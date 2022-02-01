@@ -1,109 +1,173 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9442F25
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 18:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643739663; x=1675275663;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KyOSWEaejFfh8yGXm841fhhAs/IxurylSze+gORwEsM=;
-  b=WhoxNz42PjroNJDyBYQBQifWo+6oDpT3EtHeuvZmeVh3ScGgglpxJaar
-   8nE5o0JwX6kDFhuWx+7sDc+Pb2Us3VLyHSAAn1AFOWhck3uo/C32gkHW7
-   fLPE0fsf3vHc6DJu3BCGtlEkglTDB6C2SdAxxHIc3fjiIjF9jqJKmkE05
-   1obu0I+/lFq9f0mk60u54/5cWsRh0QStfS0QGqiTxfA3eLEe64AndUmhF
-   f1KNE1Q5W6FHP6mNjxET1wLBsHRC3djFoqEP8/SuH10bRYn/7qrG7vgNo
-   hx6AHRM269PoVPoZ444phNqGbhvRFVce2bphp2b49m9zT5DHXZdxdlsDj
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247706589"
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="247706589"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 10:21:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="698497799"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2022 10:21:00 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nExm0-000TZo-5j; Tue, 01 Feb 2022 18:21:00 +0000
-Date: Wed, 2 Feb 2022 02:20:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bob Pearson <rpearsonhpe@gmail.com>, jgg@nvidia.com,
-	zyjzyj2000@gmail.com, linux-rdma@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Bob Pearson <rpearsonhpe@gmail.com>
-Subject: Re: [PATCH for-next v10 07/17] RDMA/rxe: Use kzmalloc/kfree for mca
-Message-ID: <202202020207.bxuWR3xX-lkp@intel.com>
-References: <20220131220849.10170-8-rpearsonhpe@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B86C29CA
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 19:40:43 +0000 (UTC)
+Received: by mail-lj1-f171.google.com with SMTP id t9so25591010lji.12
+        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 11:40:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=viucZbK8l9pSnGBF7R0+9cNuVMcUg5GbbuZi2PaAsjI=;
+        b=IVC9fn3GWpLYK/Rr97SW4s+kSIHFCtH/RrxNoL6iSNbu/TAdF8FBA2Pv04ZiMXYRcK
+         htp9lfu6QnZMfkwhhJaCNhvgBVtxRdYNqTrsbecSyvx6gVFWqkuUdtzHgqpB3z5A/dx4
+         0fmwMuSVKgRoVEf+U3GYxV1AXUxkeBsqfosZjyyl4iwLkoGFMKszaKQvTEMVtqs3BitM
+         GAAYhr6rvzFZloNse/nRDHNebWH7pklycGbuJ7Y81A3vyOH24HkC9WjlAGF3mDeH36r/
+         eYARvwrXxnEaBqmriI5TIkRHotAjFykXOZ3R1iTABJEhUzFcPWCBn2IUhA2ZYGI3l6JX
+         He7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=viucZbK8l9pSnGBF7R0+9cNuVMcUg5GbbuZi2PaAsjI=;
+        b=ne8jDkQc85fDj68YpVFbkwzJ0KfT+ExHXxGCBiCdoXne2Cpa/ous9X1kq56A7V+INX
+         e9MIlnI1CCLgWXRoau9P1wtEz+dQjzxxIXCVnGy7+8k0kE1WPGmwsPTVrj/jErUD35+n
+         X1C67eGv/qXY7kVkC0Bg2qGNLaFqMqnLwl6l/6V6W7FPqd2HjkZFCHtid7o/IablFzG+
+         Rt7JZepZayNBnDOQSu5jg3sPECZO+3J9UOVA3Wvrw1FK5YIcXopLAIwLBxMmyYZ42bAZ
+         eXB5s2LTAModn9/9k9CgsmGbn123w/hx4iHD9U5GYZq0HpQZ2ccBq6RFPZ8AJnUnuloR
+         67BQ==
+X-Gm-Message-State: AOAM5317OVL0d3mY/AbY4pX7ggm1/HtB1FMxQ1v/Fv7GFaR36bJU8VKH
+	UKM24p/kd+/NYwBHA5s1PXYTjmk897xgW+Zh/H6exQ==
+X-Google-Smtp-Source: ABdhPJwld6fjrnB+EsA02oB0FtfaKr2/cC0LclWTpHjlbogelMMUiOM7Hm10j7grhMBdBzybwXYddNl+yOZS3nqYn3g=
+X-Received: by 2002:a2e:7c0c:: with SMTP id x12mr17547887ljc.526.1643744441192;
+ Tue, 01 Feb 2022 11:40:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131220849.10170-8-rpearsonhpe@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220131225250.409564-1-ndesaulniers@google.com> <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 1 Feb 2022 11:40:29 -0800
+Message-ID: <CAKwvOdnkGfeBBE2NW_FKSzmZSjCJXc2801qvvOuyu+JL+m+VZQ@mail.gmail.com>
+Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier() substitute
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev, 
+	Kees Cook <keescook@chromium.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Len Baker <len.baker@gmx.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Bob,
+On Tue, Feb 1, 2022 at 1:32 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Mon, 31 Jan 2022 at 23:53, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> >
+> > Add text to memory-barriers.txt and deprecated.rst to denote that
+> > volatile-qualifying an asm statement is not a substitute for either a
+> > compiler barrier (``barrier();``) or a clobber list.
+> >
+> > This way we can point to this in code that strengthens existing
+> > volatile-qualified asm statements to use a compiler barrier.
+> >
+> > Suggested-by: Kees Cook <keescook@chromium.org>
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > ---
+> > Example: https://godbolt.org/z/8PW549zz9
+> >
+> >  Documentation/memory-barriers.txt    | 24 ++++++++++++++++++++++++
+> >  Documentation/process/deprecated.rst | 17 +++++++++++++++++
+> >  2 files changed, 41 insertions(+)
+> >
+> > diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+> > index b12df9137e1c..f3908c0812da 100644
+> > --- a/Documentation/memory-barriers.txt
+> > +++ b/Documentation/memory-barriers.txt
+> > @@ -1726,6 +1726,30 @@ of optimizations:
+> >       respect the order in which the READ_ONCE()s and WRITE_ONCE()s occur,
+> >       though the CPU of course need not do so.
+> >
+> > + (*) Similarly, the compiler is within its rights to reorder instructions
+>
+> Similar to what? Was this intended to be the second bullet point
+> rather than the first?
 
-Thank you for the patch! Perhaps something to improve:
+Similar to the previous bullet point. This isn't the first use of
+`Similarly, ` in this document.
 
-[auto build test WARNING on v5.17-rc2]
-[cannot apply to rdma/for-next next-20220201]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>
+> > +     around an asm statement so long as clobbers are not violated. For example,
+> > +
+> > +       asm volatile ("");
+> > +       flag = true;
+> > +
+> > +     May be modified by the compiler to:
+> > +
+> > +       flag = true;
+> > +       asm volatile ("");
+> > +
+> > +     Marking an asm statement as volatile is not a substitute for barrier(),
+> > +     and is implicit for asm goto statements and asm statements that do not
+> > +     have outputs (like the above example). Prefer either:
+> > +
+> > +       asm ("":::"memory");
+> > +       flag = true;
+> > +
+> > +     Or:
+> > +
+> > +       asm ("");
+> > +       barrier();
+> > +       flag = true;
+> > +
+>
+> I would expect the memory clobber to only hazard against the
+> assignment of flag if it results in a store, but looking at your
+> Godbolt example, this appears to apply even if flag is kept in a
+> register.
+>
+> Is that behavior documented/codified anywhere? Or are we relying on
+> compiler implementation details here?
 
-url:    https://github.com/0day-ci/linux/commits/Bob-Pearson/Move-two-object-pools-to-rxe_mcast-c/20220201-061231
-base:    26291c54e111ff6ba87a164d85d4a4e134b7315c
-config: arm-randconfig-r001-20220131 (https://download.01.org/0day-ci/archive/20220202/202202020207.bxuWR3xX-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/f9d560658bbbd5a17cc3c62e566cb9bb77697530
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Bob-Pearson/Move-two-object-pools-to-rxe_mcast-c/20220201-061231
-        git checkout f9d560658bbbd5a17cc3c62e566cb9bb77697530
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/infiniband/sw/rxe/
+https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
+"Note that the compiler can move even volatile asm instructions
+relative to other code, including across jump instructions."
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>
+>
+> >   (*) The compiler is within its rights to invent stores to a variable,
+> >       as in the following example:
+> >
+> > diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
+> > index 388cb19f5dbb..432816e2f79e 100644
+> > --- a/Documentation/process/deprecated.rst
+> > +++ b/Documentation/process/deprecated.rst
+> > @@ -329,3 +329,20 @@ struct_size() and flex_array_size() helpers::
+> >          instance->count = count;
+> >
+> >          memcpy(instance->items, source, flex_array_size(instance, items, instance->count));
+> > +
+> > +Volatile Qualified asm Statements
+> > +=================================
+> > +
+> > +According to `the GCC docs on inline asm
+> > +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
+> > +
+> > +  asm statements that have no output operands and asm goto statements,
+> > +  are implicitly volatile.
+> > +
+> > +For many uses of asm statements, that means adding a volatile qualifier won't
+> > +hurt (making the implicit explicit), but it will not strengthen the semantics
+> > +for such cases where it would have been implied. Care should be taken not to
+> > +confuse ``volatile`` with the kernel's ``barrier()`` macro or an explicit
+> > +clobber list. See [memory-barriers]_ for more info on ``barrier()``.
+> > +
+> > +.. [memory-barriers] Documentation/memory-barriers.txt
+> > --
+> > 2.35.0.rc2.247.g8bbb082509-goog
+> >
 
-All warnings (new ones prefixed by >>):
-
->> drivers/infiniband/sw/rxe/rxe_mcast.c:57:6: warning: no previous prototype for function '__rxe_destroy_mcg' [-Wmissing-prototypes]
-   void __rxe_destroy_mcg(struct rxe_mcg *grp)
-        ^
-   drivers/infiniband/sw/rxe/rxe_mcast.c:57:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __rxe_destroy_mcg(struct rxe_mcg *grp)
-   ^
-   static 
-   1 warning generated.
 
 
-vim +/__rxe_destroy_mcg +57 drivers/infiniband/sw/rxe/rxe_mcast.c
-
-    55	
-    56	/* caller is holding a ref from lookup and mcg->mcg_lock*/
-  > 57	void __rxe_destroy_mcg(struct rxe_mcg *grp)
-    58	{
-    59		rxe_drop_key(grp);
-    60		rxe_drop_ref(grp);
-    61	
-    62		rxe_mcast_delete(grp->rxe, &grp->mgid);
-    63	}
-    64	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Thanks,
+~Nick Desaulniers
