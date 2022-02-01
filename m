@@ -1,125 +1,129 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EED2F21
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 16:10:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643731835; x=1675267835;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=189fYGHJVlj5zOLzKTwYfYzrrePatfGTa6H0kI7Cuf8=;
-  b=TdyvA2a/8wktin9lusGdH1rUyyCmpDMS8BkZWVhQDNugUKyX7ZSScuqT
-   Q4JtWZJfAZs9YEWzn4cZAH+nhgbmr5VYlbM18cOvIMaHLHtitKEbGf2T4
-   cBotU65R9oR32lXPSWSd0j5rfmDNzGyOVLIxQkK9ZUH3aCbw7TBhPbass
-   aDuKgeigtMwlpvxV1wbBBGagLfqsWLErQY0i94fpVeotUXnTDvBJSpfL4
-   uwpR7RHuHkjCmugBxjqSrl9kDzD1Ix0P6zeQk3Di78VfXhY1hAUwVOlck
-   oqGbBI2nuugLFxEPri5LWGgiLY+D5DPvRfq29JkEjq0a53FslIDlFOsLj
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="227695126"
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="227695126"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 08:09:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="523096311"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 01 Feb 2022 08:09:52 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nEvj6-000TS5-4Z; Tue, 01 Feb 2022 16:09:52 +0000
-Date: Wed, 2 Feb 2022 00:09:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guo Ren <guoren@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [csky-linux:riscv_compat_v5 6/21]
- arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'compat_statfs'
-Message-ID: <202202020013.HE3OoT9n-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466562F21
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 16:26:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EC6C340EB;
+	Tue,  1 Feb 2022 16:26:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643732776;
+	bh=ensdKH5/5ATlXb56b9QEsLbO6Ls5DhgDYHxVsVdMhIU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VcylpKYnkQjjYp3sXdZysU2q1BNMe6JPsf8gxCFs61I0Or0mtY/f9pZGsZGdY4p1S
+	 VYasnMOMCv22nc6nbC7/gb/FFHHzlI+7dQ8SNylm3Nza0WdQLBR7aso5Uol9xLBn+x
+	 eyDQ182yiwgxZcX38Gbp6/DaQGsrrwfzUAN4/+pb0xfoOzdNPoFo5p5p7gbdbqKmCJ
+	 DKNRnAE81Gy8puPT/Uu5mRSNDg2/vFRt0LiVuOQL2eCaD63o8v3qv+4ghyy/bPOKvc
+	 EkvMmJEkYXojv/ZwSQUc1KiHV58t1/3Kbbe9Hdf5eJ3lPd742vgGDo+aMLAnvCZqKi
+	 ji1ymnLQyfFrA==
+Date: Tue, 1 Feb 2022 09:26:11 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
+Cc: gregkh@linuxfoundation.org, tj@kernel.org, viro@zeniv.linux.org.uk,
+	ndesaulniers@google.com, willy@infradead.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3] seq_file: fix NULL pointer arithmetic warning
+Message-ID: <YflfI9uAz0bR2r4m@dev-arch.archlinux-ax161>
+References: <Yfgo8p6Vk+h4+YHY@fedora>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yfgo8p6Vk+h4+YHY@fedora>
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v5
-head:   653df84165a3999569804361df88af1a54d58180
-commit: ec2542a61a8a75165df0c14f215f6b4f3821ee36 [6/21] asm-generic: compat: Cleanup duplicate definitions
-config: arm64-randconfig-r031-20220130 (https://download.01.org/0day-ci/archive/20220202/202202020013.HE3OoT9n-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/c-sky/csky-linux/commit/ec2542a61a8a75165df0c14f215f6b4f3821ee36
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v5
-        git checkout ec2542a61a8a75165df0c14f215f6b4f3821ee36
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+Hi Maíra,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Mon, Jan 31, 2022 at 03:22:42PM -0300, Maíra Canal wrote:
+> Implement conditional logic in order to replace NULL pointer arithmetic.
+> 
+> The use of NULL pointer arithmetic was pointed out by clang with the
+> following warning:
+> 
+> fs/kernfs/file.c:128:15: warning: performing pointer arithmetic on a
+> null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>                 return NULL + !*ppos;
+>                        ~~~~ ^
+> fs/seq_file.c:559:14: warning: performing pointer arithmetic on a
+> null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>         return NULL + (*pos == 0);
+> 
+> Signed-off-by: Maíra Canal <maira.canal@usp.br>
 
-All errors (new ones prefixed by >>):
+Thanks a lot for the patch!
 
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:13:
-   In file included from include/linux/irqdomain.h:35:
-   In file included from include/linux/of.h:17:
-   In file included from include/linux/kobject.h:20:
-   In file included from include/linux/sysfs.h:22:
-   In file included from include/linux/stat.h:6:
-   In file included from arch/arm64/include/asm/stat.h:13:
->> arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'compat_statfs'
-   struct compat_statfs {
-          ^
-   include/asm-generic/compat.h:80:8: note: previous definition is here
-   struct compat_statfs {
-          ^
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+It looks like Arnd sent a similar patch but it was never picked up:
 
+https://lore.kernel.org/r/20201028151202.3074398-1-arnd@kernel.org/
 
-vim +/compat_statfs +69 arch/arm64/include/asm/compat.h
+This is a cleaner solution as it uses existing defines and functions to
+deduplicate the code.
 
-3dd681d944f6d8 Will Deacon 2012-03-05  68  
-3dd681d944f6d8 Will Deacon 2012-03-05 @69  struct compat_statfs {
-3dd681d944f6d8 Will Deacon 2012-03-05  70  	int		f_type;
-3dd681d944f6d8 Will Deacon 2012-03-05  71  	int		f_bsize;
-3dd681d944f6d8 Will Deacon 2012-03-05  72  	int		f_blocks;
-3dd681d944f6d8 Will Deacon 2012-03-05  73  	int		f_bfree;
-3dd681d944f6d8 Will Deacon 2012-03-05  74  	int		f_bavail;
-3dd681d944f6d8 Will Deacon 2012-03-05  75  	int		f_files;
-3dd681d944f6d8 Will Deacon 2012-03-05  76  	int		f_ffree;
-3dd681d944f6d8 Will Deacon 2012-03-05  77  	compat_fsid_t	f_fsid;
-3dd681d944f6d8 Will Deacon 2012-03-05  78  	int		f_namelen;	/* SunOS ignores this field. */
-3dd681d944f6d8 Will Deacon 2012-03-05  79  	int		f_frsize;
-3dd681d944f6d8 Will Deacon 2012-03-05  80  	int		f_flags;
-3dd681d944f6d8 Will Deacon 2012-03-05  81  	int		f_spare[4];
-3dd681d944f6d8 Will Deacon 2012-03-05  82  };
-3dd681d944f6d8 Will Deacon 2012-03-05  83  
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-:::::: The code at line 69 was first introduced by commit
-:::::: 3dd681d944f6d861f12ee03aff17a14342963330 arm64: 32-bit (compat) applications support
-
-:::::: TO: Will Deacon <will.deacon@arm.com>
-:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+> V1 -> V2:
+> - Use SEQ_START_TOKEN instead of open-coding it
+> - kernfs_seq_start call single_start instead of open-coding it
+> V2 -> V3:
+> - Remove the EXPORT of the single_start symbol
+> ---
+>  fs/kernfs/file.c         | 7 +------
+>  fs/seq_file.c            | 4 ++--
+>  include/linux/seq_file.h | 1 +
+>  3 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
+> index 9414a7a60a9f..7aefaca876a0 100644
+> --- a/fs/kernfs/file.c
+> +++ b/fs/kernfs/file.c
+> @@ -120,13 +120,8 @@ static void *kernfs_seq_start(struct seq_file *sf, loff_t *ppos)
+>  		if (next == ERR_PTR(-ENODEV))
+>  			kernfs_seq_stop_active(sf, next);
+>  		return next;
+> -	} else {
+> -		/*
+> -		 * The same behavior and code as single_open().  Returns
+> -		 * !NULL if pos is at the beginning; otherwise, NULL.
+> -		 */
+> -		return NULL + !*ppos;
+>  	}
+> +	return single_start(sf, ppos);
+>  }
+>  
+>  static void *kernfs_seq_next(struct seq_file *sf, void *v, loff_t *ppos)
+> diff --git a/fs/seq_file.c b/fs/seq_file.c
+> index f8e1f4ee87ff..7ab8a58c29b6 100644
+> --- a/fs/seq_file.c
+> +++ b/fs/seq_file.c
+> @@ -554,9 +554,9 @@ int seq_dentry(struct seq_file *m, struct dentry *dentry, const char *esc)
+>  }
+>  EXPORT_SYMBOL(seq_dentry);
+>  
+> -static void *single_start(struct seq_file *p, loff_t *pos)
+> +void *single_start(struct seq_file *p, loff_t *pos)
+>  {
+> -	return NULL + (*pos == 0);
+> +	return *pos ? NULL : SEQ_START_TOKEN;
+>  }
+>  
+>  static void *single_next(struct seq_file *p, void *v, loff_t *pos)
+> diff --git a/include/linux/seq_file.h b/include/linux/seq_file.h
+> index 88cc16444b43..60820ab511d2 100644
+> --- a/include/linux/seq_file.h
+> +++ b/include/linux/seq_file.h
+> @@ -162,6 +162,7 @@ int seq_dentry(struct seq_file *, struct dentry *, const char *);
+>  int seq_path_root(struct seq_file *m, const struct path *path,
+>  		  const struct path *root, const char *esc);
+>  
+> +void *single_start(struct seq_file *, loff_t *);
+>  int single_open(struct file *, int (*)(struct seq_file *, void *), void *);
+>  int single_open_size(struct file *, int (*)(struct seq_file *, void *), void *, size_t);
+>  int single_release(struct inode *, struct file *);
+> -- 
+> 2.34.1
+> 
