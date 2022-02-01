@@ -1,123 +1,105 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A4D2CA1
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 10:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643712815; x=1675248815;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4Rc2R13X+A0ZPea4Zk2j4TFu+lNn7nqVaeohaqOLnM8=;
-  b=mkHHd1qBfahKSmJHJtDsxpailwhzqwhP/dINjEt9Tg8F4Yy/omKUooTA
-   /HfFepYMFqAJgHicCjbRmPHrP3WUKLN5pqqarPhGzPXtGqjIuZBnNRQij
-   TI5Wou0GKF/S3ikMK0BK9rZIyi1SJgTQjH9SvS5oTsKkUuYT8umd5qHbI
-   1la32RX2wF/xN9FbmG0ka6I7yvrni9licL2HfVIIw9HkVOzyYAp4CtF+E
-   XYDtTBbHEOggGYIXd+Ufsv4o2sieW1Qd40KUe1ymBgwkv27d7IDBZVVyJ
-   0VReo9pfqzB5mOkxu6+tcW+OmgCd8m26y4JeqTg0K/8nwErFbd+c3Erm8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="228326065"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="228326065"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 02:53:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="768894443"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Feb 2022 02:53:32 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nEqmx-000TAB-Gz; Tue, 01 Feb 2022 10:53:31 +0000
-Date: Tue, 1 Feb 2022 18:52:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Saravana Kannan <saravanak@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org,
-	David Collins <collinsd@codeaurora.org>,
-	David Dai <daidavid1@codeaurora.org>,
-	Deepak Katragadda <dkatraga@codeaurora.org>,
-	Shefali Jain <shefjain@codeaurora.org>,
-	Stephen Boyd <sboyd@codeaurora.org>,
-	Taniya Das <tdas@codeaurora.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 61/9999] drivers/clk/clk.c:3145:5: warning: no previous prototype for
- function 'clk_set_flags'
-Message-ID: <202202011809.jx2dKFgs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59852CA1
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 11:18:32 +0000 (UTC)
+Received: by mail-oi1-f177.google.com with SMTP id y23so32464743oia.13
+        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 03:18:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pcT8Frn0n3Hw9SbN/loP8iSe8IeaLdSI0AOmRzA0azM=;
+        b=hKzVGBGbfsCPYJ7HefyXr6bWuywoKmYQ1742/PdhXYVL1PPYWI/07d9VBKqIDjQKlG
+         AnjyTkWXbTrOui9wEp9Ws/Obt6FXRwK3bogt36ZFKq/2FesmgQhkOtU0Dwdm6g5NExQz
+         evPsi84gy9SKtMvgVLeUNRdk5zTgXWxKul8/dDs/VuNoEfqgf+h9cyHuQPsO54btyTyF
+         DeqENVu1pV0fem6L4ajx7cvL9IcVau2AH7EWFNtQniJxePcfsA3yBYGT3T/LDabMKlgw
+         MFJv8z5GPDcZTCIRSz6oijDhwbdCdy8wRWf1SE7atFeRCLswZe7ZLh5VHO//32pFY91U
+         PWjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pcT8Frn0n3Hw9SbN/loP8iSe8IeaLdSI0AOmRzA0azM=;
+        b=hg5/czngml/NhV5GmXlnL9KWzf4Xe2l8ecgjNGTJMH/1pqu3F4zYQBgtJ9h3oBU6iX
+         5FSHEg0MKek4wQO7TfqhlNPmOelq4qTOokFfw1Tt4SmzlrIw5cIg+GsV2CqM+JZtSBMP
+         MASibxWo4VCjiqIT9w/08YQ7j+0C1FYJa9XP6NU0YYVjiNIUjnbHBcJE8zVlpq8n7Elf
+         64QzqfdkvPCaUeEIGhFlOeDS2jPs++ecrUOJnlDEQ5mirjXGdPT22C4QeNOOsDeYy1uy
+         CkUZCgiQuEXoG/US72qBtl6R+kMPzH4qrRukvaUEY5uEKCP4qaYzh8icIdy4LRVkuf+v
+         Twgg==
+X-Gm-Message-State: AOAM531IVqidi+cp1f9dq/ojYtF5G+grUK71Jtpi4M2cW463ZMNsazTX
+	EJvpw9zPndH0GzYMeglIAW0RFshw8VJ+kpNCPsHKAw==
+X-Google-Smtp-Source: ABdhPJwO7fHptuSvmIaQ+/J/5b/+/5PLyjAttUp0EoMB/ZtjFn1J7KrgHwXlEdQXrBtYWjyOG1ilR7VtBLKEvdzrEvU=
+X-Received: by 2002:aca:2b16:: with SMTP id i22mr746926oik.128.1643714311558;
+ Tue, 01 Feb 2022 03:18:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220131090521.1947110-1-elver@google.com> <20220131090521.1947110-2-elver@google.com>
+ <202201311315.B9FDD0A@keescook>
+In-Reply-To: <202201311315.B9FDD0A@keescook>
+From: Marco Elver <elver@google.com>
+Date: Tue, 1 Feb 2022 12:18:19 +0100
+Message-ID: <CANpmjNPvyKF2LiZAzTOz0mvbxPvJW_a7ysJ3n_kcHYvHXxpw+g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] stack: Constrain and fix stack offset
+ randomization with Clang builds
+To: Kees Cook <keescook@chromium.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@kernel.org>, Elena Reshetova <elena.reshetova@intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev, kasan-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   b45c5eeda8dea785e3d411380b486a209768f6b2
-commit: 3179a1a38d96f565a2229b9244285c6abf62b10a [61/9999] ANDROID: GKI: clk: Add support for voltage voting
-config: x86_64-randconfig-r026-20220131 (https://download.01.org/0day-ci/archive/20220201/202202011809.jx2dKFgs-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/3179a1a38d96f565a2229b9244285c6abf62b10a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout 3179a1a38d96f565a2229b9244285c6abf62b10a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/clk/ drivers/nvmem/ kernel/sched/
+On Mon, 31 Jan 2022 at 22:15, Kees Cook <keescook@chromium.org> wrote:
+> On Mon, Jan 31, 2022 at 10:05:21AM +0100, Marco Elver wrote:
+> > All supported versions of Clang perform auto-init of __builtin_alloca()
+> > when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
+> >
+> > add_random_kstack_offset() uses __builtin_alloca() to add a stack
+> > offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
+> > enabled, add_random_kstack_offset() will auto-init that unused portion
+> > of the stack used to add an offset.
+> >
+> > There are several problems with this:
+> >
+> >       1. These offsets can be as large as 1023 bytes. Performing
+> >          memset() on them isn't exactly cheap, and this is done on
+> >          every syscall entry.
+> >
+> >       2. Architectures adding add_random_kstack_offset() to syscall
+> >          entry implemented in C require them to be 'noinstr' (e.g. see
+> >          x86 and s390). The potential problem here is that a call to
+> >          memset may occur, which is not noinstr.
+> >
+> > A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
+> >
+> >  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
+> >  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
+> >  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
+> >  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+> >
+> > Clang 14 (unreleased) will introduce a way to skip alloca initialization
+> > via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
+> >
+> > Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
+> > auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
+> > __builtin_alloca_uninitialized() if the compiler provides it, as is done
+> > by Clang 14.
+> >
+> > Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
+> > Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
+> > Signed-off-by: Marco Elver <elver@google.com>
+>
+> Thanks for the tweaks; this looks good to me now.
+>
+> Acked-by: Kees Cook <keescook@chromium.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Kees, which tree do randomize_kstack changes go through these days?
+I've seen previous patches went through -tip via Thomas.
 
-All warnings (new ones prefixed by >>):
-
-   drivers/clk/clk.c:624:24: warning: variable 'ignore' set but not used [-Wunused-but-set-variable]
-           int level, rc = 0, i, ignore;
-                                 ^
->> drivers/clk/clk.c:3145:5: warning: no previous prototype for function 'clk_set_flags' [-Wmissing-prototypes]
-   int clk_set_flags(struct clk *clk, unsigned long flags)
-       ^
-   drivers/clk/clk.c:3145:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int clk_set_flags(struct clk *clk, unsigned long flags)
-   ^
-   static 
->> drivers/clk/clk.c:3157:6: warning: no previous prototype for function 'clk_debug_print_hw' [-Wmissing-prototypes]
-   void clk_debug_print_hw(struct clk_core *clk, struct seq_file *f)
-        ^
-   drivers/clk/clk.c:3157:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void clk_debug_print_hw(struct clk_core *clk, struct seq_file *f)
-   ^
-   static 
-   3 warnings generated.
-   drivers/clk/clk.c:4257: warning: Function parameter or member 'dev' not described in 'devm_clk_unregister'
-   drivers/clk/clk.c:4455: warning: Function parameter or member 'get_hw' not described in 'of_clk_provider'
-
-
-vim +/clk_set_flags +3145 drivers/clk/clk.c
-
-  3144	
-> 3145	int clk_set_flags(struct clk *clk, unsigned long flags)
-  3146	{
-  3147		if (!clk)
-  3148			return 0;
-  3149	
-  3150		if (!clk->core->ops->set_flags)
-  3151			return -EINVAL;
-  3152	
-  3153		return clk->core->ops->set_flags(clk->core->hw, flags);
-  3154	}
-  3155	EXPORT_SYMBOL_GPL(clk_set_flags);
-  3156	
-> 3157	void clk_debug_print_hw(struct clk_core *clk, struct seq_file *f)
-  3158	{
-  3159	}
-  3160	EXPORT_SYMBOL(clk_debug_print_hw);
-  3161	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+-- Marco
