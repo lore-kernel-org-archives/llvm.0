@@ -1,44 +1,49 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEEF2CA5
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 13:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D812C9C
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 13:25:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643721343; x=1675257343;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YIrB/RjwUQuB/lErIj+v5pUNuBA3zxVy4nUv15hlRCw=;
-  b=cxuiAQNNqH5bD1jSDP7jt4vSL+LNbf/DY5i1sy0sqGm/v3wQ30szEUnZ
-   fL+ZE5ajDRwWoJ4+UdIKgIVUSDES73aRfRYm8lk7U6YhmjTYecIeQ0OGM
-   9lmw9A+4FlxONwpJZlUV60ymjTcbC3ezp7sF0P8zFtFFf0gh8hARMtjPG
-   Dt9hi+DUzC2DjIvZI9/ImlYgtJQCPAr5M/cn397/qz6E661XIj44kfYPe
-   MUKBtc8GMdZ/TBoUYcHOxOMZgkEMDBdTUDTDCaoU5ETFBIN9S5IqxHOZC
-   HQbRXGquSF58aSBT5fwZZdESARrpb7FMg6jpVg+RgLq/yVg/CZCEbNXJZ
+  t=1643721946; x=1675257946;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yKGBWShsl1X257518ca8gg6z6D9kxMNiO15gjp8quVo=;
+  b=RgvzTzGjJs8CN02io9R1LTGFlg/9iOUo9azFWe43AyqJVSfiQX9E1Lkw
+   iP3NROgqfOQ87MYciUbYWEWvsofyF/p5yUdS+Xvx6IQ2TchKUs854czMe
+   TnKKAXB9AbQOon+hDE9IeK2Rk+eezlPmAQeAzxuMw9qekpeq5OP3svHUe
+   9wAg+WyMPXPkh/0yh8ka5dEwIcGuwolFnugNs3c6wxa+yjD3Nh/nPgWqm
+   0gzc7rwu00I58bbNqvcJGF3l5MxTf7obxZrgjyiV/3Uox6CcpeeiQAd2L
+   ftfaF5LSOmF432KMmZ9oAp7mhlC05px024P9isoUeE3kvJY5lacvgivfG
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247456773"
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="245280019"
 X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="247456773"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 05:15:43 -0800
+   d="scan'208";a="245280019"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 05:25:45 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="630392461"
+   d="scan'208";a="626730664"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Feb 2022 05:15:41 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 01 Feb 2022 05:25:42 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nEt0W-000TIk-EP; Tue, 01 Feb 2022 13:15:40 +0000
-Date: Tue, 1 Feb 2022 21:15:15 +0800
+	id 1nEtAD-000TJ9-H6; Tue, 01 Feb 2022 13:25:41 +0000
+Date: Tue, 1 Feb 2022 21:25:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Quentin Perret <qperret@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org,
-	Saravana Kannan <saravanak@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 201/9999] kernel/sched/stubs.c:8:5: warning: no previous prototype for
- function 'sched_isolate_cpu'
-Message-ID: <202202012133.0supCHiV-lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: kbuild-all@lists.01.org, Sean Christopherson <seanjc@google.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Wanpeng Li <wanpengli@tencent.com>,
+	Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>,
+	kvm@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 3/5] KVM: x86: Use __try_cmpxchg_user() to update guest
+ PTE A/D bits
+Message-ID: <202202012104.eSvVUhWh-lkp@intel.com>
+References: <20220201010838.1494405-4-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,82 +52,135 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220201010838.1494405-4-seanjc@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   b45c5eeda8dea785e3d411380b486a209768f6b2
-commit: eead51495c8760858c32d9ad0332ffc94397aa82 [201/9999] ANDROID: GKI: sched: stub sched_isolate symbols
-config: x86_64-randconfig-r026-20220131 (https://download.01.org/0day-ci/archive/20220201/202202012133.0supCHiV-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/eead51495c8760858c32d9ad0332ffc94397aa82
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout eead51495c8760858c32d9ad0332ffc94397aa82
+Hi Sean,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on 26291c54e111ff6ba87a164d85d4a4e134b7315c]
+
+url:    https://github.com/0day-ci/linux/commits/Sean-Christopherson/x86-uaccess-CMPXCHG-KVM-bug-fixes/20220201-091001
+base:   26291c54e111ff6ba87a164d85d4a4e134b7315c
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220201/202202012104.eSvVUhWh-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/c880d7a9df876f20dc3acdd893c5c71f3cda5029
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sean-Christopherson/x86-uaccess-CMPXCHG-KVM-bug-fixes/20220201-091001
+        git checkout c880d7a9df876f20dc3acdd893c5c71f3cda5029
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvmem/ kernel/sched/
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
->> kernel/sched/stubs.c:8:5: warning: no previous prototype for function 'sched_isolate_cpu' [-Wmissing-prototypes]
-   int sched_isolate_cpu(int cpu)
-       ^
-   kernel/sched/stubs.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_isolate_cpu(int cpu)
-   ^
-   static 
->> kernel/sched/stubs.c:14:5: warning: no previous prototype for function 'sched_unisolate_cpu_unlocked' [-Wmissing-prototypes]
-   int sched_unisolate_cpu_unlocked(int cpu)
-       ^
-   kernel/sched/stubs.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_unisolate_cpu_unlocked(int cpu)
-   ^
-   static 
->> kernel/sched/stubs.c:20:5: warning: no previous prototype for function 'sched_unisolate_cpu' [-Wmissing-prototypes]
-   int sched_unisolate_cpu(int cpu)
-       ^
-   kernel/sched/stubs.c:20:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_unisolate_cpu(int cpu)
-   ^
-   static 
->> kernel/sched/stubs.c:26:5: warning: no previous prototype for function 'set_task_boost' [-Wmissing-prototypes]
-   int set_task_boost(int boost, u64 period)
-       ^
-   kernel/sched/stubs.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int set_task_boost(int boost, u64 period)
-   ^
-   static 
-   4 warnings generated.
+sparse warnings: (new ones prefixed by >>)
+   arch/x86/kvm/mmu/mmu.c:695:9: sparse: sparse: context imbalance in 'walk_shadow_page_lockless_begin' - different lock contexts for basic block
+   arch/x86/kvm/mmu/mmu.c: note: in included file (through include/linux/rbtree.h, include/linux/mm_types.h, arch/x86/kvm/irq.h):
+   include/linux/rcupdate.h:725:9: sparse: sparse: context imbalance in 'walk_shadow_page_lockless_end' - unexpected unlock
+   arch/x86/kvm/mmu/mmu.c:2595:9: sparse: sparse: context imbalance in 'mmu_try_to_unsync_pages' - different lock contexts for basic block
+   arch/x86/kvm/mmu/mmu.c: note: in included file:
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+   arch/x86/kvm/mmu/mmu.c: note: in included file:
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+   arch/x86/kvm/mmu/mmu.c: note: in included file:
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+>> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
+   arch/x86/kvm/mmu/mmu.c:4549:57: sparse: sparse: cast truncates bits from constant value (ffffff33 becomes 33)
+   arch/x86/kvm/mmu/mmu.c:4551:56: sparse: sparse: cast truncates bits from constant value (ffffff0f becomes f)
+   arch/x86/kvm/mmu/mmu.c:4553:57: sparse: sparse: cast truncates bits from constant value (ffffff55 becomes 55)
 
+vim +244 arch/x86/kvm/mmu/paging_tmpl.h
 
-vim +/sched_isolate_cpu +8 kernel/sched/stubs.c
-
-     7	
-   > 8	int sched_isolate_cpu(int cpu)
-     9	{
-    10		return -EINVAL;
-    11	}
-    12	EXPORT_SYMBOL_GPL(sched_isolate_cpu);
-    13	
-  > 14	int sched_unisolate_cpu_unlocked(int cpu)
-    15	{
-    16		return -EINVAL;
-    17	}
-    18	EXPORT_SYMBOL_GPL(sched_unisolate_cpu_unlocked);
-    19	
-  > 20	int sched_unisolate_cpu(int cpu)
-    21	{
-    22		return -EINVAL;
-    23	}
-    24	EXPORT_SYMBOL_GPL(sched_unisolate_cpu);
-    25	
-  > 26	int set_task_boost(int boost, u64 period)
+   191	
+   192	static int FNAME(update_accessed_dirty_bits)(struct kvm_vcpu *vcpu,
+   193						     struct kvm_mmu *mmu,
+   194						     struct guest_walker *walker,
+   195						     gpa_t addr, int write_fault)
+   196	{
+   197		unsigned level, index;
+   198		pt_element_t pte, orig_pte;
+   199		pt_element_t __user *ptep_user;
+   200		gfn_t table_gfn;
+   201		int ret;
+   202	
+   203		/* dirty/accessed bits are not supported, so no need to update them */
+   204		if (!PT_HAVE_ACCESSED_DIRTY(mmu))
+   205			return 0;
+   206	
+   207		for (level = walker->max_level; level >= walker->level; --level) {
+   208			pte = orig_pte = walker->ptes[level - 1];
+   209			table_gfn = walker->table_gfn[level - 1];
+   210			ptep_user = walker->ptep_user[level - 1];
+   211			index = offset_in_page(ptep_user) / sizeof(pt_element_t);
+   212			if (!(pte & PT_GUEST_ACCESSED_MASK)) {
+   213				trace_kvm_mmu_set_accessed_bit(table_gfn, index, sizeof(pte));
+   214				pte |= PT_GUEST_ACCESSED_MASK;
+   215			}
+   216			if (level == walker->level && write_fault &&
+   217					!(pte & PT_GUEST_DIRTY_MASK)) {
+   218				trace_kvm_mmu_set_dirty_bit(table_gfn, index, sizeof(pte));
+   219	#if PTTYPE == PTTYPE_EPT
+   220				if (kvm_x86_ops.nested_ops->write_log_dirty(vcpu, addr))
+   221					return -EINVAL;
+   222	#endif
+   223				pte |= PT_GUEST_DIRTY_MASK;
+   224			}
+   225			if (pte == orig_pte)
+   226				continue;
+   227	
+   228			/*
+   229			 * If the slot is read-only, simply do not process the accessed
+   230			 * and dirty bits.  This is the correct thing to do if the slot
+   231			 * is ROM, and page tables in read-as-ROM/write-as-MMIO slots
+   232			 * are only supported if the accessed and dirty bits are already
+   233			 * set in the ROM (so that MMIO writes are never needed).
+   234			 *
+   235			 * Note that NPT does not allow this at all and faults, since
+   236			 * it always wants nested page table entries for the guest
+   237			 * page tables to be writable.  And EPT works but will simply
+   238			 * overwrite the read-only memory to set the accessed and dirty
+   239			 * bits.
+   240			 */
+   241			if (unlikely(!walker->pte_writable[level - 1]))
+   242				continue;
+   243	
+ > 244			ret = __try_cmpxchg_user(ptep_user, &orig_pte, pte, fault);
+   245			if (ret)
+   246				return ret;
+   247	
+   248			kvm_vcpu_mark_page_dirty(vcpu, table_gfn);
+   249			walker->ptes[level - 1] = pte;
+   250		}
+   251		return 0;
+   252	}
+   253	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
