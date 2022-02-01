@@ -1,97 +1,112 @@
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C312CA1
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 20:25:08 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id m6so54450408ybc.9
-        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 12:25:08 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8332A2F27
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 20:56:25 +0000 (UTC)
+Received: by mail-pg1-f174.google.com with SMTP id e16so16493166pgn.4
+        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 12:56:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NQxBh7W6WQoopd/1GYZljiEFB/ShqPgFHLn5gnNvn8Y=;
-        b=eef4eipwpvsL3TFJxxFdmb4L8ZoICrM8iScWq6tOGrxMFYvddvijvxioe1BqimVZjF
-         zTxsmOqEWVCWAY9+ljLnftiZEr3qB6atVvG5B6HoLzXW9gcPBgXLSQxYllXa0qwvFBJ2
-         3Bgbwo3aF32NYbRzzZ7Twm7RLSpxWMSDOoFAVz01CTJbYtAb03oXc6CiMms5Sv/eX+4X
-         vO/IBz1JFEcwD+l02ewZnypRgup2+Va27nOIN8/FplZmyMtqy1nrLlz/p0nyRsphwJrK
-         29YI3Ovhcvrh6GkZKwLJLrKxMsb0WTfUzfk6shVmqBJfWny8lYNQkGC3sGqeXvNcRUv0
-         9abA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/K6CrouqNGPSnRyT1f52nHMQEEea+SOxraNSciufZcQ=;
+        b=L9q2IpeiXJQDBJSV9DS3cKiVk1tVp+zkdvqw3ehFZvdheg7PcUbCDRZBPhIyk71rtV
+         LgksLrzm4pydIz/Fseu/imUdzljxVgvdkVfj82Sd3r8xv9COxCiJMoq2nxn6rzvnFHMd
+         wZkiY6iCrOzr5vI0m78Qg7BCkNUD5fLKTPIfj031sIfzRYhme9BtS5u2ayojPEdik5p8
+         txNvz8+inM0BOrE+lPfj1KMaB+GyyEPRiWeG8U/s3FvZwG/3HYBgr0cgx4oqFS2/NfmI
+         vQMD3QDSzXIxHEA/TP9jLwIYHFQaaDCKnZHqrqpRVaKpaNAcIUxDdvI5w2Mtwb+EmGDM
+         6ykA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NQxBh7W6WQoopd/1GYZljiEFB/ShqPgFHLn5gnNvn8Y=;
-        b=LZk4hevR8/p9wPv6Sz40noaWLcosfwM0bxccNbh/2DhCKP+de9UQ/C7RzNtgEXgUK0
-         lbF9gyWSso5cqu18mqdY7IAgruFBoy06wAFImkJnuTLd1uaQhCxkmHsyOI0EJ0TbQXZW
-         8ZYK+r882pjPtkAjgQQxpYEuYGzvyS+bMig3CxPH9+MHhmdLlFL/Vx4NhpdTNEatlwj/
-         OxRL/oYTs3/ZmdZK73nBfA9NiPQ7f2dHef1AiF28+bZuOsvkeI5kUCWgzMCtOzhvCstC
-         A6W+UIfxFgBsw6dEaGvSF13auMUnz7ZCKgHUIKOcKeUJ/Q+YucwBmOfCYT4dQGiPJVSg
-         Wzmw==
-X-Gm-Message-State: AOAM533YpDdL0dJ1sFQoetj3oK4ERlWyndF5K2ZgCE7Z+R7JeRVhP3+l
-	Yh5c3pCNV2U8JkUFqzwBJTA3B9UXMJAbJghi+DM=
-X-Google-Smtp-Source: ABdhPJzc9Eqbhc8KooDpwUj/fmwXhyfk2NIiX2gE3LH5W4yJw1W0sv5950Z38giEOj+JUOPs3+zTNJgZcQX4aHD/gUo=
-X-Received: by 2002:a25:cccb:: with SMTP id l194mr37620366ybf.752.1643747107364;
- Tue, 01 Feb 2022 12:25:07 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/K6CrouqNGPSnRyT1f52nHMQEEea+SOxraNSciufZcQ=;
+        b=L65p/nWjpw42p/i+JIOQ7pePgVW9mZhcYJ/kXh/Yji/pSBiA2iZ4Trtu/Qt9vsWaXZ
+         a2RWzgutXUvqrSfUxpVfTamK23HAdJSZnWlU8AspAJ5lNOdOAYrZMZ3pSMaG6La1+Rqj
+         8L6F6604g9iRDmMqWkpwZUwyHC8z61sdoZRoIpj6PgWkau9Qx9FEzPA6AVRSnqiiyURq
+         DWDAtXZZK37qA0CGVimK9KD1oJOdr7XuYd/iNZiL0U7FkqEBY+mYHJaK/njgd895qlpk
+         GwbhHor2/0j5UIw9bYYqF/lz9mxYStXNQesN8njv7xDCpKL2SDiQXC7aySt41FQoQEPc
+         2fWA==
+X-Gm-Message-State: AOAM530X/BcCgHhwWExfz5faWs2RNFON1hyl4QhZkm5AW/RMhNfOSyOo
+	oU2ngyXn7yfAF3Hk7j3++jGy+g==
+X-Google-Smtp-Source: ABdhPJxt4c+g37LTztBQFLWT1J7bKlvLTzRanguek+vZD5dt6E6xBhxeHWepA0+xUSAy5RHKLZPfYg==
+X-Received: by 2002:a63:ed10:: with SMTP id d16mr21961918pgi.17.1643748984764;
+        Tue, 01 Feb 2022 12:56:24 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u19sm23445170pfi.150.2022.02.01.12.56.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 12:56:24 -0800 (PST)
+Date: Tue, 1 Feb 2022 20:56:20 +0000
+From: Sean Christopherson <seanjc@google.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Wanpeng Li <wanpengli@tencent.com>,
+	Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>,
+	kvm@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+	syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/5] Kconfig: Add option for asm goto w/ tied outputs to
+ workaround clang-13 bug
+Message-ID: <YfmedCAn8pK//I2R@google.com>
+References: <20220201010838.1494405-1-seanjc@google.com>
+ <20220201010838.1494405-2-seanjc@google.com>
+ <CAKwvOd=9nwR7z7wn50SU=mf5AywFLd95ZMH-EbYdHfbeHVvq1A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220201174256.1690515-1-trix@redhat.com>
-In-Reply-To: <20220201174256.1690515-1-trix@redhat.com>
-From: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date: Tue, 1 Feb 2022 12:24:56 -0800
-Message-ID: <CABBYNZJx0Yye2f7ZE7d0WeZ6QQTQGUDHhqeobWZHE3PZGmG72A@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: hci_sync: fix undefined return of hci_disconnect_all_sync()
-To: trix@redhat.com
-Cc: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>, 
-	David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, nathan@kernel.org, 
-	ndesaulniers@google.com, 
-	"linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>, 
-	"open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOd=9nwR7z7wn50SU=mf5AywFLd95ZMH-EbYdHfbeHVvq1A@mail.gmail.com>
 
-Hi Tom,
+On Tue, Feb 01, 2022, Nick Desaulniers wrote:
+> On Mon, Jan 31, 2022 at 5:08 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > Add a config option to guard (future) usage of asm_volatile_goto() that
+> > includes "tied outputs", i.e. "+" constraints that specify both an input
+> > and output parameter.  clang-13 has a bug[1] that causes compilation of
+> > such inline asm to fail, and KVM wants to use a "+m" constraint to
+> > implement a uaccess form of CMPXCHG[2].  E.g. the test code fails with
+> >
+> >   <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .'
+> >   int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }
+> >                             ^
+> >   <stdin>:1:29: error: unknown token in expression
+> >   <inline asm>:1:9: note: instantiated into assembly here
+> >           .long () - .
+> >                  ^
+> >   2 errors generated.
+> >
+> > on clang-13, but passes on gcc (with appropriate asm goto support).  The
+> > bug is fixed in clang-14, but won't be backported to clang-13 as the
+> > changes are too invasive/risky.
+> 
+> LGTM.
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> 
+> If you're going to respin the series, consider adding a comment in the
+> source along the lines of:
+> ```
+> clang-14 and gcc-11 fixed this.
+> ```
+> or w/e. This helps us find (via grep) and remove cruft when the
+> minimum supported compiler versions are updated.
 
-On Tue, Feb 1, 2022 at 9:43 AM <trix@redhat.com> wrote:
->
-> From: Tom Rix <trix@redhat.com>
->
-> clang static analysis reports this problem
-> hci_sync.c:4428:2: warning: Undefined or garbage value
->   returned to caller
->         return err;
->         ^~~~~~~~~~
->
-> If there are no connections this function is a noop but
-> err is never set and a false error could be reported.
-> Return 0 as other hci_* functions do.
->
-> Fixes: 182ee45da083 ("Bluetooth: hci_sync: Rework hci_suspend_notifier")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  net/bluetooth/hci_sync.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index 6e71aa6b6feae..9327737da6003 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -4425,7 +4425,7 @@ static int hci_disconnect_all_sync(struct hci_dev *hdev, u8 reason)
->                         return err;
->         }
->
-> -       return err;
-> +       return 0;
->  }
->
->  /* This function perform power off HCI command sequence as follows:
-> --
-> 2.26.3
+Will do, a new version is definitely needed.
 
-Applied, thanks.
+> Note: gcc-10 had a bug with the symbolic references to labels when
+> using tied constraints.
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98096
+> 
+> Both compilers had bugs here, and it may be worth mentioning that in
+> the commit message.
 
--- 
-Luiz Augusto von Dentz
+Is this wording accurate?
+
+  gcc also had a similar bug[3], fixed in gcc-11, where gcc failed to
+  account for its behavior of assigning two numbers to tied outputs (one
+  for input, one for output) when evaluating symbolic references. 
