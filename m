@@ -1,93 +1,92 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE8D2CA4
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 10:21:50 +0000 (UTC)
-Received: by mail-ej1-f45.google.com with SMTP id a8so52430875ejc.8
-        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 02:21:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w0qn/AbWYdlLKsTLrdNzjvpKb0731eh3D9ihByfG+Cg=;
-        b=GclaufmiyIC2kKKQl4aH3RGgPrbBuv3HO3aoA323ZCByUaHOYBu14a+1X4OPD10WK3
-         fm09gXtsRKcRrXHZzbGhdDWhrBhzp7aZRXgIHcl5GSEivA00a4ZpoPShGxrimismSBbt
-         5hRcYS3bs53+jLtmUacafSZhb65dAhhzN6Q0cXaKlA9pMyNrm3qXPqQ8ZPQkwT4+kxCL
-         k8gWdAn7OfjVIOKW38f7SPxR9tRi6j2OiiPzKJf2uR1GJjx7NLalUItt2Ps4tKxvxxFy
-         TeMbypA4daJ/EklIghqrkNpywc3ae4t5HOTQg5sZADVHQTuDLqg3TFdR6HRfe7zZDMf8
-         AffQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w0qn/AbWYdlLKsTLrdNzjvpKb0731eh3D9ihByfG+Cg=;
-        b=i1Te9dwsCEhfkUNeSXis4Lrkh3bPaJkM9fGWU/0RBhG32m8nIXTmxNJklWOm2SwaJo
-         n5A0xmMiiTGBfmbFf5OC6Bbwnr53JFH4VthQ3PupUr9/2NTYDpVuSDQmsRy792PYQp9N
-         ZPwdCpXzFl5xOsclLdhaCvECzwBWcMdElqz7/QXYPsgvVKJCXSm1DSyGizZS1L0EfOnn
-         uq+8/tCAuM1Pqs4zitafiXkLYyRU3LgEhDNZUxL0Zk+89jwP7cdxRhBp04dSnMtr07cs
-         GgMwij9ssQ9oXWl+STs1u76s1BuLl2kqbxQZT2AVyCTRCODVXLOJ7nusQJPjpM2iMUzP
-         4YAg==
-X-Gm-Message-State: AOAM5317ZxGG0/3xJGUSKqCNqIWswwHnJyMvvaeseTUdWkoGuKRW44Na
-	G8+Z1r55x0fce3SLBGDbJ+3vdQ==
-X-Google-Smtp-Source: ABdhPJzP6DNVGKDR/xSND+TRoZ71TnPMxBl+WvaIrcN/UAaCkj9VHFG9apRFHeZD0UVOyZv+T/zx4w==
-X-Received: by 2002:a17:906:bc4a:: with SMTP id s10mr20318695ejv.371.1643710908455;
-        Tue, 01 Feb 2022 02:21:48 -0800 (PST)
-Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id lm6sm14283211ejb.46.2022.02.01.02.21.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 02:21:48 -0800 (PST)
-From: Jean-Philippe Brucker <jean-philippe@linaro.org>
-To: nathan@kernel.org
-Cc: ndesaulniers@google.com,
-	llvm@lists.linux.dev,
-	bpf@vger.kernel.org,
-	andrii@kernel.org,
-	quentin@isovalent.com,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH] tools: Ignore errors from `which' when searching a GCC toolchain
-Date: Tue,  1 Feb 2022 09:31:20 +0000
-Message-Id: <20220201093119.1713207-1-jean-philippe@linaro.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC4DF2CA1
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 10:32:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643711555; x=1675247555;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O+ah6ZvrJhajAxWVyZg0CQ8gmK81vXiJAct41Moo7cc=;
+  b=bCro2eqojk+pVBa9veij5joNg6kugbkzJB9+AJ1rSeAPmdENXFRwRMAL
+   l0kIdYZq4A+jhj4rPka8+PxdKHrknDcdDPdYhfZQzboXRnqt8sqpPUbuc
+   XtTOhreNNSR3X7YFHIDeBKbYqNqAG31Ft3Sypr/dXHSvKpfunP9DqYTvd
+   GiJ1d+GSa0rLolE1C7ALxtDX27iP+C7ZBJ5u6JNy+3el7g9StjGjfQRvA
+   nVl3NaWb5GICEMUJqXPwrDXX7CNyQiWGdwtAe4RH9RXwmOmrB7gkPtgp8
+   6ECryfs1R01F1bPdOnIfIjrHKLTErVBbfx8lSxSRWQITfl3sBnFgnAb+x
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="246496662"
+X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
+   d="scan'208";a="246496662"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 02:32:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
+   d="scan'208";a="768889617"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Feb 2022 02:32:30 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nEqSc-000T7F-7V; Tue, 01 Feb 2022 10:32:30 +0000
+Date: Tue, 1 Feb 2022 18:31:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 2792/2969] lib/test_string.c:188:30: error:
+ initializer element is not a compile-time constant
+Message-ID: <202202011846.EbcxQdke-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-When cross-building tools with clang, we run `which $(CROSS_COMPILE)gcc`
-to detect whether a GCC toolchain provides the standard libraries. It is
-only a helper because some distros put libraries where LLVM does not
-automatically find them. On other systems, LLVM detects the libc
-automatically and does not need this. There, it is completely fine not
-to have a GCC at all, but some versions of `which' display an error when
-the command is not found:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   887a333c44eb67973622e530e43cd5e4cf9af927
+commit: 05a5ff1e0c9581e4ceb8cdc2cbcce5ed0e9fa2b7 [2792/2969] lib/test_string.c: Add test for strlen()
+config: mips-randconfig-r025-20220130 (https://download.01.org/0day-ci/archive/20220201/202202011846.EbcxQdke-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=05a5ff1e0c9581e4ceb8cdc2cbcce5ed0e9fa2b7
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 05a5ff1e0c9581e4ceb8cdc2cbcce5ed0e9fa2b7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash lib/
 
-	which: no aarch64-linux-gnu-gcc in ($PATH)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Since the error can safely be ignored, throw it to /dev/null.
+All errors (new ones prefixed by >>):
 
-Fixes: cebdb7374577 ("tools: Help cross-building with clang")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>> lib/test_string.c:188:30: error: initializer element is not a compile-time constant
+   static const int strlen_ce = strlen("tada, a constant expression");
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +188 lib/test_string.c
+
+   181	
+   182	/*
+   183	 * Unlike many other string functions, strlen() can be used in
+   184	 * static initializers when string lengths are known at compile
+   185	 * time. (i.e. Under these conditions, strlen() is a constant
+   186	 * expression.) Make sure it can be used this way.
+   187	 */
+ > 188	static const int strlen_ce = strlen("tada, a constant expression");
+   189	
+
 ---
- tools/scripts/Makefile.include | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-index b0be5f40a3f1..79d102304470 100644
---- a/tools/scripts/Makefile.include
-+++ b/tools/scripts/Makefile.include
-@@ -90,7 +90,7 @@ EXTRA_WARNINGS += -Wstrict-aliasing=3
- 
- else ifneq ($(CROSS_COMPILE),)
- CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
--GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc))
-+GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc 2>/dev/null))
- ifneq ($(GCC_TOOLCHAIN_DIR),)
- CLANG_CROSS_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
- CLANG_CROSS_FLAGS += --sysroot=$(shell $(CROSS_COMPILE)gcc -print-sysroot)
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
