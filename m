@@ -1,41 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5442CA5
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 02:15:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B3D2FAE
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 02:56:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643681712; x=1675217712;
+  t=1643684173; x=1675220173;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=74gUUhP+ox21nViXtqKt9guNjZ1spLIfXUftJf7SJZg=;
-  b=iIdr0hFdX7VGslDQp68oIjc3biadkPa5yFXVBugIhO/R3JRq7jB1AtuO
-   rGgGyDeKJCEap0KOLlYFB4qIrvIX49gsLAdQusWOhAL7vkIYpXZSTjc1b
-   wwwNOtDYgogQvnTRXa93Q3i2/LnzIYwP0FeLGLGAwwn3K4G8+EmyGjRd7
-   Njd9jBPr4IUZyYXS1lc/mH7xcesecOaB1ccR/PwJO3+9vzAo3BjNr8kvr
-   +4K8MLDJPnlrfzTgcb+FWtXpUZcfEINv9d8nIG0TzK/Vq9u7hIT5/qYX5
-   hDUGNaEc9ypDu0AggXcrJppULg6FTKKPvmfh3XldJA3DwI0ikUfWZpukQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="246440907"
+  bh=/j4MttSatOc0Tx7VFvWr6LM+70zW2UZKPfizy8rvSjg=;
+  b=kv29FfkrvC526TMZ9cYH7PnjikiLlrqNT5QjPkwC/3/1DQiGH7fuZIo/
+   8hbJiKrykfWHA97Sdtzkfefuk06DhMa1/IXlvJhdjZCuQZ/K299RVLLY5
+   SuPmGk5VYBxLIdKJEVmlgR5C55N3DkEw9URwoe8yUSRUnv9vNIzLX4QjI
+   LSHebuEKDqWwgGEu8mq7eLE/r5GVOZFownED6vxzNoLpwWD9rZqc7iGa3
+   Qa3+OBCwO7e+qAId9dta8eKwmUcwTl2LVHUq1EL2hUZ0+sBglxfFxSOrI
+   u/NYCkR1vuarRqH5cuPgb/8ABIKP20Wv9kWh1E5rsm8GYPUUu2zl9w0UA
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="231181189"
 X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="246440907"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 18:15:11 -0800
+   d="scan'208";a="231181189"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 18:56:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="630240580"
+   d="scan'208";a="698254737"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 31 Jan 2022 18:15:06 -0800
+  by orsmga005.jf.intel.com with ESMTP; 31 Jan 2022 18:56:10 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nEihF-000SbQ-UW; Tue, 01 Feb 2022 02:15:05 +0000
-Date: Tue, 1 Feb 2022 10:14:54 +0800
+	id 1nEjL0-000SfV-0G; Tue, 01 Feb 2022 02:56:10 +0000
+Date: Tue, 1 Feb 2022 10:55:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Trond Myklebust <trond.myklebust@hammerspace.com>
+To: Tomohito Esaki <etom@igel.co.jp>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [trondmy-nfs-2.6:testing 10/19] fs/nfs/nfs4state.c:2572:13: error:
- implicit declaration of function 'memalloc_nofs_save'
-Message-ID: <202202011021.MbDOMg4H-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [drm-misc:drm-misc-next 3/4] drivers/gpu/drm/sprd/sprd_drm.c:46:19:
+ error: no member named 'allow_fb_modifiers' in 'struct drm_mode_config'
+Message-ID: <202202011014.rBztJFU3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,188 +49,55 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git testing
-head:   ad0a7ba45fd8af0dceeadddd78d85a85df429f5b
-commit: 2f9032d5005af9b1581630763b61e3acd5dbaea4 [10/19] NFSv4: Protect the state recovery thread against direct reclaim
-config: x86_64-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220201/202202011021.MbDOMg4H-lkp@intel.com/config)
+tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+head:   d80976d9ffd9d7f89a26134a299b236910477f3b
+commit: 3d082157a24216ca084082ce421a37d14ecfcfad [3/4] drm: remove allow_fb_modifiers
+config: arm-buildonly-randconfig-r004-20220130 (https://download.01.org/0day-ci/archive/20220201/202202011014.rBztJFU3-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add trondmy-nfs-2.6 git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git
-        git fetch --no-tags trondmy-nfs-2.6 testing
-        git checkout 2f9032d5005af9b1581630763b61e3acd5dbaea4
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+        git fetch --no-tags drm-misc drm-misc-next
+        git checkout 3d082157a24216ca084082ce421a37d14ecfcfad
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/nfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/sprd/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> fs/nfs/nfs4state.c:2572:13: error: implicit declaration of function 'memalloc_nofs_save' [-Werror,-Wimplicit-function-declaration]
-           memflags = memalloc_nofs_save();
-                      ^
->> fs/nfs/nfs4state.c:2668:3: error: implicit declaration of function 'memalloc_nofs_restore' [-Werror,-Wimplicit-function-declaration]
-                   memalloc_nofs_restore(memflags);
-                   ^
-   fs/nfs/nfs4state.c:2668:3: note: did you mean 'memalloc_nofs_save'?
-   fs/nfs/nfs4state.c:2572:13: note: 'memalloc_nofs_save' declared here
-           memflags = memalloc_nofs_save();
-                      ^
-   fs/nfs/nfs4state.c:2699:2: error: implicit declaration of function 'memalloc_nofs_restore' [-Werror,-Wimplicit-function-declaration]
-           memalloc_nofs_restore(memflags);
-           ^
-   3 errors generated.
+>> drivers/gpu/drm/sprd/sprd_drm.c:46:19: error: no member named 'allow_fb_modifiers' in 'struct drm_mode_config'
+           drm->mode_config.allow_fb_modifiers = true;
+           ~~~~~~~~~~~~~~~~ ^
+   1 error generated.
 
 
-vim +/memalloc_nofs_save +2572 fs/nfs/nfs4state.c
+vim +46 drivers/gpu/drm/sprd/sprd_drm.c
 
-  2560	
-  2561	static void nfs4_state_manager(struct nfs_client *clp)
-  2562	{
-  2563		unsigned int memflags;
-  2564		int status = 0;
-  2565		const char *section = "", *section_sep = "";
-  2566	
-  2567		/*
-  2568		 * State recovery can deadlock if the direct reclaim code tries
-  2569		 * start NFS writeback. So ensure memory allocations are all
-  2570		 * GFP_NOFS.
-  2571		 */
-> 2572		memflags = memalloc_nofs_save();
-  2573	
-  2574		/* Ensure exclusive access to NFSv4 state */
-  2575		do {
-  2576			trace_nfs4_state_mgr(clp);
-  2577			clear_bit(NFS4CLNT_RUN_MANAGER, &clp->cl_state);
-  2578			if (test_bit(NFS4CLNT_PURGE_STATE, &clp->cl_state)) {
-  2579				section = "purge state";
-  2580				status = nfs4_purge_lease(clp);
-  2581				if (status < 0)
-  2582					goto out_error;
-  2583				continue;
-  2584			}
-  2585	
-  2586			if (test_bit(NFS4CLNT_LEASE_EXPIRED, &clp->cl_state)) {
-  2587				section = "lease expired";
-  2588				/* We're going to have to re-establish a clientid */
-  2589				status = nfs4_reclaim_lease(clp);
-  2590				if (status < 0)
-  2591					goto out_error;
-  2592				continue;
-  2593			}
-  2594	
-  2595			/* Initialize or reset the session */
-  2596			if (test_and_clear_bit(NFS4CLNT_SESSION_RESET, &clp->cl_state)) {
-  2597				section = "reset session";
-  2598				status = nfs4_reset_session(clp);
-  2599				if (test_bit(NFS4CLNT_LEASE_EXPIRED, &clp->cl_state))
-  2600					continue;
-  2601				if (status < 0)
-  2602					goto out_error;
-  2603			}
-  2604	
-  2605			/* Send BIND_CONN_TO_SESSION */
-  2606			if (test_and_clear_bit(NFS4CLNT_BIND_CONN_TO_SESSION,
-  2607					&clp->cl_state)) {
-  2608				section = "bind conn to session";
-  2609				status = nfs4_bind_conn_to_session(clp);
-  2610				if (status < 0)
-  2611					goto out_error;
-  2612				continue;
-  2613			}
-  2614	
-  2615			if (test_and_clear_bit(NFS4CLNT_CHECK_LEASE, &clp->cl_state)) {
-  2616				section = "check lease";
-  2617				status = nfs4_check_lease(clp);
-  2618				if (status < 0)
-  2619					goto out_error;
-  2620				continue;
-  2621			}
-  2622	
-  2623			if (test_and_clear_bit(NFS4CLNT_MOVED, &clp->cl_state)) {
-  2624				section = "migration";
-  2625				status = nfs4_handle_migration(clp);
-  2626				if (status < 0)
-  2627					goto out_error;
-  2628			}
-  2629	
-  2630			if (test_and_clear_bit(NFS4CLNT_LEASE_MOVED, &clp->cl_state)) {
-  2631				section = "lease moved";
-  2632				status = nfs4_handle_lease_moved(clp);
-  2633				if (status < 0)
-  2634					goto out_error;
-  2635			}
-  2636	
-  2637			/* First recover reboot state... */
-  2638			if (test_bit(NFS4CLNT_RECLAIM_REBOOT, &clp->cl_state)) {
-  2639				section = "reclaim reboot";
-  2640				status = nfs4_do_reclaim(clp,
-  2641					clp->cl_mvops->reboot_recovery_ops);
-  2642				if (status == -EAGAIN)
-  2643					continue;
-  2644				if (status < 0)
-  2645					goto out_error;
-  2646				nfs4_state_end_reclaim_reboot(clp);
-  2647			}
-  2648	
-  2649			/* Detect expired delegations... */
-  2650			if (test_and_clear_bit(NFS4CLNT_DELEGATION_EXPIRED, &clp->cl_state)) {
-  2651				section = "detect expired delegations";
-  2652				nfs_reap_expired_delegations(clp);
-  2653				continue;
-  2654			}
-  2655	
-  2656			/* Now recover expired state... */
-  2657			if (test_bit(NFS4CLNT_RECLAIM_NOGRACE, &clp->cl_state)) {
-  2658				section = "reclaim nograce";
-  2659				status = nfs4_do_reclaim(clp,
-  2660					clp->cl_mvops->nograce_recovery_ops);
-  2661				if (status == -EAGAIN)
-  2662					continue;
-  2663				if (status < 0)
-  2664					goto out_error;
-  2665				clear_bit(NFS4CLNT_RECLAIM_NOGRACE, &clp->cl_state);
-  2666			}
-  2667	
-> 2668			memalloc_nofs_restore(memflags);
-  2669			nfs4_end_drain_session(clp);
-  2670			nfs4_clear_state_manager_bit(clp);
-  2671	
-  2672			if (!test_and_set_bit(NFS4CLNT_RECALL_RUNNING, &clp->cl_state)) {
-  2673				if (test_and_clear_bit(NFS4CLNT_DELEGRETURN, &clp->cl_state)) {
-  2674					nfs_client_return_marked_delegations(clp);
-  2675					set_bit(NFS4CLNT_RUN_MANAGER, &clp->cl_state);
-  2676				}
-  2677				nfs4_layoutreturn_any_run(clp);
-  2678				clear_bit(NFS4CLNT_RECALL_RUNNING, &clp->cl_state);
-  2679			}
-  2680	
-  2681			/* Did we race with an attempt to give us more work? */
-  2682			if (!test_bit(NFS4CLNT_RUN_MANAGER, &clp->cl_state))
-  2683				return;
-  2684			if (test_and_set_bit(NFS4CLNT_MANAGER_RUNNING, &clp->cl_state) != 0)
-  2685				return;
-  2686			memflags = memalloc_nofs_save();
-  2687		} while (refcount_read(&clp->cl_count) > 1 && !signalled());
-  2688		goto out_drain;
-  2689	
-  2690	out_error:
-  2691		if (strlen(section))
-  2692			section_sep = ": ";
-  2693		trace_nfs4_state_mgr_failed(clp, section, status);
-  2694		pr_warn_ratelimited("NFS: state manager%s%s failed on NFSv4 server %s"
-  2695				" with error %d\n", section_sep, section,
-  2696				clp->cl_hostname, -status);
-  2697		ssleep(1);
-  2698	out_drain:
-  2699		memalloc_nofs_restore(memflags);
-  2700		nfs4_end_drain_session(clp);
-  2701		nfs4_clear_state_manager_bit(clp);
-  2702	}
-  2703	
+43531edd53f07c Kevin Tang 2021-12-07  39  
+43531edd53f07c Kevin Tang 2021-12-07  40  static void sprd_drm_mode_config_init(struct drm_device *drm)
+43531edd53f07c Kevin Tang 2021-12-07  41  {
+43531edd53f07c Kevin Tang 2021-12-07  42  	drm->mode_config.min_width = 0;
+43531edd53f07c Kevin Tang 2021-12-07  43  	drm->mode_config.min_height = 0;
+43531edd53f07c Kevin Tang 2021-12-07  44  	drm->mode_config.max_width = 8192;
+43531edd53f07c Kevin Tang 2021-12-07  45  	drm->mode_config.max_height = 8192;
+43531edd53f07c Kevin Tang 2021-12-07 @46  	drm->mode_config.allow_fb_modifiers = true;
+43531edd53f07c Kevin Tang 2021-12-07  47  
+43531edd53f07c Kevin Tang 2021-12-07  48  	drm->mode_config.funcs = &sprd_drm_mode_config_funcs;
+43531edd53f07c Kevin Tang 2021-12-07  49  	drm->mode_config.helper_private = &sprd_drm_mode_config_helper;
+43531edd53f07c Kevin Tang 2021-12-07  50  }
+43531edd53f07c Kevin Tang 2021-12-07  51  
+
+:::::: The code at line 46 was first introduced by commit
+:::::: 43531edd53f07cbe977a0b33dea6dd6c29b21fea drm/sprd: add Unisoc's drm kms master
+
+:::::: TO: Kevin Tang <kevin3.tang@gmail.com>
+:::::: CC: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
