@@ -1,98 +1,234 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8533FDD
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 01:33:06 +0000 (UTC)
-Received: by mail-qt1-f176.google.com with SMTP id e16so13178771qtq.6
-        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 17:33:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MoWm32zvhEyqRVmUpa5LXZEYybwAAQFRmq/wU8a+Gt4=;
-        b=EgGzc5rt8LRF5c2Eif2fVlYrh9HTecIoACGjTA6wXsMIE5Cq6qPShWc2VkeRIbLQLJ
-         NzdWdQo2IAl4ibTNTDpXspNbyJX8M4MXNhOrJdH7s1L6p52qZ4QQmdA9tPnPO84GtTBx
-         t7MPx8RQAxDA9goxsppgIVZ+UrbAWYJM/6BsuBOZkSZXcDSdMWpTIxG/j+/nhuMs3Lqj
-         3/1dB0rzc7uOB2csLmqRxJfM1rzyDgXH68UG9wViOR32SdzStDiwpIWGxdl9ILrg8+5K
-         qn0HtVvCShbOisPior89CQpUSaHiw49SefIEMrjQqmB2DRVai7BMhol9HGp4yJaVyAvZ
-         B1yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MoWm32zvhEyqRVmUpa5LXZEYybwAAQFRmq/wU8a+Gt4=;
-        b=jYcSxLkfv/RKitv+T/bN2JrFBd9/z0dp1I1q30rHuOoGhNXx3LCcQJ6Nty8uGRlJvh
-         3jsGJe0TTxfyLkB9lp2eQBhBnPmG75HQu3BcVvoF+z3wDoaL7nWUWgeE0OJp6xX2sLKP
-         gCp4RU7m9munI5TH6hBio9xXxLwMHuetp3AOYlQmRp0DQlawjaqdv6iT0Fazd2kdmbyZ
-         +LHJzsBde6ajyjTV7xOVHKknAv9cYVO7JIK52QVjZTJ6ASeoSUvWNoWbujuolKC9T9T6
-         aS6AMn048k6FZLpku8dUr1LV/NNZSnbnchN/VQXKHiGakeB5WkRfeAGPtSkfx05mTQLC
-         nPEw==
-X-Gm-Message-State: AOAM530+tOg2r26PUZT+6sfuPN56xm/4YmNOHBH3Mvd+6mqclIl1lOui
-	4MQQHxfMyf2Hq8J6FioBndQ=
-X-Google-Smtp-Source: ABdhPJx9XbvUrAI3Emn6dngj5AmQ9NNxFJ3HrnmEE5AIo9Ak4wHhNAJY3XZGyeDXTS4yuiTX27NoKw==
-X-Received: by 2002:a05:622a:1881:: with SMTP id v1mr17345340qtc.683.1643679185259;
-        Mon, 31 Jan 2022 17:33:05 -0800 (PST)
-Received: from WRT-WX9.. ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id v73sm9272458qkb.51.2022.01.31.17.33.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 17:33:04 -0800 (PST)
-From: Changbin Du <changbin.du@gmail.com>
-To: Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev,
-	Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH] kallsyms: ignore all local labels prefixed by '.L'
-Date: Tue,  1 Feb 2022 09:32:57 +0800
-Message-Id: <20220201013257.17926-1-changbin.du@gmail.com>
-X-Mailer: git-send-email 2.32.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5442CA5
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 02:15:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643681712; x=1675217712;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=74gUUhP+ox21nViXtqKt9guNjZ1spLIfXUftJf7SJZg=;
+  b=iIdr0hFdX7VGslDQp68oIjc3biadkPa5yFXVBugIhO/R3JRq7jB1AtuO
+   rGgGyDeKJCEap0KOLlYFB4qIrvIX49gsLAdQusWOhAL7vkIYpXZSTjc1b
+   wwwNOtDYgogQvnTRXa93Q3i2/LnzIYwP0FeLGLGAwwn3K4G8+EmyGjRd7
+   Njd9jBPr4IUZyYXS1lc/mH7xcesecOaB1ccR/PwJO3+9vzAo3BjNr8kvr
+   +4K8MLDJPnlrfzTgcb+FWtXpUZcfEINv9d8nIG0TzK/Vq9u7hIT5/qYX5
+   hDUGNaEc9ypDu0AggXcrJppULg6FTKKPvmfh3XldJA3DwI0ikUfWZpukQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="246440907"
+X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
+   d="scan'208";a="246440907"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 18:15:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
+   d="scan'208";a="630240580"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 31 Jan 2022 18:15:06 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nEihF-000SbQ-UW; Tue, 01 Feb 2022 02:15:05 +0000
+Date: Tue, 1 Feb 2022 10:14:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [trondmy-nfs-2.6:testing 10/19] fs/nfs/nfs4state.c:2572:13: error:
+ implicit declaration of function 'memalloc_nofs_save'
+Message-ID: <202202011021.MbDOMg4H-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-The llvm compiler can generate lots of local labels ('.LBB', '.Ltmpxxx',
-'.L__unnamed_xx', etc.). These symbols usually are useless for debugging.
-And they might overlap with handwritten symbols.
+tree:   git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git testing
+head:   ad0a7ba45fd8af0dceeadddd78d85a85df429f5b
+commit: 2f9032d5005af9b1581630763b61e3acd5dbaea4 [10/19] NFSv4: Protect the state recovery thread against direct reclaim
+config: x86_64-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220201/202202011021.MbDOMg4H-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add trondmy-nfs-2.6 git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git
+        git fetch --no-tags trondmy-nfs-2.6 testing
+        git checkout 2f9032d5005af9b1581630763b61e3acd5dbaea4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/nfs/
 
-Before this change, a dumpstack shows a local symbol for epc:
-[    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
-[    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
-[    0.040452][    T0]  ra : restore_all+0x12/0x6e
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The simple solution is that we can ignore all local labels prefixed by '.L'.
-For handwritten symbols which need to be preserved should drop the '.L'
-prefix.
+All errors (new ones prefixed by >>):
 
-After this change, the C defined symbol is shown so we can locate the
-problematical code immediately:
-[    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
-[    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
-[    0.036567][    T0]  ra : restore_all+0x12/0x6e
+>> fs/nfs/nfs4state.c:2572:13: error: implicit declaration of function 'memalloc_nofs_save' [-Werror,-Wimplicit-function-declaration]
+           memflags = memalloc_nofs_save();
+                      ^
+>> fs/nfs/nfs4state.c:2668:3: error: implicit declaration of function 'memalloc_nofs_restore' [-Werror,-Wimplicit-function-declaration]
+                   memalloc_nofs_restore(memflags);
+                   ^
+   fs/nfs/nfs4state.c:2668:3: note: did you mean 'memalloc_nofs_save'?
+   fs/nfs/nfs4state.c:2572:13: note: 'memalloc_nofs_save' declared here
+           memflags = memalloc_nofs_save();
+                      ^
+   fs/nfs/nfs4state.c:2699:2: error: implicit declaration of function 'memalloc_nofs_restore' [-Werror,-Wimplicit-function-declaration]
+           memalloc_nofs_restore(memflags);
+           ^
+   3 errors generated.
 
-Signed-off-by: Changbin Du <changbin.du@gmail.com>
+
+vim +/memalloc_nofs_save +2572 fs/nfs/nfs4state.c
+
+  2560	
+  2561	static void nfs4_state_manager(struct nfs_client *clp)
+  2562	{
+  2563		unsigned int memflags;
+  2564		int status = 0;
+  2565		const char *section = "", *section_sep = "";
+  2566	
+  2567		/*
+  2568		 * State recovery can deadlock if the direct reclaim code tries
+  2569		 * start NFS writeback. So ensure memory allocations are all
+  2570		 * GFP_NOFS.
+  2571		 */
+> 2572		memflags = memalloc_nofs_save();
+  2573	
+  2574		/* Ensure exclusive access to NFSv4 state */
+  2575		do {
+  2576			trace_nfs4_state_mgr(clp);
+  2577			clear_bit(NFS4CLNT_RUN_MANAGER, &clp->cl_state);
+  2578			if (test_bit(NFS4CLNT_PURGE_STATE, &clp->cl_state)) {
+  2579				section = "purge state";
+  2580				status = nfs4_purge_lease(clp);
+  2581				if (status < 0)
+  2582					goto out_error;
+  2583				continue;
+  2584			}
+  2585	
+  2586			if (test_bit(NFS4CLNT_LEASE_EXPIRED, &clp->cl_state)) {
+  2587				section = "lease expired";
+  2588				/* We're going to have to re-establish a clientid */
+  2589				status = nfs4_reclaim_lease(clp);
+  2590				if (status < 0)
+  2591					goto out_error;
+  2592				continue;
+  2593			}
+  2594	
+  2595			/* Initialize or reset the session */
+  2596			if (test_and_clear_bit(NFS4CLNT_SESSION_RESET, &clp->cl_state)) {
+  2597				section = "reset session";
+  2598				status = nfs4_reset_session(clp);
+  2599				if (test_bit(NFS4CLNT_LEASE_EXPIRED, &clp->cl_state))
+  2600					continue;
+  2601				if (status < 0)
+  2602					goto out_error;
+  2603			}
+  2604	
+  2605			/* Send BIND_CONN_TO_SESSION */
+  2606			if (test_and_clear_bit(NFS4CLNT_BIND_CONN_TO_SESSION,
+  2607					&clp->cl_state)) {
+  2608				section = "bind conn to session";
+  2609				status = nfs4_bind_conn_to_session(clp);
+  2610				if (status < 0)
+  2611					goto out_error;
+  2612				continue;
+  2613			}
+  2614	
+  2615			if (test_and_clear_bit(NFS4CLNT_CHECK_LEASE, &clp->cl_state)) {
+  2616				section = "check lease";
+  2617				status = nfs4_check_lease(clp);
+  2618				if (status < 0)
+  2619					goto out_error;
+  2620				continue;
+  2621			}
+  2622	
+  2623			if (test_and_clear_bit(NFS4CLNT_MOVED, &clp->cl_state)) {
+  2624				section = "migration";
+  2625				status = nfs4_handle_migration(clp);
+  2626				if (status < 0)
+  2627					goto out_error;
+  2628			}
+  2629	
+  2630			if (test_and_clear_bit(NFS4CLNT_LEASE_MOVED, &clp->cl_state)) {
+  2631				section = "lease moved";
+  2632				status = nfs4_handle_lease_moved(clp);
+  2633				if (status < 0)
+  2634					goto out_error;
+  2635			}
+  2636	
+  2637			/* First recover reboot state... */
+  2638			if (test_bit(NFS4CLNT_RECLAIM_REBOOT, &clp->cl_state)) {
+  2639				section = "reclaim reboot";
+  2640				status = nfs4_do_reclaim(clp,
+  2641					clp->cl_mvops->reboot_recovery_ops);
+  2642				if (status == -EAGAIN)
+  2643					continue;
+  2644				if (status < 0)
+  2645					goto out_error;
+  2646				nfs4_state_end_reclaim_reboot(clp);
+  2647			}
+  2648	
+  2649			/* Detect expired delegations... */
+  2650			if (test_and_clear_bit(NFS4CLNT_DELEGATION_EXPIRED, &clp->cl_state)) {
+  2651				section = "detect expired delegations";
+  2652				nfs_reap_expired_delegations(clp);
+  2653				continue;
+  2654			}
+  2655	
+  2656			/* Now recover expired state... */
+  2657			if (test_bit(NFS4CLNT_RECLAIM_NOGRACE, &clp->cl_state)) {
+  2658				section = "reclaim nograce";
+  2659				status = nfs4_do_reclaim(clp,
+  2660					clp->cl_mvops->nograce_recovery_ops);
+  2661				if (status == -EAGAIN)
+  2662					continue;
+  2663				if (status < 0)
+  2664					goto out_error;
+  2665				clear_bit(NFS4CLNT_RECLAIM_NOGRACE, &clp->cl_state);
+  2666			}
+  2667	
+> 2668			memalloc_nofs_restore(memflags);
+  2669			nfs4_end_drain_session(clp);
+  2670			nfs4_clear_state_manager_bit(clp);
+  2671	
+  2672			if (!test_and_set_bit(NFS4CLNT_RECALL_RUNNING, &clp->cl_state)) {
+  2673				if (test_and_clear_bit(NFS4CLNT_DELEGRETURN, &clp->cl_state)) {
+  2674					nfs_client_return_marked_delegations(clp);
+  2675					set_bit(NFS4CLNT_RUN_MANAGER, &clp->cl_state);
+  2676				}
+  2677				nfs4_layoutreturn_any_run(clp);
+  2678				clear_bit(NFS4CLNT_RECALL_RUNNING, &clp->cl_state);
+  2679			}
+  2680	
+  2681			/* Did we race with an attempt to give us more work? */
+  2682			if (!test_bit(NFS4CLNT_RUN_MANAGER, &clp->cl_state))
+  2683				return;
+  2684			if (test_and_set_bit(NFS4CLNT_MANAGER_RUNNING, &clp->cl_state) != 0)
+  2685				return;
+  2686			memflags = memalloc_nofs_save();
+  2687		} while (refcount_read(&clp->cl_count) > 1 && !signalled());
+  2688		goto out_drain;
+  2689	
+  2690	out_error:
+  2691		if (strlen(section))
+  2692			section_sep = ": ";
+  2693		trace_nfs4_state_mgr_failed(clp, section, status);
+  2694		pr_warn_ratelimited("NFS: state manager%s%s failed on NFSv4 server %s"
+  2695				" with error %d\n", section_sep, section,
+  2696				clp->cl_hostname, -status);
+  2697		ssleep(1);
+  2698	out_drain:
+  2699		memalloc_nofs_restore(memflags);
+  2700		nfs4_end_drain_session(clp);
+  2701		nfs4_clear_state_manager_bit(clp);
+  2702	}
+  2703	
+
 ---
- scripts/kallsyms.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 54ad86d13784..8caabddf817c 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -108,7 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
- 	/* Symbol names that begin with the following are ignored.*/
- 	static const char * const ignored_prefixes[] = {
- 		"$",			/* local symbols for ARM, MIPS, etc. */
--		".LASANPC",		/* s390 kasan local symbols */
-+		".L",			/* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
- 		"__crc_",		/* modversions */
- 		"__efistub_",		/* arm64 EFI stub namespace */
- 		"__kvm_nvhe_",		/* arm64 non-VHE KVM namespace */
--- 
-2.32.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
