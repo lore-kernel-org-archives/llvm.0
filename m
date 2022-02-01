@@ -1,45 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673B32CA5
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 12:55:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEEF2CA5
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 13:15:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643720143; x=1675256143;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F/PNLCQjl3adnb0moLdl49HjekyThZribRW7PYNGG6M=;
-  b=M/dgyo0x+05DBEkjsqeqHEfOBKDBxsmP0QVWRNVdP64xMrCoq7RNnFBl
-   O7NVqLhu2qw4HyYCme/+KHvId8OG7uDS9TN6tOwYSX1nko+FtQU2zLb+g
-   pA0al/jAgim9mIMGeuR2qhGuwGzvWM1MRm6jA9/UB5g1/PUbH8KUaDgGI
-   3RiLsEswHAthlMZw6h4nZBVcyQJga0bbeVxSfJtguk31+/Bxv34QlGaJ4
-   cMl7a63snq2mPWBienGSAIspahgyNa3PHxMlZy/XTEdZBzpsBxay/Y7LF
-   1S/gBm8L+RDFtnrk5NFe98YaXuJXVtUV/0MJXpdb6WmGZoclZ2koWSgTY
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247900774"
+  t=1643721343; x=1675257343;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YIrB/RjwUQuB/lErIj+v5pUNuBA3zxVy4nUv15hlRCw=;
+  b=cxuiAQNNqH5bD1jSDP7jt4vSL+LNbf/DY5i1sy0sqGm/v3wQ30szEUnZ
+   fL+ZE5ajDRwWoJ4+UdIKgIVUSDES73aRfRYm8lk7U6YhmjTYecIeQ0OGM
+   9lmw9A+4FlxONwpJZlUV60ymjTcbC3ezp7sF0P8zFtFFf0gh8hARMtjPG
+   Dt9hi+DUzC2DjIvZI9/ImlYgtJQCPAr5M/cn397/qz6E661XIj44kfYPe
+   MUKBtc8GMdZ/TBoUYcHOxOMZgkEMDBdTUDTDCaoU5ETFBIN9S5IqxHOZC
+   HQbRXGquSF58aSBT5fwZZdESARrpb7FMg6jpVg+RgLq/yVg/CZCEbNXJZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247456773"
 X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="247900774"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 04:55:42 -0800
+   d="scan'208";a="247456773"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 05:15:43 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="771097518"
+   d="scan'208";a="630392461"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Feb 2022 04:55:40 -0800
+  by orsmga004.jf.intel.com with ESMTP; 01 Feb 2022 05:15:41 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nEsh9-000THa-NR; Tue, 01 Feb 2022 12:55:39 +0000
-Date: Tue, 1 Feb 2022 20:54:51 +0800
+	id 1nEt0W-000TIk-EP; Tue, 01 Feb 2022 13:15:40 +0000
+Date: Tue, 1 Feb 2022 21:15:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
-	mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-	john.stultz@linaro.org, sboyd@kernel.org
+To: Quentin Perret <qperret@google.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	tangmeng <tangmeng@uniontech.com>
-Subject: Re: [PATCH v5] kernel/time: move timer sysctls to its own file
-Message-ID: <202202012006.823BFJHa-lkp@intel.com>
-References: <20220131102214.2284-1-tangmeng@uniontech.com>
+	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+	linux-kernel@vger.kernel.org,
+	Saravana Kannan <saravanak@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
+ 201/9999] kernel/sched/stubs.c:8:5: warning: no previous prototype for
+ function 'sched_isolate_cpu'
+Message-ID: <202202012133.0supCHiV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,128 +47,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220131102214.2284-1-tangmeng@uniontech.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi tangmeng,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on tip/timers/core]
-[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc2 next-20220131]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220131-182433
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: s390-randconfig-r044-20220131 (https://download.01.org/0day-ci/archive/20220201/202202012006.823BFJHa-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
+head:   b45c5eeda8dea785e3d411380b486a209768f6b2
+commit: eead51495c8760858c32d9ad0332ffc94397aa82 [201/9999] ANDROID: GKI: sched: stub sched_isolate symbols
+config: x86_64-randconfig-r026-20220131 (https://download.01.org/0day-ci/archive/20220201/202202012133.0supCHiV-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/c54967d83b26ebacf4a1b686c6b659150b73306c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220131-182433
-        git checkout c54967d83b26ebacf4a1b686c6b659150b73306c
+        # https://github.com/ammarfaizi2/linux-block/commit/eead51495c8760858c32d9ad0332ffc94397aa82
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
+        git checkout eead51495c8760858c32d9ad0332ffc94397aa82
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/time/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvmem/ kernel/sched/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/time/timer.c:37:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/time/timer.c:37:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/time/timer.c:37:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/time/timer.c:284:2: error: implicit declaration of function 'register_sysctl_init' [-Werror,-Wimplicit-function-declaration]
-           register_sysctl_init("kernel", timer_sysctl);
-           ^
-   12 warnings and 1 error generated.
+>> kernel/sched/stubs.c:8:5: warning: no previous prototype for function 'sched_isolate_cpu' [-Wmissing-prototypes]
+   int sched_isolate_cpu(int cpu)
+       ^
+   kernel/sched/stubs.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int sched_isolate_cpu(int cpu)
+   ^
+   static 
+>> kernel/sched/stubs.c:14:5: warning: no previous prototype for function 'sched_unisolate_cpu_unlocked' [-Wmissing-prototypes]
+   int sched_unisolate_cpu_unlocked(int cpu)
+       ^
+   kernel/sched/stubs.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int sched_unisolate_cpu_unlocked(int cpu)
+   ^
+   static 
+>> kernel/sched/stubs.c:20:5: warning: no previous prototype for function 'sched_unisolate_cpu' [-Wmissing-prototypes]
+   int sched_unisolate_cpu(int cpu)
+       ^
+   kernel/sched/stubs.c:20:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int sched_unisolate_cpu(int cpu)
+   ^
+   static 
+>> kernel/sched/stubs.c:26:5: warning: no previous prototype for function 'set_task_boost' [-Wmissing-prototypes]
+   int set_task_boost(int boost, u64 period)
+       ^
+   kernel/sched/stubs.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int set_task_boost(int boost, u64 period)
+   ^
+   static 
+   4 warnings generated.
 
 
-vim +/register_sysctl_init +284 kernel/time/timer.c
+vim +/sched_isolate_cpu +8 kernel/sched/stubs.c
 
-   281	
-   282	static int __init timer_sysctl_init(void)
-   283	{
- > 284		register_sysctl_init("kernel", timer_sysctl);
-   285		return 0;
-   286	}
-   287	__initcall(timer_sysctl_init);
-   288	#endif
-   289	static inline bool is_timers_nohz_active(void)
-   290	{
-   291		return static_branch_unlikely(&timers_nohz_active);
-   292	}
-   293	#else
-   294	static inline bool is_timers_nohz_active(void) { return false; }
-   295	#endif /* NO_HZ_COMMON */
-   296	
+     7	
+   > 8	int sched_isolate_cpu(int cpu)
+     9	{
+    10		return -EINVAL;
+    11	}
+    12	EXPORT_SYMBOL_GPL(sched_isolate_cpu);
+    13	
+  > 14	int sched_unisolate_cpu_unlocked(int cpu)
+    15	{
+    16		return -EINVAL;
+    17	}
+    18	EXPORT_SYMBOL_GPL(sched_unisolate_cpu_unlocked);
+    19	
+  > 20	int sched_unisolate_cpu(int cpu)
+    21	{
+    22		return -EINVAL;
+    23	}
+    24	EXPORT_SYMBOL_GPL(sched_unisolate_cpu);
+    25	
+  > 26	int set_task_boost(int boost, u64 period)
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
