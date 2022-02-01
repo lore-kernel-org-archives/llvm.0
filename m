@@ -1,29 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446E22CA6
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 16:01:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B85C340EB;
-	Tue,  1 Feb 2022 16:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643731317;
-	bh=hGfZZ9bBYY+bCNNU83upYdVCO5KAqgPJ2wkt7zm1oNk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dBk75CJldupzxQ2UDc7nl+vwG8ynrxmAVKQGCLo/HQp8A2T0sG10v7zuNr2DBRGdE
-	 HySQq2yjeeHF6OuMd+zj3k9TZ1cGOOzOuGM6c+KV9x7f0AaAjgMdyJn8cCUWkZXcOP
-	 BbX0VHCc9BR7GrtAdkhYefwrLh+ttA0M7c2B99VxmRj1DRBduYUR7evdHyQgu+mrOs
-	 mL/LJ3ypu/8Bete+/xMckuFWLAMGR/96dBXiBqsOqK15IkmijEstrJjpKLG1YZfnYQ
-	 Jrew3ot986hSFgsZV6AtCBPbQtv+q8jjwn53hqGtJMaIoSkqGbVnXvPmvda1PMlN+e
-	 rQ1P6saoJGuMA==
-Date: Tue, 1 Feb 2022 09:01:52 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc: ndesaulniers@google.com, llvm@lists.linux.dev, bpf@vger.kernel.org,
-	andrii@kernel.org, quentin@isovalent.com
-Subject: Re: [PATCH] tools: Ignore errors from `which' when searching a GCC
- toolchain
-Message-ID: <YflZcEjaPoN8G84c@dev-arch.archlinux-ax161>
-References: <20220201093119.1713207-1-jean-philippe@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EED2F21
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 16:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643731835; x=1675267835;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=189fYGHJVlj5zOLzKTwYfYzrrePatfGTa6H0kI7Cuf8=;
+  b=TdyvA2a/8wktin9lusGdH1rUyyCmpDMS8BkZWVhQDNugUKyX7ZSScuqT
+   Q4JtWZJfAZs9YEWzn4cZAH+nhgbmr5VYlbM18cOvIMaHLHtitKEbGf2T4
+   cBotU65R9oR32lXPSWSd0j5rfmDNzGyOVLIxQkK9ZUH3aCbw7TBhPbass
+   aDuKgeigtMwlpvxV1wbBBGagLfqsWLErQY0i94fpVeotUXnTDvBJSpfL4
+   uwpR7RHuHkjCmugBxjqSrl9kDzD1Ix0P6zeQk3Di78VfXhY1hAUwVOlck
+   oqGbBI2nuugLFxEPri5LWGgiLY+D5DPvRfq29JkEjq0a53FslIDlFOsLj
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="227695126"
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="227695126"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 08:09:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="523096311"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 01 Feb 2022 08:09:52 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nEvj6-000TS5-4Z; Tue, 01 Feb 2022 16:09:52 +0000
+Date: Wed, 2 Feb 2022 00:09:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guo Ren <guoren@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: [csky-linux:riscv_compat_v5 6/21]
+ arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'compat_statfs'
+Message-ID: <202202020013.HE3OoT9n-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,51 +44,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220201093119.1713207-1-jean-philippe@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Feb 01, 2022 at 09:31:20AM +0000, Jean-Philippe Brucker wrote:
-> When cross-building tools with clang, we run `which $(CROSS_COMPILE)gcc`
-> to detect whether a GCC toolchain provides the standard libraries. It is
-> only a helper because some distros put libraries where LLVM does not
-> automatically find them. On other systems, LLVM detects the libc
-> automatically and does not need this. There, it is completely fine not
-> to have a GCC at all, but some versions of `which' display an error when
-> the command is not found:
-> 
-> 	which: no aarch64-linux-gnu-gcc in ($PATH)
-> 
-> Since the error can safely be ignored, throw it to /dev/null.
-> 
-> Fixes: cebdb7374577 ("tools: Help cross-building with clang")
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v5
+head:   653df84165a3999569804361df88af1a54d58180
+commit: ec2542a61a8a75165df0c14f215f6b4f3821ee36 [6/21] asm-generic: compat: Cleanup duplicate definitions
+config: arm64-randconfig-r031-20220130 (https://download.01.org/0day-ci/archive/20220202/202202020013.HE3OoT9n-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/c-sky/csky-linux/commit/ec2542a61a8a75165df0c14f215f6b4f3821ee36
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v5
+        git checkout ec2542a61a8a75165df0c14f215f6b4f3821ee36
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
 
-Thanks a lot for the quick fix!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+All errors (new ones prefixed by >>):
 
-It would be nice if this could go in via bpf, as cebdb7374577 was merged
-in 5.17-rc1.
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/irqdomain.h:35:
+   In file included from include/linux/of.h:17:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:22:
+   In file included from include/linux/stat.h:6:
+   In file included from arch/arm64/include/asm/stat.h:13:
+>> arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'compat_statfs'
+   struct compat_statfs {
+          ^
+   include/asm-generic/compat.h:80:8: note: previous definition is here
+   struct compat_statfs {
+          ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-> ---
->  tools/scripts/Makefile.include | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> index b0be5f40a3f1..79d102304470 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -90,7 +90,7 @@ EXTRA_WARNINGS += -Wstrict-aliasing=3
->  
->  else ifneq ($(CROSS_COMPILE),)
->  CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
-> -GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc))
-> +GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc 2>/dev/null))
->  ifneq ($(GCC_TOOLCHAIN_DIR),)
->  CLANG_CROSS_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
->  CLANG_CROSS_FLAGS += --sysroot=$(shell $(CROSS_COMPILE)gcc -print-sysroot)
-> -- 
-> 2.34.1
-> 
-> 
+
+vim +/compat_statfs +69 arch/arm64/include/asm/compat.h
+
+3dd681d944f6d8 Will Deacon 2012-03-05  68  
+3dd681d944f6d8 Will Deacon 2012-03-05 @69  struct compat_statfs {
+3dd681d944f6d8 Will Deacon 2012-03-05  70  	int		f_type;
+3dd681d944f6d8 Will Deacon 2012-03-05  71  	int		f_bsize;
+3dd681d944f6d8 Will Deacon 2012-03-05  72  	int		f_blocks;
+3dd681d944f6d8 Will Deacon 2012-03-05  73  	int		f_bfree;
+3dd681d944f6d8 Will Deacon 2012-03-05  74  	int		f_bavail;
+3dd681d944f6d8 Will Deacon 2012-03-05  75  	int		f_files;
+3dd681d944f6d8 Will Deacon 2012-03-05  76  	int		f_ffree;
+3dd681d944f6d8 Will Deacon 2012-03-05  77  	compat_fsid_t	f_fsid;
+3dd681d944f6d8 Will Deacon 2012-03-05  78  	int		f_namelen;	/* SunOS ignores this field. */
+3dd681d944f6d8 Will Deacon 2012-03-05  79  	int		f_frsize;
+3dd681d944f6d8 Will Deacon 2012-03-05  80  	int		f_flags;
+3dd681d944f6d8 Will Deacon 2012-03-05  81  	int		f_spare[4];
+3dd681d944f6d8 Will Deacon 2012-03-05  82  };
+3dd681d944f6d8 Will Deacon 2012-03-05  83  
+
+:::::: The code at line 69 was first introduced by commit
+:::::: 3dd681d944f6d861f12ee03aff17a14342963330 arm64: 32-bit (compat) applications support
+
+:::::: TO: Will Deacon <will.deacon@arm.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
