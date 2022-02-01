@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1662C9C
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 20:57:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC79C340F0;
-	Tue,  1 Feb 2022 20:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F882C9C
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 20:57:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03855C340ED;
+	Tue,  1 Feb 2022 20:57:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643749026;
-	bh=CjKRajP1hyPG6GHtEcC8S1cRRiUsFDVkufEo2oeRcYE=;
+	s=k20201202; t=1643749030;
+	bh=QXd5q+7zbc3jx1Mm3Y3j3sEp6a7kDTxU4zMgI1M/2kk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GHhT8p9EI3H/jMYWEdBQhX57o8+L+vIC3+tLN4xs6ZNWLxeJKKUB05GTm3uPyKZJP
-	 n+1HQRKXDjX88fiYj9VEC1k7DxhEFOBPiveXCGnh7QWajpO8gdfbTdFdZTR9DERIZ9
-	 pKcGOkI5jhSUqUulKJjjhkEBOxqo5TVQQx0Iz3k6KELSay+iCNX+4K7B33Tlcxjy93
-	 afxH0sb7C88bZioAMSRlSCT2D+TsilmQQw4MQfy8OJKw5eLQ2d1TChcRATvmZJ+3o/
-	 UBo29e/0n6vyImBfvW0YptV1u6izC8zLkHsj0DWCYL7JnskXjvERbE/PVIC6ufl01T
-	 /Q1aiZ0bGchMQ==
+	b=PRveCCTFfiTH8rbyrskvMn7zEKvijdY2AWxXS8Oa0tcVHJl7jkEh4CftPLCtfL33H
+	 509+ho2uYbQttMIcdNcZ8pWKHdnBQc5NC+E1XXTcG3m1z+aQemyE7WRJ+4Y21LEeAh
+	 yJx3YcLpcmS+k+sHDkazhBTz80lCJ02l0a/eQ84VsRdVXzMtkblhyOVaNJG+EUaA+g
+	 Q8567O1/cFJVLH5kCu6alN86VTReQ2XCscOuy64FJR4I2tdUPiyOzjXea6JK4vQQ8T
+	 6RWZWTXDGkPQY2CP3EZ91XxgusRAwc8SQm0BHyemWHkrx+ChCTXnw0FuR+YEzeT9xe
+	 pNliHc4SyE9vw==
 From: Nathan Chancellor <nathan@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -30,9 +30,9 @@ Cc: Martin KaFai Lau <kafai@fb.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH bpf-next 4/5] lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
-Date: Tue,  1 Feb 2022 13:56:23 -0700
-Message-Id: <20220201205624.652313-5-nathan@kernel.org>
+Subject: [PATCH bpf-next 5/5] lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
+Date: Tue,  1 Feb 2022 13:56:24 -0700
+Message-Id: <20220201205624.652313-6-nathan@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220201205624.652313-1-nathan@kernel.org>
 References: <20220201205624.652313-1-nathan@kernel.org>
@@ -44,32 +44,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that CONFIG_PAHOLE_VERSION exists, use it in the definition of
-CONFIG_PAHOLE_HAS_SPLIT_BTF and CONFIG_PAHOLE_HAS_BTF_TAG to reduce the
-amount of duplication across the tree.
+Commit 98cd6f521f10 ("Kconfig: allow explicit opt in to DWARF v5")
+prevented CONFIG_DEBUG_INFO_DWARF5 from being selected when
+CONFIG_DEBUG_INFO_BTF is enabled because pahole had issues with clang's
+DWARF5 info. This was resolved by [1], which is in pahole v1.21.
+
+Allow DEBUG_INFO_DWARF5 to be selected with DEBUG_INFO_BTF when using
+pahole v1.21 or newer.
+
+[1]: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=7d8e829f636f47aba2e1b6eda57e74d8e31f733c
 
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- lib/Kconfig.debug | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ lib/Kconfig.debug | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 6159859769fa..bd487d480902 100644
+index bd487d480902..1555da672275 100644
 --- a/lib/Kconfig.debug
 +++ b/lib/Kconfig.debug
-@@ -323,10 +323,10 @@ config DEBUG_INFO_BTF
- 	  DWARF type info into equivalent deduplicated BTF type info.
- 
- config PAHOLE_HAS_SPLIT_BTF
--	def_bool $(success, test `$(PAHOLE) --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/'` -ge "119")
-+	def_bool PAHOLE_VERSION >= 119
- 
- config PAHOLE_HAS_BTF_TAG
--	def_bool $(success, test `$(PAHOLE) --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/'` -ge "123")
-+	def_bool PAHOLE_VERSION >= 123
- 	depends on CC_IS_CLANG
+@@ -296,7 +296,7 @@ config DEBUG_INFO_DWARF4
+ config DEBUG_INFO_DWARF5
+ 	bool "Generate DWARF Version 5 debuginfo"
+ 	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
+-	depends on !DEBUG_INFO_BTF
++	depends on !DEBUG_INFO_BTF || PAHOLE_VERSION >= 121
  	help
- 	  Decide whether pahole emits btf_tag attributes (btf_type_tag and
+ 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+ 	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
 -- 
 2.35.1
 
