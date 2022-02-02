@@ -1,144 +1,83 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98FE22F2B
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 16:01:54 +0000 (UTC)
-Received: by mail-ot1-f44.google.com with SMTP id w27-20020a9d5a9b000000b005a17d68ae89so19874552oth.12
-        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 08:01:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3g3d/0nNM/m7x4mgsz4tjhBAFiZS3Vbf1uUerpVJ9lQ=;
-        b=HhEE3lXB3iuVMezioKIcOChf5uZ2cD2tvUqJN6GkjOCS3ozVUiatdlZdgtgWNMOFfF
-         2aURaeU2R0RcuAg4rZcpV9kYDv+/9WKwld5EmmBQ6yioLNzOE8EuwMBhWIblFWY1WP8S
-         rJQ9jzlFspluGUbx44Ly+y1rSiwE40HqYsFzc3nb3T9etw8krT1xtVVwOC5u9k0utLcR
-         X6m7XAfhHJFv9iEN1Pkgsc0Nvl1GJomgBYxG0ULxrS83xo8xHhCIOE8ZA0sPl7w9uJux
-         lTcjclx1IpfsCTqPsPCDtsHXiiwG+HH26wdaCA3H0KuhXpas1yW5AR1tLt+/OfOLDMCW
-         m1Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=3g3d/0nNM/m7x4mgsz4tjhBAFiZS3Vbf1uUerpVJ9lQ=;
-        b=wMPHbgMVP5soJulYSk3g4JwuIjYKz94yDok540gEWcuiy5bCop4brYEOImLsLTO9T/
-         ERDkRzymmOL+ND+JLJoh1WyrnEQR6GjsY0pGiltCChVAuibInE02NzUE7qBLQqLGc2C5
-         GIGgtlbg1GQpJV7zNLiIQ+2KiYBG1KdA/ukhtLfqyuqeBu4ro1cYcKZEDSMVP/qQq+39
-         Wv+RswZhQFOni6XNUbhXdVU7H7kJloTDIhUSbHySJ5uGnbfC/cCUkOzWgrGo7iqTUz2W
-         epIECbpy6aICBYRDhw3oT5UMivB8NuPNG4soLEErAKmRapwxP7/dUJLAklgk406APlSE
-         SFPQ==
-X-Gm-Message-State: AOAM5310BXHtyuafkWWUvVFTmAb0kBATsjyIidyfQVJR8Pf2wB4LX2aZ
-	HXg/tJANeLhIVFRoaoEFBsM=
-X-Google-Smtp-Source: ABdhPJxTHKS5tENSR0d5oDDjMuzEHVOaTuUWMM5EdaXwgaSD2f8PtvvrrvRd6VGXmoGdjH4Lq/nLLA==
-X-Received: by 2002:a9d:72d6:: with SMTP id d22mr16613935otk.237.1643817712222;
-        Wed, 02 Feb 2022 08:01:52 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v10sm15990946oto.53.2022.02.02.08.01.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 08:01:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 2 Feb 2022 08:01:49 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Kees Cook <keescook@chromium.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Peter Rosin <peda@axentia.se>, Andy Shevchenko <andy@kernel.org>,
-	Matteo Croce <mcroce@microsoft.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
-Message-ID: <20220202160149.GA2322037@roeck-us.net>
-References: <20220130183653.491292-1-keescook@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2BF52F2B
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 16:15:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4D6C004E1;
+	Wed,  2 Feb 2022 16:15:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643818539;
+	bh=NSl+AXiIfbyRo6KNZjQLXSisPFKjjyWLyGto+1YZntI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pmuQen2qUw0drDe1n1CPByOU8Exkw3RhKGA+lKMHHK6Lnht9sFzKtTa0XQfAzEtB7
+	 Y9FXJC9rjTDOFPDreoxlNtGFx4v1bMtYwfNHBchVNLundHg/9YTbZpdflEvQi5JbqF
+	 RbSduhGFLxDRoLDa/Q4ED1vjJMtoOvrO1+VtEim2R7tycm+9HLDGENwi9YSmX8ainY
+	 ziV8t45BSFxLp9y+aU9b5HrRCknEAVrVL1wO//kf7m7n+5cyxM5veUMqqXAAavJtmr
+	 kebA62uvfpUauOvHEhqWHEscS4k4SgBscS5RA1rtuYNyDsTijyPyPiR3ywW8fhUmmT
+	 cQ6hXpsF8ZsGA==
+Date: Wed, 2 Feb 2022 16:15:35 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:spi-mem-ecc 30/30] ld.lld: error: undefined symbol:
+ nand_ecc_unregister_on_host_hw_engine
+Message-ID: <YfquJwtbg/hF5WJF@sirena.org.uk>
+References: <202202011308.a6RlPiGp-lkp@intel.com>
+ <20220202154504.7737deed@xps13>
+ <YfqhJZ+BzfMrpN4Y@sirena.org.uk>
+ <20220202163452.746d50ca@xps13>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="AALprmCZZjyoQqQJ"
+Content-Disposition: inline
+In-Reply-To: <20220202163452.746d50ca@xps13>
+X-Cookie: Quack!
+
+
+--AALprmCZZjyoQqQJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220130183653.491292-1-keescook@chromium.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jan 30, 2022 at 10:36:53AM -0800, Kees Cook wrote:
-> Add a simple test for strlen() functionality, including using it as a
-> constant expression.
-> 
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Peter Rosin <peda@axentia.se>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> I'll be taking this as part of my Clang FORTIFY_SOURCE series.
-> ---
->  lib/test_string.c | 37 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/lib/test_string.c b/lib/test_string.c
-> index 9dfd6f52de92..59994f552c48 100644
-> --- a/lib/test_string.c
-> +++ b/lib/test_string.c
-> @@ -179,6 +179,38 @@ static __init int strnchr_selftest(void)
->  	return 0;
->  }
->  
-> +/*
-> + * Unlike many other string functions, strlen() can be used in
-> + * static initializers when string lengths are known at compile
-> + * time. (i.e. Under these conditions, strlen() is a constant
-> + * expression.) Make sure it can be used this way.
-> + */
-> +static const int strlen_ce = strlen("tada, a constant expression");
-> +
+On Wed, Feb 02, 2022 at 04:34:52PM +0100, Miquel Raynal wrote:
+> > On Wed, Feb 02, 2022 at 03:45:04PM +0100, Miquel Raynal wrote:
 
-This results in:
+> > > I've failed to prevent faulty configurations with regular depends
+> > > on/select keywords, so I've come with a new solution which received a
+> > > successful build coverage test from the 0-day robots. =20
 
-lib/test_string.c:188:30: error: initializer element is not constant
-  188 | static const int strlen_ce = strlen("tada, a constant expression");
+> > > In order to still be able to use the spi controller driver (=3Dy) whi=
+le
+> > > mtd is =3Dm or =3Dn, I need to add an IS_REACHABLE() check in a coupl=
+e of
+> > > headers. This way we can just imply the right MTD symbols from the
+> > > SPI_MXIC Kconfig entry. =20
 
-for several of my tests. I don't think you can mandate that a compiler
-implements this.
+> > Isn't this just a case where we shouldn't allow MTD to be built modular?
 
-Guenter
+> How would you do that in a nice Kconfig way?
 
-> +static __init int strlen_selftest(void)
-> +{
-> +	/* String length ruler:         123456789012345 */
-> +	static const char normal[]   = "I am normal";
-> +	static const char *ptr       = "where do I go?";
-> +	static const char trailing[] = "hidden NULLs\0\0\0";
-> +	static const char leading[]  = "\0\0hidden text";
-> +
-> +	if (strlen(normal) != 11)
-> +		return 0x100001;
-> +	if (strlen(ptr++) != 14)
-> +		return 0x100002;
-> +	if (strlen(ptr++) != 13)
-> +		return 0x100003;
-> +	if (strlen(trailing) != 12)
-> +		return 0x100004;
-> +	if (strlen(leading) != 0)
-> +		return 0x100005;
-> +	if (strlen_ce != 27)
-> +		return 0x100006;
-> +
-> +	return 0;
-> +}
-> +
->  static __exit void string_selftest_remove(void)
->  {
->  }
-> @@ -212,6 +244,11 @@ static __init int string_selftest_init(void)
->  	if (subtest)
->  		goto fail;
->  
-> +	test = 5;
-> +	subtest = strlen_selftest();
-> +	if (subtest)
-> +		goto fail;
-> +
->  	pr_info("String selftests succeeded\n");
->  	return 0;
->  fail:
-> -- 
-> 2.30.2
-> 
+depends on MTD=3Dy if SPI_MXC=3Dy
+
+--AALprmCZZjyoQqQJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH6riYACgkQJNaLcl1U
+h9BE6Af/e2cwOSkpkXbG+eNGA/p9TwcEzQ+VQEoMNe3DzuKUdN4ZSx1l7NaUFa0Q
+iN6ygsz7T/jVwu2thHjKNWEiC5guogEIwh6zaGh9dJ7Dt2baWSS0qG7jJNvc3pI0
+G6SaQAPIrno9Ew2g49X2BOdy0dU8ASYysFMYAHVTRcCX7D/osF4NUM9nMj2zuzy1
+YSVFamQNC61cKSMMwWe7UoUEsEgF9ZX31dZmY3C1UaLXX1h3wMQimMKAPy92XvI0
+HC1sQnSC5ce3i2zwIGgJr4a8+IUuIDszD6ifGf3+bCROqqsxk/XkcCqzO3YOM/L5
+oUejd3ZQKs17yHaaUADvtDg7DGIeRw==
+=fvfd
+-----END PGP SIGNATURE-----
+
+--AALprmCZZjyoQqQJ--
