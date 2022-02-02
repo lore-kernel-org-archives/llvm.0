@@ -1,121 +1,128 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CC12F24
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 10:46:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643798816; x=1675334816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+0frq3/pxSbf/XvLi5+RhsXZXIGjY/DHMNgJEUnWoi4=;
-  b=gRmgf1IK5BVtkK15hHmJ+WR14VFeMffOQ+ETP0t6KlkMkIx4c5H3kQsp
-   aTnvjdP2T0EqT06RCHThUiRnwyEFDMmVj7BeJCSO5ZAlAji85GLl6Cicg
-   pvJy3xj+OnCsUi4cVRH5of5ui1MJgQQmKJ+Xy29iXZzOhD2q1cd2q9W0T
-   1Avufh5+1wezQhOGZcsn2M7NzPJZ4LJLdpjEjLf47kbkmpKX5UK0VuX1C
-   ruWtn4WdFbRAywyL5o73zloGMs9unD3W8tNbm8dZ0SZpCWx2+ofBRagky
-   v+ePj2L9Jn5/5HeScP8e7NbdDfVdT57M/dtNAwV5eYQ2E1hBQH73OVny9
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247840749"
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="247840749"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 02:46:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="771401008"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Feb 2022 02:46:52 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nFDA3-000UTg-UZ; Wed, 02 Feb 2022 10:46:51 +0000
-Date: Wed, 2 Feb 2022 18:46:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Sunil Goutham <sgoutham@marvell.com>,
-	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-	Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-	Keyur Chudgar <keyur@os.amperecomputing.com>,
-	Quan Nguyen <quan@os.amperecomputing.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux ACPI <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH v2] drivers: net: Replace acpi_bus_get_device()
-Message-ID: <202202021810.82z7OPTR-lkp@intel.com>
-References: <11918902.O9o76ZdvQC@kreacher>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBCC2F24
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 10:54:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 915C2C36AE3
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 10:54:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643799270;
+	bh=YaErwgEV6u6M+OhsAi4SczNs7iHw2evXeDZkXFHsX+o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GAGH6R8zllkRqqOh4pWIz7UlLpi/1U+L4KaC/sWRbM0N4aednJldOaN2DgqbCldtm
+	 n736xh/GuOrES5kfnjVj89yWTotpiQXIjps9fnlgD9kuBGerLNt/7MzVArsIHRj6ix
+	 Y6zt5wf2OoHD7EREvZDwgGgYx9ldrtXkFiMJcVjQMv9X67Qb4G0mz/hXdRCbNtd20v
+	 euMsJ66qrMnnGIL4K+lUKSwoUXZaNywemkckZDAGXdbCcx8zYogTgQYpMog/F5WFrT
+	 3syGzdF+eGZME66Neb3UxeTZLfUPiTf/6nexRxcI44KBVT9Huux2Bqg+TP4CTABnPY
+	 VaHTHzAJCZjbg==
+Received: by mail-wr1-f43.google.com with SMTP id s18so37502350wrv.7
+        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 02:54:30 -0800 (PST)
+X-Gm-Message-State: AOAM531tMySeXSqM0h8eq/7wHIGixqFaqc658AlO0L0tHMPUVcPmufnx
+	MlmVgPIWsOoRCQcRrts5Y/u8yoezvjhjInnLC7U=
+X-Google-Smtp-Source: ABdhPJxXQnmVGiQ6++DgTKrPDzuwG95DqfKcTlxhLVOsI6p/ssls6IrzqObL5TpmOLh1hayTFyI76Fa7LUWwzVeJ0X8=
+X-Received: by 2002:a05:6000:15ca:: with SMTP id y10mr24916503wry.417.1643799268703;
+ Wed, 02 Feb 2022 02:54:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11918902.O9o76ZdvQC@kreacher>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220131225250.409564-1-ndesaulniers@google.com>
+ <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com>
+ <CAKwvOdnkGfeBBE2NW_FKSzmZSjCJXc2801qvvOuyu+JL+m+VZQ@mail.gmail.com>
+ <CAMj1kXFnUuWLyy5q-fAV1jwZobTCNHqhKSN3mF98frsJ4ai4Ow@mail.gmail.com> <CAKwvOdn0C4Mt=Nb-HjLQtrsJ=X6zqgMssVHT_2QeZpnjb=-HhA@mail.gmail.com>
+In-Reply-To: <CAKwvOdn0C4Mt=Nb-HjLQtrsJ=X6zqgMssVHT_2QeZpnjb=-HhA@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 2 Feb 2022 11:54:17 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEaQPg0MfrT3rOthscbXLg7KyymdOVLvWD6E1vvkryAtQ@mail.gmail.com>
+Message-ID: <CAMj1kXEaQPg0MfrT3rOthscbXLg7KyymdOVLvWD6E1vvkryAtQ@mail.gmail.com>
+Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier() substitute
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev, 
+	Kees Cook <keescook@chromium.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Len Baker <len.baker@gmx.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi "Rafael,
+On Wed, 2 Feb 2022 at 04:26, Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Tue, Feb 1, 2022 at 2:15 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Tue, 1 Feb 2022 at 20:40, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > >
+> > > On Tue, Feb 1, 2022 at 1:32 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > >
+> > > > On Mon, 31 Jan 2022 at 23:53, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > > > >
+> > > > > +     around an asm statement so long as clobbers are not violated. For example,
+> > > > > +
+> > > > > +       asm volatile ("");
+> > > > > +       flag = true;
+> > > > > +
+> > > > > +     May be modified by the compiler to:
+> > > > > +
+> > > > > +       flag = true;
+> > > > > +       asm volatile ("");
+> > > > > +
+> > > > > +     Marking an asm statement as volatile is not a substitute for barrier(),
+> > > > > +     and is implicit for asm goto statements and asm statements that do not
+> > > > > +     have outputs (like the above example). Prefer either:
+> > > > > +
+> > > > > +       asm ("":::"memory");
+> > > > > +       flag = true;
+> > > > > +
+> > > > > +     Or:
+> > > > > +
+> > > > > +       asm ("");
+> > > > > +       barrier();
+> > > > > +       flag = true;
+> > > > > +
+> > > >
+> > > > I would expect the memory clobber to only hazard against the
+> > > > assignment of flag if it results in a store, but looking at your
+> > > > Godbolt example, this appears to apply even if flag is kept in a
+> > > > register.
+> > > >
+> > > > Is that behavior documented/codified anywhere? Or are we relying on
+> > > > compiler implementation details here?
+> > >
+> > > https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
+> > > "Note that the compiler can move even volatile asm instructions
+> > > relative to other code, including across jump instructions."
+> > >
+> >
+> > That doesn't really answer my question. We are documenting here that
+> > asm volatile does not prevent reordering but non-volatile asm with a
+> > "memory" clobber does, and even prevents reordering of instructions
+> > that do not modify memory to begin with.
+> >
+> > Why is it justified to rely on this undocumented behavior?
+>
+> I see your point.  You're right, I couldn't find anywhere where such
+> behavior was specified.  So the suggestion to use barrier() would rely
+> on unspecified behavior and should not be suggested.
+>
+> Probably worth still mentioning that `volatile` qualifying an asm
+> statement doesn't prevent such reordering in this document somehow,
+> and perhaps that it's (currently) unspecified whether a barrier() can
+> prevent re-ordering with regards to non-memory-modifying instructions.
 
-I love your patch! Yet something to improve:
+Yes, and to correct myself here, I meant 'instructions that do not
+/reference/ memory to begin with.
 
-[auto build test ERROR on net/master]
-[also build test ERROR on net-next/master horms-ipvs/master linus/master v5.17-rc2 next-20220202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I suppose the problem here is that the distinction only matters for
+things like objtool obsessing about whether or not instructions look
+unreachable, and relying on asm volatile() to insert markers into the
+object code.
 
-url:    https://github.com/0day-ci/linux/commits/Rafael-J-Wysocki/drivers-net-Replace-acpi_bus_get_device/20220202-035902
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 881cc731df6af99a21622e9be25a23b81adcd10b
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220202/202202021810.82z7OPTR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1d2a29e30eb391a02f25f551e6f4242e32f5b01f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Rafael-J-Wysocki/drivers-net-Replace-acpi_bus_get_device/20220202-035902
-        git checkout 1d2a29e30eb391a02f25f551e6f4242e32f5b01f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/cec/platform/seco/ drivers/net/ethernet/cavium/thunder/ drivers/net/wireless/ath/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/cavium/thunder/thunder_bgx.c:1409:24: error: use of undeclared identifier 'bgx'
-           struct device *dev = &bgx->pdev->dev;
-                                 ^
-   1 error generated.
-
-
-vim +/bgx +1409 drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-
-46b903a01c053d0 David Daney       2015-08-10  1403  
-46b903a01c053d0 David Daney       2015-08-10  1404  /* Currently only sets the MAC address. */
-46b903a01c053d0 David Daney       2015-08-10  1405  static acpi_status bgx_acpi_register_phy(acpi_handle handle,
-46b903a01c053d0 David Daney       2015-08-10  1406  					 u32 lvl, void *context, void **rv)
-46b903a01c053d0 David Daney       2015-08-10  1407  {
-1d2a29e30eb391a Rafael J. Wysocki 2022-02-01  1408  	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
-1d82efaca87ecf5 Robert Richter    2016-02-11 @1409  	struct device *dev = &bgx->pdev->dev;
-1d2a29e30eb391a Rafael J. Wysocki 2022-02-01  1410  	struct bgx *bgx = context;
-46b903a01c053d0 David Daney       2015-08-10  1411  
-1d2a29e30eb391a Rafael J. Wysocki 2022-02-01  1412  	if (!adev)
-46b903a01c053d0 David Daney       2015-08-10  1413  		goto out;
-46b903a01c053d0 David Daney       2015-08-10  1414  
-7aa4865506a26c6 Vadim Lomovtsev   2017-01-12  1415  	acpi_get_mac_address(dev, adev, bgx->lmac[bgx->acpi_lmac_idx].mac);
-46b903a01c053d0 David Daney       2015-08-10  1416  
-7aa4865506a26c6 Vadim Lomovtsev   2017-01-12  1417  	SET_NETDEV_DEV(&bgx->lmac[bgx->acpi_lmac_idx].netdev, dev);
-46b903a01c053d0 David Daney       2015-08-10  1418  
-7aa4865506a26c6 Vadim Lomovtsev   2017-01-12  1419  	bgx->lmac[bgx->acpi_lmac_idx].lmacid = bgx->acpi_lmac_idx;
-7aa4865506a26c6 Vadim Lomovtsev   2017-01-12  1420  	bgx->acpi_lmac_idx++; /* move to next LMAC */
-46b903a01c053d0 David Daney       2015-08-10  1421  out:
-46b903a01c053d0 David Daney       2015-08-10  1422  	return AE_OK;
-46b903a01c053d0 David Daney       2015-08-10  1423  }
-46b903a01c053d0 David Daney       2015-08-10  1424  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+So it seems we need a stronger clobber, one which avoids any kind of
+reordering at the instruction level.
