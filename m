@@ -1,49 +1,32 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3EB2F2B
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 16:17:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643818655; x=1675354655;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DBfsC8a66ExyypbPhJbhCI57mnu5iWgHbE6gVmzyI2I=;
-  b=UEAsdc1Zf/bIqABMlLCUAxtJYiZg1c9ldfcgLC+bseJO2de35sSyI7Vg
-   NEDH/X6F2jm7/wdTGpIyKH3tvaTH96Pc8zL/vYNRIJ5AgfcvQ9fJm4dNW
-   9t4aUeOXH0AV/N5/MBhD2WwMZY7Hpkc6tpFxVQc3GKGZSl/W7S+TZokyn
-   ghxc1DEhrhBpdeyycIkAPvl4E6WkJZlEVZmaLBCjiRqi4C/+6TV9Tq+wr
-   pTmQdubyFRkgWGgY2KC07lT04w+j5hdV319NzKkpGPIPWnNeCxZarkar6
-   qx/5M5eznWzVfQt/70trNuu4Fr/7VwHcBewRoZ4/gvK6CZiKDXLax6cIU
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="231521034"
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="231521034"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 08:17:34 -0800
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="769324845"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 08:17:31 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1nFIJ2-0008eW-RG;
-	Wed, 02 Feb 2022 18:16:28 +0200
-Date: Wed, 2 Feb 2022 18:16:28 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Kees Cook <keescook@chromium.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Peter Rosin <peda@axentia.se>, Andy Shevchenko <andy@kernel.org>,
-	Matteo Croce <mcroce@microsoft.com>,
-	Nathan Chancellor <nathan@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FCA2F2B
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 16:26:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E672FC004E1;
+	Wed,  2 Feb 2022 16:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643819168;
+	bh=wusIwvpAYb98F0yAZEFXYnS8gtTO5w+x8X+MClA3MHE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Gm2cGMr56Pfad5yvlGq7NpXnmAzGI5MgPTaIWTllBoSrlM62h724XW8dQJhz2lntv
+	 6rVxPnPi7O9qviKfc6sVFZX0caLBxpcGyRlEJULRpO+uMDFc7SHzztHX4+88zKEXAk
+	 oReL5CuoiXrzaiuHrDyYYN3YwwQZmx1/tXPfjqnmbh270BYjTAWb0AB/aWE5RIYWS/
+	 RBtPqt472ang7nDDigm0dFQB2XVKu1IAdofgiqpdp2fE/NvOOMexvbh9Df58obsuPJ
+	 uDqvHJG+sbHxcQ3qyp7wxFaqzkxBnn6tZ7WOYZUDvBAeHAJYiDk96KL5uOiwjS2lwv
+	 ebgorz+D9R2tA==
+Date: Wed, 2 Feb 2022 09:26:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
-Message-ID: <YfquXPrMX6PdD/6u@smile.fi.intel.com>
-References: <20220130183653.491292-1-keescook@chromium.org>
- <20220202160149.GA2322037@roeck-us.net>
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev, "# 3.4.x" <stable@vger.kernel.org>
+Subject: Re: [PATCH] Makefile.extrawarn: Move -Wunaligned-access to W=2
+Message-ID: <YfqwnMB2lLXOuahI@dev-arch.archlinux-ax161>
+References: <20220201232229.2992968-1-nathan@kernel.org>
+ <CAK8P3a2Y8nQ55sycxbpfN=71BNO9wuEDt=Q24ELS_u_WNRpqZw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,28 +35,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202160149.GA2322037@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CAK8P3a2Y8nQ55sycxbpfN=71BNO9wuEDt=Q24ELS_u_WNRpqZw@mail.gmail.com>
 
-On Wed, Feb 02, 2022 at 08:01:49AM -0800, Guenter Roeck wrote:
-> On Sun, Jan 30, 2022 at 10:36:53AM -0800, Kees Cook wrote:
-
-...
-
-> > +static const int strlen_ce = strlen("tada, a constant expression");
+On Wed, Feb 02, 2022 at 09:12:06AM +0100, Arnd Bergmann wrote:
+> On Wed, Feb 2, 2022 at 12:22 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > -Wunaligned-access is a new warning in clang that is default enabled for
+> > arm and arm64 under certain circumstances within the clang frontend (see
+> > LLVM commit below). Under an ARCH=arm allmodconfig, there are
+> > 1284 total/70 unique instances of this warning (most of the instances
+> > are in header files), which is quite noisy.
+> >
+> > To keep the build green through CONFIG_WERROR, only allow this warning
+> > with W=2, which seems appropriate according to its description:
+> > "warnings which occur quite often but may still be relevant".
+> >
+> > This intentionally does not use the -Wno-... + -W... pattern that the
+> > rest of the Makefile does because this warning is not enabled for
+> > anything other than certain arm and arm64 configurations within clang so
+> > it should only be "not disabled", rather than explicitly enabled, so
+> > that other architectures are not disturbed by the warning.
+> >
+> > Cc: stable@vger.kernel.org
+> > Link: https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > 
-> This results in:
-> 
-> lib/test_string.c:188:30: error: initializer element is not constant
->   188 | static const int strlen_ce = strlen("tada, a constant expression");
-> 
-> for several of my tests. I don't think you can mandate that a compiler
-> implements this.
+> The warning seems important enough to be considered for W=1 on 32-bit arm,
+> otherwise the chances of anyone actually fixing drivers for it is
+> relatively slim.
 
-With -O2 probably one can, otherwise I agree.
+Fair point, I suppose barely anyone does W=2 builds, which means we
+might as well just disable it outright.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> Can you point post the (sufficiently trimmed) output that you get with
+> the warning
+> enabled in an allmodconfig build?
 
+Sure thing.
 
+Here is the trimmed version:
+
+https://gist.github.com/nathanchance/6682e6894f75790059ca698c29212c71/raw/f63d54819afeb96f3ea0bb055096849912ac0185/trimmed.log
+
+Here is the full output of 'make ARCH=arm LLVM=1 allmodconfig':
+
+https://gist.github.com/nathanchance/6682e6894f75790059ca698c29212c71/raw/f63d54819afeb96f3ea0bb055096849912ac0185/full.log
+
+> I'm not sure why this is enabled by default for arm64, which does not have
+> the problem with fixup handlers.
+
+It is not enabled for arm64 for the kernel. If I am reading the commit
+right, it is only enabled for arm64 when -mno-unaligned-access is passed
+or building for OpenBSD, which obviously don't apply to the kernel (see
+AArch64.cpp).
+
+For ARM, we see it in the kernel because it is enabled for any version less
+than 7, according to this block in clang/lib/Driver/ToolChains/Arch/ARM.cpp:
+
+    } else if (Triple.isOSLinux() || Triple.isOSNaCl() ||
+               Triple.isOSWindows()) {
+      if (VersionNum < 7) {
+        Features.push_back("+strict-align");
+        if (!ForAS)
+          CmdArgs.push_back("-Wunaligned-access");
+      }
+
+There is this comment above this block in the source code:
+
+    // Assume pre-ARMv6 doesn't support unaligned accesses.
+    //
+    // ARMv6 may or may not support unaligned accesses depending on the
+    // SCTLR.U bit, which is architecture-specific. We assume ARMv6
+    // Darwin and NetBSD targets support unaligned accesses, and others don't.
+    //
+    // ARMv7 always has SCTLR.U set to 1, but it has a new SCTLR.A bit
+    // which raises an alignment fault on unaligned accesses. Linux
+    // defaults this bit to 0 and handles it as a system-wide (not
+    // per-process) setting. It is therefore safe to assume that ARMv7+
+    // Linux targets support unaligned accesses. The same goes for NaCl
+    // and Windows.
+    //
+    // The above behavior is consistent with GCC.
+
+I notice that CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS under certain
+conditions in arch/arm/Kconfig. Would it be worth telling clang that it
+can generate unaligned accesses in those cases via -munaligned-access or
+would that be too expensive? If we did, these warnings would be
+eliminated for configs with CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y,
+then it could be safely placed under W=1.
+
+Cheers,
+Nathan
