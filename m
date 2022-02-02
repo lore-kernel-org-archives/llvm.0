@@ -1,192 +1,73 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78FF2F3C
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 21:10:43 +0000 (UTC)
-Received: from mail-oi1-f178.google.com ([209.85.167.178]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MlO5j-1mWO321Twr-00liYU for <llvm@lists.linux.dev>; Wed, 02 Feb 2022
- 22:10:41 +0100
-Received: by mail-oi1-f178.google.com with SMTP id i5so822451oih.1
-        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 13:10:41 -0800 (PST)
-X-Gm-Message-State: AOAM533tQgU9TmmOjOcliSlj2sjBoR1y8HdkkRv5ZBJfd+mTHl7hkGQ1
-	zr4nkgFhaDNNwDmJWAd8d8z0v1nIh3zxDhJRVsI=
-X-Google-Smtp-Source: ABdhPJzNNV1PsobnG4ytJe/wQRKYy2+E1S6E16gyzyR5hGbLwWH2WkP08ud6edjeejSYC3jt2abMaIRC7f80+kKHXDU=
-X-Received: by 2002:aca:2b16:: with SMTP id i22mr5181074oik.128.1643836239885;
- Wed, 02 Feb 2022 13:10:39 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3702F28
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 21:19:49 +0000 (UTC)
+Received: by mail-il1-f170.google.com with SMTP id s1so464061ilj.7
+        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 13:19:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1f3qkBr7OwcMuEx7wDz36wE1LVweMZmBxkf7MbPeZyY=;
+        b=FW3cbUBB7agROZ5YjTp7b4wsXG8Zt/C3ptprYzXJKdtvPFTcrX4Afpqs/7NS0o+/vE
+         jJsIE6EDQb7vXkcYP4K+7r7iydD7Ze+2DI4m1g1gypljaI34DYo3pml8tDShbPTwYwQR
+         Y5Q/+q4U9oYRq9zmfzxVrrKBbuu8oz3uFgyuUnzt/v/cL6uVTNyOB4OneO53sQT1Vo1D
+         lMRJ8D40UcPgYxD3SRwynNM6V2lPtVR6JyM7Lmw03ey4Yh2r855NYSl837GElvTPH8F9
+         EiuVUBLvwyKelinM55k0PZ1TuyQrDYT42NL1Dsey6+ck8I1lgr1WdovEBekVjCGeqt2X
+         v45A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1f3qkBr7OwcMuEx7wDz36wE1LVweMZmBxkf7MbPeZyY=;
+        b=Li825f4KkqpUJ/vQXF8nQT0jLv7MwQV4Zevg00Qm0cPXI2gd7W1QjX5CZQFbIYZ8j/
+         pTdPR0WY9cajha/fdxiy4jaXMgU+8eIxVqDEv3Cl4ZU7/MIrigXLa+YoRDqsWEWB05rx
+         3pCHFVHKpgVhwS+epSNOkoYORnwjdh7v0gBp+m2lyqdRyC+rQ8aW8TBLVYv/+px1q9uR
+         QpFuVrmt7u/xwb/E10HLxG8mIYRw3swjGI/Ooyc9Cx/p1qYNdVVzZCRXCYq6JGI0hNCw
+         4FxYkqkDUCeAI/wPnX7lHiVX9iEpTVPmJxDo+fQrhJL1OsQ82Tpxw7v+LClMxUnU3lgK
+         6Dzw==
+X-Gm-Message-State: AOAM533Cn041TaOflV9FEfLZdNleiY3vv/Q4f6oh35RyujjjFzg/N0La
+	H/Tz+FHqwCndyVjQpxh67YtX0aN5cVayNnih79jLGoix
+X-Google-Smtp-Source: ABdhPJwltdwbEUw1cD6vun2+dt9kM8XuGcKuEW6K+qmiH1QnB8UKmy7cfDAtdjSF3hCiPhz+q6+7gGJ4BjDsp+QuIoI=
+X-Received: by 2002:a05:6e02:80d:: with SMTP id u13mr18427272ilm.151.1643836788498;
+ Wed, 02 Feb 2022 13:19:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220201232229.2992968-1-nathan@kernel.org> <CAK8P3a2Y8nQ55sycxbpfN=71BNO9wuEDt=Q24ELS_u_WNRpqZw@mail.gmail.com>
- <YfqwnMB2lLXOuahI@dev-arch.archlinux-ax161>
-In-Reply-To: <YfqwnMB2lLXOuahI@dev-arch.archlinux-ax161>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 2 Feb 2022 22:10:23 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2FjtM-dEkCnUAG8y8-EL7tqBk7qvyfaAs853jpFsfiPQ@mail.gmail.com>
-Message-ID: <CAK8P3a2FjtM-dEkCnUAG8y8-EL7tqBk7qvyfaAs853jpFsfiPQ@mail.gmail.com>
-Subject: Re: [PATCH] Makefile.extrawarn: Move -Wunaligned-access to W=2
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	"# 3.4.x" <stable@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>
+References: <20220202003033.704951-1-keescook@chromium.org>
+ <20220202003033.704951-2-keescook@chromium.org> <CANiq72n1d7ouKNi+pbsy7chsg0DfCXxez27qqtS9XE1n3m5=8Q@mail.gmail.com>
+ <202202021307.75435AF9@keescook>
+In-Reply-To: <202202021307.75435AF9@keescook>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 2 Feb 2022 22:19:37 +0100
+Message-ID: <CANiq72kw_=6HfSbVJovxQuJwYT8sQ2TNnyRa8gr6v1i5Jws9ZA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] Compiler Attributes: Add Clang's __pass_object_size
+To: Kees Cook <keescook@chromium.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
+	George Burgess IV <gbiv@google.com>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-hardening@vger.kernel.org, 
+	linux-security-module <linux-security-module@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:YM+huLQO/67o85ykYbBjQCNenIZcL84D79YzDHmtntGOHdoPZyP
- 1xIjXGuCHV0//4oTC2ZmeUHqen1CUXDl7mvExaNN/ppXpnSod4PF8TQ0zgNoGgFHUQ+HJjD
- Tw5+LROL7UInE0FRKW7sPWmOg5wYabOjv6R8hpagfBwYsTlLTuM+Wyo9NuURUhtbBzlaf3H
- Eh690/4XIvXXw4wwU9B4A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:daHPyPzH69k=:DfPYQBo2L42HN6njlQS8Xq
- M1jkaZRrFZ4E69/U6VaguZcCYFQwXj2ZBhYt2XFLrCetYM2GYNzd6iuYzP8ZGLxLe+1buAOkQ
- DCeDXUiAdW3oUrLoJDOBF2wJKKFibw3/gUBJRYNPbc/X2lBeQQ4XDeDv9Pg4Fjt6Ghzjv9iBm
- hXu5kjUvw+N5maXdC+UHTSITiM42Txwuqay0Uycxh4z321i8KNzx8E423BKo1bBhspN8JBATF
- CShY9u4nfYU/rpSEQ30LCjQ/PKKsKDfgowUZQuG8DECWq9nOSRgcOXNoSk7UOCvdxNl4By9bR
- CQ/I2cfNXQcqVmDpxklhjeb6RMF1zhgJ0gfO2SRlVkotIYJr6DaP3rG/11Bod8AOtTnIGiWud
- cI0L5N8p9MC8oZXAvFpAXtMwqZhipxCLxgi0D3lON0H/2KHXTWg0FYVtwrhCn633ApySG6eLw
- kXTHrETtuAutCXSpU42W0Yt1QPnnw+NR19k+ComOdeagmI2CZ4CcIWLoxfJANMsOwu8zgzybu
- LCTQsDDK6dU19+NaTlv5nDJYdSr/BeySlW0ahHRdPizOiAcTBoZCQm+p0w7kQX/+oGRCxDXAU
- 1vtcigDomM6H3v7r+L7aQKhqTUSN9GD17GTrTXShCW3Zihj1918dN/+jmuHjs/C0has2rhQbz
- EGg11pKuCp8/EU0cXZRZC6rxGcNE7+K+L9QlQMWmg7S5dXrkzXkdgVOu0fuecewhyecU=
 
-On Wed, Feb 2, 2022 at 5:26 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> On Wed, Feb 02, 2022 at 09:12:06AM +0100, Arnd Bergmann wrote:
-> > On Wed, Feb 2, 2022 at 12:22 AM Nathan Chancellor <nathan@kernel.org> wrote:
-
+On Wed, Feb 2, 2022 at 10:09 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> Fair point, I suppose barely anyone does W=2 builds, which means we
-> might as well just disable it outright.
->
-> > Can you point post the (sufficiently trimmed) output that you get with
-> > the warning
-> > enabled in an allmodconfig build?
->
-> Sure thing.
->
-> Here is the trimmed version:
->
-> https://gist.github.com/nathanchance/6682e6894f75790059ca698c29212c71/raw/f63d54819afeb96f3ea0bb055096849912ac0185/trimmed.log
->
-> Here is the full output of 'make ARCH=arm LLVM=1 allmodconfig':
->
-> https://gist.github.com/nathanchance/6682e6894f75790059ca698c29212c71/raw/f63d54819afeb96f3ea0bb055096849912ac0185/full.log
+> It's the kind of detail I feel like I might forget a month from now, so
+> I added it as a bit of a hint. If you think it's too redundant, I can
+> leave it off.
 
-Thanks, that does sound useful, and not that hard to fix. Since these
-only warn about
-structure definitions, I think in most cases we can either mark the
-outer structure
-as aligned or the inner one as unaligned, which will then avoid the
-warning as well
-as make the accesses to the inner structures standard conformant.
+If you think it is valuable having it nearby (e.g. when inspecting the
+definition of the attribute in a call site), then it is fine having
+them -- I am all for documentation (and we could consider having a
+small summary/one-liner for all attributes). But, in general, I would
+avoid repeating all the compiler docs (or, if needed, we could fix
+those upstream if they are not clear etc.).
 
-> > I'm not sure why this is enabled by default for arm64, which does not have
-> > the problem with fixup handlers.
->
-> It is not enabled for arm64 for the kernel. If I am reading the commit
-> right, it is only enabled for arm64 when -mno-unaligned-access is passed
-> or building for OpenBSD, which obviously don't apply to the kernel (see
-> AArch64.cpp).
+Thanks!
 
-Ok
-
-> For ARM, we see it in the kernel because it is enabled for any version less
-> than 7, according to this block in clang/lib/Driver/ToolChains/Arch/ARM.cpp:
->
->     } else if (Triple.isOSLinux() || Triple.isOSNaCl() ||
->                Triple.isOSWindows()) {
->       if (VersionNum < 7) {
->         Features.push_back("+strict-align");
->         if (!ForAS)
->           CmdArgs.push_back("-Wunaligned-access");
->       }
->
-> There is this comment above this block in the source code:
->
->     // Assume pre-ARMv6 doesn't support unaligned accesses.
->     //
->     // ARMv6 may or may not support unaligned accesses depending on the
->     // SCTLR.U bit, which is architecture-specific. We assume ARMv6
->     // Darwin and NetBSD targets support unaligned accesses, and others don't.
-
-This does not match what we do on Linux though: While this is correct on ARMv5
-and below, which has  there is no support for unaligned access and
-also on ARMv7,
-which has limited unaligned access in both LE and BE8 mode, Linux treats ARMv6
-the same way as ARMv7 in practice. The reason is that ARMv6 can support
-unaligned accesses both on little-endian mode and in BE8-mode, but obviously not
-in ARMv5-style BE32 mode (this would swap the wrong bytes). Linux itself does
-not run in ARMv6 BE32 mode because that would in turn not work on ARMv7,
-in addition to not having unaligned accesses.
-
->     // ARMv7 always has SCTLR.U set to 1, but it has a new SCTLR.A bit
->     // which raises an alignment fault on unaligned accesses. Linux
->     // defaults this bit to 0 and handles it as a system-wide (not
->     // per-process) setting. It is therefore safe to assume that ARMv7+
->     // Linux targets support unaligned accesses. The same goes for NaCl
->     // and Windows.
->     //
->     // The above behavior is consistent with GCC.
->
-> I notice that CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS under certain
-> conditions in arch/arm/Kconfig. Would it be worth telling clang that it
-> can generate unaligned accesses in those cases via -munaligned-access or
-> would that be too expensive? If we did, these warnings would be
-> eliminated for configs with CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y,
-> then it could be safely placed under W=1.
-
-It's complicated. For ARMv4/v5, we must never set
-CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS because unaligned
-accesses are not efficient there. For v6 and higher, most unaligned accesses
-are fast and don't trap, so we set the flag, but there are two conflicting
-interpretations of what the flag actually means:
-
-- traditionally, it was interpreted as allowing architectures to safely pass
-  around misaligned pointers and dereference them with normal load/store
-  instructions, in violation of the ABI. This however does not work when
-  the compiler generates ARMv6/v7/v8 aarch32 ldm/stm/ldrd/strd instructions
-  that trigger an alignment fault, or with recent gcc versions that may cause
-  unintended behavior when passed a misaligned pointer regardless of
-  the architecture
-
-- the new interpretation of the flag is that using get_unaligned()/
-  put_unaligned() for accessing  a pointer is turned into a normal load/store
-  instruction, which avoids both problems but requires code changes
-  in some places that rely on direct pointer dereferences.
-
-Ard has made some progress converting the remaining instances that get it
-wrong, but I don't know how many more remain.
-
-For the -munaligned-access flag, I did a quick test about the defaults,
-and found that it does not behave as I would expect, see
-https://www.godbolt.org/z/dxd9jMs3h :
-
-- Building for ARMv6, an unaligned store gets turned into individual
-  byte accesses in both gcc and clang, which matches the
-  -mno-unaligned-access behavior and your exaplanation above.
-  I'm fairly sure this is not what we want though, as the kernel already
-  assumes that it can do unaligned ldr/str, just not ldrd/strd.
-  A little more research would help here regarding why gcc and
-  linux make different assumptions about ARMv6, but I think
-  we actually want to pass -munaligned-access on ARMv6.
-
-- For a trivial aligned store, clang and gcc behave differently --
-  gcc uses strd for a 64-bit store, while clang uses two str.
-  I don't know if this is an intentional difference, but I like the
-  clang behavior here, because this avoids alignment faults in
-  case we do get passed an unaligned pointer, at the expense
-  of potentially wasting a few CPU cycles and some i-cache.
-  Ideally there would be a third compiler flag in addition to
-  -munaligned-access and -mno-unaligned-access that tells the
-  compiler (ideally both gcc and clang of course) that unaligned
-  ldr/str is allowed, but ldrd/strd/ldm/stm must be avoided even
-  for pointers that are assumed to be aligned.
-
-For the warning flag, I think we probably want this to be enabled
-all the time (after we address the known problems), to be sure
-that this does not cause traps on ARMv5, or on ARMv7 with gcc
-generating ldrd/strd instructions on misaligned struct members.
-
-         Arnd
+Cheers,
+Miguel
