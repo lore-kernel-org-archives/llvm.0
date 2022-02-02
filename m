@@ -1,102 +1,102 @@
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427B22F2B
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 15:58:38 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::226])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id 18EEDC245F
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 14:45:15 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id 5EC8AC0003;
-	Wed,  2 Feb 2022 14:45:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1643813107;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j4mbb7kF/AzGhnSoPyBUzMArPFYJPP821v155kkkR9Y=;
-	b=QglS3OiIsZmuwBxVzSE3AsOCW+Gaodk+vnxhUnbt7FEP6mazyel4+LlflNSsQAOegAdFsT
-	7Cbt2VVck066IRxwrsbuyqA0Lh2F9irDQ7PcXMiY3/c/C5VJ/NlmEm6CARBGtZ0hvq58/l
-	JMrCo6134D/pazj7DG6C1B2yawXf8lk+reHuRrnsitvKM30Ir0dX358C3xTBpCkPGkPnKm
-	oqG4i3z9NXgGOYMo9WAfd+qJbodWkNk3ex/NgSZl46sU1TBx1somISh71ch5EoRl9xQ/94
-	quNvQ7Mx/lKpraqk1MVI25i/W/ZU8mQDSmxmFw217OdrjPcWkNmaOdr9x23NcQ==
-Date: Wed, 2 Feb 2022 15:45:04 +0100
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [mtd:spi-mem-ecc 30/30] ld.lld: error: undefined symbol:
- nand_ecc_unregister_on_host_hw_engine
-Message-ID: <20220202154504.7737deed@xps13>
-In-Reply-To: <202202011308.a6RlPiGp-lkp@intel.com>
-References: <202202011308.a6RlPiGp-lkp@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374772F2B
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 16:01:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D5CC004E1;
+	Wed,  2 Feb 2022 16:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643817671;
+	bh=xY/tyDM9TE7fNi/TXqAUlya0knvSWbYnTKhzfBHBIVI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sNITSCmtm/ADY+hgozLM2hXfWFkZcoF7SgqxxI4HVjNlHu5DwB2y+FAd0P2qA18qA
+	 a1B0LuHWgucoSpbWrMgmRXsP7bZZV5ABgFiQDW38s36AGMABdxLKF6nBCE8yad1WpN
+	 mV5Q635B/rx1kdbKdK+Adi/nOaKOCJ0wnqwIZ9ycrAmt9g/0gBsmq/10CnIdNDkHyz
+	 uApS+di1tbca//X8kns8p016xWr7vR8Kuu3zm3VWeF0g1fPAzN0fodo0EmMWysLX5s
+	 qGIWj13Lihu1KPy6d0hb7l061mC9sQB+RVQMByYBnEZetczZ5XGQvsPk60sW0xarFi
+	 Iavw5uQV6Qo2A==
+Date: Wed, 2 Feb 2022 09:01:07 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] include: drop pointless __compiler_offsetof indirection
+Message-ID: <YfqqwxKCP+qJCyYg@dev-arch.archlinux-ax161>
+References: <20220202102147.326672-1-linux@rasmusvillemoes.dk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202102147.326672-1-linux@rasmusvillemoes.dk>
 
-Hi Mark,
+On Wed, Feb 02, 2022 at 11:21:47AM +0100, Rasmus Villemoes wrote:
+> (1) compiler_types.h is unconditionally included via an -include
+> flag (see scripts/Makefile.lib), and it defines __compiler_offsetof
+> unconditionally. So testing for definedness of __compiler_offsetof is
+> mostly pointless.
+> 
+> (2) Every relevant compiler provides __builtin_offsetof (even sparse
+> has had that for 14 years), and if for whatever reason one would end
+> up picking up the poor man's fallback definition (C file compiler with
+> completely custom CFLAGS?), newer clang versions won't treat the
+> result as an Integer Constant Expression, so if used in place where
+> such is required (static initializer or static_assert), one would
+> get errors like
+> 
+> t.c:11:16: error: static_assert expression is not an integral constant expression
+> t.c:11:16: note: cast that performs the conversions of a reinterpret_cast is not allowed in a constant expression
+> t.c:4:33: note: expanded from macro 'offsetof'
+> #define offsetof(TYPE, MEMBER)  ((size_t)&((TYPE *)0)->MEMBER)
+> 
+> So just define offsetof unconditionally and directly in terms of
+> __builtin_offsetof.
+> 
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-lkp@intel.com wrote on Tue, 1 Feb 2022 13:28:45 +0800:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi=
--mem-ecc
-> head:   6d0fadec1de4434fce145b374ef25c665357fa60
-> commit: 6d0fadec1de4434fce145b374ef25c665357fa60 [30/30] spi: mxic: Add s=
-upport for pipelined ECC operations
-> config: hexagon-randconfig-r001-20220130 (https://download.01.org/0day-ci=
-/archive/20220201/202202011308.a6RlPiGp-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e=
-844b69f15bb7dffaf9365cd2b355d2eb7579)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/c=
-ommit/?id=3D6d0fadec1de4434fce145b374ef25c665357fa60
->         git remote add mtd https://git.kernel.org/pub/scm/linux/kernel/gi=
-t/mtd/linux.git
->         git fetch --no-tags mtd spi-mem-ecc
->         git checkout 6d0fadec1de4434fce145b374ef25c665357fa60
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
-> >> ld.lld: error: undefined symbol: nand_ecc_unregister_on_host_hw_engine=
- =20
->    >>> referenced by spi-mxic.c
->    >>>               spi/spi-mxic.o:(mxic_spi_remove) in archive drivers/=
-built-in.a
->    >>> referenced by spi-mxic.c
->    >>>               spi/spi-mxic.o:(mxic_spi_remove) in archive drivers/=
-built-in.a =20
-
-I've failed to prevent faulty configurations with regular depends
-on/select keywords, so I've come with a new solution which received a
-successful build coverage test from the 0-day robots.
-
-In order to still be able to use the spi controller driver (=3Dy) while
-mtd is =3Dm or =3Dn, I need to add an IS_REACHABLE() check in a couple of
-headers. This way we can just imply the right MTD symbols from the
-SPI_MXIC Kconfig entry.
-
-I'll send a v11 with these changes which seem to rather cleanly address
-all situations. I don't think I can do without these extra checks as
-select/imply will not propagate the real value of the Kconfig symbol
-(y/m) like depends on does.
-
-Thanks,
-Miqu=C3=A8l
+> ---
+>  include/linux/compiler_types.h | 2 --
+>  include/linux/stddef.h         | 6 +-----
+>  2 files changed, 1 insertion(+), 7 deletions(-)
+> 
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 3c1795fdb568..83ee7f7ada5d 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -137,8 +137,6 @@ struct ftrace_likely_data {
+>   */
+>  #define __naked			__attribute__((__naked__)) notrace
+>  
+> -#define __compiler_offsetof(a, b)	__builtin_offsetof(a, b)
+> -
+>  /*
+>   * Prefer gnu_inline, so that extern inline functions do not emit an
+>   * externally visible function. This makes extern inline behave as per gnu89
+> diff --git a/include/linux/stddef.h b/include/linux/stddef.h
+> index ca507bd5f808..929d67710cc5 100644
+> --- a/include/linux/stddef.h
+> +++ b/include/linux/stddef.h
+> @@ -13,11 +13,7 @@ enum {
+>  };
+>  
+>  #undef offsetof
+> -#ifdef __compiler_offsetof
+> -#define offsetof(TYPE, MEMBER)	__compiler_offsetof(TYPE, MEMBER)
+> -#else
+> -#define offsetof(TYPE, MEMBER)	((size_t)&((TYPE *)0)->MEMBER)
+> -#endif
+> +#define offsetof(TYPE, MEMBER)	__builtin_offsetof(TYPE, MEMBER)
+>  
+>  /**
+>   * sizeof_field() - Report the size of a struct field in bytes
+> -- 
+> 2.31.1
+> 
