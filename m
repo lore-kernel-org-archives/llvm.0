@@ -1,41 +1,51 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8E32F21
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 12:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C648A2F21
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 13:51:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643806799; x=1675342799;
+  t=1643809862; x=1675345862;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LynCLwbF9EN+rG44qGo/iOIXMcrHg+bxH1lDBLUd5Qc=;
-  b=b2LmpNVhP9ZM3dQFFtTpWcZWGAvCp64kqJ0dFSTwUX2DgVWEFJDfqPkC
-   FgQEgOxWsayXQmgKpUDkTtHAHiU71q4VkXHsERrz1oxyXfmZIEx6xfJBD
-   DJIj7U4g8NIEF49hC4qVmO6tlyAa25/YTcaMq3hbM710zD5riilRAv/6n
-   ZXiXLmVx9gVBappFu9z1KheCGY46U+qaUyPnjA9ZelWZMipukdfMvTXhb
-   lQRIDiBvbCWIYm3LwiIswJ5VEjt8+EatFeZ6WMux5MFyANaYbnRbg581y
-   g/5hTu0uJ7nA4rjWBuq2X9cRd43/1w5kW0cc3QZ9Ogi6VTE/APYbHwXIy
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="272392984"
+  bh=K3DNqJv0+Yh88D8/dlbQEwER3t48zPciIGeCaPwX9uA=;
+  b=YECzTNpgGzwuf+Hl7fHUyXevqR0VX/nVmBGZW+zpBj0UJ4TZYaEfyYH1
+   oFstFhJ/ooPLGjR04JGhGl9k9iL6KnXWKWEPBLf8vnoc6lScmDktjrXaM
+   xGcWA42heELGdgjPYckqFbgT6Hw6ny7yL5MxRflU0gmS4KwLMC/tiwYkC
+   v1D0qDUfBpNMhtYioz+W8yvTt+f8F2ipvfBqUfZC60ntoDXLETs+tJkm+
+   5OEBEPgtOQH19mjDRpeTxH1lb0+6yWsMCYXcgPFTjnGefL/bjJoxf1Wuf
+   OW6/QiE933KDVm409CGpEBJlhVdHOnmh2/FiCbItdF6KO4MAxa0ZmcxXu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247686420"
 X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="272392984"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 04:59:58 -0800
+   d="scan'208";a="247686420"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 05:51:02 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="482817767"
+   d="scan'208";a="534855601"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 Feb 2022 04:59:57 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 02 Feb 2022 05:50:59 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nFFEq-000Ubi-Rt; Wed, 02 Feb 2022 12:59:56 +0000
-Date: Wed, 2 Feb 2022 20:59:17 +0800
+	id 1nFG2E-000Uek-Jm; Wed, 02 Feb 2022 13:50:58 +0000
+Date: Wed, 2 Feb 2022 21:50:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 4/4] [RFC] risc/kasan: Use kasan_pXX_table()
-Message-ID: <202202022027.EbVWEX5c-lkp@intel.com>
-References: <1f88cb32e438f9f29f45ae56849ac3fd94ec8a54.1643791473.git.christophe.leroy@csgroup.eu>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+	"kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>
+Subject: Re: [PATCH 1/4] mm/kasan: Add CONFIG_KASAN_SOFTWARE
+Message-ID: <202202022149.BRH60mXN-lkp@intel.com>
+References: <a480ac6f31eece520564afd0230c277c78169aa5.1643791473.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,12 +54,13 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1f88cb32e438f9f29f45ae56849ac3fd94ec8a54.1643791473.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <a480ac6f31eece520564afd0230c277c78169aa5.1643791473.git.christophe.leroy@csgroup.eu>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 Hi Christophe,
 
-[FYI, it's a private test report for your RFC patch.]
+I love your patch! Yet something to improve:
+
 [auto build test ERROR on tip/sched/core]
 [also build test ERROR on linus/master v5.17-rc2]
 [cannot apply to hnaz-mm/master next-20220202]
@@ -59,127 +70,160 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/mm-kasan-Add-CONFIG_KASAN_SOFTWARE/20220202-164612
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ec2444530612a886b406e2830d7f314d1a07d4bb
-config: riscv-randconfig-r023-20220131 (https://download.01.org/0day-ci/archive/20220202/202202022027.EbVWEX5c-lkp@intel.com/config)
+config: x86_64-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220202/202202022149.BRH60mXN-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/bd60b87aa4be730854fcb270aba3d72b8ce32745
+        # https://github.com/0day-ci/linux/commit/29c1001f88c380ea391fa5520f2ddcce35e35681
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Christophe-Leroy/mm-kasan-Add-CONFIG_KASAN_SOFTWARE/20220202-164612
-        git checkout bd60b87aa4be730854fcb270aba3d72b8ce32745
+        git checkout 29c1001f88c380ea391fa5520f2ddcce35e35681
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> arch/riscv/mm/kasan_init.c:112:23: error: passing 'pgd_t' to parameter of incompatible type 'p4d_t'
-                   if (kasan_pud_table(*pgd))
-                                       ^~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   include/linux/kasan.h:97:42: note: passing argument to parameter 'p4d' here
-   static inline bool kasan_pud_table(p4d_t p4d)
-                                            ^
->> arch/riscv/mm/kasan_init.c:112:23: error: passing 'pgd_t' to parameter of incompatible type 'p4d_t'
-                   if (kasan_pud_table(*pgd))
-                                       ^~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
-   include/linux/kasan.h:97:42: note: passing argument to parameter 'p4d' here
-   static inline bool kasan_pud_table(p4d_t p4d)
-                                            ^
->> arch/riscv/mm/kasan_init.c:112:23: error: passing 'pgd_t' to parameter of incompatible type 'p4d_t'
-                   if (kasan_pud_table(*pgd))
-                                       ^~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                                        ^~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   include/linux/kasan.h:97:42: note: passing argument to parameter 'p4d' here
-   static inline bool kasan_pud_table(p4d_t p4d)
-                                            ^
-   3 errors generated.
+   In file included from arch/x86/boot/compressed/cmdline.c:2:
+   In file included from arch/x86/boot/compressed/misc.h:32:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:136:
+>> include/linux/kasan.h:56:41: error: use of undeclared identifier 'KASAN_SHADOW_SCALE_SHIFT'
+           return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
+                                                  ^
+>> include/linux/kasan.h:57:5: error: use of undeclared identifier 'KASAN_SHADOW_OFFSET'
+                   + KASAN_SHADOW_OFFSET;
+                     ^
+   2 errors generated.
+--
+   In file included from arch/x86/boot/compressed/pgtable_64.c:2:
+   In file included from arch/x86/boot/compressed/misc.h:32:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:136:
+>> include/linux/kasan.h:56:41: error: use of undeclared identifier 'KASAN_SHADOW_SCALE_SHIFT'
+           return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
+                                                  ^
+>> include/linux/kasan.h:57:5: error: use of undeclared identifier 'KASAN_SHADOW_OFFSET'
+                   + KASAN_SHADOW_OFFSET;
+                     ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                           set->sig[1] | set->sig[0]) == 0;
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[1] | set->sig[0]) == 0;
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
 
 
-vim +112 arch/riscv/mm/kasan_init.c
+vim +/KASAN_SHADOW_SCALE_SHIFT +56 include/linux/kasan.h
 
-    93	
-    94	static void __init kasan_populate_pud(pgd_t *pgd,
-    95					      unsigned long vaddr, unsigned long end,
-    96					      bool early)
-    97	{
-    98		phys_addr_t phys_addr;
-    99		pud_t *pudp, *base_pud;
-   100		unsigned long next;
-   101	
-   102		if (early) {
-   103			/*
-   104			 * We can't use pgd_page_vaddr here as it would return a linear
-   105			 * mapping address but it is not mapped yet, but when populating
-   106			 * early_pg_dir, we need the physical address and when populating
-   107			 * swapper_pg_dir, we need the kernel virtual address so use
-   108			 * pt_ops facility.
-   109			 */
-   110			base_pud = pt_ops.get_pud_virt(pfn_to_phys(_pgd_pfn(*pgd)));
-   111		} else {
- > 112			if (kasan_pud_table(*pgd))
-   113				base_pud = memblock_alloc(PTRS_PER_PUD * sizeof(pud_t), PAGE_SIZE);
-   114			else
-   115				base_pud = (pud_t *)pgd_page_vaddr(*pgd);
-   116		}
-   117	
-   118		pudp = base_pud + pud_index(vaddr);
-   119	
-   120		do {
-   121			next = pud_addr_end(vaddr, end);
-   122	
-   123			if (pud_none(*pudp) && IS_ALIGNED(vaddr, PUD_SIZE) && (next - vaddr) >= PUD_SIZE) {
-   124				if (early) {
-   125					phys_addr = __pa(((uintptr_t)kasan_early_shadow_pmd));
-   126					set_pud(pudp, pfn_pud(PFN_DOWN(phys_addr), PAGE_TABLE));
-   127					continue;
-   128				} else {
-   129					phys_addr = memblock_phys_alloc(PUD_SIZE, PUD_SIZE);
-   130					if (phys_addr) {
-   131						set_pud(pudp, pfn_pud(PFN_DOWN(phys_addr), PAGE_KERNEL));
-   132						continue;
-   133					}
-   134				}
-   135			}
-   136	
-   137			kasan_populate_pmd(pudp, vaddr, next);
-   138		} while (pudp++, vaddr = next, vaddr != end);
-   139	
-   140		/*
-   141		 * Wait for the whole PGD to be populated before setting the PGD in
-   142		 * the page table, otherwise, if we did set the PGD before populating
-   143		 * it entirely, memblock could allocate a page at a physical address
-   144		 * where KASAN is not populated yet and then we'd get a page fault.
-   145		 */
-   146		if (!early)
-   147			set_pgd(pgd, pfn_pgd(PFN_DOWN(__pa(base_pud)), PAGE_TABLE));
-   148	}
-   149	
+69786cdb379bbc Andrey Ryabinin  2015-08-13  50  
+9577dd74864877 Andrey Konovalov 2018-12-28  51  int kasan_populate_early_shadow(const void *shadow_start,
+69786cdb379bbc Andrey Ryabinin  2015-08-13  52  				const void *shadow_end);
+69786cdb379bbc Andrey Ryabinin  2015-08-13  53  
+0b24becc810dc3 Andrey Ryabinin  2015-02-13  54  static inline void *kasan_mem_to_shadow(const void *addr)
+0b24becc810dc3 Andrey Ryabinin  2015-02-13  55  {
+0b24becc810dc3 Andrey Ryabinin  2015-02-13 @56  	return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
+0b24becc810dc3 Andrey Ryabinin  2015-02-13 @57  		+ KASAN_SHADOW_OFFSET;
+0b24becc810dc3 Andrey Ryabinin  2015-02-13  58  }
+0b24becc810dc3 Andrey Ryabinin  2015-02-13  59  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
