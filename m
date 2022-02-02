@@ -1,51 +1,24 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8112F25
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 10:21:52 +0000 (UTC)
-Received: by mail-ed1-f48.google.com with SMTP id b13so41105742edn.0
-        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 02:21:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=onRlZdRbDosaab/y/zUC++ZMX5giuurTyAahBOEwPR8=;
-        b=Iw8mIF0IhzTswuIYzJcfjySaSEWJKOjDnQp43YD102crOmlk6ox48nP108mNAPQatc
-         scZPiFCncu7zFYS/sGdDAV32PuAL/d0WMFsnJKi/7/U/vBTfLXpKjIYfJys+khnY66Fn
-         taN0nCKP4/pAqVCuAHztjDePFlX0QmtWfoQ0g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=onRlZdRbDosaab/y/zUC++ZMX5giuurTyAahBOEwPR8=;
-        b=0axmEzhTeERHwwJRqmZIM4SKHqumJB5VMnp9hoK7vrQctDGiOaYW44sl/lvovfnVBG
-         C4W03caqSd80RmKgxdvds/HI1kFhQLCkgrzknm5Hu6xOuBjEvR4ldxgzcaKx4Fy0Hn4A
-         gPSIeiNPZfY3vdLJfXJDrR0IYhRzv5ViGPnlAuKD473vORUIxehwp9TIrUxdzitoXHUb
-         TRELO11s0AuxNqp+65rDKi2zcUrD2Ua6k5WMab/0B03hq5CXmHGY2hBhBuHakA0tB3Qe
-         cOf5ahseXK+3v7Gdq9SWvWcXiL3oVDU+yhVYgYAOAsG9ruqxC9bEjJu1kUR6ez/3X4gt
-         5R2A==
-X-Gm-Message-State: AOAM530TQPmT9/dyRDyMsWfPcvcjgb3GN6ow0qy57KHS2NhIpEiHKwn+
-	oH/J3p2u9ElSm2GpBY2bycn3EQ==
-X-Google-Smtp-Source: ABdhPJx+fpprtlVWRfOIbm22oor83E+wyYwA4ey03sqFiVnjRuxsTVTcpecmQmC5c/zbGMz6xVJlmw==
-X-Received: by 2002:a05:6402:2682:: with SMTP id w2mr29049244edd.355.1643797310747;
-        Wed, 02 Feb 2022 02:21:50 -0800 (PST)
-Received: from localhost.localdomain ([80.208.64.233])
-        by smtp.gmail.com with ESMTPSA id v2sm15277559ejb.114.2022.02.02.02.21.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 02:21:50 -0800 (PST)
-From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To: Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] include: drop pointless __compiler_offsetof indirection
-Date: Wed,  2 Feb 2022 11:21:47 +0100
-Message-Id: <20220202102147.326672-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.31.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300ED2F24
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 10:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D45BEC340EC;
+	Wed,  2 Feb 2022 10:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643797810;
+	bh=2iKggoFWP/pSFvThOv+1gXnfFM0EtBmGzMus01UuI24=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=AvSa/dLF5Mi8+UFEKiUVXHrguSC6NkOZt4bmd80Dts1gKhXy76vo1+2BykMVrIFj2
+	 fq2nknrq+mKK5PiXjXgMyqBt7Mv61YIrBDquDQnFAp9kA0GlqjBC7JVlZ/GbXSuU08
+	 syqyIE+CDMyFEJJhYDV1/GUZS1YWQrU8lj7mESsXru+J/R4N+sgJ1bB8VihrJka9xS
+	 fmepolvx6QAzjm6zJ8E+/pB5GkMLTd70EHsSHflAhqKDW+aI3p4oNGDhp08Fwws0yS
+	 Bw9scZ24GR8Q3oj6CJWfDFGxoPr82q/qgwM9Jkv2dv0rcCziP3ZNG7GZj1VXaZXwEq
+	 EgdJFkPpofAhw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7038E5D07E;
+	Wed,  2 Feb 2022 10:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,64 +26,52 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 0/5] Allow CONFIG_DEBUG_INFO_DWARF5=y +
+ CONFIG_DEBUG_INFO_BTF=y
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <164379781074.22256.810100339582105585.git-patchwork-notify@kernel.org>
+Date: Wed, 02 Feb 2022 10:30:10 +0000
+References: <20220201205624.652313-1-nathan@kernel.org>
+In-Reply-To: <20220201205624.652313-1-nathan@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+ songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+ kpsingh@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-(1) compiler_types.h is unconditionally included via an -include
-flag (see scripts/Makefile.lib), and it defines __compiler_offsetof
-unconditionally. So testing for definedness of __compiler_offsetof is
-mostly pointless.
+Hello:
 
-(2) Every relevant compiler provides __builtin_offsetof (even sparse
-has had that for 14 years), and if for whatever reason one would end
-up picking up the poor man's fallback definition (C file compiler with
-completely custom CFLAGS?), newer clang versions won't treat the
-result as an Integer Constant Expression, so if used in place where
-such is required (static initializer or static_assert), one would
-get errors like
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-t.c:11:16: error: static_assert expression is not an integral constant expression
-t.c:11:16: note: cast that performs the conversions of a reinterpret_cast is not allowed in a constant expression
-t.c:4:33: note: expanded from macro 'offsetof'
-#define offsetof(TYPE, MEMBER)  ((size_t)&((TYPE *)0)->MEMBER)
+On Tue,  1 Feb 2022 13:56:19 -0700 you wrote:
+> Hi all,
+> 
+> This series allows CONFIG_DEBUG_INFO_DWARF5 to be selected with
+> CONFIG_DEBUG_INFO_BTF=y by checking the pahole version.
+> 
+> The first four patches add CONFIG_PAHOLE_VERSION and
+> scripts/pahole-version.sh to clean up all the places that pahole's
+> version is transformed into a 3-digit form.
+> 
+> [...]
 
-So just define offsetof unconditionally and directly in terms of
-__builtin_offsetof.
+Here is the summary with links:
+  - [bpf-next,1/5] MAINTAINERS: Add scripts/pahole-flags.sh to BPF section
+    https://git.kernel.org/bpf/bpf-next/c/f67644b4f282
+  - [bpf-next,2/5] kbuild: Add CONFIG_PAHOLE_VERSION
+    https://git.kernel.org/bpf/bpf-next/c/613fe1692377
+  - [bpf-next,3/5] scripts/pahole-flags.sh: Use pahole-version.sh
+    https://git.kernel.org/bpf/bpf-next/c/2d6c9810eb89
+  - [bpf-next,4/5] lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
+    https://git.kernel.org/bpf/bpf-next/c/6323c81350b7
+  - [bpf-next,5/5] lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
+    https://git.kernel.org/bpf/bpf-next/c/42d9b379e3e1
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- include/linux/compiler_types.h | 2 --
- include/linux/stddef.h         | 6 +-----
- 2 files changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 3c1795fdb568..83ee7f7ada5d 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -137,8 +137,6 @@ struct ftrace_likely_data {
-  */
- #define __naked			__attribute__((__naked__)) notrace
- 
--#define __compiler_offsetof(a, b)	__builtin_offsetof(a, b)
--
- /*
-  * Prefer gnu_inline, so that extern inline functions do not emit an
-  * externally visible function. This makes extern inline behave as per gnu89
-diff --git a/include/linux/stddef.h b/include/linux/stddef.h
-index ca507bd5f808..929d67710cc5 100644
---- a/include/linux/stddef.h
-+++ b/include/linux/stddef.h
-@@ -13,11 +13,7 @@ enum {
- };
- 
- #undef offsetof
--#ifdef __compiler_offsetof
--#define offsetof(TYPE, MEMBER)	__compiler_offsetof(TYPE, MEMBER)
--#else
--#define offsetof(TYPE, MEMBER)	((size_t)&((TYPE *)0)->MEMBER)
--#endif
-+#define offsetof(TYPE, MEMBER)	__builtin_offsetof(TYPE, MEMBER)
- 
- /**
-  * sizeof_field() - Report the size of a struct field in bytes
+You are awesome, thank you!
 -- 
-2.31.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
