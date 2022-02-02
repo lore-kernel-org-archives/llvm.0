@@ -1,49 +1,45 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F9C2CA5
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 20:07:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C1A2F23
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 20:08:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643832447; x=1675368447;
+  t=1643832506; x=1675368506;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zMJkYvzEHpoZwFlSsnpW0On9ckenM6sc8fP13ZFhxYs=;
-  b=grOtQMoBl/Fglz4SylLASQuCTDWxp2opRQ8F6qHoCZqnDObt9GoqH0hs
-   TBFQ5IQf8cGUkcJJjImdL/L3EFODZr4DfocXMO0dqdhZxPLli0chwI13x
-   oIqEoskGcEd8DmGx/OJ45sVhgmh+TK/peliAsidpL6BqvBNpslfTF1yHf
-   fqLd5r9ot3UIfTigLWQaFLOdEP51x7aTB73ldMi+yd92wGmzNExv6MfNC
-   CJPKXDkCN+IAkh4ObW2Z+4U0+o1DLvXiNu5nmQydaq0T4tHz2dmm6SSFI
-   KhI3Jg5J7+nF83j4MwzFXpAIvq5QKqcsRawmqyuFCw/1kb6zEQDqoR++i
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="228665488"
+  bh=rX4IpCULHcPxvwbeGlnyKWAIWnEu9XapRPbaMucEoqg=;
+  b=h3HMq5bi5r7UqumZQjvk6mvXC79q4lzkxQ2c57KAMCzt2pEwUK22woLy
+   4ALSg0hmphv1PnoKnvyLQ9vRGaW01vnxrU/RKK8lAyM5G5+6d9JQGLQwN
+   F/zlJH0cpw+hSqLamdWY93Q4BuEPnVG+nlJ3Lh5ktpcTdI9TrpVVB4PnG
+   W/a40ZpTlcSogr/z49wuPb8FbPPR6TN9VbkUWRT1NE3F2iZzOhuZQyVUh
+   ZQxaLyiVPIOdMZ2W0395dNRnb2F/+OM6gelaSiJDvBBTy1udsCIM4EPLw
+   aKEede2fGMKFgXj2NdpYHg7Ya4E7kEEdpgC7TmJzQgCOClQTfE7eEgE43
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="235410405"
 X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="228665488"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 12:07:26 -0800
+   d="scan'208";a="235410405"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 12:08:25 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="480235593"
+   d="scan'208";a="676560007"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Feb 2022 12:07:23 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 02 Feb 2022 12:08:23 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nFLuU-000V40-JG; Wed, 02 Feb 2022 20:07:22 +0000
-Date: Thu, 3 Feb 2022 04:07:15 +0800
+	id 1nFLvS-000V4Q-NM; Wed, 02 Feb 2022 20:08:22 +0000
+Date: Thu, 3 Feb 2022 04:07:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Tudor Ambarus <tudor.ambarus@microchip.com>,
-	Pratyush Yadav <p.yadav@ti.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v1 05/14] mtd: spi-nor: xilinx: rename vendor specific
- functions and defines
-Message-ID: <202202030313.BlFmGeWH-lkp@intel.com>
-References: <20220202145853.4187726-6-michael@walle.cc>
+To: Kandpal Suraj <suraj.kandpal@intel.com>,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, carsten.haitzler@arm.com,
+	jani.nikula@intel.com, quic_abhinavk@quicinc.com,
+	laurent.pinchart@ideasonboard.com, dmitry.baryshkov@linaro.org
+Subject: Re: [Intel-gfx] [PATCH 1/6] drm: add writeback pointers to
+ drm_connector
+Message-ID: <202202030437.kmrDD39E-lkp@intel.com>
+References: <20220202085429.22261-2-suraj.kandpal@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,65 +48,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202145853.4187726-6-michael@walle.cc>
+In-Reply-To: <20220202085429.22261-2-suraj.kandpal@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Michael,
+Hi Kandpal,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on mtd/spi-nor/next]
-[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on drm-intel/for-linux-next drm-tip/drm-tip v5.17-rc2 next-20220202]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Michael-Walle/mtd-spi-nor-move-vendor-specific-code-into-vendor-modules/20220202-230139
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-nor/next
-config: riscv-randconfig-r042-20220131 (https://download.01.org/0day-ci/archive/20220203/202202030313.BlFmGeWH-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Kandpal-Suraj/drm-writeback-connector-changes/20220202-164832
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: i386-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220203/202202030437.kmrDD39E-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/6527d5f32d65d5695ddcc0bcf3ac31928e64a935
+        # https://github.com/0day-ci/linux/commit/57ad56d769873f62f87fe432243030ceb1678f87
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Michael-Walle/mtd-spi-nor-move-vendor-specific-code-into-vendor-modules/20220202-230139
-        git checkout 6527d5f32d65d5695ddcc0bcf3ac31928e64a935
+        git fetch --no-tags linux-review Kandpal-Suraj/drm-writeback-connector-changes/20220202-164832
+        git checkout 57ad56d769873f62f87fe432243030ceb1678f87
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/mtd/spi-nor/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+Note: the linux-review/Kandpal-Suraj/drm-writeback-connector-changes/20220202-164832 HEAD 75bbd0a8b1fb58f702279bfbc2fe2d74db8f7028 builds fine.
+      It only hurts bisectability.
 
->> drivers/mtd/spi-nor/xilinx.c:103: warning: expecting prototype for spi_nor_xsr_ready(). Prototype was for xilinx_sr_ready() instead
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/vkms/vkms_writeback.c:117:56: error: member reference type 'struct drm_connector *' is a pointer; did you mean to use '->'?
+           struct drm_connector_state *conn_state = wb_conn->base.state;
+                                                    ~~~~~~~~~~~~~^
+                                                                 ->
+>> drivers/gpu/drm/vkms/vkms_writeback.c:143:38: error: member reference type 'struct drm_encoder *' is a pointer; did you mean to use '->'?
+           vkmsdev->output.wb_connector.encoder.possible_crtcs = 1;
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+                                               ->
+>> drivers/gpu/drm/vkms/vkms_writeback.c:144:27: error: incompatible pointer types passing 'struct drm_connector **' to parameter of type 'struct drm_connector *'; remove & [-Werror,-Wincompatible-pointer-types]
+           drm_connector_helper_add(&wb->base, &vkms_wb_conn_helper_funcs);
+                                    ^~~~~~~~~
+   include/drm/drm_modeset_helper_vtables.h:1153:67: note: passing argument to parameter 'connector' here
+   static inline void drm_connector_helper_add(struct drm_connector *connector,
+                                                                     ^
+   3 errors generated.
 
 
-vim +103 drivers/mtd/spi-nor/xilinx.c
+vim +117 drivers/gpu/drm/vkms/vkms_writeback.c
 
-37ccf5a41e1528e Michael Walle 2022-02-02   94  
-37ccf5a41e1528e Michael Walle 2022-02-02   95  /**
-37ccf5a41e1528e Michael Walle 2022-02-02   96   * spi_nor_xsr_ready() - Query the Status Register of the S3AN flash to see if
-37ccf5a41e1528e Michael Walle 2022-02-02   97   * the flash is ready for new commands.
-37ccf5a41e1528e Michael Walle 2022-02-02   98   * @nor:	pointer to 'struct spi_nor'.
-37ccf5a41e1528e Michael Walle 2022-02-02   99   *
-37ccf5a41e1528e Michael Walle 2022-02-02  100   * Return: 1 if ready, 0 if not ready, -errno on errors.
-37ccf5a41e1528e Michael Walle 2022-02-02  101   */
-6527d5f32d65d56 Michael Walle 2022-02-02  102  static int xilinx_sr_ready(struct spi_nor *nor)
-37ccf5a41e1528e Michael Walle 2022-02-02 @103  {
-37ccf5a41e1528e Michael Walle 2022-02-02  104  	int ret;
-37ccf5a41e1528e Michael Walle 2022-02-02  105  
-6527d5f32d65d56 Michael Walle 2022-02-02  106  	ret = xilinx_read_sr(nor, nor->bouncebuf);
-37ccf5a41e1528e Michael Walle 2022-02-02  107  	if (ret)
-37ccf5a41e1528e Michael Walle 2022-02-02  108  		return ret;
-37ccf5a41e1528e Michael Walle 2022-02-02  109  
-37ccf5a41e1528e Michael Walle 2022-02-02  110  	return !!(nor->bouncebuf[0] & XSR_RDY);
-37ccf5a41e1528e Michael Walle 2022-02-02  111  }
-37ccf5a41e1528e Michael Walle 2022-02-02  112  
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  108  
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  109  static void vkms_wb_atomic_commit(struct drm_connector *conn,
+eca22edb37d29f Maxime Ripard    2020-11-18  110  				  struct drm_atomic_state *state)
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  111  {
+eca22edb37d29f Maxime Ripard    2020-11-18  112  	struct drm_connector_state *connector_state = drm_atomic_get_new_connector_state(state,
+eca22edb37d29f Maxime Ripard    2020-11-18  113  											 conn);
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  114  	struct vkms_device *vkmsdev = drm_device_to_vkms_device(conn->dev);
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  115  	struct vkms_output *output = &vkmsdev->output;
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  116  	struct drm_writeback_connector *wb_conn = &output->wb_connector;
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30 @117  	struct drm_connector_state *conn_state = wb_conn->base.state;
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  118  	struct vkms_crtc_state *crtc_state = output->composer_state;
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  119  
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  120  	if (!conn_state)
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  121  		return;
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  122  
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  123  	vkms_set_composer(&vkmsdev->output, true);
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  124  
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  125  	spin_lock_irq(&output->composer_lock);
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  126  	crtc_state->active_writeback = conn_state->writeback_job->priv;
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  127  	crtc_state->wb_pending = true;
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  128  	spin_unlock_irq(&output->composer_lock);
+eca22edb37d29f Maxime Ripard    2020-11-18  129  	drm_writeback_queue_job(wb_conn, connector_state);
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  130  }
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  131  
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  132  static const struct drm_connector_helper_funcs vkms_wb_conn_helper_funcs = {
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  133  	.get_modes = vkms_wb_connector_get_modes,
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  134  	.prepare_writeback_job = vkms_wb_prepare_job,
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  135  	.cleanup_writeback_job = vkms_wb_cleanup_job,
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  136  	.atomic_commit = vkms_wb_atomic_commit,
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  137  };
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  138  
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  139  int vkms_enable_writeback_connector(struct vkms_device *vkmsdev)
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  140  {
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  141  	struct drm_writeback_connector *wb = &vkmsdev->output.wb_connector;
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  142  
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30 @143  	vkmsdev->output.wb_connector.encoder.possible_crtcs = 1;
+dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30 @144  	drm_connector_helper_add(&wb->base, &vkms_wb_conn_helper_funcs);
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
