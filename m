@@ -1,98 +1,121 @@
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41732F28
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 21:31:54 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id 69D68100003;
-	Wed,  2 Feb 2022 21:31:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1643837513;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ck01TfGCbXI5iRbQk6CNxchBoOVAYhSCtSFRw6kvyPo=;
-	b=a5GIl4KKJFJWBcGCXe+4aGdOMjpOk/RE+kxOXB0KhvAqpViEhQJuhrzLECjd8gtPegRu7g
-	KS2HobdjnwPirW6Ghv7jKD2q88ZH43e7QJwie8j86yQ6uBuLVaS3pFJwjVefeT1GTEx+EI
-	29ftYV8U6MpnldUA5kEQFPgnlQgpn+nl2UVC9ADhda6m3A5PNsoghcJfr/28SGGdVQimsN
-	LnxJSxnaka3TVOajuvEOvMfqJj2BN0pM2HXwECFR8MiNg1PtDmj/Zng8jvLrB1V5jG0iEJ
-	yy3majIxI38wC3AwDMqLzsIojPvxabe7dcnj4oi1Q+tAFvofu16FgVlx5u4pBQ==
-Date: Wed, 2 Feb 2022 22:31:49 +0100
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:spi-mem-ecc 30/30] ld.lld: error: undefined symbol:
- nand_ecc_unregister_on_host_hw_engine
-Message-ID: <20220202223149.25ddc760@xps13>
-In-Reply-To: <YfrHs81VGzUggPC6@sirena.org.uk>
-References: <202202011308.a6RlPiGp-lkp@intel.com>
-	<20220202154504.7737deed@xps13>
-	<YfqhJZ+BzfMrpN4Y@sirena.org.uk>
-	<20220202163452.746d50ca@xps13>
-	<YfquJwtbg/hF5WJF@sirena.org.uk>
-	<20220202183500.7e4ef7cb@xps13>
-	<YfrHs81VGzUggPC6@sirena.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECA42CA1
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 22:19:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643840372; x=1675376372;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XfujBTN+u0aYzQcxfjJSTOYOLdePPqbT+2Jtxu0iXqY=;
+  b=HPYS/4ROfjY5mnd6j+my9N55PiWyWRWluLes2dmCwuKAk3LMFt7DmUrv
+   oTbD8ckHdciR1BInQoNPrTQp2blLkNbValr7LdUJvUlNaLvsMcpERG4d2
+   aPIZhyv5MzaBFwU3r5tEg0VvkURqnSS3n3MHjVRdwiOksptNfjDVLLGjv
+   5d4EvJ5Go/hujz+dAvDg8+HjWRNDK3FvDc0Ff6kw8rs24TYIBDwSN6Lnf
+   QlAy5p1wPQ/tLVd8KrVvBOmF0NrqZovSCDupE8x1BAHYp5EOu4gQBHitq
+   HpRFnsmZQnKe6krBfSWKP74dCaV9AO7APIbnZRfGKDvIBpHxwFExSvSXn
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="311336500"
+X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
+   d="scan'208";a="311336500"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 14:19:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
+   d="scan'208";a="483018110"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 02 Feb 2022 14:19:29 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nFNyK-000VCn-QL; Wed, 02 Feb 2022 22:19:28 +0000
+Date: Thu, 3 Feb 2022 06:19:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jorgen Hansen <jhansen@vmware.com>, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux-foundation.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	gregkh@linuxfoundation.org, pv-drivers@vmware.com,
+	Jorgen Hansen <jhansen@vmware.com>, Vishnu Dasa <vdasa@vmware.com>
+Subject: Re: [PATCH 2/8] VMCI: dma dg: add MMIO access to registers
+Message-ID: <202202030643.4ehOD5SG-lkp@intel.com>
+References: <20220202144910.10349-3-jhansen@vmware.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202144910.10349-3-jhansen@vmware.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Mark,
+Hi Jorgen,
 
-broonie@kernel.org wrote on Wed, 2 Feb 2022 18:04:35 +0000:
+I love your patch! Perhaps something to improve:
 
-> On Wed, Feb 02, 2022 at 06:35:00PM +0100, Miquel Raynal wrote:
->=20
-> > > depends on MTD=3Dy if SPI_MXC=3Dy =20
->=20
-> > In this case I believe we should also add =20
->=20
-> > depends on MTD=3Dm if SPI_MXC=3Dm ? =20
->=20
-> It doesn't specifically need MTD to be a module so just a straight
-> dependency should be fine I guess.
->=20
-> > Anyway, this would force building the ECC support (and MTD...) even
-> > though we don't need it in most cases. =20
->=20
-> > My idea was to give people the right to only select SPI_MXIC without
-> > really caring about MTD/ECC support at all because this is IMHO a
-> > valid use case. We would then save a few kiB of extra MTD fat. =20
->=20
-> Is that something that people actually do - does this controller get
-> used without the MTD functionality?  Most of these controllers seem to
-> be really bad generic SPI controllers that would rarely get used for
-> anything other than MTD devices, if this one is a useful generic
-> controller your approach makes more sense although I do worry about
-> people getting noticably worse performance if they don't build MTD in.
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This one in particular really is a SPI controller, and can really be
-used without MTD at all. I don't know how good are the performances
-with it but it is sure that there is no performance hit when the MTD
-stack is not pulled in.
+url:    https://github.com/0day-ci/linux/commits/Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 7ab004dbcbee38b8a70798835d3ffcd97a985a5e
+config: i386-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220203/202202030643.4ehOD5SG-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/f2afd39bab80c2e42ac789f6d949d779411df928
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
+        git checkout f2afd39bab80c2e42ac789f6d949d779411df928
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/misc/vmw_vmci/
 
-Also, for the example I mentioned CONFIG_MTD but in fact I simplified a
-bit the situation as this driver is actually implying
-CONFIG_MTD_NAND_ECC which selects CONFIG_MTD_NAND_CORE.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-CONFIG_MTD_NAND_CORE is a subset of MTD. Building this subset
-really is not needed when playing with eg. a SPI-NOR. And even with a
-SPI-NAND which would require CONFIG_MTD_NAND_CORE anyway, it would not
-be necessarily to have CONFIG_MTD_NAND_ECC enabled because most NANDs
-have on-die support for it and thus do not need extra code to handle
-bitflips.
+All warnings (new ones prefixed by >>):
 
-That is the reason why I felt a bit puzzled in the first place by the
-need to pull all MTD in a build which would select this SPI controller
-driver.
+>> drivers/misc/vmw_vmci/vmci_guest.c:93:14: warning: no previous prototype for function 'vmci_read_reg' [-Wmissing-prototypes]
+   unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
+                ^
+   drivers/misc/vmw_vmci/vmci_guest.c:93:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
+   ^
+   static 
+>> drivers/misc/vmw_vmci/vmci_guest.c:100:6: warning: no previous prototype for function 'vmci_write_reg' [-Wmissing-prototypes]
+   void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
+        ^
+   drivers/misc/vmw_vmci/vmci_guest.c:100:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
+   ^
+   static 
+   2 warnings generated.
 
-Thanks,
-Miqu=C3=A8l
+
+vim +/vmci_read_reg +93 drivers/misc/vmw_vmci/vmci_guest.c
+
+    92	
+  > 93	unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
+    94	{
+    95		if (dev->mmio_base != NULL)
+    96			return readl(dev->mmio_base + reg);
+    97		return ioread32(dev->iobase + reg);
+    98	}
+    99	
+ > 100	void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
+   101	{
+   102		if (dev->mmio_base != NULL)
+   103			writel(val, dev->mmio_base + reg);
+   104		else
+   105			iowrite32(val, dev->iobase + reg);
+   106	}
+   107	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
