@@ -1,45 +1,41 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D562F24
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 04:00:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365772F21
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 05:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643774440; x=1675310440;
+  t=1643778701; x=1675314701;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3PIFhmj818P6guWNz7QSEbMuO/LC/pFWN1ArnS1Hkds=;
-  b=QiBPYYjppATivE6SlMM+WRgEIMw7VqD9A3FFvZskxD80Yr1WH2h0LPiE
-   JhKI6w0cGKPTRJa69DTTkATunQnFT584q6442t32kzVKpvSey2ajFL7z3
-   cBAOOJDqtiu+AHaQa9qzX5rmoNjrA5P3EAwIT9tzewfU0LQUETCy7vDIn
-   Wvr92rX+UdJd+BDThW76de+qUkLo/eVhzKAKkrnEL15beiWcXsxDBqrdn
-   4B3TYwvP3NbLXGh0WNyaRMDsLOPEkizwvrJeoCSS4TfKrRDlppS3CShxu
-   g2BnFBCFSHr4NprzHi5YtM0pdv1pVUzkx4XAItLIxCEWyI9AdBoa1ibfD
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="228499967"
+  bh=+NE6bYfLUbePmW3bdM3nA5ICqnwVwqWbTQHNJZZC9cI=;
+  b=nrVjEk9WE4BSupNGe9sglFoD0A2xGNVA4sVTRCm2nNuV2SQQg54uwmrC
+   LszYsBMus8NKgYVrQ4I5Cg2KlFqU0+6K0kXAOmb/kynwnzrXsrHNfMKBy
+   RNcUKqmRj25REYpWMTLCcpD3MTvSZmpn2/05PPAhPxz0u84pH/Qx6qejR
+   i6uT4snzmB7hAONNlxuXoB5SviYewdfh2pPYwHjF5LcdQSkTgZiYbT9hq
+   mEbHZZHmxn8K+PrtrLiBvkV5o7n9xOtCcEdHH7ksUQ/m8ziK80/zMWCy/
+   vLLxOjap9pLWuY/Kws3gubKq9NOL/r4LBJvHYYYtDk6FGN3E8JlBNjFmd
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="248071470"
 X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="228499967"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 20:00:39 -0800
+   d="scan'208";a="248071470"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 21:11:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="769162059"
+   d="scan'208";a="523346281"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Feb 2022 20:00:37 -0800
+  by orsmga007.jf.intel.com with ESMTP; 01 Feb 2022 21:11:39 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nF6ou-000U76-Dm; Wed, 02 Feb 2022 04:00:36 +0000
-Date: Wed, 2 Feb 2022 12:00:23 +0800
+	id 1nF7ve-000UA9-ET; Wed, 02 Feb 2022 05:11:38 +0000
+Date: Wed, 2 Feb 2022 13:11:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bean Huo <huobean@gmail.com>, songxiaowei@hisilicon.com,
-	wangbinghui@hisilicon.com, lorenzo.pieralisi@arm.com,
-	robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-	ffclaire1224@gmail.com, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, beanhuo@micron.com
-Subject: Re: [PATCH] PCI: kirin: Fix kirin960-pcie probe failure issue
-Message-ID: <202202021149.TJc443Qq-lkp@intel.com>
-References: <20220201215941.1203155-1-huobean@gmail.com>
+To: Hao Luo <haoluo@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH RFC bpf-next v2 4/5] bpf: Pin cgroup_view
+Message-ID: <202202021337.jFrbh3Yq-lkp@intel.com>
+References: <20220201205534.1962784-5-haoluo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,92 +44,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220201215941.1203155-1-huobean@gmail.com>
+In-Reply-To: <20220201205534.1962784-5-haoluo@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Bean,
+Hi Hao,
 
-Thank you for the patch! Perhaps something to improve:
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on bpf-next/master]
 
-[auto build test WARNING on helgaas-pci/next]
-[also build test WARNING on v5.17-rc2 next-20220201]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Bean-Huo/PCI-kirin-Fix-kirin960-pcie-probe-failure-issue/20220202-060120
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: riscv-randconfig-r001-20220130 (https://download.01.org/0day-ci/archive/20220202/202202021149.TJc443Qq-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Hao-Luo/Extend-cgroup-interface-with-bpf/20220202-045743
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: hexagon-randconfig-r041-20220131 (https://download.01.org/0day-ci/archive/20220202/202202021337.jFrbh3Yq-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/91a6cc1deb484e0590261edbf304784499ca1784
+        # https://github.com/0day-ci/linux/commit/5ecb726d4b2336b6c49a58f013fe270f2c3dfdd1
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Bean-Huo/PCI-kirin-Fix-kirin960-pcie-probe-failure-issue/20220202-060120
-        git checkout 91a6cc1deb484e0590261edbf304784499ca1784
+        git fetch --no-tags linux-review Hao-Luo/Extend-cgroup-interface-with-bpf/20220202-045743
+        git checkout 5ecb726d4b2336b6c49a58f013fe270f2c3dfdd1
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/pci/controller/dwc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pci/controller/dwc/pcie-kirin.c:784:13: warning: cast to smaller integer type 'enum pcie_kirin_phy_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-           phy_type = (enum pcie_kirin_phy_type)of_device_get_match_data(dev);
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> kernel/bpf/inode.c:638:18: error: use of undeclared identifier 'cgrp_dfl_root'
+                   tag->private = cgrp_dfl_root.kf_root->kn;
+                                  ^
+   1 error generated.
 
 
-vim +784 drivers/pci/controller/dwc/pcie-kirin.c
+vim +/cgrp_dfl_root +638 kernel/bpf/inode.c
 
-   770	
-   771	static int kirin_pcie_probe(struct platform_device *pdev)
-   772	{
-   773		enum pcie_kirin_phy_type phy_type;
-   774		struct device *dev = &pdev->dev;
-   775		struct kirin_pcie *kirin_pcie;
-   776		struct dw_pcie *pci;
-   777		int ret;
-   778	
-   779		if (!dev->of_node) {
-   780			dev_err(dev, "NULL node\n");
-   781			return -EINVAL;
-   782		}
-   783	
- > 784		phy_type = (enum pcie_kirin_phy_type)of_device_get_match_data(dev);
-   785	
-   786		kirin_pcie = devm_kzalloc(dev, sizeof(struct kirin_pcie), GFP_KERNEL);
-   787		if (!kirin_pcie)
-   788			return -ENOMEM;
-   789	
-   790		pci = devm_kzalloc(dev, sizeof(*pci), GFP_KERNEL);
-   791		if (!pci)
-   792			return -ENOMEM;
-   793	
-   794		pci->dev = dev;
-   795		pci->ops = &kirin_dw_pcie_ops;
-   796		pci->pp.ops = &kirin_pcie_host_ops;
-   797		kirin_pcie->pci = pci;
-   798		kirin_pcie->type = phy_type;
-   799	
-   800		ret = kirin_pcie_get_resource(kirin_pcie, pdev);
-   801		if (ret)
-   802			return ret;
-   803	
-   804		platform_set_drvdata(pdev, kirin_pcie);
-   805	
-   806		ret = kirin_pcie_power_on(pdev, kirin_pcie);
-   807		if (ret)
-   808			return ret;
-   809	
-   810		return dw_pcie_host_init(&pci->pp);
-   811	}
-   812	
+   600	
+   601	/* bpf_inherit_object - register an object in a diretory tag's inherit list
+   602	 * @dentry: dentry of the location to pin
+   603	 * @mode: mode of created file entry
+   604	 * @obj: bpf object
+   605	 * @type: type of bpf object
+   606	 *
+   607	 * Could be called from bpf_obj_do_pin() or from mkdir().
+   608	 */
+   609	static int bpf_inherit_object(struct dentry *dentry, umode_t mode,
+   610				      void *obj, enum bpf_type type)
+   611	{
+   612		struct inode *dir = d_inode(dentry->d_parent);
+   613		struct obj_list *inherits;
+   614		struct bpf_inherit_entry *e;
+   615		struct bpf_dir_tag *tag;
+   616		const char *name;
+   617		bool queued = false, new_tag = false;
+   618	
+   619		/* allocate bpf_dir_tag */
+   620		tag = inode_tag(dir);
+   621		if (!tag) {
+   622			new_tag = true;
+   623			tag = kzalloc(sizeof(struct bpf_dir_tag), GFP_KERNEL);
+   624			if (unlikely(!tag))
+   625				return -ENOMEM;
+   626	
+   627			tag->type = BPF_DIR_KERNFS_REP;
+   628			inherits = kzalloc(sizeof(struct obj_list), GFP_KERNEL);
+   629			if (unlikely(!inherits)) {
+   630				kfree(tag);
+   631				return -ENOMEM;
+   632			}
+   633	
+   634			kref_init(&inherits->refcnt);
+   635			INIT_LIST_HEAD(&inherits->list);
+   636			tag->inherit_objects = inherits;
+   637			/* initial tag points to the default root cgroup. */
+ > 638			tag->private = cgrp_dfl_root.kf_root->kn;
+   639			dir->i_private = tag;
+   640		} else {
+   641			inherits = tag->inherit_objects;
+   642		}
+   643	
+   644		list_for_each_entry_rcu(e, &inherits->list, list) {
+   645			if (!strcmp(dentry->d_name.name, e->name.name)) {
+   646				queued = true;
+   647				break;
+   648			}
+   649		}
+   650	
+   651		/* queue in tag's inherit_list. */
+   652		if (!queued) {
+   653			e = kzalloc(sizeof(struct bpf_inherit_entry), GFP_KERNEL);
+   654			if (!e) {
+   655				if (new_tag) {
+   656					kfree(tag);
+   657					kfree(inherits);
+   658				}
+   659				return -ENOMEM;
+   660			}
+   661	
+   662			INIT_LIST_HEAD(&e->list);
+   663			e->mode = mode;
+   664			e->obj = obj;
+   665			e->type = type;
+   666			name = kstrdup(dentry->d_name.name, GFP_USER | __GFP_NOWARN);
+   667			e->name = (struct qstr)QSTR_INIT(name, strlen(name));
+   668			list_add_rcu(&e->list, &inherits->list);
+   669		}
+   670		return 0;
+   671	}
+   672	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
