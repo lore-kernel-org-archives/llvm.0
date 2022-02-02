@@ -1,89 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE132F27
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 18:04:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F55C004E1;
-	Wed,  2 Feb 2022 18:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643825080;
-	bh=YseebR6ddjhKcx6iHU+3IYV3X/EAv2nfCEUhSRsuCxg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=amJbffqB6DQ6l1wg754Byfm4s9afEFFHFwm9qA5XXFPIJX8p8mAibwM8fqrhK/M/+
-	 fASKMIi7xIuon5R7woWw73mVQ1asINR+fw5GE9AM1+M0YWdwvw62TZ+EZ2xdea+cAB
-	 uM6dLRapNSCtly7TngU8MBV/SKQoGV92UMhN5OoPKCZZDtXHBQXBKijVPBL3yYAz6l
-	 HDE/ty+p9tFkm50j0vtsjkTw+thZw+rKg+b2COJ+TNH//wZVDSwc4w+42wg2oUQEXe
-	 w+gq8lZOqkLBXDgviDogz0gvPPB+l0bdSwMAfpsqj2V7Y/3dtywyWKK68IvEgG13ku
-	 Ic1dczpbcGXiQ==
-Date: Wed, 2 Feb 2022 18:04:35 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:spi-mem-ecc 30/30] ld.lld: error: undefined symbol:
- nand_ecc_unregister_on_host_hw_engine
-Message-ID: <YfrHs81VGzUggPC6@sirena.org.uk>
-References: <202202011308.a6RlPiGp-lkp@intel.com>
- <20220202154504.7737deed@xps13>
- <YfqhJZ+BzfMrpN4Y@sirena.org.uk>
- <20220202163452.746d50ca@xps13>
- <YfquJwtbg/hF5WJF@sirena.org.uk>
- <20220202183500.7e4ef7cb@xps13>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5DA2F23
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 20:07:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643832446; x=1675368446;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OKoapjEKq1E7eFux5LUXJp/W1HMiW7UHxnLJfV3whXI=;
+  b=ZlPUnlNLIzVav2y5k6CS6xZqLvaNpusfWgz0GaXaoI7/RRgRZZu17yVm
+   NTi+8tLZKCMhGn8ny59T0gnN4NrCJ1VUuhVhKs7CP4qi4QPw8BPYDhhlj
+   tpCcRW7u7ZxnJ6tqwZJSumJhfjYCRNAGKS+XGfBlsvEJpZure73QZ9XqM
+   KQ1/1LdVcVBL4+vgsFmqcHuSbsLZ0d22nzKK1mqfqbZwV5wlok7LPrqM6
+   cJnLIY+w3zFB1NYr70xjovaf3BHmQYdPucBr10obO6yCT1AIh2uqlfajV
+   owQGEU5ezXco7pBmespiDmz6WAz26AZikACf0FCk0KCdDRHgua58otkUF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="247778125"
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="247778125"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 12:07:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="771555789"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Feb 2022 12:07:23 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nFLuU-000V43-LN; Wed, 02 Feb 2022 20:07:22 +0000
+Date: Thu, 3 Feb 2022 04:07:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Tudor Ambarus <tudor.ambarus@microchip.com>,
+	Pratyush Yadav <p.yadav@ti.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v1 12/14] mtd: spi-nor: move all spansion specifics into
+ spansion.c
+Message-ID: <202202030449.IQfj2Y5O-lkp@intel.com>
+References: <20220202145853.4187726-13-michael@walle.cc>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7y4DHJEdfFNfRgCM"
-Content-Disposition: inline
-In-Reply-To: <20220202183500.7e4ef7cb@xps13>
-X-Cookie: Quack!
-
-
---7y4DHJEdfFNfRgCM
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220202145853.4187726-13-michael@walle.cc>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Feb 02, 2022 at 06:35:00PM +0100, Miquel Raynal wrote:
+Hi Michael,
 
-> > depends on MTD=y if SPI_MXC=y
+I love your patch! Perhaps something to improve:
 
-> In this case I believe we should also add
+[auto build test WARNING on mtd/spi-nor/next]
+[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> depends on MTD=m if SPI_MXC=m ?
+url:    https://github.com/0day-ci/linux/commits/Michael-Walle/mtd-spi-nor-move-vendor-specific-code-into-vendor-modules/20220202-230139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-nor/next
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220203/202202030449.IQfj2Y5O-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/01f9808a20c96553c43f929e10f3fb448cd8bd93
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Michael-Walle/mtd-spi-nor-move-vendor-specific-code-into-vendor-modules/20220202-230139
+        git checkout 01f9808a20c96553c43f929e10f3fb448cd8bd93
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mtd/spi-nor/
 
-It doesn't specifically need MTD to be a module so just a straight
-dependency should be fine I guess.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Anyway, this would force building the ECC support (and MTD...) even
-> though we don't need it in most cases.
+All warnings (new ones prefixed by >>):
 
-> My idea was to give people the right to only select SPI_MXIC without
-> really caring about MTD/ECC support at all because this is IMHO a
-> valid use case. We would then save a few kiB of extra MTD fat.
+>> drivers/mtd/spi-nor/spansion.c:332:5: warning: no previous prototype for function 'spi_nor_sr_ready_and_clear' [-Wmissing-prototypes]
+   int spi_nor_sr_ready_and_clear(struct spi_nor *nor)
+       ^
+   drivers/mtd/spi-nor/spansion.c:332:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spi_nor_sr_ready_and_clear(struct spi_nor *nor)
+   ^
+   static 
+   1 warning generated.
 
-Is that something that people actually do - does this controller get
-used without the MTD functionality?  Most of these controllers seem to
-be really bad generic SPI controllers that would rarely get used for
-anything other than MTD devices, if this one is a useful generic
-controller your approach makes more sense although I do worry about
-people getting noticably worse performance if they don't build MTD in.
 
---7y4DHJEdfFNfRgCM
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/spi_nor_sr_ready_and_clear +332 drivers/mtd/spi-nor/spansion.c
 
------BEGIN PGP SIGNATURE-----
+   324	
+   325	/**
+   326	 * spi_nor_sr_ready_and_clear() - Query the Status Register to see if the flash
+   327	 * is ready for new commands and clear it.
+   328	 * @nor:	pointer to 'struct spi_nor'.
+   329	 *
+   330	 * Return: 1 if ready, 0 if not ready, -errno on errors.
+   331	 */
+ > 332	int spi_nor_sr_ready_and_clear(struct spi_nor *nor)
+   333	{
+   334		int ret;
+   335	
+   336		ret = spi_nor_read_sr(nor, nor->bouncebuf);
+   337		if (ret)
+   338			return ret;
+   339	
+   340		if (nor->bouncebuf[0] & (SR_E_ERR | SR_P_ERR)) {
+   341			if (nor->bouncebuf[0] & SR_E_ERR)
+   342				dev_err(nor->dev, "Erase Error occurred\n");
+   343			else
+   344				dev_err(nor->dev, "Programming Error occurred\n");
+   345	
+   346			spi_nor_clear_sr(nor);
+   347	
+   348			/*
+   349			 * WEL bit remains set to one when an erase or page program
+   350			 * error occurs. Issue a Write Disable command to protect
+   351			 * against inadvertent writes that can possibly corrupt the
+   352			 * contents of the memory.
+   353			 */
+   354			ret = spi_nor_write_disable(nor);
+   355			if (ret)
+   356				return ret;
+   357	
+   358			return -EIO;
+   359		}
+   360	
+   361		return !(nor->bouncebuf[0] & SR_WIP);
+   362	}
+   363	
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH6x7IACgkQJNaLcl1U
-h9DEGQf9He89Bi3wo07ovLF1dNgSvxJZahA8VFp/QkgSOtIr4HRih0rAJyEcsb/o
-BFq3C1/FbFj6x2fTYYlWSNdaEpeqEOY1TBqi9qx7cYFV2dei4vgHn4pyTkqsAwkD
-tPEsaerYkwGek/8XP2S+6BzCsGHpL1ELpXyOViGEUuo4CYhootJfQSyUFeDVKFDI
-rJz3hXUDhZCrDNxkcYh07cw5q71tVTmTyNaQBMkAXl1FkCltvPNCgyaTClIfoqnp
-KURHYU8wj78btu4lNfrGJZk+Riwj47BcgJa94gzawKoLlX+p2CMkaNWpjn8yBhIl
-lCY66Ex4xpeOrMiy1MwOPA6EchqroA==
-=G0jO
------END PGP SIGNATURE-----
-
---7y4DHJEdfFNfRgCM--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
