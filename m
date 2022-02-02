@@ -1,63 +1,89 @@
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3B92F2B
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 15:50:50 +0000 (UTC)
-Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id CC53DD29CC
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 15:35:02 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id E298410000A;
-	Wed,  2 Feb 2022 15:34:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1643816095;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=udh0XHWQaOuEVGcPinmtV33kWRGTQJdx9kgSeb7ptEA=;
-	b=TANoPNZIlK9r9D4RAA6u4ohMIJi2bQzFP5OjFcV7SWY0g1o94ix/w1URlsTW3IJp2TSbol
-	JSKRQDtH4fHVudiBCo8FKdrTJS7+tHHdel0nHhRIeAeLxuCJ6daNOu8JLdwoudsk9qwU1u
-	uCCUTiTx42KqS21ONHO3XLNeOYRmbdgmGLNIpbUVuUWtMMkLgzLw4cQLmOD+5Kabm+BwR2
-	nZOhcjfcf1JlVjarU/n4C8MWoce6Aj+0rI4SMIqHzomoTxcD+UFfmMFuEoSB7ZI5MC/xbW
-	+x8sXaAGX4a5x4cCE+0yDGI5As0z7J05bOUMFvTipKN5n1HLsPNR9m59eK8+oA==
-Date: Wed, 2 Feb 2022 16:34:52 +0100
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:spi-mem-ecc 30/30] ld.lld: error: undefined symbol:
- nand_ecc_unregister_on_host_hw_engine
-Message-ID: <20220202163452.746d50ca@xps13>
-In-Reply-To: <YfqhJZ+BzfMrpN4Y@sirena.org.uk>
-References: <202202011308.a6RlPiGp-lkp@intel.com>
-	<20220202154504.7737deed@xps13>
-	<YfqhJZ+BzfMrpN4Y@sirena.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAD42F2B
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 15:53:53 +0000 (UTC)
+Received: by mail-io1-f48.google.com with SMTP id q204so25967467iod.8
+        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 07:53:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WXOsmtDny0WluDniF2bqbqtLayhd1SNumBfgvAoXVDc=;
+        b=ENABLJMA05R4soziave+d7UPm5zfjbrRymzXBoJsaW0z6qAKD2n9BRtw7tMe8IWvtT
+         Dtw076aY5ms2kHZAAIDpNevhFb8kbWcCRn5sIFiTdWfl+S4e2MesYrqCgrU0NJHNQkOc
+         frhUCeyRRNVCb6l36CVwAiB4lbVwnXLyCG9nQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WXOsmtDny0WluDniF2bqbqtLayhd1SNumBfgvAoXVDc=;
+        b=qULt5+SSXaNgGp5UrkzIxB0Uu3VqNcoY2RlHp3vtjwifIzELE8679SL0XGT0e9K5Sb
+         LrSiG5qKAWe8PdqN8+IzGfI+a6HNH09YreXKNGxAzyuCOAhpyL4DnH7Gt1X9K5Q06BWo
+         PKDbPzUpLCiZM8p8t7UeUZQJbhVVyamwl1cTi60VBrr9uMtK2lIJNbjrEX6yQ4LLkvLO
+         ann5+BM48Bs01sQxAP4AJUiVwcyb81Mgumhk9QK1IyK+Eq6AxVbNPpHd6bOFS5PILUWG
+         En9FIWjJRp/+MLAO50kiundyyVPjqdeBklDEqOFnwE8mZZkF02KQeVMw7348iQIl2sHD
+         EuJA==
+X-Gm-Message-State: AOAM531uVLCiPM4Dp4Ip1xNJ4AUN8wB4Du/evuKFi2FXZLYIBP+S/saT
+	q4GyMiIj7+QyKRTWTWluvvd5gw==
+X-Google-Smtp-Source: ABdhPJw6EtuJMPNRgqXBZ1urjdtS9DTte0fKkn/dXlVvcSumMDMNt2EoK1WwnohoNyDsHDMB2u/rhg==
+X-Received: by 2002:a02:9f07:: with SMTP id z7mr12280320jal.87.1643817232526;
+        Wed, 02 Feb 2022 07:53:52 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id o4sm17381145iou.42.2022.02.02.07.53.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 07:53:52 -0800 (PST)
+Subject: Re: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
+To: Christian Brauner <brauner@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>
+Cc: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Zach O'Keefe
+ <zokeefe@google.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20220127221115.3731388-1-axelrasmussen@google.com>
+ <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
+From: Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <54a0cd63-6ec9-21fa-722a-da933b0ff1bf@linuxfoundation.org>
+Date: Wed, 2 Feb 2022 08:53:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
-
-broonie@kernel.org wrote on Wed, 2 Feb 2022 15:20:05 +0000:
-
-> On Wed, Feb 02, 2022 at 03:45:04PM +0100, Miquel Raynal wrote:
+On 1/28/22 1:57 AM, Christian Brauner wrote:
+> On Thu, Jan 27, 2022 at 02:11:15PM -0800, Axel Rasmussen wrote:
+>> These are some trivial fixups, which were needed to build the tests with
+>> clang and -Werror. The following issues are fixed:
+>>
+>> - Remove various unused variables.
+>> - In child_poll_leader_exit_test, clang isn't smart enough to realize
+>>    syscall(SYS_exit, 0) won't return, so it complains we never return
+>>    from a non-void function. Add an extra exit(0) to appease it.
+>> - In test_pidfd_poll_leader_exit, ret may be branched on despite being
+>>    uninitialized, if we have !use_waitpid. Initialize it to zero to get
+>>    the right behavior in that case.
+>>
+>> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+>> ---
 > 
-> > I've failed to prevent faulty configurations with regular depends
-> > on/select keywords, so I've come with a new solution which received a
-> > successful build coverage test from the 0-day robots.  
+> Thanks!
+> (Fwiw, all those tests should also be ported to use the TEST_*() harness
+> infra. Currently it's an annoying mix.)
+> Acked-by: Christian Brauner <brauner@kernel.org>
 > 
-> > In order to still be able to use the spi controller driver (=y) while
-> > mtd is =m or =n, I need to add an IS_REACHABLE() check in a couple of
-> > headers. This way we can just imply the right MTD symbols from the
-> > SPI_MXIC Kconfig entry.  
-> 
-> Isn't this just a case where we shouldn't allow MTD to be built modular?
 
-How would you do that in a nice Kconfig way?
+Yes. Porting would be great. I will take this for now for 5.17-rc4
+
+thanks,
+-- Shuah
