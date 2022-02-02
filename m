@@ -1,89 +1,102 @@
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAD42F2B
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 15:53:53 +0000 (UTC)
-Received: by mail-io1-f48.google.com with SMTP id q204so25967467iod.8
-        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 07:53:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WXOsmtDny0WluDniF2bqbqtLayhd1SNumBfgvAoXVDc=;
-        b=ENABLJMA05R4soziave+d7UPm5zfjbrRymzXBoJsaW0z6qAKD2n9BRtw7tMe8IWvtT
-         Dtw076aY5ms2kHZAAIDpNevhFb8kbWcCRn5sIFiTdWfl+S4e2MesYrqCgrU0NJHNQkOc
-         frhUCeyRRNVCb6l36CVwAiB4lbVwnXLyCG9nQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WXOsmtDny0WluDniF2bqbqtLayhd1SNumBfgvAoXVDc=;
-        b=qULt5+SSXaNgGp5UrkzIxB0Uu3VqNcoY2RlHp3vtjwifIzELE8679SL0XGT0e9K5Sb
-         LrSiG5qKAWe8PdqN8+IzGfI+a6HNH09YreXKNGxAzyuCOAhpyL4DnH7Gt1X9K5Q06BWo
-         PKDbPzUpLCiZM8p8t7UeUZQJbhVVyamwl1cTi60VBrr9uMtK2lIJNbjrEX6yQ4LLkvLO
-         ann5+BM48Bs01sQxAP4AJUiVwcyb81Mgumhk9QK1IyK+Eq6AxVbNPpHd6bOFS5PILUWG
-         En9FIWjJRp/+MLAO50kiundyyVPjqdeBklDEqOFnwE8mZZkF02KQeVMw7348iQIl2sHD
-         EuJA==
-X-Gm-Message-State: AOAM531uVLCiPM4Dp4Ip1xNJ4AUN8wB4Du/evuKFi2FXZLYIBP+S/saT
-	q4GyMiIj7+QyKRTWTWluvvd5gw==
-X-Google-Smtp-Source: ABdhPJw6EtuJMPNRgqXBZ1urjdtS9DTte0fKkn/dXlVvcSumMDMNt2EoK1WwnohoNyDsHDMB2u/rhg==
-X-Received: by 2002:a02:9f07:: with SMTP id z7mr12280320jal.87.1643817232526;
-        Wed, 02 Feb 2022 07:53:52 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id o4sm17381145iou.42.2022.02.02.07.53.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 07:53:52 -0800 (PST)
-Subject: Re: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
-To: Christian Brauner <brauner@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>
-Cc: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Zach O'Keefe
- <zokeefe@google.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20220127221115.3731388-1-axelrasmussen@google.com>
- <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
-From: Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <54a0cd63-6ec9-21fa-722a-da933b0ff1bf@linuxfoundation.org>
-Date: Wed, 2 Feb 2022 08:53:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427B22F2B
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 15:58:38 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::226])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 18EEDC245F
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 14:45:15 +0000 (UTC)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+	by mail.gandi.net (Postfix) with ESMTPSA id 5EC8AC0003;
+	Wed,  2 Feb 2022 14:45:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1643813107;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j4mbb7kF/AzGhnSoPyBUzMArPFYJPP821v155kkkR9Y=;
+	b=QglS3OiIsZmuwBxVzSE3AsOCW+Gaodk+vnxhUnbt7FEP6mazyel4+LlflNSsQAOegAdFsT
+	7Cbt2VVck066IRxwrsbuyqA0Lh2F9irDQ7PcXMiY3/c/C5VJ/NlmEm6CARBGtZ0hvq58/l
+	JMrCo6134D/pazj7DG6C1B2yawXf8lk+reHuRrnsitvKM30Ir0dX358C3xTBpCkPGkPnKm
+	oqG4i3z9NXgGOYMo9WAfd+qJbodWkNk3ex/NgSZl46sU1TBx1somISh71ch5EoRl9xQ/94
+	quNvQ7Mx/lKpraqk1MVI25i/W/ZU8mQDSmxmFw217OdrjPcWkNmaOdr9x23NcQ==
+Date: Wed, 2 Feb 2022 15:45:04 +0100
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [mtd:spi-mem-ecc 30/30] ld.lld: error: undefined symbol:
+ nand_ecc_unregister_on_host_hw_engine
+Message-ID: <20220202154504.7737deed@xps13>
+In-Reply-To: <202202011308.a6RlPiGp-lkp@intel.com>
+References: <202202011308.a6RlPiGp-lkp@intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On 1/28/22 1:57 AM, Christian Brauner wrote:
-> On Thu, Jan 27, 2022 at 02:11:15PM -0800, Axel Rasmussen wrote:
->> These are some trivial fixups, which were needed to build the tests with
->> clang and -Werror. The following issues are fixed:
->>
->> - Remove various unused variables.
->> - In child_poll_leader_exit_test, clang isn't smart enough to realize
->>    syscall(SYS_exit, 0) won't return, so it complains we never return
->>    from a non-void function. Add an extra exit(0) to appease it.
->> - In test_pidfd_poll_leader_exit, ret may be branched on despite being
->>    uninitialized, if we have !use_waitpid. Initialize it to zero to get
->>    the right behavior in that case.
->>
->> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
->> ---
-> 
-> Thanks!
-> (Fwiw, all those tests should also be ported to use the TEST_*() harness
-> infra. Currently it's an annoying mix.)
-> Acked-by: Christian Brauner <brauner@kernel.org>
-> 
+Hi Mark,
 
-Yes. Porting would be great. I will take this for now for 5.17-rc4
+lkp@intel.com wrote on Tue, 1 Feb 2022 13:28:45 +0800:
 
-thanks,
--- Shuah
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi=
+-mem-ecc
+> head:   6d0fadec1de4434fce145b374ef25c665357fa60
+> commit: 6d0fadec1de4434fce145b374ef25c665357fa60 [30/30] spi: mxic: Add s=
+upport for pipelined ECC operations
+> config: hexagon-randconfig-r001-20220130 (https://download.01.org/0day-ci=
+/archive/20220201/202202011308.a6RlPiGp-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e=
+844b69f15bb7dffaf9365cd2b355d2eb7579)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/c=
+ommit/?id=3D6d0fadec1de4434fce145b374ef25c665357fa60
+>         git remote add mtd https://git.kernel.org/pub/scm/linux/kernel/gi=
+t/mtd/linux.git
+>         git fetch --no-tags mtd spi-mem-ecc
+>         git checkout 6d0fadec1de4434fce145b374ef25c665357fa60
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash
+>=20
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+> >> ld.lld: error: undefined symbol: nand_ecc_unregister_on_host_hw_engine=
+ =20
+>    >>> referenced by spi-mxic.c
+>    >>>               spi/spi-mxic.o:(mxic_spi_remove) in archive drivers/=
+built-in.a
+>    >>> referenced by spi-mxic.c
+>    >>>               spi/spi-mxic.o:(mxic_spi_remove) in archive drivers/=
+built-in.a =20
+
+I've failed to prevent faulty configurations with regular depends
+on/select keywords, so I've come with a new solution which received a
+successful build coverage test from the 0-day robots.
+
+In order to still be able to use the spi controller driver (=3Dy) while
+mtd is =3Dm or =3Dn, I need to add an IS_REACHABLE() check in a couple of
+headers. This way we can just imply the right MTD symbols from the
+SPI_MXIC Kconfig entry.
+
+I'll send a v11 with these changes which seem to rather cleanly address
+all situations. I don't think I can do without these extra checks as
+select/imply will not propagate the real value of the Kconfig symbol
+(y/m) like depends on does.
+
+Thanks,
+Miqu=C3=A8l
