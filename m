@@ -1,77 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300ED2F24
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 10:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D45BEC340EC;
-	Wed,  2 Feb 2022 10:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643797810;
-	bh=2iKggoFWP/pSFvThOv+1gXnfFM0EtBmGzMus01UuI24=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=AvSa/dLF5Mi8+UFEKiUVXHrguSC6NkOZt4bmd80Dts1gKhXy76vo1+2BykMVrIFj2
-	 fq2nknrq+mKK5PiXjXgMyqBt7Mv61YIrBDquDQnFAp9kA0GlqjBC7JVlZ/GbXSuU08
-	 syqyIE+CDMyFEJJhYDV1/GUZS1YWQrU8lj7mESsXru+J/R4N+sgJ1bB8VihrJka9xS
-	 fmepolvx6QAzjm6zJ8E+/pB5GkMLTd70EHsSHflAhqKDW+aI3p4oNGDhp08Fwws0yS
-	 Bw9scZ24GR8Q3oj6CJWfDFGxoPr82q/qgwM9Jkv2dv0rcCziP3ZNG7GZj1VXaZXwEq
-	 EgdJFkPpofAhw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7038E5D07E;
-	Wed,  2 Feb 2022 10:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31C629CA
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 10:42:05 +0000 (UTC)
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92.3)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1nFCpg-00009B-4Z; Wed, 02 Feb 2022 11:25:48 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+	by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1nFCpf-00078Q-P3; Wed, 02 Feb 2022 11:25:47 +0100
+Subject: Re: [PATCH bpf-next 0/5] Allow CONFIG_DEBUG_INFO_DWARF5=y +
+ CONFIG_DEBUG_INFO_BTF=y
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ Nathan Chancellor <nathan@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+ Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220201205624.652313-1-nathan@kernel.org>
+ <CAEf4BzbLwMCHDncHW-hH2kgOWc9jQK7QVkcH9aOKm7n7YC2LgQ@mail.gmail.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <c1eb308e-1f02-492b-53f1-762daa3d8ff3@iogearbox.net>
+Date: Wed, 2 Feb 2022 11:25:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/5] Allow CONFIG_DEBUG_INFO_DWARF5=y +
- CONFIG_DEBUG_INFO_BTF=y
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <164379781074.22256.810100339582105585.git-patchwork-notify@kernel.org>
-Date: Wed, 02 Feb 2022 10:30:10 +0000
-References: <20220201205624.652313-1-nathan@kernel.org>
-In-Reply-To: <20220201205624.652313-1-nathan@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
- songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
- kpsingh@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <CAEf4BzbLwMCHDncHW-hH2kgOWc9jQK7QVkcH9aOKm7n7YC2LgQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26440/Tue Feb  1 10:29:16 2022)
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Tue,  1 Feb 2022 13:56:19 -0700 you wrote:
-> Hi all,
+On 2/2/22 8:05 AM, Andrii Nakryiko wrote:
+> On Tue, Feb 1, 2022 at 12:56 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> This series allows CONFIG_DEBUG_INFO_DWARF5 to be selected with
+>> CONFIG_DEBUG_INFO_BTF=y by checking the pahole version.
+>>
+>> The first four patches add CONFIG_PAHOLE_VERSION and
+>> scripts/pahole-version.sh to clean up all the places that pahole's
+>> version is transformed into a 3-digit form.
+>>
+>> The fourth patch adds a PAHOLE_VERSION dependency to DEBUG_INFO_DWARF5
+>> so that there are no build errors when it is selected with
+>> DEBUG_INFO_BTF.
+>>
+>> I build tested Fedora's aarch64 and x86_64 config with ToT clang 14.0.0
+>> and GCC 11 with CONFIG_DEBUG_INFO_DWARF5 enabled with both pahole 1.21
+>> and 1.23.
+>>
+>> Nathan Chancellor (5):
+>>    MAINTAINERS: Add scripts/pahole-flags.sh to BPF section
+>>    kbuild: Add CONFIG_PAHOLE_VERSION
+>>    scripts/pahole-flags.sh: Use pahole-version.sh
+>>    lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
+>>    lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
+>>
 > 
-> This series allows CONFIG_DEBUG_INFO_DWARF5 to be selected with
-> CONFIG_DEBUG_INFO_BTF=y by checking the pahole version.
-> 
-> The first four patches add CONFIG_PAHOLE_VERSION and
-> scripts/pahole-version.sh to clean up all the places that pahole's
-> version is transformed into a 3-digit form.
-> 
-> [...]
+> LGTM. I'd probably combine patches 2 and 3, but it's minor. I really
+> like the CONFIG_PAHOLE_VERSION and how much cleaner it makes Kconfig
+> options.
 
-Here is the summary with links:
-  - [bpf-next,1/5] MAINTAINERS: Add scripts/pahole-flags.sh to BPF section
-    https://git.kernel.org/bpf/bpf-next/c/f67644b4f282
-  - [bpf-next,2/5] kbuild: Add CONFIG_PAHOLE_VERSION
-    https://git.kernel.org/bpf/bpf-next/c/613fe1692377
-  - [bpf-next,3/5] scripts/pahole-flags.sh: Use pahole-version.sh
-    https://git.kernel.org/bpf/bpf-next/c/2d6c9810eb89
-  - [bpf-next,4/5] lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
-    https://git.kernel.org/bpf/bpf-next/c/6323c81350b7
-  - [bpf-next,5/5] lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
-    https://git.kernel.org/bpf/bpf-next/c/42d9b379e3e1
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
++1, thanks for working on getting this enabled! I think patches 2 and 3 are
+rather logically separate, so as-is is fine as well imho. Applied, thanks!
