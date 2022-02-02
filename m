@@ -1,270 +1,107 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C664B2CA2
-	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 00:30:36 +0000 (UTC)
-Received: by mail-pg1-f172.google.com with SMTP id s16so16790930pgs.13
-        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 16:30:36 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2392F25
+	for <llvm@lists.linux.dev>; Wed,  2 Feb 2022 00:49:59 +0000 (UTC)
+Received: by mail-pj1-f74.google.com with SMTP id o21-20020a17090ad25500b001b7f9cf30ddso4195762pjw.2
+        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 16:49:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VjrCPTgmmaKb3y/ZOM5Yq/YGquEY9NIxxYzo4REsL+A=;
-        b=b/zacnqWCilFkrdeG/bENv7niD5ssPV4upXLdgRBbFvmZe+0O24r2k94ELOZM+7VQd
-         EQO9R/Ieqn+kWjMdHGu/AKAR0R5yKArK3q/KbZzm0dPcpYk6Cn8hcru5R3bjeC4oukKN
-         ea3ivYU0wuUD9zb6aj384J9Zf7+50z2ewR480=
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=g6pUKH4WYbWgbDwKBU0IMA28eYRiLDk9vkLPEbdpMnw=;
+        b=i6JiUALu1FJfRzDuhQAUfNtgTJ+zakIybzPqhobpinojJGET1wdn+8w02g/1G8c/H0
+         7QiDU6eahxRSKVG3t2E+6wnV4blltOS12NFn0qEn3cTBzKBdZm4FSw4t5yT52CSuQX8E
+         lXLrFH9oXa6Pki+a22egJUg8qRAHrTul1SgjAb1wUYTyEoE6HBAZtD+0GTr0+5gYVt7U
+         5nzJewN75+ggCxUb7KSEUmXMOAQ/ZiJrnlrWyWJ+napeTa7EiMoh1Gim19or+92uhDWW
+         AUMctQKhwgDXukqrxVdGb9WjcJc7tJSeTUJou6BVURmtfUUhsX9NY7opH+tSveXGbRIp
+         wMJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VjrCPTgmmaKb3y/ZOM5Yq/YGquEY9NIxxYzo4REsL+A=;
-        b=xSF/553JR28r4u0pl/RjTcJYHikVtPClfbWpB6RKuSP5zwpwKOVrUfMrgjYoURxHkF
-         Ly0gjCGjFSR7CmW+6bOOCYpLvh/G9de5cCLhQt3WFhfImsrKi5/P1kuXIhjJsdU+AN2/
-         vhuf6lGKSGiP1VicBgbcSNp2luvrYkIcw30/VkspFRRKTOYLS9Bjt5gMKvCRExyI6pS7
-         84U3UU3Kq6oY0OisiA9JsVPdxy7D7PVL/bw5uGmsMh2xODFf63J06e9jIA4vuGxo7emz
-         xMfx67hRFffIuNHu2b5J2S7ulth9geIPeVX84RS1kB1nca+mmHBShZ9h6OML3NyUi8tx
-         g4WQ==
-X-Gm-Message-State: AOAM532mBNWhNQPJNg8lYCixIO+1AtBnX0y6gn6nPIGk1Oda3fV00SB0
-	opS54rTMEm2hZCDINhK3EuBOCpUCa82TVA==
-X-Google-Smtp-Source: ABdhPJwKfMKHgtPbIeBl1AOuyxfFJBygOcjBsEYx4YMSRW95KxnHg/QjUq3OGwzIGJXkow4ZvokxdA==
-X-Received: by 2002:aa7:9682:: with SMTP id f2mr27769999pfk.56.1643761836333;
-        Tue, 01 Feb 2022 16:30:36 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id kb18sm4478710pjb.30.2022.02.01.16.30.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 16:30:35 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	George Burgess IV <gbiv@google.com>,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH 4/4 v5] fortify: Add Clang support
-Date: Tue,  1 Feb 2022 16:30:33 -0800
-Message-Id: <20220202003033.704951-5-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220202003033.704951-1-keescook@chromium.org>
-References: <20220202003033.704951-1-keescook@chromium.org>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=g6pUKH4WYbWgbDwKBU0IMA28eYRiLDk9vkLPEbdpMnw=;
+        b=ZPMgC29/WEwpX0wpagRZzpEyfWkZe0iki8BjrECYoeMFt0UY7DQoNHrck46KxRaA+0
+         6Q0hBLJ6IfvFnx4gHPcyvpP12zCSc+LKMAsLvZhC0Wr0K367oQaNuCgASz2DDvFjMe+I
+         9PLjbVsVHGMC956++L3hFcPyzqR0Zt3WPSQ9VbUEuH+LR058S4m4or1+7GbsQA3Sh3Zq
+         uQgW7SU1iWGzCfYOt7WJ5eFuV4NuFSVUN9pq1njxuDUffA1CCq+0Mcm8+IjzrDLsbXz4
+         jE6nZF9UyH+JHwHD8A0lijbqLFhwjQHZMp+s+RPBD5f6pbna1wjrZjuImG0fHAEX+HGt
+         Eh/g==
+X-Gm-Message-State: AOAM5328BcUMzTB1ZF8CgAq08ehgvD0f3fJfVMUOIMGdGr7jIJnNR04A
+	3Zj/GdSe50ewkwBdBMgrlEdq23iGpOI=
+X-Google-Smtp-Source: ABdhPJwlOwN/0H3aP3IPT+BMUXP+/p+nmyTa05iEyOcuehJZ4qfPcXwrDRkyY7xiTPbyi6tBdy0W4Scx52c=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:902:ecc5:: with SMTP id
+ a5mr29153463plh.54.1643762998560; Tue, 01 Feb 2022 16:49:58 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date: Wed,  2 Feb 2022 00:49:40 +0000
+Message-Id: <20220202004945.2540433-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8693; h=from:subject; bh=SqgzThQs8OQJdMsO9DeWzbUuEtfG/wphz7be5vg/zTA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh+dCoJxlB2ynAofG2ml7SHWgTF9x+jA4GWAP6eKea B1W0cvaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfnQqAAKCRCJcvTf3G3AJnYSD/ 9qfvmCRDs9vYWcHXT8jQlo5ViGbkrqp8D30tuRx3GwRHvXpdulxGExMnJaaehX3Q61rIGmgtF1t64O lZv7RoqJhfFZsiDnHAi1LhopRzSb6g3Svf3zGRJVNTQuLFfRTNaA1fne/XPa17VX8FFr2xJfmaXH+R l3vYqfN9OAos06btMuJ0iwAQ+m5hyzsDIxHYvpfZbxCnEqg6b45b2gd3iiSur0nANFHldvx+QZRrWr rjzxN8/puejVdkfM4cJdahxAR4KLp35znd5zVaabHb3cLKsbudphiENo2P/yiuTll6wWGapD0vb1xs ShNdM7FlK1junmA01KGeieaNTcix3fqUG9Hpo+dT7wrT8d+4WVMJyuJsYZGnQ/S1Jtec1rHRa90LN3 nZnTWxKdncW0/nhba4af35A4qbaq7+4qhTNPKuNbM8Oeej5cvUOiKV8ZqY9JovLML2z0lE05KvI3fj fPGHkoIhXDvUwaI8nFG8kxXXzSxM8J8H+ZUHIVbbG5Y/n1ZRw5AGQDEvjcWLPB29ETU/K1fj+HNeVi rFGxh4ITfN9OnUI8XJLIXUsOMFYMLh6QXdWWgnsDk0DV/O4cZSkW5nZMmMQFu331KzItYLI0fa228K kt2LuGtHbjGnVkj3wkoECUB7tMNkFeRRUlooV7BEY236CEeNzlWgBd106Tfg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH v2 0/5] x86: uaccess CMPXCHG + KVM bug fixes
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sean Christopherson <seanjc@google.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Wanpeng Li <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>, 
+	Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Tadeusz Struk <tadeusz.struk@linaro.org>, 
+	syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-Enable FORTIFY_SOURCE support for Clang:
+Peter, please take a look at unsafe_try_cmpxchg_user() to make sure it
+(a) still looks right and (b) works for your use case.  I added explicit
+casts to play nice with clang and sparse, as well as a __chk_user_ptr()
+given the use of __force.
 
-Use the new __pass_object_size and __overloadable attributes so
-that Clang will have appropriate visibility into argument types such
-that __builtin_object_size(p, 1) will behave correctly. Additional
-details here:
-    https://github.com/llvm/llvm-project/issues/53516
-    https://github.com/ClangBuiltLinux/linux/issues/1401
 
-Use the new __diagnose_as attribute to make sure no compile-time
-diagnostic warnings are lost due to the effectively renamed string
-functions.
+Add uaccess macros for doing CMPXCHG on userspace addresses and use the
+macros to fix KVM bugs by replacing flawed code that maps memory into the
+kernel address space without proper mmu_notifier protection (or with
+broken pfn calculations in one case).
 
-Redefine strlen() as a macro that tests for being a constant expression
-so that strlen() can still be used in static initializers, which was
-lost when adding __pass_object_size and __overloadable.
+Add yet another Kconfig for guarding asm_volatile_goto() to workaround a
+clang-13 bug.  I've verified the test passes on gcc versions of arm64,
+PPC, RISC-V, and s390x that also pass the CC_HAS_ASM_GOTO_OUTPUT test.
 
-Finally, a bug with __builtin_constant_p() of globally defined variables
-was fixed in Clang 13, so FORTIFY support must depend on that version or
-later. Additional details here:
-    https://bugs.llvm.org/show_bug.cgi?id=41459
-    commit a52f8a59aef4 ("fortify: Explicitly disable Clang support")
+Patches 1-4 are tagged for stable@ as patches 3 and 4 (mostly 3) need a
+backportable fix, and doing CMPXCHG on the userspace address is the
+simplest fix from a KVM perspective.
 
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: George Burgess IV <gbiv@google.com>
-Cc: llvm@lists.linux.dev
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/fortify-string.h | 52 ++++++++++++++++++++++++----------
- security/Kconfig               |  2 +-
- 2 files changed, 38 insertions(+), 16 deletions(-)
+v2:
+  - Explicitly cast with (__force u<size> *) to fix clang+i386
+    compilation woes and sparse warnings. [kernel test robot]
+  - Rework i386's CMPXCHG8B to force use of ECX for the error path so that
+    clang doesn't run out of input/output GPRs...
+  - Document that gcc also has/had troubles, and note the clang and gcc
+    versions that (should) work with tied outputs. [Nick]
+  - Collect tags [Nick, Tadeusz]
 
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index c45159dbdaa1..5482536d3197 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -2,7 +2,9 @@
- #ifndef _LINUX_FORTIFY_STRING_H_
- #define _LINUX_FORTIFY_STRING_H_
- 
--#define __FORTIFY_INLINE extern __always_inline __attribute__((gnu_inline))
-+#include <linux/const.h>
-+
-+#define __FORTIFY_INLINE extern __always_inline __attribute__((gnu_inline)) __overloadable
- #define __RENAME(x) __asm__(#x)
- 
- void fortify_panic(const char *name) __noreturn __cold;
-@@ -50,7 +52,11 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
- #define __underlying_strncpy	__builtin_strncpy
- #endif
- 
--__FORTIFY_INLINE char *strncpy(char *p, const char *q, __kernel_size_t size)
-+#define BOS	const __pass_object_size(1)
-+#define BOS0	const __pass_object_size(0)
-+
-+__FORTIFY_INLINE __diagnose_as(__builtin_strncpy, 1, 2, 3)
-+char *strncpy(char * BOS p, const char *q, __kernel_size_t size)
- {
- 	size_t p_size = __builtin_object_size(p, 1);
- 
-@@ -61,7 +67,8 @@ __FORTIFY_INLINE char *strncpy(char *p, const char *q, __kernel_size_t size)
- 	return __underlying_strncpy(p, q, size);
- }
- 
--__FORTIFY_INLINE char *strcat(char *p, const char *q)
-+__FORTIFY_INLINE __diagnose_as(__builtin_strcat, 1, 2)
-+char *strcat(char * BOS p, const char *q)
- {
- 	size_t p_size = __builtin_object_size(p, 1);
- 
-@@ -73,7 +80,7 @@ __FORTIFY_INLINE char *strcat(char *p, const char *q)
- }
- 
- extern __kernel_size_t __real_strnlen(const char *, __kernel_size_t) __RENAME(strnlen);
--__FORTIFY_INLINE __kernel_size_t strnlen(const char *p, __kernel_size_t maxlen)
-+__FORTIFY_INLINE __kernel_size_t strnlen(const char * BOS p, __kernel_size_t maxlen)
- {
- 	size_t p_size = __builtin_object_size(p, 1);
- 	size_t p_len = __compiletime_strlen(p);
-@@ -93,8 +100,16 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char *p, __kernel_size_t maxlen)
- 	return ret;
- }
- 
--/* defined after fortified strnlen to reuse it. */
--__FORTIFY_INLINE __kernel_size_t strlen(const char *p)
-+/*
-+ * Defined after fortified strnlen to reuse it. However, it must still be
-+ * possible for strlen() to be used on compile-time strings for use in
-+ * static initializers (i.e. as a constant expression).
-+ */
-+#define strlen(p)							\
-+	__builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),	\
-+		__builtin_strlen(p), __fortify_strlen(p))
-+__FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
-+__kernel_size_t __fortify_strlen(const char * BOS p)
- {
- 	__kernel_size_t ret;
- 	size_t p_size = __builtin_object_size(p, 1);
-@@ -110,7 +125,7 @@ __FORTIFY_INLINE __kernel_size_t strlen(const char *p)
- 
- /* defined after fortified strlen to reuse it */
- extern size_t __real_strlcpy(char *, const char *, size_t) __RENAME(strlcpy);
--__FORTIFY_INLINE size_t strlcpy(char *p, const char *q, size_t size)
-+__FORTIFY_INLINE size_t strlcpy(char * BOS p, const char * BOS q, size_t size)
- {
- 	size_t p_size = __builtin_object_size(p, 1);
- 	size_t q_size = __builtin_object_size(q, 1);
-@@ -137,7 +152,7 @@ __FORTIFY_INLINE size_t strlcpy(char *p, const char *q, size_t size)
- 
- /* defined after fortified strnlen to reuse it */
- extern ssize_t __real_strscpy(char *, const char *, size_t) __RENAME(strscpy);
--__FORTIFY_INLINE ssize_t strscpy(char *p, const char *q, size_t size)
-+__FORTIFY_INLINE ssize_t strscpy(char * BOS p, const char * BOS q, size_t size)
- {
- 	size_t len;
- 	/* Use string size rather than possible enclosing struct size. */
-@@ -183,7 +198,8 @@ __FORTIFY_INLINE ssize_t strscpy(char *p, const char *q, size_t size)
- }
- 
- /* defined after fortified strlen and strnlen to reuse them */
--__FORTIFY_INLINE char *strncat(char *p, const char *q, __kernel_size_t count)
-+__FORTIFY_INLINE __diagnose_as(__builtin_strncat, 1, 2, 3)
-+char *strncat(char * BOS p, const char * BOS q, __kernel_size_t count)
- {
- 	size_t p_len, copy_len;
- 	size_t p_size = __builtin_object_size(p, 1);
-@@ -354,7 +370,7 @@ __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
- 		memmove)
- 
- extern void *__real_memscan(void *, int, __kernel_size_t) __RENAME(memscan);
--__FORTIFY_INLINE void *memscan(void *p, int c, __kernel_size_t size)
-+__FORTIFY_INLINE void *memscan(void * BOS0 p, int c, __kernel_size_t size)
- {
- 	size_t p_size = __builtin_object_size(p, 0);
- 
-@@ -365,7 +381,8 @@ __FORTIFY_INLINE void *memscan(void *p, int c, __kernel_size_t size)
- 	return __real_memscan(p, c, size);
- }
- 
--__FORTIFY_INLINE int memcmp(const void *p, const void *q, __kernel_size_t size)
-+__FORTIFY_INLINE __diagnose_as(__builtin_memcmp, 1, 2, 3)
-+int memcmp(const void * BOS0 p, const void * BOS0 q, __kernel_size_t size)
- {
- 	size_t p_size = __builtin_object_size(p, 0);
- 	size_t q_size = __builtin_object_size(q, 0);
-@@ -381,7 +398,8 @@ __FORTIFY_INLINE int memcmp(const void *p, const void *q, __kernel_size_t size)
- 	return __underlying_memcmp(p, q, size);
- }
- 
--__FORTIFY_INLINE void *memchr(const void *p, int c, __kernel_size_t size)
-+__FORTIFY_INLINE __diagnose_as(__builtin_memchr, 1, 2, 3)
-+void *memchr(const void * BOS0 p, int c, __kernel_size_t size)
- {
- 	size_t p_size = __builtin_object_size(p, 0);
- 
-@@ -393,7 +411,7 @@ __FORTIFY_INLINE void *memchr(const void *p, int c, __kernel_size_t size)
- }
- 
- void *__real_memchr_inv(const void *s, int c, size_t n) __RENAME(memchr_inv);
--__FORTIFY_INLINE void *memchr_inv(const void *p, int c, size_t size)
-+__FORTIFY_INLINE void *memchr_inv(const void * BOS0 p, int c, size_t size)
- {
- 	size_t p_size = __builtin_object_size(p, 0);
- 
-@@ -405,7 +423,7 @@ __FORTIFY_INLINE void *memchr_inv(const void *p, int c, size_t size)
- }
- 
- extern void *__real_kmemdup(const void *src, size_t len, gfp_t gfp) __RENAME(kmemdup);
--__FORTIFY_INLINE void *kmemdup(const void *p, size_t size, gfp_t gfp)
-+__FORTIFY_INLINE void *kmemdup(const void * BOS0 p, size_t size, gfp_t gfp)
- {
- 	size_t p_size = __builtin_object_size(p, 0);
- 
-@@ -417,7 +435,8 @@ __FORTIFY_INLINE void *kmemdup(const void *p, size_t size, gfp_t gfp)
- }
- 
- /* Defined after fortified strlen to reuse it. */
--__FORTIFY_INLINE char *strcpy(char *p, const char *q)
-+__FORTIFY_INLINE __diagnose_as(__builtin_strcpy, 1, 2)
-+char *strcpy(char * BOS p, const char * BOS q)
- {
- 	size_t p_size = __builtin_object_size(p, 1);
- 	size_t q_size = __builtin_object_size(q, 1);
-@@ -446,4 +465,7 @@ __FORTIFY_INLINE char *strcpy(char *p, const char *q)
- #undef __underlying_strncat
- #undef __underlying_strncpy
- 
-+#undef BOS0
-+#undef BOS
-+
- #endif /* _LINUX_FORTIFY_STRING_H_ */
-diff --git a/security/Kconfig b/security/Kconfig
-index 0b847f435beb..1a25a567965f 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -179,7 +179,7 @@ config FORTIFY_SOURCE
- 	depends on ARCH_HAS_FORTIFY_SOURCE
- 	# https://bugs.llvm.org/show_bug.cgi?id=50322
- 	# https://bugs.llvm.org/show_bug.cgi?id=41459
--	depends on !CC_IS_CLANG
-+	depends on !CC_IS_CLANG || CLANG_VERSION >= 130000
- 	help
- 	  Detect overflows of buffers in common string and memory functions
- 	  where the compiler can determine and validate the buffer sizes.
+v1: https://lore.kernel.org/all/20220201010838.1494405-1-seanjc@google.com
+
+Peter Zijlstra (1):
+  x86/uaccess: Implement macros for CMPXCHG on user addresses
+
+Sean Christopherson (4):
+  Kconfig: Add option for asm goto w/ tied outputs to workaround
+    clang-13 bug
+  KVM: x86: Use __try_cmpxchg_user() to update guest PTE A/D bits
+  KVM: x86: Use __try_cmpxchg_user() to emulate atomic accesses
+  KVM: x86: Bail to userspace if emulation of atomic user access faults
+
+ arch/x86/include/asm/uaccess.h | 142 +++++++++++++++++++++++++++++++++
+ arch/x86/kvm/mmu/paging_tmpl.h |  45 +----------
+ arch/x86/kvm/x86.c             |  35 ++++----
+ init/Kconfig                   |   5 ++
+ 4 files changed, 162 insertions(+), 65 deletions(-)
+
+
+base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
 -- 
-2.30.2
+2.35.0.rc2.247.g8bbb082509-goog
 
