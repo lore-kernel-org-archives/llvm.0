@@ -1,53 +1,42 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67A72F27
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 01:01:30 +0000 (UTC)
-Received: by mail-qt1-f179.google.com with SMTP id z1so897060qto.3
-        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 17:01:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JagqMAt85QEq7QG/F+4kNGpe+G2br22d2RC2rhBOnF4=;
-        b=CtDJhAre6wbVCyp6Ck99vBgoZfbQxqvxD1vAHFQ2K2m89AomkhHPZEV8bcQHOwrJmh
-         Ld8hSyr5YPDYM6/V3H96lEkfy7k1p7Vs2nZM1su/dHkxdsww3Q+SWsWM/PWendaCXkCE
-         PSg91X1AStkrdpnKlYE/VYfHFCDwn5tkVxD9sv4L3udMbHacXqp9z3mca89OEqCbfhTq
-         PjeLyEob4cyq5zZMWKTstnDZ9QqfMONkqXm9vHjMBL9v/hoTTuKBVerXrDSx4h6B6RMS
-         4m2xe4SIlPg78t56A/8eCtdiwKNrb6I4JT3va2InIPcNO1sHhgLw42wnvqQ4tiZWGc78
-         JgsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JagqMAt85QEq7QG/F+4kNGpe+G2br22d2RC2rhBOnF4=;
-        b=a6f3kGwTegrQFYhBFBgMOQ48ly1OmOgdVkFkLHkd35Br/5TPoU5SW9C0h3tWKxMILX
-         29A2M2Xvr2K0UIa3defbrVCAwhWZudsI5mIu73F8B7YfKN/hu3d/BM4DNxb1Qkkt60xa
-         kkWGCnzdNVL+af6XnmgfK3e6j3+49QUbdyscrx132A0ah+gAw2GETvVkSq/WJXUv8/I1
-         l6x94O+2EdWakMb90UmeiYSt5r2jbJJV9Ote9/zrSLQ4SCdNX7Fqncmx4/nUGJDMbGPf
-         DXpLMjk4SfEd4v9o9Ke/wmuLbH7W6SNzuBaX0Al34QKay9KsYX6uteyeJxwQ1cMR5PCK
-         DwoA==
-X-Gm-Message-State: AOAM530x6OHjGZWZOTr/khG4bz56T3fVN/MZpC8cLv6rNY/Fm9Ssqw1S
-	1ujClzlRXuiekA7fZAv7Yyg=
-X-Google-Smtp-Source: ABdhPJyaHUHRoJ/EkOknro4ewQtKipU56FxmHyAl2nWgInj0hR2lQMWqI7alLaEn8xYPIaQbX5IX5g==
-X-Received: by 2002:a05:622a:130e:: with SMTP id v14mr25101910qtk.355.1643850089839;
-        Wed, 02 Feb 2022 17:01:29 -0800 (PST)
-Received: from mail.google.com ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id j13sm10149462qko.46.2022.02.02.17.01.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 17:01:29 -0800 (PST)
-Date: Thu, 3 Feb 2022 09:01:23 +0800
-From: Changbin Du <changbin.du@gmail.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Changbin Du <changbin.du@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] kallsyms: ignore all local labels prefixed by '.L'
-Message-ID: <20220203010123.yo3go6lq5t7hglor@mail.google.com>
-References: <20220201013257.17926-1-changbin.du@gmail.com>
- <CAKwvOd=fCCjSfz6tW3514ifZOMw2PT4AZiFExq1qqG1rxf5fEg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DD52F24
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 02:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643856040; x=1675392040;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5oNu7F4MlsG8yp+wso+B0dX5F5Dm0Wx9os9ex8f7JXk=;
+  b=nj0ohQDfsBL2iniXmpRp2tUzz/dY6106ugOsRcfwZ22hx+RDL3YstZx6
+   YlA5WenKmLM9RMguG5G8d4yWsmf2n6c9lu7hGn2n8GdcIV/1mpCyPiAmp
+   Y2cQliSbZ2TQeuJ/zlHdkWJGNJ+bGaNvM5a2dupWqlkciaw/+kzPxVjO6
+   D8hKFEwU3pWEJJ8Ww5n9F8V7PFtbGpRYqpu951ejO7WxV2sG2k646VZfK
+   N8fsbbFoIkL0PFhcPGH4XRE1yF9+OCdKPO3Z8jUbxkLS00LNR1sDM+lN8
+   TcwEC/hgiY3Cf7/ttEOBHkthzrROCI+j14Yu3tUkCKCt1VL4ZrQN2oc9D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="248281646"
+X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
+   d="scan'208";a="248281646"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 18:40:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
+   d="scan'208";a="620363652"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Feb 2022 18:40:39 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nFS34-000VS7-DO; Thu, 03 Feb 2022 02:40:38 +0000
+Date: Thu, 3 Feb 2022 10:39:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stuart Hayes <stuart.w.hayes@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH v2 3/3] Register auxiliary device for PCIe enclosure
+ management
+Message-ID: <202202031021.1ORRkl1U-lkp@intel.com>
+References: <88898bbc85c85dce3c355c5f0399b593da0d4d27.1643822289.git.stuart.w.hayes@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,65 +45,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOd=fCCjSfz6tW3514ifZOMw2PT4AZiFExq1qqG1rxf5fEg@mail.gmail.com>
+In-Reply-To: <88898bbc85c85dce3c355c5f0399b593da0d4d27.1643822289.git.stuart.w.hayes@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Feb 01, 2022 at 11:42:59AM -0800, Nick Desaulniers wrote:
-> On Mon, Jan 31, 2022 at 5:33 PM Changbin Du <changbin.du@gmail.com> wrote:
-> 
-> Make sure to mark the version of your patches (this is v2, IIUC). `git
-> format-patch -v2 HEAD~`
->
-Sure, I fogot to add version NO. this time. Thanks for your reminding.
+Hi Stuart,
 
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> >
-> > The llvm compiler can generate lots of local labels ('.LBB', '.Ltmpxxx',
-> > '.L__unnamed_xx', etc.). These symbols usually are useless for debugging.
-> > And they might overlap with handwritten symbols.
-> >
-> > Before this change, a dumpstack shows a local symbol for epc:
-> > [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
-> > [    0.040452][    T0]  ra : restore_all+0x12/0x6e
-> >
-> > The simple solution is that we can ignore all local labels prefixed by '.L'.
-> > For handwritten symbols which need to be preserved should drop the '.L'
-> > prefix.
-> >
-> > After this change, the C defined symbol is shown so we can locate the
-> > problematical code immediately:
-> > [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
-> > [    0.036567][    T0]  ra : restore_all+0x12/0x6e
-> >
-> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> > ---
-> >  scripts/kallsyms.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> > index 54ad86d13784..8caabddf817c 100644
-> > --- a/scripts/kallsyms.c
-> > +++ b/scripts/kallsyms.c
-> > @@ -108,7 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
-> >         /* Symbol names that begin with the following are ignored.*/
-> >         static const char * const ignored_prefixes[] = {
-> >                 "$",                    /* local symbols for ARM, MIPS, etc. */
-> > -               ".LASANPC",             /* s390 kasan local symbols */
-> > +               ".L",                   /* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
-> >                 "__crc_",               /* modversions */
-> >                 "__efistub_",           /* arm64 EFI stub namespace */
-> >                 "__kvm_nvhe_",          /* arm64 non-VHE KVM namespace */
-> > --
-> > 2.32.0
-> >
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on helgaas-pci/next]
+[also build test WARNING on char-misc/char-misc-testing pavel-leds/for-next linus/master v5.17-rc2 next-20220202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
--- 
-Cheers,
-Changbin Du
+url:    https://github.com/0day-ci/linux/commits/Stuart-Hayes/Add-PCIe-enclosure-management-support/20220203-020040
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: x86_64-randconfig-a015-20220131 (https://download.01.org/0day-ci/archive/20220203/202202031021.1ORRkl1U-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/407e7eb11ce495697eb2ee66d77f20d69548be14
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Stuart-Hayes/Add-PCIe-enclosure-management-support/20220203-020040
+        git checkout 407e7eb11ce495697eb2ee66d77f20d69548be14
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/frequency/ drivers/nvme/host/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/nvme/host/pci.c:31:
+>> include/linux/pcie_em.h:25:38: warning: use of logical '||' with constant operand [-Wconstant-logical-operand]
+                                      1 << GET_SUPPORTED_STATES_DSM ||
+                                                                    ^
+   include/linux/pcie_em.h:25:38: note: use '|' for a bitwise operation
+                                      1 << GET_SUPPORTED_STATES_DSM ||
+                                                                    ^~
+                                                                    |
+   include/linux/pcie_em.h:26:27: warning: use of logical '||' with constant operand [-Wconstant-logical-operand]
+                                      1 << GET_STATE_DSM ||
+                                                         ^
+   include/linux/pcie_em.h:26:27: note: use '|' for a bitwise operation
+                                      1 << GET_STATE_DSM ||
+                                                         ^~
+                                                         |
+>> include/linux/pcie_em.h:27:10: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+                                      1 << SET_STATE_DSM))
+                                        ^
+   include/linux/pcie_em.h:25:10: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+                                      1 << GET_SUPPORTED_STATES_DSM ||
+                                        ^
+   include/linux/pcie_em.h:26:10: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+                                      1 << GET_STATE_DSM ||
+                                        ^
+   5 warnings generated.
+
+
+vim +25 include/linux/pcie_em.h
+
+eefb0f75026145 Stuart Hayes 2022-02-02  15  
+eefb0f75026145 Stuart Hayes 2022-02-02  16  static inline bool pci_has_pcie_em_dsm(struct pci_dev *pdev)
+eefb0f75026145 Stuart Hayes 2022-02-02  17  {
+eefb0f75026145 Stuart Hayes 2022-02-02  18  #ifdef CONFIG_ACPI
+eefb0f75026145 Stuart Hayes 2022-02-02  19  	acpi_handle handle;
+eefb0f75026145 Stuart Hayes 2022-02-02  20  	const guid_t pcie_ssd_leds_dsm_guid = PCIE_SSD_LEDS_DSM_GUID;
+eefb0f75026145 Stuart Hayes 2022-02-02  21  
+eefb0f75026145 Stuart Hayes 2022-02-02  22  	handle = ACPI_HANDLE(&pdev->dev);
+eefb0f75026145 Stuart Hayes 2022-02-02  23  	if (handle)
+eefb0f75026145 Stuart Hayes 2022-02-02  24  		if (acpi_check_dsm(handle, &pcie_ssd_leds_dsm_guid, 0x1,
+eefb0f75026145 Stuart Hayes 2022-02-02 @25  				   1 << GET_SUPPORTED_STATES_DSM ||
+eefb0f75026145 Stuart Hayes 2022-02-02 @26  				   1 << GET_STATE_DSM ||
+eefb0f75026145 Stuart Hayes 2022-02-02 @27  				   1 << SET_STATE_DSM))
+eefb0f75026145 Stuart Hayes 2022-02-02  28  			return true;
+eefb0f75026145 Stuart Hayes 2022-02-02  29  #endif
+eefb0f75026145 Stuart Hayes 2022-02-02  30  	return false;
+eefb0f75026145 Stuart Hayes 2022-02-02  31  }
+eefb0f75026145 Stuart Hayes 2022-02-02  32  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
