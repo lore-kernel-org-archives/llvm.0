@@ -1,90 +1,75 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5016A2F28
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 20:45:38 +0000 (UTC)
-Received: by mail-pj1-f52.google.com with SMTP id g15-20020a17090a67cf00b001b7d5b6bedaso4123184pjm.4
-        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 12:45:38 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13522F28
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 20:46:02 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id z19so8426136lfq.13
+        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 12:46:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ax+zgGQyyKWqqmUNa+Gr/NFN1a356webih9nQCbtRlA=;
-        b=lq4mnyUfUnu0BzR6Wiz2LqRbI6UXI+AlM29AzDRsgBJJEGxcudKiSVmcZVkBdH1V5R
-         H9ihEHFWxShy/iMqODNdF03wxTXBQYKV/ZiBFz64MRdzRlBLWokuqPF3y8/2M49e7xEO
-         8cpdAI1hx+7n5zGDn6/weEZdRv67FbbRqt0zI=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fm6/WM1aXFuwaAFInnacEGjjm7HROSKZyaeunWFy85Q=;
+        b=EB+7VDo0oio3AfLjXuLSp6iozLxATOVsRvDCRYSKDC4dRHRa8GuGMgzNBg4tg2Xtaq
+         uu3+nm502DKtfpnMjfCLhX47RbFHaPcqZ1Ap/cehsIkyFRU0CD109PV/k2UlXJs84mZk
+         7Aft+fARjfKRk60pMw3eyxJoTpD+7y+rf4d478kXyMFZVg54TRtrY8xmylU8MmXJ9gmE
+         qIsC8G8P8vgijQ6+XICJ4axatcywgPRfBO4gE8gGWY4b6j/mNfakbxaUe/IEeCuTE3K2
+         fDz2vxKnxjagXfbK+K866SRGzKhDCVY9JxQOclVZz1dgNk13Zh0i2G4OkyCCxinuGBQ5
+         nVTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ax+zgGQyyKWqqmUNa+Gr/NFN1a356webih9nQCbtRlA=;
-        b=bpmtWy5LGJFqlDDrNRKXGR0FoOwa939k4Edhd2kU+56XxktZRTxfiSeBlQOCLFvFqu
-         aEtlxaHnURkNZehat+FYoCnhacAZ9lKEEMm8zISBLhxTEXeaDlHUvh+hwbvg3JCDLuqF
-         nlwET118ZOCwKr+nvgx/Am/dWtzPOE3897Znk/m0tbiwHsTDysli6gvnzwraz1mRGrbU
-         svLaOCw/1EApqaJENA+Pta2lFgKG2FaOipXVIFQF0RLIURWbcYTcdosp/xSXc/XXYG4c
-         UrcefiBrmMB+qoI+Qsgal8zeny8KrjNJ4tlMWJ87pP15ljxYmGcrU0+Yj8F3j3VBJN97
-         CtNg==
-X-Gm-Message-State: AOAM531WOEL1dyl9V+oA81y/AYB4AY3COtE0nnra2yP+WXgSUN7Mk8lu
-	86EMEEFaAxkGYotTb1Ls9V+8IQ==
-X-Google-Smtp-Source: ABdhPJzyIjueAdPLPELPYzMN0XC6MvF7sAwGHIqciSmxWkbnOpbPZS4x4gmcwTPLeXlwCj4QQRQGWA==
-X-Received: by 2002:a17:902:6903:: with SMTP id j3mr37649101plk.137.1643921137797;
-        Thu, 03 Feb 2022 12:45:37 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j10sm30543226pfu.93.2022.02.03.12.45.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 12:45:37 -0800 (PST)
-Date: Thu, 3 Feb 2022 12:45:36 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guenter Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>,
-	Andy Shevchenko <andy@kernel.org>,
-	Matteo Croce <mcroce@microsoft.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
-Message-ID: <202202031242.45A7F5704@keescook>
-References: <20220130183653.491292-1-keescook@chromium.org>
- <20220202160149.GA2322037@roeck-us.net>
- <202202021237.487D3DE73@keescook>
- <5ff18cff-6cfd-1f85-da74-1e5660a1a250@roeck-us.net>
- <CAMuHMdWssK2=NFc6NO-inQg5dWxZP4Wv41K3J3RqRXThXatovw@mail.gmail.com>
- <202202030911.4914709E@keescook>
- <CAMuHMdUBKofPP-6EofE3B7d6k0zv0nPJ7e4pjsznPF==ApJ6qg@mail.gmail.com>
- <CAKwvOdnJ3w2Jb9tBZ+JnEfviquj2WktemCd833f=_P66a0qVag@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fm6/WM1aXFuwaAFInnacEGjjm7HROSKZyaeunWFy85Q=;
+        b=eXoVus/u6u46xv+lPVJhqP5Bv32zRhMBMU6aGM9grSfUUhCWTKMubg7p+HVGMEMbaG
+         UCzYII775PhHWedndi0Wz6/LzojCtCoJDuHtJPe+FjyO0dG2O7S45aChasUh52frUNrY
+         YUCCDIhlc0gJUw33dtUshjfmADW/Ovyn2zUHtoBtVB6Rg2iTc5OQeRUvea9bKA1czD/v
+         GJWN2108Klrh8g4Ds4Eq1orcRX8O+oBuCGXGwt5EWnyohbwFIw2Y79fdoiSGE/3ZLLJH
+         I2ukBMdzOm33t+YZphd793ExJ4X8/RbmT5vkXUn2qo3rWSI3+9jKxO6dklxWJtEx4XlN
+         9Wlg==
+X-Gm-Message-State: AOAM530q4kMiJS0izaMx9TCGW/wSy0M8/tBwH8YkueC/w8OagLEY07j2
+	7/cR2No0SreurwttXwe4SLjJHdkG3eBzTvIL2kARUA==
+X-Google-Smtp-Source: ABdhPJzordyV/vbntEzNKU3NgMfL1TqdSMWainolMPsf5aYHMJtZbYurIZW+6FnXNlOUlgdQ/qO9YpSPM8DquTXJTP4=
+X-Received: by 2002:a19:6449:: with SMTP id b9mr28158247lfj.82.1643921160689;
+ Thu, 03 Feb 2022 12:46:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdnJ3w2Jb9tBZ+JnEfviquj2WktemCd833f=_P66a0qVag@mail.gmail.com>
+References: <20220203204025.1153397-1-keescook@chromium.org>
+In-Reply-To: <20220203204025.1153397-1-keescook@chromium.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 3 Feb 2022 12:45:49 -0800
+Message-ID: <CAKwvOd=7ZDMhnX6Da5_ZMM9yLgrnhjwwPhYwO-RT-3yrPy+RLw@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/build: don't build CONFIG_X86_32 as -ffreestanding
+To: Kees Cook <keescook@chromium.org>
+Cc: x86@kernel.org, Arvind Sankar <nivedita@alum.mit.edu>, 
+	Fangrui Song <maskray@google.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Andi Kleen <ak@linux.intel.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 03, 2022 at 11:50:34AM -0800, Nick Desaulniers wrote:
-> The kernel does not link against a libc; but it does provide many
-> symbols that libc would provide, with the same or similar enough
-> semantics that I would strongly recommend we _don't_ use
-> -ffreestanding in order to get such libcall optimizations (there are a
-> lot; see https://github.com/llvm/llvm-project/blob/main/llvm/lib/Transforms/Utils/SimplifyLibCalls.cpp
-> for some examples) and simply use -fno-builtin-* when necessary, or
-> fix the kernel implementations individually.
+On Thu, Feb 3, 2022 at 12:40 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> From: Nick Desaulniers <ndesaulniers@google.com>
+>
+> -ffreestanding typically inhibits "libcall optimizations" where calls to
+> certain library functions can be replaced by the compiler in certain
+> cases to calls to other library functions that may be more efficient.
+> This can be problematic for embedded targets that don't provide full
+> libc implementations.
 
-Right, we really don't want -ffreestanding. Rather, we want to not link
-against libgcc. This is mostly true already, though some of the smaller
-architectures still do:
-
-$ git grep print-libgcc
-arch/arc/Makefile:LIBGCC        = $(shell $(CC) $(cflags-y) --print-libgcc-file-name)
-arch/csky/Makefile:     $(shell $(CC) $(KBUILD_CFLAGS) $(KCFLAGS) -print-libgcc-file-name)
-arch/h8300/boot/compressed/Makefile:LIBGCC := $(shell $(CROSS-COMPILE)$(CC) $(KBUILD_CFLAGS) -print-libgcc-file-name 2>/dev/null)
-arch/nios2/Makefile:LIBGCC         := $(shell $(CC) $(KBUILD_CFLAGS) $(KCFLAGS) -print-libgcc-file-name)
-arch/openrisc/Makefile:LIBGCC           := $(shell $(CC) $(KBUILD_CFLAGS) -print-libgcc-file-name)
-arch/parisc/Makefile:LIBGCC             := $(shell $(CC) -print-libgcc-file-name)
-arch/xtensa/Makefile:LIBGCC := $(shell $(CC) $(KBUILD_CFLAGS) -print-libgcc-file-name)
-arch/xtensa/boot/boot-redboot/Makefile:LIBGCC := $(shell $(CC) $(KBUILD_CFLAGS) -print-libgcc-file-name)
+While the bcmp shenanigans were ultimately resolved by
+commit 5f074f3e192f ("lib/string.c: implement a basic bcmp")
+(and this popped up again in
+commit 1e1b6d63d634 ("lib/string.c: implement stpcpy")
+).  I'm still very much in favor of this patch, and should have
+pursued it. Thanks for resending!
 
 -- 
-Kees Cook
+Thanks,
+~Nick Desaulniers
