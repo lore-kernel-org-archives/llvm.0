@@ -1,64 +1,100 @@
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D222F2B
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 17:47:13 +0000 (UTC)
-Received: by mail-io1-f51.google.com with SMTP id i62so4251149ioa.1
-        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 09:47:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OdOUOSrNjs8WGrwM3cNkf3QDO2RSIWw0of1a994x9is=;
-        b=qUet28M/qXwcV735iKonPeQ+jqwhVlbPrZ5v9ERd6dwm84VFOR8zYyWA97AbVMMPpk
-         mdNSsJygXfKzrKCP78dj12yoxV745szFny0DHcntoUkwt943/a7cO5dorUahC/6IJ00/
-         ozJYiM3vgpSfxlYM/OlXUbNnO+TbLiwEhq9atmoz8mPx/dFEuC7imBFdF93rzQ2iavnc
-         Zb8ehMoGhPEzYOD10JM9BHrsRaoX0IBGcMMlLaUBs6P50tFW8STe4WeFavBqkIoahEYh
-         rNUldx7DrdAwacU7fFK/lB/bGzTvCGaywBPCTkO4Uiu5e0hOd+XFUoZxrZsTLX3igbPw
-         8hHg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336E22F2B
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 18:10:11 +0000 (UTC)
+Received: by mail-ua1-f44.google.com with SMTP id m90so6722414uam.2
+        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 10:10:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OdOUOSrNjs8WGrwM3cNkf3QDO2RSIWw0of1a994x9is=;
-        b=o0b04MFl12IAsFjINmTKc5L2XuAyYI28ZIEGGFElems5kQTMGBK8dz82x9gtRZwRZe
-         Twry/MPjqDJdpKqU+UrdlAHEVKTxnMarPZXLXrpC0C0wZLVgbgYiXhGp1Rkc2NS5PKoH
-         CBt25/KDJBHlBIZ/umZnl2Yoc5Tr0xTz4zV6ZMMCMxz4HZAPDu3MEzJmj3Q30H+nsvcP
-         4eOtTWQb4PC/Jqcb6zzyuit1nrCU4TbQvpn+F0Q0s1ZAFiRKngG0gVeLnIzx8ulfzc2Y
-         bwXW5TNwIZ+pLhcerO2j0G0bAmaWE+jC53+y60O9NY2rxsgR1z3nfUb0TYEuJYA2iiRk
-         aRpQ==
-X-Gm-Message-State: AOAM533y0rZ3RUq5MMNTpyij+Mm5/z3MUA4KMOLHa7GEa/LwEOiynjpP
-	KD10MY3KvbZ/1I5vHOU8BrdRkl+13p5LPHv4dFI=
-X-Google-Smtp-Source: ABdhPJx52ZDGvyoTS5OSrCU01ffJy15/Go+Qu53BiKESGtTam0tj+EOKusrFAbEcqE/fXnAA6wgsovfQDjukEOXBLsk=
-X-Received: by 2002:a5d:941a:: with SMTP id v26mr18767908ion.64.1643910432327;
- Thu, 03 Feb 2022 09:47:12 -0800 (PST)
+        bh=C/hgS+ERDNLODK1leRfRhcIAV22csg/2nDjF16o/r6Y=;
+        b=6QLNxLk7nDF4gB/Fbd3S9S0l5qnBRcn1vdUMkB+0TSleWlaiW1skh3LOwnX/IhtlM4
+         AmRq7ZGSZ7NnyXIPvS5WJPo1gqKbfKCTYc2aG9CNsp/l73yCjNycLB83xiRz829lmmwN
+         gXhYKE3qHCg49HXJz8E0ZiRzGL1XAq1SlRRuGPYPvaf8RhfxPNS0rPA+hkZj7sj8XjyU
+         SdakW5bBFL10Fo4/PFK9ZEXUZb0H9b4bHaSwX2Xb77eN0ZsBFSjHc6mX9s0XY+fnMuq9
+         lI1pGHjSCIDlqiqHTrGU0hvnE9c3ZlYlX/zo/tCxTwZ6lhHWLPuDDLj7ffzSnkCI8+5Q
+         BttA==
+X-Gm-Message-State: AOAM5329y8XShdZHiJx8smzJ56ZEUVkd77bwNVHyvzPx2/FE6iw16ncE
+	7dhMUMLx5qhDcxsIU1U3A7qYPsk2AFUO+A==
+X-Google-Smtp-Source: ABdhPJxOv2oyduA3px+cRglpA/yAOIrg4r24bZvfRDhDuq9RZ56NKaASpkYFA3YqDoSA2gHe9DefkQ==
+X-Received: by 2002:a67:f70f:: with SMTP id m15mr13879900vso.61.1643911809909;
+        Thu, 03 Feb 2022 10:10:09 -0800 (PST)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id k16sm5842440vsr.8.2022.02.03.10.10.09
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 10:10:09 -0800 (PST)
+Received: by mail-ua1-f44.google.com with SMTP id r8so6819710uaj.0
+        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 10:10:09 -0800 (PST)
+X-Received: by 2002:a67:a401:: with SMTP id n1mr13230708vse.38.1643911809441;
+ Thu, 03 Feb 2022 10:10:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220203173307.1033257-1-keescook@chromium.org>
-In-Reply-To: <20220203173307.1033257-1-keescook@chromium.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 3 Feb 2022 18:47:01 +0100
-Message-ID: <CANiq72mnF5qxfHGoDmvueMY7n2us9ZtA-u3igCJ+QjcbfKMP=g@mail.gmail.com>
-Subject: Re: [PATCH v6 0/4] fortify: Add Clang support
+References: <20220130183653.491292-1-keescook@chromium.org>
+ <20220202160149.GA2322037@roeck-us.net> <202202021237.487D3DE73@keescook>
+ <5ff18cff-6cfd-1f85-da74-1e5660a1a250@roeck-us.net> <CAMuHMdWssK2=NFc6NO-inQg5dWxZP4Wv41K3J3RqRXThXatovw@mail.gmail.com>
+ <202202030911.4914709E@keescook>
+In-Reply-To: <202202030911.4914709E@keescook>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 3 Feb 2022 19:09:58 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUBKofPP-6EofE3B7d6k0zv0nPJ7e4pjsznPF==ApJ6qg@mail.gmail.com>
+Message-ID: <CAMuHMdUBKofPP-6EofE3B7d6k0zv0nPJ7e4pjsznPF==ApJ6qg@mail.gmail.com>
+Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
 To: Kees Cook <keescook@chromium.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, George Burgess IV <gbiv@google.com>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+Cc: Guenter Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>, 
+	Andy Shevchenko <andy@kernel.org>, Matteo Croce <mcroce@microsoft.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
 	linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 3, 2022 at 6:33 PM Kees Cook <keescook@chromium.org> wrote:
+Hi Kees,
+
+On Thu, Feb 3, 2022 at 6:15 PM Kees Cook <keescook@chromium.org> wrote:
+> On Thu, Feb 03, 2022 at 09:04:22AM +0100, Geert Uytterhoeven wrote:
+> > Not if -ffreestanding, which is what several architectures are
+> > using nowadays, to a.o. prevent gcc from replacing calls to stdlib
+> > functions to other stdlib functions (e.g. strncat() -> strlen() +
+> > store, strncmp() -> strcmp()), which breaks linking if the latter is
+> > only provided inline.
 >
-> This has been updated from feedback on the v5 series. Builds correctly with Clang 12.0.1
-> too now. :)
+> Hah, for i386:
+>
+> arch/x86/Makefile
+>         # temporary until string.h is fixed
+>         KBUILD_CFLAGS += -ffreestanding
+>
+> This "temporary" is from 2006. ;)
 
-Looks fine to me! Thanks for the changes. I assume you are taking these, so:
+And before that, we had it in the main Makefile.
 
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> 6edfba1b33c7 ("[PATCH] x86_64: Don't define string functions to builtin")
+>
+> Removing that appears to solve it, and appears to build correctly. I'll
+> continue testing.
+>
+> > It works after dropping -ffreestanding.
+>
+> I wonder if the other architectures were just copying x86?
 
-Cheers,
-Miguel
+At least on m68k it was added because gcc added new optimizations
+that broke if an architecture provides some functions as inline.
+As the kernel is not supposed to be linked with the standard C
+library, -ffreestanding should be correct, isn't it?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
