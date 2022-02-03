@@ -1,116 +1,101 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05DB2F21
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 15:23:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1643901803;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FyaICBNYXFogXQpGuOXvlvkFpwrbiEbZFhG8GrBvphk=;
-	b=IXf23GRhnf1Q0dIMTGx7m3brSMqYpw6Qa4e+LZNmzKnWaldcG/mKN1KfEGxO9dJLYMZVOO
-	Cd4BKIer66Fjr63TkOMCt/lSw3SBHdYxnOuuCs+iDeGEvPRM9nkdUUxfkyifvrF77OikA7
-	yRG14/QPqV87N/V0QDt6Rs2PWMl1u+8=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-C1R4BmqcPCSRvBDxeIoWvw-1; Thu, 03 Feb 2022 10:23:17 -0500
-X-MC-Unique: C1R4BmqcPCSRvBDxeIoWvw-1
-Received: by mail-qt1-f200.google.com with SMTP id s1-20020ac85ec1000000b002cf7c93d56dso2165158qtx.21
-        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 07:23:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FyaICBNYXFogXQpGuOXvlvkFpwrbiEbZFhG8GrBvphk=;
-        b=1NfwhnUfhwBGQIqn0L1QnzbwtS7AibvSZLwsUmcXUEKe3a4DpTNe4YfGFuMG/EzGko
-         k9R/dejDheyBgJpynJbbKyvNhE4rYNawcR8KwFIEzGIC79LKBYUnFVxYMp5vkN2Y1Aty
-         tPFQ106UdyUX1Koinl/Eyonog+cDkOLpACql7M4dYOCW2M/Jz0I2ctX7c2T12lJEkt+f
-         st0Pl37KnNIpWLITINHzr9e0BKpFKmNFqN19G9KLOGLwnTX+DFHnduTwU5hqhjKQfrA1
-         DivKXrtwKf8fU/+ys7vH3gJRfXaaX49C43wyxrPwCsScaaw1IuM7BkA7Y/twysAoN1En
-         bxgQ==
-X-Gm-Message-State: AOAM5330W2017ulhvTRugNvlfoRtFaWUsuOU5H5N+KEUAlrD+PGslH/H
-	hDHVfFhPUMhY2MR6L2a0+/5lYFU0GP1zLbPZW4lKuy/dbuzjwiEfxO0AgWXkGMFVdXV8JX9+I0R
-	u2Msub7WdP5skHQ==
-X-Received: by 2002:a05:6214:767:: with SMTP id f7mr31309314qvz.32.1643901797237;
-        Thu, 03 Feb 2022 07:23:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzKoZK62v8/DrZws5sOsM70Uxo6BwdmPV1YiNBPk723GMaQhV5IIhjTr/Mj5MVVcyOlC4yv6g==
-X-Received: by 2002:a05:6214:767:: with SMTP id f7mr31309297qvz.32.1643901797012;
-        Thu, 03 Feb 2022 07:23:17 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id w22sm9746568qtk.7.2022.02.03.07.23.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 07:23:16 -0800 (PST)
-From: trix@redhat.com
-To: airlied@redhat.com,
-	tzimmermann@suse.de,
-	airlied@linux.ie,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	maxime@cerno.tech
-Cc: dri-devel@lists.freedesktop.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB852F21
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 15:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643902760; x=1675438760;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7mRbriesMnc5y9jim1krZpY4CvguXRL9C3UcMNNveDg=;
+  b=hYzXqGNr3S3/CyOSHwUdaMH9ZaatXADvnrmrDkyR+kITliN7cG4FmPHN
+   ALA/qoVhJqbrPx1UMZmYFdYtVCaTfmaWbEfBArbD+SN6cR89aj3ZhDXdD
+   pM0aaguSa4zMuTJAVNE8VVT4Osbf/bOQ765EwsrWXkckgrgtWNmfLoJVa
+   A9BBrHebKDFq1xAEBX+l7sCTGj2/URN59hxybplR6jhXzgvoeeg9s4EkT
+   J2e4I347u9QO0PRiGE3EHxk1IXjXvxiRLzzW3FobkF5z8yiP3RxlIb/jW
+   wncm8UqoLjA03ZaYkqFySc0CotZV7hMh4pEIUYU1d5BPSfXCKQuCroMu8
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="311472184"
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="311472184"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:39:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="583821356"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Feb 2022 07:39:18 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nFeCb-000WI2-SS; Thu, 03 Feb 2022 15:39:17 +0000
+Date: Thu, 3 Feb 2022 23:38:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Darren Powell <darren.powell@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/ast: fix using freed memory
-Date: Thu,  3 Feb 2022 07:23:05 -0800
-Message-Id: <20220203152305.1846862-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: [agd5f:drm-next 243/250]
+ drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:2277:6: warning:
+ variable 'ret' set but not used
+Message-ID: <202202032303.GcRtJxzw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   53593d1be00c441585cb4fec41a756b8e586b710
+commit: 5d64f9bbb6281a5a89a2266b9d39daa1fca1d6b4 [243/250] amdgpu/pm: Implement new API function "emit" that accepts buffer base and write offset
+config: i386-randconfig-a011-20220131 (https://download.01.org/0day-ci/archive/20220203/202202032303.GcRtJxzw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 5d64f9bbb6281a5a89a2266b9d39daa1fca1d6b4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
 
-clang static analysis reports this problem
-ast_mode.c:1235:3: warning: Use of memory after it is freed
-  drm_connector_update_edid_property(&ast_connector->base, edid);
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The second condition on
+All warnings (new ones prefixed by >>):
 
-  if (!flags && ast_connector->i2c)
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:2277:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+           int ret = 0;
+               ^
+   1 warning generated.
 
-Means that the edid is not always set.  If the previous block
-fails the freed edid value will be used.  So set edid to NULL
-after freeing.
 
-Fixes: 55dc449a7c60 ("drm/ast: Handle failed I2C initialization gracefully")
-Signed-off-by: Tom Rix <trix@redhat.com>
+vim +/ret +2277 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c
+
+  2272	
+  2273	static int smu_emit_ppclk_levels(void *handle, enum pp_clock_type type, char *buf, int *offset)
+  2274	{
+  2275		struct smu_context *smu = handle;
+  2276		enum smu_clk_type clk_type;
+> 2277		int ret = 0;
+  2278	
+  2279		clk_type = smu_convert_to_smuclk(type);
+  2280		if (clk_type == SMU_CLK_COUNT)
+  2281			return -EINVAL;
+  2282	
+  2283		if (!smu->pm_enabled || !smu->adev->pm.dpm_enabled)
+  2284			return -EOPNOTSUPP;
+  2285	
+  2286		if (!smu->ppt_funcs->emit_clk_levels)
+  2287			ret = -ENOENT;
+  2288	
+  2289		return smu->ppt_funcs->emit_clk_levels(smu, clk_type, buf, offset);
+  2290	
+
 ---
- drivers/gpu/drm/ast/ast_mode.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index ab52efb15670e..9131dc8a1a2fc 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -1224,10 +1224,12 @@ static int ast_get_modes(struct drm_connector *connector)
- 			return -ENOMEM;
- 
- 		flags = ast_dp501_read_edid(connector->dev, (u8 *)edid);
--		if (flags)
-+		if (flags) {
- 			ast->dp501_maxclk = ast_get_dp501_max_clk(connector->dev);
--		else
-+		} else {
- 			kfree(edid);
-+			edid = NULL;
-+		}
- 	}
- 	if (!flags && ast_connector->i2c)
- 		edid = drm_get_edid(connector, &ast_connector->i2c->adapter);
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
