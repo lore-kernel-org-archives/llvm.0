@@ -1,43 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB852F21
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 15:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC4F2F21
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 16:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643902760; x=1675438760;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7mRbriesMnc5y9jim1krZpY4CvguXRL9C3UcMNNveDg=;
-  b=hYzXqGNr3S3/CyOSHwUdaMH9ZaatXADvnrmrDkyR+kITliN7cG4FmPHN
-   ALA/qoVhJqbrPx1UMZmYFdYtVCaTfmaWbEfBArbD+SN6cR89aj3ZhDXdD
-   pM0aaguSa4zMuTJAVNE8VVT4Osbf/bOQ765EwsrWXkckgrgtWNmfLoJVa
-   A9BBrHebKDFq1xAEBX+l7sCTGj2/URN59hxybplR6jhXzgvoeeg9s4EkT
-   J2e4I347u9QO0PRiGE3EHxk1IXjXvxiRLzzW3FobkF5z8yiP3RxlIb/jW
-   wncm8UqoLjA03ZaYkqFySc0CotZV7hMh4pEIUYU1d5BPSfXCKQuCroMu8
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="311472184"
+  t=1643904621; x=1675440621;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Kbd59A/a9kfCZjJuLwDQvMRswMrJrKguvQQqF+qs2KM=;
+  b=lP0/c6EnlnwW93BuRC/14vep4jW/yb5zsHJZC8MkTyGFhGflnnjO0O46
+   4B+lc2l5QxEt1m/eXAWQrPH5yMXZvoOREC8ppJvOsHkzBGKupB4XmToBM
+   lyy4AG7n/nT9j2NRkIHHS/7h9Ueh/hgfICBXaI9nKW/VQRaDHvPT1am7/
+   uRriZMX2IEqNia4nhK3MBZ5HK79eENXZ6ow0XmR7QVBBMci4fKJPUVcky
+   7OEdisfz1Y7giwOOKZu7dg0eUzXpMlspN4JfXiyFydeHlNqRbuAwNuk2x
+   3o5bEQBZ6iLjcz8Fm8JtQm2tHi3XMJpx7UxAKH8L5WpVM1A16WjVI311y
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="231745967"
 X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="311472184"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:39:19 -0800
+   d="scan'208";a="231745967"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 08:10:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="583821356"
+   d="scan'208";a="498179717"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Feb 2022 07:39:18 -0800
+  by orsmga002.jf.intel.com with ESMTP; 03 Feb 2022 08:10:19 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nFeCb-000WI2-SS; Thu, 03 Feb 2022 15:39:17 +0000
-Date: Thu, 3 Feb 2022 23:38:41 +0800
+	id 1nFegd-000WJq-AE; Thu, 03 Feb 2022 16:10:19 +0000
+Date: Fri, 4 Feb 2022 00:09:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Darren Powell <darren.powell@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>
-Subject: [agd5f:drm-next 243/250]
- drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:2277:6: warning:
- variable 'ret' set but not used
-Message-ID: <202202032303.GcRtJxzw-lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v1 1/1] iio: chemical: atlas-ezo-sensor: Make use of
+ device properties
+Message-ID: <202202040047.MYaXoBXz-lkp@intel.com>
+References: <20220203122543.75814-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,55 +45,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220203122543.75814-1-andriy.shevchenko@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   53593d1be00c441585cb4fec41a756b8e586b710
-commit: 5d64f9bbb6281a5a89a2266b9d39daa1fca1d6b4 [243/250] amdgpu/pm: Implement new API function "emit" that accepts buffer base and write offset
-config: i386-randconfig-a011-20220131 (https://download.01.org/0day-ci/archive/20220203/202202032303.GcRtJxzw-lkp@intel.com/config)
+Hi Andy,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on v5.17-rc2 next-20220203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/iio-chemical-atlas-ezo-sensor-Make-use-of-device-properties/20220203-202716
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: hexagon-randconfig-r041-20220203 (https://download.01.org/0day-ci/archive/20220204/202202040047.MYaXoBXz-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout 5d64f9bbb6281a5a89a2266b9d39daa1fca1d6b4
+        # https://github.com/0day-ci/linux/commit/262e5b667d25332f90b88e6869ba161b11e8f88e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/iio-chemical-atlas-ezo-sensor-Make-use-of-device-properties/20220203-202716
+        git checkout 262e5b667d25332f90b88e6869ba161b11e8f88e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/chemical/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:2277:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-           int ret = 0;
-               ^
-   1 warning generated.
+>> drivers/iio/chemical/atlas-ezo-sensor.c:183:21: warning: incompatible pointer to integer conversion initializing 'kernel_ulong_t' (aka 'unsigned long') with an expression of type 'struct atlas_ezo_device *' [-Wint-conversion]
+           { "atlas-co2-ezo", &atlas_ezo_devices[0] },
+                              ^~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/chemical/atlas-ezo-sensor.c:184:20: warning: incompatible pointer to integer conversion initializing 'kernel_ulong_t' (aka 'unsigned long') with an expression of type 'struct atlas_ezo_device *' [-Wint-conversion]
+           { "atlas-o2-ezo", &atlas_ezo_devices[1] },
+                             ^~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/chemical/atlas-ezo-sensor.c:185:21: warning: incompatible pointer to integer conversion initializing 'kernel_ulong_t' (aka 'unsigned long') with an expression of type 'struct atlas_ezo_device *' [-Wint-conversion]
+           { "atlas-hum-ezo", &atlas_ezo_devices[2] },
+                              ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/iio/chemical/atlas-ezo-sensor.c:221:13: error: assigning to 'struct atlas_ezo_device *' from 'const struct atlas_ezo_device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           data->chip = chip;
+                      ^ ~~~~
+   3 warnings and 1 error generated.
 
 
-vim +/ret +2277 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c
+vim +221 drivers/iio/chemical/atlas-ezo-sensor.c
 
-  2272	
-  2273	static int smu_emit_ppclk_levels(void *handle, enum pp_clock_type type, char *buf, int *offset)
-  2274	{
-  2275		struct smu_context *smu = handle;
-  2276		enum smu_clk_type clk_type;
-> 2277		int ret = 0;
-  2278	
-  2279		clk_type = smu_convert_to_smuclk(type);
-  2280		if (clk_type == SMU_CLK_COUNT)
-  2281			return -EINVAL;
-  2282	
-  2283		if (!smu->pm_enabled || !smu->adev->pm.dpm_enabled)
-  2284			return -EOPNOTSUPP;
-  2285	
-  2286		if (!smu->ppt_funcs->emit_clk_levels)
-  2287			ret = -ENOENT;
-  2288	
-  2289		return smu->ppt_funcs->emit_clk_levels(smu, clk_type, buf, offset);
-  2290	
+8712b3098b3d03 Matt Ranostay   2020-05-11  181  
+8712b3098b3d03 Matt Ranostay   2020-05-11  182  static const struct i2c_device_id atlas_ezo_id[] = {
+262e5b667d2533 Andy Shevchenko 2022-02-03 @183  	{ "atlas-co2-ezo", &atlas_ezo_devices[0] },
+262e5b667d2533 Andy Shevchenko 2022-02-03  184  	{ "atlas-o2-ezo", &atlas_ezo_devices[1] },
+262e5b667d2533 Andy Shevchenko 2022-02-03  185  	{ "atlas-hum-ezo", &atlas_ezo_devices[2] },
+8712b3098b3d03 Matt Ranostay   2020-05-11  186  	{}
+8712b3098b3d03 Matt Ranostay   2020-05-11  187  };
+8712b3098b3d03 Matt Ranostay   2020-05-11  188  MODULE_DEVICE_TABLE(i2c, atlas_ezo_id);
+8712b3098b3d03 Matt Ranostay   2020-05-11  189  
+8712b3098b3d03 Matt Ranostay   2020-05-11  190  static const struct of_device_id atlas_ezo_dt_ids[] = {
+262e5b667d2533 Andy Shevchenko 2022-02-03  191  	{ .compatible = "atlas,co2-ezo", .data = &atlas_ezo_devices[0], },
+262e5b667d2533 Andy Shevchenko 2022-02-03  192  	{ .compatible = "atlas,o2-ezo", .data = &atlas_ezo_devices[1], },
+262e5b667d2533 Andy Shevchenko 2022-02-03  193  	{ .compatible = "atlas,hum-ezo", .data = &atlas_ezo_devices[2], },
+8712b3098b3d03 Matt Ranostay   2020-05-11  194  	{}
+8712b3098b3d03 Matt Ranostay   2020-05-11  195  };
+8712b3098b3d03 Matt Ranostay   2020-05-11  196  MODULE_DEVICE_TABLE(of, atlas_ezo_dt_ids);
+8712b3098b3d03 Matt Ranostay   2020-05-11  197  
+8712b3098b3d03 Matt Ranostay   2020-05-11  198  static int atlas_ezo_probe(struct i2c_client *client,
+8712b3098b3d03 Matt Ranostay   2020-05-11  199  		       const struct i2c_device_id *id)
+8712b3098b3d03 Matt Ranostay   2020-05-11  200  {
+262e5b667d2533 Andy Shevchenko 2022-02-03  201  	const struct atlas_ezo_device *chip;
+8712b3098b3d03 Matt Ranostay   2020-05-11  202  	struct atlas_ezo_data *data;
+8712b3098b3d03 Matt Ranostay   2020-05-11  203  	struct iio_dev *indio_dev;
+8712b3098b3d03 Matt Ranostay   2020-05-11  204  
+8712b3098b3d03 Matt Ranostay   2020-05-11  205  	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
+8712b3098b3d03 Matt Ranostay   2020-05-11  206  	if (!indio_dev)
+8712b3098b3d03 Matt Ranostay   2020-05-11  207  		return -ENOMEM;
+8712b3098b3d03 Matt Ranostay   2020-05-11  208  
+262e5b667d2533 Andy Shevchenko 2022-02-03  209  	chip = device_get_match_data(&client->dev);
+262e5b667d2533 Andy Shevchenko 2022-02-03  210  	if (!chip)
+262e5b667d2533 Andy Shevchenko 2022-02-03  211  		chip = (const struct atlas_ezo_device *)id->driver_data;
+8712b3098b3d03 Matt Ranostay   2020-05-11  212  
+8712b3098b3d03 Matt Ranostay   2020-05-11  213  	indio_dev->info = &atlas_info;
+8712b3098b3d03 Matt Ranostay   2020-05-11  214  	indio_dev->name = ATLAS_EZO_DRV_NAME;
+8712b3098b3d03 Matt Ranostay   2020-05-11  215  	indio_dev->channels = chip->channels;
+8712b3098b3d03 Matt Ranostay   2020-05-11  216  	indio_dev->num_channels = chip->num_channels;
+8712b3098b3d03 Matt Ranostay   2020-05-11  217  	indio_dev->modes = INDIO_DIRECT_MODE;
+8712b3098b3d03 Matt Ranostay   2020-05-11  218  
+8712b3098b3d03 Matt Ranostay   2020-05-11  219  	data = iio_priv(indio_dev);
+8712b3098b3d03 Matt Ranostay   2020-05-11  220  	data->client = client;
+8712b3098b3d03 Matt Ranostay   2020-05-11 @221  	data->chip = chip;
+8712b3098b3d03 Matt Ranostay   2020-05-11  222  	mutex_init(&data->lock);
+8712b3098b3d03 Matt Ranostay   2020-05-11  223  
+8712b3098b3d03 Matt Ranostay   2020-05-11  224  	return devm_iio_device_register(&client->dev, indio_dev);
+8712b3098b3d03 Matt Ranostay   2020-05-11  225  };
+8712b3098b3d03 Matt Ranostay   2020-05-11  226  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
