@@ -1,75 +1,116 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13522F28
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 20:46:02 +0000 (UTC)
-Received: by mail-lf1-f50.google.com with SMTP id z19so8426136lfq.13
-        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 12:46:02 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DC22F28
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 20:58:19 +0000 (UTC)
+Received: by mail-pj1-f47.google.com with SMTP id g15-20020a17090a67cf00b001b7d5b6bedaso4156673pjm.4
+        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 12:58:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Fm6/WM1aXFuwaAFInnacEGjjm7HROSKZyaeunWFy85Q=;
-        b=EB+7VDo0oio3AfLjXuLSp6iozLxATOVsRvDCRYSKDC4dRHRa8GuGMgzNBg4tg2Xtaq
-         uu3+nm502DKtfpnMjfCLhX47RbFHaPcqZ1Ap/cehsIkyFRU0CD109PV/k2UlXJs84mZk
-         7Aft+fARjfKRk60pMw3eyxJoTpD+7y+rf4d478kXyMFZVg54TRtrY8xmylU8MmXJ9gmE
-         qIsC8G8P8vgijQ6+XICJ4axatcywgPRfBO4gE8gGWY4b6j/mNfakbxaUe/IEeCuTE3K2
-         fDz2vxKnxjagXfbK+K866SRGzKhDCVY9JxQOclVZz1dgNk13Zh0i2G4OkyCCxinuGBQ5
-         nVTg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=fNhWlMoL3ARvzgHV8VquO+9WZr0o6dFhXF/3pBpl+zY=;
+        b=S7c3Eq3sx0VL1QSPwt15hZO3wCqBqUXIkHWHem/cKz3pGWyBEan/mKgiXfi1xp/29o
+         kB7boL1DMiQRR4rPrg+knFLE3JaOD6isHkRRpKm1H7DKzX7+3Q2lhKYT0aP2xt9jyzQz
+         PQlVEldzU7wLkMYLgSKnbnkzPrKk/TF1n93gc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fm6/WM1aXFuwaAFInnacEGjjm7HROSKZyaeunWFy85Q=;
-        b=eXoVus/u6u46xv+lPVJhqP5Bv32zRhMBMU6aGM9grSfUUhCWTKMubg7p+HVGMEMbaG
-         UCzYII775PhHWedndi0Wz6/LzojCtCoJDuHtJPe+FjyO0dG2O7S45aChasUh52frUNrY
-         YUCCDIhlc0gJUw33dtUshjfmADW/Ovyn2zUHtoBtVB6Rg2iTc5OQeRUvea9bKA1czD/v
-         GJWN2108Klrh8g4Ds4Eq1orcRX8O+oBuCGXGwt5EWnyohbwFIw2Y79fdoiSGE/3ZLLJH
-         I2ukBMdzOm33t+YZphd793ExJ4X8/RbmT5vkXUn2qo3rWSI3+9jKxO6dklxWJtEx4XlN
-         9Wlg==
-X-Gm-Message-State: AOAM530q4kMiJS0izaMx9TCGW/wSy0M8/tBwH8YkueC/w8OagLEY07j2
-	7/cR2No0SreurwttXwe4SLjJHdkG3eBzTvIL2kARUA==
-X-Google-Smtp-Source: ABdhPJzordyV/vbntEzNKU3NgMfL1TqdSMWainolMPsf5aYHMJtZbYurIZW+6FnXNlOUlgdQ/qO9YpSPM8DquTXJTP4=
-X-Received: by 2002:a19:6449:: with SMTP id b9mr28158247lfj.82.1643921160689;
- Thu, 03 Feb 2022 12:46:00 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=fNhWlMoL3ARvzgHV8VquO+9WZr0o6dFhXF/3pBpl+zY=;
+        b=ZHqRBx1tpglp946SKB35KzEYPmZePVBnb1lJ3u7LcDlv3Czqurd51VYXAQDAAeQM6r
+         XCaInbso7hOA2KNC3sKVetrJcEpDdLjOiVnx+LWvjjsVZnhlY1O5vTB7mmEaqiENIo1H
+         3/I4k6mzi3fXKGQFBLyG5IzT1IPh86aoOdUudhGl1MlhIpOmdK5uhZUtGJN+HIzyTcRL
+         xMKmfadD3x15E87DPwYHjMIK+XjCzFPkW6OfW1UxsehvpvBvEfPX1RDs4ecCB7yNp55a
+         pazhzmiQJK+ME99HjgBWiKk8UtNwXDZe/3iULXLF35Pqr4VlHFr6QOwGxf8Gx2P8zxKx
+         H87Q==
+X-Gm-Message-State: AOAM531i4+kq6p/iPFHWk2ePedfc9vcQjaEHc6DwMuPuKY+OyD5uXGQj
+	KBH7FWdLY62FadIbaHWxQXmxZg==
+X-Google-Smtp-Source: ABdhPJxHEJi5HsNKYYAMNJVOqu8P+bOMo5MPafa4O9reU/XE26kCwyLEA6TzZ8l+gs4hcb7ufp/WCw==
+X-Received: by 2002:a17:90a:e38d:: with SMTP id b13mr15783752pjz.205.1643921898620;
+        Thu, 03 Feb 2022 12:58:18 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h4sm1162486pfv.166.2022.02.03.12.58.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 12:58:18 -0800 (PST)
+Date: Thu, 3 Feb 2022 12:58:17 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: George Burgess IV <gbiv@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] Compiler Attributes: Add __pass_object_size for
+ Clang
+Message-ID: <202202031247.4F3AC598@keescook>
+References: <20220203173307.1033257-1-keescook@chromium.org>
+ <20220203173307.1033257-2-keescook@chromium.org>
+ <CAKwvOdmzdQ+X2BsUbuVBWzFtaE2Vst4=ihNNR=LmOdozqQ5Ukg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220203204025.1153397-1-keescook@chromium.org>
-In-Reply-To: <20220203204025.1153397-1-keescook@chromium.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 3 Feb 2022 12:45:49 -0800
-Message-ID: <CAKwvOd=7ZDMhnX6Da5_ZMM9yLgrnhjwwPhYwO-RT-3yrPy+RLw@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/build: don't build CONFIG_X86_32 as -ffreestanding
-To: Kees Cook <keescook@chromium.org>
-Cc: x86@kernel.org, Arvind Sankar <nivedita@alum.mit.edu>, 
-	Fangrui Song <maskray@google.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Andi Kleen <ak@linux.intel.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdmzdQ+X2BsUbuVBWzFtaE2Vst4=ihNNR=LmOdozqQ5Ukg@mail.gmail.com>
 
-On Thu, Feb 3, 2022 at 12:40 PM Kees Cook <keescook@chromium.org> wrote:
->
-> From: Nick Desaulniers <ndesaulniers@google.com>
->
-> -ffreestanding typically inhibits "libcall optimizations" where calls to
-> certain library functions can be replaced by the compiler in certain
-> cases to calls to other library functions that may be more efficient.
-> This can be problematic for embedded targets that don't provide full
-> libc implementations.
+On Thu, Feb 03, 2022 at 12:18:24PM -0800, Nick Desaulniers wrote:
+> On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > In order to gain greater visibility to type information when using
+> > __builtin_object_size(), Clang has a function attribute "pass_object_size"
+> > that will make size information available for marked arguments in
+> > a function by way of implicit additional function arguments that are
+> > then wired up the __builtin_object_size().
+> >
+> > This is needed to implement FORTIFY_SOURCE in Clang, as a workaround
+> > to Clang's __builtin_object_size() having limited visibility[1] into types
+> > across function calls (even inlines).
+> >
+> > Since any usage must also be const, include it in the macro.
+> 
+> I really don't like hiding the qualifier in the argument-attribute
+> macro like that.  I'd rather we be more explicit about changing the
+> function interfaces in include/linux/fortify-string.h.
 
-While the bcmp shenanigans were ultimately resolved by
-commit 5f074f3e192f ("lib/string.c: implement a basic bcmp")
-(and this popped up again in
-commit 1e1b6d63d634 ("lib/string.c: implement stpcpy")
-).  I'm still very much in favor of this patch, and should have
-pursued it. Thanks for resending!
+It seemed redundant to have it separate when it would always be needed.
+In v5 I had the const in the BOS (now POS) macro, but realized that this
+was silly since it would always need to be that way for __pos.
+
+> For instance, in patch 4/4, let's take a look at this hunk:
+> 
+> -__FORTIFY_INLINE char *strncpy(char *p, const char *q, __kernel_size_t size)
+> ...
+> +__FORTIFY_INLINE __diagnose_as(__builtin_strncpy, 1, 2, 3)
+> +char *strncpy(char * POS p, const char *q, __kernel_size_t size)
+> 
+> manually expanded, this has changed the qualifiers on the type of the
+> first parameter from `char *` to `char * const`.
+
+Yup, that's expected, and I wanted to tie it strictly to the expansion
+of __pass_object_size since otherwise GCC would gain the "const" bit
+(which technically shouldn't matter, but this whole series has been
+nothing but corner case after corner case, and I didn't want to risk
+another one).
+
+> I think it might be helpful to quote the docs
+> (https://clang.llvm.org/docs/AttributeReference.html#pass-object-size-pass-dynamic-object-size)
+> 
+> >> Additionally, any parameter that pass_object_size is applied to must be marked const at its function’s definition.
+> 
+> One thing that's concerning to me is though:
+> 
+> >> It is an error to take the address of a function with pass_object_size on any of its parameters.
+> 
+> Surely the kernel has indirect calls to some of these functions
+> somewhere? Is that just an issue for C++ name-mangling perhaps?
+
+AFAIU, this shouldn't be a problem for any of these. Nothing is trying
+to take memcpy, memset, etc by address. The macro-ified version of this
+change proved that out. :)
 
 -- 
-Thanks,
-~Nick Desaulniers
+Kees Cook
