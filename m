@@ -1,147 +1,173 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC4F2F21
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 16:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643904621; x=1675440621;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kbd59A/a9kfCZjJuLwDQvMRswMrJrKguvQQqF+qs2KM=;
-  b=lP0/c6EnlnwW93BuRC/14vep4jW/yb5zsHJZC8MkTyGFhGflnnjO0O46
-   4B+lc2l5QxEt1m/eXAWQrPH5yMXZvoOREC8ppJvOsHkzBGKupB4XmToBM
-   lyy4AG7n/nT9j2NRkIHHS/7h9Ueh/hgfICBXaI9nKW/VQRaDHvPT1am7/
-   uRriZMX2IEqNia4nhK3MBZ5HK79eENXZ6ow0XmR7QVBBMci4fKJPUVcky
-   7OEdisfz1Y7giwOOKZu7dg0eUzXpMlspN4JfXiyFydeHlNqRbuAwNuk2x
-   3o5bEQBZ6iLjcz8Fm8JtQm2tHi3XMJpx7UxAKH8L5WpVM1A16WjVI311y
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="231745967"
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="231745967"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 08:10:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="498179717"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 Feb 2022 08:10:19 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nFegd-000WJq-AE; Thu, 03 Feb 2022 16:10:19 +0000
-Date: Fri, 4 Feb 2022 00:09:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v1 1/1] iio: chemical: atlas-ezo-sensor: Make use of
- device properties
-Message-ID: <202202040047.MYaXoBXz-lkp@intel.com>
-References: <20220203122543.75814-1-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DB02F25
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 16:41:25 +0000 (UTC)
+Received: by mail-pj1-f43.google.com with SMTP id v15-20020a17090a4ecf00b001b82db48754so3531265pjl.2
+        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 08:41:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=1evXhfpbBKElbnPFpb9YOErw3xinbR29/m37zDfFiAw=;
+        b=S/UAP0f153LFonp1hCXbIVWAfYmrYBM8A9I4S4MSqcNaBK/XGFbffMh95ZGYIZ02J2
+         J30wn/NHcxDB9DTV6U1ItVXuLRqx+8GWqMlsxpvlKrDFs01zr0cJYjALOlGuFxEsxc2I
+         SsWacMJDXRmANGCDAQkwxE9ivNqKuc+pELREQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1evXhfpbBKElbnPFpb9YOErw3xinbR29/m37zDfFiAw=;
+        b=7VoaPyrtc8xOPgjurYnuGjcdd+iz+L09Cq0Q3NkfAtUHiHK+U1UkIjYtFMzhi2/Evf
+         fQccuphXkqxBSDD0kEpJFthtPOgIxUiZyxHUP/EZSPhTjLCKipSTtUoqHOjH4hVZIGOj
+         gMgh+MhhtG8xkx4ln3n7bPOGWR+V0Crbw8cKzMPXQnM+xMjuZK70DdTGG2NQmJgcknlq
+         KngT4Lgwu3dSbUOse/1dvsznQBsU5uTpgHhpAUNO4engeBrKOgECy3bStDeyAvYZiLyG
+         RTWzCJQKudWZ0QrB+5IG/10gyopeOZNeVyHzFt5X3xUvNt6vubTAh18vsbsRFAyI+KJX
+         In3g==
+X-Gm-Message-State: AOAM532U2b6wCSW15FSkOxW02SenXSavQ/ofVqsWJk0nE/cXIS33P0lz
+	F50L7XnHJGQb6JIdVU6fgExo1A==
+X-Google-Smtp-Source: ABdhPJzMqsctX1naiJ7QdADWrvnbSgaWNfF861ADFSzgLjkBcEQ0An+n3G1dZLDGYZsYZmDRJlHqEw==
+X-Received: by 2002:a17:902:8f8e:: with SMTP id z14mr24281634plo.28.1643906485287;
+        Thu, 03 Feb 2022 08:41:25 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d20sm3234791pfu.9.2022.02.03.08.41.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 08:41:24 -0800 (PST)
+Date: Thu, 3 Feb 2022 08:41:24 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>,
+	Andy Shevchenko <andy@kernel.org>,
+	Matteo Croce <mcroce@microsoft.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
+Message-ID: <202202030840.74FCB6868@keescook>
+References: <20220130183653.491292-1-keescook@chromium.org>
+ <20220202160149.GA2322037@roeck-us.net>
+ <202202021237.487D3DE73@keescook>
+ <5ff18cff-6cfd-1f85-da74-1e5660a1a250@roeck-us.net>
+ <CAMuHMdWssK2=NFc6NO-inQg5dWxZP4Wv41K3J3RqRXThXatovw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220203122543.75814-1-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdWssK2=NFc6NO-inQg5dWxZP4Wv41K3J3RqRXThXatovw@mail.gmail.com>
 
-Hi Andy,
+On Thu, Feb 03, 2022 at 09:04:22AM +0100, Geert Uytterhoeven wrote:
+> Hi Günter,
+> 
+> On Thu, Feb 3, 2022 at 12:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> > On 2/2/22 12:52, Kees Cook wrote:
+> > > On Wed, Feb 02, 2022 at 08:01:49AM -0800, Guenter Roeck wrote:
+> > >> On Sun, Jan 30, 2022 at 10:36:53AM -0800, Kees Cook wrote:
+> > >>> Add a simple test for strlen() functionality, including using it as a
+> > >>> constant expression.
+> > >>>
+> > >>> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > >>> Cc: Peter Rosin <peda@axentia.se>
+> > >>> Signed-off-by: Kees Cook <keescook@chromium.org>
+> > >>> ---
+> > >>> I'll be taking this as part of my Clang FORTIFY_SOURCE series.
+> > >>> ---
+> > >>>   lib/test_string.c | 37 +++++++++++++++++++++++++++++++++++++
+> > >>>   1 file changed, 37 insertions(+)
+> > >>>
+> > >>> diff --git a/lib/test_string.c b/lib/test_string.c
+> > >>> index 9dfd6f52de92..59994f552c48 100644
+> > >>> --- a/lib/test_string.c
+> > >>> +++ b/lib/test_string.c
+> > >>> @@ -179,6 +179,38 @@ static __init int strnchr_selftest(void)
+> > >>>     return 0;
+> > >>>   }
+> > >>>
+> > >>> +/*
+> > >>> + * Unlike many other string functions, strlen() can be used in
+> > >>> + * static initializers when string lengths are known at compile
+> > >>> + * time. (i.e. Under these conditions, strlen() is a constant
+> > >>> + * expression.) Make sure it can be used this way.
+> > >>> + */
+> > >>> +static const int strlen_ce = strlen("tada, a constant expression");
+> > >>> +
+> > >>
+> > >> This results in:
+> > >>
+> > >> lib/test_string.c:188:30: error: initializer element is not constant
+> > >>    188 | static const int strlen_ce = strlen("tada, a constant expression");
+> > >>
+> > >> for several of my tests. I don't think you can mandate that a compiler
+> > >> implements this.
+> > >
+> > > Which tests?
+> > >
+> >
+> > Some examples:
+> >
+> > Build reference: next-20220202
+> > Compiler version: m68k-linux-gcc (GCC) 11.2.0
+> >
+> > Building m68k:defconfig ... failed
+> > --------------
+> > Error log:
+> > lib/test_string.c:188:30: error: initializer element is not constant
+> >    188 | static const int strlen_ce = strlen("tada, a constant expression");
+> >
+> > Building mips:malta_defconfig:nocd:smp:net,e1000:initrd ... failed
+> > ------------
+> > Error log:
+> > lib/test_string.c:188:30: error: initializer element is not constant
+> >   static const int strlen_ce = strlen("tada, a constant expression");
+> >
+> > Building i386:q35:Broadwell:defconfig:smp:ata:net,rtl8139:hd ... failed
+> > ------------
+> > Error log:
+> > lib/test_string.c:188:30: error: initializer element is not constant
+> >    188 | static const int strlen_ce = strlen("tada, a constant expression");
+> >
+> > i386 and is defconfig + CONFIG_STRING_SELFTEST=y; mips is
+> > malta_defconfig + CONFIG_STRING_SELFTEST=y. All use gcc 11.2.
+> >
+> > There may be more, but there are so many failures in -next right now
+> > that I may be missing some.
+> >
+> > > This property of strlen() is already required by our builds (this is how
+> > > I tripped over it). For example:
+> > >
+> > > drivers/firmware/xilinx/zynqmp-debug.c:
+> > >
+> > > #define PM_API(id)               {id, #id, strlen(#id)}
+> > > static struct pm_api_info pm_api_list[] = {
+> > >          PM_API(PM_GET_API_VERSION),
+> > >          PM_API(PM_QUERY_DATA),
+> > > };
+> >
+> > I do not think that it is a C standard that strlen() on a constant string
+> > must be compile-time evaluated and result in a constant.
+> 
+> Not if -ffreestanding, which is what several architectures are
+> using nowadays, to a.o. prevent gcc from replacing calls to stdlib
+> functions to other stdlib functions (e.g. strncat() -> strlen() +
+> store, strncmp() -> strcmp()), which breaks linking if the latter is
+> only provided inline.
+> 
+> > Anyway, key difference, I think, is the presence of an architecture-specific
+> > version of strlen(), or the maybe non-presence of __HAVE_ARCH_STRLEN,
+> > or the definition of strlen() in include/linux/fortify-string.h.
+> 
+> It works after dropping -ffreestanding.
 
-I love your patch! Yet something to improve:
+Ah-ha, thanks for the clue here. I'll see if there is some way to
+detect this (or, I guess, drop the patch). I don't like that this
+requirement depends on the architecture, so I'd rather it behave the
+same everywhere. Hmm
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on v5.17-rc2 next-20220203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/iio-chemical-atlas-ezo-sensor-Make-use-of-device-properties/20220203-202716
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: hexagon-randconfig-r041-20220203 (https://download.01.org/0day-ci/archive/20220204/202202040047.MYaXoBXz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/262e5b667d25332f90b88e6869ba161b11e8f88e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/iio-chemical-atlas-ezo-sensor-Make-use-of-device-properties/20220203-202716
-        git checkout 262e5b667d25332f90b88e6869ba161b11e8f88e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/chemical/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/iio/chemical/atlas-ezo-sensor.c:183:21: warning: incompatible pointer to integer conversion initializing 'kernel_ulong_t' (aka 'unsigned long') with an expression of type 'struct atlas_ezo_device *' [-Wint-conversion]
-           { "atlas-co2-ezo", &atlas_ezo_devices[0] },
-                              ^~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/chemical/atlas-ezo-sensor.c:184:20: warning: incompatible pointer to integer conversion initializing 'kernel_ulong_t' (aka 'unsigned long') with an expression of type 'struct atlas_ezo_device *' [-Wint-conversion]
-           { "atlas-o2-ezo", &atlas_ezo_devices[1] },
-                             ^~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/chemical/atlas-ezo-sensor.c:185:21: warning: incompatible pointer to integer conversion initializing 'kernel_ulong_t' (aka 'unsigned long') with an expression of type 'struct atlas_ezo_device *' [-Wint-conversion]
-           { "atlas-hum-ezo", &atlas_ezo_devices[2] },
-                              ^~~~~~~~~~~~~~~~~~~~~
->> drivers/iio/chemical/atlas-ezo-sensor.c:221:13: error: assigning to 'struct atlas_ezo_device *' from 'const struct atlas_ezo_device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           data->chip = chip;
-                      ^ ~~~~
-   3 warnings and 1 error generated.
-
-
-vim +221 drivers/iio/chemical/atlas-ezo-sensor.c
-
-8712b3098b3d03 Matt Ranostay   2020-05-11  181  
-8712b3098b3d03 Matt Ranostay   2020-05-11  182  static const struct i2c_device_id atlas_ezo_id[] = {
-262e5b667d2533 Andy Shevchenko 2022-02-03 @183  	{ "atlas-co2-ezo", &atlas_ezo_devices[0] },
-262e5b667d2533 Andy Shevchenko 2022-02-03  184  	{ "atlas-o2-ezo", &atlas_ezo_devices[1] },
-262e5b667d2533 Andy Shevchenko 2022-02-03  185  	{ "atlas-hum-ezo", &atlas_ezo_devices[2] },
-8712b3098b3d03 Matt Ranostay   2020-05-11  186  	{}
-8712b3098b3d03 Matt Ranostay   2020-05-11  187  };
-8712b3098b3d03 Matt Ranostay   2020-05-11  188  MODULE_DEVICE_TABLE(i2c, atlas_ezo_id);
-8712b3098b3d03 Matt Ranostay   2020-05-11  189  
-8712b3098b3d03 Matt Ranostay   2020-05-11  190  static const struct of_device_id atlas_ezo_dt_ids[] = {
-262e5b667d2533 Andy Shevchenko 2022-02-03  191  	{ .compatible = "atlas,co2-ezo", .data = &atlas_ezo_devices[0], },
-262e5b667d2533 Andy Shevchenko 2022-02-03  192  	{ .compatible = "atlas,o2-ezo", .data = &atlas_ezo_devices[1], },
-262e5b667d2533 Andy Shevchenko 2022-02-03  193  	{ .compatible = "atlas,hum-ezo", .data = &atlas_ezo_devices[2], },
-8712b3098b3d03 Matt Ranostay   2020-05-11  194  	{}
-8712b3098b3d03 Matt Ranostay   2020-05-11  195  };
-8712b3098b3d03 Matt Ranostay   2020-05-11  196  MODULE_DEVICE_TABLE(of, atlas_ezo_dt_ids);
-8712b3098b3d03 Matt Ranostay   2020-05-11  197  
-8712b3098b3d03 Matt Ranostay   2020-05-11  198  static int atlas_ezo_probe(struct i2c_client *client,
-8712b3098b3d03 Matt Ranostay   2020-05-11  199  		       const struct i2c_device_id *id)
-8712b3098b3d03 Matt Ranostay   2020-05-11  200  {
-262e5b667d2533 Andy Shevchenko 2022-02-03  201  	const struct atlas_ezo_device *chip;
-8712b3098b3d03 Matt Ranostay   2020-05-11  202  	struct atlas_ezo_data *data;
-8712b3098b3d03 Matt Ranostay   2020-05-11  203  	struct iio_dev *indio_dev;
-8712b3098b3d03 Matt Ranostay   2020-05-11  204  
-8712b3098b3d03 Matt Ranostay   2020-05-11  205  	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
-8712b3098b3d03 Matt Ranostay   2020-05-11  206  	if (!indio_dev)
-8712b3098b3d03 Matt Ranostay   2020-05-11  207  		return -ENOMEM;
-8712b3098b3d03 Matt Ranostay   2020-05-11  208  
-262e5b667d2533 Andy Shevchenko 2022-02-03  209  	chip = device_get_match_data(&client->dev);
-262e5b667d2533 Andy Shevchenko 2022-02-03  210  	if (!chip)
-262e5b667d2533 Andy Shevchenko 2022-02-03  211  		chip = (const struct atlas_ezo_device *)id->driver_data;
-8712b3098b3d03 Matt Ranostay   2020-05-11  212  
-8712b3098b3d03 Matt Ranostay   2020-05-11  213  	indio_dev->info = &atlas_info;
-8712b3098b3d03 Matt Ranostay   2020-05-11  214  	indio_dev->name = ATLAS_EZO_DRV_NAME;
-8712b3098b3d03 Matt Ranostay   2020-05-11  215  	indio_dev->channels = chip->channels;
-8712b3098b3d03 Matt Ranostay   2020-05-11  216  	indio_dev->num_channels = chip->num_channels;
-8712b3098b3d03 Matt Ranostay   2020-05-11  217  	indio_dev->modes = INDIO_DIRECT_MODE;
-8712b3098b3d03 Matt Ranostay   2020-05-11  218  
-8712b3098b3d03 Matt Ranostay   2020-05-11  219  	data = iio_priv(indio_dev);
-8712b3098b3d03 Matt Ranostay   2020-05-11  220  	data->client = client;
-8712b3098b3d03 Matt Ranostay   2020-05-11 @221  	data->chip = chip;
-8712b3098b3d03 Matt Ranostay   2020-05-11  222  	mutex_init(&data->lock);
-8712b3098b3d03 Matt Ranostay   2020-05-11  223  
-8712b3098b3d03 Matt Ranostay   2020-05-11  224  	return devm_iio_device_register(&client->dev, indio_dev);
-8712b3098b3d03 Matt Ranostay   2020-05-11  225  };
-8712b3098b3d03 Matt Ranostay   2020-05-11  226  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook
