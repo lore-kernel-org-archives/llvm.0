@@ -1,42 +1,42 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0469B2F21
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 06:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6542C9C
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 06:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1643871356; x=1675407356;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u+SH/XnbdsUBdSooNGnpCMCUgeYkFq3TVMuP/6v6s78=;
-  b=ibHyM1u+VIfttmM0RUKRmDlZRDxuE8NDyL+0fgLMtbDrXBQU89t8MR2Q
-   L2CWrHpnSHIukk+pnRJfrQlXvIqKuuPY9fZeCuxPDfRyfQE0/a6Urd4O0
-   nJgyV3d+GIBBS9O5RhU3KGTgBIeDPpMWSEc89L0QXWbRD9nuXc7LhUrAR
-   Os6Z++kpZ/6Eu+2EsK+TJJs89NPJ1/lB9JheyDgHHDoe4rnadl0Ff/hsF
-   Yfx4mJ7v2vxBFxNMGqoT03rn5O/1ahZF9xu8dfI3c1wEHbFQ78+N652KU
-   oI+lrGxrf7LEBRH+e3kT8szBubC7rhOoD6jBZhoz+RGWhtjx4l+ZOebiG
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="248039986"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eyI2/R+yROaV0RHfck1nac7STRkahOPVD6wvBxM7ZBo=;
+  b=oGrMXImeBi3EAod0Wtgin+22lBhF04RBSn8Bbj4T+T0kHXTrJA+Od+99
+   89xRCh9Nv99uQToFrTgy/Fkvb2oVsEewpaelH3VX+JdWriRpU36qi9+WD
+   fEVLn+6BF7STGWZFDDXDWGY94I2vkNMu5dKqjySXgvLRtK6uOUfSwLLYR
+   Fc1dLB88Ff00evdvsoK0NDph3myj/9/DLS1ky+4jw/6o5fqM5inGpKReA
+   WgjtZ0zKAu8OhD2CmtwFEQz+lrOe2SRJg2nxgiObu3KwUlysxDKawpxL4
+   MAJNur1+mf4wtplkk3AItsIDPHxs2N9/297jRBgOjnKcrgPzu1qKdIpF9
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="228740303"
 X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
-   d="scan'208";a="248039986"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 22:55:55 -0800
+   d="scan'208";a="228740303"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 22:55:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
-   d="scan'208";a="538627460"
+   d="scan'208";a="523788602"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 02 Feb 2022 22:55:54 -0800
+  by orsmga007.jf.intel.com with ESMTP; 02 Feb 2022 22:55:54 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nFW25-000Vm7-P4; Thu, 03 Feb 2022 06:55:53 +0000
-Date: Thu, 3 Feb 2022 14:55:24 +0800
+	id 1nFW25-000Vm1-Ma; Thu, 03 Feb 2022 06:55:53 +0000
+Date: Thu, 3 Feb 2022 14:55:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v1 1/1] iio: frequency: adf4350: Make use of device
- properties
-Message-ID: <202202031457.yUDGy1we-lkp@intel.com>
-References: <20220202202936.56475-1-andriy.shevchenko@linux.intel.com>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mhiramat:kprobes/fprobe 7/10] arch/x86/kernel/rethook.c:14:23:
+ warning: no previous prototype for function
+ 'arch_rethook_trampoline_callback'
+Message-ID: <202202031451.vmQ3ciMx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,141 +45,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202202936.56475-1-andriy.shevchenko@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Andy,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on v5.17-rc2 next-20220203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/iio-frequency-adf4350-Make-use-of-device-properties/20220203-042942
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: arm64-randconfig-r031-20220130 (https://download.01.org/0day-ci/archive/20220203/202202031457.yUDGy1we-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git kprobes/fprobe
+head:   1f4f90c86628a76e7eac24ab732db49fc3a961d6
+commit: 806149decce8b0870024d2676b46bb3d295c38b3 [7/10] fprobe: Add exit_handler support
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220203/202202031451.vmQ3ciMx-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/45963437d849912f2763fe06c25f9e30c383b0f5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/iio-frequency-adf4350-Make-use-of-device-properties/20220203-042942
-        git checkout 45963437d849912f2763fe06c25f9e30c383b0f5
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/commit/?id=806149decce8b0870024d2676b46bb3d295c38b3
+        git remote add mhiramat https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git
+        git fetch --no-tags mhiramat kprobes/fprobe
+        git checkout 806149decce8b0870024d2676b46bb3d295c38b3
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/iio/frequency/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/iio/frequency/adf4350.c:413:6: error: implicit declaration of function 'deivice_property_read_bool' [-Werror,-Wimplicit-function-declaration]
-           if (deivice_property_read_bool(dev, "adi,phase-detector-polarity-positive-enable"))
-               ^
-   drivers/iio/frequency/adf4350.c:413:6: note: did you mean 'device_property_read_bool'?
-   include/linux/property.h:129:20: note: 'device_property_read_bool' declared here
-   static inline bool device_property_read_bool(struct device *dev,
-                      ^
-   1 error generated.
+>> arch/x86/kernel/rethook.c:14:23: warning: no previous prototype for function 'arch_rethook_trampoline_callback' [-Wmissing-prototypes]
+   __used __visible void arch_rethook_trampoline_callback(struct pt_regs *regs)
+                         ^
+   arch/x86/kernel/rethook.c:14:18: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __used __visible void arch_rethook_trampoline_callback(struct pt_regs *regs)
+                    ^
+                    static 
+   1 warning generated.
 
 
-vim +/deivice_property_read_bool +413 drivers/iio/frequency/adf4350.c
+vim +/arch_rethook_trampoline_callback +14 arch/x86/kernel/rethook.c
 
-   384	
-   385	static struct adf4350_platform_data *adf4350_parse_dt(struct device *dev)
-   386	{
-   387		struct adf4350_platform_data *pdata;
-   388		unsigned int tmp;
-   389	
-   390		pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
-   391		if (!pdata)
-   392			return NULL;
-   393	
-   394		snprintf(pdata->name, sizeof(pdata->name), "%pfw", dev_fwnode(dev));
-   395	
-   396		tmp = 10000;
-   397		device_property_read_u32(dev, "adi,channel-spacing", &tmp);
-   398		pdata->channel_spacing = tmp;
-   399	
-   400		tmp = 0;
-   401		device_property_read_u32(dev, "adi,power-up-frequency", &tmp);
-   402		pdata->power_up_frequency = tmp;
-   403	
-   404		tmp = 0;
-   405		device_property_read_u32(dev, "adi,reference-div-factor", &tmp);
-   406		pdata->ref_div_factor = tmp;
-   407	
-   408		pdata->ref_doubler_en = device_property_read_bool(dev, "adi,reference-doubler-enable");
-   409		pdata->ref_div2_en = device_property_read_bool(dev, "adi,reference-div2-enable");
-   410	
-   411		/* r2_user_settings */
-   412		pdata->r2_user_settings = 0;
- > 413		if (deivice_property_read_bool(dev, "adi,phase-detector-polarity-positive-enable"))
-   414			pdata->r2_user_settings |= ADF4350_REG2_PD_POLARITY_POS;
-   415		if (device_property_read_bool(dev, "adi,lock-detect-precision-6ns-enable"))
-   416			pdata->r2_user_settings |= ADF4350_REG2_LDP_6ns;
-   417		if (device_property_read_bool(dev, "adi,lock-detect-function-integer-n-enable"))
-   418			pdata->r2_user_settings |= ADF4350_REG2_LDF_INT_N;
-   419	
-   420		tmp = 2500;
-   421		device_property_read_u32(dev, "adi,charge-pump-current", &tmp);
-   422		pdata->r2_user_settings |= ADF4350_REG2_CHARGE_PUMP_CURR_uA(tmp);
-   423	
-   424		tmp = 0;
-   425		device_property_read_u32(dev, "adi,muxout-select", &tmp);
-   426		pdata->r2_user_settings |= ADF4350_REG2_MUXOUT(tmp);
-   427	
-   428		if (device_property_read_bool(dev, "adi,low-spur-mode-enable"))
-   429			pdata->r2_user_settings |= ADF4350_REG2_NOISE_MODE(0x3);
-   430	
-   431		/* r3_user_settings */
-   432	
-   433		pdata->r3_user_settings = 0;
-   434		if (device_property_read_bool(dev, "adi,cycle-slip-reduction-enable"))
-   435			pdata->r3_user_settings |= ADF4350_REG3_12BIT_CSR_EN;
-   436		if (device_property_read_bool(dev, "adi,charge-cancellation-enable"))
-   437			pdata->r3_user_settings |= ADF4351_REG3_CHARGE_CANCELLATION_EN;
-   438		if (device_property_read_bool(dev, "adi,anti-backlash-3ns-enable"))
-   439			pdata->r3_user_settings |= ADF4351_REG3_ANTI_BACKLASH_3ns_EN;
-   440		if (device_property_read_bool(dev, "adi,band-select-clock-mode-high-enable"))
-   441			pdata->r3_user_settings |= ADF4351_REG3_BAND_SEL_CLOCK_MODE_HIGH;
-   442	
-   443		tmp = 0;
-   444		device_property_read_u32(dev, "adi,12bit-clk-divider", &tmp);
-   445		pdata->r3_user_settings |= ADF4350_REG3_12BIT_CLKDIV(tmp);
-   446	
-   447		tmp = 0;
-   448		device_property_read_u32(dev, "adi,clk-divider-mode", &tmp);
-   449		pdata->r3_user_settings |= ADF4350_REG3_12BIT_CLKDIV_MODE(tmp);
-   450	
-   451		/* r4_user_settings */
-   452	
-   453		pdata->r4_user_settings = 0;
-   454		if (device_property_read_bool(dev, "adi,aux-output-enable"))
-   455			pdata->r4_user_settings |= ADF4350_REG4_AUX_OUTPUT_EN;
-   456		if (device_property_read_bool(dev, "adi,aux-output-fundamental-enable"))
-   457			pdata->r4_user_settings |= ADF4350_REG4_AUX_OUTPUT_FUND;
-   458		if (device_property_read_bool(dev, "adi,mute-till-lock-enable"))
-   459			pdata->r4_user_settings |= ADF4350_REG4_MUTE_TILL_LOCK_EN;
-   460	
-   461		tmp = 0;
-   462		device_property_read_u32(dev, "adi,output-power", &tmp);
-   463		pdata->r4_user_settings |= ADF4350_REG4_OUTPUT_PWR(tmp);
-   464	
-   465		tmp = 0;
-   466		device_property_read_u32(dev, "adi,aux-output-power", &tmp);
-   467		pdata->r4_user_settings |= ADF4350_REG4_AUX_OUTPUT_PWR(tmp);
-   468	
-   469		return pdata;
-   470	}
-   471	
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  10  
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  11  /*
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  12   * Called from arch_rethook_trampoline
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  13   */
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26 @14  __used __visible void arch_rethook_trampoline_callback(struct pt_regs *regs)
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  15  {
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  16  	unsigned long *frame_pointer;
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  17  
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  18  	/* fixup registers */
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  19  	regs->cs = __KERNEL_CS;
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  20  #ifdef CONFIG_X86_32
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  21  	regs->gs = 0;
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  22  #endif
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  23  	regs->ip = (unsigned long)&arch_rethook_trampoline;
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  24  	regs->orig_ax = ~0UL;
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  25  	regs->sp += sizeof(long);
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  26  	frame_pointer = &regs->sp + 1;
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  27  
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  28  	/*
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  29  	 * The return address at 'frame_pointer' is recovered by the
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  30  	 * arch_rethook_fixup_return() which called from this
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  31  	 * rethook_trampoline_handler().
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  32  	 */
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  33  	rethook_trampoline_handler(regs, (unsigned long)frame_pointer);
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  34  
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  35  	/*
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  36  	 * Copy FLAGS to 'pt_regs::sp' so that arch_rethook_trapmoline()
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  37  	 * can do RET right after POPF.
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  38  	 */
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  39  	regs->sp = regs->flags;
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  40  }
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  41  NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
+9de3b995c35eb6 Masami Hiramatsu 2022-01-26  42  
+
+:::::: The code at line 14 was first introduced by commit
+:::::: 9de3b995c35eb68273cf462f30663340ee47f8d6 rethook: x86: Add rethook x86 implementation
+
+:::::: TO: Masami Hiramatsu <mhiramat@kernel.org>
+:::::: CC: Masami Hiramatsu <mhiramat@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
