@@ -1,42 +1,50 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DD52F24
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 02:40:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643856040; x=1675392040;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5oNu7F4MlsG8yp+wso+B0dX5F5Dm0Wx9os9ex8f7JXk=;
-  b=nj0ohQDfsBL2iniXmpRp2tUzz/dY6106ugOsRcfwZ22hx+RDL3YstZx6
-   YlA5WenKmLM9RMguG5G8d4yWsmf2n6c9lu7hGn2n8GdcIV/1mpCyPiAmp
-   Y2cQliSbZ2TQeuJ/zlHdkWJGNJ+bGaNvM5a2dupWqlkciaw/+kzPxVjO6
-   D8hKFEwU3pWEJJ8Ww5n9F8V7PFtbGpRYqpu951ejO7WxV2sG2k646VZfK
-   N8fsbbFoIkL0PFhcPGH4XRE1yF9+OCdKPO3Z8jUbxkLS00LNR1sDM+lN8
-   TcwEC/hgiY3Cf7/ttEOBHkthzrROCI+j14Yu3tUkCKCt1VL4ZrQN2oc9D
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="248281646"
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="248281646"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 18:40:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="620363652"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Feb 2022 18:40:39 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nFS34-000VS7-DO; Thu, 03 Feb 2022 02:40:38 +0000
-Date: Thu, 3 Feb 2022 10:39:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stuart Hayes <stuart.w.hayes@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH v2 3/3] Register auxiliary device for PCIe enclosure
- management
-Message-ID: <202202031021.1ORRkl1U-lkp@intel.com>
-References: <88898bbc85c85dce3c355c5f0399b593da0d4d27.1643822289.git.stuart.w.hayes@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D53C2F24
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 03:15:55 +0000 (UTC)
+Received: by mail-pg1-f182.google.com with SMTP id g20so1138800pgn.10
+        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 19:15:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hBU4JFbPBzxehHqfaF4K5jjXVFa9V7j6ayn4pyPjLaM=;
+        b=kqJ580ShflAK7PUZHi/P2jKpyhV4HdvOAkzRMDOXphgVHJDXjkbbfkesDFRNxf0+qJ
+         tJ1MxkONvRpYPTFo3q2EezC9wXVqZ0szg12Y9gzBHLK9ON4Gr6Avap52/jirLO0zgDkp
+         7G5Likj54d31ySNRMCJLMPvTdkvi06Kl5pdtU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hBU4JFbPBzxehHqfaF4K5jjXVFa9V7j6ayn4pyPjLaM=;
+        b=zb6ytrccpHPHZtS09u5B/EVZ+6ttkjWWggbtFG1MXKxPgnplbRlC896oBOw/+HL3+H
+         31tSlF93cnDgcfZektNktqLVQ8rhe8gbA9qsTL/pLwYUM0EXx1qabaDC0Ol/jBqin9kH
+         DOUF3q00oFu2NqkeWa4bQhyxIAA9MW8Fu2pXH5dJLHxv0HsTmAvi/FwePQBytdNioI1k
+         gby9MkNszL1RkkeJXbg6eVHeYTq/gP4vbv6plVhqSqrsrLYtr76gUMneUPdrmTsGwK0R
+         dfoWzYQl/XeCzuAXUUMoEZeGP8Z9PhjJAQ0iSm5Ah9UzqJ5+ZU8zqpfHfYy9m1O94id5
+         PN7w==
+X-Gm-Message-State: AOAM531Es+VdstXwNhc9xB3cDEFKTpxPKnxId6oar0v/bYGXaVP3/eaq
+	hh+BQ9qtamVaRcnm7DJenA28cQ==
+X-Google-Smtp-Source: ABdhPJz/3irb1Mvta4DMVHkwV3P0zPfm1aoio/loPBUWG0M3eXDB+5Sxu3J3QxmOSYOFPFttFvqOKg==
+X-Received: by 2002:a63:5f44:: with SMTP id t65mr26353024pgb.587.1643858154753;
+        Wed, 02 Feb 2022 19:15:54 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a38sm26562425pfx.46.2022.02.02.19.15.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 19:15:54 -0800 (PST)
+Date: Wed, 2 Feb 2022 19:15:53 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	George Burgess IV <gbiv@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 4/4 v5] fortify: Add Clang support
+Message-ID: <202202021909.F46DE164@keescook>
+References: <20220202003033.704951-1-keescook@chromium.org>
+ <20220202003033.704951-5-keescook@chromium.org>
+ <CAKwvOdm1O+cKn5C86C2cB7hUCupv+Mf0w1d1pcaUNniYvc5jEw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,86 +53,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <88898bbc85c85dce3c355c5f0399b593da0d4d27.1643822289.git.stuart.w.hayes@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOdm1O+cKn5C86C2cB7hUCupv+Mf0w1d1pcaUNniYvc5jEw@mail.gmail.com>
 
-Hi Stuart,
+On Wed, Feb 02, 2022 at 01:22:09PM -0800, Nick Desaulniers wrote:
+> On Tue, Feb 1, 2022 at 4:30 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > --- a/security/Kconfig
+> > +++ b/security/Kconfig
+> > @@ -179,7 +179,7 @@ config FORTIFY_SOURCE
+> >         depends on ARCH_HAS_FORTIFY_SOURCE
+> >         # https://bugs.llvm.org/show_bug.cgi?id=50322
+> >         # https://bugs.llvm.org/show_bug.cgi?id=41459
+> > -       depends on !CC_IS_CLANG
+> > +       depends on !CC_IS_CLANG || CLANG_VERSION >= 130000
+> 
+> Are these comments still relevant, and is the clang version still correct?
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on helgaas-pci/next]
-[also build test WARNING on char-misc/char-misc-testing pavel-leds/for-next linus/master v5.17-rc2 next-20220202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Oh, good call. I thought the version was still correct (more below),
+but yes, the comments need adjusting.
 
-url:    https://github.com/0day-ci/linux/commits/Stuart-Hayes/Add-PCIe-enclosure-management-support/20220203-020040
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: x86_64-randconfig-a015-20220131 (https://download.01.org/0day-ci/archive/20220203/202202031021.1ORRkl1U-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/407e7eb11ce495697eb2ee66d77f20d69548be14
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stuart-Hayes/Add-PCIe-enclosure-management-support/20220203-020040
-        git checkout 407e7eb11ce495697eb2ee66d77f20d69548be14
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/frequency/ drivers/nvme/host/
+> In https://lore.kernel.org/llvm/CANiq72n1d7ouKNi+pbsy7chsg0DfCXxez27qqtS9XE1n3m5=8Q@mail.gmail.com/
+> Miguel notes that diagnose_as only exists in clang-14+.  If this
+> series relies on diagnose_as, then should this version check be for
+> clang-14+ rather than clang-13+?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It doesn't rely on it; this is just taking advantage of an improvement.
 
-All warnings (new ones prefixed by >>):
+> https://bugs.llvm.org/show_bug.cgi?id=50322 is still open, but doesn't
+> signify why there's a version check. It makes sense if there's no
+> version check, but I'm not sure it's still relevant to this Kconfig
+> option after your series.
 
-   In file included from drivers/nvme/host/pci.c:31:
->> include/linux/pcie_em.h:25:38: warning: use of logical '||' with constant operand [-Wconstant-logical-operand]
-                                      1 << GET_SUPPORTED_STATES_DSM ||
-                                                                    ^
-   include/linux/pcie_em.h:25:38: note: use '|' for a bitwise operation
-                                      1 << GET_SUPPORTED_STATES_DSM ||
-                                                                    ^~
-                                                                    |
-   include/linux/pcie_em.h:26:27: warning: use of logical '||' with constant operand [-Wconstant-logical-operand]
-                                      1 << GET_STATE_DSM ||
-                                                         ^
-   include/linux/pcie_em.h:26:27: note: use '|' for a bitwise operation
-                                      1 << GET_STATE_DSM ||
-                                                         ^~
-                                                         |
->> include/linux/pcie_em.h:27:10: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
-                                      1 << SET_STATE_DSM))
-                                        ^
-   include/linux/pcie_em.h:25:10: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
-                                      1 << GET_SUPPORTED_STATES_DSM ||
-                                        ^
-   include/linux/pcie_em.h:26:10: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
-                                      1 << GET_STATE_DSM ||
-                                        ^
-   5 warnings generated.
+With __overloadable, this probably ended up going away.
 
+> https://bugs.llvm.org/show_bug.cgi?id=41459 was fixed in clang-13, but
+> it was also backported to the clang 12.0.1 release.  Is it still
+> relevant if we're gated on diagnose_as from clang-14?
 
-vim +25 include/linux/pcie_em.h
+Ah-ha! I missed that this got backported. Looks like 12.0.1 and later
+have this fixed. That's excellent!
 
-eefb0f75026145 Stuart Hayes 2022-02-02  15  
-eefb0f75026145 Stuart Hayes 2022-02-02  16  static inline bool pci_has_pcie_em_dsm(struct pci_dev *pdev)
-eefb0f75026145 Stuart Hayes 2022-02-02  17  {
-eefb0f75026145 Stuart Hayes 2022-02-02  18  #ifdef CONFIG_ACPI
-eefb0f75026145 Stuart Hayes 2022-02-02  19  	acpi_handle handle;
-eefb0f75026145 Stuart Hayes 2022-02-02  20  	const guid_t pcie_ssd_leds_dsm_guid = PCIE_SSD_LEDS_DSM_GUID;
-eefb0f75026145 Stuart Hayes 2022-02-02  21  
-eefb0f75026145 Stuart Hayes 2022-02-02  22  	handle = ACPI_HANDLE(&pdev->dev);
-eefb0f75026145 Stuart Hayes 2022-02-02  23  	if (handle)
-eefb0f75026145 Stuart Hayes 2022-02-02  24  		if (acpi_check_dsm(handle, &pcie_ssd_leds_dsm_guid, 0x1,
-eefb0f75026145 Stuart Hayes 2022-02-02 @25  				   1 << GET_SUPPORTED_STATES_DSM ||
-eefb0f75026145 Stuart Hayes 2022-02-02 @26  				   1 << GET_STATE_DSM ||
-eefb0f75026145 Stuart Hayes 2022-02-02 @27  				   1 << SET_STATE_DSM))
-eefb0f75026145 Stuart Hayes 2022-02-02  28  			return true;
-eefb0f75026145 Stuart Hayes 2022-02-02  29  #endif
-eefb0f75026145 Stuart Hayes 2022-02-02  30  	return false;
-eefb0f75026145 Stuart Hayes 2022-02-02  31  }
-eefb0f75026145 Stuart Hayes 2022-02-02  32  
+> Perhaps a single comment, about the diagnose_as attribute or a link to
+> https://reviews.llvm.org/rGbc5f2d12cadce765620efc56a1ca815221db47af or
+> whatever, and updating the version check to be against clang-14 would
+> be more precise?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Yup, I will rework this after double-checking 12.0.1 builds.
+
+Thanks!
+
+-- 
+Kees Cook
