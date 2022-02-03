@@ -1,42 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93A12F23
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 05:02:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A32829CA
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 05:23:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643864568; x=1675400568;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EB6Qi17gLu5INZqtvGHAXsNGDFjiuaadSKRyvKfjSKc=;
-  b=RfHGbRpSrFgW8AYyGJgvA1yFj8Yy/Ldrl+mtVyoZT746XlPwA+o+x0PL
-   lcOYDn58hETceUQH+1dGipMam7IxKOZaNOGv7feJy6D8ricm3lBayb2kY
-   c3aRp4wYXESgq6kYqUYIyIGUrK+b/0svUmnzAdJX6qfkMYd3dYYcVnDUk
-   CTk0tCyToLxDaWqR+ulgWYqb7MC38uIiV5IzhlFAIngYZJ8iP74u+T/Rf
-   LFyjDNpvVoTpslqa7z2jGQ5jzbDd7VHNGOLoHL1aVeGgC3LVLMw1SERFN
-   FmTzg45HEHFVm94rahN7ankfWuI14a0g6PX0Cs7yzSBaQKubqAahGyPNl
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="248292856"
+  t=1643865831; x=1675401831;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fG0m/RXUF4OlUWOTpCXAv3rLGBTu2HjEplkreSuJKL4=;
+  b=AbYeaSjGoLDU+OayYV9TaaoVo/lkKf3B46d8F7h+pg6WRmct8uFToTvg
+   nxNKCFIC8Vk3QB5x1izn+mKRQPBlgpSzs2W112cO+LsEnAasxhJpga8QU
+   5AYPk2TIesPuWrvEKqIZdUojQHq9wCtZBOOTsQZerprb2TlQ7tOKEXNzt
+   9+1Ucz1yL3hufCy6Xp3C9qIfK3IP9pfjFhq2r9Or1HKnSZn2dGNvdNMQ1
+   FB7aEXlYQ5hYdSpGZIu94YARyGn1VFTVlBdYz9JaSXAxa5D4fygb1rPpr
+   aqYHS2wRjdoW3CLAQ1xoHu7OX9Gq+0LZ52KVoWHCFEBnXXVZT/y+uqWM8
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="248030301"
 X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
-   d="scan'208";a="248292856"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 21:02:48 -0800
+   d="scan'208";a="248030301"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 21:23:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
-   d="scan'208";a="583677457"
+   d="scan'208";a="480373471"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Feb 2022 21:02:46 -0800
+  by orsmga003.jf.intel.com with ESMTP; 02 Feb 2022 21:23:48 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nFUGc-000Vbm-8R; Thu, 03 Feb 2022 05:02:46 +0000
-Date: Thu, 3 Feb 2022 13:02:29 +0800
+	id 1nFUax-000Ve9-Ll; Thu, 03 Feb 2022 05:23:47 +0000
+Date: Thu, 3 Feb 2022 13:23:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Manisha Chinthapally <manisha.chinthapally@intel.com>
+To: Eric Dumazet <eric.dumazet@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mchinth:sep_socwatch_linux_5_16 1/1]
- drivers/platform/x86/sepdk/sep/pmi.c:81:5: warning: no previous prototype
- for function 'pmi_Get_CSD'
-Message-ID: <202202031242.MnDxM5zu-lkp@intel.com>
+	netdev <netdev@vger.kernel.org>, Eric Dumazet <edumazet@google.com>,
+	Coco Li <lixiaoyan@google.com>
+Subject: Re: [PATCH net-next 09/15] net: increase MAX_SKB_FRAGS
+Message-ID: <202202031315.B425Ipe8-lkp@intel.com>
+References: <20220203015140.3022854-10-eric.dumazet@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,150 +48,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220203015140.3022854-10-eric.dumazet@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_16
-head:   4cbfca15a262729ae8557758b49226fe4769f582
-commit: 4cbfca15a262729ae8557758b49226fe4769f582 [1/1] Platform/x86 Updated SEP/SOCPERF drivers to latest version
-config: x86_64-randconfig-a015-20220131 (https://download.01.org/0day-ci/archive/20220203/202202031242.MnDxM5zu-lkp@intel.com/config)
+Hi Eric,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/0day-ci/linux/commits/Eric-Dumazet/tcp-BIG-TCP-implementation/20220203-095336
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 52dae93f3bad842c6d585700460a0dea4d70e096
+config: hexagon-randconfig-r045-20220130 (https://download.01.org/0day-ci/archive/20220203/202202031315.B425Ipe8-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/mchinth/linux/commit/4cbfca15a262729ae8557758b49226fe4769f582
-        git remote add mchinth https://github.com/mchinth/linux
-        git fetch --no-tags mchinth sep_socwatch_linux_5_16
-        git checkout 4cbfca15a262729ae8557758b49226fe4769f582
+        # https://github.com/0day-ci/linux/commit/64ec6b0260be94b2ed90ee6d139591bdbd49c82d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Eric-Dumazet/tcp-BIG-TCP-implementation/20220203-095336
+        git checkout 64ec6b0260be94b2ed90ee6d139591bdbd49c82d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/x86/sepdk/pax/ drivers/platform/x86/sepdk/sep/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/platform/x86/sepdk/pax/pax.c:171:5: warning: no previous prototype for function 'pax_Disable_NMIWatchdog' [-Wmissing-prototypes]
-   S32 pax_Disable_NMIWatchdog(PVOID data)
-       ^
-   drivers/platform/x86/sepdk/pax/pax.c:171:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   S32 pax_Disable_NMIWatchdog(PVOID data)
-   ^
-   static 
->> drivers/platform/x86/sepdk/pax/pax.c:240:5: warning: no previous prototype for function 'pax_Check_NMIWatchdog' [-Wmissing-prototypes]
-   S32 pax_Check_NMIWatchdog(PVOID data)
-       ^
-   drivers/platform/x86/sepdk/pax/pax.c:240:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   S32 pax_Check_NMIWatchdog(PVOID data)
-   ^
-   static 
->> drivers/platform/x86/sepdk/pax/pax.c:280:5: warning: no previous prototype for function 'pax_Enable_NMIWatchdog' [-Wmissing-prototypes]
-   S32 pax_Enable_NMIWatchdog(PVOID data)
-       ^
-   drivers/platform/x86/sepdk/pax/pax.c:280:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   S32 pax_Enable_NMIWatchdog(PVOID data)
-   ^
-   static 
-   drivers/platform/x86/sepdk/pax/pax.c:700:22: warning: no previous prototype for function 'pax_Service_IOCTL' [-Wmissing-prototypes]
-   extern IOCTL_OP_TYPE pax_Service_IOCTL(IOCTL_USE_INODE struct file *filp,
-                        ^
-   drivers/platform/x86/sepdk/pax/pax.c:700:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   extern IOCTL_OP_TYPE pax_Service_IOCTL(IOCTL_USE_INODE struct file *filp,
-          ^
-   drivers/platform/x86/sepdk/inc/control.h:60:23: note: expanded from macro 'IOCTL_OP_TYPE'
-   #define IOCTL_OP_TYPE long
-                         ^
-   drivers/platform/x86/sepdk/pax/pax.c:738:13: warning: no previous prototype for function 'pax_Device_Control' [-Wmissing-prototypes]
-   extern long pax_Device_Control(IOCTL_USE_INODE struct file *filp,
-               ^
-   drivers/platform/x86/sepdk/pax/pax.c:738:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   extern long pax_Device_Control(IOCTL_USE_INODE struct file *filp,
-          ^
-   drivers/platform/x86/sepdk/pax/pax.c:744:6: warning: variable 'local_args' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (arg) {
-               ^~~
-   drivers/platform/x86/sepdk/pax/pax.c:749:56: note: uninitialized use occurs here
-           status = pax_Service_IOCTL(IOCTL_USE_INODE filp, cmd, local_args);
-                                                                 ^~~~~~~~~~
-   drivers/platform/x86/sepdk/pax/pax.c:744:2: note: remove the 'if' if its condition is always true
-           if (arg) {
-           ^~~~~~~~~
-   drivers/platform/x86/sepdk/pax/pax.c:742:2: note: variable 'local_args' is declared here
-           IOCTL_ARGS_NODE local_args;
-           ^
-   drivers/platform/x86/sepdk/pax/pax.c:859:12: warning: no previous prototype for function 'pax_Load' [-Wmissing-prototypes]
-   extern int pax_Load(VOID)
-              ^
-   drivers/platform/x86/sepdk/pax/pax.c:859:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   extern int pax_Load(VOID)
-          ^
-   drivers/platform/x86/sepdk/pax/pax.c:935:13: warning: no previous prototype for function 'pax_Unload' [-Wmissing-prototypes]
-   extern VOID pax_Unload(VOID)
-               ^
-   drivers/platform/x86/sepdk/pax/pax.c:935:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   extern VOID pax_Unload(VOID)
-          ^
-   8 warnings generated.
---
->> drivers/platform/x86/sepdk/sep/pmi.c:81:5: warning: no previous prototype for function 'pmi_Get_CSD' [-Wmissing-prototypes]
-   U32 pmi_Get_CSD(U32 seg, U32 *low, U32 *high)
-       ^
-   drivers/platform/x86/sepdk/sep/pmi.c:81:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   U32 pmi_Get_CSD(U32 seg, U32 *low, U32 *high)
-   ^
-   static 
-   1 warning generated.
+   In file included from kernel/bpf/btf.c:22:
+>> include/linux/skmsg.h:41:1: error: static_assert failed due to requirement '32 >= (45UL + 1)' "BITS_PER_LONG >= NR_MSG_FRAG_IDS"
+   static_assert(BITS_PER_LONG >= NR_MSG_FRAG_IDS);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:34: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:41: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                           ^              ~~~~
+   1 error generated.
 
 
-vim +/pmi_Get_CSD +81 drivers/platform/x86/sepdk/sep/pmi.c
+vim +41 include/linux/skmsg.h
 
-d605aabab41663 Jon Moeller          2018-11-13   80  
-d605aabab41663 Jon Moeller          2018-11-13  @81  U32 pmi_Get_CSD(U32 seg, U32 *low, U32 *high)
-d605aabab41663 Jon Moeller          2018-11-13   82  {
-d605aabab41663 Jon Moeller          2018-11-13   83  	PVOID gdt_max_addr;
-d605aabab41663 Jon Moeller          2018-11-13   84  	struct desc_struct *gdt;
-d605aabab41663 Jon Moeller          2018-11-13   85  	CodeDescriptor *csd;
-d605aabab41663 Jon Moeller          2018-11-13   86  
-d605aabab41663 Jon Moeller          2018-11-13   87  	SEP_DRV_LOG_TRACE_IN("Seg: %u, low: %p, high: %p.", seg, low, high);
-d605aabab41663 Jon Moeller          2018-11-13   88  
-d605aabab41663 Jon Moeller          2018-11-13   89  	gdt_max_addr =
-d605aabab41663 Jon Moeller          2018-11-13   90  		(PVOID)(((U64)gdt_desc.idtgdt_base) + gdt_desc.idtgdt_limit);
-d605aabab41663 Jon Moeller          2018-11-13   91  	gdt = gdt_desc.idtgdt_base;
-d605aabab41663 Jon Moeller          2018-11-13   92  
-d605aabab41663 Jon Moeller          2018-11-13   93  	if (seg & IS_LDT_BIT) {
-d605aabab41663 Jon Moeller          2018-11-13   94  		*low = 0;
-d605aabab41663 Jon Moeller          2018-11-13   95  		*high = 0;
-d605aabab41663 Jon Moeller          2018-11-13   96  		SEP_DRV_LOG_TRACE_OUT("FALSE [%u, %u] (IS_LDT_BIT).", *low,
-d605aabab41663 Jon Moeller          2018-11-13   97  				      *high);
-4cbfca15a26272 Manisha Chinthapally 2022-02-02   98  		return (FALSE);
-d605aabab41663 Jon Moeller          2018-11-13   99  	}
-d605aabab41663 Jon Moeller          2018-11-13  100  
-d605aabab41663 Jon Moeller          2018-11-13  101  	// segment offset is based on dropping the bottom 3 bits...
-d605aabab41663 Jon Moeller          2018-11-13  102  	csd = (CodeDescriptor *)&(gdt[seg >> SEGMENT_SHIFT]);
-d605aabab41663 Jon Moeller          2018-11-13  103  
-d605aabab41663 Jon Moeller          2018-11-13  104  	if (((PVOID)csd) >= gdt_max_addr) {
-d605aabab41663 Jon Moeller          2018-11-13  105  		SEP_DRV_LOG_WARNING_TRACE_OUT(
-d605aabab41663 Jon Moeller          2018-11-13  106  			"FALSE (segment too big in get_CSD(0x%x)!).", seg);
-d605aabab41663 Jon Moeller          2018-11-13  107  		return FALSE;
-d605aabab41663 Jon Moeller          2018-11-13  108  	}
-d605aabab41663 Jon Moeller          2018-11-13  109  
-d605aabab41663 Jon Moeller          2018-11-13  110  	*low = csd->u1.lowWord;
-d605aabab41663 Jon Moeller          2018-11-13  111  	*high = csd->u2.highWord;
-d605aabab41663 Jon Moeller          2018-11-13  112  
-d605aabab41663 Jon Moeller          2018-11-13  113  	SEP_DRV_LOG_TRACE("Seg 0x%x, low %08x, high %08x, reserved_0: %d.", seg,
-d605aabab41663 Jon Moeller          2018-11-13  114  			  *low, *high, csd->u2.s2.reserved_0);
-d605aabab41663 Jon Moeller          2018-11-13  115  	SEP_DRV_LOG_TRACE_OUT("TRUE [%u, %u].", *low, *high);
-d605aabab41663 Jon Moeller          2018-11-13  116  
-d605aabab41663 Jon Moeller          2018-11-13  117  	return TRUE;
-d605aabab41663 Jon Moeller          2018-11-13  118  }
-d605aabab41663 Jon Moeller          2018-11-13  119  #endif
-d605aabab41663 Jon Moeller          2018-11-13  120  
-
-:::::: The code at line 81 was first introduced by commit
-:::::: d605aabab41663c9be9e8c549042933189adbf2f platform/x86: add sep and socwatch drivers without socperf.
-
-:::::: TO: Jon Moeller <jon.moeller@intel.com>
-:::::: CC: Faycal Benmlih <faycal.benmlih@intel.com>
+604326b41a6fb9 Daniel Borkmann 2018-10-13  25  
+604326b41a6fb9 Daniel Borkmann 2018-10-13  26  struct sk_msg_sg {
+604326b41a6fb9 Daniel Borkmann 2018-10-13  27  	u32				start;
+604326b41a6fb9 Daniel Borkmann 2018-10-13  28  	u32				curr;
+604326b41a6fb9 Daniel Borkmann 2018-10-13  29  	u32				end;
+604326b41a6fb9 Daniel Borkmann 2018-10-13  30  	u32				size;
+604326b41a6fb9 Daniel Borkmann 2018-10-13  31  	u32				copybreak;
+163ab96b52ae2b Jakub Kicinski  2019-10-06  32  	unsigned long			copy;
+031097d9e079e4 Jakub Kicinski  2019-11-27  33  	/* The extra two elements:
+031097d9e079e4 Jakub Kicinski  2019-11-27  34  	 * 1) used for chaining the front and sections when the list becomes
+031097d9e079e4 Jakub Kicinski  2019-11-27  35  	 *    partitioned (e.g. end < start). The crypto APIs require the
+031097d9e079e4 Jakub Kicinski  2019-11-27  36  	 *    chaining;
+031097d9e079e4 Jakub Kicinski  2019-11-27  37  	 * 2) to chain tailer SG entries after the message.
+d3b18ad31f93d0 John Fastabend  2018-10-13  38  	 */
+031097d9e079e4 Jakub Kicinski  2019-11-27  39  	struct scatterlist		data[MAX_MSG_FRAGS + 2];
+604326b41a6fb9 Daniel Borkmann 2018-10-13  40  };
+031097d9e079e4 Jakub Kicinski  2019-11-27 @41  static_assert(BITS_PER_LONG >= NR_MSG_FRAG_IDS);
+604326b41a6fb9 Daniel Borkmann 2018-10-13  42  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
