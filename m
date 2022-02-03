@@ -1,80 +1,147 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3022F24
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 03:18:05 +0000 (UTC)
-Received: by mail-pf1-f182.google.com with SMTP id i65so1043216pfc.9
-        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 19:18:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4QtPGJsJdjtleT4SCvDltRv0MUxS6HLkC+/jHaWkak0=;
-        b=JGtI0UZ6Ck0rSbexL4Ad25l0q5f+gKaACzYjSkD65cN3hv2n7lC8GRTPAt3pmfHCyb
-         Wf9YGN1zv874GvRTML77HPoG8fJ5LM0e8i2CXvMNyXiPrydyVDfkVz0S+AVM/LzWWTLX
-         o4bOgZ8bo/WHDcNzDyY5pA/pQtGAfaasgfirU=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C43C2F24
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 03:36:21 +0000 (UTC)
+Received: by mail-io1-f72.google.com with SMTP id k2-20020a6bba02000000b00604f85cceffso950337iof.11
+        for <llvm@lists.linux.dev>; Wed, 02 Feb 2022 19:36:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4QtPGJsJdjtleT4SCvDltRv0MUxS6HLkC+/jHaWkak0=;
-        b=T2Z0a7lkAJIwbMGM/LRdBDcnaHSdDaBy6aXzESPJiOoVApB5F0T3gqcWS2QX+gTlw4
-         g3xNTbtRIY1Co9HOAB7HPkjSBqW4he6hMkjg4Ua2dVLGjlppIPr+Sah95tEV2d+W5nkz
-         BOiOr7o+c47gsZcG083fwGELr0xA76Zk7fWsrShI1B3J6bS7V/ImcpDXCrrMBD82Cs4E
-         XCKNmeHDAbfVYi2Rt1FD4GlMO6RU8gsxpyd/TJ9jJeJNOBe2SWPmVaNQnKYhlfv1m/Lj
-         TEqUXPC+dNg8vgzL6JGC3fdlYFwv/QhjqR+D2ynOV0FE57yo4NibvAbJ99jyYnBSAPgl
-         OSFw==
-X-Gm-Message-State: AOAM532ybTZm+E0+Y9h19MEw/G7J4llBoiWbzORtDiA3jJUhI4CIB4zc
-	Z3SKLYoYKSEmO/jBsrm59EXj9KaTfJUpLA==
-X-Google-Smtp-Source: ABdhPJw6xMNyvSowwi3MnsmqNRcX44gydSmfXvKKmKbpkqwqzSvA7MVZmoUU5NQNycnkiWAt/5IKCQ==
-X-Received: by 2002:a65:6d89:: with SMTP id bc9mr26747916pgb.260.1643858285384;
-        Wed, 02 Feb 2022 19:18:05 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k15sm27170877pff.39.2022.02.02.19.18.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 19:18:05 -0800 (PST)
-Date: Wed, 2 Feb 2022 19:18:04 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	George Burgess IV <gbiv@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH 4/4 v5] fortify: Add Clang support
-Message-ID: <202202021916.9606A43C88@keescook>
-References: <20220202003033.704951-1-keescook@chromium.org>
- <20220202003033.704951-5-keescook@chromium.org>
- <CAKwvOd=icTwyFb39U3OO5i_2YNJMiCMteeNTrVe-Q0tcmmnBJQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=7x6rKhaHmrAEYlIz/NCtXjuxWLWqRjW+skTvrls9++k=;
+        b=8I8G0EJ3nuwOTt+dCLnK8wLdsWZVJsdE+Cay3ga6kGMBaxQ3p+B1raSKmaShwK18Cb
+         wACwkx1pT0kAVXkLSq+SkOc9p//PB0FIpVXeFsdpx+Y+1hgWFdAJDxWmuYrxMQ93Vcn3
+         XpFr4w+gEglsbfxNZapzJAyY1VAG+sfS+/H/UH5XoKKWRizliczKUx3Bq2q7IahuIwle
+         QtqOt56KsfsrnWL4zo7MJHT8EnMzmFL+b6PPqjnA/dEFYg8aUPfXS8O86kl+VrYUJ4EB
+         qToJJD4tyD4itZkPjCXYP8gtaj73WZnAszDkHQGjm7rAjrKaJrBIiLnFkRbEWOraVapA
+         5+hQ==
+X-Gm-Message-State: AOAM532nf1cgnkeGE1L09Ehu7SZwmIeCXDRxPb75JOjbX1I1XU+AEt05
+	P2AK93Pr9mygk1jo1NP4zhXTnwlitZNbyZNF+hE/jbptCDIq
+X-Google-Smtp-Source: ABdhPJzZj1jMw6FAE6SvyayY5zdvayzSv5dg6luJoFgPyYb9thhsd7mbyIirTGhOCU69O6NNT0jIFBW7XgAFoaYYGIIlhZ5vZDyD
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=icTwyFb39U3OO5i_2YNJMiCMteeNTrVe-Q0tcmmnBJQ@mail.gmail.com>
+X-Received: by 2002:a02:711e:: with SMTP id n30mr16461827jac.235.1643859381164;
+ Wed, 02 Feb 2022 19:36:21 -0800 (PST)
+Date: Wed, 02 Feb 2022 19:36:21 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000079a24b05d714d69f@google.com>
+Subject: [syzbot] general protection fault in btf_decl_tag_resolve
+From: syzbot <syzbot+53619be9444215e785ed@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com, 
+	kpsingh@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org, 
+	songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Feb 02, 2022 at 01:27:11PM -0800, Nick Desaulniers wrote:
-> On Tue, Feb 1, 2022 at 4:30 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > +#define BOS    const __pass_object_size(1)
-> > +#define BOS0   const __pass_object_size(0)
-> 
-> A dumb bikeshed, but would you mind naming these BOS1 and BOS0, and
-> perhaps consider adding a comment or pointer or link to something that
-> describes why we use the two different modes?  I recognize that the
-> code already uses the two different modes already without comments,
-> but this might be a nice place to point folks like myself to so that
-> in a month or so when I forget what the difference is between modes
-> (again), we have a shorter trail of breadcrumbs.
+Hello,
 
-Sure, I can do that. My expectation was to entirely eliminate mode 0
-usage in the future.
+syzbot found the following issue on:
 
-Though now that things are so close, I'll just do some builds with the
-last few users switched over. But maybe memcmp() was a pain? I'll go
-check...
+HEAD commit:    b7892f7d5cb2 tools: Ignore errors from `which' when search..
+git tree:       bpf
+console output: https://syzkaller.appspot.com/x/log.txt?x=13181634700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5044676c290190f2
+dashboard link: https://syzkaller.appspot.com/bug?extid=53619be9444215e785ed
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16454914700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ceb884700000
 
--- 
-Kees Cook
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+53619be9444215e785ed@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 PID: 3592 Comm: syz-executor914 Not tainted 5.16.0-syzkaller-11424-gb7892f7d5cb2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:btf_type_vlen include/linux/btf.h:231 [inline]
+RIP: 0010:btf_decl_tag_resolve+0x83e/0xaa0 kernel/bpf/btf.c:3910
+Code: c1 ea 03 80 3c 02 00 0f 85 90 01 00 00 48 8b 1b e8 b7 c9 e6 ff 48 8d 7b 04 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 2b
+RSP: 0018:ffffc90001b1fa00 EFLAGS: 00010247
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff81918c09 RDI: 0000000000000004
+RBP: ffff888015c32000 R08: 0000000000000008 R09: 0000000000000008
+R10: ffffffff81918bb1 R11: 0000000000000001 R12: 0000000000000004
+R13: 0000000000000008 R14: 0000000000000000 R15: 0000000000000005
+FS:  00005555556fd300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f98c38b8220 CR3: 0000000019537000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btf_resolve+0x251/0x1020 kernel/bpf/btf.c:4198
+ btf_check_all_types kernel/bpf/btf.c:4239 [inline]
+ btf_parse_type_sec kernel/bpf/btf.c:4280 [inline]
+ btf_parse kernel/bpf/btf.c:4513 [inline]
+ btf_new_fd+0x19fe/0x2370 kernel/bpf/btf.c:6047
+ bpf_btf_load kernel/bpf/syscall.c:4039 [inline]
+ __sys_bpf+0x1cbb/0x5970 kernel/bpf/syscall.c:4679
+ __do_sys_bpf kernel/bpf/syscall.c:4738 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4736 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4736
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fd57f202099
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe9e5eb898 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd57f202099
+RDX: 0000000000000020 RSI: 0000000020000000 RDI: 0000000000000012
+RBP: 00007fd57f1c6080 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000ffffffff R11: 0000000000000246 R12: 00007fd57f1c6110
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:btf_type_vlen include/linux/btf.h:231 [inline]
+RIP: 0010:btf_decl_tag_resolve+0x83e/0xaa0 kernel/bpf/btf.c:3910
+Code: c1 ea 03 80 3c 02 00 0f 85 90 01 00 00 48 8b 1b e8 b7 c9 e6 ff 48 8d 7b 04 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 2b
+RSP: 0018:ffffc90001b1fa00 EFLAGS: 00010247
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff81918c09 RDI: 0000000000000004
+RBP: ffff888015c32000 R08: 0000000000000008 R09: 0000000000000008
+R10: ffffffff81918bb1 R11: 0000000000000001 R12: 0000000000000004
+R13: 0000000000000008 R14: 0000000000000000 R15: 0000000000000005
+FS:  00005555556fd300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000000 CR3: 0000000019537000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	c1 ea 03             	shr    $0x3,%edx
+   3:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   7:	0f 85 90 01 00 00    	jne    0x19d
+   d:	48 8b 1b             	mov    (%rbx),%rbx
+  10:	e8 b7 c9 e6 ff       	callq  0xffe6c9cc
+  15:	48 8d 7b 04          	lea    0x4(%rbx),%rdi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
+  2e:	48 89 f8             	mov    %rdi,%rax
+  31:	83 e0 07             	and    $0x7,%eax
+  34:	83 c0 03             	add    $0x3,%eax
+  37:	38 d0                	cmp    %dl,%al
+  39:	7c 08                	jl     0x43
+  3b:	84 d2                	test   %dl,%dl
+  3d:	0f                   	.byte 0xf
+  3e:	85 2b                	test   %ebp,(%rbx)
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
