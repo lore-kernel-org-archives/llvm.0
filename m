@@ -1,66 +1,88 @@
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB882F26
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 10:25:12 +0000 (UTC)
-Received: by mail-io1-f70.google.com with SMTP id a185-20020a6bcac2000000b00604c268546dso1581566iog.10
-        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 02:25:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Rxhq5+VXSIrIwj7a/GsrEywPOO2yQbABshUuuSgeFDs=;
-        b=EWr5uUT7TUzhj7RcRwj4/naKNWyapTQUxu4FmZiQit9K1v1adCU95hVH50jb2e4wvO
-         +UWAPJe8gsjm45QRcYnkmei6oHDXsDQhD9trYVvyGtxR1/a5xuAnea7WacP9hcWDx6Rz
-         xzFQ2UJn2/1PNyIi1JojZjjQQEBaAi8mf9GrzXSpYS8xhhBQnqnzMDrHmwJcGtm8hD3v
-         iqb2QZ80OfAqHvV3Ib98FvARJBpvyKEfBYTQQVuv9dsR0Loot59dp0tEmTKTsCBKZvgB
-         AyHOtMG1WpnMuW6OE2Pr17wdQCcSCPvHswY0PKYfKTjWCYEZImhyDqlDWw4M7rEGZ2o/
-         in+A==
-X-Gm-Message-State: AOAM5300OMKWnNsFjFsVN8CNZ4BK+oxbcI+XkjQD8ivlwciQ+u3zep9M
-	UP4MdrWNE2zaULECLQv7YW+X/pO+7ZMBTto/r3mLkzC3B8EI
-X-Google-Smtp-Source: ABdhPJwciDKQal6Z8tQiBUOtqqjZ9Z10+I25ua2fg40YZSw5o6TjWWvTvcWi43d589ZwucSUE+At081HdhPPiDtRhfgxGm6Iv0ds
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC43C2F23
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 14:07:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643897236; x=1675433236;
+  h=date:from:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HR7SB5DGxqkwWiH85+aMpuHVymu6Q5nUwZZRjs/KHqk=;
+  b=kA3PD8UKpkmMmYzKNx7VRh3ZXkFowD8jD6x4bO0VXcxf/WqyVKl8gYEL
+   SPKhoY5Axkh5QAtcukhYZ0PD7Opa+prXbTreVeWBC6B1wfr1p6ueONmnv
+   ChmLLH3Kp/9pL47+GwxRPbGmLJ7p8z0pmqx09XKZMmAhd25x6VZmfLV+u
+   16vFLi5seJSV64RuOucy3HHr2FI5mqPXHIbsg3x4cV9XvG9i4Xglj2kk6
+   xGznpsOLAOhAqhufzofdLrU2G9/WOoPSNT4lJThX2vLybqqPb3clO/8mu
+   EyJ00Uf0kr5IyoTFT1OF59FR9eOGj3yzPx99RlMv27eM6wTqya3KKQLb1
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="272644742"
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="272644742"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 06:07:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="676778849"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Feb 2022 06:07:15 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nFclW-000WCr-VM; Thu, 03 Feb 2022 14:07:14 +0000
+Date: Thu, 3 Feb 2022 22:06:20 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 2839/3941] ld.lld: error:
+ init/built-in.a(main.o):(function run_init_process: .text+0x36): relocation
+ R_RISCV_HI20 out of range: 529438 is not in [-524288, 524287]; references
+ argv_init
+Message-ID: <202202031843.jGKD9TfE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:f218:: with SMTP id q24mr17682264ioh.55.1643883911669;
- Thu, 03 Feb 2022 02:25:11 -0800 (PST)
-Date: Thu, 03 Feb 2022 02:25:11 -0800
-In-Reply-To: <00000000000079a24b05d714d69f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009b6eaa05d71a8c06@google.com>
-Subject: Re: [syzbot] general protection fault in btf_decl_tag_resolve
-From: syzbot <syzbot+53619be9444215e785ed@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	clang-built-linux@googlegroups.com, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, netdev@vger.kernel.org, songliubraving@fb.com, 
-	syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-syzbot has bisected this issue to:
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Dan Carpenter <error27@gmail.com>
+CC: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+CC: "Ville Syrjälä" <ville.syrjala@linux.intel.com>
 
-commit b5ea834dde6b6e7f75e51d5f66dac8cd7c97b5ef
-Author: Yonghong Song <yhs@fb.com>
-Date:   Tue Sep 14 22:30:15 2021 +0000
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   2d3d8c7643a56bfe2e808f97d5a4360d49f3b45b
+commit: 90a3d22ff02b196d5884e111f39271a1d4ee8e3e [2839/3941] drm/i915/overlay: Prevent divide by zero bugs in scaling
+config: riscv-buildonly-randconfig-r001-20220131 (https://download.01.org/0day-ci/archive/20220203/202202031843.jGKD9TfE-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=90a3d22ff02b196d5884e111f39271a1d4ee8e3e
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 90a3d22ff02b196d5884e111f39271a1d4ee8e3e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-    bpf: Support for new btf kind BTF_KIND_TAG
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12183484700000
-start commit:   b7892f7d5cb2 tools: Ignore errors from `which' when search..
-git tree:       bpf
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11183484700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16183484700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5044676c290190f2
-dashboard link: https://syzkaller.appspot.com/bug?extid=53619be9444215e785ed
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16454914700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ceb884700000
+Note: the linux-next/master HEAD 2d3d8c7643a56bfe2e808f97d5a4360d49f3b45b builds fine.
+      It may have been fixed somewhere.
 
-Reported-by: syzbot+53619be9444215e785ed@syzkaller.appspotmail.com
-Fixes: b5ea834dde6b ("bpf: Support for new btf kind BTF_KIND_TAG")
+All errors (new ones prefixed by >>):
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>> ld.lld: error: init/built-in.a(main.o):(function run_init_process: .text+0x36): relocation R_RISCV_HI20 out of range: 529438 is not in [-524288, 524287]; references argv_init
+   >>> referenced by main.c
+   >>> defined in init/built-in.a(main.o)
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
