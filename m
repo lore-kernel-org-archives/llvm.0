@@ -1,88 +1,63 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1912F28
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 21:04:14 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id z5so3283783plg.8
-        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 13:04:14 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214A22F28
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 21:13:08 +0000 (UTC)
+Received: by mail-io1-f48.google.com with SMTP id y84so5019044iof.0
+        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 13:13:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AXCyJIfbpLGxYBIbWAc7Goy/U+/enGtkfIUDufgG5no=;
-        b=RN+nNTd2KY08ojmx+rurrM8Bco9OeNs0WRScp2CK+r9LCNzp64NTOEMjXnQVm24qyo
-         wO7H8nt7ZgWhWAxYuOVShnWUfDiM9/1AiVV6vNCyTVEdoHah5R8ZjkopBY+8uUL+h7Eo
-         pOaE/TaH1Ss7lgkxTUQQORRBFTEXe9mi1T54M=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EAWfemoiqt84lCy0CQhK2iRzzP1lWnWiJOlRJH5DZgA=;
+        b=WYszGr9/9vMCZjMAMMWpwyOI0b8ae4edwyKf7kW/L0XP2dJ17AwmdNEY5WZsqp46VE
+         2auGlnnWLqq1tcFf8xB9PjXkBdzkR1DCVzo+FlH3RonUnQG37cKSpLHHhKLRAeQ9u82x
+         KDvoj3P2RnEmL5cBB91xGGaZrxQGl26u8O5Z0FvAU0zZmNJ9f1lgxZyJZxPG70/M9R/b
+         ZJB33zZByxUV7wFEaqLYgd+ex02n6v5Sin73zmgz1phF7SzYYXJbOCMs59DKN89l7R9o
+         +chzwqlWS6j1F58bNrzGZ2ob7HrdIQfuBWHLmCaIFNOrRvUB+BOcGjoJeBolVVl6dluW
+         Wyog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AXCyJIfbpLGxYBIbWAc7Goy/U+/enGtkfIUDufgG5no=;
-        b=j4hGG2kEyfceBC4S9EE4K0g8mSp7LA8S78UZ5rzh9/jab8uFHjH8QBCpNpWsrin+0C
-         vfvPsoIMGiy9MloCfcbvfLapywS9ZMzmc6n3Xe/Bn/j1KSOJnc+ES+n47IBqd1JOQ3A8
-         LusLkFcea7PFEE3+QkQe666jWZtaCaQGF14WIBIrfwihJI8zgyUZTyFeO3CQJRt/y/rK
-         Q9XwRpCag30Yy6fpWEoDh6FU5CmdkTL9GaOWyU2eIt+vsxOJ2FVDZVuu64xMrU05DfGR
-         T686QavJ3NdohUV1pbcqKZl7uIKD39pZovIHRNHIJOsL1cS+wRq+jU9vSpGU157VgZkc
-         z0/g==
-X-Gm-Message-State: AOAM532Q0jxMul+GqC8BEHyYP7PjygUTQoGhtJ4tizLfnK7VqzkYPTHF
-	ymgeqT/VzoZTT5HvKcWHUzmYRQ==
-X-Google-Smtp-Source: ABdhPJzHdXzL/QHbPAYTIAbR5kUmDhbNvKJm0lPvrYqdexCUwxFUHuGjIxkP9nZ73WuTSjfPXxN9BQ==
-X-Received: by 2002:a17:90b:1d0a:: with SMTP id on10mr15687871pjb.167.1643922253959;
-        Thu, 03 Feb 2022 13:04:13 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o9sm18049411pfw.86.2022.02.03.13.04.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 13:04:13 -0800 (PST)
-Date: Thu, 3 Feb 2022 13:04:12 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	llvm@lists.linux.dev, George Burgess IV <gbiv@google.com>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v6 2/4] Compiler Attributes: Add __overloadable for Clang
-Message-ID: <202202031301.437D8FD3@keescook>
-References: <20220203173307.1033257-1-keescook@chromium.org>
- <20220203173307.1033257-3-keescook@chromium.org>
- <CAKwvOdkU=5q-7Sb4BKYkRsigy_qYjo_7J+A73ZYKn+xArxUwXg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EAWfemoiqt84lCy0CQhK2iRzzP1lWnWiJOlRJH5DZgA=;
+        b=odVfg0Ta9hQf8k/ayfkNaoO21zBlUauI/8MfPVUDJUbWwf6GE69MmHaOQsbnObnPwT
+         EIdaIAgzDkMbdemy/ofFVLbBuCCD0dWKCsRkYKz3eTX74jKpV1oaiShe7zk24VGmvfDz
+         FkEHVRKLiuyYfPeVq75LT3qMTrM02Ba06XFK4PELEAGt1OcBkh5cCvJM2lwqscnn7yOb
+         4L4L/wCmRV6Ixs7Djo4YD1ExYNi+2cysfyQ1dkDt1ctpGrj0WMQ/Aths5g8BZK7djmOz
+         3/dQd8zzfJ58LfaE/BLyjk5APileDVpBgn7xg+aOEu6N1jGlzdwgaxQxRcOh/Gc/9ewS
+         H4eg==
+X-Gm-Message-State: AOAM531wEmTGes+3836W9rcCXTcdOhEkGjGxDXzbGmJ5btfuIzntpMEk
+	ZiEAeH4TGWQF/UOywjWzpWngXbvsxSdMk10XPM0=
+X-Google-Smtp-Source: ABdhPJwjzT9x6XYF9AVrKVnK4BdNmajWV1Dh6FA+YNP9fOCDXz2KjrJZigMbMtsj+hSp1in1/oF741KFxCePyDUQSJk=
+X-Received: by 2002:a05:6638:4105:: with SMTP id ay5mr19025118jab.186.1643922787187;
+ Thu, 03 Feb 2022 13:13:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdkU=5q-7Sb4BKYkRsigy_qYjo_7J+A73ZYKn+xArxUwXg@mail.gmail.com>
+References: <20220203173307.1033257-1-keescook@chromium.org>
+ <CANiq72mnF5qxfHGoDmvueMY7n2us9ZtA-u3igCJ+QjcbfKMP=g@mail.gmail.com> <202202031157.E18FA7BAC@keescook>
+In-Reply-To: <202202031157.E18FA7BAC@keescook>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 3 Feb 2022 22:12:56 +0100
+Message-ID: <CANiq72==yx_VnA_b2NMNMbw19V2bzuDTddgRHGO94Vj0hXfiVw@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] fortify: Add Clang support
+To: Kees Cook <keescook@chromium.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, George Burgess IV <gbiv@google.com>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 03, 2022 at 12:26:15PM -0800, Nick Desaulniers wrote:
-> On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > In order for FORTIFY_SOURCE to use __pass_object_size on an "inline
-> > extern" function, as all the fortified string functions are, the functions
-> 
-> s/inline extern/extern inline/
+On Thu, Feb 3, 2022 at 8:57 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Thanks! Does this tag apply to the fortify-string.h patch as well?
 
-I will update that. :)
+No, I would have to take a better look at the new attributes. If you
+need it, I can try to find a bit of time.
 
-> 
-> Yes, they're the same thing, but it sounds backwards when I read it.
-> 
-> > must be marked as being overloadable (i.e. different prototypes).
-> > This allows the __pass_object_size versions to take precedence.
-> 
-> Is this because of the `const` additions to the function signatures?
-
-That might be an issue, but the *real* issue is the implicit mutation of
-the function into an inline with _additional_ arguments. i.e.
-
-char *strcpy(char * POS p, const char * POS q)
-
-is really
-
-char *strcpy(char * const p, const char * const q, size_t __size_of_p, size_t __size_of_q)
-
-(i.e. what I was doing with macros, but all internally and still an
-extern inline)
-
--- 
-Kees Cook
+Cheers,
+Miguel
