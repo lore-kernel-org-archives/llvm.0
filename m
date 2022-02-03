@@ -1,87 +1,83 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC43C2F23
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 14:07:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0332D2C9C
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 14:58:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643897236; x=1675433236;
-  h=date:from:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HR7SB5DGxqkwWiH85+aMpuHVymu6Q5nUwZZRjs/KHqk=;
-  b=kA3PD8UKpkmMmYzKNx7VRh3ZXkFowD8jD6x4bO0VXcxf/WqyVKl8gYEL
-   SPKhoY5Axkh5QAtcukhYZ0PD7Opa+prXbTreVeWBC6B1wfr1p6ueONmnv
-   ChmLLH3Kp/9pL47+GwxRPbGmLJ7p8z0pmqx09XKZMmAhd25x6VZmfLV+u
-   16vFLi5seJSV64RuOucy3HHr2FI5mqPXHIbsg3x4cV9XvG9i4Xglj2kk6
-   xGznpsOLAOhAqhufzofdLrU2G9/WOoPSNT4lJThX2vLybqqPb3clO/8mu
-   EyJ00Uf0kr5IyoTFT1OF59FR9eOGj3yzPx99RlMv27eM6wTqya3KKQLb1
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="272644742"
+  t=1643900300; x=1675436300;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ImiMr2RYxdnptVxqA2RLMhnyt9qe0IIe1pIH1aXifqQ=;
+  b=UxesYxzFtSRycWP37ji6ziPcZCYPZCVBmI2ijfheDCdQ0bsqmiP6kSd/
+   6O4aOleEOch2bMKmc0/6o3xkVsVANbUSG3WTweBql6vqze+/9m9uF/zkj
+   NjTvyvO8HuZv7z/GmSfwAdONAuHYLej3griRecbMxv+FEUI9TZrCuOXEm
+   eyYrvQOc0cLKGxumNjgKRSKwSroBAYP8Hp+y5TSoUg1/5Adb+f+8cJ9Fj
+   ZVukmM5XSIArzGXcb+TjDudfeRLfiEAmyWwE61WQvHOuXTp9pifarCJiX
+   5PgbT7zFw8Z69pESVR4QSAVhgvRDOm6XKsrSnT4dXdUCQMv/r6torvDBp
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="228808900"
 X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="272644742"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 06:07:16 -0800
+   d="scan'208";a="228808900"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 06:58:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="676778849"
+   d="scan'208";a="631363443"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Feb 2022 06:07:15 -0800
+  by orsmga004.jf.intel.com with ESMTP; 03 Feb 2022 06:58:17 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nFclW-000WCr-VM; Thu, 03 Feb 2022 14:07:14 +0000
-Date: Thu, 3 Feb 2022 22:06:20 +0800
+	id 1nFdYu-000WGU-PZ; Thu, 03 Feb 2022 14:58:16 +0000
+Date: Thu, 3 Feb 2022 22:57:56 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 2839/3941] ld.lld: error:
- init/built-in.a(main.o):(function run_init_process: .text+0x36): relocation
- R_RISCV_HI20 out of range: 529438 is not in [-524288, 524287]; references
- argv_init
-Message-ID: <202202031843.jGKD9TfE-lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [linux-next:master 147/3941] ld.lld: error: undefined symbol:
+ generic_handle_arch_irq
+Message-ID: <202202032250.kbvVm5aQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Dan Carpenter <error27@gmail.com>
-CC: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-CC: "Ville Syrjälä" <ville.syrjala@linux.intel.com>
+Hi Arnd,
+
+FYI, the error/warning still remains.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
 head:   2d3d8c7643a56bfe2e808f97d5a4360d49f3b45b
-commit: 90a3d22ff02b196d5884e111f39271a1d4ee8e3e [2839/3941] drm/i915/overlay: Prevent divide by zero bugs in scaling
-config: riscv-buildonly-randconfig-r001-20220131 (https://download.01.org/0day-ci/archive/20220203/202202031843.jGKD9TfE-lkp@intel.com/config)
+commit: 54f481a2308efab49d2b14c3f8263b34fdb1c65e [147/3941] ARM: remove old-style irq entry
+config: arm-randconfig-r021-20220201 (https://download.01.org/0day-ci/archive/20220203/202202032250.kbvVm5aQ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=90a3d22ff02b196d5884e111f39271a1d4ee8e3e
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=54f481a2308efab49d2b14c3f8263b34fdb1c65e
         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
         git fetch --no-tags linux-next master
-        git checkout 90a3d22ff02b196d5884e111f39271a1d4ee8e3e
+        git checkout 54f481a2308efab49d2b14c3f8263b34fdb1c65e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the linux-next/master HEAD 2d3d8c7643a56bfe2e808f97d5a4360d49f3b45b builds fine.
-      It may have been fixed somewhere.
-
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: init/built-in.a(main.o):(function run_init_process: .text+0x36): relocation R_RISCV_HI20 out of range: 529438 is not in [-524288, 524287]; references argv_init
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
+>> ld.lld: error: undefined symbol: generic_handle_arch_irq
+   >>> referenced by kernel/entry-armv.o:(__irq_svc) in archive arch/arm/built-in.a
+   >>> referenced by kernel/entry-armv.o:(__irq_usr) in archive arch/arm/built-in.a
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
