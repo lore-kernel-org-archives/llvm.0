@@ -1,103 +1,87 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BAB2F29
-	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 20:28:54 +0000 (UTC)
-Received: by mail-lj1-f181.google.com with SMTP id z7so5597394ljj.4
-        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 12:28:54 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FA429CA
+	for <llvm@lists.linux.dev>; Thu,  3 Feb 2022 20:37:54 +0000 (UTC)
+Received: by mail-lf1-f49.google.com with SMTP id z4so8510591lft.3
+        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 12:37:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dE4PlMp2a1dru6Yvr00TjP4LGifoJOnJbdvY7D0qQXE=;
-        b=izHSx7DC4nrqxIgxZRJkLP9jOC0nX6OfOCw+aiU4VxfU9p5iz1d7bXgrw5YhlDziGm
-         AD6Zm0kby2e8DxyVhgQ8XNP0oOpOYLl92qCaXWrYGTPukz9i49rNYFd/t1e9gR5SlE2y
-         uS3F4L4tKzV42KA7Lr2MPHcS4xw2HI0EFg3MQJhbiqQMYaGbpq0jCm0tKZSM+Zx+tHCg
-         Zof8dEsghHqoIZUdw92oCH5W9rejr813ucYe6ddVV715SkDVYUCHFkc3wiPfJ9BsfsHv
-         X9Xu+5i6cAArxarL7kIkWKLSBOQ9zY3kePqnlfv/rOjQEjQTdjukJLT+Kb+RjMtUptJu
-         uyFg==
+        bh=+VrxapYZdFw5zNLlkG7gwQPQd4MEqlLeWHHaNG101EE=;
+        b=iCzeaUDYVxkrKStctnh8zTlYnJAAnFTeTA+LUgTna1b2xHj7nYwsZzrWUq+lpOMu83
+         hFYTUH1t2BGH0R0K84qzSGj7WZfSb0zOJ2HX2O59nvLkeAlgQkjs9bUMrtHGXFVhvmdc
+         qbDBPiIfo/AIUQsTRKQ2xTIEHF3zDJM1D3Yzqtk4pigP8J+2t0QRhWVAfLHGALrVdDfB
+         4I78e9t1ZCyXsLUOqKmlUn0qY2tsP1rPnrag0+pKS/h0LkzxSWvPQ4BYmVAPzXL3YLyk
+         +epwFz/vCNK8khzRX+jNkDsGrbrZDaLCjSyTMAQUzHPPvzoQLjMbxNsKu2AjBSyTbvm8
+         Qkeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dE4PlMp2a1dru6Yvr00TjP4LGifoJOnJbdvY7D0qQXE=;
-        b=PB3Do//kYm9VnbbmPSZzy6phyJU7c8SQT0voo0Iq12+HS+iDv0g+Mo8k0B9rGxEGRj
-         fa6FV4tbR8aksdjsijcuzJXn+FXpbo0diAaxm70/xuuOd2ZSdWUfIb5S3G+45GGxcQt3
-         k6lRYM67/TGNB78w/rSkIGuq734jSZ1ALINxGcrTNaG84mttCLEJSXZYqICieyqoEHfY
-         9fE/QH1ddW+JBA72FPekSA+4zP6AuyzcQj9ygCwE/QnraOQ7+nVYsS2zBvM04EmLt/aD
-         KH8kjiDBjTeptkvgbnLQPL6eIrJW8AyfXbtF4cG7JHUerseP43j9Tint2vwfSRbd1Nw6
-         alVQ==
-X-Gm-Message-State: AOAM532XuouLMldI+XyvojGUPgTV2u8425ojKKpbnRkKkaa97BFqqGTI
-	kJERe8PXZpU10hcXTyO1UrFqlsRMjpyAbxjpDmsn2A==
-X-Google-Smtp-Source: ABdhPJy0aTO74XJaMQm8cnUoj9YZULLzzNoEu5Fotpi4riNes6buUASDKHj9PbVaIvqx9IzWIEvDToQ7m/JIp7ytPXg=
-X-Received: by 2002:a05:651c:3c7:: with SMTP id f7mr19348599ljp.62.1643920132893;
- Thu, 03 Feb 2022 12:28:52 -0800 (PST)
+        bh=+VrxapYZdFw5zNLlkG7gwQPQd4MEqlLeWHHaNG101EE=;
+        b=RyJ8eIEQcrUjVPKk9hc8XrjH0Wupc31T9hbUqyeGdecOY5mPKQ4ZCzaqj+8kYqbJ2c
+         dHoe8BhAS+vviu/0y5eSUzMgbDia/94fpccr5NKWx+BKO9Dm0mq1khzuJZdYAHcrNzhR
+         Q6OszEi8TL6Qom0iPXDsMjvI/+mXko6U58o+2FQk14eTR7wrr9J/MlAoTEwJyspnRXNV
+         PTy7QV2DkvsIRBnUwgiMJ9gZZp3XlPz1W6zoZ2nabBalVZGuvwfXD+R4DikKPO8nowcA
+         PSHIkV9ZLDVgQuImtv0ZyG/2ntU7zmfRYQM18PhLvdTxabqJUCSojMR9FzlZ4Bz9tI/v
+         168g==
+X-Gm-Message-State: AOAM5323YHfoEa9y9cbW2hd7tXw2oKLFTwUnd6mNtfb67R+YIFON7GyS
+	pJjLn0SBza80Utb6hReIv7shsGIHgJlCdfPYjzlM8jo6Xho=
+X-Google-Smtp-Source: ABdhPJyEO7toB9Xk7e12MVsMQizH8I6uc0Z/+GxXMZU3C+7qqlJE+19v8i3RwheJW1fHMv6ZQfY04Q/j+HvgjnlzS2w=
+X-Received: by 2002:a05:6512:3c96:: with SMTP id h22mr28020130lfv.489.1643920672718;
+ Thu, 03 Feb 2022 12:37:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220203173307.1033257-1-keescook@chromium.org> <20220203173307.1033257-4-keescook@chromium.org>
-In-Reply-To: <20220203173307.1033257-4-keescook@chromium.org>
+References: <20220203173307.1033257-1-keescook@chromium.org> <20220203173307.1033257-5-keescook@chromium.org>
+In-Reply-To: <20220203173307.1033257-5-keescook@chromium.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 3 Feb 2022 12:28:41 -0800
-Message-ID: <CAKwvOdm7LUUotbk+mQbzXR6=UC+oEBNtq_mQbCUt0arqAbw43Q@mail.gmail.com>
-Subject: Re: [PATCH v6 3/4] Compiler Attributes: Add __diagnose_as for Clang
+Date: Thu, 3 Feb 2022 12:37:41 -0800
+Message-ID: <CAKwvOdk0UMAaw2j9OmjXN0Jc6FBOhfMP3JmSqMps2_MQFQLq-g@mail.gmail.com>
+Subject: Re: [PATCH v6 4/4] fortify: Add Clang support
 To: Kees Cook <keescook@chromium.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	George Burgess IV <gbiv@google.com>, linux-kernel@vger.kernel.org, 
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	George Burgess IV <gbiv@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
 	linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
 On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
 >
-> Clang will perform various compile-time diagnostics on uses of various
-> functions (e.g. simple bounds-checking on strcpy(), etc). These
-> diagnostics can be assigned to other functions (for example, new
-> implementations of the string functions under CONFIG_FORTIFY_SOURCE)
-> using the "diagnose_as_builtin" attribute. This allows those functions
-> to retain their compile-time diagnostic warnings.
+> Enable FORTIFY_SOURCE support for Clang:
 >
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Use the new __pass_object_size and __overloadable attributes so
+> that Clang will have appropriate visibility into argument sizes such
+> that __builtin_object_size(p, 1) will behave correctly. Additional
+> details here:
+>     https://github.com/llvm/llvm-project/issues/53516
+>     https://github.com/ClangBuiltLinux/linux/issues/1401
+>
+> When available, use the new __diagnose_as attribute to make sure no
+> compile-time diagnostic warnings are lost due to the effectively renamed
+> string functions.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Consider adding something along the lines of the following to the
+above paragraph:
+Without diagnose_as, compile time error messages won't be as precise
+as they could be, but at least users of older toolchains will have
+fortified routines. That is more valuable, but certainly a tradeoff.
 
-> ---
->  include/linux/compiler_attributes.h | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
 >
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index dc3bf2a6e1c9..df9c7e5e8818 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -100,6 +100,19 @@
->  # define __copy(symbol)
->  #endif
->
-> +/*
-> + * Optional: not supported by gcc
-> + * Optional: only supported since clang >= 14.0
-> + * Optional: not supported by icc
-> + *
-> + * clang: https://clang.llvm.org/docs/AttributeReference.html#diagnose_as_builtin
-> + */
-> +#if __has_attribute(__diagnose_as_builtin__)
-> +# define __diagnose_as(builtin...)     __attribute__((__diagnose_as_builtin__(builtin)))
-> +#else
-> +# define __diagnose_as(builtin...)
-> +#endif
-> +
->  /*
->   * Don't. Just don't. See commit 771c035372a0 ("deprecate the '__deprecated'
->   * attribute warnings entirely and for good") for more information.
-> --
-> 2.30.2
->
+> Redefine strlen() as a macro that tests for being a constant expression
+> so that strlen() can still be used in static initializers, which was
+> lost when adding __pass_object_size and __overloadable.
+
+I'd like to see `const` changes explicit in 4/4; I suspect that's
+_why_ __overloadable is even needed? If so, then a comment here about
+that wouldn't hurt.
+
+Having const be more explicit in the signature will make it more
+obvious why the definition cannot modify the parameter.
 
 
 -- 
