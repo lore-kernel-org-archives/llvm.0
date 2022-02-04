@@ -1,41 +1,45 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8888E29CA
-	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 17:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B181E2F23
+	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 19:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643997580; x=1675533580;
+  t=1644004317; x=1675540317;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=i7C4BKOaffz3S5FaBVAVvCSPXn1+alDyK0CZfCaeH18=;
-  b=JzbUDqr7QMX/1hrf7BQjAC2kaiz9SEitgEPxpPu8q/LGUyLXDPUDam+c
-   7AN6XKS9XM+0oQP0r29mCRn/7Yh6Ujiz+2JDR1GA4JyG+f084effjdhr9
-   +XLJYCElT/flmRT3lpRAUJ93fqOCm5ccvNKkiokG1l/DPdVA2vLLZGMfk
-   Lu6wt0DbmpK/CuDTrPaEvD1en/yCu7R8ujgCJZxfPA1No26V+r/WBunqb
-   q5o1gIOGIxnZPwyQRVwgHrym0dIH8BZ6J8k7OWy3M+KAB/xUTEeME7Kuv
-   ArLYji8gIDQG/33aRHv5XvfjtjYfC2CJ8JtU4/HH1xJttW6Of/6q9mVEj
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="231980357"
+  bh=kJDjmslEqoVtkUzkgdS2gg8FX4/9XXiEMdV+Zf7EL6U=;
+  b=DEtcMFGWOyvyHyH64FdQP3QB1EzBqhWXq7C5NNOpKJWQYqbETmagw2oA
+   yYO0A3o8o05l0C/zFTY2ifBKsC6HeaDNO319Jt6nasF9v0gHsG9/v8bec
+   yaOwJTBIKqsh01Q87gd4xyFxzruOO3jCkgYpkO/ygFdp1KLVjPC2LBz36
+   Arl9h4T47DYlKAc1JKZoNI/4lTY88CawYsdY6LiTfWm2Gfu24imB08dkw
+   lRaElHOB9xWoB9EH38zEHRF+ZYOtjDuGPRIxBLHxdElvTfob1c7qa+LAQ
+   RKOyEEghNVmKiZcasota+TDxykIvG0d7v6+yW6vVcZz6xwIdmjh9kYpYR
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="334827952"
 X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="231980357"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 09:59:39 -0800
+   d="scan'208";a="334827952"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:51:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="600297463"
+   d="scan'208";a="483715942"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Feb 2022 09:59:38 -0800
+  by orsmga006.jf.intel.com with ESMTP; 04 Feb 2022 11:51:44 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nG2rx-000Xyq-Cj; Fri, 04 Feb 2022 17:59:37 +0000
-Date: Sat, 5 Feb 2022 01:58:53 +0800
+	id 1nG4cS-000Y5z-0G; Fri, 04 Feb 2022 19:51:44 +0000
+Date: Sat, 5 Feb 2022 03:51:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 6/6] spi: tegra210-quad: combined sequence mode
-Message-ID: <202202050117.8UkDI9O7-lkp@intel.com>
-References: <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
+To: Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, borntraeger@de.ibm.com,
+	frankja@linux.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
+	david@redhat.com, linux-s390@vger.kernel.org,
+	linux-kernel@vger.kernel.org, scgl@linux.ibm.com
+Subject: Re: [PATCH v7 03/17] KVM: s390: pv: handle secure storage exceptions
+ for normal guests
+Message-ID: <202202050319.tZ4OT36V-lkp@intel.com>
+References: <20220204155349.63238-4-imbrenda@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,176 +48,205 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
+In-Reply-To: <20220204155349.63238-4-imbrenda@linux.ibm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Krishna,
+Hi Claudio,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on broonie-spi/for-next]
+[auto build test WARNING on kvm/queue]
 [also build test WARNING on v5.17-rc2 next-20220204]
+[cannot apply to kvms390/next s390/features]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Krishna-Yarlagadda/Tegra-QUAD-SPI-combined-sequence-mode/20220204-183224
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-config: hexagon-randconfig-r045-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050117.8UkDI9O7-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Claudio-Imbrenda/KVM-s390-pv-implement-lazy-destroy-for-reboot/20220204-235609
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+config: s390-randconfig-r044-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050319.tZ4OT36V-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/7b66ae189feb38fc460bc1eaf1374f82fd0eb893
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/cc87a31d00bc8f7a4e95369503a5ce184747a32b
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Krishna-Yarlagadda/Tegra-QUAD-SPI-combined-sequence-mode/20220204-183224
-        git checkout 7b66ae189feb38fc460bc1eaf1374f82fd0eb893
+        git fetch --no-tags linux-review Claudio-Imbrenda/KVM-s390-pv-implement-lazy-destroy-for-reboot/20220204-235609
+        git checkout cc87a31d00bc8f7a4e95369503a5ce184747a32b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/spi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kvm/ arch/s390/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/spi/spi-tegra210-quad.c:989:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-           device_reset(tqspi->dev);
-           ^~~~~~~~~~~~ ~~~~~~~~~~
-   drivers/spi/spi-tegra210-quad.c:1133:5: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-                                   device_reset(tqspi->dev);
-                                   ^~~~~~~~~~~~ ~~~~~~~~~~
->> drivers/spi/spi-tegra210-quad.c:1052:20: warning: variable 'len' set but not used [-Wunused-but-set-variable]
-           u8 cmd_value = 0, len = 0, val = 0;
-                             ^
->> drivers/spi/spi-tegra210-quad.c:1044:6: warning: variable 'single_xfer' set but not used [-Wunused-but-set-variable]
-           int single_xfer;
-               ^
-   drivers/spi/spi-tegra210-quad.c:1528:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-           device_reset(tqspi->dev);
-           ^~~~~~~~~~~~ ~~~~~~~~~~
-   5 warnings generated.
+   In file included from arch/s390/mm/fault.c:36:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from arch/s390/mm/fault.c:36:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from arch/s390/mm/fault.c:36:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> arch/s390/mm/fault.c:805:18: warning: variable 'mm' is uninitialized when used here [-Wuninitialized]
+                   mmap_read_lock(mm);
+                                  ^~
+   arch/s390/mm/fault.c:771:22: note: initialize the variable 'mm' to silence this warning
+           struct mm_struct *mm;
+                               ^
+                                = NULL
+   13 warnings generated.
 
 
-vim +/len +1052 drivers/spi/spi-tegra210-quad.c
+vim +/mm +805 arch/s390/mm/fault.c
 
-  1039	
-  1040	static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
-  1041						struct spi_message *msg)
-  1042	{
-  1043		bool is_first_msg = true;
-> 1044		int single_xfer;
-  1045		struct spi_transfer *xfer;
-  1046		struct spi_device *spi = msg->spi;
-  1047		u8 transfer_phase = 0;
-  1048		u32 cmd1 = 0, dma_ctl = 0;
-  1049		int ret;
-  1050		u32 address_value = 0;
-  1051		u32 cmd_config = 0, addr_config = 0;
-> 1052		u8 cmd_value = 0, len = 0, val = 0;
-  1053	
-  1054		/* Enable Combined sequence mode */
-  1055		val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
-  1056		val |= QSPI_CMB_SEQ_EN;
-  1057		tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
-  1058		single_xfer = list_is_singular(&msg->transfers);
-  1059		/* Process individual transfer list */
-  1060		list_for_each_entry(xfer, &msg->transfers, transfer_list) {
-  1061			if (transfer_phase == CMD_TRANSFER) {
-  1062				/* X1 SDR mode */
-  1063				cmd_config = tegra_qspi_cmd_config(false, 0,
-  1064								   xfer->len);
-  1065				cmd_value = *((const u8 *)(xfer->tx_buf));
-  1066	
-  1067			} else if (transfer_phase == ADDR_TRANSFER) {
-  1068				len = xfer->len;
-  1069				/* X1 SDR mode */
-  1070				addr_config = tegra_qspi_addr_config(false, 0,
-  1071								     xfer->len);
-  1072				address_value = *((const u32 *)(xfer->tx_buf));
-  1073			} else {
-  1074				/* Program Command, Address value in register */
-  1075				tegra_qspi_writel(tqspi, cmd_value, QSPI_CMB_SEQ_CMD);
-  1076				tegra_qspi_writel(tqspi, address_value,
-  1077						  QSPI_CMB_SEQ_ADDR);
-  1078				/* Program Command and Address config in register */
-  1079				tegra_qspi_writel(tqspi, cmd_config,
-  1080						  QSPI_CMB_SEQ_CMD_CFG);
-  1081				tegra_qspi_writel(tqspi, addr_config,
-  1082						  QSPI_CMB_SEQ_ADDR_CFG);
-  1083	
-  1084				reinit_completion(&tqspi->xfer_completion);
-  1085				cmd1 = tegra_qspi_setup_transfer_one(spi, xfer,
-  1086								     is_first_msg);
-  1087				ret = tegra_qspi_start_transfer_one(spi, xfer,
-  1088								    cmd1);
-  1089	
-  1090				if (ret < 0) {
-  1091					dev_err(tqspi->dev, "Failed to start transfer-one: %d\n",
-  1092						ret);
-  1093					return ret;
-  1094				}
-  1095	
-  1096				is_first_msg = false;
-  1097				ret = wait_for_completion_timeout
-  1098						(&tqspi->xfer_completion,
-  1099						QSPI_DMA_TIMEOUT);
-  1100	
-  1101				if (WARN_ON(ret == 0)) {
-  1102					dev_err(tqspi->dev, "QSPI Transfer failed with timeout: %d\n",
-  1103						ret);
-  1104					if (tqspi->is_curr_dma_xfer &&
-  1105					    (tqspi->cur_direction & DATA_DIR_TX))
-  1106						dmaengine_terminate_all
-  1107							(tqspi->tx_dma_chan);
-  1108	
-  1109					if (tqspi->is_curr_dma_xfer &&
-  1110					    (tqspi->cur_direction & DATA_DIR_RX))
-  1111						dmaengine_terminate_all
-  1112							(tqspi->rx_dma_chan);
-  1113	
-  1114					/* Abort transfer by resetting pio/dma bit */
-  1115					if (!tqspi->is_curr_dma_xfer) {
-  1116						cmd1 = tegra_qspi_readl
-  1117								(tqspi,
-  1118								 QSPI_COMMAND1);
-  1119						cmd1 &= ~QSPI_PIO;
-  1120						tegra_qspi_writel
-  1121								(tqspi, cmd1,
-  1122								 QSPI_COMMAND1);
-  1123					} else {
-  1124						dma_ctl = tegra_qspi_readl
-  1125								(tqspi,
-  1126								 QSPI_DMA_CTL);
-  1127						dma_ctl &= ~QSPI_DMA_EN;
-  1128						tegra_qspi_writel(tqspi, dma_ctl,
-  1129								  QSPI_DMA_CTL);
-  1130					}
-  1131	
-  1132					/* Reset controller if timeout happens */
-  1133					device_reset(tqspi->dev);
-  1134					ret = -EIO;
-  1135					goto exit;
-  1136				}
-  1137	
-  1138				if (tqspi->tx_status ||  tqspi->rx_status) {
-  1139					dev_err(tqspi->dev, "QSPI Transfer failed\n");
-  1140					tqspi->tx_status = 0;
-  1141					tqspi->rx_status = 0;
-  1142					ret = -EIO;
-  1143					goto exit;
-  1144				}
-  1145			}
-  1146			msg->actual_length += xfer->len;
-  1147			transfer_phase++;
-  1148		}
-  1149	
-  1150	exit:
-  1151		msg->status = ret;
-  1152	
-  1153		return ret;
-  1154	}
-  1155	
+   766	
+   767	void do_secure_storage_access(struct pt_regs *regs)
+   768	{
+   769		unsigned long addr = regs->int_parm_long & __FAIL_ADDR_MASK;
+   770		struct vm_area_struct *vma;
+   771		struct mm_struct *mm;
+   772		struct page *page;
+   773		struct gmap *gmap;
+   774		int rc;
+   775	
+   776		/*
+   777		 * bit 61 tells us if the address is valid, if it's not we
+   778		 * have a major problem and should stop the kernel or send a
+   779		 * SIGSEGV to the process. Unfortunately bit 61 is not
+   780		 * reliable without the misc UV feature so we need to check
+   781		 * for that as well.
+   782		 */
+   783		if (test_bit_inv(BIT_UV_FEAT_MISC, &uv_info.uv_feature_indications) &&
+   784		    !test_bit_inv(61, &regs->int_parm_long)) {
+   785			/*
+   786			 * When this happens, userspace did something that it
+   787			 * was not supposed to do, e.g. branching into secure
+   788			 * memory. Trigger a segmentation fault.
+   789			 */
+   790			if (user_mode(regs)) {
+   791				send_sig(SIGSEGV, current, 0);
+   792				return;
+   793			}
+   794	
+   795			/*
+   796			 * The kernel should never run into this case and we
+   797			 * have no way out of this situation.
+   798			 */
+   799			panic("Unexpected PGM 0x3d with TEID bit 61=0");
+   800		}
+   801	
+   802		switch (get_fault_type(regs)) {
+   803		case GMAP_FAULT:
+   804			gmap = (struct gmap *)S390_lowcore.gmap;
+ > 805			mmap_read_lock(mm);
+   806			addr = __gmap_translate(gmap, addr);
+   807			mmap_read_unlock(mm);
+   808			if (IS_ERR_VALUE(addr)) {
+   809				do_fault_error(regs, VM_ACCESS_FLAGS, VM_FAULT_BADMAP);
+   810				break;
+   811			}
+   812			fallthrough;
+   813		case USER_FAULT:
+   814			mm = current->mm;
+   815			mmap_read_lock(mm);
+   816			vma = find_vma(mm, addr);
+   817			if (!vma) {
+   818				mmap_read_unlock(mm);
+   819				do_fault_error(regs, VM_READ | VM_WRITE, VM_FAULT_BADMAP);
+   820				break;
+   821			}
+   822			page = follow_page(vma, addr, FOLL_WRITE | FOLL_GET);
+   823			if (IS_ERR_OR_NULL(page)) {
+   824				mmap_read_unlock(mm);
+   825				break;
+   826			}
+   827			if (arch_make_page_accessible(page))
+   828				send_sig(SIGSEGV, current, 0);
+   829			put_page(page);
+   830			mmap_read_unlock(mm);
+   831			break;
+   832		case KERNEL_FAULT:
+   833			page = phys_to_page(addr);
+   834			if (unlikely(!try_get_page(page)))
+   835				break;
+   836			rc = arch_make_page_accessible(page);
+   837			put_page(page);
+   838			if (rc)
+   839				BUG();
+   840			break;
+   841		default:
+   842			do_fault_error(regs, VM_READ | VM_WRITE, VM_FAULT_BADMAP);
+   843			WARN_ON_ONCE(1);
+   844		}
+   845	}
+   846	NOKPROBE_SYMBOL(do_secure_storage_access);
+   847	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
