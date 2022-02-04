@@ -1,42 +1,42 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563E929CA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5B92F26
 	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 01:30:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1643938247; x=1675474247;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MDQ5BFhaPsztW1AD5RmY252O8BjHpWhAeXvWNUdZBMc=;
-  b=bv7/ha5otCKl2D1T7hV2RxXYf9ZUG+Zk6sGaYMll0HSx6picPA1RkJ3q
-   /Ms6JK/rDszh2ZI2O8UDnpXQMl2/2v6TUN4y5ggwN+VilDvYFBftafVxe
-   b6mwRc0Xic56AaoPPnOhAhtCQBTQET7GocPMOuXlcKqeS7Ej1qyTLhBtW
-   YgDTLxa34Bf+WkMSiSWzl2IbBdTiDgKdQVvNaK/AzD/gkd7UiSXmmeOsQ
-   MdbGt2Oc49sy+Pe6pM0DIziAZb3kQa8WhvRvAMqQbmAq08SPpeV5ufQBo
-   Sa6Ehz5xXEIidOEm0xsUkx54xbOSRqW56vXpE4dv+jLqsi3PtA6MzN0vb
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248241424"
+  bh=mMHtbZE5U2aP9MLb6KVxAJHGWudjKq0dCZ1hhHE/noQ=;
+  b=Rb+p1n1936CjFYygf/4qWWmCURHt7rev0ADj4QGAXOWkeA7TpqmbYF+9
+   zPpjo7Uuqa0Q0ccrr/selex0oubdqoFLWxam8/KOI+JL3Z5fPVFFuxMkC
+   oaxhfpYTGLfCfvZh65hBslp/xyU9TW0IQGolOWcUgiL6wFOSwjkX4Emgw
+   ZORD2/N2H4acXLblwubUhi2hIsDqRdA9id+xz+mNhjb+na/On8AT78nck
+   7/HxqHz1ttYyGR2svcW4Bv9qe+1pged2MuVpYyKuyjTV/wBGHW5jEhKs5
+   Lcz+UpkpoqTg4TVsSk4iah6BaESYj6L47cmBZ0NMQe3RGvDArm7gKH9G5
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="309036117"
 X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="248241424"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 17:30:46 -0800
+   d="scan'208";a="309036117"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 17:30:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="498346931"
+   d="scan'208";a="771970104"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 Feb 2022 17:30:45 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 03 Feb 2022 17:30:45 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nFnQy-000Wv3-P4; Fri, 04 Feb 2022 01:30:44 +0000
-Date: Fri, 4 Feb 2022 09:30:24 +0800
+	id 1nFnQy-000Wup-JV; Fri, 04 Feb 2022 01:30:44 +0000
+Date: Fri, 4 Feb 2022 09:30:15 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
 	Muchun Song <songmuchun@bytedance.com>
 Subject: Re: [PATCH 2/2] mm: Convert page_vma_mapped_walk to work on PFNs
-Message-ID: <202202040601.7rVVBoVe-lkp@intel.com>
+Message-ID: <202202040625.ZAq9Op2f-lkp@intel.com>
 References: <20220203171904.609984-2-willy@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -62,35 +62,52 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Matthew-Wilcox-Oracle/mm-Add-pvmw_set_page/20220204-012111
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c36c04c2e132fc39f6b658bf607aed4425427fd7
-config: hexagon-randconfig-r045-20220130 (https://download.01.org/0day-ci/archive/20220204/202202040601.7rVVBoVe-lkp@intel.com/config)
+config: riscv-randconfig-r042-20220131 (https://download.01.org/0day-ci/archive/20220204/202202040625.ZAq9Op2f-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
         # https://github.com/0day-ci/linux/commit/4a5a2cece4c5d9ac56322c6828efbea7fcd2e480
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Matthew-Wilcox-Oracle/mm-Add-pvmw_set_page/20220204-012111
         git checkout 4a5a2cece4c5d9ac56322c6828efbea7fcd2e480
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> mm/page_vma_mapped.c:219:20: error: implicit declaration of function 'pmd_pfn' [-Werror,-Wimplicit-function-declaration]
-                                   if (!check_pmd(pmd_pfn(pmde), pvmw))
+>> mm/page_vma_mapped.c:245:27: error: call to __compiletime_assert_255 declared with 'error' attribute: BUILD_BUG failed
+                               (pvmw->nr_pages >= HPAGE_PMD_NR)) {
                                                   ^
-   mm/page_vma_mapped.c:219:20: note: did you mean 'pmd_off'?
-   include/linux/pgtable.h:149:22: note: 'pmd_off' declared here
-   static inline pmd_t *pmd_off(struct mm_struct *mm, unsigned long va)
-                        ^
+   include/linux/huge_mm.h:105:26: note: expanded from macro 'HPAGE_PMD_NR'
+   #define HPAGE_PMD_NR (1<<HPAGE_PMD_ORDER)
+                            ^
+   include/linux/huge_mm.h:104:26: note: expanded from macro 'HPAGE_PMD_ORDER'
+   #define HPAGE_PMD_ORDER (HPAGE_PMD_SHIFT-PAGE_SHIFT)
+                            ^
+   include/linux/huge_mm.h:331:28: note: expanded from macro 'HPAGE_PMD_SHIFT'
+   #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
+                              ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:334:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:327:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:161:1: note: expanded from here
+   __compiletime_assert_255
+   ^
    1 error generated.
 
 
-vim +/pmd_pfn +219 mm/page_vma_mapped.c
+vim +/error +245 mm/page_vma_mapped.c
 
    126	
    127	/**
@@ -185,7 +202,7 @@ vim +/pmd_pfn +219 mm/page_vma_mapped.c
    216				if (likely(pmd_trans_huge(pmde))) {
    217					if (pvmw->flags & PVMW_MIGRATION)
    218						return not_found(pvmw);
- > 219					if (!check_pmd(pmd_pfn(pmde), pvmw))
+   219					if (!check_pmd(pmd_pfn(pmde), pvmw))
    220						return not_found(pvmw);
    221					return true;
    222				}
@@ -211,7 +228,7 @@ vim +/pmd_pfn +219 mm/page_vma_mapped.c
    242				 * cleared *pmd but not decremented compound_mapcount().
    243				 */
    244				if ((pvmw->flags & PVMW_SYNC) &&
-   245				    (pvmw->nr_pages >= HPAGE_PMD_NR)) {
+ > 245				    (pvmw->nr_pages >= HPAGE_PMD_NR)) {
    246					spinlock_t *ptl = pmd_lock(mm, pvmw->pmd);
    247	
    248					spin_unlock(ptl);
