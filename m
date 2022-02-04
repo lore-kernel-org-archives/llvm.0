@@ -1,79 +1,262 @@
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A7C2F26
-	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 01:07:52 +0000 (UTC)
-Received: by mail-io1-f42.google.com with SMTP id e79so5505782iof.13
-        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 17:07:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rqefIdeVL2wI+DwvB62OMGgdDa6H4u4FEw5VtwaQZaY=;
-        b=Besvg7YSquJmk8Q/loW/yn4blaDryem68uUPME0EqybIjflP/f/MEmM1VJuCa0l9Qp
-         o/lcjmMPouZ8HqTTh7cfDVSwZXn0hYBUBa7Nln9ThLI54zllCE9armDl3n6BQ9Q2xhmr
-         DMSN2Z0mLfSqkeyIYamT7k+WhWDi4KwvSPf+CEN3LVyY3MI2/4ui1/Kku+oImpyTCen4
-         ijyIQoLsYJmu1oCiOh5Zl6nhShMCeVnxFbidTsSyWVvATQeqne8eQt0UPjA/oR0Cz0xy
-         NZfeEVUGoKu8lNfvPzfUKRwoBlOalQItVQsibSwj1CZiGWIyMxT8nZCER4hUGmQvHx32
-         Y/uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rqefIdeVL2wI+DwvB62OMGgdDa6H4u4FEw5VtwaQZaY=;
-        b=V2IxxaZDEYuKSFns46ohvP6vNp9z+YGcJ5WQHX6BiziE5iqPy6UDL6YT4fvJ0pl5l2
-         fCYRJbQQS9AY47LKoq4kCM1fFQTcaSRmdAKlyQhfeKXhQD/+Elp7u8YduQCadhWDLOAR
-         HTuLpe19Gyy9mh6B9/rfGoP/qO4v4VTYeugmHliDpADZowGfgRd/CXpFfHuZR02ZS0sF
-         quFaeVjBHZ7OS4mC3r3T0TBlHvg18Fl+6V/QmLG1qiwVh6U1Apg4R+IZOpoyPVk+z3sY
-         KizcDSeobsZpF9r/p+yyC148rJAuCEuszL8rwnn3HJVVafH7f35853qQ5O7ir1DhabPm
-         ldSg==
-X-Gm-Message-State: AOAM531wFg7Q7/8MQidNOcHkr/Y1+ydrcaHQ3Nat9TPJwoIkB9zIgN8e
-	YIYdcoahybTd+AYrVgbXgsJLZxZW7yGdLeJulNE=
-X-Google-Smtp-Source: ABdhPJzEN5d0Bt98thIEc9Uezwh/6R+2lP9mNdmyVMD/wnvEdrfVANxAknyo0cLuI0CB10D33HGHz6jAlL20NuOJ5BA=
-X-Received: by 2002:a05:6638:134a:: with SMTP id u10mr282776jad.264.1643936871675;
- Thu, 03 Feb 2022 17:07:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563E929CA
+	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 01:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643938247; x=1675474247;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MDQ5BFhaPsztW1AD5RmY252O8BjHpWhAeXvWNUdZBMc=;
+  b=bv7/ha5otCKl2D1T7hV2RxXYf9ZUG+Zk6sGaYMll0HSx6picPA1RkJ3q
+   /Ms6JK/rDszh2ZI2O8UDnpXQMl2/2v6TUN4y5ggwN+VilDvYFBftafVxe
+   b6mwRc0Xic56AaoPPnOhAhtCQBTQET7GocPMOuXlcKqeS7Ej1qyTLhBtW
+   YgDTLxa34Bf+WkMSiSWzl2IbBdTiDgKdQVvNaK/AzD/gkd7UiSXmmeOsQ
+   MdbGt2Oc49sy+Pe6pM0DIziAZb3kQa8WhvRvAMqQbmAq08SPpeV5ufQBo
+   Sa6Ehz5xXEIidOEm0xsUkx54xbOSRqW56vXpE4dv+jLqsi3PtA6MzN0vb
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248241424"
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="248241424"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 17:30:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="498346931"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 03 Feb 2022 17:30:45 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nFnQy-000Wv3-P4; Fri, 04 Feb 2022 01:30:44 +0000
+Date: Fri, 4 Feb 2022 09:30:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH 2/2] mm: Convert page_vma_mapped_walk to work on PFNs
+Message-ID: <202202040601.7rVVBoVe-lkp@intel.com>
+References: <20220203171904.609984-2-willy@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220203173307.1033257-1-keescook@chromium.org>
- <20220203173307.1033257-3-keescook@chromium.org> <CAKwvOdkU=5q-7Sb4BKYkRsigy_qYjo_7J+A73ZYKn+xArxUwXg@mail.gmail.com>
- <202202031301.437D8FD3@keescook>
-In-Reply-To: <202202031301.437D8FD3@keescook>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 4 Feb 2022 02:07:40 +0100
-Message-ID: <CANiq72nYuWJDESJKOzgtarM5QeGVe3DVik3HZyOEXUdNK8QfeA@mail.gmail.com>
-Subject: Re: [PATCH v6 2/4] Compiler Attributes: Add __overloadable for Clang
-To: Kees Cook <keescook@chromium.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	George Burgess IV <gbiv@google.com>, linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203171904.609984-2-willy@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Feb 3, 2022 at 10:04 PM Kees Cook <keescook@chromium.org> wrote:
->
-> That might be an issue, but the *real* issue is the implicit mutation of
-> the function into an inline with _additional_ arguments. i.e.
->
-> char *strcpy(char * POS p, const char * POS q)
->
-> is really
->
-> char *strcpy(char * const p, const char * const q, size_t __size_of_p, size_t __size_of_q)
+Hi "Matthew,
 
-Shouldn't that be
+Thank you for the patch! Yet something to improve:
 
-  char *strcpy(char * const p, size_t __size_of_p, const char * const
-q, size_t __size_of_q)
+[auto build test ERROR on linus/master]
+[also build test ERROR on tip/perf/core v5.17-rc2 next-20220203]
+[cannot apply to hnaz-mm/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-? i.e. the docs point at this but say:
+url:    https://github.com/0day-ci/linux/commits/Matthew-Wilcox-Oracle/mm-Add-pvmw_set_page/20220204-012111
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c36c04c2e132fc39f6b658bf607aed4425427fd7
+config: hexagon-randconfig-r045-20220130 (https://download.01.org/0day-ci/archive/20220204/202202040601.7rVVBoVe-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/4a5a2cece4c5d9ac56322c6828efbea7fcd2e480
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Matthew-Wilcox-Oracle/mm-Add-pvmw_set_page/20220204-012111
+        git checkout 4a5a2cece4c5d9ac56322c6828efbea7fcd2e480
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-  "...and implicitly pass the result of this call in as an invisible
-argument of type `size_t` directly after the parameter annotated with
-`pass_object_size`."
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Cheers,
-Miguel
+All errors (new ones prefixed by >>):
+
+>> mm/page_vma_mapped.c:219:20: error: implicit declaration of function 'pmd_pfn' [-Werror,-Wimplicit-function-declaration]
+                                   if (!check_pmd(pmd_pfn(pmde), pvmw))
+                                                  ^
+   mm/page_vma_mapped.c:219:20: note: did you mean 'pmd_off'?
+   include/linux/pgtable.h:149:22: note: 'pmd_off' declared here
+   static inline pmd_t *pmd_off(struct mm_struct *mm, unsigned long va)
+                        ^
+   1 error generated.
+
+
+vim +/pmd_pfn +219 mm/page_vma_mapped.c
+
+   126	
+   127	/**
+   128	 * page_vma_mapped_walk - check if @pvmw->pfn is mapped in @pvmw->vma at
+   129	 * @pvmw->address
+   130	 * @pvmw: pointer to struct page_vma_mapped_walk. page, vma, address and flags
+   131	 * must be set. pmd, pte and ptl must be NULL.
+   132	 *
+   133	 * Returns true if the page is mapped in the vma. @pvmw->pmd and @pvmw->pte point
+   134	 * to relevant page table entries. @pvmw->ptl is locked. @pvmw->address is
+   135	 * adjusted if needed (for PTE-mapped THPs).
+   136	 *
+   137	 * If @pvmw->pmd is set but @pvmw->pte is not, you have found PMD-mapped page
+   138	 * (usually THP). For PTE-mapped THP, you should run page_vma_mapped_walk() in
+   139	 * a loop to find all PTEs that map the THP.
+   140	 *
+   141	 * For HugeTLB pages, @pvmw->pte is set to the relevant page table entry
+   142	 * regardless of which page table level the page is mapped at. @pvmw->pmd is
+   143	 * NULL.
+   144	 *
+   145	 * Returns false if there are no more page table entries for the page in
+   146	 * the vma. @pvmw->ptl is unlocked and @pvmw->pte is unmapped.
+   147	 *
+   148	 * If you need to stop the walk before page_vma_mapped_walk() returned false,
+   149	 * use page_vma_mapped_walk_done(). It will do the housekeeping.
+   150	 */
+   151	bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+   152	{
+   153		struct vm_area_struct *vma = pvmw->vma;
+   154		struct mm_struct *mm = vma->vm_mm;
+   155		unsigned long end;
+   156		pgd_t *pgd;
+   157		p4d_t *p4d;
+   158		pud_t *pud;
+   159		pmd_t pmde;
+   160	
+   161		/* The only possible pmd mapping has been handled on last iteration */
+   162		if (pvmw->pmd && !pvmw->pte)
+   163			return not_found(pvmw);
+   164	
+   165		if (unlikely(is_vm_hugetlb_page(vma))) {
+   166			unsigned long size = pvmw->nr_pages * PAGE_SIZE;
+   167			/* The only possible mapping was handled on last iteration */
+   168			if (pvmw->pte)
+   169				return not_found(pvmw);
+   170	
+   171			/* when pud is not present, pte will be NULL */
+   172			pvmw->pte = huge_pte_offset(mm, pvmw->address, size);
+   173			if (!pvmw->pte)
+   174				return false;
+   175	
+   176			pvmw->ptl = huge_pte_lockptr(size_to_hstate(size), mm,
+   177							pvmw->pte);
+   178			spin_lock(pvmw->ptl);
+   179			if (!check_pte(pvmw))
+   180				return not_found(pvmw);
+   181			return true;
+   182		}
+   183	
+   184		end = vma_address_end(pvmw);
+   185		if (pvmw->pte)
+   186			goto next_pte;
+   187	restart:
+   188		do {
+   189			pgd = pgd_offset(mm, pvmw->address);
+   190			if (!pgd_present(*pgd)) {
+   191				step_forward(pvmw, PGDIR_SIZE);
+   192				continue;
+   193			}
+   194			p4d = p4d_offset(pgd, pvmw->address);
+   195			if (!p4d_present(*p4d)) {
+   196				step_forward(pvmw, P4D_SIZE);
+   197				continue;
+   198			}
+   199			pud = pud_offset(p4d, pvmw->address);
+   200			if (!pud_present(*pud)) {
+   201				step_forward(pvmw, PUD_SIZE);
+   202				continue;
+   203			}
+   204	
+   205			pvmw->pmd = pmd_offset(pud, pvmw->address);
+   206			/*
+   207			 * Make sure the pmd value isn't cached in a register by the
+   208			 * compiler and used as a stale value after we've observed a
+   209			 * subsequent update.
+   210			 */
+   211			pmde = READ_ONCE(*pvmw->pmd);
+   212	
+   213			if (pmd_trans_huge(pmde) || is_pmd_migration_entry(pmde)) {
+   214				pvmw->ptl = pmd_lock(mm, pvmw->pmd);
+   215				pmde = *pvmw->pmd;
+   216				if (likely(pmd_trans_huge(pmde))) {
+   217					if (pvmw->flags & PVMW_MIGRATION)
+   218						return not_found(pvmw);
+ > 219					if (!check_pmd(pmd_pfn(pmde), pvmw))
+   220						return not_found(pvmw);
+   221					return true;
+   222				}
+   223				if (!pmd_present(pmde)) {
+   224					swp_entry_t entry;
+   225	
+   226					if (!thp_migration_supported() ||
+   227					    !(pvmw->flags & PVMW_MIGRATION))
+   228						return not_found(pvmw);
+   229					entry = pmd_to_swp_entry(pmde);
+   230					if (!is_migration_entry(entry) ||
+   231					    !check_pmd(swp_offset(entry), pvmw))
+   232						return not_found(pvmw);
+   233					return true;
+   234				}
+   235				/* THP pmd was split under us: handle on pte level */
+   236				spin_unlock(pvmw->ptl);
+   237				pvmw->ptl = NULL;
+   238			} else if (!pmd_present(pmde)) {
+   239				/*
+   240				 * If PVMW_SYNC, take and drop THP pmd lock so that we
+   241				 * cannot return prematurely, while zap_huge_pmd() has
+   242				 * cleared *pmd but not decremented compound_mapcount().
+   243				 */
+   244				if ((pvmw->flags & PVMW_SYNC) &&
+   245				    (pvmw->nr_pages >= HPAGE_PMD_NR)) {
+   246					spinlock_t *ptl = pmd_lock(mm, pvmw->pmd);
+   247	
+   248					spin_unlock(ptl);
+   249				}
+   250				step_forward(pvmw, PMD_SIZE);
+   251				continue;
+   252			}
+   253			if (!map_pte(pvmw))
+   254				goto next_pte;
+   255	this_pte:
+   256			if (check_pte(pvmw))
+   257				return true;
+   258	next_pte:
+   259			do {
+   260				pvmw->address += PAGE_SIZE;
+   261				if (pvmw->address >= end)
+   262					return not_found(pvmw);
+   263				/* Did we cross page table boundary? */
+   264				if ((pvmw->address & (PMD_SIZE - PAGE_SIZE)) == 0) {
+   265					if (pvmw->ptl) {
+   266						spin_unlock(pvmw->ptl);
+   267						pvmw->ptl = NULL;
+   268					}
+   269					pte_unmap(pvmw->pte);
+   270					pvmw->pte = NULL;
+   271					goto restart;
+   272				}
+   273				pvmw->pte++;
+   274				if ((pvmw->flags & PVMW_SYNC) && !pvmw->ptl) {
+   275					pvmw->ptl = pte_lockptr(mm, pvmw->pmd);
+   276					spin_lock(pvmw->ptl);
+   277				}
+   278			} while (pte_none(*pvmw->pte));
+   279	
+   280			if (!pvmw->ptl) {
+   281				pvmw->ptl = pte_lockptr(mm, pvmw->pmd);
+   282				spin_lock(pvmw->ptl);
+   283			}
+   284			goto this_pte;
+   285		} while (pvmw->address < end);
+   286	
+   287		return false;
+   288	}
+   289	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
