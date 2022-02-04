@@ -1,41 +1,41 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AFD2F25
-	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 17:59:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8888E29CA
+	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 17:59:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1643997580; x=1675533580;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ltd387I2tvCTe1OykRC839k9k8NWUEcAdz6wvQq+iJM=;
-  b=Y+0JQkyWzjUnOZrv1nl20EeA+fxDZgaX89I2jeKx6mo99lGJLQYy1y9R
-   nnC46+E8upGtOZd5BtJfIA8giqdiuVDGpBesnu4JRxg464xxJvw+JrjRa
-   s/0QaForT99bFuhCpxWZAJR4gOSu1jCjnM4skdmNEY9q6yNXD+sLqyu5x
-   /EQvg+Ppg6wot/YmHgxF8AuJMBMZMW/WuCosYKebjqVobmbBDKB0zTwrg
-   35bkj0lt1Nr1Wptw/hvV9onuXDp9B8PYMEmJ4WD8nVtlo2/xmvhjto/Ad
-   wBbMkKKK+0YSB/yeToTa5AcrRT9VoVWqSYimRO9mAx33+WNehJF8XnPW9
+  bh=i7C4BKOaffz3S5FaBVAVvCSPXn1+alDyK0CZfCaeH18=;
+  b=JzbUDqr7QMX/1hrf7BQjAC2kaiz9SEitgEPxpPu8q/LGUyLXDPUDam+c
+   7AN6XKS9XM+0oQP0r29mCRn/7Yh6Ujiz+2JDR1GA4JyG+f084effjdhr9
+   +XLJYCElT/flmRT3lpRAUJ93fqOCm5ccvNKkiokG1l/DPdVA2vLLZGMfk
+   Lu6wt0DbmpK/CuDTrPaEvD1en/yCu7R8ujgCJZxfPA1No26V+r/WBunqb
+   q5o1gIOGIxnZPwyQRVwgHrym0dIH8BZ6J8k7OWy3M+KAB/xUTEeME7Kuv
+   ArLYji8gIDQG/33aRHv5XvfjtjYfC2CJ8JtU4/HH1xJttW6Of/6q9mVEj
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="311714736"
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="231980357"
 X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="311714736"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 09:59:39 -0800
+   d="scan'208";a="231980357"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 09:59:39 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="627847072"
+   d="scan'208";a="600297463"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 04 Feb 2022 09:59:38 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 04 Feb 2022 09:59:38 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nG2rx-000Xys-Dm; Fri, 04 Feb 2022 17:59:37 +0000
-Date: Sat, 5 Feb 2022 01:58:56 +0800
+	id 1nG2rx-000Xyq-Cj; Fri, 04 Feb 2022 17:59:37 +0000
+Date: Sat, 5 Feb 2022 01:58:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dipen Patel <dipenp@nvidia.com>
+To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v4 03/11] hte: Add tegra194 HTE kernel provider
-Message-ID: <202202050111.cOZMMgeY-lkp@intel.com>
-References: <20220201222630.21246-4-dipenp@nvidia.com>
+Subject: Re: [PATCH 6/6] spi: tegra210-quad: combined sequence mode
+Message-ID: <202202050117.8UkDI9O7-lkp@intel.com>
+References: <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,129 +44,176 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220201222630.21246-4-dipenp@nvidia.com>
+In-Reply-To: <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Dipen,
+Hi Krishna,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on 07f8c60fe60f84977dc815ec8a6b1100827c34dd]
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on v5.17-rc2 next-20220204]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Dipen-Patel/Intro-to-Hardware-timestamping-engine/20220202-062447
-base:   07f8c60fe60f84977dc815ec8a6b1100827c34dd
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220205/202202050111.cOZMMgeY-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Krishna-Yarlagadda/Tegra-QUAD-SPI-combined-sequence-mode/20220204-183224
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: hexagon-randconfig-r045-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050117.8UkDI9O7-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/6a6a517b6866ae7e4b1b878ab82312a9a2dc5b90
+        # https://github.com/0day-ci/linux/commit/7b66ae189feb38fc460bc1eaf1374f82fd0eb893
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Dipen-Patel/Intro-to-Hardware-timestamping-engine/20220202-062447
-        git checkout 6a6a517b6866ae7e4b1b878ab82312a9a2dc5b90
+        git fetch --no-tags linux-review Krishna-Yarlagadda/Tegra-QUAD-SPI-combined-sequence-mode/20220204-183224
+        git checkout 7b66ae189feb38fc460bc1eaf1374f82fd0eb893
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hte/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/spi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/hte/hte-tegra194.c:379:9: error: implicit declaration of function 'gpiod_enable_hw_timestamp' [-Werror,-Wimplicit-function-declaration]
-                   ret = gpiod_enable_hw_timestamp(attr->line_data,
-                         ^
-   drivers/hte/hte-tegra194.c:405:9: error: implicit declaration of function 'gpiod_disable_hw_timestamp' [-Werror,-Wimplicit-function-declaration]
-                   ret = gpiod_disable_hw_timestamp(attr->line_data,
-                         ^
->> drivers/hte/hte-tegra194.c:431:5: warning: no previous prototype for function 'tegra_hte_get_level' [-Wmissing-prototypes]
-   int tegra_hte_get_level(struct tegra_hte_soc *gs, u32 line_id)
-       ^
-   drivers/hte/hte-tegra194.c:431:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int tegra_hte_get_level(struct tegra_hte_soc *gs, u32 line_id)
-   ^
-   static 
->> drivers/hte/hte-tegra194.c:486:6: warning: no previous prototype for function 'tegra_hte_match_from_linedata' [-Wmissing-prototypes]
-   bool tegra_hte_match_from_linedata(const struct hte_chip *chip,
-        ^
-   drivers/hte/hte-tegra194.c:486:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool tegra_hte_match_from_linedata(const struct hte_chip *chip,
-   ^
-   static 
-   2 warnings and 2 errors generated.
+   drivers/spi/spi-tegra210-quad.c:989:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+           device_reset(tqspi->dev);
+           ^~~~~~~~~~~~ ~~~~~~~~~~
+   drivers/spi/spi-tegra210-quad.c:1133:5: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+                                   device_reset(tqspi->dev);
+                                   ^~~~~~~~~~~~ ~~~~~~~~~~
+>> drivers/spi/spi-tegra210-quad.c:1052:20: warning: variable 'len' set but not used [-Wunused-but-set-variable]
+           u8 cmd_value = 0, len = 0, val = 0;
+                             ^
+>> drivers/spi/spi-tegra210-quad.c:1044:6: warning: variable 'single_xfer' set but not used [-Wunused-but-set-variable]
+           int single_xfer;
+               ^
+   drivers/spi/spi-tegra210-quad.c:1528:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+           device_reset(tqspi->dev);
+           ^~~~~~~~~~~~ ~~~~~~~~~~
+   5 warnings generated.
 
 
-vim +/tegra_hte_get_level +431 drivers/hte/hte-tegra194.c
+vim +/len +1052 drivers/spi/spi-tegra210-quad.c
 
-   430	
- > 431	int tegra_hte_get_level(struct tegra_hte_soc *gs, u32 line_id)
-   432	{
-   433		struct gpio_desc *desc;
-   434	
-   435		if (gs->prov_data->type == HTE_TEGRA_TYPE_GPIO) {
-   436			desc = gs->line_data[line_id].data;
-   437			if (desc)
-   438				return gpiod_get_raw_value(desc);
-   439		}
-   440	
-   441		return -1;
-   442	}
-   443	
-   444	static void tegra_hte_read_fifo(struct tegra_hte_soc *gs)
-   445	{
-   446		u32 tsh, tsl, src, pv, cv, acv, slice, bit_index, line_id;
-   447		u64 tsc;
-   448		struct hte_ts_data el;
-   449	
-   450		while ((tegra_hte_readl(gs, HTE_TESTATUS) >>
-   451			HTE_TESTATUS_OCCUPANCY_SHIFT) &
-   452			HTE_TESTATUS_OCCUPANCY_MASK) {
-   453			tsh = tegra_hte_readl(gs, HTE_TETSCH);
-   454			tsl = tegra_hte_readl(gs, HTE_TETSCL);
-   455			tsc = (((u64)tsh << 32) | tsl);
-   456	
-   457			src = tegra_hte_readl(gs, HTE_TESRC);
-   458			slice = (src >> HTE_TESRC_SLICE_SHIFT) &
-   459				    HTE_TESRC_SLICE_DEFAULT_MASK;
-   460	
-   461			pv = tegra_hte_readl(gs, HTE_TEPCV);
-   462			cv = tegra_hte_readl(gs, HTE_TECCV);
-   463			acv = pv ^ cv;
-   464			while (acv) {
-   465				bit_index = __builtin_ctz(acv);
-   466				line_id = bit_index + (slice << 5);
-   467				el.tsc = tsc << HTE_TS_NS_SHIFT;
-   468				el.raw_level = tegra_hte_get_level(gs, line_id);
-   469				hte_push_ts_ns(gs->chip, line_id, &el);
-   470				acv &= ~BIT(bit_index);
-   471			}
-   472			tegra_hte_writel(gs, HTE_TECMD, HTE_TECMD_CMD_POP);
-   473		}
-   474	}
-   475	
-   476	static irqreturn_t tegra_hte_isr(int irq, void *dev_id)
-   477	{
-   478		struct tegra_hte_soc *gs = dev_id;
-   479		(void)irq;
-   480	
-   481		tegra_hte_read_fifo(gs);
-   482	
-   483		return IRQ_HANDLED;
-   484	}
-   485	
- > 486	bool tegra_hte_match_from_linedata(const struct hte_chip *chip,
-   487					   const struct hte_ts_desc *hdesc)
-   488	{
-   489		struct tegra_hte_soc *hte_dev = chip->data;
-   490	
-   491		if (!hte_dev || (hte_dev->prov_data->type != HTE_TEGRA_TYPE_GPIO))
-   492			return false;
-   493	
-   494		return hte_dev->c == gpiod_to_chip(hdesc->attr.line_data);
-   495	}
-   496	
+  1039	
+  1040	static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
+  1041						struct spi_message *msg)
+  1042	{
+  1043		bool is_first_msg = true;
+> 1044		int single_xfer;
+  1045		struct spi_transfer *xfer;
+  1046		struct spi_device *spi = msg->spi;
+  1047		u8 transfer_phase = 0;
+  1048		u32 cmd1 = 0, dma_ctl = 0;
+  1049		int ret;
+  1050		u32 address_value = 0;
+  1051		u32 cmd_config = 0, addr_config = 0;
+> 1052		u8 cmd_value = 0, len = 0, val = 0;
+  1053	
+  1054		/* Enable Combined sequence mode */
+  1055		val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
+  1056		val |= QSPI_CMB_SEQ_EN;
+  1057		tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
+  1058		single_xfer = list_is_singular(&msg->transfers);
+  1059		/* Process individual transfer list */
+  1060		list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+  1061			if (transfer_phase == CMD_TRANSFER) {
+  1062				/* X1 SDR mode */
+  1063				cmd_config = tegra_qspi_cmd_config(false, 0,
+  1064								   xfer->len);
+  1065				cmd_value = *((const u8 *)(xfer->tx_buf));
+  1066	
+  1067			} else if (transfer_phase == ADDR_TRANSFER) {
+  1068				len = xfer->len;
+  1069				/* X1 SDR mode */
+  1070				addr_config = tegra_qspi_addr_config(false, 0,
+  1071								     xfer->len);
+  1072				address_value = *((const u32 *)(xfer->tx_buf));
+  1073			} else {
+  1074				/* Program Command, Address value in register */
+  1075				tegra_qspi_writel(tqspi, cmd_value, QSPI_CMB_SEQ_CMD);
+  1076				tegra_qspi_writel(tqspi, address_value,
+  1077						  QSPI_CMB_SEQ_ADDR);
+  1078				/* Program Command and Address config in register */
+  1079				tegra_qspi_writel(tqspi, cmd_config,
+  1080						  QSPI_CMB_SEQ_CMD_CFG);
+  1081				tegra_qspi_writel(tqspi, addr_config,
+  1082						  QSPI_CMB_SEQ_ADDR_CFG);
+  1083	
+  1084				reinit_completion(&tqspi->xfer_completion);
+  1085				cmd1 = tegra_qspi_setup_transfer_one(spi, xfer,
+  1086								     is_first_msg);
+  1087				ret = tegra_qspi_start_transfer_one(spi, xfer,
+  1088								    cmd1);
+  1089	
+  1090				if (ret < 0) {
+  1091					dev_err(tqspi->dev, "Failed to start transfer-one: %d\n",
+  1092						ret);
+  1093					return ret;
+  1094				}
+  1095	
+  1096				is_first_msg = false;
+  1097				ret = wait_for_completion_timeout
+  1098						(&tqspi->xfer_completion,
+  1099						QSPI_DMA_TIMEOUT);
+  1100	
+  1101				if (WARN_ON(ret == 0)) {
+  1102					dev_err(tqspi->dev, "QSPI Transfer failed with timeout: %d\n",
+  1103						ret);
+  1104					if (tqspi->is_curr_dma_xfer &&
+  1105					    (tqspi->cur_direction & DATA_DIR_TX))
+  1106						dmaengine_terminate_all
+  1107							(tqspi->tx_dma_chan);
+  1108	
+  1109					if (tqspi->is_curr_dma_xfer &&
+  1110					    (tqspi->cur_direction & DATA_DIR_RX))
+  1111						dmaengine_terminate_all
+  1112							(tqspi->rx_dma_chan);
+  1113	
+  1114					/* Abort transfer by resetting pio/dma bit */
+  1115					if (!tqspi->is_curr_dma_xfer) {
+  1116						cmd1 = tegra_qspi_readl
+  1117								(tqspi,
+  1118								 QSPI_COMMAND1);
+  1119						cmd1 &= ~QSPI_PIO;
+  1120						tegra_qspi_writel
+  1121								(tqspi, cmd1,
+  1122								 QSPI_COMMAND1);
+  1123					} else {
+  1124						dma_ctl = tegra_qspi_readl
+  1125								(tqspi,
+  1126								 QSPI_DMA_CTL);
+  1127						dma_ctl &= ~QSPI_DMA_EN;
+  1128						tegra_qspi_writel(tqspi, dma_ctl,
+  1129								  QSPI_DMA_CTL);
+  1130					}
+  1131	
+  1132					/* Reset controller if timeout happens */
+  1133					device_reset(tqspi->dev);
+  1134					ret = -EIO;
+  1135					goto exit;
+  1136				}
+  1137	
+  1138				if (tqspi->tx_status ||  tqspi->rx_status) {
+  1139					dev_err(tqspi->dev, "QSPI Transfer failed\n");
+  1140					tqspi->tx_status = 0;
+  1141					tqspi->rx_status = 0;
+  1142					ret = -EIO;
+  1143					goto exit;
+  1144				}
+  1145			}
+  1146			msg->actual_length += xfer->len;
+  1147			transfer_phase++;
+  1148		}
+  1149	
+  1150	exit:
+  1151		msg->status = ret;
+  1152	
+  1153		return ret;
+  1154	}
+  1155	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
