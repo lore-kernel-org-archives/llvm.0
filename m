@@ -1,102 +1,135 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CDD2F26
-	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 00:59:08 +0000 (UTC)
-Received: by mail-ej1-f47.google.com with SMTP id s5so14116609ejx.2
-        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 16:59:08 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E2029CA
+	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 00:59:12 +0000 (UTC)
+Received: by mail-lj1-f178.google.com with SMTP id a25so6365901lji.9
+        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 16:59:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wx9zL515JtmLncGQm93eWQntb/DTkqy+sgfVCpkbAp4=;
-        b=FPro4IaRcta3YpRSuo7Os1sx9brg4nB9U+Ay5jgMt/rH0CTtD4+2q8W5O8PmupD5rP
-         X+ZDD0fbMdszPz+6S4QjxxPMM6QLRmuub03JdPQN9mFtLzP66Xjv+U4ZH4dgJCKwk508
-         lbEZdqQf0jF79Za06EQzlV27DCn4i5bEzDBAxJQBOvzeGOzzkz+dvTu7HEYP5+OY1ouT
-         5F/iY6i21ny22utCHBQh+87VywUISYY7iXzye4FUW10DsrNROis1J5vnxdylJ/l7w8xC
-         /TFF65bRaLEqH9PxXnIOv6dSlh2ivxWgzN67uoQiF9J3zENr0wnK5S83if/VqLhEPF6a
-         XxAw==
+        bh=k7KeA57I51/JIVqQa4MJpZeyTQ+nAZfh0KjGh2MyJYI=;
+        b=GrHQdd3dcFl4hedxqDCjWQSUD5ym8BEtP1DqcvK0uzMyHkP96SP2KGwCr8EneebGlg
+         3eXcdB0rMhcljYWYnWASrFjVyFqCBO93g5yZgWjzNofkS/p9ceHG93jObXLHSFwokE4q
+         c9FO6CmbguQ4s7kDQIOMsbH/8ZJGQI3GdniBOzlQhozSVDvzImxWRvt4mfHqFnz3eSd+
+         7HSl0iq1eldpuqkILsUH1ouIYSNtaceRaMTtWiA8ES5/BSfEGmp8T7cuvQsdYNoriRME
+         BjNAO2q9BoNyXRHoYSmOC52bYu3WPRrcB2qvN7186YHXcOV0YmHjyTVTXAUOzdGUGS6T
+         ymeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wx9zL515JtmLncGQm93eWQntb/DTkqy+sgfVCpkbAp4=;
-        b=OkFu5g2j8fjrJnysxddS2GJ8UqKxwsxCTCPvYWoixctQrlbHnWaa7whqrYNszAJjl/
-         JJrCTCanKMs7EG8eBQFs9V4ZrGrxrOPPI3jIpTRqzP/8LCyRXjeNcfT3LCYEhw6QToJn
-         iDtf+1vAnzVr1In7ZS0wlXQSF7dZCWgIC4O6geqiKtBpUihpP0UZFFSJn1WINvLjSvuC
-         0b6Lcn8jjOQlM3bvJ0LWTjkqsyPf/PL8nk32g9QSgbpdtsh2OKWj9Wk8UIiWYu9yNuzl
-         f1loiW7VuD7h4W2lysIMtHKDfgEQOVJjQ7Ze61AiDKtn2PgA7XoOWVRkJ7J2jKBD5qPl
-         8low==
-X-Gm-Message-State: AOAM532Hrk81Hws3zVi9+fh9FrmuGps6JZqWI5LB0/zXTUyr5JVUQZQC
-	RWxeXRTaQswQBELy2CY6nQKkvy/2MOKSFx9i0oT8
-X-Google-Smtp-Source: ABdhPJxZm8zlXltXg56zyniqAOvjtYuG3I9y6xBCgyqrjpAnGwwHKWd8QK8IhscrAzso7zlHoLO77uQ1pVrFth2RxPw=
-X-Received: by 2002:a17:907:9804:: with SMTP id ji4mr433075ejc.232.1643936347092;
- Thu, 03 Feb 2022 16:59:07 -0800 (PST)
+        bh=k7KeA57I51/JIVqQa4MJpZeyTQ+nAZfh0KjGh2MyJYI=;
+        b=MIxhl4MvpVvRZIrSI2XyOwjWXtca8mbwjVABU03y38giPbHfFAjhtHlt3h4UwSfz4+
+         7XfNffORaL9o+EBu1eufaHtIWObUW4LS/7JHYBYFRJlhViugdTt/kleXeXANVW1alzbA
+         ztnavOXYrT73BSENeGsNHfvZBWJKPqrop8hj267eBqTenKtMV3G46n7ynpWVQrJnfdSj
+         HaL9J4FzxPIl9wNHCLBWqnp9oqu9yvT9KsA6SssGkWmkpevWrw6X44UcLZOkqZX/oGLH
+         95UVqe9hFcujpM+ZCsajawaTjH7ZFmaFdo8e0pLCKdJQ8xY5NteSYyI2hjj7tqsZipTF
+         IA0A==
+X-Gm-Message-State: AOAM531S0ZLRZraD72tmi7LF99Y7Mm2DP2zDUxcSn5dLAoxuDJrgB/3W
+	JH10laK3qtWy3SB+kX3eTSRysB2L3h8Elwn2A+wp6w==
+X-Google-Smtp-Source: ABdhPJy0ozDt5HvXVEVqAROXrUgLZ+JesglIPHUMssfVg7v+JDCU6oq3ZSgJsV1Imap2fx9ReHcIOe7OihRU7xIB0wU=
+X-Received: by 2002:a05:651c:1253:: with SMTP id h19mr363659ljh.338.1643936350075;
+ Thu, 03 Feb 2022 16:59:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211215211847.206208-1-morbo@google.com> <20211229021258.176670-1-morbo@google.com>
- <87mtj7cwpa.ffs@tglx>
-In-Reply-To: <87mtj7cwpa.ffs@tglx>
-From: Bill Wendling <morbo@google.com>
-Date: Thu, 3 Feb 2022 16:58:55 -0800
-Message-ID: <CAGG=3QUie3qMTo68e6pgNu=_NDof6eA+h6=VtREm8Do1memOUg@mail.gmail.com>
-Subject: Re: [PATCH v2] x86: use builtins to read eflags
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev, 
-	LKML <linux-kernel@vger.kernel.org>
+References: <20220203173307.1033257-1-keescook@chromium.org>
+ <20220203173307.1033257-3-keescook@chromium.org> <CAKwvOdkU=5q-7Sb4BKYkRsigy_qYjo_7J+A73ZYKn+xArxUwXg@mail.gmail.com>
+ <202202031301.437D8FD3@keescook> <CAKwvOdm-_uGYrm=2LTGSR7yhGK08NniGdkhLj_sM-QD-xdKVtA@mail.gmail.com>
+ <202202031618.BC9EDA9D82@keescook>
+In-Reply-To: <202202031618.BC9EDA9D82@keescook>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 3 Feb 2022 16:58:58 -0800
+Message-ID: <CAKwvOdnZJckq7svQfKTQUteDG9RozeCXAi8OtTnJsTifiLTnbQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/4] Compiler Attributes: Add __overloadable for Clang
+To: Kees Cook <keescook@chromium.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
+	George Burgess IV <gbiv@google.com>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 3, 2022 at 4:16 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Thu, Feb 3, 2022 at 4:26 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> On Tue, Dec 28 2021 at 18:12, Bill Wendling wrote:
-> > GCC and Clang both have builtins to read and write the EFLAGS register.
-> > This allows the compiler to determine the best way to generate this
-> > code, which can improve code generation.
+> On Thu, Feb 03, 2022 at 02:11:48PM -0800, Nick Desaulniers wrote:
+> > On Thu, Feb 3, 2022 at 1:04 PM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Thu, Feb 03, 2022 at 12:26:15PM -0800, Nick Desaulniers wrote:
+> > > > On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
+> > > > >
+> > > > > must be marked as being overloadable (i.e. different prototypes).
+> > > > > This allows the __pass_object_size versions to take precedence.
+> > > >
+> > > > Is this because of the `const` additions to the function signatures?
+> > >
+> > > That might be an issue, but the *real* issue is the implicit mutation of
+> > > the function into an inline with _additional_ arguments. i.e.
+> > >
+> > > char *strcpy(char * POS p, const char * POS q)
+> > >
+> > > is really
+> > >
+> > > char *strcpy(char * const p, const char * const q, size_t __size_of_p, size_t __size_of_q)
+> > >
+> > > (i.e. what I was doing with macros, but all internally and still an
+> > > extern inline)
 > >
-> > This issue arose due to Clang's issue with the "=rm" constraint.  Clang
-> > chooses to be conservative in these situations, and so uses memory
-> > instead of registers. This is a known issue, which is currently being
-> > addressed.
-> >
-> > However, using builtins is benefiical in general, because it removes the
-> > burden of determining what's the way to read the flags register from the
-> > programmer and places it on to the compiler, which has the information
-> > needed to make that decision. Indeed, this piece of code has had several
-> > changes over the years, some of which were pinging back and forth to
-> > determine the correct constraints to use.
-> >
-> > With this change, Clang generates better code:
-> >
-> > Original code:
-> >         movq    $0, -48(%rbp)
-> >         #APP
-> >         # __raw_save_flags
-> >         pushfq
-> >         popq    -48(%rbp)
-> >         #NO_APP
-> >         movq    -48(%rbp), %rbx
-> >
-> > New code:
-> >         pushfq
-> >         popq    %rbx
-> >         #APP
-> >
-> > Note that the stack slot in the original code is no longer needed in the
-> > new code, saving a small amount of stack space.
+> > What do you mean "is really"? 4/4 doesn't change the number of
+> > parameters in strcpy explicitly in the definition AFAICT.
 >
-> This still lacks any information about the effect on GCC. There is a
-> world outside clang. It's not my job to validate that.
+> It really does change the number of parameters. See the IR difference:
 >
-I never said you were the one required to validate that. I'm not sure
-where you got that idea from. There of course is no change to GCC's
-output. I updated the commit message and sent out v3. PTAL.
+> $ cat example.c
+> #ifdef USE_POS
+> # define POS __attribute__((pass_object_size(1)))
+> #else
+> # define POS
+> #endif
+>
+> int func(void * const POS);
+>
+> struct foo
+> {
+>         int a;
+>         char *b;
+> };
+>
+> void usage(struct foo *example)
+> {
+>         func(example);
+> }
+>
+> $ IR="-O2 -Xclang -disable-llvm-passes -emit-llvm -S"
+> $ clang           example.c $IR -o normal.ll
+> $ clang -DUSE_POS example.c $IR -o pos.ll
+> $ diff -u normal.ll pos.ll
+> --- normal.ll   2022-02-03 16:23:39.734065036 -0800
+> +++ pos.ll      2022-02-03 16:23:49.518083451 -0800
+> @@ -11,14 +11,19 @@
+>    store %struct.foo* %0, %struct.foo** %2, align 8, !tbaa !3
+>    %3 = load %struct.foo*, %struct.foo** %2, align 8, !tbaa !3
+>    %4 = bitcast %struct.foo* %3 to i8*
+> -  %5 = call i32 @func(i8* noundef %4)
+> +  %5 = call i64 @llvm.objectsize.i64.p0i8(i8* %4, i1 false, i1 true, i1 false)
+> +  %6 = call i32 @func(i8* noundef %4, i64 noundef %5)
+>    ret void
+>  }
+> ...
 
--bw
+Woah, that's fancy.
+
+>
+> This is basically doing internally exactly what I was doing in v4 and
+> earlier with macros (passing in the caller's view of __bos(arg, 1)).
+
+Yeah. Ok now it all makes sense to me.
+
+With the s/inline extern/extern inline/:
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+-- 
+Thanks,
+~Nick Desaulniers
