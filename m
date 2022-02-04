@@ -1,41 +1,48 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C65D2F29
-	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 15:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4ECE2F25
+	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 17:38:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643990254; x=1675526254;
+  t=1643996320; x=1675532320;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JPwpRS21AtpS7G52dTYDaQ+oac3H8lMvMGp+3z9cyPk=;
-  b=GNLcqyrAXWkrgvaNLo1CvCVyHoRX33AiTG4zr4Q2EWroBed0U8eH2UUn
-   z4/1Fn/g8/KsEnckorHAjHdfBu87l3I31PKJ+oPP9Vb/zYjl9qKDXngoc
-   vhIqtdhfK3hxzu0Nf7GJNq218dSh6MAxbkhW4JDAWWVQtECyTdVeZFOSs
-   9P9Y/FEn8OmP88axIOGgCnXnf4o+7w1rGPQFBWIzLyEIq5fP9OFQo0CZs
-   iCDSsPY1a2FCLWThKoyUi9dC2Fkf6XNaoLP05Foo9hhAm5vGCNYZWD9Np
-   UxIp51eQmF6T06XbIPCqKbfpAk5PoI+us1tUpvQ49bnTdcwYMgOokxcNS
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248150380"
+  bh=O1t48c17XoJx7EOIIIEmyVVzGAn2IVOrgHRTPrmEe/U=;
+  b=CsSnSB2tqP2z4iqdEwZSSJuf10v8SdLXVz244JmQhdXYtxWvi/JReYvP
+   4vFx1PBSGeuvzviICrlTKiIbBuuBfjjwuhYlncrU33qpeI2JIR+2C9BaP
+   +xXk2Edd24966H/u9a3i4lmlm7PNgE27ugB6qs6rrDGAcKxYtewedGOsq
+   gqlVjk9Q2YB6l65nLVe7H0Mzp6cVhPs5pSuzjuTNi6o5o1X9artneecuX
+   ZSpM7k764U8RMVG7PcTNf52Nf/MF51l19/eufqyV4X9WUbKibeK5t6Ezo
+   +4t4hQ+157oGPd69Ng2jMab9qqzT8FAEKelBymlbQjmS9tj+cVvXRBCne
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="309153857"
 X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="248150380"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:57:33 -0800
+   d="scan'208";a="309153857"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 09:38:39 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="535569119"
+   d="scan'208";a="631768511"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Feb 2022 07:57:32 -0800
+  by orsmga004.jf.intel.com with ESMTP; 04 Feb 2022 09:38:37 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nG0xn-000Xpv-RP; Fri, 04 Feb 2022 15:57:31 +0000
-Date: Fri, 4 Feb 2022 23:56:42 +0800
+	id 1nG2Xc-000Xx0-Li; Fri, 04 Feb 2022 17:38:36 +0000
+Date: Sat, 5 Feb 2022 01:38:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 1/6] spi: tegra210-quad: use device_reset method
-Message-ID: <202202042322.4epfxv0U-lkp@intel.com>
-References: <1643970576-31503-2-git-send-email-kyarlagadda@nvidia.com>
+To: Biju Das <biju.das.jz@bp.renesas.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	Chris Paterson <Chris.Paterson2@renesas.com>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v4] clk: renesas: rzg2l-cpg: Add support for RZ/V2L SoC
+Message-ID: <202202050101.eoVR3IJN-lkp@intel.com>
+References: <20220204135221.2598-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,59 +51,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1643970576-31503-2-git-send-email-kyarlagadda@nvidia.com>
+In-Reply-To: <20220204135221.2598-1-biju.das.jz@bp.renesas.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Krishna,
+Hi Biju,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on v5.17-rc2 next-20220204]
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on v5.17-rc2]
+[cannot apply to geert-renesas-drivers/renesas-clk next-20220204]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Krishna-Yarlagadda/Tegra-QUAD-SPI-combined-sequence-mode/20220204-183224
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-config: hexagon-randconfig-r045-20220131 (https://download.01.org/0day-ci/archive/20220204/202202042322.4epfxv0U-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Biju-Das/clk-renesas-rzg2l-cpg-Add-support-for-RZ-V2L-SoC/20220204-215327
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+config: mips-randconfig-r003-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050101.eoVR3IJN-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/6bd51e7b07329b4ee4e90f5bc5aa8372ef26c999
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/c10eeae8f76f71a3b6778b816cb18c2db3e917f8
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Krishna-Yarlagadda/Tegra-QUAD-SPI-combined-sequence-mode/20220204-183224
-        git checkout 6bd51e7b07329b4ee4e90f5bc5aa8372ef26c999
+        git fetch --no-tags linux-review Biju-Das/clk-renesas-rzg2l-cpg-Add-support-for-RZ-V2L-SoC/20220204-215327
+        git checkout c10eeae8f76f71a3b6778b816cb18c2db3e917f8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/spi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/clk/renesas/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/spi/spi-tegra210-quad.c:950:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-           device_reset(tqspi->dev);
-           ^~~~~~~~~~~~ ~~~~~~~~~~
-   drivers/spi/spi-tegra210-quad.c:1270:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-           device_reset(tqspi->dev);
-           ^~~~~~~~~~~~ ~~~~~~~~~~
-   2 warnings generated.
+>> drivers/clk/renesas/r9a07g044-cpg.c:14:10: fatal error: 'dt-bindings/clock/r9a07g054-cpg.h' file not found
+   #include <dt-bindings/clock/r9a07g054-cpg.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/warn_unused_result +950 drivers/spi/spi-tegra210-quad.c
+vim +14 drivers/clk/renesas/r9a07g044-cpg.c
 
-   944	
-   945	static void tegra_qspi_handle_error(struct tegra_qspi *tqspi)
-   946	{
-   947		dev_err(tqspi->dev, "error in transfer, fifo status 0x%08x\n", tqspi->status_reg);
-   948		tegra_qspi_dump_regs(tqspi);
-   949		tegra_qspi_flush_fifos(tqspi, true);
- > 950		device_reset(tqspi->dev);
-   951	}
-   952	
+    12	
+    13	#include <dt-bindings/clock/r9a07g044-cpg.h>
+  > 14	#include <dt-bindings/clock/r9a07g054-cpg.h>
+    15	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
