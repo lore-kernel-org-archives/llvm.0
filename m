@@ -1,43 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131012F26
-	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 22:33:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606342F26
+	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 23:35:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644014039; x=1675550039;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Uf8KEKKcMkQwU490A/ltDNDtyX6BjanrwMvyTaGtG90=;
-  b=KHK8c0fXD6uQN74SlbSnAQFBYuvV4Kl4mOKyDNwx+1FstbdR3aLEUo31
-   c1nh0f5KsG9ngJLG+4nnyuEgLTkoX67nkyzH5wcz2xXpxvwNQTTIdKbw0
-   K4x91BxQuOP0mL8K4GXT//Qxn95N45vN+1UoqN6b43ttEvkf5+7LHJPaP
-   6UT4FAtaRdbsOLg02XIQqpE5wHuJC1xIAIucsrbED/2APY2vMa12Dx56S
-   mU+YWZWnnXql78KdGYRgFU3drnkvgW2KkqRG1n5Q/Jo25FzuWqua3ohMG
-   0wbQwBAxTYtUHl1L7aNzJol858yu+y9XbCyax6zmV/A6XfY8Lgjf33CaV
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="229105071"
+  t=1644017759; x=1675553759;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=M9wPMFyv7fuslXfnUJ34OScj+CJGAXieFhwUhiLYLFQ=;
+  b=OQYG7S8gCWGwSSKozrDglN+iQyY4LmiUrWp5k8qlW+0Cu+ol9Gw3Jlfa
+   l1n8jz/ZpSHCMoaubbHXHKEI67CZE/Ytu8/l+i6V5gl7BkOT3LswF/zZf
+   GMOdt3ab2t3WkC069VUIPlNu39cdWdDDopGo9khjqkjml3UirODRHZSSD
+   lBR9/ftgbbEASLOH6WDrLAbBVNwrkAi4HTT9yyMj0g7ayWV2MzfEw4ywc
+   5uzpKCWUT1NE5TXIazQeEzKyxCw8MsOB2Udi0GzJp0a+kauDyFCUzMPB2
+   MtwARHaya5OzEijor/2XtswXbgRq3d5eE9EXr9z9FTqSOvhDL/5cW1YHc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="334856691"
 X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="229105071"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 14:33:57 -0800
+   d="scan'208";a="334856691"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 15:35:58 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="566879818"
+   d="scan'208";a="627925865"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Feb 2022 14:33:55 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 04 Feb 2022 15:35:57 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nG79O-000YFh-PT; Fri, 04 Feb 2022 22:33:54 +0000
-Date: Sat, 5 Feb 2022 06:33:46 +0800
+	id 1nG87Q-000YJf-NY; Fri, 04 Feb 2022 23:35:56 +0000
+Date: Sat, 5 Feb 2022 07:35:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Johannes Berg <johannes@sipsolutions.net>,
-	linux-wireless@vger.kernel.org
+To: Mark Rutland <mark.rutland@arm.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [PATCH] mac80211_hwsim: check TX and STA bandwidth
-Message-ID: <202202050604.dzCxQjWk-lkp@intel.com>
-References: <20220204174105.5026d3892bf6.Ia0cd152357a373149bab017d479ab7d5ded289c0@changeid>
+	linux-kernel@vger.kernel.org
+Subject: [mark:arm64/preempt-dynamic-static-key 7/7]
+ kernel/rcu/rcutorture.c:408:3: error: implicit declaration of function
+ 'preempt_schedule'
+Message-ID: <202202050711.Ze2cgnZY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,168 +45,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204174105.5026d3892bf6.Ia0cd152357a373149bab017d479ab7d5ded289c0@changeid>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Johannes,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.17-rc2 next-20220204]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Johannes-Berg/mac80211_hwsim-check-TX-and-STA-bandwidth/20220205-004233
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dcb85f85fa6f142aae1fe86f399d4503d49f2b60
-config: hexagon-randconfig-r041-20220204 (https://download.01.org/0day-ci/archive/20220205/202202050604.dzCxQjWk-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/preempt-dynamic-static-key
+head:   fb01536865a3af674b204f6d0fe0935264c4b434
+commit: fb01536865a3af674b204f6d0fe0935264c4b434 [7/7] arm64: support PREEMPT_DYNAMIC
+config: arm64-randconfig-r025-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050711.Ze2cgnZY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/99f1c0b151e550eed22429c2eb48876108bf3de7
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Johannes-Berg/mac80211_hwsim-check-TX-and-STA-bandwidth/20220205-004233
-        git checkout 99f1c0b151e550eed22429c2eb48876108bf3de7
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=fb01536865a3af674b204f6d0fe0935264c4b434
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark arm64/preempt-dynamic-static-key
+        git checkout fb01536865a3af674b204f6d0fe0935264c4b434
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/wireless/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/wireless/mac80211_hwsim.c:1631:26: warning: variable 'confbw' set but not used [-Wunused-but-set-variable]
-           enum nl80211_chan_width confbw = NL80211_CHAN_WIDTH_20_NOHT;
+>> kernel/rcu/rcutorture.c:408:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
+                   torture_preempt_schedule();  /* QS only if preemptible. */
+                   ^
+   include/linux/torture.h:121:36: note: expanded from macro 'torture_preempt_schedule'
+   #define torture_preempt_schedule() preempt_schedule()
+                                      ^
+   kernel/rcu/rcutorture.c:408:3: note: did you mean 'preempt_schedule_irq'?
+   include/linux/torture.h:121:36: note: expanded from macro 'torture_preempt_schedule'
+   #define torture_preempt_schedule() preempt_schedule()
+                                      ^
+   include/linux/sched.h:296:17: note: 'preempt_schedule_irq' declared here
+   asmlinkage void preempt_schedule_irq(void);
+                   ^
+   kernel/rcu/rcutorture.c:2087:5: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
+                                   preempt_schedule();
                                    ^
-   1 warning generated.
+   2 errors generated.
 
 
-vim +/confbw +1631 drivers/net/wireless/mac80211_hwsim.c
+vim +/preempt_schedule +408 kernel/rcu/rcutorture.c
 
-  1620	
-  1621	static void mac80211_hwsim_tx(struct ieee80211_hw *hw,
-  1622				      struct ieee80211_tx_control *control,
-  1623				      struct sk_buff *skb)
-  1624	{
-  1625		struct mac80211_hwsim_data *data = hw->priv;
-  1626		struct ieee80211_tx_info *txi = IEEE80211_SKB_CB(skb);
-  1627		struct ieee80211_hdr *hdr = (void *)skb->data;
-  1628		struct ieee80211_chanctx_conf *chanctx_conf;
-  1629		struct ieee80211_channel *channel;
-  1630		bool ack;
-> 1631		enum nl80211_chan_width confbw = NL80211_CHAN_WIDTH_20_NOHT;
-  1632		u32 _portid, i;
-  1633	
-  1634		if (WARN_ON(skb->len < 10)) {
-  1635			/* Should not happen; just a sanity check for addr1 use */
-  1636			ieee80211_free_txskb(hw, skb);
-  1637			return;
-  1638		}
-  1639	
-  1640		if (!data->use_chanctx) {
-  1641			channel = data->channel;
-  1642			confbw = data->bw;
-  1643		} else if (txi->hw_queue == 4) {
-  1644			channel = data->tmp_chan;
-  1645		} else {
-  1646			chanctx_conf = rcu_dereference(txi->control.vif->chanctx_conf);
-  1647			if (chanctx_conf) {
-  1648				channel = chanctx_conf->def.chan;
-  1649				confbw = chanctx_conf->def.width;
-  1650			} else {
-  1651				channel = NULL;
-  1652			}
-  1653		}
-  1654	
-  1655		if (WARN(!channel, "TX w/o channel - queue = %d\n", txi->hw_queue)) {
-  1656			ieee80211_free_txskb(hw, skb);
-  1657			return;
-  1658		}
-  1659	
-  1660		if (data->idle && !data->tmp_chan) {
-  1661			wiphy_dbg(hw->wiphy, "Trying to TX when idle - reject\n");
-  1662			ieee80211_free_txskb(hw, skb);
-  1663			return;
-  1664		}
-  1665	
-  1666		if (txi->control.vif)
-  1667			hwsim_check_magic(txi->control.vif);
-  1668		if (control->sta)
-  1669			hwsim_check_sta_magic(control->sta);
-  1670	
-  1671		if (ieee80211_hw_check(hw, SUPPORTS_RC_TABLE))
-  1672			ieee80211_get_tx_rates(txi->control.vif, control->sta, skb,
-  1673					       txi->control.rates,
-  1674					       ARRAY_SIZE(txi->control.rates));
-  1675	
-  1676		for (i = 0; i < ARRAY_SIZE(txi->control.rates); i++) {
-  1677			u16 rflags = txi->control.rates[i].flags;
-  1678			/* initialize to data->bw for 5/10 MHz handling */
-  1679			enum nl80211_chan_width bw = data->bw;
-  1680	
-  1681			if (txi->control.rates[i].idx == -1)
-  1682				break;
-  1683	
-  1684			if (rflags & IEEE80211_TX_RC_40_MHZ_WIDTH)
-  1685				bw = NL80211_CHAN_WIDTH_40;
-  1686			else if (rflags & IEEE80211_TX_RC_80_MHZ_WIDTH)
-  1687				bw = NL80211_CHAN_WIDTH_80;
-  1688			else if (rflags & IEEE80211_TX_RC_160_MHZ_WIDTH)
-  1689				bw = NL80211_CHAN_WIDTH_160;
-  1690	
-  1691			if (WARN_ON(hwsim_get_chanwidth(bw) > hwsim_get_chanwidth(data->bw)))
-  1692				return;
-  1693		}
-  1694	
-  1695		if (skb->len >= 24 + 8 &&
-  1696		    ieee80211_is_probe_resp(hdr->frame_control)) {
-  1697			/* fake header transmission time */
-  1698			struct ieee80211_mgmt *mgmt;
-  1699			struct ieee80211_rate *txrate;
-  1700			/* TODO: get MCS */
-  1701			int bitrate = 100;
-  1702			u64 ts;
-  1703	
-  1704			mgmt = (struct ieee80211_mgmt *)skb->data;
-  1705			txrate = ieee80211_get_tx_rate(hw, txi);
-  1706			if (txrate)
-  1707				bitrate = txrate->bitrate;
-  1708			ts = mac80211_hwsim_get_tsf_raw();
-  1709			mgmt->u.probe_resp.timestamp =
-  1710				cpu_to_le64(ts + data->tsf_offset +
-  1711					    24 * 8 * 10 / bitrate);
-  1712		}
-  1713	
-  1714		mac80211_hwsim_monitor_rx(hw, skb, channel);
-  1715	
-  1716		/* wmediumd mode check */
-  1717		_portid = READ_ONCE(data->wmediumd);
-  1718	
-  1719		if (_portid || hwsim_virtio_enabled)
-  1720			return mac80211_hwsim_tx_frame_nl(hw, skb, _portid, channel);
-  1721	
-  1722		/* NO wmediumd detected, perfect medium simulation */
-  1723		data->tx_pkts++;
-  1724		data->tx_bytes += skb->len;
-  1725		ack = mac80211_hwsim_tx_frame_no_nl(hw, skb, channel);
-  1726	
-  1727		if (ack && skb->len >= 16)
-  1728			mac80211_hwsim_monitor_ack(channel, hdr->addr2);
-  1729	
-  1730		ieee80211_tx_info_clear_status(txi);
-  1731	
-  1732		/* frame was transmitted at most favorable rate at first attempt */
-  1733		txi->control.rates[0].count = 1;
-  1734		txi->control.rates[1].idx = -1;
-  1735	
-  1736		if (!(txi->flags & IEEE80211_TX_CTL_NO_ACK) && ack)
-  1737			txi->flags |= IEEE80211_TX_STAT_ACK;
-  1738		ieee80211_tx_status_irqsafe(hw, skb);
-  1739	}
-  1740	
+72e9bb549280b3 kernel/rcutorture.c     Paul E. McKenney 2006-06-27  376  
+c116dba68d1924 kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-13  377  static void
+c116dba68d1924 kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-13  378  rcu_read_delay(struct torture_random_state *rrsp, struct rt_read_seg *rtrsp)
+b2896d2e75c87e kernel/rcutorture.c     Paul E. McKenney 2006-10-04  379  {
+d0af39e89ec59f kernel/rcu/rcutorture.c Paul E. McKenney 2016-10-10  380  	unsigned long started;
+d0af39e89ec59f kernel/rcu/rcutorture.c Paul E. McKenney 2016-10-10  381  	unsigned long completed;
+b8d57a76d9f92a kernel/rcutorture.c     Josh Triplett    2009-09-08  382  	const unsigned long shortdelay_us = 200;
+1e69676592edaf kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-20  383  	unsigned long longdelay_ms = 300;
+d0af39e89ec59f kernel/rcu/rcutorture.c Paul E. McKenney 2016-10-10  384  	unsigned long long ts;
+b2896d2e75c87e kernel/rcutorture.c     Paul E. McKenney 2006-10-04  385  
+b8d57a76d9f92a kernel/rcutorture.c     Josh Triplett    2009-09-08  386  	/* We want a short delay sometimes to make a reader delay the grace
+b8d57a76d9f92a kernel/rcutorture.c     Josh Triplett    2009-09-08  387  	 * period, and we want a long delay occasionally to trigger
+b8d57a76d9f92a kernel/rcutorture.c     Josh Triplett    2009-09-08  388  	 * force_quiescent_state. */
+b2896d2e75c87e kernel/rcutorture.c     Paul E. McKenney 2006-10-04  389  
+102c14d2f87976 kernel/rcu/rcutorture.c Paul E. McKenney 2019-12-21  390  	if (!READ_ONCE(rcu_fwd_cb_nodelay) &&
+4871848531af1d kernel/rcu/rcutorture.c Paul E. McKenney 2018-08-15  391  	    !(torture_random(rrsp) % (nrealreaders * 2000 * longdelay_ms))) {
+17ef2fe97c8c8e kernel/rcu/rcutorture.c Paul E. McKenney 2018-04-27  392  		started = cur_ops->get_gp_seq();
+d0af39e89ec59f kernel/rcu/rcutorture.c Paul E. McKenney 2016-10-10  393  		ts = rcu_trace_clock_local();
+1e69676592edaf kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-20  394  		if (preempt_count() & (SOFTIRQ_MASK | HARDIRQ_MASK))
+1e69676592edaf kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-20  395  			longdelay_ms = 5; /* Avoid triggering BH limits. */
+b8d57a76d9f92a kernel/rcutorture.c     Josh Triplett    2009-09-08  396  		mdelay(longdelay_ms);
+c116dba68d1924 kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-13  397  		rtrsp->rt_delay_ms = longdelay_ms;
+17ef2fe97c8c8e kernel/rcu/rcutorture.c Paul E. McKenney 2018-04-27  398  		completed = cur_ops->get_gp_seq();
+d0af39e89ec59f kernel/rcu/rcutorture.c Paul E. McKenney 2016-10-10  399  		do_trace_rcu_torture_read(cur_ops->name, NULL, ts,
+d0af39e89ec59f kernel/rcu/rcutorture.c Paul E. McKenney 2016-10-10  400  					  started, completed);
+d0af39e89ec59f kernel/rcu/rcutorture.c Paul E. McKenney 2016-10-10  401  	}
+c116dba68d1924 kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-13  402  	if (!(torture_random(rrsp) % (nrealreaders * 2 * shortdelay_us))) {
+b8d57a76d9f92a kernel/rcutorture.c     Josh Triplett    2009-09-08  403  		udelay(shortdelay_us);
+c116dba68d1924 kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-13  404  		rtrsp->rt_delay_us = shortdelay_us;
+c116dba68d1924 kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-13  405  	}
+51b1130eb5823d kernel/rcu/rcutorture.c Paul E. McKenney 2014-01-27  406  	if (!preempt_count() &&
+c116dba68d1924 kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-13  407  	    !(torture_random(rrsp) % (nrealreaders * 500))) {
+cc1321c96f8555 kernel/rcu/rcutorture.c Paul E. McKenney 2017-10-16 @408  		torture_preempt_schedule();  /* QS only if preemptible. */
+c116dba68d1924 kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-13  409  		rtrsp->rt_preempted = true;
+c116dba68d1924 kernel/rcu/rcutorture.c Paul E. McKenney 2018-07-13  410  	}
+b2896d2e75c87e kernel/rcutorture.c     Paul E. McKenney 2006-10-04  411  }
+b2896d2e75c87e kernel/rcutorture.c     Paul E. McKenney 2006-10-04  412  
+
+:::::: The code at line 408 was first introduced by commit
+:::::: cc1321c96f855525fbd847fec130f000daa1bb1f torture: Reduce #ifdefs for preempt_schedule()
+
+:::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
