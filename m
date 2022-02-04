@@ -1,44 +1,43 @@
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DCC2F21
-	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 21:22:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131012F26
+	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 22:33:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644009774; x=1675545774;
+  t=1644014039; x=1675550039;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Q0sBxlENUk9O0bMBfazY3nvfd6WM4GRtxdNNT+RMwcU=;
-  b=XSFmcWwb8q/G2tZHZOtbOXyG39LNRShZGi0CGyuO/uKkKrO4lc8M2tfl
-   aJzpLQm41uJdXH3xSmMBLZ4ZfOeRZ/YA8ub6bxJ2BQwpmN1WoVdD2DYUf
-   grPliRF8KjuIGrNMnYVi11fkA167eHkeP+OAwqPjm+RmUPKAmU/qBc82F
-   UCR9BC1tc+5F1sFowKYHqyeNvl9CqruQU8a5LlHH+6ILufhOWhHpQs04u
-   bqb8UcMHQ5alzNNHKzEI+U4eKhNABldGRzdKpfQ54jSlEm+RKvVxesmkT
-   m8lUJ/D6nmTcmGUcBvPmoMGJ8wwyJqK+eIRbuLCavxBzRdBxdbe149csx
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="229095477"
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="229095477"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 13:22:53 -0800
+  bh=Uf8KEKKcMkQwU490A/ltDNDtyX6BjanrwMvyTaGtG90=;
+  b=KHK8c0fXD6uQN74SlbSnAQFBYuvV4Kl4mOKyDNwx+1FstbdR3aLEUo31
+   c1nh0f5KsG9ngJLG+4nnyuEgLTkoX67nkyzH5wcz2xXpxvwNQTTIdKbw0
+   K4x91BxQuOP0mL8K4GXT//Qxn95N45vN+1UoqN6b43ttEvkf5+7LHJPaP
+   6UT4FAtaRdbsOLg02XIQqpE5wHuJC1xIAIucsrbED/2APY2vMa12Dx56S
+   mU+YWZWnnXql78KdGYRgFU3drnkvgW2KkqRG1n5Q/Jo25FzuWqua3ohMG
+   0wbQwBAxTYtUHl1L7aNzJol858yu+y9XbCyax6zmV/A6XfY8Lgjf33CaV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="229105071"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="229105071"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 14:33:57 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="498596555"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="566879818"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 04 Feb 2022 13:22:49 -0800
+  by orsmga001.jf.intel.com with ESMTP; 04 Feb 2022 14:33:55 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nG62b-000YCb-2j; Fri, 04 Feb 2022 21:22:49 +0000
-Date: Sat, 5 Feb 2022 05:22:44 +0800
+	id 1nG79O-000YFh-PT; Fri, 04 Feb 2022 22:33:54 +0000
+Date: Sat, 5 Feb 2022 06:33:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, borntraeger@de.ibm.com,
-	frankja@linux.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
-	david@redhat.com, linux-s390@vger.kernel.org,
-	linux-kernel@vger.kernel.org, scgl@linux.ibm.com
-Subject: Re: [PATCH v7 10/17] KVM: s390: pv: add mmu_notifier
-Message-ID: <202202050525.5A9HirW8-lkp@intel.com>
-References: <20220204155349.63238-11-imbrenda@linux.ibm.com>
+To: Johannes Berg <johannes@sipsolutions.net>,
+	linux-wireless@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [PATCH] mac80211_hwsim: check TX and STA bandwidth
+Message-ID: <202202050604.dzCxQjWk-lkp@intel.com>
+References: <20220204174105.5026d3892bf6.Ia0cd152357a373149bab017d479ab7d5ded289c0@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,185 +46,168 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204155349.63238-11-imbrenda@linux.ibm.com>
+In-Reply-To: <20220204174105.5026d3892bf6.Ia0cd152357a373149bab017d479ab7d5ded289c0@changeid>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Claudio,
+Hi Johannes,
 
-I love your patch! Yet something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test ERROR on kvm/queue]
-[also build test ERROR on v5.17-rc2 next-20220204]
-[cannot apply to kvms390/next s390/features]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.17-rc2 next-20220204]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Claudio-Imbrenda/KVM-s390-pv-implement-lazy-destroy-for-reboot/20220204-235609
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-config: s390-randconfig-r044-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050525.5A9HirW8-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Johannes-Berg/mac80211_hwsim-check-TX-and-STA-bandwidth/20220205-004233
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dcb85f85fa6f142aae1fe86f399d4503d49f2b60
+config: hexagon-randconfig-r041-20220204 (https://download.01.org/0day-ci/archive/20220205/202202050604.dzCxQjWk-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/9ee65f25ad996d38f6935360c99a89e72024174b
+        # https://github.com/0day-ci/linux/commit/99f1c0b151e550eed22429c2eb48876108bf3de7
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Claudio-Imbrenda/KVM-s390-pv-implement-lazy-destroy-for-reboot/20220204-235609
-        git checkout 9ee65f25ad996d38f6935360c99a89e72024174b
+        git fetch --no-tags linux-review Johannes-Berg/mac80211_hwsim-check-TX-and-STA-bandwidth/20220205-004233
+        git checkout 99f1c0b151e550eed22429c2eb48876108bf3de7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/wireless/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/s390/kvm/pv.c:9:
-   In file included from include/linux/kvm_host.h:41:
-   In file included from include/linux/kvm_para.h:5:
-   In file included from include/uapi/linux/kvm_para.h:37:
-   In file included from arch/s390/include/asm/kvm_para.h:25:
-   In file included from arch/s390/include/asm/diag.h:12:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from arch/s390/kvm/pv.c:9:
-   In file included from include/linux/kvm_host.h:41:
-   In file included from include/linux/kvm_para.h:5:
-   In file included from include/uapi/linux/kvm_para.h:37:
-   In file included from arch/s390/include/asm/kvm_para.h:25:
-   In file included from arch/s390/include/asm/diag.h:12:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from arch/s390/kvm/pv.c:9:
-   In file included from include/linux/kvm_host.h:41:
-   In file included from include/linux/kvm_para.h:5:
-   In file included from include/uapi/linux/kvm_para.h:37:
-   In file included from arch/s390/include/asm/kvm_para.h:25:
-   In file included from arch/s390/include/asm/diag.h:12:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> arch/s390/kvm/pv.c:255:3: error: implicit declaration of function 'mmu_notifier_register' [-Werror,-Wimplicit-function-declaration]
-                   mmu_notifier_register(&kvm->arch.pv.mmu_notifier, kvm->mm);
-                   ^
-   arch/s390/kvm/pv.c:255:3: note: did you mean 'mmu_notifier_release'?
-   include/linux/mmu_notifier.h:679:20: note: 'mmu_notifier_release' declared here
-   static inline void mmu_notifier_release(struct mm_struct *mm)
-                      ^
-   12 warnings and 1 error generated.
+>> drivers/net/wireless/mac80211_hwsim.c:1631:26: warning: variable 'confbw' set but not used [-Wunused-but-set-variable]
+           enum nl80211_chan_width confbw = NL80211_CHAN_WIDTH_20_NOHT;
+                                   ^
+   1 warning generated.
 
 
-vim +/mmu_notifier_register +255 arch/s390/kvm/pv.c
+vim +/confbw +1631 drivers/net/wireless/mac80211_hwsim.c
 
-   210	
-   211	int kvm_s390_pv_init_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
-   212	{
-   213		struct uv_cb_cgc uvcb = {
-   214			.header.cmd = UVC_CMD_CREATE_SEC_CONF,
-   215			.header.len = sizeof(uvcb)
-   216		};
-   217		int cc, ret;
-   218		u16 dummy;
-   219	
-   220		ret = kvm_s390_pv_alloc_vm(kvm);
-   221		if (ret)
-   222			return ret;
-   223	
-   224		/* Inputs */
-   225		uvcb.guest_stor_origin = 0; /* MSO is 0 for KVM */
-   226		uvcb.guest_stor_len = kvm->arch.pv.guest_len;
-   227		uvcb.guest_asce = kvm->arch.gmap->asce;
-   228		uvcb.guest_sca = (unsigned long)kvm->arch.sca;
-   229		uvcb.conf_base_stor_origin = (u64)kvm->arch.pv.stor_base;
-   230		uvcb.conf_virt_stor_origin = (u64)kvm->arch.pv.stor_var;
-   231	
-   232		cc = uv_call_sched(0, (u64)&uvcb);
-   233		*rc = uvcb.header.rc;
-   234		*rrc = uvcb.header.rrc;
-   235		KVM_UV_EVENT(kvm, 3, "PROTVIRT CREATE VM: handle %llx len %llx rc %x rrc %x",
-   236			     uvcb.guest_handle, uvcb.guest_stor_len, *rc, *rrc);
-   237	
-   238		/* Outputs */
-   239		kvm->arch.pv.handle = uvcb.guest_handle;
-   240	
-   241		atomic_inc(&kvm->mm->context.protected_count);
-   242		if (cc) {
-   243			if (uvcb.header.rc & UVC_RC_NEED_DESTROY) {
-   244				kvm_s390_pv_deinit_vm(kvm, &dummy, &dummy);
-   245			} else {
-   246				atomic_dec(&kvm->mm->context.protected_count);
-   247				kvm_s390_pv_dealloc_vm(kvm);
-   248			}
-   249			return -EIO;
-   250		}
-   251		kvm->arch.gmap->guest_handle = uvcb.guest_handle;
-   252		/* Add the notifier only once. No races because we hold kvm->lock */
-   253		if (kvm->arch.pv.mmu_notifier.ops != &kvm_s390_pv_mmu_notifier_ops) {
-   254			kvm->arch.pv.mmu_notifier.ops = &kvm_s390_pv_mmu_notifier_ops;
- > 255			mmu_notifier_register(&kvm->arch.pv.mmu_notifier, kvm->mm);
-   256		}
-   257		return 0;
-   258	}
-   259	
+  1620	
+  1621	static void mac80211_hwsim_tx(struct ieee80211_hw *hw,
+  1622				      struct ieee80211_tx_control *control,
+  1623				      struct sk_buff *skb)
+  1624	{
+  1625		struct mac80211_hwsim_data *data = hw->priv;
+  1626		struct ieee80211_tx_info *txi = IEEE80211_SKB_CB(skb);
+  1627		struct ieee80211_hdr *hdr = (void *)skb->data;
+  1628		struct ieee80211_chanctx_conf *chanctx_conf;
+  1629		struct ieee80211_channel *channel;
+  1630		bool ack;
+> 1631		enum nl80211_chan_width confbw = NL80211_CHAN_WIDTH_20_NOHT;
+  1632		u32 _portid, i;
+  1633	
+  1634		if (WARN_ON(skb->len < 10)) {
+  1635			/* Should not happen; just a sanity check for addr1 use */
+  1636			ieee80211_free_txskb(hw, skb);
+  1637			return;
+  1638		}
+  1639	
+  1640		if (!data->use_chanctx) {
+  1641			channel = data->channel;
+  1642			confbw = data->bw;
+  1643		} else if (txi->hw_queue == 4) {
+  1644			channel = data->tmp_chan;
+  1645		} else {
+  1646			chanctx_conf = rcu_dereference(txi->control.vif->chanctx_conf);
+  1647			if (chanctx_conf) {
+  1648				channel = chanctx_conf->def.chan;
+  1649				confbw = chanctx_conf->def.width;
+  1650			} else {
+  1651				channel = NULL;
+  1652			}
+  1653		}
+  1654	
+  1655		if (WARN(!channel, "TX w/o channel - queue = %d\n", txi->hw_queue)) {
+  1656			ieee80211_free_txskb(hw, skb);
+  1657			return;
+  1658		}
+  1659	
+  1660		if (data->idle && !data->tmp_chan) {
+  1661			wiphy_dbg(hw->wiphy, "Trying to TX when idle - reject\n");
+  1662			ieee80211_free_txskb(hw, skb);
+  1663			return;
+  1664		}
+  1665	
+  1666		if (txi->control.vif)
+  1667			hwsim_check_magic(txi->control.vif);
+  1668		if (control->sta)
+  1669			hwsim_check_sta_magic(control->sta);
+  1670	
+  1671		if (ieee80211_hw_check(hw, SUPPORTS_RC_TABLE))
+  1672			ieee80211_get_tx_rates(txi->control.vif, control->sta, skb,
+  1673					       txi->control.rates,
+  1674					       ARRAY_SIZE(txi->control.rates));
+  1675	
+  1676		for (i = 0; i < ARRAY_SIZE(txi->control.rates); i++) {
+  1677			u16 rflags = txi->control.rates[i].flags;
+  1678			/* initialize to data->bw for 5/10 MHz handling */
+  1679			enum nl80211_chan_width bw = data->bw;
+  1680	
+  1681			if (txi->control.rates[i].idx == -1)
+  1682				break;
+  1683	
+  1684			if (rflags & IEEE80211_TX_RC_40_MHZ_WIDTH)
+  1685				bw = NL80211_CHAN_WIDTH_40;
+  1686			else if (rflags & IEEE80211_TX_RC_80_MHZ_WIDTH)
+  1687				bw = NL80211_CHAN_WIDTH_80;
+  1688			else if (rflags & IEEE80211_TX_RC_160_MHZ_WIDTH)
+  1689				bw = NL80211_CHAN_WIDTH_160;
+  1690	
+  1691			if (WARN_ON(hwsim_get_chanwidth(bw) > hwsim_get_chanwidth(data->bw)))
+  1692				return;
+  1693		}
+  1694	
+  1695		if (skb->len >= 24 + 8 &&
+  1696		    ieee80211_is_probe_resp(hdr->frame_control)) {
+  1697			/* fake header transmission time */
+  1698			struct ieee80211_mgmt *mgmt;
+  1699			struct ieee80211_rate *txrate;
+  1700			/* TODO: get MCS */
+  1701			int bitrate = 100;
+  1702			u64 ts;
+  1703	
+  1704			mgmt = (struct ieee80211_mgmt *)skb->data;
+  1705			txrate = ieee80211_get_tx_rate(hw, txi);
+  1706			if (txrate)
+  1707				bitrate = txrate->bitrate;
+  1708			ts = mac80211_hwsim_get_tsf_raw();
+  1709			mgmt->u.probe_resp.timestamp =
+  1710				cpu_to_le64(ts + data->tsf_offset +
+  1711					    24 * 8 * 10 / bitrate);
+  1712		}
+  1713	
+  1714		mac80211_hwsim_monitor_rx(hw, skb, channel);
+  1715	
+  1716		/* wmediumd mode check */
+  1717		_portid = READ_ONCE(data->wmediumd);
+  1718	
+  1719		if (_portid || hwsim_virtio_enabled)
+  1720			return mac80211_hwsim_tx_frame_nl(hw, skb, _portid, channel);
+  1721	
+  1722		/* NO wmediumd detected, perfect medium simulation */
+  1723		data->tx_pkts++;
+  1724		data->tx_bytes += skb->len;
+  1725		ack = mac80211_hwsim_tx_frame_no_nl(hw, skb, channel);
+  1726	
+  1727		if (ack && skb->len >= 16)
+  1728			mac80211_hwsim_monitor_ack(channel, hdr->addr2);
+  1729	
+  1730		ieee80211_tx_info_clear_status(txi);
+  1731	
+  1732		/* frame was transmitted at most favorable rate at first attempt */
+  1733		txi->control.rates[0].count = 1;
+  1734		txi->control.rates[1].idx = -1;
+  1735	
+  1736		if (!(txi->flags & IEEE80211_TX_CTL_NO_ACK) && ack)
+  1737			txi->flags |= IEEE80211_TX_STAT_ACK;
+  1738		ieee80211_tx_status_irqsafe(hw, skb);
+  1739	}
+  1740	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
