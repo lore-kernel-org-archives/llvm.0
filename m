@@ -1,42 +1,41 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3692F23
-	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 11:02:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C65D2F29
+	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 15:57:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643972539; x=1675508539;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Wh2WOcgT3HJbG90dCX+tCwQaPBWYwZ+IbOo4EkM6IwA=;
-  b=jSQ66YnjJ7uW/pOfqPYR4LIFp7nnb4kTs+xS8oebXpsgc2bvm6J6ZwVs
-   zT1uPQEAODg1cm+NTabVFEiAN8o1hYZy0O5X2FTj1HErfbGNSb4aHXRc8
-   gH6esgQI3IZL73MXTDpU2Xec+oAqbB15vowzrZwdvgIdzgAVT5BnQ+Vl1
-   FDpnC/wnpxtEBFOZ+57r5sJH8C6tvwLfgGPW1X5NLCECKz6kqpGBWjas2
-   xzwuFFl9lpUH7y79fHM6qoAgfqj+crkZiRdgZok2IsTyqZrpAz3zIfoB4
-   6uXrhP5L2QYsrtyAZtwcjuc25qy+vXjexNYYQdPU9I1GlOrVIsWsM0wm4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="228322463"
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="228322463"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 03:02:19 -0800
+  t=1643990254; x=1675526254;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JPwpRS21AtpS7G52dTYDaQ+oac3H8lMvMGp+3z9cyPk=;
+  b=GNLcqyrAXWkrgvaNLo1CvCVyHoRX33AiTG4zr4Q2EWroBed0U8eH2UUn
+   z4/1Fn/g8/KsEnckorHAjHdfBu87l3I31PKJ+oPP9Vb/zYjl9qKDXngoc
+   vhIqtdhfK3hxzu0Nf7GJNq218dSh6MAxbkhW4JDAWWVQtECyTdVeZFOSs
+   9P9Y/FEn8OmP88axIOGgCnXnf4o+7w1rGPQFBWIzLyEIq5fP9OFQo0CZs
+   iCDSsPY1a2FCLWThKoyUi9dC2Fkf6XNaoLP05Foo9hhAm5vGCNYZWD9Np
+   UxIp51eQmF6T06XbIPCqKbfpAk5PoI+us1tUpvQ49bnTdcwYMgOokxcNS
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248150380"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="248150380"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:57:33 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="772067527"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="535569119"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Feb 2022 03:02:17 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 04 Feb 2022 07:57:32 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nFwM5-000XVE-4s; Fri, 04 Feb 2022 11:02:17 +0000
-Date: Fri, 4 Feb 2022 19:02:06 +0800
+	id 1nG0xn-000Xpv-RP; Fri, 04 Feb 2022 15:57:31 +0000
+Date: Fri, 4 Feb 2022 23:56:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 11/12]
- drivers/hid/hid-magicmouse.c:662:41: warning: format specifies type
- 'unsigned short' but the argument has type 'int'
-Message-ID: <202202041829.eLXWBfs9-lkp@intel.com>
+To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 1/6] spi: tegra210-quad: use device_reset method
+Message-ID: <202202042322.4epfxv0U-lkp@intel.com>
+References: <1643970576-31503-2-git-send-email-kyarlagadda@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,182 +44,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1643970576-31503-2-git-send-email-kyarlagadda@nvidia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   25070af6e6d0c750f307b019df19cc93a54b664c
-commit: 193121bdba0a9e2be57fc6b4f1e53daf4164b1fa [11/12] HID: magicmouse: add support for Macbook trackpads
-config: riscv-randconfig-r042-20220131 (https://download.01.org/0day-ci/archive/20220204/202202041829.eLXWBfs9-lkp@intel.com/config)
+Hi Krishna,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on v5.17-rc2 next-20220204]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Krishna-Yarlagadda/Tegra-QUAD-SPI-combined-sequence-mode/20220204-183224
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: hexagon-randconfig-r045-20220131 (https://download.01.org/0day-ci/archive/20220204/202202042322.4epfxv0U-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/193121bdba0a9e2be57fc6b4f1e53daf4164b1fa
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 193121bdba0a9e2be57fc6b4f1e53daf4164b1fa
+        # https://github.com/0day-ci/linux/commit/6bd51e7b07329b4ee4e90f5bc5aa8372ef26c999
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Krishna-Yarlagadda/Tegra-QUAD-SPI-combined-sequence-mode/20220204-183224
+        git checkout 6bd51e7b07329b4ee4e90f5bc5aa8372ef26c999
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/hid/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/spi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/hid/hid-magicmouse.c:662:41: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                   hid_dbg(hdev, "ev x:%04hx y:%04hx\n", le16_to_int(f->abs_x),
-                                       ~~~~~             ^~~~~~~~~~~~~~~~~~~~~
-                                       %04x
-   include/linux/hid.h:1199:30: note: expanded from macro 'hid_dbg'
-           dev_dbg(&(hid)->dev, fmt, ##__VA_ARGS__)
-                                ~~~    ^~~~~~~~~~~
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
-   drivers/hid/hid-magicmouse.c:663:4: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                           le16_to_int(f->abs_y));
-                           ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/hid.h:1199:30: note: expanded from macro 'hid_dbg'
-           dev_dbg(&(hid)->dev, fmt, ##__VA_ARGS__)
-                                ~~~    ^~~~~~~~~~~
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
+>> drivers/spi/spi-tegra210-quad.c:950:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+           device_reset(tqspi->dev);
+           ^~~~~~~~~~~~ ~~~~~~~~~~
+   drivers/spi/spi-tegra210-quad.c:1270:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+           device_reset(tqspi->dev);
+           ^~~~~~~~~~~~ ~~~~~~~~~~
    2 warnings generated.
---
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'pos' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'hdev' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'work' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'battery_timer' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'input_ops' not described in 'magicmouse_sc'
->> drivers/hid/hid-magicmouse.c:592: warning: expecting prototype for struct trackpad. Prototype was for struct tp_header instead
 
 
-vim +662 drivers/hid/hid-magicmouse.c
+vim +/warn_unused_result +950 drivers/spi/spi-tegra210-quad.c
 
-   571	
-   572	/**
-   573	 * struct trackpad report
-   574	 *
-   575	 * @report_id:		reportid
-   576	 * @buttons:		HID Usage Buttons 3 1-bit reports
-   577	 * @num_fingers:	the number of fingers being reported in @fingers
-   578	 * @clicked:		same as @buttons
-   579	 */
-   580	struct tp_header {
-   581		// HID mouse report
-   582		u8 report_id;
-   583		u8 buttons;
-   584		u8 rel_x;
-   585		u8 rel_y;
-   586		u8 padding[4];
-   587		// HID vendor part, up to 1751 bytes
-   588		u8 unknown[22];
-   589		u8 num_fingers;
-   590		u8 clicked;
-   591		u8 unknown3[14];
- > 592	};
-   593	
-   594	static inline int le16_to_int(__le16 x)
-   595	{
-   596		return (signed short)le16_to_cpu(x);
-   597	}
-   598	
-   599	static void report_finger_data(struct input_dev *input, int slot,
-   600				       const struct input_mt_pos *pos,
-   601				       const struct tp_finger *f)
-   602	{
-   603		input_mt_slot(input, slot);
-   604		input_mt_report_slot_state(input, MT_TOOL_FINGER, true);
-   605	
-   606		input_report_abs(input, ABS_MT_TOUCH_MAJOR,
-   607				 le16_to_int(f->touch_major) << 1);
-   608		input_report_abs(input, ABS_MT_TOUCH_MINOR,
-   609				 le16_to_int(f->touch_minor) << 1);
-   610		input_report_abs(input, ABS_MT_WIDTH_MAJOR,
-   611				 le16_to_int(f->tool_major) << 1);
-   612		input_report_abs(input, ABS_MT_WIDTH_MINOR,
-   613				 le16_to_int(f->tool_minor) << 1);
-   614		input_report_abs(input, ABS_MT_ORIENTATION,
-   615				 J314_TP_MAX_FINGER_ORIENTATION - le16_to_int(f->orientation));
-   616		input_report_abs(input, ABS_MT_PRESSURE, le16_to_int(f->pressure));
-   617		input_report_abs(input, ABS_MT_POSITION_X, pos->x);
-   618		input_report_abs(input, ABS_MT_POSITION_Y, pos->y);
-   619	}
-   620	
-   621	static int magicmouse_raw_event_spi(struct hid_device *hdev,
-   622			struct hid_report *report, u8 *data, int size)
-   623	{
-   624		struct magicmouse_sc *msc = hid_get_drvdata(hdev);
-   625		struct input_dev *input = msc->input;
-   626		struct tp_header *tp_hdr;
-   627		struct tp_finger *f;
-   628		int i, n;
-   629		u32 npoints;
-   630		const size_t hdr_sz = sizeof(struct tp_header);
-   631		const size_t touch_sz = sizeof(struct tp_finger);
-   632		u8 map_contacs[MAX_CONTACTS];
-   633	
-   634		// hid_warn(hdev, "%s\n", __func__);
-   635		// print_hex_dump_debug("appleft ev: ", DUMP_PREFIX_OFFSET, 16, 1, data,
-   636		// 		     size, false);
-   637	
-   638		if (data[0] != TRACKPAD2_USB_REPORT_ID)
-   639			return 0;
-   640	
-   641		/* Expect 46 bytes of prefix, and N * 30 bytes of touch data. */
-   642		if (size < hdr_sz || ((size - hdr_sz) % touch_sz) != 0)
-   643			return 0;
-   644	
-   645		tp_hdr = (struct tp_header *)data;
-   646	
-   647		npoints = (size - hdr_sz) / touch_sz;
-   648		if (npoints < tp_hdr->num_fingers || npoints > MAX_CONTACTS) {
-   649			hid_warn(hdev,
-   650				 "unexpected number of touches (%u) for "
-   651				 "report\n",
-   652				 npoints);
-   653			return 0;
-   654		}
-   655	
-   656		n = 0;
-   657		for (i = 0; i < tp_hdr->num_fingers; i++) {
-   658			f = (struct tp_finger *)(data + hdr_sz + i * touch_sz);
-   659			if (le16_to_int(f->touch_major) == 0)
-   660				continue;
-   661	
- > 662			hid_dbg(hdev, "ev x:%04hx y:%04hx\n", le16_to_int(f->abs_x),
-   663				le16_to_int(f->abs_y));
-   664			msc->pos[n].x = le16_to_int(f->abs_x);
-   665			msc->pos[n].y = -le16_to_int(f->abs_y);
-   666			map_contacs[n] = i;
-   667			n++;
-   668		}
-   669	
-   670		input_mt_assign_slots(input, msc->tracking_ids, msc->pos, n, 0);
-   671	
-   672		for (i = 0; i < n; i++) {
-   673			int idx = map_contacs[i];
-   674			f = (struct tp_finger *)(data + hdr_sz + idx * touch_sz);
-   675			report_finger_data(input, msc->tracking_ids[i], &msc->pos[i], f);
-   676		}
-   677	
-   678		input_mt_sync_frame(input);
-   679		input_report_key(input, BTN_MOUSE, data[1] & 1);
-   680	
-   681		input_sync(input);
-   682		return 1;
-   683	}
-   684	
+   944	
+   945	static void tegra_qspi_handle_error(struct tegra_qspi *tqspi)
+   946	{
+   947		dev_err(tqspi->dev, "error in transfer, fifo status 0x%08x\n", tqspi->status_reg);
+   948		tegra_qspi_dump_regs(tqspi);
+   949		tegra_qspi_flush_fifos(tqspi, true);
+ > 950		device_reset(tqspi->dev);
+   951	}
+   952	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
