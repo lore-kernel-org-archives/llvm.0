@@ -1,106 +1,151 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B542F21
-	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 00:29:23 +0000 (UTC)
-Received: by mail-pf1-f177.google.com with SMTP id a8so3652124pfa.6
-        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 16:29:23 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE7D2F26
+	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 00:57:51 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id i10-20020a25540a000000b0061391789216so9757864ybb.2
+        for <llvm@lists.linux.dev>; Thu, 03 Feb 2022 16:57:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=7jAxI29crxP7S7vFJnF3wftZXckofe+kHrOWNqXAQow=;
-        b=bUGShFdQCuYs6lb/IPDvFbEdOFY+an3WZjtQkCOOMbGZP3vwME4Us6qOCzhxninbFG
-         vlc3rzh9YtbyMmiO32kRO/is3fZ3gD2T/c6K2F9sVL1ZO6UTnBJ8Q8rHIPVST8uIweLP
-         mV+M+tmIBCexSHDCYxuy1PtggQ94NGFYtM0H4=
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=1AAgfaFCn4Q/G5C0Wk6e2sKuKz1QEQmvxvJQx3MfWP4=;
+        b=hEAbRl5ZDxJCiDNHkRzo/kfUhjnU3E43u0pltUAJiO81qU8GC7jGCcUqO3JvC0LfYG
+         sWd5tVX/wfoW8pdqsd63kZRV87Rc8z4WCQFnc3rXqGbxxbl23oRkj0UIsQsF1vS2HBVD
+         IoEnYcDcTpp27vum0aSPkWFnLk0PL5B+tjCkRc43cgidM5VeOtSKEpZ3me3YYv4IWULE
+         DZ1/Gz/BgIpBrpFMtpBOs6YEBJAKIiRf9sOmP3aUfG+TTm34G5/1iXXvQCS/hIa+seXj
+         iEcCUXiax5gRlswuad1PvOhLxOvpSEvFNyRM5jMF6mPSbuOraG9uMVUx+tfbCibB5tiQ
+         5NRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7jAxI29crxP7S7vFJnF3wftZXckofe+kHrOWNqXAQow=;
-        b=CmQS4aO5QU3vJRAaU1wS1fLPetOkjNPS8Kn0GFjhO8c6D7Kn+JQ2tRzpaL4qwNpfCC
-         xQpLFv4pBfDktRV0fFRR/3RfPOsX/WzUiDvOTj8ycMTWEUrYB9TGyv6k/BwLUisT00Kj
-         NfwYs0GmsjlPNO/mgmmPZNHPUgOe9vFar3/l9Q1Dc/AkuEo3nQxXxiAsWrduExMdjWfJ
-         a9QN5xmUMTnUUhZeU2bEpd1DdQk/QCg1ykFdMeI1qDPt+ps2pfXBC4fkLGdaXsKUgz8+
-         6HncuM58sd+pBO3ijy7lX84ybmubfOQWH9r6qvNvItjebm30iQKe4PprN8jeE08QbYfQ
-         7TRQ==
-X-Gm-Message-State: AOAM5300amaIOD3yM5lx4s+z8NfoHNFt+/wli3/vK3xISW/WI5Gwz2FG
-	KeqotYJvLuzIhK34IYSSj8zgbw==
-X-Google-Smtp-Source: ABdhPJyxEW/qo1THvmWccU/g3L0VLb9vuHRgXCa42FJarlVXjxquMHAwuHB6voQ/2hmHqAFsJtBB+Q==
-X-Received: by 2002:a63:451f:: with SMTP id s31mr497461pga.114.1643934563402;
-        Thu, 03 Feb 2022 16:29:23 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g5sm185194pfv.22.2022.02.03.16.29.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 16:29:23 -0800 (PST)
-Date: Thu, 3 Feb 2022 16:29:22 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: George Burgess IV <gbiv@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH v6 1/4] Compiler Attributes: Add __pass_object_size for
- Clang
-Message-ID: <202202031628.E28BBBB490@keescook>
-References: <20220203173307.1033257-1-keescook@chromium.org>
- <20220203173307.1033257-2-keescook@chromium.org>
- <CAKwvOdmzdQ+X2BsUbuVBWzFtaE2Vst4=ihNNR=LmOdozqQ5Ukg@mail.gmail.com>
- <202202031247.4F3AC598@keescook>
- <CAKwvOdnUHFi=1+9VxsfwxNAkTFEytg5FV=Aii7awSx+ioRaQbQ@mail.gmail.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=1AAgfaFCn4Q/G5C0Wk6e2sKuKz1QEQmvxvJQx3MfWP4=;
+        b=cDGhibZ8LfmhxaCPC/lZ6VnIrJd9HccDTwj0vfiXcSfXKac2wQdDLsxaQVMDORuKPL
+         Xx6RZdWrmeDPYWnD4h6JC3yWEj/zPmt1dZW2oGedxDU8r9Cs2cXEXd4HakMn5rE2Xrbc
+         VeKqGXNLL/jLAHydZRIgapqc/uvkq9GJcdqSmAKhMRtH1g1JAjhWtjXwFAi8uNqiKEJ3
+         RuRf2+ZLvlE94Gp094Mu9SzWYcAAYI6gwCVzvm/rzdimAW9Oa7Woe6DogGhfKxjen8mM
+         fbsFkLEDs7u3vbsRZgh/t9BRrcPg+Uu63kEQpiu8pEBt17iNYbBByyeVtMiY5nNV/pQ+
+         anvQ==
+X-Gm-Message-State: AOAM5334X+xI2iSeJMonxSbFLvl2lmx8Y9BC4dIG1Xp4rS1xfgBSg2x5
+	KnMySncAAmIr7MChqKc9Q5gVUnv/
+X-Google-Smtp-Source: ABdhPJwH8LAmI4OsxnFxSC7ic6V69EvrB179vihRyydzNi5v/S7BpOgueZNTSI5K9U2DuX9IUni5Y4r0jw==
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:e2a5:b92b:16d1:6c85])
+ (user=morbo job=sendgmr) by 2002:a25:7188:: with SMTP id m130mr730885ybc.149.1643936270495;
+ Thu, 03 Feb 2022 16:57:50 -0800 (PST)
+Date: Thu,  3 Feb 2022 16:57:42 -0800
+In-Reply-To: <20211229021258.176670-1-morbo@google.com>
+Message-Id: <20220204005742.1222997-1-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdnUHFi=1+9VxsfwxNAkTFEytg5FV=Aii7awSx+ioRaQbQ@mail.gmail.com>
+Mime-Version: 1.0
+References: <20211229021258.176670-1-morbo@google.com>
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+Subject: [PATCH v3] x86: use builtins to read eflags
+From: Bill Wendling <morbo@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 03, 2022 at 02:01:06PM -0800, Nick Desaulniers wrote:
-> On Thu, Feb 3, 2022 at 12:58 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Thu, Feb 03, 2022 at 12:18:24PM -0800, Nick Desaulniers wrote:
-> > > On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
-> > > >
-> > > > In order to gain greater visibility to type information when using
-> > > > __builtin_object_size(), Clang has a function attribute "pass_object_size"
-> > > > that will make size information available for marked arguments in
-> > > > a function by way of implicit additional function arguments that are
-> > > > then wired up the __builtin_object_size().
-> > > >
-> > > > This is needed to implement FORTIFY_SOURCE in Clang, as a workaround
-> > > > to Clang's __builtin_object_size() having limited visibility[1] into types
-> > > > across function calls (even inlines).
-> > > >
-> > > > Since any usage must also be const, include it in the macro.
-> > >
-> > > I think it might be helpful to quote the docs
-> > > (https://clang.llvm.org/docs/AttributeReference.html#pass-object-size-pass-dynamic-object-size)
-> > >
-> > > >> Additionally, any parameter that pass_object_size is applied to must be marked const at its function’s definition.
-> > >
-> > > One thing that's concerning to me is though:
-> > >
-> > > >> It is an error to take the address of a function with pass_object_size on any of its parameters.
-> > >
-> > > Surely the kernel has indirect calls to some of these functions
-> > > somewhere? Is that just an issue for C++ name-mangling perhaps?
-> >
-> > AFAIU, this shouldn't be a problem for any of these. Nothing is trying
-> > to take memcpy, memset, etc by address. The macro-ified version of this
-> > change proved that out. :)
-> 
-> I thought Sami had found a location where memcpy was invoked
-> indirectly as part of his kcfi work? Maybe I'm misremembering.
-> 
-> https://github.com/samitolvanen/linux/commit/46a777fb35784a8c6daf13d67de8bfb5148adc2a#diff-a27660992abdf360d01deac6364db31836d0d98b5d9573b7fc10a6785a669975R16
+GCC and Clang both have builtins to read and write the EFLAGS register.
+This allows the compiler to determine the best way to generate this
+code, which can improve code generation.
 
-Hm, I've had memcpy as a macro for a while now, so dunno! That's not a
-sensible thing to call indirectly. :)
+This issue arose due to Clang's issue with the "=rm" constraint.  Clang
+chooses to be conservative in these situations, and so uses memory
+instead of registers. This is a known issue, which is currently being
+addressed.
 
+However, using builtins is benefiical in general, because it removes the
+burden of determining what's the way to read the flags register from the
+programmer and places it on to the compiler, which has the information
+needed to make that decision. Indeed, this piece of code has had several
+changes over the years, some of which were pinging back and forth to
+determine the correct constraints to use.
+
+With this change, Clang generates better code:
+
+Original code:
+        movq    $0, -48(%rbp)
+        #APP
+        # __raw_save_flags
+        pushfq
+        popq    -48(%rbp)
+        #NO_APP
+        movq    -48(%rbp), %rbx
+
+New code:
+        pushfq
+        popq    %rbx
+        #APP
+
+Note that the stack slot in the original code is no longer needed in the
+new code, saving a small amount of stack space.
+
+There is no change to GCC's ouput:
+
+Original code:
+
+        # __raw_save_flags
+        pushf ; pop %r13        # flags
+
+New code:
+
+	pushfq
+        popq    %r13    # _23
+
+Signed-off-by: Bill Wendling <morbo@google.com>
+---
+v3: - Add blurb indicating that GCC's output hasn't changed.
+v2: - Kept the original function to retain the out-of-line symbol.
+    - Improved the commit message.
+    - Note that I couldn't use Nick's suggestion of
+
+        return IS_ENABLED(CONFIG_X86_64) ? ...
+
+      because Clang complains about using __builtin_ia32_readeflags_u32 in
+      64-bit mode.
+---
+ arch/x86/include/asm/irqflags.h | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+index 87761396e8cc0..f31a035f3c6a9 100644
+--- a/arch/x86/include/asm/irqflags.h
++++ b/arch/x86/include/asm/irqflags.h
+@@ -19,20 +19,11 @@
+ extern inline unsigned long native_save_fl(void);
+ extern __always_inline unsigned long native_save_fl(void)
+ {
+-	unsigned long flags;
+-
+-	/*
+-	 * "=rm" is safe here, because "pop" adjusts the stack before
+-	 * it evaluates its effective address -- this is part of the
+-	 * documented behavior of the "pop" instruction.
+-	 */
+-	asm volatile("# __raw_save_flags\n\t"
+-		     "pushf ; pop %0"
+-		     : "=rm" (flags)
+-		     : /* no input */
+-		     : "memory");
+-
+-	return flags;
++#ifdef CONFIG_X86_64
++	return __builtin_ia32_readeflags_u64();
++#else
++	return __builtin_ia32_readeflags_u32();
++#endif
+ }
+ 
+ static __always_inline void native_irq_disable(void)
 -- 
-Kees Cook
+2.35.0.263.gb82422642f-goog
+
