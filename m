@@ -1,47 +1,39 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8FC2C80
-	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 01:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA77A2F26
+	for <llvm@lists.linux.dev>; Fri,  4 Feb 2022 01:31:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643938248; x=1675474248;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RS5EDdaKbeY9w3oby6S3/7xPKbVHLIlV8/dpjRvORYQ=;
-  b=ZiJ+cp8rjClw0IOgdq+mj+pB96vrIMxNn+CxAj36Iv4sshv1FyGBdiT5
-   x0qLCOZwwD9kU7zJeBdR/4WDjHshg8C0UwBUgxesje873Ojb6YvCcdZz7
-   ZArMKDy0twgGR66H94Rp+74Iln1cOsNkSpIJNyaNazyEbxZZ+HsrY05s9
-   F2jeFB0WiUJlYVuQnXJlrH6ALrfGItZXZORx2WcezaTTcym4LXjyt1Lvm
-   XXWvrYx3spsI2MS5+T8SJos9IMfYRVJEWC7UGf101QFlPUjt9+JXuLWS4
-   soLAzEyKdmcifQJVV4qQdgJzK8pRSVOQErdiFxgww5DcLISuBkQVTDYnC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248055174"
+  t=1643938307; x=1675474307;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Zma4VorC+cs1TXhDpDCR9bpueCZR46i7lgj5N0Cag3A=;
+  b=Olj5eV1X+u4wr0T+UFRAKBrfiAhkgqsRPA+riU+oS7sF/htJsklNj4xc
+   TLrgse+QZhIFBebXZtMpB4HjdoEcBxudH5OPkkHK3i4tjlwTw2stXotH5
+   y0OipW5yMFCwToJ0M296xnukWxKoRUyYTB3fg/7+HTEEj4hoZdQwxpwwJ
+   Nj0c8zMNOvpRKzuLWTJTCmo5G2shjX9H0lW+BWCr0fLRD++hOgO6F7XFX
+   vwmlWTrmz34Wbwy0I3HiWZmJioD/wlMRef2517su0iJGIv4GI5lrWIm8A
+   STmy7rgNb0hGWOBqvhXdN71ark/D+ezviVI1TYMFAba+QznU3sT+2neNz
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="228264717"
 X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="248055174"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 17:30:47 -0800
+   d="scan'208";a="228264717"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 17:31:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="483460718"
+   d="scan'208";a="566608966"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Feb 2022 17:30:45 -0800
+  by orsmga001.jf.intel.com with ESMTP; 03 Feb 2022 17:31:45 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nFnQy-000Wuu-Ky; Fri, 04 Feb 2022 01:30:44 +0000
-Date: Fri, 4 Feb 2022 09:29:58 +0800
+	id 1nFnRx-000Ww8-3z; Fri, 04 Feb 2022 01:31:45 +0000
+Date: Fri, 4 Feb 2022 09:30:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pedro Demarchi Gomes <pedrodemargomes@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Pedro Demarchi Gomes <pedrodemargomes@gmail.com>,
-	SeongJae Park <sj@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/damon: Add option to monitor only writes
-Message-ID: <202202040414.4fF2j3mp-lkp@intel.com>
-References: <20220203131237.298090-1-pedrodemargomes@gmail.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range:
+ 34075148288 is not in
+Message-ID: <202202040710.uRW0o2ty-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,106 +42,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220203131237.298090-1-pedrodemargomes@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Pedro,
+CC: linux-kernel@vger.kernel.org
+TO: Ard Biesheuvel <ardb@kernel.org>
+CC: Will Deacon <will@kernel.org>
+CC: Fangrui Song <maskray@google.com>
 
-Thank you for the patch! Yet something to improve:
+Hi Ard,
 
-[auto build test ERROR on hnaz-mm/master]
+FYI, the error/warning still remains.
 
-url:    https://github.com/0day-ci/linux/commits/Pedro-Demarchi-Gomes/mm-damon-Add-option-to-monitor-only-writes/20220203-211407
-base:   https://github.com/hnaz/linux-mm master
-config: hexagon-randconfig-r041-20220130 (https://download.01.org/0day-ci/archive/20220204/202202040414.4fF2j3mp-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1f2cfdd349b7647f438c1e552dc1b983da86d830
+commit: 13150bc5416f45234c955e5bed91623d178c6117 module: use hidden visibility for weak symbol references
+date:   1 year, 3 months ago
+config: arm64-randconfig-r035-20220130 (https://download.01.org/0day-ci/archive/20220204/202202040710.uRW0o2ty-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/0958bb7e2514b62f174b8e5ccfdcff07ce2a2b6b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Pedro-Demarchi-Gomes/mm-damon-Add-option-to-monitor-only-writes/20220203-211407
-        git checkout 0958bb7e2514b62f174b8e5ccfdcff07ce2a2b6b
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13150bc5416f45234c955e5bed91623d178c6117
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 13150bc5416f45234c955e5bed91623d178c6117
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> mm/damon/prmtv-common.c:87:7: error: implicit declaration of function 'pmd_dirty' [-Werror,-Wimplicit-function-declaration]
-                   if (pmd_dirty(old))
-                       ^
-   mm/damon/prmtv-common.c:87:7: note: did you mean 'pte_dirty'?
-   arch/hexagon/include/asm/pgtable.h:301:19: note: 'pte_dirty' declared here
-   static inline int pte_dirty(pte_t pte)
-                     ^
->> mm/damon/prmtv-common.c:88:10: error: implicit declaration of function 'pmd_mkdirty' [-Werror,-Wimplicit-function-declaration]
-                           pmd = pmd_mkdirty(pmd);
-                                 ^
->> mm/damon/prmtv-common.c:88:8: error: assigning to 'pmd_t' from incompatible type 'int'
-                           pmd = pmd_mkdirty(pmd);
-                               ^ ~~~~~~~~~~~~~~~~
->> mm/damon/prmtv-common.c:89:7: error: implicit declaration of function 'pmd_young' [-Werror,-Wimplicit-function-declaration]
-                   if (pmd_young(old))
-                       ^
-   mm/damon/prmtv-common.c:89:7: note: did you mean 'pte_young'?
-   arch/hexagon/include/asm/pgtable.h:295:19: note: 'pte_young' declared here
-   static inline int pte_young(pte_t pte)
-                     ^
->> mm/damon/prmtv-common.c:90:10: error: implicit declaration of function 'pmd_mkyoung' [-Werror,-Wimplicit-function-declaration]
-                           pmd = pmd_mkyoung(pmd);
-                                 ^
-   mm/damon/prmtv-common.c:90:8: error: assigning to 'pmd_t' from incompatible type 'int'
-                           pmd = pmd_mkyoung(pmd);
-                               ^ ~~~~~~~~~~~~~~~~
->> mm/damon/prmtv-common.c:92:9: error: implicit declaration of function 'pmd_wrprotect' [-Werror,-Wimplicit-function-declaration]
-                   pmd = pmd_wrprotect(pmd);
-                         ^
-   mm/damon/prmtv-common.c:92:9: note: did you mean 'pte_wrprotect'?
-   arch/hexagon/include/asm/pgtable.h:315:21: note: 'pte_wrprotect' declared here
-   static inline pte_t pte_wrprotect(pte_t pte)
-                       ^
-   mm/damon/prmtv-common.c:92:7: error: assigning to 'pmd_t' from incompatible type 'int'
-                   pmd = pmd_wrprotect(pmd);
-                       ^ ~~~~~~~~~~~~~~~~~~
->> mm/damon/prmtv-common.c:95:3: error: implicit declaration of function 'set_pmd_at' [-Werror,-Wimplicit-function-declaration]
-                   set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
-                   ^
-   mm/damon/prmtv-common.c:98:3: error: implicit declaration of function 'set_pmd_at' [-Werror,-Wimplicit-function-declaration]
-                   set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
-                   ^
-   10 errors generated.
-
-
-vim +/pmd_dirty +87 mm/damon/prmtv-common.c
-
-    78	
-    79	static inline void clear_soft_dirty_pmd(struct vm_area_struct *vma,
-    80			unsigned long addr, pmd_t *pmdp)
-    81	{
-    82		pmd_t old, pmd = *pmdp;
-    83	
-    84		if (pmd_present(pmd)) {
-    85			/* See comment in change_huge_pmd() */
-    86			old = pmdp_invalidate(vma, addr, pmdp);
-  > 87			if (pmd_dirty(old))
-  > 88				pmd = pmd_mkdirty(pmd);
-  > 89			if (pmd_young(old))
-  > 90				pmd = pmd_mkyoung(pmd);
-    91	
-  > 92			pmd = pmd_wrprotect(pmd);
-    93			pmd = pmd_clear_soft_dirty(pmd);
-    94	
-  > 95			set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
-    96		} else if (is_migration_entry(pmd_to_swp_entry(pmd))) {
-    97			pmd = pmd_swp_clear_soft_dirty(pmd);
-    98			set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
-    99		}
-   100	}
-   101	
+>> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 34075148288 is not in [-4294967296, 4294967295]
+>> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 34075148288 is not in [-4294967296, 4294967295]
+>> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 34075148288 is not in [-4294967296, 4294967295]
+>> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 34075148288 is not in [-4294967296, 4294967295]
+>> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 34075148288 is not in [-4294967296, 4294967295]
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
