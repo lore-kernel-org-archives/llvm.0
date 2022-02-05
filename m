@@ -1,42 +1,39 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9FE92F26
-	for <llvm@lists.linux.dev>; Sat,  5 Feb 2022 07:13:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB182F26
+	for <llvm@lists.linux.dev>; Sat,  5 Feb 2022 08:24:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644045198; x=1675581198;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kDIp3wm96nE80qVSlRCyB/EwmxrIMayFs4fbOk2vZsM=;
-  b=aDczl3SbQQCXzDGLfQuFXPYpXKk+i72IaW2MlvfVaaYQGoRepmG23o1j
-   EjULm+577TTo5ENjMd2YLAu9L0XU7Bam647Yswk0bU+nBkhYy+tY2Lnoh
-   M89knfZx3HFo/t7jwFWDUi63bsuA2zFMcUdj0AJ1g5Ap6QJmwfrhk22c7
-   aOlxxAjp8JfyBiaFB1U3hXlhZTtvbig5JcYSVI0GCsDscakn2E4DiDwPs
-   i90TjOVc5MUtZzjsm8CDV82cVZxsBDm8XaMW2+QsG9OsCRvbHMfZ4NoqV
-   hy1KbZVDrezgc2susTJjfqr9ZQ3ck6hse9bgo8Tg1T6DFGnMOAXEjdj24
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="232061301"
+  t=1644049463; x=1675585463;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=mATHt/51mGqPE2hZXin3kI+JfGn2eEKHlsdPrNH9uLA=;
+  b=eV609UpGhRMsjSrUHXxg80bY3mA4venvmaYVJvpicbiRafs8BGKQzg9C
+   x2F9XfdDl9imoS/He8nRPcYzr1Gk+5+SyN49Ns5dOnbODKKYw3VqWwjba
+   7QqpBKWmdcUQAJQ1tox4oMwGT5feG+XjfbL7DsMWD6JArdRbwXp0wvvsz
+   SqDNX2wclMclzjZAcXlE4zQuLAZOFhS7bqWNOFJ/g20XShnhNJNx0pHqP
+   80LuX/sVaNPpalI7GxZJ9SM3dk/3zzcfHeb+RwissfqrhSpxwpRAhPeJb
+   dX+Tr6TzcBh6w7pfChgaam2+hLrl8Xb5ZuqWubBY9KXW7y3OYaXGNApd2
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="273006918"
 X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
-   d="scan'208";a="232061301"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 23:13:17 -0800
+   d="scan'208";a="273006918"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2022 00:24:23 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
-   d="scan'208";a="524556815"
+   d="scan'208";a="621075031"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 04 Feb 2022 23:13:16 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Feb 2022 00:24:19 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nGFFz-000YkK-T3; Sat, 05 Feb 2022 07:13:15 +0000
-Date: Sat, 5 Feb 2022 15:13:00 +0800
+	id 1nGGMk-000YnH-J1; Sat, 05 Feb 2022 08:24:18 +0000
+Date: Sat, 5 Feb 2022 16:24:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mark:arm64/preempt-dynamic-static-key 7/7]
- kernel/locking/locktorture.c:122:3: error: implicit declaration of function
- 'preempt_schedule'
-Message-ID: <202202051545.EqPMbpRh-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: clang-15: error: linker command failed with exit code 1 (use -v to
+ see invocation)
+Message-ID: <202202051611.LE4aFKWX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,96 +44,48 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/preempt-dynamic-static-key
-head:   fb01536865a3af674b204f6d0fe0935264c4b434
-commit: fb01536865a3af674b204f6d0fe0935264c4b434 [7/7] arm64: support PREEMPT_DYNAMIC
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220205/202202051545.EqPMbpRh-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
+CC: linux-kernel@vger.kernel.org
+TO: Daniel Axtens <dja@axtens.net>
+CC: Michael Ellerman <mpe@ellerman.id.au>
+CC: Alexey Kardashevskiy <aik@ozlabs.ru>
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0457e5153e0e8420134f60921349099e907264ca
+commit: f5140cab448e4819ca6f158cb4130352f73c92e4 powerpc: check for support for -Wa,-m{power4,any}
+date:   6 weeks ago
+config: powerpc64-randconfig-r022-20220204 (https://download.01.org/0day-ci/archive/20220205/202202051611.LE4aFKWX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 78c6b90000292eb37aac5dead6ab26611cd76f42)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=fb01536865a3af674b204f6d0fe0935264c4b434
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/preempt-dynamic-static-key
-        git checkout fb01536865a3af674b204f6d0fe0935264c4b434
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64le-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f5140cab448e4819ca6f158cb4130352f73c92e4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f5140cab448e4819ca6f158cb4130352f73c92e4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/panel/ kernel/locking/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/locking/locktorture.c:122:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
-                   torture_preempt_schedule();  /* Allow test to be preempted. */
-                   ^
-   include/linux/torture.h:121:36: note: expanded from macro 'torture_preempt_schedule'
-   #define torture_preempt_schedule() preempt_schedule()
-                                      ^
-   kernel/locking/locktorture.c:122:3: note: did you mean 'preempt_schedule_irq'?
-   include/linux/torture.h:121:36: note: expanded from macro 'torture_preempt_schedule'
-   #define torture_preempt_schedule() preempt_schedule()
-                                      ^
-   include/linux/sched.h:296:17: note: 'preempt_schedule_irq' declared here
-   asmlinkage void preempt_schedule_irq(void);
-                   ^
-   kernel/locking/locktorture.c:170:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
-                   torture_preempt_schedule();  /* Allow test to be preempted. */
-                   ^
-   include/linux/torture.h:121:36: note: expanded from macro 'torture_preempt_schedule'
-   #define torture_preempt_schedule() preempt_schedule()
-                                      ^
-   kernel/locking/locktorture.c:349:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
-                   torture_preempt_schedule();  /* Allow test to be preempted. */
-                   ^
-   include/linux/torture.h:121:36: note: expanded from macro 'torture_preempt_schedule'
-   #define torture_preempt_schedule() preempt_schedule()
-                                      ^
-   kernel/locking/locktorture.c:524:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
-                   torture_preempt_schedule();  /* Allow test to be preempted. */
-                   ^
-   include/linux/torture.h:121:36: note: expanded from macro 'torture_preempt_schedule'
-   #define torture_preempt_schedule() preempt_schedule()
-                                      ^
-   kernel/locking/locktorture.c:564:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
-                   torture_preempt_schedule();  /* Allow test to be preempted. */
-                   ^
-   include/linux/torture.h:121:36: note: expanded from macro 'torture_preempt_schedule'
-   #define torture_preempt_schedule() preempt_schedule()
-                                      ^
-   kernel/locking/locktorture.c:591:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
-                   torture_preempt_schedule();  /* Allow test to be preempted. */
-                   ^
-   include/linux/torture.h:121:36: note: expanded from macro 'torture_preempt_schedule'
-   #define torture_preempt_schedule() preempt_schedule()
-                                      ^
-   6 errors generated.
-
-
-vim +/preempt_schedule +122 kernel/locking/locktorture.c
-
-e086481baf9d04 Paul E. McKenney 2014-02-11  112  
-e086481baf9d04 Paul E. McKenney 2014-02-11  113  static void torture_lock_busted_write_delay(struct torture_random_state *trsp)
-e086481baf9d04 Paul E. McKenney 2014-02-11  114  {
-61d49d2f9888ac Paul E. McKenney 2015-04-01  115  	const unsigned long longdelay_ms = 100;
-e086481baf9d04 Paul E. McKenney 2014-02-11  116  
-e086481baf9d04 Paul E. McKenney 2014-02-11  117  	/* We want a long delay occasionally to force massive contention.  */
-e086481baf9d04 Paul E. McKenney 2014-02-11  118  	if (!(torture_random(trsp) %
-61d49d2f9888ac Paul E. McKenney 2015-04-01  119  	      (cxt.nrealwriters_stress * 2000 * longdelay_ms)))
-61d49d2f9888ac Paul E. McKenney 2015-04-01  120  		mdelay(longdelay_ms);
-630952c22b04ad Davidlohr Bueso  2014-09-11  121  	if (!(torture_random(trsp) % (cxt.nrealwriters_stress * 20000)))
-cc1321c96f8555 Paul E. McKenney 2017-10-16 @122  		torture_preempt_schedule();  /* Allow test to be preempted. */
-e086481baf9d04 Paul E. McKenney 2014-02-11  123  }
-e086481baf9d04 Paul E. McKenney 2014-02-11  124  
-
-:::::: The code at line 122 was first introduced by commit
-:::::: cc1321c96f855525fbd847fec130f000daa1bb1f torture: Reduce #ifdefs for preempt_schedule()
-
-:::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+   <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#warnings]
+   #warning syscall futex_waitv not implemented
+    ^
+   1 warning generated.
+   /usr/bin/ld: unrecognised emulation mode: elf64lppc
+   Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
+>> clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso64/Makefile:44: arch/powerpc/kernel/vdso64/vdso64.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso64-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:424: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
