@@ -1,42 +1,41 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B8829CA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AA52F24
 	for <llvm@lists.linux.dev>; Sun,  6 Feb 2022 17:57:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1644170262; x=1675706262;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ns0B7fNPSJcBd/UifoEMtRY5RicmeavbejekRD3vT1M=;
-  b=nj+xpVzm/FTFYgX2VzFv3c76llQwUgv5XtsnJXqeHGwFfPahk/uZRr1S
-   5DTb8na2i8m+hJUxjyA8wDRIxOGaNPadPyt2TRGxdd3Ps0u6hqZx+CwHo
-   +OeS82s6zDohYK6XXkRJ21ZSevNg7acs3p9WM8BzGP3euLQyojoweHw3L
-   bMr7tDSutV1dUR8QHXWRLgqHeExOrJzke6Cip2XkvW+/kPS5dWGwvzfEQ
-   gVWLrDe/0MvuOWeT86zazUJReWfB6XFuVsf/LWL8Izf7YS82FR3IBHm4S
-   GDeuQw9rktxlM1gzuMfwYlS+iO61sD2nEEhgpZNa1LwS9A8761L8fkYpz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10249"; a="248360640"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qB/KrCOoCkP70gdGOaXQ6La8fUne/1e99+wANfuP2xU=;
+  b=dRYUtVa3K/+L7g45xVjvI26dMqykwhMiF57083a/gIHh/OlCLUHEqZw+
+   s83KRqg7SQQabysyX2a52tR8eWK1RXy+w8+zx00IG96FkAC2p2dB4N8GI
+   kbbpNLcwaHq/q0tY6aHLr0SPrw2d1/Z+Er8fpSA5uBGqHRrPOp7a+pJW7
+   Nw3cYiQfD3e/ZzPF/U20ZT52eYo/rNlZfr8XBSbzrXn7ipQ3tV77mPyaz
+   tAlovQoQdXfBiIqGJ+75jXf3RUZ7eT/KGTX/MHdIfOriQucnMgHy0aIpX
+   GqtsIWeiEDsonVR0RzU8a2WIEA3ovixIAFj7gVG8luiPcijXk6KFhHNWj
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10249"; a="235999016"
 X-IronPort-AV: E=Sophos;i="5.88,347,1635231600"; 
-   d="scan'208";a="248360640"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 09:57:41 -0800
+   d="scan'208";a="235999016"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 09:57:41 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,347,1635231600"; 
-   d="scan'208";a="484159984"
+   d="scan'208";a="481339226"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Feb 2022 09:57:40 -0800
+  by orsmga003.jf.intel.com with ESMTP; 06 Feb 2022 09:57:40 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nGln9-000aZV-Ps; Sun, 06 Feb 2022 17:57:39 +0000
-Date: Mon, 7 Feb 2022 01:56:43 +0800
+	id 1nGln9-000aZX-QU; Sun, 06 Feb 2022 17:57:39 +0000
+Date: Mon, 7 Feb 2022 01:56:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sam Ravnborg <sam@ravnborg.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v1 4/9] drm/bridge: ti-sn65dsi86: Use atomic variants of
- drm_bridge_funcs
-Message-ID: <202202070105.4pH2BXwR-lkp@intel.com>
-References: <20220206154405.1243333-5-sam@ravnborg.org>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [willy-pagecache:for-next 49/75] mm/folio-compat.c:181:9: error:
+ implicit declaration of function 'munlock_vma_folio'
+Message-ID: <202202070124.y4SKcrhy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,69 +44,154 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220206154405.1243333-5-sam@ravnborg.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Sam,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.17-rc2 next-20220204]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Sam-Ravnborg/drm-bridge-ps8640-and-ti-sn65dsi86-updates/20220206-234638
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: hexagon-buildonly-randconfig-r003-20220206 (https://download.01.org/0day-ci/archive/20220207/202202070105.4pH2BXwR-lkp@intel.com/config)
+tree:   git://git.infradead.org/users/willy/pagecache for-next
+head:   b1ccdc7664f5af97629b33fedf382af350edecf4
+commit: 9ba2488442f0e6e010a0d5c9d34fc385a19c8db5 [49/75] mm/mlock: Turn munlock_vma_page() into munlock_vma_folio()
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20220207/202202070124.y4SKcrhy-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6daaf5a44925592c764c59219b0024ee06317028)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/b4a6b21edb289882a1f838a231032110dd0f3d1e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sam-Ravnborg/drm-bridge-ps8640-and-ti-sn65dsi86-updates/20220206-234638
-        git checkout b4a6b21edb289882a1f838a231032110dd0f3d1e
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
+        git fetch --no-tags willy-pagecache for-next
+        git checkout 9ba2488442f0e6e010a0d5c9d34fc385a19c8db5
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/bridge/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/bridge/ti-sn65dsi86.c:1166:19: error: use of undeclared identifier 'ti_sn_atomic_bridge_enable'
-           .atomic_enable = ti_sn_atomic_bridge_enable,
-                            ^
->> drivers/gpu/drm/bridge/ti-sn65dsi86.c:1167:20: error: use of undeclared identifier 'ti_sn_atomic_bridge_disable'
-           .atomic_disable = ti_sn_atomic_bridge_disable,
-                             ^
->> drivers/gpu/drm/bridge/ti-sn65dsi86.c:1168:25: error: use of undeclared identifier 'ti_sn_bridge_post_disable'; did you mean 'ti_sn_bridge_atomic_disable'?
-           .atomic_post_disable = ti_sn_bridge_post_disable,
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-                                  ti_sn_bridge_atomic_disable
-   drivers/gpu/drm/bridge/ti-sn65dsi86.c:799:13: note: 'ti_sn_bridge_atomic_disable' declared here
-   static void ti_sn_bridge_atomic_disable(struct drm_bridge *bridge,
-               ^
-   3 errors generated.
+   In file included from mm/folio-compat.c:7:
+   In file included from include/linux/migrate.h:6:
+   In file included from include/linux/mempolicy.h:15:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from mm/folio-compat.c:7:
+   In file included from include/linux/migrate.h:6:
+   In file included from include/linux/mempolicy.h:15:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from mm/folio-compat.c:7:
+   In file included from include/linux/migrate.h:6:
+   In file included from include/linux/mempolicy.h:15:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+   mm/folio-compat.c:169:6: warning: no previous prototype for function 'clear_page_mlock' [-Wmissing-prototypes]
+   void clear_page_mlock(struct page *page)
+        ^
+   mm/folio-compat.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void clear_page_mlock(struct page *page)
+   ^
+   static 
+   mm/folio-compat.c:174:6: error: redefinition of 'mlock_vma_page'
+   void mlock_vma_page(struct page *page)
+        ^
+   mm/internal.h:500:20: note: previous definition is here
+   static inline void mlock_vma_page(struct page *page) { }
+                      ^
+   mm/folio-compat.c:176:2: error: implicit declaration of function 'mlock_vma_folio' [-Werror,-Wimplicit-function-declaration]
+           mlock_vma_folio(page_folio(page));
+           ^
+   mm/folio-compat.c:176:2: note: did you mean 'mlock_vma_page'?
+   mm/folio-compat.c:174:6: note: 'mlock_vma_page' declared here
+   void mlock_vma_page(struct page *page)
+        ^
+>> mm/folio-compat.c:181:9: error: implicit declaration of function 'munlock_vma_folio' [-Werror,-Wimplicit-function-declaration]
+           return munlock_vma_folio(page_folio(page));
+                  ^
+   mm/folio-compat.c:181:9: note: did you mean 'munlock_vma_page'?
+   mm/folio-compat.c:179:15: note: 'munlock_vma_page' declared here
+   unsigned long munlock_vma_page(struct page *page)
+                 ^
+>> mm/folio-compat.c:179:15: warning: no previous prototype for function 'munlock_vma_page' [-Wmissing-prototypes]
+   unsigned long munlock_vma_page(struct page *page)
+                 ^
+   mm/folio-compat.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long munlock_vma_page(struct page *page)
+   ^
+   static 
+   mm/folio-compat.c:186:2: error: implicit declaration of function 'folio_mlock' [-Werror,-Wimplicit-function-declaration]
+           folio_mlock(page_folio(page));
+           ^
+   mm/folio-compat.c:186:2: note: did you mean 'folio_lock'?
+   include/linux/pagemap.h:776:20: note: 'folio_lock' declared here
+   static inline void folio_lock(struct folio *folio)
+                      ^
+   mm/folio-compat.c:184:6: warning: no previous prototype for function 'page_mlock' [-Wmissing-prototypes]
+   void page_mlock(struct page *page)
+        ^
+   mm/folio-compat.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void page_mlock(struct page *page)
+   ^
+   static 
+   10 warnings and 4 errors generated.
 
 
-vim +/ti_sn_atomic_bridge_enable +1166 drivers/gpu/drm/bridge/ti-sn65dsi86.c
+vim +/munlock_vma_folio +181 mm/folio-compat.c
 
-  1160	
-  1161	static const struct drm_bridge_funcs ti_sn_bridge_funcs = {
-  1162		.attach = ti_sn_bridge_attach,
-  1163		.detach = ti_sn_bridge_detach,
-  1164		.mode_valid = ti_sn_bridge_mode_valid,
-  1165		.atomic_pre_enable = ti_sn_bridge_atomic_pre_enable,
-> 1166		.atomic_enable = ti_sn_atomic_bridge_enable,
-> 1167		.atomic_disable = ti_sn_atomic_bridge_disable,
-> 1168		.atomic_post_disable = ti_sn_bridge_post_disable,
-  1169		DRM_BRIDGE_STATE_OPS,
-  1170	};
-  1171	
+   173	
+   174	void mlock_vma_page(struct page *page)
+   175	{
+ > 176		mlock_vma_folio(page_folio(page));
+   177	}
+   178	
+ > 179	unsigned long munlock_vma_page(struct page *page)
+   180	{
+ > 181		return munlock_vma_folio(page_folio(page));
+   182	}
+   183	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
