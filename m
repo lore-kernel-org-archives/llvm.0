@@ -1,198 +1,174 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021027.outbound.protection.outlook.com [52.101.62.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AA52F24
-	for <llvm@lists.linux.dev>; Sun,  6 Feb 2022 17:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644170262; x=1675706262;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qB/KrCOoCkP70gdGOaXQ6La8fUne/1e99+wANfuP2xU=;
-  b=dRYUtVa3K/+L7g45xVjvI26dMqykwhMiF57083a/gIHh/OlCLUHEqZw+
-   s83KRqg7SQQabysyX2a52tR8eWK1RXy+w8+zx00IG96FkAC2p2dB4N8GI
-   kbbpNLcwaHq/q0tY6aHLr0SPrw2d1/Z+Er8fpSA5uBGqHRrPOp7a+pJW7
-   Nw3cYiQfD3e/ZzPF/U20ZT52eYo/rNlZfr8XBSbzrXn7ipQ3tV77mPyaz
-   tAlovQoQdXfBiIqGJ+75jXf3RUZ7eT/KGTX/MHdIfOriQucnMgHy0aIpX
-   GqtsIWeiEDsonVR0RzU8a2WIEA3ovixIAFj7gVG8luiPcijXk6KFhHNWj
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10249"; a="235999016"
-X-IronPort-AV: E=Sophos;i="5.88,347,1635231600"; 
-   d="scan'208";a="235999016"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 09:57:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,347,1635231600"; 
-   d="scan'208";a="481339226"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 06 Feb 2022 09:57:40 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nGln9-000aZX-QU; Sun, 06 Feb 2022 17:57:39 +0000
-Date: Mon, 7 Feb 2022 01:56:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [willy-pagecache:for-next 49/75] mm/folio-compat.c:181:9: error:
- implicit declaration of function 'munlock_vma_folio'
-Message-ID: <202202070124.y4SKcrhy-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850A12F23
+	for <llvm@lists.linux.dev>; Sun,  6 Feb 2022 19:37:13 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jeGtVqlHWGlLrMSn/2WjDjKPBm2hNLEpKxovQWTSCQv5S5nR54FNojlp7JMMS4TPbezHosALOKFaOhbsSyH9/AWJmHsjm6T9y0zn1Hkn5dxL2yXmRl1ZTuRwb95nGBOEWcyWLvCinNZ6Gunv3ftw5kYYUr3Q3s97fcSd5vhqjXrb3S5mOnS5UJ+Bn0B4y1Db+Oo0oneHZ7xYr+h2qhqojmaB0PLDFHtFimNzYmp3VcSGP4jhUOUhuEWJ7R9SBaICTwaXS8Wa+jgoO2xA3HKHuuLlieNzFoaJKolXkH3gcrghnFFgnV7691yJ6m0dZFCip4rQQ5/kwQ/s2WC1PiRJCw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lHZ5CsyWDTR9InSrJZH2HQglYNEUZLW1TDAB5/j6G6U=;
+ b=R4bhGhmyfOCSPY6IAAMVM3LMzaOtiHh4Cg/cZuIy3KUWmev2gmBRy1g64zTnJbDBRK1nAwOcr1d9t/yDXqgdjPkDDHTRi6TsMlZVEQbdkwbpx8ErVhls96WcEBS1QnAJCNg8PsDl7KFm0cFy3YVwpwRhdg6MZWlozuJuX+gkIGZEteg3fGDJja1FqiFFMtQCSeIGKd3yFQXWwwtqpGUIltQYzl2FPnldMWwY3jr/YuP8pS9T5mf47soZcpUQJBrBhEYqyxTYgI6wtHeJIBUre3R2M6nRYU52121ZGa69e9Mh5YF0YReeOZ/9tq7+l9yhKZ0T0D+Y9wVQ96ulOrU1sQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lHZ5CsyWDTR9InSrJZH2HQglYNEUZLW1TDAB5/j6G6U=;
+ b=Ya3tY6vSqZggRSzR3lilF/QVzFmJYGCeMDipbQP8YKFkzZkXx4jWhVArWwFwclDc8ZKxJRXbZr9GQ08dLAV7WFpiIZjG/rmLeYL/LgGLHkHO6NoLjm3u1ZJKlgKhy2jkhFTAvV0EFwtvnhDFP5yov3Nv+AfbNP17TxBVm+mK2ls=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com (2603:10b6:5:22d::11)
+ by MW4PR21MB1953.namprd21.prod.outlook.com (2603:10b6:303:74::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.3; Sun, 6 Feb
+ 2022 19:37:10 +0000
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::5598:8419:b821:a519]) by DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::5598:8419:b821:a519%3]) with mapi id 15.20.4995.003; Sun, 6 Feb 2022
+ 19:37:09 +0000
+From: Michael Kelley <mikelley@microsoft.com>
+To: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	sthemmin@microsoft.com,
+	wei.liu@kernel.org,
+	tianyu.lan@microsoft.com,
+	longli@microsoft.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	vt@altlinux.org,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: mikelley@microsoft.com
+Subject: [PATCH 1/1] Drivers: hv: vmbus: Rework use of DMA_BIT_MASK(64)
+Date: Sun,  6 Feb 2022 11:36:56 -0800
+Message-Id: <1644176216-12531-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: CO1PR15CA0053.namprd15.prod.outlook.com
+ (2603:10b6:101:1f::21) To DM6PR21MB1514.namprd21.prod.outlook.com
+ (2603:10b6:5:22d::11)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 090971b6-b39f-43f1-bb0e-08d9e9a810d6
+X-MS-TrafficTypeDiagnostic: MW4PR21MB1953:EE_
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Microsoft-Antispam-PRVS:
+	<MW4PR21MB195344739764EA70A21C270FD72B9@MW4PR21MB1953.namprd21.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	dluHeqGxmdMPLISNBfU2hDyRxyphc5Zpbvx5O4QsOYNLu0q1f9zJB9R0L9TBhYywbmpjg5H9XZc1Eki2ICZ647l4/9frN0LhYd7AHmXpvkQ6VvFixDbR5ySLrTFQuBWhCnBDnBwreuWjXnVSwd3W9AfIMxTNB/O2YEbM1BScboi5q8WnkcmRJBDO/FyNJT0d1GdhVprY47kOjw64Mh7/MGGGbPd5fvhaG1IVJjQUOsz7lDK2RYxRiVmIkB0iPgNbrRuCCaEwPW04ftOGDyc9Fp3+rPh8Rz5jh2d1plsFMDo5BKPTRpgj7weEChw4pB5thwEn6txmnbr7rLH/2Bqi+UATSW7a+SlPG3bJ0YlUxyFee891VFxZ4rX7bZtptWtxzE7ZfjII526g4HfLKY5B8Hylz6pol6wv95uFUQNvLEMhv/2VIZ4lQD+pBjXha2PdOE4WjpHhqgS89YhBDcrDzFzT5oW/AUnVdvYL8Vg9nQrIHAb4HU2adWWWIVxXJE5x2d5pJzbI21Krb8x/5mIKd3QcEOR+4zO0ig6qrL8fjce+DuHIWACJfpdaJBtPiS1qC9au+xnfnXPrLkO+p58RfQZe/19IdEgGF0RTgvxiF3GWkrRaqUC5/xHG7+AOU4tY/BCJn0wz+llKEHHxFoaNfTXTFmXV12tqmSWkDOCUXT/55Vgvo86LmjEomM5OyG3zujXda0x4aekySrXkzqTpR+199/BM9uonl5eHbtdxeghmBdsFHR8QGYXW5Czy16NC357stLnNppD0hWVBo0ydrQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(4326008)(8676002)(107886003)(66556008)(66476007)(86362001)(66946007)(38100700002)(26005)(5660300002)(38350700002)(2906002)(921005)(82960400001)(82950400001)(186003)(2616005)(6486002)(83380400001)(52116002)(6512007)(6666004)(6506007)(10290500003)(508600001)(316002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?odKCHEl2SdFhoqF81CyiQMUYLOalQ28gKVUlNzZ9MzmuBP9I6iWQtYDcX3Vc?=
+ =?us-ascii?Q?anqku706CdpeB9V605mp5E521fD9nJMEOy1hyi+RUB2EtQh6x1WRHYX504pd?=
+ =?us-ascii?Q?XX9zFem8uU/XI/YC/PbjdxUkSW/mq2HFRQ7GpmLgnXTzHzHZEI5AY6XLTS2X?=
+ =?us-ascii?Q?7sfcq+pMaR6VT3Sf+36wo/rzCiGkbDbqvMvYoVPXHAxmaJha0e4pJ/GNNufb?=
+ =?us-ascii?Q?XO0jTUW0vr7jKdyr6ctRtkT6yx43cYXQFrwer18tVDhHUvnMgHK3mXjMe97T?=
+ =?us-ascii?Q?O55y3CGfuZxDe+4tZX2MdjWZHRN/n8GpvDrgMQFu62sSu64x2R1TJ6KayWxV?=
+ =?us-ascii?Q?CW3Jxpj2OrK4kIPDWf9Z2ALH8TZHRLtwvNc0FSih5cpW8TW3cpbZXP3xNGHI?=
+ =?us-ascii?Q?aoK1+HhvZEdwKxKFJj8wFGpY/bZEuGu0M2QsnAnl+4pe1iR9zfyfkBzFyVBR?=
+ =?us-ascii?Q?cj6wGPiSOY7t99+/HyxScWwyYkVWV4FYvJmfUzMyWJ2yiFk22b4B3DzIgHmP?=
+ =?us-ascii?Q?f+/3kkSLSKaLCDt3QyGPN2/K8V5BEz/IZkPCxX9XVAc3LBBA5ab/rYWaw+LE?=
+ =?us-ascii?Q?rsnHNQozCWM88A8YgKEjw8tLkm19fLQHI4EU3Myg7F1aTWAt60zFUJmrpWFC?=
+ =?us-ascii?Q?va5o/hzqar1P9S9feiojh57Ks2IQ4pC0yElOFXM34AzjqiNHTVtCgFj3Gsno?=
+ =?us-ascii?Q?+jqw+xPgaNGcKoU5N5W4RvYb+cOfmrEt5T8vdWjWmJWPNZ1VlKxNFspN6xTR?=
+ =?us-ascii?Q?y3DLLuHCUDwAm1rgn2mKBQhzhX757RX993ofDCKvJmLKLBd0Arp1tWEC/M2H?=
+ =?us-ascii?Q?XY4cTYLQtlBBvd2IuGA4QI42CMbI+qT0/sFD9P0+WBj10h6mbYg3ipGtdLOQ?=
+ =?us-ascii?Q?CScd5I4HainQTOHd6YKs4R9J7M9XuRolqVoL7YOgAHYr9IEFk2AVL1weLCM+?=
+ =?us-ascii?Q?nMpaeNRO5Jwrft9dcSw3yKeESbAm0NXILzKC6WWEpAoIsQJ/UFG10Xz4mrx1?=
+ =?us-ascii?Q?9UlEI/GagmJtdRg8jppKB4w87j5vjIG2k/gFg4ILAAp8mfVaSFYvhGnudyqh?=
+ =?us-ascii?Q?4Sk+hWz3m9ew+Rc1oLiT2itMepav15LT1wui/WwfSOFgdj3mDxKnZlNq2/BL?=
+ =?us-ascii?Q?lkw40XGMd2FCgPFlNm3zNU2rHA2gUmfGywHE0IF5DyAfNCS6JhzYfrkIfrIZ?=
+ =?us-ascii?Q?PmnwvVgENoL+7KyhO9kX9zECkO70Ly2rZ8Nc/dlvBM6KNPD6wj1UWZd9s49+?=
+ =?us-ascii?Q?vr/lM9xT9/OKuM/2e1FqSkyWjMsL8tB+h2IERllbQzTb/HlgasbkY/DoMgQ7?=
+ =?us-ascii?Q?B9VXZd1JEd+84hjDl9E8naAwmET7gNT/wiLcxHxfYTiDoRNykw5LwSk9+JPm?=
+ =?us-ascii?Q?eSSfXiqAITBT2ejCoauRRcBx0hO6vhSw2HDCMMoDEUJfcXj3XibrpdSWhSo+?=
+ =?us-ascii?Q?fk66dsim8djMop/Ipd/qsExZTyaYg/H4xCc+3soa0E1k7UxQbuVnBoAGbhBv?=
+ =?us-ascii?Q?GD+Z7PjfffFjcjgdK6OZu5oymQPQOTwSG8tiAsevrJAiDfcjg9IoyKh7VD9K?=
+ =?us-ascii?Q?fPRe4F/fBO6HtWGtXi9o7XMtO7cPF4g1xEbnmpSC+FaKsDMbEZ4gP/08orBk?=
+ =?us-ascii?Q?cGKM16Ys2UpkDZmqT1Nwt68=3D?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 090971b6-b39f-43f1-bb0e-08d9e9a810d6
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1514.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2022 19:37:09.7570
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zxaFBWvOVS5aNTtL2sKquduzccayUyvggh6Ss+r6tOzft92ZX4FKd26XR8D5ZitCj4m8ne/IBQdhkqDBgv6xbw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB1953
 
-tree:   git://git.infradead.org/users/willy/pagecache for-next
-head:   b1ccdc7664f5af97629b33fedf382af350edecf4
-commit: 9ba2488442f0e6e010a0d5c9d34fc385a19c8db5 [49/75] mm/mlock: Turn munlock_vma_page() into munlock_vma_folio()
-config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20220207/202202070124.y4SKcrhy-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6daaf5a44925592c764c59219b0024ee06317028)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
-        git fetch --no-tags willy-pagecache for-next
-        git checkout 9ba2488442f0e6e010a0d5c9d34fc385a19c8db5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Using DMA_BIT_MASK(64) as an initializer for a global variable
+causes problems with Clang 12.0.1. The compiler doesn't understand
+that value 64 is excluded from the shift at compile time, resulting
+in a build error.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+While this is a compiler problem, avoid the issue by setting up
+the dma_mask memory as part of struct hv_device, and initialize
+it using dma_set_mask().
 
-All error/warnings (new ones prefixed by >>):
-
-   In file included from mm/folio-compat.c:7:
-   In file included from include/linux/migrate.h:6:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from mm/folio-compat.c:7:
-   In file included from include/linux/migrate.h:6:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from mm/folio-compat.c:7:
-   In file included from include/linux/migrate.h:6:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
-   mm/folio-compat.c:169:6: warning: no previous prototype for function 'clear_page_mlock' [-Wmissing-prototypes]
-   void clear_page_mlock(struct page *page)
-        ^
-   mm/folio-compat.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void clear_page_mlock(struct page *page)
-   ^
-   static 
-   mm/folio-compat.c:174:6: error: redefinition of 'mlock_vma_page'
-   void mlock_vma_page(struct page *page)
-        ^
-   mm/internal.h:500:20: note: previous definition is here
-   static inline void mlock_vma_page(struct page *page) { }
-                      ^
-   mm/folio-compat.c:176:2: error: implicit declaration of function 'mlock_vma_folio' [-Werror,-Wimplicit-function-declaration]
-           mlock_vma_folio(page_folio(page));
-           ^
-   mm/folio-compat.c:176:2: note: did you mean 'mlock_vma_page'?
-   mm/folio-compat.c:174:6: note: 'mlock_vma_page' declared here
-   void mlock_vma_page(struct page *page)
-        ^
->> mm/folio-compat.c:181:9: error: implicit declaration of function 'munlock_vma_folio' [-Werror,-Wimplicit-function-declaration]
-           return munlock_vma_folio(page_folio(page));
-                  ^
-   mm/folio-compat.c:181:9: note: did you mean 'munlock_vma_page'?
-   mm/folio-compat.c:179:15: note: 'munlock_vma_page' declared here
-   unsigned long munlock_vma_page(struct page *page)
-                 ^
->> mm/folio-compat.c:179:15: warning: no previous prototype for function 'munlock_vma_page' [-Wmissing-prototypes]
-   unsigned long munlock_vma_page(struct page *page)
-                 ^
-   mm/folio-compat.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long munlock_vma_page(struct page *page)
-   ^
-   static 
-   mm/folio-compat.c:186:2: error: implicit declaration of function 'folio_mlock' [-Werror,-Wimplicit-function-declaration]
-           folio_mlock(page_folio(page));
-           ^
-   mm/folio-compat.c:186:2: note: did you mean 'folio_lock'?
-   include/linux/pagemap.h:776:20: note: 'folio_lock' declared here
-   static inline void folio_lock(struct folio *folio)
-                      ^
-   mm/folio-compat.c:184:6: warning: no previous prototype for function 'page_mlock' [-Wmissing-prototypes]
-   void page_mlock(struct page *page)
-        ^
-   mm/folio-compat.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void page_mlock(struct page *page)
-   ^
-   static 
-   10 warnings and 4 errors generated.
-
-
-vim +/munlock_vma_folio +181 mm/folio-compat.c
-
-   173	
-   174	void mlock_vma_page(struct page *page)
-   175	{
- > 176		mlock_vma_folio(page_folio(page));
-   177	}
-   178	
- > 179	unsigned long munlock_vma_page(struct page *page)
-   180	{
- > 181		return munlock_vma_folio(page_folio(page));
-   182	}
-   183	
-
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Vitaly Chikunov <vt@altlinux.org>
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 743b237c3a7b ("scsi: storvsc: Add Isolation VM support for storvsc driver")
+Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/hv/vmbus_drv.c | 4 ++--
+ include/linux/hyperv.h | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 17bf55f..0d96634 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -2079,7 +2079,6 @@ struct hv_device *vmbus_device_create(const guid_t *type,
+ 	return child_device_obj;
+ }
+ 
+-static u64 vmbus_dma_mask = DMA_BIT_MASK(64);
+ /*
+  * vmbus_device_register - Register the child device
+  */
+@@ -2120,8 +2119,9 @@ int vmbus_device_register(struct hv_device *child_device_obj)
+ 	}
+ 	hv_debug_add_dev_dir(child_device_obj);
+ 
+-	child_device_obj->device.dma_mask = &vmbus_dma_mask;
+ 	child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
++	child_device_obj->device.dma_mask = &child_device_obj->dma_mask;
++	dma_set_mask(&child_device_obj->device, DMA_BIT_MASK(64));
+ 	return 0;
+ 
+ err_kset_unregister:
+diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+index f565a89..fe2e017 100644
+--- a/include/linux/hyperv.h
++++ b/include/linux/hyperv.h
+@@ -1262,6 +1262,7 @@ struct hv_device {
+ 	struct vmbus_channel *channel;
+ 	struct kset	     *channels_kset;
+ 	struct device_dma_parameters dma_parms;
++	u64 dma_mask;
+ 
+ 	/* place holder to keep track of the dir for hv device in debugfs */
+ 	struct dentry *debug_dir;
+-- 
+1.8.3.1
+
