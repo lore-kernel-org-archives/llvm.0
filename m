@@ -1,41 +1,44 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725B52F21
-	for <llvm@lists.linux.dev>; Sun,  6 Feb 2022 21:50:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0437B2F28
+	for <llvm@lists.linux.dev>; Sun,  6 Feb 2022 22:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644184248; x=1675720248;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XsOC8Zy4l1C2+Y5YhwrFf7GUgQArRfqPMOFG5LuKxqA=;
-  b=cK5HwZo6RXn2Vg9i6ivJD6xpC9/J8833BazNl6tEcFTM0wMEAwyccwJ+
-   AoojYCiZx2sPpoWUWTVcwxxoOKHGcup28wMKtBQjYUuzjjhYkBY+9hjXv
-   SUB3rdE3HNCvSyX+EZXtGNTc/s8U/py4BUheRVhiTHmzmO9RNU487NKIo
-   NxwKgFpiYwoXgO0NlpRdKRWmxvAFT8rSiTQEjsa+yGI7NHFNLP9tUzzEk
-   mUyAVG98+pIzlDo5S31BPXzEM+zpfFzr+nR2Yf2M2QAAsJRUxraqeeQMD
-   /6pY9XRzkgbXFNcgMg3OX5Jz20xPcyjPbr5s2DiSqyg+8R6JOAkn9H9//
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10249"; a="248373355"
+  t=1644186709; x=1675722709;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kFnGWBRuYaRO+lKITZ6AYKmTA6IRz5Jul47SZVwBE9w=;
+  b=egdidNKfX9DTaDxfBqFDre6YG10k8IQEpVvRbxE04Dl+pzxvOOmwcNBf
+   VH4zIl28Vrey0g/q1eib6s5/rpoKy2NAGyGqcITjhQVxIIQqv7zFWe+zw
+   k5a5R9SdB+EeLW+0pxLDmeQv8c1jbRSEvDk2cNYd4BiEWBAQGh7fCoMiM
+   k2FR84f0QNfGqg2AhsTbf3V7fWfhwWThfyo56G46ZoUt9CTokiATMqJSd
+   8u+5XStUtKRuGMlJ8+R+IpPgv2Z72UaTvRNfw2B62zwjLw6EpYSc0ERDO
+   uGLuN9FTuum3gaI3h839vINyTi7hL39NbLcz9DXw5Zm5PVTayDFRHuG8L
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="248822804"
 X-IronPort-AV: E=Sophos;i="5.88,348,1635231600"; 
-   d="scan'208";a="248373355"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 13:50:47 -0800
+   d="scan'208";a="248822804"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 14:31:49 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,348,1635231600"; 
-   d="scan'208";a="632253767"
+   d="scan'208";a="700264749"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 06 Feb 2022 13:50:46 -0800
+  by orsmga005.jf.intel.com with ESMTP; 06 Feb 2022 14:31:47 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nGpQk-000amG-3F; Sun, 06 Feb 2022 21:50:46 +0000
-Date: Mon, 7 Feb 2022 05:50:33 +0800
+	id 1nGq4Q-000ao2-T1; Sun, 06 Feb 2022 22:31:46 +0000
+Date: Mon, 7 Feb 2022 06:31:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marek Vasut <marex@denx.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] [RFC] drm: mxsfb: Implement LCDIF scanout CRC32 support
-Message-ID: <202202070546.PJcFF726-lkp@intel.com>
-References: <20220206185643.275811-1-marex@denx.de>
+To: Hector Martin <marcan@marcan.st>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Arend van Spriel <arend.vanspriel@broadcom.com>
+Subject: [asahilinux:bits/080-wifi 16/39]
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:42: warning:
+ format specifies type 'long' but the argument has type 'size_t' (aka
+ 'unsigned int')
+Message-ID: <202202070649.4O7uhfhJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,76 +47,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220206185643.275811-1-marex@denx.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Marek,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.17-rc2 next-20220204]
-[cannot apply to airlied/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Marek-Vasut/drm-mxsfb-Implement-LCDIF-scanout-CRC32-support/20220207-025808
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220207/202202070546.PJcFF726-lkp@intel.com/config)
+tree:   https://github.com/AsahiLinux/linux bits/080-wifi
+head:   1753101ce16367deadb5ec5ab5dc7ab4894649bf
+commit: 1b3f024a42ffd102e9abcf974c3102afd7966252 [16/39] brcmfmac: pcie: Read Apple OTP information
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220207/202202070649.4O7uhfhJ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6daaf5a44925592c764c59219b0024ee06317028)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/75b77e11a90d2a041b405a10dce7e1be6aab61a0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Marek-Vasut/drm-mxsfb-Implement-LCDIF-scanout-CRC32-support/20220207-025808
-        git checkout 75b77e11a90d2a041b405a10dce7e1be6aab61a0
+        # https://github.com/AsahiLinux/linux/commit/1b3f024a42ffd102e9abcf974c3102afd7966252
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/080-wifi
+        git checkout 1b3f024a42ffd102e9abcf974c3102afd7966252
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/mxsfb/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hid/ drivers/net/wireless/broadcom/brcm80211/brcmfmac/ sound/soc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/mxsfb/mxsfb_drv.c:324:33: error: too many arguments to function call, expected single argument 'addr', have 2 arguments
-           u32 hwcrc = readl(mxsfb->base, LCDC_V4_CRC_STAT);
-                       ~~~~~              ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/mxsfb/mxsfb_regs.h:29:27: note: expanded from macro 'LCDC_V4_CRC_STAT'
-   #define LCDC_V4_CRC_STAT                0x1a0
-                                           ^~~~~
-   arch/x86/include/asm/io.h:60:17: note: 'readl' declared here
-   build_mmio_read(readl, "l", unsigned int, "=r", :"memory")
-                   ^
-   1 error generated.
+>> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:42: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+           brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
+                                           ~~~     ^~~~
+                                           %u
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/debug.h:77:14: note: expanded from macro 'brcmf_dbg'
+                       fmt, ##__VA_ARGS__);                        \
+                       ~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/addr +324 drivers/gpu/drm/mxsfb/mxsfb_drv.c
+vim +1849 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 
-   317	
-   318	static ssize_t mxsfb_frame_checksum_show(struct device *dev,
-   319						     struct device_attribute *attr,
-   320						     char *buf)
-   321	{
-   322		struct drm_device *drm = dev_get_drvdata(dev);
-   323		struct mxsfb_drm_private *mxsfb = drm->dev_private;
- > 324		u32 hwcrc = readl(mxsfb->base, LCDC_V4_CRC_STAT);
-   325		u32 swcrc = 0xffffffff;
-   326		int i;
-   327	
-   328		if (mxsfb->gem_vaddr) {
-   329			for (i = 0; i < mxsfb->gem_size / 4; i++) {
-   330				u32 data = bitrev32(((u32 *)mxsfb->gem_vaddr)[i]);
-   331				swcrc = crc32(swcrc, &data, 4);
-   332			}
-   333			swcrc = bitrev32(swcrc);
-   334		}
-   335	
-   336		return sysfs_emit(buf, "HW:%08x,SW:%08x,OK:%d\n", hwcrc, swcrc, hwcrc == swcrc);
-   337	}
-   338	static DEVICE_ATTR(frame_checksum, 0444, mxsfb_frame_checksum_show, NULL);
-   339	
+  1842	
+  1843	static int
+  1844	brcmf_pcie_parse_otp(struct brcmf_pciedev_info *devinfo, u8 *otp, size_t size)
+  1845	{
+  1846		int p = 0;
+  1847		int ret = -EINVAL;
+  1848	
+> 1849		brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
+  1850	
+  1851		while (p < (size - 1)) {
+  1852			u8 type = otp[p];
+  1853			u8 length = otp[p + 1];
+  1854	
+  1855			if (type == 0)
+  1856				break;
+  1857	
+  1858			if ((p + 2 + length) > size)
+  1859				break;
+  1860	
+  1861			switch (type) {
+  1862			case BRCMF_OTP_SYS_VENDOR:
+  1863				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): SYS_VENDOR\n",
+  1864					  p, length);
+  1865				ret = brcmf_pcie_parse_otp_sys_vendor(devinfo,
+  1866								      &otp[p + 2],
+  1867								      length);
+  1868				break;
+  1869			case BRCMF_OTP_BRCM_CIS:
+  1870				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): BRCM_CIS\n",
+  1871					  p, length);
+  1872				break;
+  1873			default:
+  1874				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): Unknown type 0x%x\n",
+  1875					  p, length, type);
+  1876				break;
+  1877			}
+  1878	
+  1879			p += 2 + length;
+  1880		}
+  1881	
+  1882		return ret;
+  1883	}
+  1884	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
