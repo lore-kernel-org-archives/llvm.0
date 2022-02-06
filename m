@@ -1,174 +1,189 @@
-Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021027.outbound.protection.outlook.com [52.101.62.27])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850A12F23
-	for <llvm@lists.linux.dev>; Sun,  6 Feb 2022 19:37:13 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jeGtVqlHWGlLrMSn/2WjDjKPBm2hNLEpKxovQWTSCQv5S5nR54FNojlp7JMMS4TPbezHosALOKFaOhbsSyH9/AWJmHsjm6T9y0zn1Hkn5dxL2yXmRl1ZTuRwb95nGBOEWcyWLvCinNZ6Gunv3ftw5kYYUr3Q3s97fcSd5vhqjXrb3S5mOnS5UJ+Bn0B4y1Db+Oo0oneHZ7xYr+h2qhqojmaB0PLDFHtFimNzYmp3VcSGP4jhUOUhuEWJ7R9SBaICTwaXS8Wa+jgoO2xA3HKHuuLlieNzFoaJKolXkH3gcrghnFFgnV7691yJ6m0dZFCip4rQQ5/kwQ/s2WC1PiRJCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lHZ5CsyWDTR9InSrJZH2HQglYNEUZLW1TDAB5/j6G6U=;
- b=R4bhGhmyfOCSPY6IAAMVM3LMzaOtiHh4Cg/cZuIy3KUWmev2gmBRy1g64zTnJbDBRK1nAwOcr1d9t/yDXqgdjPkDDHTRi6TsMlZVEQbdkwbpx8ErVhls96WcEBS1QnAJCNg8PsDl7KFm0cFy3YVwpwRhdg6MZWlozuJuX+gkIGZEteg3fGDJja1FqiFFMtQCSeIGKd3yFQXWwwtqpGUIltQYzl2FPnldMWwY3jr/YuP8pS9T5mf47soZcpUQJBrBhEYqyxTYgI6wtHeJIBUre3R2M6nRYU52121ZGa69e9Mh5YF0YReeOZ/9tq7+l9yhKZ0T0D+Y9wVQ96ulOrU1sQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lHZ5CsyWDTR9InSrJZH2HQglYNEUZLW1TDAB5/j6G6U=;
- b=Ya3tY6vSqZggRSzR3lilF/QVzFmJYGCeMDipbQP8YKFkzZkXx4jWhVArWwFwclDc8ZKxJRXbZr9GQ08dLAV7WFpiIZjG/rmLeYL/LgGLHkHO6NoLjm3u1ZJKlgKhy2jkhFTAvV0EFwtvnhDFP5yov3Nv+AfbNP17TxBVm+mK2ls=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from DM6PR21MB1514.namprd21.prod.outlook.com (2603:10b6:5:22d::11)
- by MW4PR21MB1953.namprd21.prod.outlook.com (2603:10b6:303:74::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.3; Sun, 6 Feb
- 2022 19:37:10 +0000
-Received: from DM6PR21MB1514.namprd21.prod.outlook.com
- ([fe80::5598:8419:b821:a519]) by DM6PR21MB1514.namprd21.prod.outlook.com
- ([fe80::5598:8419:b821:a519%3]) with mapi id 15.20.4995.003; Sun, 6 Feb 2022
- 19:37:09 +0000
-From: Michael Kelley <mikelley@microsoft.com>
-To: kys@microsoft.com,
-	haiyangz@microsoft.com,
-	sthemmin@microsoft.com,
-	wei.liu@kernel.org,
-	tianyu.lan@microsoft.com,
-	longli@microsoft.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	vt@altlinux.org,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: mikelley@microsoft.com
-Subject: [PATCH 1/1] Drivers: hv: vmbus: Rework use of DMA_BIT_MASK(64)
-Date: Sun,  6 Feb 2022 11:36:56 -0800
-Message-Id: <1644176216-12531-1-git-send-email-mikelley@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: CO1PR15CA0053.namprd15.prod.outlook.com
- (2603:10b6:101:1f::21) To DM6PR21MB1514.namprd21.prod.outlook.com
- (2603:10b6:5:22d::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C552F21
+	for <llvm@lists.linux.dev>; Sun,  6 Feb 2022 21:40:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644183648; x=1675719648;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=JyaXasOYnbMHw2yA/fp88cf++V2EcbKTI2cCD9f8/do=;
+  b=TYdqqpG50Os8jqqWA/jE/xandYYir76nu9r9flys92xENJrUy0ralZLb
+   zf94U+cuP97tFxHkLWDJnVjQubb23rfJATHwlLoUwzAP/WD8AmZcVCegM
+   +eQb5osSvt8gY4lqDFWuj9veT6PPf9CLz26Hj1Y8T/fdRf7Ku+gdNx1Yy
+   xCdC+dPD/G8iv/+Qc7E13hK7a4n32m8qgB882Tfdk5o37/pPOEigoQStP
+   hemCzODlR20G8/he0R1ycMtk1Ot3r4ZwPcCKebt7ZRXzl3FJtSVbtlirK
+   stC+66U6BwRG4j7NsLH+VpFXtz2r+nSsYIfFEj0djeXh22c5M+iLT7o5l
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10249"; a="335012580"
+X-IronPort-AV: E=Sophos;i="5.88,348,1635231600"; 
+   d="scan'208";a="335012580"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 13:40:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,348,1635231600"; 
+   d="scan'208";a="700258450"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 06 Feb 2022 13:40:46 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nGpH3-000alh-Sa; Sun, 06 Feb 2022 21:40:45 +0000
+Date: Mon, 7 Feb 2022 05:40:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marek Vasut <marex@denx.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] drm: mxsfb: Simplify LCDIF clock handling
+Message-ID: <202202070554.XjbmgTB8-lkp@intel.com>
+References: <20220206185555.275768-1-marex@denx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 090971b6-b39f-43f1-bb0e-08d9e9a810d6
-X-MS-TrafficTypeDiagnostic: MW4PR21MB1953:EE_
-X-MS-Exchange-AtpMessageProperties: SA|SL
-X-Microsoft-Antispam-PRVS:
-	<MW4PR21MB195344739764EA70A21C270FD72B9@MW4PR21MB1953.namprd21.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	dluHeqGxmdMPLISNBfU2hDyRxyphc5Zpbvx5O4QsOYNLu0q1f9zJB9R0L9TBhYywbmpjg5H9XZc1Eki2ICZ647l4/9frN0LhYd7AHmXpvkQ6VvFixDbR5ySLrTFQuBWhCnBDnBwreuWjXnVSwd3W9AfIMxTNB/O2YEbM1BScboi5q8WnkcmRJBDO/FyNJT0d1GdhVprY47kOjw64Mh7/MGGGbPd5fvhaG1IVJjQUOsz7lDK2RYxRiVmIkB0iPgNbrRuCCaEwPW04ftOGDyc9Fp3+rPh8Rz5jh2d1plsFMDo5BKPTRpgj7weEChw4pB5thwEn6txmnbr7rLH/2Bqi+UATSW7a+SlPG3bJ0YlUxyFee891VFxZ4rX7bZtptWtxzE7ZfjII526g4HfLKY5B8Hylz6pol6wv95uFUQNvLEMhv/2VIZ4lQD+pBjXha2PdOE4WjpHhqgS89YhBDcrDzFzT5oW/AUnVdvYL8Vg9nQrIHAb4HU2adWWWIVxXJE5x2d5pJzbI21Krb8x/5mIKd3QcEOR+4zO0ig6qrL8fjce+DuHIWACJfpdaJBtPiS1qC9au+xnfnXPrLkO+p58RfQZe/19IdEgGF0RTgvxiF3GWkrRaqUC5/xHG7+AOU4tY/BCJn0wz+llKEHHxFoaNfTXTFmXV12tqmSWkDOCUXT/55Vgvo86LmjEomM5OyG3zujXda0x4aekySrXkzqTpR+199/BM9uonl5eHbtdxeghmBdsFHR8QGYXW5Czy16NC357stLnNppD0hWVBo0ydrQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(4326008)(8676002)(107886003)(66556008)(66476007)(86362001)(66946007)(38100700002)(26005)(5660300002)(38350700002)(2906002)(921005)(82960400001)(82950400001)(186003)(2616005)(6486002)(83380400001)(52116002)(6512007)(6666004)(6506007)(10290500003)(508600001)(316002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?odKCHEl2SdFhoqF81CyiQMUYLOalQ28gKVUlNzZ9MzmuBP9I6iWQtYDcX3Vc?=
- =?us-ascii?Q?anqku706CdpeB9V605mp5E521fD9nJMEOy1hyi+RUB2EtQh6x1WRHYX504pd?=
- =?us-ascii?Q?XX9zFem8uU/XI/YC/PbjdxUkSW/mq2HFRQ7GpmLgnXTzHzHZEI5AY6XLTS2X?=
- =?us-ascii?Q?7sfcq+pMaR6VT3Sf+36wo/rzCiGkbDbqvMvYoVPXHAxmaJha0e4pJ/GNNufb?=
- =?us-ascii?Q?XO0jTUW0vr7jKdyr6ctRtkT6yx43cYXQFrwer18tVDhHUvnMgHK3mXjMe97T?=
- =?us-ascii?Q?O55y3CGfuZxDe+4tZX2MdjWZHRN/n8GpvDrgMQFu62sSu64x2R1TJ6KayWxV?=
- =?us-ascii?Q?CW3Jxpj2OrK4kIPDWf9Z2ALH8TZHRLtwvNc0FSih5cpW8TW3cpbZXP3xNGHI?=
- =?us-ascii?Q?aoK1+HhvZEdwKxKFJj8wFGpY/bZEuGu0M2QsnAnl+4pe1iR9zfyfkBzFyVBR?=
- =?us-ascii?Q?cj6wGPiSOY7t99+/HyxScWwyYkVWV4FYvJmfUzMyWJ2yiFk22b4B3DzIgHmP?=
- =?us-ascii?Q?f+/3kkSLSKaLCDt3QyGPN2/K8V5BEz/IZkPCxX9XVAc3LBBA5ab/rYWaw+LE?=
- =?us-ascii?Q?rsnHNQozCWM88A8YgKEjw8tLkm19fLQHI4EU3Myg7F1aTWAt60zFUJmrpWFC?=
- =?us-ascii?Q?va5o/hzqar1P9S9feiojh57Ks2IQ4pC0yElOFXM34AzjqiNHTVtCgFj3Gsno?=
- =?us-ascii?Q?+jqw+xPgaNGcKoU5N5W4RvYb+cOfmrEt5T8vdWjWmJWPNZ1VlKxNFspN6xTR?=
- =?us-ascii?Q?y3DLLuHCUDwAm1rgn2mKBQhzhX757RX993ofDCKvJmLKLBd0Arp1tWEC/M2H?=
- =?us-ascii?Q?XY4cTYLQtlBBvd2IuGA4QI42CMbI+qT0/sFD9P0+WBj10h6mbYg3ipGtdLOQ?=
- =?us-ascii?Q?CScd5I4HainQTOHd6YKs4R9J7M9XuRolqVoL7YOgAHYr9IEFk2AVL1weLCM+?=
- =?us-ascii?Q?nMpaeNRO5Jwrft9dcSw3yKeESbAm0NXILzKC6WWEpAoIsQJ/UFG10Xz4mrx1?=
- =?us-ascii?Q?9UlEI/GagmJtdRg8jppKB4w87j5vjIG2k/gFg4ILAAp8mfVaSFYvhGnudyqh?=
- =?us-ascii?Q?4Sk+hWz3m9ew+Rc1oLiT2itMepav15LT1wui/WwfSOFgdj3mDxKnZlNq2/BL?=
- =?us-ascii?Q?lkw40XGMd2FCgPFlNm3zNU2rHA2gUmfGywHE0IF5DyAfNCS6JhzYfrkIfrIZ?=
- =?us-ascii?Q?PmnwvVgENoL+7KyhO9kX9zECkO70Ly2rZ8Nc/dlvBM6KNPD6wj1UWZd9s49+?=
- =?us-ascii?Q?vr/lM9xT9/OKuM/2e1FqSkyWjMsL8tB+h2IERllbQzTb/HlgasbkY/DoMgQ7?=
- =?us-ascii?Q?B9VXZd1JEd+84hjDl9E8naAwmET7gNT/wiLcxHxfYTiDoRNykw5LwSk9+JPm?=
- =?us-ascii?Q?eSSfXiqAITBT2ejCoauRRcBx0hO6vhSw2HDCMMoDEUJfcXj3XibrpdSWhSo+?=
- =?us-ascii?Q?fk66dsim8djMop/Ipd/qsExZTyaYg/H4xCc+3soa0E1k7UxQbuVnBoAGbhBv?=
- =?us-ascii?Q?GD+Z7PjfffFjcjgdK6OZu5oymQPQOTwSG8tiAsevrJAiDfcjg9IoyKh7VD9K?=
- =?us-ascii?Q?fPRe4F/fBO6HtWGtXi9o7XMtO7cPF4g1xEbnmpSC+FaKsDMbEZ4gP/08orBk?=
- =?us-ascii?Q?cGKM16Ys2UpkDZmqT1Nwt68=3D?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 090971b6-b39f-43f1-bb0e-08d9e9a810d6
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1514.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2022 19:37:09.7570
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zxaFBWvOVS5aNTtL2sKquduzccayUyvggh6Ss+r6tOzft92ZX4FKd26XR8D5ZitCj4m8ne/IBQdhkqDBgv6xbw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB1953
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220206185555.275768-1-marex@denx.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Using DMA_BIT_MASK(64) as an initializer for a global variable
-causes problems with Clang 12.0.1. The compiler doesn't understand
-that value 64 is excluded from the shift at compile time, resulting
-in a build error.
+Hi Marek,
 
-While this is a compiler problem, avoid the issue by setting up
-the dma_mask memory as part of struct hv_device, and initialize
-it using dma_set_mask().
+I love your patch! Yet something to improve:
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Vitaly Chikunov <vt@altlinux.org>
-Reported-by: Jakub Kicinski <kuba@kernel.org>
-Fixes: 743b237c3a7b ("scsi: storvsc: Add Isolation VM support for storvsc driver")
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on next-20220204]
+[cannot apply to drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next airlied/drm-next v5.17-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Marek-Vasut/drm-mxsfb-Simplify-LCDIF-clock-handling/20220207-025717
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: riscv-randconfig-r031-20220207 (https://download.01.org/0day-ci/archive/20220207/202202070554.XjbmgTB8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6daaf5a44925592c764c59219b0024ee06317028)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/7e48d24c5ec466eddb1bfbb6f39daaf061d2a84b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Marek-Vasut/drm-mxsfb-Simplify-LCDIF-clock-handling/20220207-025717
+        git checkout 7e48d24c5ec466eddb1bfbb6f39daaf061d2a84b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/mxsfb/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/mxsfb/mxsfb_drv.c:263:8: error: use of undeclared label 'err_vblank'
+                   goto err_vblank;
+                        ^
+   1 error generated.
+
+
+vim +/err_vblank +263 drivers/gpu/drm/mxsfb/mxsfb_drv.c
+
+5fc40f41c137cc Thomas Zimmermann 2021-08-03  189  
+c6ddee8220bf8a Laurent Pinchart  2020-07-27  190  static int mxsfb_load(struct drm_device *drm,
+c6ddee8220bf8a Laurent Pinchart  2020-07-27  191  		      const struct mxsfb_devdata *devdata)
+45d59d704080cc Marek Vasut       2016-08-18  192  {
+45d59d704080cc Marek Vasut       2016-08-18  193  	struct platform_device *pdev = to_platform_device(drm->dev);
+45d59d704080cc Marek Vasut       2016-08-18  194  	struct mxsfb_drm_private *mxsfb;
+45d59d704080cc Marek Vasut       2016-08-18  195  	struct resource *res;
+45d59d704080cc Marek Vasut       2016-08-18  196  	int ret;
+45d59d704080cc Marek Vasut       2016-08-18  197  
+45d59d704080cc Marek Vasut       2016-08-18  198  	mxsfb = devm_kzalloc(&pdev->dev, sizeof(*mxsfb), GFP_KERNEL);
+45d59d704080cc Marek Vasut       2016-08-18  199  	if (!mxsfb)
+45d59d704080cc Marek Vasut       2016-08-18  200  		return -ENOMEM;
+45d59d704080cc Marek Vasut       2016-08-18  201  
+c42001e357f7de Laurent Pinchart  2020-07-27  202  	mxsfb->drm = drm;
+45d59d704080cc Marek Vasut       2016-08-18  203  	drm->dev_private = mxsfb;
+c6ddee8220bf8a Laurent Pinchart  2020-07-27  204  	mxsfb->devdata = devdata;
+45d59d704080cc Marek Vasut       2016-08-18  205  
+45d59d704080cc Marek Vasut       2016-08-18  206  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+45d59d704080cc Marek Vasut       2016-08-18  207  	mxsfb->base = devm_ioremap_resource(drm->dev, res);
+45d59d704080cc Marek Vasut       2016-08-18  208  	if (IS_ERR(mxsfb->base))
+45d59d704080cc Marek Vasut       2016-08-18  209  		return PTR_ERR(mxsfb->base);
+45d59d704080cc Marek Vasut       2016-08-18  210  
+45d59d704080cc Marek Vasut       2016-08-18  211  	mxsfb->clk = devm_clk_get(drm->dev, NULL);
+45d59d704080cc Marek Vasut       2016-08-18  212  	if (IS_ERR(mxsfb->clk))
+45d59d704080cc Marek Vasut       2016-08-18  213  		return PTR_ERR(mxsfb->clk);
+45d59d704080cc Marek Vasut       2016-08-18  214  
+7e48d24c5ec466 Marek Vasut       2022-02-06  215  	mxsfb->clk_axi = devm_clk_get_optional(drm->dev, "axi");
+45d59d704080cc Marek Vasut       2016-08-18  216  	if (IS_ERR(mxsfb->clk_axi))
+7e48d24c5ec466 Marek Vasut       2022-02-06  217  		return PTR_ERR(mxsfb->clk_axi);
+45d59d704080cc Marek Vasut       2016-08-18  218  
+7e48d24c5ec466 Marek Vasut       2022-02-06  219  	mxsfb->clk_disp_axi = devm_clk_get_optional(drm->dev, "disp_axi");
+45d59d704080cc Marek Vasut       2016-08-18  220  	if (IS_ERR(mxsfb->clk_disp_axi))
+7e48d24c5ec466 Marek Vasut       2022-02-06  221  		return PTR_ERR(mxsfb->clk_disp_axi);
+45d59d704080cc Marek Vasut       2016-08-18  222  
+45d59d704080cc Marek Vasut       2016-08-18  223  	ret = dma_set_mask_and_coherent(drm->dev, DMA_BIT_MASK(32));
+45d59d704080cc Marek Vasut       2016-08-18  224  	if (ret)
+45d59d704080cc Marek Vasut       2016-08-18  225  		return ret;
+45d59d704080cc Marek Vasut       2016-08-18  226  
+45d59d704080cc Marek Vasut       2016-08-18  227  	/* Modeset init */
+45d59d704080cc Marek Vasut       2016-08-18  228  	drm_mode_config_init(drm);
+45d59d704080cc Marek Vasut       2016-08-18  229  
+ae1ed009328193 Laurent Pinchart  2020-07-27  230  	ret = mxsfb_kms_init(mxsfb);
+45d59d704080cc Marek Vasut       2016-08-18  231  	if (ret < 0) {
+ae1ed009328193 Laurent Pinchart  2020-07-27  232  		dev_err(drm->dev, "Failed to initialize KMS pipeline\n");
+7e48d24c5ec466 Marek Vasut       2022-02-06  233  		return ret;
+45d59d704080cc Marek Vasut       2016-08-18  234  	}
+45d59d704080cc Marek Vasut       2016-08-18  235  
+b9f5937680a8f1 Laurent Pinchart  2020-07-27  236  	ret = drm_vblank_init(drm, drm->mode_config.num_crtc);
+b9f5937680a8f1 Laurent Pinchart  2020-07-27  237  	if (ret < 0) {
+b9f5937680a8f1 Laurent Pinchart  2020-07-27  238  		dev_err(drm->dev, "Failed to initialise vblank\n");
+7e48d24c5ec466 Marek Vasut       2022-02-06  239  		return ret;
+b9f5937680a8f1 Laurent Pinchart  2020-07-27  240  	}
+b9f5937680a8f1 Laurent Pinchart  2020-07-27  241  
+b9f5937680a8f1 Laurent Pinchart  2020-07-27  242  	/* Start with vertical blanking interrupt reporting disabled. */
+b9f5937680a8f1 Laurent Pinchart  2020-07-27  243  	drm_crtc_vblank_off(&mxsfb->crtc);
+b9f5937680a8f1 Laurent Pinchart  2020-07-27  244  
+c42001e357f7de Laurent Pinchart  2020-07-27  245  	ret = mxsfb_attach_bridge(mxsfb);
+45d59d704080cc Marek Vasut       2016-08-18  246  	if (ret) {
+ee46d16d2e40be Guido Günther     2020-12-15  247  		if (ret != -EPROBE_DEFER)
+d02340436695cb Robert Chiras     2019-08-29  248  			dev_err(drm->dev, "Cannot connect bridge: %d\n", ret);
+7e48d24c5ec466 Marek Vasut       2022-02-06  249  		return ret;
+45d59d704080cc Marek Vasut       2016-08-18  250  	}
+45d59d704080cc Marek Vasut       2016-08-18  251  
+45d59d704080cc Marek Vasut       2016-08-18  252  	drm->mode_config.min_width	= MXSFB_MIN_XRES;
+45d59d704080cc Marek Vasut       2016-08-18  253  	drm->mode_config.min_height	= MXSFB_MIN_YRES;
+45d59d704080cc Marek Vasut       2016-08-18  254  	drm->mode_config.max_width	= MXSFB_MAX_XRES;
+45d59d704080cc Marek Vasut       2016-08-18  255  	drm->mode_config.max_height	= MXSFB_MAX_YRES;
+45d59d704080cc Marek Vasut       2016-08-18  256  	drm->mode_config.funcs		= &mxsfb_mode_config_funcs;
+9f19fd3bd894d6 Leonard Crestez   2018-09-17  257  	drm->mode_config.helper_private	= &mxsfb_mode_config_helpers;
+45d59d704080cc Marek Vasut       2016-08-18  258  
+45d59d704080cc Marek Vasut       2016-08-18  259  	drm_mode_config_reset(drm);
+45d59d704080cc Marek Vasut       2016-08-18  260  
+5fc40f41c137cc Thomas Zimmermann 2021-08-03  261  	ret = platform_get_irq(pdev, 0);
+5fc40f41c137cc Thomas Zimmermann 2021-08-03  262  	if (ret < 0)
+5fc40f41c137cc Thomas Zimmermann 2021-08-03 @263  		goto err_vblank;
+5fc40f41c137cc Thomas Zimmermann 2021-08-03  264  	mxsfb->irq = ret;
+5fc40f41c137cc Thomas Zimmermann 2021-08-03  265  
+5fc40f41c137cc Thomas Zimmermann 2021-08-03  266  	ret = mxsfb_irq_install(drm, mxsfb->irq);
+45d59d704080cc Marek Vasut       2016-08-18  267  	if (ret < 0) {
+45d59d704080cc Marek Vasut       2016-08-18  268  		dev_err(drm->dev, "Failed to install IRQ handler\n");
+7e48d24c5ec466 Marek Vasut       2022-02-06  269  		return ret;
+45d59d704080cc Marek Vasut       2016-08-18  270  	}
+45d59d704080cc Marek Vasut       2016-08-18  271  
+45d59d704080cc Marek Vasut       2016-08-18  272  	drm_kms_helper_poll_init(drm);
+45d59d704080cc Marek Vasut       2016-08-18  273  
+45d59d704080cc Marek Vasut       2016-08-18  274  	platform_set_drvdata(pdev, drm);
+45d59d704080cc Marek Vasut       2016-08-18  275  
+45d59d704080cc Marek Vasut       2016-08-18  276  	drm_helper_hpd_irq_event(drm);
+45d59d704080cc Marek Vasut       2016-08-18  277  
+7e48d24c5ec466 Marek Vasut       2022-02-06  278  	pm_runtime_enable(drm->dev);
+45d59d704080cc Marek Vasut       2016-08-18  279  
+7e48d24c5ec466 Marek Vasut       2022-02-06  280  	return 0;
+45d59d704080cc Marek Vasut       2016-08-18  281  }
+45d59d704080cc Marek Vasut       2016-08-18  282  
+
 ---
- drivers/hv/vmbus_drv.c | 4 ++--
- include/linux/hyperv.h | 1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 17bf55f..0d96634 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -2079,7 +2079,6 @@ struct hv_device *vmbus_device_create(const guid_t *type,
- 	return child_device_obj;
- }
- 
--static u64 vmbus_dma_mask = DMA_BIT_MASK(64);
- /*
-  * vmbus_device_register - Register the child device
-  */
-@@ -2120,8 +2119,9 @@ int vmbus_device_register(struct hv_device *child_device_obj)
- 	}
- 	hv_debug_add_dev_dir(child_device_obj);
- 
--	child_device_obj->device.dma_mask = &vmbus_dma_mask;
- 	child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
-+	child_device_obj->device.dma_mask = &child_device_obj->dma_mask;
-+	dma_set_mask(&child_device_obj->device, DMA_BIT_MASK(64));
- 	return 0;
- 
- err_kset_unregister:
-diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-index f565a89..fe2e017 100644
---- a/include/linux/hyperv.h
-+++ b/include/linux/hyperv.h
-@@ -1262,6 +1262,7 @@ struct hv_device {
- 	struct vmbus_channel *channel;
- 	struct kset	     *channels_kset;
- 	struct device_dma_parameters dma_parms;
-+	u64 dma_mask;
- 
- 	/* place holder to keep track of the dir for hv device in debugfs */
- 	struct dentry *debug_dir;
--- 
-1.8.3.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
