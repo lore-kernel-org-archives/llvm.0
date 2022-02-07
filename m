@@ -1,183 +1,129 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DD42F26
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 20:23:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644265437; x=1675801437;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WX/QWphywdX4X9SXBJw5KgJQb2HOEeFXMw5MNbnu9eA=;
-  b=FosN/GgcKr8JtklP1Uu0X/2fIuexT8zVD4uywguUkeQjXgcKcykociF0
-   UKskSiTrTm2Oi7ngeAaX6ZYqzDK38z1Di1RrzjqQ8O6WlvGMRCljs9EjG
-   vmvjFbAGBpBvrrhOeyicBMunVwBLveHS6XWmsfb16cVrIU6G/Af4TtcDt
-   8b/tIApBO25BkF6x4zIL38BdKIUebBLDp1teDKJ9igPqF63SUrcT1OmVt
-   qy9CJ0ztYQ3AVdRcG+fughlas8Z5Iq1y8rF6yA1O/YbZllgE7YPr1j7Hr
-   C6JHse58PcvWlmBeQ+HlNftfINITnLZrh1rttZhwHUB9DIl7buxH+oO0Z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="312099937"
-X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="312099937"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 12:23:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="632597119"
-Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 07 Feb 2022 12:23:53 -0800
-Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nHAYC-0000w4-Um; Mon, 07 Feb 2022 20:23:52 +0000
-Date: Tue, 8 Feb 2022 04:22:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Baruch Siach <baruch@tkos.co.il>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Baruch Siach <baruch.siach@siklu.com>,
-	Balaji Prakash J <bjagadee@codeaurora.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Robert Marko <robert.marko@sartura.hr>,
-	Kathiravan T <kathirav@codeaurora.org>, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 1/3] pwm: driver for qualcomm ipq6018 pwm block
-Message-ID: <202202080410.R0qwqtXx-lkp@intel.com>
-References: <17dd231f496d09ed8502bdd505eaa77bb6637e4b.1644226245.git.baruch@tkos.co.il>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EDE2F25
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 21:15:56 +0000 (UTC)
+Received: by mail-oi1-f180.google.com with SMTP id t199so18423670oie.10
+        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 13:15:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OobE6i7gIMfg4XFPq2mt3VscXgZfAtapsVYwcALM9Kc=;
+        b=THD90P/x+7OXkXfQgKxZwvuLFl98w7iNmiBPjN4Ohbd8qVNuZsx8HWUnEr2oeRg0bM
+         +ejAu/jNLP6+QxZwJXSaM6gcmUm8+Ys4VNJ1ag7fE8U6A7odgXO8TJR3SRg1uV+DqQLK
+         fJ2RVbkVPIOW06tXisnEHU16QLILzSryYaZ93aLE1/PfSns7oLMi2pr3QWFEYH4+PD6X
+         eIl4D+ULSOqcPo3uMG6aK7Pwc5sZGXxJgtLeNRl4d3sTNdoAQH6Vi2PJuV1p4BjAn2m9
+         Bpry8EuRVjmMSq99PJdUzvItDNKdfhnDAZ7hV/Tzem/KMiOT793BLNxluAkpAulQBWlY
+         vUwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OobE6i7gIMfg4XFPq2mt3VscXgZfAtapsVYwcALM9Kc=;
+        b=mUTe5xnLtdLCsnJ7lleIia5yZXNnbAEah+6rakheEqCCFKeM71J6HoYIlQBK9EDHHU
+         aEkp8loXKmYZ8KFf490jfW7J8+7qZ3Vw7480TUJ9d2O6TyEqBuPdb97j/q/gwC3Q5pbk
+         SFyjIclhMQZRiHRGARKVT5HOdWqYE6znX9DO9wA02DbceE+QQQmxmmp3OT8vNCxfthT6
+         YlnBPfTUg4jR4L0pX89VpoCQ7J2tLNXIo9DoB+PgmX6XXVa8CT3TGf6FlE46/Nec7d9B
+         Un4NWx+hmowyNQ+XpJf/LPR9oPCJW+hQ4faK3cbOmiC/YD4Fl3Q9V4BxAM0FTrAGuKok
+         kBMA==
+X-Gm-Message-State: AOAM5320aRMIF+3TyRbSUdfYnDxvzxsmNXsXbTGtzwOf19vp+sS166/0
+	DrDav2VRKFFE2TEhaPlypeYYsd0p0BMvJaPEFmg=
+X-Google-Smtp-Source: ABdhPJy0bAxTrvw72wAxN/d14eYdF+KNvKxwijohy8ZvMiJBQd6GMzYwqRPpVLSh5YbT4tpNXPax1NgR3jIPFhxGNvk=
+X-Received: by 2002:a05:6808:159e:: with SMTP id t30mr412394oiw.132.1644268555404;
+ Mon, 07 Feb 2022 13:15:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17dd231f496d09ed8502bdd505eaa77bb6637e4b.1644226245.git.baruch@tkos.co.il>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220205150008.1968218-1-trix@redhat.com> <DM6PR12MB261982BB4DBCC90F70381121E42C9@DM6PR12MB2619.namprd12.prod.outlook.com>
+In-Reply-To: <DM6PR12MB261982BB4DBCC90F70381121E42C9@DM6PR12MB2619.namprd12.prod.outlook.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Mon, 7 Feb 2022 16:15:44 -0500
+Message-ID: <CADnq5_Mx8kMjLMTxD+db_ssTX8O35MzSfAyeL2NaHDMay7+bzQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/pm: fix error handling
+To: "Quan, Evan" <Evan.Quan@amd.com>
+Cc: "trix@redhat.com" <trix@redhat.com>, "Deucher, Alexander" <Alexander.Deucher@amd.com>, 
+	"Koenig, Christian" <Christian.Koenig@amd.com>, "Pan, Xinhui" <Xinhui.Pan@amd.com>, 
+	"airlied@linux.ie" <airlied@linux.ie>, "daniel@ffwll.ch" <daniel@ffwll.ch>, 
+	"nathan@kernel.org" <nathan@kernel.org>, "ndesaulniers@google.com" <ndesaulniers@google.com>, 
+	"Lazar, Lijo" <Lijo.Lazar@amd.com>, "Powell, Darren" <Darren.Powell@amd.com>, 
+	"Chen, Guchun" <Guchun.Chen@amd.com>, "Grodzovsky, Andrey" <Andrey.Grodzovsky@amd.com>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
+	"amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Baruch,
+Applied.  Thanks!
 
-I love your patch! Perhaps something to improve:
+Alex
 
-[auto build test WARNING on thierry-reding-pwm/for-next]
-[also build test WARNING on robh/for-next v5.17-rc3 next-20220207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Baruch-Siach/pwm-driver-for-qualcomm-ipq6018-pwm-block/20220207-175605
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220208/202202080410.R0qwqtXx-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/71e449eb6d19b141b4527caae529e16c52bcfeea
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Baruch-Siach/pwm-driver-for-qualcomm-ipq6018-pwm-block/20220207-175605
-        git checkout 71e449eb6d19b141b4527caae529e16c52bcfeea
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/pwm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pwm/pwm-ipq.c:122:11: warning: result of comparison of constant 16000000000 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-           if (rate > 16ULL * GIGA)
-               ~~~~ ^ ~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +122 drivers/pwm/pwm-ipq.c
-
-    99	
-   100	static int ipq_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-   101				 const struct pwm_state *state)
-   102	{
-   103		struct ipq_pwm_chip *ipq_chip = ipq_pwm_from_chip(chip);
-   104		unsigned int pre_div, pwm_div, best_pre_div, best_pwm_div;
-   105		unsigned long rate = clk_get_rate(ipq_chip->clk);
-   106		u64 period_ns, duty_ns, period_rate;
-   107		u64 min_diff;
-   108	
-   109		if (state->polarity != PWM_POLARITY_NORMAL)
-   110			return -EINVAL;
-   111	
-   112		if (state->period < DIV64_U64_ROUND_UP(NSEC_PER_SEC, rate))
-   113			return -ERANGE;
-   114	
-   115		period_ns = min(state->period, IPQ_PWM_MAX_PERIOD_NS);
-   116		duty_ns = min(state->duty_cycle, period_ns);
-   117	
-   118		/*
-   119		 * period_ns is 1G or less. As long as rate is less than 16 GHz,
-   120		 * period_rate does not overflow. Make that explicit.
-   121		 */
- > 122		if (rate > 16ULL * GIGA)
-   123			return -EINVAL;
-   124		period_rate = period_ns * rate;
-   125		best_pre_div = IPQ_PWM_MAX_DIV;
-   126		best_pwm_div = IPQ_PWM_MAX_DIV;
-   127		/*
-   128		 * We don't need to consider pre_div values smaller than
-   129		 *
-   130		 *                              period_rate
-   131		 *  pre_div_min := ------------------------------------
-   132		 *                 NSEC_PER_SEC * (IPQ_PWM_MAX_DIV + 1)
-   133		 *
-   134		 * because pre_div = pre_div_min results in a better
-   135		 * approximation.
-   136		 */
-   137		pre_div = div64_u64(period_rate,
-   138				(u64)NSEC_PER_SEC * (IPQ_PWM_MAX_DIV + 1));
-   139		min_diff = period_rate;
-   140	
-   141		for (; pre_div <= IPQ_PWM_MAX_DIV; pre_div++) {
-   142			u64 remainder;
-   143	
-   144			pwm_div = div64_u64_rem(period_rate,
-   145					(u64)NSEC_PER_SEC * (pre_div + 1), &remainder);
-   146			/* pwm_div is unsigned; the check below catches underflow */
-   147			pwm_div--;
-   148	
-   149			/*
-   150			 * Swapping values for pre_div and pwm_div produces the same
-   151			 * period length. So we can skip all settings with pre_div >
-   152			 * pwm_div which results in bigger constraints for selecting
-   153			 * the duty_cycle than with the two values swapped.
-   154			 */
-   155			if (pre_div > pwm_div)
-   156				break;
-   157	
-   158			/*
-   159			 * Make sure we can do 100% duty cycle where
-   160			 * hi_dur == pwm_div + 1
-   161			 */
-   162			if (pwm_div > IPQ_PWM_MAX_DIV - 1)
-   163				continue;
-   164	
-   165			if (remainder < min_diff) {
-   166				best_pre_div = pre_div;
-   167				best_pwm_div = pwm_div;
-   168				min_diff = remainder;
-   169	
-   170				if (min_diff == 0) /* bingo */
-   171					break;
-   172			}
-   173		}
-   174	
-   175		/* config divider values for the closest possible frequency */
-   176		config_div_and_duty(pwm, best_pre_div, best_pwm_div,
-   177				    rate, duty_ns, state->enabled);
-   178	
-   179		return 0;
-   180	}
-   181	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On Sun, Feb 6, 2022 at 10:04 PM Quan, Evan <Evan.Quan@amd.com> wrote:
+>
+> [AMD Official Use Only]
+>
+> Reviewed-by: Evan Quan <evan.quan@amd.com>
+>
+> > -----Original Message-----
+> > From: trix@redhat.com <trix@redhat.com>
+> > Sent: Saturday, February 5, 2022 11:00 PM
+> > To: Quan, Evan <Evan.Quan@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Koenig, Christian
+> > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
+> > airlied@linux.ie; daniel@ffwll.ch; nathan@kernel.org;
+> > ndesaulniers@google.com; Lazar, Lijo <Lijo.Lazar@amd.com>; Powell, Darren
+> > <Darren.Powell@amd.com>; Chen, Guchun <Guchun.Chen@amd.com>;
+> > Grodzovsky, Andrey <Andrey.Grodzovsky@amd.com>
+> > Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
+> > kernel@vger.kernel.org; llvm@lists.linux.dev; Tom Rix <trix@redhat.com>
+> > Subject: [PATCH] drm/amd/pm: fix error handling
+> >
+> > From: Tom Rix <trix@redhat.com>
+> >
+> > clang static analysis reports this error
+> > amdgpu_smu.c:2289:9: warning: Called function pointer
+> >   is null (null dereference)
+> >         return smu->ppt_funcs->emit_clk_levels(
+> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > There is a logic error in the earlier check of
+> > emit_clk_levels.  The error value is set to
+> > the ret variable but ret is never used.  Return
+> > directly and remove the unneeded ret variable.
+> >
+> > Fixes: 5d64f9bbb628 ("amdgpu/pm: Implement new API function "emit" that
+> > accepts buffer base and write offset")
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >  drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> > b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> > index af368aa1fd0ae..5f3b3745a9b7a 100644
+> > --- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> > +++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> > @@ -2274,7 +2274,6 @@ static int smu_emit_ppclk_levels(void *handle,
+> > enum pp_clock_type type, char *bu
+> >  {
+> >       struct smu_context *smu = handle;
+> >       enum smu_clk_type clk_type;
+> > -     int ret = 0;
+> >
+> >       clk_type = smu_convert_to_smuclk(type);
+> >       if (clk_type == SMU_CLK_COUNT)
+> > @@ -2284,7 +2283,7 @@ static int smu_emit_ppclk_levels(void *handle,
+> > enum pp_clock_type type, char *bu
+> >               return -EOPNOTSUPP;
+> >
+> >       if (!smu->ppt_funcs->emit_clk_levels)
+> > -             ret = -ENOENT;
+> > +             return -ENOENT;
+> >
+> >       return smu->ppt_funcs->emit_clk_levels(smu, clk_type, buf, offset);
+> >
+> > --
+> > 2.26.3
