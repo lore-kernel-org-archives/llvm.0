@@ -1,162 +1,109 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7823F2F21
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 11:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644231741; x=1675767741;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UzI41Op0LdiA4fxHsjsrc6pgw6L092Cn3Cy1cpg+6tg=;
-  b=Jd0a+i9tMiQatdI+EiPzG7JmD+JNW5vzBL6VaozrBlf9ndRLJzJmdqMq
-   oDjcMmmFbbr73PBkxzpXBWg0TsDMe0Arzo4hiQfDL+tlj3HVflpt3Xo9e
-   IkeyQJkdbBjvTNUpn5AxOt9lbTCiUk29RjOMD8RJQMMAw8GEL63v9WoBw
-   HTg0kIzsKleCMowOV6Kbq4MXAmivgsSFimay4EoRJtEZ6e+7y4+DKSAFt
-   HhgePsDA5wLB+dOTsv2EYWRyV2eBvFhmjfeRzhGZAIbzeeoK8UIpRuJsY
-   P+Wxpj57uPAH9nUpNHs77XCjUwGZ5x5AEsYg7mj2P0npVaStAlAJX1Rez
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="228662162"
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="228662162"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 03:02:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="628485911"
-Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Feb 2022 03:02:19 -0800
-Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nH1mk-0000Qo-KS; Mon, 07 Feb 2022 11:02:18 +0000
-Date: Mon, 7 Feb 2022 19:02:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within
- 'struct htt_tx_fetch_ind' is less aligned than 'union
- htt_tx_fetch_ind::(anonymous at
- drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct
- htt_tx_fetch_ind' being...
-Message-ID: <202202071856.7s2z6Cam-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89232F21
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 11:29:42 +0000 (UTC)
+Received: by mail-oo1-f53.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so13268679oot.4
+        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 03:29:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GdrAEtpSp9knE3dG4N9tmiah7mkkROzWWe9VwwtgIEE=;
+        b=hm9BqMPBVXryDOYxjtgkzshKUBUyISC+PQUo9JZc0hU2pX+klK/9GoBimwmV4SbPbs
+         Cqktu28LyobNhdW4hSKY5KtDI2UWmSNcgeBjPTEd7B4KB0hv2NV+qWzvuHN6+SkOtFu5
+         TiwDUyoGDQxMO8KHFSZQJ2fIbs8XY6z6xtTOFXXwph0LDKis4tf2aBVt2bTqxORAi41k
+         0mvxrR6ZwQGJIQ4JCZ1rPHseamYb5bXnm/00ermwgNFOxidmOYZNjcSWxwjAfipHHjP3
+         5kb+IMCddLCjqQ0SjILaVak/wEXI3KPC55ZNGDUEu9H22th2mZrQCZFD6FlRu9EAsZ9l
+         NCiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GdrAEtpSp9knE3dG4N9tmiah7mkkROzWWe9VwwtgIEE=;
+        b=FWd4C38QiJsR1Cufo1aVEe+yd8tPoTDoqROnivCXLU+yJH9jnoMxydXBDKrvkNASPl
+         VOmoMLgP15ANgiPrDoDuwKW9EjHKhY1ZKV5WaVBVUhLK0VbHM/l1rxszSYh20v27i3nT
+         zY2i+vdIJ46clEsgbNdU93PBDRpU7efxjK0vauhu/U6XpGKP3lEndXwETuLn65afknrY
+         K0ckzU2jpwa+OJnhbp9DCM6XJI6jbbynHckSD/4oyQ2NvtJKVBp46CeEtmJ9kqwyOPUO
+         DTpJJxksn1T114ET4vQYXkIQ75x1156TNF7g2eHPuvRpQlS1wqa+nuEOfRLGs3BpwPb8
+         hW3Q==
+X-Gm-Message-State: AOAM531givrBaRxbg5i/lGXjfb2tjguNKolMAUszGiSAmTU6TA9n0ShL
+	u3i1ixXBn2YbcMeknIciAnFWuB26DOCXn7ZJfpUpxg==
+X-Google-Smtp-Source: ABdhPJyznrMFFiZoDqOMDlGRTRqArtq67oollYysU5ym1cWQLUvuAwYKu1pUfSpdvfjbXzTs/4WO2obpDRUITFEc+0s=
+X-Received: by 2002:a05:6870:7715:: with SMTP id dw21mr3643420oab.38.1644233381454;
+ Mon, 07 Feb 2022 03:29:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <0000000000001e0ba105d5c2dede@google.com> <000000000000fbf22d05d74d08fb@google.com>
+ <20220207103009.id72sr4dtghgzp5f@work>
+In-Reply-To: <20220207103009.id72sr4dtghgzp5f@work>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Mon, 7 Feb 2022 12:29:30 +0100
+Message-ID: <CACT4Y+Z-R1swsyGrdgy89zHvmAa8tsBVE=mLngsapr5qPre9ZQ@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in ext4_fill_super
+To: Lukas Czerner <lczerner@redhat.com>
+Cc: syzbot <syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com>, 
+	adilger.kernel@dilger.ca, cmaiolino@redhat.com, linux-ext4@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Kees,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dfd42facf1e4ada021b939b4e19c935dcdd55566
-commit: fa7845cfd53f3b1d3f60efa55db89805595bc045 treewide: Replace open-coded flex arrays in unions
-date:   4 months ago
-config: arm-buildonly-randconfig-r006-20220207 (https://download.01.org/0day-ci/archive/20220207/202202071856.7s2z6Cam-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa7845cfd53f3b1d3f60efa55db89805595bc045
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fa7845cfd53f3b1d3f60efa55db89805595bc045
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/wireless/ath/ath10k/mac.c:8:
-   In file included from drivers/net/wireless/ath/ath10k/mac.h:11:
-   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
-   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
-   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
->> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/mac.c:5942:22: warning: parameter 'changed_flags' set but not used [-Wunused-but-set-parameter]
-                                       unsigned int changed_flags,
-                                                    ^
-   5 warnings generated.
---
-   In file included from drivers/net/wireless/ath/ath10k/debug.c:14:
-   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
-   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
-   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
->> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   4 warnings generated.
---
-   In file included from drivers/net/wireless/ath/ath10k/ce.c:8:
-   In file included from drivers/net/wireless/ath/ath10k/hif.h:11:
-   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
-   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
-   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
->> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/ce.c:127:1: warning: unused function 'ath10k_get_ring_byte' [-Wunused-function]
-   ath10k_get_ring_byte(unsigned int offset,
-   ^
-   drivers/net/wireless/ath/ath10k/ce.c:212:1: warning: unused function 'ath10k_ce_shadow_dest_ring_write_index_set' [-Wunused-function]
-   ath10k_ce_shadow_dest_ring_write_index_set(struct ath10k *ar,
-   ^
-   drivers/net/wireless/ath/ath10k/ce.c:449:20: warning: unused function 'ath10k_ce_error_intr_enable' [-Wunused-function]
-   static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
-                      ^
-   7 warnings generated.
+On Mon, 7 Feb 2022 at 11:30, Lukas Czerner <lczerner@redhat.com> wrote:
+>
+> On Sat, Feb 05, 2022 at 02:39:06PM -0800, syzbot wrote:
+> > syzbot has bisected this issue to:
+> >
+> > commit cebe85d570cf84804e848332d6721bc9e5300e07
+> > Author: Lukas Czerner <lczerner@redhat.com>
+> > Date:   Wed Oct 27 14:18:56 2021 +0000
+> >
+> >     ext4: switch to the new mount api
+> >
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14902978700000
+> > start commit:   0457e5153e0e Merge tag 'for-linus' of git://git.kernel.org..
+> > git tree:       upstream
+> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=16902978700000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=12902978700000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cd57c0f940a9a1ec
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=138c9e58e3cb22eae3b4
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17f7004fb00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178cf108700000
+> >
+> > Reported-by: syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com
+> > Fixes: cebe85d570cf ("ext4: switch to the new mount api")
+> >
+> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> >
+>
+> I believe that this has been fixed with upstream commit
+>
+> commit 7c268d4ce2d3761f666a9950b029c8902bfab710
+> Author: Lukas Czerner <lczerner@redhat.com>
+> Date:   Wed Jan 19 14:02:09 2022 +0100
+>
+>     ext4: fix potential NULL pointer dereference in ext4_fill_super()
+>
+>     By mistake we fail to return an error from ext4_fill_super() in case
+>     that ext4_alloc_sbi() fails to allocate a new sbi. Instead we just set
+>     the ret variable and allow the function to continue which will later
+>     lead to a NULL pointer dereference. Fix it by returning -ENOMEM in the
+>     case ext4_alloc_sbi() fails.
+>
+>     Fixes: cebe85d570cf ("ext4: switch to the new mount api")
+>     Reported-by: kernel test robot <lkp@intel.com>
+>     Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>     Signed-off-by: Lukas Czerner <lczerner@redhat.com>
+>     Link: https://lore.kernel.org/r/20220119130209.40112-1-lczerner@redhat.com
+>     Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+>     Cc: stable@kernel.org
 
 
-vim +1677 drivers/net/wireless/ath/ath10k/htt.h
+Let's tell syzbot then:
 
-  1670	
-  1671	struct htt_tx_fetch_ind {
-  1672		u8 pad0;
-  1673		__le16 fetch_seq_num;
-  1674		__le32 token;
-  1675		__le16 num_resp_ids;
-  1676		__le16 num_records;
-> 1677		union {
-  1678			/* ath10k_htt_get_tx_fetch_ind_resp_ids() */
-  1679			DECLARE_FLEX_ARRAY(__le32, resp_ids);
-  1680			DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
-  1681		};
-  1682	} __packed;
-  1683	
+#syz fix: ext4: fix potential NULL pointer dereference in ext4_fill_super()
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks
