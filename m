@@ -1,41 +1,42 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DAE52F21
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 10:30:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1644229852;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3cyRyCr5+eamib5wZIABy4k0pAM0GRsoTKR73ge8vW8=;
-	b=afUnP9BF1TqjnNoVdkoIiwLZFdS2Evmm8ctpNdgG9FP7GhTeppliY6xcXPcIaIHD7NYGqW
-	aBGFAQztMNWgWQFjPVoWyBCooa5KWfIerYpuB0kjj2HYC29QUWAA/gKfRt93uZ7AE3t+qZ
-	9WHunOaafFevTRqQ+Qp3GhMNI+v+r8M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-253-UDBsiRaoM2S6ps60GOiWsQ-1; Mon, 07 Feb 2022 05:30:48 -0500
-X-MC-Unique: UDBsiRaoM2S6ps60GOiWsQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 209C21800D50;
-	Mon,  7 Feb 2022 10:30:47 +0000 (UTC)
-Received: from work (unknown [10.40.194.180])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id DE8AE7D704;
-	Mon,  7 Feb 2022 10:30:12 +0000 (UTC)
-Date: Mon, 7 Feb 2022 11:30:09 +0100
-From: Lukas Czerner <lczerner@redhat.com>
-To: syzbot <syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com>
-Cc: adilger.kernel@dilger.ca, cmaiolino@redhat.com,
-	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Subject: Re: [syzbot] general protection fault in ext4_fill_super
-Message-ID: <20220207103009.id72sr4dtghgzp5f@work>
-References: <0000000000001e0ba105d5c2dede@google.com>
- <000000000000fbf22d05d74d08fb@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E362C9C
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 10:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644229940; x=1675765940;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XRmP/X8RLTSHNZOJtP0mmFwv/xOazCe7T0uuWyO98Rw=;
+  b=TPPXjgi5E1idvMVbl8+ZFeczfZvMHtiktSM+kqnQSl9AOLlhn4mRa5sm
+   cF82olkJ1OCB8Mof9SSCsBNhAwwQc7ffAKkFq2M/3Pd+ZLMqPlvUBWw3S
+   W+DPvawL3sBuEJhJMyFQf4xx7fPGWIbX3XORUzxNCRUYBUayv1N+kfMKD
+   712wK/ZWYFRrrmpUzvNRN4gwcqRJTs/F9gsuzDpRrPMFUqWqx6ZO4H2BQ
+   lYq1zOTVWWfdhBz23bXfnD130CL0SpzFilVQzQm/IWYafsk0CBPzqXIGY
+   932m88f2/0NBx1qQrVRR1JIJc5nzgqIgNpvFciYKOCEXAk6GWhBHrD8dr
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="228658629"
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="228658629"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 02:32:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="499158093"
+Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 07 Feb 2022 02:32:17 -0800
+Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nH1Jh-0000PM-9R; Mon, 07 Feb 2022 10:32:17 +0000
+Date: Mon, 7 Feb 2022 18:31:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Badhri Jagan Sridharan <badhri@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v1 2/2] usb: typec: tcpm: Enable limit_src_current_set
+ callback
+Message-ID: <202202071805.JWYS6D5m-lkp@intel.com>
+References: <20220207043907.2758424-2-badhri@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,56 +45,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000fbf22d05d74d08fb@google.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <20220207043907.2758424-2-badhri@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, Feb 05, 2022 at 02:39:06PM -0800, syzbot wrote:
-> syzbot has bisected this issue to:
-> 
-> commit cebe85d570cf84804e848332d6721bc9e5300e07
-> Author: Lukas Czerner <lczerner@redhat.com>
-> Date:   Wed Oct 27 14:18:56 2021 +0000
-> 
->     ext4: switch to the new mount api
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14902978700000
-> start commit:   0457e5153e0e Merge tag 'for-linus' of git://git.kernel.org..
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=16902978700000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12902978700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cd57c0f940a9a1ec
-> dashboard link: https://syzkaller.appspot.com/bug?extid=138c9e58e3cb22eae3b4
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17f7004fb00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178cf108700000
-> 
-> Reported-by: syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com
-> Fixes: cebe85d570cf ("ext4: switch to the new mount api")
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> 
+Hi Badhri,
 
-I believe that this has been fixed with upstream commit
+Thank you for the patch! Perhaps something to improve:
 
-commit 7c268d4ce2d3761f666a9950b029c8902bfab710
-Author: Lukas Czerner <lczerner@redhat.com>
-Date:   Wed Jan 19 14:02:09 2022 +0100
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on linus/master v5.17-rc3 next-20220207]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-    ext4: fix potential NULL pointer dereference in ext4_fill_super()
+url:    https://github.com/0day-ci/linux/commits/Badhri-Jagan-Sridharan/usb-typec-Introduce-typec-attributes-for-limiting-source-current/20220207-141625
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: i386-randconfig-a006-20220207 (https://download.01.org/0day-ci/archive/20220207/202202071805.JWYS6D5m-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/3b7afb6baa84baf8d1d27a46425095017772e87b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Badhri-Jagan-Sridharan/usb-typec-Introduce-typec-attributes-for-limiting-source-current/20220207-141625
+        git checkout 3b7afb6baa84baf8d1d27a46425095017772e87b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/typec/tcpm/
 
-    By mistake we fail to return an error from ext4_fill_super() in case
-    that ext4_alloc_sbi() fails to allocate a new sbi. Instead we just set
-    the ret variable and allow the function to continue which will later
-    lead to a NULL pointer dereference. Fix it by returning -ENOMEM in the
-    case ext4_alloc_sbi() fails.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-    Fixes: cebe85d570cf ("ext4: switch to the new mount api")
-    Reported-by: kernel test robot <lkp@intel.com>
-    Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-    Signed-off-by: Lukas Czerner <lczerner@redhat.com>
-    Link: https://lore.kernel.org/r/20220119130209.40112-1-lczerner@redhat.com
-    Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-    Cc: stable@kernel.org
+All warnings (new ones prefixed by >>):
 
-Thanks!
--Lukas
+>> drivers/usb/typec/tcpm/tcpm.c:5919:5: warning: no previous prototype for function 'tcpm_update_source_capabilities_locked' [-Wmissing-prototypes]
+   int tcpm_update_source_capabilities_locked(struct tcpm_port *port)
+       ^
+   drivers/usb/typec/tcpm/tcpm.c:5919:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tcpm_update_source_capabilities_locked(struct tcpm_port *port)
+   ^
+   static 
+   1 warning generated.
 
+
+vim +/tcpm_update_source_capabilities_locked +5919 drivers/usb/typec/tcpm/tcpm.c
+
+  5918	
+> 5919	int tcpm_update_source_capabilities_locked(struct tcpm_port *port)
+  5920	{
+  5921		int ret = 0;
+  5922	
+  5923		switch (port->state) {
+  5924		case SRC_UNATTACHED:
+  5925		case SRC_ATTACH_WAIT:
+  5926		case SRC_TRYWAIT:
+  5927			tcpm_set_cc(port, tcpm_rp_cc(port));
+  5928			break;
+  5929		case SRC_SEND_CAPABILITIES:
+  5930		case SRC_NEGOTIATE_CAPABILITIES:
+  5931		case SRC_READY:
+  5932		case SRC_WAIT_NEW_CAPABILITIES:
+  5933			port->upcoming_state = SRC_SEND_CAPABILITIES;
+  5934			ret = tcpm_ams_start(port, POWER_NEGOTIATION);
+  5935			if (ret == -EAGAIN) {
+  5936				port->upcoming_state = INVALID_STATE;
+  5937				break;
+  5938			}
+  5939			break;
+  5940		default:
+  5941			break;
+  5942		}
+  5943		return ret;
+  5944	}
+  5945	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
