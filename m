@@ -1,174 +1,100 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2B22F25
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 22:12:12 +0000 (UTC)
-Received: by mail-lf1-f49.google.com with SMTP id f10so29597046lfu.8
-        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 14:12:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cFN1ZYBqoyYBut+IHT4rtno8V8itQS4yOxwKeKCtmn4=;
-        b=DO1SsmMoZUPb8EpqEdwHK7B5xPPAQPJVqR4moEEUUS19EXPRjKIcJvUyNowKDRrUuX
-         mcrC07VGFDcXhkaKsml15IF3S1BWurAGrnREufMQVhdour7Qxru/+BISVmcki+3DotLo
-         zHbHVVdCjjbD/sCjBscxYVh3yLL2Il9MbEIXe06erS1zFXCLDw+xJQ7SOUJE1vIeK1yd
-         z6OrvvBm/gvqyd9GQWPvXvTGwFxdfshMjbbbNRibU9purQbIbC95bEYQto8V3bR7d1ov
-         g84sFOxVvuw+33dvJlhOmHfKKzsN+h7vVAUF1dmS5Wwot9B6cAyfUvgxglqPUxia5yiD
-         nfCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cFN1ZYBqoyYBut+IHT4rtno8V8itQS4yOxwKeKCtmn4=;
-        b=RfVGYBCgywb/+0axHs2Y8otFIvcliGX9R98n3a6hEzu2tnSprb80gQ7CCa1IX9jLgt
-         YOOIo4hKlhNkqQOvhuWdNiIdR4U2hmaUUaFDiQ7uWpXlJ1YjLkRxalT/4kivPk4jRbwZ
-         kQdtiIxyU7rLH2VxFct24/6vFRZfFSWw6M9QQTpAsXTJ/1G9mL8P/9aMqfJnX/B6K7q1
-         TZrql0aS14X8f4WkWUSxkTThN+ZJIRIGz3ltps04lR12Pzae7cStGB3RhFuUyXXcABPR
-         r2UzG5f49UWR3aFMnbQ9R4VWh2+XcgR4g5kjHnGoQjziC3eLzpeJ3nC7qVOFx2wr7gdD
-         tE3A==
-X-Gm-Message-State: AOAM533XG/CiG++zkySZ/HwYEGEYVZFzfjLxfa1DHKcuyeFG97aMEdRb
-	yrI0+wQDFGDeWhYGNFa/i6Edf9hlW/JgANSimB1Tbw==
-X-Google-Smtp-Source: ABdhPJxw3i4RCdalhojC+MhyaF6SAJt6gNdZ18G4Mssyxvj2N+4Vbk9x6zcG3vBGyPmTfV+iG9cTrKeLTbKYP4kuO2g=
-X-Received: by 2002:ac2:4c17:: with SMTP id t23mr1027082lfq.240.1644271930244;
- Mon, 07 Feb 2022 14:12:10 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992F62F2C
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 22:35:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644273300; x=1675809300;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fB30TGozDnNwkvmCJtIs1n+CB+ujhtjdyI6F+aPuKJU=;
+  b=E7OnYxjfHBG00DQVX9WXRzdVoPzwJsPzPvj1Z4Pnhc2yl1b4AwHgne+P
+   AOXcF9RI+2VFQDjMy5V0RFd7weuuQ3t4YARvsBqnMWn/Ex4iwYGslb1iq
+   7/c5DBkrR33L757rZDe7mtV2aww4qsNyKVzmT9Sjkbi14eBR+qv0J7Ug2
+   7dviGMQ6yAnkVw+vL0y0UNaietN7XyV/WetC3Wg5Cny1ctb55qoKAEb4D
+   Kw/nklMfYGR/BlFVx0dFZdN4GDYDchIsvi1tzUhUxc7Z7YSgDf/N7/xq/
+   erucHFWfTbW7oD6nqUdPQ5qc5gn+PrKXc0wrwhMM3WwW/L4/Krp7YgQF3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="236227196"
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="236227196"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 14:34:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="540316265"
+Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Feb 2022 14:34:57 -0800
+Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nHCb2-000135-NS; Mon, 07 Feb 2022 22:34:56 +0000
+Date: Tue, 8 Feb 2022 06:34:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Dumazet <eric.dumazet@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH net-next 08/11] ipmr: introduce ipmr_net_exit_batch()
+Message-ID: <202202080620.vPGy8XEF-lkp@intel.com>
+References: <20220207171756.1304544-9-eric.dumazet@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211229021258.176670-1-morbo@google.com> <20220204005742.1222997-1-morbo@google.com>
-In-Reply-To: <20220204005742.1222997-1-morbo@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 7 Feb 2022 14:11:58 -0800
-Message-ID: <CAKwvOdk=VdDo1fhWJVa4eO0UjuQwtV9kC-cJd0J9-6guU2vafA@mail.gmail.com>
-Subject: Re: [PATCH v3] x86: use builtins to read eflags
-To: Bill Wendling <morbo@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207171756.1304544-9-eric.dumazet@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Feb 3, 2022 at 4:57 PM Bill Wendling <morbo@google.com> wrote:
->
-> GCC and Clang both have builtins to read and write the EFLAGS register.
-> This allows the compiler to determine the best way to generate this
-> code, which can improve code generation.
->
-> This issue arose due to Clang's issue with the "=rm" constraint.  Clang
-> chooses to be conservative in these situations, and so uses memory
-> instead of registers. This is a known issue, which is currently being
-> addressed.
->
-> However, using builtins is benefiical in general, because it removes the
+Hi Eric,
 
-s/benefiical/beneficial/
+I love your patch! Yet something to improve:
 
-> burden of determining what's the way to read the flags register from the
-> programmer and places it on to the compiler, which has the information
-> needed to make that decision. Indeed, this piece of code has had several
-> changes over the years, some of which were pinging back and forth to
-> determine the correct constraints to use.
->
-> With this change, Clang generates better code:
->
-> Original code:
->         movq    $0, -48(%rbp)
->         #APP
->         # __raw_save_flags
->         pushfq
->         popq    -48(%rbp)
->         #NO_APP
->         movq    -48(%rbp), %rbx
->
-> New code:
->         pushfq
->         popq    %rbx
->         #APP
+[auto build test ERROR on net-next/master]
 
-But it also forces frame pointers due to another bug in LLVM.
-https://godbolt.org/z/6badWaGjo
-For x86_64, we default to CONFIG_UNWINDER_ORC=y, not
-CONFIG_UNWINDER_FRAME_POINTER=y.  So this change would make us use
-registers instead of stack slots (improvement), but then force frame
-pointers when we probably didn't need or want them (deterioration) for
-all released versions of clang.
+url:    https://github.com/0day-ci/linux/commits/Eric-Dumazet/net-speedup-netns-dismantles/20220208-013735
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git ff62433883b3ab753a78954ecf46e2c514f5c407
+config: x86_64-randconfig-r003-20220207 (https://download.01.org/0day-ci/archive/20220208/202202080620.vPGy8XEF-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/4a23446f3f1d4d348348210ec16e5e5372177b48
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Eric-Dumazet/net-speedup-netns-dismantles/20220208-013735
+        git checkout 4a23446f3f1d4d348348210ec16e5e5372177b48
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
 
-I think we should fix https://reviews.llvm.org/D92695 first before I'd
-be comfortable signing off on this kernel change.  Again, I think we
-should test out Phoebe's recommendation
-https://reviews.llvm.org/D92695#inline-1086936
-or do you already have a fix that I haven't yet been cc'ed on, perhaps?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> Note that the stack slot in the original code is no longer needed in the
-> new code, saving a small amount of stack space.
->
-> There is no change to GCC's ouput:
->
-> Original code:
->
->         # __raw_save_flags
->         pushf ; pop %r13        # flags
->
-> New code:
->
->         pushfq
->         popq    %r13    # _23
->
-> Signed-off-by: Bill Wendling <morbo@google.com>
-> ---
-> v3: - Add blurb indicating that GCC's output hasn't changed.
-> v2: - Kept the original function to retain the out-of-line symbol.
->     - Improved the commit message.
->     - Note that I couldn't use Nick's suggestion of
->
->         return IS_ENABLED(CONFIG_X86_64) ? ...
->
->       because Clang complains about using __builtin_ia32_readeflags_u32 in
->       64-bit mode.
-> ---
->  arch/x86/include/asm/irqflags.h | 19 +++++--------------
->  1 file changed, 5 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-> index 87761396e8cc0..f31a035f3c6a9 100644
-> --- a/arch/x86/include/asm/irqflags.h
-> +++ b/arch/x86/include/asm/irqflags.h
-> @@ -19,20 +19,11 @@
->  extern inline unsigned long native_save_fl(void);
->  extern __always_inline unsigned long native_save_fl(void)
->  {
-> -       unsigned long flags;
-> -
-> -       /*
-> -        * "=rm" is safe here, because "pop" adjusts the stack before
-> -        * it evaluates its effective address -- this is part of the
-> -        * documented behavior of the "pop" instruction.
-> -        */
-> -       asm volatile("# __raw_save_flags\n\t"
-> -                    "pushf ; pop %0"
-> -                    : "=rm" (flags)
-> -                    : /* no input */
-> -                    : "memory");
-> -
-> -       return flags;
-> +#ifdef CONFIG_X86_64
-> +       return __builtin_ia32_readeflags_u64();
-> +#else
-> +       return __builtin_ia32_readeflags_u32();
-> +#endif
->  }
->
->  static __always_inline void native_irq_disable(void)
-> --
-> 2.35.0.263.gb82422642f-goog
->
+All errors (new ones prefixed by >>):
+
+>> net/ipv4/ipmr.c:269:2: error: implicit declaration of function 'ASSERT_RNTL' [-Werror,-Wimplicit-function-declaration]
+           ASSERT_RNTL();
+           ^
+   1 error generated.
 
 
--- 
-Thanks,
-~Nick Desaulniers
+vim +/ASSERT_RNTL +269 net/ipv4/ipmr.c
+
+   264	
+   265	static void __net_exit ipmr_rules_exit(struct net *net)
+   266	{
+   267		struct mr_table *mrt, *next;
+   268	
+ > 269		ASSERT_RNTL();
+   270		list_for_each_entry_safe(mrt, next, &net->ipv4.mr_tables, list) {
+   271			list_del(&mrt->list);
+   272			ipmr_free_table(mrt);
+   273		}
+   274		fib_rules_unregister(net->ipv4.mr_rules_ops);
+   275	}
+   276	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
