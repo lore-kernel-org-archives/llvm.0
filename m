@@ -1,129 +1,174 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EDE2F25
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 21:15:56 +0000 (UTC)
-Received: by mail-oi1-f180.google.com with SMTP id t199so18423670oie.10
-        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 13:15:56 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2B22F25
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 22:12:12 +0000 (UTC)
+Received: by mail-lf1-f49.google.com with SMTP id f10so29597046lfu.8
+        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 14:12:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OobE6i7gIMfg4XFPq2mt3VscXgZfAtapsVYwcALM9Kc=;
-        b=THD90P/x+7OXkXfQgKxZwvuLFl98w7iNmiBPjN4Ohbd8qVNuZsx8HWUnEr2oeRg0bM
-         +ejAu/jNLP6+QxZwJXSaM6gcmUm8+Ys4VNJ1ag7fE8U6A7odgXO8TJR3SRg1uV+DqQLK
-         fJ2RVbkVPIOW06tXisnEHU16QLILzSryYaZ93aLE1/PfSns7oLMi2pr3QWFEYH4+PD6X
-         eIl4D+ULSOqcPo3uMG6aK7Pwc5sZGXxJgtLeNRl4d3sTNdoAQH6Vi2PJuV1p4BjAn2m9
-         Bpry8EuRVjmMSq99PJdUzvItDNKdfhnDAZ7hV/Tzem/KMiOT793BLNxluAkpAulQBWlY
-         vUwQ==
+        bh=cFN1ZYBqoyYBut+IHT4rtno8V8itQS4yOxwKeKCtmn4=;
+        b=DO1SsmMoZUPb8EpqEdwHK7B5xPPAQPJVqR4moEEUUS19EXPRjKIcJvUyNowKDRrUuX
+         mcrC07VGFDcXhkaKsml15IF3S1BWurAGrnREufMQVhdour7Qxru/+BISVmcki+3DotLo
+         zHbHVVdCjjbD/sCjBscxYVh3yLL2Il9MbEIXe06erS1zFXCLDw+xJQ7SOUJE1vIeK1yd
+         z6OrvvBm/gvqyd9GQWPvXvTGwFxdfshMjbbbNRibU9purQbIbC95bEYQto8V3bR7d1ov
+         g84sFOxVvuw+33dvJlhOmHfKKzsN+h7vVAUF1dmS5Wwot9B6cAyfUvgxglqPUxia5yiD
+         nfCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OobE6i7gIMfg4XFPq2mt3VscXgZfAtapsVYwcALM9Kc=;
-        b=mUTe5xnLtdLCsnJ7lleIia5yZXNnbAEah+6rakheEqCCFKeM71J6HoYIlQBK9EDHHU
-         aEkp8loXKmYZ8KFf490jfW7J8+7qZ3Vw7480TUJ9d2O6TyEqBuPdb97j/q/gwC3Q5pbk
-         SFyjIclhMQZRiHRGARKVT5HOdWqYE6znX9DO9wA02DbceE+QQQmxmmp3OT8vNCxfthT6
-         YlnBPfTUg4jR4L0pX89VpoCQ7J2tLNXIo9DoB+PgmX6XXVa8CT3TGf6FlE46/Nec7d9B
-         Un4NWx+hmowyNQ+XpJf/LPR9oPCJW+hQ4faK3cbOmiC/YD4Fl3Q9V4BxAM0FTrAGuKok
-         kBMA==
-X-Gm-Message-State: AOAM5320aRMIF+3TyRbSUdfYnDxvzxsmNXsXbTGtzwOf19vp+sS166/0
-	DrDav2VRKFFE2TEhaPlypeYYsd0p0BMvJaPEFmg=
-X-Google-Smtp-Source: ABdhPJy0bAxTrvw72wAxN/d14eYdF+KNvKxwijohy8ZvMiJBQd6GMzYwqRPpVLSh5YbT4tpNXPax1NgR3jIPFhxGNvk=
-X-Received: by 2002:a05:6808:159e:: with SMTP id t30mr412394oiw.132.1644268555404;
- Mon, 07 Feb 2022 13:15:55 -0800 (PST)
+        bh=cFN1ZYBqoyYBut+IHT4rtno8V8itQS4yOxwKeKCtmn4=;
+        b=RfVGYBCgywb/+0axHs2Y8otFIvcliGX9R98n3a6hEzu2tnSprb80gQ7CCa1IX9jLgt
+         YOOIo4hKlhNkqQOvhuWdNiIdR4U2hmaUUaFDiQ7uWpXlJ1YjLkRxalT/4kivPk4jRbwZ
+         kQdtiIxyU7rLH2VxFct24/6vFRZfFSWw6M9QQTpAsXTJ/1G9mL8P/9aMqfJnX/B6K7q1
+         TZrql0aS14X8f4WkWUSxkTThN+ZJIRIGz3ltps04lR12Pzae7cStGB3RhFuUyXXcABPR
+         r2UzG5f49UWR3aFMnbQ9R4VWh2+XcgR4g5kjHnGoQjziC3eLzpeJ3nC7qVOFx2wr7gdD
+         tE3A==
+X-Gm-Message-State: AOAM533XG/CiG++zkySZ/HwYEGEYVZFzfjLxfa1DHKcuyeFG97aMEdRb
+	yrI0+wQDFGDeWhYGNFa/i6Edf9hlW/JgANSimB1Tbw==
+X-Google-Smtp-Source: ABdhPJxw3i4RCdalhojC+MhyaF6SAJt6gNdZ18G4Mssyxvj2N+4Vbk9x6zcG3vBGyPmTfV+iG9cTrKeLTbKYP4kuO2g=
+X-Received: by 2002:ac2:4c17:: with SMTP id t23mr1027082lfq.240.1644271930244;
+ Mon, 07 Feb 2022 14:12:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220205150008.1968218-1-trix@redhat.com> <DM6PR12MB261982BB4DBCC90F70381121E42C9@DM6PR12MB2619.namprd12.prod.outlook.com>
-In-Reply-To: <DM6PR12MB261982BB4DBCC90F70381121E42C9@DM6PR12MB2619.namprd12.prod.outlook.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Mon, 7 Feb 2022 16:15:44 -0500
-Message-ID: <CADnq5_Mx8kMjLMTxD+db_ssTX8O35MzSfAyeL2NaHDMay7+bzQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/pm: fix error handling
-To: "Quan, Evan" <Evan.Quan@amd.com>
-Cc: "trix@redhat.com" <trix@redhat.com>, "Deucher, Alexander" <Alexander.Deucher@amd.com>, 
-	"Koenig, Christian" <Christian.Koenig@amd.com>, "Pan, Xinhui" <Xinhui.Pan@amd.com>, 
-	"airlied@linux.ie" <airlied@linux.ie>, "daniel@ffwll.ch" <daniel@ffwll.ch>, 
-	"nathan@kernel.org" <nathan@kernel.org>, "ndesaulniers@google.com" <ndesaulniers@google.com>, 
-	"Lazar, Lijo" <Lijo.Lazar@amd.com>, "Powell, Darren" <Darren.Powell@amd.com>, 
-	"Chen, Guchun" <Guchun.Chen@amd.com>, "Grodzovsky, Andrey" <Andrey.Grodzovsky@amd.com>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
-	"amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211229021258.176670-1-morbo@google.com> <20220204005742.1222997-1-morbo@google.com>
+In-Reply-To: <20220204005742.1222997-1-morbo@google.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 7 Feb 2022 14:11:58 -0800
+Message-ID: <CAKwvOdk=VdDo1fhWJVa4eO0UjuQwtV9kC-cJd0J9-6guU2vafA@mail.gmail.com>
+Subject: Re: [PATCH v3] x86: use builtins to read eflags
+To: Bill Wendling <morbo@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Applied.  Thanks!
+On Thu, Feb 3, 2022 at 4:57 PM Bill Wendling <morbo@google.com> wrote:
+>
+> GCC and Clang both have builtins to read and write the EFLAGS register.
+> This allows the compiler to determine the best way to generate this
+> code, which can improve code generation.
+>
+> This issue arose due to Clang's issue with the "=rm" constraint.  Clang
+> chooses to be conservative in these situations, and so uses memory
+> instead of registers. This is a known issue, which is currently being
+> addressed.
+>
+> However, using builtins is benefiical in general, because it removes the
 
-Alex
+s/benefiical/beneficial/
 
-On Sun, Feb 6, 2022 at 10:04 PM Quan, Evan <Evan.Quan@amd.com> wrote:
+> burden of determining what's the way to read the flags register from the
+> programmer and places it on to the compiler, which has the information
+> needed to make that decision. Indeed, this piece of code has had several
+> changes over the years, some of which were pinging back and forth to
+> determine the correct constraints to use.
 >
-> [AMD Official Use Only]
+> With this change, Clang generates better code:
 >
-> Reviewed-by: Evan Quan <evan.quan@amd.com>
+> Original code:
+>         movq    $0, -48(%rbp)
+>         #APP
+>         # __raw_save_flags
+>         pushfq
+>         popq    -48(%rbp)
+>         #NO_APP
+>         movq    -48(%rbp), %rbx
 >
-> > -----Original Message-----
-> > From: trix@redhat.com <trix@redhat.com>
-> > Sent: Saturday, February 5, 2022 11:00 PM
-> > To: Quan, Evan <Evan.Quan@amd.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>; Koenig, Christian
-> > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
-> > airlied@linux.ie; daniel@ffwll.ch; nathan@kernel.org;
-> > ndesaulniers@google.com; Lazar, Lijo <Lijo.Lazar@amd.com>; Powell, Darren
-> > <Darren.Powell@amd.com>; Chen, Guchun <Guchun.Chen@amd.com>;
-> > Grodzovsky, Andrey <Andrey.Grodzovsky@amd.com>
-> > Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
-> > kernel@vger.kernel.org; llvm@lists.linux.dev; Tom Rix <trix@redhat.com>
-> > Subject: [PATCH] drm/amd/pm: fix error handling
-> >
-> > From: Tom Rix <trix@redhat.com>
-> >
-> > clang static analysis reports this error
-> > amdgpu_smu.c:2289:9: warning: Called function pointer
-> >   is null (null dereference)
-> >         return smu->ppt_funcs->emit_clk_levels(
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > There is a logic error in the earlier check of
-> > emit_clk_levels.  The error value is set to
-> > the ret variable but ret is never used.  Return
-> > directly and remove the unneeded ret variable.
-> >
-> > Fixes: 5d64f9bbb628 ("amdgpu/pm: Implement new API function "emit" that
-> > accepts buffer base and write offset")
-> > Signed-off-by: Tom Rix <trix@redhat.com>
-> > ---
-> >  drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> > b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> > index af368aa1fd0ae..5f3b3745a9b7a 100644
-> > --- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> > +++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> > @@ -2274,7 +2274,6 @@ static int smu_emit_ppclk_levels(void *handle,
-> > enum pp_clock_type type, char *bu
-> >  {
-> >       struct smu_context *smu = handle;
-> >       enum smu_clk_type clk_type;
-> > -     int ret = 0;
-> >
-> >       clk_type = smu_convert_to_smuclk(type);
-> >       if (clk_type == SMU_CLK_COUNT)
-> > @@ -2284,7 +2283,7 @@ static int smu_emit_ppclk_levels(void *handle,
-> > enum pp_clock_type type, char *bu
-> >               return -EOPNOTSUPP;
-> >
-> >       if (!smu->ppt_funcs->emit_clk_levels)
-> > -             ret = -ENOENT;
-> > +             return -ENOENT;
-> >
-> >       return smu->ppt_funcs->emit_clk_levels(smu, clk_type, buf, offset);
-> >
-> > --
-> > 2.26.3
+> New code:
+>         pushfq
+>         popq    %rbx
+>         #APP
+
+But it also forces frame pointers due to another bug in LLVM.
+https://godbolt.org/z/6badWaGjo
+For x86_64, we default to CONFIG_UNWINDER_ORC=y, not
+CONFIG_UNWINDER_FRAME_POINTER=y.  So this change would make us use
+registers instead of stack slots (improvement), but then force frame
+pointers when we probably didn't need or want them (deterioration) for
+all released versions of clang.
+
+I think we should fix https://reviews.llvm.org/D92695 first before I'd
+be comfortable signing off on this kernel change.  Again, I think we
+should test out Phoebe's recommendation
+https://reviews.llvm.org/D92695#inline-1086936
+or do you already have a fix that I haven't yet been cc'ed on, perhaps?
+
+>
+> Note that the stack slot in the original code is no longer needed in the
+> new code, saving a small amount of stack space.
+>
+> There is no change to GCC's ouput:
+>
+> Original code:
+>
+>         # __raw_save_flags
+>         pushf ; pop %r13        # flags
+>
+> New code:
+>
+>         pushfq
+>         popq    %r13    # _23
+>
+> Signed-off-by: Bill Wendling <morbo@google.com>
+> ---
+> v3: - Add blurb indicating that GCC's output hasn't changed.
+> v2: - Kept the original function to retain the out-of-line symbol.
+>     - Improved the commit message.
+>     - Note that I couldn't use Nick's suggestion of
+>
+>         return IS_ENABLED(CONFIG_X86_64) ? ...
+>
+>       because Clang complains about using __builtin_ia32_readeflags_u32 in
+>       64-bit mode.
+> ---
+>  arch/x86/include/asm/irqflags.h | 19 +++++--------------
+>  1 file changed, 5 insertions(+), 14 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+> index 87761396e8cc0..f31a035f3c6a9 100644
+> --- a/arch/x86/include/asm/irqflags.h
+> +++ b/arch/x86/include/asm/irqflags.h
+> @@ -19,20 +19,11 @@
+>  extern inline unsigned long native_save_fl(void);
+>  extern __always_inline unsigned long native_save_fl(void)
+>  {
+> -       unsigned long flags;
+> -
+> -       /*
+> -        * "=rm" is safe here, because "pop" adjusts the stack before
+> -        * it evaluates its effective address -- this is part of the
+> -        * documented behavior of the "pop" instruction.
+> -        */
+> -       asm volatile("# __raw_save_flags\n\t"
+> -                    "pushf ; pop %0"
+> -                    : "=rm" (flags)
+> -                    : /* no input */
+> -                    : "memory");
+> -
+> -       return flags;
+> +#ifdef CONFIG_X86_64
+> +       return __builtin_ia32_readeflags_u64();
+> +#else
+> +       return __builtin_ia32_readeflags_u32();
+> +#endif
+>  }
+>
+>  static __always_inline void native_irq_disable(void)
+> --
+> 2.35.0.263.gb82422642f-goog
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
