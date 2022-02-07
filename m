@@ -1,103 +1,120 @@
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183E92F26
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 19:26:20 +0000 (UTC)
-Received: by mail-lj1-f182.google.com with SMTP id bx31so21239736ljb.0
-        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 11:26:19 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504722F26
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 19:32:17 +0000 (UTC)
+Received: by mail-lf1-f44.google.com with SMTP id z4so14143705lfg.5
+        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 11:32:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AJag/A5JmvykTiv6EpL4n31ZcZevEf+cXwTOlC0tOkg=;
-        b=q1Hb1u5r9+AsViUlf6UZzxNWWr4GQprtIzge2G5bWfH70p3weWpX0FICkMAfCmkQSW
-         DxgfdzQE6MACnIaDHskjXVgPZotUPDpBaHrW7ATyVti21B//sFUL8rxetrFLrYvP+b9F
-         4o+LGmKu257u9/1LtqMQ+GhZ4MclAaFkmv2BmZ8JEy/LHyw1sb1hB1gUgMg4y5Ld4IM5
-         tJ31LDi71OAbJlJwPOZ8x3SIhG9TLn96RRZPV9+jyJD4SVx4VtmZA5hyKpNTsTwCyT+X
-         MBzdf/hKqWdwyskNBWuTAbzc/LRz7r8p7GK9DgeuRqvoHUUPsMLbtYzYn516lryInL24
-         Sgrw==
+        bh=9kNXJ/3JYeOdOA7DH0CUuMRYUlFkKsOTuLs1vioWo7w=;
+        b=h+mCGkMYZDJ2VmGTrhAw2KavAcmOsthjQkVi+QdZ+ZkiV9+fSapdS2uzHf/ukcLtPC
+         vRMH36btXdXZw4Ye257+NkEVUOXQ85HWugB/ZhQX8fVUxns1ppL9bbQn13QOA3ElZuOG
+         w/woARgt0jaLHbggZleqoiutYHT5OJpNXqshM0nOaRT6yu8ba+36GM7vOQkVtn+q+KMz
+         PrViwbkfN0W+BU23IVkmRKIfKyqmi1i+hfYNh3aPzbDCWEmi298Kiaj1FG9p3y59070a
+         yT9dTx74o7gwmNbXRdcfA+scReMr+Pi9A/l2N0+4dLetZsnbwfaTYZnVUOnLHuSETGIp
+         DGJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AJag/A5JmvykTiv6EpL4n31ZcZevEf+cXwTOlC0tOkg=;
-        b=b10tBxlLL5D0TF5FFpzrYvc/BEP3ukC0KGxmR9FyXhmMmiY6OhQOzwB6d+t/qrcN3w
-         3NzO+2EMSSo7JvscxRvmL4QuljPiKsCCO+kbU9Z4aQOyFuUJzT/62OAHFxuSUM/+NI52
-         J4OeZfOpdoiiOC++y5X7YeUo7GYuR5EeAmMGs41uzbg11NL88erAZHNnVeIURY0rPOnJ
-         3WYPNyDs2F2up22ocK2aU9bT+Y1GI4zWrkFqlKuHlsdKBt0Sq+QjZoGjt+gXVFHhsIDr
-         aP6nOeyhGZedmP0NyGdGDdIvw6GOiLJaiWt/DnnMOYgjfZ9J+u4Cdox+qGqrHihwHSj6
-         Mr8w==
-X-Gm-Message-State: AOAM531QCLsvSLc4tqi52HyQ3cmGNQpWEETyEin0bjVdCJ9KB34dLCbs
-	3AoVYYRVOqHPJZVPKlkrfZca8pzTepeWIeAVUjLYzw==
-X-Google-Smtp-Source: ABdhPJxiRwBDrZ7qHrwkeYZzKApFxOfBT0kt7xuCw9xbG3ufLrmJ9Sb/VD/Nm0ot8LNlflSABDiDmjBvKBn3HS7qJ1s=
-X-Received: by 2002:a2e:980e:: with SMTP id a14mr617655ljj.220.1644261977984;
- Mon, 07 Feb 2022 11:26:17 -0800 (PST)
+        bh=9kNXJ/3JYeOdOA7DH0CUuMRYUlFkKsOTuLs1vioWo7w=;
+        b=2JZj5rs+/DsYdVJ3fPFp/rAbB2wQjA4bMvOY3Gn8IhI/BI7dfirLB4jMTcQ5ksH+6a
+         /a4x7mqVMZSpFyqAvAtszRYa4hiG8vYzgvNuq/qu4GXIZawgrkbhj6p5pt/pBmz4JUIX
+         fA+OFFsDhSCdHMJMMMfVcTErY67MuRbNHjewHBSOI9zmhuskvI2GMHeOwD2eItog452r
+         tMrab3F7Zs5x9PQUpjSOZZPjU/QLfPoUlHTQHIkH2mogdLZvcQvrNb035Q/FSXPTpmpr
+         l5RumJbbFKxNCGZn1Ub8xrr05nupjKksMCj/yRirW5a7b4506jEMWj66IPiAkbqyATlP
+         a0IQ==
+X-Gm-Message-State: AOAM5321SZwwL9pM6a6RFgbgmb7bRoR2RyLQ+SgKk7bFFYg5uuJeH/R9
+	W7ZEfd92oMn2VZdDKBQ91Oa1NW0M79BnZFebTtcuIZ/GirdTHA==
+X-Google-Smtp-Source: ABdhPJysHyL+1pJLsLclE94GhiA8i/bGjovo8W+T16GtnH/4rOMgZ92vLex2xjh0nrjH88dfPBFkxZUzaXe4biaSDQQ=
+X-Received: by 2002:ac2:4c4c:: with SMTP id o12mr637262lfk.523.1644262335129;
+ Mon, 07 Feb 2022 11:32:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220203152305.1846862-1-trix@redhat.com>
-In-Reply-To: <20220203152305.1846862-1-trix@redhat.com>
+References: <20220207162410.1013466-1-nathan@kernel.org>
+In-Reply-To: <20220207162410.1013466-1-nathan@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 7 Feb 2022 11:26:06 -0800
-Message-ID: <CAKwvOd=MviBd5iwSnhyt9aSZU+QTsBrBSGPcjsjt2eepfYC3KQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/ast: fix using freed memory
-To: trix@redhat.com
-Cc: airlied@redhat.com, tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch, 
-	nathan@kernel.org, maxime@cerno.tech, dri-devel@lists.freedesktop.org, 
+Date: Mon, 7 Feb 2022 11:32:03 -0800
+Message-ID: <CAKwvOdnfQeY8sC0iET4hm-kgeFhurWf_jrh4=czBj17zQ5+x0Q@mail.gmail.com>
+Subject: Re: [PATCH] io_uring: Fix use of uninitialized ret in io_eventfd_register()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, 
+	Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 3, 2022 at 7:23 AM <trix@redhat.com> wrote:
+On Mon, Feb 7, 2022 at 8:24 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> From: Tom Rix <trix@redhat.com>
+> Clang warns:
 >
-> clang static analysis reports this problem
-> ast_mode.c:1235:3: warning: Use of memory after it is freed
->   drm_connector_update_edid_property(&ast_connector->base, edid);
->   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+>           return ret;
+>                  ^~~
+>   fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence this warning
+>           int fd, ret;
+>                      ^
+>                       = 0
+>   1 warning generated.
 >
-> The second condition on
+> Just return 0 directly and reduce the scope of ret to the if statement,
+> as that is the only place that it is used, which is how the function was
+> before the fixes commit.
 >
->   if (!flags && ast_connector->i2c)
->
-> Means that the edid is not always set.  If the previous block
-> fails the freed edid value will be used.  So set edid to NULL
-> after freeing.
->
-> Fixes: 55dc449a7c60 ("drm/ast: Handle failed I2C initialization gracefully")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> Fixes: 1a75fac9a0f9 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
+
+Did SHA's change? In linux-next, I see:
+commit b77e315a9644 ("io_uring: avoid ring quiesce while
+registering/unregistering eventfd")
+otherwise LGTM
+
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1579
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
->  drivers/gpu/drm/ast/ast_mode.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  fs/io_uring.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-> index ab52efb15670e..9131dc8a1a2fc 100644
-> --- a/drivers/gpu/drm/ast/ast_mode.c
-> +++ b/drivers/gpu/drm/ast/ast_mode.c
-> @@ -1224,10 +1224,12 @@ static int ast_get_modes(struct drm_connector *connector)
->                         return -ENOMEM;
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 5479f0607430..7ef04bb66da1 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -9370,7 +9370,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+>  {
+>         struct io_ev_fd *ev_fd;
+>         __s32 __user *fds = arg;
+> -       int fd, ret;
+> +       int fd;
 >
->                 flags = ast_dp501_read_edid(connector->dev, (u8 *)edid);
-> -               if (flags)
-> +               if (flags) {
->                         ast->dp501_maxclk = ast_get_dp501_max_clk(connector->dev);
-> -               else
-> +               } else {
->                         kfree(edid);
-> +                       edid = NULL;
-> +               }
-
-You probably didn't need to add the {} for the if, but it doesn't really matter.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
+>         ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
+>                                         lockdep_is_held(&ctx->uring_lock));
+> @@ -9386,14 +9386,14 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+>
+>         ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
+>         if (IS_ERR(ev_fd->cq_ev_fd)) {
+> -               ret = PTR_ERR(ev_fd->cq_ev_fd);
+> +               int ret = PTR_ERR(ev_fd->cq_ev_fd);
+>                 kfree(ev_fd);
+>                 return ret;
 >         }
->         if (!flags && ast_connector->i2c)
->                 edid = drm_get_edid(connector, &ast_connector->i2c->adapter);
+>         ev_fd->eventfd_async = eventfd_async;
+>
+>         rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
+> -       return ret;
+> +       return 0;
+>  }
+>
+>  static void io_eventfd_put(struct rcu_head *rcu)
+>
+> base-commit: 88a0394bc27de2dd8a8715970f289c5627052532
 > --
-> 2.26.3
+> 2.35.1
+>
 >
 
 
