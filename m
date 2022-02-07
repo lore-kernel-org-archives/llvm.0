@@ -1,129 +1,95 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EA72C9C
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 16:09:56 +0000 (UTC)
-Received: by mail-ej1-f41.google.com with SMTP id st12so18684217ejc.4
-        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 08:09:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HfNUL5JKH3kDf9qcQKKwHP/7+N+j2kYmXhkm2NxXJsQ=;
-        b=WXMnkH9XsSuvy3H2Kr2qG+uXVLIPGGRNiWUsXZsQY5yexuuphJgJ3zDsU7ESFOdht8
-         hN8fTYFHE1tJahZVv7Tph6v8sSqk2Oy7LSzFctaVfchOz6FqksTgPjfmN5KmtsKi4bnE
-         O97vwwZ8sVYLlyK6gxJqPVvbbuQZj/2RBpRW70EvVH1Fc0pYEdY2oaHZAMxV5joMFJnh
-         TX0L9KFVHPoMUgZcTPC7Hil7HrEFTfV4mLM4cbHNhXM1PSK63D0gJtIWcv4kFol8S7Nt
-         a4b1IECQGhyVA7O0b1yypmJnh9xojue1v9aFC1be0RXBQM2YC9xiYOR3kBbG0WLHLexe
-         AqCw==
-X-Gm-Message-State: AOAM5304s1UVBVlUGMA4oIDbJ+Lg4pfvqIuPr6QnWyWMQTbGHJydizQg
-	563USNqVNQidF0hD7NNSQ1E=
-X-Google-Smtp-Source: ABdhPJxqFokTQR6V5JB0DhCIYgiAiKptMY6dcJVRueO91WZ4xHF2FzIjEh+Q/tU8n1/nJVpU/LkqMg==
-X-Received: by 2002:a17:906:c105:: with SMTP id do5mr338028ejc.165.1644250194581;
-        Mon, 07 Feb 2022 08:09:54 -0800 (PST)
-Received: from [192.168.0.90] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.googlemail.com with ESMTPSA id p19sm3826870ejc.42.2022.02.07.08.09.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 08:09:53 -0800 (PST)
-Message-ID: <48e41893-d7de-fdc1-d988-9331c2de22f4@kernel.org>
-Date: Mon, 7 Feb 2022 17:09:52 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1EF2F24
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 16:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576DDC004E1;
+	Mon,  7 Feb 2022 16:24:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1644251082;
+	bh=wizEBetaRGWa2xd5IXRmfnLE9oVDJtn3/BtteleiDC4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PrD+e3xkXH15yxqW3MWnSPrWcDpaDckn1bQQf3urWGrunHqlZq4miFYHCoW2lJF5M
+	 wnwqUSZ5pjlTXm3nIDgY8AhFC3dQK4Fq92rIWuMq9mzlXnGsWalP3qTSMrF+XvZAV9
+	 sFEVLpgEeftZxEoczh4UhCpZ+1yRo4HRn5fQRUw2hxTrrzTzp41ZxKrNpxvtUp53du
+	 zSZ2pOgFJLqT/vEgjrGNt1o/d3MVv4X3obbGu+yG8CAtCjX+ldxOg67atZ9AfIU5kM
+	 QZJhPnGjL4VInsqw+GToch6hUanMSRBv2TlltnCIoCdJQb8r20a1qVrdKpkr1mBGnZ
+	 y73rN3je0sxJA==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Usama Arif <usama.arif@bytedance.com>,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] io_uring: Fix use of uninitialized ret in io_eventfd_register()
+Date: Mon,  7 Feb 2022 09:24:11 -0700
+Message-Id: <20220207162410.1013466-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: ld.lld: error: undefined symbol: socfpga_reset_init
-Content-Language: en-US
-To: Randy Dunlap <rdunlap@infradead.org>,
- Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
- Dinh Nguyen <dinguyen@kernel.org>
-References: <202202050539.Mtk9I4Ef-lkp@intel.com>
- <67f432e2-1bfd-29dc-f2ed-051b47ef0844@kernel.org>
- <YgBtAdhl8dZVTAV+@dev-arch.archlinux-ax161>
- <8c315714-ea7b-d3ec-f131-6beded67b479@kernel.org>
- <a141e090-7049-d693-1dc2-7c0a593b9682@infradead.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <a141e090-7049-d693-1dc2-7c0a593b9682@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 07/02/2022 17:06, Randy Dunlap wrote:
-> 
-> 
-> On 2/6/22 23:55, Krzysztof Kozlowski wrote:
->> On 07/02/2022 01:51, Nathan Chancellor wrote:
->>> Hi Krzysztof,
->>>
->>> On Sun, Feb 06, 2022 at 12:55:57PM +0100, Krzysztof Kozlowski wrote:
->>>> On 04/02/2022 22:12, kernel test robot wrote:
->>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->>>>> head:   dcb85f85fa6f142aae1fe86f399d4503d49f2b60
->>>>> commit: 4483397b03536506535d611b0cb28a81a69e8edf ARM: socfpga: drop ARCH_SOCFPGA
->>>>> date:   11 months ago
->>>>> config: arm-socfpga_defconfig (https://download.01.org/0day-ci/archive/20220205/202202050539.Mtk9I4Ef-lkp@intel.com/config)
->>>>> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
->>>>> reproduce (this is a W=1 build):
->>>>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>>>         chmod +x ~/bin/make.cross
->>>>>         # install arm cross compiling tool for clang build
->>>>>         # apt-get install binutils-arm-linux-gnueabi
->>>>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4483397b03536506535d611b0cb28a81a69e8edf
->>>>>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>>>         git fetch --no-tags linus master
->>>>>         git checkout 4483397b03536506535d611b0cb28a81a69e8edf
->>>>>         # save the config file to linux build tree
->>>>>         mkdir build_dir
->>>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
->>>>>
->>>>> If you fix the issue, kindly add following tag as appropriate
->>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>>
->>>>> All errors (new ones prefixed by >>):
->>>>>
->>>>>>> ld.lld: error: undefined symbol: socfpga_reset_init
->>>>>    >>> referenced by socfpga.c
->>>>>    >>>               socfpga.o:(socfpga_init_irq) in archive arch/arm/mach-socfpga/built-in.a
->>>>>    >>> referenced by socfpga.c
->>>>>    >>>               socfpga.o:(socfpga_arria10_init_irq) in archive arch/arm/mach-socfpga/built-in.a
->>>>>
->>>>
->>>> This looks like a false positive. On the socfpga defconfig arm build,
->>>> the socfpga_reset_init() (drivers/reset/reset-socfpga.c) is built.
->>>>
->>>> I also could not reproduce it with GCC.
->>>
->>> I can reproduce this error with the configuration that the bot provides
->>> at both 4483397b03536506535d611b0cb28a81a69e8edf and v5.17-rc3, even
->>> with GCC:
->>>
->>> $ curl -LSso .config https://download.01.org/0day-ci/archive/20220205/202202050539.Mtk9I4Ef-lkp@intel.com/config
->>>
->>> $ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- olddefconfig all
->>> ...
->>> arm-linux-gnueabi-ld: arch/arm/mach-socfpga/socfpga.o: in function `socfpga_init_irq':
->>> socfpga.c:(.init.text+0x104): undefined reference to `socfpga_reset_init'
->>> ...
->>>
->>> Whether or not this reproduces with the in-tree socfpga_defconfig, I am
->>> not sure.
->>
->> Thanks for checking - it seems I misread (and find it confusing...) the
->> report - that it is socfpga defconfig. It clearly says "config:
->> arm-socfpga_defconfig"...
-> 
-> Aha, I did the same thing and could not reproduce it. :(
-> 
->> I can reproduce it with the config from the URL. I'll work on fix.
+Clang warns:
 
-FYI, patch sent:
-https://lore.kernel.org/linux-arm-kernel/20220207084404.212017-1-krzysztof.kozlowski@canonical.com/
+  fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+          return ret;
+                 ^~~
+  fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence this warning
+          int fd, ret;
+                     ^
+                      = 0
+  1 warning generated.
 
+Just return 0 directly and reduce the scope of ret to the if statement,
+as that is the only place that it is used, which is how the function was
+before the fixes commit.
 
-Best regards,
-Krzysztof
+Fixes: 1a75fac9a0f9 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1579
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ fs/io_uring.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 5479f0607430..7ef04bb66da1 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -9370,7 +9370,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+ {
+ 	struct io_ev_fd *ev_fd;
+ 	__s32 __user *fds = arg;
+-	int fd, ret;
++	int fd;
+ 
+ 	ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
+ 					lockdep_is_held(&ctx->uring_lock));
+@@ -9386,14 +9386,14 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+ 
+ 	ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
+ 	if (IS_ERR(ev_fd->cq_ev_fd)) {
+-		ret = PTR_ERR(ev_fd->cq_ev_fd);
++		int ret = PTR_ERR(ev_fd->cq_ev_fd);
+ 		kfree(ev_fd);
+ 		return ret;
+ 	}
+ 	ev_fd->eventfd_async = eventfd_async;
+ 
+ 	rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
+-	return ret;
++	return 0;
+ }
+ 
+ static void io_eventfd_put(struct rcu_head *rcu)
+
+base-commit: 88a0394bc27de2dd8a8715970f289c5627052532
+-- 
+2.35.1
+
