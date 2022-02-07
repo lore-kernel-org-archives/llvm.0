@@ -1,46 +1,50 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C0F2F26
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 20:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DD42F26
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 20:23:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644264777; x=1675800777;
+  t=1644265437; x=1675801437;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=E/9q+1vanuIWMxEsBVm7dkTx6y+5b6TFiPq1WZ6/6pU=;
-  b=iux7QvMIjmyUmNbp5dfm7DE+hkwftlQVeRr2z2UQJHVD7RR1amMLKVqO
-   2s3QRu0DtsULZ1ufiVEuMKNPifZWYGtZ6z6OELz5Zt2uql/sOKw5f1jSJ
-   dTEq5TJrv6k4QcXj8N5R9N3zChb1y6CJ75XRnIkVthiNeb+iVvPLvhPFI
-   bPuOrYoJ1vVoFq3GD3NiRcNO4Y9EBSmAwxFaQWjuTQ5uDXLLEU7QGUne9
-   imDiI44hTNr4kS8jJJH0xQJQ1Ex1QlwZ1fEo5e1E3EBRIqZbCpY2DDvXP
-   PE69x3GpxPxij3nOM6MQVjHqbuvsb4py1T463d7yWkhDca08Ht4A7fUig
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="246389854"
+  bh=WX/QWphywdX4X9SXBJw5KgJQb2HOEeFXMw5MNbnu9eA=;
+  b=FosN/GgcKr8JtklP1Uu0X/2fIuexT8zVD4uywguUkeQjXgcKcykociF0
+   UKskSiTrTm2Oi7ngeAaX6ZYqzDK38z1Di1RrzjqQ8O6WlvGMRCljs9EjG
+   vmvjFbAGBpBvrrhOeyicBMunVwBLveHS6XWmsfb16cVrIU6G/Af4TtcDt
+   8b/tIApBO25BkF6x4zIL38BdKIUebBLDp1teDKJ9igPqF63SUrcT1OmVt
+   qy9CJ0ztYQ3AVdRcG+fughlas8Z5Iq1y8rF6yA1O/YbZllgE7YPr1j7Hr
+   C6JHse58PcvWlmBeQ+HlNftfINITnLZrh1rttZhwHUB9DIl7buxH+oO0Z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="312099937"
 X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="246389854"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 12:12:56 -0800
+   d="scan'208";a="312099937"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 12:23:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="700590505"
+   d="scan'208";a="632597119"
 Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 07 Feb 2022 12:12:53 -0800
+  by orsmga004.jf.intel.com with ESMTP; 07 Feb 2022 12:23:53 -0800
 Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nHANY-0000vV-JD; Mon, 07 Feb 2022 20:12:52 +0000
-Date: Tue, 8 Feb 2022 04:12:34 +0800
+	id 1nHAYC-0000w4-Um; Mon, 07 Feb 2022 20:23:52 +0000
+Date: Tue, 8 Feb 2022 04:22:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nitesh Shetty <nj.shetty@samsung.com>, mpatocka@redhat.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, javier@javigon.com,
-	chaitanyak@nvidia.com, linux-block@vger.kernel.org,
-	linux-scsi@vger.kernel.org, dm-devel@redhat.com,
-	linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-	axboe@kernel.dk, msnitzer@redhat.com
-Subject: Re: [PATCH v2 07/10] nvmet: add copy command support for bdev and
- file ns
-Message-ID: <202202080346.u4ubCCIs-lkp@intel.com>
-References: <20220207141348.4235-8-nj.shetty@samsung.com>
+To: Baruch Siach <baruch@tkos.co.il>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Baruch Siach <baruch.siach@siklu.com>,
+	Balaji Prakash J <bjagadee@codeaurora.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Robert Marko <robert.marko@sartura.hr>,
+	Kathiravan T <kathirav@codeaurora.org>, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH 1/3] pwm: driver for qualcomm ipq6018 pwm block
+Message-ID: <202202080410.R0qwqtXx-lkp@intel.com>
+References: <17dd231f496d09ed8502bdd505eaa77bb6637e4b.1644226245.git.baruch@tkos.co.il>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,145 +53,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207141348.4235-8-nj.shetty@samsung.com>
+In-Reply-To: <17dd231f496d09ed8502bdd505eaa77bb6637e4b.1644226245.git.baruch@tkos.co.il>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Nitesh,
+Hi Baruch,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on linus/master v5.17-rc3 next-20220207]
-[cannot apply to device-mapper-dm/for-next]
+[auto build test WARNING on thierry-reding-pwm/for-next]
+[also build test WARNING on robh/for-next v5.17-rc3 next-20220207]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Nitesh-Shetty/block-make-bio_map_kern-non-static/20220207-231407
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: arm64-randconfig-r031-20220207 (https://download.01.org/0day-ci/archive/20220208/202202080346.u4ubCCIs-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Baruch-Siach/pwm-driver-for-qualcomm-ipq6018-pwm-block/20220207-175605
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git for-next
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220208/202202080410.R0qwqtXx-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/6bb6ea64499e1ac27975e79bb2eee89f07861893
+        # https://github.com/0day-ci/linux/commit/71e449eb6d19b141b4527caae529e16c52bcfeea
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Nitesh-Shetty/block-make-bio_map_kern-non-static/20220207-231407
-        git checkout 6bb6ea64499e1ac27975e79bb2eee89f07861893
+        git fetch --no-tags linux-review Baruch-Siach/pwm-driver-for-qualcomm-ipq6018-pwm-block/20220207-175605
+        git checkout 71e449eb6d19b141b4527caae529e16c52bcfeea
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/nvme/target/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/pwm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/nvme/target/admin-cmd.c:534:15: warning: implicit conversion from '__le32' (aka 'unsigned int') to '__le16' (aka 'unsigned short') changes value from 2097152 to 0 [-Wconstant-conversion]
-                   id->mssrl = cpu_to_le32(BIO_MAX_VECS << (PAGE_SHIFT - SECTOR_SHIFT));
-                             ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
-   #define cpu_to_le32 __cpu_to_le32
-                       ^
-   include/uapi/linux/byteorder/big_endian.h:34:27: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)__swab32((x)))
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/pwm/pwm-ipq.c:122:11: warning: result of comparison of constant 16000000000 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+           if (rate > 16ULL * GIGA)
+               ~~~~ ^ ~~~~~~~~~~~~
    1 warning generated.
 
 
-vim +534 drivers/nvme/target/admin-cmd.c
+vim +122 drivers/pwm/pwm-ipq.c
 
-   488	
-   489	static void nvmet_execute_identify_ns(struct nvmet_req *req)
-   490	{
-   491		struct nvme_id_ns *id;
-   492		u16 status;
-   493	
-   494		if (le32_to_cpu(req->cmd->identify.nsid) == NVME_NSID_ALL) {
-   495			req->error_loc = offsetof(struct nvme_identify, nsid);
-   496			status = NVME_SC_INVALID_NS | NVME_SC_DNR;
-   497			goto out;
-   498		}
-   499	
-   500		id = kzalloc(sizeof(*id), GFP_KERNEL);
-   501		if (!id) {
-   502			status = NVME_SC_INTERNAL;
-   503			goto out;
-   504		}
-   505	
-   506		/* return an all zeroed buffer if we can't find an active namespace */
-   507		status = nvmet_req_find_ns(req);
-   508		if (status) {
-   509			status = 0;
-   510			goto done;
-   511		}
-   512	
-   513		nvmet_ns_revalidate(req->ns);
-   514	
-   515		/*
-   516		 * nuse = ncap = nsze isn't always true, but we have no way to find
-   517		 * that out from the underlying device.
-   518		 */
-   519		id->ncap = id->nsze =
-   520			cpu_to_le64(req->ns->size >> req->ns->blksize_shift);
-   521		switch (req->port->ana_state[req->ns->anagrpid]) {
-   522		case NVME_ANA_INACCESSIBLE:
-   523		case NVME_ANA_PERSISTENT_LOSS:
-   524			break;
-   525		default:
-   526			id->nuse = id->nsze;
-   527			break;
-   528		}
-   529	
-   530		if (req->ns->bdev)
-   531			nvmet_bdev_set_limits(req->ns->bdev, id);
-   532		else {
-   533			id->msrc = to0based(BIO_MAX_VECS);
- > 534			id->mssrl = cpu_to_le32(BIO_MAX_VECS << (PAGE_SHIFT - SECTOR_SHIFT));
-   535			id->mcl = cpu_to_le64(le32_to_cpu(id->mssrl) * BIO_MAX_VECS);
-   536		}
-   537	
-   538		/*
-   539		 * We just provide a single LBA format that matches what the
-   540		 * underlying device reports.
-   541		 */
-   542		id->nlbaf = 0;
-   543		id->flbas = 0;
-   544	
-   545		/*
-   546		 * Our namespace might always be shared.  Not just with other
-   547		 * controllers, but also with any other user of the block device.
-   548		 */
-   549		id->nmic = NVME_NS_NMIC_SHARED;
-   550		id->anagrpid = cpu_to_le32(req->ns->anagrpid);
-   551	
-   552		memcpy(&id->nguid, &req->ns->nguid, sizeof(id->nguid));
-   553	
-   554		id->lbaf[0].ds = req->ns->blksize_shift;
-   555	
-   556		if (req->sq->ctrl->pi_support && nvmet_ns_has_pi(req->ns)) {
-   557			id->dpc = NVME_NS_DPC_PI_FIRST | NVME_NS_DPC_PI_LAST |
-   558				  NVME_NS_DPC_PI_TYPE1 | NVME_NS_DPC_PI_TYPE2 |
-   559				  NVME_NS_DPC_PI_TYPE3;
-   560			id->mc = NVME_MC_EXTENDED_LBA;
-   561			id->dps = req->ns->pi_type;
-   562			id->flbas = NVME_NS_FLBAS_META_EXT;
-   563			id->lbaf[0].ms = cpu_to_le16(req->ns->metadata_size);
-   564		}
-   565	
-   566		if (req->ns->readonly)
-   567			id->nsattr |= (1 << 0);
-   568	done:
-   569		if (!status)
-   570			status = nvmet_copy_to_sgl(req, 0, id, sizeof(*id));
-   571	
-   572		kfree(id);
-   573	out:
-   574		nvmet_req_complete(req, status);
-   575	}
-   576	
+    99	
+   100	static int ipq_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+   101				 const struct pwm_state *state)
+   102	{
+   103		struct ipq_pwm_chip *ipq_chip = ipq_pwm_from_chip(chip);
+   104		unsigned int pre_div, pwm_div, best_pre_div, best_pwm_div;
+   105		unsigned long rate = clk_get_rate(ipq_chip->clk);
+   106		u64 period_ns, duty_ns, period_rate;
+   107		u64 min_diff;
+   108	
+   109		if (state->polarity != PWM_POLARITY_NORMAL)
+   110			return -EINVAL;
+   111	
+   112		if (state->period < DIV64_U64_ROUND_UP(NSEC_PER_SEC, rate))
+   113			return -ERANGE;
+   114	
+   115		period_ns = min(state->period, IPQ_PWM_MAX_PERIOD_NS);
+   116		duty_ns = min(state->duty_cycle, period_ns);
+   117	
+   118		/*
+   119		 * period_ns is 1G or less. As long as rate is less than 16 GHz,
+   120		 * period_rate does not overflow. Make that explicit.
+   121		 */
+ > 122		if (rate > 16ULL * GIGA)
+   123			return -EINVAL;
+   124		period_rate = period_ns * rate;
+   125		best_pre_div = IPQ_PWM_MAX_DIV;
+   126		best_pwm_div = IPQ_PWM_MAX_DIV;
+   127		/*
+   128		 * We don't need to consider pre_div values smaller than
+   129		 *
+   130		 *                              period_rate
+   131		 *  pre_div_min := ------------------------------------
+   132		 *                 NSEC_PER_SEC * (IPQ_PWM_MAX_DIV + 1)
+   133		 *
+   134		 * because pre_div = pre_div_min results in a better
+   135		 * approximation.
+   136		 */
+   137		pre_div = div64_u64(period_rate,
+   138				(u64)NSEC_PER_SEC * (IPQ_PWM_MAX_DIV + 1));
+   139		min_diff = period_rate;
+   140	
+   141		for (; pre_div <= IPQ_PWM_MAX_DIV; pre_div++) {
+   142			u64 remainder;
+   143	
+   144			pwm_div = div64_u64_rem(period_rate,
+   145					(u64)NSEC_PER_SEC * (pre_div + 1), &remainder);
+   146			/* pwm_div is unsigned; the check below catches underflow */
+   147			pwm_div--;
+   148	
+   149			/*
+   150			 * Swapping values for pre_div and pwm_div produces the same
+   151			 * period length. So we can skip all settings with pre_div >
+   152			 * pwm_div which results in bigger constraints for selecting
+   153			 * the duty_cycle than with the two values swapped.
+   154			 */
+   155			if (pre_div > pwm_div)
+   156				break;
+   157	
+   158			/*
+   159			 * Make sure we can do 100% duty cycle where
+   160			 * hi_dur == pwm_div + 1
+   161			 */
+   162			if (pwm_div > IPQ_PWM_MAX_DIV - 1)
+   163				continue;
+   164	
+   165			if (remainder < min_diff) {
+   166				best_pre_div = pre_div;
+   167				best_pwm_div = pwm_div;
+   168				min_diff = remainder;
+   169	
+   170				if (min_diff == 0) /* bingo */
+   171					break;
+   172			}
+   173		}
+   174	
+   175		/* config divider values for the closest possible frequency */
+   176		config_div_and_duty(pwm, best_pre_div, best_pwm_div,
+   177				    rate, duty_ns, state->enabled);
+   178	
+   179		return 0;
+   180	}
+   181	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
