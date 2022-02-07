@@ -1,101 +1,106 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9A12C9C
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 18:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1644259901;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=NvU5tprvh+UDdv26EAx+wVN7Ocpyn3c3CsBDj5+9PsM=;
-	b=fEsxP5y6pvua6wTTAA0Dnj9/8lcf2RxCY+YFxeI4Clf8fwDFeyUqEitvDetYhJavazkUkF
-	FjyB8IYLlVxbGUCv15a+5qYwhkMR7bVRtFyOBQQZLojGoB/VgUHVpS6YoUyeMtOS1jr2TE
-	PLNLbPgtKgBQuABTssaWexmJyTIge4M=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-537-mSiZgdU-Mi67-k0SQ1JFWw-1; Mon, 07 Feb 2022 13:51:40 -0500
-X-MC-Unique: mSiZgdU-Mi67-k0SQ1JFWw-1
-Received: by mail-qk1-f198.google.com with SMTP id b18-20020a05620a089200b004e0e2f73f35so9224124qka.19
-        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 10:51:40 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183E92F26
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 19:26:20 +0000 (UTC)
+Received: by mail-lj1-f182.google.com with SMTP id bx31so21239736ljb.0
+        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 11:26:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AJag/A5JmvykTiv6EpL4n31ZcZevEf+cXwTOlC0tOkg=;
+        b=q1Hb1u5r9+AsViUlf6UZzxNWWr4GQprtIzge2G5bWfH70p3weWpX0FICkMAfCmkQSW
+         DxgfdzQE6MACnIaDHskjXVgPZotUPDpBaHrW7ATyVti21B//sFUL8rxetrFLrYvP+b9F
+         4o+LGmKu257u9/1LtqMQ+GhZ4MclAaFkmv2BmZ8JEy/LHyw1sb1hB1gUgMg4y5Ld4IM5
+         tJ31LDi71OAbJlJwPOZ8x3SIhG9TLn96RRZPV9+jyJD4SVx4VtmZA5hyKpNTsTwCyT+X
+         MBzdf/hKqWdwyskNBWuTAbzc/LRz7r8p7GK9DgeuRqvoHUUPsMLbtYzYn516lryInL24
+         Sgrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NvU5tprvh+UDdv26EAx+wVN7Ocpyn3c3CsBDj5+9PsM=;
-        b=m2xLLvtROpv0W5XG1fhBTxqI7zBNJPH20GokaablGrlGBpjqHiGc1abQqAdT15jzHX
-         LHB+PEY/lhCuwVe06ZaXkvqe1CzD5pLUhzlhmaJcj3ZPFSdOeeMOoROOyTLzUdJPSPhO
-         iyuyMEFB4A9FfU1XF2hN1q64muBX9NGsnoL/qEP7Hjd+PqcKgg9T0I2tx1ChvHqPT5Up
-         Bjfpj9kpSeTLaN/ocgRJikbF1Y1XFakEGD7Xq6z9WLM8CeD755KPsEhNjr3eJG47nYrI
-         grSvFMg79UKy9AbBA/pg9Ia5HKL8sGJ7tyAF5kV6BdNdE8JtdfqveFobjtyCd9St6pNR
-         Zh/A==
-X-Gm-Message-State: AOAM533sgCF0yO64wz9kbw1f6YP2o0Xbs2qodxkxl1ocx225Ck6BHJrY
-	miz8vgz6GrYG7GHPsJuCUo9hpf0yXS2IxuGZxr91PGPJF0R3CAmXZYbwUlYDxLLPdFAJ5Wfxnbm
-	r2OcG0DZT1KGgfQ==
-X-Received: by 2002:ac8:7d0d:: with SMTP id g13mr644666qtb.168.1644259900306;
-        Mon, 07 Feb 2022 10:51:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwu11695XI9Zsd4rsyupYe/UJYMLSTJVRBNGwcwiBFgOq5vyomoglH0AfFajDCRhiqB7vAv2A==
-X-Received: by 2002:ac8:7d0d:: with SMTP id g13mr644650qtb.168.1644259900108;
-        Mon, 07 Feb 2022 10:51:40 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id u9sm5826890qko.110.2022.02.07.10.51.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 10:51:39 -0800 (PST)
-From: trix@redhat.com
-To: axboe@kernel.dk,
-	asml.silence@gmail.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	usama.arif@bytedance.com
-Cc: io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] io_uring: fix uninitialized return
-Date: Mon,  7 Feb 2022 10:51:26 -0800
-Message-Id: <20220207185126.2085525-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AJag/A5JmvykTiv6EpL4n31ZcZevEf+cXwTOlC0tOkg=;
+        b=b10tBxlLL5D0TF5FFpzrYvc/BEP3ukC0KGxmR9FyXhmMmiY6OhQOzwB6d+t/qrcN3w
+         3NzO+2EMSSo7JvscxRvmL4QuljPiKsCCO+kbU9Z4aQOyFuUJzT/62OAHFxuSUM/+NI52
+         J4OeZfOpdoiiOC++y5X7YeUo7GYuR5EeAmMGs41uzbg11NL88erAZHNnVeIURY0rPOnJ
+         3WYPNyDs2F2up22ocK2aU9bT+Y1GI4zWrkFqlKuHlsdKBt0Sq+QjZoGjt+gXVFHhsIDr
+         aP6nOeyhGZedmP0NyGdGDdIvw6GOiLJaiWt/DnnMOYgjfZ9J+u4Cdox+qGqrHihwHSj6
+         Mr8w==
+X-Gm-Message-State: AOAM531QCLsvSLc4tqi52HyQ3cmGNQpWEETyEin0bjVdCJ9KB34dLCbs
+	3AoVYYRVOqHPJZVPKlkrfZca8pzTepeWIeAVUjLYzw==
+X-Google-Smtp-Source: ABdhPJxiRwBDrZ7qHrwkeYZzKApFxOfBT0kt7xuCw9xbG3ufLrmJ9Sb/VD/Nm0ot8LNlflSABDiDmjBvKBn3HS7qJ1s=
+X-Received: by 2002:a2e:980e:: with SMTP id a14mr617655ljj.220.1644261977984;
+ Mon, 07 Feb 2022 11:26:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+References: <20220203152305.1846862-1-trix@redhat.com>
+In-Reply-To: <20220203152305.1846862-1-trix@redhat.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 7 Feb 2022 11:26:06 -0800
+Message-ID: <CAKwvOd=MviBd5iwSnhyt9aSZU+QTsBrBSGPcjsjt2eepfYC3KQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/ast: fix using freed memory
+To: trix@redhat.com
+Cc: airlied@redhat.com, tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch, 
+	nathan@kernel.org, maxime@cerno.tech, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Tom Rix <trix@redhat.com>
+On Thu, Feb 3, 2022 at 7:23 AM <trix@redhat.com> wrote:
+>
+> From: Tom Rix <trix@redhat.com>
+>
+> clang static analysis reports this problem
+> ast_mode.c:1235:3: warning: Use of memory after it is freed
+>   drm_connector_update_edid_property(&ast_connector->base, edid);
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> The second condition on
+>
+>   if (!flags && ast_connector->i2c)
+>
+> Means that the edid is not always set.  If the previous block
+> fails the freed edid value will be used.  So set edid to NULL
+> after freeing.
+>
+> Fixes: 55dc449a7c60 ("drm/ast: Handle failed I2C initialization gracefully")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/gpu/drm/ast/ast_mode.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
+> index ab52efb15670e..9131dc8a1a2fc 100644
+> --- a/drivers/gpu/drm/ast/ast_mode.c
+> +++ b/drivers/gpu/drm/ast/ast_mode.c
+> @@ -1224,10 +1224,12 @@ static int ast_get_modes(struct drm_connector *connector)
+>                         return -ENOMEM;
+>
+>                 flags = ast_dp501_read_edid(connector->dev, (u8 *)edid);
+> -               if (flags)
+> +               if (flags) {
+>                         ast->dp501_maxclk = ast_get_dp501_max_clk(connector->dev);
+> -               else
+> +               } else {
+>                         kfree(edid);
+> +                       edid = NULL;
+> +               }
 
-The clang build fails with this error
-io_uring.c:9396:9: error: variable 'ret' is uninitialized when used here
-        return ret;
-               ^~~~
-Return 0 directly.
+You probably didn't need to add the {} for the if, but it doesn't really matter.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Fixes: b77e315a9644 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- fs/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>         }
+>         if (!flags && ast_connector->i2c)
+>                 edid = drm_get_edid(connector, &ast_connector->i2c->adapter);
+> --
+> 2.26.3
+>
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index aadabb31d6da7..74afb96af214c 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -9393,7 +9393,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
- 	ev_fd->eventfd_async = eventfd_async;
- 
- 	rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
--	return ret;
-+	return 0;
- }
- 
- static void io_eventfd_put(struct rcu_head *rcu)
+
 -- 
-2.26.3
-
+Thanks,
+~Nick Desaulniers
