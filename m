@@ -1,111 +1,91 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C272F26
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 19:45:07 +0000 (UTC)
-Received: by mail-lj1-f177.google.com with SMTP id k18so9215637lji.12
-        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 11:45:07 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8D32F26
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 19:48:26 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id z19so28942496lfq.13
+        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 11:48:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lZDpDADdfwq40jZPbE/sznh7Bnymle3eu2MsiKyAnHI=;
-        b=BdiDafPxAfgT1LadX6/qdSNo8n3l0Xa/GtCJEktDJMXEmp52SrE42F60zh+yNtgnej
-         uafnZUT8MJqOawyMYksVSqsD8w5zXATUGodDDaf2n0OSYIP77vOHkN1WwPFv0stLOa78
-         +4ATpfopW4dS5hdH2p54SyosNF1m7zjr8r+2YE4GWs0neqc92bzF3dIJD7hE8cA0PJPs
-         kQu1XjE348Lq3znmdTjfrSq9FD04iuxmobdD48LoM7k4xW51/uiPDMkZVxL359FVEki8
-         6hN3NzqdifRAShPzrX73QDVc8Pe4IH8JQaohdbJyNHzgPOa0p/tQFkgSdDhkiO0KiTmj
-         Kknw==
+        bh=xshAeQAm5Ise7n5+KqUI2Gq2vO43dYWLzj1n4M3lADI=;
+        b=m2jprebEmhSHSHuYWHpyXk49Q0ycc3cDlMn8JwLTJJKi2qmYSXGGWLoz6bhYhWu4b7
+         WLT19qdEsHrW5Af6zYgwyr9CHYjWxlnl1s0VchRi57EarrSycUQh196P7SyNM6uW01th
+         gnPfKYQmGbsuDcYSC8LlYEKew+wRz/a4CEjh414g8M5tqRCmp5iWBjX+e2YiyFzh2wZt
+         J4oGZRvK4SRlVUUa/H6PGStsTQeKvk9uoL3RvfR7e63ThSnGziaw2k4B1T6zUhLcoPMf
+         nS+SBy3zu4A9uchwt1CmvnTevZEmI2ii8QW82pmdTb2FlG7lO+SGc/8Yr9dDygMfsCIZ
+         7FVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lZDpDADdfwq40jZPbE/sznh7Bnymle3eu2MsiKyAnHI=;
-        b=uQJWfpGY92IMakuRHlMugvexfjMLIyfdrRwULE47PhU9J6RZZy47LmljXCh4n/EFm3
-         f4WXDqfAumJfDUgyHtL8pUgWlhiGMAMPdo4lH6S9LTV6RTTZIiFxxd4BwineQIfL+2JR
-         ww0LJehogBQRhpP7bdTi5MUXUYPaGg7RC4knsTg0rUjJh+tIuH+1vcpCkiBHWLWVi3Rx
-         f+gKVAY0XINHPPni6SO2rqgzdq+IT4MKIdm2BLWNyTKWm4mD/D/KHQhkbiD3W5nN1J90
-         EaMQsVMnE4Ed6e76njRdladB5wC9vUA/MGiDQ7P+SJg0jZ3Izt9aHaKyz16cBKTlR2VL
-         EfcQ==
-X-Gm-Message-State: AOAM531OwSLdnhy8fneRuCmtvqOZFIfzzJMBB/cU/hFlLQ1xxvhwWTnB
-	lcobBrm6uVl8zI1d77+AdRjHDKqES3cmPCXkiBr5SQ==
-X-Google-Smtp-Source: ABdhPJwv1WF2F6ndc/bGUuNT+neSxWAOv6iXkCytc6pktYWRpfycPf6E/KpzZmQrd8aUu/NlJ8No19+iCvFMptVtXu4=
-X-Received: by 2002:a2e:7c0c:: with SMTP id x12mr648215ljc.526.1644263105665;
- Mon, 07 Feb 2022 11:45:05 -0800 (PST)
+        bh=xshAeQAm5Ise7n5+KqUI2Gq2vO43dYWLzj1n4M3lADI=;
+        b=7KOol+ZkHs/1Cv6CsNu4+s/6kATNPFah8uKm5whu9KqKbv4lJUM6RL3KaGaoZIxiHS
+         53sbS3j4+Thi4LlRcTjARqy81r/l7+YrxVzP65u6amNo3hUu/gVsIVFAwVTHfMLjRY8A
+         yFCQXrr6drSR7AeswGZdrkzaokjqz7uCHbZcojXGrWidZMHGnIVbCP3CEMEfo7QDR5nf
+         8a+sFUV2KtnaHrHa7YTcbtlP6wngBud0mKizUtC8YFVfhWFURNuE8AriMv0NuWSGyNXY
+         wH7C6PhKIz7X24pVfjkz9YYc89fTX3G7J7HsJk3eVEUkcHlsNgE323tv7deXDn/Yy3BY
+         kLxw==
+X-Gm-Message-State: AOAM532KRxtElkQbyf2r12r39+B9n695QrkAI8XHao75ApGT5b6l9vrH
+	9TfK4FZyRKxJBrdZJItWvaM7c+02zIEaPQcJ90dOKA==
+X-Google-Smtp-Source: ABdhPJxGbuBFTqFUGLppr8/37eakpFsdrpJ9JwAJ3Gez87KBdM9rrL4ReL3BepKhdcb9fJ8x8e3HiDRO8sSDB9UW9qg=
+X-Received: by 2002:ac2:4e10:: with SMTP id e16mr739680lfr.444.1644263304407;
+ Mon, 07 Feb 2022 11:48:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220207165304.1046867-1-nathan@kernel.org>
-In-Reply-To: <20220207165304.1046867-1-nathan@kernel.org>
+References: <20220207185126.2085525-1-trix@redhat.com>
+In-Reply-To: <20220207185126.2085525-1-trix@redhat.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 7 Feb 2022 11:44:53 -0800
-Message-ID: <CAKwvOdkXe8CB3QGe2e6Fhz8_SLOsOpcMumoKBiAzGE_VTXCkVg@mail.gmail.com>
-Subject: Re: [PATCH] drm/stm: Avoid using val uninitialized in ltdc_set_ycbcr_config()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Yannick Fertre <yannick.fertre@foss.st.com>, Philippe Cornu <philippe.cornu@foss.st.com>, 
-	Benjamin Gaignard <benjamin.gaignard@linaro.org>, dri-devel@lists.freedesktop.org, 
-	linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
+Date: Mon, 7 Feb 2022 11:48:12 -0800
+Message-ID: <CAKwvOdnyPZ6w5qg-+W0H0ait3KUV5S9+-gmty-ANK46BeKd5VQ@mail.gmail.com>
+Subject: Re: [PATCH] io_uring: fix uninitialized return
+To: trix@redhat.com
+Cc: axboe@kernel.dk, asml.silence@gmail.com, nathan@kernel.org, 
+	usama.arif@bytedance.com, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 7, 2022 at 8:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Mon, Feb 7, 2022 at 10:51 AM <trix@redhat.com> wrote:
 >
-> Clang warns:
+> From: Tom Rix <trix@redhat.com>
 >
->   drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->           default:
->           ^~~~~~~
->   drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
->           val |= LxPCR_YCEN;
->           ^~~
->   drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
->           u32 val;
->                  ^
->                   = 0
->   1 warning generated.
+> The clang build fails with this error
+> io_uring.c:9396:9: error: variable 'ret' is uninitialized when used here
+>         return ret;
+>                ^~~~
+> Return 0 directly.
 >
-> Use a return instead of break in the default case to fix the warning.
-> Add an error message so that this return is not silent, which could hide
-> issues in the future.
->
-> Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1575
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Fixes: b77e315a9644 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+
+Thanks for the patch:
+See also:
+https://lore.kernel.org/llvm/20220207162410.1013466-1-nathan@kernel.org/
+
 > ---
->  drivers/gpu/drm/stm/ltdc.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  fs/io_uring.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-> index 5eeb32c9c9ce..447ddde1786c 100644
-> --- a/drivers/gpu/drm/stm/ltdc.c
-> +++ b/drivers/gpu/drm/stm/ltdc.c
-> @@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
->                 break;
->         default:
->                 /* RGB or not a YCbCr supported format */
-> -               break;
-> +               drm_err(plane->dev, "Unsupported pixel format: %u\n", drm_pix_fmt);
-
-This is fine, but in the future you should add an explicit
-#include <drm/drm_print.h>
-to avoid implicit header dependencies (like the ones that Mingo is
-trying to detangle) for the declaration of drm_err. `drm_vprintf`
-needs it, too.
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> +               return;
->         }
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index aadabb31d6da7..74afb96af214c 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -9393,7 +9393,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+>         ev_fd->eventfd_async = eventfd_async;
 >
->         /* Enable limited range */
+>         rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
+> -       return ret;
+> +       return 0;
+>  }
 >
-> base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
+>  static void io_eventfd_put(struct rcu_head *rcu)
 > --
-> 2.35.1
+> 2.26.3
 >
 
 
