@@ -1,41 +1,41 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1983F2F28
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 12:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C832F28
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 13:26:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644237326; x=1675773326;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3NKj1n84LPNzblkKv0SBI1v5Ra2UBc4AsePgYBd5ZAg=;
-  b=PmFvHgOn2UYJuqIPe5ukiXMVE4u6JydKXop13Qydizx5MNyO6GQ3X9lB
-   NGlnUNeC0t1bjp8UBy+ykIE3V0CC+knsBdx/bDBdP/G7ocPwROi1DABvG
-   IB8K1vQ/ZE6MG3ljGIhZZ9lvmdFA0ft073ZEvKZ47K3GqDp2MkdkfJUZx
-   4v+ptMJUzdl3kheN0clTRNqoRHvaZKinSdnKi90AzjmoSly/pJ7jNQOih
-   iKFscX4L5JFnx347KIVY8G4wP2G7pua9W0Pio1OQPXe/0fX1ycTZ6XMqH
-   YyGKLXZPAKjvNBTyrPb111UufAskKCOE776Ln/ziLNtakkXOq2x8b948r
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="229353868"
+  t=1644240393; x=1675776393;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OhLq9iOaKgngzX2eyZipiDbgiA3qy4PJPJO7vpmnR4A=;
+  b=MeeURjh1IjK+dBWlgHqn72Nth5NxVW5SUQU5J0vZvZuvIa+LnajL1zC6
+   jQSdNxAxaMP09ibu/zjsrljOqwSAgQoBEDo60OLf5p6QVflJyb48YHKQC
+   6UzZAUHrIrjFZCV9yON5c01e/YhBtszZt9clg/oOhwr3gQ5+O4YWdk/pm
+   a4U8fUctaUpd1Qi5PbJKAAEfVv8Xf8mma73U9DQEAhSXVhstux0RX9qT6
+   7agbPOgUtbYKkhNPRU0P4EI7GUa2o/mP2G2CKJOIjxGm0xl58XwMARVVF
+   KXLjdp5sc7QCplwD61IR27OsrmhLwgo5B5Od9ZKpDtNdOzxOX/Ji+grJ1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="312011840"
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="229353868"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:35:25 -0800
+   d="scan'208";a="312011840"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 05:26:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="770621720"
+   d="scan'208";a="621550973"
 Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Feb 2022 04:35:24 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Feb 2022 05:26:30 -0800
 Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nH3Ep-0000WX-Ih; Mon, 07 Feb 2022 12:35:23 +0000
-Date: Mon, 7 Feb 2022 20:34:23 +0800
+	id 1nH42H-0000ZD-MQ; Mon, 07 Feb 2022 13:26:29 +0000
+Date: Mon, 7 Feb 2022 21:25:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tyrone Ting <warp5tw@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
-Message-ID: <202202072020.toQ349pg-lkp@intel.com>
-References: <20220207063338.6570-7-warp5tw@gmail.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: drivers/media/dvb-frontends/stv0367.c:995:12: warning: stack frame
+ size (9464) exceeds limit (8192) in 'stv0367ter_algo'
+Message-ID: <202202072142.Mdz2lNT9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,196 +44,279 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207063338.6570-7-warp5tw@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Tyrone,
+Hi Kees,
 
-Thank you for the patch! Perhaps something to improve:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on v5.17-rc3 next-20220207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Tyrone-Ting/i2c-npcm-Bug-fixes-timeout-spurious-interrupts/20220207-144704
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220207/202202072020.toQ349pg-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dfd42facf1e4ada021b939b4e19c935dcdd55566
+commit: a52f8a59aef46b59753e583bf4b28fccb069ce64 fortify: Explicitly disable Clang support
+date:   5 months ago
+config: x86_64-randconfig-r034-20220207 (https://download.01.org/0day-ci/archive/20220207/202202072142.Mdz2lNT9-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/580220fb38f28f5ab9ad2c4d39d4738719f39a7a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tyrone-Ting/i2c-npcm-Bug-fixes-timeout-spurious-interrupts/20220207-144704
-        git checkout 580220fb38f28f5ab9ad2c4d39d4738719f39a7a
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a52f8a59aef46b59753e583bf4b28fccb069ce64
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a52f8a59aef46b59753e583bf4b28fccb069ce64
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/i2c/busses/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/dvb-frontends/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-npcm7xx.c:2164:12: warning: comparison of distinct pointer types ('typeof (bus->adap.timeout) *' (aka 'int *') and 'typeof (usecs_to_jiffies(timeout_usec)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           timeout = max(bus->adap.timeout, usecs_to_jiffies(timeout_usec));
-                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:52:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/media/dvb-frontends/stv0367.c:995:12: warning: stack frame size (9464) exceeds limit (8192) in 'stv0367ter_algo' [-Wframe-larger-than]
+   static int stv0367ter_algo(struct dvb_frontend *fe)
+              ^
+>> drivers/media/dvb-frontends/stv0367.c:2540:12: warning: stack frame size (9368) exceeds limit (8192) in 'stv0367cab_set_frontend' [-Wframe-larger-than]
+   static int stv0367cab_set_frontend(struct dvb_frontend *fe)
+              ^
+   2 warnings generated.
 
 
-vim +2164 drivers/i2c/busses/i2c-npcm7xx.c
+vim +/stv0367ter_algo +995 drivers/media/dvb-frontends/stv0367.c
 
-56a1485b102ed1 Tali Perry 2020-05-27  2103  
-56a1485b102ed1 Tali Perry 2020-05-27  2104  static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
-56a1485b102ed1 Tali Perry 2020-05-27  2105  				int num)
-56a1485b102ed1 Tali Perry 2020-05-27  2106  {
-56a1485b102ed1 Tali Perry 2020-05-27  2107  	struct npcm_i2c *bus = container_of(adap, struct npcm_i2c, adap);
-56a1485b102ed1 Tali Perry 2020-05-27  2108  	struct i2c_msg *msg0, *msg1;
-56a1485b102ed1 Tali Perry 2020-05-27  2109  	unsigned long time_left, flags;
-56a1485b102ed1 Tali Perry 2020-05-27  2110  	u16 nwrite, nread;
-56a1485b102ed1 Tali Perry 2020-05-27  2111  	u8 *write_data, *read_data;
-56a1485b102ed1 Tali Perry 2020-05-27  2112  	u8 slave_addr;
-692c41a2a403a7 Tali Perry 2022-02-07  2113  	unsigned long timeout;
-56a1485b102ed1 Tali Perry 2020-05-27  2114  	bool read_block = false;
-56a1485b102ed1 Tali Perry 2020-05-27  2115  	bool read_PEC = false;
-56a1485b102ed1 Tali Perry 2020-05-27  2116  	u8 bus_busy;
-56a1485b102ed1 Tali Perry 2020-05-27  2117  	unsigned long timeout_usec;
-56a1485b102ed1 Tali Perry 2020-05-27  2118  
-56a1485b102ed1 Tali Perry 2020-05-27  2119  	if (bus->state == I2C_DISABLE) {
-56a1485b102ed1 Tali Perry 2020-05-27  2120  		dev_err(bus->dev, "I2C%d module is disabled", bus->num);
-56a1485b102ed1 Tali Perry 2020-05-27  2121  		return -EINVAL;
-56a1485b102ed1 Tali Perry 2020-05-27  2122  	}
-56a1485b102ed1 Tali Perry 2020-05-27  2123  
-56a1485b102ed1 Tali Perry 2020-05-27  2124  	msg0 = &msgs[0];
-56a1485b102ed1 Tali Perry 2020-05-27  2125  	slave_addr = msg0->addr;
-56a1485b102ed1 Tali Perry 2020-05-27  2126  	if (msg0->flags & I2C_M_RD) { /* read */
-56a1485b102ed1 Tali Perry 2020-05-27  2127  		nwrite = 0;
-56a1485b102ed1 Tali Perry 2020-05-27  2128  		write_data = NULL;
-56a1485b102ed1 Tali Perry 2020-05-27  2129  		read_data = msg0->buf;
-56a1485b102ed1 Tali Perry 2020-05-27  2130  		if (msg0->flags & I2C_M_RECV_LEN) {
-56a1485b102ed1 Tali Perry 2020-05-27  2131  			nread = 1;
-56a1485b102ed1 Tali Perry 2020-05-27  2132  			read_block = true;
-56a1485b102ed1 Tali Perry 2020-05-27  2133  			if (msg0->flags & I2C_CLIENT_PEC)
-56a1485b102ed1 Tali Perry 2020-05-27  2134  				read_PEC = true;
-56a1485b102ed1 Tali Perry 2020-05-27  2135  		} else {
-56a1485b102ed1 Tali Perry 2020-05-27  2136  			nread = msg0->len;
-56a1485b102ed1 Tali Perry 2020-05-27  2137  		}
-56a1485b102ed1 Tali Perry 2020-05-27  2138  	} else { /* write */
-56a1485b102ed1 Tali Perry 2020-05-27  2139  		nwrite = msg0->len;
-56a1485b102ed1 Tali Perry 2020-05-27  2140  		write_data = msg0->buf;
-56a1485b102ed1 Tali Perry 2020-05-27  2141  		nread = 0;
-56a1485b102ed1 Tali Perry 2020-05-27  2142  		read_data = NULL;
-56a1485b102ed1 Tali Perry 2020-05-27  2143  		if (num == 2) {
-56a1485b102ed1 Tali Perry 2020-05-27  2144  			msg1 = &msgs[1];
-56a1485b102ed1 Tali Perry 2020-05-27  2145  			read_data = msg1->buf;
-56a1485b102ed1 Tali Perry 2020-05-27  2146  			if (msg1->flags & I2C_M_RECV_LEN) {
-56a1485b102ed1 Tali Perry 2020-05-27  2147  				nread = 1;
-56a1485b102ed1 Tali Perry 2020-05-27  2148  				read_block = true;
-56a1485b102ed1 Tali Perry 2020-05-27  2149  				if (msg1->flags & I2C_CLIENT_PEC)
-56a1485b102ed1 Tali Perry 2020-05-27  2150  					read_PEC = true;
-56a1485b102ed1 Tali Perry 2020-05-27  2151  			} else {
-56a1485b102ed1 Tali Perry 2020-05-27  2152  				nread = msg1->len;
-56a1485b102ed1 Tali Perry 2020-05-27  2153  				read_block = false;
-56a1485b102ed1 Tali Perry 2020-05-27  2154  			}
-56a1485b102ed1 Tali Perry 2020-05-27  2155  		}
-56a1485b102ed1 Tali Perry 2020-05-27  2156  	}
-56a1485b102ed1 Tali Perry 2020-05-27  2157  
-06be67266a0c9a Tali Perry 2020-08-31  2158  	/*
-06be67266a0c9a Tali Perry 2020-08-31  2159  	 * Adaptive TimeOut: estimated time in usec + 100% margin:
-06be67266a0c9a Tali Perry 2020-08-31  2160  	 * 2: double the timeout for clock stretching case
-06be67266a0c9a Tali Perry 2020-08-31  2161  	 * 9: bits per transaction (including the ack/nack)
-06be67266a0c9a Tali Perry 2020-08-31  2162  	 */
-06be67266a0c9a Tali Perry 2020-08-31  2163  	timeout_usec = (2 * 9 * USEC_PER_SEC / bus->bus_freq) * (2 + nread + nwrite);
-692c41a2a403a7 Tali Perry 2022-02-07 @2164  	timeout = max(bus->adap.timeout, usecs_to_jiffies(timeout_usec));
-56a1485b102ed1 Tali Perry 2020-05-27  2165  	if (nwrite >= 32 * 1024 || nread >= 32 * 1024) {
-56a1485b102ed1 Tali Perry 2020-05-27  2166  		dev_err(bus->dev, "i2c%d buffer too big\n", bus->num);
-56a1485b102ed1 Tali Perry 2020-05-27  2167  		return -EINVAL;
-56a1485b102ed1 Tali Perry 2020-05-27  2168  	}
-56a1485b102ed1 Tali Perry 2020-05-27  2169  
-692c41a2a403a7 Tali Perry 2022-02-07  2170  	time_left = jiffies + timeout + 1;
-56a1485b102ed1 Tali Perry 2020-05-27  2171  	do {
-56a1485b102ed1 Tali Perry 2020-05-27  2172  		/*
-56a1485b102ed1 Tali Perry 2020-05-27  2173  		 * we must clear slave address immediately when the bus is not
-56a1485b102ed1 Tali Perry 2020-05-27  2174  		 * busy, so we spinlock it, but we don't keep the lock for the
-56a1485b102ed1 Tali Perry 2020-05-27  2175  		 * entire while since it is too long.
-56a1485b102ed1 Tali Perry 2020-05-27  2176  		 */
-56a1485b102ed1 Tali Perry 2020-05-27  2177  		spin_lock_irqsave(&bus->lock, flags);
-56a1485b102ed1 Tali Perry 2020-05-27  2178  		bus_busy = ioread8(bus->reg + NPCM_I2CCST) & NPCM_I2CCST_BB;
-f54736925a4f83 Tali Perry 2020-05-27  2179  #if IS_ENABLED(CONFIG_I2C_SLAVE)
-f54736925a4f83 Tali Perry 2020-05-27  2180  		if (!bus_busy && bus->slave)
-f54736925a4f83 Tali Perry 2020-05-27  2181  			iowrite8((bus->slave->addr & 0x7F),
-f54736925a4f83 Tali Perry 2020-05-27  2182  				 bus->reg + NPCM_I2CADDR1);
-f54736925a4f83 Tali Perry 2020-05-27  2183  #endif
-56a1485b102ed1 Tali Perry 2020-05-27  2184  		spin_unlock_irqrestore(&bus->lock, flags);
-56a1485b102ed1 Tali Perry 2020-05-27  2185  
-56a1485b102ed1 Tali Perry 2020-05-27  2186  	} while (time_is_after_jiffies(time_left) && bus_busy);
-56a1485b102ed1 Tali Perry 2020-05-27  2187  
-56a1485b102ed1 Tali Perry 2020-05-27  2188  	if (bus_busy) {
-56a1485b102ed1 Tali Perry 2020-05-27  2189  		iowrite8(NPCM_I2CCST_BB, bus->reg + NPCM_I2CCST);
-56a1485b102ed1 Tali Perry 2020-05-27  2190  		npcm_i2c_reset(bus);
-56a1485b102ed1 Tali Perry 2020-05-27  2191  		i2c_recover_bus(adap);
-56a1485b102ed1 Tali Perry 2020-05-27  2192  		return -EAGAIN;
-56a1485b102ed1 Tali Perry 2020-05-27  2193  	}
-56a1485b102ed1 Tali Perry 2020-05-27  2194  
-56a1485b102ed1 Tali Perry 2020-05-27  2195  	npcm_i2c_init_params(bus);
-692c41a2a403a7 Tali Perry 2022-02-07  2196  	bus->dest_addr = slave_addr << 1;
-56a1485b102ed1 Tali Perry 2020-05-27  2197  	bus->msgs = msgs;
-56a1485b102ed1 Tali Perry 2020-05-27  2198  	bus->msgs_num = num;
-56a1485b102ed1 Tali Perry 2020-05-27  2199  	bus->cmd_err = 0;
-56a1485b102ed1 Tali Perry 2020-05-27  2200  	bus->read_block_use = read_block;
-56a1485b102ed1 Tali Perry 2020-05-27  2201  
-56a1485b102ed1 Tali Perry 2020-05-27  2202  	reinit_completion(&bus->cmd_complete);
-56a1485b102ed1 Tali Perry 2020-05-27  2203  
-8b4b09a6da0b25 Tali Perry 2022-02-07  2204  	npcm_i2c_int_enable(bus, true);
-8b4b09a6da0b25 Tali Perry 2022-02-07  2205  
-8b4b09a6da0b25 Tali Perry 2022-02-07  2206  	if (npcm_i2c_master_start_xmit(bus, slave_addr, nwrite, nread,
-8b4b09a6da0b25 Tali Perry 2022-02-07  2207  				       write_data, read_data, read_PEC,
-8b4b09a6da0b25 Tali Perry 2022-02-07  2208  				       read_block)) {
-56a1485b102ed1 Tali Perry 2020-05-27  2209  		time_left = wait_for_completion_timeout(&bus->cmd_complete,
-56a1485b102ed1 Tali Perry 2020-05-27  2210  							timeout);
-56a1485b102ed1 Tali Perry 2020-05-27  2211  
-56a1485b102ed1 Tali Perry 2020-05-27  2212  		if (time_left == 0) {
-56a1485b102ed1 Tali Perry 2020-05-27  2213  			if (bus->timeout_cnt < ULLONG_MAX)
-56a1485b102ed1 Tali Perry 2020-05-27  2214  				bus->timeout_cnt++;
-56a1485b102ed1 Tali Perry 2020-05-27  2215  			if (bus->master_or_slave == I2C_MASTER) {
-56a1485b102ed1 Tali Perry 2020-05-27  2216  				i2c_recover_bus(adap);
-56a1485b102ed1 Tali Perry 2020-05-27  2217  				bus->cmd_err = -EIO;
-56a1485b102ed1 Tali Perry 2020-05-27  2218  				bus->state = I2C_IDLE;
-56a1485b102ed1 Tali Perry 2020-05-27  2219  			}
-56a1485b102ed1 Tali Perry 2020-05-27  2220  		}
-56a1485b102ed1 Tali Perry 2020-05-27  2221  	}
-56a1485b102ed1 Tali Perry 2020-05-27  2222  
-56a1485b102ed1 Tali Perry 2020-05-27  2223  	/* if there was BER, check if need to recover the bus: */
-56a1485b102ed1 Tali Perry 2020-05-27  2224  	if (bus->cmd_err == -EAGAIN)
-8b4b09a6da0b25 Tali Perry 2022-02-07  2225  		bus->cmd_err = i2c_recover_bus(adap);
-56a1485b102ed1 Tali Perry 2020-05-27  2226  
-8947efc077168c Tali Perry 2020-09-20  2227  	/*
-8947efc077168c Tali Perry 2020-09-20  2228  	 * After any type of error, check if LAST bit is still set,
-8947efc077168c Tali Perry 2020-09-20  2229  	 * due to a HW issue.
-8947efc077168c Tali Perry 2020-09-20  2230  	 * It cannot be cleared without resetting the module.
-8947efc077168c Tali Perry 2020-09-20  2231  	 */
-8b4b09a6da0b25 Tali Perry 2022-02-07  2232  	else if (bus->cmd_err &&
-8947efc077168c Tali Perry 2020-09-20  2233  		 (NPCM_I2CRXF_CTL_LAST_PEC & ioread8(bus->reg + NPCM_I2CRXF_CTL)))
-8947efc077168c Tali Perry 2020-09-20  2234  		npcm_i2c_reset(bus);
-8947efc077168c Tali Perry 2020-09-20  2235  
-8b4b09a6da0b25 Tali Perry 2022-02-07  2236  	/* after any xfer, successful or not, stall and EOB must be disabled */
-8b4b09a6da0b25 Tali Perry 2022-02-07  2237  	npcm_i2c_stall_after_start(bus, false);
-8b4b09a6da0b25 Tali Perry 2022-02-07  2238  	npcm_i2c_eob_int(bus, false);
-8b4b09a6da0b25 Tali Perry 2022-02-07  2239  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25   994  
+285d55ad5f2cc0 drivers/media/dvb/frontends/stv0367.c Mauro Carvalho Chehab 2011-12-26  @995  static int stv0367ter_algo(struct dvb_frontend *fe)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25   996  {
+285d55ad5f2cc0 drivers/media/dvb/frontends/stv0367.c Mauro Carvalho Chehab 2011-12-26   997  	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25   998  	struct stv0367_state *state = fe->demodulator_priv;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25   999  	struct stv0367ter_state *ter_state = state->ter_state;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1000  	int offset = 0, tempo = 0;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1001  	u8 u_var;
+df1ec0272fd49a drivers/media/dvb/frontends/stv0367.c Peter Senna Tschudin  2012-06-14  1002  	u8 /*constell,*/ counter;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1003  	s8 step;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1004  	s32 timing_offset = 0;
+b16338e3d346ce drivers/media/dvb-frontends/stv0367.c Daniel Scheller       2017-03-29  1005  	u32 trl_nomrate = 0, InternalFreq = 0, temp = 0, ifkhz = 0;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1006  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1007  	dprintk("%s:\n", __func__);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1008  
+b16338e3d346ce drivers/media/dvb-frontends/stv0367.c Daniel Scheller       2017-03-29  1009  	stv0367_get_if_khz(state, &ifkhz);
+b16338e3d346ce drivers/media/dvb-frontends/stv0367.c Daniel Scheller       2017-03-29  1010  
+285d55ad5f2cc0 drivers/media/dvb/frontends/stv0367.c Mauro Carvalho Chehab 2011-12-26  1011  	ter_state->frequency = p->frequency;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1012  	ter_state->force = FE_TER_FORCENONE
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1013  			+ stv0367_readbits(state, F367TER_FORCE) * 2;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1014  	ter_state->if_iq_mode = state->config->if_iq_mode;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1015  	switch (state->config->if_iq_mode) {
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1016  	case FE_TER_NORMAL_IF_TUNER:  /* Normal IF mode */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1017  		dprintk("ALGO: FE_TER_NORMAL_IF_TUNER selected\n");
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1018  		stv0367_writebits(state, F367TER_TUNER_BB, 0);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1019  		stv0367_writebits(state, F367TER_LONGPATH_IF, 0);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1020  		stv0367_writebits(state, F367TER_DEMUX_SWAP, 0);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1021  		break;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1022  	case FE_TER_LONGPATH_IF_TUNER:  /* Long IF mode */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1023  		dprintk("ALGO: FE_TER_LONGPATH_IF_TUNER selected\n");
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1024  		stv0367_writebits(state, F367TER_TUNER_BB, 0);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1025  		stv0367_writebits(state, F367TER_LONGPATH_IF, 1);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1026  		stv0367_writebits(state, F367TER_DEMUX_SWAP, 1);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1027  		break;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1028  	case FE_TER_IQ_TUNER:  /* IQ mode */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1029  		dprintk("ALGO: FE_TER_IQ_TUNER selected\n");
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1030  		stv0367_writebits(state, F367TER_TUNER_BB, 1);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1031  		stv0367_writebits(state, F367TER_PPM_INVSEL, 0);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1032  		break;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1033  	default:
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1034  		printk(KERN_ERR "ALGO: wrong TUNER type selected\n");
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1035  		return -EINVAL;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1036  	}
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1037  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1038  	usleep_range(5000, 7000);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1039  
+285d55ad5f2cc0 drivers/media/dvb/frontends/stv0367.c Mauro Carvalho Chehab 2011-12-26  1040  	switch (p->inversion) {
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1041  	case INVERSION_AUTO:
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1042  	default:
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1043  		dprintk("%s: inversion AUTO\n", __func__);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1044  		if (ter_state->if_iq_mode == FE_TER_IQ_TUNER)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1045  			stv0367_writebits(state, F367TER_IQ_INVERT,
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1046  						ter_state->sense);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1047  		else
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1048  			stv0367_writebits(state, F367TER_INV_SPECTR,
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1049  						ter_state->sense);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1050  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1051  		break;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1052  	case INVERSION_ON:
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1053  	case INVERSION_OFF:
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1054  		if (ter_state->if_iq_mode == FE_TER_IQ_TUNER)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1055  			stv0367_writebits(state, F367TER_IQ_INVERT,
+285d55ad5f2cc0 drivers/media/dvb/frontends/stv0367.c Mauro Carvalho Chehab 2011-12-26  1056  						p->inversion);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1057  		else
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1058  			stv0367_writebits(state, F367TER_INV_SPECTR,
+285d55ad5f2cc0 drivers/media/dvb/frontends/stv0367.c Mauro Carvalho Chehab 2011-12-26  1059  						p->inversion);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1060  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1061  		break;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1062  	}
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1063  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1064  	if ((ter_state->if_iq_mode != FE_TER_NORMAL_IF_TUNER) &&
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1065  				(ter_state->pBW != ter_state->bw)) {
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1066  		stv0367ter_agc_iir_lock_detect_set(state);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1067  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1068  		/*set fine agc target to 180 for LPIF or IQ mode*/
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1069  		/* set Q_AGCTarget */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1070  		stv0367_writebits(state, F367TER_SEL_IQNTAR, 1);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1071  		stv0367_writebits(state, F367TER_AUT_AGC_TARGET_MSB, 0xB);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1072  		/*stv0367_writebits(state,AUT_AGC_TARGET_LSB,0x04); */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1073  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1074  		/* set Q_AGCTarget */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1075  		stv0367_writebits(state, F367TER_SEL_IQNTAR, 0);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1076  		stv0367_writebits(state, F367TER_AUT_AGC_TARGET_MSB, 0xB);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1077  		/*stv0367_writebits(state,AUT_AGC_TARGET_LSB,0x04); */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1078  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1079  		if (!stv0367_iir_filt_init(state, ter_state->bw,
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1080  						state->config->xtal))
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1081  			return -EINVAL;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1082  		/*set IIR filter once for 6,7 or 8MHz BW*/
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1083  		ter_state->pBW = ter_state->bw;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1084  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1085  		stv0367ter_agc_iir_rst(state);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1086  	}
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1087  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1088  	if (ter_state->hierarchy == FE_TER_HIER_LOW_PRIO)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1089  		stv0367_writebits(state, F367TER_BDI_LPSEL, 0x01);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1090  	else
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1091  		stv0367_writebits(state, F367TER_BDI_LPSEL, 0x00);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1092  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1093  	InternalFreq = stv0367ter_get_mclk(state, state->config->xtal) / 1000;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1094  	temp = (int)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1095  		((((ter_state->bw * 64 * (1 << 15) * 100)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1096  						/ (InternalFreq)) * 10) / 7);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1097  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1098  	stv0367_writebits(state, F367TER_TRL_NOMRATE_LSB, temp % 2);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1099  	temp = temp / 2;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1100  	stv0367_writebits(state, F367TER_TRL_NOMRATE_HI, temp / 256);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1101  	stv0367_writebits(state, F367TER_TRL_NOMRATE_LO, temp % 256);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1102  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1103  	temp = stv0367_readbits(state, F367TER_TRL_NOMRATE_HI) * 512 +
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1104  			stv0367_readbits(state, F367TER_TRL_NOMRATE_LO) * 2 +
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1105  			stv0367_readbits(state, F367TER_TRL_NOMRATE_LSB);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1106  	temp = (int)(((1 << 17) * ter_state->bw * 1000) / (7 * (InternalFreq)));
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1107  	stv0367_writebits(state, F367TER_GAIN_SRC_HI, temp / 256);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1108  	stv0367_writebits(state, F367TER_GAIN_SRC_LO, temp % 256);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1109  	temp = stv0367_readbits(state, F367TER_GAIN_SRC_HI) * 256 +
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1110  			stv0367_readbits(state, F367TER_GAIN_SRC_LO);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1111  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1112  	temp = (int)
+b16338e3d346ce drivers/media/dvb-frontends/stv0367.c Daniel Scheller       2017-03-29  1113  		((InternalFreq - ifkhz) * (1 << 16) / (InternalFreq));
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1114  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1115  	dprintk("DEROT temp=0x%x\n", temp);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1116  	stv0367_writebits(state, F367TER_INC_DEROT_HI, temp / 256);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1117  	stv0367_writebits(state, F367TER_INC_DEROT_LO, temp % 256);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1118  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1119  	ter_state->echo_pos = 0;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1120  	ter_state->ucblocks = 0; /* liplianin */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1121  	ter_state->pBER = 0; /* liplianin */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1122  	stv0367_writebits(state, F367TER_LONG_ECHO, ter_state->echo_pos);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1123  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1124  	if (stv0367ter_lock_algo(state) != FE_TER_LOCKOK)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1125  		return 0;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1126  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1127  	ter_state->state = FE_TER_LOCKOK;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1128  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1129  	ter_state->mode = stv0367_readbits(state, F367TER_SYR_MODE);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1130  	ter_state->guard = stv0367_readbits(state, F367TER_SYR_GUARD);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1131  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1132  	ter_state->first_lock = 1; /* we know sense now :) */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1133  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1134  	ter_state->agc_val =
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1135  			(stv0367_readbits(state, F367TER_AGC1_VAL_LO) << 16) +
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1136  			(stv0367_readbits(state, F367TER_AGC1_VAL_HI) << 24) +
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1137  			stv0367_readbits(state, F367TER_AGC2_VAL_LO) +
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1138  			(stv0367_readbits(state, F367TER_AGC2_VAL_HI) << 8);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1139  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1140  	/* Carrier offset calculation */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1141  	stv0367_writebits(state, F367TER_FREEZE, 1);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1142  	offset = (stv0367_readbits(state, F367TER_CRL_FOFFSET_VHI) << 16) ;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1143  	offset += (stv0367_readbits(state, F367TER_CRL_FOFFSET_HI) << 8);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1144  	offset += (stv0367_readbits(state, F367TER_CRL_FOFFSET_LO));
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1145  	stv0367_writebits(state, F367TER_FREEZE, 0);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1146  	if (offset > 8388607)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1147  		offset -= 16777216;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1148  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1149  	offset = offset * 2 / 16384;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1150  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1151  	if (ter_state->mode == FE_TER_MODE_2K)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1152  		offset = (offset * 4464) / 1000;/*** 1 FFT BIN=4.464khz***/
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1153  	else if (ter_state->mode == FE_TER_MODE_4K)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1154  		offset = (offset * 223) / 100;/*** 1 FFT BIN=2.23khz***/
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1155  	else  if (ter_state->mode == FE_TER_MODE_8K)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1156  		offset = (offset * 111) / 100;/*** 1 FFT BIN=1.1khz***/
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1157  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1158  	if (stv0367_readbits(state, F367TER_PPM_INVSEL) == 1) {
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1159  		if ((stv0367_readbits(state, F367TER_INV_SPECTR) ==
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1160  				(stv0367_readbits(state,
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1161  					F367TER_STATUS_INV_SPECRUM) == 1)))
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1162  			offset = offset * -1;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1163  	}
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1164  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1165  	if (ter_state->bw == 6)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1166  		offset = (offset * 6) / 8;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1167  	else if (ter_state->bw == 7)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1168  		offset = (offset * 7) / 8;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1169  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1170  	ter_state->frequency += offset;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1171  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1172  	tempo = 10;  /* exit even if timing_offset stays null */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1173  	while ((timing_offset == 0) && (tempo > 0)) {
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1174  		usleep_range(10000, 20000);	/*was 20ms  */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1175  		/* fine tuning of timing offset if required */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1176  		timing_offset = stv0367_readbits(state, F367TER_TRL_TOFFSET_LO)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1177  				+ 256 * stv0367_readbits(state,
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1178  							F367TER_TRL_TOFFSET_HI);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1179  		if (timing_offset >= 32768)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1180  			timing_offset -= 65536;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1181  		trl_nomrate = (512 * stv0367_readbits(state,
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1182  							F367TER_TRL_NOMRATE_HI)
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1183  			+ stv0367_readbits(state, F367TER_TRL_NOMRATE_LO) * 2
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1184  			+ stv0367_readbits(state, F367TER_TRL_NOMRATE_LSB));
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1185  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1186  		timing_offset = ((signed)(1000000 / trl_nomrate) *
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1187  							timing_offset) / 2048;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1188  		tempo--;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1189  	}
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1190  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1191  	if (timing_offset <= 0) {
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1192  		timing_offset = (timing_offset - 11) / 22;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1193  		step = -1;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1194  	} else {
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1195  		timing_offset = (timing_offset + 11) / 22;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1196  		step = 1;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1197  	}
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1198  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1199  	for (counter = 0; counter < abs(timing_offset); counter++) {
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1200  		trl_nomrate += step;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1201  		stv0367_writebits(state, F367TER_TRL_NOMRATE_LSB,
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1202  						trl_nomrate % 2);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1203  		stv0367_writebits(state, F367TER_TRL_NOMRATE_LO,
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1204  						trl_nomrate / 2);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1205  		usleep_range(1000, 2000);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1206  	}
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1207  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1208  	usleep_range(5000, 6000);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1209  	/* unlocks could happen in case of trl centring big step,
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1210  	then a core off/on restarts demod */
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1211  	u_var = stv0367_readbits(state, F367TER_LK);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1212  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1213  	if (!u_var) {
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1214  		stv0367_writebits(state, F367TER_CORE_ACTIVE, 0);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1215  		msleep(20);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1216  		stv0367_writebits(state, F367TER_CORE_ACTIVE, 1);
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1217  	}
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1218  
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1219  	return 0;
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1220  }
+17cce932e8be9a drivers/media/dvb/frontends/stv0367.c Igor M. Liplianin     2011-01-25  1221  
+
+:::::: The code at line 995 was first introduced by commit
+:::::: 285d55ad5f2cc0b8a316c3574e2faa0a5b45bd0f [media] stv0367: convert set_fontend to use DVBv5 parameters
+
+:::::: TO: Mauro Carvalho Chehab <mchehab@redhat.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@redhat.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
