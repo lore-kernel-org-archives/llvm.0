@@ -1,142 +1,111 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6FC2F26
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 19:38:22 +0000 (UTC)
-Received: by mail-lf1-f48.google.com with SMTP id f10so28905045lfu.8
-        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 11:38:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C272F26
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 19:45:07 +0000 (UTC)
+Received: by mail-lj1-f177.google.com with SMTP id k18so9215637lji.12
+        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 11:45:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6Yt7ZvJovg2QAocXCl+HRPbqydrsknVjCbRsvR6IR8M=;
-        b=VTofCTNW2o3FILm4vzr1hNG65FttBoBZjnvu5pXxlclzK91RiQSBG635y0Pn3Oq45F
-         nGPdube6VQGmsErLaPoFreoHxF7vhJUnWIbUAEwtOJKQRBZXzgCx0O2pk/KYBLtU0iTn
-         s9mZLmKu7ywtHkkW6wd4hp7RVUAvA/OgcjD9217bAxUDODLJs13Yc+q30U0S1djiweSA
-         uLkZxK9SK4264vD8Ym5SROaaNI6k/w8w/2J9pP4oLkdZV+3UGVY+OQ7hmolyIS2OsJ/e
-         bqHVbPDog4xhtM9y2LUxfTrUplrjkd2/ShZFVygUvE982TUJrsWm0IjQAILjwhrflYWR
-         J/MQ==
+        bh=lZDpDADdfwq40jZPbE/sznh7Bnymle3eu2MsiKyAnHI=;
+        b=BdiDafPxAfgT1LadX6/qdSNo8n3l0Xa/GtCJEktDJMXEmp52SrE42F60zh+yNtgnej
+         uafnZUT8MJqOawyMYksVSqsD8w5zXATUGodDDaf2n0OSYIP77vOHkN1WwPFv0stLOa78
+         +4ATpfopW4dS5hdH2p54SyosNF1m7zjr8r+2YE4GWs0neqc92bzF3dIJD7hE8cA0PJPs
+         kQu1XjE348Lq3znmdTjfrSq9FD04iuxmobdD48LoM7k4xW51/uiPDMkZVxL359FVEki8
+         6hN3NzqdifRAShPzrX73QDVc8Pe4IH8JQaohdbJyNHzgPOa0p/tQFkgSdDhkiO0KiTmj
+         Kknw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6Yt7ZvJovg2QAocXCl+HRPbqydrsknVjCbRsvR6IR8M=;
-        b=isW+AamNy/QtH/1xO7n/W36KVUtQ8UDHP6yo2wzHwWW8A4jvoY+Ck2GG3OApL2tzSA
-         +NHw4vVpeoW9C1Yht+oKrdnBENZeyeEsx87ea9fuMzop538WXW1kuVtx6H+JkNeAMv13
-         28JA8NDiWNGzAssDc1obhrRy0Bv2U1UqDtn2qMrIEkCPBWpZKsK2rCi9eyWnPrbmrJBt
-         NQZikxvM6R97bg1RoVSNtGq/fDLRZ2FWwyt3l1otn8C2CNASv7M0F/UFT31fA5EuIGCH
-         ZxUOWLNz8WoCKSjCrpqIAwmQwHjR57QVg7M8MdtpPjfEdJPGH7SKWbz4EOLoFj7t7Bdv
-         QaWw==
-X-Gm-Message-State: AOAM533jhuILzxNJNUh7fqxLtQ/lN/OlGhRl4xv3EsSfXkgQQQukcPAL
-	LGBzYQLVWTIwBxBdYS67NmKTK0+USL5CTxG9WRroBA==
-X-Google-Smtp-Source: ABdhPJyx0GeiIkJSO+d8OmtXQTXYOg6hSZ+hEKGf0KkrGZHoaSLZxbl+Eg7pRHp13/NqtBIcN9UJnSX0JLWkrQqOvss=
-X-Received: by 2002:ac2:5627:: with SMTP id b7mr688504lff.489.1644262700296;
- Mon, 07 Feb 2022 11:38:20 -0800 (PST)
+        bh=lZDpDADdfwq40jZPbE/sznh7Bnymle3eu2MsiKyAnHI=;
+        b=uQJWfpGY92IMakuRHlMugvexfjMLIyfdrRwULE47PhU9J6RZZy47LmljXCh4n/EFm3
+         f4WXDqfAumJfDUgyHtL8pUgWlhiGMAMPdo4lH6S9LTV6RTTZIiFxxd4BwineQIfL+2JR
+         ww0LJehogBQRhpP7bdTi5MUXUYPaGg7RC4knsTg0rUjJh+tIuH+1vcpCkiBHWLWVi3Rx
+         f+gKVAY0XINHPPni6SO2rqgzdq+IT4MKIdm2BLWNyTKWm4mD/D/KHQhkbiD3W5nN1J90
+         EaMQsVMnE4Ed6e76njRdladB5wC9vUA/MGiDQ7P+SJg0jZ3Izt9aHaKyz16cBKTlR2VL
+         EfcQ==
+X-Gm-Message-State: AOAM531OwSLdnhy8fneRuCmtvqOZFIfzzJMBB/cU/hFlLQ1xxvhwWTnB
+	lcobBrm6uVl8zI1d77+AdRjHDKqES3cmPCXkiBr5SQ==
+X-Google-Smtp-Source: ABdhPJwv1WF2F6ndc/bGUuNT+neSxWAOv6iXkCytc6pktYWRpfycPf6E/KpzZmQrd8aUu/NlJ8No19+iCvFMptVtXu4=
+X-Received: by 2002:a2e:7c0c:: with SMTP id x12mr648215ljc.526.1644263105665;
+ Mon, 07 Feb 2022 11:45:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220207162410.1013466-1-nathan@kernel.org> <CAKwvOdnfQeY8sC0iET4hm-kgeFhurWf_jrh4=czBj17zQ5+x0Q@mail.gmail.com>
- <YgF0vyDgnsSARZf1@dev-arch.archlinux-ax161>
-In-Reply-To: <YgF0vyDgnsSARZf1@dev-arch.archlinux-ax161>
+References: <20220207165304.1046867-1-nathan@kernel.org>
+In-Reply-To: <20220207165304.1046867-1-nathan@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 7 Feb 2022 11:38:08 -0800
-Message-ID: <CAKwvOd=428ceq=GmjbkPu0fXx6b-T6J56HTy-DPdKKvaHwuSsA@mail.gmail.com>
-Subject: Re: [PATCH] io_uring: Fix use of uninitialized ret in io_eventfd_register()
+Date: Mon, 7 Feb 2022 11:44:53 -0800
+Message-ID: <CAKwvOdkXe8CB3QGe2e6Fhz8_SLOsOpcMumoKBiAzGE_VTXCkVg@mail.gmail.com>
+Subject: Re: [PATCH] drm/stm: Avoid using val uninitialized in ltdc_set_ycbcr_config()
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, 
-	Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: Yannick Fertre <yannick.fertre@foss.st.com>, Philippe Cornu <philippe.cornu@foss.st.com>, 
+	Benjamin Gaignard <benjamin.gaignard@linaro.org>, dri-devel@lists.freedesktop.org, 
+	linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 7, 2022 at 11:36 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Mon, Feb 7, 2022 at 8:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> On Mon, Feb 07, 2022 at 11:32:03AM -0800, Nick Desaulniers wrote:
-> > On Mon, Feb 7, 2022 at 8:24 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Clang warns:
-> > >
-> > >   fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-> > >           return ret;
-> > >                  ^~~
-> > >   fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence this warning
-> > >           int fd, ret;
-> > >                      ^
-> > >                       = 0
-> > >   1 warning generated.
-> > >
-> > > Just return 0 directly and reduce the scope of ret to the if statement,
-> > > as that is the only place that it is used, which is how the function was
-> > > before the fixes commit.
-> > >
-> > > Fixes: 1a75fac9a0f9 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
-> >
-> > Did SHA's change? In linux-next, I see:
-> > commit b77e315a9644 ("io_uring: avoid ring quiesce while
-> > registering/unregistering eventfd")
-> > otherwise LGTM
+> Clang warns:
 >
-> Yes, this is against Jens' latest for-5.18/io_uring branch, which was
-> rebased after next-20220207 was released.
+>   drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+>           default:
+>           ^~~~~~~
+>   drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
+>           val |= LxPCR_YCEN;
+>           ^~~
+>   drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
+>           u32 val;
+>                  ^
+>                   = 0
+>   1 warning generated.
 >
-> https://git.kernel.dk/cgit/linux-block/log/?h=for-5.18/io_uring
+> Use a return instead of break in the default case to fix the warning.
+> Add an error message so that this return is not silent, which could hide
+> issues in the future.
+>
+> Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1575
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/gpu/drm/stm/ltdc.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+> index 5eeb32c9c9ce..447ddde1786c 100644
+> --- a/drivers/gpu/drm/stm/ltdc.c
+> +++ b/drivers/gpu/drm/stm/ltdc.c
+> @@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
+>                 break;
+>         default:
+>                 /* RGB or not a YCbCr supported format */
+> -               break;
+> +               drm_err(plane->dev, "Unsupported pixel format: %u\n", drm_pix_fmt);
 
-Thanks for the explanation.
+This is fine, but in the future you should add an explicit
+#include <drm/drm_print.h>
+to avoid implicit header dependencies (like the ones that Mingo is
+trying to detangle) for the declaration of drm_err. `drm_vprintf`
+needs it, too.
+
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+> +               return;
+>         }
 >
-> Cheers,
-> Nathan
+>         /* Enable limited range */
 >
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1579
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >  fs/io_uring.c | 6 +++---
-> > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/fs/io_uring.c b/fs/io_uring.c
-> > > index 5479f0607430..7ef04bb66da1 100644
-> > > --- a/fs/io_uring.c
-> > > +++ b/fs/io_uring.c
-> > > @@ -9370,7 +9370,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
-> > >  {
-> > >         struct io_ev_fd *ev_fd;
-> > >         __s32 __user *fds = arg;
-> > > -       int fd, ret;
-> > > +       int fd;
-> > >
-> > >         ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
-> > >                                         lockdep_is_held(&ctx->uring_lock));
-> > > @@ -9386,14 +9386,14 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
-> > >
-> > >         ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
-> > >         if (IS_ERR(ev_fd->cq_ev_fd)) {
-> > > -               ret = PTR_ERR(ev_fd->cq_ev_fd);
-> > > +               int ret = PTR_ERR(ev_fd->cq_ev_fd);
-> > >                 kfree(ev_fd);
-> > >                 return ret;
-> > >         }
-> > >         ev_fd->eventfd_async = eventfd_async;
-> > >
-> > >         rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
-> > > -       return ret;
-> > > +       return 0;
-> > >  }
-> > >
-> > >  static void io_eventfd_put(struct rcu_head *rcu)
-> > >
-> > > base-commit: 88a0394bc27de2dd8a8715970f289c5627052532
-> > > --
-> > > 2.35.1
-> > >
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
+> base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
+> --
+> 2.35.1
 >
 
 
