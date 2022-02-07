@@ -1,117 +1,194 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3A02F26
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 20:09:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1644264569;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oAKAsUPUKTpUUZnEXmxnxU0YG6aRlUUAiMH3EfYzKGI=;
-	b=Oktdx55Cy5+2kois0hc1tjCINo1p98Db30JtaAn6aIO7gJhyjKhxTpsow32a1Nf4z/SoKR
-	fVsv5Pniy0Uei2riVwRXpLUpLPaJbOoQ5qQ06LNpoyqpNIcl3aCkNTUZTDT6boCczQe+qH
-	fx6OFH8dZdbHhW0NJ42zkvW8BtMYeQ4=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-346-ElhphNsBOzauo8_MU1FBUA-1; Mon, 07 Feb 2022 15:09:28 -0500
-X-MC-Unique: ElhphNsBOzauo8_MU1FBUA-1
-Received: by mail-qv1-f72.google.com with SMTP id iv13-20020ad45ced000000b004248c87cc4cso9433762qvb.10
-        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 12:09:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=oAKAsUPUKTpUUZnEXmxnxU0YG6aRlUUAiMH3EfYzKGI=;
-        b=WLGaFxF6PecUQccLZn5ziHzpuIMt25wjZsbsGW38lU//CORzjSq90eXq6+wW94WR61
-         5EQ6cF6AH2Dcq6x45IUvPp++Xohnv/zHkMdGQNekAJTs48cK6/xxPqugE8ukajmUFLuo
-         HvtcIunLJo2FcUI9uf6UnJkd6KzNiMDKrKKxZjHpx3lO2NOyoqGKzFUnGbmR4OeATtIn
-         pH5oa2Pb6y+5r/EwBQIr5mgYhdncwPxylhz/PAPgutirNzpryDPfajfSZBf+jpoyWb6J
-         9QDmxANN52F4J2Q0tEd8eg0/H9rYT1IDz535SpwAB+OrhsJfFIXbljTneDUKBmTF12sp
-         yqHQ==
-X-Gm-Message-State: AOAM530IDZlhax5z2eBMTDF3p/o9DLJC/u7EiRMwIYqsG+Jlb7Qda9G1
-	lnVshxRNPxREy7zuWDt8y80tHmT4xgrvsLZYP+oQlk+ldZ7u8FYSO2hUz5mDqYMJs/SA7e9+CFx
-	ASqIiJheO5EaL6VHT7UOLfWJqTJiRAqPUj8GxXdxHr8XF+8TUWuXgeFiNOJ5x
-X-Received: by 2002:a05:622a:592:: with SMTP id c18mr830656qtb.135.1644264567698;
-        Mon, 07 Feb 2022 12:09:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJywAnyIcF5clfnoxlwiuAguCyMOTb/Q0XK6fapq4xAke4rq7+JEFToSVHf/fm0Di7oe+k2noA==
-X-Received: by 2002:a05:622a:592:: with SMTP id c18mr830628qtb.135.1644264567407;
-        Mon, 07 Feb 2022 12:09:27 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id s9sm4840314qki.101.2022.02.07.12.09.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 12:09:26 -0800 (PST)
-Subject: Re: [PATCH] io_uring: fix uninitialized return
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: axboe@kernel.dk, asml.silence@gmail.com, nathan@kernel.org,
- usama.arif@bytedance.com, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220207185126.2085525-1-trix@redhat.com>
- <CAKwvOdnyPZ6w5qg-+W0H0ait3KUV5S9+-gmty-ANK46BeKd5VQ@mail.gmail.com>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <831dd322-4931-2285-4408-79df5ab1df64@redhat.com>
-Date: Mon, 7 Feb 2022 12:09:24 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C0F2F26
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 20:12:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644264777; x=1675800777;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E/9q+1vanuIWMxEsBVm7dkTx6y+5b6TFiPq1WZ6/6pU=;
+  b=iux7QvMIjmyUmNbp5dfm7DE+hkwftlQVeRr2z2UQJHVD7RR1amMLKVqO
+   2s3QRu0DtsULZ1ufiVEuMKNPifZWYGtZ6z6OELz5Zt2uql/sOKw5f1jSJ
+   dTEq5TJrv6k4QcXj8N5R9N3zChb1y6CJ75XRnIkVthiNeb+iVvPLvhPFI
+   bPuOrYoJ1vVoFq3GD3NiRcNO4Y9EBSmAwxFaQWjuTQ5uDXLLEU7QGUne9
+   imDiI44hTNr4kS8jJJH0xQJQ1Ex1QlwZ1fEo5e1E3EBRIqZbCpY2DDvXP
+   PE69x3GpxPxij3nOM6MQVjHqbuvsb4py1T463d7yWkhDca08Ht4A7fUig
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="246389854"
+X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
+   d="scan'208";a="246389854"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 12:12:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
+   d="scan'208";a="700590505"
+Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Feb 2022 12:12:53 -0800
+Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nHANY-0000vV-JD; Mon, 07 Feb 2022 20:12:52 +0000
+Date: Tue, 8 Feb 2022 04:12:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nitesh Shetty <nj.shetty@samsung.com>, mpatocka@redhat.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, javier@javigon.com,
+	chaitanyak@nvidia.com, linux-block@vger.kernel.org,
+	linux-scsi@vger.kernel.org, dm-devel@redhat.com,
+	linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+	axboe@kernel.dk, msnitzer@redhat.com
+Subject: Re: [PATCH v2 07/10] nvmet: add copy command support for bdev and
+ file ns
+Message-ID: <202202080346.u4ubCCIs-lkp@intel.com>
+References: <20220207141348.4235-8-nj.shetty@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdnyPZ6w5qg-+W0H0ait3KUV5S9+-gmty-ANK46BeKd5VQ@mail.gmail.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207141348.4235-8-nj.shetty@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+Hi Nitesh,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on linus/master v5.17-rc3 next-20220207]
+[cannot apply to device-mapper-dm/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Nitesh-Shetty/block-make-bio_map_kern-non-static/20220207-231407
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: arm64-randconfig-r031-20220207 (https://download.01.org/0day-ci/archive/20220208/202202080346.u4ubCCIs-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/6bb6ea64499e1ac27975e79bb2eee89f07861893
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Nitesh-Shetty/block-make-bio_map_kern-non-static/20220207-231407
+        git checkout 6bb6ea64499e1ac27975e79bb2eee89f07861893
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/nvme/target/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/nvme/target/admin-cmd.c:534:15: warning: implicit conversion from '__le32' (aka 'unsigned int') to '__le16' (aka 'unsigned short') changes value from 2097152 to 0 [-Wconstant-conversion]
+                   id->mssrl = cpu_to_le32(BIO_MAX_VECS << (PAGE_SHIFT - SECTOR_SHIFT));
+                             ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/big_endian.h:34:27: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)__swab32((x)))
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-On 2/7/22 11:48 AM, Nick Desaulniers wrote:
-> On Mon, Feb 7, 2022 at 10:51 AM <trix@redhat.com> wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> The clang build fails with this error
->> io_uring.c:9396:9: error: variable 'ret' is uninitialized when used here
->>          return ret;
->>                 ^~~~
->> Return 0 directly.
->>
->> Fixes: b77e315a9644 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
->> Signed-off-by: Tom Rix <trix@redhat.com>
-> Thanks for the patch:
-> See also:
-> https://lore.kernel.org/llvm/20220207162410.1013466-1-nathan@kernel.org/
+vim +534 drivers/nvme/target/admin-cmd.c
 
-No worries as long as it gets fixed.
+   488	
+   489	static void nvmet_execute_identify_ns(struct nvmet_req *req)
+   490	{
+   491		struct nvme_id_ns *id;
+   492		u16 status;
+   493	
+   494		if (le32_to_cpu(req->cmd->identify.nsid) == NVME_NSID_ALL) {
+   495			req->error_loc = offsetof(struct nvme_identify, nsid);
+   496			status = NVME_SC_INVALID_NS | NVME_SC_DNR;
+   497			goto out;
+   498		}
+   499	
+   500		id = kzalloc(sizeof(*id), GFP_KERNEL);
+   501		if (!id) {
+   502			status = NVME_SC_INTERNAL;
+   503			goto out;
+   504		}
+   505	
+   506		/* return an all zeroed buffer if we can't find an active namespace */
+   507		status = nvmet_req_find_ns(req);
+   508		if (status) {
+   509			status = 0;
+   510			goto done;
+   511		}
+   512	
+   513		nvmet_ns_revalidate(req->ns);
+   514	
+   515		/*
+   516		 * nuse = ncap = nsze isn't always true, but we have no way to find
+   517		 * that out from the underlying device.
+   518		 */
+   519		id->ncap = id->nsze =
+   520			cpu_to_le64(req->ns->size >> req->ns->blksize_shift);
+   521		switch (req->port->ana_state[req->ns->anagrpid]) {
+   522		case NVME_ANA_INACCESSIBLE:
+   523		case NVME_ANA_PERSISTENT_LOSS:
+   524			break;
+   525		default:
+   526			id->nuse = id->nsze;
+   527			break;
+   528		}
+   529	
+   530		if (req->ns->bdev)
+   531			nvmet_bdev_set_limits(req->ns->bdev, id);
+   532		else {
+   533			id->msrc = to0based(BIO_MAX_VECS);
+ > 534			id->mssrl = cpu_to_le32(BIO_MAX_VECS << (PAGE_SHIFT - SECTOR_SHIFT));
+   535			id->mcl = cpu_to_le64(le32_to_cpu(id->mssrl) * BIO_MAX_VECS);
+   536		}
+   537	
+   538		/*
+   539		 * We just provide a single LBA format that matches what the
+   540		 * underlying device reports.
+   541		 */
+   542		id->nlbaf = 0;
+   543		id->flbas = 0;
+   544	
+   545		/*
+   546		 * Our namespace might always be shared.  Not just with other
+   547		 * controllers, but also with any other user of the block device.
+   548		 */
+   549		id->nmic = NVME_NS_NMIC_SHARED;
+   550		id->anagrpid = cpu_to_le32(req->ns->anagrpid);
+   551	
+   552		memcpy(&id->nguid, &req->ns->nguid, sizeof(id->nguid));
+   553	
+   554		id->lbaf[0].ds = req->ns->blksize_shift;
+   555	
+   556		if (req->sq->ctrl->pi_support && nvmet_ns_has_pi(req->ns)) {
+   557			id->dpc = NVME_NS_DPC_PI_FIRST | NVME_NS_DPC_PI_LAST |
+   558				  NVME_NS_DPC_PI_TYPE1 | NVME_NS_DPC_PI_TYPE2 |
+   559				  NVME_NS_DPC_PI_TYPE3;
+   560			id->mc = NVME_MC_EXTENDED_LBA;
+   561			id->dps = req->ns->pi_type;
+   562			id->flbas = NVME_NS_FLBAS_META_EXT;
+   563			id->lbaf[0].ms = cpu_to_le16(req->ns->metadata_size);
+   564		}
+   565	
+   566		if (req->ns->readonly)
+   567			id->nsattr |= (1 << 0);
+   568	done:
+   569		if (!status)
+   570			status = nvmet_copy_to_sgl(req, 0, id, sizeof(*id));
+   571	
+   572		kfree(id);
+   573	out:
+   574		nvmet_req_complete(req, status);
+   575	}
+   576	
 
-Tom
-
->
->> ---
->>   fs/io_uring.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/fs/io_uring.c b/fs/io_uring.c
->> index aadabb31d6da7..74afb96af214c 100644
->> --- a/fs/io_uring.c
->> +++ b/fs/io_uring.c
->> @@ -9393,7 +9393,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
->>          ev_fd->eventfd_async = eventfd_async;
->>
->>          rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
->> -       return ret;
->> +       return 0;
->>   }
->>
->>   static void io_eventfd_put(struct rcu_head *rcu)
->> --
->> 2.26.3
->>
->
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
