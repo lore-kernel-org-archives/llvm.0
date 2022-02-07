@@ -1,42 +1,44 @@
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E362C9C
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 10:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7823F2F21
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 11:02:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644229940; x=1675765940;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XRmP/X8RLTSHNZOJtP0mmFwv/xOazCe7T0uuWyO98Rw=;
-  b=TPPXjgi5E1idvMVbl8+ZFeczfZvMHtiktSM+kqnQSl9AOLlhn4mRa5sm
-   cF82olkJ1OCB8Mof9SSCsBNhAwwQc7ffAKkFq2M/3Pd+ZLMqPlvUBWw3S
-   W+DPvawL3sBuEJhJMyFQf4xx7fPGWIbX3XORUzxNCRUYBUayv1N+kfMKD
-   712wK/ZWYFRrrmpUzvNRN4gwcqRJTs/F9gsuzDpRrPMFUqWqx6ZO4H2BQ
-   lYq1zOTVWWfdhBz23bXfnD130CL0SpzFilVQzQm/IWYafsk0CBPzqXIGY
-   932m88f2/0NBx1qQrVRR1JIJc5nzgqIgNpvFciYKOCEXAk6GWhBHrD8dr
+  t=1644231741; x=1675767741;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UzI41Op0LdiA4fxHsjsrc6pgw6L092Cn3Cy1cpg+6tg=;
+  b=Jd0a+i9tMiQatdI+EiPzG7JmD+JNW5vzBL6VaozrBlf9ndRLJzJmdqMq
+   oDjcMmmFbbr73PBkxzpXBWg0TsDMe0Arzo4hiQfDL+tlj3HVflpt3Xo9e
+   IkeyQJkdbBjvTNUpn5AxOt9lbTCiUk29RjOMD8RJQMMAw8GEL63v9WoBw
+   HTg0kIzsKleCMowOV6Kbq4MXAmivgsSFimay4EoRJtEZ6e+7y4+DKSAFt
+   HhgePsDA5wLB+dOTsv2EYWRyV2eBvFhmjfeRzhGZAIbzeeoK8UIpRuJsY
+   P+Wxpj57uPAH9nUpNHs77XCjUwGZ5x5AEsYg7mj2P0npVaStAlAJX1Rez
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="228658629"
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="228662162"
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="228658629"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 02:32:19 -0800
+   d="scan'208";a="228662162"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 03:02:20 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="499158093"
+   d="scan'208";a="628485911"
 Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Feb 2022 02:32:17 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 07 Feb 2022 03:02:19 -0800
 Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nH1Jh-0000PM-9R; Mon, 07 Feb 2022 10:32:17 +0000
-Date: Mon, 7 Feb 2022 18:31:38 +0800
+	id 1nH1mk-0000Qo-KS; Mon, 07 Feb 2022 11:02:18 +0000
+Date: Mon, 7 Feb 2022 19:02:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v1 2/2] usb: typec: tcpm: Enable limit_src_current_set
- callback
-Message-ID: <202202071805.JWYS6D5m-lkp@intel.com>
-References: <20220207043907.2758424-2-badhri@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within
+ 'struct htt_tx_fetch_ind' is less aligned than 'union
+ htt_tx_fetch_ind::(anonymous at
+ drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct
+ htt_tx_fetch_ind' being...
+Message-ID: <202202071856.7s2z6Cam-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,79 +47,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207043907.2758424-2-badhri@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Badhri,
+Hi Kees,
 
-Thank you for the patch! Perhaps something to improve:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on linus/master v5.17-rc3 next-20220207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Badhri-Jagan-Sridharan/usb-typec-Introduce-typec-attributes-for-limiting-source-current/20220207-141625
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: i386-randconfig-a006-20220207 (https://download.01.org/0day-ci/archive/20220207/202202071805.JWYS6D5m-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dfd42facf1e4ada021b939b4e19c935dcdd55566
+commit: fa7845cfd53f3b1d3f60efa55db89805595bc045 treewide: Replace open-coded flex arrays in unions
+date:   4 months ago
+config: arm-buildonly-randconfig-r006-20220207 (https://download.01.org/0day-ci/archive/20220207/202202071856.7s2z6Cam-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/3b7afb6baa84baf8d1d27a46425095017772e87b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Badhri-Jagan-Sridharan/usb-typec-Introduce-typec-attributes-for-limiting-source-current/20220207-141625
-        git checkout 3b7afb6baa84baf8d1d27a46425095017772e87b
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa7845cfd53f3b1d3f60efa55db89805595bc045
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fa7845cfd53f3b1d3f60efa55db89805595bc045
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/typec/tcpm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/usb/typec/tcpm/tcpm.c:5919:5: warning: no previous prototype for function 'tcpm_update_source_capabilities_locked' [-Wmissing-prototypes]
-   int tcpm_update_source_capabilities_locked(struct tcpm_port *port)
-       ^
-   drivers/usb/typec/tcpm/tcpm.c:5919:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int tcpm_update_source_capabilities_locked(struct tcpm_port *port)
+   In file included from drivers/net/wireless/ath/ath10k/mac.c:8:
+   In file included from drivers/net/wireless/ath/ath10k/mac.h:11:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/mac.c:5942:22: warning: parameter 'changed_flags' set but not used [-Wunused-but-set-parameter]
+                                       unsigned int changed_flags,
+                                                    ^
+   5 warnings generated.
+--
+   In file included from drivers/net/wireless/ath/ath10k/debug.c:14:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   4 warnings generated.
+--
+   In file included from drivers/net/wireless/ath/ath10k/ce.c:8:
+   In file included from drivers/net/wireless/ath/ath10k/hif.h:11:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/ce.c:127:1: warning: unused function 'ath10k_get_ring_byte' [-Wunused-function]
+   ath10k_get_ring_byte(unsigned int offset,
    ^
-   static 
-   1 warning generated.
+   drivers/net/wireless/ath/ath10k/ce.c:212:1: warning: unused function 'ath10k_ce_shadow_dest_ring_write_index_set' [-Wunused-function]
+   ath10k_ce_shadow_dest_ring_write_index_set(struct ath10k *ar,
+   ^
+   drivers/net/wireless/ath/ath10k/ce.c:449:20: warning: unused function 'ath10k_ce_error_intr_enable' [-Wunused-function]
+   static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
+                      ^
+   7 warnings generated.
 
 
-vim +/tcpm_update_source_capabilities_locked +5919 drivers/usb/typec/tcpm/tcpm.c
+vim +1677 drivers/net/wireless/ath/ath10k/htt.h
 
-  5918	
-> 5919	int tcpm_update_source_capabilities_locked(struct tcpm_port *port)
-  5920	{
-  5921		int ret = 0;
-  5922	
-  5923		switch (port->state) {
-  5924		case SRC_UNATTACHED:
-  5925		case SRC_ATTACH_WAIT:
-  5926		case SRC_TRYWAIT:
-  5927			tcpm_set_cc(port, tcpm_rp_cc(port));
-  5928			break;
-  5929		case SRC_SEND_CAPABILITIES:
-  5930		case SRC_NEGOTIATE_CAPABILITIES:
-  5931		case SRC_READY:
-  5932		case SRC_WAIT_NEW_CAPABILITIES:
-  5933			port->upcoming_state = SRC_SEND_CAPABILITIES;
-  5934			ret = tcpm_ams_start(port, POWER_NEGOTIATION);
-  5935			if (ret == -EAGAIN) {
-  5936				port->upcoming_state = INVALID_STATE;
-  5937				break;
-  5938			}
-  5939			break;
-  5940		default:
-  5941			break;
-  5942		}
-  5943		return ret;
-  5944	}
-  5945	
+  1670	
+  1671	struct htt_tx_fetch_ind {
+  1672		u8 pad0;
+  1673		__le16 fetch_seq_num;
+  1674		__le32 token;
+  1675		__le16 num_resp_ids;
+  1676		__le16 num_records;
+> 1677		union {
+  1678			/* ath10k_htt_get_tx_fetch_ind_resp_ids() */
+  1679			DECLARE_FLEX_ARRAY(__le32, resp_ids);
+  1680			DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
+  1681		};
+  1682	} __packed;
+  1683	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
