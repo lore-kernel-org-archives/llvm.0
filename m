@@ -1,32 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1EF2F24
-	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 16:24:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576DDC004E1;
-	Mon,  7 Feb 2022 16:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739EB2F27
+	for <llvm@lists.linux.dev>; Mon,  7 Feb 2022 16:53:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D23FC340ED;
+	Mon,  7 Feb 2022 16:53:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644251082;
-	bh=wizEBetaRGWa2xd5IXRmfnLE9oVDJtn3/BtteleiDC4=;
+	s=k20201202; t=1644252797;
+	bh=X39xYx51fikLum/6dHtmOj01yGauqmQNBgR0dA+t/T4=;
 	h=From:To:Cc:Subject:Date:From;
-	b=PrD+e3xkXH15yxqW3MWnSPrWcDpaDckn1bQQf3urWGrunHqlZq4miFYHCoW2lJF5M
-	 wnwqUSZ5pjlTXm3nIDgY8AhFC3dQK4Fq92rIWuMq9mzlXnGsWalP3qTSMrF+XvZAV9
-	 sFEVLpgEeftZxEoczh4UhCpZ+1yRo4HRn5fQRUw2hxTrrzTzp41ZxKrNpxvtUp53du
-	 zSZ2pOgFJLqT/vEgjrGNt1o/d3MVv4X3obbGu+yG8CAtCjX+ldxOg67atZ9AfIU5kM
-	 QZJhPnGjL4VInsqw+GToch6hUanMSRBv2TlltnCIoCdJQb8r20a1qVrdKpkr1mBGnZ
-	 y73rN3je0sxJA==
+	b=daQ/U5GjWfNjCv/LB9Bb4/XbLHnn7bL1gcbSSNpasT2b/VlhN0hVFOpSqKam/0dEa
+	 bpyiUxlfQlTzbqNwEtgG7vDWrd8uTKgWFaeN1z9j77gL17m0Fwx1GvlcoFD63IOhZ6
+	 aUAt6UccpTa0iMVMP9JhHEpJoTaCOugnlvW8u+Xcb44//9MHg7zH6jZkEevSiBr5bN
+	 xJhMylojME3ZonO9bIqbR2RjxTze8Mkm7FQcxq352Y2N5gUjNNJ/fGADzZoIUk2KIm
+	 pNe/efhQ4UaqmLRW6nyXUhxuqSKaDTbO0GKhwVkYXJ8XUDIdziHpTCA1yN/rYFThfc
+	 pTYRUq7PJmu3g==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>
+To: Yannick Fertre <yannick.fertre@foss.st.com>,
+	Philippe Cornu <philippe.cornu@foss.st.com>,
+	Benjamin Gaignard <benjamin.gaignard@linaro.org>
 Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Usama Arif <usama.arif@bytedance.com>,
-	io-uring@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] io_uring: Fix use of uninitialized ret in io_eventfd_register()
-Date: Mon,  7 Feb 2022 09:24:11 -0700
-Message-Id: <20220207162410.1013466-1-nathan@kernel.org>
+Subject: [PATCH] drm/stm: Avoid using val uninitialized in ltdc_set_ycbcr_config()
+Date: Mon,  7 Feb 2022 09:53:04 -0700
+Message-Id: <20220207165304.1046867-1-nathan@kernel.org>
 X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -38,58 +40,45 @@ Content-Transfer-Encoding: 8bit
 
 Clang warns:
 
-  fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-          return ret;
-                 ^~~
-  fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence this warning
-          int fd, ret;
-                     ^
-                      = 0
+  drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+          default:
+          ^~~~~~~
+  drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
+          val |= LxPCR_YCEN;
+          ^~~
+  drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
+          u32 val;
+                 ^
+                  = 0
   1 warning generated.
 
-Just return 0 directly and reduce the scope of ret to the if statement,
-as that is the only place that it is used, which is how the function was
-before the fixes commit.
+Use a return instead of break in the default case to fix the warning.
+Add an error message so that this return is not silent, which could hide
+issues in the future.
 
-Fixes: 1a75fac9a0f9 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1579
+Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1575
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- fs/io_uring.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/stm/ltdc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 5479f0607430..7ef04bb66da1 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -9370,7 +9370,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
- {
- 	struct io_ev_fd *ev_fd;
- 	__s32 __user *fds = arg;
--	int fd, ret;
-+	int fd;
- 
- 	ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
- 					lockdep_is_held(&ctx->uring_lock));
-@@ -9386,14 +9386,14 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
- 
- 	ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
- 	if (IS_ERR(ev_fd->cq_ev_fd)) {
--		ret = PTR_ERR(ev_fd->cq_ev_fd);
-+		int ret = PTR_ERR(ev_fd->cq_ev_fd);
- 		kfree(ev_fd);
- 		return ret;
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 5eeb32c9c9ce..447ddde1786c 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
+ 		break;
+ 	default:
+ 		/* RGB or not a YCbCr supported format */
+-		break;
++		drm_err(plane->dev, "Unsupported pixel format: %u\n", drm_pix_fmt);
++		return;
  	}
- 	ev_fd->eventfd_async = eventfd_async;
  
- 	rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
--	return ret;
-+	return 0;
- }
- 
- static void io_eventfd_put(struct rcu_head *rcu)
+ 	/* Enable limited range */
 
-base-commit: 88a0394bc27de2dd8a8715970f289c5627052532
+base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
 -- 
 2.35.1
 
