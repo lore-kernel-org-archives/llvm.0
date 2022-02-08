@@ -1,138 +1,124 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from condef-02.nifty.com (condef-02.nifty.com [202.248.20.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A250A2F2E
-	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 03:52:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644292331; x=1675828331;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gni8ZAnSjS2QQ6jPRCIKsoiZCM6QkQtCXQebf87OVz0=;
-  b=FtkxOUHTW6VErWiVzM/BBJQVU8nar5Lc+1Bjdqz57bqo0qLHAJgoqZif
-   7jbsmdfYdn0XAE3KnuNNIatdpMJubG0mNoMrLZYV+0B0gAmUXQXaQDe+x
-   9PnIbf8rkMSZJu7DlRRtvXZixuRWDS72zqv5umkM2EEfRN8CWMimLTO5Q
-   B6cYr/2uHrssh7XNzbx6ixKK+FtdNLkI0os7rITmFYN+lX1cTTZUmasfx
-   XZ8WQddPmvbfOHoinjw6mikHS121iNRLP82itktQizgS6ZXHzJqGA9T2w
-   oWaj+6RnberSXCoNd2hhpRiWLSYogJuBVGZ6dv7Cdcdsx2wByxrjFVHbE
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="232432728"
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="232432728"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 19:52:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="484669090"
-Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Feb 2022 19:52:09 -0800
-Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nHHY0-0001JL-DI; Tue, 08 Feb 2022 03:52:08 +0000
-Date: Tue, 8 Feb 2022 11:51:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michael Cheng <michael.cheng@intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, michael.cheng@intel.com,
-	lucas.demarchi@intel.com, dri-devel@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH v6 6/6] drm: Add arch arm64 for
- drm_clflush_virt_range
-Message-ID: <202202081151.wYD1tE4p-lkp@intel.com>
-References: <20220207201127.648624-7-michael.cheng@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE072F2C
+	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 04:35:33 +0000 (UTC)
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-02.nifty.com with ESMTP id 2184OR1V008317
+	for <llvm@lists.linux.dev>; Tue, 8 Feb 2022 13:24:27 +0900
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51]) (authenticated)
+	by conssluserg-01.nifty.com with ESMTP id 2184O8ah021841
+	for <llvm@lists.linux.dev>; Tue, 8 Feb 2022 13:24:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2184O8ah021841
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1644294249;
+	bh=19uR+JQrTDSNjb/M+uvq075l3b28UXxtfZ5ZKrtYtzw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=k640Df3SrCi6fK+IspeoU5KOGEeWwlg3V0VARZ5jpH+hr622BV+dar0DE7tkD4ftM
+	 Nl8bp7u1erlyxLSu7DOS28i/BOL9BBocT+yIqqO7x9ZpcSkjsj+n9yvxR4KvIayebH
+	 8CvETzc3aKM1ewcrZCpzZ5q3npOMgarvQjNQzmwWYbLHbozp/qZbEIQP8kVXptxpts
+	 YzYU6N2O/jGo/3gqJdnr2ZkNdRl1cEtBqTBLLrtZIsfzqTvO7xvhq6S6y1SidE9aV4
+	 /LCU14Cc8LW50UKekJ/LMXcHcDbfM8FCjJDb6kxxozk8tZvjnq2yCERk2OTRQgr0Yd
+	 L7TBqmYiSvgPA==
+X-Nifty-SrcIP: [209.85.216.51]
+Received: by mail-pj1-f51.google.com with SMTP id a11-20020a17090a740b00b001b8b506c42fso1096959pjg.0
+        for <llvm@lists.linux.dev>; Mon, 07 Feb 2022 20:24:09 -0800 (PST)
+X-Gm-Message-State: AOAM530ADJGbNpK0PHqL03KNF37RUJgHBSKQwvTx4uk+lmpz3Liejc4a
+	Y1NsFp5BzgrPz/egD9bNMUlRARt5H6LZHvh0cT4=
+X-Google-Smtp-Source: ABdhPJz2z9KXlrVLO5E7bA267/kU9GqMyolRq34mQQWWV79UiH2n6X5+/PWBXovs/xUvLsayHJ/bKqkNLxzPi6m7E1k=
+X-Received: by 2002:a17:902:6948:: with SMTP id k8mr2866496plt.136.1644294248161;
+ Mon, 07 Feb 2022 20:24:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207201127.648624-7-michael.cheng@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220202230515.2931333-1-nathan@kernel.org> <CAKwvOdkQ__2A3NohrcJgF+JABSDnSyEKzD97qVa4cpM==GPONQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdkQ__2A3NohrcJgF+JABSDnSyEKzD97qVa4cpM==GPONQ@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 8 Feb 2022 13:23:32 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASCGbLWkDXYqyCf08sFHjGqvqSgmFsJ741MHGSKzkifLg@mail.gmail.com>
+Message-ID: <CAK7LNASCGbLWkDXYqyCf08sFHjGqvqSgmFsJ741MHGSKzkifLg@mail.gmail.com>
+Subject: Re: [PATCH v2] Makefile.extrawarn: Move -Wunaligned-access to W=1
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Michael,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on drm-tip/drm-tip drm/drm-next v5.17-rc3 next-20220207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Michael-Cheng/Use-drm_clflush-instead-of-clflush/20220208-041326
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-config: arm64-randconfig-r005-20220207 (https://download.01.org/0day-ci/archive/20220208/202202081151.wYD1tE4p-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/f2fb6ade1531d88b046e245e8b854a7422a05a14
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Michael-Cheng/Use-drm_clflush-instead-of-clflush/20220208-041326
-        git checkout f2fb6ade1531d88b046e245e8b854a7422a05a14
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/drm_cache.c:182:25: error: passing 'void' to parameter of incompatible type 'unsigned long'
-           flush_tlb_kernel_range(*addr, *end);
-                                  ^~~~~
-   arch/arm64/include/asm/tlbflush.h:374:57: note: passing argument to parameter 'start' here
-   static inline void flush_tlb_kernel_range(unsigned long start, unsigned long end)
-                                                           ^
-   1 error generated.
+On Thu, Feb 3, 2022 at 8:12 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Wed, Feb 2, 2022 at 3:07 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > -Wunaligned-access is a new warning in clang that is default enabled for
+> > arm and arm64 under certain circumstances within the clang frontend (see
+> > LLVM commit below). On v5.17-rc2, an ARCH=arm allmodconfig build shows
+> > 1284 total/70 unique instances of this warning (most of the instances
+> > are in header files), which is quite noisy.
+> >
+> > To keep a normal build green through CONFIG_WERROR, only show this
+> > warning with W=1, which will allow automated build systems to catch new
+> > instances of the warning so that the total number can be driven down to
+> > zero eventually since catching unaligned accesses at compile time would
+> > be generally useful.
+> >
+> > Cc: stable@vger.kernel.org
+> > Link: https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1569
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1576
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Thanks to you and Arnd for working out whether this is important to
+> pursue. Sounds like it is.
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> > ---
 
 
-vim +182 drivers/gpu/drm/drm_cache.c
+I assume this should be considered as a bug fix
+to avoid the error for the combination of CONFIG_WERROR=y
+and the latest Clang.
 
-   151	
-   152	/**
-   153	 * drm_clflush_virt_range - Flush dcache lines of a region
-   154	 * @addr: Initial kernel memory address.
-   155	 * @length: Region size.
-   156	 *
-   157	 * Flush every data cache line entry that points to an address in the
-   158	 * region requested.
-   159	 */
-   160	void
-   161	drm_clflush_virt_range(void *addr, unsigned long length)
-   162	{
-   163	#if defined(CONFIG_X86)
-   164		if (static_cpu_has(X86_FEATURE_CLFLUSH)) {
-   165			const int size = boot_cpu_data.x86_clflush_size;
-   166			void *end = addr + length;
-   167	
-   168			addr = (void *)(((unsigned long)addr) & -size);
-   169			mb(); /*CLFLUSH is only ordered with a full memory barrier*/
-   170			for (; addr < end; addr += size)
-   171				clflushopt(addr);
-   172			clflushopt(end - 1); /* force serialisation */
-   173			mb(); /*Ensure that every data cache line entry is flushed*/
-   174			return;
-   175		}
-   176	
-   177		if (wbinvd_on_all_cpus())
-   178			pr_err("Timed out waiting for cache flush\n");
-   179	
-   180	#elif defined(CONFIG_ARM64)
-   181		void *end = addr + length;
- > 182		flush_tlb_kernel_range(*addr, *end);
-   183	#else
-   184		pr_err("Architecture has no drm_cache.c support\n");
-   185		WARN_ON_ONCE(1);
-   186	#endif
-   187	}
-   188	EXPORT_SYMBOL(drm_clflush_virt_range);
-   189	
+Applied to linux-kbuild/fixes.
+Thanks.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+> >
+> > v1 -> v2: https://lore.kernel.org/r/20220201232229.2992968-1-nathan@kernel.org/
+> >
+> > * Move to W=1 instead of W=2 so that new instances are caught (Arnd).
+> > * Add links to the ClangBuiltLinux issue tracker.
+> >
+> >  scripts/Makefile.extrawarn | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> > index d53825503874..8be892887d71 100644
+> > --- a/scripts/Makefile.extrawarn
+> > +++ b/scripts/Makefile.extrawarn
+> > @@ -51,6 +51,7 @@ KBUILD_CFLAGS += -Wno-sign-compare
+> >  KBUILD_CFLAGS += -Wno-format-zero-length
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+> >  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
+> > +KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+> >  endif
+> >
+> >  endif
+> >
+> > base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
+> > --
+> > 2.35.1
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
