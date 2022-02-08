@@ -1,114 +1,120 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEEDD2F21
-	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 15:44:49 +0000 (UTC)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 218AXaZg001203;
-	Tue, 8 Feb 2022 16:44:19 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=ddNKQeBNsufwtCR82T3hW0VvpqNHVS9IOC40mmH+H4Y=;
- b=r7xz+kjguAgrfwFsWKvHgj8PszyLfubCiP0Sm9Ix80tW1MFjXbvTFgXLqOTb7v6CwgdB
- oCSg34AYk0aNVKnfP3wIlIM/vbiYxBTIcgevTazRr8y0P7jh7PskiqSjKQF6l8KlR0Ql
- kxt9VIzRQQ7jN3sKzPe7AUgjqcslVHx5lRerGl5Pxj8YS61QlE242zVsdyTSOss2myJT
- dtgjyEKvMhFwkjXAU1wgO9oVMLqUNPJ+trprw16r+NFf9dMrnoRu46SDsNsYIwQrXTMh
- c3gAdRYfYxom5aFLtg00gc4BeWUM9ZXD9CU3X82sAI1lDAI4UVzjr9PJTwK40GKW0vQo +g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e37nk5n3r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Feb 2022 16:44:19 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E317F10002A;
-	Tue,  8 Feb 2022 16:44:17 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D584E221778;
-	Tue,  8 Feb 2022 16:44:17 +0100 (CET)
-Received: from [10.129.7.146] (10.75.127.51) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 8 Feb
- 2022 16:44:17 +0100
-Message-ID: <aea58d59-9b1c-608b-7212-1d64ce2f07db@foss.st.com>
-Date: Tue, 8 Feb 2022 16:44:16 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BD32F21
+	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 16:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3931FC004E1;
+	Tue,  8 Feb 2022 16:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1644336260;
+	bh=fkcM/cj5TPbLIL53k1xCwKgNr/uerJzMAH9JtGLwnIY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=W2ObtUKMEXvRy3dBC56Fc90mt+dAL+rivWu2owCuXVq8ZkTywujYcg7GOXvqjaWWp
+	 k1pRIEVq8nEywWeHrVSZZCzZ9wVomBrnw5TiJO8JAPHGaQs0/XpWJ+ZhMQgghtnEBQ
+	 zt5+pTF0G8ydZtXrTlgEAMNpnskaa3TOQRqYoTqbb82TLr88AyZNd0B5+TlKhp+HFu
+	 284mtD2ZKWuxgUlOrQUub9s0VTX9HFVkNtvDeFVONHQTtrxa5k4W0g3Ts8j+0fwE0O
+	 PEYwLJnJvqSXkdHI2rljnF9jkSuDrQr8mz9byg6MSbhL6JBxS1RdPOBWzerws73Ax6
+	 NPl8wJWcYhfVQ==
+Date: Tue, 8 Feb 2022 09:04:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev, stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] Makefile.extrawarn: Move -Wunaligned-access to W=1
+Message-ID: <YgKUgI95kAPKGOZY@dev-arch.archlinux-ax161>
+References: <20220202230515.2931333-1-nathan@kernel.org>
+ <CAKwvOdkQ__2A3NohrcJgF+JABSDnSyEKzD97qVa4cpM==GPONQ@mail.gmail.com>
+ <CAK7LNASCGbLWkDXYqyCf08sFHjGqvqSgmFsJ741MHGSKzkifLg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/stm: Avoid using val uninitialized in
- ltdc_set_ycbcr_config()
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>,
-        Philippe Cornu
-	<philippe.cornu@foss.st.com>,
-        Benjamin Gaignard
-	<benjamin.gaignard@linaro.org>
-CC: Nick Desaulniers <ndesaulniers@google.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-References: <20220207165304.1046867-1-nathan@kernel.org>
-From: yannick Fertre <yannick.fertre@foss.st.com>
-In-Reply-To: <20220207165304.1046867-1-nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-08_05,2022-02-07_02,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNASCGbLWkDXYqyCf08sFHjGqvqSgmFsJ741MHGSKzkifLg@mail.gmail.com>
 
-Hi Nathan,
-Thenks for the patch.
+On Tue, Feb 08, 2022 at 01:23:32PM +0900, Masahiro Yamada wrote:
+> On Thu, Feb 3, 2022 at 8:12 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> >
+> > On Wed, Feb 2, 2022 at 3:07 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > -Wunaligned-access is a new warning in clang that is default enabled for
+> > > arm and arm64 under certain circumstances within the clang frontend (see
+> > > LLVM commit below). On v5.17-rc2, an ARCH=arm allmodconfig build shows
+> > > 1284 total/70 unique instances of this warning (most of the instances
+> > > are in header files), which is quite noisy.
+> > >
+> > > To keep a normal build green through CONFIG_WERROR, only show this
+> > > warning with W=1, which will allow automated build systems to catch new
+> > > instances of the warning so that the total number can be driven down to
+> > > zero eventually since catching unaligned accesses at compile time would
+> > > be generally useful.
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Link: https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1569
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1576
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> > Thanks to you and Arnd for working out whether this is important to
+> > pursue. Sounds like it is.
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> > > ---
+> 
+> 
+> I assume this should be considered as a bug fix
+> to avoid the error for the combination of CONFIG_WERROR=y
+> and the latest Clang.
+> 
+> Applied to linux-kbuild/fixes.
+> Thanks.
 
-Acked-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Yes, this is what I was hoping for! Thank you, I'll try to make that
+more clear in the future.
 
-Best regards
+Cheers,
+Nathan
 
-On 2/7/22 17:53, Nathan Chancellor wrote:
-> Clang warns:
+> > >
+> > > v1 -> v2: https://lore.kernel.org/r/20220201232229.2992968-1-nathan@kernel.org/
+> > >
+> > > * Move to W=1 instead of W=2 so that new instances are caught (Arnd).
+> > > * Add links to the ClangBuiltLinux issue tracker.
+> > >
+> > >  scripts/Makefile.extrawarn | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> > > index d53825503874..8be892887d71 100644
+> > > --- a/scripts/Makefile.extrawarn
+> > > +++ b/scripts/Makefile.extrawarn
+> > > @@ -51,6 +51,7 @@ KBUILD_CFLAGS += -Wno-sign-compare
+> > >  KBUILD_CFLAGS += -Wno-format-zero-length
+> > >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+> > >  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
+> > > +KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+> > >  endif
+> > >
+> > >  endif
+> > >
+> > > base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
+> > > --
+> > > 2.35.1
+> > >
+> >
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
 > 
->    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->            default:
->            ^~~~~~~
->    drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
->            val |= LxPCR_YCEN;
->            ^~~
->    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
->            u32 val;
->                   ^
->                    = 0
->    1 warning generated.
 > 
-> Use a return instead of break in the default case to fix the warning.
-> Add an error message so that this return is not silent, which could hide
-> issues in the future.
 > 
-> Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1575
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->   drivers/gpu/drm/stm/ltdc.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-> index 5eeb32c9c9ce..447ddde1786c 100644
-> --- a/drivers/gpu/drm/stm/ltdc.c
-> +++ b/drivers/gpu/drm/stm/ltdc.c
-> @@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
->   		break;
->   	default:
->   		/* RGB or not a YCbCr supported format */
-> -		break;
-> +		drm_err(plane->dev, "Unsupported pixel format: %u\n", drm_pix_fmt);
-> +		return;
->   	}
->   
->   	/* Enable limited range */
-> 
-> base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
+> -- 
+> Best Regards
+> Masahiro Yamada
