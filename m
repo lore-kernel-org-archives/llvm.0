@@ -1,78 +1,161 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mx.tkos.co.il (guitar.tcltek.co.il [84.110.109.230])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1459D2F24
-	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 06:36:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644302180; x=1675838180;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R2EpC7L9HPvI7a+HCeFp0P2eZxbITzHSWO9wr9DWlXk=;
-  b=JKu6z3JPkp8W5JKLVMKXpalttlrV33HPHrL0oTzdVhp2SdfruuNKGuq0
-   0Qv9zjhJi7XwXXaI1d/w20jEOCSCb/E4tPPURNmNVI3rGTdymqMnG6ST+
-   tryZX6IWkWumrCUAj7R0pOMaq4g5L3nJpktFMhdr6+SKDkqoT0P9bbUFB
-   WEDUr9ecENcNQbgo0oAqVjO82eE8kV9RsDzCkD0Fy1ixTG5M/Cf22iw7N
-   PySXupjboCq3Sio9MJ8sZN/H/0GGAk6UrWsU0xwqxCSxSIG6NcOLGE7dc
-   0CFlSsPRS1YDzlT/FeUVv5DrOGe4cCUJ+p+8eAoVUC/USKUzMsusqobYW
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="228853295"
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="228853295"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 22:36:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="481842077"
-Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Feb 2022 22:36:17 -0800
-Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nHK6q-0001Rz-OR; Tue, 08 Feb 2022 06:36:16 +0000
-Date: Tue, 8 Feb 2022 14:35:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Piyush Mehta <piyush.mehta@xilinx.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>,
-	Manish Narani <manish.narani@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15 405/872] ld.lld: error: undefined
- symbol: dwc3_host_wakeup_capable
-Message-ID: <202202081418.PWppIke1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936982F24
+	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 07:13:43 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx.tkos.co.il (Postfix) with ESMTPS id D4955440F82;
+	Tue,  8 Feb 2022 09:04:29 +0200 (IST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+	s=default; t=1644303870;
+	bh=CoMpoM4K1lZgIZZ/gT4uGOcMYzm4yu3oXE6YWk7Pl3E=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+	b=iuQ/CUexAXl4o9mo57d2MTUi6AjojpLmZvL5XX9otbayEhRWQNIfkFbt0jRjjXMMj
+	 +xHUsWbFYc1Sw5vD+0krknkTYdyJ/xl4IPW0vgIP/bPsIR12j8lTgrC6Xzi1z0neZ+
+	 WlIKKmv83YCdDwvxGFnQTq4VvOl+cw9o1c+m39r1wJBIWKnfQPDegSRkP3sZSqZs4y
+	 1p6ZkuOUN4GQesMTzqoZdoOorf79tOtm22lQ4NQ85U93vAh1EOgsaBmcuQFI/R+YR7
+	 esKK/LbJGgeMRImEg7aTKt4PrkeAbdCoJyKpy5M7++6JDyxj/9Q2dT/JAjnGsL93tt
+	 9sP3cctqL/8qw==
+References: <17dd231f496d09ed8502bdd505eaa77bb6637e4b.1644226245.git.baruch@tkos.co.il>
+ <202202080410.R0qwqtXx-lkp@intel.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+From: Baruch Siach <baruch@tkos.co.il>
+To: kernel test robot <lkp@intel.com>
+Cc: Thierry Reding <thierry.reding@gmail.com>, Uwe =?utf-8?Q?Kleine-K?=
+ =?utf-8?Q?=C3=B6nig?=
+ <u.kleine-koenig@pengutronix.de>, Andy Gross <agross@kernel.org>, Bjorn
+ Andersson <bjorn.andersson@linaro.org>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, Balaji Prakash J <bjagadee@codeaurora.org>, Rob
+ Herring <robh+dt@kernel.org>, Robert Marko <robert.marko@sartura.hr>,
+ Kathiravan T <kathirav@codeaurora.org>, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH 1/3] pwm: driver for qualcomm ipq6018 pwm block
+Date: Tue, 08 Feb 2022 08:51:40 +0200
+In-reply-to: <202202080410.R0qwqtXx-lkp@intel.com>
+Message-ID: <87ee4ddejv.fsf@tarshish>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
-head:   1183ce490adb103e5e569b8ebd74c50c885ddc05
-commit: 9a7535b91e5a749ad7e26fade0820c4c847ff8e2 [405/872] usb: xhci-plat: Add remote wakeup support for xilinx
-config: i386-randconfig-a005-20220207 (https://download.01.org/0day-ci/archive/20220208/202202081418.PWppIke1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/9a7535b91e5a749ad7e26fade0820c4c847ff8e2
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15
-        git checkout 9a7535b91e5a749ad7e26fade0820c4c847ff8e2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hi test robot,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for testing and reporting.
 
-All errors (new ones prefixed by >>):
+On Tue, Feb 08 2022, kernel test robot wrote:
 
->> ld.lld: error: undefined symbol: dwc3_host_wakeup_capable
-   >>> referenced by xhci-plat.c:104 (drivers/usb/host/xhci-plat.c:104)
-   >>>               usb/host/xhci-plat.o:(xhci_plat_probe) in archive drivers/built-in.a
+[snip]
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>>> drivers/pwm/pwm-ipq.c:122:11: warning: result of comparison of constant 16000000000 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+>            if (rate > 16ULL * GIGA)
+>                ~~~~ ^ ~~~~~~~~~~~~
+>    1 warning generated.
+
+This clang warning is only enabled with W=1 (see commit
+afe956c577b). Not sure how to avoid it.
+
+Is there a way to express this condition without making clang warn on
+platforms where ULONG_MAX == 2^32? Maybe cast to unsigned long long? Or
+should we just ignore this W=1 warning?
+
+baruch
+
+> vim +122 drivers/pwm/pwm-ipq.c
+>
+>     99	
+>    100	static int ipq_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+>    101				 const struct pwm_state *state)
+>    102	{
+>    103		struct ipq_pwm_chip *ipq_chip = ipq_pwm_from_chip(chip);
+>    104		unsigned int pre_div, pwm_div, best_pre_div, best_pwm_div;
+>    105		unsigned long rate = clk_get_rate(ipq_chip->clk);
+>    106		u64 period_ns, duty_ns, period_rate;
+>    107		u64 min_diff;
+>    108	
+>    109		if (state->polarity != PWM_POLARITY_NORMAL)
+>    110			return -EINVAL;
+>    111	
+>    112		if (state->period < DIV64_U64_ROUND_UP(NSEC_PER_SEC, rate))
+>    113			return -ERANGE;
+>    114	
+>    115		period_ns = min(state->period, IPQ_PWM_MAX_PERIOD_NS);
+>    116		duty_ns = min(state->duty_cycle, period_ns);
+>    117	
+>    118		/*
+>    119		 * period_ns is 1G or less. As long as rate is less than 16 GHz,
+>    120		 * period_rate does not overflow. Make that explicit.
+>    121		 */
+>  > 122		if (rate > 16ULL * GIGA)
+>    123			return -EINVAL;
+>    124		period_rate = period_ns * rate;
+>    125		best_pre_div = IPQ_PWM_MAX_DIV;
+>    126		best_pwm_div = IPQ_PWM_MAX_DIV;
+>    127		/*
+>    128		 * We don't need to consider pre_div values smaller than
+>    129		 *
+>    130		 *                              period_rate
+>    131		 *  pre_div_min := ------------------------------------
+>    132		 *                 NSEC_PER_SEC * (IPQ_PWM_MAX_DIV + 1)
+>    133		 *
+>    134		 * because pre_div = pre_div_min results in a better
+>    135		 * approximation.
+>    136		 */
+>    137		pre_div = div64_u64(period_rate,
+>    138				(u64)NSEC_PER_SEC * (IPQ_PWM_MAX_DIV + 1));
+>    139		min_diff = period_rate;
+>    140	
+>    141		for (; pre_div <= IPQ_PWM_MAX_DIV; pre_div++) {
+>    142			u64 remainder;
+>    143	
+>    144			pwm_div = div64_u64_rem(period_rate,
+>    145					(u64)NSEC_PER_SEC * (pre_div + 1), &remainder);
+>    146			/* pwm_div is unsigned; the check below catches underflow */
+>    147			pwm_div--;
+>    148	
+>    149			/*
+>    150			 * Swapping values for pre_div and pwm_div produces the same
+>    151			 * period length. So we can skip all settings with pre_div >
+>    152			 * pwm_div which results in bigger constraints for selecting
+>    153			 * the duty_cycle than with the two values swapped.
+>    154			 */
+>    155			if (pre_div > pwm_div)
+>    156				break;
+>    157	
+>    158			/*
+>    159			 * Make sure we can do 100% duty cycle where
+>    160			 * hi_dur == pwm_div + 1
+>    161			 */
+>    162			if (pwm_div > IPQ_PWM_MAX_DIV - 1)
+>    163				continue;
+>    164	
+>    165			if (remainder < min_diff) {
+>    166				best_pre_div = pre_div;
+>    167				best_pwm_div = pwm_div;
+>    168				min_diff = remainder;
+>    169	
+>    170				if (min_diff == 0) /* bingo */
+>    171					break;
+>    172			}
+>    173		}
+>    174	
+>    175		/* config divider values for the closest possible frequency */
+>    176		config_div_and_duty(pwm, best_pre_div, best_pwm_div,
+>    177				    rate, duty_ns, state->enabled);
+>    178	
+>    179		return 0;
+>    180	}
+>    181	
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
