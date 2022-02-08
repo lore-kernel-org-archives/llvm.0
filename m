@@ -1,234 +1,154 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3483F2F2C
-	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 23:02:32 +0000 (UTC)
-Received: by mail-lj1-f173.google.com with SMTP id a25so959953lji.9
-        for <llvm@lists.linux.dev>; Tue, 08 Feb 2022 15:02:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD682F2C
+	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 23:04:25 +0000 (UTC)
+Received: by mail-lj1-f180.google.com with SMTP id t7so952868ljc.10
+        for <llvm@lists.linux.dev>; Tue, 08 Feb 2022 15:04:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GEsbRiSDfsbD08TUlr9Z9ZV0yPbDrnJpWGkjQS1Hjis=;
-        b=fWn1x1uIGbgBehFQOAadciehWIRQAbIRPopVuxyMs9DoCbcqhnCA5/ghNcgY5tNMDf
-         5GhwA9+vHcBJjP6gawOB7m0zKDAFRMLpTd9K54bIWrjJ6IGoAARtOuEQktyCGmFTcGDn
-         uhHTEI/YL3/Qf8gwXd9Wj05PprcljXGcb7flKid1B26xBvyY8sPHXBZbfavh8BBh4l60
-         MSC0SrCyOssFTR0HzR68YTTTPNzwROKwnegujpJX0lzrXUHdXjDEPiXvezq8Nmzja98E
-         +G8RsjsCuEEXbGhRjRFsVQMhqA+Q32LX9Wv9l13OY729iqCi4MeD8oaP+xZJlh08LRcE
-         mvMg==
+         :cc;
+        bh=EzIha971yQLAyJxRSkUf/hABp2vPytSC8H1yQIf41M4=;
+        b=YGW9z4jPHGEGB7AelMTYwtJgbPRFRhbuibumAkUcs2kET7uSzj0LFBI25AXPW+xNc6
+         HczGoJGlDK4ursC38hCqf9s+rZO6Y1zdPccy02agz/BQaOnMg6CQgPmxNmSD8tn7wrct
+         EB8XCyQFkWo4Azox2+rGnJ1SPDhnaRy78ijqXbB34xLcK5n2S0oInGOb8rk/55KwF+mo
+         9sJ/oG3eKAasIhPSicxbZS3mbtLbwzO5f5BLTSNj155I5Yqy7Vjz2omOt1tyc8if7c7q
+         4HV1j9jX7vssStw5LLeTXcJiZhkcF9AR4shHC1B4oB7Ht77nbfdw7H0ieDgBRQzms/RO
+         VYqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GEsbRiSDfsbD08TUlr9Z9ZV0yPbDrnJpWGkjQS1Hjis=;
-        b=DAbvDuBiv9pz6oNfwXtR4x+J4bOndPlJEMgor9onqWoQzcLRxmbfmFgeuTkiWo1OZT
-         HhIfGz5bnoHoX/P3kRv561zCzTnozhhKUxQFvJCo+9uE5h5dXZcglJWbByLF5SeBfOlI
-         vwhSrcZGOyUS8SyIBJnq5bf+iOmZhL9EFv5kF0vyENl/S2UHaGqCvHFmUJfDQDrPnQEf
-         0kQhNkUbeQ42qU1Bdq1f8BlqZBhkbscZAsDSaPZ9LbfBBsWuabEAUgENyIF1LNGqLCKe
-         qXMuEI7WEFF7mhtLcqJ5oeg+MkB4EAIdCYGuAsiec31zVlOo1jOwaGmrWFivUy7/vEYx
-         psXQ==
-X-Gm-Message-State: AOAM530bbdLRH/Xram1XQ37Z8cUafO1jW/B2AuAlRY0zuHNXbYHueO1x
-	qW6ZU6E4CaWzs71ciFEeg9dvaGP7inn1Wo4Zk6Ii4g==
-X-Google-Smtp-Source: ABdhPJwzIGQpMo3FcDX4EZrWbf35chAhH6w3p/Ql4U+GgaY0Z8qelHtmHkjrihldVSKa+BJDZ2pVxD1WaoGAx0umA5c=
-X-Received: by 2002:a2e:980e:: with SMTP id a14mr4296399ljj.220.1644361350015;
- Tue, 08 Feb 2022 15:02:30 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=EzIha971yQLAyJxRSkUf/hABp2vPytSC8H1yQIf41M4=;
+        b=cfX/rgXiJsye+232tdHwNELd16whpDYyasyb1IN7i7mfTCIfsYvzzKH566XudwBQ+z
+         PIx3W20ToATtmsnjStxpyxrYjTBo1IDLJOWQPQWZNpudEyPXduG5dFUSwtkUk7dPQDEf
+         QPXDzQOPuh/iBz/eK4W2naS+Va5kUIE6Gy1kDi2s+cy6eQkBa7N437FL003IvHJxypDb
+         fw0hSGQMMSl0fxz9MQwXV/6H9VB0XxjQoB+J36BLpB1xM6zLNOAM1FRrFRy9C4hSZleD
+         J+0HyskbLly/iWlVGwpSJYxeTGG9h7WdILow2/qZjDdUwBf7Q9iSe2ZyNh+L3+sQ+TOn
+         GBSw==
+X-Gm-Message-State: AOAM530US1fWejbO6WS+5QenSxorDNeXzluD+YCnT4SOptbIPgfBUIeJ
+	qFtFUlZg2WtQu0L9sW5BuJzaFQSIYMyyO2n12qdn5Wphk+U=
+X-Google-Smtp-Source: ABdhPJxP5RnTeIivtuPxdGjyUFL4anyqlXhyUsssJcaDCNV+jLzk/FxRspMMf+Y6WdUndcOZ8hOIZy/bqTlM7xi+l4Q=
+X-Received: by 2002:a2e:954:: with SMTP id 81mr4120299ljj.198.1644361463072;
+ Tue, 08 Feb 2022 15:04:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220208225350.1331628-1-keescook@chromium.org> <20220208225350.1331628-6-keescook@chromium.org>
-In-Reply-To: <20220208225350.1331628-6-keescook@chromium.org>
+References: <20220208225350.1331628-1-keescook@chromium.org> <20220208225350.1331628-7-keescook@chromium.org>
+In-Reply-To: <20220208225350.1331628-7-keescook@chromium.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 8 Feb 2022 15:02:18 -0800
-Message-ID: <CAKwvOdn2zQSGjMp=CqJSaMWaUyRXH8EtT++wAfb+QqzzbwLocA@mail.gmail.com>
-Subject: Re: [PATCH v7 5/8] fortify: Make pointer arguments const
+Date: Tue, 8 Feb 2022 15:04:11 -0800
+Message-ID: <CAKwvOdnY9kOfmGEusrA9Sgjv5oL0WuTxMpQA9bWDaEPtj90ngA@mail.gmail.com>
+Subject: Re: [PATCH v7 6/8] fortify: Use __diagnose_as() for better diagnostic coverage
 To: Kees Cook <keescook@chromium.org>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
 	George Burgess IV <gbiv@google.com>, linux-kernel@vger.kernel.org, 
 	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
 On Tue, Feb 8, 2022 at 2:53 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> In preparation for using Clang's __pass_object_size attribute, make all
-> the pointer arguments to the fortified string functions const. Nothing
-> was changing their values anyway, so this added requirement (needed by
-> __pass_object_size) requires no code changes and has no impact on
-> the binary instruction output.
+> In preparation for using Clang's __pass_object_size, add __diagnose_as()
+> attributes to mark the functions as being the same as the indicated
+> builtins. When __daignose_as() is available, Clang will have a more
+> complete ability to apply its own diagnostic analysis to callers of these
+> functions, as if they were the builtins themselves. Without __diagnose_as,
+> Clang's compile time diagnostic messages won't be as precise as they
+> could be, but at least users of older toolchains will still benefit from
+> having fortified routines.
 
-Gracias Se=C3=B1or!
+Yes, much easier to review split up. Thanks for taking the time to do so!
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 >
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
->  include/linux/fortify-string.h | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
+>  include/linux/fortify-string.h | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
 >
-> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-strin=
-g.h
-> index 439aad24ab3b..f874ada4b9af 100644
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+> index f874ada4b9af..db1ad1c1c79a 100644
 > --- a/include/linux/fortify-string.h
 > +++ b/include/linux/fortify-string.h
-> @@ -50,7 +50,7 @@ extern char *__underlying_strncpy(char *p, const char *=
-q, __kernel_size_t size)
+> @@ -50,7 +50,8 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
 >  #define __underlying_strncpy   __builtin_strncpy
 >  #endif
 >
-> -__FORTIFY_INLINE char *strncpy(char *p, const char *q, __kernel_size_t s=
-ize)
-> +__FORTIFY_INLINE char *strncpy(char * const p, const char *q, __kernel_s=
-ize_t size)
+> -__FORTIFY_INLINE char *strncpy(char * const p, const char *q, __kernel_size_t size)
+> +__FORTIFY_INLINE __diagnose_as(__builtin_strncpy, 1, 2, 3)
+> +char *strncpy(char * const p, const char *q, __kernel_size_t size)
 >  {
->         size_t p_size =3D __builtin_object_size(p, 1);
+>         size_t p_size = __builtin_object_size(p, 1);
 >
-> @@ -61,7 +61,7 @@ __FORTIFY_INLINE char *strncpy(char *p, const char *q, =
-__kernel_size_t size)
+> @@ -61,7 +62,8 @@ __FORTIFY_INLINE char *strncpy(char * const p, const char *q, __kernel_size_t si
 >         return __underlying_strncpy(p, q, size);
 >  }
 >
-> -__FORTIFY_INLINE char *strcat(char *p, const char *q)
-> +__FORTIFY_INLINE char *strcat(char * const p, const char *q)
+> -__FORTIFY_INLINE char *strcat(char * const p, const char *q)
+> +__FORTIFY_INLINE __diagnose_as(__builtin_strcat, 1, 2)
+> +char *strcat(char * const p, const char *q)
 >  {
->         size_t p_size =3D __builtin_object_size(p, 1);
+>         size_t p_size = __builtin_object_size(p, 1);
 >
-> @@ -73,7 +73,7 @@ __FORTIFY_INLINE char *strcat(char *p, const char *q)
->  }
->
->  extern __kernel_size_t __real_strnlen(const char *, __kernel_size_t) __R=
-ENAME(strnlen);
-> -__FORTIFY_INLINE __kernel_size_t strnlen(const char *p, __kernel_size_t =
-maxlen)
-> +__FORTIFY_INLINE __kernel_size_t strnlen(const char * const p, __kernel_=
-size_t maxlen)
->  {
->         size_t p_size =3D __builtin_object_size(p, 1);
->         size_t p_len =3D __compiletime_strlen(p);
-> @@ -94,7 +94,7 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char *p,=
- __kernel_size_t maxlen)
+> @@ -94,7 +96,8 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const p, __kernel_size_t m
 >  }
 >
 >  /* defined after fortified strnlen to reuse it. */
-> -__FORTIFY_INLINE __kernel_size_t strlen(const char *p)
-> +__FORTIFY_INLINE __kernel_size_t strlen(const char * const p)
+> -__FORTIFY_INLINE __kernel_size_t strlen(const char * const p)
+> +__FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
+> +__kernel_size_t strlen(const char * const p)
 >  {
 >         __kernel_size_t ret;
->         size_t p_size =3D __builtin_object_size(p, 1);
-> @@ -110,7 +110,7 @@ __FORTIFY_INLINE __kernel_size_t strlen(const char *p=
-)
->
->  /* defined after fortified strlen to reuse it */
->  extern size_t __real_strlcpy(char *, const char *, size_t) __RENAME(strl=
-cpy);
-> -__FORTIFY_INLINE size_t strlcpy(char *p, const char *q, size_t size)
-> +__FORTIFY_INLINE size_t strlcpy(char * const p, const char * const q, si=
-ze_t size)
->  {
->         size_t p_size =3D __builtin_object_size(p, 1);
->         size_t q_size =3D __builtin_object_size(q, 1);
-> @@ -137,7 +137,7 @@ __FORTIFY_INLINE size_t strlcpy(char *p, const char *=
-q, size_t size)
->
->  /* defined after fortified strnlen to reuse it */
->  extern ssize_t __real_strscpy(char *, const char *, size_t) __RENAME(str=
-scpy);
-> -__FORTIFY_INLINE ssize_t strscpy(char *p, const char *q, size_t size)
-> +__FORTIFY_INLINE ssize_t strscpy(char * const p, const char * const q, s=
-ize_t size)
->  {
->         size_t len;
->         /* Use string size rather than possible enclosing struct size. */
-> @@ -183,7 +183,7 @@ __FORTIFY_INLINE ssize_t strscpy(char *p, const char =
-*q, size_t size)
+>         size_t p_size = __builtin_object_size(p, 1);
+> @@ -183,7 +186,8 @@ __FORTIFY_INLINE ssize_t strscpy(char * const p, const char * const q, size_t si
 >  }
 >
 >  /* defined after fortified strlen and strnlen to reuse them */
-> -__FORTIFY_INLINE char *strncat(char *p, const char *q, __kernel_size_t c=
-ount)
-> +__FORTIFY_INLINE char *strncat(char * const p, const char * const q, __k=
-ernel_size_t count)
+> -__FORTIFY_INLINE char *strncat(char * const p, const char * const q, __kernel_size_t count)
+> +__FORTIFY_INLINE __diagnose_as(__builtin_strncat, 1, 2, 3)
+> +char *strncat(char * const p, const char * const q, __kernel_size_t count)
 >  {
 >         size_t p_len, copy_len;
->         size_t p_size =3D __builtin_object_size(p, 1);
-> @@ -354,7 +354,7 @@ __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_siz=
-e_t size,
->                 memmove)
->
->  extern void *__real_memscan(void *, int, __kernel_size_t) __RENAME(memsc=
-an);
-> -__FORTIFY_INLINE void *memscan(void *p, int c, __kernel_size_t size)
-> +__FORTIFY_INLINE void *memscan(void * const p, int c, __kernel_size_t si=
-ze)
->  {
->         size_t p_size =3D __builtin_object_size(p, 0);
->
-> @@ -365,7 +365,7 @@ __FORTIFY_INLINE void *memscan(void *p, int c, __kern=
-el_size_t size)
+>         size_t p_size = __builtin_object_size(p, 1);
+> @@ -365,7 +369,8 @@ __FORTIFY_INLINE void *memscan(void * const p, int c, __kernel_size_t size)
 >         return __real_memscan(p, c, size);
 >  }
 >
-> -__FORTIFY_INLINE int memcmp(const void *p, const void *q, __kernel_size_=
-t size)
-> +__FORTIFY_INLINE int memcmp(const void * const p, const void * const q, =
-__kernel_size_t size)
+> -__FORTIFY_INLINE int memcmp(const void * const p, const void * const q, __kernel_size_t size)
+> +__FORTIFY_INLINE __diagnose_as(__builtin_memcmp, 1, 2, 3)
+> +int memcmp(const void * const p, const void * const q, __kernel_size_t size)
 >  {
->         size_t p_size =3D __builtin_object_size(p, 0);
->         size_t q_size =3D __builtin_object_size(q, 0);
-> @@ -381,7 +381,7 @@ __FORTIFY_INLINE int memcmp(const void *p, const void=
- *q, __kernel_size_t size)
+>         size_t p_size = __builtin_object_size(p, 0);
+>         size_t q_size = __builtin_object_size(q, 0);
+> @@ -381,7 +386,8 @@ __FORTIFY_INLINE int memcmp(const void * const p, const void * const q, __kernel
 >         return __underlying_memcmp(p, q, size);
 >  }
 >
-> -__FORTIFY_INLINE void *memchr(const void *p, int c, __kernel_size_t size=
-)
-> +__FORTIFY_INLINE void *memchr(const void * const p, int c, __kernel_size=
-_t size)
+> -__FORTIFY_INLINE void *memchr(const void * const p, int c, __kernel_size_t size)
+> +__FORTIFY_INLINE __diagnose_as(__builtin_memchr, 1, 2, 3)
+> +void *memchr(const void * const p, int c, __kernel_size_t size)
 >  {
->         size_t p_size =3D __builtin_object_size(p, 0);
+>         size_t p_size = __builtin_object_size(p, 0);
 >
-> @@ -393,7 +393,7 @@ __FORTIFY_INLINE void *memchr(const void *p, int c, _=
-_kernel_size_t size)
->  }
->
->  void *__real_memchr_inv(const void *s, int c, size_t n) __RENAME(memchr_=
-inv);
-> -__FORTIFY_INLINE void *memchr_inv(const void *p, int c, size_t size)
-> +__FORTIFY_INLINE void *memchr_inv(const void * const p, int c, size_t si=
-ze)
->  {
->         size_t p_size =3D __builtin_object_size(p, 0);
->
-> @@ -405,7 +405,7 @@ __FORTIFY_INLINE void *memchr_inv(const void *p, int =
-c, size_t size)
->  }
->
->  extern void *__real_kmemdup(const void *src, size_t len, gfp_t gfp) __RE=
-NAME(kmemdup);
-> -__FORTIFY_INLINE void *kmemdup(const void *p, size_t size, gfp_t gfp)
-> +__FORTIFY_INLINE void *kmemdup(const void * const p, size_t size, gfp_t =
-gfp)
->  {
->         size_t p_size =3D __builtin_object_size(p, 0);
->
-> @@ -417,7 +417,7 @@ __FORTIFY_INLINE void *kmemdup(const void *p, size_t =
-size, gfp_t gfp)
+> @@ -417,7 +423,8 @@ __FORTIFY_INLINE void *kmemdup(const void * const p, size_t size, gfp_t gfp)
 >  }
 >
 >  /* Defined after fortified strlen to reuse it. */
-> -__FORTIFY_INLINE char *strcpy(char *p, const char *q)
-> +__FORTIFY_INLINE char *strcpy(char * const p, const char * const q)
+> -__FORTIFY_INLINE char *strcpy(char * const p, const char * const q)
+> +__FORTIFY_INLINE __diagnose_as(__builtin_strcpy, 1, 2)
+> +char *strcpy(char * const p, const char * const q)
 >  {
->         size_t p_size =3D __builtin_object_size(p, 1);
->         size_t q_size =3D __builtin_object_size(q, 1);
+>         size_t p_size = __builtin_object_size(p, 1);
+>         size_t q_size = __builtin_object_size(q, 1);
 > --
 > 2.30.2
 >
->
 
 
---=20
+-- 
 Thanks,
 ~Nick Desaulniers
