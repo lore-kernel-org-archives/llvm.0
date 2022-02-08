@@ -1,49 +1,50 @@
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD682F2C
-	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 23:04:25 +0000 (UTC)
-Received: by mail-lj1-f180.google.com with SMTP id t7so952868ljc.10
-        for <llvm@lists.linux.dev>; Tue, 08 Feb 2022 15:04:25 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196172F2C
+	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 23:17:27 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id o2so929334lfd.1
+        for <llvm@lists.linux.dev>; Tue, 08 Feb 2022 15:17:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=EzIha971yQLAyJxRSkUf/hABp2vPytSC8H1yQIf41M4=;
-        b=YGW9z4jPHGEGB7AelMTYwtJgbPRFRhbuibumAkUcs2kET7uSzj0LFBI25AXPW+xNc6
-         HczGoJGlDK4ursC38hCqf9s+rZO6Y1zdPccy02agz/BQaOnMg6CQgPmxNmSD8tn7wrct
-         EB8XCyQFkWo4Azox2+rGnJ1SPDhnaRy78ijqXbB34xLcK5n2S0oInGOb8rk/55KwF+mo
-         9sJ/oG3eKAasIhPSicxbZS3mbtLbwzO5f5BLTSNj155I5Yqy7Vjz2omOt1tyc8if7c7q
-         4HV1j9jX7vssStw5LLeTXcJiZhkcF9AR4shHC1B4oB7Ht77nbfdw7H0ieDgBRQzms/RO
-         VYqg==
+        bh=uV9MHzT3yqaSJ8VvyobC0sdXGQe9fB58ozgnu6xiqyY=;
+        b=o9cIyt5bY7tBJycqX+8faJX72GU6lGkN/ohJfrqEdo0bZnpl6VntHVjHKLxO6fpEeS
+         iLf8pFroVszcKHeVggFtDlA+/ahQl3iX1R9v4sYDnfrhyannRYLCftIoDkTkZ4LWdZ8e
+         eTTW3/lWIDj82yqfzAs6m33+pXHmp+1TZM6C5KQ3xixSli3TEnfD9bLpdm+Ayj3FoQgG
+         SA5BZBXbeirjsZcyi7cw5gEhLmJvfNhrSqTn8AVDVcHxUN6yKrr/cwPpVdE+tUgSOeZ5
+         eOi3DyPC6N0NZbjqqScdyo/fT+aS95PhLxpARudPtka+wNBCsaFXjp7qXE/MZCXgcaXz
+         Yyjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EzIha971yQLAyJxRSkUf/hABp2vPytSC8H1yQIf41M4=;
-        b=cfX/rgXiJsye+232tdHwNELd16whpDYyasyb1IN7i7mfTCIfsYvzzKH566XudwBQ+z
-         PIx3W20ToATtmsnjStxpyxrYjTBo1IDLJOWQPQWZNpudEyPXduG5dFUSwtkUk7dPQDEf
-         QPXDzQOPuh/iBz/eK4W2naS+Va5kUIE6Gy1kDi2s+cy6eQkBa7N437FL003IvHJxypDb
-         fw0hSGQMMSl0fxz9MQwXV/6H9VB0XxjQoB+J36BLpB1xM6zLNOAM1FRrFRy9C4hSZleD
-         J+0HyskbLly/iWlVGwpSJYxeTGG9h7WdILow2/qZjDdUwBf7Q9iSe2ZyNh+L3+sQ+TOn
-         GBSw==
-X-Gm-Message-State: AOAM530US1fWejbO6WS+5QenSxorDNeXzluD+YCnT4SOptbIPgfBUIeJ
-	qFtFUlZg2WtQu0L9sW5BuJzaFQSIYMyyO2n12qdn5Wphk+U=
-X-Google-Smtp-Source: ABdhPJxP5RnTeIivtuPxdGjyUFL4anyqlXhyUsssJcaDCNV+jLzk/FxRspMMf+Y6WdUndcOZ8hOIZy/bqTlM7xi+l4Q=
-X-Received: by 2002:a2e:954:: with SMTP id 81mr4120299ljj.198.1644361463072;
- Tue, 08 Feb 2022 15:04:23 -0800 (PST)
+        bh=uV9MHzT3yqaSJ8VvyobC0sdXGQe9fB58ozgnu6xiqyY=;
+        b=7T6v2f6VqKP0FhdHc4+XcB9oibSvHaGG7+fcHWIWf/KrwZOPxXj+IKpN03TXPo/h90
+         juHOpJ/LOLeaQLxfySMd29EIob1umMi0XTf0sTLU8FBBQ5WIti8zEK4eOuWxooFctCH7
+         9SJFvTS0UotfSoKnxGt+S1BsgXQYb+XeIyEkhCOhpw3XTCBy2NHMtOqj+QDCsSE/eqVh
+         7MVMLrLa5yG7gAe8rVxMkWWPtVcab8EMtgbWYvIaLe+4pyngv7QIntf7AtjLG6eghoI1
+         ItnJkG8GoPe9aBf/mG8oLsfoRftm0Yxq7DlsvbXj3gXsl2VgWtDl3cihgVECj61rU8HO
+         CNjg==
+X-Gm-Message-State: AOAM530P59WUkAfF8rS9XnfiX6M3CHvrP1UZgOw4IFq3e/63ypx+P+VU
+	tYV/LwdvUVf2PXZVTylBGSd7ZMVE0YtH99aXv5UlSb0/aGLXVQ==
+X-Google-Smtp-Source: ABdhPJzEdVmqLDi7X6N3Z46Ig8r2EtxJrWgkjU4z9gBLfTsztBj2W7LYuSaUTleZLNiFoJLMfZzFlIFwEMqAL3kJPUI=
+X-Received: by 2002:ac2:4c4c:: with SMTP id o12mr4287394lfk.523.1644362244992;
+ Tue, 08 Feb 2022 15:17:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220208225350.1331628-1-keescook@chromium.org> <20220208225350.1331628-7-keescook@chromium.org>
-In-Reply-To: <20220208225350.1331628-7-keescook@chromium.org>
+References: <20220208225350.1331628-1-keescook@chromium.org> <20220208225350.1331628-8-keescook@chromium.org>
+In-Reply-To: <20220208225350.1331628-8-keescook@chromium.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 8 Feb 2022 15:04:11 -0800
-Message-ID: <CAKwvOdnY9kOfmGEusrA9Sgjv5oL0WuTxMpQA9bWDaEPtj90ngA@mail.gmail.com>
-Subject: Re: [PATCH v7 6/8] fortify: Use __diagnose_as() for better diagnostic coverage
+Date: Tue, 8 Feb 2022 15:17:13 -0800
+Message-ID: <CAKwvOd=wre3uzFVBFaOs4Oud+SobxiW_BwKXMsa5p0tEy6BsiA@mail.gmail.com>
+Subject: Re: [PATCH v7 7/8] fortify: Make sure strlen() may still be used as a
+ constant expression
 To: Kees Cook <keescook@chromium.org>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
 	George Burgess IV <gbiv@google.com>, linux-kernel@vger.kernel.org, 
@@ -52,98 +53,75 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Tue, Feb 8, 2022 at 2:53 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> In preparation for using Clang's __pass_object_size, add __diagnose_as()
-> attributes to mark the functions as being the same as the indicated
-> builtins. When __daignose_as() is available, Clang will have a more
-> complete ability to apply its own diagnostic analysis to callers of these
-> functions, as if they were the builtins themselves. Without __diagnose_as,
-> Clang's compile time diagnostic messages won't be as precise as they
-> could be, but at least users of older toolchains will still benefit from
-> having fortified routines.
-
-Yes, much easier to review split up. Thanks for taking the time to do so!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
+> In preparation for enabling Clang FORTIFY_SOURCE support, redefine
+> strlen() as a macro that tests for being a constant expression
+> so that strlen() can still be used in static initializers, which is
+> lost when adding __pass_object_size and __overloadable.
+>
+> An example of this usage can be seen here:
+>         https://lore.kernel.org/all/202201252321.dRmWZ8wW-lkp@intel.com/
+>
+> Notably, this constant expression feature of strlen() is not available
+> for architectures that build with -ffreestanding. This means the kernel
+> currently does not universally expect strlen() to be used this way, but
+> since there _are_ some build configurations that depend on it, retain
+> the characteristic for Clang FORTIFY_SOURCE builds too.
 >
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
->  include/linux/fortify-string.h | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
+>  include/linux/fortify-string.h | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
 >
 > diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-> index f874ada4b9af..db1ad1c1c79a 100644
+> index db1ad1c1c79a..f77cf22e2d60 100644
 > --- a/include/linux/fortify-string.h
 > +++ b/include/linux/fortify-string.h
-> @@ -50,7 +50,8 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
->  #define __underlying_strncpy   __builtin_strncpy
->  #endif
+> @@ -2,6 +2,8 @@
+>  #ifndef _LINUX_FORTIFY_STRING_H_
+>  #define _LINUX_FORTIFY_STRING_H_
 >
-> -__FORTIFY_INLINE char *strncpy(char * const p, const char *q, __kernel_size_t size)
-> +__FORTIFY_INLINE __diagnose_as(__builtin_strncpy, 1, 2, 3)
-> +char *strncpy(char * const p, const char *q, __kernel_size_t size)
->  {
->         size_t p_size = __builtin_object_size(p, 1);
+> +#include <linux/const.h>
+> +
+>  #define __FORTIFY_INLINE extern __always_inline __gnu_inline
+>  #define __RENAME(x) __asm__(#x)
 >
-> @@ -61,7 +62,8 @@ __FORTIFY_INLINE char *strncpy(char * const p, const char *q, __kernel_size_t si
->         return __underlying_strncpy(p, q, size);
+> @@ -95,9 +97,16 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const p, __kernel_size_t m
+>         return ret;
 >  }
 >
-> -__FORTIFY_INLINE char *strcat(char * const p, const char *q)
-> +__FORTIFY_INLINE __diagnose_as(__builtin_strcat, 1, 2)
-> +char *strcat(char * const p, const char *q)
->  {
->         size_t p_size = __builtin_object_size(p, 1);
->
-> @@ -94,7 +96,8 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const p, __kernel_size_t m
->  }
->
->  /* defined after fortified strnlen to reuse it. */
-> -__FORTIFY_INLINE __kernel_size_t strlen(const char * const p)
-> +__FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
-> +__kernel_size_t strlen(const char * const p)
+> -/* defined after fortified strnlen to reuse it. */
+> +/*
+> + * Defined after fortified strnlen to reuse it. However, it must still be
+> + * possible for strlen() to be used on compile-time strings for use in
+> + * static initializers (i.e. as a constant expression).
+> + */
+> +#define strlen(p)                                                      \
+> +       __builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),      \
+
+Is `__is_constexpr(p) == __is_constexpr(__builtin_strlen(p))`? i.e.
+can we drop the first `__builtin_strlen`? It seems redundant.
+
+So instead, we'd have:
+
+#define strlen(p) __builtin_choose_expr(__is_constexpr(p),
+__builtin_strlen(p), __fortify_strlen(p))
+
+Or is there some funny business where p isn't constexpr but strlen(p)
+somehow is? I doubt that.  (Or is it that p is constexpr, but
+strlen(p) is not?)
+
+(Guess I'm wrong: https://godbolt.org/z/19ffz7vjx)
+
+Ok then.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> +               __builtin_strlen(p), __fortify_strlen(p))
+>  __FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
+> -__kernel_size_t strlen(const char * const p)
+> +__kernel_size_t __fortify_strlen(const char * const p)
 >  {
 >         __kernel_size_t ret;
 >         size_t p_size = __builtin_object_size(p, 1);
-> @@ -183,7 +186,8 @@ __FORTIFY_INLINE ssize_t strscpy(char * const p, const char * const q, size_t si
->  }
->
->  /* defined after fortified strlen and strnlen to reuse them */
-> -__FORTIFY_INLINE char *strncat(char * const p, const char * const q, __kernel_size_t count)
-> +__FORTIFY_INLINE __diagnose_as(__builtin_strncat, 1, 2, 3)
-> +char *strncat(char * const p, const char * const q, __kernel_size_t count)
->  {
->         size_t p_len, copy_len;
->         size_t p_size = __builtin_object_size(p, 1);
-> @@ -365,7 +369,8 @@ __FORTIFY_INLINE void *memscan(void * const p, int c, __kernel_size_t size)
->         return __real_memscan(p, c, size);
->  }
->
-> -__FORTIFY_INLINE int memcmp(const void * const p, const void * const q, __kernel_size_t size)
-> +__FORTIFY_INLINE __diagnose_as(__builtin_memcmp, 1, 2, 3)
-> +int memcmp(const void * const p, const void * const q, __kernel_size_t size)
->  {
->         size_t p_size = __builtin_object_size(p, 0);
->         size_t q_size = __builtin_object_size(q, 0);
-> @@ -381,7 +386,8 @@ __FORTIFY_INLINE int memcmp(const void * const p, const void * const q, __kernel
->         return __underlying_memcmp(p, q, size);
->  }
->
-> -__FORTIFY_INLINE void *memchr(const void * const p, int c, __kernel_size_t size)
-> +__FORTIFY_INLINE __diagnose_as(__builtin_memchr, 1, 2, 3)
-> +void *memchr(const void * const p, int c, __kernel_size_t size)
->  {
->         size_t p_size = __builtin_object_size(p, 0);
->
-> @@ -417,7 +423,8 @@ __FORTIFY_INLINE void *kmemdup(const void * const p, size_t size, gfp_t gfp)
->  }
->
->  /* Defined after fortified strlen to reuse it. */
-> -__FORTIFY_INLINE char *strcpy(char * const p, const char * const q)
-> +__FORTIFY_INLINE __diagnose_as(__builtin_strcpy, 1, 2)
-> +char *strcpy(char * const p, const char * const q)
->  {
->         size_t p_size = __builtin_object_size(p, 1);
->         size_t q_size = __builtin_object_size(q, 1);
 > --
 > 2.30.2
 >
