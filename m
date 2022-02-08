@@ -1,38 +1,38 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E192CA1
-	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 22:53:52 +0000 (UTC)
-Received: by mail-pl1-f182.google.com with SMTP id 10so628796plj.1
-        for <llvm@lists.linux.dev>; Tue, 08 Feb 2022 14:53:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9AB22C80
+	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 22:53:53 +0000 (UTC)
+Received: by mail-pj1-f42.google.com with SMTP id a11-20020a17090a740b00b001b8b506c42fso3438377pjg.0
+        for <llvm@lists.linux.dev>; Tue, 08 Feb 2022 14:53:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=i9+TXKUAkpTaSSFkDc82oY8i+zzLmeGGAoJvsbwdSmc=;
-        b=DpHAirTaqreuTh3qO0clDbGWizOcXR8ahrX4F1ymRrFVbFS6CRYSM9SFmB6IAfTrk2
-         xrQktak/8DfZMh4wzNznNm3R5p/8Bc+t3+mDTYX2OKBvEIMZ+v/xV+vflABKXocII+Wb
-         +HSJfiymNB9IUaCaXTEuyVo4x/KSlYxBD2Yi8=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UuLl1lhQUOpyY4F3HChSqUr+c0VI6V5HzLLZgZKWEaw=;
+        b=ik6XSnGwoTVxVDhYB8ynCOQG4c6bMYjzhqvsiu2jcXe2sP8H/QSj3cEyNxiwz0JqcI
+         yhFaUhjIqFt5MOUx2V19RIDMBibxcVbZ6v4Hv6eewU5L6TQXwtUB9sV4WytGY/DN7qwG
+         AFOWBrAzmZHKOJFerj+7gNv3n6o15KnEoDTHQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=i9+TXKUAkpTaSSFkDc82oY8i+zzLmeGGAoJvsbwdSmc=;
-        b=SGF/9+fxhcnx9OGcDxd5dIvNcZA4bU+Y8e/XBV6+ptX7HAkxxCXd6/qDBvoqjlF57g
-         L3q3+V9kC5pUYnhprQlV8+GoO+E0/VWdc1lBfqQxhp6kwwH75pLmaL5BSXvZ8XAK/FVD
-         L2DHOcP/dpm73CcntkzaLQM5k8+1lcll3dWcH+L2NQvQmU6+TcSYeLFjqGBGdx+nTpK2
-         8ph2N8icu/zreVl3b+FYPXKevavtdevzRb/UxDY3EjbOASvfNJrI+xqQPA2Y6hZNsDZN
-         SOUFHSQ7Hcjfp40YSNAOuWZGIjhUv2Sttv9nzcYRQbq6/qQ9wc362P2Xi+X8CsXFCaTg
-         4Dew==
-X-Gm-Message-State: AOAM5327X2NssM5oRykh4KIfwu85P9V5n/x2Xn5BM9XC8y6LfQGdPk88
-	bbvBdB1fRmBX0vTmQmUDMtx2TA==
-X-Google-Smtp-Source: ABdhPJxghJG0s80oPtx6cPs1tw9srhe66vxlFmTMitgk04CQTZOEHnGk8ydDSx5mkScbfCr5Zukeow==
-X-Received: by 2002:a17:902:f70c:: with SMTP id h12mr6619293plo.53.1644360832442;
-        Tue, 08 Feb 2022 14:53:52 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UuLl1lhQUOpyY4F3HChSqUr+c0VI6V5HzLLZgZKWEaw=;
+        b=70Ct683zU4QAGNKN0LQz6NtfoW0ZmTGecx8H/+i+4bwhKdwjS3vHxnwlhSLYkBxoef
+         zVtTUXQWf9V4dEoYgdD7bT274gqKZhaDRzOQlfFpKuivmanF/5M8IUv5fF6kcHbDfVqm
+         ReJFJ47UBZ8sdlNARxFALKSeYU6vixGrK5lb0/OwcaNIXx+5IKaoOgLndqzYUKPiMAdo
+         vnO3qTfyI2CdHvt0boY58pJiTSltqbRe+yqbS4cVg/d60N0AI8Ngm8mK/wHWxwvSAmYQ
+         EjR8dP5BQAIPpYPuix3LQnlXUwcU0DTbuRmCW9Br5KbDrHrWQCczjUqhPxbXTdKs20ki
+         B0sA==
+X-Gm-Message-State: AOAM532m6HQLyD5bfCjISKGQe5IdG32w040ImwBmMw68ULKKF2D+UEgV
+	bwyw89JXfkWdJtje1N8yjMpanxycOBrxpA==
+X-Google-Smtp-Source: ABdhPJxFXk/eqGfISYiBlXBCy8lWVfEtqVMkIfl1a7/KbgQHxia/IVUlGc1fcQAipi4dlXl4FbwWrQ==
+X-Received: by 2002:a17:90a:8401:: with SMTP id j1mr197099pjn.235.1644360833475;
+        Tue, 08 Feb 2022 14:53:53 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y8sm12371181pgs.31.2022.02.08.14.53.51
+        by smtp.gmail.com with ESMTPSA id p6sm4103431pfo.73.2022.02.08.14.53.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 14:53:51 -0800 (PST)
+        Tue, 08 Feb 2022 14:53:53 -0800 (PST)
 From: Kees Cook <keescook@chromium.org>
 To: Kees Cook <keescook@chromium.org>
 Cc: Miguel Ojeda <ojeda@kernel.org>,
@@ -42,60 +42,110 @@ Cc: Miguel Ojeda <ojeda@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v7 0/8] fortify: Add Clang support
-Date: Tue,  8 Feb 2022 14:53:42 -0800
-Message-Id: <20220208225350.1331628-1-keescook@chromium.org>
+Subject: [PATCH v7 6/8] fortify: Use __diagnose_as() for better diagnostic coverage
+Date: Tue,  8 Feb 2022 14:53:48 -0800
+Message-Id: <20220208225350.1331628-7-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220208225350.1331628-1-keescook@chromium.org>
+References: <20220208225350.1331628-1-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1778; h=from:subject; bh=VgPaboUfDiJcgnmAPga8l6bF+y6/pdp/kTPZknfOtHc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiAvR7gB2hyAJzJb1CAb7+XpPx3wUAMnqCrCC+4SiR pd9TJfqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgL0ewAKCRCJcvTf3G3AJpsHD/ 9ZNIlnurQBvW2LVZrp41Dk0XSrYzoX0gMRlpSdXpfucgrtBfM+i/zQvvm9bPOetNqljg+r+iZDzJ47 TLF+5NQJCrAxw/JWpwAcDZZITYVnpP9deKRiRaeADTAgCgJEa1BPKBXOYv7zd+jqpA8ErZS7xqxCg9 zLlUkCWdcDpRhLOEsz8SiHXHUR5FBqI/HmKi8tAkCFQTyyeamXGWsHszvD7eclVjozTkwrt40aMpd/ Y2AXDv+RDe4BM9JHrwUkIYoKdgjtp4iwEe451T/Wn91ztzWg12zA2aqaw28KbgBK3lubqcOL7dn5qB g2TjOlEwdL1pTjhGx0grwPN/xydfSOMTevRogCBUPsbg0ap7dRpy6HvBIerAX7BCSE0AgTlkMQmoOL 80RX6u6JPMcKcDlbVCSSzcW6B7LlM3zrdBNHMpHWTUHHtvO9513WY2vtW450Gr4GegvoWK5IOlkegf a7fYyrFWAI9QGyEIpx51mWDl4eL+eo8Dk+LBRZRVWIZCw1xafO5roM29QfNZn2VJAtyybrmP5ooOGW h6iRUyHI4c42L3MKfMWTEp0Z2U8yaNZvhJGvFz49qNWW4wlP9+enwd4RyuwR7wOFgO70GNorYTGwKs YZ8a2RbFi0p9LY/IhQt6UU6+gG6M2U4Cqk8RxrBNSdWXQvuP/4pIkDzau3Jg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3932; h=from:subject; bh=PmLo1tH3dH3S3QkOsOrJ2Edy3uWnbVOSIVtbl+9ShXk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiAvR9iyMHXECK2JnvWQS1iN7Uf9vsEXNUF5vYwO7A cAhxA5aJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgL0fQAKCRCJcvTf3G3AJqVYEA CyQ0/tVUuN3tDpvncf1tTIZjtUYX4pf2TahFr8HOnEfQGNMWu5BS9wLCOh3WOdeUYjYVs5VZBA5MIt UaLeH1UXkGbkq9oMh5ufGedggXk5mtvcRDJvD+hhH5Y57jEx+tDCYo+0sVJKJpidE3tgNdwVVxEES4 p5XxCjCT2vuOGMp6SFnxybOIiNno96PSn+pBtz685ioHZj1J5oKXtauJFYIxyB87Jhjwp3nMCqySDx moipYuvoJZzyB31hOAPgVSjNWOTgzuCWt1WsvZ15rkNMCcZ7QFBXVxMI/EG+diCYlkpvB4Z2K4+T5h 1hA5hN5yeMZtbr0MoeMaQA27W3EUviSkedxaq3RbKYMIASvn7/wUXn9RMCrQtT0IjyUe/30NPw04nl fV8bU0Yc/IDWLfpfSbtyan1Fg+1f2kGuCkVjemGnCi/cgzfdNoyW3GHbX9RvJmcdLfoCVazMN/i2il gw3969Ms5R/ZIqU8sLVb3YH0bGXdlGgmjv7M7bO67cTapCN6ryUGo8LBFSsIB2a/UWP/OVrRvCPixO vr4QsI3xmQwk6grd01qg0tRBUg2SAiq+tmIxvA+ymbeZOCfiGw9MWEkqHLqW04mSX13DLx0nEPTsBG nNspaED0AyhKfnYHUED2f9lu59lSApQ2HkqDudabNbLoY6g9YoD3RrnDv9Iw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Hi,
+In preparation for using Clang's __pass_object_size, add __diagnose_as()
+attributes to mark the functions as being the same as the indicated
+builtins. When __daignose_as() is available, Clang will have a more
+complete ability to apply its own diagnostic analysis to callers of these
+functions, as if they were the builtins themselves. Without __diagnose_as,
+Clang's compile time diagnostic messages won't be as precise as they
+could be, but at least users of older toolchains will still benefit from
+having fortified routines.
 
-This is the updated series for getting Clang to work with
-CONFIG_FORTIFY_SOURCE. We went around a few times since v6 on dealing
-with -ffreestanding (thank you Nick for figuring out the root cause),
-and are dropping X86_32 support until the associated Clang bug is fixed.
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/fortify-string.h | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-I also split up the last patch, since it was doing a bunch of separate
-changes, which seemed better as separate patches.
-
-Thanks!
-
--Kees
-
-v1: https://lore.kernel.org/linux-hardening/20210727205855.411487-61-keescook@chromium.org/
-v2: https://lore.kernel.org/linux-hardening/20210818060533.3569517-64-keescook@chromium.org/
-v3: https://lore.kernel.org/linux-hardening/20211213223331.135412-18-keescook@chromium.org/
-v4: https://lore.kernel.org/linux-hardening/20220130182204.420775-1-keescook@chromium.org/
-v5: https://lore.kernel.org/linux-hardening/20220202003033.704951-1-keescook@chromium.org/
-v6: https://lore.kernel.org/linux-hardening/20220203173307.1033257-1-keescook@chromium.org/
-v7:
- - split last patch into separate logical change patches
- - drop X86_32 support for now
-
-
-Kees Cook (8):
-  fortify: Replace open-coded __gnu_inline attribute
-  Compiler Attributes: Add __pass_object_size for Clang
-  Compiler Attributes: Add __overloadable for Clang
-  Compiler Attributes: Add __diagnose_as for Clang
-  fortify: Make pointer arguments const
-  fortify: Use __diagnose_as() for better diagnostic coverage
-  fortify: Make sure strlen() may still be used as a constant expression
-  fortify: Add Clang support
-
- include/linux/compiler_attributes.h | 39 +++++++++++++++++++
- include/linux/fortify-string.h      | 58 +++++++++++++++++++++--------
- security/Kconfig                    |  5 ++-
- 3 files changed, 85 insertions(+), 17 deletions(-)
-
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index f874ada4b9af..db1ad1c1c79a 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -50,7 +50,8 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
+ #define __underlying_strncpy	__builtin_strncpy
+ #endif
+ 
+-__FORTIFY_INLINE char *strncpy(char * const p, const char *q, __kernel_size_t size)
++__FORTIFY_INLINE __diagnose_as(__builtin_strncpy, 1, 2, 3)
++char *strncpy(char * const p, const char *q, __kernel_size_t size)
+ {
+ 	size_t p_size = __builtin_object_size(p, 1);
+ 
+@@ -61,7 +62,8 @@ __FORTIFY_INLINE char *strncpy(char * const p, const char *q, __kernel_size_t si
+ 	return __underlying_strncpy(p, q, size);
+ }
+ 
+-__FORTIFY_INLINE char *strcat(char * const p, const char *q)
++__FORTIFY_INLINE __diagnose_as(__builtin_strcat, 1, 2)
++char *strcat(char * const p, const char *q)
+ {
+ 	size_t p_size = __builtin_object_size(p, 1);
+ 
+@@ -94,7 +96,8 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const p, __kernel_size_t m
+ }
+ 
+ /* defined after fortified strnlen to reuse it. */
+-__FORTIFY_INLINE __kernel_size_t strlen(const char * const p)
++__FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
++__kernel_size_t strlen(const char * const p)
+ {
+ 	__kernel_size_t ret;
+ 	size_t p_size = __builtin_object_size(p, 1);
+@@ -183,7 +186,8 @@ __FORTIFY_INLINE ssize_t strscpy(char * const p, const char * const q, size_t si
+ }
+ 
+ /* defined after fortified strlen and strnlen to reuse them */
+-__FORTIFY_INLINE char *strncat(char * const p, const char * const q, __kernel_size_t count)
++__FORTIFY_INLINE __diagnose_as(__builtin_strncat, 1, 2, 3)
++char *strncat(char * const p, const char * const q, __kernel_size_t count)
+ {
+ 	size_t p_len, copy_len;
+ 	size_t p_size = __builtin_object_size(p, 1);
+@@ -365,7 +369,8 @@ __FORTIFY_INLINE void *memscan(void * const p, int c, __kernel_size_t size)
+ 	return __real_memscan(p, c, size);
+ }
+ 
+-__FORTIFY_INLINE int memcmp(const void * const p, const void * const q, __kernel_size_t size)
++__FORTIFY_INLINE __diagnose_as(__builtin_memcmp, 1, 2, 3)
++int memcmp(const void * const p, const void * const q, __kernel_size_t size)
+ {
+ 	size_t p_size = __builtin_object_size(p, 0);
+ 	size_t q_size = __builtin_object_size(q, 0);
+@@ -381,7 +386,8 @@ __FORTIFY_INLINE int memcmp(const void * const p, const void * const q, __kernel
+ 	return __underlying_memcmp(p, q, size);
+ }
+ 
+-__FORTIFY_INLINE void *memchr(const void * const p, int c, __kernel_size_t size)
++__FORTIFY_INLINE __diagnose_as(__builtin_memchr, 1, 2, 3)
++void *memchr(const void * const p, int c, __kernel_size_t size)
+ {
+ 	size_t p_size = __builtin_object_size(p, 0);
+ 
+@@ -417,7 +423,8 @@ __FORTIFY_INLINE void *kmemdup(const void * const p, size_t size, gfp_t gfp)
+ }
+ 
+ /* Defined after fortified strlen to reuse it. */
+-__FORTIFY_INLINE char *strcpy(char * const p, const char * const q)
++__FORTIFY_INLINE __diagnose_as(__builtin_strcpy, 1, 2)
++char *strcpy(char * const p, const char * const q)
+ {
+ 	size_t p_size = __builtin_object_size(p, 1);
+ 	size_t q_size = __builtin_object_size(q, 1);
 -- 
 2.30.2
 
