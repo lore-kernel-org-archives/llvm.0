@@ -1,130 +1,116 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5F02F28
-	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 13:26:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644413210; x=1675949210;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yRxLiCCsKty7UwQgrjOb+UfCHwO5LNQYwAMxkh40LT4=;
-  b=UKTO0+RZSAkK1SSmtPYHLwFnqeevJ4VvBKzDjs9Y4boaycvEtJhq2dT6
-   Uo3jBAN2DZdpdG9U/zVYraz+JrePOJvgelXK+rUz3ReOWYwmMUdHQsRAG
-   99/SHij6JtAA0nqnF5DSoGTqVubkZlXX9Rm7g3EoPTz6FROcQbHqF1LWT
-   ul3XcVeGLdlFDdaqXnbRkIFyNLh+3trDl8iIENN89N1LO1cUXpgXs7AbI
-   YBfrsFa5RQTz73sMHj6KzXKL4rZpybDDHs2DBExkW5Jd7Vs3FjICBS9Oy
-   Ipyu6ucxTVp4dFhM60LDF52h8QK1Al8tIIkohoP4xla9SycENoSdgnuTE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="249150791"
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="249150791"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 05:26:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="482326542"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 Feb 2022 05:26:48 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nHmzf-0001rU-UQ; Wed, 09 Feb 2022 13:26:47 +0000
-Date: Wed, 9 Feb 2022 21:26:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhen Ni <nizhen@uniontech.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:sched/core 29/29] kernel/sched/fair.c:230:2: error:
- implicit declaration of function 'sched_cfs_bandwidth_sysctl_init'
-Message-ID: <202202092107.WdTEsmSF-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3B42F26
+	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 14:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1644418384;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=j/VJVwJcabH5SXTn4ZvXEnmPqcRm07U+dAsv8ELCv4A=;
+	b=ZUnUbGvowMVxiMUCtLP03qoHy6wxoZ6IRx0YRR+xyr6NIeQpVmtBtPFpKoTsynWVV0vJTA
+	9e9RXqe3CQSeU/mCBx5aeNQfD0A3/Xxmtvu++orFB/63qZSNxQN1w+0FAyzHDXncRyROa/
+	X8Z7M31HL3DsQeFNupNW4PNTO0Yp0rw=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-2-tXjnPEvsOhyIvb74lnuOiQ-1; Wed, 09 Feb 2022 09:53:03 -0500
+X-MC-Unique: tXjnPEvsOhyIvb74lnuOiQ-1
+Received: by mail-qk1-f197.google.com with SMTP id u12-20020a05620a0c4c00b00475a9324977so1548784qki.13
+        for <llvm@lists.linux.dev>; Wed, 09 Feb 2022 06:53:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j/VJVwJcabH5SXTn4ZvXEnmPqcRm07U+dAsv8ELCv4A=;
+        b=IQZq+QhrL1vdPmIcfYpAyN2UnzKY3ukSxOges4WdS6TQDQJ3VrgnWl2bS0zHi6AeAq
+         dAA9fLDYpbS0zs9vqxKsE+UPTAOJ7fjRX2j2J8oPRxtdLPBESDrathOvKu89QzGUrTTJ
+         w67ws+NpZGj1hVHna0gfnf/TtPouP2kZmD/D7EiFVRBq+xaRzAO7NIhnXLwaLC1jrM/J
+         rqB1U994SwCtwLbG0I8q26Zy7SFf/tplgl5Xa4Vl6E93fpe8Ygd6D40GzOPxiRO09s5n
+         5s4rqJdg0ZTsjNntrdwODM3VFB8CDrR+aryewseBaUR8YeBZmuows9YbwYFMgQ29z9gT
+         edNQ==
+X-Gm-Message-State: AOAM532kozro2vk9JFyNTdZqTCmi3NdOuUHpRX5AfVXqXG+aQkHbInFX
+	UM27ewENGHWczaIzTkE0o2S23pcoBnmH4t1xeDCiXlXnt9Lzbv1esNUn4/yZy2QZhcWzJPqre8P
+	BdIFuISvSgnZdSg==
+X-Received: by 2002:a05:622a:87:: with SMTP id o7mr1562246qtw.38.1644418382984;
+        Wed, 09 Feb 2022 06:53:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw5wcZMgzdbV24kPRKWlIzraNFqysXb9opnZC+c5gQEfuzVCDVwwO+VOEAL5ibZQMRfOE0JJw==
+X-Received: by 2002:a05:622a:87:: with SMTP id o7mr1562236qtw.38.1644418382803;
+        Wed, 09 Feb 2022 06:53:02 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id bk19sm8421478qkb.125.2022.02.09.06.53.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 06:53:02 -0800 (PST)
+From: trix@redhat.com
+To: Felix.Kuehling@amd.com,
+	alexander.deucher@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@linux.ie,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	david.yatsin@amd.com,
+	rajneesh.bhardwaj@amd.com
+Cc: amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amdkfd: fix freeing an unset pointer
+Date: Wed,  9 Feb 2022 06:52:54 -0800
+Message-Id: <20220209145254.2291158-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
-head:   bf8d9ef490e0600b3b30ac2244858ecd327123ab
-commit: bf8d9ef490e0600b3b30ac2244858ecd327123ab [29/29] sched: Move cfs_bandwidth_slice sysctls to fair.c
-config: hexagon-randconfig-r045-20220209 (https://download.01.org/0day-ci/archive/20220209/202202092107.WdTEsmSF-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=bf8d9ef490e0600b3b30ac2244858ecd327123ab
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue sched/core
-        git checkout bf8d9ef490e0600b3b30ac2244858ecd327123ab
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/sched/
+From: Tom Rix <trix@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+clang static analysis reports this problem
+kfd_chardev.c:2092:2: warning: 1st function call argument
+  is an uninitialized value
+        kvfree(bo_privs);
+        ^~~~~~~~~~~~~~~~
 
-All errors (new ones prefixed by >>):
+When bo_buckets alloc fails, it jumps to an error handler
+that frees the yet to be allocated bo_privs.  Because
+bo_buckets is the first error, return directly.
 
->> kernel/sched/fair.c:230:2: error: implicit declaration of function 'sched_cfs_bandwidth_sysctl_init' [-Werror,-Wimplicit-function-declaration]
-           sched_cfs_bandwidth_sysctl_init();
-           ^
-   kernel/sched/fair.c:652:5: warning: no previous prototype for function 'sched_update_scaling' [-Wmissing-prototypes]
-   int sched_update_scaling(void)
-       ^
-   kernel/sched/fair.c:652:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_update_scaling(void)
-   ^
-   static 
-   kernel/sched/fair.c:5469:6: warning: no previous prototype for function 'init_cfs_bandwidth' [-Wmissing-prototypes]
-   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-        ^
-   kernel/sched/fair.c:5469:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-   ^
-   static 
-   kernel/sched/fair.c:11694:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
-   void free_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:11694:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void free_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:11696:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-       ^
-   kernel/sched/fair.c:11696:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-   ^
-   static 
-   kernel/sched/fair.c:11701:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
-   void online_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:11701:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void online_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:11703:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
-   void unregister_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:11703:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void unregister_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   6 warnings and 1 error generated.
+Fixes: 5ccbb057c0a1 ("drm/amdkfd: CRIU Implement KFD checkpoint ioctl")
 
-
-vim +/sched_cfs_bandwidth_sysctl_init +230 kernel/sched/fair.c
-
-   226	
-   227	void __init sched_init_granularity(void)
-   228	{
-   229		update_sysctl();
- > 230		sched_cfs_bandwidth_sysctl_init();
-   231	}
-   232	
-
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/amd/amdkfd/kfd_chardev.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+index 64e3b4e3a7126..636391c61cafb 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+@@ -1982,10 +1982,8 @@ static int criu_checkpoint_bos(struct kfd_process *p,
+ 	void *mem;
+ 
+ 	bo_buckets = kvzalloc(num_bos * sizeof(*bo_buckets), GFP_KERNEL);
+-	if (!bo_buckets) {
+-		ret = -ENOMEM;
+-		goto exit;
+-	}
++	if (!bo_buckets)
++		return -ENOMEM;
+ 
+ 	bo_privs = kvzalloc(num_bos * sizeof(*bo_privs), GFP_KERNEL);
+ 	if (!bo_privs) {
+-- 
+2.26.3
+
