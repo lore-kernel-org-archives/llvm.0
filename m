@@ -1,42 +1,41 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F08062F25
-	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 09:11:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E5329CA
+	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 09:32:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644397905; x=1675933905;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NjdtmaVs0ctuD53j3aiBDEGJMY5OFw6n0MZBEZ9TuzI=;
-  b=eXHFEU16hi7aIccinuS7fjGDYCoNloU5bzCFwyiyM5HuiiB2mq2UBrQw
-   2RS6j9mnPsswk6jVG2eGcI7UkI7+WYoE3WinEh7htlokAg8gWWcuLGQE6
-   7gbVcA06hV7pNqahCkVqeDaanaam1NGShXL2YWzDi+a1JtWo+qT14yiUz
-   VrCiNdDmTKY5Ab+qpJCZ5iKVZYzVfrX6C0k36DuDB2XZ2leZS8T/YsbKe
-   u+IjTE17AKIoz9ytsqo4yxwhQvFcPa4o7cNDzTRNkv7ce/9qRLm2YNOYC
-   Kp7qkwKLBJ+4U0Zy0hBWJNCiiQi2TE/R5dno7do0rGJpr6eKqGWj6RcZF
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="249109264"
+  t=1644399160; x=1675935160;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=izwdSITMpunh4AcS7aQqovML+8wGE0TxPdGnFvNUz2Q=;
+  b=XmtLSZipOqPxfN44nWbliRKyX2t1keo0pvvkUkLFR30eRirKn4uhWjlZ
+   mKTW0G7AfO0jbffpEz2UhmnV3YqoAydReesilYUn3ydIEj7xDzHxMNo4J
+   PVy2bLXoj3NRqbXGYDRv4Y9b/x9zo2bnZyoaSxku8fH0fC81HzVRKCXnW
+   JkumUlV2vou57bfAOiiwfSkaJi+sK6OcHjNYZVbCDdhr84xS+nGvqveqC
+   O4uaaIx56kKEjbxT0FWa+4m1e+YySTIOe5qaglFcvUUKXq68x/t2yzG89
+   xIVNCodqRxzO3kDr2oCHG7VxkBNH0j36Rh3PhY1HHAyXnlnnmdBSNN9fs
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="312461597"
 X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="249109264"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 01:11:38 -0800
+   d="scan'208";a="312461597"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 01:32:39 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="499903651"
+   d="scan'208";a="701195001"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 Feb 2022 01:11:36 -0800
+  by orsmga005.jf.intel.com with ESMTP; 09 Feb 2022 01:32:38 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nHj0h-0001XJ-IB; Wed, 09 Feb 2022 09:11:35 +0000
-Date: Wed, 9 Feb 2022 17:11:19 +0800
+	id 1nHjL3-0001a5-Ja; Wed, 09 Feb 2022 09:32:37 +0000
+Date: Wed, 9 Feb 2022 17:32:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15 848/872] ld.lld: error: undefined
- symbol: update_stripe
-Message-ID: <202202091702.kNz1pA5j-lkp@intel.com>
+To: Stephane Eranian <eranian@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v6 08/12] ACPI: add perf low power callback
+Message-ID: <202202091736.pYZciCGD-lkp@intel.com>
+References: <20220208211637.2221872-9-eranian@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,32 +44,126 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220208211637.2221872-9-eranian@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
-head:   1183ce490adb103e5e569b8ebd74c50c885ddc05
-commit: ad3ea50420b2f1742f84afbb0de7dd0b355298c2 [848/872] spi: spi-zynqmp-gqspi: Add dual parallel and stacked mode support in driver
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220209/202202091702.kNz1pA5j-lkp@intel.com/config)
+Hi Stephane,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on tip/perf/core]
+[also build test ERROR on rafael-pm/linux-next v5.17-rc3 next-20220209]
+[cannot apply to tip/x86/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Stephane-Eranian/perf-x86-amd-Add-AMD-Fam19h-Branch-Sampling-support/20220209-064255
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ee28855a54493ce83bc2a3fbe30210be61b57bc7
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220209/202202091736.pYZciCGD-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/ad3ea50420b2f1742f84afbb0de7dd0b355298c2
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15
-        git checkout ad3ea50420b2f1742f84afbb0de7dd0b355298c2
+        # https://github.com/0day-ci/linux/commit/90b2d6c8c171189602e01f8c00301f7705e5d16a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Stephane-Eranian/perf-x86-amd-Add-AMD-Fam19h-Branch-Sampling-support/20220209-064255
+        git checkout 90b2d6c8c171189602e01f8c00301f7705e5d16a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: update_stripe
-   >>> referenced by spi-zynqmp-gqspi.c:1148 (drivers/spi/spi-zynqmp-gqspi.c:1148)
-   >>>               spi/spi-zynqmp-gqspi.o:(zynqmp_qspi_exec_op) in archive drivers/built-in.a
+>> drivers/acpi/acpi_pad.c:168:4: error: implicit declaration of function 'perf_lopwr_cb' [-Werror,-Wimplicit-function-declaration]
+                           perf_lopwr_cb(true);
+                           ^
+   1 error generated.
+
+
+vim +/perf_lopwr_cb +168 drivers/acpi/acpi_pad.c
+
+   135	
+   136	static unsigned int idle_pct = 5; /* percentage */
+   137	static unsigned int round_robin_time = 1; /* second */
+   138	static int power_saving_thread(void *data)
+   139	{
+   140		int do_sleep;
+   141		unsigned int tsk_index = (unsigned long)data;
+   142		u64 last_jiffies = 0;
+   143	
+   144		sched_set_fifo_low(current);
+   145	
+   146		while (!kthread_should_stop()) {
+   147			unsigned long expire_time;
+   148	
+   149			/* round robin to cpus */
+   150			expire_time = last_jiffies + round_robin_time * HZ;
+   151			if (time_before(expire_time, jiffies)) {
+   152				last_jiffies = jiffies;
+   153				round_robin_cpu(tsk_index);
+   154			}
+   155	
+   156			do_sleep = 0;
+   157	
+   158			expire_time = jiffies + HZ * (100 - idle_pct) / 100;
+   159	
+   160			while (!need_resched()) {
+   161				if (tsc_detected_unstable && !tsc_marked_unstable) {
+   162					/* TSC could halt in idle, so notify users */
+   163					mark_tsc_unstable("TSC halts in idle");
+   164					tsc_marked_unstable = 1;
+   165				}
+   166				local_irq_disable();
+   167	
+ > 168				perf_lopwr_cb(true);
+   169	
+   170				tick_broadcast_enable();
+   171				tick_broadcast_enter();
+   172				stop_critical_timings();
+   173	
+   174				mwait_idle_with_hints(power_saving_mwait_eax, 1);
+   175	
+   176				start_critical_timings();
+   177				tick_broadcast_exit();
+   178	
+   179				perf_lopwr_cb(false);
+   180	
+   181				local_irq_enable();
+   182	
+   183				if (time_before(expire_time, jiffies)) {
+   184					do_sleep = 1;
+   185					break;
+   186				}
+   187			}
+   188	
+   189			/*
+   190			 * current sched_rt has threshold for rt task running time.
+   191			 * When a rt task uses 95% CPU time, the rt thread will be
+   192			 * scheduled out for 5% CPU time to not starve other tasks. But
+   193			 * the mechanism only works when all CPUs have RT task running,
+   194			 * as if one CPU hasn't RT task, RT task from other CPUs will
+   195			 * borrow CPU time from this CPU and cause RT task use > 95%
+   196			 * CPU time. To make 'avoid starvation' work, takes a nap here.
+   197			 */
+   198			if (unlikely(do_sleep))
+   199				schedule_timeout_killable(HZ * idle_pct / 100);
+   200	
+   201			/* If an external event has set the need_resched flag, then
+   202			 * we need to deal with it, or this loop will continue to
+   203			 * spin without calling __mwait().
+   204			 */
+   205			if (unlikely(need_resched()))
+   206				schedule();
+   207		}
+   208	
+   209		exit_round_robin(tsk_index);
+   210		return 0;
+   211	}
+   212	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
