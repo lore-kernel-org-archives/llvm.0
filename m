@@ -1,43 +1,39 @@
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3122F28
-	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 01:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8E92F23
+	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 03:09:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644370042; x=1675906042;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NMyeiIsueqE8D5tiJQhqjy0Mj/1tI0AQal2caRNshgk=;
-  b=KBhiocLONNQ6KmXBigLWNmrakzhlzrCu0EIgsr6ak46PyR4nnpha4WIp
-   AJRrG6y+vk10D8sEfrMy2uMcMcHCjO/b9EyJKQv01AyOax2ffFOw/q2KM
-   olf+XxGgWw3d0BxD0o4FC20KkkCNMuhOkyf+8RcAYGc+a8L09f2JMYh3B
-   PLErCOxW0DZpQPqvjsgL2bVtrWS0xkDPlXyWZaEp+IIcXFZb8KJDnW39r
-   rgW/GVRhOq9XHfpvowAnquNQb/HZX1tD2ewE/TIRXwh3tfmkROYYFuWEa
-   L+lLr8rdoU7RahhL7fRAoWZwlKsyWFcbsdLzkM8z29tsO789o5YvVGGNy
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="232660380"
+  t=1644376166; x=1675912166;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=I7X+0aJ3Vdg0cJTzgcFqR37DtvK5gzqMb2fAJsQh7Ok=;
+  b=LH3xagjFOoAuo2+w7DOAfhHCUKGJmJT9sTkfEAcfAqalsqqb7kQzd4L7
+   Dr4ZYED5DApY9dPOCsBQOtWKfUsFxUXbhGdr0s+x4Isjmm7e/ZE4RXIQg
+   la+zxi4UbuC+8dHR+PohWS0RXyAWfc6YljLe+4p5a05wrFLED6Ejqk2vR
+   bhpU1pINSt7owFq1ftHrW8S0hQ02u5AyXpnOCnsr6uzqa4vhDOWkiaxwM
+   3euqSHovjGm1MyUIu3MaahgPiSkCjwFJUSGJ4CdYxx5oooMSoTGeOg00t
+   wUwSL9FAQmF2D1v39RHs+jnAhRbklAOlAX5Mu0nAu7SkF4oNhYvHy7mI6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="232673481"
 X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
-   d="scan'208";a="232660380"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 17:27:21 -0800
+   d="scan'208";a="232673481"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 19:09:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
-   d="scan'208";a="701059444"
+   d="scan'208";a="482175966"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 Feb 2022 17:27:20 -0800
+  by orsmga003.jf.intel.com with ESMTP; 08 Feb 2022 19:09:24 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nHblP-00012f-E6; Wed, 09 Feb 2022 01:27:19 +0000
-Date: Wed, 9 Feb 2022 09:26:21 +0800
+	id 1nHdMA-000199-IQ; Wed, 09 Feb 2022 03:09:22 +0000
+Date: Wed, 9 Feb 2022 11:08:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Satya Tangirala <satyat@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 971/9999] drivers/mmc/core/crypto.c:14:6: warning: no previous prototype for
- function 'mmc_crypto_setup_queue'
-Message-ID: <202202090901.7ZCWAPk5-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [crng-random:jd/preempt-rt 4/9] drivers/char/random.o: warning:
+ objtool: urandom_read_nowarn()+0x1b2: unreachable instruction
+Message-ID: <202202091149.sGYokEQM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,67 +44,41 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   69be2ccce366f9ef3eec5cd1c9b8bfb3e1c2d16d
-commit: eb54e7323628bf827eab028d14d8171f8dd6777e [971/9999] ANDROID: mmc: MMC crypto API
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220209/202202090901.7ZCWAPk5-lkp@intel.com/config)
+CC: zx2c4@kernel.org
+CC: linux-kernel@vger.kernel.org
+TO: "Jason A. Donenfeld" <zx2c4@kernel.org>
+CC: "Jean-Philippe Aumasson" <jeanphilippe.aumasson@gmail.com>
+
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git jd/preempt-rt
+head:   e32d7768f472ed279c1c4a82bf8ba611d67db8e2
+commit: 17e19ef79dd0e0ad4b7ec2831088282ddd7674cd [4/9] random: use linear min-entropy accumulation crediting
+config: x86_64-buildonly-randconfig-r002-20220207 (https://download.01.org/0day-ci/archive/20220209/202202091149.sGYokEQM-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/eb54e7323628bf827eab028d14d8171f8dd6777e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout eb54e7323628bf827eab028d14d8171f8dd6777e
+        # https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=17e19ef79dd0e0ad4b7ec2831088282ddd7674cd
+        git remote add crng-random git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
+        git fetch --no-tags crng-random jd/preempt-rt
+        git checkout 17e19ef79dd0e0ad4b7ec2831088282ddd7674cd
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mmc/core/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/mmc/core/crypto.c:14:6: warning: no previous prototype for function 'mmc_crypto_setup_queue' [-Wmissing-prototypes]
-   void mmc_crypto_setup_queue(struct mmc_host *host, struct request_queue *q)
+   drivers/char/random.c:1882:6: warning: no previous prototype for function 'add_hwgenerator_randomness' [-Wmissing-prototypes]
+   void add_hwgenerator_randomness(const char *buffer, size_t count,
         ^
-   drivers/mmc/core/crypto.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mmc_crypto_setup_queue(struct mmc_host *host, struct request_queue *q)
+   drivers/char/random.c:1882:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void add_hwgenerator_randomness(const char *buffer, size_t count,
    ^
    static 
->> drivers/mmc/core/crypto.c:21:6: warning: no previous prototype for function 'mmc_crypto_free_host' [-Wmissing-prototypes]
-   void mmc_crypto_free_host(struct mmc_host *host)
-        ^
-   drivers/mmc/core/crypto.c:21:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mmc_crypto_free_host(struct mmc_host *host)
-   ^
-   static 
->> drivers/mmc/core/crypto.c:26:6: warning: no previous prototype for function 'mmc_crypto_prepare_req' [-Wmissing-prototypes]
-   void mmc_crypto_prepare_req(struct mmc_queue_req *mqrq)
-        ^
-   drivers/mmc/core/crypto.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mmc_crypto_prepare_req(struct mmc_queue_req *mqrq)
-   ^
-   static 
-   3 warnings generated.
-
-
-vim +/mmc_crypto_setup_queue +14 drivers/mmc/core/crypto.c
-
-    13	
-  > 14	void mmc_crypto_setup_queue(struct mmc_host *host, struct request_queue *q)
-    15	{
-    16		if (host->caps2 & MMC_CAP2_CRYPTO)
-    17			q->ksm = host->ksm;
-    18	}
-    19	EXPORT_SYMBOL_GPL(mmc_crypto_setup_queue);
-    20	
-  > 21	void mmc_crypto_free_host(struct mmc_host *host)
-    22	{
-    23		keyslot_manager_destroy(host->ksm);
-    24	}
-    25	
-  > 26	void mmc_crypto_prepare_req(struct mmc_queue_req *mqrq)
+   1 warning generated.
+>> drivers/char/random.o: warning: objtool: urandom_read_nowarn()+0x1b2: unreachable instruction
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
