@@ -1,40 +1,41 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3037E2F28
-	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 12:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5F02F28
+	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 13:26:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644411354; x=1675947354;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=XkKCrfI0fycI5Zhp7DcWIg9hk0Hgi7O9FWpCplL7p+E=;
-  b=ZoVuJmKv+sUS5cC+BhHltHSgQRiNr5+GyNGWslo7pCTXUwzg6/CjdRl7
-   cHu2mZUl6wHPCGPFKAbJ7CsiTJVvBhmaAd6lIk9nqGgHfWtoYANMxJ7dY
-   CLk5zf9IXypV6RkZhGX2/iEiyq6bkOD2YEo4oFcy19PO1mZEcfb46+UBY
-   YWcgZKHIXYMrAari0vmT1pwKKdv2XDpPbUAY2Fl9qj9Zq/5Aua70Ec7gn
-   78QeDOlfa3XDV1RSXWzXhiBblkwigzuMekhNdD7yyWP3XN7yMDIdm8V0x
-   4ajpLyRRsdgUvPQWWQDmRQyscOPgUqZTdxS34abl6HyckLQCc+zYIg7Nh
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="236603229"
+  t=1644413210; x=1675949210;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yRxLiCCsKty7UwQgrjOb+UfCHwO5LNQYwAMxkh40LT4=;
+  b=UKTO0+RZSAkK1SSmtPYHLwFnqeevJ4VvBKzDjs9Y4boaycvEtJhq2dT6
+   Uo3jBAN2DZdpdG9U/zVYraz+JrePOJvgelXK+rUz3ReOWYwmMUdHQsRAG
+   99/SHij6JtAA0nqnF5DSoGTqVubkZlXX9Rm7g3EoPTz6FROcQbHqF1LWT
+   ul3XcVeGLdlFDdaqXnbRkIFyNLh+3trDl8iIENN89N1LO1cUXpgXs7AbI
+   YBfrsFa5RQTz73sMHj6KzXKL4rZpybDDHs2DBExkW5Jd7Vs3FjICBS9Oy
+   Ipyu6ucxTVp4dFhM60LDF52h8QK1Al8tIIkohoP4xla9SycENoSdgnuTE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="249150791"
 X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="236603229"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 04:55:48 -0800
+   d="scan'208";a="249150791"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 05:26:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="771333777"
+   d="scan'208";a="482326542"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Feb 2022 04:55:47 -0800
+  by orsmga003.jf.intel.com with ESMTP; 09 Feb 2022 05:26:48 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nHmVe-0001p0-Ff; Wed, 09 Feb 2022 12:55:46 +0000
-Date: Wed, 9 Feb 2022 20:55:43 +0800
+	id 1nHmzf-0001rU-UQ; Wed, 09 Feb 2022 13:26:47 +0000
+Date: Wed, 9 Feb 2022 21:26:38 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 3871/4656]
- drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.o: warning:
- objtool: hubbub31_program_watermarks()+0x61: unreachable instruction
-Message-ID: <202202092059.9gegO2oq-lkp@intel.com>
+To: Zhen Ni <nizhen@uniontech.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [peterz-queue:sched/core 29/29] kernel/sched/fair.c:230:2: error:
+ implicit declaration of function 'sched_cfs_bandwidth_sysctl_init'
+Message-ID: <202202092107.WdTEsmSF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,33 +46,84 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>
-CC: Alex Deucher <alexander.deucher@amd.com>
-CC: Charlene Liu <Charlene.Liu@amd.com>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   10207e3a840b47b5eae573486a88fb6e29884f77
-commit: ca7f9d0aba9940f4d3e759f44c414c3707a94b21 [3871/4656] drm/amd/display: fix yellow carp wm clamping
-config: x86_64-buildonly-randconfig-r002-20220207 (https://download.01.org/0day-ci/archive/20220209/202202092059.9gegO2oq-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
+head:   bf8d9ef490e0600b3b30ac2244858ecd327123ab
+commit: bf8d9ef490e0600b3b30ac2244858ecd327123ab [29/29] sched: Move cfs_bandwidth_slice sysctls to fair.c
+config: hexagon-randconfig-r045-20220209 (https://download.01.org/0day-ci/archive/20220209/202202092107.WdTEsmSF-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ca7f9d0aba9940f4d3e759f44c414c3707a94b21
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout ca7f9d0aba9940f4d3e759f44c414c3707a94b21
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=bf8d9ef490e0600b3b30ac2244858ecd327123ab
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/core
+        git checkout bf8d9ef490e0600b3b30ac2244858ecd327123ab
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/sched/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.o: warning: objtool: hubbub31_program_watermarks()+0x61: unreachable instruction
+>> kernel/sched/fair.c:230:2: error: implicit declaration of function 'sched_cfs_bandwidth_sysctl_init' [-Werror,-Wimplicit-function-declaration]
+           sched_cfs_bandwidth_sysctl_init();
+           ^
+   kernel/sched/fair.c:652:5: warning: no previous prototype for function 'sched_update_scaling' [-Wmissing-prototypes]
+   int sched_update_scaling(void)
+       ^
+   kernel/sched/fair.c:652:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int sched_update_scaling(void)
+   ^
+   static 
+   kernel/sched/fair.c:5469:6: warning: no previous prototype for function 'init_cfs_bandwidth' [-Wmissing-prototypes]
+   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+        ^
+   kernel/sched/fair.c:5469:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+   ^
+   static 
+   kernel/sched/fair.c:11694:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
+   void free_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:11694:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void free_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/fair.c:11696:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
+   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+       ^
+   kernel/sched/fair.c:11696:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+   ^
+   static 
+   kernel/sched/fair.c:11701:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
+   void online_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:11701:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void online_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/fair.c:11703:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
+   void unregister_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:11703:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void unregister_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   6 warnings and 1 error generated.
+
+
+vim +/sched_cfs_bandwidth_sysctl_init +230 kernel/sched/fair.c
+
+   226	
+   227	void __init sched_init_granularity(void)
+   228	{
+   229		update_sysctl();
+ > 230		sched_cfs_bandwidth_sysctl_init();
+   231	}
+   232	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
