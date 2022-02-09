@@ -1,34 +1,34 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E6F2C9C
-	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 18:59:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9EC2C9C
+	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 18:59:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644433160; x=1675969160;
+  t=1644433161; x=1675969161;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lDXFHCnNkuwrtByUN11SlzF5cvcRHsyXQHMq9A+A45Q=;
-  b=nJKmZQ0ile1Very0iKjS3oykHLspIlbGooSw/dSeN2w0yLiloZvQcAR2
-   d2JFpzSmTDcnLuPst46KlNElh2nyttY2qRtheQaaeH/BZQLRO1IQbQcn1
-   8YRooZxDWwoTnXiohacIKdGlkHQBFhLpz5/3+8jXEaPnIVM22YjiVzF02
-   ysIy+abn0d1iuaIhIYwWE38KT20v10CD1bmOTZm5Jz0o3Bq+1UDMI/rsL
-   gSf94IPkwERVXrbvxKKz/jM9ewUbgq4K5sEVXfrmpYEiBrTVyUJEq6GXG
-   XFOsn1v3TXCrdgTk46ecB5WzZ5TqINAPKv3e+5ubfqW5fJRrR5gmVhLWf
+  bh=R+jBO/npeGvXg7XDYxgpHbHrFNhYQT3ckL7ow46HPUI=;
+  b=CUG2k+KPp2CeYIbIR77sVlQEXf7NytnipX9kxXDeXv9eAJW4tHUSJFvG
+   8RBTavnClktL6PmSCsddrypGnePhpj/fgmiGcyaTLJdwNNcaGWzDMd7x4
+   rZcnB6WwbrQJkqucgpJMI6VmnzicTGWUb0rGesQofmdX2J+/K2c4Cvzo1
+   prye4t9FdnHvbTxxJREOhmqY1GRO7L0n4WHzi13rQKg0e1Ij8VcdleD+q
+   3oH+2A6kJqgPoq7MJnq5vYR4welI0OEdozQxLDfrVIdqNjyshifko0lpR
+   wA596M1qTvG4dkcFPD0nF5QHB/JPHZgVJlq4ilZVfG+x2gb8uqGMFLw/H
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="312597913"
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249516112"
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="312597913"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:20 -0800
+   d="scan'208";a="249516112"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="485376320"
+   d="scan'208";a="629389938"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga006.jf.intel.com with ESMTP; 09 Feb 2022 10:59:11 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 09 Feb 2022 10:59:13 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQY031082;
-	Wed, 9 Feb 2022 18:59:09 GMT
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQZ031082;
+	Wed, 9 Feb 2022 18:59:11 GMT
 From: Alexander Lobakin <alexandr.lobakin@intel.com>
 To: linux-hardening@vger.kernel.org, x86@kernel.org
 Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -61,9 +61,9 @@ Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v10 11/15] x86/boot: allow FG-KASLR to be selected
-Date: Wed,  9 Feb 2022 19:57:48 +0100
-Message-Id: <20220209185752.1226407-12-alexandr.lobakin@intel.com>
+Subject: [PATCH v10 12/15] module: add arch-indep FG-KASLR for randomizing function layout
+Date: Wed,  9 Feb 2022 19:57:49 +0100
+Message-Id: <20220209185752.1226407-13-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
 References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
@@ -75,27 +75,220 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that the kernel has full support of FG-KASLR from both core and
-x86 code, allow FG-KASLR to be enabled for x86_64 if the "regular"
-KASLR is also turned on.
+From: Kristen Carlson Accardi <kristen@linux.intel.com>
 
+Introduce a new config option to allow modules to be re-ordered
+by function. This option can be enabled independently of the
+kernel text KASLR or FG_KASLR settings so that it can be used
+by architectures that do not support either of these features.
+This option will be selected by default if CONFIG_FG_KASLR is
+selected.
+
+If a module has functions split out into separate text sections
+(i.e. compiled with the -ffunction-sections flag), reorder the
+functions to provide some code diversification to modules.
+
+Alexander Lobakin:
+
+Make it work with ClangCFI -- in such builds, .text section must
+always come first and be page-aligned. Exclude it from the shuffle
+list and leave as it is.
+Make this feature depend on `-z unique-symbol` as well, due to the
+very same reasons as for FG-KASLR for vmlinux.
+Use common shuffle_array() from <linux/random.h> instead of
+open-coding it.
+
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Tested-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Tested-by: Tony Luck <tony.luck@intel.com>
+Acked-by: Jessica Yu <jeyu@kernel.org>
+Tested-by: Jessica Yu <jeyu@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com> # swap.cocci
+Co-developed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- arch/x86/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ Makefile                |  6 +++-
+ include/linux/linkage.h |  1 +
+ init/Kconfig            | 14 ++++++++
+ kernel/module.c         | 73 +++++++++++++++++++++++++++++++++++++++--
+ 4 files changed, 91 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f6bb48d41349..d5442107a915 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -105,6 +105,7 @@ config X86
- 	select ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
-+	select ARCH_SUPPORTS_FG_KASLR		if X86_64 && RANDOMIZE_BASE
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK	if X86_64
- 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
- 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
+diff --git a/Makefile b/Makefile
+index 4328d53d8b25..cf7cf5cbdad9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -889,7 +889,7 @@ export SECSUBST_AFLAGS
+ endif
+ 
+ # Same for modules. LD DCE doesn't work for them, thus not checking for it
+-ifneq ($(CONFIG_LTO_CLANG),)
++ifneq ($(CONFIG_MODULE_FG_KASLR)$(CONFIG_LTO_CLANG),)
+ KBUILD_AFLAGS_MODULE += -Wa,--sectname-subst
+ KBUILD_CFLAGS_MODULE += -Wa,--sectname-subst
+ endif
+@@ -898,6 +898,10 @@ endif # CONFIG_HAVE_ASM_FUNCTION_SECTIONS
+ # ClangLTO implies `-ffunction-sections -fdata-sections`, no need
+ # to specify them manually and trigger a pointless full rebuild
+ ifndef CONFIG_LTO_CLANG
++ifdef CONFIG_MODULE_FG_KASLR
++KBUILD_CFLAGS_MODULE += -ffunction-sections
++endif
++
+ ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_FG_KASLR),)
+ KBUILD_CFLAGS_KERNEL += -ffunction-sections
+ endif
+diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+index 95ca162a868c..12cf21f9d8ad 100644
+--- a/include/linux/linkage.h
++++ b/include/linux/linkage.h
+@@ -81,6 +81,7 @@
+ #if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
+     ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
+      (defined(CONFIG_FG_KASLR) && !defined(MODULE)) || \
++     (defined(CONFIG_MODULE_FG_KASLR) && defined(MODULE)) || \
+      (defined(CONFIG_LTO_CLANG)))
+ 
+ #define SYM_PUSH_SECTION(name)				\
+diff --git a/init/Kconfig b/init/Kconfig
+index 5fbd1c294df4..86a2d3fd6390 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2386,6 +2386,20 @@ config UNUSED_KSYMS_WHITELIST
+ 	  one per line. The path can be absolute, or relative to the kernel
+ 	  source tree.
+ 
++config MODULE_FG_KASLR
++	bool "Module Function Granular Layout Randomization"
++	depends on $(cc-option,-ffunction-sections)
++	depends on LD_HAS_Z_UNIQUE_SYMBOL || !LIVEPATCH
++	default FG_KASLR
++	depends on BROKEN
++	help
++	  This option randomizes the module text section by reordering the text
++	  section by function at module load time. In order to use this
++	  feature, the module must have been compiled with the
++	  -ffunction-sections compiler flag.
++
++	  If unsure, say N.
++
+ endif # MODULES
+ 
+ config MODULES_TREE_LOOKUP
+diff --git a/kernel/module.c b/kernel/module.c
+index 46a5c2ed1928..616a622953fa 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -57,6 +57,7 @@
+ #include <linux/bsearch.h>
+ #include <linux/dynamic_debug.h>
+ #include <linux/audit.h>
++#include <linux/random.h>
+ #include <uapi/linux/module.h>
+ #include "module-internal.h"
+ 
+@@ -1526,7 +1527,7 @@ static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
+ 
+ 	for (section = 0; section < sect_attrs->nsections; section++)
+ 		kfree(sect_attrs->attrs[section].battr.attr.name);
+-	kfree(sect_attrs);
++	kvfree(sect_attrs);
+ }
+ 
+ static void add_sect_attrs(struct module *mod, const struct load_info *info)
+@@ -1543,7 +1544,7 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
+ 	size[0] = ALIGN(struct_size(sect_attrs, attrs, nloaded),
+ 			sizeof(sect_attrs->grp.bin_attrs[0]));
+ 	size[1] = (nloaded + 1) * sizeof(sect_attrs->grp.bin_attrs[0]);
+-	sect_attrs = kzalloc(size[0] + size[1], GFP_KERNEL);
++	sect_attrs = kvzalloc(size[0] + size[1], GFP_KERNEL);
+ 	if (sect_attrs == NULL)
+ 		return;
+ 
+@@ -2415,6 +2416,71 @@ static bool module_init_layout_section(const char *sname)
+ 	return module_init_section(sname);
+ }
+ 
++/*
++ * randomize_text()
++ * Look through the core section looking for executable code sections.
++ * Store sections in an array and then shuffle the sections
++ * to reorder the functions.
++ */
++static void randomize_text(struct module *mod, struct load_info *info)
++{
++	int max_sections = info->hdr->e_shnum;
++	int num_text_sections = 0;
++	Elf_Shdr **text_list;
++	int i, size;
++
++	text_list = kvmalloc_array(max_sections, sizeof(*text_list), GFP_KERNEL);
++	if (!text_list)
++		return;
++
++	for (i = 0; i < max_sections; i++) {
++		Elf_Shdr *shdr = &info->sechdrs[i];
++		const char *sname = info->secstrings + shdr->sh_name;
++
++		if (!(shdr->sh_flags & SHF_ALLOC) ||
++		    !(shdr->sh_flags & SHF_EXECINSTR) ||
++		    (shdr->sh_flags & ARCH_SHF_SMALL) ||
++		    module_init_layout_section(sname))
++			continue;
++
++		/*
++		 * With CONFIG_CFI_CLANG, .text with __cfi_check() must come
++		 * before any other text sections, and be aligned to PAGE_SIZE.
++		 * Don't include it in the shuffle list.
++		 */
++		if (IS_ENABLED(CONFIG_CFI_CLANG) && !strcmp(sname, ".text"))
++			continue;
++
++		if (!num_text_sections)
++			size = shdr->sh_entsize;
++
++		text_list[num_text_sections] = shdr;
++		num_text_sections++;
++	}
++
++	if (!num_text_sections)
++		goto exit;
++
++	shuffle_array(text_list, num_text_sections);
++
++	for (i = 0; i < num_text_sections; i++) {
++		Elf_Shdr *shdr = text_list[i];
++
++		/*
++		 * get_offset has a section index for it's last
++		 * argument, that is only used by arch_mod_section_prepend(),
++		 * which is only defined by parisc. Since this type
++		 * of randomization isn't supported on parisc, we can
++		 * safely pass in zero as the last argument, as it is
++		 * ignored.
++		 */
++		shdr->sh_entsize = get_offset(mod, &size, shdr, 0);
++	}
++
++exit:
++	kvfree(text_list);
++}
++
+ /*
+  * Lay out the SHF_ALLOC sections in a way not dissimilar to how ld
+  * might -- code, read-only data, read-write data, small data.  Tally
+@@ -2509,6 +2575,9 @@ static void layout_sections(struct module *mod, struct load_info *info)
+ 			break;
+ 		}
+ 	}
++
++	if (IS_ENABLED(CONFIG_MODULE_FG_KASLR))
++		randomize_text(mod, info);
+ }
+ 
+ static void set_license(struct module *mod, const char *license)
 -- 
 2.34.1
 
