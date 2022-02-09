@@ -1,50 +1,43 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AB42F2C
-	for <llvm@lists.linux.dev>; Tue,  8 Feb 2022 23:58:28 +0000 (UTC)
-Received: by mail-pj1-f44.google.com with SMTP id m7so670117pjk.0
-        for <llvm@lists.linux.dev>; Tue, 08 Feb 2022 15:58:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Al312nSB11RWQ/fPz/oLtgMbGtxfQXub9WO/1WYfmpk=;
-        b=QVhTkuP6g5ht0lSUDdZXX4ML54Png+mqetf03uPCTSZEbVJJRRik/1zcMYrH17WVc3
-         bpnDG1ZupaKCXeN7lPCDGJ5EAv8dmXPG65CXGhHlRVFz0gJq0z1+3Q/Xv+P/D3bFVjZC
-         pq+jYhiAV+G8dH8pK+8L0b1G59nytVkjzXk1U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Al312nSB11RWQ/fPz/oLtgMbGtxfQXub9WO/1WYfmpk=;
-        b=t74rv6KWXkBo26uCaw/RIrZvCELQHdlM9Q82+jE8kGh8N3XZXxCShiNf99sEvxb7d4
-         OWissyUYk99flBLaNmGCVcODoRDmu0B8idc64kQo24i/YR3KxMXfvdEgrgtO6VVoGtqj
-         UxcJCZSvcjjzghVcPNZWqYjCp+dqxXIQtFvGk/E3YRmmz/14ZsV7o2b5ji/zxvfydfVd
-         wNaki/193QkmOERxKgPIphfVTXSCPxe1jl8uWqsy5fVQ/XZp46A/gEPnmRL6z63KFr3C
-         L3frxozPO7Ds1pY3jNYybgnUYBvKaySCZaUsR9QleXLxN9oiIxUwstTV/GWOxWrqU2vG
-         0abw==
-X-Gm-Message-State: AOAM532P+MjDt7GzjRO06Bfdvtl0HwJ+7CFyA9J7uEISBOnKSpgqgoGb
-	fv5S3HuXY7Cp9zTE/FTQDZDxRg==
-X-Google-Smtp-Source: ABdhPJw+/mRo5ofjXEkCHagXxoE3e/S1IZPBO5qaKIqgxKt9qk6CwAf4EaSB4bnfRh2kzoYBWuaIAw==
-X-Received: by 2002:a17:902:e88e:: with SMTP id w14mr6839434plg.95.1644364707754;
-        Tue, 08 Feb 2022 15:58:27 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r7sm6748208pgv.15.2022.02.08.15.58.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 15:58:27 -0800 (PST)
-Date: Tue, 8 Feb 2022 15:58:26 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	George Burgess IV <gbiv@google.com>, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v7 7/8] fortify: Make sure strlen() may still be used as
- a constant expression
-Message-ID: <202202081555.ED0C0658@keescook>
-References: <20220208225350.1331628-1-keescook@chromium.org>
- <20220208225350.1331628-8-keescook@chromium.org>
- <CAKwvOd=wre3uzFVBFaOs4Oud+SobxiW_BwKXMsa5p0tEy6BsiA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3122F28
+	for <llvm@lists.linux.dev>; Wed,  9 Feb 2022 01:27:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644370042; x=1675906042;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NMyeiIsueqE8D5tiJQhqjy0Mj/1tI0AQal2caRNshgk=;
+  b=KBhiocLONNQ6KmXBigLWNmrakzhlzrCu0EIgsr6ak46PyR4nnpha4WIp
+   AJRrG6y+vk10D8sEfrMy2uMcMcHCjO/b9EyJKQv01AyOax2ffFOw/q2KM
+   olf+XxGgWw3d0BxD0o4FC20KkkCNMuhOkyf+8RcAYGc+a8L09f2JMYh3B
+   PLErCOxW0DZpQPqvjsgL2bVtrWS0xkDPlXyWZaEp+IIcXFZb8KJDnW39r
+   rgW/GVRhOq9XHfpvowAnquNQb/HZX1tD2ewE/TIRXwh3tfmkROYYFuWEa
+   L+lLr8rdoU7RahhL7fRAoWZwlKsyWFcbsdLzkM8z29tsO789o5YvVGGNy
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="232660380"
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="232660380"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 17:27:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="701059444"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 08 Feb 2022 17:27:20 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nHblP-00012f-E6; Wed, 09 Feb 2022 01:27:19 +0000
+Date: Wed, 9 Feb 2022 09:26:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Satya Tangirala <satyat@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
+ 971/9999] drivers/mmc/core/crypto.c:14:6: warning: no previous prototype for
+ function 'mmc_crypto_setup_queue'
+Message-ID: <202202090901.7ZCWAPk5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,76 +46,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOd=wre3uzFVBFaOs4Oud+SobxiW_BwKXMsa5p0tEy6BsiA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Feb 08, 2022 at 03:17:13PM -0800, Nick Desaulniers wrote:
-> On Tue, Feb 8, 2022 at 2:53 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > In preparation for enabling Clang FORTIFY_SOURCE support, redefine
-> > strlen() as a macro that tests for being a constant expression
-> > so that strlen() can still be used in static initializers, which is
-> > lost when adding __pass_object_size and __overloadable.
-> >
-> > An example of this usage can be seen here:
-> >         https://lore.kernel.org/all/202201252321.dRmWZ8wW-lkp@intel.com/
-> >
-> > Notably, this constant expression feature of strlen() is not available
-> > for architectures that build with -ffreestanding. This means the kernel
-> > currently does not universally expect strlen() to be used this way, but
-> > since there _are_ some build configurations that depend on it, retain
-> > the characteristic for Clang FORTIFY_SOURCE builds too.
-> >
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  include/linux/fortify-string.h | 13 +++++++++++--
-> >  1 file changed, 11 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-> > index db1ad1c1c79a..f77cf22e2d60 100644
-> > --- a/include/linux/fortify-string.h
-> > +++ b/include/linux/fortify-string.h
-> > @@ -2,6 +2,8 @@
-> >  #ifndef _LINUX_FORTIFY_STRING_H_
-> >  #define _LINUX_FORTIFY_STRING_H_
-> >
-> > +#include <linux/const.h>
-> > +
-> >  #define __FORTIFY_INLINE extern __always_inline __gnu_inline
-> >  #define __RENAME(x) __asm__(#x)
-> >
-> > @@ -95,9 +97,16 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const p, __kernel_size_t m
-> >         return ret;
-> >  }
-> >
-> > -/* defined after fortified strnlen to reuse it. */
-> > +/*
-> > + * Defined after fortified strnlen to reuse it. However, it must still be
-> > + * possible for strlen() to be used on compile-time strings for use in
-> > + * static initializers (i.e. as a constant expression).
-> > + */
-> > +#define strlen(p)                                                      \
-> > +       __builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),      \
-> 
-> Is `__is_constexpr(p) == __is_constexpr(__builtin_strlen(p))`? i.e.
-> can we drop the first `__builtin_strlen`? It seems redundant.
-> 
-> So instead, we'd have:
-> 
-> #define strlen(p) __builtin_choose_expr(__is_constexpr(p),
-> __builtin_strlen(p), __fortify_strlen(p))
-> 
-> Or is there some funny business where p isn't constexpr but strlen(p)
-> somehow is? I doubt that.  (Or is it that p is constexpr, but
-> strlen(p) is not?)
-> 
-> (Guess I'm wrong: https://godbolt.org/z/19ffz7vjx)
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
+head:   69be2ccce366f9ef3eec5cd1c9b8bfb3e1c2d16d
+commit: eb54e7323628bf827eab028d14d8171f8dd6777e [971/9999] ANDROID: mmc: MMC crypto API
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220209/202202090901.7ZCWAPk5-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/eb54e7323628bf827eab028d14d8171f8dd6777e
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
+        git checkout eb54e7323628bf827eab028d14d8171f8dd6777e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mmc/core/
 
-Yeah, as you've discovered ... funny business. :P
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Ok then.
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+All warnings (new ones prefixed by >>):
 
-Thanks!
+>> drivers/mmc/core/crypto.c:14:6: warning: no previous prototype for function 'mmc_crypto_setup_queue' [-Wmissing-prototypes]
+   void mmc_crypto_setup_queue(struct mmc_host *host, struct request_queue *q)
+        ^
+   drivers/mmc/core/crypto.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mmc_crypto_setup_queue(struct mmc_host *host, struct request_queue *q)
+   ^
+   static 
+>> drivers/mmc/core/crypto.c:21:6: warning: no previous prototype for function 'mmc_crypto_free_host' [-Wmissing-prototypes]
+   void mmc_crypto_free_host(struct mmc_host *host)
+        ^
+   drivers/mmc/core/crypto.c:21:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mmc_crypto_free_host(struct mmc_host *host)
+   ^
+   static 
+>> drivers/mmc/core/crypto.c:26:6: warning: no previous prototype for function 'mmc_crypto_prepare_req' [-Wmissing-prototypes]
+   void mmc_crypto_prepare_req(struct mmc_queue_req *mqrq)
+        ^
+   drivers/mmc/core/crypto.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mmc_crypto_prepare_req(struct mmc_queue_req *mqrq)
+   ^
+   static 
+   3 warnings generated.
 
--- 
-Kees Cook
+
+vim +/mmc_crypto_setup_queue +14 drivers/mmc/core/crypto.c
+
+    13	
+  > 14	void mmc_crypto_setup_queue(struct mmc_host *host, struct request_queue *q)
+    15	{
+    16		if (host->caps2 & MMC_CAP2_CRYPTO)
+    17			q->ksm = host->ksm;
+    18	}
+    19	EXPORT_SYMBOL_GPL(mmc_crypto_setup_queue);
+    20	
+  > 21	void mmc_crypto_free_host(struct mmc_host *host)
+    22	{
+    23		keyslot_manager_destroy(host->ksm);
+    24	}
+    25	
+  > 26	void mmc_crypto_prepare_req(struct mmc_queue_req *mqrq)
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
