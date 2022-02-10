@@ -1,426 +1,153 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F8D7D
-	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 19:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644523031; x=1676059031;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6l1NuGDEgyOu0Gjn1hdPBVC3wyFXZLjKFhzlZFDEPsU=;
-  b=f/khl8SohJM3YRqA+cJFu/QTjrWVJBUQkrMH6o750H6YPy3N8vFXZkZj
-   1ZdZggcfq5yI4T+RLvKVtsMSj55puZjzVRG8q4uvkH3PRF3g4IJb2RGiT
-   NJPESrcHEyWfoySf9hWHr7bNAG62AOpoctsyZzcyJMOCFtZHEeKGoMZ+z
-   4gxf6l6faXI7bCCsc1+2+8EiwIuxwwlwlIt3hT6WttWivIhdkxM44+a0z
-   KABDTVV5dvMX99ToMxAc4IBv4AKx92lXDi/PimXRb6T3nat/nrxZsHABa
-   yZAVZp3zwRKIMxAVvRHVXe4lK3p4GHnzZq6rF5eS5ocmUA/jjDkrWjlh4
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="247167114"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="247167114"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 11:57:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="485878537"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 10 Feb 2022 11:57:06 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nIFYw-0003gs-19; Thu, 10 Feb 2022 19:57:06 +0000
-Date: Fri, 11 Feb 2022 03:56:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guo Ren <guoren@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [csky-linux:riscv_compat_v6_svpbmt-v6 35/35]
- include/asm-generic/io.h:973:34: error: use of undeclared identifier
- '_PAGE_PMA'
-Message-ID: <202202110318.nlUr3nQu-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CDCE2F22
+	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 22:32:15 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id b64-20020a256743000000b0061e169a5f19so14601001ybc.11
+        for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 14:32:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=gl08/uxFVlmi2wSTq5+9dUe3B/HwzYiRuJoJTn+segs=;
+        b=BdC/fKhWAhUYwCbX8kX1FDzZtTY9aXZLZxD44qMz+MrqHmpo9XxkQ1C7btl4i+KBVV
+         2Ttqt8x0eMP9PuQygYLTj0RxfbJGpXIFw5IZjpN/3or4BSXmsMctd17EhXpz9MgID3jO
+         Q70qwhcGZZ8Q9ILF3wfH79Moln9rfUCDFOmkxEJ40b7+4WFJRQmCmCZl6Gv+hi3LgMGZ
+         WQJEhU9pRiMZ2Kl2UcNgWBheBv/L/Q+B9jAavghoGDh76uwwOd+etdfMAMGK2thVbD7W
+         cLh1JCBDeH/t5HCTavnLVT+ygkAhzWIOeOoVs5j7GDPwte7Qo8aRpEKtRHBfxq58hsKf
+         RM5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=gl08/uxFVlmi2wSTq5+9dUe3B/HwzYiRuJoJTn+segs=;
+        b=OayJTzxvdd8XzhjPgYdQn0H8WSlY9/RVj22Pd3W4hIb/J+MNfcdb4GurGxZ66EMoYb
+         VjxtihrMTx2UHTpPSCSfFH8ik6KtO4XFkWwWU/gRa22brn0qCGdiheP+yWdJvvCV18Tk
+         yMgeGig8uQSsG0j+4xZdcLFU/8vBlBfirwlzczS45+lbQOOCHVtefCgjVh7SUkvZrlIx
+         OXcLcvWgKPAJ08LLNwuROijByPqcX1wsVyL7guK2931fWudb/KbhB3y3LLyg0VS1z5Lh
+         DJaBQMw0jXdqDmRMZAvwFrMyTWIXIhSzW1OkK2RCy/TZ1vwdz5vB5NZEoBVxqTLcHWTq
+         /H0A==
+X-Gm-Message-State: AOAM530gfEqa/PccUAWan4ilbQkhI9C7brAbApMTpWoiP+eH3m7/73Cn
+	aFUFTHFamtqrretOELqF1D2VgNaQ
+X-Google-Smtp-Source: ABdhPJzsflLFTtrCxYLYUbOG68XKxeYHkfS3xyNJorZcxmlFdOO6bvUPqjcNKP1xFAdasYI3UiPhTZ8wNQ==
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:2f6e:60d0:d1d5:6d5b])
+ (user=morbo job=sendgmr) by 2002:a25:3285:: with SMTP id y127mr9242337yby.205.1644532334603;
+ Thu, 10 Feb 2022 14:32:14 -0800 (PST)
+Date: Thu, 10 Feb 2022 14:31:34 -0800
+In-Reply-To: <20220204005742.1222997-1-morbo@google.com>
+Message-Id: <20220210223134.233757-1-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+References: <20220204005742.1222997-1-morbo@google.com>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH v4] x86: use builtins to read eflags
+From: Bill Wendling <morbo@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v6_svpbmt-v6
-head:   54acb36c958fc990cc59889f79c8ddca7386c295
-commit: 54acb36c958fc990cc59889f79c8ddca7386c295 [35/35] riscv: xtpbmt: Fixup T-HEAD CPU _PAGE_KERNEL quirks
-config: riscv-randconfig-r042-20220208 (https://download.01.org/0day-ci/archive/20220211/202202110318.nlUr3nQu-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project aa845d7a245d85c441d0bd44fc7b6c3be8f3de8d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/c-sky/csky-linux/commit/54acb36c958fc990cc59889f79c8ddca7386c295
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v6_svpbmt-v6
-        git checkout 54acb36c958fc990cc59889f79c8ddca7386c295
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ arch/riscv/mm/ drivers/base/firmware_loader/ drivers/pci/ drivers/target/ fs/erofs/ fs/pstore/ kernel/ mm/
+GCC and Clang both have builtins to read and write the EFLAGS register.
+This allows the compiler to determine the best way to generate this
+code, which can improve code generation.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This issue arose due to Clang's issue with the "=rm" constraint.  Clang
+chooses to be conservative in these situations, and so uses memory
+instead of registers. This is a known issue, which is currently being
+addressed.
 
-All error/warnings (new ones prefixed by >>):
+However, using builtins is beneficial in general, because it removes the
+burden of determining what's the way to read the flags register from the
+programmer and places it on to the compiler, which has the information
+needed to make that decision. Indeed, this piece of code has had several
+changes over the years, some of which were pinging back and forth to
+determine the correct constraints to use.
 
-   In file included from arch/riscv/kernel/irq.c:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:973:34: error: use of undeclared identifier '_PAGE_PMA'
-           return ioremap_prot(addr, size, _PAGE_IOREMAP);
-                                           ^
-   arch/riscv/include/asm/pgtable.h:178:25: note: expanded from macro '_PAGE_IOREMAP'
-   #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-                             ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   1 error generated.
---
-   In file included from arch/riscv/kernel/setup.c:21:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:973:34: error: use of undeclared identifier '_PAGE_PMA'
-           return ioremap_prot(addr, size, _PAGE_IOREMAP);
-                                           ^
-   arch/riscv/include/asm/pgtable.h:178:25: note: expanded from macro '_PAGE_IOREMAP'
-   #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-                             ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
->> arch/riscv/kernel/setup.c:270:58: error: use of undeclared identifier '_PAGE_PMA'
-   printk("%s: _PAGE_KERNEL: 0x%lx\n", __func__, pgprot_val(PAGE_KERNEL));
-                                                            ^
->> arch/riscv/kernel/setup.c:271:44: warning: format specifies type 'unsigned long long' but the argument has type 'int' [-Wformat]
-   printk("%s: _PAGE_IO: 0x%llx\n", __func__, _PAGE_IO);
-                           ~~~~               ^~~~~~~~
-                           %x
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   arch/riscv/include/asm/pgtable-32.h:28:19: note: expanded from macro '_PAGE_IO'
-   #define _PAGE_IO                0
-                                   ^
-   arch/riscv/kernel/setup.c:272:49: warning: format specifies type 'unsigned long long' but the argument has type 'int' [-Wformat]
-   printk("%s: _PAGE_NOCACHE: 0x%llx\n", __func__, _PAGE_NOCACHE);
-                                ~~~~               ^~~~~~~~~~~~~
-                                %x
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   arch/riscv/include/asm/pgtable-32.h:27:24: note: expanded from macro '_PAGE_NOCACHE'
-   #define _PAGE_NOCACHE           0
-                                   ^
-   2 warnings and 2 errors generated.
---
-   In file included from arch/riscv/kernel/signal.c:12:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:973:34: error: use of undeclared identifier '_PAGE_PMA'
-           return ioremap_prot(addr, size, _PAGE_IOREMAP);
-                                           ^
-   arch/riscv/include/asm/pgtable.h:178:25: note: expanded from macro '_PAGE_IOREMAP'
-   #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-                             ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   arch/riscv/kernel/signal.c:320:27: warning: no previous prototype for function 'do_notify_resume' [-Wmissing-prototypes]
-   asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
-                             ^
-   arch/riscv/kernel/signal.c:320:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
-                        ^
-                        static 
-   1 warning and 1 error generated.
---
->> arch/riscv/kernel/patch.c:42:17: error: use of undeclared identifier '_PAGE_PMA'
-           return (void *)set_fixmap_offset(fixmap, page_to_phys(page) +
-                          ^
-   include/asm-generic/fixmap.h:83:33: note: expanded from macro 'set_fixmap_offset'
-           __set_fixmap_offset(idx, phys, FIXMAP_PAGE_NORMAL)
-                                          ^
-   include/asm-generic/fixmap.h:48:28: note: expanded from macro 'FIXMAP_PAGE_NORMAL'
-   #define FIXMAP_PAGE_NORMAL PAGE_KERNEL
-                              ^
-   arch/riscv/include/asm/pgtable.h:170:31: note: expanded from macro 'PAGE_KERNEL'
-   #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-                                            ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   1 error generated.
---
-   In file included from arch/riscv/mm/init.c:13:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:973:34: error: use of undeclared identifier '_PAGE_PMA'
-           return ioremap_prot(addr, size, _PAGE_IOREMAP);
-                                           ^
-   arch/riscv/include/asm/pgtable.h:178:25: note: expanded from macro '_PAGE_IOREMAP'
-   #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-                             ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
->> arch/riscv/mm/init.c:264:18: error: use of undeclared identifier '_PAGE_PMA'
-           return (pte_t *)set_fixmap_offset(FIX_PTE, pa);
-                           ^
-   include/asm-generic/fixmap.h:83:33: note: expanded from macro 'set_fixmap_offset'
-           __set_fixmap_offset(idx, phys, FIXMAP_PAGE_NORMAL)
-                                          ^
-   include/asm-generic/fixmap.h:48:28: note: expanded from macro 'FIXMAP_PAGE_NORMAL'
-   #define FIXMAP_PAGE_NORMAL PAGE_KERNEL
-                              ^
-   arch/riscv/include/asm/pgtable.h:170:31: note: expanded from macro 'PAGE_KERNEL'
-   #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-                                            ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   arch/riscv/mm/init.c:569:10: error: use of undeclared identifier '_PAGE_PMA'
-                   return PAGE_KERNEL;
-                          ^
-   arch/riscv/include/asm/pgtable.h:170:31: note: expanded from macro 'PAGE_KERNEL'
-   #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-                                            ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   arch/riscv/mm/init.c:571:9: error: use of undeclared identifier '_PAGE_PMA'
-           return PAGE_KERNEL_EXEC;
-                  ^
-   arch/riscv/include/asm/pgtable.h:172:35: note: expanded from macro 'PAGE_KERNEL_EXEC'
-   #define PAGE_KERNEL_EXEC        __pgprot(_PAGE_KERNEL | _PAGE_EXEC)
-                                            ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   arch/riscv/mm/init.c:675:6: error: use of undeclared identifier '_PAGE_PMA'
-                                           PAGE_KERNEL_EXEC : pgprot_from_va(va));
-                                           ^
-   arch/riscv/include/asm/pgtable.h:172:35: note: expanded from macro 'PAGE_KERNEL_EXEC'
-   #define PAGE_KERNEL_EXEC        __pgprot(_PAGE_KERNEL | _PAGE_EXEC)
-                                            ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   arch/riscv/mm/init.c:692:47: error: use of undeclared identifier '_PAGE_PMA'
-                              IS_ENABLED(CONFIG_64BIT) ? PAGE_TABLE : PAGE_KERNEL);
-                                                                      ^
-   arch/riscv/include/asm/pgtable.h:170:31: note: expanded from macro 'PAGE_KERNEL'
-   #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-                                            ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   arch/riscv/mm/init.c:724:13: warning: no previous prototype for function 'pt_ops_set_early' [-Wmissing-prototypes]
-   void __init pt_ops_set_early(void)
-               ^
-   arch/riscv/mm/init.c:724:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init pt_ops_set_early(void)
-   ^
-   static 
-   arch/riscv/mm/init.c:744:13: warning: no previous prototype for function 'pt_ops_set_fixmap' [-Wmissing-prototypes]
-   void __init pt_ops_set_fixmap(void)
-               ^
-   arch/riscv/mm/init.c:744:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init pt_ops_set_fixmap(void)
-   ^
-   static 
-   arch/riscv/mm/init.c:760:13: warning: no previous prototype for function 'pt_ops_set_late' [-Wmissing-prototypes]
-   void __init pt_ops_set_late(void)
-               ^
-   arch/riscv/mm/init.c:760:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init pt_ops_set_late(void)
-   ^
-   static 
-   arch/riscv/mm/init.c:852:41: error: use of undeclared identifier '_PAGE_PMA'
-                              kernel_map.phys_addr, PGDIR_SIZE, PAGE_KERNEL_EXEC);
-                                                                ^
-   arch/riscv/include/asm/pgtable.h:172:35: note: expanded from macro 'PAGE_KERNEL_EXEC'
-   #define PAGE_KERNEL_EXEC        __pgprot(_PAGE_KERNEL | _PAGE_EXEC)
-                                            ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   3 warnings and 7 errors generated.
---
->> arch/riscv/mm/pageattr.c:182:15: error: use of undeclared identifier '_PAGE_PMA'
-                   .set_mask = PAGE_KERNEL,
-                               ^
-   arch/riscv/include/asm/pgtable.h:170:31: note: expanded from macro 'PAGE_KERNEL'
-   #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-                                            ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   1 error generated.
---
-   In file included from kernel/kallsyms.c:25:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:973:34: error: use of undeclared identifier '_PAGE_PMA'
-           return ioremap_prot(addr, size, _PAGE_IOREMAP);
-                                           ^
-   arch/riscv/include/asm/pgtable.h:178:25: note: expanded from macro '_PAGE_IOREMAP'
-   #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-                             ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   kernel/kallsyms.c:587:12: warning: no previous prototype for function 'arch_get_kallsym' [-Wmissing-prototypes]
-   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-              ^
-   kernel/kallsyms.c:587:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-   ^
-   static 
-   1 warning and 1 error generated.
---
->> kernel/relay.c:129:47: error: use of undeclared identifier '_PAGE_PMA'
-           mem = vmap(buf->page_array, n_pages, VM_MAP, PAGE_KERNEL);
-                                                        ^
-   arch/riscv/include/asm/pgtable.h:170:31: note: expanded from macro 'PAGE_KERNEL'
-   #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-                                            ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   1 error generated.
---
-   In file included from kernel/iomem.c:4:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:973:34: error: use of undeclared identifier '_PAGE_PMA'
-           return ioremap_prot(addr, size, _PAGE_IOREMAP);
-                                           ^
-   arch/riscv/include/asm/pgtable.h:178:25: note: expanded from macro '_PAGE_IOREMAP'
-   #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-                             ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   kernel/iomem.c:9:22: warning: no previous prototype for function 'ioremap_cache' [-Wmissing-prototypes]
-   __weak void __iomem *ioremap_cache(resource_size_t offset, unsigned long size)
-                        ^
-   kernel/iomem.c:9:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   __weak void __iomem *ioremap_cache(resource_size_t offset, unsigned long size)
-          ^
-          static 
-   1 warning and 1 error generated.
---
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:973:34: error: use of undeclared identifier '_PAGE_PMA'
-           return ioremap_prot(addr, size, _PAGE_IOREMAP);
-                                           ^
-   arch/riscv/include/asm/pgtable.h:178:25: note: expanded from macro '_PAGE_IOREMAP'
-   #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-                             ^
-   arch/riscv/include/asm/pgtable.h:167:7: note: expanded from macro '_PAGE_KERNEL'
-                                   | _PAGE_PMA \
-                                     ^
-   In file included from kernel/fork.c:41:
-   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   kernel/fork.c:162:13: warning: no previous prototype for function 'arch_release_task_struct' [-Wmissing-prototypes]
-   void __weak arch_release_task_struct(struct task_struct *tsk)
-               ^
-   kernel/fork.c:162:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __weak arch_release_task_struct(struct task_struct *tsk)
-   ^
-   static 
-   kernel/fork.c:764:20: warning: no previous prototype for function 'arch_task_cache_init' [-Wmissing-prototypes]
-   void __init __weak arch_task_cache_init(void) { }
-                      ^
-   kernel/fork.c:764:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak arch_task_cache_init(void) { }
-   ^
-   static 
-   3 warnings and 1 error generated.
-..
+With this change, Clang generates better code:
 
+Original code:
+        movq    $0, -48(%rbp)
+        #APP
+        # __raw_save_flags
+        pushfq
+        popq    -48(%rbp)
+        #NO_APP
+        movq    -48(%rbp), %rbx
 
-vim +/_PAGE_PMA +973 include/asm-generic/io.h
+New code:
+        pushfq
+        popq    %rbx
+        #APP
 
-80b0ca98f91ddbc Christoph Hellwig 2019-08-13  969  
-80b0ca98f91ddbc Christoph Hellwig 2019-08-13  970  static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
-80b0ca98f91ddbc Christoph Hellwig 2019-08-13  971  {
-80b0ca98f91ddbc Christoph Hellwig 2019-08-13  972  	/* _PAGE_IOREMAP needs to be supplied by the architecture */
-80b0ca98f91ddbc Christoph Hellwig 2019-08-13 @973  	return ioremap_prot(addr, size, _PAGE_IOREMAP);
-80b0ca98f91ddbc Christoph Hellwig 2019-08-13  974  }
-80b0ca98f91ddbc Christoph Hellwig 2019-08-13  975  #endif /* !CONFIG_MMU || CONFIG_GENERIC_IOREMAP */
-97c9801a15e5b0c Christoph Hellwig 2019-08-11  976  
+Note that the stack slot in the original code is no longer needed in the
+new code, saving a small amount of stack space.
 
-:::::: The code at line 973 was first introduced by commit
-:::::: 80b0ca98f91ddbc09828aff5a00af1c73837713e lib: provide a simple generic ioremap implementation
+There is no change to GCC's output:
 
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Christoph Hellwig <hch@lst.de>
+Original code:
 
+        # __raw_save_flags
+        pushf ; pop %r13        # flags
+
+New code:
+
+        pushfq
+        popq    %r13    # _23
+
+Signed-off-by: Bill Wendling <morbo@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v4: - Clang now no longer generates stack frames when using these builtins.
+    - Corrected misspellings.
+v3: - Add blurb indicating that GCC's output hasn't changed.
+v2: - Kept the original function to retain the out-of-line symbol.
+    - Improved the commit message.
+    - Note that I couldn't use Nick's suggestion of
+
+        return IS_ENABLED(CONFIG_X86_64) ? ...
+
+      because Clang complains about using __builtin_ia32_readeflags_u32 in
+      64-bit mode.
+---
+ arch/x86/include/asm/irqflags.h | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+index 87761396e8cc..f31a035f3c6a 100644
+--- a/arch/x86/include/asm/irqflags.h
++++ b/arch/x86/include/asm/irqflags.h
+@@ -19,20 +19,11 @@
+ extern inline unsigned long native_save_fl(void);
+ extern __always_inline unsigned long native_save_fl(void)
+ {
+-	unsigned long flags;
+-
+-	/*
+-	 * "=rm" is safe here, because "pop" adjusts the stack before
+-	 * it evaluates its effective address -- this is part of the
+-	 * documented behavior of the "pop" instruction.
+-	 */
+-	asm volatile("# __raw_save_flags\n\t"
+-		     "pushf ; pop %0"
+-		     : "=rm" (flags)
+-		     : /* no input */
+-		     : "memory");
+-
+-	return flags;
++#ifdef CONFIG_X86_64
++	return __builtin_ia32_readeflags_u64();
++#else
++	return __builtin_ia32_readeflags_u32();
++#endif
+ }
+ 
+ static __always_inline void native_irq_disable(void)
+-- 
+2.35.1.265.g69c8d7142f-goog
+
