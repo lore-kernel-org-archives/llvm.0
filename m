@@ -1,40 +1,39 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE6A2F22
-	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 06:48:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DE32F22
+	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 08:01:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644475714; x=1676011714;
+  t=1644480116; x=1676016116;
   h=date:from:cc:subject:message-id:mime-version;
-  bh=nr/G/BC6QakbmjCA7/I2E4velW1h7kZS+XKVzzGr6/k=;
-  b=F3IkuCcMN9uUfwi0ApEWn5b6VwzTJAnzhYWrVPHUmllf8/lYYypHv9FS
-   zKafX+vnLtEo9efN3Wp2kzwdUTLjvzx4uAmBfobn1nz3bfUNpUQRK6DOe
-   W0wSikd78X809T3Zpocbulnlp12jW7EN7zWs57uXWq4+CfiVbMik6PIr+
-   OPTaR87fh3xTMC+XqokOLF7NC2h1JOKU3yreOtytrgEsSbcTU7ym/w47N
-   ZmSHONI1eaGnMziO+G2nNc2Iw3QJ4n4WS27qCJ4TP6ipIUO0ZvmysBzLy
-   X7Dp3J6KWQb7zMpofxb+6Shm5S43G3nivBxOcPsdnA15F0oE/tsz9qLMf
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="232987730"
+  bh=Hna673Z3dX9q5Cg2SeJuXY0XMdl4pHS7lC4zGnZXYlE=;
+  b=XFZWqvHFaJv226aGXnB3+MV1mqZ8akbBXHakczlKzZTdXVuSPKiSeRHZ
+   7nNUwBUUIWtm1gQcsjUWt725+8/UVFz/X6clb2Nl/4PCMhEwIQB7RrA4R
+   x8wsdxijEyxoBuwVhL+lY8SR9z72dokpMIQzDAoTnX008NZr2oPCJFOUd
+   0h16sPs589DMPhCdE5zfMx4Yp3snuG5UQU593YtT7q4nUG2aHFbLmjweA
+   PFKYCbwz3g/L02W2Nbb3W1daFirbgNAfD9PA5H+euM4ZhYgXM4EEqmqrK
+   +y140VjP+vpZPJmw8j0SZ1Mnzw+YqCaox+l05siCPZFOhKQC2x78iRs34
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249189303"
 X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="232987730"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 22:48:32 -0800
+   d="scan'208";a="249189303"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 00:01:34 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="568536999"
+   d="scan'208";a="633578403"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 09 Feb 2022 22:48:31 -0800
+  by orsmga004.jf.intel.com with ESMTP; 10 Feb 2022 00:01:33 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nI3Fm-0002qC-Jz; Thu, 10 Feb 2022 06:48:30 +0000
-Date: Thu, 10 Feb 2022 14:48:28 +0800
+	id 1nI4OS-0002ux-JP; Thu, 10 Feb 2022 08:01:32 +0000
+Date: Thu, 10 Feb 2022 16:00:38 +0800
 From: kernel test robot <lkp@intel.com>
 Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: ld.lld: error: init/built-in.a(do_mounts_rd.o):(function
- ext2_image_size: .text+0x3e): relocation R_RISCV_HI20 out of range: 527059
- is not in [-524288, 524287]; references .L__unnamed_3
-Message-ID: <202202101425.397JTyCS-lkp@intel.com>
+Subject: drivers/acpi/platform_profile.o: warning: objtool:
+ platform_profile_show()+0xdb: unreachable instruction
+Message-ID: <202202101500.A2YFc7ud-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,36 +45,33 @@ Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 CC: linux-kernel@vger.kernel.org
-TO: Paul Moore <paul@paul-moore.com>
-CC: Richard Guy Briggs <rgb@redhat.com>
+TO: Mark Pearson <markpearson@lenovo.com>
+CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC: Hans de Goede <hdegoede@redhat.com>
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   f4bc5bbb5fef3cf421ba3485d6d383c27ec473ed
-commit: f26d04331360d42dbd6b58448bd98e4edbfbe1c5 audit: improve audit queue handling when "audit=1" on cmdline
-date:   2 weeks ago
-config: riscv-randconfig-r031-20220210 (https://download.01.org/0day-ci/archive/20220210/202202101425.397JTyCS-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project aa845d7a245d85c441d0bd44fc7b6c3be8f3de8d)
+commit: a2ff95e018f1d2bc816f3078d5110a655e355f18 ACPI: platform: Add platform profile support
+date:   1 year, 1 month ago
+config: x86_64-buildonly-randconfig-r002-20220207 (https://download.01.org/0day-ci/archive/20220210/202202101500.A2YFc7ud-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f26d04331360d42dbd6b58448bd98e4edbfbe1c5
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a2ff95e018f1d2bc816f3078d5110a655e355f18
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout f26d04331360d42dbd6b58448bd98e4edbfbe1c5
+        git checkout a2ff95e018f1d2bc816f3078d5110a655e355f18
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: init/built-in.a(do_mounts_rd.o):(function ext2_image_size: .text+0x3e): relocation R_RISCV_HI20 out of range: 527059 is not in [-524288, 524287]; references .L__unnamed_3
-   >>> referenced by do_mounts_rd.c
-   >>> defined in init/built-in.a(do_mounts_rd.o)
+>> drivers/acpi/platform_profile.o: warning: objtool: platform_profile_show()+0xdb: unreachable instruction
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
