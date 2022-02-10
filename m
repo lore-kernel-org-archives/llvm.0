@@ -1,137 +1,126 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E122C9C
-	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 18:55:51 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2086321121;
-	Thu, 10 Feb 2022 18:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1644519350; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DdvRYUYPbeuUwugRz/zD5fkCcoVbL25yO1bIyTTrtQE=;
-	b=kbho8IjDsMCYYGtM1D3wg8uEHchZfhJ93p54CQVZZV4Ps3xA0QeVKQS6SmnK1WhosD0Ugp
-	eBjpwjMGG3X1RAfKZFlFwn6eHdv7x/XfOlEcjUkSQPJAG1FuJqNY5HCLQ6/ezgsdG4uPxB
-	sBZZirLaPeGQVKr5mTbereSFpjkWZJA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1644519350;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DdvRYUYPbeuUwugRz/zD5fkCcoVbL25yO1bIyTTrtQE=;
-	b=kn3NfczTzXNH5S4YABkE3WiOoJMtnuZJs+eToav08csO5x2B9klUAf96MArUbpSawcg3wf
-	lhSIs+86sjnMEjAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DBCE713C22;
-	Thu, 10 Feb 2022 18:55:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id t3hhNLVfBWKPcAAAMHmgww
-	(envelope-from <tzimmermann@suse.de>); Thu, 10 Feb 2022 18:55:49 +0000
-Message-ID: <5df2f9bb-9181-56da-ea85-06af7ea8704a@suse.de>
-Date: Thu, 10 Feb 2022 19:55:49 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57E37D
+	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 19:16:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644520567; x=1676056567;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+p1C2+hRbYzcb/l1siyQudvnO0KYSG81c9bAnJuKKaE=;
+  b=anLOIu7YlZVMNJTzxqb3gJRKblkbHePdKstgzYptPq3A2ohbKOF4O0g7
+   p3+4aS4es5/JQo6bVC0b9fnwhWUj8zc+5N9kSQZTEo/vLeGm0nY+1mOT2
+   MiWkQAHNFwv0ark48I1f+lIHtW7wRaN57Y+q8XJaIIF4tgAeZf07AV2Ky
+   bY8qDnIfQcrmERv0geTbJTIuSDsskOvIOlco/LU6hcvqU5ivH/srKrdbD
+   rLvd850gCUZm8HUbQ0fMCImwoNV5bpzNGXlJd6SQHvBLlcSBIqehFNfN/
+   4fgX0vgj6GNRWGpF7el3C7aFfsvtp3YeEkF9JIuQdwdaz88HJBWbK0hRO
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="233130573"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="233130573"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 11:16:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="633789683"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 10 Feb 2022 11:16:04 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nIEvE-0003ei-33; Thu, 10 Feb 2022 19:16:04 +0000
+Date: Fri, 11 Feb 2022 03:15:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guo Ren <guoren@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Christoph Hellwig <hch@lst.de>
+Subject: [csky-linux:riscv_compat_v6_svpbmt-v6 20/35]
+ arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'compat_statfs'
+Message-ID: <202202110304.nUwbKm0j-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/ast: fix using freed memory
-Content-Language: en-US
-To: trix@redhat.com, airlied@redhat.com, airlied@linux.ie, daniel@ffwll.ch,
- nathan@kernel.org, ndesaulniers@google.com, maxime@cerno.tech
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-References: <20220203152305.1846862-1-trix@redhat.com>
-From: Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220203152305.1846862-1-trix@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------092ooI4Qbv1X0dO7Q2ZFcB0X"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------092ooI4Qbv1X0dO7Q2ZFcB0X
-Content-Type: multipart/mixed; boundary="------------O6FbTDLRmQ55Ds9EEjrFytE7";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: trix@redhat.com, airlied@redhat.com, airlied@linux.ie, daniel@ffwll.ch,
- nathan@kernel.org, ndesaulniers@google.com, maxime@cerno.tech
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Message-ID: <5df2f9bb-9181-56da-ea85-06af7ea8704a@suse.de>
-Subject: Re: [PATCH] drm/ast: fix using freed memory
-References: <20220203152305.1846862-1-trix@redhat.com>
-In-Reply-To: <20220203152305.1846862-1-trix@redhat.com>
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v6_svpbmt-v6
+head:   54acb36c958fc990cc59889f79c8ddca7386c295
+commit: ac589e74083c1738ab2c8db584e11aac71c26858 [20/35] asm-generic: compat: Cleanup duplicate definitions
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220211/202202110304.nUwbKm0j-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project aa845d7a245d85c441d0bd44fc7b6c3be8f3de8d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/c-sky/csky-linux/commit/ac589e74083c1738ab2c8db584e11aac71c26858
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v6_svpbmt-v6
+        git checkout ac589e74083c1738ab2c8db584e11aac71c26858
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
 
---------------O6FbTDLRmQ55Ds9EEjrFytE7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-SGkNCg0KQW0gMDMuMDIuMjIgdW0gMTY6MjMgc2NocmllYiB0cml4QHJlZGhhdC5jb206DQo+
-IEZyb206IFRvbSBSaXggPHRyaXhAcmVkaGF0LmNvbT4NCj4gDQo+IGNsYW5nIHN0YXRpYyBh
-bmFseXNpcyByZXBvcnRzIHRoaXMgcHJvYmxlbQ0KPiBhc3RfbW9kZS5jOjEyMzU6Mzogd2Fy
-bmluZzogVXNlIG9mIG1lbW9yeSBhZnRlciBpdCBpcyBmcmVlZA0KPiAgICBkcm1fY29ubmVj
-dG9yX3VwZGF0ZV9lZGlkX3Byb3BlcnR5KCZhc3RfY29ubmVjdG9yLT5iYXNlLCBlZGlkKTsN
-Cj4gICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn4NCj4gDQo+IFRoZSBzZWNvbmQgY29uZGl0aW9uIG9uDQo+IA0KPiAg
-ICBpZiAoIWZsYWdzICYmIGFzdF9jb25uZWN0b3ItPmkyYykNCj4gDQo+IE1lYW5zIHRoYXQg
-dGhlIGVkaWQgaXMgbm90IGFsd2F5cyBzZXQuICBJZiB0aGUgcHJldmlvdXMgYmxvY2sNCj4g
-ZmFpbHMgdGhlIGZyZWVkIGVkaWQgdmFsdWUgd2lsbCBiZSB1c2VkLiAgU28gc2V0IGVkaWQg
-dG8gTlVMTA0KPiBhZnRlciBmcmVlaW5nLg0KDQpUaGFua3MgZm9yIHlvdXIgcGF0Y2guIFdl
-IGhhdmUgbWVhbndoaWxlIG1lcmdlcyBhIGNoYW5nZSB0aGF0IHJlcGxhY2VzIA0KdGhlIGNv
-ZGUgZW50aXJlbHkuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IEZpeGVzOiA1
-NWRjNDQ5YTdjNjAgKCJkcm0vYXN0OiBIYW5kbGUgZmFpbGVkIEkyQyBpbml0aWFsaXphdGlv
-biBncmFjZWZ1bGx5IikNCj4gU2lnbmVkLW9mZi1ieTogVG9tIFJpeCA8dHJpeEByZWRoYXQu
-Y29tPg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMgfCA2ICsr
-KystLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
-KC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5j
-IGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+IGluZGV4IGFiNTJlZmIxNTY3
-MGUuLjkxMzFkYzhhMWEyZmMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9hc3Qv
-YXN0X21vZGUuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMNCj4g
-QEAgLTEyMjQsMTAgKzEyMjQsMTIgQEAgc3RhdGljIGludCBhc3RfZ2V0X21vZGVzKHN0cnVj
-dCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IpDQo+ICAgCQkJcmV0dXJuIC1FTk9NRU07DQo+
-ICAgDQo+ICAgCQlmbGFncyA9IGFzdF9kcDUwMV9yZWFkX2VkaWQoY29ubmVjdG9yLT5kZXYs
-ICh1OCAqKWVkaWQpOw0KPiAtCQlpZiAoZmxhZ3MpDQo+ICsJCWlmIChmbGFncykgew0KPiAg
-IAkJCWFzdC0+ZHA1MDFfbWF4Y2xrID0gYXN0X2dldF9kcDUwMV9tYXhfY2xrKGNvbm5lY3Rv
-ci0+ZGV2KTsNCj4gLQkJZWxzZQ0KPiArCQl9IGVsc2Ugew0KPiAgIAkJCWtmcmVlKGVkaWQp
-Ow0KPiArCQkJZWRpZCA9IE5VTEw7DQo+ICsJCX0NCj4gICAJfQ0KPiAgIAlpZiAoIWZsYWdz
-ICYmIGFzdF9jb25uZWN0b3ItPmkyYykNCj4gICAJCWVkaWQgPSBkcm1fZ2V0X2VkaWQoY29u
-bmVjdG9yLCAmYXN0X2Nvbm5lY3Rvci0+aTJjLT5hZGFwdGVyKTsNCg0KLS0gDQpUaG9tYXMg
-WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
-b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
-IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
-OiBJdm8gVG90ZXYNCg==
+All errors (new ones prefixed by >>):
 
---------------O6FbTDLRmQ55Ds9EEjrFytE7--
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/irqdomain.h:35:
+   In file included from include/linux/of.h:17:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:22:
+   In file included from include/linux/stat.h:6:
+   In file included from arch/arm64/include/asm/stat.h:13:
+>> arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'compat_statfs'
+   struct compat_statfs {
+          ^
+   include/asm-generic/compat.h:80:8: note: previous definition is here
+   struct compat_statfs {
+          ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
---------------092ooI4Qbv1X0dO7Q2ZFcB0X
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
 
------BEGIN PGP SIGNATURE-----
+vim +/compat_statfs +69 arch/arm64/include/asm/compat.h
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIFX7UFAwAAAAAACgkQlh/E3EQov+Bg
-wBAAksaQa3/SWLQEybFdtMJpVESyPa8f/LCtzK+RiiNrEDFUvwMLa9TiADFUgkqVasVgWX8TigZG
-V7S6dSyYE/2h3HvUwpLJvi4aFS9fm7Lzts15k1+Z2zqPr1XwI+RseeX7PrG6kCfpBR296oCIdpD1
-cDP2qy4lybkl/sH8Hj6CXTyEfnVl+UIw2TVI7DQ2ssICFtNsOlsBiVB4lTMJi3fsaUDIxIxZPwak
-xumRRY0EtrrRzoTuUdOYaEUO73dBQ8RpkKZPdeac2BBKv6w14U1+6j2N4NSls22mQK6MjJbZLkHs
-538dat6sGOzmMyOjL2G8ENQJ6BQ1g9JzWAedyWN1EW38es9PT2IsYZMU0wESZfrKBhINBN3MZnuq
-FUaZlCg1nGBJi33ircQkw8Ctkl60OhT7Bfqy5CkeSuf4HaokujZLv/a/xw1PItRGBYiWoBbAaADL
-+eC1piBUxO5ZriVIa5nL38g+3empUpJxhE0+NKqd5x7TSgBD0bpXUxzgvuR042I9En1hfIHyBwD2
-1hk0dwf5c+9CCW9uYzxFVrLK/lCseATVr2lzx0YUDsXvVreYFKknlvhTydlQXqHGUS2kxvi8dOkA
-Mnh5Y/iR+IP46pvSuMTTJaRsf/nDzUFd48tFjCwtkSEc014a8Ht76o1WL/C//uJL1cY32CQU8vep
-aW8=
-=5Niu
------END PGP SIGNATURE-----
+3dd681d944f6d8 Will Deacon 2012-03-05  68  
+3dd681d944f6d8 Will Deacon 2012-03-05 @69  struct compat_statfs {
+3dd681d944f6d8 Will Deacon 2012-03-05  70  	int		f_type;
+3dd681d944f6d8 Will Deacon 2012-03-05  71  	int		f_bsize;
+3dd681d944f6d8 Will Deacon 2012-03-05  72  	int		f_blocks;
+3dd681d944f6d8 Will Deacon 2012-03-05  73  	int		f_bfree;
+3dd681d944f6d8 Will Deacon 2012-03-05  74  	int		f_bavail;
+3dd681d944f6d8 Will Deacon 2012-03-05  75  	int		f_files;
+3dd681d944f6d8 Will Deacon 2012-03-05  76  	int		f_ffree;
+3dd681d944f6d8 Will Deacon 2012-03-05  77  	compat_fsid_t	f_fsid;
+3dd681d944f6d8 Will Deacon 2012-03-05  78  	int		f_namelen;	/* SunOS ignores this field. */
+3dd681d944f6d8 Will Deacon 2012-03-05  79  	int		f_frsize;
+3dd681d944f6d8 Will Deacon 2012-03-05  80  	int		f_flags;
+3dd681d944f6d8 Will Deacon 2012-03-05  81  	int		f_spare[4];
+3dd681d944f6d8 Will Deacon 2012-03-05  82  };
+3dd681d944f6d8 Will Deacon 2012-03-05  83  
 
---------------092ooI4Qbv1X0dO7Q2ZFcB0X--
+:::::: The code at line 69 was first introduced by commit
+:::::: 3dd681d944f6d861f12ee03aff17a14342963330 arm64: 32-bit (compat) applications support
+
+:::::: TO: Will Deacon <will.deacon@arm.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
