@@ -1,159 +1,243 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778952F24
-	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 00:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644453079; x=1675989079;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CnOSWYoXr4bC9YQTX0CWWYKZDGp0EePO33bXWv9JyVM=;
-  b=V25Ef/HUJPROIkUkumq2DQRd6dRjZUqK+99qqXXB1uSYZj5N2KsvogOQ
-   jIuqmetaWP+9zHLfTZKoblv45HNQcVHg/SIEpATUJsXFnSZ36EJwXx9cb
-   07zXcqhWtL4OBRXi6J9fndDUXoxdn9NBVeFRmN+ENmhIrH02SMeBb/elD
-   RSaKTFVJi4YFDcgj1UId1d0dh3otaf6qeyfvM0YwThE8zy9Uej3tVvLeZ
-   wwIQYDDK2790HsGnuFGodNWvNhn3BnoDsdGtJipHIV4JwGzpR0ty4m7ay
-   ZhLoIYzM0bCD3jIlEotLDXvip67xxCcqzAkvddHo4bE/GJIBssDfJznfF
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249129570"
-X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
-   d="scan'208";a="249129570"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 16:31:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
-   d="scan'208";a="585774824"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Feb 2022 16:31:17 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nHxMi-0002Sq-U8; Thu, 10 Feb 2022 00:31:16 +0000
-Date: Thu, 10 Feb 2022 08:30:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stephane Eranian <eranian@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:perf/core 16/17] drivers/acpi/acpi_pad.c:168:4: error:
- implicit declaration of function 'perf_lopwr_cb'
-Message-ID: <202202100823.E5rjIvVT-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945C62F24
+	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 00:38:27 +0000 (UTC)
+Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-10.nifty.com with ESMTP id 21A0UFP2010926
+	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 09:30:15 +0900
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176]) (authenticated)
+	by conssluserg-02.nifty.com with ESMTP id 21A0U6Na000711
+	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 09:30:07 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 21A0U6Na000711
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1644453007;
+	bh=6klY6ywSHDTIAmjF9MCEJbiIQSicqR7O8sRNcdznk98=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=r6P2WkeMfp/H3RXMD6DzcwlV9NwBjLEOXZoRASN2wuKbY0r2MfWcnjJFQYO20li4Z
+	 r36l9GLY/xAc5J2Xai+1gb4fws1qxfu6BuO6/WQ6/VZxkBr7BlJBPFIAD3WZ16h6Os
+	 fHszajb7da46jy/QH+686vigTFIWspGksiC8RALLtvMu8fDo7Ryii78/iCBfiU6KxS
+	 k+FpDbGKEhCCv3GsUK9BVUV+Bnm56NcYqRWxiA2HEKFs43S7TNz1xxJxtw9O2fVQW+
+	 tL5oQWFHYzyB1WUnCogTyewfahMWeYZvoPuSpXdt16dfW5Su55XpePvQsJx2gZVbi0
+	 hCyQOR7VmrG8g==
+X-Nifty-SrcIP: [209.85.210.176]
+Received: by mail-pf1-f176.google.com with SMTP id y8so4558894pfa.11
+        for <llvm@lists.linux.dev>; Wed, 09 Feb 2022 16:30:07 -0800 (PST)
+X-Gm-Message-State: AOAM533vpwvD2wab541cXpcpFBzMDTUSUVcR+/vf80Yc5m7nU/vs2/BW
+	KpFdkbxi8/LmostCou7dxwc42euS1l21i0AXQZM=
+X-Google-Smtp-Source: ABdhPJy9PxQxyofxPgV6A6DkaBe7h5z+1tcTNPVaCvhahGvMNZ8PUFa33IO9YCS+eHepbhDA9aj4Q/bzp9Ylq1Q/eNY=
+X-Received: by 2002:a05:6a00:240a:: with SMTP id z10mr4954154pfh.68.1644453006311;
+ Wed, 09 Feb 2022 16:30:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220112224342.958358-1-quic_eberman@quicinc.com>
+ <20220201213542.2808035-1-quic_eberman@quicinc.com> <CAKwvOdmZHmihbf_mLyi=Ncf7FZjjSxxTsHZeaqxk4LKhMHs_iA@mail.gmail.com>
+ <CAKwvOdn0oi+3yEECXLaSzoAdW19SCvpn_8t6yB2wpJE+Fpoy5w@mail.gmail.com>
+In-Reply-To: <CAKwvOdn0oi+3yEECXLaSzoAdW19SCvpn_8t6yB2wpJE+Fpoy5w@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 10 Feb 2022 09:29:31 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARSJcbk+9tfotXj7OR4AjpHcYZVPCuJyaM0BJJXpPvgPA@mail.gmail.com>
+Message-ID: <CAK7LNARSJcbk+9tfotXj7OR4AjpHcYZVPCuJyaM0BJJXpPvgPA@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: Add environment variables for userprogs flags
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Fangrui Song <maskray@google.com>, Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Matthias Maennich <maennich@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Elliot Berman <quic_eberman@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/core
-head:   c23483152838201e7eb9d179d121e0ed0189269e
-commit: e879a335a574ca071f76684b8160a56d9147db27 [16/17] ACPI: add perf low power callback
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220210/202202100823.E5rjIvVT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=e879a335a574ca071f76684b8160a56d9147db27
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue perf/core
-        git checkout e879a335a574ca071f76684b8160a56d9147db27
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+On Wed, Feb 9, 2022 at 7:53 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Tue, Feb 1, 2022 at 1:38 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> >
+> > On Tue, Feb 1, 2022 at 1:36 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+> > >
+> > > Allow additional arguments be passed to userprogs compilation.
+> > > Reproducible clang builds need to provide a sysroot and gcc path to
+> > > ensure same toolchain is used across hosts. KCFLAGS is not currently
+> >
+> > ^ ensure the same (maybe Masahiro can fix that up locally when applying)
+>
+> Masahiro,
+> What are your thoughts on this patch?  I think this would help Android
+> define a musl or bionic sysroot for CC_CAN_LINK and ultimately
+> UAPI_HEADER_TEST support.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/acpi/acpi_pad.c:168:4: error: implicit declaration of function 'perf_lopwr_cb' [-Werror,-Wimplicit-function-declaration]
-                           perf_lopwr_cb(true);
-                           ^
-   1 error generated.
+Sorry for delay.
 
 
-vim +/perf_lopwr_cb +168 drivers/acpi/acpi_pad.c
+Applied with two fixups in the commit log:
 
-   135	
-   136	static unsigned int idle_pct = 5; /* percentage */
-   137	static unsigned int round_robin_time = 1; /* second */
-   138	static int power_saving_thread(void *data)
-   139	{
-   140		int do_sleep;
-   141		unsigned int tsk_index = (unsigned long)data;
-   142		u64 last_jiffies = 0;
-   143	
-   144		sched_set_fifo_low(current);
-   145	
-   146		while (!kthread_should_stop()) {
-   147			unsigned long expire_time;
-   148	
-   149			/* round robin to cpus */
-   150			expire_time = last_jiffies + round_robin_time * HZ;
-   151			if (time_before(expire_time, jiffies)) {
-   152				last_jiffies = jiffies;
-   153				round_robin_cpu(tsk_index);
-   154			}
-   155	
-   156			do_sleep = 0;
-   157	
-   158			expire_time = jiffies + HZ * (100 - idle_pct) / 100;
-   159	
-   160			while (!need_resched()) {
-   161				if (tsc_detected_unstable && !tsc_marked_unstable) {
-   162					/* TSC could halt in idle, so notify users */
-   163					mark_tsc_unstable("TSC halts in idle");
-   164					tsc_marked_unstable = 1;
-   165				}
-   166				local_irq_disable();
-   167	
- > 168				perf_lopwr_cb(true);
-   169	
-   170				tick_broadcast_enable();
-   171				tick_broadcast_enter();
-   172				stop_critical_timings();
-   173	
-   174				mwait_idle_with_hints(power_saving_mwait_eax, 1);
-   175	
-   176				start_critical_timings();
-   177				tick_broadcast_exit();
-   178	
-   179				perf_lopwr_cb(false);
-   180	
-   181				local_irq_enable();
-   182	
-   183				if (time_before(expire_time, jiffies)) {
-   184					do_sleep = 1;
-   185					break;
-   186				}
-   187			}
-   188	
-   189			/*
-   190			 * current sched_rt has threshold for rt task running time.
-   191			 * When a rt task uses 95% CPU time, the rt thread will be
-   192			 * scheduled out for 5% CPU time to not starve other tasks. But
-   193			 * the mechanism only works when all CPUs have RT task running,
-   194			 * as if one CPU hasn't RT task, RT task from other CPUs will
-   195			 * borrow CPU time from this CPU and cause RT task use > 95%
-   196			 * CPU time. To make 'avoid starvation' work, takes a nap here.
-   197			 */
-   198			if (unlikely(do_sleep))
-   199				schedule_timeout_killable(HZ * idle_pct / 100);
-   200	
-   201			/* If an external event has set the need_resched flag, then
-   202			 * we need to deal with it, or this loop will continue to
-   203			 * spin without calling __mwait().
-   204			 */
-   205			if (unlikely(need_resched()))
-   206				schedule();
-   207		}
-   208	
-   209		exit_round_robin(tsk_index);
-   210		return 0;
-   211	}
-   212	
+ ensure same -> ensure the same
+ Clang 13+ might detect  ->  Clang might detect
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+
+
+
+
+
+
+
+
+
+
+> >
+> > > used for any user programs compilation, so add new USERCFLAGS and
+> > > USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
+> > >
+> > > Clang 13+ might detect GCC installation on hosts which have it installed
+> > > to a default location in /. With addition of these environment
+> > > variables, you can specify flags such as:
+> > >
+> > > $ make USERCFLAGS=--sysroot=/path/to/sysroot
+> > >
+> > > This can also be used to specify different sysroots such as musl or
+> > > bionic which may be installed on the host in paths that the compiler
+> > > may not search by default.
+> > >
+> > > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> >
+> > Thanks for the patch!
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> > > ---
+> > >
+> > > Changes since v2:
+> > >  - Incorporated Nick's suggestions:
+> > >    - Addressed docs and commit text comments
+> > >    - Introduced KBUILD_USERHOSTCFLAGS as suggested
+> > >
+> > >  Documentation/kbuild/kbuild.rst    | 11 +++++++++++
+> > >  Documentation/kbuild/makefiles.rst |  2 ++
+> > >  Makefile                           | 10 ++++++----
+> > >  init/Kconfig                       |  8 ++++----
+> > >  usr/include/Makefile               |  3 +++
+> > >  5 files changed, 26 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
+> > > index 2d1fc03d346e..ef19b9c13523 100644
+> > > --- a/Documentation/kbuild/kbuild.rst
+> > > +++ b/Documentation/kbuild/kbuild.rst
+> > > @@ -77,6 +77,17 @@ HOSTLDLIBS
+> > >  ----------
+> > >  Additional libraries to link against when building host programs.
+> > >
+> > > +.. _userkbuildflags:
+> > > +
+> > > +USERCFLAGS
+> > > +----------
+> > > +Additional options used for $(CC) when compiling userprogs.
+> > > +
+> > > +USERLDFLAGS
+> > > +-----------
+> > > +Additional options used for $(LD) when linking userprogs. userprogs are linked
+> > > +with CC, so $(USERLDFLAGS) should include "-Wl," prefix as applicable.
+> > > +
+> > >  KBUILD_KCONFIG
+> > >  --------------
+> > >  Set the top-level Kconfig file to the value of this environment
+> > > diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+> > > index b008b90b92c9..11a296e52d68 100644
+> > > --- a/Documentation/kbuild/makefiles.rst
+> > > +++ b/Documentation/kbuild/makefiles.rst
+> > > @@ -982,6 +982,8 @@ The syntax is quite similar. The difference is to use "userprogs" instead of
+> > >
+> > >         When linking bpfilter_umh, it will be passed the extra option -static.
+> > >
+> > > +       From command line, :ref:`USERCFLAGS and USERLDFLAGS <userkbuildflags>` will also be used.
+> > > +
+> > >  5.4 When userspace programs are actually built
+> > >  ----------------------------------------------
+> > >
+> > > diff --git a/Makefile b/Makefile
+> > > index 45278d508d81..1d0172449355 100644
+> > > --- a/Makefile
+> > > +++ b/Makefile
+> > > @@ -431,11 +431,12 @@ HOSTCC    = gcc
+> > >  HOSTCXX        = g++
+> > >  endif
+> > >
+> > > -export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+> > > -                             -O2 -fomit-frame-pointer -std=gnu89
+> > > -export KBUILD_USERLDFLAGS :=
+> > > +KBUILD_USERHOSTCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+> > > +                        -O2 -fomit-frame-pointer -std=gnu89
+> > > +KBUILD_USERCFLAGS  := $(KBUILD_USERHOSTCFLAGS) $(USERCFLAGS)
+> > > +KBUILD_USERLDFLAGS := $(USERLDFLAGS)
+> > >
+> > > -KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
+> > > +KBUILD_HOSTCFLAGS   := $(KBUILD_USERHOSTCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
+> > >  KBUILD_HOSTCXXFLAGS := -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS)
+> > >  KBUILD_HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
+> > >  KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
+> > > @@ -530,6 +531,7 @@ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AW
+> > >  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+> > >  export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
+> > >  export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
+> > > +export KBUILD_USERCFLAGS KBUILD_USERLDFLAGS
+> > >
+> > >  export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LDFLAGS
+> > >  export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
+> > > diff --git a/init/Kconfig b/init/Kconfig
+> > > index f2ae41e6717f..164706c38e8b 100644
+> > > --- a/init/Kconfig
+> > > +++ b/init/Kconfig
+> > > @@ -62,13 +62,13 @@ config LLD_VERSION
+> > >
+> > >  config CC_CAN_LINK
+> > >         bool
+> > > -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag)) if 64BIT
+> > > -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag))
+> > > +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
+> > > +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag))
+> > >
+> > >  config CC_CAN_LINK_STATIC
+> > >         bool
+> > > -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag) -static) if 64BIT
+> > > -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag) -static)
+> > > +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
+> > > +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
+> > >
+> > >  config CC_HAS_ASM_GOTO
+> > >         def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
+> > > diff --git a/usr/include/Makefile b/usr/include/Makefile
+> > > index 1c2ae1368079..0322e567dc1e 100644
+> > > --- a/usr/include/Makefile
+> > > +++ b/usr/include/Makefile
+> > > @@ -12,6 +12,9 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+> > >  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+> > >  UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
+> > >
+> > > +# USERCFLAGS might contain sysroot location for CC.
+> > > +UAPI_CFLAGS += $(USERCFLAGS)
+> > > +
+> > >  override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
+> > >
+> > >  # The following are excluded for now because they fail to build.
+> > > --
+> > > 2.25.1
+> > >
+> >
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+>
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
