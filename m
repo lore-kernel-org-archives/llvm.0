@@ -1,785 +1,581 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88322F20
-	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 15:21:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1644506483;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=I63ov6H1sn3LnofbwW1sc2gMfvCSZr4dX1SfZxJZrP8=;
-	b=GaHpJblCmy3DuxFcqc6WdKa/zgE2ykcLMN9YWdN9Lz6JxNf8UI+Vr6a1BU2jrPe8WMFv9F
-	VdzwUzhmJD+N97Rue4kY0H0sSP+S7zrYr5oumrOghAN6Q+F/tRHVLrVF59PYtk5Mr5wxHv
-	JSQzdIH7Rj1F3gAfYjgC53hg+H1LKUY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-344-DcZm3qneNo6jc0jUmiBX_Q-1; Thu, 10 Feb 2022 10:21:16 -0500
-X-MC-Unique: DcZm3qneNo6jc0jUmiBX_Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E515084DA43
-	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 15:21:15 +0000 (UTC)
-Received: from [172.64.5.23] (unknown [10.30.33.51])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 78B73753D9;
-	Thu, 10 Feb 2022 15:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0C629CA
+	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 16:43:38 +0000 (UTC)
+Received: by mail-wm1-f48.google.com with SMTP id j9-20020a05600c190900b0037bff8a24ebso1156308wmq.4
+        for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 08:43:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:cc:message-id:subject:mime-version:list-id;
+        bh=GYilQjS/zwxef0gu/59aymrWDyRnS+qzGAShvxtirGU=;
+        b=wxzySOBpjNVkCJaVqAeRlCzZjrIOlTcXTTsHoKMtDpQh3ub0+Ik7sLU8fosTrG6QhO
+         L3y2JA5+yLRDKTjmf0n514aYtPtOEPLs2MnFNqyt7aAfHEWNtNtUjqLkTCpHOcxu/ovv
+         3lp7GI38PIGKbmdb4Wb5Y06v61SUX1lER33pe71ju1Q87LQuCxDGhYdifUWRcltvhBee
+         iyrxLU02cR/Q7VrxwOaIE6KyU9RaGsf5NEVtxF+ek+8e1KdsMAxyrMjm21DLF3RSAQbi
+         bJxiKKG1OedwwxNllzwQUgg+o2MmhbG1Q8moRfD2QLsNC2XoGayV+sj7s/OwfY+TcOwH
+         yH/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:message-id:subject:mime-version
+         :list-id;
+        bh=GYilQjS/zwxef0gu/59aymrWDyRnS+qzGAShvxtirGU=;
+        b=mWt9h2NvZc4TFFGFTbhxPYPG+5w0G1Rx4Nfvjy9uDnq6M+YIbovDHhokGVT8KswuyM
+         b7jdrV5z//IsWE4KJFnNVnE/A0aqd/JWqqqeETyl+A7y95WFjIpsHAWXdG1I4CgKyWU8
+         9hHgxtr+yyI0RNvvkd1Gc4Dl7WES7ZOnaTGcmiSjLierigPecVoUEtnXcxOLBSDlaWty
+         nZ9tiAiOMOmwMyT3aTaB8dfqRFbXsJTf4AaHviRN35bZpWa0t27Iq9iiDjDLYwXaCYy/
+         RUpUhJGZ21g1wKVwpyh0lE/WzAYjpDdt+3u9I9Hz1jXfRQ5x8n9PO3vxCXc4IoBEhLR/
+         qOcg==
+X-Gm-Message-State: AOAM5338c1o6wksxzO8PBkgbaaLOqvNDYWl+ZC0K+DPd/MCN8aObt7WI
+	sx0BZcoqCzCt6veIbzKb9cvZNQ==
+X-Google-Smtp-Source: ABdhPJw5TYCvMzCVy8E1IJRh19RvXzUU1L/wds6ACs46TCC4lGqGzsa7HBX2MPqHz21U+vzuU54Ddg==
+X-Received: by 2002:a05:600c:1d8f:: with SMTP id p15mr2828600wms.36.1644511416666;
+        Thu, 10 Feb 2022 08:43:36 -0800 (PST)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id y17sm1881489wma.5.2022.02.10.08.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 08:43:36 -0800 (PST)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Thu, 10 Feb 2022 16:43:35 +0000 (UTC)
+To: Hugh Dickins <hughd@google.com>
+Cc: llvm@lists.linux.dev, arnd@linaro.org
+Message-ID: <1721993191.23462.1644511416102@jenkins.jenkins>
+Subject: [TCWG CI] Regression caused by linux: mm/munlock: mlock_page()
+ munlock_page() batch by pagevec
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: CKI Project <cki-project@redhat.com>
-To: skt-results-master@redhat.com, llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for kernel 5.17.0-rc3
- (mainline.kernel.org-clang, f4bc5bbb)
-Date: Thu, 10 Feb 2022 15:20:00 -0000
-CC: Bruno Goncalves <bgoncalv@redhat.com>,
- Memory Management <mm-qe@redhat.com>, Li Wang <liwang@redhat.com>,
- Jan Stancek <jstancek@redhat.com>, Fei Liu <feliu@redhat.com>,
- Yi Chen <yiche@redhat.com>, Jianwen Ji <jiji@redhat.com>,
- Hangbin Liu <haliu@redhat.com>, Jianlin Shi <jishi@redhat.com>,
- Xiumei Mu <xmu@redhat.com>, Guangwu Zhang <guazhang@redhat.com>,
- Yi Zhang <yizhan@redhat.com>, Fendy Tjahjadi <ftjahjad@redhat.com>,
- Xiaowu Wu <xiawu@redhat.com>, Baoquan He <bhe@redhat.com>,
- Jiri Dluhos <jdluhos@redhat.com>, Xiong Zhou <xzhou@redhat.com>,
- Changhui Zhong <czhong@redhat.com>, Filip Suba <fsuba@redhat.com>,
- Jeff Bastian <jbastian@redhat.com>
-Message-ID: <cki.XTQEL1XAYYCSQG4G3U86@redhat.com>
-X-Gitlab-Pipeline-ID: 467315058
-X-Gitlab-Url: https://gitlab.com
-X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
- =?utf-8?q?nes/cki-trusted-contributors/pipelines/467315058?=
-X-DataWarehouse-Checkout-IID: 31909
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-
-
-Check out this report and any autotriaged failures in our web dashboard:
-    https://datawarehouse.cki-project.org/kcidb/checkouts/31909
-
-Hello,
-
-We ran automated tests on a recent commit from this kernel tree:
-
-       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
-s/linux.git
-            Commit: f4bc5bbb5fef - Merge tag 'nfsd-5.17-2' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/cel/linux
-
-The results of these automated tests are provided below.
-
-    Overall result: FAILED (see details below)
-             Merge: OK
-           Compile: OK
- Selftests compile: FAILED
-             Tests: FAILED
-    Targeted tests: NO
-
-All kernel binaries, config files, and logs are available for download here=
-:
-
-  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
-fix=3Ddatawarehouse-public/2022/02/09/467315058
-
-One or more kernel tests failed:
-
-    s390x:
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-     =E2=9D=8C LTP - syscalls
-     =E2=9D=8C Networking bridge: sanity
-     =E2=9D=8C Networking UDP: socket
-     =E2=9D=8C Networking tunnel: geneve basic test
-     =E2=9D=8C Networking tunnel: gre basic
-     =E2=9D=8C L2TP basic test
-     =E2=9D=8C Networking tunnel: vxlan basic
-     =E2=9D=8C Networking ipsec: basic netns - transport
-     =E2=9D=8C Networking ipsec: basic netns - tunnel
-     =E2=9D=8C storage: dm/common
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-     =E2=9D=8C Storage blktests - blk
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-
-    aarch64:
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-     =E2=9D=8C LTP - syscalls
-     =E2=9D=8C Memory: fork_mem
-     =E2=9D=8C Networking bridge: sanity
-     =E2=9D=8C Networking UDP: socket
-     =E2=9D=8C Networking tunnel: geneve basic test
-     =E2=9D=8C Networking tunnel: gre basic
-     =E2=9D=8C L2TP basic test
-     =E2=9D=8C Networking tunnel: vxlan basic
-     =E2=9D=8C Networking ipsec: basic netns - transport
-     =E2=9D=8C Networking ipsec: basic netns - tunnel
-     =E2=9D=8C storage: dm/common
-     =E2=9D=8C kdump - kexec_boot
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-     =E2=9D=8C Networking bridge: sanity - mlx5
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-     =E2=9D=8C kdump - sysrq-c
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-
-    ppc64le:
-     =E2=9D=8C Boot test
-     =E2=9D=8C Reboot test
-     =E2=9D=8C LTP - syscalls
-     =E2=9D=8C Memory: fork_mem
-     =E2=9D=8C Networking bridge: sanity
-
-    x86_64 (debug):
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-
-    x86_64:
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-
-We hope that these logs can help you find the problem quickly. For the full
-detail on our testing procedures, please scroll to the bottom of this messa=
-ge.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
-Compile testing
----------------
-
-We compiled the kernel for 5 architectures:
-
-    aarch64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-    ppc64le:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
-
-    s390x:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-
-We built the following selftests:
-
-  x86_64:
-      net: OK
-      bpf: fail
-      seccomp: OK
-      lkdtm: OK
-      install and packaging: OK
-
-You can find the full log (build-selftests.log) in the artifact storage abo=
-ve.
-
-
-Hardware testing
-----------------
-We booted each kernel and ran the following tests:
-
-  aarch64:
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =E2=9C=85 ACPI table test
-       =E2=9C=85 ACPI enabled test
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9D=8C LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9C=85 LTP - pty
-       =E2=9C=85 LTP - ipc
-       =E2=9C=85 LTP - tracing
-       =E2=9C=85 LTP: openposix test suite
-       =E2=9C=85 CIFS Connectathon
-       =E2=9C=85 POSIX pjd-fstest suites
-       =E2=9C=85 Loopdev Sanity
-       =E2=9C=85 jvm - jcstress tests
-       =E2=9D=8C Memory: fork_mem
-       =E2=9C=85 Memory function: memfd_create
-       =E2=9C=85 AMTU (Abstract Machine Test Utility)
-       =E2=9D=8C Networking bridge: sanity
-       =E2=9C=85 Ethernet drivers sanity
-       =E2=9C=85 Networking socket: fuzz
-       =E2=9C=85 Networking route: pmtu
-       =E2=9C=85 Networking route_func - local
-       =E2=9C=85 Networking route_func - forward
-       =E2=9C=85 Networking TCP: keepalive test
-       =E2=9D=8C Networking UDP: socket
-       =E2=9C=85 Networking cki netfilter test
-       =E2=9D=8C Networking tunnel: geneve basic test
-       =E2=9D=8C Networking tunnel: gre basic
-       =E2=9D=8C L2TP basic test
-       =E2=9D=8C Networking tunnel: vxlan basic
-       =E2=9D=8C Networking ipsec: basic netns - transport
-       =E2=9D=8C Networking ipsec: basic netns - tunnel
-       =E2=9C=85 Libkcapi AF_ALG test
-       =E2=9C=85 pciutils: update pci ids test
-       =E2=9C=85 ALSA PCM loopback test
-       =E2=9C=85 ALSA Control (mixer) Userspace Element test
-       =E2=9D=8C storage: dm/common
-       =E2=9C=85 lvm snapper test
-       =E2=9C=85 storage: SCSI VPD
-       =E2=9C=85 trace: ftrace/tracer
-       =E2=9D=8C kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9C=85 i2c: i2cdetect sanity
-       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
-       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9D=8C Networking: igmp conformance test
-       =F0=9F=9A=A7 =E2=9C=85 audit: audit testsuite test
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =E2=9C=85 xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =E2=9C=85 IPMI driver test
-       =E2=9C=85 IPMItool loop stress test
-       =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9C=85 Storage blktests - blk
-       =E2=9C=85 Storage block - filesystem fio test
-       =E2=9C=85 Storage block - queue scheduler test
-       =E2=9C=85 storage: software RAID testing
-       =E2=9C=85 Storage: swraid mdadm raid_module test
-       =E2=9C=85 stress: stress-ng - interrupt
-       =E2=9C=85 stress: stress-ng - cpu
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as user
-       =F0=9F=9A=A7 =E2=9D=8C xfstests - btrfs
-       =F0=9F=9A=A7 =E2=9D=8C Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9D=8C Storage block - storage fio numa
-       =F0=9F=9A=A7 =E2=9D=8C lvm cache test
-       =F0=9F=9A=A7 =E2=9D=8C stress: stress-ng - os
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =E2=9D=8C Networking bridge: sanity - mlx5
-       =E2=9C=85 Ethernet drivers sanity - mlx5
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
-
-    Host 5:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =E2=9D=8C kdump - sysrq-c
-
-    Host 6:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
-
-  ppc64le:
-    Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9D=8C LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9C=85 LTP - pty
-       =E2=9C=85 LTP - ipc
-       =E2=9C=85 LTP - tracing
-       =E2=9C=85 LTP: openposix test suite
-       =E2=9C=85 CIFS Connectathon
-       =E2=9C=85 POSIX pjd-fstest suites
-       =E2=9C=85 Loopdev Sanity
-       =E2=9C=85 jvm - jcstress tests
-       =E2=9D=8C Memory: fork_mem
-       =E2=9C=85 Memory function: memfd_create
-       =E2=9C=85 AMTU (Abstract Machine Test Utility)
-       =E2=9D=8C Networking bridge: sanity
-       =E2=9C=85 Ethernet drivers sanity
-       =E2=9C=85 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
-est
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
-
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-
-    Host 5:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-
-    Host 6:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
-
-  s390x:
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =E2=9C=85 kdump - sysrq-c
-       =E2=9C=85 kdump - file-load
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9D=8C LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9C=85 LTP - pty
-       =E2=9C=85 LTP - ipc
-       =E2=9C=85 LTP - tracing
-       =E2=9C=85 LTP: openposix test suite
-       =E2=9C=85 CIFS Connectathon
-       =E2=9C=85 POSIX pjd-fstest suites
-       =E2=9C=85 Loopdev Sanity
-       =E2=9C=85 jvm - jcstress tests
-       =E2=9C=85 Memory: fork_mem
-       =E2=9C=85 Memory function: memfd_create
-       =E2=9C=85 AMTU (Abstract Machine Test Utility)
-       =E2=9D=8C Networking bridge: sanity
-       =E2=9C=85 Ethernet drivers sanity
-       =E2=9C=85 Networking route: pmtu
-       =E2=9C=85 Networking route_func - local
-       =E2=9C=85 Networking route_func - forward
-       =E2=9C=85 Networking TCP: keepalive test
-       =E2=9D=8C Networking UDP: socket
-       =E2=9C=85 Networking cki netfilter test
-       =E2=9D=8C Networking tunnel: geneve basic test
-       =E2=9D=8C Networking tunnel: gre basic
-       =E2=9D=8C L2TP basic test
-       =E2=9D=8C Networking tunnel: vxlan basic
-       =E2=9D=8C Networking ipsec: basic netns - transport
-       =E2=9D=8C Networking ipsec: basic netns - tunnel
-       =E2=9C=85 Libkcapi AF_ALG test
-       =E2=9D=8C storage: dm/common
-       =E2=9C=85 lvm snapper test
-       =E2=9C=85 trace: ftrace/tracer
-       =E2=9C=85 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9C=85 audit: audit testsuite test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9D=8C Storage blktests - blk
-       =E2=9C=85 Storage: swraid mdadm raid_module test
-       =E2=9C=85 stress: stress-ng - interrupt
-       =E2=9C=85 stress: stress-ng - cpu
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as user
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
-       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9D=8C Reboot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
-
-  x86_64 (debug):
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - nfsv4.2
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - cifsv3.11
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Idle Test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - net
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - forwa=
-rding
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - tc
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf_t=
-est_progs
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
-e test
-
-  x86_64:
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
-p
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - nfsv4.2
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - cifsv3.11
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
-t
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
-r
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Idle Test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - storage fio=
- numa
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
-
-    Host 5:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
-t
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
-est
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - net
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - forwa=
-rding
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - tc
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf_t=
-est_progs
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
-e test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
-
-  Test sources: https://gitlab.com/cki-project/kernel-tests
-    =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
- existing tests!
-
-Aborted tests
--------------
-Tests that didn't complete running successfully are marked with =E2=9A=A1=
-=E2=9A=A1=E2=9A=A1.
-If this was caused by an infrastructure issue, we try to mark that
-explicitly in the report.
-
-Waived tests
-------------
-If the test run included waived tests, they are marked with =F0=9F=9A=A7. S=
-uch tests are
-executed but their results are not taken into account. Tests are waived whe=
-n
-their results are not reliable enough, e.g. when they're just introduced or=
- are
-being fixed.
-
-Testing timeout
----------------
-We aim to provide a report within reasonable timeframe. Tests that haven't
-finished running yet are marked with =E2=8F=B1.
-Targeted tests
---------------
-Test runs for patches always include a set of base tests, plus some
-tests chosen based on the file paths modified by the patch. The latter
-are called "targeted tests". If no targeted tests are run, that means
-no patch-specific tests are available. Please, consider contributing a
-targeted test for related patches to increase test coverage. See
-https://docs.engineering.redhat.com/x/_wEZB for more details.
-
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_23461_336474925.1644511415244"
+X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-release-arm-next-allnoconfig
+X-Jenkins-Result: SUCCESS
+List-ID: 
+
+------=_Part_23461_336474925.1644511415244
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+[TCWG CI] Regression caused by linux: mm/munlock: mlock_page() munlock_page() batch by pagevec:
+commit cbaf47432c909044db94fbbf45a0870f6d2f169e
+Author: Hugh Dickins <hughd@google.com>
+
+    mm/munlock: mlock_page() munlock_page() batch by pagevec
+
+Results regressed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+553
+# First few build errors in logs:
+# 00:00:47 mm/swap.c:637:2: error: implicit declaration of function 'mlock_page_drain' [-Werror,-Wimplicit-function-declaration]
+# 00:00:47 make[1]: *** [mm/swap.o] Error 1
+# 00:00:47 make: *** [mm] Error 2
+
+from
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+570
+# linux build successful:
+all
+
+THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+
+This commit has regressed these CI configurations:
+ - tcwg_kernel/llvm-release-arm-next-allnoconfig
+
+First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-next-allnoconfig/4/artifact/artifacts/build-cbaf47432c909044db94fbbf45a0870f6d2f169e/
+Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-next-allnoconfig/4/artifact/artifacts/build-0ad999a94b292ea4bf0fcc49a437a0fd21a30a1b/
+Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-next-allnoconfig/4/artifact/artifacts/build-baseline/
+Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-next-allnoconfig/4/artifact/artifacts/
+
+Reproduce builds:
+<cut>
+mkdir investigate-linux-cbaf47432c909044db94fbbf45a0870f6d2f169e
+cd investigate-linux-cbaf47432c909044db94fbbf45a0870f6d2f169e
+
+# Fetch scripts
+git clone https://git.linaro.org/toolchain/jenkins-scripts
+
+# Fetch manifests and test.sh script
+mkdir -p artifacts/manifests
+curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-next-allnoconfig/4/artifact/artifacts/manifests/build-baseline.sh --fail
+curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-next-allnoconfig/4/artifact/artifacts/manifests/build-parameters.sh --fail
+curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-next-allnoconfig/4/artifact/artifacts/test.sh --fail
+chmod +x artifacts/test.sh
+
+# Reproduce the baseline build (build all pre-requisites)
+./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
+
+# Save baseline build state (which is then restored in artifacts/test.sh)
+mkdir -p ./bisect
+rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /linux/ ./ ./bisect/baseline/
+
+cd linux
+
+# Reproduce first_bad build
+git checkout --detach cbaf47432c909044db94fbbf45a0870f6d2f169e
+../artifacts/test.sh
+
+# Reproduce last_good build
+git checkout --detach 0ad999a94b292ea4bf0fcc49a437a0fd21a30a1b
+../artifacts/test.sh
+
+cd ..
+</cut>
+
+Full commit (up to 1000 lines):
+<cut>
+commit cbaf47432c909044db94fbbf45a0870f6d2f169e
+Author: Hugh Dickins <hughd@google.com>
+Date:   Wed Feb 9 11:28:31 2022 +1100
+
+    mm/munlock: mlock_page() munlock_page() batch by pagevec
+    
+    A weakness of the page->mlock_count approach is the need for lruvec lock
+    while holding page table lock.  That is not an overhead we would allow on
+    normal pages, but I think acceptable just for pages in an mlocked area.
+    But let's try to amortize the extra cost by gathering on per-cpu pagevec
+    before acquiring the lruvec lock.
+    
+    I have an unverified conjecture that the mlock pagevec might work out well
+    for delaying the mlock processing of new file pages until they have got
+    off lru_cache_add()'s pagevec and on to LRU.
+    
+    The initialization of page->mlock_count is subject to races and awkward: 0
+    or !!PageMlocked or 1?  Was it wrong even in the implementation before
+    this commit, which just widens the window?  I haven't gone back to think
+    it through.  Maybe someone can point out a better way to initialize it.
+    
+    Bringing lru_cache_add_inactive_or_unevictable()'s mlock initialization
+    into mm/mlock.c has helped: mlock_new_page(), using the mlock pagevec,
+    rather than lru_cache_add()'s pagevec.
+    
+    Experimented with various orderings: the right thing seems to be for
+    mlock_page() and mlock_new_page() to TestSetPageMlocked before adding to
+    pagevec, but munlock_page() to leave TestClearPageMlocked to the later
+    pagevec processing.
+    
+    Dropped the VM_BUG_ON_PAGE(PageTail)s this time around: they have made
+    their point, and the thp_nr_page()s already contain a VM_BUG_ON_PGFLAGS()
+    for that.
+    
+    This still leaves acquiring lruvec locks under page table lock each time
+    the pagevec fills (or a THP is added): which I suppose is rather silly,
+    since they sit on pagevec waiting to be processed long after page table
+    lock has been dropped; but I'm disinclined to uglify the calling sequence
+    until some load shows an actual problem with it (nothing wrong with taking
+    lruvec lock under page table lock, just "nicer" to do it less).
+    
+    Link: https://lkml.kernel.org/r/eadba522-cfe1-b0d6-56fc-7bc9f649b89d@google.com
+    Signed-off-by: Hugh Dickins <hughd@google.com>
+    Cc: Alistair Popple <apopple@nvidia.com>
+    Cc: David Hildenbrand <david@redhat.com>
+    Cc: Greg Thelen <gthelen@google.com>
+    Cc: Johannes Weiner <hannes@cmpxchg.org>
+    Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
+    Cc: Matthew Wilcox <willy@infradead.org>
+    Cc: Michal Hocko <mhocko@suse.com>
+    Cc: Rik van Riel <riel@surriel.com>
+    Cc: Shakeel Butt <shakeelb@google.com>
+    Cc: Suren Baghdasaryan <surenb@google.com>
+    Cc: Vlastimil Babka <vbabka@suse.cz>
+    Cc: Yu Zhao <yuzhao@google.com>
+    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+    Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ mm/internal.h |   7 +-
+ mm/mlock.c    | 212 ++++++++++++++++++++++++++++++++++++++++++++++++----------
+ mm/swap.c     |  27 ++++----
+ 3 files changed, 199 insertions(+), 47 deletions(-)
+
+diff --git a/mm/internal.h b/mm/internal.h
+index 5cbd19a16603..0d240e876831 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -402,7 +402,8 @@ extern int mlock_future_check(struct mm_struct *mm, unsigned long flags,
+  *
+  * mlock is usually called at the end of page_add_*_rmap(),
+  * munlock at the end of page_remove_rmap(); but new anon
+- * pages are managed in lru_cache_add_inactive_or_unevictable().
++ * pages are managed by lru_cache_add_inactive_or_unevictable()
++ * calling mlock_new_page().
+  *
+  * @compound is used to include pmd mappings of THPs, but filter out
+  * pte mappings of THPs, which cannot be consistently counted: a pte
+@@ -425,6 +426,9 @@ static inline void munlock_vma_page(struct page *page,
+ 	    (compound || !PageTransCompound(page)))
+ 		munlock_page(page);
+ }
++void mlock_new_page(struct page *page);
++bool need_mlock_page_drain(int cpu);
++void mlock_page_drain(int cpu);
+ 
+ extern pmd_t maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma);
+ 
+@@ -503,6 +507,7 @@ static inline void mlock_vma_page(struct page *page,
+ 			struct vm_area_struct *vma, bool compound) { }
+ static inline void munlock_vma_page(struct page *page,
+ 			struct vm_area_struct *vma, bool compound) { }
++static inline void mlock_new_page(struct page *page) { }
+ static inline void vunmap_range_noflush(unsigned long start, unsigned long end)
+ {
+ }
+diff --git a/mm/mlock.c b/mm/mlock.c
+index f8e5dcff21ae..d50d48961b22 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -28,6 +28,8 @@
+ 
+ #include "internal.h"
+ 
++static DEFINE_PER_CPU(struct pagevec, mlock_pvec);
++
+ bool can_do_mlock(void)
+ {
+ 	if (rlimit(RLIMIT_MEMLOCK) != 0)
+@@ -49,57 +51,79 @@ EXPORT_SYMBOL(can_do_mlock);
+  * PageUnevictable is set to indicate the unevictable state.
+  */
+ 
+-/**
+- * mlock_page - mlock a page
+- * @page - page to be mlocked, either a normal page or a THP head.
+- */
+-void mlock_page(struct page *page)
++static struct lruvec *__mlock_page(struct page *page, struct lruvec *lruvec)
+ {
+-	struct lruvec *lruvec;
+-	int nr_pages = thp_nr_pages(page);
++	/* There is nothing more we can do while it's off LRU */
++	if (!TestClearPageLRU(page))
++		return lruvec;
+ 
+-	VM_BUG_ON_PAGE(PageTail(page), page);
++	lruvec = folio_lruvec_relock_irq(page_folio(page), lruvec);
+ 
+-	if (!TestSetPageMlocked(page)) {
+-		mod_zone_page_state(page_zone(page), NR_MLOCK, nr_pages);
+-		__count_vm_events(UNEVICTABLE_PGMLOCKED, nr_pages);
++	if (unlikely(page_evictable(page))) {
++		/*
++		 * This is a little surprising, but quite possible:
++		 * PageMlocked must have got cleared already by another CPU.
++		 * Could this page be on the Unevictable LRU?  I'm not sure,
++		 * but move it now if so.
++		 */
++		if (PageUnevictable(page)) {
++			del_page_from_lru_list(page, lruvec);
++			ClearPageUnevictable(page);
++			add_page_to_lru_list(page, lruvec);
++			__count_vm_events(UNEVICTABLE_PGRESCUED,
++					  thp_nr_pages(page));
++		}
++		goto out;
+ 	}
+ 
+-	/* There is nothing more we can do while it's off LRU */
+-	if (!TestClearPageLRU(page))
+-		return;
+-
+-	lruvec = folio_lruvec_lock_irq(page_folio(page));
+ 	if (PageUnevictable(page)) {
+-		page->mlock_count++;
++		if (PageMlocked(page))
++			page->mlock_count++;
+ 		goto out;
+ 	}
+ 
+ 	del_page_from_lru_list(page, lruvec);
+ 	ClearPageActive(page);
+ 	SetPageUnevictable(page);
+-	page->mlock_count = 1;
++	page->mlock_count = !!PageMlocked(page);
+ 	add_page_to_lru_list(page, lruvec);
+-	__count_vm_events(UNEVICTABLE_PGCULLED, nr_pages);
++	__count_vm_events(UNEVICTABLE_PGCULLED, thp_nr_pages(page));
+ out:
+ 	SetPageLRU(page);
+-	unlock_page_lruvec_irq(lruvec);
++	return lruvec;
+ }
+ 
+-/**
+- * munlock_page - munlock a page
+- * @page: page to be munlocked, either a normal page or a THP head.
+- */
+-void munlock_page(struct page *page)
++static struct lruvec *__mlock_new_page(struct page *page, struct lruvec *lruvec)
++{
++	VM_BUG_ON_PAGE(PageLRU(page), page);
++
++	lruvec = folio_lruvec_relock_irq(page_folio(page), lruvec);
++
++	/* As above, this is a little surprising, but possible */
++	if (unlikely(page_evictable(page)))
++		goto out;
++
++	SetPageUnevictable(page);
++	page->mlock_count = !!PageMlocked(page);
++	__count_vm_events(UNEVICTABLE_PGCULLED, thp_nr_pages(page));
++out:
++	add_page_to_lru_list(page, lruvec);
++	SetPageLRU(page);
++	return lruvec;
++}
++
++static struct lruvec *__munlock_page(struct page *page, struct lruvec *lruvec)
+ {
+-	struct lruvec *lruvec;
+ 	int nr_pages = thp_nr_pages(page);
++	bool isolated = false;
++
++	if (!TestClearPageLRU(page))
++		goto munlock;
+ 
+-	VM_BUG_ON_PAGE(PageTail(page), page);
++	isolated = true;
++	lruvec = folio_lruvec_relock_irq(page_folio(page), lruvec);
+ 
+-	lock_page_memcg(page);
+-	lruvec = folio_lruvec_lock_irq(page_folio(page));
+-	if (PageLRU(page) && PageUnevictable(page)) {
++	if (PageUnevictable(page)) {
+ 		/* Then mlock_count is maintained, but might undercount */
+ 		if (page->mlock_count)
+ 			page->mlock_count--;
+@@ -108,24 +132,144 @@ void munlock_page(struct page *page)
+ 	}
+ 	/* else assume that was the last mlock: reclaim will fix it if not */
+ 
++munlock:
+ 	if (TestClearPageMlocked(page)) {
+ 		__mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
+-		if (PageLRU(page) || !PageUnevictable(page))
++		if (isolated || !PageUnevictable(page))
+ 			__count_vm_events(UNEVICTABLE_PGMUNLOCKED, nr_pages);
+ 		else
+ 			__count_vm_events(UNEVICTABLE_PGSTRANDED, nr_pages);
+ 	}
+ 
+ 	/* page_evictable() has to be checked *after* clearing Mlocked */
+-	if (PageLRU(page) && PageUnevictable(page) && page_evictable(page)) {
++	if (isolated && PageUnevictable(page) && page_evictable(page)) {
+ 		del_page_from_lru_list(page, lruvec);
+ 		ClearPageUnevictable(page);
+ 		add_page_to_lru_list(page, lruvec);
+ 		__count_vm_events(UNEVICTABLE_PGRESCUED, nr_pages);
+ 	}
+ out:
+-	unlock_page_lruvec_irq(lruvec);
+-	unlock_page_memcg(page);
++	if (isolated)
++		SetPageLRU(page);
++	return lruvec;
++}
++
++/*
++ * Flags held in the low bits of a struct page pointer on the mlock_pvec.
++ */
++#define LRU_PAGE 0x1
++#define NEW_PAGE 0x2
++#define mlock_lru(page) ((struct page *)((unsigned long)page + LRU_PAGE))
++#define mlock_new(page) ((struct page *)((unsigned long)page + NEW_PAGE))
++
++/*
++ * mlock_pagevec() is derived from pagevec_lru_move_fn():
++ * perhaps that can make use of such page pointer flags in future,
++ * but for now just keep it for mlock.  We could use three separate
++ * pagevecs instead, but one feels better (munlocking a full pagevec
++ * does not need to drain mlocking pagevecs first).
++ */
++static void mlock_pagevec(struct pagevec *pvec)
++{
++	struct lruvec *lruvec = NULL;
++	unsigned long mlock;
++	struct page *page;
++	int i;
++
++	for (i = 0; i < pagevec_count(pvec); i++) {
++		page = pvec->pages[i];
++		mlock = (unsigned long)page & (LRU_PAGE | NEW_PAGE);
++		page = (struct page *)((unsigned long)page - mlock);
++		pvec->pages[i] = page;
++
++		if (mlock & LRU_PAGE)
++			lruvec = __mlock_page(page, lruvec);
++		else if (mlock & NEW_PAGE)
++			lruvec = __mlock_new_page(page, lruvec);
++		else
++			lruvec = __munlock_page(page, lruvec);
++	}
++
++	if (lruvec)
++		unlock_page_lruvec_irq(lruvec);
++	release_pages(pvec->pages, pvec->nr);
++	pagevec_reinit(pvec);
++}
++
++void mlock_page_drain(int cpu)
++{
++	struct pagevec *pvec;
++
++	pvec = &per_cpu(mlock_pvec, cpu);
++	if (pagevec_count(pvec))
++		mlock_pagevec(pvec);
++}
++
++bool need_mlock_page_drain(int cpu)
++{
++	return pagevec_count(&per_cpu(mlock_pvec, cpu));
++}
++
++/**
++ * mlock_page - mlock a page already on (or temporarily off) LRU
++ * @page - page to be mlocked, either a normal page or a THP head.
++ */
++void mlock_page(struct page *page)
++{
++	struct pagevec *pvec = &get_cpu_var(mlock_pvec);
++
++	if (!TestSetPageMlocked(page)) {
++		int nr_pages = thp_nr_pages(page);
++
++		mod_zone_page_state(page_zone(page), NR_MLOCK, nr_pages);
++		__count_vm_events(UNEVICTABLE_PGMLOCKED, nr_pages);
++	}
++
++	get_page(page);
++	if (!pagevec_add(pvec, mlock_lru(page)) ||
++	    PageHead(page) || lru_cache_disabled())
++		mlock_pagevec(pvec);
++	put_cpu_var(mlock_pvec);
++}
++
++/**
++ * mlock_new_page - mlock a newly allocated page not yet on LRU
++ * @page - page to be mlocked, either a normal page or a THP head.
++ */
++void mlock_new_page(struct page *page)
++{
++	struct pagevec *pvec = &get_cpu_var(mlock_pvec);
++	int nr_pages = thp_nr_pages(page);
++
++	SetPageMlocked(page);
++	mod_zone_page_state(page_zone(page), NR_MLOCK, nr_pages);
++	__count_vm_events(UNEVICTABLE_PGMLOCKED, nr_pages);
++
++	get_page(page);
++	if (!pagevec_add(pvec, mlock_new(page)) ||
++	    PageHead(page) || lru_cache_disabled())
++		mlock_pagevec(pvec);
++	put_cpu_var(mlock_pvec);
++}
++
++/**
++ * munlock_page - munlock a page
++ * @page - page to be munlocked, either a normal page or a THP head.
++ */
++void munlock_page(struct page *page)
++{
++	struct pagevec *pvec = &get_cpu_var(mlock_pvec);
++
++	/*
++	 * TestClearPageMlocked(page) must be left to __munlock_page(),
++	 * which will check whether the page is multiply mlocked.
++	 */
++
++	get_page(page);
++	if (!pagevec_add(pvec, page) ||
++	    PageHead(page) || lru_cache_disabled())
++		mlock_pagevec(pvec);
++	put_cpu_var(mlock_pvec);
+ }
+ 
+ static int mlock_pte_range(pmd_t *pmd, unsigned long addr,
+diff --git a/mm/swap.c b/mm/swap.c
+index 3f770b1ea2c1..842d5cd92cf6 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -490,18 +490,12 @@ EXPORT_SYMBOL(folio_add_lru);
+ void lru_cache_add_inactive_or_unevictable(struct page *page,
+ 					 struct vm_area_struct *vma)
+ {
+-	bool unevictable;
+-
+ 	VM_BUG_ON_PAGE(PageLRU(page), page);
+ 
+-	unevictable = (vma->vm_flags & (VM_LOCKED | VM_SPECIAL)) == VM_LOCKED;
+-	if (unlikely(unevictable) && !TestSetPageMlocked(page)) {
+-		int nr_pages = thp_nr_pages(page);
+-
+-		mod_zone_page_state(page_zone(page), NR_MLOCK, nr_pages);
+-		count_vm_events(UNEVICTABLE_PGMLOCKED, nr_pages);
+-	}
+-	lru_cache_add(page);
++	if (unlikely((vma->vm_flags & (VM_LOCKED | VM_SPECIAL)) == VM_LOCKED))
++		mlock_new_page(page);
++	else
++		lru_cache_add(page);
+ }
+ 
+ /*
+@@ -640,6 +634,7 @@ void lru_add_drain_cpu(int cpu)
+ 		pagevec_lru_move_fn(pvec, lru_lazyfree_fn);
+ 
+ 	activate_page_drain(cpu);
++	mlock_page_drain(cpu);
+ }
+ 
+ /**
+@@ -842,6 +837,7 @@ inline void __lru_add_drain_all(bool force_all_cpus)
+ 		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate, cpu)) ||
+ 		    pagevec_count(&per_cpu(lru_pvecs.lru_lazyfree, cpu)) ||
+ 		    need_activate_page_drain(cpu) ||
++		    need_mlock_page_drain(cpu) ||
+ 		    has_bh_in_lru(cpu, NULL)) {
+ 			INIT_WORK(work, lru_add_drain_per_cpu);
+ 			queue_work_on(cpu, mm_percpu_wq, work);
+@@ -1030,7 +1026,7 @@ static void __pagevec_lru_add_fn(struct folio *folio, struct lruvec *lruvec)
+ 	 * Is an smp_mb__after_atomic() still required here, before
+ 	 * folio_evictable() tests PageMlocked, to rule out the possibility
+ 	 * of stranding an evictable folio on an unevictable LRU?  I think
+-	 * not, because munlock_page() only clears PageMlocked while the LRU
++	 * not, because __munlock_page() only clears PageMlocked while the LRU
+ 	 * lock is held.
+ 	 *
+ 	 * (That is not true of __page_cache_release(), and not necessarily
+@@ -1043,7 +1039,14 @@ static void __pagevec_lru_add_fn(struct folio *folio, struct lruvec *lruvec)
+ 	} else {
+ 		folio_clear_active(folio);
+ 		folio_set_unevictable(folio);
+-		folio->mlock_count = !!folio_test_mlocked(folio);
++		/*
++		 * folio->mlock_count = !!folio_test_mlocked(folio)?
++		 * But that leaves __mlock_page() in doubt whether another
++		 * actor has already counted the mlock or not.  Err on the
++		 * safe side, underestimate, let page reclaim fix it, rather
++		 * than leaving a page on the unevictable LRU indefinitely.
++		 */
++		folio->mlock_count = 0;
+ 		if (!was_unevictable)
+ 			__count_vm_events(UNEVICTABLE_PGCULLED, nr_pages);
+ 	}
+</cut>
+------=_Part_23461_336474925.1644511415244--
