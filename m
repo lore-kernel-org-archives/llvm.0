@@ -1,42 +1,40 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5232F23
-	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 05:57:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE6A2F22
+	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 06:48:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644472650; x=1676008650;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6wj8DxYg7pGKO5ac7Yedqz4Iiks0afIEByGjlIyI1BI=;
-  b=kudalcB5Bx5sdWM7DUfhHuraAg+N38UEvFJMr33tAesk1KMuTTdbHoen
-   pXQXbDT12stn2nztuFFiWqcDV7EkIwqDaV8jX8AKTWd+XpXRjoXGT3VAO
-   hN/ez9M8kcY1sAy88LROehWsHW9IQPBzVDoitrRg6HPyxGeFQ870OwEca
-   U4PeNnGuQIAzmfG0Z+ZVXIprnaIdN3cwkp/XtfM3UeMeDfZBO658HpgjQ
-   KhXdjQjejkZqs2aGBbUg7mvfE/UGnkMa5GLcuLiJ6iuo+62fBvQjNxgpl
-   ynPHakuy8hIlqk/mOhWrc2f/eoDhYGjh7gZ2DnmvXAkCXj+qz7lfifSBB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="273964790"
-X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
-   d="scan'208";a="273964790"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 21:57:29 -0800
+  t=1644475714; x=1676011714;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=nr/G/BC6QakbmjCA7/I2E4velW1h7kZS+XKVzzGr6/k=;
+  b=F3IkuCcMN9uUfwi0ApEWn5b6VwzTJAnzhYWrVPHUmllf8/lYYypHv9FS
+   zKafX+vnLtEo9efN3Wp2kzwdUTLjvzx4uAmBfobn1nz3bfUNpUQRK6DOe
+   W0wSikd78X809T3Zpocbulnlp12jW7EN7zWs57uXWq4+CfiVbMik6PIr+
+   OPTaR87fh3xTMC+XqokOLF7NC2h1JOKU3yreOtytrgEsSbcTU7ym/w47N
+   ZmSHONI1eaGnMziO+G2nNc2Iw3QJ4n4WS27qCJ4TP6ipIUO0ZvmysBzLy
+   X7Dp3J6KWQb7zMpofxb+6Shm5S43G3nivBxOcPsdnA15F0oE/tsz9qLMf
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="232987730"
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="232987730"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 22:48:32 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
-   d="scan'208";a="526340574"
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="568536999"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 09 Feb 2022 21:57:27 -0800
+  by orsmga001.jf.intel.com with ESMTP; 09 Feb 2022 22:48:31 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nI2SN-0002mj-2H; Thu, 10 Feb 2022 05:57:27 +0000
-Date: Thu, 10 Feb 2022 13:56:34 +0800
+	id 1nI3Fm-0002qC-Jz; Thu, 10 Feb 2022 06:48:30 +0000
+Date: Thu, 10 Feb 2022 14:48:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: arch/mips/crypto/crc32-mips.c:40:1: error: expected identifier or '('
-Message-ID: <202202101304.wJVi3lit-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: ld.lld: error: init/built-in.a(do_mounts_rd.o):(function
+ ext2_image_size: .text+0x3e): relocation R_RISCV_HI20 out of range: 527059
+ is not in [-524288, 524287]; references .L__unnamed_3
+Message-ID: <202202101425.397JTyCS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,145 +45,37 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
+CC: linux-kernel@vger.kernel.org
+TO: Paul Moore <paul@paul-moore.com>
+CC: Richard Guy Briggs <rgb@redhat.com>
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   f4bc5bbb5fef3cf421ba3485d6d383c27ec473ed
-commit: 67512a8cf5a730938fdb1e48de33edfef6015e03 MIPS: Avoid macro redefinitions
-date:   5 months ago
-config: mips-randconfig-r014-20220209 (https://download.01.org/0day-ci/archive/20220210/202202101304.wJVi3lit-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
+commit: f26d04331360d42dbd6b58448bd98e4edbfbe1c5 audit: improve audit queue handling when "audit=1" on cmdline
+date:   2 weeks ago
+config: riscv-randconfig-r031-20220210 (https://download.01.org/0day-ci/archive/20220210/202202101425.397JTyCS-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project aa845d7a245d85c441d0bd44fc7b6c3be8f3de8d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=67512a8cf5a730938fdb1e48de33edfef6015e03
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f26d04331360d42dbd6b58448bd98e4edbfbe1c5
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 67512a8cf5a730938fdb1e48de33edfef6015e03
+        git checkout f26d04331360d42dbd6b58448bd98e4edbfbe1c5
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> arch/mips/crypto/crc32-mips.c:40:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32b,  0, 0);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:41:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32h,  1, 0);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:42:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32w,  2, 0);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:43:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32d,  3, 0);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:44:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32cb, 0, 1);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:45:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32ch, 1, 1);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:46:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32cw, 2, 1);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:47:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32cd, 3, 1);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   8 errors generated.
-
-
-vim +40 arch/mips/crypto/crc32-mips.c
-
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  29  
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  30  #ifndef TOOLCHAIN_SUPPORTS_CRC
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  31  #define _ASM_MACRO_CRC32(OP, SZ, TYPE)					  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  32  _ASM_MACRO_3R(OP, rt, rs, rt2,						  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  33  	".ifnc	\\rt, \\rt2\n\t"					  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  34  	".error	\"invalid operands \\\"" #OP " \\rt,\\rs,\\rt2\\\"\"\n\t" \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  35  	".endif\n\t"							  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  36  	_ASM_INSN_IF_MIPS(0x7c00000f | (__rt << 16) | (__rs << 21) |	  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  37  			  ((SZ) <<  6) | ((TYPE) << 8))			  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  38  	_ASM_INSN32_IF_MM(0x00000030 | (__rs << 16) | (__rt << 21) |	  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  39  			  ((SZ) << 14) | ((TYPE) << 3)))
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09 @40  _ASM_MACRO_CRC32(crc32b,  0, 0);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  41  _ASM_MACRO_CRC32(crc32h,  1, 0);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  42  _ASM_MACRO_CRC32(crc32w,  2, 0);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  43  _ASM_MACRO_CRC32(crc32d,  3, 0);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  44  _ASM_MACRO_CRC32(crc32cb, 0, 1);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  45  _ASM_MACRO_CRC32(crc32ch, 1, 1);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  46  _ASM_MACRO_CRC32(crc32cw, 2, 1);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  47  _ASM_MACRO_CRC32(crc32cd, 3, 1);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  48  #define _ASM_SET_CRC ""
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  49  #else /* !TOOLCHAIN_SUPPORTS_CRC */
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  50  #define _ASM_SET_CRC ".set\tcrc\n\t"
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  51  #endif
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  52  
-
-:::::: The code at line 40 was first introduced by commit
-:::::: 4a5dc51e93e80463010ab4d8d00fc9cb6bc936fa MIPS: crypto: Add crc32 and crc32c hw accelerated module
-
-:::::: TO: Marcin Nowakowski <marcin.nowakowski@mips.com>
-:::::: CC: James Hogan <jhogan@kernel.org>
+>> ld.lld: error: init/built-in.a(do_mounts_rd.o):(function ext2_image_size: .text+0x3e): relocation R_RISCV_HI20 out of range: 527059 is not in [-524288, 524287]; references .L__unnamed_3
+   >>> referenced by do_mounts_rd.c
+   >>> defined in init/built-in.a(do_mounts_rd.o)
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
