@@ -1,203 +1,137 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99169173
-	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 18:45:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644518706; x=1676054706;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=v3iYPiqCdKGv+k/GYQIr2pn/ZjWnJ8s735hfY/vqC9A=;
-  b=VdN6NrajvPaMVHqGtpwaUt+KmuQgzdXZf7v1XjWzE3dnAxUIZh4vCyxv
-   cQPe+U1o9dkY7CqfWha1zU5e4tDwE9wripU5iHOb5OtWRVttUlOXNKrOh
-   Iy6BvJwM34z/zlu1BoCgvZNw/KEHWpC4J+YfB8/+YWWPhfZpENlvzGQVK
-   rve0HZDCeJIUyId4lMDOBeLbSNi89lFmN0iEpi8BmCo2LmE2SZh/9uGmT
-   xIvUpDbVlm/8/yqfO2vXekpQSPHQzNvcg3niCuikPTw+7xGYB7iXodxT5
-   TsRhZ6rvpFLui5b8Tt7WP2Ay4xWxqDCJK4alBIixdjc7RuPtZORwHL3LC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249772402"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="249772402"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 10:45:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="633778683"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 10 Feb 2022 10:45:03 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nIERD-0003bL-11; Thu, 10 Feb 2022 18:45:03 +0000
-Date: Fri, 11 Feb 2022 02:44:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guo Ren <guoren@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [csky-linux:riscv_compat_v6_svpbmt-v6 35/35]
- arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-time
- absolute expression
-Message-ID: <202202110254.CrnRD2CM-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E122C9C
+	for <llvm@lists.linux.dev>; Thu, 10 Feb 2022 18:55:51 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2086321121;
+	Thu, 10 Feb 2022 18:55:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1644519350; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DdvRYUYPbeuUwugRz/zD5fkCcoVbL25yO1bIyTTrtQE=;
+	b=kbho8IjDsMCYYGtM1D3wg8uEHchZfhJ93p54CQVZZV4Ps3xA0QeVKQS6SmnK1WhosD0Ugp
+	eBjpwjMGG3X1RAfKZFlFwn6eHdv7x/XfOlEcjUkSQPJAG1FuJqNY5HCLQ6/ezgsdG4uPxB
+	sBZZirLaPeGQVKr5mTbereSFpjkWZJA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1644519350;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DdvRYUYPbeuUwugRz/zD5fkCcoVbL25yO1bIyTTrtQE=;
+	b=kn3NfczTzXNH5S4YABkE3WiOoJMtnuZJs+eToav08csO5x2B9klUAf96MArUbpSawcg3wf
+	lhSIs+86sjnMEjAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DBCE713C22;
+	Thu, 10 Feb 2022 18:55:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id t3hhNLVfBWKPcAAAMHmgww
+	(envelope-from <tzimmermann@suse.de>); Thu, 10 Feb 2022 18:55:49 +0000
+Message-ID: <5df2f9bb-9181-56da-ea85-06af7ea8704a@suse.de>
+Date: Thu, 10 Feb 2022 19:55:49 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/ast: fix using freed memory
+Content-Language: en-US
+To: trix@redhat.com, airlied@redhat.com, airlied@linux.ie, daniel@ffwll.ch,
+ nathan@kernel.org, ndesaulniers@google.com, maxime@cerno.tech
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+References: <20220203152305.1846862-1-trix@redhat.com>
+From: Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220203152305.1846862-1-trix@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------092ooI4Qbv1X0dO7Q2ZFcB0X"
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v6_svpbmt-v6
-head:   54acb36c958fc990cc59889f79c8ddca7386c295
-commit: 54acb36c958fc990cc59889f79c8ddca7386c295 [35/35] riscv: xtpbmt: Fixup T-HEAD CPU _PAGE_KERNEL quirks
-config: riscv-randconfig-c006-20220209 (https://download.01.org/0day-ci/archive/20220211/202202110254.CrnRD2CM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project aa845d7a245d85c441d0bd44fc7b6c3be8f3de8d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/c-sky/csky-linux/commit/54acb36c958fc990cc59889f79c8ddca7386c295
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v6_svpbmt-v6
-        git checkout 54acb36c958fc990cc59889f79c8ddca7386c295
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------092ooI4Qbv1X0dO7Q2ZFcB0X
+Content-Type: multipart/mixed; boundary="------------O6FbTDLRmQ55Ds9EEjrFytE7";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: trix@redhat.com, airlied@redhat.com, airlied@linux.ie, daniel@ffwll.ch,
+ nathan@kernel.org, ndesaulniers@google.com, maxime@cerno.tech
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Message-ID: <5df2f9bb-9181-56da-ea85-06af7ea8704a@suse.de>
+Subject: Re: [PATCH] drm/ast: fix using freed memory
+References: <20220203152305.1846862-1-trix@redhat.com>
+In-Reply-To: <20220203152305.1846862-1-trix@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--------------O6FbTDLRmQ55Ds9EEjrFytE7
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-All errors (new ones prefixed by >>):
+SGkNCg0KQW0gMDMuMDIuMjIgdW0gMTY6MjMgc2NocmllYiB0cml4QHJlZGhhdC5jb206DQo+
+IEZyb206IFRvbSBSaXggPHRyaXhAcmVkaGF0LmNvbT4NCj4gDQo+IGNsYW5nIHN0YXRpYyBh
+bmFseXNpcyByZXBvcnRzIHRoaXMgcHJvYmxlbQ0KPiBhc3RfbW9kZS5jOjEyMzU6Mzogd2Fy
+bmluZzogVXNlIG9mIG1lbW9yeSBhZnRlciBpdCBpcyBmcmVlZA0KPiAgICBkcm1fY29ubmVj
+dG9yX3VwZGF0ZV9lZGlkX3Byb3BlcnR5KCZhc3RfY29ubmVjdG9yLT5iYXNlLCBlZGlkKTsN
+Cj4gICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
+fn5+fn5+fn5+fn5+fn4NCj4gDQo+IFRoZSBzZWNvbmQgY29uZGl0aW9uIG9uDQo+IA0KPiAg
+ICBpZiAoIWZsYWdzICYmIGFzdF9jb25uZWN0b3ItPmkyYykNCj4gDQo+IE1lYW5zIHRoYXQg
+dGhlIGVkaWQgaXMgbm90IGFsd2F5cyBzZXQuICBJZiB0aGUgcHJldmlvdXMgYmxvY2sNCj4g
+ZmFpbHMgdGhlIGZyZWVkIGVkaWQgdmFsdWUgd2lsbCBiZSB1c2VkLiAgU28gc2V0IGVkaWQg
+dG8gTlVMTA0KPiBhZnRlciBmcmVlaW5nLg0KDQpUaGFua3MgZm9yIHlvdXIgcGF0Y2guIFdl
+IGhhdmUgbWVhbndoaWxlIG1lcmdlcyBhIGNoYW5nZSB0aGF0IHJlcGxhY2VzIA0KdGhlIGNv
+ZGUgZW50aXJlbHkuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IEZpeGVzOiA1
+NWRjNDQ5YTdjNjAgKCJkcm0vYXN0OiBIYW5kbGUgZmFpbGVkIEkyQyBpbml0aWFsaXphdGlv
+biBncmFjZWZ1bGx5IikNCj4gU2lnbmVkLW9mZi1ieTogVG9tIFJpeCA8dHJpeEByZWRoYXQu
+Y29tPg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMgfCA2ICsr
+KystLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
+KC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5j
+IGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+IGluZGV4IGFiNTJlZmIxNTY3
+MGUuLjkxMzFkYzhhMWEyZmMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9hc3Qv
+YXN0X21vZGUuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMNCj4g
+QEAgLTEyMjQsMTAgKzEyMjQsMTIgQEAgc3RhdGljIGludCBhc3RfZ2V0X21vZGVzKHN0cnVj
+dCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IpDQo+ICAgCQkJcmV0dXJuIC1FTk9NRU07DQo+
+ICAgDQo+ICAgCQlmbGFncyA9IGFzdF9kcDUwMV9yZWFkX2VkaWQoY29ubmVjdG9yLT5kZXYs
+ICh1OCAqKWVkaWQpOw0KPiAtCQlpZiAoZmxhZ3MpDQo+ICsJCWlmIChmbGFncykgew0KPiAg
+IAkJCWFzdC0+ZHA1MDFfbWF4Y2xrID0gYXN0X2dldF9kcDUwMV9tYXhfY2xrKGNvbm5lY3Rv
+ci0+ZGV2KTsNCj4gLQkJZWxzZQ0KPiArCQl9IGVsc2Ugew0KPiAgIAkJCWtmcmVlKGVkaWQp
+Ow0KPiArCQkJZWRpZCA9IE5VTEw7DQo+ICsJCX0NCj4gICAJfQ0KPiAgIAlpZiAoIWZsYWdz
+ICYmIGFzdF9jb25uZWN0b3ItPmkyYykNCj4gICAJCWVkaWQgPSBkcm1fZ2V0X2VkaWQoY29u
+bmVjdG9yLCAmYXN0X2Nvbm5lY3Rvci0+aTJjLT5hZGFwdGVyKTsNCg0KLS0gDQpUaG9tYXMg
+WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
+b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
+IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
+OiBJdm8gVG90ZXYNCg==
 
-   In file included from arch/riscv/kernel/setup.c:21:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from arch/riscv/kernel/setup.c:21:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from arch/riscv/kernel/setup.c:21:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/setup.c:12:
-   In file included from include/linux/mm.h:33:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
->> arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_NOCACHE);
-           ^
-   arch/riscv/include/asm/errata_list.h:52:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE_2("li %0, 0\t\nnop",                                                    \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:147:2: note: expanded from macro 'ALTERNATIVE_2'
-           _ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1, \
-           ^
-   arch/riscv/include/asm/alternative-macros.h:117:2: note: expanded from macro '_ALTERNATIVE_CFG_2'
-           __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),   \
-           ^
-   arch/riscv/include/asm/alternative-macros.h:112:2: note: expanded from macro '__ALTERNATIVE_CFG_2'
-           ALT_NEW_CONTENT(vendor_id_1, errata_id_1, enable_1, new_c_1)    \
-           ^
-   arch/riscv/include/asm/alternative-macros.h:88:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
-            ^
-   <inline asm>:25:6: note: instantiated into assembly here
-   .org    . - (887b - 886b) + (889b - 888b)
-           ^
-   In file included from arch/riscv/kernel/setup.c:12:
-   In file included from include/linux/mm.h:33:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
->> arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_NOCACHE);
-           ^
-   arch/riscv/include/asm/errata_list.h:52:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE_2("li %0, 0\t\nnop",                                                    \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:147:2: note: expanded from macro 'ALTERNATIVE_2'
-           _ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1, \
-           ^
-   arch/riscv/include/asm/alternative-macros.h:117:2: note: expanded from macro '_ALTERNATIVE_CFG_2'
-           __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),   \
-           ^
-   arch/riscv/include/asm/alternative-macros.h:112:2: note: expanded from macro '__ALTERNATIVE_CFG_2'
-           ALT_NEW_CONTENT(vendor_id_1, errata_id_1, enable_1, new_c_1)    \
-           ^
-   arch/riscv/include/asm/alternative-macros.h:89:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
-            ^
-   <inline asm>:26:6: note: instantiated into assembly here
-   .org    . - (889b - 888b) + (887b - 886b)
-           ^
-   7 warnings and 2 errors generated.
+--------------O6FbTDLRmQ55Ds9EEjrFytE7--
 
+--------------092ooI4Qbv1X0dO7Q2ZFcB0X
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-vim +105 arch/riscv/include/asm/pgtable-64.h
+-----BEGIN PGP SIGNATURE-----
 
-54acb36c958fc9 Guo Ren 2022-02-10  100  
-bac41a3372f958 Wei Fu  2021-11-29  101  static inline u64 riscv_page_nocache(void)
-bac41a3372f958 Wei Fu  2021-11-29  102  {
-bac41a3372f958 Wei Fu  2021-11-29  103  	u64 val;
-bac41a3372f958 Wei Fu  2021-11-29  104  
-bac41a3372f958 Wei Fu  2021-11-29 @105  	ALT_SVPBMT(val, _PAGE_NOCACHE);
-bac41a3372f958 Wei Fu  2021-11-29  106  	return val;
-bac41a3372f958 Wei Fu  2021-11-29  107  }
-bac41a3372f958 Wei Fu  2021-11-29  108  
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIFX7UFAwAAAAAACgkQlh/E3EQov+Bg
+wBAAksaQa3/SWLQEybFdtMJpVESyPa8f/LCtzK+RiiNrEDFUvwMLa9TiADFUgkqVasVgWX8TigZG
+V7S6dSyYE/2h3HvUwpLJvi4aFS9fm7Lzts15k1+Z2zqPr1XwI+RseeX7PrG6kCfpBR296oCIdpD1
+cDP2qy4lybkl/sH8Hj6CXTyEfnVl+UIw2TVI7DQ2ssICFtNsOlsBiVB4lTMJi3fsaUDIxIxZPwak
+xumRRY0EtrrRzoTuUdOYaEUO73dBQ8RpkKZPdeac2BBKv6w14U1+6j2N4NSls22mQK6MjJbZLkHs
+538dat6sGOzmMyOjL2G8ENQJ6BQ1g9JzWAedyWN1EW38es9PT2IsYZMU0wESZfrKBhINBN3MZnuq
+FUaZlCg1nGBJi33ircQkw8Ctkl60OhT7Bfqy5CkeSuf4HaokujZLv/a/xw1PItRGBYiWoBbAaADL
++eC1piBUxO5ZriVIa5nL38g+3empUpJxhE0+NKqd5x7TSgBD0bpXUxzgvuR042I9En1hfIHyBwD2
+1hk0dwf5c+9CCW9uYzxFVrLK/lCseATVr2lzx0YUDsXvVreYFKknlvhTydlQXqHGUS2kxvi8dOkA
+Mnh5Y/iR+IP46pvSuMTTJaRsf/nDzUFd48tFjCwtkSEc014a8Ht76o1WL/C//uJL1cY32CQU8vep
+aW8=
+=5Niu
+-----END PGP SIGNATURE-----
 
-:::::: The code at line 105 was first introduced by commit
-:::::: bac41a3372f9586652716665df9da6c4059b9309 riscv: add RISC-V Svpbmt extension support
-
-:::::: TO: Wei Fu <wefu@redhat.com>
-:::::: CC: Guo Ren <guoren@linux.alibaba.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--------------092ooI4Qbv1X0dO7Q2ZFcB0X--
