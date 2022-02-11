@@ -1,137 +1,153 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9FD7E
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 19:25:48 +0000 (UTC)
-Received: by mail-ej1-f45.google.com with SMTP id fy20so24777381ejc.0
-        for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 11:25:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GD2hJleO+BGH7uHOhMKE9GqyrPE46e0JW2MnbUpSxGM=;
-        b=drfDVDdeD8zFrAGVCcIkHw8cHfErxBrAfhUyN91kJxJKe7SFJCF1p34U300RUKCKXs
-         IsYGGcezgrgOoB2pMWJkGVYIZH1t3Nf9qUroRrLaUJP2QZxM6apgtBrpZC2+QmcgpLLH
-         BD8DCL8/XZztvmMGrPeUUFBlGgIPvar6eCDf/qW0jcwBavP4r176sqNGpI3+zJ8HJf6b
-         YcnRoVVXqfafFaxH9MB2a3CJ9kQdcIWYkfLxOdjlip+Ux+iD13NsD/2y86Jyw+KhmLjX
-         A6Gq5jqdYkVmxjgRrMeXlf4v46aWr5kSthyjIVdiJBf0Z6drQa+3kt33IEpNGLCsuKSI
-         RAew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GD2hJleO+BGH7uHOhMKE9GqyrPE46e0JW2MnbUpSxGM=;
-        b=e360jN5eixrnUTrO9/C+uJkhrGw9eOQXB7AdDCXzRETGMtKHlLLJiDmwDyTncjItLU
-         PZcEigk2XcMBYQdXMkhgOwQmZZ94oAY1Jlfgoqv4dCKNj3OZeUiRYWdOzI6MgpENJl7S
-         eHZO+7ifYNziK79vS0TtKMqZ4QbVmcLljXFmAM9wDvqc/B6Y1vSosc4MFs0QrOTRO3He
-         VT3eHLnRy/zfu+L9xi9S3p710OPkwXKCxOnjiS5ua2dd0O0dbt2g8NO8S/zRiSCUIq1D
-         A3Pb5pbDOxX1sNUxH0z8WKfRKsZSCigWW2DC+yhxt/Jg6IzpkPkf6pL9Eb+WPfAF5hAi
-         ooJA==
-X-Gm-Message-State: AOAM533eGfkhPvIY6ReJHiOZ3JH0BqvVnWS72i2z5x+VNwoSMzNnym1v
-	A/u7TlDlFDlD9RgcxSLcJ4yjYuXzMrX7nfVi2xjA
-X-Google-Smtp-Source: ABdhPJypX/j9HQ9UKdN5Q/EButffbsswHumKPBUPD8F3DELLeUuIF/73MuElgNl5Ate/M9VWPJk6xBwOmP/PC1qeyu4=
-X-Received: by 2002:a17:906:2811:: with SMTP id r17mr2621343ejc.31.1644607546332;
- Fri, 11 Feb 2022 11:25:46 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38DDA7E
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 19:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644607929; x=1676143929;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=iyW30ZO7r4Fd21o5Ux+VD7Pk0FrFgMzRvP+brrRqTm8=;
+  b=mG+dvx/TarVIi6BBHPVxQ/g0r8IvuU3f6vJAWYWZ1nyH8mkDei4igS4S
+   jF2IE3nvqGUzztwLGvKtgkBPwnaWg/oB5z+2dhQNPVE+qf6i9ePo8KH9J
+   GQTqvS8TKeTZaimrsktVyDZplpStr59R+8VbW7ZW9W/WqknTschU1ylhR
+   spoRdqphpWXceJi4kGt24uuV7nTqGhHdFhWoR0rgzq/eSyfY2whLqL/Ia
+   pQNB2xe68VNBPoNGMSaZ46Jx4FBc+XjlNfufhFDDlXBJm3U0em0m+IdHY
+   15aABfdNxxf8PeYON+EYYbSrCdBXq+mPUMXihtlGvEh2Sbsic/mVPgH6C
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="229761760"
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="229761760"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 11:32:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="527073405"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 11 Feb 2022 11:32:05 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nIbeH-00055L-2D; Fri, 11 Feb 2022 19:32:05 +0000
+Date: Sat, 12 Feb 2022 03:31:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
+	Sanjay R Mehta <sanju.mehta@amd.com>,
+	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel@collabora.com,
+	Lucas Tanure <tanureal@opensource.cirrus.com>,
+	Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
+Subject: Re: [PATCH v2 3/3] spi: amd: Add support for version AMDI0062
+Message-ID: <202202120307.tqHogZDg-lkp@intel.com>
+References: <20220211143155.75513-4-andrealmeid@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220204005742.1222997-1-morbo@google.com> <20220210223134.233757-1-morbo@google.com>
- <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com>
-In-Reply-To: <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com>
-From: Bill Wendling <morbo@google.com>
-Date: Fri, 11 Feb 2022 11:25:34 -0800
-Message-ID: <CAGG=3QXvSt=d94iqSV-Y9JVNc+pt-WOZGpSeW--fp=w2ttMvUA@mail.gmail.com>
-Subject: Re: [PATCH v4] x86: use builtins to read eflags
-To: David Laight <David.Laight@aculab.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220211143155.75513-4-andrealmeid@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Feb 11, 2022 at 8:40 AM David Laight <David.Laight@aculab.com> wrote:
-> From: Bill Wendling
-> > Sent: 10 February 2022 22:32
-> >
-> > GCC and Clang both have builtins to read and write the EFLAGS register.
-> > This allows the compiler to determine the best way to generate this
-> > code, which can improve code generation.
-> >
-> > This issue arose due to Clang's issue with the "=rm" constraint.  Clang
-> > chooses to be conservative in these situations, and so uses memory
-> > instead of registers. This is a known issue, which is currently being
-> > addressed.
-> >
-> > However, using builtins is beneficial in general, because it removes the
-> > burden of determining what's the way to read the flags register from the
-> > programmer and places it on to the compiler, which has the information
-> > needed to make that decision.
->
-> Except that neither gcc nor clang attempt to make that decision.
-> They always do pushf; pop ax;
->
-It looks like both GCC and Clang pop into virtual registers. The
-register allocator is then able to determine if it can allocate a
-physical register or if a stack slot is required.
+Hi "André,
 
-> ...
-> > v4: - Clang now no longer generates stack frames when using these builtins.
-> >     - Corrected misspellings.
->
-> While clang 'head' has been fixed, it seems a bit premature to say
-> it is 'fixed' enough for all clang builds to use the builtin.
->
-True, but it's been cherry-picked into the clang 14.0.0 branch, which
-is scheduled for release in March.
+I love your patch! Perhaps something to improve:
 
-> Seems better to change it (back) to "=r" and comment that this
-> is currently as good as __builtin_ia32_readeflags_u64() and that
-> clang makes a 'pigs breakfast' of "=rm" - which has only marginal
-> benefit.
->
-That would be okay as far as code generation is concerned, but it does
-place the burden of correctness back on the programmer. Also, it was
-that at some point, but was changed to "=rm" here. :-)
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on v5.17-rc3 next-20220211]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-commit ab94fcf528d127fcb490175512a8910f37e5b346
-Author: H. Peter Anvin <hpa@zytor.com>
-Date:   Tue Aug 25 16:47:16 2009 -0700
+url:    https://github.com/0day-ci/linux/commits/Andr-Almeida/spi-amd-Add-support-for-new-controller-version/20220211-223438
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: arm64-randconfig-r015-20220211 (https://download.01.org/0day-ci/archive/20220212/202202120307.tqHogZDg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/f9ba9fa1166540cf4dbf3ffbddb96b55699479b5
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Andr-Almeida/spi-amd-Add-support-for-new-controller-version/20220211-223438
+        git checkout f9ba9fa1166540cf4dbf3ffbddb96b55699479b5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/spi/
 
-    x86: allow "=rm" in native_save_fl()
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-    This is a partial revert of f1f029c7bfbf4ee1918b90a431ab823bed812504.
+All warnings (new ones prefixed by >>):
 
-    "=rm" is allowed in this context, because "pop" is explicitly defined
-    to adjust the stack pointer *before* it evaluates its effective
-    address, if it has one.  Thus, we do end up writing to the correct
-    address even if we use an on-stack memory argument.
-
-    The original reporter for f1f029c7bfbf4ee1918b90a431ab823bed812504 was
-    apparently using a broken x86 simulator.
-
-    [ Impact: performance ]
-
-    Signed-off-by: H. Peter Anvin <hpa@zytor.com>
-    Cc: Gabe Black <spamforgabe@umich.edu>
+>> drivers/spi/spi-amd.c:296:21: warning: cast to smaller integer type 'enum amd_spi_versions' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           amd_spi->version = (enum amd_spi_versions) device_get_match_data(dev);
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-amd.c:333:23: error: use of undeclared identifier 'spi_acpi_match'
+                   .acpi_match_table = spi_acpi_match,
+                                       ^
+   1 warning and 1 error generated.
 
 
-> Changing to __builtin_ia32_readeflags_u64() may be worth while
-> if/when the compilers will generate pushf; pop mem; for it.
->
-I was able to come up with an example where GCC generates "pushf ; pop mem":
+vim +296 drivers/spi/spi-amd.c
 
-  https://godbolt.org/z/9rocjdoaK
+   272	
+   273	static int amd_spi_probe(struct platform_device *pdev)
+   274	{
+   275		struct device *dev = &pdev->dev;
+   276		struct spi_master *master;
+   277		struct amd_spi *amd_spi;
+   278		int err = 0;
+   279	
+   280		/* Allocate storage for spi_master and driver private data */
+   281		master = spi_alloc_master(dev, sizeof(struct amd_spi));
+   282		if (!master) {
+   283			dev_err(dev, "Error allocating SPI master\n");
+   284			return -ENOMEM;
+   285		}
+   286	
+   287		amd_spi = spi_master_get_devdata(master);
+   288		amd_spi->io_remap_addr = devm_platform_ioremap_resource(pdev, 0);
+   289		if (IS_ERR(amd_spi->io_remap_addr)) {
+   290			err = PTR_ERR(amd_spi->io_remap_addr);
+   291			dev_err(dev, "error %d ioremap of SPI registers failed\n", err);
+   292			goto err_free_master;
+   293		}
+   294		dev_dbg(dev, "io_remap_address: %p\n", amd_spi->io_remap_addr);
+   295	
+ > 296		amd_spi->version = (enum amd_spi_versions) device_get_match_data(dev);
+   297	
+   298		/* Initialize the spi_master fields */
+   299		master->bus_num = 0;
+   300		master->num_chipselect = 4;
+   301		master->mode_bits = 0;
+   302		master->flags = SPI_MASTER_HALF_DUPLEX;
+   303		master->setup = amd_spi_master_setup;
+   304		master->transfer_one_message = amd_spi_master_transfer;
+   305	
+   306		/* Register the controller with SPI framework */
+   307		err = devm_spi_register_master(dev, master);
+   308		if (err) {
+   309			dev_err(dev, "error %d registering SPI controller\n", err);
+   310			goto err_free_master;
+   311		}
+   312	
+   313		return 0;
+   314	
+   315	err_free_master:
+   316		spi_master_put(master);
+   317	
+   318		return err;
+   319	}
+   320	
 
-(Clang generates a variation of "pop mem," and is horrible code, but
-it's meant for demonstration purposes only.) One interesting thing
-about the use of the builtins is that if at all possible, the "pop"
-instruction may be moved away from the "pushf" if it's safe and would
-reduce register pressure.
-
--bw
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
