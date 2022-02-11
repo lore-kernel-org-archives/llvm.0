@@ -1,43 +1,43 @@
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683082C9D
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 07:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4C32C9C
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 07:39:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644563916; x=1676099916;
+  t=1644565178; x=1676101178;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4zG3KZGXTpJfpGgev8yRz7MIt5raqtx+/z4kReXzRCE=;
-  b=GG2F/XLZyccZBkbdxTgZV1mKGqjNVHKFVLKGpf0Aa1PruN1ISpVG0s0Z
-   /VPF18q4l12P2F0RKvsnYF6aD7yPzN6/ll++CLO1wgAcFdkh9SojOM8Hf
-   pvTnE0Z8Q+LUy6VKtUfHbd4lFlWahB436WjbbOhNvzHyNcr6Din2Ry0LR
-   Ed/ZxL5vCnjpOxuDRykB4BWimya0wBDUdlIDoy+ns6e8L6hPbA+FjXIwv
-   WuK7UyRtuOPA9sMGhzCWFCtj4Gq/e/Vd4fcZqnYQ6L1Js1oLeBRA/7JU8
-   TWmPYAt0QlHdFRaJVBHejjW941/bt/41qDTQ0PnuZyT+nVCnKcFHn1ifE
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249429228"
+  bh=Kuu4yAgm2h2AU3HLL6wVmTP4jdC0kdpUduB/ZGLHFmg=;
+  b=GxW2Y6z52Xpuw0JKjO8Nsirf8FoX5Ur4Y2jzXGoONZ/lyIWTW9jt8sHC
+   7WG1Fsw9SGcZj6C2KYv+3kdLMibQaMv2sRiXs+0gtI6P9vGI56xNKvfoR
+   g5smdEbe+aHdMagwA9S5ZGqySHvXwBiRWwYheV1Hk2e0ycqFG2KcXN+O6
+   UPsrNpGeXjsiMy57hRyEDpKSBDbD860y7VTLo6ckKV9RMkpMDsK2G9AxO
+   9bdeRKztgBy72GOrbQk5+j7crMnSu5xYrMsl9Cae4ouOrDQuH4wLRLp5b
+   fbPO9iNXCtfefQxzD0HHoyWX6sjs63I2Mny4x4kQ/oaBIO7f61KKIOTFh
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249431971"
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="249429228"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 23:18:36 -0800
+   d="scan'208";a="249431971"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 23:39:36 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="633989767"
+   d="scan'208";a="483196793"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 10 Feb 2022 23:18:34 -0800
+  by orsmga003.jf.intel.com with ESMTP; 10 Feb 2022 23:39:34 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nIQCP-0004HJ-60; Fri, 11 Feb 2022 07:18:33 +0000
-Date: Fri, 11 Feb 2022 15:18:21 +0800
+	id 1nIQWj-0004Iw-T0; Fri, 11 Feb 2022 07:39:33 +0000
+Date: Fri, 11 Feb 2022 15:38:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Baluta <daniel.baluta@nxp.com>
+To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [ammarfaizi2-block:broonie/sound/for-next 33/44]
- sound/soc/sof/compress.c:91:5: warning: no previous prototype for function
- 'sof_compr_open'
-Message-ID: <202202111513.hHDovgro-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 35/35]
+ fs/netfs/flush.c:471:2: error: implicit declaration of function
+ 'netfs_proc_add_writeback'
+Message-ID: <202202111524.GEkq0rzh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,285 +48,244 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block broonie/sound/for-next
-head:   9193bc0558d1812343039b510797b669f054efc5
-commit: 6324cf901e14c6662be508f30485e0f09c54694d [33/44] ASoC: SOF: compr: Add compress ops implementation
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220211/202202111513.hHDovgro-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   429e2bb6fb190f390ed23afc0d2308e877c43be5
+commit: 429e2bb6fb190f390ed23afc0d2308e877c43be5 [35/35] netfs: Provide /proc/fs/netfs/writebacks to display writeback slices
+config: hexagon-randconfig-r041-20220211 (https://download.01.org/0day-ci/archive/20220211/202202111524.GEkq0rzh-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/6324cf901e14c6662be508f30485e0f09c54694d
+        # https://github.com/ammarfaizi2/linux-block/commit/429e2bb6fb190f390ed23afc0d2308e877c43be5
         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block broonie/sound/for-next
-        git checkout 6324cf901e14c6662be508f30485e0f09c54694d
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 429e2bb6fb190f390ed23afc0d2308e877c43be5
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/sof/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/soc/sof/compress.c:91:5: warning: no previous prototype for function 'sof_compr_open' [-Wmissing-prototypes]
-   int sof_compr_open(struct snd_soc_component *component,
-       ^
-   sound/soc/sof/compress.c:91:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sof_compr_open(struct snd_soc_component *component,
-   ^
-   static 
->> sound/soc/sof/compress.c:127:5: warning: no previous prototype for function 'sof_compr_free' [-Wmissing-prototypes]
-   int sof_compr_free(struct snd_soc_component *component,
-       ^
-   sound/soc/sof/compress.c:127:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sof_compr_free(struct snd_soc_component *component,
-   ^
-   static 
->> sound/soc/sof/compress.c:161:5: warning: no previous prototype for function 'sof_compr_set_params' [-Wmissing-prototypes]
-   int sof_compr_set_params(struct snd_soc_component *component,
-       ^
-   sound/soc/sof/compress.c:161:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sof_compr_set_params(struct snd_soc_component *component,
-   ^
-   static 
->> sound/soc/sof/compress.c:224:5: warning: no previous prototype for function 'sof_compr_get_params' [-Wmissing-prototypes]
-   int sof_compr_get_params(struct snd_soc_component *component,
-       ^
-   sound/soc/sof/compress.c:224:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sof_compr_get_params(struct snd_soc_component *component,
-   ^
-   static 
->> sound/soc/sof/compress.c:233:5: warning: no previous prototype for function 'sof_compr_trigger' [-Wmissing-prototypes]
-   int sof_compr_trigger(struct snd_soc_component *component,
-       ^
-   sound/soc/sof/compress.c:233:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sof_compr_trigger(struct snd_soc_component *component,
-   ^
-   static 
->> sound/soc/sof/compress.c:273:5: warning: no previous prototype for function 'sof_compr_copy' [-Wmissing-prototypes]
-   int sof_compr_copy(struct snd_soc_component *component,
-       ^
-   sound/soc/sof/compress.c:273:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sof_compr_copy(struct snd_soc_component *component,
-   ^
-   static 
-   6 warnings generated.
+>> fs/netfs/flush.c:471:2: error: implicit declaration of function 'netfs_proc_add_writeback' [-Werror,-Wimplicit-function-declaration]
+           netfs_proc_add_writeback(wback);
+           ^
+   fs/netfs/flush.c:471:2: note: did you mean 'netfs_proc_add_wback'?
+   fs/netfs/internal.h:93:20: note: 'netfs_proc_add_wback' declared here
+   static inline void netfs_proc_add_wback(struct netfs_writeback *wback) {}
+                      ^
+   1 error generated.
+--
+>> fs/netfs/objects.c:205:4: error: implicit declaration of function 'netfs_proc_del_writeback' [-Werror,-Wimplicit-function-declaration]
+                           netfs_proc_del_writeback(wback);
+                           ^
+   fs/netfs/objects.c:205:4: note: did you mean 'netfs_proc_del_wback'?
+   fs/netfs/internal.h:94:20: note: 'netfs_proc_del_wback' declared here
+   static inline void netfs_proc_del_wback(struct netfs_writeback *wback) {}
+                      ^
+   1 error generated.
 
 
-vim +/sof_compr_open +91 sound/soc/sof/compress.c
+vim +/netfs_proc_add_writeback +471 fs/netfs/flush.c
 
-    90	
-  > 91	int sof_compr_open(struct snd_soc_component *component,
-    92			   struct snd_compr_stream *cstream)
-    93	{
-    94		struct snd_soc_pcm_runtime *rtd = cstream->private_data;
-    95		struct snd_compr_runtime *crtd = cstream->runtime;
-    96		struct snd_compr_tstamp *tstamp;
-    97		struct snd_sof_pcm *spcm;
-    98		int dir;
-    99	
-   100		tstamp = kzalloc(sizeof(*tstamp), GFP_KERNEL);
-   101		if (!tstamp)
-   102			return -ENOMEM;
-   103	
-   104		spcm = snd_sof_find_spcm_dai(component, rtd);
-   105		if (!spcm) {
-   106			kfree(tstamp);
-   107			return -EINVAL;
-   108		}
-   109	
-   110		dir = cstream->direction;
-   111	
-   112		if (spcm->stream[dir].cstream) {
-   113			kfree(tstamp);
-   114			return -EBUSY;
-   115		}
-   116	
-   117		spcm->stream[dir].cstream = cstream;
-   118		spcm->stream[dir].posn.host_posn = 0;
-   119		spcm->stream[dir].posn.dai_posn = 0;
-   120		spcm->prepared[dir] = false;
-   121	
-   122		crtd->private_data = tstamp;
-   123	
-   124		return 0;
-   125	}
-   126	
- > 127	int sof_compr_free(struct snd_soc_component *component,
-   128			   struct snd_compr_stream *cstream)
-   129	{
-   130		struct snd_sof_dev *sdev = snd_soc_component_get_drvdata(component);
-   131		struct snd_compr_tstamp *tstamp = cstream->runtime->private_data;
-   132		struct snd_soc_pcm_runtime *rtd = cstream->private_data;
-   133		struct sof_ipc_stream stream;
-   134		struct sof_ipc_reply reply;
-   135		struct snd_sof_pcm *spcm;
-   136		int ret = 0;
-   137	
-   138		spcm = snd_sof_find_spcm_dai(component, rtd);
-   139		if (!spcm)
-   140			return -EINVAL;
-   141	
-   142		stream.hdr.size = sizeof(stream);
-   143		stream.hdr.cmd = SOF_IPC_GLB_STREAM_MSG | SOF_IPC_STREAM_PCM_FREE;
-   144		stream.comp_id = spcm->stream[cstream->direction].comp_id;
-   145	
-   146		if (spcm->prepared[cstream->direction]) {
-   147			ret = sof_ipc_tx_message(sdev->ipc, stream.hdr.cmd,
-   148						 &stream, sizeof(stream),
-   149						 &reply, sizeof(reply));
-   150			if (!ret)
-   151				spcm->prepared[cstream->direction] = false;
-   152		}
-   153	
-   154		cancel_work_sync(&spcm->stream[cstream->direction].period_elapsed_work);
-   155		spcm->stream[cstream->direction].cstream = NULL;
-   156		kfree(tstamp);
-   157	
-   158		return ret;
-   159	}
-   160	
- > 161	int sof_compr_set_params(struct snd_soc_component *component,
-   162				 struct snd_compr_stream *cstream, struct snd_compr_params *params)
-   163	{
-   164		struct snd_sof_dev *sdev = snd_soc_component_get_drvdata(component);
-   165		struct snd_soc_pcm_runtime *rtd = cstream->private_data;
-   166		struct snd_compr_runtime *crtd = cstream->runtime;
-   167		struct sof_ipc_pcm_params_reply ipc_params_reply;
-   168		struct snd_compr_tstamp *tstamp;
-   169		struct sof_ipc_pcm_params pcm;
-   170		struct snd_sof_pcm *spcm;
-   171		int ret;
-   172	
-   173		tstamp = crtd->private_data;
-   174	
-   175		spcm = snd_sof_find_spcm_dai(component, rtd);
-   176	
-   177		if (!spcm)
-   178			return -EINVAL;
-   179	
-   180		cstream->dma_buffer.dev.type = SNDRV_DMA_TYPE_DEV_SG;
-   181		cstream->dma_buffer.dev.dev = sdev->dev;
-   182		ret = snd_compr_malloc_pages(cstream, crtd->buffer_size);
-   183		if (ret < 0)
-   184			return ret;
-   185	
-   186		ret = create_page_table(component, cstream, crtd->dma_area, crtd->dma_bytes);
-   187		if (ret < 0)
-   188			return ret;
-   189	
-   190		memset(&pcm, 0, sizeof(pcm));
-   191	
-   192		pcm.params.buffer.pages = PFN_UP(crtd->dma_bytes);
-   193		pcm.hdr.size = sizeof(pcm);
-   194		pcm.hdr.cmd = SOF_IPC_GLB_STREAM_MSG | SOF_IPC_STREAM_PCM_PARAMS;
-   195	
-   196		pcm.comp_id = spcm->stream[cstream->direction].comp_id;
-   197		pcm.params.hdr.size = sizeof(pcm.params);
-   198		pcm.params.buffer.phy_addr = spcm->stream[cstream->direction].page_table.addr;
-   199		pcm.params.buffer.size = crtd->dma_bytes;
-   200		pcm.params.direction = cstream->direction;
-   201		pcm.params.channels = params->codec.ch_out;
-   202		pcm.params.rate = params->codec.sample_rate;
-   203		pcm.params.buffer_fmt = SOF_IPC_BUFFER_INTERLEAVED;
-   204		pcm.params.frame_fmt = SOF_IPC_FRAME_S32_LE;
-   205		pcm.params.sample_container_bytes =
-   206			snd_pcm_format_physical_width(SNDRV_PCM_FORMAT_S32) >> 3;
-   207		pcm.params.host_period_bytes = params->buffer.fragment_size;
-   208	
-   209		ret = sof_ipc_tx_message(sdev->ipc, pcm.hdr.cmd, &pcm, sizeof(pcm),
-   210					 &ipc_params_reply, sizeof(ipc_params_reply));
-   211		if (ret < 0) {
-   212			dev_err(component->dev, "error ipc failed\n");
-   213			return ret;
-   214		}
-   215	
-   216		tstamp->byte_offset = sdev->stream_box.offset + ipc_params_reply.posn_offset;
-   217		tstamp->sampling_rate = params->codec.sample_rate;
-   218	
-   219		spcm->prepared[cstream->direction] = true;
-   220	
-   221		return 0;
-   222	}
-   223	
- > 224	int sof_compr_get_params(struct snd_soc_component *component,
-   225				 struct snd_compr_stream *cstream, struct snd_codec *params)
-   226	{
-   227		/* TODO: we don't query the supported codecs for now, if the
-   228		 * application asks for an unsupported codec the set_params() will fail.
-   229		 */
-   230		return 0;
-   231	}
-   232	
- > 233	int sof_compr_trigger(struct snd_soc_component *component,
-   234			      struct snd_compr_stream *cstream, int cmd)
-   235	{
-   236		struct snd_sof_dev *sdev = snd_soc_component_get_drvdata(component);
-   237		struct snd_soc_pcm_runtime *rtd = cstream->private_data;
-   238		struct sof_ipc_stream stream;
-   239		struct sof_ipc_reply reply;
-   240		struct snd_sof_pcm *spcm;
-   241	
-   242		spcm = snd_sof_find_spcm_dai(component, rtd);
-   243		if (!spcm)
-   244			return -EINVAL;
-   245	
-   246		stream.hdr.size = sizeof(stream);
-   247		stream.hdr.cmd = SOF_IPC_GLB_STREAM_MSG;
-   248		stream.comp_id = spcm->stream[cstream->direction].comp_id;
-   249	
-   250		switch (cmd) {
-   251		case SNDRV_PCM_TRIGGER_START:
-   252			stream.hdr.cmd |= SOF_IPC_STREAM_TRIG_START;
-   253			break;
-   254		case SNDRV_PCM_TRIGGER_STOP:
-   255			stream.hdr.cmd |= SOF_IPC_STREAM_TRIG_STOP;
-   256			break;
-   257		case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-   258			stream.hdr.cmd |= SOF_IPC_STREAM_TRIG_PAUSE;
-   259			break;
-   260		case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-   261			stream.hdr.cmd |= SOF_IPC_STREAM_TRIG_RELEASE;
-   262			break;
-   263		default:
-   264			dev_err(component->dev, "error: unhandled trigger cmd %d\n", cmd);
-   265			break;
-   266		}
-   267	
-   268		return sof_ipc_tx_message(sdev->ipc, stream.hdr.cmd,
-   269					  &stream, sizeof(stream),
-   270					  &reply, sizeof(reply));
-   271	}
-   272	
- > 273	int sof_compr_copy(struct snd_soc_component *component,
-   274			   struct snd_compr_stream *cstream,
-   275			   char __user *buf, size_t count)
-   276	{
-   277		struct snd_compr_runtime *rtd = cstream->runtime;
-   278		unsigned int offset, n;
-   279		void *ptr;
-   280		int ret;
-   281	
-   282		if (count > rtd->buffer_size)
-   283			count = rtd->buffer_size;
-   284	
-   285		div_u64_rem(rtd->total_bytes_available, rtd->buffer_size, &offset);
-   286		ptr = rtd->dma_area + offset;
-   287		n = rtd->buffer_size - offset;
-   288	
-   289		if (count < n) {
-   290			ret = copy_from_user(ptr, buf, count);
-   291		} else {
-   292			ret = copy_from_user(ptr, buf, n);
-   293			ret += copy_from_user(rtd->dma_area, buf + n, count - n);
-   294		}
-   295	
-   296		return count - ret;
-   297	}
-   298	
+   293	
+   294	/*
+   295	 * Flush some of the dirty queue, transforming a part of a sequence of dirty
+   296	 * regions into a block we can flush.
+   297	 *
+   298	 * A number of things constrain us:
+   299	 *  - The region we write out should not be undergoing modification
+   300	 *  - We may need to expand or split the region for a number of reasons:
+   301	 *    - Filesystem storage block/object size
+   302	 *    - Filesystem RPC size (wsize)
+   303	 *    - Cache block size
+   304	 *    - Cache DIO block size
+   305	 *    - Crypto/compression block size
+   306	 *
+   307	 * This may be entered multiple times simultaneously.  Automatic flushing by
+   308	 * the VM is serialised on I_SYNC, but things like fsync() may enter multiple
+   309	 * times simultaneously.
+   310	 */
+   311	static int netfs_flush_dirty(struct netfs_writeback *wback,
+   312				     struct writeback_control *wbc,
+   313				     struct netfs_i_context *ctx,
+   314				     struct ma_state *mas,
+   315				     pgoff_t *_first, pgoff_t last,
+   316				     struct netfs_dirty_region *spares[2])
+   317	{
+   318		struct netfs_dirty_region *region;
+   319		struct folio *folio;
+   320		pgoff_t first = *_first;
+   321		pgoff_t csize = 1UL << ctx->cache_order;
+   322		long ret;
+   323	
+   324		XA_STATE(xas, &wback->mapping->i_pages, 0);
+   325	
+   326		/* Round out the range we're looking through to accommodate whole cache
+   327		 * blocks.  The cache may only be able to store blocks of that size, in
+   328		 * which case we may need to add non-dirty pages to the buffer too.
+   329		 */
+   330		if (ctx->cache_order) {
+   331			first = round_down(first, csize);
+   332			last = round_up_incl(last, csize);
+   333		}
+   334	
+   335		_enter("%lx-%lx", first, last);
+   336	
+   337		rcu_read_lock();
+   338		mtree_lock(&ctx->dirty_regions);
+   339	
+   340		/* Find the first dirty region that overlaps the requested range */
+   341		mas_set(mas, first);
+   342		do {
+   343			region = mas_find(mas, last);
+   344			if (!region)
+   345				goto found_nothing;
+   346		} while (netfs_mas_is_flushing(region));
+   347	
+   348		_debug("query D=%x %lx-%lx",
+   349		       netfs_mas_is_valid(region) ? region->debug_id : 0,
+   350		       mas->index, mas->last);
+   351	
+   352		wback->first = max(mas->index, first);
+   353		if (wback->first > 0) {
+   354			_debug("nonz %lx", wback->first);
+   355	
+   356			/* The first folio might extend backwards beyond the start of
+   357			 * the proposed region - in which case we need to include that
+   358			 * also.  But at least, in such a case, the folio size has to
+   359			 * be an integer multiple of the cache blocksize.
+   360			 */
+   361			if (mas->index < wback->first) {
+   362				_debug("check folio %lx", wback->first);
+   363				xas_set(&xas, wback->first);
+   364				do {
+   365					xas_reset(&xas);
+   366					folio = xas_load(&xas);
+   367				} while (xas_retry(&xas, folio));
+   368	
+   369				if (folio && !xa_is_value(folio)) {
+   370					_debug("check folio %lx", folio->index);
+   371					/* A region span *should not* end in the middle of a folio. */
+   372					BUG_ON(folio->index < mas->index);
+   373					if (folio->index < wback->first) {
+   374						wback->first = folio->index;
+   375						mas_set_range(mas, wback->first, mas->last);
+   376					}
+   377				}
+   378			}
+   379	
+   380			_debug("fol %lx", wback->first);
+   381	
+   382			if (mas->index < wback->first) {
+   383				pgoff_t saved_last = mas->last;
+   384				_debug("splitf %lx-%lx %lx", mas->index, mas->last, first);
+   385				netfs_split_off_front(ctx, mas, region, &spares[0], first - 1,
+   386						      netfs_dirty_trace_split_off_front);
+   387				mas_set_range(mas, first, saved_last);
+   388			}
+   389	
+   390			wback->last = mas->last;
+   391		}
+   392	
+   393		while (mas->last < last) {
+   394			_debug("store %lx-%lx", mas->index, mas->last);
+   395			wback->last = mas->last;
+   396			mas_store(mas, netfs_mas_set_flushing(region));
+   397			if (region != NETFS_COPY_TO_CACHE) {
+   398				netfs_get_dirty_region(ctx, region, netfs_region_trace_get_wback);
+   399				list_add_tail(&region->flush_link, &wback->regions);
+   400				trace_netfs_dirty(ctx, region, 0, mas->index, mas->last,
+   401						  netfs_dirty_trace_flush);
+   402			}
+   403	
+   404			region = mas_next(mas, mas->last + 1);
+   405			if (!region || netfs_mas_is_flushing(region))
+   406				goto no_more;
+   407			if (mas->last >= last)
+   408				break;
+   409			_debug("query+ D=%x %lx-%lx",
+   410			       netfs_mas_is_valid(region) ? region->debug_id : 0,
+   411			       mas->index, mas->last);
+   412		}
+   413	
+   414		/* Deal with the region we're looking at exceeding the specified range.
+   415		 * In such a case, we need to split the region - and the last folio may
+   416		 * extend beyond the end of the proposed region - in which case we need
+   417		 * to include that also.  And, again, the folio size has to be an
+   418		 * integer multiple of the cache blocksize.
+   419		 */
+   420		if (mas->last > last) {
+   421			xas_set(&xas, last);
+   422			do {
+   423				xas_reset(&xas);
+   424				folio = xas_load(&xas);
+   425			} while (xas_retry(&xas, folio));
+   426	
+   427			if (folio && !xa_is_value(folio)) {
+   428				pgoff_t flast = folio_next_index(folio) - 1;
+   429	
+   430				_debug("flast %lx %lx %lx", flast, mas->last, last);
+   431				/* A region span *should not* end in the middle of a folio. */
+   432				BUG_ON(flast > mas->last);
+   433				if (flast > last) {
+   434					last = flast;
+   435					mas_set_range(mas, mas->index, last);
+   436				}
+   437			}
+   438	
+   439			region = netfs_split_off_front(ctx, mas, region, &spares[1], last,
+   440						       netfs_dirty_trace_split_off_back);
+   441		}
+   442	
+   443		wback->last = mas->last;
+   444		mas_store(mas, netfs_mas_set_flushing(region));
+   445		if (region != NETFS_COPY_TO_CACHE) {
+   446			netfs_get_dirty_region(ctx, region, netfs_region_trace_get_wback);
+   447			list_add_tail(&region->flush_link, &wback->regions);
+   448			trace_netfs_dirty(ctx, region, 0, mas->index, mas->last,
+   449					  netfs_dirty_trace_flush2);
+   450		}
+   451	
+   452	no_more:
+   453		/* We've now got a contiguous span.  Some of the subspans may only need
+   454		 * writing to the cache, whilst others need writing to both the server
+   455		 * and the cache.
+   456		 */
+   457		_debug("span %lx-%lx", wback->first, wback->last);
+   458		*_first = last + 1;
+   459		mtree_unlock(&ctx->dirty_regions);
+   460		rcu_read_unlock();
+   461	
+   462		/* Load the pages into the raw-data buffer and transition them over to
+   463		 * the writeback state.
+   464		 */
+   465		ret = netfs_flush_get_pages(wback, ctx);
+   466		if (ret < 0)
+   467			goto undo;
+   468	
+   469		netfs_writeback_lock(wback);
+   470		netfs_writeback_start(wback);
+ > 471		netfs_proc_add_writeback(wback);
+   472		trace_netfs_wback(wback);
+   473	
+   474		wbc->nr_to_write -= wback->last - wback->first + 1;
+   475		*_first = wback->last + 1;
+   476		_leave(" = %lx [%lx]", wback->last - wback->first + 1, *_first);
+   477		return 1;
+   478	
+   479	found_nothing:
+   480		*_first = last + 1;
+   481		mtree_unlock(&ctx->dirty_regions);
+   482		rcu_read_unlock();
+   483		return 0;
+   484	
+   485	undo:
+   486		BUG(); // TODO
+   487	}
+   488	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
