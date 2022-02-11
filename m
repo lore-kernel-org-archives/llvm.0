@@ -1,42 +1,45 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003A37A
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 17:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46167A
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 18:00:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644602346; x=1676138346;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dfDXeP7AiMHViCfUwz3sPdeWt24ri9rYQUIoHVSUuNw=;
-  b=dwJvpiitF7OVWn8ImNeJdIcKLxRgsSF7OVK2bdR43rSFx0lj6Hx+sqd7
-   tLGSr8t3p0LoCfROBwjnz4um5mXrZPpT6IkzVBld0TSBWzVKigUA3cUm9
-   I0l2bMvvKr23HAqotxQ3lVseRJd5Phyl+C+68wGwnLqMFj3Jdx1ma5xGc
-   uu41VzaRR5b12HXVSHB3kpX8311YMKheYlTtDyGnE1DOVwKmputdN00/I
-   cXRB2t+cCF6gehltUxBDPoL0jpysBsHaqsOavoxcGSWKmA5lx0XHQ3aAm
-   lmVmlg+U6Ryf2XPGK8aRMKLtIsoLzGKgQz+WSVufIs2Kzgu3HSTcwJ0CZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="229743236"
+  t=1644602404; x=1676138404;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4hQe/gaqC8VJ4miQIXlMaSjVco1XU+NwrK+DxptlP7o=;
+  b=O7OLyhNlyrigUzwtMv+s0rblJELNNQE3d7mmgkPmTLn6SFUMm4kd709a
+   cfqSrO06XT+dbhizaZT8a05+zSYFZQdJHMPJEpU9chmDN1xLW4G7F4+4f
+   gnErBgikSqNYCwBfLcU2AR4/24lB9LW1KrAFlr/gQ36chfSxVJLzGsKxT
+   bWZ4BGvo1JQ0iJj8ihirUiT3MFTytR1vhJTDqKTyHW/7qZkJzTbB/o47k
+   dVBwyJQCRopTgl0jWpJghOD+bDJ5jHiMWauTFl4FH2tQW0gkQcIkUMCKN
+   Hf3+BNmqvPetOeb1Zj0XMaSE/uP9wITURhw/XgBc6HhHLjcSmV8Ry0RmE
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="313059570"
 X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="229743236"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 09:59:04 -0800
+   d="scan'208";a="313059570"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 10:00:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="602439868"
+   d="scan'208";a="679574080"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Feb 2022 09:59:01 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 11 Feb 2022 10:00:02 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nIaCD-0004uZ-5V; Fri, 11 Feb 2022 17:59:01 +0000
-Date: Sat, 12 Feb 2022 01:58:12 +0800
+	id 1nIaDB-0004w3-DM; Fri, 11 Feb 2022 18:00:01 +0000
+Date: Sat, 12 Feb 2022 01:59:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ville Syrjala <ville.syrjala@linux.intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [Intel-gfx] [PATCH 7/8] drm/i915: Clean up SSKPD/MLTR defines
-Message-ID: <202202112244.gwKGUmOj-lkp@intel.com>
-References: <20220211090629.15555-8-ville.syrjala@linux.intel.com>
+To: Carl Huang <quic_cjhuang@quicinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>,
+	Baochen Qiang <quic_bqiang@quicinc.com>,
+	Wen Gong <quic_wgong@quicinc.com>
+Subject: [ammarfaizi2-block:kvalo/ath/pending-deferred 57/62]
+ drivers/net/wireless/ath/ath11k/wow.c:481:17: error: no member named
+ 'wowlan' in 'struct wiphy'
+Message-ID: <202202120027.x2o1HiR8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,679 +48,191 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220211090629.15555-8-ville.syrjala@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Ville,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on drm-intel/for-linux-next]
-[also build test WARNING on drm-tip/drm-tip next-20220211]
-[cannot apply to v5.17-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Ville-Syrjala/drm-i915-Plane-wm-cleanups/20220211-170856
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220211/202202112244.gwKGUmOj-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending-deferred
+head:   9a4dbe8c276e1d26533f2e4191c2b5dbef2d7b1e
+commit: 24a2528121749a929923132e26ef5b0180e18544 [57/62] ath11k: Add basic WoW functionalities
+config: hexagon-randconfig-r005-20220211 (https://download.01.org/0day-ci/archive/20220212/202202120027.x2o1HiR8-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/24cedeb8c8ca97104e12936a4647665dd0e9b0f8
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Ville-Syrjala/drm-i915-Plane-wm-cleanups/20220211-170856
-        git checkout 24cedeb8c8ca97104e12936a4647665dd0e9b0f8
+        # https://github.com/ammarfaizi2/linux-block/commit/24a2528121749a929923132e26ef5b0180e18544
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending-deferred
+        git checkout 24a2528121749a929923132e26ef5b0180e18544
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
+>> drivers/net/wireless/ath/ath11k/wow.c:356:5: warning: no previous prototype for function 'ath11k_wow_op_suspend' [-Wmissing-prototypes]
+   int ath11k_wow_op_suspend(struct ieee80211_hw *hw,
+       ^
+   drivers/net/wireless/ath/ath11k/wow.c:356:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int ath11k_wow_op_suspend(struct ieee80211_hw *hw,
+   ^
+   static 
+>> drivers/net/wireless/ath/ath11k/wow.c:415:6: warning: no previous prototype for function 'ath11k_wow_op_set_wakeup' [-Wmissing-prototypes]
+   void ath11k_wow_op_set_wakeup(struct ieee80211_hw *hw, bool enabled)
+        ^
+   drivers/net/wireless/ath/ath11k/wow.c:415:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void ath11k_wow_op_set_wakeup(struct ieee80211_hw *hw, bool enabled)
+   ^
+   static 
+>> drivers/net/wireless/ath/ath11k/wow.c:424:5: warning: no previous prototype for function 'ath11k_wow_op_resume' [-Wmissing-prototypes]
+   int ath11k_wow_op_resume(struct ieee80211_hw *hw)
+       ^
+   drivers/net/wireless/ath/ath11k/wow.c:424:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int ath11k_wow_op_resume(struct ieee80211_hw *hw)
+   ^
+   static 
+   drivers/net/wireless/ath/ath11k/wow.c:466:5: error: redefinition of 'ath11k_wow_init'
+   int ath11k_wow_init(struct ath11k *ar)
+       ^
+   drivers/net/wireless/ath/ath11k/wow.h:40:19: note: previous definition is here
+   static inline int ath11k_wow_init(struct ath11k *ar)
                      ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 10 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 10 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 10 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 10 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 10 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 10 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 10 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 10 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
-   drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 11 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 11 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 12 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ~~~~~~^~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/gpu/drm/i915/intel_pm.c:2949:27: warning: shift count is negative [-Wshift-count-negative]
-                   wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-                           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:1900:34: note: expanded from macro 'SSKPD_NEW_WM0_MASK_HSW'
-   #define   SSKPD_NEW_WM0_MASK_HSW        REG_GENMASK64(63, 56)
-                                           ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:53:38: note: expanded from macro 'REG_GENMASK64'
-   #define REG_GENMASK64(__high, __low) _REG_GENMASK(u64, __high, __low)
-                                        ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:26:12: note: expanded from macro '_REG_GENMASK'
-           ((__type)(GENMASK(__high, __low) +                              \
-                     ^
-   note: (skipping 12 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+>> drivers/net/wireless/ath/ath11k/wow.c:481:17: error: no member named 'wowlan' in 'struct wiphy'
+           ar->hw->wiphy->wowlan = &ar->wow.wowlan_support;
+           ~~~~~~~~~~~~~  ^
+   3 warnings and 2 errors generated.
 
 
-vim +2949 drivers/gpu/drm/i915/intel_pm.c
+vim +481 drivers/net/wireless/ath/ath11k/wow.c
 
-  2859	
-  2860	static void intel_read_wm_latency(struct drm_i915_private *dev_priv,
-  2861					  u16 wm[8])
-  2862	{
-  2863		struct intel_uncore *uncore = &dev_priv->uncore;
-  2864	
-  2865		if (DISPLAY_VER(dev_priv) >= 9) {
-  2866			u32 val;
-  2867			int ret, i;
-  2868			int level, max_level = ilk_wm_max_level(dev_priv);
-  2869			int mult = IS_DG2(dev_priv) ? 2 : 1;
-  2870	
-  2871			/* read the first set of memory latencies[0:3] */
-  2872			val = 0; /* data0 to be programmed to 0 for first set */
-  2873			ret = snb_pcode_read(dev_priv, GEN9_PCODE_READ_MEM_LATENCY,
-  2874					     &val, NULL);
-  2875	
-  2876			if (ret) {
-  2877				drm_err(&dev_priv->drm,
-  2878					"SKL Mailbox read error = %d\n", ret);
-  2879				return;
-  2880			}
-  2881	
-  2882			wm[0] = (val & GEN9_MEM_LATENCY_LEVEL_MASK) * mult;
-  2883			wm[1] = ((val >> GEN9_MEM_LATENCY_LEVEL_1_5_SHIFT) &
-  2884					GEN9_MEM_LATENCY_LEVEL_MASK) * mult;
-  2885			wm[2] = ((val >> GEN9_MEM_LATENCY_LEVEL_2_6_SHIFT) &
-  2886					GEN9_MEM_LATENCY_LEVEL_MASK) * mult;
-  2887			wm[3] = ((val >> GEN9_MEM_LATENCY_LEVEL_3_7_SHIFT) &
-  2888					GEN9_MEM_LATENCY_LEVEL_MASK) * mult;
-  2889	
-  2890			/* read the second set of memory latencies[4:7] */
-  2891			val = 1; /* data0 to be programmed to 1 for second set */
-  2892			ret = snb_pcode_read(dev_priv, GEN9_PCODE_READ_MEM_LATENCY,
-  2893					     &val, NULL);
-  2894			if (ret) {
-  2895				drm_err(&dev_priv->drm,
-  2896					"SKL Mailbox read error = %d\n", ret);
-  2897				return;
-  2898			}
-  2899	
-  2900			wm[4] = (val & GEN9_MEM_LATENCY_LEVEL_MASK) * mult;
-  2901			wm[5] = ((val >> GEN9_MEM_LATENCY_LEVEL_1_5_SHIFT) &
-  2902					GEN9_MEM_LATENCY_LEVEL_MASK) * mult;
-  2903			wm[6] = ((val >> GEN9_MEM_LATENCY_LEVEL_2_6_SHIFT) &
-  2904					GEN9_MEM_LATENCY_LEVEL_MASK) * mult;
-  2905			wm[7] = ((val >> GEN9_MEM_LATENCY_LEVEL_3_7_SHIFT) &
-  2906					GEN9_MEM_LATENCY_LEVEL_MASK) * mult;
-  2907	
-  2908			/*
-  2909			 * If a level n (n > 1) has a 0us latency, all levels m (m >= n)
-  2910			 * need to be disabled. We make sure to sanitize the values out
-  2911			 * of the punit to satisfy this requirement.
-  2912			 */
-  2913			for (level = 1; level <= max_level; level++) {
-  2914				if (wm[level] == 0) {
-  2915					for (i = level + 1; i <= max_level; i++)
-  2916						wm[i] = 0;
-  2917	
-  2918					max_level = level - 1;
-  2919	
-  2920					break;
-  2921				}
-  2922			}
-  2923	
-  2924			/*
-  2925			 * WaWmMemoryReadLatency
-  2926			 *
-  2927			 * punit doesn't take into account the read latency so we need
-  2928			 * to add proper adjustement to each valid level we retrieve
-  2929			 * from the punit when level 0 response data is 0us.
-  2930			 */
-  2931			if (wm[0] == 0) {
-  2932				u8 adjust = DISPLAY_VER(dev_priv) >= 12 ? 3 : 2;
-  2933	
-  2934				for (level = 0; level <= max_level; level++)
-  2935					wm[level] += adjust;
-  2936			}
-  2937	
-  2938			/*
-  2939			 * WA Level-0 adjustment for 16GB DIMMs: SKL+
-  2940			 * If we could not get dimm info enable this WA to prevent from
-  2941			 * any underrun. If not able to get Dimm info assume 16GB dimm
-  2942			 * to avoid any underrun.
-  2943			 */
-  2944			if (dev_priv->dram_info.wm_lv_0_adjust_needed)
-  2945				wm[0] += 1;
-  2946		} else if (IS_HASWELL(dev_priv) || IS_BROADWELL(dev_priv)) {
-  2947			u64 sskpd = intel_uncore_read64(uncore, MCH_SSKPD);
-  2948	
-> 2949			wm[0] = REG_FIELD_GET64(SSKPD_NEW_WM0_MASK_HSW, sskpd);
-  2950			if (wm[0] == 0)
-  2951				wm[0] = REG_FIELD_GET64(SSKPD_OLD_WM0_MASK_HSW, sskpd);
-  2952			wm[1] = REG_FIELD_GET64(SSKPD_WM1_MASK_HSW, sskpd);
-  2953			wm[2] = REG_FIELD_GET64(SSKPD_WM2_MASK_HSW, sskpd);
-  2954			wm[3] = REG_FIELD_GET64(SSKPD_WM3_MASK_HSW, sskpd);
-  2955			wm[4] = REG_FIELD_GET64(SSKPD_WM4_MASK_HSW, sskpd);
-  2956		} else if (DISPLAY_VER(dev_priv) >= 6) {
-  2957			u32 sskpd = intel_uncore_read(uncore, MCH_SSKPD);
-  2958	
-  2959			wm[0] = REG_FIELD_GET(SSKPD_WM0_MASK_SNB, sskpd);
-  2960			wm[1] = REG_FIELD_GET(SSKPD_WM1_MASK_SNB, sskpd);
-  2961			wm[2] = REG_FIELD_GET(SSKPD_WM2_MASK_SNB, sskpd);
-  2962			wm[3] = REG_FIELD_GET(SSKPD_WM3_MASK_SNB, sskpd);
-  2963		} else if (DISPLAY_VER(dev_priv) >= 5) {
-  2964			u32 mltr = intel_uncore_read(uncore, MLTR_ILK);
-  2965	
-  2966			/* ILK primary LP0 latency is 700 ns */
-  2967			wm[0] = 7;
-  2968			wm[1] = REG_FIELD_GET(MLTR_WM1_MASK, mltr);
-  2969			wm[2] = REG_FIELD_GET(MLTR_WM2_MASK, mltr);
-  2970		} else {
-  2971			MISSING_CASE(INTEL_DEVID(dev_priv));
-  2972		}
-  2973	}
-  2974	
+   355	
+ > 356	int ath11k_wow_op_suspend(struct ieee80211_hw *hw,
+   357				  struct cfg80211_wowlan *wowlan)
+   358	{
+   359		struct ath11k *ar = hw->priv;
+   360		int ret;
+   361	
+   362		mutex_lock(&ar->conf_mutex);
+   363	
+   364		ret =  ath11k_wow_cleanup(ar);
+   365		if (ret) {
+   366			ath11k_warn(ar->ab, "failed to clear wow wakeup events: %d\n",
+   367				    ret);
+   368			goto exit;
+   369		}
+   370	
+   371		ret = ath11k_wow_set_wakeups(ar, wowlan);
+   372		if (ret) {
+   373			ath11k_warn(ar->ab, "failed to set wow wakeup events: %d\n",
+   374				    ret);
+   375			goto cleanup;
+   376		}
+   377	
+   378		ret = ath11k_mac_wait_tx_complete(ar);
+   379		if (ret) {
+   380			ath11k_warn(ar->ab, "failed to wait tx complete: %d\n", ret);
+   381			goto cleanup;
+   382		}
+   383	
+   384		ret = ath11k_wow_enable(ar->ab);
+   385		if (ret) {
+   386			ath11k_warn(ar->ab, "failed to start wow: %d\n", ret);
+   387			goto cleanup;
+   388		}
+   389	
+   390		ath11k_ce_stop_shadow_timers(ar->ab);
+   391		ath11k_dp_stop_shadow_timers(ar->ab);
+   392	
+   393		ath11k_hif_irq_disable(ar->ab);
+   394		ath11k_hif_ce_irq_disable(ar->ab);
+   395	
+   396		ret = ath11k_hif_suspend(ar->ab);
+   397		if (ret) {
+   398			ath11k_warn(ar->ab, "failed to suspend hif: %d\n", ret);
+   399			goto wakeup;
+   400		}
+   401	
+   402		goto exit;
+   403	
+   404	wakeup:
+   405		ath11k_wow_wakeup(ar->ab);
+   406	
+   407	cleanup:
+   408		ath11k_wow_cleanup(ar);
+   409	
+   410	exit:
+   411		mutex_unlock(&ar->conf_mutex);
+   412		return ret ? 1 : 0;
+   413	}
+   414	
+ > 415	void ath11k_wow_op_set_wakeup(struct ieee80211_hw *hw, bool enabled)
+   416	{
+   417		struct ath11k *ar = hw->priv;
+   418	
+   419		mutex_lock(&ar->conf_mutex);
+   420		device_set_wakeup_enable(ar->ab->dev, enabled);
+   421		mutex_unlock(&ar->conf_mutex);
+   422	}
+   423	
+ > 424	int ath11k_wow_op_resume(struct ieee80211_hw *hw)
+   425	{
+   426		struct ath11k *ar = hw->priv;
+   427		int ret;
+   428	
+   429		mutex_lock(&ar->conf_mutex);
+   430	
+   431		ret = ath11k_hif_resume(ar->ab);
+   432		if (ret) {
+   433			ath11k_warn(ar->ab, "failed to resume hif: %d\n", ret);
+   434			goto exit;
+   435		}
+   436	
+   437		ath11k_hif_ce_irq_enable(ar->ab);
+   438		ath11k_hif_irq_enable(ar->ab);
+   439	
+   440		ret = ath11k_wow_wakeup(ar->ab);
+   441		if (ret)
+   442			ath11k_warn(ar->ab, "failed to wakeup from wow: %d\n", ret);
+   443	
+   444	exit:
+   445		if (ret) {
+   446			switch (ar->state) {
+   447			case ATH11K_STATE_ON:
+   448				ar->state = ATH11K_STATE_RESTARTING;
+   449				ret = 1;
+   450				break;
+   451			case ATH11K_STATE_OFF:
+   452			case ATH11K_STATE_RESTARTING:
+   453			case ATH11K_STATE_RESTARTED:
+   454			case ATH11K_STATE_WEDGED:
+   455				ath11k_warn(ar->ab, "encountered unexpected device state %d on resume, cannot recover\n",
+   456					    ar->state);
+   457				ret = -EIO;
+   458				break;
+   459			}
+   460		}
+   461	
+   462		mutex_unlock(&ar->conf_mutex);
+   463		return ret;
+   464	}
+   465	
+ > 466	int ath11k_wow_init(struct ath11k *ar)
+   467	{
+   468		if (WARN_ON(!test_bit(WMI_TLV_SERVICE_WOW, ar->wmi->wmi_ab->svc_map)))
+   469			return -EINVAL;
+   470	
+   471		ar->wow.wowlan_support = ath11k_wowlan_support;
+   472	
+   473		if (ar->wmi->wmi_ab->wlan_resource_config.rx_decap_mode ==
+   474		    ATH11K_HW_TXRX_NATIVE_WIFI) {
+   475			ar->wow.wowlan_support.pattern_max_len -= WOW_MAX_REDUCE;
+   476			ar->wow.wowlan_support.max_pkt_offset -= WOW_MAX_REDUCE;
+   477		}
+   478	
+   479		ar->wow.max_num_patterns = ATH11K_WOW_PATTERNS;
+   480		ar->wow.wowlan_support.n_patterns = ar->wow.max_num_patterns;
+ > 481		ar->hw->wiphy->wowlan = &ar->wow.wowlan_support;
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
