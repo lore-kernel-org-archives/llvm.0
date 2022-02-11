@@ -1,108 +1,119 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DBF7D
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 22:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644617113; x=1676153113;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=JvifyvibEXNvIeu/UqujnxOiEd42GQjWujWe/6qUKG4=;
-  b=kjAKeg30PMzTQrsY23KZ2f45Z07JfCfShPSI7rOzEkuQw2NOQEF0oLlt
-   iPJU4HhiTmg9mWqLb3bBgiyI1usYO1YHSZJsLCVIV3VyRlLHlDuoWLcUC
-   8GiFBMOuPpegG83GvZMMSBwFU5qWQPguU03/Vmmw3nmQ0UGJ9l82BJaZ8
-   VX5i6GPhlAKcHD6giI1c/owwOFaQZV1tkeuG4Iqp7ikzEoOAGxB8XYokg
-   tB+D71+mOWc1mrc7qF6H6h3owGFwuZZmW0fVcCkIu99NmIGF4Ycy9vSng
-   wKvfe5XOKJgCThxIuuOss/3sKvgzx74MzFd0HQe3dAMOJyRtO+TOSHYce
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="313099293"
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="313099293"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 14:05:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="586484258"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Feb 2022 14:05:09 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nIe2P-0005FD-AO; Fri, 11 Feb 2022 22:05:09 +0000
-Date: Sat, 12 Feb 2022 06:04:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
-	Sanjay R Mehta <sanju.mehta@amd.com>,
-	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel@collabora.com,
-	Lucas Tanure <tanureal@opensource.cirrus.com>,
-	Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
-Subject: Re: [PATCH v2 3/3] spi: amd: Add support for version AMDI0062
-Message-ID: <202202120539.KmgOSqRV-lkp@intel.com>
-References: <20220211143155.75513-4-andrealmeid@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC9C7D
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 22:10:02 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-234-heNkNE9MNiONtRLfW4EdGw-1; Fri, 11 Feb 2022 22:09:59 +0000
+X-MC-Unique: heNkNE9MNiONtRLfW4EdGw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Fri, 11 Feb 2022 22:09:58 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Fri, 11 Feb 2022 22:09:58 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Bill Wendling' <morbo@google.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, "Andy
+ Lutomirski" <luto@kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4] x86: use builtins to read eflags
+Thread-Topic: [PATCH v4] x86: use builtins to read eflags
+Thread-Index: AQHYHs4TBErQZHLpBUiy6+9ZW5FRHqyOjNCAgAAv2wCAACoDUA==
+Date: Fri, 11 Feb 2022 22:09:58 +0000
+Message-ID: <6b83fa302b974f749c60fc6c456e055f@AcuMS.aculab.com>
+References: <20220204005742.1222997-1-morbo@google.com>
+ <20220210223134.233757-1-morbo@google.com>
+ <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com>
+ <CAGG=3QXvSt=d94iqSV-Y9JVNc+pt-WOZGpSeW--fp=w2ttMvUA@mail.gmail.com>
+In-Reply-To: <CAGG=3QXvSt=d94iqSV-Y9JVNc+pt-WOZGpSeW--fp=w2ttMvUA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220211143155.75513-4-andrealmeid@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-Hi "André,
+RnJvbTogQmlsbCBXZW5kbGluZyA+IFNlbnQ6IDExIEZlYnJ1YXJ5IDIwMjIgMTk6MjYNCj4gDQo+
+IE9uIEZyaSwgRmViIDExLCAyMDIyIGF0IDg6NDAgQU0gRGF2aWQgTGFpZ2h0IDxEYXZpZC5MYWln
+aHRAYWN1bGFiLmNvbT4gd3JvdGU6DQo+ID4gRnJvbTogQmlsbCBXZW5kbGluZw0KPiA+ID4gU2Vu
+dDogMTAgRmVicnVhcnkgMjAyMiAyMjozMg0KPiA+ID4NCj4gPiA+IEdDQyBhbmQgQ2xhbmcgYm90
+aCBoYXZlIGJ1aWx0aW5zIHRvIHJlYWQgYW5kIHdyaXRlIHRoZSBFRkxBR1MgcmVnaXN0ZXIuDQo+
+ID4gPiBUaGlzIGFsbG93cyB0aGUgY29tcGlsZXIgdG8gZGV0ZXJtaW5lIHRoZSBiZXN0IHdheSB0
+byBnZW5lcmF0ZSB0aGlzDQo+ID4gPiBjb2RlLCB3aGljaCBjYW4gaW1wcm92ZSBjb2RlIGdlbmVy
+YXRpb24uDQo+ID4gPg0KPiA+ID4gVGhpcyBpc3N1ZSBhcm9zZSBkdWUgdG8gQ2xhbmcncyBpc3N1
+ZSB3aXRoIHRoZSAiPXJtIiBjb25zdHJhaW50LiAgQ2xhbmcNCj4gPiA+IGNob29zZXMgdG8gYmUg
+Y29uc2VydmF0aXZlIGluIHRoZXNlIHNpdHVhdGlvbnMsIGFuZCBzbyB1c2VzIG1lbW9yeQ0KPiA+
+ID4gaW5zdGVhZCBvZiByZWdpc3RlcnMuIFRoaXMgaXMgYSBrbm93biBpc3N1ZSwgd2hpY2ggaXMg
+Y3VycmVudGx5IGJlaW5nDQo+ID4gPiBhZGRyZXNzZWQuDQo+ID4gPg0KPiA+ID4gSG93ZXZlciwg
+dXNpbmcgYnVpbHRpbnMgaXMgYmVuZWZpY2lhbCBpbiBnZW5lcmFsLCBiZWNhdXNlIGl0IHJlbW92
+ZXMgdGhlDQo+ID4gPiBidXJkZW4gb2YgZGV0ZXJtaW5pbmcgd2hhdCdzIHRoZSB3YXkgdG8gcmVh
+ZCB0aGUgZmxhZ3MgcmVnaXN0ZXIgZnJvbSB0aGUNCj4gPiA+IHByb2dyYW1tZXIgYW5kIHBsYWNl
+cyBpdCBvbiB0byB0aGUgY29tcGlsZXIsIHdoaWNoIGhhcyB0aGUgaW5mb3JtYXRpb24NCj4gPiA+
+IG5lZWRlZCB0byBtYWtlIHRoYXQgZGVjaXNpb24uDQo+ID4NCj4gPiBFeGNlcHQgdGhhdCBuZWl0
+aGVyIGdjYyBub3IgY2xhbmcgYXR0ZW1wdCB0byBtYWtlIHRoYXQgZGVjaXNpb24uDQo+ID4gVGhl
+eSBhbHdheXMgZG8gcHVzaGY7IHBvcCBheDsNCj4gPg0KPiBJdCBsb29rcyBsaWtlIGJvdGggR0ND
+IGFuZCBDbGFuZyBwb3AgaW50byB2aXJ0dWFsIHJlZ2lzdGVycy4gVGhlDQo+IHJlZ2lzdGVyIGFs
+bG9jYXRvciBpcyB0aGVuIGFibGUgdG8gZGV0ZXJtaW5lIGlmIGl0IGNhbiBhbGxvY2F0ZSBhDQo+
+IHBoeXNpY2FsIHJlZ2lzdGVyIG9yIGlmIGEgc3RhY2sgc2xvdCBpcyByZXF1aXJlZC4NCg0KRG9p
+bmc6DQoJaW50IGZsOw0KCXZvaWQgZih2b2lkKSB7IGZsID0gX19idWlsdGluX2lhMzJfcmVhZGVm
+bGFnc191NjQoKTsgfQ0KU2VlbXMgdG8gdXNlIHJlZ2lzdGVyLg0KSWYgaXQgcG9wcyB0byBhIHZp
+cnR1YWwgcmVnaXN0ZXIgaXQgd2lsbCBwcm9iYWJseSBuZXZlciBwb3ANCmludG8gYSByZWFsIHRh
+cmdldCBsb2NhdGlvbi4NCg0KU2VlIGh0dHBzOi8vZ29kYm9sdC5vcmcvei84YVk4bzhyaGUNCg0K
+QnV0IHBlcmZvcm1hbmNlIHdpc2UgdGhlIHBvcCttb3YgaXMganVzdCBvbmUgYnl0ZSBsb25nZXIu
+DQpJbnN0cnVjdGlvbiBkZWNvZGUgdGltZSBtaWdodCBiZSBoaWdoZXIgZm9yIHR3byBpbnN0cnVj
+dGlvbiwgYnV0IHNpbmNlDQoncG9wIG1lbScgZ2VuZXJhdGVzIDIgdW9wcyAoaW50ZWwpIGl0IG1h
+eSBiZSBjb25zdHJhaW5lZCB0byB0aGUgZmlyc3QNCmRlY29kZXIgKEkgY2FuJ3QgcmVtZW1iZXJ0
+aGUgZXhhY3QgZGV0YWlscyksIGJ1dCB0aGUgc2VwYXJhdGUgcG9wK21vdg0KY2FuIGJlIGRlY29k
+ZWQgaW4gcGFyYWxsZWwgLSBzbyBjb3VsZCBlbmQgdXAgZmFzdGVyLg0KDQpBY3R1YWwgZXhlY3V0
+aW9uIHRpbWUgKGlmIHRoYXQgbWFrZXMgYW55IHNlbnNlKSBpcyByZWFsbHkgdGhlIHNhbWUuDQpU
+d28gb3BlcmF0aW9ucywgb25lIHBvcCBhbmQgb25lIG1lbW9yeSB3cml0ZS4NCg0KSSBiZXQgeW91
+J2QgYmUgaGFyZCBwcmVzc2VkIHRvIGZpbmQgYSBwaWVjZSBvZiBjb2RlIHdoZXJlIGl0IGV2ZW4g
+bWFkZQ0KYSBjb25zaXN0ZW50IGRpZmZlcmVuY2UuDQoNCj4gPiAuLi4NCj4gPiA+IHY0OiAtIENs
+YW5nIG5vdyBubyBsb25nZXIgZ2VuZXJhdGVzIHN0YWNrIGZyYW1lcyB3aGVuIHVzaW5nIHRoZXNl
+IGJ1aWx0aW5zLg0KPiA+ID4gICAgIC0gQ29ycmVjdGVkIG1pc3NwZWxsaW5ncy4NCj4gPg0KPiA+
+IFdoaWxlIGNsYW5nICdoZWFkJyBoYXMgYmVlbiBmaXhlZCwgaXQgc2VlbXMgYSBiaXQgcHJlbWF0
+dXJlIHRvIHNheQ0KPiA+IGl0IGlzICdmaXhlZCcgZW5vdWdoIGZvciBhbGwgY2xhbmcgYnVpbGRz
+IHRvIHVzZSB0aGUgYnVpbHRpbi4NCj4gPg0KPiBUcnVlLCBidXQgaXQncyBiZWVuIGNoZXJyeS1w
+aWNrZWQgaW50byB0aGUgY2xhbmcgMTQuMC4wIGJyYW5jaCwgd2hpY2gNCj4gaXMgc2NoZWR1bGVk
+IGZvciByZWxlYXNlIGluIE1hcmNoLg0KPiANCj4gPiBTZWVtcyBiZXR0ZXIgdG8gY2hhbmdlIGl0
+IChiYWNrKSB0byAiPXIiIGFuZCBjb21tZW50IHRoYXQgdGhpcw0KPiA+IGlzIGN1cnJlbnRseSBh
+cyBnb29kIGFzIF9fYnVpbHRpbl9pYTMyX3JlYWRlZmxhZ3NfdTY0KCkgYW5kIHRoYXQNCj4gPiBj
+bGFuZyBtYWtlcyBhICdwaWdzIGJyZWFrZmFzdCcgb2YgIj1ybSIgLSB3aGljaCBoYXMgb25seSBt
+YXJnaW5hbA0KPiA+IGJlbmVmaXQuDQo+ID4NCj4gVGhhdCB3b3VsZCBiZSBva2F5IGFzIGZhciBh
+cyBjb2RlIGdlbmVyYXRpb24gaXMgY29uY2VybmVkLCBidXQgaXQgZG9lcw0KPiBwbGFjZSB0aGUg
+YnVyZGVuIG9mIGNvcnJlY3RuZXNzIGJhY2sgb24gdGhlIHByb2dyYW1tZXIuIEFsc28sIGl0IHdh
+cw0KPiB0aGF0IGF0IHNvbWUgcG9pbnQsIGJ1dCB3YXMgY2hhbmdlZCB0byAiPXJtIiBoZXJlLiA6
+LSkNCg0KQXMgSSBzYWlkLCBhIGNvbW1lbnQgc2hvdWxkIHN0b3AgdGhlIGJvdW5jZS4NCg0KLi4u
+DQo+IEkgd2FzIGFibGUgdG8gY29tZSB1cCB3aXRoIGFuIGV4YW1wbGUgd2hlcmUgR0NDIGdlbmVy
+YXRlcyAicHVzaGYgOyBwb3AgbWVtIjoNCj4gDQo+ICAgaHR0cHM6Ly9nb2Rib2x0Lm9yZy96Lzly
+b2NqZG9hSw0KPiANCj4gKENsYW5nIGdlbmVyYXRlcyBhIHZhcmlhdGlvbiBvZiAicG9wIG1lbSwi
+IGFuZCBpcyBob3JyaWJsZSBjb2RlLCBidXQNCj4gaXQncyBtZWFudCBmb3IgZGVtb25zdHJhdGlv
+biBwdXJwb3NlcyBvbmx5LikgT25lIGludGVyZXN0aW5nIHRoaW5nDQo+IGFib3V0IHRoZSB1c2Ug
+b2YgdGhlIGJ1aWx0aW5zIGlzIHRoYXQgaWYgYXQgYWxsIHBvc3NpYmxlLCB0aGUgInBvcCINCj4g
+aW5zdHJ1Y3Rpb24gbWF5IGJlIG1vdmVkIGF3YXkgZnJvbSB0aGUgInB1c2hmIiBpZiBpdCdzIHNh
+ZmUgYW5kIHdvdWxkDQo+IHJlZHVjZSByZWdpc3RlciBwcmVzc3VyZS4NCg0KSSB3b3VsZG4ndCB0
+cnVzdCB0aGUgY29tcGlsZXIgdG8gZ2V0IHN0YWNrIHBvaW50ZXIgcmVsYXRpdmUgYWNjZXNzZXMN
+CnJpZ2h0IGlmIGl0IGRvZXMgbW92ZSB0aGVtIGFwYXJ0Lg0KRGVmaW5pdGVseSBzY29wZSBmb3Ig
+aG9ycmlkIGJ1Z3MgOy0pDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNp
+ZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsN
+ClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on v5.17-rc3 next-20220211]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Andr-Almeida/spi-amd-Add-support-for-new-controller-version/20220211-223438
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-config: hexagon-randconfig-r045-20220211 (https://download.01.org/0day-ci/archive/20220212/202202120539.KmgOSqRV-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/f9ba9fa1166540cf4dbf3ffbddb96b55699479b5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Andr-Almeida/spi-amd-Add-support-for-new-controller-version/20220211-223438
-        git checkout f9ba9fa1166540cf4dbf3ffbddb96b55699479b5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/spi/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/spi/spi-amd.c:333:23: error: use of undeclared identifier 'spi_acpi_match'
-                   .acpi_match_table = spi_acpi_match,
-                                       ^
-   1 error generated.
-
-
-vim +/spi_acpi_match +333 drivers/spi/spi-amd.c
-
-   329	
-   330	static struct platform_driver amd_spi_driver = {
-   331		.driver = {
-   332			.name = "amd_spi",
- > 333			.acpi_match_table = spi_acpi_match,
-   334		},
-   335		.probe = amd_spi_probe,
-   336	};
-   337	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
