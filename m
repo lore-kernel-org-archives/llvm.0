@@ -1,44 +1,42 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005CE2CA1
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 06:03:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D016E2C80
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 06:13:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644559413; x=1676095413;
+  t=1644560013; x=1676096013;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HK4xC+6JUpQkmPX0PZae+YBXwScsP73EELvRa6GGoCM=;
-  b=mI3jRqhj5yToi2JU2crib3JV48s2NSWHhYswWr8QdEvnfHmNZ4/9VIRQ
-   FrL50ZoypTL8fIQbPpUeZRQWoGoAVGfVvbMI1Lm/4zgHwWrv15gHH/5SF
-   xMB+s0SS6YeNT6v8U9jf8xLqEHE4UvV38egKQYtoy6cYYJxPxc8HodfCX
-   IUZubZu+G6F7Gzt90GKQM7pLrDW5gqugJ942e6+Z1jb/WbjtVq3w/Fnpj
-   240sgpIwHps8tmf/1j2HQFrv1iYqWinil57ILhVZYbARK+TkGirmkV4y/
-   Xfd5uTKES2K6WEEHbeQFo2E5abla+5Jwbl8j1y5PPSMXlMHjUB6/m5NHB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249614695"
+  bh=PmHqyQPi2g+O0hYtOvmp0RaWuS5vyYozzAUJzLC6fcU=;
+  b=ZDhoueLz1yn0T3oXKISIUg3utSKNK52TyRPv35p2HNQ8dG2jnDyxZECP
+   SCZsQko1iWOT91/4V1mNaNa14qkOIYJ8Pvpex6kz/3S+dFWxmtLXV25Ge
+   fzOQH/S2LXEN0FGdEQaH+rT3erFavjuLer1zdzDbY2dzdI5DQbGJUz+mC
+   ILPQ1sJJJEZBA+oDEe3fYXb1yNlq2pFvyOXnTAAdahyTf5Q3DoTuZq+dc
+   LZIDGO3yclKr4X16GlpmikvJZZMGw6B9EIU1muxUZjHXxb/4cgEm/u26S
+   uMwS6/1kPZ1gyK27pqtAbjdfqkv7nuxKEJLoAioCIEQ3u03FTAgX6PAG6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="248501615"
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="249614695"
+   d="scan'208";a="248501615"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:03:33 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:13:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="679414671"
+   d="scan'208";a="679416565"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2022 22:03:31 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2022 22:13:32 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nIP1n-0004C1-1G; Fri, 11 Feb 2022 06:03:31 +0000
-Date: Fri, 11 Feb 2022 14:02:56 +0800
+	id 1nIPBT-0004DE-Bt; Fri, 11 Feb 2022 06:13:31 +0000
+Date: Fri, 11 Feb 2022 14:13:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Jeff Layton <jlayton@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 29/35]
- fs/netfs/write_helper.c:28:26: warning: comparison of distinct pointer types
- ('typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof
- (size) *' (aka 'unsigned int *'))
-Message-ID: <202202111324.LBsc3lm4-lkp@intel.com>
+Subject: [jlayton:ceph-fscrypt 55/57] net/ceph/messenger.c:1126:16: warning:
+ comparison of distinct pointer types ('typeof (bytes) *' (aka 'unsigned int
+ *') and 'typeof (((1UL) << (12))) *' (aka 'unsigned long *'))
+Message-ID: <202202111436.oS410AKW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,62 +47,64 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   429e2bb6fb190f390ed23afc0d2308e877c43be5
-commit: 01abe2ebb0b5676c9d0394947cfeea45d0f5c09f [29/35] netfs: Implement buffered writes through netfs_file_write_iter()
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220211/202202111324.LBsc3lm4-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt
+head:   adf69efebc954db1aa7af7b93febbc2a1b51dc6c
+commit: 8647843c1c4c4ebffb864d049176b4d847ef3a4b [55/57] libceph: allow ceph_msg_data_advance to advance more than a page
+config: riscv-randconfig-r016-20220211 (https://download.01.org/0day-ci/archive/20220211/202202111436.oS410AKW-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/01abe2ebb0b5676c9d0394947cfeea45d0f5c09f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 01abe2ebb0b5676c9d0394947cfeea45d0f5c09f
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=8647843c1c4c4ebffb864d049176b4d847ef3a4b
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton ceph-fscrypt
+        git checkout 8647843c1c4c4ebffb864d049176b4d847ef3a4b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/cpuidle/ net/ceph/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/write_helper.c:28:26: warning: comparison of distinct pointer types ('typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   unsigned int psize   = min(PAGE_SIZE - offset, size);
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/ceph/messenger.c:178:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                            ntohs(in4->sin_port));
+                            ^~~~~~~~~~~~~~~~~~~~
+   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                    ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                       ^~~~~~~~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:43:26: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/ceph/messenger.c:184:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                            ntohs(in6->sin6_port));
+                            ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                    ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                       ^~~~~~~~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:43:26: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/ceph/messenger.c:1126:16: warning: comparison of distinct pointer types ('typeof (bytes) *' (aka 'unsigned int *') and 'typeof (((1UL) << (12))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   size_t cur = min(bytes, PAGE_SIZE);
+                                ^~~~~~~~~~~~~~~~~~~~~
    include/linux/minmax.h:45:19: note: expanded from macro 'min'
    #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/write_helper.c:126:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->from  = min(target->from, folio_pos(folio) + offset);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/write_helper.c:127:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->to    = max(target->to,   folio_pos(folio) + offset + len);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:52:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
                            ^~~~~~~~~~~~~~~~~~~~~~
    include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
            __builtin_choose_expr(__safe_cmp(x, y), \
@@ -118,138 +118,19 @@ All warnings (new ones prefixed by >>):
    3 warnings generated.
 
 
-vim +28 fs/netfs/write_helper.c
+vim +1126 net/ceph/messenger.c
 
-    18	
-    19	static size_t copy_folio_from_iter_atomic(struct folio *folio,
-    20						  unsigned int offset, size_t size,
-    21						  struct iov_iter *i)
-    22	{
-    23		size_t copied = 0, n;
-    24	
-    25		do {
-    26			unsigned int index   = offset / PAGE_SIZE;
-    27			unsigned int poffset = offset % PAGE_SIZE;
-  > 28			unsigned int psize   = min(PAGE_SIZE - offset, size);
-    29	
-    30			n = copy_page_from_iter_atomic(folio_file_page(folio, index),
-    31						       poffset, psize, i);
-    32			copied += n;
-    33			if (n < psize)
-    34				break;
-    35			size -= n;
-    36		} while (size);
-    37		return copied;
-    38	}
-    39	
-    40	/*
-    41	 * Initialise a new dirty folio group.  We have to round it out to any crypto
-    42	 * alignment.
-    43	 */
-    44	static void netfs_init_dirty_region(struct netfs_i_context *ctx,
-    45					    struct netfs_dirty_region *region,
-    46					    struct file *file,
-    47					    enum netfs_write_type write_type,
-    48					    loff_t start, size_t len)
-    49	{
-    50		struct netfs_flush_group *group;
-    51	
-    52		region->from		= start;
-    53		region->to		= start + len;
-    54		region->debug_id	= atomic_inc_return(&netfs_region_debug_ids);
-    55		refcount_set(&region->ref, 1);
-    56	
-    57		switch (write_type) {
-    58		case NETFS_ORDINARY_WRITE:
-    59		case NETFS_DIO_WRITE:
-    60			break;
-    61		case NETFS_SYNC_WRITE:
-    62			__set_bit(NETFS_REGION_SYNC, &region->flags);
-    63			break;
-    64		case NETFS_DSYNC_WRITE:
-    65			__set_bit(NETFS_REGION_DSYNC, &region->flags);
-    66			break;
-    67		}
-    68	
-    69		if (file && ctx->ops->init_dirty_region)
-    70			ctx->ops->init_dirty_region(region, file);
-    71	
-    72		if (!region->group) {
-    73			group = list_last_entry(&ctx->flush_groups,
-    74						struct netfs_flush_group, group_link);
-    75			region->group = netfs_get_flush_group(group);
-    76		}
-    77		trace_netfs_ref_region(region->debug_id, refcount_read(&region->ref),
-    78				       netfs_region_trace_new);
-    79	}
-    80	
-    81	/*
-    82	 * Decide if/how a write can be merged with a dirty region.
-    83	 */
-    84	static bool netfs_is_write_compatible(struct netfs_i_context *ctx,
-    85					      struct netfs_dirty_region *old,
-    86					      struct netfs_dirty_region *candidate)
-    87	{
-    88		/* Regions being actively flushed can't be merged with */
-    89		if (netfs_mas_is_flushing(old) ||
-    90		    candidate->group != old->group ||
-    91		    test_bit(NETFS_FGROUP_FLUSHED, &old->group->flags)) {
-    92			_leave(" = f [flush]");
-    93			return false;
-    94		}
-    95	
-    96		if (test_bit(NETFS_REGION_DSYNC, &old->flags)) {
-    97			_leave(" = f [dsync]");
-    98			return false;
-    99		}
-   100	
-   101		if (!ctx->ops->is_write_compatible) {
-   102			if (test_bit(NETFS_REGION_DSYNC, &candidate->flags)) {
-   103				_leave(" = f [dsync]");
-   104				return false;
-   105			}
-   106			_leave(" = t");
-   107			return true;
-   108		}
-   109		return ctx->ops->is_write_compatible(ctx, old, candidate);
-   110	}
-   111	
-   112	/*
-   113	 * Subsume the modifications into an existing target region.  Returns true if
-   114	 * we need to update the dirty_regions tree.
-   115	 */
-   116	static bool netfs_subsume_into_existing(struct netfs_i_context *ctx,
-   117						struct folio *folio,
-   118						struct ma_state *mas,
-   119						struct netfs_dirty_region **_target,
-   120						struct netfs_dirty_region **_to_put,
-   121						pgoff_t *_first, pgoff_t *_last,
-   122						size_t offset, size_t len)
-   123	{
-   124		struct netfs_dirty_region *target = *_target, *prev;
-   125	
- > 126		target->from  = min(target->from, folio_pos(folio) + offset);
- > 127		target->to    = max(target->to,   folio_pos(folio) + offset + len);
-   128		trace_netfs_dirty(ctx, target, NULL, *_first, *_last,
-   129				  netfs_dirty_trace_modified);
-   130	
-   131		/* We might have bridged to the previous region also. */
-   132		prev = mas_prev(mas, *_first - 1);
-   133		if (!netfs_mas_is_valid(prev))
-   134			return false;
-   135	
-   136		if (prev->to != target->from ||
-   137		    prev->waiting_on_wb != target->waiting_on_wb)
-   138			return false;
-   139	
-   140		*_first = mas->index;
-   141		prev->to = target->to;
-   142		*_to_put = target;
-   143		trace_netfs_dirty(ctx, prev, NULL, *_first, *_last,
-   144				  netfs_dirty_trace_merged_prev);
-   145		return true;
-   146	}
-   147	
+  1122	
+  1123	void ceph_msg_data_advance(struct ceph_msg_data_cursor *cursor, size_t bytes)
+  1124	{
+  1125		while (bytes) {
+> 1126			size_t cur = min(bytes, PAGE_SIZE);
+  1127	
+  1128			__ceph_msg_data_advance(cursor, cur);
+  1129			bytes -= cur;
+  1130		}
+  1131	}
+  1132	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
