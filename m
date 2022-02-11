@@ -1,24 +1,24 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0D22F23
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 15:37:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE5F2F23
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 15:45:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ZsqYYuB5zPz4U2XvwTMc7Gwvie5cfcQX4xHf1kN4geA=; b=lhI/YJi2qjzHxmqjjPK8JUNboc
-	ELI4IMRWe4IJCl+h4E80XJqj1r2cvVckQdNY7MsZ4rSJcC5OHXZnE17vBcaWvad9TqsQS7uYDMZoc
-	zJdah9V3x6bIlCrd4LnTyHADuZU+AWDPwCmox+GPAwDgNzoVJCHCx+M4/jtduxkjqdOmhpbHeVAhw
-	tNoWavJzu7HFS6IlzQhV9C73xEopKbRU4nHMSiPN9uxoAlZAvJ6zIJDJnFDcRGgzqelEJQMVkvmAx
-	YxbR5s1DYOcCPOo1IqIDqjzmY/2yL9NSDDEAomSd5QGOCwT6y6Sx411ri6MQR4hI56UPRhn4RlCL1
-	wlXfZY8A==;
+	bh=D4ssCnbjOmNx384cUCrIrcB0A0RSUiH80NWH2bqiycM=; b=fWCZewgQBtczZ5rQ18W9dGavBq
+	WsPEEA/EumPa5pCR08AiIjkpkUkAZxC72NFzZ0YpEzqv1lSCm5DJzhLPql8GKpProhdkTIRMlEOJB
+	W9trXGDv0a1Pm877onXAxSun4yukfD0kQccuY09LBWaHZQT5gCvPVgSYDoYYtGb2QRUD+moxXuLtQ
+	SmYmYiEGsczGASUBctESrAVeejE2JiV9TkeR5OwkJf4dtG3XygJEZ/m4h+o8aldGWhTARDjLKtzwL
+	GLdQSC5qL6HKX1mtdEEFdTTadVDQvEPqb1HPyc93cPdaqB8L+iSMt7ZM+Hz8VGK9Anu+uvBhXZ6uX
+	fi8sFVJg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nIXyu-0093dN-LI; Fri, 11 Feb 2022 15:37:08 +0000
+	id 1nIY6u-0093nF-P9; Fri, 11 Feb 2022 15:45:24 +0000
 Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id F341A98630A; Fri, 11 Feb 2022 16:37:06 +0100 (CET)
-Date: Fri, 11 Feb 2022 16:37:06 +0100
+	id 6075C98630A; Fri, 11 Feb 2022 16:45:24 +0100 (CET)
+Date: Fri, 11 Feb 2022 16:45:24 +0100
 From: Peter Zijlstra <peterz@infradead.org>
 To: Alexander Lobakin <alexandr.lobakin@intel.com>
 Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
@@ -51,11 +51,10 @@ Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
 	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
 	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v10 10/15] FG-KASLR: use a scripted approach to handle
- .text.* sections
-Message-ID: <20220211153706.GW23216@worktop.programming.kicks-ass.net>
+Subject: Re: [PATCH v10 05/15] x86: support asm function sections
+Message-ID: <20220211154524.GX23216@worktop.programming.kicks-ass.net>
 References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-11-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-6-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,33 +63,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209185752.1226407-11-alexandr.lobakin@intel.com>
+In-Reply-To: <20220209185752.1226407-6-alexandr.lobakin@intel.com>
 
-On Wed, Feb 09, 2022 at 07:57:47PM +0100, Alexander Lobakin wrote:
-> +sub read_sections {
-> +	open(my $fh, "\"$readelf\" -SW \"$file\" 2>/dev/null |")
-> +		or die "$0: ERROR: failed to execute \"$readelf\": $!";
-> +
-> +	while (<$fh>) {
-> +		my $name;
-> +		my $align;
-> +		chomp;
-> +
-> +		($name, $align) = $_ =~ /^\s*\[[\s0-9]*\]\s*(\.\S*)\s*[A-Z]*\s*[0-9a-f]{16}\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]{2}\s*[A-Z]{2}\s*[0-9]\s*[0-9]\s*([0-9]*)$/;
+On Wed, Feb 09, 2022 at 07:57:42PM +0100, Alexander Lobakin wrote:
+> Address places which need special care and enable
+> CONFIG_ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS.
+> 
+> Notably:
+>  - propagate `--sectname-subst` to KBUILD_AFLAGS in
+>    x86/boot/Makefile and x86/boot/compressed/Makefile as both
+>    override them;
+>  - symbols starting with a dot (like ".Lrelocated") should be
+>    handled manually with SYM_*_START_SECT(.Lrelocated, relocated)
+>    as "two dots" is a special (and CPP doesn't want to concatenate
+>    two dots in general);
+>  - some symbols explicitly need to reside in one section (like
+>    kexec control code, hibernation page etc.);
+>  - macros creating aliases for functions (like __memcpy() for
+>    memcpy() etc.) should go after the main declaration (as
+>    aliases should be declared in the same section and they
+>    don't have SYM_PUSH_SECTION() inside);
+>  - things like ".org", ".align" should be manually pushed to
+>    the same section the next symbol goes to;
+>  - expand indirect_thunk wildcards in vmlinux.lds.S to catch
+>    symbols back into the "main" section;
+>  - inline ASM functions like __raw_callee*() should be pushed
+>    manually as well.
+> 
+> With these changes and `-ffunction-sections` enabled, "plain"
+> ".text" section is empty which means that everything works
+> right as expected.
+> 
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> ---
+>  arch/x86/Kconfig                              |  1 +
+>  arch/x86/boot/Makefile                        |  1 +
+>  arch/x86/boot/compressed/Makefile             |  1 +
+>  arch/x86/boot/compressed/head_32.S            |  2 +-
+>  arch/x86/boot/compressed/head_64.S            | 32 ++++++++++++-------
+>  arch/x86/boot/pmjump.S                        |  2 +-
+>  arch/x86/crypto/aesni-intel_asm.S             |  4 +--
+>  arch/x86/crypto/poly1305-x86_64-cryptogams.pl |  4 +++
+>  arch/x86/include/asm/paravirt.h               |  2 ++
+>  arch/x86/include/asm/qspinlock_paravirt.h     |  2 ++
+>  arch/x86/kernel/head_32.S                     |  4 +--
+>  arch/x86/kernel/head_64.S                     |  4 +--
+>  arch/x86/kernel/kprobes/core.c                |  2 ++
+>  arch/x86/kernel/kvm.c                         |  2 ++
+>  arch/x86/kernel/relocate_kernel_32.S          | 10 +++---
+>  arch/x86/kernel/relocate_kernel_64.S          | 12 ++++---
+>  arch/x86/kernel/vmlinux.lds.S                 |  2 +-
+>  arch/x86/kvm/emulate.c                        |  7 +++-
+>  arch/x86/lib/copy_user_64.S                   |  2 +-
+>  arch/x86/lib/error-inject.c                   |  2 ++
+>  arch/x86/lib/getuser.S                        |  5 ++-
+>  arch/x86/lib/memcpy_64.S                      |  4 +--
+>  arch/x86/lib/memmove_64.S                     |  5 ++-
+>  arch/x86/lib/memset_64.S                      |  5 +--
+>  arch/x86/lib/putuser.S                        |  2 +-
+>  arch/x86/power/hibernate_asm_32.S             | 10 +++---
+>  arch/x86/power/hibernate_asm_64.S             | 10 +++---
+>  27 files changed, 89 insertions(+), 50 deletions(-)
 
-Is there really no readable way to write this?
+Urgh, how much of that can you avoid by (ab)using __DISABLE_EXPORTS
+like:
 
-> +
-> +		if (!defined($name)) {
-> +			next;
-> +		}
-> +
-> +		## Clang 13 onwards emits __cfi_check_fail only on final
-> +		## linking, so it won't appear in .o files and will be
-> +		## missing in @sections. Add it manually to prevent
-> +		## spawning orphans.
-> +		if ($name eq ".text.__cfi_check_fail") {
-> +			$has_ccf = 1;
-> +		}
+  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=x86/wip.ibt&id=ab74f54f2b1f6cfeaf2b3ba6999bde7cabada9ca
 
-How is that relevant, x86-64 doesn't and won't do clang-cfi.
