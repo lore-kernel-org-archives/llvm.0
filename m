@@ -1,176 +1,110 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4410D2F26
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 11:38:44 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D23A51042;
-	Fri, 11 Feb 2022 03:32:36 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.87.94])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 54B423F73B;
-	Fri, 11 Feb 2022 03:32:32 -0800 (PST)
-Date: Fri, 11 Feb 2022 11:32:27 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-	acme@redhat.com, ardb@kernel.org, bp@alien8.de, broonie@kernel.org,
-	catalin.marinas@arm.com, dave.hansen@linux.intel.com,
-	jpoimboe@redhat.com, jslaby@suse.cz,
-	linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-	mingo@redhat.com, peterz@infradead.org, tglx@linutronix.de,
-	will@kernel.org, llvm@lists.linux.dev,
-	James Y Knight <jyknight@google.com>
-Subject: Re: [PATCH v2 2/7] linkage: add SYM_{ENTRY,START,END}_AT()
-Message-ID: <YgZJS6mDoAgVqC4l@FVFF77S0Q05N>
-References: <20220125113200.3829108-1-mark.rutland@arm.com>
- <20220125113200.3829108-3-mark.rutland@arm.com>
- <YgUmvuJYfycnhODA@FVFF77S0Q05N>
- <CAKwvOdmWV6AL2RM2SQNYQ7fu3kQwPf+W57LZ_szrfZm2eLtBcw@mail.gmail.com>
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2F42F26
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 11:44:27 +0000 (UTC)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21B8UOh6025927;
+	Fri, 11 Feb 2022 11:44:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ePIyHCGwB3p8G2qD/O5/VZiBUO5jydYuzuzJGELgpIs=;
+ b=YsphtSzT2tvVTjicRhxfbPNyIzciHZn9oHfZej4SmCbVHd1xXh0Z8XP+EgWK1QZfJnXR
+ koEFaVSvUxr9B6v0ltKoSujxhOWG7SvF5VHU1l1yqfp00I3DaRXFIwBKFRVM2VlNwcA8
+ wfeicAT8/2+iDagWcxn6uUsFT4uwcUKbg0WwQVUUKUG7LofWhV4e+LiNlW6s0ENt3EjY
+ rACcANmKYM/lR/uKU3kbdDljIKwUSFXqIWbbExrw7yMsuCB0agLHMBS01UKZ0XHB9ib5
+ kb7ruq92oq4OH6IdkPlOzUmX+hBWxeZrVOXDXbKdZRDQ8ZEuQDg468TKT0hBwoSSj9x2 dg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3e5gbvqpvk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Feb 2022 11:44:19 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21BBdNNO005302;
+	Fri, 11 Feb 2022 11:44:19 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3e5gbvqpv1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Feb 2022 11:44:18 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+	by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21BBgOXu020482;
+	Fri, 11 Feb 2022 11:44:17 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+	by ppma03fra.de.ibm.com with ESMTP id 3e1gva6x91-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Feb 2022 11:44:17 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+	by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21BBiDiQ45744468
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 11 Feb 2022 11:44:13 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5CB8AAE056;
+	Fri, 11 Feb 2022 11:44:13 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E40DBAE045;
+	Fri, 11 Feb 2022 11:44:12 +0000 (GMT)
+Received: from localhost (unknown [9.43.26.72])
+	by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Fri, 11 Feb 2022 11:44:12 +0000 (GMT)
+Date: Fri, 11 Feb 2022 17:14:11 +0530
+From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH kernel 2/3] powerpc/llvm: Sample config for LLVM LTO
+To: Alexey Kardashevskiy <aik@ozlabs.ru>, llvm@lists.linux.dev
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Daniel Axtens
+	<dja@axtens.net>, Fabiano Rosas <farosas@linux.ibm.com>,
+        Joel Stanley
+	<joel@jms.id.au>, linuxppc-dev@lists.ozlabs.org,
+        Michael Ellerman
+	<mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nathan Lynch
+	<nathanl@linux.ibm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+References: <20220211023125.1790960-1-aik@ozlabs.ru>
+	<20220211023125.1790960-3-aik@ozlabs.ru>
+In-Reply-To: <20220211023125.1790960-3-aik@ozlabs.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdmWV6AL2RM2SQNYQ7fu3kQwPf+W57LZ_szrfZm2eLtBcw@mail.gmail.com>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1644579444.bal9kji6uc.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rbnPX762MV5KMj-wy5NaZvzqfgpb8jab
+X-Proofpoint-GUID: FFnGLbCgnwD_EF_xmcZbj_LXeg53GOcB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-11_04,2022-02-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 spamscore=0 mlxscore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 phishscore=0 impostorscore=0 clxscore=1011 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202110066
 
-On Thu, Feb 10, 2022 at 05:20:10PM -0800, Nick Desaulniers wrote:
-> On Thu, Feb 10, 2022 at 6:52 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > Both GCC and clang are happy to treat labels as constant expressions:
-> >
-> > | [mark@lakrids:~/asm-test]% cat test-label.S
-> > |         .text
-> > |
-> > | start:
-> > |         nop
-> > | end:
-> > |
-> > |         .if (end - start) == 0
-> > |         .err
-> > |         .endif
-> > |
-> > | [mark@lakrids:~/asm-test]% usekorg 11.1.0 aarch64-linux-gcc -c test-label.S
-> > | [mark@lakrids:~/asm-test]% usellvm 13.0.0 clang --target=aarch64-linux -c test-label.S
-> >
-> > ... but only GCC is happy to treat symbol definitions as constants:
-> >
-> > | [mark@lakrids:~/asm-test]% cat test-symbol.S
-> > |         .text
-> > |
-> > | .set start, .;
-> > |         nop
-> > | .set end, .;
-> > |
-> > |         .if (end - start) == 0
-> > |         .err
-> > |         .endif
-> > |
-> > | [mark@lakrids:~/asm-test]% usekorg 11.1.0 aarch64-linux-gcc -c test-symbol.S
-> > | [mark@lakrids:~/asm-test]% usellvm 13.0.0 clang --target=aarch64-linux -c test-symbol.S
-> > | test-symbol.S:7:6: error: expected absolute expression
-> > |  .if (end - start) == 0
-> > |      ^
-> > | test-symbol.S:8:2: error: .err encountered
-> > |  .err
-> > |  ^
-> >
-> > This is obviously a behavioural difference, but I'm not sure whether it's
-> > intentional, or just an artifact of the differing implementation of GNU as and
-> > LLVM's integrated assembler. Nich, Nathan, any thoughts on that?
-> >
-> > Does clang have any mechanism other than labels to define location constants
-> > that can be used as absolute expressions? e.g. is there any mechanism to alias
-> > a label which results in the alias also being a constant?
-> 
-> s/constant/absolute/
+Alexey Kardashevskiy wrote:
+>=20
+> Disables CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT as CONFIG_HAS_LTO_CLANG
+> depends on it being disabled. In order to avoid disabling way too many
+> options (like DYNAMIC_FTRACE/FUNCTION_TRACER), this converts
+> FTRACE_MCOUNT_USE_RECORDMCOUNT from def_bool to bool.
 
-Sorry, yes. I wasn't clear on the terminology when I wrote this, and I realise
-now what I said was a bit confused.
+<snip>
 
-IIUC the symbols themselves are relocatable (rather than absolute) whether
-they're labels or created via `.set`, since the base of the section hasn't been
-set yet. The difference between the two *should* be absolute (since they're
-both relocatable relative to the same base), and LLVM can figure that out for
-two labels, but not when either is created via `.set`, so it seems some
-information is tracked differently for labels and othey symbols?
+> +CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT=3Dn
 
-I note LLVM *can* treat the result of a `.set` as absolute, eg. if I do:
+I don't think that will work since we have no other ways of generating=20
+mcount locations on powerpc. And since we decided to only support=20
+DYNAMIC_FTRACE, I guess we will need to disable FUNCTION_TRACER to get=20
+this working, for now.
 
-	.set sym_offset (label_end - label_start)
-	.if sym_offset == 0
-	.err
-	.endif
+I am looking into ways to get ftrace working in this scenario.
 
-... LLVM treats `sym_offset` as an absolute value.
 
-> Nothing off the top of my head comes to mind as a substitute that will
-> work as expected today.
-> 
-> I've filed https://github.com/llvm/llvm-project/issues/53728 to
-> discuss more with folks that understand our AsmParser better.
-
-Thanks!
-
-> From what I can tell, our AsmParser is falling down because the
-> operands of the binary expression themselves are not considered
-> absolute.
-
-IIUC even in the label case the operands aren't absolute, but rather that
-they're relocatable relative to the same base, and hence the expression can be
-evaluate to be absolute (since the base gets cancelled out, removing the
-relocation).
-
-So is there something that gets tracked differently for labels and other
-symbols?
-
-> I doubt we will be able to handle the general case of symbol
-> differencing; the symbol reference operands could refer to symbols in
-> different sections that haven't been laid out yet (or whose order
-> could be shuffled by the linker).  But if they're in the same section
-> (or "fragment" of a section), we might be able to special case this.
-
-Sure, I think the only case that needs to work (or can work conceptually) is
-when they're in the same section (of fragment thereof), and that's all the GNU
-assembler supports.
-
-> For the expression
-> 
-> > .if (qwerty_fiqin_end - qwerty_fiqin_start) > (0x200 - 0x1c)
-> 
-> can you use local labels (`.L` prefix) rather than symbolic
-> references? or is there a risk of them not being unique per TU?
-
-For the problem in this patch I might be able to do something of that shape,
-but I'll need to factor the SYM_*() helpers differently so that I can use
-labels for the primary definition.
-
-I can't do that for the aliases, since I don't know the set of aliases until
-after the primary definition is created. Since there's no label aliasing
-mechanism, I must use symbol references. However, I think I can propagate the
-size by calculating alongside the primary definition, e.g.
-
-	primary_start:
-		nop
-	primary_end:
-	.set primary_size, (primary_end - primary_start)
-
-	.set alias_start, primary_start
-	.set alias_end,   primary_end
-	.set alias_size,  primary_size
-
-... so I'll have a go at that.
-
-However, that still means I can't treat aliases as entirely equivalent to the
-primary definition, e.g.
-
-	.if (alias_end - alias_start) == 0
-	.err
-	.endif
-
-... and there might be more things of that sort of shape, so it'd be good if
-LLVM could handle this for symbol references (in the same section or fragment
-thereof), so that we have the chance to use that in future.
-
-Thanks,
-Mark.
+- Naveen
