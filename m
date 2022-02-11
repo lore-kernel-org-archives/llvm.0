@@ -1,41 +1,41 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 007857F
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 23:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9097F
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 23:17:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644620836; x=1676156836;
+  t=1644621434; x=1676157434;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lM+bgZCvXseabCmGbkk74kFfTfJiI3WpBveP7l1AAGo=;
-  b=kR3hZ/uppx/4bOzxCTqn/9eeD3h27Nbd+WDTXhft3qSTDDk+2YzW5iyo
-   Nyh13A9gx3bRp7pNSKjiOg7GLf4lm4GF/VFIW2wxFVYpRU3O8rKtHe8e7
-   878LGV4gRApOhT9O3SfflzWfWHVCRTq866hOoASNl5TxBwaWKyhrGf0wt
-   nvdBAlzuqyZ7ehFPSV8uy9mVjPMSUmq0hnKBgOJDJV0q51KmCLkRDxCmN
-   aYLGLZP05uF6hKbhjfkfL8MoyyHQ8+n3h67r3A/HtNDvwotpRH24pRBJo
-   hQrACzvXOo7bUUoKPrSzSvecvs7WSJRI+Jh9u2L2mrXIMWPufYPOVxdl8
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="237229774"
+  bh=3uDkKfWJW+Hl4RsTnEsj60dakYDgQfSC8Z/vXEobp8Y=;
+  b=EZUIoOaIkXGkN3l59qGqSEDvLEWWUI7RwzbRllFVcGZen+CEo0566rO6
+   JJj8PsAYhhfk+07C/jb893kX0XWiihYDsUtEO3ajt8rrWEK7Gfj6+Dh9Q
+   zIcCkkt6eOwbJvUDiIL/J/FxxhvjoHZ4B01Sxeyp8AsWBPxx6n+fyYQHT
+   XwHI6zlKw1VeSAGd8lYHpgdG1INCnHffzCJ8HF7DuLvxtgBTh6VeUWtmU
+   3IfiPbvoThrn8Qx5MCIAdzSCMW7d00Ho6PWAFSh4ArsflPy4MZYT9B1qm
+   2eaOK+iqhGpTo0bTCHXsTEG6meGeRo/5o13Db4AOY09JwZgVkEV9Pvy86
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="237230786"
 X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="237229774"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 15:07:15 -0800
+   d="scan'208";a="237230786"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 15:17:14 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="634239872"
+   d="scan'208";a="542279022"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 11 Feb 2022 15:07:12 -0800
+  by orsmga008.jf.intel.com with ESMTP; 11 Feb 2022 15:17:13 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nIf0S-0005Jv-Aj; Fri, 11 Feb 2022 23:07:12 +0000
-Date: Sat, 12 Feb 2022 07:06:42 +0800
+	id 1nIfA8-0005Kh-Iv; Fri, 11 Feb 2022 23:17:12 +0000
+Date: Sat, 12 Feb 2022 07:17:03 +0800
 From: kernel test robot <lkp@intel.com>
 To: Zi Yan <zi.yan@sent.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
 Subject: Re: [PATCH v5 3/6] mm: make alloc_contig_range work at pageblock
  granularity
-Message-ID: <202202120607.4dI5nqMH-lkp@intel.com>
+Message-ID: <202202120720.MfxEFq7T-lkp@intel.com>
 References: <20220211164135.1803616-4-zi.yan@sent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -50,17 +50,17 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 Hi Zi,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on hnaz-mm/master]
-[also build test WARNING on powerpc/next linux/master linus/master v5.17-rc3 next-20220211]
+[auto build test ERROR on hnaz-mm/master]
+[also build test ERROR on powerpc/next linux/master linus/master v5.17-rc3 next-20220211]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Zi-Yan/Use-pageblock_order-for-cma-and-alloc_contig_range-alignment/20220212-004358
 base:   https://github.com/hnaz/linux-mm master
-config: hexagon-randconfig-r045-20220211 (https://download.01.org/0day-ci/archive/20220212/202202120607.4dI5nqMH-lkp@intel.com/config)
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220212/202202120720.MfxEFq7T-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -71,98 +71,107 @@ reproduce (this is a W=1 build):
         git checkout 5aacb9dfc8abb1a0610b70226606408a96d0e997
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   mm/page_alloc.c:3869:15: warning: no previous prototype for function 'should_fail_alloc_page' [-Wmissing-prototypes]
-   noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+>> mm/page_isolation.c:332:8: error: implicit declaration of function 'isolate_single_pageblock' [-Werror,-Wimplicit-function-declaration]
+           ret = isolate_single_pageblock(isolate_start, gfp_flags, 0);
                  ^
-   mm/page_alloc.c:3869:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
-            ^
-            static 
->> mm/page_alloc.c:8988:5: warning: no previous prototype for function '__alloc_contig_migrate_range' [-Wmissing-prototypes]
-   int __alloc_contig_migrate_range(struct compact_control *cc,
-       ^
-   mm/page_alloc.c:8988:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __alloc_contig_migrate_range(struct compact_control *cc,
-   ^
-   static 
-   2 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OMAP_GPMC
-   Depends on MEMORY && OF_ADDRESS
-   Selected by
-   - MTD_NAND_OMAP2 && MTD && MTD_RAW_NAND && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST && HAS_IOMEM
+   1 error generated.
 
 
-vim +/__alloc_contig_migrate_range +8988 mm/page_alloc.c
+vim +/isolate_single_pageblock +332 mm/page_isolation.c
 
-  8986	
-  8987	/* [start, end) must belong to a single zone. */
-> 8988	int __alloc_contig_migrate_range(struct compact_control *cc,
-  8989						unsigned long start, unsigned long end)
-  8990	{
-  8991		/* This function is based on compact_zone() from compaction.c. */
-  8992		unsigned int nr_reclaimed;
-  8993		unsigned long pfn = start;
-  8994		unsigned int tries = 0;
-  8995		int ret = 0;
-  8996		struct migration_target_control mtc = {
-  8997			.nid = zone_to_nid(cc->zone),
-  8998			.gfp_mask = GFP_USER | __GFP_MOVABLE | __GFP_RETRY_MAYFAIL,
-  8999		};
-  9000	
-  9001		lru_cache_disable();
-  9002	
-  9003		while (pfn < end || !list_empty(&cc->migratepages)) {
-  9004			if (fatal_signal_pending(current)) {
-  9005				ret = -EINTR;
-  9006				break;
-  9007			}
-  9008	
-  9009			if (list_empty(&cc->migratepages)) {
-  9010				cc->nr_migratepages = 0;
-  9011				ret = isolate_migratepages_range(cc, pfn, end);
-  9012				if (ret && ret != -EAGAIN)
-  9013					break;
-  9014				pfn = cc->migrate_pfn;
-  9015				tries = 0;
-  9016			} else if (++tries == 5) {
-  9017				ret = -EBUSY;
-  9018				break;
-  9019			}
-  9020	
-  9021			nr_reclaimed = reclaim_clean_pages_from_list(cc->zone,
-  9022								&cc->migratepages);
-  9023			cc->nr_migratepages -= nr_reclaimed;
-  9024	
-  9025			ret = migrate_pages(&cc->migratepages, alloc_migration_target,
-  9026				NULL, (unsigned long)&mtc, cc->mode, MR_CONTIG_RANGE, NULL);
-  9027	
-  9028			/*
-  9029			 * On -ENOMEM, migrate_pages() bails out right away. It is pointless
-  9030			 * to retry again over this error, so do the same here.
-  9031			 */
-  9032			if (ret == -ENOMEM)
-  9033				break;
-  9034		}
-  9035	
-  9036		lru_cache_enable();
-  9037		if (ret < 0) {
-  9038			if (ret == -EBUSY)
-  9039				alloc_contig_dump_pages(&cc->migratepages);
-  9040			putback_movable_pages(&cc->migratepages);
-  9041			return ret;
-  9042		}
-  9043		return 0;
-  9044	}
-  9045	
+   274	
+   275	/**
+   276	 * start_isolate_page_range() - make page-allocation-type of range of pages to
+   277	 * be MIGRATE_ISOLATE.
+   278	 * @start_pfn:		The lower PFN of the range to be isolated.
+   279	 * @end_pfn:		The upper PFN of the range to be isolated.
+   280	 * @migratetype:	Migrate type to set in error recovery.
+   281	 * @flags:		The following flags are allowed (they can be combined in
+   282	 *			a bit mask)
+   283	 *			MEMORY_OFFLINE - isolate to offline (!allocate) memory
+   284	 *					 e.g., skip over PageHWPoison() pages
+   285	 *					 and PageOffline() pages.
+   286	 *			REPORT_FAILURE - report details about the failure to
+   287	 *			isolate the range
+   288	 * @gfp_flags:		GFP flags used for migrating pages that sit across the
+   289	 *			range boundaries.
+   290	 *
+   291	 * Making page-allocation-type to be MIGRATE_ISOLATE means free pages in
+   292	 * the range will never be allocated. Any free pages and pages freed in the
+   293	 * future will not be allocated again. If specified range includes migrate types
+   294	 * other than MOVABLE or CMA, this will fail with -EBUSY. For isolating all
+   295	 * pages in the range finally, the caller have to free all pages in the range.
+   296	 * test_page_isolated() can be used for test it.
+   297	 *
+   298	 * The function first tries to isolate the pageblocks at the beginning and end
+   299	 * of the range, since there might be pages across the range boundaries.
+   300	 * Afterwards, it isolates the rest of the range.
+   301	 *
+   302	 * There is no high level synchronization mechanism that prevents two threads
+   303	 * from trying to isolate overlapping ranges. If this happens, one thread
+   304	 * will notice pageblocks in the overlapping range already set to isolate.
+   305	 * This happens in set_migratetype_isolate, and set_migratetype_isolate
+   306	 * returns an error. We then clean up by restoring the migration type on
+   307	 * pageblocks we may have modified and return -EBUSY to caller. This
+   308	 * prevents two threads from simultaneously working on overlapping ranges.
+   309	 *
+   310	 * Please note that there is no strong synchronization with the page allocator
+   311	 * either. Pages might be freed while their page blocks are marked ISOLATED.
+   312	 * A call to drain_all_pages() after isolation can flush most of them. However
+   313	 * in some cases pages might still end up on pcp lists and that would allow
+   314	 * for their allocation even when they are in fact isolated already. Depending
+   315	 * on how strong of a guarantee the caller needs, zone_pcp_disable/enable()
+   316	 * might be used to flush and disable pcplist before isolation and enable after
+   317	 * unisolation.
+   318	 *
+   319	 * Return: 0 on success and -EBUSY if any part of range cannot be isolated.
+   320	 */
+   321	int start_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+   322				     unsigned migratetype, int flags, gfp_t gfp_flags)
+   323	{
+   324		unsigned long pfn;
+   325		struct page *page;
+   326		/* isolation is done at page block granularity */
+   327		unsigned long isolate_start = ALIGN_DOWN(start_pfn, pageblock_nr_pages);
+   328		unsigned long isolate_end = ALIGN(end_pfn, pageblock_nr_pages);
+   329		int ret;
+   330	
+   331		/* isolate [isolate_start, isolate_start + pageblock_nr_pages] pageblock */
+ > 332		ret = isolate_single_pageblock(isolate_start, gfp_flags, 0);
+   333		if (ret)
+   334			return ret;
+   335	
+   336		/* isolate [isolate_end - pageblock_nr_pages, isolate_end] pageblock */
+   337		ret = isolate_single_pageblock(isolate_end, gfp_flags, 1);
+   338		if (ret) {
+   339			unset_migratetype_isolate(pfn_to_page(isolate_start), migratetype);
+   340			return ret;
+   341		}
+   342	
+   343		/* skip isolated pageblocks at the beginning and end */
+   344		for (pfn = isolate_start + pageblock_nr_pages;
+   345		     pfn < isolate_end - pageblock_nr_pages;
+   346		     pfn += pageblock_nr_pages) {
+   347			page = __first_valid_page(pfn, pageblock_nr_pages);
+   348			if (page && set_migratetype_isolate(page, migratetype, flags,
+   349						start_pfn, end_pfn)) {
+   350				undo_isolate_page_range(isolate_start, pfn, migratetype);
+   351				unset_migratetype_isolate(
+   352					pfn_to_page(isolate_end - pageblock_nr_pages),
+   353					migratetype);
+   354				return -EBUSY;
+   355			}
+   356		}
+   357		return 0;
+   358	}
+   359	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
