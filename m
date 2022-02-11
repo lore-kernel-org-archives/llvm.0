@@ -1,20 +1,26 @@
 Received: from ozlabs.ru (ozlabs.ru [107.174.27.60])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4196A29CA
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 01:49:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD80D2F24
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 02:31:36 +0000 (UTC)
 Received: from fstn1-p1.ozlabs.ibm.com. (localhost [IPv6:::1])
-	by ozlabs.ru (Postfix) with ESMTP id A561F804B3;
-	Thu, 10 Feb 2022 20:43:17 -0500 (EST)
+	by ozlabs.ru (Postfix) with ESMTP id 5C773804B3;
+	Thu, 10 Feb 2022 21:31:28 -0500 (EST)
 From: Alexey Kardashevskiy <aik@ozlabs.ru>
 To: llvm@lists.linux.dev
-Cc: Alexey Kardashevskiy <aik@ozlabs.ru>,
-	linux-kernel@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
+Cc: linuxppc-dev@lists.ozlabs.org,
 	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Nathan Lynch <nathanl@linux.ibm.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>
-Subject: [RFC PATCH kernel] trace: Make FTRACE_MCOUNT_USE_RECORDMCOUNT configurable
-Date: Fri, 11 Feb 2022 12:43:13 +1100
-Message-Id: <20220211014313.1790140-1-aik@ozlabs.ru>
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Joel Stanley <joel@jms.id.au>,
+	Fabiano Rosas <farosas@linux.ibm.com>,
+	Daniel Axtens <dja@axtens.net>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Alexey Kardashevskiy <aik@ozlabs.ru>,
+	"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: [PATCH kernel 0/3] powerpc/llvm/lto: Enable CONFIG_LTO_CLANG_THIN=y
+Date: Fri, 11 Feb 2022 13:31:22 +1100
+Message-Id: <20220211023125.1790960-1-aik@ozlabs.ru>
 X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -24,48 +30,28 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-For whatever reason LLVM does not allow LTO (Link Time Optimization) if
-FTRACE_MCOUNT_USE_RECORDMCOUNT is enabled.
 
-This allows disabling just this option instead of disabling all FTRACE
-options.
+This is based on sha1
+1b43a74f255c Michael Ellerman "Automatic merge of 'master' into merge (2022-02-01 10:41)".
 
-Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
----
-
-Or disabling FTRACE is the right thing to do if HAS_LTO_CLANG=y?
-
-Came from arch/Kconfig:
-
-config HAS_LTO_CLANG
-        def_bool y
-        depends on CC_IS_CLANG && LD_IS_LLD && AS_IS_LLVM
-        depends on $(success,$(NM) --help | head -n 1 | grep -qi llvm)
-        depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
-        depends on ARCH_SUPPORTS_LTO_CLANG
-        depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT  <======
-        depends on !KASAN || KASAN_HW_TAGS
-        depends on !GCOV_KERNEL
+Please comment. Thanks.
 
 
----
- kernel/trace/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index a5eb5e7fd624..87d82d2b0b0b 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -704,7 +704,8 @@ config FTRACE_MCOUNT_USE_OBJTOOL
- 	depends on FTRACE_MCOUNT_RECORD
- 
- config FTRACE_MCOUNT_USE_RECORDMCOUNT
--	def_bool y
-+	bool "Enable FTRACE_MCOUNT_USE_RECORDMCOUNT"
-+	default y
- 	depends on !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
- 	depends on !FTRACE_MCOUNT_USE_CC
- 	depends on !FTRACE_MCOUNT_USE_OBJTOOL
+Alexey Kardashevskiy (3):
+  powerpc/64: Allow LLVM LTO builds
+  powerpc/llvm: Sample config for LLVM LTO
+  powerpc/llvm/lto: Workaround conditional branches in FTR_SECTION_ELSE
+
+ arch/powerpc/Makefile                    |   4 +
+ arch/powerpc/Kconfig                     |   2 +
+ arch/powerpc/configs/ppc64_lto_defconfig | 381 +++++++++++++++++++++++
+ arch/powerpc/kernel/exceptions-64s.S     |   6 +-
+ arch/powerpc/lib/copyuser_64.S           |   3 +-
+ arch/powerpc/lib/memcpy_64.S             |   3 +-
+ 6 files changed, 396 insertions(+), 3 deletions(-)
+ create mode 100644 arch/powerpc/configs/ppc64_lto_defconfig
+
 -- 
 2.30.2
 
