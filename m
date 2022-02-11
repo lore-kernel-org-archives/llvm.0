@@ -1,34 +1,34 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4E92C9E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005CE2CA1
 	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 06:03:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1644559413; x=1676095413;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5wqtbc0vWefMzKGCJhOvChWgfOmyEIjI7FN+FIK74zs=;
-  b=AkE2RHNstqyUkBmQs8IBh2US4/BQSxT3B0oWWKef8AQDV/hRMDU4YqQ9
-   kzeMTyKdcWZV7TENKl75z5+afRWZq9vHEBBhx5O2G+KKRv3ZzmsZsZ5Js
-   lPHXa+jER6eULHK6fQFfJsNuofssGK4Jr+vXAaZpTCb5KC8NuDJEwzuVK
-   270dvBjuI7eAB2tJJq+KwLnygtsknT8tCKz4wj8DMm9t7F+SF5VsaYIAn
-   3dFfIlDXExa3jW3rDyIa4ByByn77VSQBY9jEATQlalvbOL6+wCuhHxW12
-   pZGPMq4sUpZzi7oIpJmObj0IUp6UBL8uDiZ//ze8JJAlJYiHfDkR6PEQb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249419501"
+  bh=HK4xC+6JUpQkmPX0PZae+YBXwScsP73EELvRa6GGoCM=;
+  b=mI3jRqhj5yToi2JU2crib3JV48s2NSWHhYswWr8QdEvnfHmNZ4/9VIRQ
+   FrL50ZoypTL8fIQbPpUeZRQWoGoAVGfVvbMI1Lm/4zgHwWrv15gHH/5SF
+   xMB+s0SS6YeNT6v8U9jf8xLqEHE4UvV38egKQYtoy6cYYJxPxc8HodfCX
+   IUZubZu+G6F7Gzt90GKQM7pLrDW5gqugJ942e6+Z1jb/WbjtVq3w/Fnpj
+   240sgpIwHps8tmf/1j2HQFrv1iYqWinil57ILhVZYbARK+TkGirmkV4y/
+   Xfd5uTKES2K6WEEHbeQFo2E5abla+5Jwbl8j1y5PPSMXlMHjUB6/m5NHB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249614695"
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="249419501"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:03:33 -0800
+   d="scan'208";a="249614695"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:03:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="701984598"
+   d="scan'208";a="679414671"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 10 Feb 2022 22:03:31 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2022 22:03:31 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nIP1m-0004Bz-WF; Fri, 11 Feb 2022 06:03:31 +0000
-Date: Fri, 11 Feb 2022 14:02:50 +0800
+	id 1nIP1n-0004C1-1G; Fri, 11 Feb 2022 06:03:31 +0000
+Date: Fri, 11 Feb 2022 14:02:56 +0800
 From: kernel test robot <lkp@intel.com>
 To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -36,9 +36,9 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
 Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 29/35]
  fs/netfs/write_helper.c:28:26: warning: comparison of distinct pointer types
- ('typeof ((1UL << 18) - offset) *' (aka 'unsigned long *') and 'typeof
+ ('typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof
  (size) *' (aka 'unsigned int *'))
-Message-ID: <202202111352.8qGMAF4o-lkp@intel.com>
+Message-ID: <202202111324.LBsc3lm4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,7 +52,7 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
 head:   429e2bb6fb190f390ed23afc0d2308e877c43be5
 commit: 01abe2ebb0b5676c9d0394947cfeea45d0f5c09f [29/35] netfs: Implement buffered writes through netfs_file_write_iter()
-config: hexagon-randconfig-r041-20220211 (https://download.01.org/0day-ci/archive/20220211/202202111352.8qGMAF4o-lkp@intel.com/config)
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220211/202202111324.LBsc3lm4-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -63,14 +63,14 @@ reproduce (this is a W=1 build):
         git checkout 01abe2ebb0b5676c9d0394947cfeea45d0f5c09f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/write_helper.c:28:26: warning: comparison of distinct pointer types ('typeof ((1UL << 18) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+>> fs/netfs/write_helper.c:28:26: warning: comparison of distinct pointer types ('typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
                    unsigned int psize   = min(PAGE_SIZE - offset, size);
                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/minmax.h:45:19: note: expanded from macro 'min'
