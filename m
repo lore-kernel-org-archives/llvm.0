@@ -1,42 +1,42 @@
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D9D7D
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 09:51:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F647D
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 10:12:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644573099; x=1676109099;
+  t=1644574360; x=1676110360;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0mXqDOwW22bUhnQUeJtpNRx2NwBK4pzkw0tnt/i07uw=;
-  b=VXmRE4J1ZWGHw7TI9bAdgBDYhe6geHv1G0XKAGJwxkIYqd4Qib8jzK7W
-   hvfFiP/WIvZzQladJJcfIxIy8jGiDXhEW5mPKuoz3ZvohOPH1clo3sa1W
-   6quIuBNtyXp0zxEV1j1kzpN2kMXg7L8zNBO4g6/6+sepgAiSNSrAZ6DNN
-   gpJtcQhOofkHLOhTkQPfpekusCELYf0yGo73fvCXYLplJt7pCVLVpWtaj
-   Gh6LWgsRJ+vANmgU1811wi01nG0QomawBeNUuF7wrbrVvCAJAiWy+6YJb
-   YN41cDNi02iOboQ9MBMnmVBEBz9g6vDgN7PvDwonegYPBf+nLPbAnuOuZ
+  bh=B6JVRlnUPIgo89MVFvwAVoplyYztYEv8R/ryAaiGIro=;
+  b=l16WUYcET0nLiMf9s0J4oLB9wo3+TLgGvPgekdVnZ/O7uBYkHf1/dywC
+   pdWpkv4RQKKwlxvIP2z7FYnASzXefpEUQ3CAvm9rUiCzAnglVtryifC72
+   ccPtLiWBzDF5CronXIGlfUcqKxmXR4UQG9jdywHC4t4uTssWQsRSVpib4
+   9ESpdiK0P//FtprQaU1YZkHanfrqJ4T/NFVeVL76VBh9O9L9Bc2xGqiZn
+   1bbW4OZvTLnEU6wz/nBao18ZEbmg6roGiwKw38TJt4oRA/mAX9sy34a/S
+   GUIvyeOxHC2pIv1R1dzCcAWXddry6iAk2djCFiZx/R1tShZqSTSYBa9yE
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="312984616"
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="312987159"
 X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="312984616"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 01:51:39 -0800
+   d="scan'208";a="312987159"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 02:12:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="602332572"
+   d="scan'208";a="568997477"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Feb 2022 01:51:38 -0800
+  by orsmga001.jf.intel.com with ESMTP; 11 Feb 2022 02:12:38 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nISaX-0004PT-BT; Fri, 11 Feb 2022 09:51:37 +0000
-Date: Fri, 11 Feb 2022 17:51:22 +0800
+	id 1nISur-0004Qf-VP; Fri, 11 Feb 2022 10:12:37 +0000
+Date: Fri, 11 Feb 2022 18:11:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <anup.patel@wdc.com>
+To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_sbi_hsm_suspend_v11 6/8]
- drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: error: implicit declaration of
- function 'cpuid_to_hartid_map'
-Message-ID: <202202111718.2xBAlFri-lkp@intel.com>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 34/35] ld.lld:
+ error: undefined symbol: xa_store_range
+Message-ID: <202202111814.4NEkwCTo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,143 +47,32 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_hsm_suspend_v11
-head:   23c200d61b016e3b70c0f352ee89d8ff0511ba82
-commit: 64abac12078cac4dcf481c1cb8f4bc72d9049bae [6/8] cpuidle: Add RISC-V SBI CPU idle driver
-config: riscv-randconfig-r016-20220211 (https://download.01.org/0day-ci/archive/20220211/202202111718.2xBAlFri-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   429e2bb6fb190f390ed23afc0d2308e877c43be5
+commit: e9340673baaf1ff587aed3391aa411cf554bc42e [34/35] netfs: Slice a writeback from a dirty region
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220211/202202111814.4NEkwCTo-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/64abac12078cac4dcf481c1cb8f4bc72d9049bae
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_sbi_hsm_suspend_v11
-        git checkout 64abac12078cac4dcf481c1cb8f4bc72d9049bae
+        # https://github.com/ammarfaizi2/linux-block/commit/e9340673baaf1ff587aed3391aa411cf554bc42e
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout e9340673baaf1ff587aed3391aa411cf554bc42e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                            cpuid_to_hartid_map(cpu));
-                            ^
-   drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                            cpuid_to_hartid_map(cpu));
-                            ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                          cpuid_to_hartid_map(cpu));
-                          ^
-   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                          cpuid_to_hartid_map(cpu));
-                          ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
-           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                                    cpuid_to_hartid_map(cpu));
-                                    ^
-   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                                    cpuid_to_hartid_map(cpu));
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   3 warnings and 3 errors generated.
-
-
-vim +/cpuid_to_hartid_map +350 drivers/cpuidle/cpuidle-riscv-sbi.c
-
-   317	
-   318	static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
-   319	{
-   320		struct cpuidle_driver *drv;
-   321		unsigned int state_count = 0;
-   322		int ret = 0;
-   323	
-   324		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
-   325		if (!drv)
-   326			return -ENOMEM;
-   327	
-   328		drv->name = "sbi_cpuidle";
-   329		drv->owner = THIS_MODULE;
-   330		drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-   331	
-   332		/* RISC-V architectural WFI to be represented as state index 0. */
-   333		drv->states[0].enter = sbi_cpuidle_enter_state;
-   334		drv->states[0].exit_latency = 1;
-   335		drv->states[0].target_residency = 1;
-   336		drv->states[0].power_usage = UINT_MAX;
-   337		strcpy(drv->states[0].name, "WFI");
-   338		strcpy(drv->states[0].desc, "RISC-V WFI");
-   339	
-   340		/*
-   341		 * If no DT idle states are detected (ret == 0) let the driver
-   342		 * initialization fail accordingly since there is no reason to
-   343		 * initialize the idle driver if only wfi is supported, the
-   344		 * default archictectural back-end already executes wfi
-   345		 * on idle entry.
-   346		 */
-   347		ret = dt_init_idle_driver(drv, sbi_cpuidle_state_match, 1);
-   348		if (ret <= 0) {
-   349			pr_debug("HART%ld: failed to parse DT idle states\n",
- > 350				 cpuid_to_hartid_map(cpu));
-   351			return ret ? : -ENODEV;
-   352		}
-   353		state_count = ret + 1; /* Include WFI state as well */
-   354	
-   355		/* Initialize idle states from DT. */
-   356		ret = sbi_cpuidle_dt_init_states(dev, drv, cpu, state_count);
-   357		if (ret) {
-   358			pr_err("HART%ld: failed to init idle states\n",
-   359			       cpuid_to_hartid_map(cpu));
-   360			return ret;
-   361		}
-   362	
-   363		ret = cpuidle_register(drv, NULL);
-   364		if (ret)
-   365			goto deinit;
-   366	
-   367		cpuidle_cooling_register(drv);
-   368	
-   369		return 0;
-   370	deinit:
-   371		sbi_cpuidle_deinit_cpu(cpu);
-   372		return ret;
-   373	}
-   374	
+>> ld.lld: error: undefined symbol: xa_store_range
+   >>> referenced by flush.c:204 (fs/netfs/flush.c:204)
+   >>>               netfs/flush.o:(netfs_flush_get_pages) in archive fs/built-in.a
+   >>> referenced by flush.c:232 (fs/netfs/flush.c:232)
+   >>>               netfs/flush.o:(netfs_flush_get_pages) in archive fs/built-in.a
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
