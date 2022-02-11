@@ -1,239 +1,170 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46167A
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 18:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644602404; x=1676138404;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4hQe/gaqC8VJ4miQIXlMaSjVco1XU+NwrK+DxptlP7o=;
-  b=O7OLyhNlyrigUzwtMv+s0rblJELNNQE3d7mmgkPmTLn6SFUMm4kd709a
-   cfqSrO06XT+dbhizaZT8a05+zSYFZQdJHMPJEpU9chmDN1xLW4G7F4+4f
-   gnErBgikSqNYCwBfLcU2AR4/24lB9LW1KrAFlr/gQ36chfSxVJLzGsKxT
-   bWZ4BGvo1JQ0iJj8ihirUiT3MFTytR1vhJTDqKTyHW/7qZkJzTbB/o47k
-   dVBwyJQCRopTgl0jWpJghOD+bDJ5jHiMWauTFl4FH2tQW0gkQcIkUMCKN
-   Hf3+BNmqvPetOeb1Zj0XMaSE/uP9wITURhw/XgBc6HhHLjcSmV8Ry0RmE
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="313059570"
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="313059570"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 10:00:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="679574080"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Feb 2022 10:00:02 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nIaDB-0004w3-DM; Fri, 11 Feb 2022 18:00:01 +0000
-Date: Sat, 12 Feb 2022 01:59:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Carl Huang <quic_cjhuang@quicinc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>,
-	Baochen Qiang <quic_bqiang@quicinc.com>,
-	Wen Gong <quic_wgong@quicinc.com>
-Subject: [ammarfaizi2-block:kvalo/ath/pending-deferred 57/62]
- drivers/net/wireless/ath/ath11k/wow.c:481:17: error: no member named
- 'wowlan' in 'struct wiphy'
-Message-ID: <202202120027.x2o1HiR8-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CAB7A
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 18:05:14 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id p19so27274203ybc.6
+        for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 10:05:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bQCacAqu6AD3L5T1l4m/Dw/zcsi+Jlaw1qBbQHQJ5n8=;
+        b=kLbjkhoYZDNiub72bMg9ZqtXNwhvLpNO+yW5ASu4uizUywougb5IgTN3A9j7vUzPCV
+         ilbbSa1H6KXx7RaT+aD1shRHdR+F7jQhMY0UN+PZf0soTx4mDFCLBkN12LSn14MUXJMC
+         bNY8Rs4cIcMre3iQE1bY1Ur1vW/u69KzewdCW2nJGe9IgAG6nvcuHwrTzvL46TewNu1r
+         U+zUpHn0Hef8B9vTL4zTS59BQuQ6aJP1KPP4mXq58IjfIWdD1mYgt7ZNd5gv/gf0TIGs
+         jwIuFW4tMTPcYA5dGPBW7M+tfiAM/VQkuwm1hqfpeOplL17TdnC+4+tTNbwqFwdIJkQ3
+         7MlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bQCacAqu6AD3L5T1l4m/Dw/zcsi+Jlaw1qBbQHQJ5n8=;
+        b=6kqjEmTjB6qcTEUYjsHuxSRHDrF1MoK0Xwk9cc40l5DwQiAO6w30Fa9/f0kfnorUHF
+         +BTaADwFY4cXR22e+X/PWjQGgBy5HfoK6WzCTChhqbdk2FsGMygMLMQ8Hbo0tXJB+/9n
+         w4Hxsk/qjBY8+YpbTaPMIxXeVJ2HGYZtIC0S2Uo5u0L1Hi7jI3IzlRICYsVW2+1zeYO1
+         +RnVfZ48MuS+aTPM1uq7bK68r9DeaWFnGPWn6OvUaM3+KChEw+EIkUvCFQH/QXbo7HqJ
+         BWhuJVQysNUxp+RmsKxYGZJFrwuuOwNoxCsFfRbEPB+8BSimlw/IkVfOE1FksMpUYWr7
+         guAQ==
+X-Gm-Message-State: AOAM5326+hxt+VDt74zsUUnXuL9n2/DrLuhh52zmAzc1jCVSFEpXhA+P
+	36jTjpMFRBEiQDO3m3AgSNMz/eSsoEOwFS0pIjz4Ug==
+X-Google-Smtp-Source: ABdhPJwqwn2kG4R0P3X04f1gmCys5jwU2Zxegllqb4PCZmn/bHZrdEndwiA5mCsWiE6z6c7BUFdhF4f1GQkwwBkxWBE=
+X-Received: by 2002:a81:ce09:: with SMTP id t9mr2890290ywi.254.1644602713368;
+ Fri, 11 Feb 2022 10:05:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble>
+In-Reply-To: <20220211174130.xxgjoqr2vidotvyw@treble>
+From: =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+Date: Fri, 11 Feb 2022 10:05:02 -0800
+Message-ID: <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
+Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
+ unique-symbol` is available
+To: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>, linux-hardening@vger.kernel.org, 
+	x86@kernel.org, Borislav Petkov <bp@alien8.de>, 
+	Jesse Brandeburg <jesse.brandeburg@intel.com>, 
+	Kristen Carlson Accardi <kristen@linux.intel.com>, Kees Cook <keescook@chromium.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+	Bruce Schlobohm <bruce.schlobohm@intel.com>, Jessica Yu <jeyu@kernel.org>, 
+	kernel test robot <lkp@intel.com>, Miroslav Benes <mbenes@suse.cz>, 
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Marios Pomonis <pomonis@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, "H.J. Lu" <hjl.tools@gmail.com>, 
+	Nicolas Pitre <nico@fluxnic.net>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
+	live-patching@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending-deferred
-head:   9a4dbe8c276e1d26533f2e4191c2b5dbef2d7b1e
-commit: 24a2528121749a929923132e26ef5b0180e18544 [57/62] ath11k: Add basic WoW functionalities
-config: hexagon-randconfig-r005-20220211 (https://download.01.org/0day-ci/archive/20220212/202202120027.x2o1HiR8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/24a2528121749a929923132e26ef5b0180e18544
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending-deferred
-        git checkout 24a2528121749a929923132e26ef5b0180e18544
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
+On Fri, Feb 11, 2022 at 9:41 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+>
+> On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
+> > Position-based search, which means that if there are several symbols
+> > with the same name, the user needs to additionally provide the
+> > "index" of a desired symbol, is fragile. For example, it breaks
+> > when two symbols with the same name are located in different
+> > sections.
+> >
+> > Since a while, LD has a flag `-z unique-symbol` which appends
+> > numeric suffixes to the functions with the same name (in symtab
+> > and strtab). It can be used to effectively prevent from having
+> > any ambiguity when referring to a symbol by its name.
+>
+> In the patch description can you also give the version of binutils (and
+> possibly other linkers) which have the flag?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+GNU ld>=3D2.36 supports -z unique-symbol. ld.lld doesn't support -z unique-=
+symbol.
 
-All error/warnings (new ones prefixed by >>):
+I subscribe to llvm@lists.linux.dev and happen to notice this message
+(can't keep up with the changes...)
+I am a bit concerned with this option and replied last time on
+https://lore.kernel.org/r/20220105032456.hs3od326sdl4zjv4@google.com
 
->> drivers/net/wireless/ath/ath11k/wow.c:356:5: warning: no previous prototype for function 'ath11k_wow_op_suspend' [-Wmissing-prototypes]
-   int ath11k_wow_op_suspend(struct ieee80211_hw *hw,
-       ^
-   drivers/net/wireless/ath/ath11k/wow.c:356:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ath11k_wow_op_suspend(struct ieee80211_hw *hw,
-   ^
-   static 
->> drivers/net/wireless/ath/ath11k/wow.c:415:6: warning: no previous prototype for function 'ath11k_wow_op_set_wakeup' [-Wmissing-prototypes]
-   void ath11k_wow_op_set_wakeup(struct ieee80211_hw *hw, bool enabled)
-        ^
-   drivers/net/wireless/ath/ath11k/wow.c:415:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void ath11k_wow_op_set_wakeup(struct ieee80211_hw *hw, bool enabled)
-   ^
-   static 
->> drivers/net/wireless/ath/ath11k/wow.c:424:5: warning: no previous prototype for function 'ath11k_wow_op_resume' [-Wmissing-prototypes]
-   int ath11k_wow_op_resume(struct ieee80211_hw *hw)
-       ^
-   drivers/net/wireless/ath/ath11k/wow.c:424:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ath11k_wow_op_resume(struct ieee80211_hw *hw)
-   ^
-   static 
-   drivers/net/wireless/ath/ath11k/wow.c:466:5: error: redefinition of 'ath11k_wow_init'
-   int ath11k_wow_init(struct ath11k *ar)
-       ^
-   drivers/net/wireless/ath/ath11k/wow.h:40:19: note: previous definition is here
-   static inline int ath11k_wow_init(struct ath11k *ar)
-                     ^
->> drivers/net/wireless/ath/ath11k/wow.c:481:17: error: no member named 'wowlan' in 'struct wiphy'
-           ar->hw->wiphy->wowlan = &ar->wow.wowlan_support;
-           ~~~~~~~~~~~~~  ^
-   3 warnings and 2 errors generated.
+My full reasoning is on
+https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symb=
+ol
+
+> > Check for its availability and always prefer when the livepatching
+> > is on. It can be used unconditionally later on after broader testing
+> > on a wide variety of machines, but for now let's stick to the actual
+> > CONFIG_LIVEPATCH=3Dy case, which is true for most of distro configs
+> > anyways.
+>
+> Has anybody objected to just enabling it for *all* configs, not just for
+> livepatch?
+>
+> I'd much prefer that: the less "special" livepatch is (and the distros
+> which enable it), the better.  And I think having unique symbols would
+> benefit some other components.
+>
+> > +++ b/kernel/livepatch/core.c
+> > @@ -143,11 +143,13 @@ static int klp_find_callback(void *data, const ch=
+ar *name,
+> >       args->count++;
+> >
+> >       /*
+> > -      * Finish the search when the symbol is found for the desired pos=
+ition
+> > -      * or the position is not defined for a non-unique symbol.
+> > +      * Finish the search when unique symbol names are enabled
+> > +      * or the symbol is found for the desired position or the
+> > +      * position is not defined for a non-unique symbol.
+> >        */
+> > -     if ((args->pos && (args->count =3D=3D args->pos)) ||
+> > -         (!args->pos && (args->count > 1)))
+> > +     if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL) ||
+> > +         (args->pos && args->count =3D=3D args->pos) ||
+> > +         (!args->pos && args->count > 1))
+> >               return 1;
+>
+> There's no real need to do this.  The code already works as-is, even if
+> there are no unique symbols.
+>
+> Even if there are no duplicates, there's little harm in going through
+> all the symbols anyway, to check for errors just in case something
+> unexpected happened with the linking (unexpected duplicate) or the patch
+> creation (unexpected sympos).  It's not a hot path, so performance isn't
+> really a concern.
+>
+> When the old linker versions eventually age out, we can then go strip
+> out all the sympos stuff.
+>
+> > @@ -169,6 +171,13 @@ static int klp_find_object_symbol(const char *objn=
+ame, const char *name,
+> >       else
+> >               kallsyms_on_each_symbol(klp_find_callback, &args);
+> >
+> > +     /*
+> > +      * If the LD's `-z unique-symbol` flag is available and enabled,
+> > +      * sympos checks are not relevant.
+> > +      */
+> > +     if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL))
+> > +             sympos =3D 0;
+> > +
+>
+> Similarly, I don't see a need for this.  If the patch is legit then
+> sympos should already be zero.  If not, an error gets reported and the
+> patch fails to load.
+>
+> --
+> Josh
+>
+>
 
 
-vim +481 drivers/net/wireless/ath/ath11k/wow.c
-
-   355	
- > 356	int ath11k_wow_op_suspend(struct ieee80211_hw *hw,
-   357				  struct cfg80211_wowlan *wowlan)
-   358	{
-   359		struct ath11k *ar = hw->priv;
-   360		int ret;
-   361	
-   362		mutex_lock(&ar->conf_mutex);
-   363	
-   364		ret =  ath11k_wow_cleanup(ar);
-   365		if (ret) {
-   366			ath11k_warn(ar->ab, "failed to clear wow wakeup events: %d\n",
-   367				    ret);
-   368			goto exit;
-   369		}
-   370	
-   371		ret = ath11k_wow_set_wakeups(ar, wowlan);
-   372		if (ret) {
-   373			ath11k_warn(ar->ab, "failed to set wow wakeup events: %d\n",
-   374				    ret);
-   375			goto cleanup;
-   376		}
-   377	
-   378		ret = ath11k_mac_wait_tx_complete(ar);
-   379		if (ret) {
-   380			ath11k_warn(ar->ab, "failed to wait tx complete: %d\n", ret);
-   381			goto cleanup;
-   382		}
-   383	
-   384		ret = ath11k_wow_enable(ar->ab);
-   385		if (ret) {
-   386			ath11k_warn(ar->ab, "failed to start wow: %d\n", ret);
-   387			goto cleanup;
-   388		}
-   389	
-   390		ath11k_ce_stop_shadow_timers(ar->ab);
-   391		ath11k_dp_stop_shadow_timers(ar->ab);
-   392	
-   393		ath11k_hif_irq_disable(ar->ab);
-   394		ath11k_hif_ce_irq_disable(ar->ab);
-   395	
-   396		ret = ath11k_hif_suspend(ar->ab);
-   397		if (ret) {
-   398			ath11k_warn(ar->ab, "failed to suspend hif: %d\n", ret);
-   399			goto wakeup;
-   400		}
-   401	
-   402		goto exit;
-   403	
-   404	wakeup:
-   405		ath11k_wow_wakeup(ar->ab);
-   406	
-   407	cleanup:
-   408		ath11k_wow_cleanup(ar);
-   409	
-   410	exit:
-   411		mutex_unlock(&ar->conf_mutex);
-   412		return ret ? 1 : 0;
-   413	}
-   414	
- > 415	void ath11k_wow_op_set_wakeup(struct ieee80211_hw *hw, bool enabled)
-   416	{
-   417		struct ath11k *ar = hw->priv;
-   418	
-   419		mutex_lock(&ar->conf_mutex);
-   420		device_set_wakeup_enable(ar->ab->dev, enabled);
-   421		mutex_unlock(&ar->conf_mutex);
-   422	}
-   423	
- > 424	int ath11k_wow_op_resume(struct ieee80211_hw *hw)
-   425	{
-   426		struct ath11k *ar = hw->priv;
-   427		int ret;
-   428	
-   429		mutex_lock(&ar->conf_mutex);
-   430	
-   431		ret = ath11k_hif_resume(ar->ab);
-   432		if (ret) {
-   433			ath11k_warn(ar->ab, "failed to resume hif: %d\n", ret);
-   434			goto exit;
-   435		}
-   436	
-   437		ath11k_hif_ce_irq_enable(ar->ab);
-   438		ath11k_hif_irq_enable(ar->ab);
-   439	
-   440		ret = ath11k_wow_wakeup(ar->ab);
-   441		if (ret)
-   442			ath11k_warn(ar->ab, "failed to wakeup from wow: %d\n", ret);
-   443	
-   444	exit:
-   445		if (ret) {
-   446			switch (ar->state) {
-   447			case ATH11K_STATE_ON:
-   448				ar->state = ATH11K_STATE_RESTARTING;
-   449				ret = 1;
-   450				break;
-   451			case ATH11K_STATE_OFF:
-   452			case ATH11K_STATE_RESTARTING:
-   453			case ATH11K_STATE_RESTARTED:
-   454			case ATH11K_STATE_WEDGED:
-   455				ath11k_warn(ar->ab, "encountered unexpected device state %d on resume, cannot recover\n",
-   456					    ar->state);
-   457				ret = -EIO;
-   458				break;
-   459			}
-   460		}
-   461	
-   462		mutex_unlock(&ar->conf_mutex);
-   463		return ret;
-   464	}
-   465	
- > 466	int ath11k_wow_init(struct ath11k *ar)
-   467	{
-   468		if (WARN_ON(!test_bit(WMI_TLV_SERVICE_WOW, ar->wmi->wmi_ab->svc_map)))
-   469			return -EINVAL;
-   470	
-   471		ar->wow.wowlan_support = ath11k_wowlan_support;
-   472	
-   473		if (ar->wmi->wmi_ab->wlan_resource_config.rx_decap_mode ==
-   474		    ATH11K_HW_TXRX_NATIVE_WIFI) {
-   475			ar->wow.wowlan_support.pattern_max_len -= WOW_MAX_REDUCE;
-   476			ar->wow.wowlan_support.max_pkt_offset -= WOW_MAX_REDUCE;
-   477		}
-   478	
-   479		ar->wow.max_num_patterns = ATH11K_WOW_PATTERNS;
-   480		ar->wow.wowlan_support.n_patterns = ar->wow.max_num_patterns;
- > 481		ar->hw->wiphy->wowlan = &ar->wow.wowlan_support;
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
