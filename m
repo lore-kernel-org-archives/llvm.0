@@ -1,96 +1,327 @@
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA712C9C
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 06:44:15 +0000 (UTC)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailnew.west.internal (Postfix) with ESMTP id 56D802B00220;
-	Fri, 11 Feb 2022 01:44:14 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 11 Feb 2022 01:44:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=russell.cc; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm1; bh=HvFmbhxULQy7Wi
-	D8a5AA4taYB4vhUTCo5A74bweqwIY=; b=u6CWiWlQbrFWW3U8wZCMxDJ/ZOcxz5
-	IJO5Vc3n7ZBnv+uN+YGTjbb3qwOc3dIL7R7vGVabuql2eiUu/jG2tSwf6ZSS+QC4
-	8Q7dfUadHrgCaeGJVUWPKZe5mpTY0K+LJ4EDo8vHTUoti6dpbgfDw7l/rH37/z+G
-	faHWrix70mDxKbrlCJ/VJSsq3hbkSnJSlDBBkhI1YKnjOQdmWJUtbpNocWhBac/r
-	EY2x2Fhxzhc05KEmVctie+cA82qHrVN/kwh0gU38OcIcMjc6Kfpfh/NnXlv17+rx
-	KK7sB3Rwd2FnxO9kst2AxT96YHF3JziKzzGRGtBRhXAD4uXpiB3NnD9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; bh=HvFmbhxULQy7WiD8a5AA4taYB4vhUTCo5A74bweqw
-	IY=; b=F3J/kxuagKhW77qG+7hwISPLYDxBw017oI2NMaDt+MGBSscOTiX9Us6Xp
-	uz9VOPeOhuqJptCn6HXujGN5qd038UJf6116/i4t9gSR0bJ0gybm8MbsY/JS9nlA
-	2wfwV50bJg6K2Ptzy+q754LKZVUIzXw5VUgnLyR96pWWVWw9TP46HUrDPHqKBpCe
-	QuxaBiA8DBqLT4EQBRPdrmbVCE99+8yfJMVCpW+JYWhzljCp1KfxUoqotXCw7xnj
-	v6QZh0SR+wr2uHAxezsa+IENolaObQA7i32q298/8tDNala8U/0Ka75ol9d3y0qD
-	D6gwHD1AFVfdgyBomd0b9P4ic87JQ==
-X-ME-Sender: <xms:vQUGYnKGInObE8cDZQoG7UuSQyE2q7W0eYDZE8tuz-B-PYYPcDWPBQ>
-    <xme:vQUGYrLGix-4R8rSycyv4kWqgRuQ36Sr44OcW1kSjOIAAymIU0hS9FaeMY2kBPRti
-    FEWwPLXFXNVhIiPhA>
-X-ME-Received: <xmr:vQUGYvvdf4Kn41LV6bgSPufyIfK0TIzsy2T087QIsdxvEp7G4swR9TMyUEucGvKSWBc0BDOZ4FXrWBtIIUKtMYGVjrfrNNmps_Q9eq9lGDpxBE_fO1GT>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddriedvgdelfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculdeftddmnecujfgurhepkffuhffvjghftgffgggfgfesthekredttder
-    jeenucfhrhhomheptfhushhsvghllhcuvehurhhrvgihuceorhhushgtuhhrsehruhhssh
-    gvlhhlrdgttgeqnecuggftrfgrthhtvghrnhepvdevvddvtedtueeiueekgeetkeejtdeu
-    hfehhfejgfdvvedtleefteekhfduvddtnecuffhomhgrihhnpeeigedrshgsnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhhushgtuhhrsehr
-    uhhsshgvlhhlrdgttg
-X-ME-Proxy: <xmx:vQUGYgZyKAStTzCvHkM840mjSHoRuKmBnqnW8f_xBN_OG9-a-JP_MA>
-    <xmx:vQUGYua0damM9LLXir-Za4dc6ai74t6sDVLbaOvjHKSCCE1FQUsZuw>
-    <xmx:vQUGYkBGk6A5w75urxGVSM63zfqD94e0WyyEbS9BfXZOkGT3kgQkSA>
-    <xmx:vQUGYkkg9mYdvf-aDcJKx9d5bpmTV5vWfSy2tQAk1djs_OTvhdUQJ5eSmWg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 11 Feb 2022 01:44:09 -0500 (EST)
-Message-ID: <62e5a57c18557a20db8e60b3995a549cde622cdb.camel@russell.cc>
-Subject: Re: [PATCH kernel 3/3] powerpc/llvm/lto: Workaround conditional
- branches in FTR_SECTION_ELSE
-From: Russell Currey <ruscur@russell.cc>
-To: Alexey Kardashevskiy <aik@ozlabs.ru>, llvm@lists.linux.dev
-Cc: Nathan Lynch <nathanl@linux.ibm.com>, Fabiano Rosas
- <farosas@linux.ibm.com>,  Nick Desaulniers <ndesaulniers@google.com>,
- Nicholas Piggin <npiggin@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
-  Joel Stanley <joel@jms.id.au>, "Naveen N. Rao"
- <naveen.n.rao@linux.vnet.ibm.com>,  linuxppc-dev@lists.ozlabs.org, Daniel
- Axtens <dja@axtens.net>
-In-Reply-To: <20220211023125.1790960-4-aik@ozlabs.ru>
-References: <20220211023125.1790960-1-aik@ozlabs.ru>
-	 <20220211023125.1790960-4-aik@ozlabs.ru>
-Content-Type: text/plain; charset="UTF-8"
-Date: Fri, 11 Feb 2022 16:44:04 +1000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D936E2C9C
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 07:06:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644563195; x=1676099195;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cNkGNTO7lyqemczwGGXCDcdGty6f622nnJU9sCxAnSI=;
+  b=ZpQ5y+lVvTUT1WFZA3q0LPaZ+1f/DwySiGscr5kCoXDTMG+XBK3F3Qrn
+   WqXVzE5fXxZ38PcqXw3JLTPtHzcqVU70E+iCgIYnLl5CLiS7Z0rsYuHka
+   eYH9y4PtYSBiCBqokvENx4VlbDwDPiXia6i8yRAjpcyEs138ln0KlwCY9
+   lUs6t5SSntmKhoIdwEhvVnOOtuyynbficrSngawtQYDfKysCJfkLZz6Tv
+   7W7/lello+AQR8iAhh1vGbs2LBbjSZefyktBRMlk4IlA2MQlsmJebjNzM
+   2mXGFja/pICP2vrb3ccBRTvEXJ4V5qnbOnSj+RdeBe9sNZxu7pygOBs1P
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="237080187"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="237080187"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 23:06:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="483176474"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 10 Feb 2022 23:06:33 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nIQ0m-0004GC-Ns; Fri, 11 Feb 2022 07:06:32 +0000
+Date: Fri, 11 Feb 2022 15:06:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jlayton:ceph-fscrypt 57/57] net/ceph/messenger_v2.c:1787:5: error:
+ incomplete definition of type 'struct cepn_connection'
+Message-ID: <202202111558.NeRjba8E-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Evolution 3.42.3 
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, 2022-02-11 at 13:31 +1100, Alexey Kardashevskiy wrote:
-> diff --git a/arch/powerpc/lib/memcpy_64.S
-> b/arch/powerpc/lib/memcpy_64.S
-> index 016c91e958d8..286c7e2d0883 100644
-> --- a/arch/powerpc/lib/memcpy_64.S
-> +++ b/arch/powerpc/lib/memcpy_64.S
-> @@ -50,10 +50,11 @@ ALT_FTR_SECTION_END_IFCLR(CPU_FTR_VMX_COPY)
->     At the time of writing the only CPU that has this combination of
-> bits
->     set is Power6. */
->  test_feature = (SELFTEST_CASE == 1)
-> +       beq      .ldst_aligned
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt
+head:   adf69efebc954db1aa7af7b93febbc2a1b51dc6c
+commit: adf69efebc954db1aa7af7b93febbc2a1b51dc6c [57/57] libceph: define a structure to track SPARSE_READ reply processing
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220211/202202111558.NeRjba8E-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=adf69efebc954db1aa7af7b93febbc2a1b51dc6c
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton ceph-fscrypt
+        git checkout adf69efebc954db1aa7af7b93febbc2a1b51dc6c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
 
-Hey Alexey, typo here (should be .Ldst_aligned) that breaks the build
-for BE.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->  BEGIN_FTR_SECTION
->         nop
+All errors (new ones prefixed by >>):
+
+   net/ceph/messenger_v2.c:1783:37: warning: declaration of 'struct cepn_connection' will not be visible outside of this function [-Wvisibility]
+   static int prepare_read_data(struct cepn_connection *con)
+                                       ^
+>> net/ceph/messenger_v2.c:1787:5: error: incomplete definition of type 'struct cepn_connection'
+           con->in_data_crc = -1;
+           ~~~^
+   net/ceph/messenger_v2.c:1783:37: note: forward declaration of 'struct cepn_connection'
+   static int prepare_read_data(struct cepn_connection *con)
+                                       ^
+   net/ceph/messenger_v2.c:1788:47: error: incomplete definition of type 'struct cepn_connection'
+           ret = prepare_read_data_len(con, data_len(con->in_msg));
+                                                     ~~~^
+   net/ceph/messenger_v2.c:1783:37: note: forward declaration of 'struct cepn_connection'
+   static int prepare_read_data(struct cepn_connection *con)
+                                       ^
+   net/ceph/messenger_v2.c:1790:6: error: incomplete definition of type 'struct cepn_connection'
+                   con->v2.in_state = IN_S_PREPARE_READ_DATA_CONT;
+                   ~~~^
+   net/ceph/messenger_v2.c:1783:37: note: forward declaration of 'struct cepn_connection'
+   static int prepare_read_data(struct cepn_connection *con)
+                                       ^
+>> net/ceph/messenger_v2.c:1842:24: error: use of undeclared identifier 'iter'
+           if (!iov_iter_is_bvec(iter))
+                                 ^
+>> net/ceph/messenger_v2.c:1881:10: error: implicit declaration of function 'handle_epilogue' [-Werror,-Wimplicit-function-declaration]
+                   return handle_epilogue(con);
+                          ^
+   net/ceph/messenger_v2.c:1881:10: note: did you mean 'decode_epilogue'?
+   net/ceph/messenger_v2.c:573:12: note: 'decode_epilogue' declared here
+   static int decode_epilogue(void *p, u32 *front_crc, u32 *middle_crc,
+              ^
+   net/ceph/messenger_v2.c:1898:24: error: use of undeclared identifier 'iter'
+           if (!iov_iter_is_kvec(iter))
+                                 ^
+>> net/ceph/messenger_v2.c:1951:28: error: incompatible pointer types passing 'struct ceph_connection *' to parameter of type 'struct cepn_connection *' [-Werror,-Wincompatible-pointer-types]
+                   return prepare_read_data(con);
+                                            ^~~
+   net/ceph/messenger_v2.c:1783:54: note: passing argument to parameter 'con' here
+   static int prepare_read_data(struct cepn_connection *con)
+                                                        ^
+   net/ceph/messenger_v2.c:2938:12: error: static declaration of 'handle_epilogue' follows non-static declaration
+   static int handle_epilogue(struct ceph_connection *con)
+              ^
+   net/ceph/messenger_v2.c:1881:10: note: previous implicit declaration is here
+                   return handle_epilogue(con);
+                          ^
+   net/ceph/messenger_v2.c:3012:28: error: incompatible pointer types passing 'struct ceph_connection *' to parameter of type 'struct cepn_connection *' [-Werror,-Wincompatible-pointer-types]
+                           ret = prepare_read_data(con);
+                                                   ^~~
+   net/ceph/messenger_v2.c:1783:54: note: passing argument to parameter 'con' here
+   static int prepare_read_data(struct cepn_connection *con)
+                                                        ^
+>> net/ceph/messenger_v2.c:3014:8: error: use of undeclared identifier 'IN_S_PREPARE_READ_SPARSE_DATA'
+                   case IN_S_PREPARE_READ_SPARSE_DATA:
+                        ^
+   1 warning and 10 errors generated.
 
 
+vim +1787 net/ceph/messenger_v2.c
+
+  1782	
+  1783	static int prepare_read_data(struct cepn_connection *con)
+  1784	{
+  1785		int ret;
+  1786	
+> 1787		con->in_data_crc = -1;
+  1788		ret = prepare_read_data_len(con, data_len(con->in_msg));
+  1789		if (ret == 0)
+  1790			con->v2.in_state = IN_S_PREPARE_READ_DATA_CONT;
+  1791		return ret;
+  1792	}
+  1793	
+  1794	static void prepare_read_data_cont(struct ceph_connection *con)
+  1795	{
+  1796		struct bio_vec bv;
+  1797	
+  1798		if (ceph_test_opt(from_msgr(con->msgr), RXBOUNCE)) {
+  1799			con->in_data_crc = crc32c(con->in_data_crc,
+  1800						  page_address(con->bounce_page),
+  1801						  con->v2.in_bvec.bv_len);
+  1802	
+  1803			get_bvec_at(&con->v2.in_cursor, &bv);
+  1804			memcpy_to_page(bv.bv_page, bv.bv_offset,
+  1805				       page_address(con->bounce_page),
+  1806				       con->v2.in_bvec.bv_len);
+  1807		} else {
+  1808			con->in_data_crc = ceph_crc32c_page(con->in_data_crc,
+  1809							    con->v2.in_bvec.bv_page,
+  1810							    con->v2.in_bvec.bv_offset,
+  1811							    con->v2.in_bvec.bv_len);
+  1812		}
+  1813	
+  1814		ceph_msg_data_advance(&con->v2.in_cursor, con->v2.in_bvec.bv_len);
+  1815		if (con->v2.in_cursor.total_resid) {
+  1816			get_bvec_at(&con->v2.in_cursor, &bv);
+  1817			if (ceph_test_opt(from_msgr(con->msgr), RXBOUNCE)) {
+  1818				bv.bv_page = con->bounce_page;
+  1819				bv.bv_offset = 0;
+  1820			}
+  1821			set_in_bvec(con, &bv);
+  1822			WARN_ON(con->v2.in_state != IN_S_PREPARE_READ_DATA_CONT);
+  1823			return;
+  1824		}
+  1825	
+  1826		/*
+  1827		 * We've read all data.  Prepare to read epilogue.
+  1828		 */
+  1829		reset_in_kvecs(con);
+  1830		add_in_kvec(con, con->v2.in_buf, CEPH_EPILOGUE_PLAIN_LEN);
+  1831		con->v2.in_state = IN_S_HANDLE_EPILOGUE;
+  1832	}
+  1833	
+  1834	static int prepare_sparse_read_data_cont(struct ceph_connection *con)
+  1835	{
+  1836		int ret;
+  1837		struct bio_vec bv;
+  1838		char *buf = NULL;
+  1839		struct iov_iter *in_iter = &con->v2.in_iter;
+  1840		u64 off = 0, len = 0;
+  1841	
+> 1842		if (!iov_iter_is_bvec(iter))
+  1843			return -EIO;
+  1844	
+  1845		if (ceph_test_opt(from_msgr(con->msgr), RXBOUNCE)) {
+  1846			con->in_data_crc = crc32c(con->in_data_crc,
+  1847						  page_address(con->bounce_page),
+  1848						  con->v2.in_bvec.bv_len);
+  1849	
+  1850			get_bvec_at(&con->v2.in_cursor, &bv);
+  1851			memcpy_to_page(bv.bv_page, bv.bv_offset,
+  1852				       page_address(con->bounce_page),
+  1853				       con->v2.in_bvec.bv_len);
+  1854		} else {
+  1855			con->in_data_crc = ceph_crc32c_page(con->in_data_crc,
+  1856							    con->v2.in_bvec.bv_page,
+  1857							    con->v2.in_bvec.bv_offset,
+  1858							    con->v2.in_bvec.bv_len);
+  1859		}
+  1860	
+  1861		if (con->v2.in_cursor.total_resid) {
+  1862			get_bvec_at(&con->v2.in_cursor, &bv);
+  1863			if (ceph_test_opt(from_msgr(con->msgr), RXBOUNCE)) {
+  1864				bv.bv_page = con->bounce_page;
+  1865				bv.bv_offset = 0;
+  1866			}
+  1867			set_in_bvec(con, &bv);
+  1868			WARN_ON(con->v2.in_state != IN_S_PREPARE_SPARSE_DATA_CONT);
+  1869			return 0;
+  1870		}
+  1871	
+  1872		/* get next extent */
+  1873		ret = con->ops->sparse_read(con, &off, &len, &buf);
+  1874		if (ret <= 0) {
+  1875			if (ret < 0)
+  1876				return ret;
+  1877	
+  1878			reset_in_kvecs(con);
+  1879			add_in_kvec(con, con->v2.in_buf, CEPH_EPILOGUE_PLAIN_LEN);
+  1880			con->v2.in_state = IN_S_HANDLE_EPILOGUE;
+> 1881			return handle_epilogue(con);
+  1882		}
+  1883	
+  1884		ret = prepare_read_data_len(con, off + len);
+  1885		if (!ret)
+  1886			ceph_msg_data_advance(&con->v2.in_cursor, off);
+  1887		return ret;
+  1888	}
+  1889	
+  1890	static int prepare_sparse_read_header(struct ceph_connection *con)
+  1891	{
+  1892		int ret;
+  1893		struct bio_vec bv;
+  1894		char *buf = NULL;
+  1895		struct iov_iter *in_iter = &con->v2.in_iter;
+  1896		u64 off = 0, len = 0;
+  1897	
+  1898		if (!iov_iter_is_kvec(iter))
+  1899			return -EIO;
+  1900	
+  1901		/* On first call, we have no kvec so don't compute crc */
+  1902		if (con->v2.in_kvec_cnt) {
+  1903			WARN_ON_ONCE(con->v2.in_kvec_cnt > 1);
+  1904			con->in_data_crc = crc32c(con->in_data_crc,
+  1905					  con->v2.in_kvecs[0].iov_base,
+  1906					  con->v2.in_kvecs[0].iov_len);
+  1907		}
+  1908	
+  1909		ret = con->ops->sparse_read(con, &off, &len, &buf);
+  1910		if (ret < 0)
+  1911			return ret;
+  1912	
+  1913		/* No actual data? */
+  1914		if (WARN_ON_ONCE(!ret))
+  1915			return -EIO;
+  1916	
+  1917		if (!buf) {
+  1918			ret = prepare_read_data_len(con, off + len);
+  1919			if (!ret) {
+  1920				ceph_msg_data_advance(&con->v2.in_cursor, off);
+  1921				con->v2.in_state = IN_S_PREPARE_SPARSE_DATA_CONT;
+  1922			}
+  1923			return ret;
+  1924		}
+  1925	
+  1926		WARN_ON_ONCE(con->v2.in_state != IN_S_PREPARE_SPARSE_DATA_HDR);
+  1927		reset_in_kvecs(con);
+  1928		add_in_kvec(con, buf, len);
+  1929		return 0;
+  1930	}
+  1931	
+  1932	static int prepare_sparse_read_data(struct ceph_connection *con)
+  1933	{
+  1934		if (WARN_ON_ONCE(!con->ops->sparse_read))
+  1935			return -EOPNOTSUPP;
+  1936	
+  1937		if (!con_secure(con))
+  1938			con->in_data_crc = -1;
+  1939	
+  1940		reset_in_kvecs(con);
+  1941		con->v2.in_state = IN_S_PREPARE_SPARSE_DATA_HDR;
+  1942		return prepare_sparse_read_header(con);
+  1943	}
+  1944	
+  1945	static int prepare_read_tail_plain(struct ceph_connection *con)
+  1946	{
+  1947		struct ceph_msg *msg = con->in_msg;
+  1948	
+  1949		if (!front_len(msg) && !middle_len(msg)) {
+  1950			WARN_ON(!data_len(msg));
+> 1951			return prepare_read_data(con);
+  1952		}
+  1953	
+  1954		reset_in_kvecs(con);
+  1955		if (front_len(msg)) {
+  1956			add_in_kvec(con, msg->front.iov_base, front_len(msg));
+  1957			WARN_ON(msg->front.iov_len != front_len(msg));
+  1958		}
+  1959		if (middle_len(msg)) {
+  1960			add_in_kvec(con, msg->middle->vec.iov_base, middle_len(msg));
+  1961			WARN_ON(msg->middle->vec.iov_len != middle_len(msg));
+  1962		}
+  1963	
+  1964		if (data_len(msg)) {
+  1965			if (msg->sparse_read)
+  1966				con->v2.in_state = IN_S_PREPARE_SPARSE_DATA;
+  1967			else
+  1968				con->v2.in_state = IN_S_PREPARE_READ_DATA;
+  1969		} else {
+  1970			add_in_kvec(con, con->v2.in_buf, CEPH_EPILOGUE_PLAIN_LEN);
+  1971			con->v2.in_state = IN_S_HANDLE_EPILOGUE;
+  1972		}
+  1973		return 0;
+  1974	}
+  1975	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
