@@ -1,30 +1,39 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AEB12F2A
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 13:25:03 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C42C1042;
-	Fri, 11 Feb 2022 05:25:02 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.87.94])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11A773F718;
-	Fri, 11 Feb 2022 05:24:58 -0800 (PST)
-Date: Fri, 11 Feb 2022 13:24:49 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-	acme@redhat.com, ardb@kernel.org, bp@alien8.de, broonie@kernel.org,
-	catalin.marinas@arm.com, dave.hansen@linux.intel.com,
-	jpoimboe@redhat.com, jslaby@suse.cz,
-	linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-	mingo@redhat.com, peterz@infradead.org, tglx@linutronix.de,
-	will@kernel.org, llvm@lists.linux.dev,
-	James Y Knight <jyknight@google.com>
-Subject: Re: [PATCH v2 2/7] linkage: add SYM_{ENTRY,START,END}_AT()
-Message-ID: <YgZjofwviaYFS88O@FVFF77S0Q05N>
-References: <20220125113200.3829108-1-mark.rutland@arm.com>
- <20220125113200.3829108-3-mark.rutland@arm.com>
- <YgUmvuJYfycnhODA@FVFF77S0Q05N>
- <CAKwvOdmWV6AL2RM2SQNYQ7fu3kQwPf+W57LZ_szrfZm2eLtBcw@mail.gmail.com>
- <YgZJS6mDoAgVqC4l@FVFF77S0Q05N>
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E032F2A
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 13:38:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=YTO3lQZ9ulZigrat8ImU1xcidv81PGdKqOhNxbitprE=; b=bpRFNqDXrNG2aPA4RrOeuWdkGX
+	WSqTYKmF8o5NsrP+zcWvfXFJVk8jFoZB3AARPxYSoXjFtf15ClaxgtmNfd8xmXidzygUJkj04I09J
+	lS9g+MH4Vs5YJApbSKndfwvfioa2L1uSMPWbiwCYMePXh+GniLybkXsm6AUtJOcHihGphmc+6b2ud
+	1t2fkPZWIObJ4veQHzWCOEWOe1LND/dnNygllvYcb6taaL0p/4S9znPaKosdnmDKTlVYJ+7wyCv7D
+	zVADCI9Z2jRJGVuYn6jwTDIb2chXjb/n6xLy9wfcWchIU7KxEJlgVOx6Reri3FeYmJUgqr7Hxo6rT
+	2S0rugRA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nIW7g-00ARTA-Tw; Fri, 11 Feb 2022 13:38:05 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B757D98630A; Fri, 11 Feb 2022 14:38:03 +0100 (CET)
+Date: Fri, 11 Feb 2022 14:38:03 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Joao Moreira <joao@overdrivepizza.com>
+Cc: Kees Cook <keescook@chromium.org>, x86@kernel.org, hjl.tools@gmail.com,
+	jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+	linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+	samitolvanen@google.com, llvm@lists.linux.dev
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+Message-ID: <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+References: <20211122170301.764232470@infradead.org>
+ <20211122170805.338489412@infradead.org>
+ <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
+ <202202081541.900F9E1B@keescook>
+ <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
+ <202202082003.FA77867@keescook>
+ <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,57 +42,132 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgZJS6mDoAgVqC4l@FVFF77S0Q05N>
+In-Reply-To: <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com>
 
-On Fri, Feb 11, 2022 at 11:32:27AM +0000, Mark Rutland wrote:
-> On Thu, Feb 10, 2022 at 05:20:10PM -0800, Nick Desaulniers wrote:
-> > On Thu, Feb 10, 2022 at 6:52 AM Mark Rutland <mark.rutland@arm.com> wrote:
- > For the expression
-> > 
-> > > .if (qwerty_fiqin_end - qwerty_fiqin_start) > (0x200 - 0x1c)
-> > 
-> > can you use local labels (`.L` prefix) rather than symbolic
-> > references? or is there a risk of them not being unique per TU?
->
-> For the problem in this patch I might be able to do something of that shape,
-> but I'll need to factor the SYM_*() helpers differently so that I can use
-> labels for the primary definition.
+On Tue, Feb 08, 2022 at 09:18:44PM -0800, Joao Moreira wrote:
+> > Ah, excellent, thanks for the pointers. There's also this in the works:
+> > https://reviews.llvm.org/D119296 (a new CFI mode, designed to play nice
+> > to objtool, IBT, etc.)
+> 
+> Oh, great! Thanks for pointing it out. I guess I saw something with a
+> similar name before ;) https://www.blackhat.com/docs/asia-17/materials/asia-17-Moreira-Drop-The-Rop-Fine-Grained-Control-Flow-Integrity-For-The-Linux-Kernel.pdf
+> 
+> Jokes aside (and perhaps questions more targeted to Sami), from a diagonal
+> look it seems that this follows the good old tag approach proposed by
+> PaX/grsecurity, right? If this is the case, should I assume it could also
+> benefit from features like -mibt-seal? Also are you considering that perhaps
+> we can use alternatives to flip different CFI instrumentation as suggested
+> by PeterZ in another thread?
 
-FWIW, that refactoring turned out to be easier than I expected, and I actually
-prefer the new structure.
+So, lets try and recap things from IRC yesterday. There's a whole bunch
+of things intertwining making indirect branches 'interesting'. Most of
+which I've not seen mentioned in Sami's KCFI proposal which makes it
+rather pointless.
 
-I've ended up dropping this patch, and in the next patch I leave
-SYM_FUNC_START() unchanged, but calculate the size in SYM_FUNC_END() and
-propagate that to all the aliases pre-calculated:
+I think we'll end up with something related to KCFI, but with distinct
+differences:
 
-diff --git a/include/linux/linkage.h b/include/linux/linkage.h
-index dbf8506decca..027ab1618bf8 100644
---- a/include/linux/linkage.h
-+++ b/include/linux/linkage.h
-@@ -165,7 +165,18 @@
- #ifndef SYM_END
- #define SYM_END(name, sym_type)                                \
-        .type name sym_type ASM_NL                      \
--       .size name, .-name
-+       .set .L__sym_size_##name, .-name ASM_NL         \
-+       .size name, .L__sym_size_##name
-+#endif
-+
-+/* SYM_ALIAS -- use only if you have to */
-+#ifndef SYM_ALIAS
-+#define SYM_ALIAS(alias, name, sym_type, linkage)                      \
-+       linkage(alias) ASM_NL                                           \
-+       .set alias, name                                                \
-+       .type alias sym_type ASM_NL                                     \
-+       .set .L__sym_size_##alias, .L__sym_size_##name ASM_NL           \
-+       .size alias, .L__sym_size_##alias
- #endif
+ - 32bit immediates for smaller code
+ - __kcfi_check_fail() is out for smaller code
+ - it must interact with IBT/BTI and retpolines
+ - we must be very careful with speculation.
 
-I still think that in future we *might* want to be able to use two non-label
-symbols (in the same section/fragment/etc) to generate an absolute expression,
-but that's not a blocker for this series, and for the common cases (e.g.
-checking size) we can probably work around that as above.
+Right, so because !IBT-CFI needs the check at the call site, like:
 
-Thanks for looknig at this!
+caller:
+	cmpl	$0xdeadbeef, -0x4(%rax)		# 7 bytes
+	je	1f				# 2 bytes
+	ud2					# 2 bytes
+1:	call	__x86_indirect_thunk_rax	# 5 bytes
 
-Mark.
+
+	.align 16
+	.byte 0xef, 0xbe, 0xad, 0xde		# 4 bytes
+func:
+	...
+	ret
+
+
+While FineIBT has them at the landing site:
+
+caller:
+	movl	$0xdeadbeef, %r11d		# 6 bytes
+	call	__x86_indirect_thunk_rax	# 5 bytes
+
+
+	.align 16
+func:
+	endbr					# 4 bytes
+	cmpl	$0xdeadbeef, %r11d		# 7 bytes
+	je	1f				# 2 bytes
+	ud2					# 2 bytes
+1:	...
+	ret
+
+
+It seems to me that always doing the check at the call-site is simpler,
+since it avoids code-bloat and patching work. That is, if we allow both
+we'll effectivly blow up the code by 11 + 13 bytes (11 at the call site,
+13 at function entry) as opposed to 11+4 or 6+13.
+
+Which then yields:
+
+caller:
+	cmpl	$0xdeadbeef, -0x4(%rax)		# 7 bytes
+	je	1f				# 2 bytes
+	ud2					# 2 bytes
+1:	call	__x86_indirect_thunk_rax	# 5 bytes
+
+
+	.align 16
+	.byte 0xef, 0xbe, 0xad, 0xde		# 4 bytes
+func:
+	endbr					# 4 bytes
+	...
+	ret
+
+For a combined 11+8 bytes overhead :/
+
+Now, this setup provides:
+
+ - minimal size (please yell if there's a smaller option I missed;
+   s/ud2/int3/ ?)
+ - since the retpoline handles speculation from stuff before it, the
+   load-miss induced speculation is covered.
+ - the 'je' branch is binary, leading to either the retpoline or the
+   ud2, both which are a speculation stop.
+ - the ud2 is placed such that if the exception is non-fatal, code
+   execution can recover
+ - when IBT is present we can rewrite the thunk call to:
+
+	lfence
+	call *(%rax)
+
+   and rely on the WAIT-FOR-ENDBR speculation stop (also 5 bytes).
+ - can disable CFI by replacing the cmpl with:
+
+	jmp	1f
+
+   (or an 11 byte nop, which is just about possible). And since we
+   already have all retpoline thunk callsites in a section, we can
+   trivially find all CFI bits that are always in front it them.
+ - function pointer sanity
+
+
+Additionally, if we ensure all direct call are +4 and only indirect
+calls hit the ENDBR -- as it optimal anyway, saves on decoding ENDBR. We
+can replace those ENDBR instructions of functions that should never be
+indirectly called with:
+
+	ud1    0x0(%rax),%eax
+
+which is a 4 byte #UD. This gives us the property that even on !IBT
+hardware such a call will go *splat*.
+
+Further, Andrew put in the request for __attribute__((cfi_seed(blah)))
+to allow distinguishing indirect functions with otherwise identical
+signature; eg. cookie = hash32(blah##signature).
+
+
+Did I miss anything? Got anything wrong?
+
