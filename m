@@ -1,157 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1C17E
-	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 18:35:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1644604537;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J8HfLfxVfcNiEkSEpweyJmi/8GyqJBZOj2yEwh6I5kQ=;
-	b=DPIUuc92rhtDlcr85TDrzAzHgmpBK+X5Lvp6cXpFZF/AwKN9DoFSpTxRhZiGVm9WCqZYmr
-	pKtUAYGacpMdZR3gb8u1D1d0NTcDGnJQwBCe7EkhhKPWawtbC4FuzoPD6xf4bfx1j4Jdan
-	mKiUdQ/SUn9ikgOw5V0MgX6xQbrTyhY=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-NJwk2SZpN1C85Cz5PTBsYg-1; Fri, 11 Feb 2022 13:35:35 -0500
-X-MC-Unique: NJwk2SZpN1C85Cz5PTBsYg-1
-Received: by mail-oo1-f72.google.com with SMTP id y20-20020a4acb94000000b003185ebeeffdso3381329ooq.15
-        for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 10:35:35 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9FD7E
+	for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 19:25:48 +0000 (UTC)
+Received: by mail-ej1-f45.google.com with SMTP id fy20so24777381ejc.0
+        for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 11:25:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GD2hJleO+BGH7uHOhMKE9GqyrPE46e0JW2MnbUpSxGM=;
+        b=drfDVDdeD8zFrAGVCcIkHw8cHfErxBrAfhUyN91kJxJKe7SFJCF1p34U300RUKCKXs
+         IsYGGcezgrgOoB2pMWJkGVYIZH1t3Nf9qUroRrLaUJP2QZxM6apgtBrpZC2+QmcgpLLH
+         BD8DCL8/XZztvmMGrPeUUFBlGgIPvar6eCDf/qW0jcwBavP4r176sqNGpI3+zJ8HJf6b
+         YcnRoVVXqfafFaxH9MB2a3CJ9kQdcIWYkfLxOdjlip+Ux+iD13NsD/2y86Jyw+KhmLjX
+         A6Gq5jqdYkVmxjgRrMeXlf4v46aWr5kSthyjIVdiJBf0Z6drQa+3kt33IEpNGLCsuKSI
+         RAew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=J8HfLfxVfcNiEkSEpweyJmi/8GyqJBZOj2yEwh6I5kQ=;
-        b=N7CgEdY8UdZB1qStE4ikw87jTJMtPO3GoCJW2MYgXToe/bgK9E6RqmI9hyhwMxx70R
-         sIMsDJFK6G/DpsfTm/3PlKK81nmeAve59xhXBd2DIG1E+Da22FP0J2Su3tpQXxYWT1qw
-         n/L6SwzE4cfMwnz9cytBhWrSx4jysjk2Kx+CN7sTAnSx1lEtCVwjXx8MrJej0Du7NsCx
-         lCYAmsQRaNwsizXDV3HnWg7j0w2PoWK7nKPNaO7sTZnhIWNp98TTEXeiVoNOUnHqHh5S
-         gZVWLZ0P8fMi5LnuLue9dKAuZI1d1JvpARMzXhyc9g7Y2A2eDvPR3S3e1T0nsLaMih9h
-         5WBA==
-X-Gm-Message-State: AOAM530193Bl4qPousi+9FTuKLnPYfiIMczJ5kQtikEyu99dAAlZIfL0
-	djZRNKn++CraRXk5NVphNZ8UlSq6JiJ/S8HQ2gfwKrfTlk1h0P3MD06/fK71BYkWezyvHc0GnpI
-	2LlIua77h1Tj3Fg==
-X-Received: by 2002:a05:6830:19ed:: with SMTP id t13mr1078567ott.83.1644604535033;
-        Fri, 11 Feb 2022 10:35:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwvxMA3qcq86xXsncmpwHUMHF94120N5jKw3TA/bT6HNPqEH7OwmhO+43BhJzSDitpUEbLUcg==
-X-Received: by 2002:a05:6830:19ed:: with SMTP id t13mr1078522ott.83.1644604534752;
-        Fri, 11 Feb 2022 10:35:34 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id m7sm9451958ots.32.2022.02.11.10.35.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 10:35:34 -0800 (PST)
-Date: Fri, 11 Feb 2022 10:35:29 -0800
-From: Josh Poimboeuf <jpoimboe@redhat.com>
-To: =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-	linux-hardening@vger.kernel.org, x86@kernel.org,
-	Borislav Petkov <bp@alien8.de>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Kristen Carlson Accardi <kristen@linux.intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	Bruce Schlobohm <bruce.schlobohm@intel.com>,
-	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Marios Pomonis <pomonis@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-Message-ID: <20220211183529.q7qi2qmlyuscxyto@treble>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-3-alexandr.lobakin@intel.com>
- <20220211174130.xxgjoqr2vidotvyw@treble>
- <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GD2hJleO+BGH7uHOhMKE9GqyrPE46e0JW2MnbUpSxGM=;
+        b=e360jN5eixrnUTrO9/C+uJkhrGw9eOQXB7AdDCXzRETGMtKHlLLJiDmwDyTncjItLU
+         PZcEigk2XcMBYQdXMkhgOwQmZZ94oAY1Jlfgoqv4dCKNj3OZeUiRYWdOzI6MgpENJl7S
+         eHZO+7ifYNziK79vS0TtKMqZ4QbVmcLljXFmAM9wDvqc/B6Y1vSosc4MFs0QrOTRO3He
+         VT3eHLnRy/zfu+L9xi9S3p710OPkwXKCxOnjiS5ua2dd0O0dbt2g8NO8S/zRiSCUIq1D
+         A3Pb5pbDOxX1sNUxH0z8WKfRKsZSCigWW2DC+yhxt/Jg6IzpkPkf6pL9Eb+WPfAF5hAi
+         ooJA==
+X-Gm-Message-State: AOAM533eGfkhPvIY6ReJHiOZ3JH0BqvVnWS72i2z5x+VNwoSMzNnym1v
+	A/u7TlDlFDlD9RgcxSLcJ4yjYuXzMrX7nfVi2xjA
+X-Google-Smtp-Source: ABdhPJypX/j9HQ9UKdN5Q/EButffbsswHumKPBUPD8F3DELLeUuIF/73MuElgNl5Ate/M9VWPJk6xBwOmP/PC1qeyu4=
+X-Received: by 2002:a17:906:2811:: with SMTP id r17mr2621343ejc.31.1644607546332;
+ Fri, 11 Feb 2022 11:25:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20220204005742.1222997-1-morbo@google.com> <20220210223134.233757-1-morbo@google.com>
+ <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com>
+In-Reply-To: <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com>
+From: Bill Wendling <morbo@google.com>
+Date: Fri, 11 Feb 2022 11:25:34 -0800
+Message-ID: <CAGG=3QXvSt=d94iqSV-Y9JVNc+pt-WOZGpSeW--fp=w2ttMvUA@mail.gmail.com>
+Subject: Re: [PATCH v4] x86: use builtins to read eflags
+To: David Laight <David.Laight@aculab.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Feb 11, 2022 at 10:05:02AM -0800, Fāng-ruì Sòng wrote:
-> On Fri, Feb 11, 2022 at 9:41 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+On Fri, Feb 11, 2022 at 8:40 AM David Laight <David.Laight@aculab.com> wrote:
+> From: Bill Wendling
+> > Sent: 10 February 2022 22:32
 > >
-> > On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
-> > > Position-based search, which means that if there are several symbols
-> > > with the same name, the user needs to additionally provide the
-> > > "index" of a desired symbol, is fragile. For example, it breaks
-> > > when two symbols with the same name are located in different
-> > > sections.
-> > >
-> > > Since a while, LD has a flag `-z unique-symbol` which appends
-> > > numeric suffixes to the functions with the same name (in symtab
-> > > and strtab). It can be used to effectively prevent from having
-> > > any ambiguity when referring to a symbol by its name.
+> > GCC and Clang both have builtins to read and write the EFLAGS register.
+> > This allows the compiler to determine the best way to generate this
+> > code, which can improve code generation.
 > >
-> > In the patch description can you also give the version of binutils (and
-> > possibly other linkers) which have the flag?
-> 
-> GNU ld>=2.36 supports -z unique-symbol. ld.lld doesn't support -z unique-symbol.
-> 
-> I subscribe to llvm@lists.linux.dev and happen to notice this message
-> (can't keep up with the changes...)
-> I am a bit concerned with this option and replied last time on
-> https://lore.kernel.org/r/20220105032456.hs3od326sdl4zjv4@google.com
-> 
-> My full reasoning is on
-> https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+> > This issue arose due to Clang's issue with the "=rm" constraint.  Clang
+> > chooses to be conservative in these situations, and so uses memory
+> > instead of registers. This is a known issue, which is currently being
+> > addressed.
+> >
+> > However, using builtins is beneficial in general, because it removes the
+> > burden of determining what's the way to read the flags register from the
+> > programmer and places it on to the compiler, which has the information
+> > needed to make that decision.
+>
+> Except that neither gcc nor clang attempt to make that decision.
+> They always do pushf; pop ax;
+>
+It looks like both GCC and Clang pop into virtual registers. The
+register allocator is then able to determine if it can allocate a
+physical register or if a stack slot is required.
 
-Ah, right.  Also discussed here:
+> ...
+> > v4: - Clang now no longer generates stack frames when using these builtins.
+> >     - Corrected misspellings.
+>
+> While clang 'head' has been fixed, it seems a bit premature to say
+> it is 'fixed' enough for all clang builds to use the builtin.
+>
+True, but it's been cherry-picked into the clang 14.0.0 branch, which
+is scheduled for release in March.
 
-  https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
-  https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
+> Seems better to change it (back) to "=r" and comment that this
+> is currently as good as __builtin_ia32_readeflags_u64() and that
+> clang makes a 'pigs breakfast' of "=rm" - which has only marginal
+> benefit.
+>
+That would be okay as far as code generation is concerned, but it does
+place the burden of correctness back on the programmer. Also, it was
+that at some point, but was changed to "=rm" here. :-)
 
-I'm not qualified to comment on LTO/PGO stability issues, but it doesn't
-sound good.  And we want to support livepatch for LTO kernels.
+commit ab94fcf528d127fcb490175512a8910f37e5b346
+Author: H. Peter Anvin <hpa@zytor.com>
+Date:   Tue Aug 25 16:47:16 2009 -0700
 
-Also I realized that this flag would have a negative effect on
-kpatch-build, as it currently does its analysis on .o files.  So it
-would have to figure out how to properly detect function renames, to
-avoid patching the wrong function for example.
+    x86: allow "=rm" in native_save_fl()
 
-And if LLD doesn't plan to support the flag then it will be a headache
-for livepatch (and the kernel in general) to deal with the divergent
-configs.
+    This is a partial revert of f1f029c7bfbf4ee1918b90a431ab823bed812504.
 
-One idea I mentioned before, it may be worth exploring changing the "F"
-in FGKASLR to "File" instead of "Function".  In other words, only
-shuffle at an object-file granularity.  Then, even with duplicates, the
-<file+function> symbol pair doesn't change in the symbol table.  And as
-a bonus, it should help FGKASLR i-cache performance, significantly.
+    "=rm" is allowed in this context, because "pop" is explicitly defined
+    to adjust the stack pointer *before* it evaluates its effective
+    address, if it has one.  Thus, we do end up writing to the correct
+    address even if we use an on-stack memory argument.
 
--- 
-Josh
+    The original reporter for f1f029c7bfbf4ee1918b90a431ab823bed812504 was
+    apparently using a broken x86 simulator.
 
+    [ Impact: performance ]
+
+    Signed-off-by: H. Peter Anvin <hpa@zytor.com>
+    Cc: Gabe Black <spamforgabe@umich.edu>
+
+
+> Changing to __builtin_ia32_readeflags_u64() may be worth while
+> if/when the compilers will generate pushf; pop mem; for it.
+>
+I was able to come up with an example where GCC generates "pushf ; pop mem":
+
+  https://godbolt.org/z/9rocjdoaK
+
+(Clang generates a variation of "pop mem," and is horrible code, but
+it's meant for demonstration purposes only.) One interesting thing
+about the use of the builtins is that if at all possible, the "pop"
+instruction may be moved away from the "pushf" if it's safe and would
+reduce register pressure.
+
+-bw
