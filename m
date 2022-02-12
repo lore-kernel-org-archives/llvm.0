@@ -1,66 +1,115 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A4F19B
-	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 09:23:26 +0000 (UTC)
-Received: by mail-ej1-f42.google.com with SMTP id jg20so2464630ejc.3
-        for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 01:23:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FQxuwYXRyYUymC0nv8LtPvAyCwq+SjfKuitASpf9b8c=;
-        b=GtTztpKAfezmMys6OpEIn2nWbo/GqvB5Oos478kLkJCUxhN5olCS2zSuhE8pXPw5Hj
-         9wGLVZKdpHU/v0OaCEVNZWTQvRyXrYyrWaVh6P79raY5Hd/I3oHP+l/aitRKt8IN7KBO
-         ASdGBE9hBiy1tsgNkRLXr8S5P+Ma59JkbNbmU1SypL5+PkHTTSOa43HiE83Z1KwU9CWP
-         u/RKeVWxJmbqFS6+aJx4WxzcoS34FLzKWnwanbYJannfskzriwZBlM8rcfEozkiAvxEX
-         lYn4aTrxL4ISMBWalU0A2gymUSeGh9BpCONFDtrck4RDEAK/J0AsqmOugVh+82/Osc9J
-         zTDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FQxuwYXRyYUymC0nv8LtPvAyCwq+SjfKuitASpf9b8c=;
-        b=gqyAgIVkNBEE/b9KYYigiv2uvL0dl4sQkQBUNUFHrJsk38sQ2LRXHnBEGp/DAbqv0K
-         G3ioTjHsjBkBIxgcr4TL6GbD+hzCO+NaK3MqD8iNzyZMYauRDIyE4nbHh85NNSK+Pq5j
-         ri4PMq1KAlNF78EJ2W8vuztJKyrsyfoPHs8CKyY6YioGwvQcNwfnwjTI/3NDuWzrqYGT
-         uvChA1U+EDfBNMu0Y/VDhNv7KxxN8pbUsUai/rlbnAMcD2+weXY0uSBMwpJgtO6Na1Sq
-         6eJ6yZ5D8QhFxLhnxuhDLFf/txqLVkga6Ey6wNJam4TV3hJ6BMGE3TPaamG91JRSZZDl
-         x1Jw==
-X-Gm-Message-State: AOAM5301wHSW2BsrzY9tf6Sun5i0rcQrxEXIm3rlElOTacAoXAdQqu48
-	KmFBfy8IBcJDpg0QKD7e0cFCnfzETTyo1HVre0KD
-X-Google-Smtp-Source: ABdhPJytMk5SxWzvQpjZUpYvjyvFSnw3e08lRh+rlrf+maOllfFiyQe6ROhhCGHgoslwjvZ5GG1YlCud3jYxHBGFxek=
-X-Received: by 2002:a17:906:72de:: with SMTP id m30mr2194742ejl.163.1644657804498;
- Sat, 12 Feb 2022 01:23:24 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85212565
+	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 10:39:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644662383; x=1676198383;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dyrVGvm6aHy6JUcrneabP4PT1dWr5KSKwYtqdojd098=;
+  b=R2PDU5u9CzjEDYfcWTlkeQ+jY0GRKsSby0pMbvCnv4MY2Y3ft4Vpe1Gs
+   9IE7TDvRULW9lQyzhHWhHRy0sFoyzr6u1ECdkRzEpzSqL4iNmxQioRWTv
+   UwSfuO/mWa1jd4Uqj4BZPHJP8RsEzAOriK9NB43cLSjuI3/t2bNj+hS2f
+   Q+Rx6H1gAkR22n2h3gf/sHqBRv+jjmLeap07H+NpubBycbO2hWqoIDWTd
+   0swBku5N0AZ1Z6Ra6RQEFJ9Pzjtl4Mo5iw5G/CVrJ9dQHT0hYsrmU3uLo
+   4XfFKf4tdGg/9jU/bZcYQqWKOpfxOqGhFPw1/O6/iFzvAFFCv+OmWAHxq
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="230511974"
+X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
+   d="scan'208";a="230511974"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 02:39:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
+   d="scan'208";a="537874368"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 12 Feb 2022 02:39:41 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nIpob-00061T-2e; Sat, 12 Feb 2022 10:39:41 +0000
+Date: Sat, 12 Feb 2022 18:39:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mkp:5.18/discovery2 64/67] drivers/scsi/sd.c:1096:4: warning: add
+ explicit braces to avoid dangling else
+Message-ID: <202202121642.NBfsbeBr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220204005742.1222997-1-morbo@google.com> <20220210223134.233757-1-morbo@google.com>
- <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com> <CAGG=3QXvSt=d94iqSV-Y9JVNc+pt-WOZGpSeW--fp=w2ttMvUA@mail.gmail.com>
- <CAKwvOdmqQ4M1pcz1BW+MTtRdwP3itOLcV83X+1nJQkf9BNJ7Fw@mail.gmail.com>
-In-Reply-To: <CAKwvOdmqQ4M1pcz1BW+MTtRdwP3itOLcV83X+1nJQkf9BNJ7Fw@mail.gmail.com>
-From: Bill Wendling <morbo@google.com>
-Date: Sat, 12 Feb 2022 01:23:12 -0800
-Message-ID: <CAGG=3QWmp_nXH0nkREMwRcqAcBOmGFuDifsE5t=wNjDGkLMcgg@mail.gmail.com>
-Subject: Re: [PATCH v4] x86: use builtins to read eflags
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: David Laight <David.Laight@aculab.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Feb 11, 2022 at 4:24 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
-> I would like to discuss this further off list with you Bill before you
-> resend this patch again.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/linux.git 5.18/discovery2
+head:   7c371ec158614870d9c9c5d1a9e0f0c35f9198d7
+commit: 56db0eb9f48930efde746c3cb9af11524102dc76 [64/67] scsi: sd: Implement support for NDOB flag in WRITE SAME(16)
+config: riscv-randconfig-r021-20220211 (https://download.01.org/0day-ci/archive/20220212/202202121642.NBfsbeBr-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c7eb84634519e6497be42f5fe323f9a04ed67127)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mkp/linux.git/commit/?id=56db0eb9f48930efde746c3cb9af11524102dc76
+        git remote add mkp https://git.kernel.org/pub/scm/linux/kernel/git/mkp/linux.git
+        git fetch --no-tags mkp 5.18/discovery2
+        git checkout 56db0eb9f48930efde746c3cb9af11524102dc76
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/scsi/
 
-That won't be necessary.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--bw
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/sd.c:1096:4: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+                           else
+                           ^
+   1 warning generated.
+
+
+vim +1096 drivers/scsi/sd.c
+
+  1076	
+  1077	static void sd_config_write_zeroes(struct scsi_disk *sdkp,
+  1078					   enum sd_zeroing_mode mode)
+  1079	{
+  1080		struct request_queue *q = sdkp->disk->queue;
+  1081		unsigned int logical_block_size = sdkp->device->sector_size;
+  1082	
+  1083		if (mode == SD_ZERO_DEFAULT && !sdkp->zeroing_override) {
+  1084			mode = SD_ZERO_WRITE;
+  1085	
+  1086			if (sdkp->lbprz && sdkp->lbpws)
+  1087				if (sdkp->ndob)
+  1088					mode = SD_ZERO_WS16_NDOB;
+  1089				else
+  1090					mode = SD_ZERO_WS16_UNMAP;
+  1091			else if (sdkp->lbprz && sdkp->lbpws10)
+  1092				mode = SD_ZERO_WS10_UNMAP;
+  1093			else if (sdkp->max_ws_blocks)
+  1094				if (sdkp->ndob)
+  1095					mode = SD_ZERO_WS16_NDOB;
+> 1096				else
+  1097					mode = SD_ZERO_WS;
+  1098		}
+  1099	
+  1100		if (mode == SD_ZERO_DISABLE)
+  1101			sdkp->zeroing_override = true;
+  1102	
+  1103		sdkp->zeroing_mode = mode;
+  1104		blk_queue_max_write_zeroes_sectors(q, sdkp->max_ws_blocks *
+  1105						   (logical_block_size >> 9));
+  1106	}
+  1107	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
