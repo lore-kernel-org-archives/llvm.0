@@ -1,77 +1,67 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4192595
-	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 22:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644705212; x=1676241212;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=+vQIk7Zh0itAcy6M5TOwfDdpZ9FNzFL/In8IY61nt8c=;
-  b=P89i7WHtWkHHMjLMydWsD5iqvhJ+BBTcbzTRHt1QeUahDen2zsJ0shVX
-   F2kLRVk9GemvH/l5ZsEz2fmygFe1UjlJDL4VJvEmNNgd++0E64lraRKCC
-   0Ss7wfIdDxKBusecqJQY4+tOjXD1wfdT01YV7SQqDAL0KExJBgG8POvaH
-   gyysRiidiofhz8y0qLh/k9GNP51u3m/2AVrORsuEHbd/UYemjjGKkAyBc
-   y3CPb8Pp2xoGvhCl2rBbYvLX5TSupYeSYgzZ0dGmIOaORlbQdLysTyo95
-   i08aaM3AZIyOpo7q7o4lmdZY/7Eo09OEEwR2lIKUwaYmzM5Ra9BlutOI9
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="313188377"
-X-IronPort-AV: E=Sophos;i="5.88,364,1635231600"; 
-   d="scan'208";a="313188377"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 14:33:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,364,1635231600"; 
-   d="scan'208";a="484296743"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 12 Feb 2022 14:33:31 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nJ0xO-0006hf-G2; Sat, 12 Feb 2022 22:33:30 +0000
-Date: Sun, 13 Feb 2022 06:33:18 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: block/bio.o: warning: objtool: bvec_alloc()+0x77: unreachable
- instruction
-Message-ID: <202202130617.yv6T7j1N-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFC129B4
+	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 22:37:35 +0000 (UTC)
+Received: by mail-io1-f45.google.com with SMTP id i62so15793741ioa.1
+        for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 14:37:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3YdRY1vh187Ti2lNhE1cStNPG0E7OoEZRMCqSox6LPI=;
+        b=FgIb53GclKHW/Dem1kAPZUD7TGBuLnh3J/g6syXNtGRja8YZ83qRRwuQTnRzpieC8w
+         fKXQU1o0quQwgbV0tIYFvu41XjLzIYjMimbwkSRcjvdJqtrVNaAY2m8Bg75Ju8H8WOtA
+         BBpr+HmMPAMk1R+I/R8IXXsJ8sDGdrVj+/xl13IM6kpV2lhoCtjWEMpPNmpYAJLq/B44
+         BUyrEerWq6JN6OZGjyLLTexTeRAB4YxvzuF1w4Cm5PtEBBg9G71MTHBKdl1yRZlGBBjU
+         Jf/34jO3QhtPFGwajFqFUrtaAeqJoxt8uEZfG2fP2Hcp9ap2KdptTv4oflf1VQvvTwx8
+         jnpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3YdRY1vh187Ti2lNhE1cStNPG0E7OoEZRMCqSox6LPI=;
+        b=eB24u0kl7jUnDGaauYP/4EL/3sF1ozadzgQxtJK5G1ZnJxH8sNRS53vvMe3tCQ3iBe
+         02wIH3DPSdX9l3a7FjCO2ii8QyxX46YPcFWFFrxOUCPXdFo0BgkoIj1BVafwHBpyt6rV
+         Q5JoU8hPt0TJKXFEBP1CHr9iBIG8dp9op24zWTn1gqCSo7aCO06clkZ257pAzk8y//nm
+         lJF9ZFR8TQKPweeHvw11WBPh8JoVIc2Z0xewkZVgAqWJu/zWgt1SpmE/z+4HL9MZcWaB
+         bQjJwAoVHnSXsuxA6Pn487uZkbxKA/Q7BDxeXD8IKT4srcJVq4hhdczlO4D01JMAOW8k
+         843w==
+X-Gm-Message-State: AOAM5308Bry/3UIVFSXfpRiw1+QIqdsU0FqL9jQ76gO5UNdACp+fmo3Y
+	i/7i3n3YOpOuidUMzuxMcEttlmxTWm92ww9hFTU=
+X-Google-Smtp-Source: ABdhPJzdH6b9QIMhUbZGTWgEGzFFCI4yKLf5IBcqvttq0NrZTiLI0b1JMRDi2wzSo7hyKbEiBcmXMw7fLNbNNB+n4j4=
+X-Received: by 2002:a05:6638:380f:: with SMTP id i15mr4338869jav.308.1644705454806;
+ Sat, 12 Feb 2022 14:37:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <202202121743.YbGELjcY-lkp@intel.com> <YggQeC0PuAseqtpQ@archlinux-ax161>
+In-Reply-To: <YggQeC0PuAseqtpQ@archlinux-ax161>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sat, 12 Feb 2022 23:37:23 +0100
+Message-ID: <CANiq72kPP=o2NiE+r3Gt=Uhh79ESDwa6BRkj5HW3fn4VCY-evw@mail.gmail.com>
+Subject: Re: [ojeda-linux:rust-next 18/20] ld.lld: error: drivers/built-in.a(gpio/gpio_pl061_rust.o)
+ is incompatible with aarch64elfb
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Wedson Almeida Filho <wedsonaf@google.com>, Miguel Ojeda <ojeda@kernel.org>, kbuild-all@lists.01.org, 
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
+	rust-for-linux <rust-for-linux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-CC: linux-kernel@vger.kernel.org
-TO: Christoph Hellwig <hch@lst.de>
-CC: Jens Axboe <axboe@kernel.dk>
+On Sat, Feb 12, 2022 at 8:54 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> + Miguel, Wedson, rust-for-linux, since it looks like this did not get
+> sent to you all.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   83e396641110663d3c7bb25b9bc0c6a750359ecf
-commit: 7a800a20ae6329e803c5c646b20811a6ae9ca136 block: use bi_max_vecs to find the bvec pool
-date:   1 year ago
-config: x86_64-buildonly-randconfig-r002-20220207 (https://download.01.org/0day-ci/archive/20220213/202202130617.yv6T7j1N-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0d8850ae2cae85d49bea6ae0799fa41c7202c05c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7a800a20ae6329e803c5c646b20811a6ae9ca136
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7a800a20ae6329e803c5c646b20811a6ae9ca136
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Thanks -- strange, there is a `TO` and `CC` there in the top.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Possibly some incompatibility with Rust + aarch64be?
 
-All warnings (new ones prefixed by >>):
+It is getting built for the wrong endianness due to the single target
+spec file + the lax "depends on", will fix.
 
->> block/bio.o: warning: objtool: bvec_alloc()+0x77: unreachable instruction
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Miguel
