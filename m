@@ -1,124 +1,108 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819D37F
-	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 00:05:18 +0000 (UTC)
-Received: by mail-lj1-f174.google.com with SMTP id k10so11554747ljq.2
-        for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 16:05:18 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A679120E6
+	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 00:11:06 +0000 (UTC)
+Received: by mail-lj1-f178.google.com with SMTP id j14so14563744lja.3
+        for <llvm@lists.linux.dev>; Fri, 11 Feb 2022 16:11:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3wE/nOdJLWv1mzpBtdK/cJVk9Tp2iFdl54BX0oVeteY=;
-        b=JZ4+ncYzNYerj+moSCDWO1WJoiIH1M96FVDcYdw6NEPzkI0vfciZXqQRAJ/ExwSKWm
-         4su7BW04KWOmgtSLfMWfmFwwPLUoxQMXYWPRUVsT0VuYtJ20G92SikYuCtyrx5evufpO
-         N26KJe6Z+HgUlAL/2VpEhB+DoS4ngCWobKH+HY7DUT67+fxZm239uiFhBRDD9YYE1yMS
-         e5fCMS0jPdtR9S7RB6LBOirrAFXoAK/6zoreaVyBSpBP1PpepUVqlOCB1ZYioEKq6Hkr
-         o0LQgL6mBPPLbsxzPWnWfoZAKZ8O48BoDo1avbbjjBi0eQWRjzpXbSLNlmahWCrqKf3U
-         JMiw==
+        bh=B+YNFIwiPxLTkItYxer4dG/fpwVBfSqMZccPHFp7vxg=;
+        b=NZmpYtE1ZxGwyElBafNkR5Vh4aJ8GXSp8VaQeOCOYBp1VwWwJJUiMoqzK17BW/4uj3
+         O/Bjb64AuEPECbQVWeqjuSaFrC0YdyNmezhrG4nROa2GQvx2EneQQg2wnNtoRgPp1ggN
+         OFSD6+ETUvQm77IU1jJ+pT4dmpbrhfgADQIrss1BP9ugdFCm7lg/JiZVjTz9NG/Pj3Cz
+         1Xu9zzyYdkDQFd263M2qwapK2JYXj3dfI35qkOLskaoX/OMxefQkduSQcLWXVFV8MlWH
+         kOMlWq2vcq2kECVxwdpy7QxIR/dDz58R3lpLYrUI7u9ER9fOo293JUoB6eEvKJeb+N4p
+         WcjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3wE/nOdJLWv1mzpBtdK/cJVk9Tp2iFdl54BX0oVeteY=;
-        b=cKgHBNbhUSMbhDllTWWzmDdSNQqrYucsLZzIX1DdLcqKhSu2WjvSneIlcRgFsPtge0
-         0YMiupjcD5iPVOv2CkVyyhe3HYZr9u3RmQZWcLRwAYbFYYma4huQuckrVEy51M7KIc0H
-         dil9ebP37AyG/iZ6AzFIwP4UObWojdeU+kZpdPcN0tAKl4Ajp2KNUWCiap3tvLRjYPJk
-         Jv2uu5w3ZyARBF5ZMBNu9HBUVUWxjP2hCmP9ZJqe9xbVL3QAkju4XkYeg59R3FF73d9S
-         d7ubSXd17KWHnN5YQ2BOcvdmVfPFl/PUYj7oOWd28S+jEZ5JTh5FUMCs/+PvfXENBIt2
-         kAug==
-X-Gm-Message-State: AOAM533kaUcEmxiVAKTSuHA2QXQ+gaEAKdTORElYlCcKdNhdZBjufbis
-	3Q2vhsRbvFEq1OssrSYGQq3SPnMCreNFwh2r1v8Vvw==
-X-Google-Smtp-Source: ABdhPJwmPtH/n7FoQO5chtGDWHS6OG9MEkuqrVz6CbXbgX3B755ZqK+C3HYjz81i7WU+P0JnqoED8Mf0MZ6V58/814Q=
-X-Received: by 2002:a05:651c:1253:: with SMTP id h19mr2394779ljh.338.1644624316161;
- Fri, 11 Feb 2022 16:05:16 -0800 (PST)
+        bh=B+YNFIwiPxLTkItYxer4dG/fpwVBfSqMZccPHFp7vxg=;
+        b=IOcA3AiYF2G4ebDAtMdeAJmjqjCv2BmuxbSS8aSf0fXjviinoZxgEctW4G0YI7zhZ/
+         uyvPy8WXPY6bf2uaUIXXPq0IZgGkFLmki9x62YTnOidbbMCjCsc1C5gFI0Z2cxKLARYr
+         Sq3Kjw61Jn9aMvTXZerDgcqaxF8iU3T2E/YMuvnSlHPXh8KReVwNxVm4JpNoAuJxtjK8
+         VCBVm7rJ6iszemnaaE5LnE1Va75d1KQWL1owrMhrSLDVLLQCDstsnScDWszWtqZZ0cJT
+         2RkJAay3qHXO1/lA+iJsBphJ55PDAmVSjZORhDh4aP/cwH4sA3qoLbOlbH3Gmd6xz0lr
+         Lcrw==
+X-Gm-Message-State: AOAM533a0yGwbCEyPelmSxUftWYfc32iDfnJN68qzhK/fjxngnxytDFM
+	zapGk8YZD+NEEUVG883Yftfdii0/UWUhAOQ89JzSSg==
+X-Google-Smtp-Source: ABdhPJxOrcM/KH1/6FO4cPzkkOj/gwwGf25IRof3rUjEqWDzpbM8wMR1DaoWZd5wnEo9gwL91nU/CwzRAJEj0PcTDv0=
+X-Received: by 2002:a05:651c:2121:: with SMTP id a33mr2450328ljq.220.1644624664475;
+ Fri, 11 Feb 2022 16:11:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220211023125.1790960-1-aik@ozlabs.ru> <20220211023125.1790960-3-aik@ozlabs.ru>
-In-Reply-To: <20220211023125.1790960-3-aik@ozlabs.ru>
+References: <20220211014313.1790140-1-aik@ozlabs.ru>
+In-Reply-To: <20220211014313.1790140-1-aik@ozlabs.ru>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 11 Feb 2022 16:05:04 -0800
-Message-ID: <CAKwvOdmJspxuNh-K-CeLJh4X4GGVYJWH29HnjJwuRL+jcN9G5w@mail.gmail.com>
-Subject: Re: [PATCH kernel 2/3] powerpc/llvm: Sample config for LLVM LTO
-To: Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc: llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	Nicholas Piggin <npiggin@gmail.com>, Nathan Lynch <nathanl@linux.ibm.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, Joel Stanley <joel@jms.id.au>, 
-	Fabiano Rosas <farosas@linux.ibm.com>, Daniel Axtens <dja@axtens.net>, 
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
-	"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Date: Fri, 11 Feb 2022 16:10:52 -0800
+Message-ID: <CAKwvOdkKsoYw9KOfwdHYg7OkTz0TQ6YgZZcqQ5PNg+_O1Q5bgg@mail.gmail.com>
+Subject: Re: [RFC PATCH kernel] trace: Make FTRACE_MCOUNT_USE_RECORDMCOUNT configurable
+To: Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, Alexey Kardashevskiy <aik@ozlabs.ru>, linux-kernel@vger.kernel.org, 
+	Steven Rostedt <rostedt@goodmis.org>, Nathan Chancellor <nathan@kernel.org>, Ingo Molnar <mingo@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 10, 2022 at 6:31 PM Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
++ Sami, Kees
+
+Do you guys remember why we don't support
+FTRACE_MCOUNT_USE_RECORDMCOUNT with LTO?
+https://patchwork.kernel.org/project/linux-kbuild/patch/20201013003203.4168817-12-samitolvanen@google.com/?
+
+On Thu, Feb 10, 2022 at 5:43 PM Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
 >
-> The config is a copy of ppc64_defconfig with a few tweaks. This could be
-> a smaller config to merge into ppc64_defconfig but unfortunately
-> merger does not allow disabling already enabled options.
-
-Cool series!
-
+> For whatever reason LLVM does not allow LTO (Link Time Optimization) if
+> FTRACE_MCOUNT_USE_RECORDMCOUNT is enabled.
 >
-> This is a command line to compile the kernel using the upstream llvm:
+> This allows disabling just this option instead of disabling all FTRACE
+> options.
 >
-> make -j64 O=/home/aik/pbuild/kernels-llvm/ \
->  "KCFLAGS=-Wmissing-braces -Wno-array-bounds" \
->  ARCH=powerpc LLVM_IAS=1 ppc64le_lto_defconfig CC=clang LLVM=1
-
-That command line invocation is kind of a mess, and many things
-shouldn't be necessary.
-
-O= is just noise; if folks are doing in tree builds then that doesn't
-add anything meaningful.
-KCFLAGS= why? I know -Warray-bounds is being worked on actively, but
-do we have instances of -Wmissing-braces at the moment? Let's get
-those fixed up.
-LLVM_IAS=1 is implied by LLVM=1.
-CC=clang is implied by LLVM=1
-
-why add a new config? I think it would be simpler to just show command
-line invocations of `./scripts/config -e` and `make`. No new config
-required.
-
+> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+> ---
 >
-> Forces CONFIG_BTRFS_FS=y to make CONFIG_ZSTD_COMPRESS=y to fix:
-> ld.lld: error: linking module flags 'Code Model': IDs have conflicting values in 'lib/built-in.a(entropy_common.o at 5332)' and 'ld-temp.o'
+> Or disabling FTRACE is the right thing to do if HAS_LTO_CLANG=y?
 >
-> because modules are linked with -mcmodel=large but the kernel uses -mcmodel=medium
-
-Please file a bug about this.
-https://github.com/ClangBuiltLinux/linux/issues
-
+> Came from arch/Kconfig:
 >
-> Enables CONFIG_USERFAULTFD=y as otherwise vm_userfaultfd_ctx becomes
-> 0 bytes long and clang sanitizer crashes as
-> https://bugs.llvm.org/show_bug.cgi?id=500375
-
-The above hyperlink doesn't work for me. Upstream llvm just moved from
-bugzilla to github issue tracker.
-
-https://github.com/llvm/llvm-project/issues
-
+> config HAS_LTO_CLANG
+>         def_bool y
+>         depends on CC_IS_CLANG && LD_IS_LLD && AS_IS_LLVM
+>         depends on $(success,$(NM) --help | head -n 1 | grep -qi llvm)
+>         depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
+>         depends on ARCH_SUPPORTS_LTO_CLANG
+>         depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT  <======
+>         depends on !KASAN || KASAN_HW_TAGS
+>         depends on !GCOV_KERNEL
 >
-> Disables CONFIG_FTR_FIXUP_SELFTEST as it uses FTR_SECTION_ELSE with
-> conditional branches. There are other places like this and the following
-> patches address that.
 >
-> Disables CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT as CONFIG_HAS_LTO_CLANG
-> depends on it being disabled. In order to avoid disabling way too many
-> options (like DYNAMIC_FTRACE/FUNCTION_TRACER), this converts
-> FTRACE_MCOUNT_USE_RECORDMCOUNT from def_bool to bool.
+> ---
+>  kernel/trace/Kconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> Note that even with this config there is a good chance that LTO
-> is going to fail linking vmlinux because of the "bc" problem.
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index a5eb5e7fd624..87d82d2b0b0b 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -704,7 +704,8 @@ config FTRACE_MCOUNT_USE_OBJTOOL
+>         depends on FTRACE_MCOUNT_RECORD
+>
+>  config FTRACE_MCOUNT_USE_RECORDMCOUNT
+> -       def_bool y
+> +       bool "Enable FTRACE_MCOUNT_USE_RECORDMCOUNT"
+> +       default y
+>         depends on !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+>         depends on !FTRACE_MCOUNT_USE_CC
+>         depends on !FTRACE_MCOUNT_USE_OBJTOOL
+> --
+> 2.30.2
+>
 
-I think rather than adding a new config with LTO enabled and a few
-things turned off, it would be better to not allow LTO to be
-selectable if those things are turned on, until the combination of the
-two are fixed.
 
 -- 
 Thanks,
