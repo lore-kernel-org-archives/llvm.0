@@ -1,41 +1,39 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85212565
-	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 10:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189687D
+	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 10:39:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1644662383; x=1676198383;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dyrVGvm6aHy6JUcrneabP4PT1dWr5KSKwYtqdojd098=;
-  b=R2PDU5u9CzjEDYfcWTlkeQ+jY0GRKsSby0pMbvCnv4MY2Y3ft4Vpe1Gs
-   9IE7TDvRULW9lQyzhHWhHRy0sFoyzr6u1ECdkRzEpzSqL4iNmxQioRWTv
-   UwSfuO/mWa1jd4Uqj4BZPHJP8RsEzAOriK9NB43cLSjuI3/t2bNj+hS2f
-   Q+Rx6H1gAkR22n2h3gf/sHqBRv+jjmLeap07H+NpubBycbO2hWqoIDWTd
-   0swBku5N0AZ1Z6Ra6RQEFJ9Pzjtl4Mo5iw5G/CVrJ9dQHT0hYsrmU3uLo
-   4XfFKf4tdGg/9jU/bZcYQqWKOpfxOqGhFPw1/O6/iFzvAFFCv+OmWAHxq
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Rqc8J5eQU4lBxtOGIrF7ieabk2WVNWhi8Mm8rL1wNoQ=;
+  b=Iz5RtmO/Frfv65iNvhtq6UJ+IqYlR3n5r1Y/3Rr2ZElgT7gR2FuXCXaa
+   hZkAdSZ/Na0RkWig99SYbHWLgX4EObx+++wNdvq6FRVWcgSQd/AxuGLTj
+   V9WW8gvAL2nMPKM1u16kTV89xezBJW+Ve6RZFFVNjAugIB+dAuNjndvEP
+   n2jxVj7Zmwg/QjbmV/nX5eT5SIyuX6Ilc4UBKhfvjslPi+1X4LQ5qs7dx
+   rlwsleBfuJKF8EcyEaUi92DfAsC/Kuy2cQjas/cuA5LNxGEDVY0FN6IYg
+   EGswKS9oUaYgUDnUsmyKGT+KPBeEykc2UfKIkJcCmoW3DT8CgHrE9U716
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="230511974"
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="310608976"
 X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
-   d="scan'208";a="230511974"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 02:39:43 -0800
+   d="scan'208";a="310608976"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 02:39:42 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
-   d="scan'208";a="537874368"
+   d="scan'208";a="702385197"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Feb 2022 02:39:41 -0800
+  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2022 02:39:41 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nIpob-00061T-2e; Sat, 12 Feb 2022 10:39:41 +0000
-Date: Sat, 12 Feb 2022 18:39:09 +0800
+	id 1nIpob-00061e-5H; Sat, 12 Feb 2022 10:39:41 +0000
+Date: Sat, 12 Feb 2022 18:39:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mkp:5.18/discovery2 64/67] drivers/scsi/sd.c:1096:4: warning: add
- explicit braces to avoid dangling else
-Message-ID: <202202121642.NBfsbeBr-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [ojeda-linux:rust-next 18/20] ld.lld: error:
+ drivers/built-in.a(gpio/gpio_pl061_rust.o) is incompatible with aarch64elfb
+Message-ID: <202202121743.YbGELjcY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,69 +44,42 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/linux.git 5.18/discovery2
-head:   7c371ec158614870d9c9c5d1a9e0f0c35f9198d7
-commit: 56db0eb9f48930efde746c3cb9af11524102dc76 [64/67] scsi: sd: Implement support for NDOB flag in WRITE SAME(16)
-config: riscv-randconfig-r021-20220211 (https://download.01.org/0day-ci/archive/20220212/202202121642.NBfsbeBr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c7eb84634519e6497be42f5fe323f9a04ed67127)
+CC: linux-kernel@vger.kernel.org
+TO: Wedson Almeida Filho <wedsonaf@google.com>
+CC: Miguel Ojeda <ojeda@kernel.org>
+
+Hi Wedson,
+
+First bad commit (maybe != root cause):
+
+tree:   https://github.com/ojeda/linux.git rust-next
+head:   ced9f62ec4355bbb92226ac3f019da468a5c996b
+commit: 5c1fec092f967b9b4722f6d91c9bcbe8222098fd [18/20] [RFC] drivers: gpio: PrimeCell PL061 in Rust
+config: arm64-randconfig-r033-20220212 (https://download.01.org/0day-ci/archive/20220212/202202121743.YbGELjcY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mkp/linux.git/commit/?id=56db0eb9f48930efde746c3cb9af11524102dc76
-        git remote add mkp https://git.kernel.org/pub/scm/linux/kernel/git/mkp/linux.git
-        git fetch --no-tags mkp 5.18/discovery2
-        git checkout 56db0eb9f48930efde746c3cb9af11524102dc76
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ojeda/linux/commit/5c1fec092f967b9b4722f6d91c9bcbe8222098fd
+        git remote add ojeda-linux https://github.com/ojeda/linux.git
+        git fetch --no-tags ojeda-linux rust-next
+        git checkout 5c1fec092f967b9b4722f6d91c9bcbe8222098fd
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/scsi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/scsi/sd.c:1096:4: warning: add explicit braces to avoid dangling else [-Wdangling-else]
-                           else
-                           ^
-   1 warning generated.
-
-
-vim +1096 drivers/scsi/sd.c
-
-  1076	
-  1077	static void sd_config_write_zeroes(struct scsi_disk *sdkp,
-  1078					   enum sd_zeroing_mode mode)
-  1079	{
-  1080		struct request_queue *q = sdkp->disk->queue;
-  1081		unsigned int logical_block_size = sdkp->device->sector_size;
-  1082	
-  1083		if (mode == SD_ZERO_DEFAULT && !sdkp->zeroing_override) {
-  1084			mode = SD_ZERO_WRITE;
-  1085	
-  1086			if (sdkp->lbprz && sdkp->lbpws)
-  1087				if (sdkp->ndob)
-  1088					mode = SD_ZERO_WS16_NDOB;
-  1089				else
-  1090					mode = SD_ZERO_WS16_UNMAP;
-  1091			else if (sdkp->lbprz && sdkp->lbpws10)
-  1092				mode = SD_ZERO_WS10_UNMAP;
-  1093			else if (sdkp->max_ws_blocks)
-  1094				if (sdkp->ndob)
-  1095					mode = SD_ZERO_WS16_NDOB;
-> 1096				else
-  1097					mode = SD_ZERO_WS;
-  1098		}
-  1099	
-  1100		if (mode == SD_ZERO_DISABLE)
-  1101			sdkp->zeroing_override = true;
-  1102	
-  1103		sdkp->zeroing_mode = mode;
-  1104		blk_queue_max_write_zeroes_sectors(q, sdkp->max_ws_blocks *
-  1105						   (logical_block_size >> 9));
-  1106	}
-  1107	
+   ld.lld: error: rust/built-in.a(core.o) is incompatible with aarch64elfb
+   ld.lld: error: rust/built-in.a(compiler_builtins.o) is incompatible with aarch64elfb
+   ld.lld: error: rust/built-in.a(alloc.o) is incompatible with aarch64elfb
+   ld.lld: error: rust/built-in.a(kernel.o) is incompatible with aarch64elfb
+>> ld.lld: error: drivers/built-in.a(gpio/gpio_pl061_rust.o) is incompatible with aarch64elfb
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
