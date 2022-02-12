@@ -1,41 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF8C2566
-	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 10:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6652567
+	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 10:39:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644662383; x=1676198383;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IYrk9y2jLb238Dngg+0eR8eEyR0nRrvF7fRVKu/5dhM=;
-  b=D9Xg1PCh1Am/4vrY5sTa25kPnjPjBLSZ0ryWxLEOVUeA/fvym8R3jToL
-   4UpoXA5YDk8UCLyo+YE/dA/1k/gPV6g6Fbrq6WlVT6yyNCg+5HFUxBDw3
-   QrA76am8rrXU0qxaa5Ph5G6c1f+wQMh+K2mIydxGtl7SWrSg1/cbEZMcS
-   Jx7rVPdbEoW4mO2QHQu4lpCMf5qP0Ba8bJ48L5BKmCTo7SugfLM3wBA84
-   cPw8D/jeRAHg0yeCExdqzToNJCWpcdn/ElH4VrPwmvrhAu2wWLHkrLtT8
-   oWp6I07UQs1N+cRj7RvjoInf3uaYpgFaICxzfBUiKn8IsTXrZnl5oQ9j0
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="313153514"
+  t=1644662384; x=1676198384;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=U0oyazIgdr8BRlcbnAi2qE4iTWDo/NuzE6ByBJmMMzs=;
+  b=BiLmmsZ7AsPWwf0aMztZQB/Cv1qVgbCYl/ulHzpufe2UIZWCMd6mPaFm
+   uxNjiqt/qVinGtATOfs/+8x1s+FJ4vluYL9bD+lb1ebL9edGBdFYKH+YO
+   Ocf8zV9apOXR5WV935+1TAJh/q35s0WU0TvvoNxphfpO9FaChG5NApFCK
+   G0m042bVJZNUv5Na/XJRhB8jryXzrzF1XfXTNYz15qiW4CS0am7FXl2IU
+   w4+hx13ux/+eARL1CPLPC+B5hjWb70gl6SOr4wAzP//a9AzHtfW1e370a
+   mBKveFlLmwZRfZUdMriM7ZDSaPZLZ2HpGUY/f7dDz5tiUt/RHaG78+5C5
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="247465976"
 X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
-   d="scan'208";a="313153514"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 02:39:43 -0800
+   d="scan'208";a="247465976"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 02:39:43 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
-   d="scan'208";a="586614434"
+   d="scan'208";a="527258959"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Feb 2022 02:39:41 -0800
+  by orsmga007.jf.intel.com with ESMTP; 12 Feb 2022 02:39:41 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nIpob-00061L-0x; Sat, 12 Feb 2022 10:39:41 +0000
-Date: Sat, 12 Feb 2022 18:38:55 +0800
+	id 1nIpob-00061X-37; Sat, 12 Feb 2022 10:39:41 +0000
+Date: Sat, 12 Feb 2022 18:39:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lukas Czerner <lczerner@redhat.com>
+To: Felix Fietkau <nbd@nbd.name>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>
-Subject: fs/ext4/super.c:2173:1: warning: unused function 'ctx_clear_flags'
-Message-ID: <202202121524.strwjtrg-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [nbd168-wireless:mtk-flow-offload 3/9]
+ drivers/net/ethernet/mediatek/mtk_wed.h:33:20: error: no member named 'hw'
+ in 'struct mtk_wed_device'
+Message-ID: <202202121626.jCM5m8Oy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,223 +45,290 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Lukas,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git =
-master
-head:   83e396641110663d3c7bb25b9bc0c6a750359ecf
-commit: 4437992be7ca3ac5dd0a62cad10357112d4fb43e ext4: remove lazytime/nola=
-zytime mount options handled by MS_LAZYTIME
-date:   7 weeks ago
-config: mips-randconfig-r005-20220211 (https://download.01.org/0day-ci/arch=
-ive/20220212/202202121524.strwjtrg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f=
-774697c85d6a352dcea013f46a99f9fe31)
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
+tree:   https://github.com/nbd168/wireless mtk-flow-offload
+head:   1ba2137278dd5c4747b6e43be7aae4e94fb9c76e
+commit: b3eab9db70af66f3ce1415f2e51750b15df268c9 [3/9] net: ethernet: mtk_eth_soc: add support for Wireless Ethernet Dispatch (WED)
+config: arm64-randconfig-r022-20220211 (https://download.01.org/0day-ci/archive/20220212/202202121626.jCM5m8Oy-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c7eb84634519e6497be42f5fe323f9a04ed67127)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t/commit/?id=3D4437992be7ca3ac5dd0a62cad10357112d4fb43e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/gi=
-t/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4437992be7ca3ac5dd0a62cad10357112d4fb43e
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/nbd168/wireless/commit/b3eab9db70af66f3ce1415f2e51750b15df268c9
+        git remote add nbd168-wireless https://github.com/nbd168/wireless
+        git fetch --no-tags nbd168-wireless mtk-flow-offload
+        git checkout b3eab9db70af66f3ce1415f2e51750b15df268c9
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash fs/ext4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/ext4/super.c:2173:1: warning: unused function 'ctx_clear_flags'
-   EXT4_SET_CTX(flags);
-   ^
-   fs/ext4/super.c:2161:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline void ctx_clear_##name(struct ext4_fs_context ^
-   <scratch space>:84:1: note: expanded from here
-   ctx_clear_flags
-   ^
-   fs/ext4/super.c:2173:1: warning: unused function 'ctx_test_flags'
-   fs/ext4/super.c:2167:34: note: expanded from macro 'EXT4_SET_CTX'
-   static inline unsigned long ^
-   <scratch space>:87:1: note: expanded from here
-   ctx_test_flags
-   ^
-   fs/ext4/super.c:2176:1: warning: unused function 'ctx_clear_mount_flags'
-   EXT4_SET_CTX(mount_flags);
-   ^
-   fs/ext4/super.c:2161:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline void ctx_clear_##name(struct ext4_fs_context ^
-   <scratch space>:108:1: note: expanded from here
-   ctx_clear_mount_flags
-   ^
-   fs/ext4/super.c:2176:1: warning: unused function 'ctx_test_mount_flags'
-   fs/ext4/super.c:2167:34: note: expanded from macro 'EXT4_SET_CTX'
-   static inline unsigned long ^
-   <scratch space>:111:1: note: expanded from here
-   ctx_test_mount_flags
-   ^
-   fatal error: error in backend: Nested variants found in inline asm strin=
-g: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
-h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
-branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
-de/asm/bitops.h", .line =3D 105, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
-et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0. Program arguments: clang -Wp,-MMD,fs/ext4/.super.o.d -nostdinc -Iarch=
-/mips/include -I./arch/mips/include/generated -Iinclude -I./include -Iarch/=
-mips/include/uapi -I./arch/mips/include/generated/uapi -Iinclude/uapi -I./i=
-nclude/generated/uapi -include include/linux/compiler-version.h -include in=
-clude/linux/kconfig.h -include include/linux/compiler_types.h -D__KERNEL__ =
--DVMLINUX_LOAD_ADDRESS=3D0xffffffff84000000 -DLINKER_LOAD_ADDRESS=3D0x84000=
-000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=3D -DKBUILD_E=
-XTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -fno-st=
-rict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-functio=
-n-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format-secu=
-rity -std=3Dgnu89 --target=3Dmipsel-linux -fintegrated-as -Werror=3Dunknown=
--warning-option -Werror=3Dignored-optimization-argument -mno-check-zero-div=
-ision -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-float -DGAS_HAS_S=
-ET_HARDFLOAT -Wa,-msoft-float -ffreestanding -EL -fno-stack-check -march=3D=
-mips32 -Wa,-mips32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/include=
-/asm/mach-bmips/ -Iarch/mips/include/asm/mach-generic -fno-asynchronous-unw=
-ind-tables -fno-delete-null-pointer-checks -Wno-frame-address -Wno-address-=
-of-packed-member -O2 -Wframe-larger-than=3D1024 -fno-stack-protector -Wimpl=
-icit-fallthrough -Wno-gnu -mno-global-merge -Wno-unused-but-set-variable -W=
-no-unused-const-variable -ftrivial-auto-var-init=3Dzero -enable-trivial-aut=
-o-var-init-zero-knowing-it-will-be-removed-from-clang -fno-stack-clash-prot=
-ection -pg -Wdeclaration-after-statement -Wvla -Wno-pointer-sign -Wno-array=
--bounds -fno-strict-overflow -fno-stack-check -Werror=3Ddate-time -Werror=
-=3Dincompatible-pointer-types -Wextra -Wunused -Wno-unused-parameter -Wmiss=
-ing-declarations -Wmissing-format-attribute -Wmissing-prototypes -Wold-styl=
-e-definition -Wmissing-include-dirs -Wunused-but-set-variable -Wunused-cons=
-t-variable -Wno-missing-field-initializers -Wno-sign-compare -Wno-type-limi=
-ts -I fs/ext4 -I ./fs/ext4 -ffunction-sections -fdata-sections -DKBUILD_MOD=
-FILE=3D"fs/ext4/ext4" -DKBUILD_BASENAME=3D"super" -DKBUILD_MODNAME=3D"ext4"=
- -D__KBUILD_MODNAME=3Dkmod_ext4 -c -o fs/ext4/super.o fs/ext4/super.c
-   1. <eof> parser at end of file
-   2. Code generation
-   3. Running pass 'Function Pass Manager' on module 'fs/ext4/super.c'.
-   4. Running pass 'Mips Assembly Printer' on function '@ext4_read_bh_nowai=
-t'
-   #0 0x000056373747f14f Signals.cpp:0:0
-   #1 0x000056373747d02c llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
-oss/clang-c7eb846345/bin/clang-15+0x347a02c)
-   #2 0x00005637373bd2c7 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
-cross/clang-c7eb846345/bin/clang-15+0x33ba2c7)
-   #3 0x00005637374756de llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
-ang-c7eb846345/bin/clang-15+0x34726de)
-   #4 0x00005637350ab9fb (/opt/cross/clang-c7eb846345/bin/clang-15+0x10a89f=
-b)
-   #5 0x00005637373c3d7c llvm::report_fatal_error(llvm::Twine const&, bool)=
- (/opt/cross/clang-c7eb846345/bin/clang-15+0x33c0d7c)
-   #6 0x00005637380d0420 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
- const (/opt/cross/clang-c7eb846345/bin/clang-15+0x40cd420)
-   #7 0x00005637380cc354 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
-lang-c7eb846345/bin/clang-15+0x40c9354)
-   #8 0x0000563735b17077 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
-achineFunction&) (/opt/cross/clang-c7eb846345/bin/clang-15+0x1b14077)
-   #9 0x00005637367cf98d llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
-ction&) (.part.53) MachineFunctionPass.cpp:0:0
-   #10 0x0000563736c10617 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (/opt/cross/clang-c7eb846345/bin/clang-15+0x2c0d617)
-   #11 0x0000563736c10791 llvm::FPPassManager::runOnModule(llvm::Module&) (=
-/opt/cross/clang-c7eb846345/bin/clang-15+0x2c0d791)
-   #12 0x0000563736c1130f llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (/opt/cross/clang-c7eb846345/bin/clang-15+0x2c0e30f)
-   #13 0x00005637377972b7 clang::EmitBackendOutput(clang::DiagnosticsEngine=
-&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
-TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
-ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
-lvm::raw_pwrite_stream> >) (/opt/cross/clang-c7eb846345/bin/clang-15+0x3794=
-2b7)
-   #14 0x00005637383e97c3 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (/opt/cross/clang-c7eb846345/bin/clang-15+0x43e67c3)
-   #15 0x0000563738ec04e9 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
-ross/clang-c7eb846345/bin/clang-15+0x4ebd4e9)
-   #16 0x00005637383e85ff clang::CodeGenAction::ExecuteAction() (/opt/cross=
-/clang-c7eb846345/bin/clang-15+0x43e55ff)
-   #17 0x0000563737de55b1 clang::FrontendAction::Execute() (/opt/cross/clan=
-g-c7eb846345/bin/clang-15+0x3de25b1)
-   #18 0x0000563737d7c05a clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (/opt/cross/clang-c7eb846345/bin/clang-15+0x3d7905a)
-   #19 0x0000563737ea9ceb (/opt/cross/clang-c7eb846345/bin/clang-15+0x3ea6c=
-eb)
-   #20 0x00005637350acfac cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
-ng-c7eb846345/bin/clang-15+0x10a9fac)
-   #21 0x00005637350a9c7b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
-cpp:0:0
-   #22 0x0000563737c13585 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
-ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
-tor<char> const::'lambda'()>(long) Job.cpp:0:0
-   #23 0x00005637373bd183 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (/opt/cross/clang-c7eb846345/bin/clang-15+0x33ba183)
-   #24 0x0000563737c13e7e clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
-har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
-   #25 0x0000563737be8a77 clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const (/opt/cross/clang-c7e=
-b846345/bin/clang-15+0x3be5a77)
-   #26 0x0000563737be9457 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) const (/opt/cross/clang-c7eb846345/bin/clang-15+0x3be6457)
-   #27 0x0000563737bf2ae9 clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) (/opt/cross/clang-c7eb846345/bin/clang-15+0x3befae9)
-   #28 0x0000563734fd23ff main (/opt/cross/clang-c7eb846345/bin/clang-15+0x=
-fcf3ff)
-   #29 0x00007f9d5663bd0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x26d0a)
-   #30 0x00005637350a979a _start (/opt/cross/clang-c7eb846345/bin/clang-15+=
-0x10a679a)
-   clang-15: error: clang frontend command failed with exit code 70 (use -v=
- to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project c7eb84634519e6497be42=
-f5fe323f9a04ed67127)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-c7eb846345/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch drivers fs include kernel scripts source usr
+   In file included from drivers/net/ethernet/mediatek/mtk_eth_soc.c:27:
+>> drivers/net/ethernet/mediatek/mtk_wed.h:33:20: error: no member named 'hw' in 'struct mtk_wed_device'
+           regmap_write(dev->hw->regs, reg, val);
+                        ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:41:19: error: no member named 'hw' in 'struct mtk_wed_device'
+           regmap_read(dev->hw->regs, reg, &val);
+                       ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:49:19: error: no member named 'hw' in 'struct mtk_wed_device'
+           writel(val, dev->hw->wdma + reg);
+                       ~~~  ^
+   arch/arm64/include/asm/io.h:142:56: note: expanded from macro 'writel'
+   #define writel(v,c)             ({ __iowmb(); writel_relaxed((v),(c)); })
+                                                                     ^
+   arch/arm64/include/asm/io.h:127:78: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
+                                                                                    ^
+   In file included from drivers/net/ethernet/mediatek/mtk_eth_soc.c:27:
+   drivers/net/ethernet/mediatek/mtk_wed.h:55:20: error: no member named 'hw' in 'struct mtk_wed_device'
+           return readl(dev->hw->wdma + reg);
+                        ~~~  ^
+   arch/arm64/include/asm/io.h:137:46: note: expanded from macro 'readl'
+   #define readl(c)                ({ u32 __v = readl_relaxed(c); __iormb(__v); __v; })
+                                                              ^
+   arch/arm64/include/asm/io.h:122:79: note: expanded from macro 'readl_relaxed'
+   #define readl_relaxed(c)        ({ u32 __r = le32_to_cpu((__force __le32)__raw_readl(c)); __r; })
+                                                                                        ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/ethernet/mediatek/mtk_eth_soc.c:27:
+>> drivers/net/ethernet/mediatek/mtk_wed.h:61:12: error: no member named 'tx_ring' in 'struct mtk_wed_device'
+           if (!dev->tx_ring[ring].wpdma)
+                ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:64:20: error: no member named 'tx_ring' in 'struct mtk_wed_device'
+           return readl(dev->tx_ring[ring].wpdma + reg);
+                        ~~~  ^
+   arch/arm64/include/asm/io.h:137:46: note: expanded from macro 'readl'
+   #define readl(c)                ({ u32 __v = readl_relaxed(c); __iormb(__v); __v; })
+                                                              ^
+   arch/arm64/include/asm/io.h:122:79: note: expanded from macro 'readl_relaxed'
+   #define readl_relaxed(c)        ({ u32 __r = le32_to_cpu((__force __le32)__raw_readl(c)); __r; })
+                                                                                        ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/ethernet/mediatek/mtk_eth_soc.c:27:
+   drivers/net/ethernet/mediatek/mtk_wed.h:70:12: error: no member named 'tx_ring' in 'struct mtk_wed_device'
+           if (!dev->tx_ring[ring].wpdma)
+                ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:73:19: error: no member named 'tx_ring' in 'struct mtk_wed_device'
+           writel(val, dev->tx_ring[ring].wpdma + reg);
+                       ~~~  ^
+   arch/arm64/include/asm/io.h:142:56: note: expanded from macro 'writel'
+   #define writel(v,c)             ({ __iowmb(); writel_relaxed((v),(c)); })
+                                                                     ^
+   arch/arm64/include/asm/io.h:127:78: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
+                                                                                    ^
+   In file included from drivers/net/ethernet/mediatek/mtk_eth_soc.c:27:
+>> drivers/net/ethernet/mediatek/mtk_wed.h:79:12: error: no member named 'txfree_ring' in 'struct mtk_wed_device'
+           if (!dev->txfree_ring.wpdma)
+                ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:82:20: error: no member named 'txfree_ring' in 'struct mtk_wed_device'
+           return readl(dev->txfree_ring.wpdma + reg);
+                        ~~~  ^
+   arch/arm64/include/asm/io.h:137:46: note: expanded from macro 'readl'
+   #define readl(c)                ({ u32 __v = readl_relaxed(c); __iormb(__v); __v; })
+                                                              ^
+   arch/arm64/include/asm/io.h:122:79: note: expanded from macro 'readl_relaxed'
+   #define readl_relaxed(c)        ({ u32 __r = le32_to_cpu((__force __le32)__raw_readl(c)); __r; })
+                                                                                        ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/ethernet/mediatek/mtk_eth_soc.c:27:
+   drivers/net/ethernet/mediatek/mtk_wed.h:88:12: error: no member named 'txfree_ring' in 'struct mtk_wed_device'
+           if (!dev->txfree_ring.wpdma)
+                ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:91:19: error: no member named 'txfree_ring' in 'struct mtk_wed_device'
+           writel(val, dev->txfree_ring.wpdma + reg);
+                       ~~~  ^
+   arch/arm64/include/asm/io.h:142:56: note: expanded from macro 'writel'
+   #define writel(v,c)             ({ __iowmb(); writel_relaxed((v),(c)); })
+                                                                     ^
+   arch/arm64/include/asm/io.h:127:78: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
+                                                                                    ^
+   12 errors generated.
+--
+   In file included from drivers/net/ethernet/mediatek/mtk_wed.c:17:
+>> drivers/net/ethernet/mediatek/mtk_wed.h:33:20: error: no member named 'hw' in 'struct mtk_wed_device'
+           regmap_write(dev->hw->regs, reg, val);
+                        ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:41:19: error: no member named 'hw' in 'struct mtk_wed_device'
+           regmap_read(dev->hw->regs, reg, &val);
+                       ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:49:19: error: no member named 'hw' in 'struct mtk_wed_device'
+           writel(val, dev->hw->wdma + reg);
+                       ~~~  ^
+   arch/arm64/include/asm/io.h:142:56: note: expanded from macro 'writel'
+   #define writel(v,c)             ({ __iowmb(); writel_relaxed((v),(c)); })
+                                                                     ^
+   arch/arm64/include/asm/io.h:127:78: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
+                                                                                    ^
+   In file included from drivers/net/ethernet/mediatek/mtk_wed.c:17:
+   drivers/net/ethernet/mediatek/mtk_wed.h:55:20: error: no member named 'hw' in 'struct mtk_wed_device'
+           return readl(dev->hw->wdma + reg);
+                        ~~~  ^
+   arch/arm64/include/asm/io.h:137:46: note: expanded from macro 'readl'
+   #define readl(c)                ({ u32 __v = readl_relaxed(c); __iormb(__v); __v; })
+                                                              ^
+   arch/arm64/include/asm/io.h:122:79: note: expanded from macro 'readl_relaxed'
+   #define readl_relaxed(c)        ({ u32 __r = le32_to_cpu((__force __le32)__raw_readl(c)); __r; })
+                                                                                        ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/ethernet/mediatek/mtk_wed.c:17:
+>> drivers/net/ethernet/mediatek/mtk_wed.h:61:12: error: no member named 'tx_ring' in 'struct mtk_wed_device'
+           if (!dev->tx_ring[ring].wpdma)
+                ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:64:20: error: no member named 'tx_ring' in 'struct mtk_wed_device'
+           return readl(dev->tx_ring[ring].wpdma + reg);
+                        ~~~  ^
+   arch/arm64/include/asm/io.h:137:46: note: expanded from macro 'readl'
+   #define readl(c)                ({ u32 __v = readl_relaxed(c); __iormb(__v); __v; })
+                                                              ^
+   arch/arm64/include/asm/io.h:122:79: note: expanded from macro 'readl_relaxed'
+   #define readl_relaxed(c)        ({ u32 __r = le32_to_cpu((__force __le32)__raw_readl(c)); __r; })
+                                                                                        ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/ethernet/mediatek/mtk_wed.c:17:
+   drivers/net/ethernet/mediatek/mtk_wed.h:70:12: error: no member named 'tx_ring' in 'struct mtk_wed_device'
+           if (!dev->tx_ring[ring].wpdma)
+                ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:73:19: error: no member named 'tx_ring' in 'struct mtk_wed_device'
+           writel(val, dev->tx_ring[ring].wpdma + reg);
+                       ~~~  ^
+   arch/arm64/include/asm/io.h:142:56: note: expanded from macro 'writel'
+   #define writel(v,c)             ({ __iowmb(); writel_relaxed((v),(c)); })
+                                                                     ^
+   arch/arm64/include/asm/io.h:127:78: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
+                                                                                    ^
+   In file included from drivers/net/ethernet/mediatek/mtk_wed.c:17:
+>> drivers/net/ethernet/mediatek/mtk_wed.h:79:12: error: no member named 'txfree_ring' in 'struct mtk_wed_device'
+           if (!dev->txfree_ring.wpdma)
+                ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:82:20: error: no member named 'txfree_ring' in 'struct mtk_wed_device'
+           return readl(dev->txfree_ring.wpdma + reg);
+                        ~~~  ^
+   arch/arm64/include/asm/io.h:137:46: note: expanded from macro 'readl'
+   #define readl(c)                ({ u32 __v = readl_relaxed(c); __iormb(__v); __v; })
+                                                              ^
+   arch/arm64/include/asm/io.h:122:79: note: expanded from macro 'readl_relaxed'
+   #define readl_relaxed(c)        ({ u32 __r = le32_to_cpu((__force __le32)__raw_readl(c)); __r; })
+                                                                                        ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/ethernet/mediatek/mtk_wed.c:17:
+   drivers/net/ethernet/mediatek/mtk_wed.h:88:12: error: no member named 'txfree_ring' in 'struct mtk_wed_device'
+           if (!dev->txfree_ring.wpdma)
+                ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.h:91:19: error: no member named 'txfree_ring' in 'struct mtk_wed_device'
+           writel(val, dev->txfree_ring.wpdma + reg);
+                       ~~~  ^
+   arch/arm64/include/asm/io.h:142:56: note: expanded from macro 'writel'
+   #define writel(v,c)             ({ __iowmb(); writel_relaxed((v),(c)); })
+                                                                     ^
+   arch/arm64/include/asm/io.h:127:78: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
+                                                                                    ^
+>> drivers/net/ethernet/mediatek/mtk_wed.c:35:26: error: no member named 'hw' in 'struct mtk_wed_device'
+           regmap_update_bits(dev->hw->regs, reg, mask | val, val);
+                              ~~~  ^
+>> drivers/net/ethernet/mediatek/mtk_wed.c:84:34: error: no member named 'wlan' in 'struct mtk_wed_device'
+           hw = hw_list[pci_domain_nr(dev->wlan.pci_dev->bus)];
+                                      ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.c:98:19: error: no member named 'wlan' in 'struct mtk_wed_device'
+           int token = dev->wlan.token_start;
+                       ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.c:103:19: error: no member named 'wlan' in 'struct mtk_wed_device'
+           ring_size = dev->wlan.nbuf & ~(MTK_WED_BUF_PER_PAGE - 1);
+                       ~~~  ^
+>> drivers/net/ethernet/mediatek/mtk_wed.c:110:7: error: no member named 'buf_ring' in 'struct mtk_wed_device'
+           dev->buf_ring.size = ring_size;
+           ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.c:111:7: error: no member named 'buf_ring' in 'struct mtk_wed_device'
+           dev->buf_ring.pages = page_list;
+           ~~~  ^
+   drivers/net/ethernet/mediatek/mtk_wed.c:113:33: error: no member named 'hw' in 'struct mtk_wed_device'
+           desc = dma_alloc_coherent(dev->hw->dev, ring_size * sizeof(*desc),
+                                     ~~~  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-vim +/ctx_clear_flags +2173 fs/ext4/super.c
+vim +33 drivers/net/ethernet/mediatek/mtk_wed.h
 
-6e47a3cc68fc525 Lukas Czerner 2021-10-27  2172 =20
-6e47a3cc68fc525 Lukas Czerner 2021-10-27 @2173  EXT4_SET_CTX(flags);
-6e47a3cc68fc525 Lukas Czerner 2021-10-27  2174  EXT4_SET_CTX(mount_opt);
-6e47a3cc68fc525 Lukas Czerner 2021-10-27  2175  EXT4_SET_CTX(mount_opt2);
-6e47a3cc68fc525 Lukas Czerner 2021-10-27  2176  EXT4_SET_CTX(mount_flags);
-6e47a3cc68fc525 Lukas Czerner 2021-10-27  2177 =20
-
-:::::: The code at line 2173 was first introduced by commit
-:::::: 6e47a3cc68fc525428297a00524833361ebbb0e9 ext4: get rid of super bloc=
-k and sbi from handle_mount_ops()
-
-:::::: TO: Lukas Czerner <lczerner@redhat.com>
-:::::: CC: Theodore Ts'o <tytso@mit.edu>
+    29	
+    30	static inline void
+    31	wed_w32(struct mtk_wed_device *dev, u32 reg, u32 val)
+    32	{
+  > 33		regmap_write(dev->hw->regs, reg, val);
+    34	}
+    35	
+    36	static inline u32
+    37	wed_r32(struct mtk_wed_device *dev, u32 reg)
+    38	{
+    39		unsigned int val;
+    40	
+    41		regmap_read(dev->hw->regs, reg, &val);
+    42	
+    43		return val;
+    44	}
+    45	
+    46	static inline void
+    47	wdma_w32(struct mtk_wed_device *dev, u32 reg, u32 val)
+    48	{
+    49		writel(val, dev->hw->wdma + reg);
+    50	}
+    51	
+    52	static inline u32
+    53	wdma_r32(struct mtk_wed_device *dev, u32 reg)
+    54	{
+    55		return readl(dev->hw->wdma + reg);
+    56	}
+    57	
+    58	static inline u32
+    59	wpdma_tx_r32(struct mtk_wed_device *dev, int ring, u32 reg)
+    60	{
+  > 61		if (!dev->tx_ring[ring].wpdma)
+    62			return 0;
+    63	
+    64		return readl(dev->tx_ring[ring].wpdma + reg);
+    65	}
+    66	
+    67	static inline void
+    68	wpdma_tx_w32(struct mtk_wed_device *dev, int ring, u32 reg, u32 val)
+    69	{
+    70		if (!dev->tx_ring[ring].wpdma)
+    71			return;
+    72	
+    73		writel(val, dev->tx_ring[ring].wpdma + reg);
+    74	}
+    75	
+    76	static inline u32
+    77	wpdma_txfree_r32(struct mtk_wed_device *dev, u32 reg)
+    78	{
+  > 79		if (!dev->txfree_ring.wpdma)
+    80			return 0;
+    81	
+    82		return readl(dev->txfree_ring.wpdma + reg);
+    83	}
+    84	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
