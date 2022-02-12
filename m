@@ -1,43 +1,41 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A6F7A
-	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 05:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE75B7A
+	for <llvm@lists.linux.dev>; Sat, 12 Feb 2022 06:29:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644644788; x=1676180788;
+  t=1644647370; x=1676183370;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AQ9szTLzH8p4ZzKApvUor4Tkzkm+eqoA6a52bjEco+k=;
-  b=QzEXp/+F5+sWcokuzkQJw1YIdOYAcXW5d2gl7tHiB4vzKQCXKp7BquQA
-   3kUGQB/Akiq/HWotZEmmjtpJLqZcq4pXCwESnSgvrZmtV1uTqXQzByFgU
-   fyRtyspIWLeoF08mtnWyAZth0mYcoPI4S6DVbM0k/TcLWw8+dSx/OcxNK
-   L2CqH7yfvc69jTZUjfdYUgKZWNkiMLphsmr8Ikcm5mnYMKa+bv11i+0HA
-   O81y/uYXnakCkaC6bmR7LdWoiB3/RcOTZCO6+TSlsQNbhR1euAuwWPcG2
-   3RMGZa4pe8i9s/wpBZM/icF+aGg0CvxRkH5A1ziLg51WZ2u4jyPY+Kc1H
+  bh=lx8D/4t99L/QOb2KmlGM1cN1sBIDegNqwSPqNsEol0M=;
+  b=S+XPPSPk/38sRelvF0EHCKSwzTl68wsHS8MOuzUEV8gGLoqiNWUrKhi3
+   4xjpmZEfpiobuR/olwt21PheuC6e+gRAQMkKVu8Eqw/rUMWi68EVbSD/6
+   qdS8ScBe9fDFSuga0xoG57ibXsXf0MFL1SuJ8T1pUjTt0YDiQGsHwi5AW
+   cRy0NctZrb41spu6RBjTkxUH9Ul4pcRR+oVws3w8IySw2VhGPagnzRT8a
+   +IimJI5YEdsetfQphoch3bi9S4e01G4VmtW2ShbxbzwGwBNsbSRuwKeUt
+   4yiOx5+EmMZ6d7VshXtvG1ivD0e2LK+TYlLH38sMQu3gKdHkLLKiozLqM
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="310592613"
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="247453381"
 X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
-   d="scan'208";a="310592613"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 21:46:28 -0800
+   d="scan'208";a="247453381"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 22:29:29 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
-   d="scan'208";a="774444145"
+   d="scan'208";a="702346862"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Feb 2022 21:46:26 -0800
+  by orsmga005.jf.intel.com with ESMTP; 11 Feb 2022 22:29:28 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nIlEo-0005hP-1U; Sat, 12 Feb 2022 05:46:26 +0000
-Date: Sat, 12 Feb 2022 13:45:24 +0800
+	id 1nIluR-0005k3-Bp; Sat, 12 Feb 2022 06:29:27 +0000
+Date: Sat, 12 Feb 2022 14:28:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kai Huang <kai.huang@intel.com>
+To: Waiman Long <longman@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Isaku Yamahata <isaku.yamahata@intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 7/145]
- arch/x86/kernel/cpu/tdx/tdx.c:148:30: warning: variable 'err' is
- uninitialized when used within its own initialization
-Message-ID: <202202121324.DClhLKTq-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [peterz-queue:locking/core 6/7] kernel/locking/lockdep.c:6017:57:
+ error: use of undeclared identifier 'offset'
+Message-ID: <202202121417.yBYvheMJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,45 +46,53 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   f40698d38196025a38e79a2bdf22058de944b38a
-commit: 474e0c5f940be499b7c8996ba8e64c31f56d21fe [7/145] x86/cpu: Do logical cpu level TDX module initialization
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220212/202202121324.DClhLKTq-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+head:   2300c94a775d0f2a733ef11285cc0abe8126edf6
+commit: 065af96d73df2653a2d7da572cf8ba57218479ef [6/7] locking/lockdep: Cleanup reinit_class()
+config: hexagon-buildonly-randconfig-r006-20220211 (https://download.01.org/0day-ci/archive/20220212/202202121417.yBYvheMJ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c7eb84634519e6497be42f5fe323f9a04ed67127)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/474e0c5f940be499b7c8996ba8e64c31f56d21fe
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 474e0c5f940be499b7c8996ba8e64c31f56d21fe
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=065af96d73df2653a2d7da572cf8ba57218479ef
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue locking/core
+        git checkout 065af96d73df2653a2d7da572cf8ba57218479ef
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/cpu/tdx/ drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/cpu/tdx/tdx.c:148:30: warning: variable 'err' is uninitialized when used within its own initialization [-Wuninitialized]
-           atomic_t *err = (atomic_t *)err;
-                     ~~~               ^~~
-   1 warning generated.
+>> kernel/locking/lockdep.c:6017:57: error: use of undeclared identifier 'offset'
+           BUILD_BUG_ON(offsetof(struct lock_class, lock_entry) > offset);
+                                                                  ^
+   kernel/locking/lockdep.c:6018:58: error: use of undeclared identifier 'offset'
+           BUILD_BUG_ON(offsetof(struct lock_class, locks_after) > offset);
+                                                                   ^
+   kernel/locking/lockdep.c:6019:59: error: use of undeclared identifier 'offset'
+           BUILD_BUG_ON(offsetof(struct lock_class, locks_before) > offset);
+                                                                    ^
+   3 errors generated.
 
 
-vim +/err +148 arch/x86/kernel/cpu/tdx/tdx.c
+vim +/offset +6017 kernel/locking/lockdep.c
 
-   144	
-   145	/* SMP call function to run TDH.SYS.LP.INIT */
-   146	static void smp_call_tdx_cpu_init(void *data)
-   147	{
- > 148		atomic_t *err = (atomic_t *)err;
-   149	
-   150		if (tdh_sys_lp_init())
-   151			atomic_set(err, -1);
-   152	}
-   153	
+  6011	
+  6012	static void reinit_class(struct lock_class *class)
+  6013	{
+  6014		WARN_ON_ONCE(!class->lock_entry.next);
+  6015		WARN_ON_ONCE(!list_empty(&class->locks_after));
+  6016		WARN_ON_ONCE(!list_empty(&class->locks_before));
+> 6017		BUILD_BUG_ON(offsetof(struct lock_class, lock_entry) > offset);
+  6018		BUILD_BUG_ON(offsetof(struct lock_class, locks_after) > offset);
+  6019		BUILD_BUG_ON(offsetof(struct lock_class, locks_before) > offset);
+  6020		memset_startat(class, 0, key);
+  6021	}
+  6022	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
