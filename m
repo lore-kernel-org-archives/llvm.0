@@ -1,122 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2877D
-	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 18:39:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C04C004E1;
-	Sun, 13 Feb 2022 18:39:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644777568;
-	bh=vs/QifduZDoY/ETojuivPkDFpDkaCbp+mFAiQ9QKXeM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=falLgcQBvsXbqD+5YLjI1r1ZMPrtOBpatRB1KWnuNJZdPpvjG+1glNvUecuPgKshv
-	 R0IeB2ewTJ5vBosdW21LO200CjQ0+kPkyfe+PBnE8gkyuD7YQPqrB1QLL6CBQfm1u+
-	 xdPlfnqACnviL311DuyenWWRaR5MYxaxx+bT8Pmlzy7sfsg15OlovsPIm1uBL4Mh4a
-	 +DqneNWYyE62qrT9xIzLdD5gEQoWkf/BfY6MTPQjyNcu9gRs/zgqO6J7BkBgxjSe/T
-	 q3lghfTp0GqoRrUzjNic75qgfEwCSMo6hzSznuEBYvjXt+RvYHlQd/dHwXMVp26zfV
-	 7l2HwQheFoJQA==
-Date: Sun, 13 Feb 2022 11:39:23 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Tong Zhang <ztong0001@gmail.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] drm/i915: fix build issue when using clang
-Message-ID: <YglQW7gVNoRJ7QpQ@dev-arch.archlinux-ax161>
-References: <20220213065106.48062-1-ztong0001@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBEE47D
+	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 19:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644780606; x=1676316606;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Z+IPQbc3DoIThr1y05QJVgCJisA7QjZzfj+r0fgo/G8=;
+  b=Mgz9UvtJAjrzRZZ36064nW6jLT4hdq6BCkJBCsPHKzfwSuS1G6YHYypw
+   T5iQIDjRO0Drpu4YZKyYJPJmXylTkU1SOlX5UO9+p1lLV1CcPdhWXZvvD
+   LGLwRzfP7Ke0CwClK44IKV6nUPVgIlehrlsERje7G+MTOR8S5/bE5C2AE
+   x3dL6HH/tuf0UWCOfQ6TTyx7tMGTCrjAmzJJk74aeLv/d/KZU/UDDAnki
+   uCJDgoh+tMyV5WjH/vyk73rzSUupxC+etUwMj9h3A0RxkwJZA0oHJjLhQ
+   dzgsAFurux90RFPopDEgjvvkjOXG1Ue5jPRHdpRfrKPz0G22RUo3Y4/c3
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="237379979"
+X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
+   d="scan'208";a="237379979"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 11:30:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
+   d="scan'208";a="484955778"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 13 Feb 2022 11:30:04 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nJKZP-0007mF-WD; Sun, 13 Feb 2022 19:30:04 +0000
+Date: Mon, 14 Feb 2022 03:29:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mathias Krause <minipli@grsecurity.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: kernel/sched/rt.c:257:6: error: no previous prototype for function
+ 'unregister_rt_sched_group'
+Message-ID: <202202140339.Uk9VGrvV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220213065106.48062-1-ztong0001@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, Feb 12, 2022 at 10:51:06PM -0800, Tong Zhang wrote:
-> drm/i915 target adds some extra cflags, especially it does re-apply -Wall.
-> In clang this will override -Wno-format-security and cause the build to
-> fail when CONFIG_DRM_I915_WERROR=y. While with GCC this does not happen.
-> We reapply -Wno-format-security here to get around this issue.
+Hi Mathias,
 
-For what it's worth, GCC would warn in the exact same way if
--Wformat-security was included within -Wall like it is for clang:
+FYI, the error/warning still remains.
 
-drivers/gpu/drm/i915/gt/intel_gt.c: In function ‘intel_gt_invalidate_tlbs’:
-drivers/gpu/drm/i915/gt/intel_gt.c:988:9: error: format not a string literal and no format arguments [-Werror=format-security]
-  988 |         GEM_TRACE("\n");
-      |         ^~~~~~~~~
-cc1: all warnings being treated as errors
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
+commit: b027789e5e50494c2325cc70c8642e7fd6059479 sched/fair: Prevent dead task groups from regaining cfs_rq's
+date:   3 months ago
+config: riscv-randconfig-c006-20220213 (https://download.01.org/0day-ci/archive/20220214/202202140339.Uk9VGrvV-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 478c237e21b2c3a83e46f26fcbeb3876682f9b14)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b027789e5e50494c2325cc70c8642e7fd6059479
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b027789e5e50494c2325cc70c8642e7fd6059479
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/ drivers/clk/bcm/ drivers/gpu/drm/ kernel/sched/
 
-drivers/gpu/drm/i915/gt/selftest_execlists.c: In function ‘live_sanitycheck’:
-drivers/gpu/drm/i915/gt/selftest_execlists.c:142:25: error: format not a string literal and no format arguments [-Werror=format-security]
-  142 |                         GEM_TRACE("spinner failed to start\n");
-      |                         ^~~~~~~~~
-drivers/gpu/drm/i915/gt/selftest_execlists.c: In function ‘live_preempt’:
-drivers/gpu/drm/i915/gt/selftest_execlists.c:1775:25: error: format not a string literal and no format arguments [-Werror=format-security]
- 1775 |                         GEM_TRACE("lo spinner failed to start\n");
-      |                         ^~~~~~~~~
-drivers/gpu/drm/i915/gt/selftest_execlists.c:1792:25: error: format not a string literal and no format arguments [-Werror=format-security]
- 1792 |                         GEM_TRACE("hi spinner failed to start\n");
-      |                         ^~~~~~~~~
-cc1: all warnings being treated as errors
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-If fixing these warnings instead of just disabling the warning is
-undesirable (since I feel like the entire point of the i195 cflags
-situation is to enable more warnings than the main Makefile), I think
-the commit message should be rewritten to something along the lines of:
+All errors (new ones prefixed by >>):
 
-"drm/i915 adds some extra cflags, namely -Wall, which causes
-instances of -Wformat-security to appear when building with clang, even
-though this warning is turned off kernel-wide in the main Makefile:"
+>> kernel/sched/rt.c:257:6: error: no previous prototype for function 'unregister_rt_sched_group' [-Werror,-Wmissing-prototypes]
+   void unregister_rt_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/rt.c:257:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void unregister_rt_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/rt.c:259:6: error: no previous prototype for function 'free_rt_sched_group' [-Werror,-Wmissing-prototypes]
+   void free_rt_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/rt.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void free_rt_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/rt.c:261:5: error: no previous prototype for function 'alloc_rt_sched_group' [-Werror,-Wmissing-prototypes]
+   int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)
+       ^
+   kernel/sched/rt.c:261:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)
+   ^
+   static 
+   kernel/sched/rt.c:675:6: error: no previous prototype for function 'sched_rt_bandwidth_account' [-Werror,-Wmissing-prototypes]
+   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
+        ^
+   kernel/sched/rt.c:675:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
+   ^
+   static 
+   4 errors generated.
 
-> drivers/gpu/drm/i915/gt/intel_gt.c:983:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
->         GEM_TRACE("ERROR\n");
->         ^~~~~~~~~~~~~~~~~~~~
-> ./drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
->  #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
->                        ^~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/kernel.h:369:3: note: expanded from macro 'trace_printk'
->                 do_trace_printk(fmt, ##__VA_ARGS__);    \
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/kernel.h:383:30: note: expanded from macro 'do_trace_printk'
->                 __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
->                                            ^~~~~~~~~~~~~~~~
-> drivers/gpu/drm/i915/gt/intel_gt.c:983:2: note: treat the string as an argument to avoid this
 
-"This does not happen with GCC because it does not enable
--Wformat-security with -Wall. Disable -Wformat-security within the i915
-Makefile so that these warnings do not show up with clang."
+vim +/unregister_rt_sched_group +257 kernel/sched/rt.c
 
-The actual diff itself looks fine to me.
+   256	
+ > 257	void unregister_rt_sched_group(struct task_group *tg) { }
+   258	
 
-Cheers,
-Nathan
-
-> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-> ---
->  drivers/gpu/drm/i915/Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
-> index 1b62b9f65196..c04e05a3d39f 100644
-> --- a/drivers/gpu/drm/i915/Makefile
-> +++ b/drivers/gpu/drm/i915/Makefile
-> @@ -13,6 +13,7 @@
->  # will most likely get a sudden build breakage... Hopefully we will fix
->  # new warnings before CI updates!
->  subdir-ccflags-y := -Wall -Wextra
-> +subdir-ccflags-y += -Wno-format-security
->  subdir-ccflags-y += -Wno-unused-parameter
->  subdir-ccflags-y += -Wno-type-limits
->  subdir-ccflags-y += -Wno-missing-field-initializers
-> -- 
-> 2.25.1
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
