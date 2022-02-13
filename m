@@ -1,42 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A02365
-	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 13:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C077A
+	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 17:48:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644757438; x=1676293438;
+  t=1644774484; x=1676310484;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4WJZJbknenGkTG+kkIeFvel9trpEu70jNlVS7CRk4ik=;
-  b=ZweB1FJTBrR8D0WsfWALCqY/vbJBh3wlUMnNbQaptf9JS1SZBYK8Lwhf
-   Wcm+SZpRNnl2QdJIXucIrUC8O1Mfk593SQPcpfFkwbrATgX69lx4Ob1ZG
-   Vq+u2BiUYkPCdk8ONB50IleOWgCRGZLaqpri8X9tqvxHV4SepnqZc4bVj
-   TJlUUtA6aJyL6mdXEEEZ/A+OObUKrObDKL5TCIqUICIE0rKhR5tYqXBI2
-   VXE2SNzsSDhSN31ahgslqUK9tUe61OfPGYsngaqfbq+PpMyavRs3JhBAz
-   6yG6nahu5pqQ4/KWKB5hJ2M521MsYcFAhy25B3rEh4c/6zO7yDDUR/AQy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="229910072"
+  bh=G4lnQt9mqaSacmnUNQc0vRjPvtM79i/zVMuBcDZ8deo=;
+  b=EPliIkP6ZsKESFpS8hBzX1fqgDnV5u5DEkMf/Hh3F8k0CNBUI8cr/zZd
+   EVZB80hXntlXffI1OiGTBhOiYQrpSpW5Xw5suq+HvxCiE2V2AX1bLUcj9
+   0TeBlT6BiLLWwMfRVzWlbwo42zjBNAzbQorAdUGRJPTwiubPkAZo11vLk
+   jsuRGaSRsc1WFSjpVGxeipA+2OhSClv6gIx1/ss4uso7pcfsq+pmjang6
+   VzyqsR+BtBGjSB9NHI2pw8pHrVGW1wH5/ZLeWKGRjspGWRZmOxbRlQdUy
+   u9ooClAiJHzpqyKlwOpHEFf/wipuQDwKN50sitB8ix46o7sLNIjFCTpzR
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="237374191"
 X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="229910072"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 05:03:57 -0800
+   d="scan'208";a="237374191"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 09:48:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="702627576"
+   d="scan'208";a="569617180"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 13 Feb 2022 05:03:55 -0800
+  by orsmga001.jf.intel.com with ESMTP; 13 Feb 2022 09:48:02 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nJEXj-0007WS-7t; Sun, 13 Feb 2022 13:03:55 +0000
-Date: Sun, 13 Feb 2022 21:03:29 +0800
+	id 1nJIyf-0007hB-HB; Sun, 13 Feb 2022 17:48:01 +0000
+Date: Mon, 14 Feb 2022 01:47:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: chongjiapeng <jiapeng.chong@linux.alibaba.com>
+To: Nikita Shubin <nikita.shubin@maquefel.me>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: kernel/trace/ftrace.c:7157:20: error: unused function
- 'ftrace_startup_enable'
-Message-ID: <202202132037.4aN017dU-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Subject: arch/arm/mach-ep93xx/ts72xx.c:154:13: error: no previous prototype
+ for function 'ts72xx_register_flash'
+Message-ID: <202202140141.HRZ3WZwi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,47 +49,83 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
-commit: 172f7ba9772cae12f099fc563352e905dc9a1921 ftrace: Make ftrace_profile_pages_init static
+commit: 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert in-place to COMMON_CLK
 date:   4 months ago
-config: arm-randconfig-r001-20220213 (https://download.01.org/0day-ci/archive/20220213/202202132037.4aN017dU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 478c237e21b2c3a83e46f26fcbeb3876682f9b14)
+config: arm-randconfig-r004-20220213 (https://download.01.org/0day-ci/archive/20220214/202202140141.HRZ3WZwi-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=172f7ba9772cae12f099fc563352e905dc9a1921
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 172f7ba9772cae12f099fc563352e905dc9a1921
+        git checkout 9645ccc7bd7a16cd73c3be9dee70cd702b03be37
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-ep93xx/ drivers/hsi/controllers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/trace/ftrace.c:7157:20: error: unused function 'ftrace_startup_enable' [-Werror,-Wunused-function]
-   static inline void ftrace_startup_enable(int command) { }
-                      ^
+>> arch/arm/mach-ep93xx/ts72xx.c:154:13: error: no previous prototype for function 'ts72xx_register_flash' [-Werror,-Wmissing-prototypes]
+   void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
+               ^
+   arch/arm/mach-ep93xx/ts72xx.c:154:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
+   ^
+   static 
    1 error generated.
+--
+>> drivers/hsi/controllers/omap_ssi_core.c:147:6: error: no previous prototype for function 'ssi_waketest' [-Werror,-Wmissing-prototypes]
+   void ssi_waketest(struct hsi_client *cl, unsigned int enable)
+        ^
+   drivers/hsi/controllers/omap_ssi_core.c:147:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void ssi_waketest(struct hsi_client *cl, unsigned int enable)
+   ^
+   static 
+   1 error generated.
+--
+>> drivers/hsi/controllers/omap_ssi_port.c:463:6: error: variable 'val' set but not used [-Werror,-Wunused-but-set-variable]
+           u32 val;
+               ^
+>> drivers/hsi/controllers/omap_ssi_port.c:1325:6: error: variable 'mode' set but not used [-Werror,-Wunused-but-set-variable]
+           u32 mode;
+               ^
+   2 errors generated.
 
 
-vim +/ftrace_startup_enable +7157 kernel/trace/ftrace.c
+vim +/ts72xx_register_flash +154 arch/arm/mach-ep93xx/ts72xx.c
 
-0b6e4d56bf7186 Frederic Weisbecker      2008-10-28  7155  
-8434dc9340cd2e Steven Rostedt (Red Hat  2015-01-20  7156) static inline int ftrace_init_dyn_tracefs(struct dentry *d_tracer) { return 0; }
-df4fc31558dd2a Steven Rostedt           2008-11-26 @7157  static inline void ftrace_startup_enable(int command) { }
-e1effa0144a1dd Steven Rostedt (Red Hat  2014-08-05  7158) static inline void ftrace_startup_all(int command) { }
-8a56d7761d2d04 Steven Rostedt (Red Hat  2013-11-25  7159) 
+030d2dd450a628 H Hartley Sweeten 2010-01-05  153  
+d6d76745f4d921 Lukasz Majewski   2017-12-12 @154  void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
+d6d76745f4d921 Lukasz Majewski   2017-12-12  155  				  resource_size_t start)
+3174c88af4b6b2 Hartley Sweeten   2009-07-20  156  {
+16bcf78f8cac9c Hartley Sweeten   2010-06-10  157  	/*
+16bcf78f8cac9c Hartley Sweeten   2010-06-10  158  	 * TS7200 has NOR flash all other TS72xx board have NAND flash.
+16bcf78f8cac9c Hartley Sweeten   2010-06-10  159  	 */
+030d2dd450a628 H Hartley Sweeten 2010-01-05  160  	if (board_is_ts7200()) {
+16bcf78f8cac9c Hartley Sweeten   2010-06-10  161  		ep93xx_register_flash(2, EP93XX_CS6_PHYS_BASE, SZ_16M);
+030d2dd450a628 H Hartley Sweeten 2010-01-05  162  	} else {
+030d2dd450a628 H Hartley Sweeten 2010-01-05  163  		ts72xx_nand_resource[0].start = start;
+030d2dd450a628 H Hartley Sweeten 2010-01-05  164  		ts72xx_nand_resource[0].end = start + SZ_16M - 1;
+030d2dd450a628 H Hartley Sweeten 2010-01-05  165  
+d6d76745f4d921 Lukasz Majewski   2017-12-12  166  		ts72xx_nand_data.chip.partitions = parts;
+d6d76745f4d921 Lukasz Majewski   2017-12-12  167  		ts72xx_nand_data.chip.nr_partitions = n;
+d6d76745f4d921 Lukasz Majewski   2017-12-12  168  
+030d2dd450a628 H Hartley Sweeten 2010-01-05  169  		platform_device_register(&ts72xx_nand_flash);
+030d2dd450a628 H Hartley Sweeten 2010-01-05  170  	}
+3174c88af4b6b2 Hartley Sweeten   2009-07-20  171  }
+3174c88af4b6b2 Hartley Sweeten   2009-07-20  172  
 
-:::::: The code at line 7157 was first introduced by commit
-:::::: df4fc31558dd2a3a30292ddb3a64c2a5befcec73 ftrace: add function tracing to single thread
+:::::: The code at line 154 was first introduced by commit
+:::::: d6d76745f4d921ba8c58d72259b9383ee5b67b28 ARM: ep93xx: ts72xx: Rewrite ts72xx_register_flash() to accept parameters
 
-:::::: TO: Steven Rostedt <srostedt@redhat.com>
-:::::: CC: Ingo Molnar <mingo@elte.hu>
+:::::: TO: Lukasz Majewski <lukma@denx.de>
+:::::: CC: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
