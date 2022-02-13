@@ -1,42 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED837D
-	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 12:12:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A02365
+	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 13:03:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644754375; x=1676290375;
+  t=1644757438; x=1676293438;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZYB68LCx4yFPTjdSR/HWUSiQhzE6FrY4X+s6uCvFbKY=;
-  b=cfSGp3nbeYNEvDdaZER3HnAWoZlqkzE8RqjbcxG0waYjn0LA8nSH6wJb
-   1PPlY+Js0IWKOa1pHClwwV1Ur7aNFiIW1Anl9DzwLREBP1tPHwzjdBW1T
-   9k59IGttSsbxoc6znN/0qkvKio8RBwzLl4/IRisty6RKCXQSB5jmO6KtL
-   hC/EkQwr63cMKS9J6TyMgUrjOpONJYVbI0per35hLctpGpKf8TOCdCAuA
-   U7qW/V5gA04wgjxj8BIYQe7WXEfML4nxUSzu5tPOjBy+gLdBHb7VhBXUa
-   9pjKveLlpWN/DqrgbXkAApkQW6/Y64ZRZXm6/ANQ45q1gUKQSWpmP9qYM
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="237352898"
+  bh=4WJZJbknenGkTG+kkIeFvel9trpEu70jNlVS7CRk4ik=;
+  b=ZweB1FJTBrR8D0WsfWALCqY/vbJBh3wlUMnNbQaptf9JS1SZBYK8Lwhf
+   Wcm+SZpRNnl2QdJIXucIrUC8O1Mfk593SQPcpfFkwbrATgX69lx4Ob1ZG
+   Vq+u2BiUYkPCdk8ONB50IleOWgCRGZLaqpri8X9tqvxHV4SepnqZc4bVj
+   TJlUUtA6aJyL6mdXEEEZ/A+OObUKrObDKL5TCIqUICIE0rKhR5tYqXBI2
+   VXE2SNzsSDhSN31ahgslqUK9tUe61OfPGYsngaqfbq+PpMyavRs3JhBAz
+   6yG6nahu5pqQ4/KWKB5hJ2M521MsYcFAhy25B3rEh4c/6zO7yDDUR/AQy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="229910072"
 X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="237352898"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 04:12:54 -0800
+   d="scan'208";a="229910072"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 05:03:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="679928484"
+   d="scan'208";a="702627576"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2022 04:12:53 -0800
+  by orsmga005.jf.intel.com with ESMTP; 13 Feb 2022 05:03:55 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nJDkK-0007Tk-Mq; Sun, 13 Feb 2022 12:12:52 +0000
-Date: Sun, 13 Feb 2022 20:12:12 +0800
+	id 1nJEXj-0007WS-7t; Sun, 13 Feb 2022 13:03:55 +0000
+Date: Sun, 13 Feb 2022 21:03:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maxime Ripard <maxime@cerno.tech>
+To: chongjiapeng <jiapeng.chong@linux.alibaba.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>
-Subject: drivers/clk/bcm/clk-bcm2835.c:942:6: error: variable 'rem' set but
- not used
-Message-ID: <202202132034.ZltYqjTa-lkp@intel.com>
+	"Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: kernel/trace/ftrace.c:7157:20: error: unused function
+ 'ftrace_startup_enable'
+Message-ID: <202202132037.4aN017dU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,86 +47,49 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Maxime,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
-commit: 8ca011ef4af48a7af7b15afd8a4a44039dd04cea clk: bcm-2835: Remove rounding up the dividers
+commit: 172f7ba9772cae12f099fc563352e905dc9a1921 ftrace: Make ftrace_profile_pages_init static
 date:   4 months ago
-config: arm-randconfig-r006-20220213 (https://download.01.org/0day-ci/archive/20220213/202202132034.ZltYqjTa-lkp@intel.com/config)
+config: arm-randconfig-r001-20220213 (https://download.01.org/0day-ci/archive/20220213/202202132037.4aN017dU-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 478c237e21b2c3a83e46f26fcbeb3876682f9b14)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8ca011ef4af48a7af7b15afd8a4a44039dd04cea
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=172f7ba9772cae12f099fc563352e905dc9a1921
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 8ca011ef4af48a7af7b15afd8a4a44039dd04cea
+        git checkout 172f7ba9772cae12f099fc563352e905dc9a1921
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/bcm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/ kernel/trace/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/clk/bcm/clk-bcm2835.c:942:6: error: variable 'rem' set but not used [-Werror,-Wunused-but-set-variable]
-           u64 rem;
-               ^
+>> kernel/trace/ftrace.c:7157:20: error: unused function 'ftrace_startup_enable' [-Werror,-Wunused-function]
+   static inline void ftrace_startup_enable(int command) { }
+                      ^
    1 error generated.
 
 
-vim +/rem +942 drivers/clk/bcm/clk-bcm2835.c
+vim +/ftrace_startup_enable +7157 kernel/trace/ftrace.c
 
-41691b8862e2a3 Eric Anholt   2015-10-08  932  
-41691b8862e2a3 Eric Anholt   2015-10-08  933  static u32 bcm2835_clock_choose_div(struct clk_hw *hw,
-41691b8862e2a3 Eric Anholt   2015-10-08  934  				    unsigned long rate,
-8ca011ef4af48a Maxime Ripard 2021-09-22  935  				    unsigned long parent_rate)
-41691b8862e2a3 Eric Anholt   2015-10-08  936  {
-41691b8862e2a3 Eric Anholt   2015-10-08  937  	struct bcm2835_clock *clock = bcm2835_clock_from_hw(hw);
-41691b8862e2a3 Eric Anholt   2015-10-08  938  	const struct bcm2835_clock_data *data = clock->data;
-9c95b32ca09364 Remi Pommarel 2015-12-06  939  	u32 unused_frac_mask =
-9c95b32ca09364 Remi Pommarel 2015-12-06  940  		GENMASK(CM_DIV_FRAC_BITS - data->frac_bits, 0) >> 1;
-41691b8862e2a3 Eric Anholt   2015-10-08  941  	u64 temp = (u64)parent_rate << CM_DIV_FRAC_BITS;
-9c95b32ca09364 Remi Pommarel 2015-12-06 @942  	u64 rem;
-959ca92a3235fc Martin Sperl  2016-02-29  943  	u32 div, mindiv, maxdiv;
-41691b8862e2a3 Eric Anholt   2015-10-08  944  
-9c95b32ca09364 Remi Pommarel 2015-12-06  945  	rem = do_div(temp, rate);
-41691b8862e2a3 Eric Anholt   2015-10-08  946  	div = temp;
-41691b8862e2a3 Eric Anholt   2015-10-08  947  	div &= ~unused_frac_mask;
-41691b8862e2a3 Eric Anholt   2015-10-08  948  
-959ca92a3235fc Martin Sperl  2016-02-29  949  	/* different clamping limits apply for a mash clock */
-959ca92a3235fc Martin Sperl  2016-02-29  950  	if (data->is_mash_clock) {
-959ca92a3235fc Martin Sperl  2016-02-29  951  		/* clamp to min divider of 2 */
-959ca92a3235fc Martin Sperl  2016-02-29  952  		mindiv = 2 << CM_DIV_FRAC_BITS;
-959ca92a3235fc Martin Sperl  2016-02-29  953  		/* clamp to the highest possible integer divider */
-959ca92a3235fc Martin Sperl  2016-02-29  954  		maxdiv = (BIT(data->int_bits) - 1) << CM_DIV_FRAC_BITS;
-959ca92a3235fc Martin Sperl  2016-02-29  955  	} else {
-997f16bd5d2e9b Martin Sperl  2016-02-29  956  		/* clamp to min divider of 1 */
-959ca92a3235fc Martin Sperl  2016-02-29  957  		mindiv = 1 << CM_DIV_FRAC_BITS;
-997f16bd5d2e9b Martin Sperl  2016-02-29  958  		/* clamp to the highest possible fractional divider */
-959ca92a3235fc Martin Sperl  2016-02-29  959  		maxdiv = GENMASK(data->int_bits + CM_DIV_FRAC_BITS - 1,
-959ca92a3235fc Martin Sperl  2016-02-29  960  				 CM_DIV_FRAC_BITS - data->frac_bits);
-959ca92a3235fc Martin Sperl  2016-02-29  961  	}
-959ca92a3235fc Martin Sperl  2016-02-29  962  
-959ca92a3235fc Martin Sperl  2016-02-29  963  	/* apply the clamping  limits */
-959ca92a3235fc Martin Sperl  2016-02-29  964  	div = max_t(u32, div, mindiv);
-959ca92a3235fc Martin Sperl  2016-02-29  965  	div = min_t(u32, div, maxdiv);
-41691b8862e2a3 Eric Anholt   2015-10-08  966  
-41691b8862e2a3 Eric Anholt   2015-10-08  967  	return div;
-41691b8862e2a3 Eric Anholt   2015-10-08  968  }
-41691b8862e2a3 Eric Anholt   2015-10-08  969  
+0b6e4d56bf7186 Frederic Weisbecker      2008-10-28  7155  
+8434dc9340cd2e Steven Rostedt (Red Hat  2015-01-20  7156) static inline int ftrace_init_dyn_tracefs(struct dentry *d_tracer) { return 0; }
+df4fc31558dd2a Steven Rostedt           2008-11-26 @7157  static inline void ftrace_startup_enable(int command) { }
+e1effa0144a1dd Steven Rostedt (Red Hat  2014-08-05  7158) static inline void ftrace_startup_all(int command) { }
+8a56d7761d2d04 Steven Rostedt (Red Hat  2013-11-25  7159) 
 
-:::::: The code at line 942 was first introduced by commit
-:::::: 9c95b32ca09364e4687b72c4e17b78dc1c420026 clk: bcm2835: add a round up ability to the clock divisor
+:::::: The code at line 7157 was first introduced by commit
+:::::: df4fc31558dd2a3a30292ddb3a64c2a5befcec73 ftrace: add function tracing to single thread
 
-:::::: TO: Remi Pommarel <repk@triplefau.lt>
-:::::: CC: Michael Turquette <mturquette@baylibre.com>
+:::::: TO: Steven Rostedt <srostedt@redhat.com>
+:::::: CC: Ingo Molnar <mingo@elte.hu>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
