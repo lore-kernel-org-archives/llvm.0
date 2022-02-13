@@ -1,41 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09E67C
-	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 22:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38082364
+	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 22:33:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644789732; x=1676325732;
+  t=1644791594; x=1676327594;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GRRDRwAyuRUthgsnp7PMFzr7hutQ2aKWIrRPUmcF2J4=;
-  b=Lt/dI/+/GR9ID6MGGR+21Xf5ixpuwLOqhp88BMu+fMJP02sapsG2NUJV
-   Abej/C71QQaUyDAwxOhrkPyzOVHiEHBX1W2CRRQ6/IrqFBoyOxb+ZYpFF
-   BYQH5XTGnK26/m2kkZDzd1kOvb3hMN/8tDwiRdLUlPlmolVuM5yMhF3vi
-   sCApjIf/AxW94lU81ZURM9WPsFM6ahxFdTv+l1TBDAgwr5R2jeg1rNgj5
-   zHO8H7BNNMZ1a2Lj2zJ0UzGZcEBbdJn5PS8A0N4Pw4B+phlDShrLadE5v
-   XOnYOlhckM+TB/UOBqECLt4vpPSt9TOC27pwW8oRB1Cbkw/QbJgpwT+nK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="249923634"
+  bh=971JhnVBoFb6X05hqx76zRjjoZWkClyuYbSZUvxRits=;
+  b=OkfCvpnihopGtaLC8Jimbg3iIRc3HlYKcsJyINClsEciHmdA6J+aulIq
+   dju95r1n6uugaoGrg3Jod96ebBJwstKIy4Iem46eSL2dzp1/MhXRnW83u
+   Ghxd2nWThdiSsQCJHgEkA8/IdRzf4hTVKNXSU3KxkWJU2zHlq1h1jOw/T
+   MmRAH7zqxMekeVGII76oVEiV5C2tqpbNds8yOJ8P1cIiALEF4XwTlrV1D
+   5UK+UEuZo/ubEpuCboJVRFAUCvlyopZ+IiE+LZ2KhyYW9iy6PLfVf1EIY
+   AwYDYVlVcyEQ2Kwk02aFkgrZTqGWdg1dfaMWqeN+tQbD/JP3NaBPQxeap
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="274543834"
 X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="249923634"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 14:02:12 -0800
+   d="scan'208";a="274543834"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 14:33:13 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="501415210"
+   d="scan'208";a="569714200"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 13 Feb 2022 14:02:10 -0800
+  by orsmga001.jf.intel.com with ESMTP; 13 Feb 2022 14:33:11 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nJMwb-0007tE-SG; Sun, 13 Feb 2022 22:02:09 +0000
-Date: Mon, 14 Feb 2022 06:02:06 +0800
+	id 1nJNQc-0007vG-La; Sun, 13 Feb 2022 22:33:10 +0000
+Date: Mon, 14 Feb 2022 06:32:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+To: Shakeel Butt <shakeelb@google.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [toke:xdp-queueing-02 5/11] ld.lld: error: duplicate symbol:
- pifo_map_dequeue
-Message-ID: <202202140559.L2j44zUI-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Muchun Song <songmuchun@bytedance.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: mm/memcontrol.c:2774:20: error: unused function 'cancel_charge'
+Message-ID: <202202140629.MxlIbXOG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,203 +48,52 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-02
-head:   26dde94b299bc277f7a99a99ba64b4363964e833
-commit: 34cc5abfbae0dfcb6967c54cb80f7595bc9c5c37 [5/11] Add a PIFO map type for queueing packets
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220214/202202140559.L2j44zUI-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   754e0b0e35608ed5206d6a67a791563c631cec07
+commit: 58056f77502f3567b760c9a8fc8d2e9081515b2d memcg, kmem: further deprecate kmem.limit_in_bytes
+date:   3 months ago
+config: arm-randconfig-r005-20220213 (https://download.01.org/0day-ci/archive/20220214/202202140629.MxlIbXOG-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=34cc5abfbae0dfcb6967c54cb80f7595bc9c5c37
-        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
-        git fetch --no-tags toke xdp-queueing-02
-        git checkout 34cc5abfbae0dfcb6967c54cb80f7595bc9c5c37
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=58056f77502f3567b760c9a8fc8d2e9081515b2d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 58056f77502f3567b760c9a8fc8d2e9081515b2d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from net/socket.c:55:
-   In file included from include/linux/bpf-cgroup.h:5:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
+>> mm/memcontrol.c:2774:20: error: unused function 'cancel_charge' [-Werror,-Wunused-function]
+   static inline void cancel_charge(struct mem_cgroup *memcg, unsigned int nr_pages)
+                      ^
+   mm/memcontrol.c:3339:19: error: unused function 'mem_cgroup_move_swap_account' [-Werror,-Wunused-function]
+   static inline int mem_cgroup_move_swap_account(swp_entry_t entry,
                      ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/socket.c:2206:6: warning: variable 'max_optlen' set but not used [-Wunused-but-set-variable]
-           int max_optlen;
-               ^
-   2 warnings generated.
---
-   In file included from net/core/sock.c:133:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   1 warning generated.
---
-   In file included from net/core/dev.c:95:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/core/dev.c:4971:1: warning: unused function 'sch_handle_ingress' [-Wunused-function]
-   sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
-   ^
-   net/core/dev.c:5120:19: warning: unused function 'nf_ingress' [-Wunused-function]
-   static inline int nf_ingress(struct sk_buff *skb, struct packet_type **pt_prev,
-                     ^
-   3 warnings generated.
---
-   In file included from net/core/net-traces.c:35:
-   In file included from include/trace/events/tcp.h:12:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   In file included from net/core/net-traces.c:50:
-   In file included from include/trace/events/neigh.h:255:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:873:
-   include/trace/events/neigh.h:42:20: warning: variable 'pin6' set but not used [-Wunused-but-set-variable]
-                   struct in6_addr *pin6;
-                                    ^
-   In file included from net/core/net-traces.c:50:
-   In file included from include/trace/events/neigh.h:255:
-   In file included from include/trace/define_trace.h:103:
-   In file included from include/trace/perf.h:107:
-   include/trace/events/neigh.h:42:20: warning: variable 'pin6' set but not used [-Wunused-but-set-variable]
-                   struct in6_addr *pin6;
-                                    ^
-   3 warnings generated.
---
-   In file included from net/ipv4/route.c:95:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/ipv4/route.c:869:6: warning: variable 'log_martians' set but not used [-Wunused-but-set-variable]
-           int log_martians;
-               ^
-   2 warnings generated.
---
-   In file included from net/ipv4/tcp_output.c:40:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/ipv4/tcp_output.c:188:3: warning: result of comparison of constant -1 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
-                   NET_ADD_STATS(sock_net(sk), LINUX_MIB_TCPACKCOMPRESSED,
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/ip.h:292:41: note: expanded from macro 'NET_ADD_STATS'
-   #define NET_ADD_STATS(net, field, adnd) SNMP_ADD_STATS((net)->mib.net_statistics, field, adnd)
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/snmp.h:143:4: note: expanded from macro 'SNMP_ADD_STATS'
-                           this_cpu_add(mib->mibs[field], addend)
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:509:33: note: expanded from macro 'this_cpu_add'
-   #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   <scratch space>:148:1: note: expanded from here
-   this_cpu_add_4
-   ^
-   arch/x86/include/asm/percpu.h:268:34: note: expanded from macro 'this_cpu_add_4'
-   #define this_cpu_add_4(pcp, val)        percpu_add_op(4, volatile, (pcp), val)
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_add_op'
-                                 ((val) == 1 || (val) == -1)) ?            \
-                                                ~~~~~ ^  ~~
-   2 warnings generated.
---
-   In file included from net/netfilter/ipvs/ip_vs_core.c:34:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/netfilter/ipvs/ip_vs_core.c:1596:8: warning: variable 'outer_proto' set but not used [-Wunused-but-set-variable]
-           char *outer_proto = "IPIP";
-                 ^
-   2 warnings generated.
---
-   In file included from net/netfilter/ipvs/ip_vs_xmit.c:33:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/netfilter/ipvs/ip_vs_xmit.c:107:1: warning: unused function '__mtu_check_toobig_v6' [-Wunused-function]
-   __mtu_check_toobig_v6(const struct sk_buff *skb, u32 mtu)
-   ^
-   2 warnings generated.
---
-   In file included from net/mptcp/options.c:11:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/mptcp/options.c:554:21: warning: parameter 'remaining' set but not used [-Wunused-but-set-parameter]
-                                             unsigned int remaining,
-                                                          ^
-   2 warnings generated.
---
->> ld.lld: error: duplicate symbol: pifo_map_dequeue
-   >>> defined in net/bluetooth/bluetooth.o(l2cap_core.o)
-   >>> defined in net/bluetooth/bluetooth.o(l2cap_sock.o)
---
->> ld.lld: error: duplicate symbol: pifo_map_dequeue
-   >>> defined in net/netfilter/ipset/ip_set.o(ip_set_getport.o)
-   >>> defined in net/netfilter/ipset/ip_set.o(pfxlen.o)
-..
+   2 errors generated.
+
+
+vim +/cancel_charge +2774 mm/memcontrol.c
+
+  2773	
+> 2774	static inline void cancel_charge(struct mem_cgroup *memcg, unsigned int nr_pages)
+  2775	{
+  2776		if (mem_cgroup_is_root(memcg))
+  2777			return;
+  2778	
+  2779		page_counter_uncharge(&memcg->memory, nr_pages);
+  2780		if (do_memsw_account())
+  2781			page_counter_uncharge(&memcg->memsw, nr_pages);
+  2782	}
+  2783	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
