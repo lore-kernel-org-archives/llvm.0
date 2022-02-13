@@ -1,41 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBEE47D
-	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 19:30:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6197D
+	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 20:21:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644780606; x=1676316606;
+  t=1644783668; x=1676319668;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Z+IPQbc3DoIThr1y05QJVgCJisA7QjZzfj+r0fgo/G8=;
-  b=Mgz9UvtJAjrzRZZ36064nW6jLT4hdq6BCkJBCsPHKzfwSuS1G6YHYypw
-   T5iQIDjRO0Drpu4YZKyYJPJmXylTkU1SOlX5UO9+p1lLV1CcPdhWXZvvD
-   LGLwRzfP7Ke0CwClK44IKV6nUPVgIlehrlsERje7G+MTOR8S5/bE5C2AE
-   x3dL6HH/tuf0UWCOfQ6TTyx7tMGTCrjAmzJJk74aeLv/d/KZU/UDDAnki
-   uCJDgoh+tMyV5WjH/vyk73rzSUupxC+etUwMj9h3A0RxkwJZA0oHJjLhQ
-   dzgsAFurux90RFPopDEgjvvkjOXG1Ue5jPRHdpRfrKPz0G22RUo3Y4/c3
+  bh=B95xdXdHmWxdgNh3ecp02Wd/uPuUcWHNRTXWP56vqBA=;
+  b=nqiZdR1WR3m2Yjk5lLWe46MBoWb3UL5Y2fz8z5DqO23fnP32QV1aVHsJ
+   2aQdHxof6e3V3Z9pNHig6zNY7ELBBI3Y0mggKI6SUh9stnyj3h3Nk9dec
+   k6lLDjWFrxgVDMRhG1RnG+tYMLh8NpTrCOMGsqx+QWxWLaW4B0qvkGaHQ
+   hbCw7U9CI+reKrlUb5gOjpMa2BTv0/1KDAyru39LpaxOneAymIsfI/+Nn
+   EASh0bhkvYx/EOyezu05Z1/nSsbtu2xEyBQBa36IS2YaxUezlCp3xemb9
+   a3G9+s5qhYJcFGiHxdNV1DoGyPItDyHRIK9Ko5UmqtrDoVoCFSEOgFntQ
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="237379979"
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="310709793"
 X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="237379979"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 11:30:06 -0800
+   d="scan'208";a="310709793"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 12:21:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="484955778"
+   d="scan'208";a="634713203"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 13 Feb 2022 11:30:04 -0800
+  by orsmga004.jf.intel.com with ESMTP; 13 Feb 2022 12:21:05 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nJKZP-0007mF-WD; Sun, 13 Feb 2022 19:30:04 +0000
-Date: Mon, 14 Feb 2022 03:29:26 +0800
+	id 1nJLMn-0007nn-3J; Sun, 13 Feb 2022 20:21:05 +0000
+Date: Mon, 14 Feb 2022 04:20:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mathias Krause <minipli@grsecurity.net>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: kernel/sched/rt.c:257:6: error: no previous prototype for function
- 'unregister_rt_sched_group'
-Message-ID: <202202140339.Uk9VGrvV-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+	Abhinav Kumar <abhinavk@codeaurora.org>,
+	Stephen Boyd <swboyd@chromium.org>
+Subject: drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:1148:26: error: variable
+ 'priv' set but not used
+Message-ID: <202202140432.v7pvcbKc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,70 +48,98 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Mathias,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
-commit: b027789e5e50494c2325cc70c8642e7fd6059479 sched/fair: Prevent dead task groups from regaining cfs_rq's
-date:   3 months ago
-config: riscv-randconfig-c006-20220213 (https://download.01.org/0day-ci/archive/20220214/202202140339.Uk9VGrvV-lkp@intel.com/config)
+head:   c5d714aa6dce262482992cccc0ab01383294f7ac
+commit: 167dac97eb46c7b8a15b2195080e191bb0c9ce35 drm/msm/dp: Modify prototype of encoder based API
+date:   4 months ago
+config: arm-randconfig-r006-20220213 (https://download.01.org/0day-ci/archive/20220214/202202140432.v7pvcbKc-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 478c237e21b2c3a83e46f26fcbeb3876682f9b14)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b027789e5e50494c2325cc70c8642e7fd6059479
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=167dac97eb46c7b8a15b2195080e191bb0c9ce35
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout b027789e5e50494c2325cc70c8642e7fd6059479
+        git checkout 167dac97eb46c7b8a15b2195080e191bb0c9ce35
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/ drivers/clk/bcm/ drivers/gpu/drm/ kernel/sched/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/msm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/sched/rt.c:257:6: error: no previous prototype for function 'unregister_rt_sched_group' [-Werror,-Wmissing-prototypes]
-   void unregister_rt_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/rt.c:257:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void unregister_rt_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/rt.c:259:6: error: no previous prototype for function 'free_rt_sched_group' [-Werror,-Wmissing-prototypes]
-   void free_rt_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/rt.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void free_rt_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/rt.c:261:5: error: no previous prototype for function 'alloc_rt_sched_group' [-Werror,-Wmissing-prototypes]
-   int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)
-       ^
-   kernel/sched/rt.c:261:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)
-   ^
-   static 
-   kernel/sched/rt.c:675:6: error: no previous prototype for function 'sched_rt_bandwidth_account' [-Werror,-Wmissing-prototypes]
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-        ^
-   kernel/sched/rt.c:675:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-   ^
-   static 
-   4 errors generated.
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:1148:26: error: variable 'priv' set but not used [-Werror,-Wunused-but-set-variable]
+           struct msm_drm_private *priv;
+                                   ^
+   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:1197:26: error: variable 'priv' set but not used [-Werror,-Wunused-but-set-variable]
+           struct msm_drm_private *priv;
+                                   ^
+   2 errors generated.
 
 
-vim +/unregister_rt_sched_group +257 kernel/sched/rt.c
+vim +/priv +1148 drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
 
-   256	
- > 257	void unregister_rt_sched_group(struct task_group *tg) { }
-   258	
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1143  
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1144  static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1145  {
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1146  	struct dpu_encoder_virt *dpu_enc = NULL;
+86b89080368b46 Jeykumar Sankaran 2018-09-05  1147  	int ret = 0;
+c943b4948b5848 Chandan Uddaraju  2020-08-27 @1148  	struct msm_drm_private *priv;
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1149  	struct drm_display_mode *cur_mode = NULL;
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1150  
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1151  	if (!drm_enc) {
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1152  		DPU_ERROR("invalid encoder\n");
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1153  		return;
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1154  	}
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1155  	dpu_enc = to_dpu_encoder_virt(drm_enc);
+fba7427eb59496 Sean Paul         2018-11-16  1156  
+fba7427eb59496 Sean Paul         2018-11-16  1157  	mutex_lock(&dpu_enc->enc_lock);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1158  	cur_mode = &dpu_enc->base.crtc->state->adjusted_mode;
+c943b4948b5848 Chandan Uddaraju  2020-08-27  1159  	priv = drm_enc->dev->dev_private;
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1160  
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1161  	trace_dpu_enc_enable(DRMID(drm_enc), cur_mode->hdisplay,
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1162  			     cur_mode->vdisplay);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1163  
+86b89080368b46 Jeykumar Sankaran 2018-09-05  1164  	/* always enable slave encoder before master */
+86b89080368b46 Jeykumar Sankaran 2018-09-05  1165  	if (dpu_enc->cur_slave && dpu_enc->cur_slave->ops.enable)
+86b89080368b46 Jeykumar Sankaran 2018-09-05  1166  		dpu_enc->cur_slave->ops.enable(dpu_enc->cur_slave);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1167  
+86b89080368b46 Jeykumar Sankaran 2018-09-05  1168  	if (dpu_enc->cur_master && dpu_enc->cur_master->ops.enable)
+86b89080368b46 Jeykumar Sankaran 2018-09-05  1169  		dpu_enc->cur_master->ops.enable(dpu_enc->cur_master);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1170  
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1171  	ret = dpu_encoder_resource_control(drm_enc, DPU_ENC_RC_EVENT_KICKOFF);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1172  	if (ret) {
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1173  		DPU_ERROR_ENC(dpu_enc, "dpu resource control failed: %d\n",
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1174  				ret);
+fba7427eb59496 Sean Paul         2018-11-16  1175  		goto out;
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1176  	}
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1177  
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1178  	_dpu_encoder_virt_enable_helper(drm_enc);
+fba7427eb59496 Sean Paul         2018-11-16  1179  
+167dac97eb46c7 Bjorn Andersson   2021-10-16  1180  	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS) {
+167dac97eb46c7 Bjorn Andersson   2021-10-16  1181  		ret = msm_dp_display_enable(dpu_enc->dp, drm_enc);
+c943b4948b5848 Chandan Uddaraju  2020-08-27  1182  		if (ret) {
+c943b4948b5848 Chandan Uddaraju  2020-08-27  1183  			DPU_ERROR_ENC(dpu_enc, "dp display enable failed: %d\n",
+c943b4948b5848 Chandan Uddaraju  2020-08-27  1184  				ret);
+c943b4948b5848 Chandan Uddaraju  2020-08-27  1185  			goto out;
+c943b4948b5848 Chandan Uddaraju  2020-08-27  1186  		}
+c943b4948b5848 Chandan Uddaraju  2020-08-27  1187  	}
+fba7427eb59496 Sean Paul         2018-11-16  1188  	dpu_enc->enabled = true;
+fba7427eb59496 Sean Paul         2018-11-16  1189  
+fba7427eb59496 Sean Paul         2018-11-16  1190  out:
+fba7427eb59496 Sean Paul         2018-11-16  1191  	mutex_unlock(&dpu_enc->enc_lock);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1192  }
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1193  
+
+:::::: The code at line 1148 was first introduced by commit
+:::::: c943b4948b5848fc0e07f875edbd35a973879e22 drm/msm/dp: add displayPort driver support
+
+:::::: TO: Chandan Uddaraju <chandanu@codeaurora.org>
+:::::: CC: Rob Clark <robdclark@chromium.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
