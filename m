@@ -1,50 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9F77A
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 15:20:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855FCC340E9;
-	Mon, 14 Feb 2022 15:20:01 +0000 (UTC)
-Date: Mon, 14 Feb 2022 10:20:00 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: kernel test robot <lkp@intel.com>
-Cc: chongjiapeng <jiapeng.chong@linux.alibaba.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: kernel/trace/ftrace.c:7157:20: error: unused function
- 'ftrace_startup_enable'
-Message-ID: <20220214102000.1d3af66e@gandalf.local.home>
-In-Reply-To: <202202132037.4aN017dU-lkp@intel.com>
-References: <202202132037.4aN017dU-lkp@intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9F37A
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 15:35:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223E5C340E9;
+	Mon, 14 Feb 2022 15:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1644852933;
+	bh=GKW1O/9iEU6PCo4adC0DG5ixQw/23hNkDvK3MXbEU/A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ivNsmiPS4Tf+UY9vbDcZjF34lCS0o63Mbho96U/7CiTc5r6c69kGgDsPQZ0HxW5sU
+	 peK/+DXnIKlPzS3kY76K+q4SLK3IjgRWmWpEBpOToELnM8+y628Nxgg3ikqgM7trRD
+	 SudH1CrRFJX05een+/BoKb2kHwcZ6q+mGL6r7v7ZzLI5AW8ys/LpU1yQKVpN+eB2dA
+	 Dvgm6/p7pZw2zUiASzvNiF8tXFr2dolpvzbQccoRGA9XQZF4ryN28Ds07K1QyaNtHk
+	 RWQurZTHGXanZvVFav8d4rfPKjc7/EuP3oC/+iBVr7W1LD8SgRCoWQDrrclKiZPwDP
+	 h/9ebHsGuy/hQ==
+Date: Mon, 14 Feb 2022 08:35:29 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Eric Dumazet <edumazet@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: arm64: clang-nightly: net/ipv4/tcp_input.c: clang: error: clang
+ frontend command failed with exit code 139
+Message-ID: <Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161>
+References: <CA+G9fYtR+E52X-ucmvXYG5-9v0q2UEXQsML=nkQRnSf7TwXYqw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtR+E52X-ucmvXYG5-9v0q2UEXQsML=nkQRnSf7TwXYqw@mail.gmail.com>
 
-On Sun, 13 Feb 2022 21:03:29 +0800
-kernel test robot <lkp@intel.com> wrote:
+Hi Naresh,
 
-> All errors (new ones prefixed by >>):
+On Mon, Feb 14, 2022 at 12:27:17PM +0530, Naresh Kamboju wrote:
+> On Linux mainline master branch with arm64 clang-nightly build failed
+> due to following errors and warnings.
 > 
-> >> kernel/trace/ftrace.c:7157:20: error: unused function 'ftrace_startup_enable' [-Werror,-Wunused-function]  
->    static inline void ftrace_startup_enable(int command) { }
->                       ^
->    1 error generated.
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM=1 LLVM_IAS=1
+> ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
+> CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- HOSTCC=clang CC=clang
+> PLEASE submit a bug report to
+> https://github.com/llvm/llvm-project/issues/ and include the crash
+> backtrace, preprocessed source, and associated run script.
+> Stack dump:
 
-Strange. I always thought that static inline functions do not cause
-warnings when not used? Especially, since they are often in headers when
-things are turned off. Or is it because this is in a C file?
+<snip>
 
-Is this a new warning caused by a commit, or is it a new warning because
-the compiler now complains about it?
+> 1. <eof> parser at end of file
+> 2. Code generation
+> 3. Running pass 'Function Pass Manager' on module
+> '/builds/linux/net/ipv4/tcp_input.c'.
 
--- Steve
+<snip>
 
+> I have reported this a new issues on github,
+> https://github.com/llvm/llvm-project/issues/53811
 
-> 
-> 
-> vim +/ftrace_startup_enable +7157 kernel/trace/ftrace.c
+Thank you for the report! I found this over the weekend myself and
+reverted the problematic commit in LLVM and I will make sure that if it
+lands again, it can build a kernel without any issues.
+
+https://github.com/llvm/llvm-project/commit/22eb1dae3fb20ca8ada865de1d95baab0e08a060
+
+For the future, you may consider only sending reports of compiler
+crashes to Nick, myself, and llvm@lists.linux.dev; a compiler crash is
+pretty much never the fault of the source code so CC'ing Linux
+maintainers is just noise.
+
+Cheers,
+Nathan
