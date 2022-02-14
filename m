@@ -1,42 +1,42 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0EC642
-	for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 23:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBFA627
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 00:36:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644795921; x=1676331921;
+  t=1644798983; x=1676334983;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QkeBktSYu7Zbm4nVXAP95se/pEHPyFg+wEqC9VvLHs0=;
-  b=BGhUotVVZSThT5jQJiyiw/Xy3ofCh/Sf6c2zChCVjB4AtUKwUYzdnA9G
-   kASb8dNvPBZfDFwr4wsxwOwVBKdCqK2SDSDE490tnzqROmgkuN1hjNEiF
-   yKylXcimCtL6dgnBFs2bdZyAYpGaraFh+Uzt4FQ5YNhWvFfSIRU6jUeek
-   LfakMvfks/mincbmD2PvEmi/tuWctM/L3hY/DRRS8ygDXWulcH9dqoph3
-   k4dGl2xXRo9kwfEfUChqSZLSoBPsyTd1UDPhfM171h3NxwHmjw9DQJxw4
-   T4N06TxAZQGUQo4wiH+t4m7Egu3naIsfU6Mp/Of9S8NI6pVKdOuqYdbAa
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="336408983"
+  bh=+MphsBjQd9Mx9ssh5ka9JkBfThVEfm9wyc0kFHGmOzs=;
+  b=LHvRldXUTd/9pjbmg4OPe6Jzyii7o8Y2653LGJIMJfy8CVbSgWPCW/av
+   Cw5e2TzSIWbDmIyFBrGZ5KZiYK1N9tiOMwQ4tJrOJjsyiIQwnz0NZnSgg
+   ymKPhoGgpW8XmVXcNu/rBMnX2XB9UvCGhje40LAHmzzWeqgIJS0aCC7wN
+   PvGBv9sdBhS7OGGuJqdDbOKbIOQinyEUlJHhMIJ57IQA929IaVo0/BXDj
+   M5O5sej/9T2ebhF01TFCHW6uX9oW35xGVYfrcuo9dCv37d9tKieqzD4JJ
+   PGAPUNbMksdpyzCMcZPJvdKmy6XMi06ryCfgVEexVwefNHctz81Hy7Byl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="233534724"
 X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="336408983"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 15:45:20 -0800
+   d="scan'208";a="233534724"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 16:36:23 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="501442416"
+   d="scan'208";a="586968101"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 13 Feb 2022 15:45:19 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 13 Feb 2022 16:36:21 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nJOYQ-00080T-FY; Sun, 13 Feb 2022 23:45:18 +0000
-Date: Mon, 14 Feb 2022 07:44:34 +0800
+	id 1nJPLp-00082X-7O; Mon, 14 Feb 2022 00:36:21 +0000
+Date: Mon, 14 Feb 2022 08:35:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: zhanglianjie <zhanglianjie@uniontech.com>
+To: Jiri Olsa <jolsa@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: [linux-next:master 5127/5417] mm/page-writeback.c:93:28: error:
- unused variable 'dirty_bytes_min'
-Message-ID: <202202140744.t6UIHhn5-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/fprobe_link_5 4/10]
+ kernel/trace/bpf_trace.c:1043:15: error: no member named 'ip' in 'struct
+ pt_regs'
+Message-ID: <202202140858.R22HkKfR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,54 +47,44 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   6d9bd4ad4ca08b1114e814c2c42383b8b13be631
-commit: 3eb7a613cb25789b954064cf6e310f6b5ca92c03 [5127/5417] mm: move page-writeback sysctls to their own file
-config: hexagon-randconfig-r041-20220213 (https://download.01.org/0day-ci/archive/20220214/202202140744.t6UIHhn5-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/fprobe_link_5
+head:   9149abfa25286fdf715525babec5150939c9ac96
+commit: 6944d13cf0af8628c0b80eb90359d90cbba0d69c [4/10] bpf: Add bpf_get_func_ip kprobe helper for fprobe link
+config: arm-aspeed_g4_defconfig (https://download.01.org/0day-ci/archive/20220214/202202140858.R22HkKfR-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3eb7a613cb25789b954064cf6e310f6b5ca92c03
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 3eb7a613cb25789b954064cf6e310f6b5ca92c03
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=6944d13cf0af8628c0b80eb90359d90cbba0d69c
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/fprobe_link_5
+        git checkout 6944d13cf0af8628c0b80eb90359d90cbba0d69c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/trace/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> mm/page-writeback.c:93:28: error: unused variable 'dirty_bytes_min' [-Werror,-Wunused-const-variable]
-   static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
-                              ^
-   mm/page-writeback.c:509:12: error: unused function 'dirty_background_ratio_handler' [-Werror,-Wunused-function]
-   static int dirty_background_ratio_handler(struct ctl_table *table, int write,
-              ^
-   mm/page-writeback.c:520:12: error: unused function 'dirty_background_bytes_handler' [-Werror,-Wunused-function]
-   static int dirty_background_bytes_handler(struct ctl_table *table, int write,
-              ^
-   mm/page-writeback.c:531:12: error: unused function 'dirty_ratio_handler' [-Werror,-Wunused-function]
-   static int dirty_ratio_handler(struct ctl_table *table, int write, void *buffer,
-              ^
-   mm/page-writeback.c:545:12: error: unused function 'dirty_bytes_handler' [-Werror,-Wunused-function]
-   static int dirty_bytes_handler(struct ctl_table *table, int write,
-              ^
-   mm/page-writeback.c:2002:12: error: unused function 'dirty_writeback_centisecs_handler' [-Werror,-Wunused-function]
-   static int dirty_writeback_centisecs_handler(struct ctl_table *table, int write,
-              ^
-   6 errors generated.
+>> kernel/trace/bpf_trace.c:1043:15: error: no member named 'ip' in 'struct pt_regs'
+           return regs->ip;
+                  ~~~~  ^
+   1 error generated.
 
 
-vim +/dirty_bytes_min +93 mm/page-writeback.c
+vim +1043 kernel/trace/bpf_trace.c
 
-    91	
-    92	/* this is needed for the proc_doulongvec_minmax of vm_dirty_bytes */
-  > 93	static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
-    94	
+  1039	
+  1040	BPF_CALL_1(bpf_get_func_ip_fprobe, struct pt_regs *, regs)
+  1041	{
+  1042		/* This helper call is inlined by verifier. */
+> 1043		return regs->ip;
+  1044	}
+  1045	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
