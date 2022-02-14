@@ -1,79 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77397A
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 15:37:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D42DBC340EE;
-	Mon, 14 Feb 2022 15:37:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644853053;
-	bh=TGfDEvbs7Wyxord98HhplZKBquF6jeKuRkvjNaSxV8E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uBnGROUT6OZUqoDwiwDiuVFCFycWKqRclb52GfvVRuU6zlyC4uSBaacRqAXINj1EW
-	 pGHKMX1pd3HIxtJDXK3E3gdndQenpFRLyioVvu9APpHxsYk/RtUJVUfVuURkZkVrZW
-	 pSJghEKHTJ7crpiuUOmUSrWykuSCnNTda9kpc//Ttpl6E4gpv8Ce+F95Saw/yGAkv1
-	 A2aWNn3o0klUtWfP2Y4CK34fCR8gDwlbaDmvo1DhGZfE1/8J0ojC9vin4GXpIKTzr5
-	 /TevaZG2vKw8mgfpv6wK12qiS5vsOeH4w1Z4iQ+pDkrXmQbY2vfKMA0KUfQcb+tudg
-	 WjNhb74fkhdZg==
-Date: Mon, 14 Feb 2022 08:37:27 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	torvalds@linux-foundation.org, akpm@linux-foundation.org,
-	linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-	slade@sladewatkins.com, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 5.16 000/203] 5.16.10-rc1 review
-Message-ID: <Ygp3NyV5AptXcmzV@dev-arch.archlinux-ax161>
-References: <20220214092510.221474733@linuxfoundation.org>
- <CA+G9fYvfx2jRPnU6zVK8v9vNbwXc4wV0KX0JfGWeNsAbL72y-g@mail.gmail.com>
- <Ygo8pUuBuNYmP9ds@kroah.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34C87A
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 15:40:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1644853250;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NsyCA1by/ak8R1lwSMjCXJyyH1qXb4V0zf8axMvxNR8=;
+	b=D76JO1VuFa5VT6Kb/Piz9d3MFdyjVn2tUldPx9JyB441Z6MpWvbKKwTP7z8SznwmPpHW8C
+	Xm4QeRakfIhI/NwBJ0ZiCGciU4SmqRdrgNwpfbNa1zoPlOOwwD4hzJVoib/EmzSNf3bkbR
+	PjXoWLKhP4tRKFukRQAuGkW6BxT+47Q=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-201-0frNZTBgPeCccdlt0ZTNYg-1; Mon, 14 Feb 2022 10:40:48 -0500
+X-MC-Unique: 0frNZTBgPeCccdlt0ZTNYg-1
+Received: by mail-oo1-f72.google.com with SMTP id t16-20020a4ae9b0000000b0031877e91c80so7259664ood.13
+        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 07:40:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NsyCA1by/ak8R1lwSMjCXJyyH1qXb4V0zf8axMvxNR8=;
+        b=wXtmWmAsdUUeb053gdh7OAzVmbiY+agMpXLRw2vAJlk7rg9VrxkDwd/n3DmPTJtMSO
+         7eKu7VJGrLHGmb/EPG9SZfb4MuJTvmjfwAk7Bgt3ow5EWSvjA6b40B039ZqFMX29k6zd
+         /jyS7FmrPoRI5V268F8RUbaZ/Otnf0aSgy7Y9A1K3A4RHF0acjbJyqr9hN8vtZr2KcCn
+         9LlGkm9mYyLY3eUPteulaFi5+0b8hmTry62rn+Md5Sm6P1OLYiJ3F8ZJ00hqabXV8lVx
+         +K8nLc0bNuhjJi8kP9+XEDOgSgkwvhAfCR6iMa9fU59fEqzIn5A2z6m0rV5F66zRNGOd
+         0QNQ==
+X-Gm-Message-State: AOAM531wJtP505fLCQ+X4/gPb8aLJkHAQonsVBTx0fEVYE+ZuIeduBvs
+	5z01mrTlpnTOuZSqgWpHxK0swI4KUL1osUVV0m5uYgWHZn7goIXofzsI/P+Md9KOvmAEx4zYmo7
+	zBbN7R32BQIIPvQ==
+X-Received: by 2002:a05:6808:30a0:: with SMTP id bl32mr34577oib.262.1644853248094;
+        Mon, 14 Feb 2022 07:40:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyuAZBJGNoWdrA+012X1djizbpdOBot5gLyfgpONhsQ6+8gC+0JtSILPzlYULjoQUEuunFbBw==
+X-Received: by 2002:a05:6808:30a0:: with SMTP id bl32mr34562oib.262.1644853247928;
+        Mon, 14 Feb 2022 07:40:47 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id n11sm4432445oal.1.2022.02.14.07.40.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 07:40:47 -0800 (PST)
+From: trix@redhat.com
+To: jesse.brandeburg@intel.com,
+	anthony.l.nguyen@intel.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	paul.greenwalt@intel.com,
+	evan.swanson@intel.com
+Cc: intel-wired-lan@lists.osuosl.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] ice: initialize local variable 'tlv'
+Date: Mon, 14 Feb 2022 07:40:43 -0800
+Message-Id: <20220214154043.2891024-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ygo8pUuBuNYmP9ds@kroah.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-On Mon, Feb 14, 2022 at 12:27:33PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Feb 14, 2022 at 04:29:43PM +0530, Naresh Kamboju wrote:
-> > On Mon, 14 Feb 2022 at 15:23, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 5.16.10 release.
-> > > There are 203 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.10-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> > 
-> > On Linux mainline master branch with arm64 clang-nigtly build failed
-> > due to following errors and warnings.
-> > Now it is also noticed on stable-rc 5.15 and 5.16.
-> 
-> Sounds like a compiler error.  Do the clang developers know about this?
+From: Tom Rix <trix@redhat.com>
 
-Yes, please see my response to Naresh in his other report for more
-information:
+Clang static analysis reports this issues
+ice_common.c:5008:21: warning: The left expression of the compound
+  assignment is an uninitialized value. The computed value will
+  also be garbage
+  ldo->phy_type_low |= ((u64)buf << (i * 16));
+  ~~~~~~~~~~~~~~~~~ ^
 
-https://lore.kernel.org/r/Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161
+When called from ice_cfg_phy_fec() ldo is the unintialized local
+variable tlv.  So initialize.
 
-Cheers,
-Nathan
+Fixes: ea78ce4dab05 ("ice: add link lenient and default override support")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/ethernet/intel/ice/ice_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/intel/ice/ice_common.c b/drivers/net/ethernet/intel/ice/ice_common.c
+index c57e5fc41cf8..0e4434e3c290 100644
+--- a/drivers/net/ethernet/intel/ice/ice_common.c
++++ b/drivers/net/ethernet/intel/ice/ice_common.c
+@@ -3379,7 +3379,7 @@ ice_cfg_phy_fec(struct ice_port_info *pi, struct ice_aqc_set_phy_cfg_data *cfg,
+ 
+ 	if (fec == ICE_FEC_AUTO && ice_fw_supports_link_override(hw) &&
+ 	    !ice_fw_supports_report_dflt_cfg(hw)) {
+-		struct ice_link_default_override_tlv tlv;
++		struct ice_link_default_override_tlv tlv = { 0 };
+ 
+ 		status = ice_get_link_default_override(&tlv, pi);
+ 		if (status)
+-- 
+2.26.3
+
