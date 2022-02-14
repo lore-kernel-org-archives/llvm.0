@@ -1,78 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3857A
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 15:53:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A84C340E9;
-	Mon, 14 Feb 2022 15:53:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644853989;
-	bh=jLvxgQZxaKOAqXhYrM5X1Wu5kLbIgCnhJeKHmC+J/hU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lQKVAu2uhc9aOAP+y7UGrprRWpt3DynGUNCiscNmjhGuzfwwkwi5m1z+ikunfTgp0
-	 A+MtOkmrXFBm+xAdXxuaxv8uXfbzijCAeWyw6P5Enw9ypt94YI6uZDKoyXPp+o+N7q
-	 s4SIz0xvqbqJP5vqTHLjUnV43SmLu+NDzZ9eQqiE6U/s8dMTZ1SmDDyaBciqkQl/t2
-	 STkV0H43IJluM5xai44liuwSe/z+RLXM7K8xORHhyrbhCfk4cvOYVp+czWFU0mpE0U
-	 TZsFtVQRzk8Kepfpzo9uZngSH2iylG1+3YliUMp5yigVnd/zYLL3me2Aotb0NXSoeJ
-	 2p3i/kiMgKCKg==
-Date: Mon, 14 Feb 2022 08:53:04 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: kernel test robot <lkp@intel.com>,
-	chongjiapeng <jiapeng.chong@linux.alibaba.com>,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: kernel/trace/ftrace.c:7157:20: error: unused function
- 'ftrace_startup_enable'
-Message-ID: <Ygp64CsyyKyRykqE@dev-arch.archlinux-ax161>
-References: <202202132037.4aN017dU-lkp@intel.com>
- <20220214102000.1d3af66e@gandalf.local.home>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20BBC7A
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 16:10:26 +0000 (UTC)
+Received: by mail-yb1-f181.google.com with SMTP id y129so47541470ybe.7
+        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 08:10:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7cG3DtS4AFRpk5Ytg8SebP0tvlPwMV13yDhdJ92f6j8=;
+        b=nkY8OC1guEp+iBvvAKdH8uX4DHWKDUYifZMG7fUcaVU5dGlMpe0ROTjrfcTYl5ikh9
+         cF17s9gZMl/Flw+7Bw/CDtMSY4YAJ6zQ3Dg5e3qel/uDjE53fEPXceT9l0RqCIxIUs0s
+         Tn34nIqD8jvG/EeL4seiSbzkA4VH1+IjamxBwWyJzxUfKFmSxbeSKVp1glLpwisZ/vOu
+         EFbI+K6ea432x1R3uVsUDH/Jdva4B7BcKmQygfhCrpH68Dgbzr3iu3ZHO8GEAygm2Vil
+         ZO+H9mdL79k3ldSQpcV415Cx/rZf1bQIg+vnVjaq73QoJniq8v6l33qdN1tBIwNiFS8C
+         BetQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7cG3DtS4AFRpk5Ytg8SebP0tvlPwMV13yDhdJ92f6j8=;
+        b=Z6vhYdviaBgRrjjRS/5LWpbpLzyKpCEVTfoJzAxNGEv2t54GvkenTCFotwP5rMGjir
+         U/J7UJzSweYUvYxb16diKy6lbqm+HCsdwqExf1p3zms8xXTYktGjTxXW/pydeKEjX2JD
+         lMhWe0GxG+3mYbOKqwCKrBzluNM4iqa7v7b2bIlujwit/ySWzQ00hjVH2UMDHq4TEWwr
+         gVYGBimxeWZBXxtGqbjakW+6bSc+xmi8N69edgZvYJAS+sRUFgq4PCbI4q0BMdTFkHgs
+         RjFWFKEi0eI/wqjIsqxUahOGJOiZX5hvEmc7CZD+spdQ1z+wRBAnt2gBDU0RSO/Vcbo/
+         zRIQ==
+X-Gm-Message-State: AOAM532qsMKo+tmwl/3fF5gcPBOHxp7oYlT4U1IzswMXfrZp8yO3NsxE
+	8ZdP+1uYYjNSLxY5rOxKBsLK4GhUlpfZJbLshBUhzQ==
+X-Google-Smtp-Source: ABdhPJxmeN0Mu0nfPv7jQg7fnM5tK8qeTcOwoiKNnS1LECVetrm3mNP8Yu3R/CnlqIPtPQaboKVejM8GSgVVJp7zzC4=
+X-Received: by 2002:a81:ff10:: with SMTP id k16mr314507ywn.321.1644855025825;
+ Mon, 14 Feb 2022 08:10:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214102000.1d3af66e@gandalf.local.home>
+References: <20220211014313.1790140-1-aik@ozlabs.ru> <CAKwvOdkKsoYw9KOfwdHYg7OkTz0TQ6YgZZcqQ5PNg+_O1Q5bgg@mail.gmail.com>
+In-Reply-To: <CAKwvOdkKsoYw9KOfwdHYg7OkTz0TQ6YgZZcqQ5PNg+_O1Q5bgg@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 14 Feb 2022 08:10:16 -0800
+Message-ID: <CABCJKudj5VJ-f+QU0qmnODoadEzpVME2rXhtUZbzrEV8o69hqQ@mail.gmail.com>
+Subject: Re: [RFC PATCH kernel] trace: Make FTRACE_MCOUNT_USE_RECORDMCOUNT configurable
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev, 
+	Alexey Kardashevskiy <aik@ozlabs.ru>, LKML <linux-kernel@vger.kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Nathan Chancellor <nathan@kernel.org>, Ingo Molnar <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Steve,
+On Fri, Feb 11, 2022 at 4:11 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> + Sami, Kees
+>
+> Do you guys remember why we don't support
+> FTRACE_MCOUNT_USE_RECORDMCOUNT with LTO?
 
-On Mon, Feb 14, 2022 at 10:20:00AM -0500, Steven Rostedt wrote:
-> On Sun, 13 Feb 2022 21:03:29 +0800
-> kernel test robot <lkp@intel.com> wrote:
-> 
-> > All errors (new ones prefixed by >>):
-> > 
-> > >> kernel/trace/ftrace.c:7157:20: error: unused function 'ftrace_startup_enable' [-Werror,-Wunused-function]  
-> >    static inline void ftrace_startup_enable(int command) { }
-> >                       ^
-> >    1 error generated.
-> 
-> Strange. I always thought that static inline functions do not cause
-> warnings when not used? Especially, since they are often in headers when
-> things are turned off. Or is it because this is in a C file?
+It's because recordmcount cannot distinguish between calls and other
+references to mcount/fentry, which is a problem with LTO where we have
+to process the entire vmlinux.o and cannot ignore individual
+translation units. Instead of resorting to workarounds, Peter was kind
+enough to implement a smarter mcount pass in objtool, which we now use
+on x86_64 with LTO.
 
-With -Wunused-function, clang will warn about unused static inline
-functions within a .c file (but not .h), whereas GCC will not warn for
-either. The unused attribute was added to the definition of inline to
-make clang's behavior match GCC's.
+Alexey, which architecture are you trying to fix here?
 
-> Is this a new warning caused by a commit, or is it a new warning because
-> the compiler now complains about it?
-
-However, in commit 6863f5643dd7 ("kbuild: allow Clang to find unused
-static inline functions for W=1 build"), Masahiro made it so that the
-unused attribute does not get added at W=1 so that instances of unused
-static inline functions can be caught and eliminated (or put into use,
-if the function should have been used), hence this report.
-
-I will be honest, I don't know why the robot flagged 172f7ba9772c as the
-commit that introduced this warning but it seems legitimate if
-CONFIG_DYNAMIC_FTRACE is not enabled, since ftrace_startup_enable() is
-only ever used within an '#ifdef CONFIG_DYNAMIC_FTRACE' block so I guess
-the stub is unnecessary?
-
-Cheers,
-Nathan
+Sami
