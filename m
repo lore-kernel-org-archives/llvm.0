@@ -1,96 +1,106 @@
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F8CA2C
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 18:26:06 +0000 (UTC)
-Received: by mail-oo1-f54.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso20269670oop.9
-        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 10:26:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QlSvtvFbST+JRiZy0nw8qsurosZlPyiaBzL4u9A7NPg=;
-        b=HXqACW//Zm0115qK79VxKxElAYlr95AzBf3cBr6QuimTb9boq0VaCrFqwmZvXHTKI0
-         wKgj5UvN50iY0OiyrcX6/VJPFTxIBdus86P9uDgMpY7COalhtCiMDuUuNkmlHbDOMFVb
-         7c/d/mm4z92AXKDl1cngznbb7e/JgfyeqwLfiV4dnWnr9nBwruWYPE1VizPeGLJfYvWI
-         7NwGpT7iZsmEYd4jGbrlyV5wgk4jv2b7smJtuJ3GDbWT+eRbKGnewN7kUrlHZD7B1AEI
-         Oiq83ESXQFphER2f1zpQGtfPQD7KZuYuCSsMt7OAkw/q8fXEk03RR3RKro0Ww3Cc5fwz
-         yx2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QlSvtvFbST+JRiZy0nw8qsurosZlPyiaBzL4u9A7NPg=;
-        b=qjPn3//3C73VQMMWfWS7pQeKtY3jVpYqTh+XcfP8wXzfbZtfMzrbR7/WSjg3PRvZdH
-         yGCzCGAmTweT2pJT/PdORvDxe53ct4SsbGHYICTgtabGhRgQ5dwcpHobi6/AMejAKJIo
-         j77TUDAcJpqLfl3x5CMBmhqS939Xb9eKJpFKVA6c1nX87UgKO0KCXjTwYD0AixjqnmvE
-         pb1OgIFKcpnp3HEOL8k059VP3UxQWkg8gXXlaQlv7udNCjY+hWGN5owgYbkzGi8m3wH4
-         +uRIKE03e6TPc2d5K5Mcg5iEP/noF98vUMKndmiXRpWZjf869E0J+O8GzbkhRy1UENkW
-         48sw==
-X-Gm-Message-State: AOAM531gKHbvbn8dHdK5pbffBsUPffiFb71oeWfRLWWhFWmkOA3ydVHW
-	ktN0lS2DSVcbTvLtfFaa+lu7MgjKD/6UfBrJ2Qo=
-X-Google-Smtp-Source: ABdhPJwwkbSacvGQlLKe3Ok3VHnEV3xZS3SoGcqpH7A0COkvlXN8wexYw97Y95QA9d+schJeyBmufa9z8v8pu+r/cg8=
-X-Received: by 2002:a4a:d583:: with SMTP id z3mr20564oos.68.1644863166025;
- Mon, 14 Feb 2022 10:26:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D56A35
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 18:52:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644864738; x=1676400738;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kWYAiQSwLurW6gnqQpOqmFvca/DUjsnHzrUszupOuks=;
+  b=AJ/nIurSGxXeMvzQjIXGxaa05wDSxPf9PMFg7NZ0WDjMjo1HNvA0R9H8
+   q8hrjFEgsdCV6Rp+hIiGCx82PFZPCWxkx5VpMMOHmBpgmuTlk0571F0//
+   7tFz4uJ8hurrfaFJ/2KZswK1zODaNq5S/QHZ7mKosgcP0GiTIjnCLzrZW
+   xG9O60z7P+wKDxzUhg+iDlxJtz+QMkynjnGgZDgI+RxM/I1svnMpi2ZL1
+   E8bexU5HhMSWFjPsum+8A2/FoZJnT6G3gdDrp+oLd36fHO4hZA+Cae3nn
+   C7kvyWy3TEHQ9DiVkPIsXdVIPmTixVz5oyasNJXyI8aF1khYI9ib06G2P
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="336587521"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="336587521"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 10:52:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="485638559"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 14 Feb 2022 10:52:15 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nJgSN-0008pm-7e; Mon, 14 Feb 2022 18:52:15 +0000
+Date: Tue, 15 Feb 2022 02:51:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC V2 02/21] rv: Add runtime reactors interface
+Message-ID: <202202150232.GmgML41h-lkp@intel.com>
+References: <d69a5d389928803ec62055f3cffa704c656f803a.1644830251.git.bristot@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220214182224.2906060-1-trix@redhat.com>
-In-Reply-To: <20220214182224.2906060-1-trix@redhat.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Mon, 14 Feb 2022 13:25:55 -0500
-Message-ID: <CADnq5_MrrTXmVPv7ukkpq-+WWn7cKbF9CHjhsBnuRzqbriUN1g@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: check return status before using stable_pstate
-To: Tom Rix <trix@redhat.com>
-Cc: "Deucher, Alexander" <alexander.deucher@amd.com>, Christian Koenig <christian.koenig@amd.com>, 
-	xinhui pan <Xinhui.Pan@amd.com>, Dave Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"Tuikov, Luben" <luben.tuikov@amd.com>, "Nieto, David M" <david.nieto@amd.com>, 
-	Nirmoy Das <nirmoy.das@amd.com>, "Xue, Ken" <Ken.Xue@amd.com>, Roy Sun <Roy.Sun@amd.com>, 
-	"Quan, Evan" <evan.quan@amd.com>, llvm@lists.linux.dev, 
-	Maling list - DRI developers <dri-devel@lists.freedesktop.org>, 
-	amd-gfx list <amd-gfx@lists.freedesktop.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d69a5d389928803ec62055f3cffa704c656f803a.1644830251.git.bristot@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Applied.  Thanks!
+Hi Daniel,
 
-Alex
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on rostedt-trace/for-next]
+[also build test WARNING on lwn/docs-next linus/master v5.17-rc4 next-20220214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-On Mon, Feb 14, 2022 at 1:22 PM <trix@redhat.com> wrote:
->
-> From: Tom Rix <trix@redhat.com>
->
-> Clang static analysis reports this problem
-> amdgpu_ctx.c:616:26: warning: Assigned value is garbage
->   or undefined
->   args->out.pstate.flags = stable_pstate;
->                          ^ ~~~~~~~~~~~~~
-> amdgpu_ctx_stable_pstate can fail without setting
-> stable_pstate.  So check.
->
-> Fixes: 8cda7a4f96e4 ("drm/amdgpu/UAPI: add new CTX OP to get/set stable pstates")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
-> index 1c72f6095f08..f522b52725e4 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
-> @@ -613,7 +613,8 @@ int amdgpu_ctx_ioctl(struct drm_device *dev, void *data,
->                 if (args->in.flags)
->                         return -EINVAL;
->                 r = amdgpu_ctx_stable_pstate(adev, fpriv, id, false, &stable_pstate);
-> -               args->out.pstate.flags = stable_pstate;
-> +               if (!r)
-> +                       args->out.pstate.flags = stable_pstate;
->                 break;
->         case AMDGPU_CTX_OP_SET_STABLE_PSTATE:
->                 if (args->in.flags & ~AMDGPU_CTX_STABLE_PSTATE_FLAGS_MASK)
-> --
-> 2.26.3
->
+url:    https://github.com/0day-ci/linux/commits/Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220214-193144
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202150232.GmgML41h-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/e716a88380b48ccbfe62acc96f536718e439130e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220214-193144
+        git checkout e716a88380b48ccbfe62acc96f536718e439130e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/trace/rv/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/trace/rv/rv_reactors.c:76:24: warning: no previous prototype for function 'get_reactor_rdef_by_name' [-Wmissing-prototypes]
+   struct rv_reactor_def *get_reactor_rdef_by_name(char *name)
+                          ^
+   kernel/trace/rv/rv_reactors.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct rv_reactor_def *get_reactor_rdef_by_name(char *name)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/get_reactor_rdef_by_name +76 kernel/trace/rv/rv_reactors.c
+
+    75	
+  > 76	struct rv_reactor_def *get_reactor_rdef_by_name(char *name)
+    77	{
+    78		struct rv_reactor_def *r;
+    79		list_for_each_entry(r, &rv_reactors_list, list) {
+    80			if (strcmp(name, r->reactor->name) == 0)
+    81				return r;
+    82		}
+    83	
+    84		return NULL;
+    85	}
+    86	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
