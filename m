@@ -1,40 +1,39 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A5BA2C
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 17:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4946CA30
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 17:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1644859216; x=1676395216;
   h=date:from:cc:subject:message-id:mime-version;
-  bh=zV+5iJNX/+4UhRcz+aj/ZEWHZQcCBStSKpsVmNedm+U=;
-  b=f0DnUnZumXsGpIz+ICjT4KTKxkqPfsE65U/c5D++HwngBhsKSaJrtvVE
-   EL0hYl7u80FYEdmb9VD/MN8M9WVeH3RC384fsawKxAKo1aKJ9Xx0mBqL0
-   wRWxPV4WX5OJrSu4wJHfMwcKQssEKK2rRD315IZE7aheb7ByLu03mlUpt
-   W/KByxsMC3FxH2nr4SZmnvI98SESJplmcoWhGu623R3ZFvgqxZkCaWYSp
-   3oIPXleBw2hkWim225UJM5F9A5ThfyVjzcQvVr5guIMr3Ci172UYUb3Qi
-   8rKNT/SEH20D4b8fa694Abt9T3m1BEp6QROtTzrkEjRluu4X9wTBrCzbT
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="237548045"
+  bh=+gIHxLyESJuSqt89W6rAV6RPwwYH90ILpNalN85AC+U=;
+  b=d6MN9WhACxxoRWnSQtOvjuwFCP2qdbVUmJkkH6IHmGkDM/Z/DSIAUZU0
+   fMWfRlZdr09bisMnO/XGKhRnkykPGnu4TTEcVUvBcTmO+W6fIRveyZPvT
+   RtJEqXa1+n1EcKrHlCfHqoQl37xGpKTPoilrHGnpfds708HXVDqbTlDXV
+   o9kzWLtsJAxJfwcql0bVHNy5OBD6ch1CrDxhVNkGJ2bjEp3ZMbJ27bZAG
+   enV4Pw8DpGlSz1Nw1KHDjdwGlF1Uep2KGkoQ6akxwm8CotPV8+RZ7ZfKO
+   eBrtfoTXvIfl/IdVTitsuYsQ1KVjAHLGH4ewX13ZjbS87Ihw4vd4EZtNr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="310876141"
 X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="237548045"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:20:15 -0800
+   d="scan'208";a="310876141"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:20:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="703191555"
+   d="scan'208";a="632247087"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 14 Feb 2022 09:20:14 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 14 Feb 2022 09:20:14 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nJf1K-0008nA-49; Mon, 14 Feb 2022 17:20:14 +0000
-Date: Tue, 15 Feb 2022 01:19:32 +0800
+	id 1nJf1K-0008n4-3F; Mon, 14 Feb 2022 17:20:14 +0000
+Date: Tue, 15 Feb 2022 01:19:35 +0800
 From: kernel test robot <lkp@intel.com>
 Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 842/5679]
- drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.o: warning: objtool:
- csiphy_lanes_enable() falls through to next function csiphy_lanes_disable()
-Message-ID: <202202142312.dSKZUCkF-lkp@intel.com>
+Subject: vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x39: call to
+ ghcb_set_sw_exit_code() leaves .noinstr.text section
+Message-ID: <202202142331.ZR5kseK5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,36 +44,50 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Jonathan Marek <jonathan@marek.ca>
-CC: Mauro Carvalho Chehab <mchehab@kernel.org>
-CC: linux-media@vger.kernel.org
-CC: Robert Foss <robert.foss@linaro.org>
-CC: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-CC: Hans Verkuil <hverkuil@xs4all.nl>
+CC: linux-kernel@vger.kernel.org
+TO: Nick Desaulniers <ndesaulniers@google.com>
+CC: Kees Cook <keescook@chromium.org>
+CC: Fangrui Song <maskray@google.com>
+CC: Miguel Ojeda <ojeda@kernel.org>
+CC: Nathan Chancellor <nathan@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   259cbfc98c55ba3b6ef6e61fb7cfc3751dfded1e
-commit: 53655d2a0ff295deee5c4b40fe7fc8851bc672e6 [842/5679] media: camss: csiphy-3ph: add support for SM8250 CSI DPHY
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220214/202202142312.dSKZUCkF-lkp@intel.com/config)
+Hi Nick,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   754e0b0e35608ed5206d6a67a791563c631cec07
+commit: 380d53c45ff21f66870ee965b62613137f9d010d compiler_attributes.h: define __no_profile, add to noinstr
+date:   8 months ago
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220214/202202142331.ZR5kseK5-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=53655d2a0ff295deee5c4b40fe7fc8851bc672e6
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 53655d2a0ff295deee5c4b40fe7fc8851bc672e6
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=380d53c45ff21f66870ee965b62613137f9d010d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 380d53c45ff21f66870ee965b62613137f9d010d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.o: warning: objtool: csiphy_lanes_enable() falls through to next function csiphy_lanes_disable()
+   vmlinux.o: warning: objtool: do_syscall_64()+0x18: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_int80_syscall_32()+0x25: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x29: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: vc_switch_off_ist()+0x27: call to ip_within_syscall_gap() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret()+0x21: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_page() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_entry_stack()+0x9: call to cpu_entry_stack() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x39: call to ghcb_set_sw_exit_code() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: safe_stack_exc_vmm_communication()+0x2b: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: debug_locks_off()+0x20: call to console_verbose() leaves .noinstr.text section
+   kallsyms failure: relative symbol value 0xffffffff045a1000 out of range in relative mode
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
