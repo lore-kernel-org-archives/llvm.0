@@ -1,145 +1,150 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B67A7C
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 10:50:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644835856; x=1676371856;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/kLJyU48R70GHyVr31Y/V7xMHTXJq7WJn+RQtezx4m8=;
-  b=N6RvS1d39U0XEMfNXcpSdQ+tZQl8mf3X0YodzS17U0Kczw4H82ClRXUT
-   BBGBIQB3G8T8TCo0k3walfTTvQHegRHkmNojaXw1oHnngUfUe/mPPiYsU
-   fJPtWRD0DZp5B+9mmZgM7zjHXAoglRJtaoODKor79JMbk4Te+HkTXfzhl
-   bVK5SZLhaLeV4QxIxnRwKBClVQNiOW5pfQnSZR1BpWLW+YuujMuxAxV/0
-   9UodE6DQ+doXoy5HsN3inYSHoALsUlKiEdhTWO+jPobes6KeKthxydx0C
-   HuKAtoHYciiidaWSLSpqNFBep6iw/lk6LAVKQEwhDJbRLQLkbqFQ17Scj
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="248896969"
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="248896969"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 02:50:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="703019134"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 14 Feb 2022 02:50:53 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nJYwX-0008QR-2Z; Mon, 14 Feb 2022 10:50:53 +0000
-Date: Mon, 14 Feb 2022 18:50:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marcelo Tosatti <mtosatti@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: kernel/time/hrtimer.c:276:20: warning: unused function
- 'is_migration_base'
-Message-ID: <202202141804.APyBFuLN-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21447C
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 10:59:56 +0000 (UTC)
+Received: by mail-yb1-f178.google.com with SMTP id o19so44657884ybc.12
+        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 02:59:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tSvkUxAWqaJyF4gpEgS5w4YFZfn9R8g1UyzR4KbX0y8=;
+        b=NUPC+F603/mADdiuvtTD8yuUBHvS3mFO/t99+p2ii+I1JrqK+WeB+iLnKCcLgQMAql
+         4EnJbqHUSDpGONN29PSMCLf/oXrgUAZXPAwuJt6LR9yRfmO6rspPqEpZllkgjZS4o2as
+         hBq2eAR2SKobpeT+Y4ds3LOWup3nHW6tC+vOZFKdAfAluBI5Tos+3pKoreSnnFdbwCPh
+         3/K+efGrryiCz0JBmm7Gb5Cbrmu6041PAhlPVhCHvo8NzyjjXHDTkaa2E5WMApUmUYQv
+         YxgBV317/0DA52nI9/duIyMBMYoBdqHq+8u+ifdjXe93sg6lRYwO5TBx88DTGZhsUlfU
+         OXwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tSvkUxAWqaJyF4gpEgS5w4YFZfn9R8g1UyzR4KbX0y8=;
+        b=LREa9InZvZa88yitBlO5xRBit95xdtLDAlYdkNlALNbRQc9FObKbdM9a9m4h986h6y
+         f5Ag15WBzdVrqQ0619+j3Fsn8ulujPKT3PwIKBYHaVhFWaXaft0hacgRplDa22RZbXQT
+         AvHb6LQhp82d6z7Nqtjhqd9sbWqPPU6Yp1nPzqhGDjZyhryGY0Kun/SfPn/WekW4cU7v
+         0P2Tf6txtyTUMcFk8lx5RFyYoSz3bLAsMbDww3zVJRPGQI4KIBHNYvtCofNh5TNXFJ7H
+         F7wVvlL6faJUjLH3emC9hO1kB07UwcPTmu1uHm/0eOSNjYKzhy9J48A4rwV+5CGKmydX
+         WWSg==
+X-Gm-Message-State: AOAM531xIlLw2VNBtjKni8CGxHylNqJ5Z126a8CJO4HSZdtoVa6p7Xxt
+	kAo9DMJIg37D5U9mW1iP3GOPOxqTGy4qFm2c0ve3Og==
+X-Google-Smtp-Source: ABdhPJyn3EB7X/eUQXQ6uJnjqPqie/m6r5EE+EDezLUD9EJJ+dKSm66GD6Mt05vPNLzD/a2FWFEizipzB/6Dhf/2qXY=
+X-Received: by 2002:a25:f404:: with SMTP id q4mr11597189ybd.146.1644836395586;
+ Mon, 14 Feb 2022 02:59:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 14 Feb 2022 16:29:43 +0530
+Message-ID: <CA+G9fYvfx2jRPnU6zVK8v9vNbwXc4wV0KX0JfGWeNsAbL72y-g@mail.gmail.com>
+Subject: Re: [PATCH 5.16 000/203] 5.16.10-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	torvalds@linux-foundation.org, akpm@linux-foundation.org, linux@roeck-us.net, 
+	shuah@kernel.org, patches@kernelci.org, lkft-triage@lists.linaro.org, 
+	pavel@denx.de, jonathanh@nvidia.com, f.fainelli@gmail.com, 
+	sudipm.mukherjee@gmail.com, slade@sladewatkins.com, 
+	Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Marcelo,
+On Mon, 14 Feb 2022 at 15:23, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.10 release.
+> There are 203 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.10-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-FYI, the error/warning still remains.
+On Linux mainline master branch with arm64 clang-nigtly build failed
+due to following errors and warnings.
+Now it is also noticed on stable-rc 5.15 and 5.16.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   754e0b0e35608ed5206d6a67a791563c631cec07
-commit: 81d741d3460ca422843ce0ec8351083f259c6166 hrtimer: Avoid unnecessary SMP function calls in clock_was_set()
-date:   6 months ago
-config: mips-randconfig-r033-20220213 (https://download.01.org/0day-ci/archive/20220214/202202141804.APyBFuLN-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d741d3460ca422843ce0ec8351083f259c6166
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 81d741d3460ca422843ce0ec8351083f259c6166
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/ kernel/time/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_REALTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_MONOTONIC,
-   ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_BOOTTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_TAI,
-   ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:1591:7: warning: variable 'expires_in_hardirq' set but not used
-   bool expires_in_hardirq;
-   ^
->> kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
-   static inline bool is_migration_base(struct hrtimer_clock_base
-   ^
->> kernel/time/hrtimer.c:1830:20: warning: unused function '__hrtimer_peek_ahead_timers'
-   static inline void __hrtimer_peek_ahead_timers(void) { }
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-   Target: mips-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-ea071884b0/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm scripts security sound source usr virt
+net/ipv4/tcp_input.c: clang: error: clang frontend command failed with
+exit code 139 (use -v to see invocation)
+https://github.com/llvm/llvm-project/issues/53811
 
 
-vim +/is_migration_base +276 kernel/time/hrtimer.c
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM=1 LLVM_IAS=1
+ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
+CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- HOSTCC=clang CC=clang
+PLEASE submit a bug report to
+https://github.com/llvm/llvm-project/issues/ and include the crash
+backtrace, preprocessed source, and associated run script.
+Stack dump:
+0. Program arguments: clang -Wp,-MMD,net/ipv4/.tcp_input.o.d -nostdinc
+-I/builds/linux/arch/arm64/include -I./arch/arm64/include/generated
+-I/builds/linux/include -I./include
+-I/builds/linux/arch/arm64/include/uapi
+-I./arch/arm64/include/generated/uapi -I/builds/linux/include/uapi
+-I./include/generated/uapi -include
+/builds/linux/include/linux/compiler-version.h -include
+/builds/linux/include/linux/kconfig.h -include
+/builds/linux/include/linux/compiler_types.h -D__KERNEL__
+-mlittle-endian -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+-DKASAN_SHADOW_SCALE_SHIFT= -Qunused-arguments
+-fmacro-prefix-map=/builds/linux/= -Wall -Wundef
+-Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing
+-fno-common -fshort-wchar -fno-PIE
+-Werror=implicit-function-declaration -Werror=implicit-int
+-Werror=return-type -Wno-format-security -std=gnu89
+--target=aarch64-linux-gnu -fintegrated-as
+-Werror=unknown-warning-option -Werror=ignored-optimization-argument
+-mgeneral-regs-only -DCONFIG_CC_HAS_K_CONSTRAINT=1 -Wno-psabi
+-fno-asynchronous-unwind-tables -fno-unwind-tables
+-mbranch-protection=pac-ret+leaf+bti -Wa,-march=armv8.5-a
+-DARM64_ASM_ARCH=\"armv8.5-a\" -DKASAN_SHADOW_SCALE_SHIFT=
+-fno-delete-null-pointer-checks -Wno-frame-address
+-Wno-address-of-packed-member -O2 -Wframe-larger-than=2048
+-fstack-protector-strong -Wimplicit-fallthrough -Wno-gnu
+-mno-global-merge -Wno-unused-but-set-variable
+-Wno-unused-const-variable -fno-omit-frame-pointer
+-fno-optimize-sibling-calls -ftrivial-auto-var-init=zero
+-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+-fno-stack-clash-protection -fpatchable-function-entry=2
+-Wdeclaration-after-statement -Wvla -Wno-pointer-sign
+-Wcast-function-type -Wno-array-bounds -fno-strict-overflow
+-fno-stack-check -Werror=date-time -Werror=incompatible-pointer-types
+-Wno-initializer-overrides -Wno-format -Wno-sign-compare
+-Wno-format-zero-length -Wno-pointer-to-enum-cast
+-Wno-tautological-constant-out-of-range-compare -Wno-unaligned-access
+-mstack-protector-guard=sysreg -mstack-protector-guard-reg=sp_el0
+-mstack-protector-guard-offset=1408 -I /builds/linux/net/ipv4 -I
+./net/ipv4 -DKBUILD_MODFILE=\"net/ipv4/tcp_input\"
+-DKBUILD_BASENAME=\"tcp_input\" -DKBUILD_MODNAME=\"tcp_input\"
+-D__KBUILD_MODNAME=kmod_tcp_input -c -o net/ipv4/tcp_input.o
+/builds/linux/net/ipv4/tcp_input.c
+1. <eof> parser at end of file
+2. Code generation
+3. Running pass 'Function Pass Manager' on module
+'/builds/linux/net/ipv4/tcp_input.c'.
+4. Running pass 'Live Interval Analysis' on function '@tcp_ack'
+ #0 0x00007fcc9438ce91 llvm::sys::PrintStackTrace(llvm::raw_ostream&,
+int) (/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xe93e91)
 
-c0a3132963db68 kernel/hrtimer.c      Thomas Gleixner           2006-01-09  275  
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04 @276  static inline bool is_migration_base(struct hrtimer_clock_base *base)
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  277  {
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  278  	return false;
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  279  }
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  280  
 
-:::::: The code at line 276 was first introduced by commit
-:::::: 5d2295f3a93b04986d069ebeaf5b07725f9096c1 hrtimer: Add a missing bracket and hide `migration_base' on !SMP
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--
+Linaro LKFT
+https://lkft.linaro.org
