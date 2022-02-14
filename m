@@ -1,113 +1,148 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED397A
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 14:33:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1644849217;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=oIIRJ21BwIfvNwz0gmLQtZq6j5ywHb6my37zjrdYjEk=;
-	b=O75n34Aef/V1fpS4uKiwxVNbpwYzBP+sCMWrd3fnJ0ynFbZAXl/K0o7QrLEVFF4Qo74wSO
-	ikkjDpk8uKJ9KN5tKSyWRh7X2wI0nmBA6O2Rs1ER+i9bM1VUAzfsiea5p9eY5CUBgHgfIH
-	qIx6bygdzF7Mp1dKuHQ/mqQzXuIz/qM=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-583-PFZIXEbsPE60fBr_SuMZ9A-1; Mon, 14 Feb 2022 09:33:35 -0500
-X-MC-Unique: PFZIXEbsPE60fBr_SuMZ9A-1
-Received: by mail-oo1-f72.google.com with SMTP id h7-20020a4aa287000000b002eb15de5797so10702268ool.23
-        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 06:33:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oIIRJ21BwIfvNwz0gmLQtZq6j5ywHb6my37zjrdYjEk=;
-        b=p+lSXMCUjRXTTQTsgrD1Yg6BgK5KgYhSBJmGOF3uELXN8Bqb0bTHyEgnPMiCUVJxiM
-         KPCH/pLbQaKN2ZCaiR1/uoIY58VZ1xVdtmozashaPcKT8rESy+BG4iXFGEMeu6w+y9Yw
-         XdI7FW6ZCHmbxZ0ISpFYpvh2MYNUCb9+3yD5AY4Viy6zPAq4xIB7CwVmUlPXY5hu1lGY
-         rTf24719jnhKjW0iEni2Khe3BHtvEIF6QTtHooveuhwCsjwhwySppSccuvwR4FuSMc9N
-         4d7IBZ6iZ7qK3fe3HVbrN9uo75WGjPNeJlNTJzVl0no7ERFDudRughrzSlDLyCDmK7Dg
-         SOdA==
-X-Gm-Message-State: AOAM53225fkH9kBKqNa7c81NdAinrNzZAY8Uf+BUqNP8R272tYkUfbaN
-	0RaUlPJw5shyhJizwcRwIwszecZWAbpsB1hA5YTqZ8Xqh/sAMNO8vxNP4MGFB4XxEtTTGD/C3Fj
-	zLtVR+H+kQb/jKw==
-X-Received: by 2002:a05:6870:c095:: with SMTP id c21mr2067595oad.245.1644849215042;
-        Mon, 14 Feb 2022 06:33:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxdVQ5IR9sHLZgVPu2QVTSPw4yaT3G8ufJi3cdC6V7G9uaFDWwCWmnk8z6rfOM7YD50C4dtNQ==
-X-Received: by 2002:a05:6870:c095:: with SMTP id c21mr2067577oad.245.1644849214794;
-        Mon, 14 Feb 2022 06:33:34 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id z4sm12449303ota.7.2022.02.14.06.33.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 06:33:34 -0800 (PST)
-From: trix@redhat.com
-To: jesse.brandeburg@intel.com,
-	anthony.l.nguyen@intel.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	jacob.e.keller@intel.com
-Cc: intel-wired-lan@lists.osuosl.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] ice: check the return of ice_ptp_gettimex64
-Date: Mon, 14 Feb 2022 06:33:27 -0800
-Message-Id: <20220214143327.2884183-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044807A
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 14:37:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644849431; x=1676385431;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6LOK4VVNnkh4NqshkBZRVXh25R9/25K4xECHUcNdZ8I=;
+  b=b338rXFggUHZ6Epj9c1xP461PsIkEzMRoELCFUgahew4xBBt34wNmGox
+   +PWAHJprDPEOn/KEJNz/4v51Y4N4jXZxI1nDm2QZcOmQ4JGumhUp+Qqnz
+   1nREyQ29aPZbCPRQXckBcrRbFu48giRI8uWDFKBZlgV6s1NUEfURaLav5
+   GbOJo2BYoPlgkc3nI0pmlUGBwrJEMxOngW2xtexxS9grJ5zNbwxCLHXC/
+   QfiNVyVP5b9Gy5diTKi+8v8WW3jEzOsnK05KrgjTigAWiSzgj3qWxoVHy
+   5pgp7AsbzsL2Pn8EuIot5g3/V7fdaWfof8WM9AavCPa2kzKqzj7ei/ZdO
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="249849537"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="249849537"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 06:37:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="495683768"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 14 Feb 2022 06:37:09 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nJcTU-0008ed-CQ; Mon, 14 Feb 2022 14:37:08 +0000
+Date: Mon, 14 Feb 2022 22:36:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: kernel/time/hrtimer.c:650:19: warning: unused function
+ 'hrtimer_hres_active'
+Message-ID: <202202142217.xTcn7mgj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+Hi Thomas,
 
-Clang static analysis reports this issue
-time64.h:69:50: warning: The left operand of '+'
-  is a garbage value
-  set_normalized_timespec64(&ts_delta, lhs.tv_sec + rhs.tv_sec,
-                                       ~~~~~~~~~~ ^
-In ice_ptp_adjtime_nonatomic(), the timespec64 variable 'now'
-is set by ice_ptp_gettimex64().  This function can fail
-with -EBUSY, so 'now' can have a gargbage value.
-So check the return.
+FYI, the error/warning still remains.
 
-Fixes: 06c16d89d2cb ("ice: register 1588 PTP clock device object for E810 devices")
-Signed-off-by: Tom Rix <trix@redhat.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   754e0b0e35608ed5206d6a67a791563c631cec07
+commit: 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429 hrtimer: Use raw_cpu_ptr() in clock_was_set()
+date:   6 months ago
+config: mips-randconfig-r033-20220213 (https://download.01.org/0day-ci/archive/20220214/202202142217.xTcn7mgj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/ kernel/time/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_REALTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_MONOTONIC,
+   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_BOOTTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_TAI,
+   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:1648:7: warning: variable 'expires_in_hardirq' set but not used
+   bool expires_in_hardirq;
+   ^
+   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
+   static inline bool is_migration_base(struct hrtimer_clock_base
+   ^
+>> kernel/time/hrtimer.c:650:19: warning: unused function 'hrtimer_hres_active'
+   static inline int hrtimer_hres_active(void)
+   ^
+   kernel/time/hrtimer.c:1887:20: warning: unused function '__hrtimer_peek_ahead_timers'
+   static inline void __hrtimer_peek_ahead_timers(void) { }
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-ea071884b0/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm scripts security sound source usr virt
+
+
+vim +/hrtimer_hres_active +650 kernel/time/hrtimer.c
+
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  649  
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21 @650  static inline int hrtimer_hres_active(void)
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  651  {
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  652  	return __hrtimer_hres_active(this_cpu_ptr(&hrtimer_bases));
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  653  }
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  654  
+
+:::::: The code at line 650 was first introduced by commit
+:::::: 28bfd18bf3daa5db8bb3422ea7138c8b7d2444ac hrtimer: Make the hrtimer_cpu_base::hres_active field unconditional, to simplify the code
+
+:::::: TO: Anna-Maria Gleixner <anna-maria@linutronix.de>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
 ---
- drivers/net/ethernet/intel/ice/ice_ptp.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.c b/drivers/net/ethernet/intel/ice/ice_ptp.c
-index ae291d442539..000c39d163a2 100644
---- a/drivers/net/ethernet/intel/ice/ice_ptp.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ptp.c
-@@ -1533,9 +1533,12 @@ ice_ptp_settime64(struct ptp_clock_info *info, const struct timespec64 *ts)
- static int ice_ptp_adjtime_nonatomic(struct ptp_clock_info *info, s64 delta)
- {
- 	struct timespec64 now, then;
-+	int ret;
- 
- 	then = ns_to_timespec64(delta);
--	ice_ptp_gettimex64(info, &now, NULL);
-+	ret = ice_ptp_gettimex64(info, &now, NULL);
-+	if (ret)
-+		return ret;
- 	now = timespec64_add(now, then);
- 
- 	return ice_ptp_settime64(info, (const struct timespec64 *)&now);
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
