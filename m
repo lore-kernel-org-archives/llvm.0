@@ -1,33 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9F37A
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 15:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223E5C340E9;
-	Mon, 14 Feb 2022 15:35:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77397A
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 15:37:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D42DBC340EE;
+	Mon, 14 Feb 2022 15:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644852933;
-	bh=GKW1O/9iEU6PCo4adC0DG5ixQw/23hNkDvK3MXbEU/A=;
+	s=k20201202; t=1644853053;
+	bh=TGfDEvbs7Wyxord98HhplZKBquF6jeKuRkvjNaSxV8E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ivNsmiPS4Tf+UY9vbDcZjF34lCS0o63Mbho96U/7CiTc5r6c69kGgDsPQZ0HxW5sU
-	 peK/+DXnIKlPzS3kY76K+q4SLK3IjgRWmWpEBpOToELnM8+y628Nxgg3ikqgM7trRD
-	 SudH1CrRFJX05een+/BoKb2kHwcZ6q+mGL6r7v7ZzLI5AW8ys/LpU1yQKVpN+eB2dA
-	 Dvgm6/p7pZw2zUiASzvNiF8tXFr2dolpvzbQccoRGA9XQZF4ryN28Ds07K1QyaNtHk
-	 RWQurZTHGXanZvVFav8d4rfPKjc7/EuP3oC/+iBVr7W1LD8SgRCoWQDrrclKiZPwDP
-	 h/9ebHsGuy/hQ==
-Date: Mon, 14 Feb 2022 08:35:29 -0700
+	b=uBnGROUT6OZUqoDwiwDiuVFCFycWKqRclb52GfvVRuU6zlyC4uSBaacRqAXINj1EW
+	 pGHKMX1pd3HIxtJDXK3E3gdndQenpFRLyioVvu9APpHxsYk/RtUJVUfVuURkZkVrZW
+	 pSJghEKHTJ7crpiuUOmUSrWykuSCnNTda9kpc//Ttpl6E4gpv8Ce+F95Saw/yGAkv1
+	 A2aWNn3o0klUtWfP2Y4CK34fCR8gDwlbaDmvo1DhGZfE1/8J0ojC9vin4GXpIKTzr5
+	 /TevaZG2vKw8mgfpv6wK12qiS5vsOeH4w1Z4iQ+pDkrXmQbY2vfKMA0KUfQcb+tudg
+	 WjNhb74fkhdZg==
+Date: Mon, 14 Feb 2022 08:37:27 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, llvm@lists.linux.dev,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>
-Subject: Re: arm64: clang-nightly: net/ipv4/tcp_input.c: clang: error: clang
- frontend command failed with exit code 139
-Message-ID: <Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161>
-References: <CA+G9fYtR+E52X-ucmvXYG5-9v0q2UEXQsML=nkQRnSf7TwXYqw@mail.gmail.com>
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	torvalds@linux-foundation.org, akpm@linux-foundation.org,
+	linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+	slade@sladewatkins.com, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 5.16 000/203] 5.16.10-rc1 review
+Message-ID: <Ygp3NyV5AptXcmzV@dev-arch.archlinux-ax161>
+References: <20220214092510.221474733@linuxfoundation.org>
+ <CA+G9fYvfx2jRPnU6zVK8v9vNbwXc4wV0KX0JfGWeNsAbL72y-g@mail.gmail.com>
+ <Ygo8pUuBuNYmP9ds@kroah.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,45 +39,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYtR+E52X-ucmvXYG5-9v0q2UEXQsML=nkQRnSf7TwXYqw@mail.gmail.com>
+In-Reply-To: <Ygo8pUuBuNYmP9ds@kroah.com>
 
-Hi Naresh,
-
-On Mon, Feb 14, 2022 at 12:27:17PM +0530, Naresh Kamboju wrote:
-> On Linux mainline master branch with arm64 clang-nightly build failed
-> due to following errors and warnings.
+On Mon, Feb 14, 2022 at 12:27:33PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Feb 14, 2022 at 04:29:43PM +0530, Naresh Kamboju wrote:
+> > On Mon, 14 Feb 2022 at 15:23, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 5.16.10 release.
+> > > There are 203 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.10-rc1.gz
+> > > or in the git tree and branch at:
+> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> > 
+> > On Linux mainline master branch with arm64 clang-nigtly build failed
+> > due to following errors and warnings.
+> > Now it is also noticed on stable-rc 5.15 and 5.16.
 > 
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM=1 LLVM_IAS=1
-> ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
-> CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- HOSTCC=clang CC=clang
-> PLEASE submit a bug report to
-> https://github.com/llvm/llvm-project/issues/ and include the crash
-> backtrace, preprocessed source, and associated run script.
-> Stack dump:
+> Sounds like a compiler error.  Do the clang developers know about this?
 
-<snip>
+Yes, please see my response to Naresh in his other report for more
+information:
 
-> 1. <eof> parser at end of file
-> 2. Code generation
-> 3. Running pass 'Function Pass Manager' on module
-> '/builds/linux/net/ipv4/tcp_input.c'.
-
-<snip>
-
-> I have reported this a new issues on github,
-> https://github.com/llvm/llvm-project/issues/53811
-
-Thank you for the report! I found this over the weekend myself and
-reverted the problematic commit in LLVM and I will make sure that if it
-lands again, it can build a kernel without any issues.
-
-https://github.com/llvm/llvm-project/commit/22eb1dae3fb20ca8ada865de1d95baab0e08a060
-
-For the future, you may consider only sending reports of compiler
-crashes to Nick, myself, and llvm@lists.linux.dev; a compiler crash is
-pretty much never the fault of the source code so CC'ing Linux
-maintainers is just noise.
+https://lore.kernel.org/r/Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161
 
 Cheers,
 Nathan
