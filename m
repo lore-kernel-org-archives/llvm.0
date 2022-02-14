@@ -1,161 +1,90 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECADA35
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 19:13:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644866011; x=1676402011;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OPsg9/jpppi/LY2t/Fw9MvKZpBWLmJurE/YRhV48e5M=;
-  b=BnsG64aFHMOfPX2odFyXKnpXtmzE9a5pVbTbXdG3nZdtgCcXV4Dus9zv
-   WgB2Ohz3d40Y0Mx9dwehC+G7d5rFHLdsIebXmOCJvwhL2xEo1D1PaOxMs
-   yqFFI6XUPhKL3ttGxF2AoIa61hbZkTmGRl31DVrTjZg9vg529RHh/1PBh
-   czonSrx2bWw+nYPMctvNe05s4nPTMXqyjfsovdiVQmr1UECbOnqdyeK1q
-   /2lJb2PgFWej1LBJAsGW2JmwORKvsdFupWr6iacsUaestH4fgD4KoXra1
-   vgYxheV+hYnO+m+Y+vrGZMU+LdQMIFeWqEH+HtOLFNIHUnv2XBf0RPLh1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="247759148"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="247759148"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 11:13:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="485651771"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 14 Feb 2022 11:13:16 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nJgmh-0008qn-Mw; Mon, 14 Feb 2022 19:13:15 +0000
-Date: Tue, 15 Feb 2022 03:12:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 2/2] serial: sh-sci: Switch to use dev_err_probe_ptr()
-Message-ID: <202202150314.3Ybl4jns-lkp@intel.com>
-References: <20220214143248.502-2-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223C7A35
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 19:14:16 +0000 (UTC)
+Received: by mail-pf1-f170.google.com with SMTP id y5so30910165pfe.4
+        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 11:14:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=7CzXZHBrjrvvHPuFEDIUoa2XYSCdiIOC+ZXymIl1Gq0=;
+        b=DLytup8/nMFdOQpyOX32iLWswu2Lulci0Fe3QMhFaiTB94l2eFbralSxvQAHWw0Abi
+         eMBgf9GgT+3emlXnMtYFbLB8+fCbzYJCtn5FPEK0aM6ahcRxN/pBwtNPTnwicu4pOuMN
+         h1eKmzTSyxcEdz8Xf9DJQZvl62kNNYWtiHsrE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=7CzXZHBrjrvvHPuFEDIUoa2XYSCdiIOC+ZXymIl1Gq0=;
+        b=G3KJc3RtR963aS+HqkJJYNrpkIhAPYPSPMJo1BkuH9O2by9bDThN2W4gFwytjvs49J
+         06exJT9L8Ox+W2YsTPlpRXdWzQG1+NYJivsuCx+C5jtdPiYdz8IRH+Jv11LgarM0xPTx
+         zQvcjwlk6pm/EuzblRl9H8z2mCpuasL3ClE5Xf2Hx7QPQjvXMBI831hmb9C/cK7TDD6p
+         D96XvTdN5bPzjVOLPTr0UUKGAkuamDWL9eds3d70sp9XGMaEBgmMP/iDdKSMc5+Z5qL/
+         MFnESkFlWddor7Zi4aoeDh7A9lLnJZtpHWKVlKQ0kwDecdd/A8BLvBOVdxdQRfic4+DE
+         ySmg==
+X-Gm-Message-State: AOAM530dobaNQ276z0g1jtUY9ThGLIUIFj9mvAw3IImZEZmRMUhlrlW+
+	KdQtpI7Hu/4mqu2FunI7VfZXNg==
+X-Google-Smtp-Source: ABdhPJwEa/+o++xM1jvGn6J4uA1jnNEs+L6LOssFo6u6kFTNXF/whFKH0nAMuVk0P4sIE7mk5RwzkA==
+X-Received: by 2002:a65:584d:: with SMTP id s13mr389414pgr.369.1644866055556;
+        Mon, 14 Feb 2022 11:14:15 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id oa10sm12985799pjb.54.2022.02.14.11.14.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 11:14:15 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Marco Elver <elver@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>
+Cc: Kees Cook <keescook@chromium.org>,
+	Alexander Potapenko <glider@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	kasan-dev@googlegroups.com,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 1/2] stack: Introduce CONFIG_RANDOMIZE_KSTACK_OFFSET
+Date: Mon, 14 Feb 2022 11:14:03 -0800
+Message-Id: <164486603894.3748820.17377347049312013591.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220131090521.1947110-1-elver@google.com>
+References: <20220131090521.1947110-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214143248.502-2-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Andy,
+On Mon, 31 Jan 2022 10:05:20 +0100, Marco Elver wrote:
+> The randomize_kstack_offset feature is unconditionally compiled in when
+> the architecture supports it.
+> 
+> To add constraints on compiler versions, we require a dedicated Kconfig
+> variable. Therefore, introduce RANDOMIZE_KSTACK_OFFSET.
+> 
+> Furthermore, this option is now also configurable by EXPERT kernels:
+> while the feature is supposed to have zero performance overhead when
+> disabled, due to its use of static branches, there are few cases where
+> giving a distribution the option to disable the feature entirely makes
+> sense. For example, in very resource constrained environments, which
+> would never enable the feature to begin with, in which case the
+> additional kernel code size increase would be redundant.
+> 
+> [...]
 
-I love your patch! Yet something to improve:
+Applied to for-next/hardening, thanks!
 
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on usb/usb-testing linux/master linus/master v5.17-rc4 next-20220214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[1/2] stack: Introduce CONFIG_RANDOMIZE_KSTACK_OFFSET
+      https://git.kernel.org/kees/c/8cb37a5974a4
+[2/2] stack: Constrain and fix stack offset randomization with Clang builds
+      https://git.kernel.org/kees/c/efa90c11f62e
 
-url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/driver-core-add-a-wrapper-to-device-probe-log-helper-to-return-pointer/20220214-223425
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: hexagon-buildonly-randconfig-r001-20220214 (https://download.01.org/0day-ci/archive/20220215/202202150314.3Ybl4jns-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/810910d324cc80b092207d043651de696d293cbd
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/driver-core-add-a-wrapper-to-device-probe-log-helper-to-return-pointer/20220214-223425
-        git checkout 810910d324cc80b092207d043651de696d293cbd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/serial/
+-- 
+Kees Cook
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/tty/serial/sh-sci.c:3205:83: error: too few arguments to function call, expected 4, have 3
-                   return dev_err_probe_ptr(&pdev->dev, PTR_ERR(rstc), "failed to get reset ctrl\n");
-                          ~~~~~~~~~~~~~~~~~                                                        ^
-   include/linux/device.h:988:7: note: 'dev_err_probe_ptr' declared here
-   void *dev_err_probe_ptr(const struct device *dev, int err, const char *fmt, va_list args)
-         ^
-   1 error generated.
-
-
-vim +3205 drivers/tty/serial/sh-sci.c
-
-  3187	
-  3188	static struct plat_sci_port *sci_parse_dt(struct platform_device *pdev,
-  3189						  unsigned int *dev_id)
-  3190	{
-  3191		struct device_node *np = pdev->dev.of_node;
-  3192		struct reset_control *rstc;
-  3193		struct plat_sci_port *p;
-  3194		struct sci_port *sp;
-  3195		const void *data;
-  3196		int id, ret;
-  3197	
-  3198		if (!IS_ENABLED(CONFIG_OF) || !np)
-  3199			return ERR_PTR(-EINVAL);
-  3200	
-  3201		data = of_device_get_match_data(&pdev->dev);
-  3202	
-  3203		rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
-  3204		if (IS_ERR(rstc))
-> 3205			return dev_err_probe_ptr(&pdev->dev, PTR_ERR(rstc), "failed to get reset ctrl\n");
-  3206	
-  3207		ret = reset_control_deassert(rstc);
-  3208		if (ret) {
-  3209			dev_err(&pdev->dev, "failed to deassert reset %d\n", ret);
-  3210			return ERR_PTR(ret);
-  3211		}
-  3212	
-  3213		ret = devm_add_action_or_reset(&pdev->dev, sci_reset_control_assert, rstc);
-  3214		if (ret) {
-  3215			dev_err(&pdev->dev, "failed to register assert devm action, %d\n",
-  3216				ret);
-  3217			return ERR_PTR(ret);
-  3218		}
-  3219	
-  3220		p = devm_kzalloc(&pdev->dev, sizeof(struct plat_sci_port), GFP_KERNEL);
-  3221		if (!p)
-  3222			return ERR_PTR(-ENOMEM);
-  3223	
-  3224		/* Get the line number from the aliases node. */
-  3225		id = of_alias_get_id(np, "serial");
-  3226		if (id < 0 && ~sci_ports_in_use)
-  3227			id = ffz(sci_ports_in_use);
-  3228		if (id < 0) {
-  3229			dev_err(&pdev->dev, "failed to get alias id (%d)\n", id);
-  3230			return ERR_PTR(-EINVAL);
-  3231		}
-  3232		if (id >= ARRAY_SIZE(sci_ports)) {
-  3233			dev_err(&pdev->dev, "serial%d out of range\n", id);
-  3234			return ERR_PTR(-EINVAL);
-  3235		}
-  3236	
-  3237		sp = &sci_ports[id];
-  3238		*dev_id = id;
-  3239	
-  3240		p->type = SCI_OF_TYPE(data);
-  3241		p->regtype = SCI_OF_REGTYPE(data);
-  3242	
-  3243		sp->has_rtscts = of_property_read_bool(np, "uart-has-rtscts");
-  3244	
-  3245		return p;
-  3246	}
-  3247	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
