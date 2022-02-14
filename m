@@ -1,131 +1,115 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E13A2C
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 17:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644861077; x=1676397077;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EykiRRFTIBWspQ0iHz9Svz3vTbHpf+77utafI35eB9o=;
-  b=KbeVIgFvumJcE9EMQtniVljuP6NMCmogiLvzwOpOllN4LBgDaGxwI1vu
-   eQl142gsIgo+WuYYiXnZA7E5beLxWr+jz52JqfAYyW28vKrZUWMaHYkNz
-   4G8BGgMcQXFUugfqN3il5fT4mlQdMMyfgwRMJMj8oRSKjttcMvQSW8J+B
-   YQF1LYDD+g+ctxJTQag4JrXXOOajreajDbKJ866OOfowT34q0StbI52yn
-   kqZqqCoqI7lxwSAJcNcGqzFE/qVq0BGDfpaPrnePORPhR633BTsxDd5RF
-   MRZnSK2DX15uqRnz7PJTifi6C/aEfybaVbnbZL2K6pO9NLWmOIub20Unw
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="248980413"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="248980413"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:51:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="543781249"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 14 Feb 2022 09:51:15 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nJfVK-0008oP-HY; Mon, 14 Feb 2022 17:51:14 +0000
-Date: Tue, 15 Feb 2022 01:50:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC V2 01/21] rv: Add Runtime Verification (RV) interface
-Message-ID: <202202150143.3BpCqVdF-lkp@intel.com>
-References: <87606fc180e4551b19dc61609907b555214c41a1.1644830251.git.bristot@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62934A2C
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 17:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1644861105;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sRClfikrb2SAycFi2aWUxJvEEU6PW+e2USfmkK1Iaug=;
+	b=XviSr68nOxrbdbennGxQQjQrypAOLEhW1qkIVujCa3be2lxAAZhSJtwybSZbnb9AGt6Qce
+	VlVx+oz36hig08c9Kd9jfiePd1rYBSETCMn//ISFiL0Yu27IUqrAQnnS13e2W8zSYO71EZ
+	pcnPaoPWi+MTHGOMHnZj99L3VOYy824=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-64-HtdiNVVpPOCOKnsq9MuBAA-1; Mon, 14 Feb 2022 12:51:44 -0500
+X-MC-Unique: HtdiNVVpPOCOKnsq9MuBAA-1
+Received: by mail-oo1-f71.google.com with SMTP id g8-20020a4aa708000000b002e8efc514a6so11010784oom.12
+        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 09:51:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sRClfikrb2SAycFi2aWUxJvEEU6PW+e2USfmkK1Iaug=;
+        b=1HJO0uFzAThrkyMAPiuj8pcCZlaxUJSETal3BuDq+m5klGYXon/VbkjY/i2V3R52ZQ
+         C2IC5/SPfYGinfnGbmRPGU+qUjESdSygqeRnf67DNLLWjUVLhJ1zg2SUdx3GNi/Sj+FZ
+         +xSiU3qcCreyazXIhV5CMWB6CNCv9Fzz5BRhZD3+THVQ4Z03c2dKgPUBRzggqOIw2S9T
+         Nv3vxdeCZXQCTs+YTOmeKrlU/jUFKqPASFhONIGEyYkiCM48v8VIrpJqYsVZk8nKXw9v
+         fFPetcgffLxGdoYSsr/HX6OaJYFdx0oF6xWkwB158ZMg4Dh9TBG8Av5V6KoyvaSe8Pl1
+         ykyw==
+X-Gm-Message-State: AOAM532PedYFidM/eXz5PYTu0qVoaD5d9EK2Jyz615x4I0TpyekvzFBG
+	6/KqX2gxZKNkI25aETLWQhn+bWT4R/v9wQNTodMqn6tJDkXTWGSVdPPuH5f3MltdQc170UAb/ux
+	+HuOEC6rxuRPyBA==
+X-Received: by 2002:a9d:6e84:: with SMTP id a4mr18934otr.43.1644861103174;
+        Mon, 14 Feb 2022 09:51:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzcnHxTDhHzI4mHvMfEWEZ41qbHYDvsaNz05h/swvvbijMzbRD2lKpXlDtrTUoDdBuBcdn0Yg==
+X-Received: by 2002:a9d:6e84:: with SMTP id a4mr18930otr.43.1644861102975;
+        Mon, 14 Feb 2022 09:51:42 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id w20sm12910024ooe.3.2022.02.14.09.51.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 09:51:42 -0800 (PST)
+From: trix@redhat.com
+To: jk@codeconstruct.com.au,
+	matt@codeconstruct.com.au,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] mctp: fix use after free
+Date: Mon, 14 Feb 2022 09:51:38 -0800
+Message-Id: <20220214175138.2902947-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87606fc180e4551b19dc61609907b555214c41a1.1644830251.git.bristot@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-Hi Daniel,
+From: Tom Rix <trix@redhat.com>
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on rostedt-trace/for-next]
-[also build test WARNING on lwn/docs-next linus/master v5.17-rc4 next-20220214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Clang static analysis reports this problem
+route.c:425:4: warning: Use of memory after it is freed
+  trace_mctp_key_acquire(key);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+When mctp_key_add() fails, key is freed but then is later
+used in trace_mctp_key_acquire().  Add an else statement
+to use the key only when mctp_key_add() is successful.
 
-url:    https://github.com/0day-ci/linux/commits/Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220214-193144
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202150143.3BpCqVdF-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/f99370d1c81f0a3b56d6630ff62631f6ecfdf8d8
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220214-193144
-        git checkout f99370d1c81f0a3b56d6630ff62631f6ecfdf8d8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/trace/rv/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/trace/rv/rv.c:189:6: warning: no previous prototype for function 'disable_monitor' [-Wmissing-prototypes]
-   void disable_monitor(struct rv_monitor_def *mdef)
-        ^
-   kernel/trace/rv/rv.c:189:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void disable_monitor(struct rv_monitor_def *mdef)
-   ^
-   static 
->> kernel/trace/rv/rv.c:202:6: warning: no previous prototype for function 'enable_monitor' [-Wmissing-prototypes]
-   void enable_monitor(struct rv_monitor_def *mdef)
-        ^
-   kernel/trace/rv/rv.c:202:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void enable_monitor(struct rv_monitor_def *mdef)
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/disable_monitor +189 kernel/trace/rv/rv.c
-
-   185	
-   186	/*
-   187	 * Disable a given runtime monitor.
-   188	 */
- > 189	void disable_monitor(struct rv_monitor_def *mdef)
-   190	{
-   191		if (mdef->monitor->enabled) {
-   192			mdef->monitor->enabled = 0;
-   193			mdef->monitor->stop();
-   194		}
-   195	
-   196		mdef->enabled = 0;
-   197	}
-   198	
-   199	/*
-   200	 * Enable a given monitor.
-   201	 */
- > 202	void enable_monitor(struct rv_monitor_def *mdef)
-   203	{
-   204		/*
-   205		 * Reset all internal monitors before starting.
-   206		 */
-   207		mdef->monitor->reset();
-   208		if (!mdef->monitor->enabled)
-   209			mdef->monitor->start();
-   210	
-   211		mdef->monitor->enabled = 1;
-   212		mdef->enabled = 1;
-   213	}
-   214	
-
+Fixes: 4a992bbd3650 ("mctp: Implement message fragmentation & reassembly")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ net/mctp/route.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/net/mctp/route.c b/net/mctp/route.c
+index 17e3482aa770..0c4c56e1bd6e 100644
+--- a/net/mctp/route.c
++++ b/net/mctp/route.c
+@@ -419,13 +419,14 @@ static int mctp_route_input(struct mctp_route *route, struct sk_buff *skb)
+ 			 * this function.
+ 			 */
+ 			rc = mctp_key_add(key, msk);
+-			if (rc)
++			if (rc) {
+ 				kfree(key);
++			} else {
++				trace_mctp_key_acquire(key);
+ 
+-			trace_mctp_key_acquire(key);
+-
+-			/* we don't need to release key->lock on exit */
+-			mctp_key_unref(key);
++				/* we don't need to release key->lock on exit */
++				mctp_key_unref(key);
++			}
+ 			key = NULL;
+ 
+ 		} else {
+-- 
+2.26.3
+
