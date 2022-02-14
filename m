@@ -1,150 +1,251 @@
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21447C
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 10:59:56 +0000 (UTC)
-Received: by mail-yb1-f178.google.com with SMTP id o19so44657884ybc.12
-        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 02:59:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tSvkUxAWqaJyF4gpEgS5w4YFZfn9R8g1UyzR4KbX0y8=;
-        b=NUPC+F603/mADdiuvtTD8yuUBHvS3mFO/t99+p2ii+I1JrqK+WeB+iLnKCcLgQMAql
-         4EnJbqHUSDpGONN29PSMCLf/oXrgUAZXPAwuJt6LR9yRfmO6rspPqEpZllkgjZS4o2as
-         hBq2eAR2SKobpeT+Y4ds3LOWup3nHW6tC+vOZFKdAfAluBI5Tos+3pKoreSnnFdbwCPh
-         3/K+efGrryiCz0JBmm7Gb5Cbrmu6041PAhlPVhCHvo8NzyjjXHDTkaa2E5WMApUmUYQv
-         YxgBV317/0DA52nI9/duIyMBMYoBdqHq+8u+ifdjXe93sg6lRYwO5TBx88DTGZhsUlfU
-         OXwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tSvkUxAWqaJyF4gpEgS5w4YFZfn9R8g1UyzR4KbX0y8=;
-        b=LREa9InZvZa88yitBlO5xRBit95xdtLDAlYdkNlALNbRQc9FObKbdM9a9m4h986h6y
-         f5Ag15WBzdVrqQ0619+j3Fsn8ulujPKT3PwIKBYHaVhFWaXaft0hacgRplDa22RZbXQT
-         AvHb6LQhp82d6z7Nqtjhqd9sbWqPPU6Yp1nPzqhGDjZyhryGY0Kun/SfPn/WekW4cU7v
-         0P2Tf6txtyTUMcFk8lx5RFyYoSz3bLAsMbDww3zVJRPGQI4KIBHNYvtCofNh5TNXFJ7H
-         F7wVvlL6faJUjLH3emC9hO1kB07UwcPTmu1uHm/0eOSNjYKzhy9J48A4rwV+5CGKmydX
-         WWSg==
-X-Gm-Message-State: AOAM531xIlLw2VNBtjKni8CGxHylNqJ5Z126a8CJO4HSZdtoVa6p7Xxt
-	kAo9DMJIg37D5U9mW1iP3GOPOxqTGy4qFm2c0ve3Og==
-X-Google-Smtp-Source: ABdhPJyn3EB7X/eUQXQ6uJnjqPqie/m6r5EE+EDezLUD9EJJ+dKSm66GD6Mt05vPNLzD/a2FWFEizipzB/6Dhf/2qXY=
-X-Received: by 2002:a25:f404:: with SMTP id q4mr11597189ybd.146.1644836395586;
- Mon, 14 Feb 2022 02:59:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE31F7C
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 11:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644837659; x=1676373659;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ti7mFt3h430vZH2EbX5GTh7/m0VDNjVSg5lsADuLQEM=;
+  b=EOPGdonNhrGlZK9Q+4A9ZKewlEVm25gBQYnypMxptm8b+hCcZUB+G4Ro
+   gXUn8fcbZQKZ0IAnzbYF5WPYsTslrjILwt38BtgiH62Hk4X/t5Hp+EV+R
+   u6cjf78JFoYPh+gGO4Ae4cjwcaIQKhb2LwAPVbQ4cuCTVv0yMn0jvblUK
+   QrXxi/t28ztUFp3QI/uhJ5zFylgzHHbwqMwprZkCp2MmzT+aubzF/xIHZ
+   2fKru84GCPW6Yel6T24QHcdC+t3M9qMMJF41Rns6VEhWtBYs+aPuHf+pt
+   83BdXp5fwq/rQC67z2hPau0Y6E/GG5gDmCv+xJAjjW2NWL3WEam9663Mr
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="247665126"
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="247665126"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:20:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="570117941"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 14 Feb 2022 03:20:57 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nJZPd-0008Rs-1v; Mon, 14 Feb 2022 11:20:57 +0000
+Date: Mon, 14 Feb 2022 19:20:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [willy-pagecache:for-next 52/85] mm/page_vma_mapped.c:219:20: error:
+ implicit declaration of function 'pmd_pfn'
+Message-ID: <202202141924.UPUvH4uw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220214092510.221474733@linuxfoundation.org>
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 14 Feb 2022 16:29:43 +0530
-Message-ID: <CA+G9fYvfx2jRPnU6zVK8v9vNbwXc4wV0KX0JfGWeNsAbL72y-g@mail.gmail.com>
-Subject: Re: [PATCH 5.16 000/203] 5.16.10-rc1 review
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, llvm@lists.linux.dev, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	torvalds@linux-foundation.org, akpm@linux-foundation.org, linux@roeck-us.net, 
-	shuah@kernel.org, patches@kernelci.org, lkft-triage@lists.linaro.org, 
-	pavel@denx.de, jonathanh@nvidia.com, f.fainelli@gmail.com, 
-	sudipm.mukherjee@gmail.com, slade@sladewatkins.com, 
-	Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, 14 Feb 2022 at 15:23, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.10 release.
-> There are 203 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.10-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   git://git.infradead.org/users/willy/pagecache for-next
+head:   c267b33d0001488f1d9dad12d6a87655e174d914
+commit: 9733dd1f11d6b6f8a38fa82f0cc014f7840cbd67 [52/85] mm: Convert page_vma_mapped_walk to work on PFNs
+config: mips-buildonly-randconfig-r003-20220213 (https://download.01.org/0day-ci/archive/20220214/202202141924.UPUvH4uw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
+        git fetch --no-tags willy-pagecache for-next
+        git checkout 9733dd1f11d6b6f8a38fa82f0cc014f7840cbd67
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-On Linux mainline master branch with arm64 clang-nigtly build failed
-due to following errors and warnings.
-Now it is also noticed on stable-rc 5.15 and 5.16.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-net/ipv4/tcp_input.c: clang: error: clang frontend command failed with
-exit code 139 (use -v to see invocation)
-https://github.com/llvm/llvm-project/issues/53811
+All errors (new ones prefixed by >>):
+
+>> mm/page_vma_mapped.c:219:20: error: implicit declaration of function 'pmd_pfn' [-Werror,-Wimplicit-function-declaration]
+                                   if (!check_pmd(pmd_pfn(pmde), pvmw))
+                                                  ^
+   mm/page_vma_mapped.c:219:20: note: did you mean 'pmd_off'?
+   include/linux/pgtable.h:150:22: note: 'pmd_off' declared here
+   static inline pmd_t *pmd_off(struct mm_struct *mm, unsigned long va)
+                        ^
+   1 error generated.
 
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM=1 LLVM_IAS=1
-ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
-CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- HOSTCC=clang CC=clang
-PLEASE submit a bug report to
-https://github.com/llvm/llvm-project/issues/ and include the crash
-backtrace, preprocessed source, and associated run script.
-Stack dump:
-0. Program arguments: clang -Wp,-MMD,net/ipv4/.tcp_input.o.d -nostdinc
--I/builds/linux/arch/arm64/include -I./arch/arm64/include/generated
--I/builds/linux/include -I./include
--I/builds/linux/arch/arm64/include/uapi
--I./arch/arm64/include/generated/uapi -I/builds/linux/include/uapi
--I./include/generated/uapi -include
-/builds/linux/include/linux/compiler-version.h -include
-/builds/linux/include/linux/kconfig.h -include
-/builds/linux/include/linux/compiler_types.h -D__KERNEL__
--mlittle-endian -DCC_USING_PATCHABLE_FUNCTION_ENTRY
--DKASAN_SHADOW_SCALE_SHIFT= -Qunused-arguments
--fmacro-prefix-map=/builds/linux/= -Wall -Wundef
--Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing
--fno-common -fshort-wchar -fno-PIE
--Werror=implicit-function-declaration -Werror=implicit-int
--Werror=return-type -Wno-format-security -std=gnu89
---target=aarch64-linux-gnu -fintegrated-as
--Werror=unknown-warning-option -Werror=ignored-optimization-argument
--mgeneral-regs-only -DCONFIG_CC_HAS_K_CONSTRAINT=1 -Wno-psabi
--fno-asynchronous-unwind-tables -fno-unwind-tables
--mbranch-protection=pac-ret+leaf+bti -Wa,-march=armv8.5-a
--DARM64_ASM_ARCH=\"armv8.5-a\" -DKASAN_SHADOW_SCALE_SHIFT=
--fno-delete-null-pointer-checks -Wno-frame-address
--Wno-address-of-packed-member -O2 -Wframe-larger-than=2048
--fstack-protector-strong -Wimplicit-fallthrough -Wno-gnu
--mno-global-merge -Wno-unused-but-set-variable
--Wno-unused-const-variable -fno-omit-frame-pointer
--fno-optimize-sibling-calls -ftrivial-auto-var-init=zero
--enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
--fno-stack-clash-protection -fpatchable-function-entry=2
--Wdeclaration-after-statement -Wvla -Wno-pointer-sign
--Wcast-function-type -Wno-array-bounds -fno-strict-overflow
--fno-stack-check -Werror=date-time -Werror=incompatible-pointer-types
--Wno-initializer-overrides -Wno-format -Wno-sign-compare
--Wno-format-zero-length -Wno-pointer-to-enum-cast
--Wno-tautological-constant-out-of-range-compare -Wno-unaligned-access
--mstack-protector-guard=sysreg -mstack-protector-guard-reg=sp_el0
--mstack-protector-guard-offset=1408 -I /builds/linux/net/ipv4 -I
-./net/ipv4 -DKBUILD_MODFILE=\"net/ipv4/tcp_input\"
--DKBUILD_BASENAME=\"tcp_input\" -DKBUILD_MODNAME=\"tcp_input\"
--D__KBUILD_MODNAME=kmod_tcp_input -c -o net/ipv4/tcp_input.o
-/builds/linux/net/ipv4/tcp_input.c
-1. <eof> parser at end of file
-2. Code generation
-3. Running pass 'Function Pass Manager' on module
-'/builds/linux/net/ipv4/tcp_input.c'.
-4. Running pass 'Live Interval Analysis' on function '@tcp_ack'
- #0 0x00007fcc9438ce91 llvm::sys::PrintStackTrace(llvm::raw_ostream&,
-int) (/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xe93e91)
+vim +/pmd_pfn +219 mm/page_vma_mapped.c
 
+   126	
+   127	/**
+   128	 * page_vma_mapped_walk - check if @pvmw->pfn is mapped in @pvmw->vma at
+   129	 * @pvmw->address
+   130	 * @pvmw: pointer to struct page_vma_mapped_walk. page, vma, address and flags
+   131	 * must be set. pmd, pte and ptl must be NULL.
+   132	 *
+   133	 * Returns true if the page is mapped in the vma. @pvmw->pmd and @pvmw->pte point
+   134	 * to relevant page table entries. @pvmw->ptl is locked. @pvmw->address is
+   135	 * adjusted if needed (for PTE-mapped THPs).
+   136	 *
+   137	 * If @pvmw->pmd is set but @pvmw->pte is not, you have found PMD-mapped page
+   138	 * (usually THP). For PTE-mapped THP, you should run page_vma_mapped_walk() in
+   139	 * a loop to find all PTEs that map the THP.
+   140	 *
+   141	 * For HugeTLB pages, @pvmw->pte is set to the relevant page table entry
+   142	 * regardless of which page table level the page is mapped at. @pvmw->pmd is
+   143	 * NULL.
+   144	 *
+   145	 * Returns false if there are no more page table entries for the page in
+   146	 * the vma. @pvmw->ptl is unlocked and @pvmw->pte is unmapped.
+   147	 *
+   148	 * If you need to stop the walk before page_vma_mapped_walk() returned false,
+   149	 * use page_vma_mapped_walk_done(). It will do the housekeeping.
+   150	 */
+   151	bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+   152	{
+   153		struct vm_area_struct *vma = pvmw->vma;
+   154		struct mm_struct *mm = vma->vm_mm;
+   155		unsigned long end;
+   156		pgd_t *pgd;
+   157		p4d_t *p4d;
+   158		pud_t *pud;
+   159		pmd_t pmde;
+   160	
+   161		/* The only possible pmd mapping has been handled on last iteration */
+   162		if (pvmw->pmd && !pvmw->pte)
+   163			return not_found(pvmw);
+   164	
+   165		if (unlikely(is_vm_hugetlb_page(vma))) {
+   166			unsigned long size = pvmw->nr_pages * PAGE_SIZE;
+   167			/* The only possible mapping was handled on last iteration */
+   168			if (pvmw->pte)
+   169				return not_found(pvmw);
+   170	
+   171			/* when pud is not present, pte will be NULL */
+   172			pvmw->pte = huge_pte_offset(mm, pvmw->address, size);
+   173			if (!pvmw->pte)
+   174				return false;
+   175	
+   176			pvmw->ptl = huge_pte_lockptr(size_to_hstate(size), mm,
+   177							pvmw->pte);
+   178			spin_lock(pvmw->ptl);
+   179			if (!check_pte(pvmw))
+   180				return not_found(pvmw);
+   181			return true;
+   182		}
+   183	
+   184		end = vma_address_end(pvmw);
+   185		if (pvmw->pte)
+   186			goto next_pte;
+   187	restart:
+   188		do {
+   189			pgd = pgd_offset(mm, pvmw->address);
+   190			if (!pgd_present(*pgd)) {
+   191				step_forward(pvmw, PGDIR_SIZE);
+   192				continue;
+   193			}
+   194			p4d = p4d_offset(pgd, pvmw->address);
+   195			if (!p4d_present(*p4d)) {
+   196				step_forward(pvmw, P4D_SIZE);
+   197				continue;
+   198			}
+   199			pud = pud_offset(p4d, pvmw->address);
+   200			if (!pud_present(*pud)) {
+   201				step_forward(pvmw, PUD_SIZE);
+   202				continue;
+   203			}
+   204	
+   205			pvmw->pmd = pmd_offset(pud, pvmw->address);
+   206			/*
+   207			 * Make sure the pmd value isn't cached in a register by the
+   208			 * compiler and used as a stale value after we've observed a
+   209			 * subsequent update.
+   210			 */
+   211			pmde = READ_ONCE(*pvmw->pmd);
+   212	
+   213			if (pmd_trans_huge(pmde) || is_pmd_migration_entry(pmde)) {
+   214				pvmw->ptl = pmd_lock(mm, pvmw->pmd);
+   215				pmde = *pvmw->pmd;
+   216				if (likely(pmd_trans_huge(pmde))) {
+   217					if (pvmw->flags & PVMW_MIGRATION)
+   218						return not_found(pvmw);
+ > 219					if (!check_pmd(pmd_pfn(pmde), pvmw))
+   220						return not_found(pvmw);
+   221					return true;
+   222				}
+   223				if (!pmd_present(pmde)) {
+   224					swp_entry_t entry;
+   225	
+   226					if (!thp_migration_supported() ||
+   227					    !(pvmw->flags & PVMW_MIGRATION))
+   228						return not_found(pvmw);
+   229					entry = pmd_to_swp_entry(pmde);
+   230					if (!is_migration_entry(entry) ||
+   231					    !check_pmd(swp_offset(entry), pvmw))
+   232						return not_found(pvmw);
+   233					return true;
+   234				}
+   235				/* THP pmd was split under us: handle on pte level */
+   236				spin_unlock(pvmw->ptl);
+   237				pvmw->ptl = NULL;
+   238			} else if (!pmd_present(pmde)) {
+   239				/*
+   240				 * If PVMW_SYNC, take and drop THP pmd lock so that we
+   241				 * cannot return prematurely, while zap_huge_pmd() has
+   242				 * cleared *pmd but not decremented compound_mapcount().
+   243				 */
+   244				if ((pvmw->flags & PVMW_SYNC) &&
+   245				    transparent_hugepage_active(vma) &&
+   246				    (pvmw->nr_pages >= HPAGE_PMD_NR)) {
+   247					spinlock_t *ptl = pmd_lock(mm, pvmw->pmd);
+   248	
+   249					spin_unlock(ptl);
+   250				}
+   251				step_forward(pvmw, PMD_SIZE);
+   252				continue;
+   253			}
+   254			if (!map_pte(pvmw))
+   255				goto next_pte;
+   256	this_pte:
+   257			if (check_pte(pvmw))
+   258				return true;
+   259	next_pte:
+   260			do {
+   261				pvmw->address += PAGE_SIZE;
+   262				if (pvmw->address >= end)
+   263					return not_found(pvmw);
+   264				/* Did we cross page table boundary? */
+   265				if ((pvmw->address & (PMD_SIZE - PAGE_SIZE)) == 0) {
+   266					if (pvmw->ptl) {
+   267						spin_unlock(pvmw->ptl);
+   268						pvmw->ptl = NULL;
+   269					}
+   270					pte_unmap(pvmw->pte);
+   271					pvmw->pte = NULL;
+   272					goto restart;
+   273				}
+   274				pvmw->pte++;
+   275				if ((pvmw->flags & PVMW_SYNC) && !pvmw->ptl) {
+   276					pvmw->ptl = pte_lockptr(mm, pvmw->pmd);
+   277					spin_lock(pvmw->ptl);
+   278				}
+   279			} while (pte_none(*pvmw->pte));
+   280	
+   281			if (!pvmw->ptl) {
+   282				pvmw->ptl = pte_lockptr(mm, pvmw->pmd);
+   283				spin_lock(pvmw->ptl);
+   284			}
+   285			goto this_pte;
+   286		} while (pvmw->address < end);
+   287	
+   288		return false;
+   289	}
+   290	
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
---
-Linaro LKFT
-https://lkft.linaro.org
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
