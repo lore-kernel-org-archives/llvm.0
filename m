@@ -1,167 +1,113 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2EB812
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 14:17:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644848230; x=1676384230;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3sFlm92IDjvtUnk1YcNHebLidnZh8FzoTXE56MfSJNo=;
-  b=lGcs2R3DYr5f4SnAaXIO7eF8qhaDUSbSVMfuuI4e/NDtnnBsALfhwaia
-   VYURt59DLWonnwxjLPwnOaDxBPS7GyzBEiOQCbz6LhGgdJeoC6kkbEg9R
-   FBiFFTyFJld+BWkKi2E3f1PXs+Rf0yDlE+CRUS0NnbBqwUkHt3JSxtqGt
-   FYk/+Kmv4eq9/00IOQ9X+DY6BIq6G0nHUWKrp0FkxMAhmNxWuoUEka/y2
-   Pbz0w3FeTRZOlWEUhSC0PJ/mEDltVWQNeLt7TWBNnPi7M9KYrtO33V7zt
-   TgP7FnpIkwb+zw/nnNL+K4/xVLkUyZDfsXDmVTDe/B2CiXV/l3VlAsh6D
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="336524559"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="336524559"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 06:17:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="773064971"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Feb 2022 06:17:08 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nJcA8-0008dn-2Z; Mon, 14 Feb 2022 14:17:08 +0000
-Date: Mon, 14 Feb 2022 22:16:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:iommufd 23/31]
- drivers/iommu/iommufd/io_pagetable.c:488:6: error: comparison of distinct
- pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length
- - 1) *' (aka 'unsigned int *'))
-Message-ID: <202202142244.2jylcKcV-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED397A
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 14:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1644849217;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oIIRJ21BwIfvNwz0gmLQtZq6j5ywHb6my37zjrdYjEk=;
+	b=O75n34Aef/V1fpS4uKiwxVNbpwYzBP+sCMWrd3fnJ0ynFbZAXl/K0o7QrLEVFF4Qo74wSO
+	ikkjDpk8uKJ9KN5tKSyWRh7X2wI0nmBA6O2Rs1ER+i9bM1VUAzfsiea5p9eY5CUBgHgfIH
+	qIx6bygdzF7Mp1dKuHQ/mqQzXuIz/qM=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-PFZIXEbsPE60fBr_SuMZ9A-1; Mon, 14 Feb 2022 09:33:35 -0500
+X-MC-Unique: PFZIXEbsPE60fBr_SuMZ9A-1
+Received: by mail-oo1-f72.google.com with SMTP id h7-20020a4aa287000000b002eb15de5797so10702268ool.23
+        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 06:33:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oIIRJ21BwIfvNwz0gmLQtZq6j5ywHb6my37zjrdYjEk=;
+        b=p+lSXMCUjRXTTQTsgrD1Yg6BgK5KgYhSBJmGOF3uELXN8Bqb0bTHyEgnPMiCUVJxiM
+         KPCH/pLbQaKN2ZCaiR1/uoIY58VZ1xVdtmozashaPcKT8rESy+BG4iXFGEMeu6w+y9Yw
+         XdI7FW6ZCHmbxZ0ISpFYpvh2MYNUCb9+3yD5AY4Viy6zPAq4xIB7CwVmUlPXY5hu1lGY
+         rTf24719jnhKjW0iEni2Khe3BHtvEIF6QTtHooveuhwCsjwhwySppSccuvwR4FuSMc9N
+         4d7IBZ6iZ7qK3fe3HVbrN9uo75WGjPNeJlNTJzVl0no7ERFDudRughrzSlDLyCDmK7Dg
+         SOdA==
+X-Gm-Message-State: AOAM53225fkH9kBKqNa7c81NdAinrNzZAY8Uf+BUqNP8R272tYkUfbaN
+	0RaUlPJw5shyhJizwcRwIwszecZWAbpsB1hA5YTqZ8Xqh/sAMNO8vxNP4MGFB4XxEtTTGD/C3Fj
+	zLtVR+H+kQb/jKw==
+X-Received: by 2002:a05:6870:c095:: with SMTP id c21mr2067595oad.245.1644849215042;
+        Mon, 14 Feb 2022 06:33:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxdVQ5IR9sHLZgVPu2QVTSPw4yaT3G8ufJi3cdC6V7G9uaFDWwCWmnk8z6rfOM7YD50C4dtNQ==
+X-Received: by 2002:a05:6870:c095:: with SMTP id c21mr2067577oad.245.1644849214794;
+        Mon, 14 Feb 2022 06:33:34 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id z4sm12449303ota.7.2022.02.14.06.33.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 06:33:34 -0800 (PST)
+From: trix@redhat.com
+To: jesse.brandeburg@intel.com,
+	anthony.l.nguyen@intel.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	jacob.e.keller@intel.com
+Cc: intel-wired-lan@lists.osuosl.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] ice: check the return of ice_ptp_gettimex64
+Date: Mon, 14 Feb 2022 06:33:27 -0800
+Message-Id: <20220214143327.2884183-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-tree:   https://github.com/jgunthorpe/linux iommufd
-head:   6b5b3f20ed6b64824c2d447b4f4555fcb390bf3b
-commit: 01c5309803286f2c29a6f40bca7f489fce968c42 [23/31] iommufd: Data structure to provide IOVA to PFN mapping
-config: i386-randconfig-a004-20220214 (https://download.01.org/0day-ci/archive/20220214/202202142244.2jylcKcV-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/01c5309803286f2c29a6f40bca7f489fce968c42
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe iommufd
-        git checkout 01c5309803286f2c29a6f40bca7f489fce968c42
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iommu/iommufd/
+From: Tom Rix <trix@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Clang static analysis reports this issue
+time64.h:69:50: warning: The left operand of '+'
+  is a garbage value
+  set_normalized_timespec64(&ts_delta, lhs.tv_sec + rhs.tv_sec,
+                                       ~~~~~~~~~~ ^
+In ice_ptp_adjtime_nonatomic(), the timespec64 variable 'now'
+is set by ice_ptp_gettimex64().  This function can fail
+with -EBUSY, so 'now' can have a gargbage value.
+So check the return.
 
-All errors (new ones prefixed by >>):
-
->> drivers/iommu/iommufd/io_pagetable.c:488:6: error: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Werror,-Wcompare-distinct-pointer-types]
-           if (check_add_overflow(iova, length - 1, &last_iova))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   drivers/iommu/iommufd/io_pagetable.c:548:14: error: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Werror,-Wcompare-distinct-pointer-types]
-               WARN_ON(check_add_overflow(iova, length - 1, &last_iova)))
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   2 errors generated.
-
-
-vim +488 drivers/iommu/iommufd/io_pagetable.c
-
-   462	
-   463	/**
-   464	* iopt_access_pages - Return a list of pages under the iova
-   465	*
-   466	* Reads @npages starting at iova and returns the struct page * pointers. These
-   467	* can be kmap'd by the caller for CPU access.
-   468	*
-   469	* The caller must perform iopt_unaccess_pages() when done to balance this.
-   470	*
-   471	* iova can be unaligned from PAGE_SIZE. The first returned byte starts at
-   472	* page_to_phys(out_pages[0]) + (iova % PAGE_SIZE). The caller promises not
-   473	* to touch memory outside the requested iova slice.
-   474	*
-   475	* FIXME: callers that need a DMA mapping via a sgl should create another
-   476	* interface to build the SGL efficiently
-   477	*/
-   478	int iopt_access_pages(struct io_pagetable *iopt, unsigned long iova,
-   479			      size_t length, struct page **out_pages, bool write)
-   480	{
-   481		unsigned long cur_iova = iova;
-   482		unsigned long last_iova;
-   483		struct iopt_area *area;
-   484		int rc;
-   485	
-   486		if (!length)
-   487			return -EINVAL;
- > 488		if (check_add_overflow(iova, length - 1, &last_iova))
-   489			return -EOVERFLOW;
-   490	
-   491		down_read(&iopt->rwsem);
-   492		for (area = iopt_area_iter_first(iopt, iova, last_iova); area;
-   493		     area = iopt_area_iter_next(area, iova, last_iova)) {
-   494			unsigned long last = min(last_iova, iopt_area_last_iova(area));
-   495			unsigned long last_index;
-   496			unsigned long index;
-   497	
-   498			/* Need contiguous areas in the access */
-   499			if (iopt_area_iova(area) < cur_iova) {
-   500				rc = -EINVAL;
-   501				goto out_remove;
-   502			}
-   503	
-   504			index = iopt_iova_to_index(area, cur_iova);
-   505			last_index = iopt_iova_to_index(area, last);
-   506			rc = iopt_pages_add_user(area->pages, index, last_index,
-   507						 out_pages, write);
-   508			if (rc)
-   509				goto out_remove;
-   510			if (last == last_iova)
-   511				break;
-   512			/*
-   513			 * Can't cross areas that are not aligned to the system page
-   514			 * size with this API.
-   515			 */
-   516			if (cur_iova % PAGE_SIZE) {
-   517				rc = -EINVAL;
-   518				goto out_remove;
-   519			}
-   520			cur_iova = last + 1;
-   521			out_pages += last_index - index;
-   522			atomic_inc(&area->num_users);
-   523		}
-   524	
-   525		up_read(&iopt->rwsem);
-   526		return 0;
-   527	
-   528	out_remove:
-   529		if (cur_iova != iova)
-   530			iopt_unaccess_pages(iopt, iova, cur_iova - iova);
-   531		return rc;
-   532	}
-   533	
-
+Fixes: 06c16d89d2cb ("ice: register 1588 PTP clock device object for E810 devices")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/net/ethernet/intel/ice/ice_ptp.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.c b/drivers/net/ethernet/intel/ice/ice_ptp.c
+index ae291d442539..000c39d163a2 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ptp.c
++++ b/drivers/net/ethernet/intel/ice/ice_ptp.c
+@@ -1533,9 +1533,12 @@ ice_ptp_settime64(struct ptp_clock_info *info, const struct timespec64 *ts)
+ static int ice_ptp_adjtime_nonatomic(struct ptp_clock_info *info, s64 delta)
+ {
+ 	struct timespec64 now, then;
++	int ret;
+ 
+ 	then = ns_to_timespec64(delta);
+-	ice_ptp_gettimex64(info, &now, NULL);
++	ret = ice_ptp_gettimex64(info, &now, NULL);
++	if (ret)
++		return ret;
+ 	now = timespec64_add(now, then);
+ 
+ 	return ice_ptp_settime64(info, (const struct timespec64 *)&now);
+-- 
+2.26.3
+
