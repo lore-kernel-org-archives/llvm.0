@@ -1,42 +1,69 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7097C
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 11:54:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644839640; x=1676375640;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=78NBjTW1Usi2nU8xVnJBMuVMyBmU+wkZ71QX/Ue0630=;
-  b=MsB0pwev7lKx4T308RNkRCu7iIombQAeqqrzgBzX1eGWwQT6BX9JZuNr
-   /HsIWsBpFpZEqzHl5aztyYyxgkKYLi7cjn+pdJVghCDqMTjOx/4Oumo+3
-   oH6qvXJcS980EbQQ8LpSy6UEI48HZ5pCC9mjkOdFR63Yy/DA3tF4VV/nS
-   4HAyosiiNTX5s01D5j4sxdEkGel3EdOtvVMIuXiGYFtRyFqN9sJSVK1ZB
-   Mw0qC9UOFxRHz3bNoREfzB535bA4EE7o8DP1gJPYpKk25sfURi45hefBR
-   8T6f0zxXfKVp6vhsOwW6kq4YYk275fU+pIIVeM1pL6atFGFz2DCrWQ0g5
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="237484374"
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="237484374"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:54:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="775107823"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Feb 2022 03:53:58 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nJZva-0008Tt-4t; Mon, 14 Feb 2022 11:53:58 +0000
-Date: Mon, 14 Feb 2022 19:53:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Liu Yi L <yi.l.liu@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.17-rc1 29/29]
- drivers/iommu/iommufd/pages.c:482:2: error: implicit declaration of function
- 'kunmap_atomic'
-Message-ID: <202202141921.KB6IvVIV-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6557C
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 12:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=vrno95ckgyNZyTDaz0cxWeVMJf3/5VGWMZm2iflspMA=; b=DbFyDh73sddokDaXx0Lfi0R3f9
+	3LM/8QuYShYk70AL/7BQOgCR6JoVl6UlqVGlhOvQNd+AVIW/BMBTryCH+Cu5IDioUss955Yt7ynk9
+	/7BjDllCHbIHhQeeXrOb2egSffpeatjS9x0whRRwCjx6Z2+7h0PbeCD80iYuzpb2B1K+pTsmYQHpy
+	x2k6fZXbtf2V9mTxncO0kDw0Xga/JMR2o9iROVt5EZJlXBB3EULFOArIPe0iJVULIvI2oScz6vEsC
+	eid+p2o5HJ2qaE7tyGpH+W6kr92OaoLnuYUo5OCKUCCCkSjMgwMlxdJQXdmdkgPoGpFI0AcYVKFow
+	XkHiBb+w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nJa17-009tm8-Bi; Mon, 14 Feb 2022 11:59:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A43F53002C5;
+	Mon, 14 Feb 2022 12:59:35 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 8E9D12D1EC148; Mon, 14 Feb 2022 12:59:35 +0100 (CET)
+Date: Mon, 14 Feb 2022 12:59:35 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
+	Borislav Petkov <bp@alien8.de>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Kristen Carlson Accardi <kristen@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	Bruce Schlobohm <bruce.schlobohm@intel.com>,
+	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Marios Pomonis <pomonis@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v10 10/15] FG-KASLR: use a scripted approach to handle
+ .text.* sections
+Message-ID: <YgpEJ7BmuYtHkayT@hirez.programming.kicks-ass.net>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-11-alexandr.lobakin@intel.com>
+ <20220211153706.GW23216@worktop.programming.kicks-ass.net>
+ <20220214113434.5256-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,87 +72,22 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220214113434.5256-1-alexandr.lobakin@intel.com>
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc1
-head:   0afc8638a638ddb14a59876ee72e869b770f4c02
-commit: 0afc8638a638ddb14a59876ee72e869b770f4c02 [29/29] iommufd: Add device mmio map support
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220214/202202141921.KB6IvVIV-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/luxis1999/iommufd/commit/0afc8638a638ddb14a59876ee72e869b770f4c02
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc1
-        git checkout 0afc8638a638ddb14a59876ee72e869b770f4c02
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iommu/iommufd/
+On Mon, Feb 14, 2022 at 12:34:34PM +0100, Alexander Lobakin wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Re "won't do" -- sorry for trying to hijack this thread a bit, but
+> did I miss something? The last comments I've read were that LLVM
+> tools need to change their approach for CFI on x86, and Sami went
+> redo it, but I can't recall any "life-time" nacks.
 
-All errors (new ones prefixed by >>):
+Won't as in the lclang-cfi as it exists today. And I've understood that
+this CFI model is a keeper. It is true that Sami has been working on an
+alternative KCFI, but the little I can make of this proposal, it
+still needs serious work. Also see here:
 
->> drivers/iommu/iommufd/pages.c:482:2: error: implicit declaration of function 'kunmap_atomic' [-Werror,-Wimplicit-function-declaration]
-           pte_unmap_unlock(ptep, ptl);
-           ^
-   include/linux/mm.h:2345:2: note: expanded from macro 'pte_unmap_unlock'
-           pte_unmap(pte);                                 \
-           ^
-   include/linux/pgtable.h:99:24: note: expanded from macro 'pte_unmap'
-   #define pte_unmap(pte) kunmap_atomic((pte))
-                          ^
-   1 error generated.
+  https://lkml.kernel.org/r/20220211133803.GV23216@worktop.programming.kicks-ass.net
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for IOMMUFD
-   Depends on IOMMU_SUPPORT
-   Selected by
-   - VFIO_PCI_CORE && VFIO && PCI && MMU
-
-
-vim +/kunmap_atomic +482 drivers/iommu/iommufd/pages.c
-
-   449	
-   450	static int follow_fault_pfn(struct vm_area_struct *vma, struct mm_struct *mm,
-   451				    unsigned long vaddr, unsigned long *pfn,
-   452				    bool write_fault)
-   453	{
-   454		pte_t *ptep;
-   455		spinlock_t *ptl;
-   456		int ret;
-   457	
-   458		ret = follow_pte(vma->vm_mm, vaddr, &ptep, &ptl);
-   459		if (ret) {
-   460			bool unlocked = false;
-   461	
-   462			ret = fixup_user_fault(mm, vaddr,
-   463					       FAULT_FLAG_REMOTE |
-   464					       (write_fault ?  FAULT_FLAG_WRITE : 0),
-   465					       &unlocked);
-   466			if (unlocked)
-   467				return -EAGAIN;
-   468	
-   469			if (ret)
-   470				return ret;
-   471	
-   472			ret = follow_pte(vma->vm_mm, vaddr, &ptep, &ptl);
-   473			if (ret)
-   474				return ret;
-   475		}
-   476	
-   477		if (write_fault && !pte_write(*ptep))
-   478			ret = -EFAULT;
-   479		else
-   480			*pfn = pte_pfn(*ptep);
-   481	
- > 482		pte_unmap_unlock(ptep, ptl);
-   483		return ret;
-   484	}
-   485	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Specifically, I object to the existence of any __*cfi_check_fail symbol
+on the grounds that it will bloat the code (and makes thinking about the
+whole speculation angle more painful than it needs to be).
