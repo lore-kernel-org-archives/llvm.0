@@ -1,93 +1,182 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6557C
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 12:00:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=vrno95ckgyNZyTDaz0cxWeVMJf3/5VGWMZm2iflspMA=; b=DbFyDh73sddokDaXx0Lfi0R3f9
-	3LM/8QuYShYk70AL/7BQOgCR6JoVl6UlqVGlhOvQNd+AVIW/BMBTryCH+Cu5IDioUss955Yt7ynk9
-	/7BjDllCHbIHhQeeXrOb2egSffpeatjS9x0whRRwCjx6Z2+7h0PbeCD80iYuzpb2B1K+pTsmYQHpy
-	x2k6fZXbtf2V9mTxncO0kDw0Xga/JMR2o9iROVt5EZJlXBB3EULFOArIPe0iJVULIvI2oScz6vEsC
-	eid+p2o5HJ2qaE7tyGpH+W6kr92OaoLnuYUo5OCKUCCCkSjMgwMlxdJQXdmdkgPoGpFI0AcYVKFow
-	XkHiBb+w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nJa17-009tm8-Bi; Mon, 14 Feb 2022 11:59:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A43F53002C5;
-	Mon, 14 Feb 2022 12:59:35 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 8E9D12D1EC148; Mon, 14 Feb 2022 12:59:35 +0100 (CET)
-Date: Mon, 14 Feb 2022 12:59:35 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
-	Borislav Petkov <bp@alien8.de>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Kristen Carlson Accardi <kristen@linux.intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	Bruce Schlobohm <bruce.schlobohm@intel.com>,
-	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Marios Pomonis <pomonis@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v10 10/15] FG-KASLR: use a scripted approach to handle
- .text.* sections
-Message-ID: <YgpEJ7BmuYtHkayT@hirez.programming.kicks-ass.net>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-11-alexandr.lobakin@intel.com>
- <20220211153706.GW23216@worktop.programming.kicks-ass.net>
- <20220214113434.5256-1-alexandr.lobakin@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EF17C
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 12:15:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644840916; x=1676376916;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=WUc1NN7vslvUvreUnv2/jHfCPbAb4tZm7oM8lOOA/80=;
+  b=E/kUYZ8T74a59PqaAo6Z4gLVUC2vuruTCkLrLvXqtSAoyh+g4SZ/dn3E
+   u6ElhBDHuRCcQ+v3f6u7GMPNF5Zs3i2G6HneB6PWcLPZIWFaytpofd4Xl
+   aa2CFqEgkky755T4BKh+YB4WyXcD5VOmAVYhjsIp2dJl1N7B1v6imWL7A
+   4yTK+uvtVfb+MJp8l+RrsQCD76JgpCyilsDYtt/83nMKz28zOd3u7iuxg
+   l8/C8ZxEii+G4BVylC9kaF9EfaV2XgUBGrT3F6kUX2Br4gw90FlY/fJ2G
+   oysPDPEgBRbk4uUeX5qY11/G5KT35VkERsSS087tdykrlLljHL1MpQIVL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="310814826"
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="310814826"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 04:15:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="501769789"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 14 Feb 2022 04:15:06 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 21ECF3B3005507;
+	Mon, 14 Feb 2022 12:15:04 GMT
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z unique-symbol` is available
+Date: Mon, 14 Feb 2022 13:14:47 +0100
+Message-Id: <20220214121447.288695-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220211174130.xxgjoqr2vidotvyw@treble>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214113434.5256-1-alexandr.lobakin@intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Feb 14, 2022 at 12:34:34PM +0100, Alexander Lobakin wrote:
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+Date: Fri, 11 Feb 2022 09:41:30 -0800
 
-> Re "won't do" -- sorry for trying to hijack this thread a bit, but
-> did I miss something? The last comments I've read were that LLVM
-> tools need to change their approach for CFI on x86, and Sami went
-> redo it, but I can't recall any "life-time" nacks.
+> On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
+> > Position-based search, which means that if there are several symbols
+> > with the same name, the user needs to additionally provide the
+> > "index" of a desired symbol, is fragile. For example, it breaks
+> > when two symbols with the same name are located in different
+> > sections.
+> > 
+> > Since a while, LD has a flag `-z unique-symbol` which appends
+> > numeric suffixes to the functions with the same name (in symtab
+> > and strtab). It can be used to effectively prevent from having
+> > any ambiguity when referring to a symbol by its name.
+> 
+> In the patch description can you also give the version of binutils (and
+> possibly other linkers) which have the flag?
 
-Won't as in the lclang-cfi as it exists today. And I've understood that
-this CFI model is a keeper. It is true that Sami has been working on an
-alternative KCFI, but the little I can make of this proposal, it
-still needs serious work. Also see here:
+Yeah, sure.
 
-  https://lkml.kernel.org/r/20220211133803.GV23216@worktop.programming.kicks-ass.net
+> 
+> > Check for its availability and always prefer when the livepatching
+> > is on. It can be used unconditionally later on after broader testing
+> > on a wide variety of machines, but for now let's stick to the actual
+> > CONFIG_LIVEPATCH=y case, which is true for most of distro configs
+> > anyways.
+> 
+> Has anybody objected to just enabling it for *all* configs, not just for
+> livepatch?
 
-Specifically, I object to the existence of any __*cfi_check_fail symbol
-on the grounds that it will bloat the code (and makes thinking about the
-whole speculation angle more painful than it needs to be).
+A few folks previously.
+
+> 
+> I'd much prefer that: the less "special" livepatch is (and the distros
+> which enable it), the better.  And I think having unique symbols would
+> benefit some other components.
+
+Agree, I just want this series to be as least invasive for
+non-FG-KASLR builds as possible. And currently this flag make depmod
+emit a bunch of harmless false-positive warnings, so I'd wait until
+at least the series is accepted / I post a patch for depmod and it
+gets accepted.
+
+> 
+> > +++ b/kernel/livepatch/core.c
+> > @@ -143,11 +143,13 @@ static int klp_find_callback(void *data, const char *name,
+> >  	args->count++;
+> >  
+> >  	/*
+> > -	 * Finish the search when the symbol is found for the desired position
+> > -	 * or the position is not defined for a non-unique symbol.
+> > +	 * Finish the search when unique symbol names are enabled
+> > +	 * or the symbol is found for the desired position or the
+> > +	 * position is not defined for a non-unique symbol.
+> >  	 */
+> > -	if ((args->pos && (args->count == args->pos)) ||
+> > -	    (!args->pos && (args->count > 1)))
+> > +	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL) ||
+> > +	    (args->pos && args->count == args->pos) ||
+> > +	    (!args->pos && args->count > 1))
+> >  		return 1;
+> 
+> There's no real need to do this.  The code already works as-is, even if
+> there are no unique symbols.
+> 
+> Even if there are no duplicates, there's little harm in going through
+> all the symbols anyway, to check for errors just in case something
+> unexpected happened with the linking (unexpected duplicate) or the patch
+> creation (unexpected sympos).  It's not a hot path, so performance isn't
+> really a concern.
+> 
+> When the old linker versions eventually age out, we can then go strip
+> out all the sympos stuff.
+> 
+> > @@ -169,6 +171,13 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+> >  	else
+> >  		kallsyms_on_each_symbol(klp_find_callback, &args);
+> >  
+> > +	/*
+> > +	 * If the LD's `-z unique-symbol` flag is available and enabled,
+> > +	 * sympos checks are not relevant.
+> > +	 */
+> > +	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL))
+> > +		sympos = 0;
+> > +
+> 
+> Similarly, I don't see a need for this.  If the patch is legit then
+> sympos should already be zero.  If not, an error gets reported and the
+> patch fails to load.
+
+Right, but for both those chunks the main idea is to let the
+compiler optimize-out the code non-actual for unique-symbol builds:
+
+add/remove: 0/0 grow/shrink: 1/2 up/down: 3/-80 (-77)
+Function                                     old     new   delta
+klp_find_callback                            139     142      +3
+klp_find_object_symbol.cold                   85      48     -37
+klp_find_object_symbol                       168     125     -43
+
+> 
+> -- 
+> Josh
+
+Thanks,
+Al
