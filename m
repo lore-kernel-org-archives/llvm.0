@@ -1,68 +1,88 @@
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D26A28
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 16:11:23 +0000 (UTC)
-Received: by mail-yb1-f172.google.com with SMTP id p19so47561985ybc.6
-        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 08:11:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7d7duxq8SWZ+wyJ0FImMjEjcqMZoiPfFxvX8LzzJYUI=;
-        b=WFuePSVBjIRsih/BDhc3ZDyFNjTduf/2prT0P7K5D5zdcW4WXl9TGDGnOfvmCu1HIM
-         EbstvqY1+sNw24+bOoXGzdot5LRmPLdNQ8bgLYNNUfxs/+L7966DGIB75Xn0JRvxDiM9
-         orD1haDtHkzRri50HDaCxPSsJXRYbYMpZntQwTgy+w+MIp5OPIdXUg2NzsY4wXwEQql7
-         riklSf7zaGERAuKIJ9UC0pm/hpwjTn6Me22UKN9N8RABcrlEegVPmjCxOt3wF25uGo9x
-         O3msNH2IBi+Sw06R1nZlWM2tR7XL7wMr8svGOZYXkEE5SbKf8nZMv1w1wTw8sW5JYC/r
-         NaUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7d7duxq8SWZ+wyJ0FImMjEjcqMZoiPfFxvX8LzzJYUI=;
-        b=lUzAkAXuJTFdD8gZSnJN0+akKogQxl6SQyvjyHaUuQslO0zW5NOWtgR1pi6Z2EFSA8
-         SBdis1BIjeQXxBk1UX0YTOy7ub3GAWKR7j92yuyIBrHqV2QaFZutJYzMaWnyQPLYFzK/
-         dCMbjN7aKNtvbvDdtSmNEfgfwAp8l1oxj5+S62GYW7pjjSiAxbH9+olmz1s4GxhlCUZY
-         aP+Rz4pKU+lecIg/XWscwkGrZAo3ZNHsmgoTrds6O+YNpgF114b9b+skRedAQuuU8rlf
-         l1bYth0XcdY3679WyHaPRPjyI9kGyBGvc5kBJMd5XuDHIWPYevq40QD/laVaEjWi8+1G
-         TJEA==
-X-Gm-Message-State: AOAM5315CLr4Q8h7640Yr3W6TSN4ToCn1kQNnJwcZADu1BezpTmqdriP
-	CrM8E7z1MstTKIp8mxD6glCVtAF5IM3R8IBgBcOmMA==
-X-Google-Smtp-Source: ABdhPJwOIwUtQ7prIWpfJSj9cE9kAy+eNIUKZooAP6EKtuNBX9xBZmLUqd+FbKOu05zqWqcOgBkrkryJtMtZ0qS7hAc=
-X-Received: by 2002:a81:ed10:: with SMTP id k16mr351182ywm.166.1644855079904;
- Mon, 14 Feb 2022 08:11:19 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2976A28
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 16:18:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12B84C340E9;
+	Mon, 14 Feb 2022 16:18:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1644855514;
+	bh=MxUELgouTCzynxz+OhbXL8S6pkcFTrJYcpK6L0QjaK0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=hY7FA50Z9GLbILF8oloNEYwWctQ25YoD2jmrX4Op47TlOJDV3czDHcgoPxaNJfIC9
+	 IenFbec2uCkGK3lwjWueQiw5Fyw5j1Hr1Vz8lS56AepZSqqQhyFRcPBMX606PJ5y/d
+	 gk7WRz4UE/qvW5tDpE3ArlR4lMcJ1zh5JJkRmwTxyolzJ3dDoO6NFhpqt2pOGbMPO5
+	 aIJKn8QlT/lyHTYtRfuWtDSvLuwhUfYN6emPcNC5sCn0CrP6wwpFgQwTUJ3jhICCiO
+	 WX8KuYyGwiqZ//xMUsVXAkqn3KcuvZyI6uAWsnZ7FLevDdsxwuwyeGKsOcDmkL+iRt
+	 +QWK2KRT+LHnA==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	stable@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 4.9 to 5.4] Makefile.extrawarn: Move -Wunaligned-access to W=1
+Date: Mon, 14 Feb 2022 09:16:42 -0700
+Message-Id: <20220214161641.1818-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYtR+E52X-ucmvXYG5-9v0q2UEXQsML=nkQRnSf7TwXYqw@mail.gmail.com>
- <Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161>
-In-Reply-To: <Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 14 Feb 2022 21:41:08 +0530
-Message-ID: <CA+G9fYvTX0VR=-MVy0gT+-1x+uAWpoh0YJOasJZCi_GQiJ-+cw@mail.gmail.com>
-Subject: Re: arm64: clang-nightly: net/ipv4/tcp_input.c: clang: error: clang
- frontend command failed with exit code 139
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Nathan,
+commit 1cf5f151d25fcca94689efd91afa0253621fb33a upstream.
 
-> Thank you for the report! I found this over the weekend myself and
-> reverted the problematic commit in LLVM and I will make sure that if it
-> lands again, it can build a kernel without any issues.
->
-> https://github.com/llvm/llvm-project/commit/22eb1dae3fb20ca8ada865de1d95baab0e08a060
->
-> For the future, you may consider only sending reports of compiler
-> crashes to Nick, myself, and llvm@lists.linux.dev; a compiler crash is
-> pretty much never the fault of the source code so CC'ing Linux
-> maintainers is just noise.
+-Wunaligned-access is a new warning in clang that is default enabled for
+arm and arm64 under certain circumstances within the clang frontend (see
+LLVM commit below). On v5.17-rc2, an ARCH=arm allmodconfig build shows
+1284 total/70 unique instances of this warning (most of the instances
+are in header files), which is quite noisy.
 
-Thanks for the suggestions. I do agree.
+To keep a normal build green through CONFIG_WERROR, only show this
+warning with W=1, which will allow automated build systems to catch new
+instances of the warning so that the total number can be driven down to
+zero eventually since catching unaligned accesses at compile time would
+be generally useful.
 
-- Naresh
+Cc: stable@vger.kernel.org
+Link: https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
+Link: https://github.com/ClangBuiltLinux/linux/issues/1569
+Link: https://github.com/ClangBuiltLinux/linux/issues/1576
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+[nathan: Fix conflict due to lack of afe956c577b2d]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+
+I am not sure how many people are using ToT clang with ARCH=arm on
+stable but given how noisy this warning can be, I think it is worth
+applying this to all applicable stable branches.
+
+This applies to 4.9 through 5.4 with 'patch -Np1'.
+
+ scripts/Makefile.extrawarn | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index ca08f2fe7c34..854e2ba9daa2 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -49,6 +49,7 @@ KBUILD_CFLAGS += -Wno-format
+ KBUILD_CFLAGS += -Wno-sign-compare
+ KBUILD_CFLAGS += -Wno-format-zero-length
+ KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
++KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+ endif
+ 
+ endif
+
+base-commit: 52871671099d1bb3fca5ed076029e4b937bfc053
+-- 
+2.35.1
+
