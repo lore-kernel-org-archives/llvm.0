@@ -1,221 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDA1A2C
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 17:50:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0463C340E9;
-	Mon, 14 Feb 2022 17:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644861047;
-	bh=uov7EjYTMvpPjFpkPhJJRxqMsegsnmPylESXjrtQkOk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Jt0SSb6zZbVQJoycFRPYUImdn1TOg90ZrzSCxXNea/Oro76q1iBhjHf5uGq+cv7Pe
-	 r/KRw+qgDlX7R4xka9Mx+2TU7C4vQpHb7OCfPIBSKWix3fD+kD5wuPyhM1DjT87r+y
-	 zpFAOmlFvnkU1Pk1k8zOeZ2e1fPjjuobFE2J6NiFngUEvdjCMerTs7e7Ou/3TudhL7
-	 ood1ZW2rIlu9c3tJ1SFIRDxL9sATELtzlGC10X31ZYCMLKjf+4pwBFEEeJ9lITph45
-	 bA/SAZGT5UWsGcUZyWcTyvr+hzgLZhGFr/ShksK9GzS6NweT2MLGSrbgsy8hkiTqf1
-	 kmHYbo++DOQcQ==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Imran Khan <imran.f.khan@oracle.com>,
-	kernel test robot <lkp@intel.com>
-Cc: tj@kernel.org,
-	gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kbuild-all@lists.01.org
-Subject: Re: [PATCH v6 7/7] kernfs: Replace per-fs rwsem with hashed ones.
-Date: Mon, 14 Feb 2022 10:49:51 -0700
-Message-Id: <20220214174951.131423-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214120322.2402628-8-imran.f.khan@oracle.com>
-References: <20220214120322.2402628-8-imran.f.khan@oracle.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E13A2C
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 17:51:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644861077; x=1676397077;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EykiRRFTIBWspQ0iHz9Svz3vTbHpf+77utafI35eB9o=;
+  b=KbeVIgFvumJcE9EMQtniVljuP6NMCmogiLvzwOpOllN4LBgDaGxwI1vu
+   eQl142gsIgo+WuYYiXnZA7E5beLxWr+jz52JqfAYyW28vKrZUWMaHYkNz
+   4G8BGgMcQXFUugfqN3il5fT4mlQdMMyfgwRMJMj8oRSKjttcMvQSW8J+B
+   YQF1LYDD+g+ctxJTQag4JrXXOOajreajDbKJ866OOfowT34q0StbI52yn
+   kqZqqCoqI7lxwSAJcNcGqzFE/qVq0BGDfpaPrnePORPhR633BTsxDd5RF
+   MRZnSK2DX15uqRnz7PJTifi6C/aEfybaVbnbZL2K6pO9NLWmOIub20Unw
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="248980413"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="248980413"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:51:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="543781249"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 14 Feb 2022 09:51:15 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nJfVK-0008oP-HY; Mon, 14 Feb 2022 17:51:14 +0000
+Date: Tue, 15 Feb 2022 01:50:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC V2 01/21] rv: Add Runtime Verification (RV) interface
+Message-ID: <202202150143.3BpCqVdF-lkp@intel.com>
+References: <87606fc180e4551b19dc61609907b555214c41a1.1644830251.git.bristot@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87606fc180e4551b19dc61609907b555214c41a1.1644830251.git.bristot@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Feb 15, 2022 at 01:19:23AM +0800, kernel test robot wrote:
-> Hi Imran,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on 6d9bd4ad4ca08b1114e814c2c42383b8b13be631]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Imran-Khan/kernfs-Introduce-hashed-mutexes-to-replace-global-kernfs_open_file_mutex/20220214-200700
-> base:   6d9bd4ad4ca08b1114e814c2c42383b8b13be631
-> config: hexagon-randconfig-r012-20220213 (https://download.01.org/0day-ci/archive/20220214/202202142322.OezS0EtW-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/48eab913f80f1555d57b964ef7cdba17f5ec5d1f
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Imran-Khan/kernfs-Introduce-hashed-mutexes-to-replace-global-kernfs_open_file_mutex/20220214-200700
->         git checkout 48eab913f80f1555d57b964ef7cdba17f5ec5d1f
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/kernfs/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> fs/kernfs/dir.c:1619:7: warning: variable 'old_parent' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->                    if (!new_name)
->                        ^~~~~~~~~
->    fs/kernfs/dir.c:1653:50: note: uninitialized use occurs here
->            up_write_kernfs_rwsem_rename_ns(kn, new_parent, old_parent);
->                                                            ^~~~~~~~~~
->    fs/kernfs/dir.c:1619:3: note: remove the 'if' if its condition is always false
->                    if (!new_name)
->                    ^~~~~~~~~~~~~~
->    fs/kernfs/dir.c:1612:6: warning: variable 'old_parent' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if (kernfs_find_ns(new_parent, new_name, new_ns))
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    fs/kernfs/dir.c:1653:50: note: uninitialized use occurs here
->            up_write_kernfs_rwsem_rename_ns(kn, new_parent, old_parent);
->                                                            ^~~~~~~~~~
->    fs/kernfs/dir.c:1612:2: note: remove the 'if' if its condition is always false
->            if (kernfs_find_ns(new_parent, new_name, new_ns))
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    fs/kernfs/dir.c:1607:6: warning: variable 'old_parent' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if ((kn->parent == new_parent) && (kn->ns == new_ns) &&
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    fs/kernfs/dir.c:1653:50: note: uninitialized use occurs here
->            up_write_kernfs_rwsem_rename_ns(kn, new_parent, old_parent);
->                                                            ^~~~~~~~~~
->    fs/kernfs/dir.c:1607:2: note: remove the 'if' if its condition is always false
->            if ((kn->parent == new_parent) && (kn->ns == new_ns) &&
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    fs/kernfs/dir.c:1602:6: warning: variable 'old_parent' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if (!kernfs_active(kn) || !kernfs_active(new_parent) ||
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    fs/kernfs/dir.c:1653:50: note: uninitialized use occurs here
->            up_write_kernfs_rwsem_rename_ns(kn, new_parent, old_parent);
->                                                            ^~~~~~~~~~
->    fs/kernfs/dir.c:1602:2: note: remove the 'if' if its condition is always false
->            if (!kernfs_active(kn) || !kernfs_active(new_parent) ||
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >> fs/kernfs/dir.c:1602:6: warning: variable 'old_parent' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
->            if (!kernfs_active(kn) || !kernfs_active(new_parent) ||
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    fs/kernfs/dir.c:1653:50: note: uninitialized use occurs here
->            up_write_kernfs_rwsem_rename_ns(kn, new_parent, old_parent);
->                                                            ^~~~~~~~~~
->    fs/kernfs/dir.c:1602:6: note: remove the '||' if its condition is always false
->            if (!kernfs_active(kn) || !kernfs_active(new_parent) ||
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >> fs/kernfs/dir.c:1602:6: warning: variable 'old_parent' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
->            if (!kernfs_active(kn) || !kernfs_active(new_parent) ||
->                ^~~~~~~~~~~~~~~~~~
->    fs/kernfs/dir.c:1653:50: note: uninitialized use occurs here
->            up_write_kernfs_rwsem_rename_ns(kn, new_parent, old_parent);
->                                                            ^~~~~~~~~~
->    fs/kernfs/dir.c:1602:6: note: remove the '||' if its condition is always false
->            if (!kernfs_active(kn) || !kernfs_active(new_parent) ||
->                ^~~~~~~~~~~~~~~~~~~~~
->    fs/kernfs/dir.c:1591:32: note: initialize the variable 'old_parent' to silence this warning
->            struct kernfs_node *old_parent;
->                                          ^
->                                           = NULL
->    6 warnings generated.
-> 
-> 
-> vim +1619 fs/kernfs/dir.c
-> 
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1580  
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1581  /**
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1582   * kernfs_rename_ns - move and rename a kernfs_node
-> 324a56e16e44ba Tejun Heo          2013-12-11  1583   * @kn: target node
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1584   * @new_parent: new parent to put @sd under
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1585   * @new_name: new name
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1586   * @new_ns: new namespace tag
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1587   */
-> 324a56e16e44ba Tejun Heo          2013-12-11  1588  int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1589  		     const char *new_name, const void *new_ns)
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1590  {
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1591  	struct kernfs_node *old_parent;
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1592  	const char *old_name = NULL;
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1593  	int error;
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1594  
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1595  	/* can't move or rename root */
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1596  	if (!kn->parent)
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1597  		return -EINVAL;
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1598  
-> 48eab913f80f15 Imran Khan         2022-02-14  1599  	down_write_kernfs_rwsem_rename_ns(kn, kn->parent, new_parent);
-> 798c75a0d44cdb Greg Kroah-Hartman 2014-01-13  1600  
-> d0ae3d4347ee02 Tejun Heo          2013-12-11  1601  	error = -ENOENT;
-> ea015218f2f7ac Eric W. Biederman  2015-05-13 @1602  	if (!kernfs_active(kn) || !kernfs_active(new_parent) ||
-> ea015218f2f7ac Eric W. Biederman  2015-05-13  1603  	    (new_parent->flags & KERNFS_EMPTY_DIR))
-> d0ae3d4347ee02 Tejun Heo          2013-12-11  1604  		goto out;
-> d0ae3d4347ee02 Tejun Heo          2013-12-11  1605  
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1606  	error = 0;
-> adc5e8b58f4886 Tejun Heo          2013-12-11  1607  	if ((kn->parent == new_parent) && (kn->ns == new_ns) &&
-> adc5e8b58f4886 Tejun Heo          2013-12-11  1608  	    (strcmp(kn->name, new_name) == 0))
-> 798c75a0d44cdb Greg Kroah-Hartman 2014-01-13  1609  		goto out;	/* nothing to rename */
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1610  
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1611  	error = -EEXIST;
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1612  	if (kernfs_find_ns(new_parent, new_name, new_ns))
-> 798c75a0d44cdb Greg Kroah-Hartman 2014-01-13  1613  		goto out;
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1614  
-> 324a56e16e44ba Tejun Heo          2013-12-11  1615  	/* rename kernfs_node */
-> adc5e8b58f4886 Tejun Heo          2013-12-11  1616  	if (strcmp(kn->name, new_name) != 0) {
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1617  		error = -ENOMEM;
-> 75287a677ba1be Andrzej Hajda      2015-02-13  1618  		new_name = kstrdup_const(new_name, GFP_KERNEL);
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28 @1619  		if (!new_name)
-> 798c75a0d44cdb Greg Kroah-Hartman 2014-01-13  1620  			goto out;
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1621  	} else {
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1622  		new_name = NULL;
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1623  	}
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1624  
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1625  	/*
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1626  	 * Move to the appropriate place in the appropriate directories rbtree.
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1627  	 */
-> c637b8acbe079e Tejun Heo          2013-12-11  1628  	kernfs_unlink_sibling(kn);
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1629  	kernfs_get(new_parent);
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1630  
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1631  	/* rename_lock protects ->parent and ->name accessors */
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1632  	spin_lock_irq(&kernfs_rename_lock);
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1633  
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1634  	old_parent = kn->parent;
-> adc5e8b58f4886 Tejun Heo          2013-12-11  1635  	kn->parent = new_parent;
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1636  
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1637  	kn->ns = new_ns;
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1638  	if (new_name) {
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1639  		old_name = kn->name;
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1640  		kn->name = new_name;
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1641  	}
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1642  
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1643  	spin_unlock_irq(&kernfs_rename_lock);
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1644  
-> 9561a8961c708f Tejun Heo          2014-02-10  1645  	kn->hash = kernfs_name_hash(kn->name, kn->ns);
-> c637b8acbe079e Tejun Heo          2013-12-11  1646  	kernfs_link_sibling(kn);
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1647  
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1648  	kernfs_put(old_parent);
-> 75287a677ba1be Andrzej Hajda      2015-02-13  1649  	kfree_const(old_name);
-> 3eef34ad7dc369 Tejun Heo          2014-02-07  1650  
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1651  	error = 0;
-> ae34372eb8408b Tejun Heo          2014-01-10  1652   out:
-> 48eab913f80f15 Imran Khan         2022-02-14  1653  	up_write_kernfs_rwsem_rename_ns(kn, new_parent, old_parent);
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1654  	return error;
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1655  }
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1656  
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+Hi Daniel,
 
-I am forwarding this along as a reply to the original posting so that
-this patch series is not picked up in its current form. This warning
-looks legitimate to me and it will break allmodconfig due to -Werror.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on rostedt-trace/for-next]
+[also build test WARNING on lwn/docs-next linus/master v5.17-rc4 next-20220214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Intel folks, why did this get sent to the author privately, rather than
-as a reply to the original posting, given the patch is still in review?
+url:    https://github.com/0day-ci/linux/commits/Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220214-193144
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202150143.3BpCqVdF-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/f99370d1c81f0a3b56d6630ff62631f6ecfdf8d8
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220214-193144
+        git checkout f99370d1c81f0a3b56d6630ff62631f6ecfdf8d8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/trace/rv/
 
-Cheers,
-Nathan
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/trace/rv/rv.c:189:6: warning: no previous prototype for function 'disable_monitor' [-Wmissing-prototypes]
+   void disable_monitor(struct rv_monitor_def *mdef)
+        ^
+   kernel/trace/rv/rv.c:189:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void disable_monitor(struct rv_monitor_def *mdef)
+   ^
+   static 
+>> kernel/trace/rv/rv.c:202:6: warning: no previous prototype for function 'enable_monitor' [-Wmissing-prototypes]
+   void enable_monitor(struct rv_monitor_def *mdef)
+        ^
+   kernel/trace/rv/rv.c:202:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void enable_monitor(struct rv_monitor_def *mdef)
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/disable_monitor +189 kernel/trace/rv/rv.c
+
+   185	
+   186	/*
+   187	 * Disable a given runtime monitor.
+   188	 */
+ > 189	void disable_monitor(struct rv_monitor_def *mdef)
+   190	{
+   191		if (mdef->monitor->enabled) {
+   192			mdef->monitor->enabled = 0;
+   193			mdef->monitor->stop();
+   194		}
+   195	
+   196		mdef->enabled = 0;
+   197	}
+   198	
+   199	/*
+   200	 * Enable a given monitor.
+   201	 */
+ > 202	void enable_monitor(struct rv_monitor_def *mdef)
+   203	{
+   204		/*
+   205		 * Reset all internal monitors before starting.
+   206		 */
+   207		mdef->monitor->reset();
+   208		if (!mdef->monitor->enabled)
+   209			mdef->monitor->start();
+   210	
+   211		mdef->monitor->enabled = 1;
+   212		mdef->enabled = 1;
+   213	}
+   214	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
