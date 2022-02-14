@@ -1,96 +1,360 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181037E4
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 04:59:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644814788; x=1676350788;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=mnVdV9g6h7sGGeNidmpco4mIzuDJEZ7mJohPavhO5m0=;
-  b=DE7dXO4sfWEGp96dK9tAU2RQT/kXFVb7lpCcwTbfdhdiDX0p1V942KAK
-   iDqB8c5xFaBInG5OM8/KoIU1unAWy5qQv7Sty/ZvlYc6nCWQBoqqgHiTA
-   5Cu5ZE7FYb9VEpMq+NEmtsUIDsKmGScm4n4sdvbkuXTA8zrfF0tNDjMq/
-   NUdpBX864p7I1osYj6+Nbz3L7c0QvRaUo/xnLqRO00W3CA8GDZcGR6hEa
-   l9SQv5xC8slwVrktGetcvByHyUz5mku/sGKHHdgYpjQpzi/IT286OHw15
-   K9+qg0vu2vgMIW9hDElKbO2/CwQ5XftjFUDLN437Ooc/qjgmh2+pGS6j+
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="230649798"
-X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="230649798"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 20:59:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="495144459"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 Feb 2022 20:59:45 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nJTSj-0008CB-8q; Mon, 14 Feb 2022 04:59:45 +0000
-Date: Mon, 14 Feb 2022 12:59:35 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: ld.lld: error: kernel/built-in.a(kallsyms.o):(function reset_iter:
- .text+0xb0e): relocation R_RISCV_PCREL_HI20 out of range: -524453 is not in
- [-524288, 524287]; references kallsyms_markers
-Message-ID: <202202141205.JHKIRnxH-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CAB7A
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 06:57:29 +0000 (UTC)
+Received: by mail-yb1-f175.google.com with SMTP id p19so43245957ybc.6
+        for <llvm@lists.linux.dev>; Sun, 13 Feb 2022 22:57:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=/c7eW+jp5n/u8fBKOifBe+KsFh5ubV24/pYgdvLharI=;
+        b=iLBOrWP23AaiZ6szz/4afr0kvAjeA8ArJQwY5E0wu6tI6yM6f6qBJ25zGq2UkpO/gA
+         IyttSAehmsyj8QBZDI08vux3L1eIunYHav/MWmtLg/VRbGE7J5EEkfc30CMlkXrmTBXD
+         ATIllqKM7XIxQXjpyBiKH2sbLaK4MwKV56NLj4gSRPIQhYmrkDWF8wma2piTi3bEXhZQ
+         d7Gs/Atg75USEMBNjbve+2w76KhLhXWJTDJrxBwOfIJoQFXP50+UNUeCs8BvKT7H2Ypz
+         G/NusOLq7IndpArNcOL+1DwWarBZpkYcJdb0ozJVho2kkhd/0QqNWLlRIbIf1qcIsQiE
+         QRxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=/c7eW+jp5n/u8fBKOifBe+KsFh5ubV24/pYgdvLharI=;
+        b=6DGHpSjF31iCusbCFjC0ZcTjqVIejuAABgeOSEZOD7eMLQ8SJFY4VJcdEiaaohOEsA
+         DNxDE0wPDB8YBQ3yyuAOG1Qkz6hKVU/f+Bu45QC9eRnjkqMfYBBJOTLNzRwFfm8bVviU
+         SNOcZ7jWhxqNcjpXu2NLwrbLIRgv8QIZTErsYW74JuqVW3sRzTD+UKG+zUVLmgFnK7mD
+         n9Eb11yBu71wDjbOB6N5CA1E9gIrkc7gglQ7j/3c7z6984k8iyiyvVpjahXLMw+6Fp4E
+         Lfdk/b270f4vGNd19pKpjKNBcvuG/cOHn5JSp6W1jREem4YB5DSqmmKgXZJGuwd8eILi
+         cTuA==
+X-Gm-Message-State: AOAM532eD3aybZUrENCjiqJltLFI5OImW1abm8BXP3XdiRxzHTwtL/kZ
+	9zpGRnIk0s5/g9lKAb85y/HHRlyEEJoVfej4yVSyuQ==
+X-Google-Smtp-Source: ABdhPJz9byRxxGRGC9v9WTDoYHdOcy8LfGvH2M73frhaCqdcAJmP97YDGEDp0kF6hv8WYq6wNwylJDopbtd4sKq+Ipc=
+X-Received: by 2002:a25:bc81:: with SMTP id e1mr11232234ybk.553.1644821848330;
+ Sun, 13 Feb 2022 22:57:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 14 Feb 2022 12:27:17 +0530
+Message-ID: <CA+G9fYtR+E52X-ucmvXYG5-9v0q2UEXQsML=nkQRnSf7TwXYqw@mail.gmail.com>
+Subject: arm64: clang-nightly: net/ipv4/tcp_input.c: clang: error: clang
+ frontend command failed with exit code 139
+To: open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+Cc: Eric Dumazet <edumazet@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>, David Ahern <dsahern@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-CC: linux-kernel@vger.kernel.org
-TO: Gal Pressman <gal@nvidia.com>
-CC: Jakub Kicinski <kuba@kernel.org>
-CC: Tariq Toukan <tariqt@nvidia.com>
-CC: Eric Dumazet <edumazet@google.com>
+On Linux mainline master branch with arm64 clang-nightly build failed
+due to following errors and warnings.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   754e0b0e35608ed5206d6a67a791563c631cec07
-commit: 48cec899e357cfb92d022a9c0df6bbe72a7f6951 tcp: Add a stub for sk_defer_free_flush()
-date:   3 weeks ago
-config: riscv-randconfig-r016-20220213 (https://download.01.org/0day-ci/archive/20220214/202202141205.JHKIRnxH-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=48cec899e357cfb92d022a9c0df6bbe72a7f6951
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 48cec899e357cfb92d022a9c0df6bbe72a7f6951
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM=1 LLVM_IAS=1
+ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
+CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- HOSTCC=clang CC=clang
+PLEASE submit a bug report to
+https://github.com/llvm/llvm-project/issues/ and include the crash
+backtrace, preprocessed source, and associated run script.
+Stack dump:
+0. Program arguments: clang -Wp,-MMD,net/ipv4/.tcp_input.o.d -nostdinc
+-I/builds/linux/arch/arm64/include -I./arch/arm64/include/generated
+-I/builds/linux/include -I./include
+-I/builds/linux/arch/arm64/include/uapi
+-I./arch/arm64/include/generated/uapi -I/builds/linux/include/uapi
+-I./include/generated/uapi -include
+/builds/linux/include/linux/compiler-version.h -include
+/builds/linux/include/linux/kconfig.h -include
+/builds/linux/include/linux/compiler_types.h -D__KERNEL__
+-mlittle-endian -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+-DKASAN_SHADOW_SCALE_SHIFT= -Qunused-arguments
+-fmacro-prefix-map=/builds/linux/= -Wall -Wundef
+-Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing
+-fno-common -fshort-wchar -fno-PIE
+-Werror=implicit-function-declaration -Werror=implicit-int
+-Werror=return-type -Wno-format-security -std=gnu89
+--target=aarch64-linux-gnu -fintegrated-as
+-Werror=unknown-warning-option -Werror=ignored-optimization-argument
+-mgeneral-regs-only -DCONFIG_CC_HAS_K_CONSTRAINT=1 -Wno-psabi
+-fno-asynchronous-unwind-tables -fno-unwind-tables
+-mbranch-protection=pac-ret+leaf+bti -Wa,-march=armv8.5-a
+-DARM64_ASM_ARCH=\"armv8.5-a\" -DKASAN_SHADOW_SCALE_SHIFT=
+-fno-delete-null-pointer-checks -Wno-frame-address
+-Wno-address-of-packed-member -O2 -Wframe-larger-than=2048
+-fstack-protector-strong -Wimplicit-fallthrough -Wno-gnu
+-mno-global-merge -Wno-unused-but-set-variable
+-Wno-unused-const-variable -fno-omit-frame-pointer
+-fno-optimize-sibling-calls -ftrivial-auto-var-init=zero
+-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+-fno-stack-clash-protection -fpatchable-function-entry=2
+-Wdeclaration-after-statement -Wvla -Wno-pointer-sign
+-Wcast-function-type -Wno-array-bounds -fno-strict-overflow
+-fno-stack-check -Werror=date-time -Werror=incompatible-pointer-types
+-Wno-initializer-overrides -Wno-format -Wno-sign-compare
+-Wno-format-zero-length -Wno-pointer-to-enum-cast
+-Wno-tautological-constant-out-of-range-compare -Wno-unaligned-access
+-mstack-protector-guard=sysreg -mstack-protector-guard-reg=sp_el0
+-mstack-protector-guard-offset=1408 -I /builds/linux/net/ipv4 -I
+./net/ipv4 -DKBUILD_MODFILE=\"net/ipv4/tcp_input\"
+-DKBUILD_BASENAME=\"tcp_input\" -DKBUILD_MODNAME=\"tcp_input\"
+-D__KBUILD_MODNAME=kmod_tcp_input -c -o net/ipv4/tcp_input.o
+/builds/linux/net/ipv4/tcp_input.c
+1. <eof> parser at end of file
+2. Code generation
+3. Running pass 'Function Pass Manager' on module
+'/builds/linux/net/ipv4/tcp_input.c'.
+4. Running pass 'Live Interval Analysis' on function '@tcp_ack'
+ #0 0x00007fcc9438ce91 llvm::sys::PrintStackTrace(llvm::raw_ostream&,
+int) (/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xe93e91)
+ #1 0x00007fcc9438abee llvm::sys::RunSignalHandlers()
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xe91bee)
+ #2 0x00007fcc9438c260 llvm::sys::CleanupOnSignal(unsigned long)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xe93260)
+ #3 0x00007fcc942b4e0f (/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xdbbe0f)
+ #4 0x00007fcc9d729140 __restore_rt
+(/lib/x86_64-linux-gnu/libpthread.so.0+0x14140)
+ #5 0x00007fcc9467bebb (/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x1182ebb)
+ #6 0x00007fcc9467b274
+llvm::ConnectedVNInfoEqClasses::Distribute(llvm::LiveInterval&,
+llvm::LiveInterval**, llvm::MachineRegisterInfo&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x1182274)
+ #7 0x00007fcc9466ef85
+llvm::LiveIntervals::splitSeparateComponents(llvm::LiveInterval&,
+llvm::SmallVectorImpl<llvm::LiveInterval*>&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x1175f85)
+ #8 0x00007fcc9466d914 llvm::LiveIntervals::computeVirtRegs()
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x1174914)
+ #9 0x00007fcc9466d4f2
+llvm::LiveIntervals::runOnMachineFunction(llvm::MachineFunction&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x11744f2)
+#10 0x00007fcc9471247d
+llvm::MachineFunctionPass::runOnFunction(llvm::Function&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x121947d)
+#11 0x00007fcc944c749f
+llvm::FPPassManager::runOnFunction(llvm::Function&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xfce49f)
+#12 0x00007fcc944ce9a3 llvm::FPPassManager::runOnModule(llvm::Module&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xfd59a3)
+#13 0x00007fcc944c8026
+llvm::legacy::PassManagerImpl::run(llvm::Module&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xfcf026)
+#14 0x00007fcc9b71896b
+clang::EmitBackendOutput(clang::DiagnosticsEngine&,
+clang::HeaderSearchOptions const&, clang::CodeGenOptions const&,
+clang::TargetOptions const&, clang::LangOptions const&,
+llvm::StringRef, llvm::Module*, clang::BackendAction,
+std::unique_ptr<llvm::raw_pwrite_stream,
+std::default_delete<llvm::raw_pwrite_stream> >)
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x18a296b)
+#15 0x00007fcc9ba5ecb1 (/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x1be8cb1)
+#16 0x00007fcc9a8af994 clang::ParseAST(clang::Sema&, bool, bool)
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0xa39994)
+#17 0x00007fcc9ba5b001 clang::CodeGenAction::ExecuteAction()
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x1be5001)
+#18 0x00007fcc9c3fc1b7 clang::FrontendAction::Execute()
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x25861b7)
+#19 0x00007fcc9c3541d6
+clang::CompilerInstance::ExecuteAction(clang::FrontendAction&)
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x24de1d6)
+#20 0x00007fcc9c475c3a
+clang::ExecuteCompilerInvocation(clang::CompilerInstance*)
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x25ffc3a)
+#21 0x0000000000413e1e cc1_main(llvm::ArrayRef<char const*>, char
+const*, void*) (/usr/lib/llvm-15/bin/clang+0x413e1e)
+#22 0x000000000041209b (/usr/lib/llvm-15/bin/clang+0x41209b)
+#23 0x00007fcc9bfd65a2 (/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x21605a2)
+#24 0x00007fcc942b4b7d
+llvm::CrashRecoveryContext::RunSafely(llvm::function_ref<void ()>)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xdbbb7d)
+#25 0x00007fcc9bfd6090
+clang::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringRef>
+>, std::__cxx11::basic_string<char, std::char_traits<char>,
+std::allocator<char> >*, bool*) const
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x2160090)
+#26 0x00007fcc9bf9dac3
+clang::driver::Compilation::ExecuteCommand(clang::driver::Command
+const&, clang::driver::Command const*&) const
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x2127ac3)
+#27 0x00007fcc9bf9dd4a
+clang::driver::Compilation::ExecuteJobs(clang::driver::JobList const&,
+llvm::SmallVectorImpl<std::pair<int, clang::driver::Command const*>
+>&) const (/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x2127d4a)
+#28 0x00007fcc9bfb7917
+clang::driver::Driver::ExecuteCompilation(clang::driver::Compilation&,
+llvm::SmallVectorImpl<std::pair<int, clang::driver::Command const*>
+>&) (/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x2141917)
+#29 0x0000000000411b06 main (/usr/lib/llvm-15/bin/clang+0x411b06)
+#30 0x00007fcc9302dd0a __libc_start_main
+(/lib/x86_64-linux-gnu/libc.so.6+0x26d0a)
+#31 0x000000000040ef9a _start (/usr/lib/llvm-15/bin/clang+0x40ef9a)
+clang: error: clang frontend command failed with exit code 139 (use -v
+to see invocation)
+Debian clang version
+15.0.0-++20220212071827+2e57156fead3-1~exp1~20220212071918.154
+Target: aarch64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /usr/local/bin
+clang: note: diagnostic msg:
+********************
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+PLEASE ATTACH THE FOLLOWING FILES TO THE BUG REPORT:
+Preprocessed source(s) and associated run script(s) are located at:
+clang: note: diagnostic msg: /tmp/tcp_input-24e82f.c
+clang: note: diagnostic msg: /tmp/tcp_input-24e82f.sh
+clang: note: diagnostic msg:
 
-All errors (new ones prefixed by >>):
+********************
+make[3]: *** [/builds/linux/scripts/Makefile.build:288:
+net/ipv4/tcp_input.o] Error 139
+PLEASE submit a bug report to
+https://github.com/llvm/llvm-project/issues/ and include the crash
+backtrace, preprocessed source, and associated run script.
+Stack dump:
+0. Program arguments: clang -Wp,-MMD,net/ipv4/.tcp_minisocks.o.d
+-nostdinc -I/builds/linux/arch/arm64/include
+-I./arch/arm64/include/generated -I/builds/linux/include -I./include
+-I/builds/linux/arch/arm64/include/uapi
+-I./arch/arm64/include/generated/uapi -I/builds/linux/include/uapi
+-I./include/generated/uapi -include
+/builds/linux/include/linux/compiler-version.h -include
+/builds/linux/include/linux/kconfig.h -include
+/builds/linux/include/linux/compiler_types.h -D__KERNEL__
+-mlittle-endian -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+-DKASAN_SHADOW_SCALE_SHIFT= -Qunused-arguments
+-fmacro-prefix-map=/builds/linux/= -Wall -Wundef
+-Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing
+-fno-common -fshort-wchar -fno-PIE
+-Werror=implicit-function-declaration -Werror=implicit-int
+-Werror=return-type -Wno-format-security -std=gnu89
+--target=aarch64-linux-gnu -fintegrated-as
+-Werror=unknown-warning-option -Werror=ignored-optimization-argument
+-mgeneral-regs-only -DCONFIG_CC_HAS_K_CONSTRAINT=1 -Wno-psabi
+-fno-asynchronous-unwind-tables -fno-unwind-tables
+-mbranch-protection=pac-ret+leaf+bti -Wa,-march=armv8.5-a
+-DARM64_ASM_ARCH=\"armv8.5-a\" -DKASAN_SHADOW_SCALE_SHIFT=
+-fno-delete-null-pointer-checks -Wno-frame-address
+-Wno-address-of-packed-member -O2 -Wframe-larger-than=2048
+-fstack-protector-strong -Wimplicit-fallthrough -Wno-gnu
+-mno-global-merge -Wno-unused-but-set-variable
+-Wno-unused-const-variable -fno-omit-frame-pointer
+-fno-optimize-sibling-calls -ftrivial-auto-var-init=zero
+-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+-fno-stack-clash-protection -fpatchable-function-entry=2
+-Wdeclaration-after-statement -Wvla -Wno-pointer-sign
+-Wcast-function-type -Wno-array-bounds -fno-strict-overflow
+-fno-stack-check -Werror=date-time -Werror=incompatible-pointer-types
+-Wno-initializer-overrides -Wno-format -Wno-sign-compare
+-Wno-format-zero-length -Wno-pointer-to-enum-cast
+-Wno-tautological-constant-out-of-range-compare -Wno-unaligned-access
+-mstack-protector-guard=sysreg -mstack-protector-guard-reg=sp_el0
+-mstack-protector-guard-offset=1408 -I /builds/linux/net/ipv4 -I
+./net/ipv4 -DKBUILD_MODFILE=\"net/ipv4/tcp_minisocks\"
+-DKBUILD_BASENAME=\"tcp_minisocks\" -DKBUILD_MODNAME=\"tcp_minisocks\"
+-D__KBUILD_MODNAME=kmod_tcp_minisocks -c -o net/ipv4/tcp_minisocks.o
+/builds/linux/net/ipv4/tcp_minisocks.c
+1. <eof> parser at end of file
+2. Code generation
+3. Running pass 'Function Pass Manager' on module
+'/builds/linux/net/ipv4/tcp_minisocks.c'.
+4. Running pass 'Simple Register Coalescing' on function
+'@tcp_timewait_state_process'
+ #0 0x00007f394a236e91 llvm::sys::PrintStackTrace(llvm::raw_ostream&,
+int) (/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xe93e91)
+ #1 0x00007f394a234bee llvm::sys::RunSignalHandlers()
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xe91bee)
+ #2 0x00007f394a236260 llvm::sys::CleanupOnSignal(unsigned long)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xe93260)
+ #3 0x00007f394a15ee0f (/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xdbbe0f)
+ #4 0x00007f39535d3140 __restore_rt
+(/lib/x86_64-linux-gnu/libpthread.so.0+0x14140)
+ #5 0x00007f394a5220b5 llvm::LiveRange::join(llvm::LiveRange&, int
+const*, int const*, llvm::SmallVectorImpl<llvm::VNInfo*>&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x117f0b5)
+ #6 0x00007f394a74a8db (/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x13a78db)
+ #7 0x00007f394a7467ed (/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x13a37ed)
+ #8 0x00007f394a7441dd (/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x13a11dd)
+ #9 0x00007f394a5bc47d
+llvm::MachineFunctionPass::runOnFunction(llvm::Function&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0x121947d)
+#10 0x00007f394a37149f
+llvm::FPPassManager::runOnFunction(llvm::Function&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xfce49f)
+#11 0x00007f394a3789a3 llvm::FPPassManager::runOnModule(llvm::Module&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xfd59a3)
+#12 0x00007f394a372026
+llvm::legacy::PassManagerImpl::run(llvm::Module&)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xfcf026)
+#13 0x00007f39515c296b
+clang::EmitBackendOutput(clang::DiagnosticsEngine&,
+clang::HeaderSearchOptions const&, clang::CodeGenOptions const&,
+clang::TargetOptions const&, clang::LangOptions const&,
+llvm::StringRef, llvm::Module*, clang::BackendAction,
+std::unique_ptr<llvm::raw_pwrite_stream,
+std::default_delete<llvm::raw_pwrite_stream> >)
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x18a296b)
+#14 0x00007f3951908cb1 (/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x1be8cb1)
+#15 0x00007f3950759994 clang::ParseAST(clang::Sema&, bool, bool)
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0xa39994)
+#16 0x00007f3951905001 clang::CodeGenAction::ExecuteAction()
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x1be5001)
+#17 0x00007f39522a61b7 clang::FrontendAction::Execute()
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x25861b7)
+#18 0x00007f39521fe1d6
+clang::CompilerInstance::ExecuteAction(clang::FrontendAction&)
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x24de1d6)
+#19 0x00007f395231fc3a
+clang::ExecuteCompilerInvocation(clang::CompilerInstance*)
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x25ffc3a)
+#20 0x0000000000413e1e cc1_main(llvm::ArrayRef<char const*>, char
+const*, void*) (/usr/lib/llvm-15/bin/clang+0x413e1e)
+#21 0x000000000041209b (/usr/lib/llvm-15/bin/clang+0x41209b)
+#22 0x00007f3951e805a2 (/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x21605a2)
+#23 0x00007f394a15eb7d
+llvm::CrashRecoveryContext::RunSafely(llvm::function_ref<void ()>)
+(/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1+0xdbbb7d)
+#24 0x00007f3951e80090
+clang::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringRef>
+>, std::__cxx11::basic_string<char, std::char_traits<char>,
+std::allocator<char> >*, bool*) const
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x2160090)
+#25 0x00007f3951e47ac3
+clang::driver::Compilation::ExecuteCommand(clang::driver::Command
+const&, clang::driver::Command const*&) const
+(/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x2127ac3)
+#26 0x00007f3951e47d4a
+clang::driver::Compilation::ExecuteJobs(clang::driver::JobList const&,
+llvm::SmallVectorImpl<std::pair<int, clang::driver::Command const*>
+>&) const (/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x2127d4a)
+#27 0x00007f3951e61917
+clang::driver::Driver::ExecuteCompilation(clang::driver::Compilation&,
+llvm::SmallVectorImpl<std::pair<int, clang::driver::Command const*>
+>&) (/usr/lib/x86_64-linux-gnu/libclang-cpp.so.15+0x2141917)
+#28 0x0000000000411b06 main (/usr/lib/llvm-15/bin/clang+0x411b06)
+#29 0x00007f3948ed7d0a __libc_start_main
+(/lib/x86_64-linux-gnu/libc.so.6+0x26d0a)
+#30 0x000000000040ef9a _start (/usr/lib/llvm-15/bin/clang+0x40ef9a)
+clang: error: clang frontend command failed with exit code 139 (use -v
+to see invocation)
+Debian clang version
+15.0.0-++20220212071827+2e57156fead3-1~exp1~20220212071918.154
+Target: aarch64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /usr/local/bin
+clang: note: diagnostic msg:
+********************
 
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function reset_iter: .text+0xb0e): relocation R_RISCV_PCREL_HI20 out of range: -524453 is not in [-524288, 524287]; references kallsyms_markers
-   >>> referenced by kallsyms.c
-   >>> defined in kernel/built-in.a(kallsyms.o)
+build log link:
+https://builds.tuxbuild.com/254TFZPxjU105HfmOmS9Rac9sEO/
+Kconfig: https://builds.tuxbuild.com/254TFZPxjU105HfmOmS9Rac9sEO/config
+toolchain: clang-nightly
+
+I have reported this a new issues on github,
+https://github.com/llvm/llvm-project/issues/53811
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
 --
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function reset_iter: .text+0xb20): relocation R_RISCV_PCREL_HI20 out of range: -524453 is not in [-524288, 524287]; references kallsyms_names
-   >>> referenced by kallsyms.c
-   >>> defined in kernel/built-in.a(kallsyms.o)
---
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function update_iter: .text+0xb8c): relocation R_RISCV_PCREL_HI20 out of range: -524453 is not in [-524288, 524287]; references kallsyms_num_syms
-   >>> referenced by kallsyms.c
-   >>> defined in kernel/built-in.a(kallsyms.o)
---
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function update_iter: .text+0xbb8): relocation R_RISCV_PCREL_HI20 out of range: -524453 is not in [-524288, 524287]; references kallsyms_relative_base
-   >>> referenced by kallsyms.c
-   >>> defined in kernel/built-in.a(kallsyms.o)
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Linaro LKFT
+https://lkft.linaro.org
