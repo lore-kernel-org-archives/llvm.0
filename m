@@ -1,34 +1,34 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D7A7C
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 11:35:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1094A7C
+	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 11:50:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644838511; x=1676374511;
+  t=1644839434; x=1676375434;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=YGHaP2hnU1orIs+CLY7os5ijsM1R9T/d7HZLRE0xrlA=;
-  b=kDjLyAT0w/+clGKojAiku1i+2MatVlC9Ezht/Y1gV29r3zIn+nSb2fR7
-   GpSgIH2SCw3KNmmm0jC5/eB0ILxO5lv6Z+gXVxAuvaUHzB73vmQPaPL3r
-   hBoUss0ZUO42LWbm48dR93bDdX6lhpKe0XoIhHbZ+jq6wKimdUkLydi1Q
-   Xf+qunR1bY5/sCqS0aLODz+BfokhSTYvYaOLe2omz4nfjHoHqXk8/d3uF
-   2TGO9WoG9LMfEoqm2QjOaknrVY0vX9SSuCE3Sm9Odufak2WQtpKhtprSV
-   Z+T84zTWfnM9JvcfBsvNxwE2iIFRTfk8Z/YYAWTlOmoTHRwTmQp9gLvLc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="237481808"
+  bh=pwDESe15Vd1g0DPBCuoyVHda2xq39Jpz8AWqAWVhmO8=;
+  b=foRDSNoz18EfutAzqCKBYZGacy7W1fopC0v6j1qxhpL43p2dIvEDZEmB
+   D4QQb9A2CntBJmp5tNsRddhnJPUFP/WzsiM8zgNOiSRrLVefpJwv2qrJj
+   pWva8u0Thqeli5VhC7vhEL7mP+V6QEofq8K7oAqshZJ0AtOpe9fsP78sB
+   hC9GBcLSAu4xtO9kn9D0m4t04m5PeGwWYG0j/PfzhrRFIgMixiG5ruSXp
+   chyBrStpS14IISqD3IZ0Qp6Xp1Jd85vA6D8R98uN7NhOklwJUFST7laoI
+   Lhbi0hwg2kSqOCxEbDQQt9TWiMoYFO04jhZ51AGzVAYkygqQPNiSFtNd1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="237484006"
 X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="237481808"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:35:10 -0800
+   d="scan'208";a="237484006"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:50:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="775096766"
+   d="scan'208";a="538559695"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Feb 2022 03:34:59 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 14 Feb 2022 03:50:25 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 21EBYuXA031487;
-	Mon, 14 Feb 2022 11:34:57 GMT
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 21EBoMxH001918;
+	Mon, 14 Feb 2022 11:50:22 GMT
 From: Alexander Lobakin <alexandr.lobakin@intel.com>
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -61,12 +61,12 @@ Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: Re: [PATCH v10 10/15] FG-KASLR: use a scripted approach to handle .text.* sections
-Date: Mon, 14 Feb 2022 12:34:34 +0100
-Message-Id: <20220214113434.5256-1-alexandr.lobakin@intel.com>
+Subject: Re: [PATCH v10 05/15] x86: support asm function sections
+Date: Mon, 14 Feb 2022 12:49:27 +0100
+Message-Id: <20220214114927.6104-1-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220211153706.GW23216@worktop.programming.kicks-ass.net>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-11-alexandr.lobakin@intel.com> <20220211153706.GW23216@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220211154524.GX23216@worktop.programming.kicks-ass.net>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185753.1226407-6-alexandr.lobakin@intel.com> <20220211154524.GX23216@worktop.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,53 +76,77 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri, 11 Feb 2022 16:37:06 +0100
+Date: Fri, 11 Feb 2022 16:45:24 +0100
 
-> On Wed, Feb 09, 2022 at 07:57:47PM +0100, Alexander Lobakin wrote:
-> > +sub read_sections {
-> > +	open(my $fh, "\"$readelf\" -SW \"$file\" 2>/dev/null |")
-> > +		or die "$0: ERROR: failed to execute \"$readelf\": $!";
-> > +
-> > +	while (<$fh>) {
-> > +		my $name;
-> > +		my $align;
-> > +		chomp;
-> > +
-> > +		($name, $align) = $_ =~ /^\s*\[[\s0-9]*\]\s*(\.\S*)\s*[A-Z]*\s*[0-9a-f]{16}\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]{2}\s*[A-Z]{2}\s*[0-9]\s*[0-9]\s*([0-9]*)$/;
+> On Wed, Feb 09, 2022 at 07:57:42PM +0100, Alexander Lobakin wrote:
+> > Address places which need special care and enable
+> > CONFIG_ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS.
+> > 
+> > Notably:
+> >  - propagate `--sectname-subst` to KBUILD_AFLAGS in
+> >    x86/boot/Makefile and x86/boot/compressed/Makefile as both
+> >    override them;
+> >  - symbols starting with a dot (like ".Lrelocated") should be
+> >    handled manually with SYM_*_START_SECT(.Lrelocated, relocated)
+> >    as "two dots" is a special (and CPP doesn't want to concatenate
+> >    two dots in general);
+> >  - some symbols explicitly need to reside in one section (like
+> >    kexec control code, hibernation page etc.);
+> >  - macros creating aliases for functions (like __memcpy() for
+> >    memcpy() etc.) should go after the main declaration (as
+> >    aliases should be declared in the same section and they
+> >    don't have SYM_PUSH_SECTION() inside);
+> >  - things like ".org", ".align" should be manually pushed to
+> >    the same section the next symbol goes to;
+> >  - expand indirect_thunk wildcards in vmlinux.lds.S to catch
+> >    symbols back into the "main" section;
+> >  - inline ASM functions like __raw_callee*() should be pushed
+> >    manually as well.
+> > 
+> > With these changes and `-ffunction-sections` enabled, "plain"
+> > ".text" section is empty which means that everything works
+> > right as expected.
+> > 
+> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > ---
+> >  arch/x86/Kconfig                              |  1 +
+> >  arch/x86/boot/Makefile                        |  1 +
+> >  arch/x86/boot/compressed/Makefile             |  1 +
+> >  arch/x86/boot/compressed/head_32.S            |  2 +-
+> >  arch/x86/boot/compressed/head_64.S            | 32 ++++++++++++-------
+> >  arch/x86/boot/pmjump.S                        |  2 +-
+> >  arch/x86/crypto/aesni-intel_asm.S             |  4 +--
+> >  arch/x86/crypto/poly1305-x86_64-cryptogams.pl |  4 +++
+> >  arch/x86/include/asm/paravirt.h               |  2 ++
+> >  arch/x86/include/asm/qspinlock_paravirt.h     |  2 ++
+> >  arch/x86/kernel/head_32.S                     |  4 +--
+> >  arch/x86/kernel/head_64.S                     |  4 +--
+> >  arch/x86/kernel/kprobes/core.c                |  2 ++
+> >  arch/x86/kernel/kvm.c                         |  2 ++
+> >  arch/x86/kernel/relocate_kernel_32.S          | 10 +++---
+> >  arch/x86/kernel/relocate_kernel_64.S          | 12 ++++---
+> >  arch/x86/kernel/vmlinux.lds.S                 |  2 +-
+> >  arch/x86/kvm/emulate.c                        |  7 +++-
+> >  arch/x86/lib/copy_user_64.S                   |  2 +-
+> >  arch/x86/lib/error-inject.c                   |  2 ++
+> >  arch/x86/lib/getuser.S                        |  5 ++-
+> >  arch/x86/lib/memcpy_64.S                      |  4 +--
+> >  arch/x86/lib/memmove_64.S                     |  5 ++-
+> >  arch/x86/lib/memset_64.S                      |  5 +--
+> >  arch/x86/lib/putuser.S                        |  2 +-
+> >  arch/x86/power/hibernate_asm_32.S             | 10 +++---
+> >  arch/x86/power/hibernate_asm_64.S             | 10 +++---
+> >  27 files changed, 89 insertions(+), 50 deletions(-)
 > 
-> Is there really no readable way to write this?
-
-I'm no regexp master, so I'd be glad if someone could help improve
-this :D I only tried to optimize it using online tools, and they
-eventually didn't help.
-It could probably be replaced with a pipe to `cut` or `tr`, I'll
-take a look a bit later if there won't be any other proposals.
-
+> Urgh, how much of that can you avoid by (ab)using __DISABLE_EXPORTS
+> like:
 > 
-> > +
-> > +		if (!defined($name)) {
-> > +			next;
-> > +		}
-> > +
-> > +		## Clang 13 onwards emits __cfi_check_fail only on final
-> > +		## linking, so it won't appear in .o files and will be
-> > +		## missing in @sections. Add it manually to prevent
-> > +		## spawning orphans.
-> > +		if ($name eq ".text.__cfi_check_fail") {
-> > +			$has_ccf = 1;
-> > +		}
-> 
-> How is that relevant, x86-64 doesn't and won't do clang-cfi.
+>   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=x86/wip.ibt&id=ab74f54f2b1f6cfeaf2b3ba6999bde7cabada9ca
 
-1. One of my test cases was based on Sami's ClangCFI x86 series from
-   LKML (the one that was getting patched by objtool :P).
-2. ClangCFI is present on ARM64 and it can receive FG-KASLR in a
-   future, why not make it work together from the start?
+Oh, never thought on that, looks like at least 3 of 27 files and
+35 of 139 lines, nice!
+I'll redo this one in the meantime whilst waiting for more comments
+here.
 
-Re "won't do" -- sorry for trying to hijack this thread a bit, but
-did I miss something? The last comments I've read were that LLVM
-tools need to change their approach for CFI on x86, and Sami went
-redo it, but I can't recall any "life-time" nacks.
-
-Thanks,
+Thanks!
 Al
