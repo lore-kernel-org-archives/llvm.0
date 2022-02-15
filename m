@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014481578
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 15:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C3BC340F1;
-	Tue, 15 Feb 2022 15:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28F61580
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 15:29:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 550FCC340ED;
+	Tue, 15 Feb 2022 15:29:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644938849;
+	s=k20201202; t=1644938941;
 	bh=qJwGXYo41BOzEX6oFtnAmcbygBymqUp/dIQMb+BAvlQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Trmrpw/bgUC8KXZJ2oe2q2jd+k6nO1O9EFS9NL8anjqqr8HFHfBiR+SJzPQ+UUq5f
-	 ZvLBt3FcSFNoLA3gbLemJgapV/PCibn//WTuk5tFy5NqiDfTsTvqBnTGP1w3v8iRPe
-	 MvRvS0khiDKzDDF0jw2hPVdiYPsqfYyLaEMaXfcSI2ff6KmCgqoycRbfQgjaZrl5YZ
-	 K6BCqY8lo05qjIDEo3C6TG+m2WuzM9vIypTmRbs/5mrKkc8LqSscILgsw7pc/46lX8
-	 u8qZWwP35KJhflw+lneEXFzYYVW/NQ9YU4GwmhWKOvTM2hGUftcaFlr8nUoOuMUly3
-	 XyKD3L/EZ4i3Q==
+	b=nahRJDDaW6kPRRFQtFZRYjIY1K+nkmLgmWRu7jbRVDPB44seuo9RjaxscF15R5tff
+	 oQ19wh8eePWzkxFRpapxf/9aXWAyYxKHBQkvd8yfqcCTGoESpyICuVAaMWhFIvZ3B7
+	 tbPYIRjg6Slu83lySHr9X1zz/a7ZPOPwabJ2EGjm2ru9ryqOI/KfwSDmQvnem1akw9
+	 hGTHpuQ96ngyImKwJTL8uc+cculNBQqZNu/DaA0oPbvJj+gI+RDojSOdkOKZnCNzEM
+	 sLKMD2scSXYZYijYKR3pE0OzShthzJpJ73I3U7kdke6rCsCwWpYEWWoJBIFgFgr0b2
+	 LVv4MANFMkjuQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -27,12 +27,12 @@ Cc: Axel Rasmussen <axelrasmussen@google.com>,
 	ndesaulniers@google.com,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.16 16/34] selftests: fixup build warnings in pidfd / clone3 tests
-Date: Tue, 15 Feb 2022 10:26:39 -0500
-Message-Id: <20220215152657.580200-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 16/33] selftests: fixup build warnings in pidfd / clone3 tests
+Date: Tue, 15 Feb 2022 10:28:14 -0500
+Message-Id: <20220215152831.580780-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220215152657.580200-1-sashal@kernel.org>
-References: <20220215152657.580200-1-sashal@kernel.org>
+In-Reply-To: <20220215152831.580780-1-sashal@kernel.org>
+References: <20220215152831.580780-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
