@@ -1,151 +1,117 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DABD1164
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 01:51:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644889891; x=1676425891;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9pqhgBM2noU6Il2Mro72w/TLz4GFbDxbkMY3Y+dasOA=;
-  b=PvUYOC7q22iVBAWTahfQ52fzFYIBVl0aDA55PCJNO9Rm4LO+D/4uho6D
-   mxM5ohF3Hlyo5GW9X7HoRfQkB4YB/LyzTfmNPauzthXGjNdx7uQTq4cmI
-   lzqDkUfOd3lBmfGdwO9vRhNmYNHetaYx9kGwum+2ZhUd7pnxCoYOdXnJl
-   2Bs79wtIlFIpz4/4vg3D3kwPWubocHqLF5CKvGdpsPXirYb3BxMCSRw2D
-   a7FdFsEpaqTDt0to7Zr4wryV7AOkuRwBIz1iW/oWTKXcuStnfeOJbVvNd
-   fnVbRX2mwWQM3ZCcJk1DQg3UF0G7cDSDt5xJFkvevgicq+Sp5DUHdbCZ8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="247821106"
-X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
-   d="scan'208";a="247821106"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 17:51:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
-   d="scan'208";a="485884093"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 14 Feb 2022 17:51:28 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nJn03-00099c-Ll; Tue, 15 Feb 2022 01:51:27 +0000
-Date: Tue, 15 Feb 2022 09:50:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 38/39]
- fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types
- ('typeof (len) *' (aka 'unsigned int *') and 'typeof ((1UL << 18) - offset)
- *' (aka 'unsigned long *'))
-Message-ID: <202202150936.6AhJ1Nev-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068131164
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 02:05:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1644890750;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rcVCDBo5DVaghZVQQl2zbGTyQ7E+laKLLxGgEjqHxnk=;
+	b=cMP1hLngHF5dBY6Kiv615qCEwj0aHnyQ9HUNmpOPLeBR9lZUczKsbZ/FZxkVpqldvKfGZf
+	p/cggVPq/Kz0lVmrfB6BOXLNi5ZxaBLTVcRItKXphAelV04cIk8uXip91RglFD/A8byr+A
+	rYB+NJbRWNe6DRK+0f4RwoSAeWffvRM=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-20-wIhril9VNpmReuh9hwkF1Q-1; Mon, 14 Feb 2022 21:05:47 -0500
+X-MC-Unique: wIhril9VNpmReuh9hwkF1Q-1
+Received: by mail-oo1-f69.google.com with SMTP id bb33-20020a056820162100b0031619149c44so11676665oob.5
+        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 18:05:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rcVCDBo5DVaghZVQQl2zbGTyQ7E+laKLLxGgEjqHxnk=;
+        b=U/yQ1ECVy+By6HTp5LlUvxMS5wSOlaVXkIG0hazsiKGiuzlPJ6bUAGHbkVl6KfEQFv
+         bLZ/EwyFHidq0LThb+hPwikZxVWa2IsNMka8ydm7C4X4sV08sPqjU65M8B09l7eJEO6h
+         JHaJ79DrJUVJRuFYhypjJpA242fj9vKzG77+o7b/mwASOt1vu4BNtLzobep/WU7m4qhG
+         UNlAxGIVKRTmyHzVezuJ2QM43W9lEepw2Mo6p1hUAgHnOXxJG4WIYkcaNNWZtCAm8PBK
+         pj7KwN2KzPRmpcRXQwVBAInupWrtFiEact+5DiD7HiG1AmykKd40y8NTOfnvuuvAPbST
+         7J+w==
+X-Gm-Message-State: AOAM531FmFiQb+UAnrZMSolRxzoK056ALkFmojj2cn6yxjY2wJ3ogtFu
+	oW5BE4eucwTrV40Lmv5MjFUzmetK8rxgKRGyHjeiNcb3EG8WzOVyIjWAdbSE/7OLFPrkAK3HqyI
+	PZH06lv9PeKwXmw==
+X-Received: by 2002:a05:6830:4113:: with SMTP id w19mr688311ott.120.1644890746756;
+        Mon, 14 Feb 2022 18:05:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzEs/cQG7EnoAYBz/PX072UhjyPsRpX8PJZ5Lr3Q9WSLBCh3TgTI0hgly/YAlr42AGrYmPADg==
+X-Received: by 2002:a05:6830:4113:: with SMTP id w19mr688302ott.120.1644890746552;
+        Mon, 14 Feb 2022 18:05:46 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id r41sm14527325oap.2.2022.02.14.18.05.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 18:05:46 -0800 (PST)
+From: trix@redhat.com
+To: jk@codeconstruct.com.au,
+	matt@codeconstruct.com.au,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH v2] mctp: fix use after free
+Date: Mon, 14 Feb 2022 18:05:41 -0800
+Message-Id: <20220215020541.2944949-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   b995bc7182f60aa2b4d8930a7446f10dfbcebcc2
-commit: 8573fb679d751564f10601acf56465d777132b03 [38/39] netfs: Perform content encryption
-config: hexagon-randconfig-r034-20220214 (https://download.01.org/0day-ci/archive/20220215/202202150936.6AhJ1Nev-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/8573fb679d751564f10601acf56465d777132b03
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 8573fb679d751564f10601acf56465d777132b03
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
+From: Tom Rix <trix@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Clang static analysis reports this problem
+route.c:425:4: warning: Use of memory after it is freed
+  trace_mctp_key_acquire(key);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+When mctp_key_add() fails, key is freed but then is later
+used in trace_mctp_key_acquire().  Add an else statement
+to use the key only when mctp_key_add() is successful.
 
-All warnings (new ones prefixed by >>):
-
->> fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof ((1UL << 18) - offset) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                           seg = min(len, PAGE_SIZE - offset);
-                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +76 fs/netfs/crypto.c
-
-    45	
-    46	/*
-    47	 * Populate a scatterlist from folios in an xarray.
-    48	 */
-    49	static int netfs_xarray_to_sglist(struct xarray *xa, loff_t pos, size_t len,
-    50					  struct scatterlist *sg, unsigned int n_sg)
-    51	{
-    52		struct scatterlist *p = sg;
-    53		struct folio *folio = NULL;
-    54		size_t seg, offset, skip = 0;
-    55		loff_t start = pos;
-    56		pgoff_t index = start >> PAGE_SHIFT;
-    57		int j;
-    58	
-    59		XA_STATE(xas, xa, index);
-    60	
-    61		sg_init_table(sg, n_sg);
-    62	
-    63		rcu_read_lock();
-    64	
-    65		xas_for_each(&xas, folio, ULONG_MAX) {
-    66			if (xas_retry(&xas, folio))
-    67				continue;
-    68			if (WARN_ON(xa_is_value(folio)) || WARN_ON(folio_test_hugetlb(folio)))
-    69				break;
-    70			for (j = (folio_index(folio) < index) ? index - folio_index(folio) : 0;
-    71			     j < folio_nr_pages(folio); j++
-    72			     ) {
-    73				struct page *subpage = folio_file_page(folio, j);
-    74	
-    75				offset = (pos + skip) & ~PAGE_MASK;
-  > 76				seg = min(len, PAGE_SIZE - offset);
-    77	
-    78				sg_set_page(p++, subpage, seg, offset);
-    79	
-    80				len -= seg;
-    81				skip += seg;
-    82				if (len == 0)
-    83					break;
-    84			}
-    85			if (len == 0)
-    86				break;
-    87		}
-    88	
-    89		rcu_read_unlock();
-    90		if (len > 0) {
-    91			kdebug("*** Insufficient source (%zx)", len);
-    92			//WARN_ON(len > 0);
-    93			return -EIO;
-    94		}
-    95	
-    96		sg_mark_end(p - 1);
-    97		return p - sg;
-    98	}
-    99	
-
+Fixes: 4f9e1ba6de45 ("mctp: Add tracepoints for tag/key handling")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v2: change the Fixes: line
+
+ net/mctp/route.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/net/mctp/route.c b/net/mctp/route.c
+index 17e3482aa770..0c4c56e1bd6e 100644
+--- a/net/mctp/route.c
++++ b/net/mctp/route.c
+@@ -419,13 +419,14 @@ static int mctp_route_input(struct mctp_route *route, struct sk_buff *skb)
+ 			 * this function.
+ 			 */
+ 			rc = mctp_key_add(key, msk);
+-			if (rc)
++			if (rc) {
+ 				kfree(key);
++			} else {
++				trace_mctp_key_acquire(key);
+ 
+-			trace_mctp_key_acquire(key);
+-
+-			/* we don't need to release key->lock on exit */
+-			mctp_key_unref(key);
++				/* we don't need to release key->lock on exit */
++				mctp_key_unref(key);
++			}
+ 			key = NULL;
+ 
+ 		} else {
+-- 
+2.26.3
+
