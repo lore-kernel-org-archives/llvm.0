@@ -1,145 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627C71578
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 15:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E79C1C340F2;
-	Tue, 15 Feb 2022 15:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644939016;
-	bh=qJwGXYo41BOzEX6oFtnAmcbygBymqUp/dIQMb+BAvlQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=toB1+tjH280Rxab4Nq+JVo9pwKh2LgmrB5RKdUOE/uZduzmBq6H+kPVbMKU0zRciA
-	 mJjElqXB+Ia5qWu2VXlLauPBAzOeaYc1Q9ofQ0lXVEmFzAEM9TYe0xuoRL/CQ7QIf4
-	 rnKuOUhTgWna9N07VFKM84d6t5MwYgLND1GNat21OPZwIn9oU4schUGBp82J0EQka1
-	 vVU/wx9wZgxXVB0Y+nQ9XZERS9IK36MLzCBk6vtTVihqYDYp7j+g2FssWEL1QI85OU
-	 5dgVJLSKVjPoRRLQnzy253nP6+t3FBLXl2mvZFf1bRKOGw1n0MJwlQUR6F9Pq8YZdO
-	 u7daHQgz5gUiw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Axel Rasmussen <axelrasmussen@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	shuah@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 11/23] selftests: fixup build warnings in pidfd / clone3 tests
-Date: Tue, 15 Feb 2022 10:29:45 -0500
-Message-Id: <20220215152957.581303-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220215152957.581303-1-sashal@kernel.org>
-References: <20220215152957.581303-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB801578
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 15:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644939663; x=1676475663;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=2oO8/10MFcMCOYqNAD9cvhK5NMUVcVkLqj3qdOkyTT8=;
+  b=KwdzmqTy64Gg6jXAH4jdFGcQBAO66YHjqDv6CQjIrz0h0aXlmyg39rVX
+   UBtX80FwdRXTQFCLYas0LtZy3/pglBR2U5PXlYqY5b6cQ2C4DgM0oe++3
+   EJQ6uKUa/VZFCxL+43myEttC/qhpXZNAF1b2pP/m0ca/b3j+KzR+rjXwo
+   FpNcRrRJYO2on3aUQdhtEr1rHKKbIcIaTw3mfn+rUP4jAna8JlAmkT7+c
+   3GoevJEYtidq+Nl1OpF4fApnPoo/CAXiA+tT6LobLtcdvD61leES/ng1Q
+   JgOYFyWYfB8BcA0jWO4FNL+zY0x8SeOSz8ksR1HFkb73eqA9EIbZh+UGS
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250320828"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="250320828"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 07:40:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="497244038"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 07:40:53 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nJzwi-0009nv-TC; Tue, 15 Feb 2022 15:40:52 +0000
+Date: Tue, 15 Feb 2022 23:39:55 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [intel-tdx:guest-rebased 128/133] arch/x86/kernel/head_64.o:
+ warning: objtool: verify_cpu()+0x4d: unreachable instruction
+Message-ID: <202202152337.dgk9Lm8b-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Axel Rasmussen <axelrasmussen@google.com>
+CC: linux-kernel@vger.kernel.org
+TO: Andi Kleen <ak@linux.intel.com>
+CC: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 
-[ Upstream commit e2aa5e650b07693477dff554053605976789fd68 ]
+tree:   https://github.com/intel/tdx.git guest-rebased
+head:   36c91f6d572820e8556972fd7644bd96798e85d6
+commit: fc9eb9756100201dbc23d220d3441115866085c8 [128/133] [REVERTME] x86/tdx: Add CONFIG option for KVM SDV workarounds
+config: x86_64-randconfig-a002-20220214 (https://download.01.org/0day-ci/archive/20220215/202202152337.dgk9Lm8b-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/fc9eb9756100201dbc23d220d3441115866085c8
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-rebased
+        git checkout fc9eb9756100201dbc23d220d3441115866085c8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
-These are some trivial fixups, which were needed to build the tests with
-clang and -Werror. The following issues are fixed:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-- Remove various unused variables.
-- In child_poll_leader_exit_test, clang isn't smart enough to realize
-  syscall(SYS_exit, 0) won't return, so it complains we never return
-  from a non-void function. Add an extra exit(0) to appease it.
-- In test_pidfd_poll_leader_exit, ret may be branched on despite being
-  uninitialized, if we have !use_waitpid. Initialize it to zero to get
-  the right behavior in that case.
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-Acked-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> arch/x86/kernel/head_64.o: warning: objtool: verify_cpu()+0x4d: unreachable instruction
+
 ---
- tools/testing/selftests/clone3/clone3.c    | 2 --
- tools/testing/selftests/pidfd/pidfd_test.c | 6 +++---
- tools/testing/selftests/pidfd/pidfd_wait.c | 5 ++---
- 3 files changed, 5 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index 076cf4325f783..cd4582129c7d6 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -126,8 +126,6 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
- 
- int main(int argc, char *argv[])
- {
--	pid_t pid;
--
- 	uid_t uid = getuid();
- 
- 	ksft_print_header();
-diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-index 529eb700ac26a..9a2d64901d591 100644
---- a/tools/testing/selftests/pidfd/pidfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_test.c
-@@ -441,7 +441,6 @@ static void test_pidfd_poll_exec(int use_waitpid)
- {
- 	int pid, pidfd = 0;
- 	int status, ret;
--	pthread_t t1;
- 	time_t prog_start = time(NULL);
- 	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
- 
-@@ -500,13 +499,14 @@ static int child_poll_leader_exit_test(void *args)
- 	 */
- 	*child_exit_secs = time(NULL);
- 	syscall(SYS_exit, 0);
-+	/* Never reached, but appeases compiler thinking we should return. */
-+	exit(0);
- }
- 
- static void test_pidfd_poll_leader_exit(int use_waitpid)
- {
- 	int pid, pidfd = 0;
--	int status, ret;
--	time_t prog_start = time(NULL);
-+	int status, ret = 0;
- 	const char *test_name = "pidfd_poll check for premature notification on non-empty"
- 				"group leader exit";
- 
-diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-index be2943f072f60..17999e082aa71 100644
---- a/tools/testing/selftests/pidfd/pidfd_wait.c
-+++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-@@ -39,7 +39,7 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
- 
- TEST(wait_simple)
- {
--	int pidfd = -1, status = 0;
-+	int pidfd = -1;
- 	pid_t parent_tid = -1;
- 	struct clone_args args = {
- 		.parent_tid = ptr_to_u64(&parent_tid),
-@@ -47,7 +47,6 @@ TEST(wait_simple)
- 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
- 		.exit_signal = SIGCHLD,
- 	};
--	int ret;
- 	pid_t pid;
- 	siginfo_t info = {
- 		.si_signo = 0,
-@@ -88,7 +87,7 @@ TEST(wait_simple)
- 
- TEST(wait_states)
- {
--	int pidfd = -1, status = 0;
-+	int pidfd = -1;
- 	pid_t parent_tid = -1;
- 	struct clone_args args = {
- 		.parent_tid = ptr_to_u64(&parent_tid),
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
