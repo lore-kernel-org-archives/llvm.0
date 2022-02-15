@@ -1,52 +1,58 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DAD31844
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 22:58:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644965929; x=1676501929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aVC1VWYu2/FOZnDI0tt4/RlhnPLtWk9kahE+Z9VUFDQ=;
-  b=VKI/2tXE8dpPbIDoGojUD1rK/Dagfx3doRkd2qRjL6cu4SPoXyf74UsP
-   hze2kHMRS/LYmPZQQ2ejGi9xcLyOI3SGVMkGXzZPWDZX7pTqcBlHXnhrw
-   cuPjEpmhdLwclRjwZ3UJWkJVVBiU47EOLTyG+xfCg2ZAvmsW9MXNWmhBd
-   4EAjxaXRb4fH4wpR4phVypkodeAg6KTYXGYGyn+YY6snE21TV1+jkeLSk
-   N+ayiw68NeNq5TVaDOerOLVyseVBa+yQyL+NRGeV/CBZLr+XQOmmjr4Et
-   b15ytmXYRiOruNuY28sbcYNotSDo7B/tqudUBsqlYnNO5bQsnKguH10EJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="234012675"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="234012675"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 14:58:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="636179010"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2022 14:58:10 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nK6lt-000A8D-Mp; Tue, 15 Feb 2022 22:58:09 +0000
-Date: Wed, 16 Feb 2022 06:57:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	kasan-dev@googlegroups.com,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kasan: test: support async (again) and asymm modes for
- HW_TAGS
-Message-ID: <202202160627.SICieucW-lkp@intel.com>
-References: <51ae4a56205a41953971113ab2c264c7e2e5d969.1644938763.git.andreyknvl@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DED21B85
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 23:05:59 +0000 (UTC)
+Received: by mail-pj1-f42.google.com with SMTP id r64-20020a17090a43c600b001b8854e682eso725663pjg.0
+        for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 15:05:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xFoXp1iXxwPnqPJm6+R4iAU7d160QC7MYGNnmZh/iBg=;
+        b=kQ3XkCI8aIjA5Ugam7/F4NKdZ3ib0Caocmpb4cMY+oXEk7UdngLyy7C5ZthE2yi4T+
+         8ancU/wgUoU8Ie/JRkBYI1vQi5P7ZRB8cOA+jrBJRKXuxHUy9R1SJCWzN2TK/GFlCF5V
+         XSHRhRkKiZFOBTRHm3pDqNPDRTvyKEPS1YWEU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xFoXp1iXxwPnqPJm6+R4iAU7d160QC7MYGNnmZh/iBg=;
+        b=SDm13wPk+4tOySpev1DIFLT9tsAhg0gWspyOnWAbreR1D36aafT+cFWwWk1FSuew3L
+         0qn99gKuFBCbwENAo4i8jwYt6F3FSXb3sdEGJQBV2oYd68GHya8KAZD4AJBvHfjBEVdV
+         omh98+pgNP4/HWkE93vhd5y75hpP9RXFvXCTch0A5w5/Hd4efXWk61xS/rMtxsJTF777
+         Lo10Z+2LcLIxXKeVNZyu8CLdYxoEsVgbGZiYXnb6sBSV31ToKLKkwpk8zpiT8mqW6j7g
+         yYpEYBXOa8Ldm61stsZf/LQqJ4nlbXdktarK6sZfiBhqeoviNrSmNNlL41ZKFBxhdkjn
+         DMDw==
+X-Gm-Message-State: AOAM532r5SqzwnhIEi1p+Y2Ip58FutxmmB2qgYsPoLb9yfGvF2PMBgvy
+	/zIfFNxEKd9bclINiW4xflndQg==
+X-Google-Smtp-Source: ABdhPJxpn8JTzN/X/F3Jqc5MxaE4ad0yPJLGCRgLTY9lFi2ex5Wt3LFUet9W6MXnAIXxEQ2uWDtQUQ==
+X-Received: by 2002:a17:902:cf07:: with SMTP id i7mr1278462plg.137.1644966359102;
+        Tue, 15 Feb 2022 15:05:59 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id pj8sm9590566pjb.54.2022.02.15.15.05.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 15:05:58 -0800 (PST)
+Date: Tue, 15 Feb 2022 15:05:57 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>, X86 ML <x86@kernel.org>,
+	hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
+	andrew.cooper3@citrix.com, LKML <linux-kernel@vger.kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+Message-ID: <202202151503.91E9B76B@keescook>
+References: <202202081541.900F9E1B@keescook>
+ <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
+ <202202082003.FA77867@keescook>
+ <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com>
+ <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+ <CABCJKuciRBnz4JxBDJC=+kuJn4pU2uBkWPBov7-VL2o2j0F4SA@mail.gmail.com>
+ <20220214222550.GB23216@worktop.programming.kicks-ass.net>
+ <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
+ <202202151129.1A5C5FE42@keescook>
+ <20220215210550.GD23216@worktop.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,298 +61,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <51ae4a56205a41953971113ab2c264c7e2e5d969.1644938763.git.andreyknvl@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220215210550.GD23216@worktop.programming.kicks-ass.net>
 
-Hi,
+On Tue, Feb 15, 2022 at 10:05:50PM +0100, Peter Zijlstra wrote:
+> On Tue, Feb 15, 2022 at 12:03:12PM -0800, Kees Cook wrote:
+> > On Tue, Feb 15, 2022 at 08:56:03AM -0800, Sami Tolvanen wrote:
+> > > On Mon, Feb 14, 2022 at 2:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > > > On Mon, Feb 14, 2022 at 01:38:18PM -0800, Sami Tolvanen wrote:
+> > > > > I'm fine with adding a trap mode that's used by default, but having
+> > > > > more helpful diagnostics when something fails is useful even in
+> > > > > production systems in my experience. This change results in a vmlinux
+> > > > > that's another 0.92% smaller.
+> > > >
+> > > > You can easily have the exception generate a nice warning, you can even
+> > > > have it continue. You really don't need a call for that.
+> > > 
+> > > Sure, but wouldn't that require us to generate something like
+> > > __bug_table, so we know where the CFI specific traps are?
+> > 
+> > It also means the trap handler needs to do a bunch of instruction
+> > decoding to find the address that was going to be jumped to, etc.
+> 
+> arch/x86/kernel/alternative.c:apply_retpolines() has all that, since we
+> need to to know that to re-write the thunk-call.
 
-I love your patch! Yet something to improve:
+Ah, okay, well that makes things easier. :)
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc4 next-20220215]
-[cannot apply to hnaz-mm/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> > > > > In this case the function has two indirect calls and Clang seems to
+> > > > > prefer to emit just one ud2.
+> > > >
+> > > > That will not allow you to recover from the exception. UD2 is not an
+> > > > unconditional fail. It should have an out-going edge in this case too.
+> > > 
+> > > Yes, CFI failures are not recoverable in that code. In fact, LLVM
+> > > assumes that the llvm.trap intrinsic (i.e. ud2) never returns, but I
+> > > suppose we could just use an int3 instead. I assume that's sufficient
+> > > to stop speculation?
+> > 
+> > Peter, is there a reason you want things in the specific order of:
+> > 
+> > cmp, je-to-call, trap, call
+> > 
+> > Isn't it more run-time efficient to have an out-of-line failure of
+> > the form:
+> > 
+> > cmp, jne-to-trap, call, ...code..., trap, jmp-to-call
+> > 
+> > I thought the static label stuff allowed the "default out of line"
+> > option, as far as pessimizing certain states, etc? The former is certainly
+> > code-size smaller, though, yes, but doesn't it waste space in the cache
+> > line for the unlikely case, etc?
+> 
+> Mostly so that we can deduce the address of the trap from the retpoline
+> site, also the above has a fairly high chance of using jcc.d32 which is
+> actually larger than jcc.d8+ud2.
 
-url:    https://github.com/0day-ci/linux/commits/andrey-konovalov-linux-dev/kasan-test-support-async-again-and-asymm-modes-for-HW_TAGS/20220215-232923
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d567f5db412ed52de0b3b3efca4a451263de6108
-config: arm64-randconfig-r036-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160627.SICieucW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/50334edb33a25643468715fbfc0e6d4a7d594432
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review andrey-konovalov-linux-dev/kasan-test-support-async-again-and-asymm-modes-for-HW_TAGS/20220215-232923
-        git checkout 50334edb33a25643468715fbfc0e6d4a7d594432
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash mm/kasan/
+Ah, yeah, that's an interesting point.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Still, I worry about finding ways to convinces Clang to emit precisely
+cmp/je/trap/call, but I guess we'll catch it immediately if it doesn't.
+:P
 
-All errors (new ones prefixed by >>):
-
->> mm/kasan/report.c:360:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->report_found, true);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   include/linux/compiler_types.h:313:10: note: expanded from macro '__native_word'
-           (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-                   ^
-   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   mm/kasan/report.c:350:9: note: forward declaration of 'struct kunit_kasan_status'
-           struct kunit_kasan_status *status;
-                  ^
->> mm/kasan/report.c:360:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->report_found, true);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   include/linux/compiler_types.h:313:39: note: expanded from macro '__native_word'
-           (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-                                                ^
-   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   mm/kasan/report.c:350:9: note: forward declaration of 'struct kunit_kasan_status'
-           struct kunit_kasan_status *status;
-                  ^
->> mm/kasan/report.c:360:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->report_found, true);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   include/linux/compiler_types.h:314:10: note: expanded from macro '__native_word'
-            sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-                   ^
-   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   mm/kasan/report.c:350:9: note: forward declaration of 'struct kunit_kasan_status'
-           struct kunit_kasan_status *status;
-                  ^
->> mm/kasan/report.c:360:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->report_found, true);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   include/linux/compiler_types.h:314:38: note: expanded from macro '__native_word'
-            sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-                                               ^
-   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   mm/kasan/report.c:350:9: note: forward declaration of 'struct kunit_kasan_status'
-           struct kunit_kasan_status *status;
-                  ^
->> mm/kasan/report.c:360:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->report_found, true);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                                         ^
-   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   mm/kasan/report.c:350:9: note: forward declaration of 'struct kunit_kasan_status'
-           struct kunit_kasan_status *status;
-                  ^
->> mm/kasan/report.c:360:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->report_found, true);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:61:15: note: expanded from macro 'WRITE_ONCE'
-           __WRITE_ONCE(x, val);                                           \
-                        ^
-   include/asm-generic/rwonce.h:55:20: note: expanded from macro '__WRITE_ONCE'
-           *(volatile typeof(x) *)&(x) = (val);                            \
-                             ^
-   mm/kasan/report.c:350:9: note: forward declaration of 'struct kunit_kasan_status'
-           struct kunit_kasan_status *status;
-                  ^
->> mm/kasan/report.c:360:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->report_found, true);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:61:15: note: expanded from macro 'WRITE_ONCE'
-           __WRITE_ONCE(x, val);                                           \
-                        ^
-   include/asm-generic/rwonce.h:55:27: note: expanded from macro '__WRITE_ONCE'
-           *(volatile typeof(x) *)&(x) = (val);                            \
-                                    ^
-   mm/kasan/report.c:350:9: note: forward declaration of 'struct kunit_kasan_status'
-           struct kunit_kasan_status *status;
-                  ^
-   mm/kasan/report.c:361:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->sync_fault, sync);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   include/linux/compiler_types.h:313:10: note: expanded from macro '__native_word'
-           (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-                   ^
-   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   mm/kasan/report.c:350:9: note: forward declaration of 'struct kunit_kasan_status'
-           struct kunit_kasan_status *status;
-                  ^
-   mm/kasan/report.c:361:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->sync_fault, sync);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   include/linux/compiler_types.h:313:39: note: expanded from macro '__native_word'
-           (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-                                                ^
-   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   mm/kasan/report.c:350:9: note: forward declaration of 'struct kunit_kasan_status'
-           struct kunit_kasan_status *status;
-                  ^
-   mm/kasan/report.c:361:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->sync_fault, sync);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   include/linux/compiler_types.h:314:10: note: expanded from macro '__native_word'
-            sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-                   ^
-   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   mm/kasan/report.c:350:9: note: forward declaration of 'struct kunit_kasan_status'
-           struct kunit_kasan_status *status;
-                  ^
-   mm/kasan/report.c:361:19: error: incomplete definition of type 'struct kunit_kasan_status'
-           WRITE_ONCE(status->sync_fault, sync);
-                      ~~~~~~^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   include/linux/compiler_types.h:314:38: note: expanded from macro '__native_word'
-            sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-                                               ^
-   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-
-
-vim +360 mm/kasan/report.c
-
-   345	
-   346	#if IS_ENABLED(CONFIG_KUNIT)
-   347	static void kasan_update_kunit_status(struct kunit *cur_test, bool sync)
-   348	{
-   349		struct kunit_resource *resource;
-   350		struct kunit_kasan_status *status;
-   351	
-   352		resource = kunit_find_named_resource(cur_test, "kasan_status");
-   353	
-   354		if (!resource) {
-   355			kunit_set_failure(cur_test);
-   356			return;
-   357		}
-   358	
-   359		status = (struct kunit_kasan_status *)resource->data;
- > 360		WRITE_ONCE(status->report_found, true);
-   361		WRITE_ONCE(status->sync_fault, sync);
-   362		kunit_put_resource(resource);
-   363	}
-   364	#endif /* IS_ENABLED(CONFIG_KUNIT) */
-   365	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook
