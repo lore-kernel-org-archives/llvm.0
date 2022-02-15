@@ -1,48 +1,27 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DED21B85
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 23:05:59 +0000 (UTC)
-Received: by mail-pj1-f42.google.com with SMTP id r64-20020a17090a43c600b001b8854e682eso725663pjg.0
-        for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 15:05:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xFoXp1iXxwPnqPJm6+R4iAU7d160QC7MYGNnmZh/iBg=;
-        b=kQ3XkCI8aIjA5Ugam7/F4NKdZ3ib0Caocmpb4cMY+oXEk7UdngLyy7C5ZthE2yi4T+
-         8ancU/wgUoU8Ie/JRkBYI1vQi5P7ZRB8cOA+jrBJRKXuxHUy9R1SJCWzN2TK/GFlCF5V
-         XSHRhRkKiZFOBTRHm3pDqNPDRTvyKEPS1YWEU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xFoXp1iXxwPnqPJm6+R4iAU7d160QC7MYGNnmZh/iBg=;
-        b=SDm13wPk+4tOySpev1DIFLT9tsAhg0gWspyOnWAbreR1D36aafT+cFWwWk1FSuew3L
-         0qn99gKuFBCbwENAo4i8jwYt6F3FSXb3sdEGJQBV2oYd68GHya8KAZD4AJBvHfjBEVdV
-         omh98+pgNP4/HWkE93vhd5y75hpP9RXFvXCTch0A5w5/Hd4efXWk61xS/rMtxsJTF777
-         Lo10Z+2LcLIxXKeVNZyu8CLdYxoEsVgbGZiYXnb6sBSV31ToKLKkwpk8zpiT8mqW6j7g
-         yYpEYBXOa8Ldm61stsZf/LQqJ4nlbXdktarK6sZfiBhqeoviNrSmNNlL41ZKFBxhdkjn
-         DMDw==
-X-Gm-Message-State: AOAM532r5SqzwnhIEi1p+Y2Ip58FutxmmB2qgYsPoLb9yfGvF2PMBgvy
-	/zIfFNxEKd9bclINiW4xflndQg==
-X-Google-Smtp-Source: ABdhPJxpn8JTzN/X/F3Jqc5MxaE4ad0yPJLGCRgLTY9lFi2ex5Wt3LFUet9W6MXnAIXxEQ2uWDtQUQ==
-X-Received: by 2002:a17:902:cf07:: with SMTP id i7mr1278462plg.137.1644966359102;
-        Tue, 15 Feb 2022 15:05:59 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id pj8sm9590566pjb.54.2022.02.15.15.05.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 15:05:58 -0800 (PST)
-Date: Tue, 15 Feb 2022 15:05:57 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>, X86 ML <x86@kernel.org>,
-	hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
-	andrew.cooper3@citrix.com, LKML <linux-kernel@vger.kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2E91B8B
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 23:38:36 +0000 (UTC)
+Received: (Authenticated sender: joao@overdrivepizza.com)
+	by mail.gandi.net (Postfix) with ESMTPA id 3EEEF240004;
+	Tue, 15 Feb 2022 23:38:33 +0000 (UTC)
+Precedence: bulk
+X-Mailing-List: llvm@lists.linux.dev
+List-Id: <llvm.lists.linux.dev>
+List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
+List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Date: Tue, 15 Feb 2022 15:38:33 -0800
+From: Joao Moreira <joao@overdrivepizza.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen
+ <samitolvanen@google.com>, X86 ML <x86@kernel.org>, hjl.tools@gmail.com,
+ Josh Poimboeuf <jpoimboe@redhat.com>, andrew.cooper3@citrix.com, LKML
+ <linux-kernel@vger.kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ llvm@lists.linux.dev
 Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
-Message-ID: <202202151503.91E9B76B@keescook>
+In-Reply-To: <202202151503.91E9B76B@keescook>
 References: <202202081541.900F9E1B@keescook>
  <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
  <202202082003.FA77867@keescook>
@@ -53,74 +32,31 @@ References: <202202081541.900F9E1B@keescook>
  <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
  <202202151129.1A5C5FE42@keescook>
  <20220215210550.GD23216@worktop.programming.kicks-ass.net>
-Precedence: bulk
-X-Mailing-List: llvm@lists.linux.dev
-List-Id: <llvm.lists.linux.dev>
-List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
-List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220215210550.GD23216@worktop.programming.kicks-ass.net>
+ <202202151503.91E9B76B@keescook>
+Message-ID: <4553dfb68285a686737969e117bf48cc@overdrivepizza.com>
+X-Sender: joao@overdrivepizza.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 15, 2022 at 10:05:50PM +0100, Peter Zijlstra wrote:
-> On Tue, Feb 15, 2022 at 12:03:12PM -0800, Kees Cook wrote:
-> > On Tue, Feb 15, 2022 at 08:56:03AM -0800, Sami Tolvanen wrote:
-> > > On Mon, Feb 14, 2022 at 2:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > On Mon, Feb 14, 2022 at 01:38:18PM -0800, Sami Tolvanen wrote:
-> > > > > I'm fine with adding a trap mode that's used by default, but having
-> > > > > more helpful diagnostics when something fails is useful even in
-> > > > > production systems in my experience. This change results in a vmlinux
-> > > > > that's another 0.92% smaller.
-> > > >
-> > > > You can easily have the exception generate a nice warning, you can even
-> > > > have it continue. You really don't need a call for that.
-> > > 
-> > > Sure, but wouldn't that require us to generate something like
-> > > __bug_table, so we know where the CFI specific traps are?
-> > 
-> > It also means the trap handler needs to do a bunch of instruction
-> > decoding to find the address that was going to be jumped to, etc.
+>> 
+>> Mostly so that we can deduce the address of the trap from the 
+>> retpoline
+>> site, also the above has a fairly high chance of using jcc.d32 which 
+>> is
+>> actually larger than jcc.d8+ud2.
 > 
-> arch/x86/kernel/alternative.c:apply_retpolines() has all that, since we
-> need to to know that to re-write the thunk-call.
-
-Ah, okay, well that makes things easier. :)
-
-> > > > > In this case the function has two indirect calls and Clang seems to
-> > > > > prefer to emit just one ud2.
-> > > >
-> > > > That will not allow you to recover from the exception. UD2 is not an
-> > > > unconditional fail. It should have an out-going edge in this case too.
-> > > 
-> > > Yes, CFI failures are not recoverable in that code. In fact, LLVM
-> > > assumes that the llvm.trap intrinsic (i.e. ud2) never returns, but I
-> > > suppose we could just use an int3 instead. I assume that's sufficient
-> > > to stop speculation?
-> > 
-> > Peter, is there a reason you want things in the specific order of:
-> > 
-> > cmp, je-to-call, trap, call
-> > 
-> > Isn't it more run-time efficient to have an out-of-line failure of
-> > the form:
-> > 
-> > cmp, jne-to-trap, call, ...code..., trap, jmp-to-call
-> > 
-> > I thought the static label stuff allowed the "default out of line"
-> > option, as far as pessimizing certain states, etc? The former is certainly
-> > code-size smaller, though, yes, but doesn't it waste space in the cache
-> > line for the unlikely case, etc?
+> Ah, yeah, that's an interesting point.
 > 
-> Mostly so that we can deduce the address of the trap from the retpoline
-> site, also the above has a fairly high chance of using jcc.d32 which is
-> actually larger than jcc.d8+ud2.
+> Still, I worry about finding ways to convinces Clang to emit precisely
+> cmp/je/trap/call, but I guess we'll catch it immediately if it doesn't.
+> :P
 
-Ah, yeah, that's an interesting point.
+This can probably be done more easily/precisely if implemented directly
+in the compiler's arch-specific backend. At least for x86 it wasn't a
+hassle to emit a defined sequence of instructions in the past. The price
+is that it will require a pass specific to each supported architecture,
+but I guess this isn't that bad.
 
-Still, I worry about finding ways to convinces Clang to emit precisely
-cmp/je/trap/call, but I guess we'll catch it immediately if it doesn't.
-:P
-
--- 
-Kees Cook
+Perhaps this is discussion for a different mailing list, idk... but
+just pointing that it is not a huge wall.
