@@ -1,99 +1,130 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49EF7C
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 19:10:41 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id j15so15879493lfe.11
-        for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 11:10:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WMFpeHH/2LlihF+kPrm9P2QAiW9s4yup6CA8c8djDKc=;
-        b=Q7Fza7uT9MzvDrNjzgOKE/3nryb9/bWyOoCtZ+VCeySA1EtuNAXGDqISCPSRBOJspw
-         g7Yx+kYLhYqc+5XQGELlTT7ExTn1f1mhnG9Z3ubty2EJhwKx3+jDHQPAH3zrYGnWfYdO
-         1Or7ZqiSrs2230fVtFM6L1529Vg7oGeXKKBOvjK1fUj9ihfPGNp08tdP85lBXZH+vZwx
-         SnDKT7G/28RfcEM8rszaV00cy4kmqPgk7c4o7rE8TL+/aS/l++IUvyd+WeHd4WHSF8P6
-         x5WmsIejkZc6/1+KdpdO7V8DII7hNzO1rqf3C28046NwRgqyJH0wHjotNvGcrMhnFF8+
-         PnFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WMFpeHH/2LlihF+kPrm9P2QAiW9s4yup6CA8c8djDKc=;
-        b=zWwQlAX/tMB7UQSD956lp0F4rPE1BCUh3Yow0XYdU7B+Ny95EMpibnFTiMkHElm/N3
-         1kTR4Op9TVuLL1RGTU+NHyuD/pde5Uadg7nqbvTwAJS5OhMYROnnguLzIf7iSL8fSe6B
-         +jc7mBteuroBRh9/5u8u0w0Mak/oOwxYU+X8cf+GEqRW3amRcaiWqPIV/jzvbbdDbQfx
-         qpjg6QLRvFZPaOg+sC40w76lhMy45xtfWtToN0/HDcWR/8wx32M0p9DyE4XvUD+piteO
-         EikxJKaNVp6xRKiDpeCL3HRyIK9d6nn111SuneGoMWuURgwOIRoT7P4lF/EBBJ6JURjJ
-         udvA==
-X-Gm-Message-State: AOAM530++bMVIwjNg/IiDhkmFH42MlWmx6zNrygGBPOe7zvujkT4rHzs
-	6ddZ14kBg68RoBLXa1ijheTVSjwn3iA2nwD+lL5bYw==
-X-Google-Smtp-Source: ABdhPJyaSWbdMiG2FSKsMdDp4SYE6wwV2PmswU3VGZUUZh2mvxF1Xr0MrClFP7EQq8zdXlrgsOaLyKQpQomEYSOYCTg=
-X-Received: by 2002:ac2:4e10:: with SMTP id e16mr406714lfr.444.1644952239569;
- Tue, 15 Feb 2022 11:10:39 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1DC7C
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 19:14:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644952465; x=1676488465;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S3nwh1DCk/7yVwVXELV3S4r9vMlV9xxl4V3q4If14Vo=;
+  b=XQMRL1/Y0CiATnOdWr57Dwmayy32n5cWpk9DwbXnzzLuIRNFH9PWgOrR
+   loNv+BRz5zRgYgmwRtibdoC/q/wMk7Fyf2qb8smxvYJYj/K3uSebsVlD/
+   ejwQgePrZKSZxlEnjy2mVQj5PTM0QdNwQhZ1ngYdEwLfdi3UT637lI1fz
+   Jl3Xn6oFY/uGDlhlAu57ACiLFmSuiP2IaImGS0AGzoZrux9igeACiLIO4
+   uEhsisPkDP+EP9IONVcKboV1CK8YUnLB9pbrHukFoRw5u5LaZKnVGyWbk
+   Cz9WexiOSzPGN+B3nzPFNmItTQv0HhFlWpwCdZzNJGBU7ra52Wh9DRvK4
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="275010487"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="275010487"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 11:14:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="497399839"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 11:14:03 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nK3H0-0009xK-Rq; Tue, 15 Feb 2022 19:14:02 +0000
+Date: Wed, 16 Feb 2022 03:13:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [broonie-spi:for-next 59/66] drivers/spi/spi-amd.c:296:21: warning:
+ cast to smaller integer type 'enum amd_spi_versions' from 'const void *'
+Message-ID: <202202160331.TbQABF6V-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYtR+E52X-ucmvXYG5-9v0q2UEXQsML=nkQRnSf7TwXYqw@mail.gmail.com>
- <Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161>
-In-Reply-To: <Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 15 Feb 2022 11:10:28 -0800
-Message-ID: <CAKwvOdmXvC-E_9PSOZVQDDx_UCSadxhF4d9c7qpJPmeFLY_JEA@mail.gmail.com>
-Subject: Re: arm64: clang-nightly: net/ipv4/tcp_input.c: clang: error: clang
- frontend command failed with exit code 139
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Feb 14, 2022 at 7:35 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Naresh,
->
-> On Mon, Feb 14, 2022 at 12:27:17PM +0530, Naresh Kamboju wrote:
-> > On Linux mainline master branch with arm64 clang-nightly build failed
-> > due to following errors and warnings.
-> >
-> > make --silent --keep-going --jobs=8
-> > O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM=1 LLVM_IAS=1
-> > ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
-> > CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- HOSTCC=clang CC=clang
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+head:   db91535d770445e1b61f6f7e4bdbd8cce45440c0
+commit: 209043554915d7c51ac112a668ad1a255e1bea61 [59/66] spi: amd: Add support for version AMDI0062
+config: x86_64-randconfig-a005-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160331.TbQABF6V-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/commit/?id=209043554915d7c51ac112a668ad1a255e1bea61
+        git remote add broonie-spi https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+        git fetch --no-tags broonie-spi for-next
+        git checkout 209043554915d7c51ac112a668ad1a255e1bea61
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
 
-Thanks for the report. Thanks Nathan for submitting reverts.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Naresh, as a heads up, the above command line can be simplified a
-little bit (particularly for newer kernel branches)
+All warnings (new ones prefixed by >>):
 
-LLVM_IAS=1 is implied by LLVM=1 as of v5.15-rc1 via
-commit f12b034afeb3 ("scripts/Makefile.clang: default to LLVM_IAS=1").
+>> drivers/spi/spi-amd.c:296:21: warning: cast to smaller integer type 'enum amd_spi_versions' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           amd_spi->version = (enum amd_spi_versions) device_get_match_data(dev);
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-CROSS_COMPILE is no longer necessary when building with LLVM=1 as of
-v5.15-rc1 via:
-commit 231ad7f409f1 ("Makefile: infer --target from ARCH for CC=clang")
 
-There is no need for CROSS_COMPILE_COMPAT as of v5.16-rc1 via
-commit 3e6f8d1fa184 ("arm64: vdso32: require CROSS_COMPILE_COMPAT for gcc+bfd")
-when LLVM=1 is set.
+vim +296 drivers/spi/spi-amd.c
 
-HOSTCC and CC are implied by LLVM=1 as of
-commit a0d1c951ef08 ("kbuild: support LLVM=1 to switch the default
-tools to Clang/LLVM")
-v5.7-rc1.
+   272	
+   273	static int amd_spi_probe(struct platform_device *pdev)
+   274	{
+   275		struct device *dev = &pdev->dev;
+   276		struct spi_master *master;
+   277		struct amd_spi *amd_spi;
+   278		int err = 0;
+   279	
+   280		/* Allocate storage for spi_master and driver private data */
+   281		master = spi_alloc_master(dev, sizeof(struct amd_spi));
+   282		if (!master) {
+   283			dev_err(dev, "Error allocating SPI master\n");
+   284			return -ENOMEM;
+   285		}
+   286	
+   287		amd_spi = spi_master_get_devdata(master);
+   288		amd_spi->io_remap_addr = devm_platform_ioremap_resource(pdev, 0);
+   289		if (IS_ERR(amd_spi->io_remap_addr)) {
+   290			err = PTR_ERR(amd_spi->io_remap_addr);
+   291			dev_err(dev, "error %d ioremap of SPI registers failed\n", err);
+   292			goto err_free_master;
+   293		}
+   294		dev_dbg(dev, "io_remap_address: %p\n", amd_spi->io_remap_addr);
+   295	
+ > 296		amd_spi->version = (enum amd_spi_versions) device_get_match_data(dev);
+   297	
+   298		/* Initialize the spi_master fields */
+   299		master->bus_num = 0;
+   300		master->num_chipselect = 4;
+   301		master->mode_bits = 0;
+   302		master->flags = SPI_MASTER_HALF_DUPLEX;
+   303		master->setup = amd_spi_master_setup;
+   304		master->transfer_one_message = amd_spi_master_transfer;
+   305	
+   306		/* Register the controller with SPI framework */
+   307		err = devm_spi_register_master(dev, master);
+   308		if (err) {
+   309			dev_err(dev, "error %d registering SPI controller\n", err);
+   310			goto err_free_master;
+   311		}
+   312	
+   313		return 0;
+   314	
+   315	err_free_master:
+   316		spi_master_put(master);
+   317	
+   318		return err;
+   319	}
+   320	
 
-So the above make invocation could be trimmed down to simply:
-
-$ make --silent --keep-going --jobs=8 \
-O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM=1
-
-We might need to discuss further with tuxbuild folks, since I think a
-few of those are set implicitly; I would prefer if they needed to be
-set explicitly in order to properly test them being _unspecified_ in
-our CI.
--- 
-Thanks,
-~Nick Desaulniers
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
