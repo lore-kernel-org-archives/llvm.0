@@ -1,43 +1,43 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42670186C
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 21:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uvMluQdN0GSPuEJBcDu2YtcMnFGhEbHkw4SETZERvO0=; b=Rt5N2dtwUV7yCxceA3dKBG7Jec
-	DN0oXg1X/475ee26Wl+i80jXWzL36PEZHfWtFuolqqKIAmfheMVxDPoaAdPrZIc7XRpqmyJJWIcfn
-	Tc5jGPiry2KXhNSK++FitBh3laLYzLUOq1JapJoodBvcjrJrs1xQpBrmXc8vlkso96NNzKlQ6NDOn
-	PdhT9FvvKCy+vJTylcgyFZ3YEGMYOWjhCkvcIPMbHsUCoxtXCGTNCzjmTrFjOBVGCVZwUiU8svxrl
-	Yp51OVSq4cQvGa8BRlbEbg8C4oJYGzALwc2ucGwqleaBJyBq4Mkx4VqAHi3fedOUaQbuNZPxSRR1R
-	QhMyXUUg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nK51D-00EB2o-Ti; Tue, 15 Feb 2022 21:05:52 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 6B154987956; Tue, 15 Feb 2022 22:05:50 +0100 (CET)
-Date: Tue, 15 Feb 2022 22:05:50 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>, X86 ML <x86@kernel.org>,
-	hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
-	andrew.cooper3@citrix.com, LKML <linux-kernel@vger.kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
-Message-ID: <20220215210550.GD23216@worktop.programming.kicks-ass.net>
-References: <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
- <202202081541.900F9E1B@keescook>
- <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
- <202202082003.FA77867@keescook>
- <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com>
- <20220211133803.GV23216@worktop.programming.kicks-ass.net>
- <CABCJKuciRBnz4JxBDJC=+kuJn4pU2uBkWPBov7-VL2o2j0F4SA@mail.gmail.com>
- <20220214222550.GB23216@worktop.programming.kicks-ass.net>
- <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
- <202202151129.1A5C5FE42@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B9C1B63
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 21:57:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644962230; x=1676498230;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m6XSI0G98RPdQqcOvLzHw4i5erJFqqKLtNysZ8EGoWc=;
+  b=CsFT9oahb3Hy1J/YOFApzrhwmzqydkeG4HEJ16++9vGZMdxuw2/sTgmP
+   NrmmTCZ2HkSMjIZpN5aDNV8K7RaHrb6Up91KywTU6mC06lPCYsw5TmN0t
+   5nzHaHiC4Kap7fj21P1FgF3tPgSeuBo1r1GRrye7dsyZXgojDI2vA8HpR
+   w2hFjqlijjdylogoaczIhgJ93aLvup0KwsqgI4t8l6CQ/qIzAG+2QRV6Q
+   AN3pnt+L2lkKGlW6icXSPdDPoCHNLLJDJx7+rStI502RL+bHB3HrNaZ5U
+   iwx78/L2awM9Nx8Yk34Axrc3Vc3WN5Txpz+BMMNtxyYiJ6vsJeITacwgV
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="237867147"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="237867147"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 13:57:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="497587232"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 13:57:08 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nK5oq-000A4q-6W; Tue, 15 Feb 2022 21:57:08 +0000
+Date: Wed, 16 Feb 2022 05:56:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 9/43]
+ fs/9p/vfs_inode.c:258:7: error: no member named 'wsize' in 'struct
+ netfs_i_context'
+Message-ID: <202202160504.GlQpVHFc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,54 +46,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202202151129.1A5C5FE42@keescook>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Feb 15, 2022 at 12:03:12PM -0800, Kees Cook wrote:
-> On Tue, Feb 15, 2022 at 08:56:03AM -0800, Sami Tolvanen wrote:
-> > On Mon, Feb 14, 2022 at 2:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > On Mon, Feb 14, 2022 at 01:38:18PM -0800, Sami Tolvanen wrote:
-> > > > I'm fine with adding a trap mode that's used by default, but having
-> > > > more helpful diagnostics when something fails is useful even in
-> > > > production systems in my experience. This change results in a vmlinux
-> > > > that's another 0.92% smaller.
-> > >
-> > > You can easily have the exception generate a nice warning, you can even
-> > > have it continue. You really don't need a call for that.
-> > 
-> > Sure, but wouldn't that require us to generate something like
-> > __bug_table, so we know where the CFI specific traps are?
-> 
-> It also means the trap handler needs to do a bunch of instruction
-> decoding to find the address that was going to be jumped to, etc.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   d40df0841e9f8de3713a19dd3f0ba283c860cb93
+commit: 90870fcbed9794a03bee7aba8195e8c43e46e1dd [9/43] netfs: Add a netfs inode context
+config: hexagon-randconfig-r034-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160504.GlQpVHFc-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/90870fcbed9794a03bee7aba8195e8c43e46e1dd
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 90870fcbed9794a03bee7aba8195e8c43e46e1dd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/9p/
 
-arch/x86/kernel/alternative.c:apply_retpolines() has all that, since we
-need to to know that to re-write the thunk-call.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > > > In this case the function has two indirect calls and Clang seems to
-> > > > prefer to emit just one ud2.
-> > >
-> > > That will not allow you to recover from the exception. UD2 is not an
-> > > unconditional fail. It should have an out-going edge in this case too.
-> > 
-> > Yes, CFI failures are not recoverable in that code. In fact, LLVM
-> > assumes that the llvm.trap intrinsic (i.e. ud2) never returns, but I
-> > suppose we could just use an int3 instead. I assume that's sufficient
-> > to stop speculation?
-> 
-> Peter, is there a reason you want things in the specific order of:
-> 
-> cmp, je-to-call, trap, call
-> 
-> Isn't it more run-time efficient to have an out-of-line failure of
-> the form:
-> 
-> cmp, jne-to-trap, call, ...code..., trap, jmp-to-call
-> 
-> I thought the static label stuff allowed the "default out of line"
-> option, as far as pessimizing certain states, etc? The former is certainly
-> code-size smaller, though, yes, but doesn't it waste space in the cache
-> line for the unlikely case, etc?
+Note: the ammarfaizi2-block/dhowells/linux-fs/netfs-maple HEAD d40df0841e9f8de3713a19dd3f0ba283c860cb93 builds fine.
+      It only hurts bisectability.
 
-Mostly so that we can deduce the address of the trap from the retpoline
-site, also the above has a fairly high chance of using jcc.d32 which is
-actually larger than jcc.d8+ud2.
+All errors (new ones prefixed by >>):
+
+>> fs/9p/vfs_inode.c:258:7: error: no member named 'wsize' in 'struct netfs_i_context'
+           ctx->wsize = 1024 * 1024;
+           ~~~  ^
+   1 error generated.
+
+
+vim +258 fs/9p/vfs_inode.c
+
+   249	
+   250	/*
+   251	 * Set parameters for the netfs library
+   252	 */
+   253	static void v9fs_set_netfs_context(struct inode *inode)
+   254	{
+   255		struct netfs_i_context *ctx = netfs_i_context(inode);
+   256	
+   257		netfs_i_context_init(inode, &v9fs_req_ops);
+ > 258		ctx->wsize = 1024 * 1024;
+   259	}
+   260	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
