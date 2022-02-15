@@ -1,98 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E867C
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 18:52:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E49FC340EB;
-	Tue, 15 Feb 2022 18:52:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644951171;
-	bh=DFG0pRgxAXggFuC5nOBdDvexAUqfQBkCU3iOcuBDTLs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KD1kgcdAH5hIi1+tPUuj9hs1lQi/1mRkekyPB/HBDERBqSiPocLYx+7M+qFCRr1Nv
-	 82kimfILqAA5HyP4LXAoI1u6y7aKJriuVzXe0db2jwIz4FfIS2QUkAtBPyM4HMcsZx
-	 oYcxOeF2h1/9I52noM8DP7kJQ7hZnD4K613ltTs/egGEPU5xdWfD9gMkXa6mWBXsb/
-	 c2NOQcj+47/jdtoldgqMnRIu64DXzXzuhG6qEn5VHXsdU1U1qJRjitolMfLPTsFT6I
-	 9XVm7MPeOX/xaMSZ7Em4Gve1jd3myWH/D472ERvQsyHbTG2nieE9JZUzOPvrlLnVIQ
-	 J0gJ8+132x8kQ==
-Date: Tue, 15 Feb 2022 11:52:46 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Tong Zhang <ztong0001@gmail.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] drm/i915: fix build issue when using clang
-Message-ID: <Ygv2fvIKiM9w+aSb@dev-arch.archlinux-ax161>
-References: <YglQW7gVNoRJ7QpQ@dev-arch.archlinux-ax161>
- <20220214195821.29809-1-ztong0001@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49EF7C
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 19:10:41 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id j15so15879493lfe.11
+        for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 11:10:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WMFpeHH/2LlihF+kPrm9P2QAiW9s4yup6CA8c8djDKc=;
+        b=Q7Fza7uT9MzvDrNjzgOKE/3nryb9/bWyOoCtZ+VCeySA1EtuNAXGDqISCPSRBOJspw
+         g7Yx+kYLhYqc+5XQGELlTT7ExTn1f1mhnG9Z3ubty2EJhwKx3+jDHQPAH3zrYGnWfYdO
+         1Or7ZqiSrs2230fVtFM6L1529Vg7oGeXKKBOvjK1fUj9ihfPGNp08tdP85lBXZH+vZwx
+         SnDKT7G/28RfcEM8rszaV00cy4kmqPgk7c4o7rE8TL+/aS/l++IUvyd+WeHd4WHSF8P6
+         x5WmsIejkZc6/1+KdpdO7V8DII7hNzO1rqf3C28046NwRgqyJH0wHjotNvGcrMhnFF8+
+         PnFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WMFpeHH/2LlihF+kPrm9P2QAiW9s4yup6CA8c8djDKc=;
+        b=zWwQlAX/tMB7UQSD956lp0F4rPE1BCUh3Yow0XYdU7B+Ny95EMpibnFTiMkHElm/N3
+         1kTR4Op9TVuLL1RGTU+NHyuD/pde5Uadg7nqbvTwAJS5OhMYROnnguLzIf7iSL8fSe6B
+         +jc7mBteuroBRh9/5u8u0w0Mak/oOwxYU+X8cf+GEqRW3amRcaiWqPIV/jzvbbdDbQfx
+         qpjg6QLRvFZPaOg+sC40w76lhMy45xtfWtToN0/HDcWR/8wx32M0p9DyE4XvUD+piteO
+         EikxJKaNVp6xRKiDpeCL3HRyIK9d6nn111SuneGoMWuURgwOIRoT7P4lF/EBBJ6JURjJ
+         udvA==
+X-Gm-Message-State: AOAM530++bMVIwjNg/IiDhkmFH42MlWmx6zNrygGBPOe7zvujkT4rHzs
+	6ddZ14kBg68RoBLXa1ijheTVSjwn3iA2nwD+lL5bYw==
+X-Google-Smtp-Source: ABdhPJyaSWbdMiG2FSKsMdDp4SYE6wwV2PmswU3VGZUUZh2mvxF1Xr0MrClFP7EQq8zdXlrgsOaLyKQpQomEYSOYCTg=
+X-Received: by 2002:ac2:4e10:: with SMTP id e16mr406714lfr.444.1644952239569;
+ Tue, 15 Feb 2022 11:10:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214195821.29809-1-ztong0001@gmail.com>
+References: <CA+G9fYtR+E52X-ucmvXYG5-9v0q2UEXQsML=nkQRnSf7TwXYqw@mail.gmail.com>
+ <Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161>
+In-Reply-To: <Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 15 Feb 2022 11:10:28 -0800
+Message-ID: <CAKwvOdmXvC-E_9PSOZVQDDx_UCSadxhF4d9c7qpJPmeFLY_JEA@mail.gmail.com>
+Subject: Re: arm64: clang-nightly: net/ipv4/tcp_input.c: clang: error: clang
+ frontend command failed with exit code 139
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 14, 2022 at 11:58:20AM -0800, Tong Zhang wrote:
-> drm/i915 adds some extra cflags, namely -Wall, which causes
-> instances of -Wformat-security to appear when building with clang, even
-> though this warning is turned off kernel-wide in the main Makefile:
-> 
-> > drivers/gpu/drm/i915/gt/intel_gt.c:983:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-> >         GEM_TRACE("ERROR\n");
-> >         ^~~~~~~~~~~~~~~~~~~~
-> > ./drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
-> >  #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-> >                        ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > ./include/linux/kernel.h:369:3: note: expanded from macro 'trace_printk'
-> >                 do_trace_printk(fmt, ##__VA_ARGS__);    \
-> >                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > ./include/linux/kernel.h:383:30: note: expanded from macro 'do_trace_printk'
-> >                 __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-> >                                           ^~~~~~~~~~~~~~~~
-> >drivers/gpu/drm/i915/gt/intel_gt.c:983:2: note: treat the string as an argument to avoid this
-> 
-> This does not happen with GCC because it does not enable
-> -Wformat-security with -Wall. Disable -Wformat-security within the i915
-> Makefile so that these warnings do not show up with clang.
-> 
-> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+On Mon, Feb 14, 2022 at 7:35 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Naresh,
+>
+> On Mon, Feb 14, 2022 at 12:27:17PM +0530, Naresh Kamboju wrote:
+> > On Linux mainline master branch with arm64 clang-nightly build failed
+> > due to following errors and warnings.
+> >
+> > make --silent --keep-going --jobs=8
+> > O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM=1 LLVM_IAS=1
+> > ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
+> > CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- HOSTCC=clang CC=clang
 
-Given this is not enabled for GCC and it is disabled in the main
-Makefile:
+Thanks for the report. Thanks Nathan for submitting reverts.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Naresh, as a heads up, the above command line can be simplified a
+little bit (particularly for newer kernel branches)
 
-Additionally, it seems like trace_printk() is designed to be able to
-take a string literal without a format argument, so this should be fine.
+LLVM_IAS=1 is implied by LLVM=1 as of v5.15-rc1 via
+commit f12b034afeb3 ("scripts/Makefile.clang: default to LLVM_IAS=1").
 
-> ---
-> 
-> v2: revise commit message
-> 
->  drivers/gpu/drm/i915/Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
-> index 1b62b9f65196..c04e05a3d39f 100644
-> --- a/drivers/gpu/drm/i915/Makefile
-> +++ b/drivers/gpu/drm/i915/Makefile
-> @@ -13,6 +13,7 @@
->  # will most likely get a sudden build breakage... Hopefully we will fix
->  # new warnings before CI updates!
->  subdir-ccflags-y := -Wall -Wextra
-> +subdir-ccflags-y += -Wno-format-security
->  subdir-ccflags-y += -Wno-unused-parameter
->  subdir-ccflags-y += -Wno-type-limits
->  subdir-ccflags-y += -Wno-missing-field-initializers
-> -- 
-> 2.25.1
-> 
-> 
+CROSS_COMPILE is no longer necessary when building with LLVM=1 as of
+v5.15-rc1 via:
+commit 231ad7f409f1 ("Makefile: infer --target from ARCH for CC=clang")
+
+There is no need for CROSS_COMPILE_COMPAT as of v5.16-rc1 via
+commit 3e6f8d1fa184 ("arm64: vdso32: require CROSS_COMPILE_COMPAT for gcc+bfd")
+when LLVM=1 is set.
+
+HOSTCC and CC are implied by LLVM=1 as of
+commit a0d1c951ef08 ("kbuild: support LLVM=1 to switch the default
+tools to Clang/LLVM")
+v5.7-rc1.
+
+So the above make invocation could be trimmed down to simply:
+
+$ make --silent --keep-going --jobs=8 \
+O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM=1
+
+We might need to discuss further with tuxbuild folks, since I think a
+few of those are set implicitly; I would prefer if they needed to be
+set explicitly in order to properly test them being _unspecified_ in
+our CI.
+-- 
+Thanks,
+~Nick Desaulniers
