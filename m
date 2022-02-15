@@ -1,221 +1,97 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD29186C
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 20:49:52 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id j17-20020a25ec11000000b0061dabf74012so43249949ybh.15
-        for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 12:49:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=BSIelYmbPm1PuRZo7j2Bm2YpHBp5n2KMNsW2+koRF9o=;
-        b=OmOAzde3hQuPTuUUuGTkKQgKqvdyaE/pxNZKEZAB5iLQVTOdo20BMzFWWZZl5ZbEuO
-         sd1n997b8ys5m/fBIWHZk3R3yVqnEhs3ac+tNR/QL3TbIKDeDc62lEtuIZ+MTihDeNt+
-         /uMoEIQYhieWPpxjXMGJrySmFhr6E2Pz2jG4b9ZqxnGNp3uMfAKLGZPE310w3JihB6Ib
-         OYleI1I1Od0cR5gz1VdeuTIKI4KRWWERhthYNiBNlzzfeN6M5islxffXtHWTDYPL/OBP
-         oNw/HgJ2MVEPIIkZWMx+JbBuobi/Fc76/A58iX0Jry+a8W5t3vfGgWIhQw5UpJEYFWQ0
-         sjpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=BSIelYmbPm1PuRZo7j2Bm2YpHBp5n2KMNsW2+koRF9o=;
-        b=XhlSR1Nbn9gAg2HJ5J1vZNFXBDkRBVCI0ZlKIQpdHmK/gDYGpx7qS5KR4nOY6NvoVd
-         e5pI/TS6TtbgwDUcjiJ0XtpGqvd4BJT9nwGIbq5SRzmji/oJfWVTPgHE1QyFxfp+rYQ5
-         1QAsqGBx6fSubZ4LlIepMwrkBA1VjL1wiqzvJpyt/zdmVC8hIAkr5Z8sIF/LAHkimy1T
-         dy56pfca/SV28F1Z++8TzvR3jmM89TlYFD5VylbDPKoTGNYR2GVJ5zcTb2tGhQL7vcyB
-         ftnBMAie+ud5bBIAJ5bcRjx1sV96OoiVfQ8N55HwL+c7QgReNoXNteIX3Nj5R/vebNFw
-         9b5g==
-X-Gm-Message-State: AOAM531dCj5Dp0xTpJvoQoc8m/Bp0rhZ4n9s+FL+OklRKseY9ce/+m9X
-	1VxwfyL5DSx/ZOXXTf2DLek5DR0JJJQctLaS+lk=
-X-Google-Smtp-Source: ABdhPJzP9ryL032NQtZ90yOl34xGEV9EIKEu/dsnCdcGdVufhTNhFh8paAmrE7BnYvSQ/nYsBzO5GcuJqvTablHmSFk=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:dfad:458b:9fb2:b77a])
- (user=ndesaulniers job=sendgmr) by 2002:a81:c501:: with SMTP id
- k1mr756814ywi.116.1644958191153; Tue, 15 Feb 2022 12:49:51 -0800 (PST)
-Date: Tue, 15 Feb 2022 12:49:47 -0800
-Message-Id: <20220215204947.1719516-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76592186C
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 20:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=STnj2ybwZv05qCjMTqaXWuXN0Sm5uRuBvdpB6J67Jg0=; b=o++5p4UyKYULUAc9XC40okIKxv
+	p9pPp+HvcJo46VATvElhowtSi+6FB7H2feZPLxDPHk1AkWihA23qMIj4IsNq9zaUTEt8913L+IM4l
+	nFS/JGmwP1+I/zScTHdItmu7EIiDyHDpqRr6bai9qTIniHz5b5AwLu0ksN/owOGXTe0RmDtnyT0M2
+	Yz8euY75y/El0mSE0isb+8qiguE50bRr92wSRlFUqUhkagz9flQTo2aqXRZL2ewrEVZDtu5W8PtkN
+	Js0Lx/dWZE7xNmwOzqAv9YOGDgjwsF3VvSnuH5L4Lc9ZHw7M404pCUPyJrlpMbDOcwqRkCZ9F/ee0
+	seBCiFgA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nK4pb-00ABAC-Jx; Tue, 15 Feb 2022 20:53:52 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id EC34B987956; Tue, 15 Feb 2022 21:53:49 +0100 (CET)
+Date: Tue, 15 Feb 2022 21:53:49 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Joao Moreira <joao@overdrivepizza.com>,
+	Kees Cook <keescook@chromium.org>, X86 ML <x86@kernel.org>,
+	hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
+	andrew.cooper3@citrix.com, LKML <linux-kernel@vger.kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+Message-ID: <20220215205349.GC23216@worktop.programming.kicks-ass.net>
+References: <20211122170805.338489412@infradead.org>
+ <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
+ <202202081541.900F9E1B@keescook>
+ <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
+ <202202082003.FA77867@keescook>
+ <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com>
+ <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+ <CABCJKuciRBnz4JxBDJC=+kuJn4pU2uBkWPBov7-VL2o2j0F4SA@mail.gmail.com>
+ <20220214222550.GB23216@worktop.programming.kicks-ass.net>
+ <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1644958187; l=6237;
- s=20211004; h=from:subject; bh=KRPwLsTNNlHCWxCWXknX1SGak/+wjdb7pX5i8pARYhc=;
- b=MLcVqidAwW+ao1oHaVwGiibzFPdmdQSKX4iTNyUvI6u4uHIfv8BAO/pUH3DozcXFBD7mf8xaLcnQ
- OQKIrOg2BJTK0EvgDF4JpA04IH8tfxy/EXcxeGbLFrXi3Wg8qg0f
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH] Documentation/llvm: refresh docs for LLVM=1
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Yujie Liu <yujie.liu@intel.com>, 
-	Philip Li <philip.li@intel.com>, julie.du@intel.com, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Michal Marek <michal.lkml@markovi.net>, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
 
-Refresh the docs for 2022:
-* add link to Chimera Linux.
-* add Quick Start section pointing out that LLVM=1 is the simple
-  recommended method.
-* Re-order the sections on Clang and Cross Compiling to come after the
-  section on LLVM utilities. I think the documentation flows better this
-  way.
-* Add note about LLVM=1 to Omitting CROSS_COMPILE section.
-* Change note in Supported Architectures from discussing CC=clang vs.
-  LLVM=1 to discussion LLVM=1 vs. LLVM_IAS=0.
-* Update make command column of support architecture table; we now
-  support LLVM=1 everywhere; just some more work to get ARCH=s390
-  assembling with clang.
-* Word wrap a few columns over 80 lines.
+On Tue, Feb 15, 2022 at 08:56:03AM -0800, Sami Tolvanen wrote:
+> On Mon, Feb 14, 2022 at 2:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > On Mon, Feb 14, 2022 at 01:38:18PM -0800, Sami Tolvanen wrote:
+> > > I'm fine with adding a trap mode that's used by default, but having
+> > > more helpful diagnostics when something fails is useful even in
+> > > production systems in my experience. This change results in a vmlinux
+> > > that's another 0.92% smaller.
+> >
+> > You can easily have the exception generate a nice warning, you can even
+> > have it continue. You really don't need a call for that.
+> 
+> Sure, but wouldn't that require us to generate something like
+> __bug_table, so we know where the CFI specific traps are?
 
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- Documentation/kbuild/llvm.rst | 82 +++++++++++++++++++++--------------
- 1 file changed, 50 insertions(+), 32 deletions(-)
+Yes, but since you're going to emit a retpoline, and objtool already
+generates a list of retpoline sites, we can abuse that. If the
+instruction after the trap is a retpoline site, we a CFI fail.
 
-diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-index d32616891dcf..7f52cde70bc7 100644
---- a/Documentation/kbuild/llvm.rst
-+++ b/Documentation/kbuild/llvm.rst
-@@ -15,36 +15,27 @@ such as GCC and binutils. Ongoing work has allowed for `Clang
- <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
- used as viable substitutes. Distributions such as `Android
- <https://www.android.com/>`_, `ChromeOS
--<https://www.chromium.org/chromium-os>`_, and `OpenMandriva
--<https://www.openmandriva.org/>`_ use Clang built kernels.  `LLVM is a
-+<https://www.chromium.org/chromium-os>`_, `OpenMandriva
-+<https://www.openmandriva.org/>`_, and `Chimera Linux
-+<https://chimera-linux.org/>`_ use Clang built kernels.  `LLVM is a
- collection of toolchain components implemented in terms of C++ objects
- <https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM that
- supports C and the GNU C extensions required by the kernel, and is pronounced
- "klang," not "see-lang."
- 
--Clang
-------
-+Quick Start
-+-----------
-+::
- 
--The compiler used can be swapped out via ``CC=`` command line argument to ``make``.
--``CC=`` should be set when selecting a config and during a build. ::
-+	make LLVM=1
- 
--	make CC=clang defconfig
-+for native builds or
- 
--	make CC=clang
-+or ::
- 
--Cross Compiling
-----------------
-+	ARCH=arm64 make LLVM=1
- 
--A single Clang compiler binary will typically contain all supported backends,
--which can help simplify cross compiling. ::
--
--	make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu-
--
--``CROSS_COMPILE`` is not used to prefix the Clang compiler binary, instead
--``CROSS_COMPILE`` is used to set a command line flag: ``--target=<triple>``. For
--example: ::
--
--	clang --target=aarch64-linux-gnu foo.c
-+for cross compiling.
- 
- LLVM Utilities
- --------------
-@@ -63,6 +54,32 @@ They can be enabled individually. The full list of the parameters: ::
- The integrated assembler is enabled by default. You can pass ``LLVM_IAS=0`` to
- disable it.
- 
-+Clang
-+-----
-+
-+The compiler used can be swapped out via ``CC=`` command line argument to
-+``make``.  ``CC=`` should be set when selecting a config and during a build.
-+``CC=clang`` is implied by ``LLVM=1``, but if it's desired to simply use clang
-+as the compiler for the target, then ``CC=`` is a quick substitute. ::
-+
-+	make CC=clang defconfig
-+
-+	make CC=clang
-+
-+Cross Compiling
-+---------------
-+
-+A single Clang compiler binary will typically contain all supported backends,
-+which can help simplify cross compiling. ::
-+
-+	make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu-
-+
-+``CROSS_COMPILE`` is not used to prefix the Clang compiler binary, instead
-+``CROSS_COMPILE`` is used to set a command line flag: ``--target=<triple>``.
-+For example: ::
-+
-+	clang --target=aarch64-linux-gnu foo.c
-+
- Omitting CROSS_COMPILE
- ----------------------
- 
-@@ -71,7 +88,8 @@ As explained above, ``CROSS_COMPILE`` is used to set ``--target=<triple>``.
- If ``CROSS_COMPILE`` is not specified, the ``--target=<triple>`` is inferred
- from ``ARCH``.
- 
--That means if you use only LLVM tools, ``CROSS_COMPILE`` becomes unnecessary.
-+That means if you use only LLVM tools via ``LLVM=1``, ``CROSS_COMPILE`` becomes
-+unnecessary.
- 
- For example, to cross-compile the arm64 kernel::
- 
-@@ -88,13 +106,13 @@ Supported Architectures
- LLVM does not target all of the architectures that Linux supports and
- just because a target is supported in LLVM does not mean that the kernel
- will build or work without any issues. Below is a general summary of
--architectures that currently work with ``CC=clang`` or ``LLVM=1``. Level
--of support corresponds to "S" values in the MAINTAINERS files. If an
--architecture is not present, it either means that LLVM does not target
--it or there are known issues. Using the latest stable version of LLVM or
--even the development tree will generally yield the best results.
--An architecture's ``defconfig`` is generally expected to work well,
--certain configurations may have problems that have not been uncovered
-+architectures that currently work with ``LLVM=1`` but may need the integrated
-+assembler disabled via ``LLVM_IAS=0``. Level of support corresponds to "S"
-+values in the MAINTAINERS files. If an architecture is not present, it either
-+means that LLVM does not target it or there are known issues. Using the latest
-+stable version of LLVM or even the development tree will generally yield the
-+best results.  An architecture's ``defconfig`` is generally expected to work
-+well, certain configurations may have problems that have not been uncovered
- yet. Bug reports are always welcome at the issue tracker below!
- 
- .. list-table::
-@@ -112,16 +130,16 @@ yet. Bug reports are always welcome at the issue tracker below!
-      - ``LLVM=1``
-    * - mips
-      - Maintained
--     - ``CC=clang``
-+     - ``LLVM=1``
-    * - powerpc
-      - Maintained
--     - ``CC=clang``
-+     - ``LLVM=1``
-    * - riscv
-      - Maintained
--     - ``CC=clang``
-+     - ``LLVM=1``
-    * - s390
-      - Maintained
--     - ``CC=clang``
-+     - ``LLVM=1 LLVM_IAS=0``
-    * - x86
-      - Supported
-      - ``LLVM=1``
+> > > In this case the function has two indirect calls and Clang seems to
+> > > prefer to emit just one ud2.
+> >
+> > That will not allow you to recover from the exception. UD2 is not an
+> > unconditional fail. It should have an out-going edge in this case too.
+> 
+> Yes, CFI failures are not recoverable in that code. In fact, LLVM
+> assumes that the llvm.trap intrinsic (i.e. ud2) never returns, but I
+> suppose we could just use an int3 instead. I assume that's sufficient
+> to stop speculation?
 
-base-commit: c5d9ae265b105d9a67575fb67bd4650a6fc08e25
--- 
-2.35.1.265.g69c8d7142f-goog
+It is. int3 is also smaller by one byte, but the exception is already
+fairly complicated, but I can see if we can make it work.
+
+> > Also, you really should add a CS prefix to the retpoline thunk call if
+> > you insist on using r11 (or any of the higher regs).
+> 
+> I actually didn't touch the retpoline thunk call, that's exactly the
+> code Clang normally generates.
+
+Yeah, and it needs help, also see:
+
+  https://lore.kernel.org/lkml/20211119165630.276205624@infradead.org/
+
+Specifically, clang needs to:
+
+ - CS prefix stuff the retpoline thunk call/jmp;
+ - stop doing conditional indirect tail-calls.
 
