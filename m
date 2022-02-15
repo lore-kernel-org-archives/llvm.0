@@ -1,68 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB881578
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 15:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 27493C340F2;
-	Tue, 15 Feb 2022 15:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014481578
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 15:27:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C3BC340F1;
+	Tue, 15 Feb 2022 15:27:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644937211;
-	bh=nGCeJwddwcrOgxUdguUA+7IGx/+e9mVPmupofSCfSOs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=m8K/c3AsmMzfRh2ZnGyzPqyCP/2bgN2mZTGR+0q/g794oybul8RXG1rDU3t1v8pwN
-	 OBllcD1OP+862nyanc+7JowNAE9cKfV5SdDjpbI+5JWCZaayUoAA9x0uwGRPjWolbk
-	 ZeEPZ17Og1apCIRdwbN4/+SJl8uqXZKRsPS82l91PeAJnd263bInRyS3kUlH6hFZd+
-	 fA64wy0+FdIlRElkqIuXaKfFzSPIF1TX0AUwuC++oWsUbGw27qxUqnrUmv/YvRWW6W
-	 z/4pJkhQADOX1W+gi0f9qmkEZL4ZdOJWDYWKadhTCXRxgLXztzp3DRZhloaG3a/rtH
-	 DOg8HmM2Xiexw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0F0DEE6BBD2;
-	Tue, 15 Feb 2022 15:00:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1644938849;
+	bh=qJwGXYo41BOzEX6oFtnAmcbygBymqUp/dIQMb+BAvlQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Trmrpw/bgUC8KXZJ2oe2q2jd+k6nO1O9EFS9NL8anjqqr8HFHfBiR+SJzPQ+UUq5f
+	 ZvLBt3FcSFNoLA3gbLemJgapV/PCibn//WTuk5tFy5NqiDfTsTvqBnTGP1w3v8iRPe
+	 MvRvS0khiDKzDDF0jw2hPVdiYPsqfYyLaEMaXfcSI2ff6KmCgqoycRbfQgjaZrl5YZ
+	 K6BCqY8lo05qjIDEo3C6TG+m2WuzM9vIypTmRbs/5mrKkc8LqSscILgsw7pc/46lX8
+	 u8qZWwP35KJhflw+lneEXFzYYVW/NQ9YU4GwmhWKOvTM2hGUftcaFlr8nUoOuMUly3
+	 XyKD3L/EZ4i3Q==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Axel Rasmussen <axelrasmussen@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	shuah@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.16 16/34] selftests: fixup build warnings in pidfd / clone3 tests
+Date: Tue, 15 Feb 2022 10:26:39 -0500
+Message-Id: <20220215152657.580200-16-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220215152657.580200-1-sashal@kernel.org>
+References: <20220215152657.580200-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] mctp: fix use after free
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <164493721105.12867.12615995983107309370.git-patchwork-notify@kernel.org>
-Date: Tue, 15 Feb 2022 15:00:11 +0000
-References: <20220215020541.2944949-1-trix@redhat.com>
-In-Reply-To: <20220215020541.2944949-1-trix@redhat.com>
-To: Tom Rix <trix@redhat.com>
-Cc: jk@codeconstruct.com.au, matt@codeconstruct.com.au, davem@davemloft.net,
- kuba@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-Hello:
+From: Axel Rasmussen <axelrasmussen@google.com>
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+[ Upstream commit e2aa5e650b07693477dff554053605976789fd68 ]
 
-On Mon, 14 Feb 2022 18:05:41 -0800 you wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Clang static analysis reports this problem
-> route.c:425:4: warning: Use of memory after it is freed
->   trace_mctp_key_acquire(key);
->   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> When mctp_key_add() fails, key is freed but then is later
-> used in trace_mctp_key_acquire().  Add an else statement
-> to use the key only when mctp_key_add() is successful.
-> 
-> [...]
+These are some trivial fixups, which were needed to build the tests with
+clang and -Werror. The following issues are fixed:
 
-Here is the summary with links:
-  - [v2] mctp: fix use after free
-    https://git.kernel.org/netdev/net/c/7e5b6a5c8c44
+- Remove various unused variables.
+- In child_poll_leader_exit_test, clang isn't smart enough to realize
+  syscall(SYS_exit, 0) won't return, so it complains we never return
+  from a non-void function. Add an extra exit(0) to appease it.
+- In test_pidfd_poll_leader_exit, ret may be branched on despite being
+  uninitialized, if we have !use_waitpid. Initialize it to zero to get
+  the right behavior in that case.
 
-You are awesome, thank you!
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+Acked-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/clone3/clone3.c    | 2 --
+ tools/testing/selftests/pidfd/pidfd_test.c | 6 +++---
+ tools/testing/selftests/pidfd/pidfd_wait.c | 5 ++---
+ 3 files changed, 5 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+index 076cf4325f783..cd4582129c7d6 100644
+--- a/tools/testing/selftests/clone3/clone3.c
++++ b/tools/testing/selftests/clone3/clone3.c
+@@ -126,8 +126,6 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
+ 
+ int main(int argc, char *argv[])
+ {
+-	pid_t pid;
+-
+ 	uid_t uid = getuid();
+ 
+ 	ksft_print_header();
+diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+index 529eb700ac26a..9a2d64901d591 100644
+--- a/tools/testing/selftests/pidfd/pidfd_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_test.c
+@@ -441,7 +441,6 @@ static void test_pidfd_poll_exec(int use_waitpid)
+ {
+ 	int pid, pidfd = 0;
+ 	int status, ret;
+-	pthread_t t1;
+ 	time_t prog_start = time(NULL);
+ 	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
+ 
+@@ -500,13 +499,14 @@ static int child_poll_leader_exit_test(void *args)
+ 	 */
+ 	*child_exit_secs = time(NULL);
+ 	syscall(SYS_exit, 0);
++	/* Never reached, but appeases compiler thinking we should return. */
++	exit(0);
+ }
+ 
+ static void test_pidfd_poll_leader_exit(int use_waitpid)
+ {
+ 	int pid, pidfd = 0;
+-	int status, ret;
+-	time_t prog_start = time(NULL);
++	int status, ret = 0;
+ 	const char *test_name = "pidfd_poll check for premature notification on non-empty"
+ 				"group leader exit";
+ 
+diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
+index be2943f072f60..17999e082aa71 100644
+--- a/tools/testing/selftests/pidfd/pidfd_wait.c
++++ b/tools/testing/selftests/pidfd/pidfd_wait.c
+@@ -39,7 +39,7 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
+ 
+ TEST(wait_simple)
+ {
+-	int pidfd = -1, status = 0;
++	int pidfd = -1;
+ 	pid_t parent_tid = -1;
+ 	struct clone_args args = {
+ 		.parent_tid = ptr_to_u64(&parent_tid),
+@@ -47,7 +47,6 @@ TEST(wait_simple)
+ 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
+ 		.exit_signal = SIGCHLD,
+ 	};
+-	int ret;
+ 	pid_t pid;
+ 	siginfo_t info = {
+ 		.si_signo = 0,
+@@ -88,7 +87,7 @@ TEST(wait_simple)
+ 
+ TEST(wait_states)
+ {
+-	int pidfd = -1, status = 0;
++	int pidfd = -1;
+ 	pid_t parent_tid = -1;
+ 	struct clone_args args = {
+ 		.parent_tid = ptr_to_u64(&parent_tid),
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
