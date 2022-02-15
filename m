@@ -1,312 +1,113 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575A6EB8
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 00:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644884975; x=1676420975;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ncMI0EhhO9hE9xejvboOh/fi9Wowt90vvpLp8QRli4E=;
-  b=IWGSLuuCy3M9zqyhGsJBT6Tah8TZ/jEZZQTL5YsEdjCgbftv+6buD++5
-   1T3g5JEjRfoLIlDGQbwAkG/zqq6Ywl57hCS3gDyZpS+q4iYFURCwkKpKf
-   Tk7dqGNTgd9ghs7FuGqHJl2+NHd6dVyQG7u5MQ/T5mCadCQ6h/TCJhvuS
-   tQUGfQXtWlJmJiYJauh7vWz99rizSWN81oKd+JFb0burNjMjjnGIT++Wf
-   zbZzV9I02I/MlAoRj8eVDbAjb/Rd6ziViKwL0vXhgRQaIUpDBam5qIwb4
-   dnkjPT+ay0YZVlJglsQGwzLvXvJlmoJXMq9ombjZbNX9+ZODy4pdAtBOl
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="313491225"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="313491225"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 16:29:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="703350293"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 14 Feb 2022 16:29:26 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nJlig-00096I-60; Tue, 15 Feb 2022 00:29:26 +0000
-Date: Tue, 15 Feb 2022 08:29:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 28/39]
- fs/netfs/write_helper.c:665:32: error: no member named 'cache' in 'struct
- netfs_i_context'
-Message-ID: <202202150844.OSL410Oz-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C8FED0
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 00:34:02 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id e5so4020329lfr.9
+        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 16:34:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OFruwUIxpJyCAJe6BUEe5KI8KczW9wuSS9rT9U6kwk8=;
+        b=pNkfZ896aqQt7dxFAL3iK96SFQ7NoXtb2Ceidw3enkYzd0BLbOWPp60JGJUW+qHpzP
+         vha9n63h1RLvgzCbw3+jQYFWQaCzLQ8wumhFW1a9hER8FUDMo215I+ch3kf3QAL6E5le
+         wfg+eWhQzKrURlsaORbokfcPD25ZrXZngEdKY8/wbtkEmsPhlHRQGKCU8+37fX7AlUNN
+         gPxty3ifxG7Ps7xfxpJu+jdhDgHNM8RFfh2TCd3LMjiZINYDyDkRhodU0PCMXA9Xdmx3
+         k1WO3HjmEjFYIwtTRi+Xapadzjmqc1y4DsUChFQjxHNF/kUwVYPM8/WaKLi3lTASQLbd
+         rFeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OFruwUIxpJyCAJe6BUEe5KI8KczW9wuSS9rT9U6kwk8=;
+        b=mzGTCpjMNDq5E4LSPLXQE9RF1EbBR4HroPEFksOUygj0D7/lpAqApZX1Ref9J3wfL+
+         EPYdan/kpTnWcjO0kaHeMQFZodb0DNDZBakzEGRR63yr2ZYzSlA2G3lBfwcezrRVqjbG
+         UtkwGnnKzR5yWnPQzXs650tgbTbV6zd7qg+v9NsLTFYIBYOjfthxpuSoFALcXF7R3DSw
+         6p88VR5DNBAjwHGkEnSzuoxQlD2OudqBePXQ1HiOP04OboAMn/dsCcdyLjHSUWGqr6GO
+         ca3u0rwa/IIHUp9jdZZ/m8VkZuJhjdk5hUz+Ime0eYfRA+Zg6+vlRc3DGlgWII5GG6ab
+         TcTw==
+X-Gm-Message-State: AOAM532rsc2Gys8lSLooJdrigj5FZCoyyjsacdn5F//iciVmGj8QcoXC
+	//pj8SVD/FV20uhOsiN1r+MXjLkDuPhEf5oPUU3qGw==
+X-Google-Smtp-Source: ABdhPJx7Rb7z1GPvI6D+qTr0nkylaeunlTRJq2MplQYHe5RLznwDlYot8RNG7SMgUqUeiXfZAdP4E+Zw5G60wNR8oyI=
+X-Received: by 2002:ac2:4e10:: with SMTP id e16mr1229400lfr.444.1644885240322;
+ Mon, 14 Feb 2022 16:34:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220204005742.1222997-1-morbo@google.com> <20220210223134.233757-1-morbo@google.com>
+ <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com> <CAGG=3QXvSt=d94iqSV-Y9JVNc+pt-WOZGpSeW--fp=w2ttMvUA@mail.gmail.com>
+ <CAKwvOdmqQ4M1pcz1BW+MTtRdwP3itOLcV83X+1nJQkf9BNJ7Fw@mail.gmail.com> <CAGG=3QWmp_nXH0nkREMwRcqAcBOmGFuDifsE5t=wNjDGkLMcgg@mail.gmail.com>
+In-Reply-To: <CAGG=3QWmp_nXH0nkREMwRcqAcBOmGFuDifsE5t=wNjDGkLMcgg@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 14 Feb 2022 16:33:48 -0800
+Message-ID: <CAKwvOdms4Zcfn1fUTjQ4cHbVa2vSUj+YvCgR24xYGNf1tz4rOQ@mail.gmail.com>
+Subject: Re: [PATCH v4] x86: use builtins to read eflags
+To: Bill Wendling <morbo@google.com>
+Cc: David Laight <David.Laight@aculab.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   b995bc7182f60aa2b4d8930a7446f10dfbcebcc2
-commit: f923e34430afd434b984d1d604f3ec3898f63ad8 [28/39] netfs: Implement buffered writes through netfs_file_write_iter()
-config: hexagon-randconfig-r034-20220214 (https://download.01.org/0day-ci/archive/20220215/202202150844.OSL410Oz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/f923e34430afd434b984d1d604f3ec3898f63ad8
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout f923e34430afd434b984d1d604f3ec3898f63ad8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
+On Sat, Feb 12, 2022 at 1:23 AM Bill Wendling <morbo@google.com> wrote:
+>
+> On Fri, Feb 11, 2022 at 4:24 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> > I would like to discuss this further off list with you Bill before you
+> > resend this patch again.
+>
+> That won't be necessary.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Bill,
+I'm sorry; I could have worded that better+differently.
 
-All error/warnings (new ones prefixed by >>):
+In code review, I tend to use phrases like "consider doing X" for
+suggestions that are merely suggestions; things I don't care about.
 
->> fs/netfs/write_helper.c:28:26: warning: comparison of distinct pointer types ('typeof ((1UL << 18) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   unsigned int psize   = min(PAGE_SIZE - offset, size);
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/write_helper.c:125:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->from  = min(target->from, folio_pos(folio) + offset);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/write_helper.c:126:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->to    = max(target->to,   folio_pos(folio) + offset + len);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:52:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/write_helper.c:665:32: error: no member named 'cache' in 'struct netfs_i_context'
-                                   fscache_update_cookie(ctx->cache, NULL, &pos);
-                                                         ~~~  ^
-   3 warnings and 1 error generated.
+I should have been more explicit that my concern regarding released
+versions of clang and CONFIG_UNWINDER_ORC=y was not one of those
+cases.
 
+I like the intent of the patch; with the following fixups, I would
+gladly sign off on it and encourage the x86 maintainers to consider it
+further.
+1. handle the case of released versions of clang and
+CONFIG_UNWINDER_ORC=y. Something with a grep'able comment for clang-14
+so we can clean that up when the minimally supported version of clang
+is bumped.
+2. update the commit message to refer to previous commits that
+modified these flags, as per Thomas in response to v1.
+3. Note no change in generated code from GCC, as per Thomas in
+response to v2. Perhaps test a few more configs, since I only checked
+kmem_cache_free yet native_save_fl and local_irq_save have MANY more
+call sites.
+4. Add `Link: https://github.com/llvm/llvm-project/issues/46875` to
+commit message.
 
-vim +665 fs/netfs/write_helper.c
+Optionally:
+5. Add notes to commit message about the intent of this patch
+improving profiles for kmem_cache_free for CONFIG_SLAB=y. Feel free to
+use numbers I cited from our internal bug and
+https://lore.kernel.org/lkml/CAKwvOdmXxmYgqEOT4vSbN60smSkQRcc3B5duQAhaaYoaDo=Riw@mail.gmail.com/.
+6. Add note to commit message about memory operands from Agner Fog's
+instruction tables in the above lore link.
+7. Add note to commit that compilers can schedule the generated
+instructions from the builtins among instructions from surrounding C
+statements, which they cannot do for inline asm, as demonstrated by
+https://godbolt.org/z/EsP1KTjxa.
 
-   507	
-   508	/*
-   509	 * Write data into a prereserved region of the pagecache attached to a netfs
-   510	 * inode.
-   511	 */
-   512	static ssize_t netfs_perform_write(struct kiocb *iocb, struct iov_iter *iter,
-   513					   enum netfs_write_type write_type)
-   514	{
-   515		struct netfs_dirty_region *spare_region = NULL;
-   516		struct file *file = iocb->ki_filp;
-   517		struct netfs_i_context *ctx = netfs_i_context(file_inode(file));
-   518		struct folio *folio;
-   519		enum netfs_handle_nonuptodate nupt;
-   520		ssize_t written = 0, ret;
-   521		loff_t i_size, pos = iocb->ki_pos;
-   522		bool always_fill = false;
-   523		bool locked = false;
-   524	
-   525		MA_STATE(mas, &ctx->dirty_regions, pos / PAGE_SIZE,
-   526			 (pos + iov_iter_count(iter) - 1) / PAGE_SIZE);
-   527	
-   528		ret = ctx->ops->validate_for_write(file_inode(file), file);
-   529		if (ret < 0)
-   530			return ret;
-   531	
-   532		do {
-   533			size_t plen;
-   534			size_t offset;	/* Offset into pagecache folio */
-   535			size_t bytes;	/* Bytes to write to folio */
-   536			size_t copied;	/* Bytes copied from user */
-   537	
-   538			folio = netfs_grab_folio_for_write(file->f_mapping,
-   539							   pos / PAGE_SIZE,
-   540							   iov_iter_count(iter));
-   541			if (!folio) {
-   542				ret = -ENOMEM;
-   543				goto out;
-   544			}
-   545	
-   546			plen = folio_size(folio);
-   547			offset = pos - folio_file_pos(folio);
-   548			bytes = min_t(size_t, plen - offset, iov_iter_count(iter));
-   549			locked = true;
-   550	
-   551			if (!folio_test_uptodate(folio)) {
-   552				folio_unlock(folio); /* Avoid deadlocking fault-in */
-   553				locked = false;
-   554			}
-   555	
-   556			/* Bring in the user page that we will copy from _first_.
-   557			 * Otherwise there's a nasty deadlock on copying from the same
-   558			 * page as we're writing to, without it being marked
-   559			 * up-to-date.
-   560			 *
-   561			 * Not only is this an optimisation, but it is also required to
-   562			 * check that the address is actually valid, when atomic
-   563			 * usercopies are used, below.
-   564			 */
-   565			if (unlikely(fault_in_iov_iter_readable(iter, bytes))) {
-   566				ret = -EFAULT;
-   567				goto error_folio;
-   568			}
-   569	
-   570			if (fatal_signal_pending(current)) {
-   571				ret = -EINTR;
-   572				goto error_folio;
-   573			}
-   574	
-   575			if (!locked) {
-   576				ret = folio_lock_killable(folio);
-   577				if (ret < 0)
-   578					goto error_folio;
-   579			}
-   580	
-   581	redo_prefetch:
-   582			/* See if we need to prefetch the area we're going to modify.
-   583			 * We need to do this before we get a lock on the folio in case
-   584			 * there's more than one writer competing for the same cache
-   585			 * block.
-   586			 */
-   587			nupt = netfs_handle_nonuptodate_folio(ctx, file, folio,
-   588							      offset, bytes, always_fill);
-   589			_debug("nupt %u", nupt);
-   590			switch (nupt) {
-   591			case NETFS_JUST_PREFETCH:
-   592				ret = netfs_prefetch_for_write(file, folio, bytes);
-   593				if (ret < 0) {
-   594					_debug("prefetch = %zd", ret);
-   595					goto error_folio;
-   596				}
-   597				nupt = NETFS_FOLIO_IS_UPTODATE;
-   598				fallthrough;
-   599			case NETFS_FOLIO_IS_UPTODATE:
-   600				break;
-   601			case NETFS_MODIFY_AND_CLEAR:
-   602				zero_user_segment(&folio->page, 0, offset);
-   603				break;
-   604			case NETFS_WHOLE_FOLIO_MODIFY:
-   605				break;
-   606			}
-   607	
-   608			/* Preallocate the space we need in the dirty region list. */
-   609			ret = mas_expected_entries(&mas, 1);
-   610			if (ret < 0)
-   611				goto error_folio;
-   612	
-   613			if (!spare_region) {
-   614				spare_region = netfs_alloc_dirty_region();
-   615				if (IS_ERR(spare_region)) {
-   616					ret = PTR_ERR(spare_region);
-   617					spare_region = NULL;
-   618					goto error_folio;
-   619				}
-   620			}
-   621	
-   622			if (mapping_writably_mapped(folio_file_mapping(folio)))
-   623				flush_dcache_folio(folio);
-   624			copied = copy_folio_from_iter_atomic(folio, offset, bytes, iter);
-   625			flush_dcache_folio(folio);
-   626	
-   627			/*  Deal with a (partially) failed copy */
-   628			if (!folio_test_uptodate(folio)) {
-   629				if (copied == 0) {
-   630					ret = -EFAULT;
-   631					goto error_folio;
-   632				}
-   633				if (copied < bytes) {
-   634					iov_iter_revert(iter, copied);
-   635					always_fill = true;
-   636					goto redo_prefetch;
-   637				}
-   638				switch (nupt) {
-   639				case NETFS_JUST_PREFETCH:
-   640				case NETFS_FOLIO_IS_UPTODATE:
-   641					/* We have the folio locked, so it really ought
-   642					 * to be uptodate.
-   643					 */
-   644					WARN(true, "Locked folio %lx became non-uptodate\n",
-   645					     folio_index(folio));
-   646					ret = -EIO;
-   647					goto error_folio;
-   648				case NETFS_MODIFY_AND_CLEAR:
-   649					zero_user_segment(&folio->page, offset + copied, plen);
-   650					fallthrough;
-   651				case NETFS_WHOLE_FOLIO_MODIFY:
-   652					folio_mark_uptodate(folio);
-   653					break;
-   654				}
-   655			}
-   656	
-   657			/* Update the inode size if we moved the EOF marker */
-   658			pos += copied;
-   659			i_size = i_size_read(file_inode(file));
-   660			if (pos > i_size) {
-   661				if (ctx->ops->update_i_size) {
-   662					ctx->ops->update_i_size(file, pos);
-   663				} else {
-   664					i_size_write(file_inode(file), pos);
- > 665					fscache_update_cookie(ctx->cache, NULL, &pos);
-   666				}
-   667			}
-   668	
-   669			netfs_commit_folio(ctx, file, &spare_region, &mas,
-   670					   folio, offset, copied, write_type);
-   671	
-   672			folio_mark_dirty(folio);
-   673			folio_unlock(folio);
-   674			folio_put(folio);
-   675			folio = NULL;
-   676	
-   677			cond_resched();
-   678	
-   679			written += copied;
-   680	
-   681			balance_dirty_pages_ratelimited(file->f_mapping);
-   682		} while (iov_iter_count(iter));
-   683	
-   684	out:
-   685		if (likely(written)) {
-   686			if (write_type == NETFS_ORDINARY_WRITE)
-   687				netfs_commit_region(ctx, &mas, iocb->ki_pos, written);
-   688	
-   689			iocb->ki_pos += written;
-   690	
+Actually 7 is probably more precise than 3. Since there's no change
+generally in terms of operands chosen AFAICT, but GCC (and clang)
+could now better schedule instructions.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+It's still a good patch; please stick with it!  Let me know how I can help.
+-- 
+Thanks,
+~Nick Desaulniers
