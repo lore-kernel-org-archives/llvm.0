@@ -1,229 +1,198 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752EDEB8
-	for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 23:53:38 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id u20so5142395lff.2
-        for <llvm@lists.linux.dev>; Mon, 14 Feb 2022 15:53:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fLpszrz2XbhK8hQIyggzqGqnVBM/+oIg/TVgQPiwx7Q=;
-        b=nHU5+GXtQBcn0+LMXl+dFkDs8InirQfDocIDNYZGbhJzNaVTI+kslHwnBlMsyS/1pe
-         MUHTkoUhBHy2ECBs0LJLtSRzB7d69j/Kp4cqYL1/dgP+vQ48I3bCZUmMoYwlvEDjDQc4
-         MezmrUSciLzfMSJo9BWk567ugujw1FZUufyuzI8eQTVNaZ38v/ZVSPcAwbI5AhrRP6/2
-         i9zM43z+NlDQcE5iITGdziHtxCxvDPr/7zzmg0SIOik1kN9AsXiU423wsLPz1YmDLKWW
-         29rUaAFPJ0fbmcZa7/iGJANDot7bkDwTv0a4CgeV9xW3nFtMpnlozMDRpyaO7Oh+w3PC
-         At8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fLpszrz2XbhK8hQIyggzqGqnVBM/+oIg/TVgQPiwx7Q=;
-        b=ydOd+cSay6o5DjhduNbcMeWB8HcYWUqFB2gMV6R7JGDbBYDyNUUbciOdK1Rl+AJTOb
-         UZsNkf/SkGYeZbH1JFLx2IvtbdANLJUSe9EZr5kkfD3Ye+DXflBUr6qPObH43N39GFwg
-         2yGohkr89alftelXIs9eoqRFvyQUeXH4OFju6oWdIATKUA8nLpnj+sTQq2mO9UAc3asO
-         l96p7xw/7xGqk1e5nZSdGpJYPDdBEqNykSQDmR5qeY3TQ3zVw9sLXFz6Yyitl6xXz/k6
-         ymb1hFBlv7Vtz3OkwJ63dNyIcnWIzGkGkBrYXCwIDgtkmIx0KrGgHskMvIKGX2acmQJu
-         xXfg==
-X-Gm-Message-State: AOAM530SGPf/Ubve2CjH+3qSLnGRyDHVeKO++u4vN2T0/fpNg02KY1rl
-	9byji4GnIyBo598ClAynMbP1FLKK5QEHwkrQ82coYQ==
-X-Google-Smtp-Source: ABdhPJy9Ripq6XcGdhDxsNU7aoM8isWBdS8htxRLdNlnNS/NuTCpxlUfHXc9NkvvH8APOUJ3+7vB1kSenltpjaQcA8A=
-X-Received: by 2002:a05:6512:3f97:: with SMTP id x23mr1133872lfa.550.1644882816258;
- Mon, 14 Feb 2022 15:53:36 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4773BEB8
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 00:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644884369; x=1676420369;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZSirIDvlIWHGucFV8M2Rio4bqMTvd2u/FR+TdqsQcwk=;
+  b=YyuXhR7D/zXY/3eyHc9Kjmc+QQK7jvC8UrU8k9aJC5ZAT4h0IaNxBZo4
+   /SPnUuhhYRl0XMYD1dzIfbnixoWjgLpdEOITHFyFNErEaOWVOmGiRc8n5
+   iiLwQuD4nNRu9FVFlm3T/fygs3qt7RcrqmE+v6z+rqxQyn1SAjZc5YRQD
+   RyriBKJ8aS5By50dG01blzUJvAz/cTxCMua95k3EbZh1SvTLmPuJFTiuE
+   G/sM9n6oXhNPZOqoqAHP6k1aMO+wySZQTywi4DKZimV4NVvEKAGfOI9Y6
+   h9lqzavmXE/l7O9zvepvBzRHOO3VJRZCo2QyFQATn4T5O3x2nHD/c0dN4
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="249046751"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="249046751"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 16:19:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="570547087"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 14 Feb 2022 16:19:26 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nJlYz-000951-HR; Tue, 15 Feb 2022 00:19:25 +0000
+Date: Tue, 15 Feb 2022 08:18:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, davem@davemloft.net,
+	kuba@kernel.org, Willem de Bruijn <willemb@google.com>,
+	Congyu Liu <liu3101@purdue.edu>
+Subject: Re: [PATCH net] ipv6: per-netns exclusive flowlabel checks
+Message-ID: <202202150837.bGbeRjWx-lkp@intel.com>
+References: <20220214200400.513069-1-willemdebruijn.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211229021258.176670-1-morbo@google.com> <20220204005742.1222997-1-morbo@google.com>
- <CAKwvOdk=VdDo1fhWJVa4eO0UjuQwtV9kC-cJd0J9-6guU2vafA@mail.gmail.com> <0d93ea4d847b42ca9c5603cb97cbda8a@AcuMS.aculab.com>
-In-Reply-To: <0d93ea4d847b42ca9c5603cb97cbda8a@AcuMS.aculab.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 14 Feb 2022 15:53:24 -0800
-Message-ID: <CAKwvOdmXxmYgqEOT4vSbN60smSkQRcc3B5duQAhaaYoaDo=Riw@mail.gmail.com>
-Subject: Re: [PATCH v3] x86: use builtins to read eflags
-To: David Laight <David.Laight@aculab.com>, Bill Wendling <morbo@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214200400.513069-1-willemdebruijn.kernel@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Feb 8, 2022 at 1:14 AM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Nick Desaulniers
-> > Sent: 07 February 2022 22:12
-> >
-> > On Thu, Feb 3, 2022 at 4:57 PM Bill Wendling <morbo@google.com> wrote:
-> > >
-> > > GCC and Clang both have builtins to read and write the EFLAGS register.
-> > > This allows the compiler to determine the best way to generate this
-> > > code, which can improve code generation.
-> > >
-> > > This issue arose due to Clang's issue with the "=rm" constraint.  Clang
-> > > chooses to be conservative in these situations, and so uses memory
-> > > instead of registers. This is a known issue, which is currently being
-> > > addressed.
->
-> How much performance would be lost by just using "=r"?
+Hi Willem,
 
-It adds undue register pressure.  When native_save_fl() is inlined
-into callers, requiring an operand to be in a register clobbers it, so
-we may need to insert stack spills + reloads for values produced
-before but consumed after the asm stmt if we run out of registers to
-allocate for the live range.
+Thank you for the patch! Perhaps something to improve:
 
-Looking at the disassembly of native_save_fl() or calls to
-__builtin_ia32_readeflags_u64() in isolation are less interesting than
-what happens once native_save_fl() starts getting inlined into
-callers.
+[auto build test WARNING on net/master]
 
->
-> You get two instructions if the actual target is memory.
-> This might be a marginal code size increase - but not much,
-> It might also slow things down if the execution is limited
-> by the instruction decoder.
+url:    https://github.com/0day-ci/linux/commits/Willem-de-Bruijn/ipv6-per-netns-exclusive-flowlabel-checks/20220215-042330
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 86006f996346e8a5a1ea80637ec949ceeea4ecbc
+config: hexagon-randconfig-r036-20220214 (https://download.01.org/0day-ci/archive/20220215/202202150837.bGbeRjWx-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/5d3936d3544b4cdd6d63c896d158d4975a4822c3
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Willem-de-Bruijn/ipv6-per-netns-exclusive-flowlabel-checks/20220215-042330
+        git checkout 5d3936d3544b4cdd6d63c896d158d4975a4822c3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ceph/ net/sched/
 
-"=rm" vs "=r" is more so about whether the operands to the asm are
-required to be in memory or not, rather than number of instructions
-generated.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> But on Intel cpu 'pop memory' is 2 uops, exactly the same
-> as 'pop register' 'store register' (and I think amd is similar).
-> So the actual execution time is exactly the same for both.
+All warnings (new ones prefixed by >>):
 
-Page 10 of Agner Fog's
-https://www.agner.org/optimize/instruction_tables.pdf
-shows that a pop to memory is 3 "ops" while pop to register is 2. Page
-9 defines "ops" as
+           compiletime_assert_rwonce_type(x);                              \
+                                          ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+                                            ^
+   include/linux/compiler_types.h:314:10: note: expanded from macro '__native_word'
+            sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+                   ^
+   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                               ^~~~~~~~~
+   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+                                ^~~~~~~~~
+   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   In file included from net/sched/cls_flow.c:24:
+   In file included from include/net/ip.h:30:
+   In file included from include/net/route.h:24:
+   In file included from include/net/inetpeer.h:16:
+   include/net/ipv6.h:403:30: error: no member named 'ipv6' in 'struct net'
+               READ_ONCE(sock_net(sk)->ipv6.flowlabel_has_excl))
+                         ~~~~~~~~~~~~  ^
+   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
+           compiletime_assert_rwonce_type(x);                              \
+                                          ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+                                            ^
+   include/linux/compiler_types.h:314:38: note: expanded from macro '__native_word'
+            sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+                                               ^
+   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                               ^~~~~~~~~
+   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+                                ^~~~~~~~~
+   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   In file included from net/sched/cls_flow.c:24:
+   In file included from include/net/ip.h:30:
+   In file included from include/net/route.h:24:
+   In file included from include/net/inetpeer.h:16:
+   include/net/ipv6.h:403:30: error: no member named 'ipv6' in 'struct net'
+               READ_ONCE(sock_net(sk)->ipv6.flowlabel_has_excl))
+                         ~~~~~~~~~~~~  ^
+   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
+           compiletime_assert_rwonce_type(x);                              \
+                                          ^
+   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
+           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+                                                         ^
+   include/linux/compiler_types.h:346:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                               ^~~~~~~~~
+   include/linux/compiler_types.h:334:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+                                ^~~~~~~~~
+   include/linux/compiler_types.h:326:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   In file included from net/sched/cls_flow.c:24:
+   In file included from include/net/ip.h:30:
+   In file included from include/net/route.h:24:
+   In file included from include/net/inetpeer.h:16:
+   include/net/ipv6.h:403:30: error: no member named 'ipv6' in 'struct net'
+               READ_ONCE(sock_net(sk)->ipv6.flowlabel_has_excl))
+                         ~~~~~~~~~~~~  ^
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+           __READ_ONCE(x);                                                 \
+                       ^
+   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
+   #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+                                                                    ^
+   include/linux/compiler_types.h:302:13: note: expanded from macro '__unqual_scalar_typeof'
+                   _Generic((x),                                           \
+                             ^
+   In file included from net/sched/cls_flow.c:24:
+   In file included from include/net/ip.h:30:
+   In file included from include/net/route.h:24:
+   In file included from include/net/inetpeer.h:16:
+   include/net/ipv6.h:403:30: error: no member named 'ipv6' in 'struct net'
+               READ_ONCE(sock_net(sk)->ipv6.flowlabel_has_excl))
+                         ~~~~~~~~~~~~  ^
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+           __READ_ONCE(x);                                                 \
+                       ^
+   include/asm-generic/rwonce.h:44:72: note: expanded from macro '__READ_ONCE'
+   #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+                                                                           ^
+   In file included from net/sched/cls_flow.c:24:
+   In file included from include/net/ip.h:30:
+   In file included from include/net/route.h:24:
+   In file included from include/net/inetpeer.h:16:
+   include/net/ipv6.h:402:60: error: invalid operands to binary expression ('long' and 'void')
+           if (static_branch_unlikely(&ipv6_flowlabel_exclusive.key) &&
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+>> net/sched/cls_flow.c:63:52: warning: shift count >= width of type [-Wshift-count-overflow]
+           return (a & 0xFFFFFFFF) ^ (BITS_PER_LONG > 32 ? a >> 32 : 0);
+                                                             ^  ~~
+   1 warning and 8 errors generated.
 
-    Number of macro-operations issued from instruction decoder to
-schedulers. Instructions with more than 2 macro-operations use
-microcode.
 
-Internally, it looks like we have benchmarks that show that
-kmem_cache_free spends 5.18% of cycles in that pop-to-memory
-instruction (looks like this is CONFIG_SLAB).  Further,
-native_save_fl() is called by local_irq_save() all over the kernel.
-After this patch, the hot spot disappears from the profile (the
-push+pop becomes 0.003% of samples from 5.18%).
+vim +63 net/sched/cls_flow.c
 
-So I think with those above two notes, that should answer the question
-"why is any of this important?"
+e5dfb815181fcb Patrick McHardy 2008-01-31  58  
+e5dfb815181fcb Patrick McHardy 2008-01-31  59  static inline u32 addr_fold(void *addr)
+e5dfb815181fcb Patrick McHardy 2008-01-31  60  {
+e5dfb815181fcb Patrick McHardy 2008-01-31  61  	unsigned long a = (unsigned long)addr;
+e5dfb815181fcb Patrick McHardy 2008-01-31  62  
+e5dfb815181fcb Patrick McHardy 2008-01-31 @63  	return (a & 0xFFFFFFFF) ^ (BITS_PER_LONG > 32 ? a >> 32 : 0);
+e5dfb815181fcb Patrick McHardy 2008-01-31  64  }
+e5dfb815181fcb Patrick McHardy 2008-01-31  65  
 
-Further, page 10 also notes that push to memory is 2 "ops" and push to
-register is 1, but that doesn't make a difference in the profiles.
-
-Additionally, I compare the disassembly of kmem_cache_free
-(CONFIG_SLAB) before+after this patch. There is no difference for GCC,
-but you can see quite an improvement for clang:
-https://gist.github.com/nickdesaulniers/7f143bae821d86603294bf00b8bd5074
-This is the kind of info I would give Thomas when he asks about
-changes to GCC codegen.
-
-To the point I made last Friday about support for actually released
-versions of clang, here's how v4 of the patch makes clang codegen
-worse. This is ToT llvm with f3481f43bbe2c8a24e74210d310cf3be291bf52d
-reverted. (That's the commit that fixed the forcibly inserted stack
-frame).
-https://gist.github.com/nickdesaulniers/b4d0f6e26f8cbef0ae4c5352cfeaca67
-
-Specifically, CONFIG_UNWINDER_FRAME_POINTER=y is improved;
-CONFIG_UNWINDER_ORC=y is made worse (for all released versions of
-clang, since they don't yet have
-f3481f43bbe2c8a24e74210d310cf3be291bf52d).
-
-Therefore, v5 of this patch should have something like:
-
-diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-index f31a035f3c6a..2d2d4d8ab823 100644
---- a/arch/x86/include/asm/irqflags.h
-+++ b/arch/x86/include/asm/irqflags.h
-@@ -19,7 +19,12 @@
- extern inline unsigned long native_save_fl(void);
- extern __always_inline unsigned long native_save_fl(void)
- {
--#ifdef CONFIG_X86_64
-+/* clang would force frame pointers via the builtins until clang-14 */
-+#if defined(CC_IS_CLANG) && defined(UNWINDER_ORC) && CLANG_VERSION < 140000
-+       unsigned long flags;
-+       asm volatile ("pushf; pop %0" : "=rm"(flags));
-+       return flags;
-+#elif defined(CONFIG_X86_64)
-        return __builtin_ia32_readeflags_u64();
- #else
-        return __builtin_ia32_readeflags_u32();
-
-(though I would keep the existing code and comment for the complex
-case, rather than blindly applying my full diff above; and I would
-wait for https://github.com/llvmbot/llvm-project/pull/42 to actually
-be merged before claiming clang was fixed. oh, looks like it just was.
-I'd add `Link: https://github.com/llvm/llvm-project/issues/46875`
-explicitly to the commit message.)
-
-Then once clang-14 is the minimally supported version of clang
-according to Documentation/process/changes.rst we can drop the
-existing inline asm and simply retain the builtins.
-
-Thomas also asked in review of v1 that additional info about previous
-commits be included in the commit message.
-https://lore.kernel.org/llvm/87o85faum5.ffs@tglx/
-
-Finally, if we need exhaustive proof that the builtins are better for
-codegen, even with GCC, I think this case demonstrates so perfectly:
-https://godbolt.org/z/5n3Eov1xT
-
-Because compilers treat inline asm a black boxes, they can't schedule
-instructions in the inline asm with instructions lowered from the
-surrounding C statements.  With the compiler builtins, they now can,
-because the assembler isn't involved.  Perhaps noting that in the
-commit message would help improve the first paragraph of the commit
-message of v4.
-
->
-> Also it looks like clang's builtin is effectively "=r".
-
-It's not; it's closer to how "=rm" should work; add register pressure
-and you may find a memory operand rather than a register operand.  But
-the builtin is resolved by different machinery than the inline asm.
-The inline asm is conservative in the presence of both r and m and
-picks m to avoid undue register pressure; r and m together is treated
-as "r or m" with a priority for m.  In this case, we'd prefer r's
-codegen when possible.
-
-I read "=rm" as "r" or "m"; we'd prefer if llvm chose "r" for most
-cases, but it will choose "m" conservatively which is legal by the
-"or". "r" would be more precise for what we want. I'm not sure if
-there are configs that could exhaust the register allocator though if
-"m" was not specified as an option.
-
-AFAICT
-commit ab94fcf528d1 ("x86: allow "=rm" in native_save_fl()")
-does not cite register exhaustion as a reason to permit "m", so
-perhaps the version from
-commit f1f029c7bfbf ("x86: fix assembly constraints in native_save_fl()")
-would be preferred.  That said, who knows how "r" will affect codegen
-elsewhere, which is why my suggested diff above retains "=rm" as the
-constraint for the fallback code. "No functional change" for released
-versions of clang.
-
-> Compiling:
-> long fl;
-> void native_save_fl(void) {
->        fl = __builtin_ia32_readeflags_u64();
-> }
-> Not only generates a stack frame, it also generates:
-> pushf; pop %rax; mov mem, %rax.
-
-https://github.com/llvm/llvm-project/issues/46875
-
---
-Thanks,
-~Nick Desaulniers
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
