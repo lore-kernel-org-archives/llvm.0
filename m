@@ -1,35 +1,34 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76592186C
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 20:54:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42670186C
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 21:06:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=STnj2ybwZv05qCjMTqaXWuXN0Sm5uRuBvdpB6J67Jg0=; b=o++5p4UyKYULUAc9XC40okIKxv
-	p9pPp+HvcJo46VATvElhowtSi+6FB7H2feZPLxDPHk1AkWihA23qMIj4IsNq9zaUTEt8913L+IM4l
-	nFS/JGmwP1+I/zScTHdItmu7EIiDyHDpqRr6bai9qTIniHz5b5AwLu0ksN/owOGXTe0RmDtnyT0M2
-	Yz8euY75y/El0mSE0isb+8qiguE50bRr92wSRlFUqUhkagz9flQTo2aqXRZL2ewrEVZDtu5W8PtkN
-	Js0Lx/dWZE7xNmwOzqAv9YOGDgjwsF3VvSnuH5L4Lc9ZHw7M404pCUPyJrlpMbDOcwqRkCZ9F/ee0
-	seBCiFgA==;
+	bh=uvMluQdN0GSPuEJBcDu2YtcMnFGhEbHkw4SETZERvO0=; b=Rt5N2dtwUV7yCxceA3dKBG7Jec
+	DN0oXg1X/475ee26Wl+i80jXWzL36PEZHfWtFuolqqKIAmfheMVxDPoaAdPrZIc7XRpqmyJJWIcfn
+	Tc5jGPiry2KXhNSK++FitBh3laLYzLUOq1JapJoodBvcjrJrs1xQpBrmXc8vlkso96NNzKlQ6NDOn
+	PdhT9FvvKCy+vJTylcgyFZ3YEGMYOWjhCkvcIPMbHsUCoxtXCGTNCzjmTrFjOBVGCVZwUiU8svxrl
+	Yp51OVSq4cQvGa8BRlbEbg8C4oJYGzALwc2ucGwqleaBJyBq4Mkx4VqAHi3fedOUaQbuNZPxSRR1R
+	QhMyXUUg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nK4pb-00ABAC-Jx; Tue, 15 Feb 2022 20:53:52 +0000
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nK51D-00EB2o-Ti; Tue, 15 Feb 2022 21:05:52 +0000
 Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id EC34B987956; Tue, 15 Feb 2022 21:53:49 +0100 (CET)
-Date: Tue, 15 Feb 2022 21:53:49 +0100
+	id 6B154987956; Tue, 15 Feb 2022 22:05:50 +0100 (CET)
+Date: Tue, 15 Feb 2022 22:05:50 +0100
 From: Peter Zijlstra <peterz@infradead.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Joao Moreira <joao@overdrivepizza.com>,
-	Kees Cook <keescook@chromium.org>, X86 ML <x86@kernel.org>,
+To: Kees Cook <keescook@chromium.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>, X86 ML <x86@kernel.org>,
 	hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
 	andrew.cooper3@citrix.com, LKML <linux-kernel@vger.kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
 Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
-Message-ID: <20220215205349.GC23216@worktop.programming.kicks-ass.net>
-References: <20211122170805.338489412@infradead.org>
- <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
+Message-ID: <20220215210550.GD23216@worktop.programming.kicks-ass.net>
+References: <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
  <202202081541.900F9E1B@keescook>
  <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
  <202202082003.FA77867@keescook>
@@ -38,6 +37,7 @@ References: <20211122170805.338489412@infradead.org>
  <CABCJKuciRBnz4JxBDJC=+kuJn4pU2uBkWPBov7-VL2o2j0F4SA@mail.gmail.com>
  <20220214222550.GB23216@worktop.programming.kicks-ass.net>
  <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
+ <202202151129.1A5C5FE42@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,52 +46,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
+In-Reply-To: <202202151129.1A5C5FE42@keescook>
 
-On Tue, Feb 15, 2022 at 08:56:03AM -0800, Sami Tolvanen wrote:
-> On Mon, Feb 14, 2022 at 2:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > On Mon, Feb 14, 2022 at 01:38:18PM -0800, Sami Tolvanen wrote:
-> > > I'm fine with adding a trap mode that's used by default, but having
-> > > more helpful diagnostics when something fails is useful even in
-> > > production systems in my experience. This change results in a vmlinux
-> > > that's another 0.92% smaller.
-> >
-> > You can easily have the exception generate a nice warning, you can even
-> > have it continue. You really don't need a call for that.
+On Tue, Feb 15, 2022 at 12:03:12PM -0800, Kees Cook wrote:
+> On Tue, Feb 15, 2022 at 08:56:03AM -0800, Sami Tolvanen wrote:
+> > On Mon, Feb 14, 2022 at 2:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > > On Mon, Feb 14, 2022 at 01:38:18PM -0800, Sami Tolvanen wrote:
+> > > > I'm fine with adding a trap mode that's used by default, but having
+> > > > more helpful diagnostics when something fails is useful even in
+> > > > production systems in my experience. This change results in a vmlinux
+> > > > that's another 0.92% smaller.
+> > >
+> > > You can easily have the exception generate a nice warning, you can even
+> > > have it continue. You really don't need a call for that.
+> > 
+> > Sure, but wouldn't that require us to generate something like
+> > __bug_table, so we know where the CFI specific traps are?
 > 
-> Sure, but wouldn't that require us to generate something like
-> __bug_table, so we know where the CFI specific traps are?
+> It also means the trap handler needs to do a bunch of instruction
+> decoding to find the address that was going to be jumped to, etc.
 
-Yes, but since you're going to emit a retpoline, and objtool already
-generates a list of retpoline sites, we can abuse that. If the
-instruction after the trap is a retpoline site, we a CFI fail.
+arch/x86/kernel/alternative.c:apply_retpolines() has all that, since we
+need to to know that to re-write the thunk-call.
 
-> > > In this case the function has two indirect calls and Clang seems to
-> > > prefer to emit just one ud2.
-> >
-> > That will not allow you to recover from the exception. UD2 is not an
-> > unconditional fail. It should have an out-going edge in this case too.
+> > > > In this case the function has two indirect calls and Clang seems to
+> > > > prefer to emit just one ud2.
+> > >
+> > > That will not allow you to recover from the exception. UD2 is not an
+> > > unconditional fail. It should have an out-going edge in this case too.
+> > 
+> > Yes, CFI failures are not recoverable in that code. In fact, LLVM
+> > assumes that the llvm.trap intrinsic (i.e. ud2) never returns, but I
+> > suppose we could just use an int3 instead. I assume that's sufficient
+> > to stop speculation?
 > 
-> Yes, CFI failures are not recoverable in that code. In fact, LLVM
-> assumes that the llvm.trap intrinsic (i.e. ud2) never returns, but I
-> suppose we could just use an int3 instead. I assume that's sufficient
-> to stop speculation?
-
-It is. int3 is also smaller by one byte, but the exception is already
-fairly complicated, but I can see if we can make it work.
-
-> > Also, you really should add a CS prefix to the retpoline thunk call if
-> > you insist on using r11 (or any of the higher regs).
+> Peter, is there a reason you want things in the specific order of:
 > 
-> I actually didn't touch the retpoline thunk call, that's exactly the
-> code Clang normally generates.
+> cmp, je-to-call, trap, call
+> 
+> Isn't it more run-time efficient to have an out-of-line failure of
+> the form:
+> 
+> cmp, jne-to-trap, call, ...code..., trap, jmp-to-call
+> 
+> I thought the static label stuff allowed the "default out of line"
+> option, as far as pessimizing certain states, etc? The former is certainly
+> code-size smaller, though, yes, but doesn't it waste space in the cache
+> line for the unlikely case, etc?
 
-Yeah, and it needs help, also see:
-
-  https://lore.kernel.org/lkml/20211119165630.276205624@infradead.org/
-
-Specifically, clang needs to:
-
- - CS prefix stuff the retpoline thunk call/jmp;
- - stop doing conditional indirect tail-calls.
-
+Mostly so that we can deduce the address of the trap from the retpoline
+site, also the above has a fairly high chance of using jcc.d32 which is
+actually larger than jcc.d8+ud2.
