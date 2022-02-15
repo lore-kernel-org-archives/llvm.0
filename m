@@ -1,98 +1,260 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B9C1B63
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 21:57:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644962230; x=1676498230;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=m6XSI0G98RPdQqcOvLzHw4i5erJFqqKLtNysZ8EGoWc=;
-  b=CsFT9oahb3Hy1J/YOFApzrhwmzqydkeG4HEJ16++9vGZMdxuw2/sTgmP
-   NrmmTCZ2HkSMjIZpN5aDNV8K7RaHrb6Up91KywTU6mC06lPCYsw5TmN0t
-   5nzHaHiC4Kap7fj21P1FgF3tPgSeuBo1r1GRrye7dsyZXgojDI2vA8HpR
-   w2hFjqlijjdylogoaczIhgJ93aLvup0KwsqgI4t8l6CQ/qIzAG+2QRV6Q
-   AN3pnt+L2lkKGlW6icXSPdDPoCHNLLJDJx7+rStI502RL+bHB3HrNaZ5U
-   iwx78/L2awM9Nx8Yk34Axrc3Vc3WN5Txpz+BMMNtxyYiJ6vsJeITacwgV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="237867147"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="237867147"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 13:57:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="497587232"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 13:57:08 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nK5oq-000A4q-6W; Tue, 15 Feb 2022 21:57:08 +0000
-Date: Wed, 16 Feb 2022 05:56:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 9/43]
- fs/9p/vfs_inode.c:258:7: error: no member named 'wsize' in 'struct
- netfs_i_context'
-Message-ID: <202202160504.GlQpVHFc-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF7D1B84
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 22:57:58 +0000 (UTC)
+Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id B1896CC9AB
+	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 22:45:29 +0000 (UTC)
+Received: (Authenticated sender: joao@overdrivepizza.com)
+	by mail.gandi.net (Postfix) with ESMTPA id E9B18100002;
+	Tue, 15 Feb 2022 22:45:19 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Date: Tue, 15 Feb 2022 14:45:19 -0800
+From: Joao Moreira <joao@overdrivepizza.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Kees Cook <keescook@chromium.org>, x86@kernel.org, hjl.tools@gmail.com,
+ jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+ linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+ samitolvanen@google.com, llvm@lists.linux.dev
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+In-Reply-To: <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+References: <20211122170301.764232470@infradead.org>
+ <20211122170805.338489412@infradead.org>
+ <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
+ <202202081541.900F9E1B@keescook>
+ <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
+ <202202082003.FA77867@keescook>
+ <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com>
+ <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+Message-ID: <ad72aa54607151a5d838058f8493d9a7@overdrivepizza.com>
+X-Sender: joao@overdrivepizza.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   d40df0841e9f8de3713a19dd3f0ba283c860cb93
-commit: 90870fcbed9794a03bee7aba8195e8c43e46e1dd [9/43] netfs: Add a netfs inode context
-config: hexagon-randconfig-r034-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160504.GlQpVHFc-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/90870fcbed9794a03bee7aba8195e8c43e46e1dd
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 90870fcbed9794a03bee7aba8195e8c43e46e1dd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/9p/
+On 2022-02-11 05:38, Peter Zijlstra wrote:
+> On Tue, Feb 08, 2022 at 09:18:44PM -0800, Joao Moreira wrote:
+>> > Ah, excellent, thanks for the pointers. There's also this in the works:
+>> > https://reviews.llvm.org/D119296 (a new CFI mode, designed to play nice
+>> > to objtool, IBT, etc.)
+>> 
+>> Oh, great! Thanks for pointing it out. I guess I saw something with a
+>> similar name before ;) 
+>> https://www.blackhat.com/docs/asia-17/materials/asia-17-Moreira-Drop-The-Rop-Fine-Grained-Control-Flow-Integrity-For-The-Linux-Kernel.pdf
+>> 
+>> Jokes aside (and perhaps questions more targeted to Sami), from a 
+>> diagonal
+>> look it seems that this follows the good old tag approach proposed by
+>> PaX/grsecurity, right? If this is the case, should I assume it could 
+>> also
+>> benefit from features like -mibt-seal? Also are you considering that 
+>> perhaps
+>> we can use alternatives to flip different CFI instrumentation as 
+>> suggested
+>> by PeterZ in another thread?
+> 
+> So, lets try and recap things from IRC yesterday. There's a whole bunch
+> of things intertwining making indirect branches 'interesting'. Most of
+> which I've not seen mentioned in Sami's KCFI proposal which makes it
+> rather pointless.
+> 
+> I think we'll end up with something related to KCFI, but with distinct
+> differences:
+> 
+>  - 32bit immediates for smaller code
+>  - __kcfi_check_fail() is out for smaller code
+>  - it must interact with IBT/BTI and retpolines
+>  - we must be very careful with speculation.
+> 
+> Right, so because !IBT-CFI needs the check at the call site, like:
+> 
+> caller:
+> 	cmpl	$0xdeadbeef, -0x4(%rax)		# 7 bytes
+> 	je	1f				# 2 bytes
+> 	ud2					# 2 bytes
+> 1:	call	__x86_indirect_thunk_rax	# 5 bytes
+> 
+> 
+> 	.align 16
+> 	.byte 0xef, 0xbe, 0xad, 0xde		# 4 bytes
+> func:
+> 	...
+> 	ret
+> 
+> 
+> While FineIBT has them at the landing site:
+> 
+> caller:
+> 	movl	$0xdeadbeef, %r11d		# 6 bytes
+> 	call	__x86_indirect_thunk_rax	# 5 bytes
+> 
+> 
+> 	.align 16
+> func:
+> 	endbr					# 4 bytes
+> 	cmpl	$0xdeadbeef, %r11d		# 7 bytes
+> 	je	1f				# 2 bytes
+> 	ud2					# 2 bytes
+> 1:	...
+> 	ret
+> 
+> 
+> It seems to me that always doing the check at the call-site is simpler,
+> since it avoids code-bloat and patching work. That is, if we allow both
+> we'll effectivly blow up the code by 11 + 13 bytes (11 at the call 
+> site,
+> 13 at function entry) as opposed to 11+4 or 6+13.
+> 
+> Which then yields:
+> 
+> caller:
+> 	cmpl	$0xdeadbeef, -0x4(%rax)		# 7 bytes
+> 	je	1f				# 2 bytes
+> 	ud2					# 2 bytes
+> 1:	call	__x86_indirect_thunk_rax	# 5 bytes
+> 
+> 
+> 	.align 16
+> 	.byte 0xef, 0xbe, 0xad, 0xde		# 4 bytes
+> func:
+> 	endbr					# 4 bytes
+> 	...
+> 	ret
+> 
+> For a combined 11+8 bytes overhead :/
+> 
+> Now, this setup provides:
+> 
+>  - minimal size (please yell if there's a smaller option I missed;
+>    s/ud2/int3/ ?)
+>  - since the retpoline handles speculation from stuff before it, the
+>    load-miss induced speculation is covered.
+>  - the 'je' branch is binary, leading to either the retpoline or the
+>    ud2, both which are a speculation stop.
+>  - the ud2 is placed such that if the exception is non-fatal, code
+>    execution can recover
+>  - when IBT is present we can rewrite the thunk call to:
+> 
+> 	lfence
+> 	call *(%rax)
+> 
+>    and rely on the WAIT-FOR-ENDBR speculation stop (also 5 bytes).
+>  - can disable CFI by replacing the cmpl with:
+> 
+> 	jmp	1f
+> 
+>    (or an 11 byte nop, which is just about possible). And since we
+>    already have all retpoline thunk callsites in a section, we can
+>    trivially find all CFI bits that are always in front it them.
+>  - function pointer sanity
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Agreed that it is sensible to support CFI for CPUs without CET. KCFI is 
+a win.
+Yet, I still think that we should support FineIBT and there are a few 
+reasons
+for that (other than hopeful performance benefits).
 
-Note: the ammarfaizi2-block/dhowells/linux-fs/netfs-maple HEAD d40df0841e9f8de3713a19dd3f0ba283c860cb93 builds fine.
-      It only hurts bisectability.
+- KCFI is more prone to the presence of unintended allowed targets. 
+Since the
+IBT scheme always rely on the same watermark tag (the ENDBR 
+instruction), it
+is easier to prevent these from being emitted by JIT/compilers (fwiiw, 
+see
+https://reviews.llvm.org/rGf385823e04f300c92ec03dbd660d621cc618a271 and
+https://dl.acm.org/doi/10.1145/3337167.3337175).
 
-All errors (new ones prefixed by >>):
+- Regarding the space overhead, I can try to verify if FineIBT can be 
+feasibly
+reshaped into:
 
->> fs/9p/vfs_inode.c:258:7: error: no member named 'wsize' in 'struct netfs_i_context'
-           ctx->wsize = 1024 * 1024;
-           ~~~  ^
-   1 error generated.
+caller:
+     movl    $0xdeadbeef,%r10            # 6 bytes
+     sub     $0x5,%r11                   # 4 bytes
+     call    *(%r11)                     # 5 bytes
 
+     .align 16
+     endbr                               # 4 bytes
+     call __x86_fineibt_thunk_deadbeef   # 5 bytes
+func+4:
+     ...
+     ret
 
-vim +258 fs/9p/vfs_inode.c
+__x86_fineibt_thunk_deadbeef:
+     xor     $0xdeadbeef, %r10
+     je      1f
+     ud2
+1:
+     retq
 
-   249	
-   250	/*
-   251	 * Set parameters for the netfs library
-   252	 */
-   253	static void v9fs_set_netfs_context(struct inode *inode)
-   254	{
-   255		struct netfs_i_context *ctx = netfs_i_context(inode);
-   256	
-   257		netfs_i_context_init(inode, &v9fs_req_ops);
- > 258		ctx->wsize = 1024 * 1024;
-   259	}
-   260	
+This scheme would require less space and less runtime patching. We would 
+need
+one additional byte on callees to patch both the ENDBR and the 5-byte 
+call
+instruction, plus space to hold the thunks somewhere else. The thunks 
+overhead
+is then dilluted across the functions belonging to the same equivalence 
+set,
+as these will use the same thunk. On a quick analysis over defconfig, it 
+seems
+that the number of equivalence sets are ~25% of the number of functions 
+(thus,
+space overhead is cut to a fourth). I guess this would only require the 
+KCFI
+compiler support to emit an additional "0xcc" before the tag.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thunks can also be placed in a special section and dropped during boot 
+to
+reduce the runtime memory footprint.
+
+What do you think, is this worth investigating?
+
+Also, in my understanding, r11 does not need to be preserved as, 
+per-ABI, it
+is a scratch register. So there is no need to add $0x5,%r11 back after 
+the
+call. Let me know if I'm mistaken.
+
+> 
+> Additionally, if we ensure all direct call are +4 and only indirect
+> calls hit the ENDBR -- as it optimal anyway, saves on decoding ENDBR. 
+> We
+> can replace those ENDBR instructions of functions that should never be
+> indirectly called with:
+> 
+> 	ud1    0x0(%rax),%eax
+> 
+> which is a 4 byte #UD. This gives us the property that even on !IBT
+> hardware such a call will go *splat*.
+
+Given that the space overhead is a big concern, isn't it better to use 
+the
+compiler support to prevent ENDBRs in the first place? Patching #UD is 
+kinda
+cool, yeah, but I don't see it providing meaningful security guarantees 
+over
+not having the ENDBRs emitted at all.
+
+> 
+> Further, Andrew put in the request for __attribute__((cfi_seed(blah)))
+> to allow distinguishing indirect functions with otherwise identical
+> signature; eg. cookie = hash32(blah##signature).
+> 
+> 
+> Did I miss anything? Got anything wrong?
+
+I understand that Today there are not too many CET-enabled CPUs out 
+there,
+and that the benefits might be a bit blurred currently. Yet, given that 
+this
+is something that should continuously change with time, would you object 
+to
+FineIBT as a build option, i.e., something which might not be supported 
+by
+alternatives when using defconfig?
