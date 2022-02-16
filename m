@@ -1,34 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B9B1B8D
-	for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 23:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA4EC340EB;
-	Tue, 15 Feb 2022 23:48:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644968889;
-	bh=ntRkLDJdszNp74lJFVe+EQz4Z27rNENIOTdR2SU+7VU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f/SX0Swt8Tie4u76t8Z0xXSmx1fzLK7JoCvPUyRiuVFh1LSRgFO0q2dOOzLt7Bn0s
-	 0gVJLDZOjGnBBGMrmEqMfJ67WnbtmRdW7/yOgxSUaZQ7tvZVwNHk3jO3h19zkQFSuf
-	 58mfZNMbB8hEGDeSuGMKB7umTk1la9ufDJEJxrtZT9j56kec1tSDrgSdZdaNciWRx6
-	 aH0zR+swH7M+ZZBCGydDFoeqpYmxZ4qVrccNGJD8u4q5wfbea+sth8aVqhGYds2FH2
-	 U06eeZ3pRAswO8RIn4RwagyApfOUBrGioY1Uar/kY9QJiAHnX/OQjvxIl1tUKfN4am
-	 u3Tn7iHF3oYiw==
-Date: Tue, 15 Feb 2022 16:48:03 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Yujie Liu <yujie.liu@intel.com>,
-	Philip Li <philip.li@intel.com>, julie.du@intel.com,
-	Michal Marek <michal.lkml@markovi.net>, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52DE1B90
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 00:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644970218; x=1676506218;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uEyOI3gBkM4gqhuOyvcPW9N22GUaDMH9evCDrwsFc+8=;
+  b=oGJskdGVR7SOFJGS955T1S1jFizlJ0zFRzsjdf8vrQL82g9BFittSvKm
+   4ZowtFu9dJx6D5kXPifQOQzJt9y3j1ibDjeAWgvN2fO8NxThrWbQ6DiT9
+   +T4DL9E5ofFfWJ2DKEoSBQESgiwiyVxbWQA2TM6qULmQfx6kVPtHs0pkK
+   032NpxMUPId/0lg5xwwdePkupLdC/lbplhwfylD1stjmC0bDexuxLJGGC
+   yV8BGTk+03IUeqwOXCeADpcZupOiMZ7u9wCX52ZPfkXdnH9URFrHn1EcI
+   iiFSuhyvqRQ//2w/zVohV/WPtY1hHGdNddrnVIN8W8EeXQZSD4b7QtgTB
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="231114712"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="231114712"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 16:10:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="704022345"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 15 Feb 2022 16:10:16 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nK7tf-000ABK-Bg; Wed, 16 Feb 2022 00:10:15 +0000
+Date: Wed, 16 Feb 2022 08:09:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Armin Wolf <W_Armin@gmx.de>, pali@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, jdelvare@suse.com,
+	linux@roeck-us.net, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation/llvm: refresh docs for LLVM=1
-Message-ID: <Ygw7s5XRokaPP1J5@dev-arch.archlinux-ax161>
-References: <20220215204947.1719516-1-ndesaulniers@google.com>
+Subject: Re: [PATCH 5/7] hwmon: (dell-smm) Improve assembly code
+Message-ID: <202202160842.6EYIVsJn-lkp@intel.com>
+References: <20220215191113.16640-6-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,223 +46,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215204947.1719516-1-ndesaulniers@google.com>
+In-Reply-To: <20220215191113.16640-6-W_Armin@gmx.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Feb 15, 2022 at 12:49:47PM -0800, Nick Desaulniers wrote:
-> Refresh the docs for 2022:
-> * add link to Chimera Linux.
-> * add Quick Start section pointing out that LLVM=1 is the simple
->   recommended method.
-> * Re-order the sections on Clang and Cross Compiling to come after the
->   section on LLVM utilities. I think the documentation flows better this
->   way.
-> * Add note about LLVM=1 to Omitting CROSS_COMPILE section.
-> * Change note in Supported Architectures from discussing CC=clang vs.
->   LLVM=1 to discussion LLVM=1 vs. LLVM_IAS=0.
-> * Update make command column of support architecture table; we now
->   support LLVM=1 everywhere; just some more work to get ARCH=s390
->   assembling with clang.
-> * Word wrap a few columns over 80 lines.
+Hi Armin,
 
-This patch is doing a lot, it might make sense to split it up. Reviewing
-documentation changes is not the easiest as it is.
+Thank you for the patch! Yet something to improve:
 
-Comments inline, thanks for the patch!
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on next-20220215]
+[cannot apply to linus/master v5.17-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  Documentation/kbuild/llvm.rst | 82 +++++++++++++++++++++--------------
->  1 file changed, 50 insertions(+), 32 deletions(-)
-> 
-> diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> index d32616891dcf..7f52cde70bc7 100644
-> --- a/Documentation/kbuild/llvm.rst
-> +++ b/Documentation/kbuild/llvm.rst
-> @@ -15,36 +15,27 @@ such as GCC and binutils. Ongoing work has allowed for `Clang
->  <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
->  used as viable substitutes. Distributions such as `Android
->  <https://www.android.com/>`_, `ChromeOS
-> -<https://www.chromium.org/chromium-os>`_, and `OpenMandriva
-> -<https://www.openmandriva.org/>`_ use Clang built kernels.  `LLVM is a
-> +<https://www.chromium.org/chromium-os>`_, `OpenMandriva
-> +<https://www.openmandriva.org/>`_, and `Chimera Linux
-> +<https://chimera-linux.org/>`_ use Clang built kernels.  `LLVM is a
->  collection of toolchain components implemented in terms of C++ objects
->  <https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM that
->  supports C and the GNU C extensions required by the kernel, and is pronounced
->  "klang," not "see-lang."
->  
-> -Clang
-> ------
-> +Quick Start
-> +-----------
-> +::
->  
-> -The compiler used can be swapped out via ``CC=`` command line argument to ``make``.
-> -``CC=`` should be set when selecting a config and during a build. ::
-> +	make LLVM=1
->  
-> -	make CC=clang defconfig
-> +for native builds or
->  
-> -	make CC=clang
-> +or ::
->  
-> -Cross Compiling
-> ----------------
-> +	ARCH=arm64 make LLVM=1
+url:    https://github.com/0day-ci/linux/commits/Armin-Wolf/hwmon-dell-smm-Miscellaneous-improvements/20220216-031722
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: i386-randconfig-a004-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160842.6EYIVsJn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/e03bd707be4885b219afdfd7a24778fb0a8129e1
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Armin-Wolf/hwmon-dell-smm-Miscellaneous-improvements/20220216-031722
+        git checkout e03bd707be4885b219afdfd7a24778fb0a8129e1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-make ARCH=arm64 LLVM=1
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-is used throughout the rest of the document and I think it is more
-consistent to keep all the variables on the right side of make.
+All errors (new ones prefixed by >>):
 
-Compare:
+>> drivers/hwmon/dell-smm-hwmon.c:178:15: error: inline assembly requires more registers than available
+           asm volatile("out %%al,$0xb2\n\t"
+                        ^
+   1 error generated.
 
-$ rg "make .*=" Documentation
 
-vs.
+vim +178 drivers/hwmon/dell-smm-hwmon.c
 
-$ rg "=.* make" Documentation
+   161	
+   162	/*
+   163	 * Call the System Management Mode BIOS. Code provided by Jonathan Buzzard.
+   164	 */
+   165	static int i8k_smm_func(void *par)
+   166	{
+   167		ktime_t calltime = ktime_get();
+   168		struct smm_regs *regs = par;
+   169		int eax = regs->eax;
+   170		int ebx = regs->ebx;
+   171		long long duration;
+   172		int rc;
+   173	
+   174		/* SMM requires CPU 0 */
+   175		if (smp_processor_id() != 0)
+   176			return -EBUSY;
+   177	
+ > 178		asm volatile("out %%al,$0xb2\n\t"
+   179			     "out %%al,$0x84\n"
+   180			     : "=a" (regs->eax),
+   181			       "=b" (regs->ebx),
+   182			       "=c" (regs->ecx),
+   183			       "=d" (regs->edx),
+   184			       "=S" (regs->esi),
+   185			       "=D" (regs->edi),
+   186			       CC_OUT(c) (rc)
+   187			     : "a" (regs->eax),
+   188			       "b" (regs->ebx),
+   189			       "c" (regs->ecx),
+   190			       "d" (regs->edx),
+   191			       "S" (regs->esi),
+   192			       "D" (regs->edi));
+   193	
+   194		if (rc != 0 || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
+   195			rc = -EINVAL;
+   196	
+   197		duration = ktime_us_delta(ktime_get(), calltime);
+   198		pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lld usecs)\n", eax, ebx,
+   199			 (rc ? 0xffff : regs->eax & 0xffff), duration);
+   200	
+   201		return rc;
+   202	}
+   203	
 
->  
-> -A single Clang compiler binary will typically contain all supported backends,
-> -which can help simplify cross compiling. ::
-> -
-> -	make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu-
-> -
-> -``CROSS_COMPILE`` is not used to prefix the Clang compiler binary, instead
-> -``CROSS_COMPILE`` is used to set a command line flag: ``--target=<triple>``. For
-> -example: ::
-> -
-> -	clang --target=aarch64-linux-gnu foo.c
-> +for cross compiling.
->  
->  LLVM Utilities
->  --------------
-> @@ -63,6 +54,32 @@ They can be enabled individually. The full list of the parameters: ::
->  The integrated assembler is enabled by default. You can pass ``LLVM_IAS=0`` to
->  disable it.
->  
-> +Clang
-> +-----
-> +
-> +The compiler used can be swapped out via ``CC=`` command line argument to
-
-... via the ``CC=``... ?
-
-> +``make``.  ``CC=`` should be set when selecting a config and during a build.
-
-I think
-
-``CC=`` should be set when generating a config and building a kernel.
-
-might read a little bit better?
-
-> +``CC=clang`` is implied by ``LLVM=1``, but if it's desired to simply use clang
-> +as the compiler for the target, then ``CC=`` is a quick substitute. ::
-> +
-> +	make CC=clang defconfig
-> +
-> +	make CC=clang
-> +
-> +Cross Compiling
-> +---------------
-> +
-> +A single Clang compiler binary will typically contain all supported backends,
-> +which can help simplify cross compiling. ::
-> +
-> +	make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu-
-> +
-> +``CROSS_COMPILE`` is not used to prefix the Clang compiler binary, instead
-> +``CROSS_COMPILE`` is used to set a command line flag: ``--target=<triple>``.
-> +For example: ::
-> +
-> +	clang --target=aarch64-linux-gnu foo.c
-> +
->  Omitting CROSS_COMPILE
->  ----------------------
->  
-> @@ -71,7 +88,8 @@ As explained above, ``CROSS_COMPILE`` is used to set ``--target=<triple>``.
->  If ``CROSS_COMPILE`` is not specified, the ``--target=<triple>`` is inferred
->  from ``ARCH``.
->  
-> -That means if you use only LLVM tools, ``CROSS_COMPILE`` becomes unnecessary.
-> +That means if you use only LLVM tools via ``LLVM=1``, ``CROSS_COMPILE`` becomes
-> +unnecessary.
->  
->  For example, to cross-compile the arm64 kernel::
->  
-> @@ -88,13 +106,13 @@ Supported Architectures
->  LLVM does not target all of the architectures that Linux supports and
->  just because a target is supported in LLVM does not mean that the kernel
->  will build or work without any issues. Below is a general summary of
-> -architectures that currently work with ``CC=clang`` or ``LLVM=1``. Level
-> -of support corresponds to "S" values in the MAINTAINERS files. If an
-> -architecture is not present, it either means that LLVM does not target
-> -it or there are known issues. Using the latest stable version of LLVM or
-> -even the development tree will generally yield the best results.
-> -An architecture's ``defconfig`` is generally expected to work well,
-> -certain configurations may have problems that have not been uncovered
-> +architectures that currently work with ``LLVM=1`` but may need the integrated
-> +assembler disabled via ``LLVM_IAS=0``. Level of support corresponds to "S"
-> +values in the MAINTAINERS files. If an architecture is not present, it either
-> +means that LLVM does not target it or there are known issues. Using the latest
-> +stable version of LLVM or even the development tree will generally yield the
-> +best results.  An architecture's ``defconfig`` is generally expected to work
-> +well, certain configurations may have problems that have not been uncovered
->  yet. Bug reports are always welcome at the issue tracker below!
->  
->  .. list-table::
-> @@ -112,16 +130,16 @@ yet. Bug reports are always welcome at the issue tracker below!
->       - ``LLVM=1``
->     * - mips
->       - Maintained
-> -     - ``CC=clang``
-> +     - ``LLVM=1``
->     * - powerpc
->       - Maintained
-> -     - ``CC=clang``
-> +     - ``LLVM=1``
-
-Are we ready for this yet?
-
-https://github.com/ClangBuiltLinux/linux/issues?q=is%3Aopen+is%3Aissue+label%3A%22%5BARCH%5D+powerpc%22+label%3A%22%5BTOOL%5D+integrated-as%22
-
-I think we could potentially say LLVM=1 LLVM_IAS=0 but pseries_defconfig
-does not build with ld.lld:
-
-https://github.com/ClangBuiltLinux/linux/issues/602
-
-Maybe it is worth breaking up powerpc into powerpc32, powerpc64, and
-powerpc64le?
-
->     * - riscv
->       - Maintained
-> -     - ``CC=clang``
-> +     - ``LLVM=1``
->     * - s390
->       - Maintained
-> -     - ``CC=clang``
-> +     - ``LLVM=1 LLVM_IAS=0``
-
-I don't think s390 is ready for this claim. ld.lld and llvm-objcopy do
-not support s390, which are both used in a defconfig build, as far as I
-am aware.
-
-https://github.com/ClangBuiltLinux/linux/issues/1524
-https://github.com/ClangBuiltLinux/linux/issues/1530
-
->     * - x86
->       - Supported
->       - ``LLVM=1``
-> 
-> base-commit: c5d9ae265b105d9a67575fb67bd4650a6fc08e25
-> -- 
-> 2.35.1.265.g69c8d7142f-goog
-> 
-
-The rest of the changes look good to me.
-
-Cheers,
-Nathan
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
