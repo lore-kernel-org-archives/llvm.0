@@ -1,43 +1,43 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB65D1FC7
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 12:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=KwpwEmg3Ay1xR1OpUdJFEpmOJDMHbZm34VOni0D55fE=; b=bxlC7Hk92JLtUG4P6uFvkF7ZwT
-	vV5rij/EihMTPNuwhQTsQAced9u7zDEOR0fWZpIPvIIvrQj34YxJ165OYQeezvzA2OyHHwr1u4LPD
-	2YDycurAhC69LeI7uOc7aUsrNn1ACcbOpIjL3AgPwTecM99I1r/0iNCo2zm4QYOC4dAJ0SJse8CV8
-	Cl2J4CZhJzSMEHdke3Ez9Zf2AO6gPBgzAq5qnVDIpGSkD3KadBZqlloUf/huUnvlOQlnSAiXGgmOL
-	9NXiA4XzKLSYk0o+ZDFfqv9extucWJOaiZq9tcqIHKApT2yei6Fbc9AzeUcwt5POhEElpYxowOLpm
-	+oD0CeBg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nKJMH-00AIir-8L; Wed, 16 Feb 2022 12:24:33 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 08BA9986ACA; Wed, 16 Feb 2022 13:24:30 +0100 (CET)
-Date: Wed, 16 Feb 2022 13:24:29 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>, X86 ML <x86@kernel.org>,
-	hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
-	andrew.cooper3@citrix.com, LKML <linux-kernel@vger.kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
-Message-ID: <20220216122429.GB86719@worktop.programming.kicks-ass.net>
-References: <202202081541.900F9E1B@keescook>
- <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
- <202202082003.FA77867@keescook>
- <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com>
- <20220211133803.GV23216@worktop.programming.kicks-ass.net>
- <CABCJKuciRBnz4JxBDJC=+kuJn4pU2uBkWPBov7-VL2o2j0F4SA@mail.gmail.com>
- <20220214222550.GB23216@worktop.programming.kicks-ass.net>
- <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
- <202202151129.1A5C5FE42@keescook>
- <20220215210550.GD23216@worktop.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75DE28EB
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 12:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645014999; x=1676550999;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4VVNkngBUvjf2UbRLWf5djKaS/NI5B4cK7i5F8dSJ4A=;
+  b=BHqPZMrAZo8Zpn41tUjsyzOXE9w/izmtP5xXJOnn9AwjPXaf7Kh9gmrF
+   JgSU3/dV4BcpbmLoKwHDLwlsoAGq2imBocUzcfU2FadQ1Y6pcCzJjgtV1
+   8N8i5IS+PERWlwo2MKENW439+42Qq2XSPxi9gkouHD2LpCHHbwa3VEhdG
+   dom2MantvM9XrLGIv/DMsNqDWD9OENESsjxCklNT+nrA9CWlOz3bBcWpm
+   e9NYuVzA9IHG4xsQvQNnxSXh2VqC3SVOnFE1aFniTHXJ8ShNmvLXt7f2z
+   /CesbIuUHEK4vOeKc9yrGwGG6BKJklkDlfy60jHx+Mdkl2LmzY2Y/SPFC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="248190836"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="248190836"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 04:36:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="498967815"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 16 Feb 2022 04:36:37 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nKJXw-000Anc-9o; Wed, 16 Feb 2022 12:36:36 +0000
+Date: Wed, 16 Feb 2022 20:35:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tong Zhang <ztong0001@gmail.com>, Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Tong Zhang <ztong0001@gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec: honor acpi=off
+Message-ID: <202202162047.eCFMqb2x-lkp@intel.com>
+References: <20220216062601.779690-1-ztong0001@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,27 +46,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215210550.GD23216@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220216062601.779690-1-ztong0001@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Feb 15, 2022 at 10:05:50PM +0100, Peter Zijlstra wrote:
+Hi Tong,
 
-> > Peter, is there a reason you want things in the specific order of:
-> > 
-> > cmp, je-to-call, trap, call
-> > 
-> > Isn't it more run-time efficient to have an out-of-line failure of
-> > the form:
-> > 
-> > cmp, jne-to-trap, call, ...code..., trap, jmp-to-call
-> > 
-> > I thought the static label stuff allowed the "default out of line"
-> > option, as far as pessimizing certain states, etc? The former is certainly
-> > code-size smaller, though, yes, but doesn't it waste space in the cache
-> > line for the unlikely case, etc?
-> 
-> Mostly so that we can deduce the address of the trap from the retpoline
-> site, also the above has a fairly high chance of using jcc.d32 which is
-> actually larger than jcc.d8+ud2.
+Thank you for the patch! Perhaps something to improve:
 
-Also; and I think I mentioned this a few emails back, by having the
-whole CFI thing as a single range of bytes it becomes easier to patch.
+[auto build test WARNING on chrome-platform/for-next]
+[also build test WARNING on v5.17-rc4 next-20220216]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Tong-Zhang/platform-chrome-cros_ec-honor-acpi-off/20220216-142709
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220216/202202162047.eCFMqb2x-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/66345a4aecd6e4acba257476c6e44559fccca143
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Tong-Zhang/platform-chrome-cros_ec-honor-acpi-off/20220216-142709
+        git checkout 66345a4aecd6e4acba257476c6e44559fccca143
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/chrome/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/chrome/cros_ec_lpc.c:553:6: warning: address of function 'acpi_disable' will always evaluate to 'true' [-Wpointer-bool-conversion]
+           if (acpi_disable)
+           ~~  ^~~~~~~~~~~~
+   drivers/platform/chrome/cros_ec_lpc.c:553:6: note: prefix with the address-of operator to silence this warning
+           if (acpi_disable)
+               ^
+               &
+   1 warning generated.
+
+
+vim +553 drivers/platform/chrome/cros_ec_lpc.c
+
+   547	
+   548	static int __init cros_ec_lpc_init(void)
+   549	{
+   550		int ret;
+   551		acpi_status status;
+   552	
+ > 553		if (acpi_disable)
+   554			return -ENODEV;
+   555	
+   556		status = acpi_get_devices(ACPI_DRV_NAME, cros_ec_lpc_parse_device,
+   557					  &cros_ec_lpc_acpi_device_found, NULL);
+   558		if (ACPI_FAILURE(status))
+   559			pr_warn(DRV_NAME ": Looking for %s failed\n", ACPI_DRV_NAME);
+   560	
+   561		if (!cros_ec_lpc_acpi_device_found &&
+   562		    !dmi_check_system(cros_ec_lpc_dmi_table)) {
+   563			pr_err(DRV_NAME ": unsupported system.\n");
+   564			return -ENODEV;
+   565		}
+   566	
+   567		cros_ec_lpc_mec_init(EC_HOST_CMD_REGION0,
+   568				     EC_LPC_ADDR_MEMMAP + EC_MEMMAP_SIZE);
+   569	
+   570		/* Register the driver */
+   571		ret = platform_driver_register(&cros_ec_lpc_driver);
+   572		if (ret) {
+   573			pr_err(DRV_NAME ": can't register driver: %d\n", ret);
+   574			cros_ec_lpc_mec_destroy();
+   575			return ret;
+   576		}
+   577	
+   578		if (!cros_ec_lpc_acpi_device_found) {
+   579			/* Register the device, and it'll get hooked up automatically */
+   580			ret = platform_device_register(&cros_ec_lpc_device);
+   581			if (ret) {
+   582				pr_err(DRV_NAME ": can't register device: %d\n", ret);
+   583				platform_driver_unregister(&cros_ec_lpc_driver);
+   584				cros_ec_lpc_mec_destroy();
+   585			}
+   586		}
+   587	
+   588		return ret;
+   589	}
+   590	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
