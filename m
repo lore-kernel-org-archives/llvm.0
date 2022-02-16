@@ -1,151 +1,156 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2F21844
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 01:01:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644973281; x=1676509281;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q0FCXywQavSXv/9ImP7xI1EkXXeqrd+iE5j6182icVg=;
-  b=eNb3tM0wG5n4qFSsjnBIf1jF/uIU+ARlRFUB7F9inOrjZbZwJQ5Y6YsY
-   0oVTUs7PN4xK92Af/5HueoZOZ3r/VuHS5RoVHmFXZQ/9sQQWOHKZmIldP
-   SZk2SwwJUKuWk14gvOwrAw75RWOsMOGTbbKerQZjlZLOxAAVgn31JoB3u
-   CHF1WCHzXtbfDIuF6nQF3/cd1sAHaNYNymqpSzoqJTR553TsCY6QFEVBb
-   /nj11n3pcX+Fx2KxiRbNNkvHRvV0b/J3uNKM4n2g8hCtZzFjviubVkD4+
-   rJTjNp9328PZRESLnizwikWDGl6ZCUJTTB6/XocsdoquXhjwPkg9v+CK9
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="248092690"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="248092690"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 17:01:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="704046197"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Feb 2022 17:01:17 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nK8h3-000AEc-8b; Wed, 16 Feb 2022 01:01:17 +0000
-Date: Wed, 16 Feb 2022 09:00:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 36/43]
- fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types
- ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) -
- offset) *' (aka 'unsigned long *'))
-Message-ID: <202202160859.rLKL6wYG-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EFA1B9E
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 01:19:21 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id c3so780801pls.5
+        for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 17:19:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=n3HlZeesmoig6AzcEvE+vVMKK5hAX/6KVNpJ5JEyVT0=;
+        b=HErnWS27+ufQ8NMTJ7hAU5qJQcdOuUHum0wucqqZdIejgM4oVbYBv9dz7n+S+NgHgq
+         CtO+qahqEdmzfiHlS/+L5kONAoOcQPK34qrMjCSBSnx49jUEUjcTKMUvz34S8GXpgtDN
+         kSy/ZGxSksJWuYJrmv6TqoBU+iq2cpEZVDn+tl89zjItgRR5iEctXMiyMS1yILvLR9m8
+         jd+bmOOXRfU62lUA4RABx557Fy4+mx9gJj7tA+C/5T8asdWmskTsV8p6Xl5ZlKhz/06L
+         eRAX3Do2/AiPdqaFgKNmXaI3CXIe2qtvdc3MpACpVWFSBhucZGEaASa6D8aI7/03/FOX
+         Qvfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=n3HlZeesmoig6AzcEvE+vVMKK5hAX/6KVNpJ5JEyVT0=;
+        b=mjSK7xswd1CgIKL5glwwNtXJTwgf3eg584rDCYt4zBPARLx/bLwvANZHXNldp5KA8Z
+         dZJC5P+k0/B2IXiLj226mof4savF1sM0GVf7imbw4NoTpr4jF3jFYjj9D7oMMWVljr9F
+         LLbHm9GjFXRsKlPdLXTk8Euro1+PgxMImTM1s0Ex0ogabXjhoDdEXakK+bM0UXI0+4+m
+         Br5IZ2XEH/Vvcn2WFcWDqvvm8d0y9ildYJzQsrXj/eSnV8ONuWZd68HEXhhJbRlTyCF0
+         Wt1z0TSfX7FihRYFponyWkUovphctZO3oP6buSQ56+h7mhe14S+4AH5e+KAtQgji9/pE
+         R7KQ==
+X-Gm-Message-State: AOAM530rjJgVf+ENdtvobCT3Rr0E/r0ciEOTozFJLaPfQvoEVwG66mdu
+	kgypYEUX+ND4WJBsTzJ8JaExcw==
+X-Google-Smtp-Source: ABdhPJz//7pCe6QfbeIQekjYzgNrs+uHEYNqvhn8Lf50/8/fqgE551gMWzpa1CMDZA/VAoZVPMfivQ==
+X-Received: by 2002:a17:902:e846:b0:14f:4580:4f23 with SMTP id t6-20020a170902e84600b0014f45804f23mr185743plg.63.1644974361125;
+        Tue, 15 Feb 2022 17:19:21 -0800 (PST)
+Received: from [192.168.10.24] (203-7-124-83.dyn.iinet.net.au. [203.7.124.83])
+        by smtp.gmail.com with ESMTPSA id cu21sm17962188pjb.50.2022.02.15.17.19.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 17:19:20 -0800 (PST)
+Message-ID: <8b1d0d57-0bf7-8ca5-8b08-cd5a12f7666f@ozlabs.ru>
+Date: Wed, 16 Feb 2022 12:19:14 +1100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   d40df0841e9f8de3713a19dd3f0ba283c860cb93
-commit: dcba644aa7bbb5bfb44d4a5c3abd187c51544bcd [36/43] netfs: Perform content encryption
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220216/202202160859.rLKL6wYG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/dcba644aa7bbb5bfb44d4a5c3abd187c51544bcd
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout dcba644aa7bbb5bfb44d4a5c3abd187c51544bcd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                           seg = min(len, PAGE_SIZE - offset);
-                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101
+ Thunderbird/97.0
+Subject: Re: [RFC PATCH kernel] trace: Make FTRACE_MCOUNT_USE_RECORDMCOUNT
+ configurable
+Content-Language: en-US
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Sami Tolvanen <samitolvanen@google.com>
+References: <20220211014313.1790140-1-aik@ozlabs.ru>
+ <20220211214722.4373ca83@rorschach.local.home>
+From: Alexey Kardashevskiy <aik@ozlabs.ru>
+In-Reply-To: <20220211214722.4373ca83@rorschach.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +76 fs/netfs/crypto.c
 
-    45	
-    46	/*
-    47	 * Populate a scatterlist from folios in an xarray.
-    48	 */
-    49	static int netfs_xarray_to_sglist(struct xarray *xa, loff_t pos, size_t len,
-    50					  struct scatterlist *sg, unsigned int n_sg)
-    51	{
-    52		struct scatterlist *p = sg;
-    53		struct folio *folio = NULL;
-    54		size_t seg, offset, skip = 0;
-    55		loff_t start = pos;
-    56		pgoff_t index = start >> PAGE_SHIFT;
-    57		int j;
-    58	
-    59		XA_STATE(xas, xa, index);
-    60	
-    61		sg_init_table(sg, n_sg);
-    62	
-    63		rcu_read_lock();
-    64	
-    65		xas_for_each(&xas, folio, ULONG_MAX) {
-    66			if (xas_retry(&xas, folio))
-    67				continue;
-    68			if (WARN_ON(xa_is_value(folio)) || WARN_ON(folio_test_hugetlb(folio)))
-    69				break;
-    70			for (j = (folio_index(folio) < index) ? index - folio_index(folio) : 0;
-    71			     j < folio_nr_pages(folio); j++
-    72			     ) {
-    73				struct page *subpage = folio_file_page(folio, j);
-    74	
-    75				offset = (pos + skip) & ~PAGE_MASK;
-  > 76				seg = min(len, PAGE_SIZE - offset);
-    77	
-    78				sg_set_page(p++, subpage, seg, offset);
-    79	
-    80				len -= seg;
-    81				skip += seg;
-    82				if (len == 0)
-    83					break;
-    84			}
-    85			if (len == 0)
-    86				break;
-    87		}
-    88	
-    89		rcu_read_unlock();
-    90		if (len > 0) {
-    91			kdebug("*** Insufficient source (%zx)", len);
-    92			//WARN_ON(len > 0);
-    93			return -EIO;
-    94		}
-    95	
-    96		sg_mark_end(p - 1);
-    97		return p - sg;
-    98	}
-    99	
+On 2/12/22 13:47, Steven Rostedt wrote:
+> On Fri, 11 Feb 2022 12:43:13 +1100
+> Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
+> 
+>> For whatever reason LLVM does not allow LTO (Link Time Optimization) if
+>> FTRACE_MCOUNT_USE_RECORDMCOUNT is enabled.
+>>
+>> This allows disabling just this option instead of disabling all FTRACE
+>> options.
+> 
+> What FTRACE options are you talking about?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+LTO_CLANG_THIN => HAS_LTO_CLANG => !FTRACE_MCOUNT_USE_RECORDMCOUNT =>
+
+FTRACE [=y] && !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY [=n] && 
+!FTRACE_MCOUNT_USE_CC [=n] && !FTRACE_MCOUNT_USE_OBJTOOL [=n] && 
+FTRACE_MCOUNT_RECORD [=y]
+
+A bunch.
+
+
+> 
+>>
+>> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+>> ---
+>>
+>> Or disabling FTRACE is the right thing to do if HAS_LTO_CLANG=y?
+>>
+>> Came from arch/Kconfig:
+>>
+>> config HAS_LTO_CLANG
+>>          def_bool y
+>>          depends on CC_IS_CLANG && LD_IS_LLD && AS_IS_LLVM
+>>          depends on $(success,$(NM) --help | head -n 1 | grep -qi llvm)
+>>          depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
+>>          depends on ARCH_SUPPORTS_LTO_CLANG
+>>          depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT  <======
+>>          depends on !KASAN || KASAN_HW_TAGS
+>>          depends on !GCOV_KERNEL
+>>
+>>
+>> ---
+>>   kernel/trace/Kconfig | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+>> index a5eb5e7fd624..87d82d2b0b0b 100644
+>> --- a/kernel/trace/Kconfig
+>> +++ b/kernel/trace/Kconfig
+>> @@ -704,7 +704,8 @@ config FTRACE_MCOUNT_USE_OBJTOOL
+>>   	depends on FTRACE_MCOUNT_RECORD
+>>   
+>>   config FTRACE_MCOUNT_USE_RECORDMCOUNT
+>> -	def_bool y
+>> +	bool "Enable FTRACE_MCOUNT_USE_RECORDMCOUNT"
+>> +	default y
+> 
+> I don't think this does what you think it does.
+
+Sounds like it.
+
+> This is not something that should be user selectable. What exactly are
+> you trying to accomplish here?
+
+I am trying to
+
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index b779603978e1..91c122224f83 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -153,6 +153,8 @@ config PPC
+         select ARCH_WANT_IRQS_OFF_ACTIVATE_MM
+         select ARCH_WANT_LD_ORPHAN_WARN
+         select ARCH_WEAK_RELEASE_ACQUIRE
++       select ARCH_SUPPORTS_LTO_CLANG          if PPC64
++       select ARCH_SUPPORTS_LTO_CLANG_THIN     if PPC64
+
+
+to get LTO working on powerpc64le with minimal change to 
+ppc64le_defconfig which has all these FTRACE_xxx enabled.
+
+
+> 
+> -- Steve
+> 
+> 
+>>   	depends on !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+>>   	depends on !FTRACE_MCOUNT_USE_CC
+>>   	depends on !FTRACE_MCOUNT_USE_OBJTOOL
+> 
