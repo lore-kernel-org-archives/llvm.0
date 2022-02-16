@@ -1,44 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6849938C8
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 22:57:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D044A38D1
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 23:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645052276; x=1676588276;
+  t=1645055276; x=1676591276;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K1FNw9kJqvzXvvYeL/LL/mYYXyP+XB5IVbv9vIzKqKI=;
-  b=VRKpgpnBoKjzCCKpu2xAStKB9LK7WtVbBoHKw79I55YGpm3VVqYBwm6c
-   /T4uak+9CN0JrLWUdWLX6gxA1Wue1l8j+i9YdZ/HwhVb6937XGgSHpKWv
-   KbhBaoomdaPnXkcA5R6MxKyx32AJ5P82BeNwHgEY3lYXtfkuN737hzirc
-   hfMjLPecfPsLt00+yN/LHLMWfdD3BEKRVqqGI5b4i9rP+xXWa4vxc+BbF
-   VqB+Okj63ZDVIlzikxC3XxDKNKwkG24JiycumlLayTP5Awh30HSBHTWaw
-   yYVrHDymKKsh5wwVAFTvcbDpdybvqzwSuCddZ8ARfR4KRRCOX/ypWRQqS
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="250477494"
+  bh=fs4JKPq5X+QC5yD0VVUEKvyhnjnWCNRaHddlh6dhTqI=;
+  b=gU2kDXxqSWYQmS1Siqz5wSfGd32W76O/VPW/WHdk/pkyRWqZiyjb58Gw
+   z+rZKBxzRl+GyxY1YyLG5iySKSlZGqzIXGvGBKeXL0BBF0Lespg8cgkk+
+   qZDzuDmzRpTiox1N0o2OlIy3JP1rfRYV3zqy9x1Oq5uVb1cil3BuBFJI4
+   3D6469UWrMv5ukg1E0hEKKqg8SU/75DBlL9bnXk9rY3EHuGsTcVXW84+d
+   40jv41aVwI0AP0gYo97P2pn90YwPHIVr9QqS8d+1MVceyvFG09YXxprgI
+   XVf2ywxSaE7Ekk8J3g5hDgmGtkJ+Ofs4d4K6Tbax8eiJNBvcxRCS5l5oh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249585733"
 X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="250477494"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 14:57:55 -0800
+   d="scan'208";a="249585733"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 15:47:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="681713134"
+   d="scan'208";a="704516440"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Feb 2022 14:57:53 -0800
+  by orsmga005.jf.intel.com with ESMTP; 16 Feb 2022 15:47:54 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nKTFA-000BDC-Ul; Wed, 16 Feb 2022 22:57:52 +0000
-Date: Thu, 17 Feb 2022 06:56:56 +0800
+	id 1nKU1Z-000BFL-P5; Wed, 16 Feb 2022 23:47:53 +0000
+Date: Thu, 17 Feb 2022 07:47:43 +0800
 From: kernel test robot <lkp@intel.com>
 To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 29/42]
- fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer
- types ('typeof ((1UL << 14) - offset) *' (aka 'unsigned long *') and 'typeof
- (size) *' (aka 'unsigned int *'))
-Message-ID: <202202170638.sSxMPQ6J-lkp@intel.com>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 31/42]
+ fs/netfs/buffered_write.c:749:6: warning: variable 'spare_region' is used
+ uninitialized whenever 'if' condition is true
+Message-ID: <202202170739.jOmFwlAm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,16 +50,16 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
 head:   5cb7f190822d09757b30cd9539e57eef72552d1f
-commit: 261cd621bd0477d43de460dea6c7bf7fa81824be [29/42] netfs: Implement buffered writes through netfs_file_write_iter()
-config: hexagon-randconfig-r005-20220216 (https://download.01.org/0day-ci/archive/20220217/202202170638.sSxMPQ6J-lkp@intel.com/config)
+commit: eefdd180445e96088f4a69f0e733643e9a794b1f [31/42] netfs: Allow buffered shared-writeable mmap through netfs_page_mkwrite()
+config: hexagon-randconfig-r005-20220216 (https://download.01.org/0day-ci/archive/20220217/202202170739.jOmFwlAm-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/261cd621bd0477d43de460dea6c7bf7fa81824be
+        # https://github.com/ammarfaizi2/linux-block/commit/eefdd180445e96088f4a69f0e733643e9a794b1f
         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
         git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 261cd621bd0477d43de460dea6c7bf7fa81824be
+        git checkout eefdd180445e96088f4a69f0e733643e9a794b1f
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
@@ -70,7 +69,7 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer types ('typeof ((1UL << 14) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+   fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer types ('typeof ((1UL << 14) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
                    unsigned int psize   = min(PAGE_SIZE - offset, size);
                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/minmax.h:45:19: note: expanded from macro 'min'
@@ -85,7 +84,7 @@ All warnings (new ones prefixed by >>):
    include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
            (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
                       ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/buffered_write.c:95:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
+   fs/netfs/buffered_write.c:95:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
            target->from  = min(target->from, folio_pos(folio) + offset);
                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/minmax.h:45:19: note: expanded from macro 'min'
@@ -100,7 +99,7 @@ All warnings (new ones prefixed by >>):
    include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
            (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
                       ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/buffered_write.c:96:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
+   fs/netfs/buffered_write.c:96:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
            target->to    = max(target->to,   folio_pos(folio) + offset + len);
                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/minmax.h:52:19: note: expanded from macro 'max'
@@ -115,110 +114,73 @@ All warnings (new ones prefixed by >>):
    include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
            (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
                       ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   3 warnings generated.
+>> fs/netfs/buffered_write.c:749:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (mas_expected_entries(&mas, 2) < 0) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/buffered_write.c:785:30: note: uninitialized use occurs here
+           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
+                                       ^~~~~~~~~~~~
+   fs/netfs/buffered_write.c:749:2: note: remove the 'if' if its condition is always false
+           if (mas_expected_entries(&mas, 2) < 0) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/buffered_write.c:746:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (folio_lock_killable(folio) < 0)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/buffered_write.c:785:30: note: uninitialized use occurs here
+           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
+                                       ^~~~~~~~~~~~
+   fs/netfs/buffered_write.c:746:2: note: remove the 'if' if its condition is always false
+           if (folio_lock_killable(folio) < 0)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/buffered_write.c:743:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (folio_wait_writeback_killable(folio))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/buffered_write.c:785:30: note: uninitialized use occurs here
+           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
+                                       ^~~~~~~~~~~~
+   fs/netfs/buffered_write.c:743:2: note: remove the 'if' if its condition is always false
+           if (folio_wait_writeback_killable(folio))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/buffered_write.c:726:41: note: initialize the variable 'spare_region' to silence this warning
+           struct netfs_dirty_region *spare_region;
+                                                  ^
+                                                   = NULL
+   6 warnings generated.
 
 
-vim +28 fs/netfs/buffered_write.c
+vim +749 fs/netfs/buffered_write.c
 
-    18	
-    19	static size_t copy_folio_from_iter_atomic(struct folio *folio,
-    20						  unsigned int offset, size_t size,
-    21						  struct iov_iter *i)
-    22	{
-    23		size_t copied = 0, n;
-    24	
-    25		do {
-    26			unsigned int index   = offset / PAGE_SIZE;
-    27			unsigned int poffset = offset % PAGE_SIZE;
-  > 28			unsigned int psize   = min(PAGE_SIZE - offset, size);
-    29	
-    30			n = copy_page_from_iter_atomic(folio_file_page(folio, index),
-    31						       poffset, psize, i);
-    32			copied += n;
-    33			if (n < psize)
-    34				break;
-    35			size -= n;
-    36		} while (size);
-    37		return copied;
-    38	}
-    39	
-    40	/*
-    41	 * Initialise a new dirty folio group.  We have to round it out to any crypto
-    42	 * alignment.
-    43	 */
-    44	static void netfs_init_dirty_region(struct netfs_i_context *ctx,
-    45					    struct netfs_dirty_region *region,
-    46					    struct file *file,
-    47					    loff_t start, size_t len)
-    48	{
-    49		region->from		= start;
-    50		region->to		= start + len;
-    51		region->debug_id	= atomic_inc_return(&netfs_region_debug_ids);
-    52	
-    53		if (file && ctx->ops->init_dirty_region)
-    54			ctx->ops->init_dirty_region(region, file);
-    55	
-    56		trace_netfs_ref_region(region->debug_id, refcount_read(&region->ref),
-    57				       netfs_region_trace_new);
-    58	}
-    59	
-    60	/*
-    61	 * Return true if two dirty regions are compatible such that b can be merged
-    62	 * onto the end of a.
-    63	 */
-    64	bool netfs_are_regions_mergeable(struct netfs_i_context *ctx,
-    65					 struct netfs_dirty_region *a,
-    66					 struct netfs_dirty_region *b)
-    67	{
-    68		if (!netfs_mas_is_valid(a) || !netfs_mas_is_valid(b))
-    69			return a == b;
-    70		if (b->waiting_on_wb != a->waiting_on_wb)
-    71			return false;
-    72		if (b->from != a->to &&
-    73		    !test_bit(NETFS_ICTX_NEW_CONTENT, &ctx->flags) &&
-    74		    b->from < ctx->zero_point)
-    75			return false;
-    76		if (ctx->ops->are_regions_mergeable)
-    77			return ctx->ops->are_regions_mergeable(ctx, a, b);
-    78		return true;
-    79	}
-    80	
-    81	/*
-    82	 * Subsume the modifications into an existing target region.  Returns true if
-    83	 * we need to update the dirty_regions tree.
-    84	 */
-    85	static bool netfs_subsume_into_existing(struct netfs_i_context *ctx,
-    86						struct folio *folio,
-    87						struct ma_state *mas,
-    88						struct netfs_dirty_region **_target,
-    89						struct netfs_dirty_region **_to_put,
-    90						pgoff_t *_first, pgoff_t *_last,
-    91						size_t offset, size_t len)
-    92	{
-    93		struct netfs_dirty_region *target = *_target, *prev;
-    94	
-  > 95		target->from  = min(target->from, folio_pos(folio) + offset);
-  > 96		target->to    = max(target->to,   folio_pos(folio) + offset + len);
-    97		trace_netfs_dirty(ctx, target, NULL, *_first, *_last,
-    98				  netfs_dirty_trace_modified);
-    99	
-   100		/* We might have bridged to the previous region also. */
-   101		prev = mas_prev(mas, *_first - 1);
-   102		if (!netfs_mas_is_valid(prev))
-   103			return false;
-   104	
-   105		if (prev->to != target->from ||
-   106		    prev->waiting_on_wb != target->waiting_on_wb)
-   107			return false;
-   108	
-   109		*_first = mas->index;
-   110		prev->to = target->to;
-   111		*_to_put = target;
-   112		trace_netfs_dirty(ctx, prev, NULL, *_first, *_last,
-   113				  netfs_dirty_trace_merged_prev);
-   114		return true;
-   115	}
-   116	
+   719	
+   720	/*
+   721	 * Notification that a previously read-only page is about to become writable.
+   722	 * Note that the caller indicates a single page of a multipage folio.
+   723	 */
+   724	vm_fault_t netfs_page_mkwrite(struct vm_fault *vmf)
+   725	{
+   726		struct netfs_dirty_region *spare_region;
+   727		struct folio *folio = page_folio(vmf->page);
+   728		struct file *file = vmf->vma->vm_file;
+   729		struct inode *inode = file_inode(file);
+   730		struct netfs_i_context *ctx = netfs_i_context(inode);
+   731		vm_fault_t ret = VM_FAULT_RETRY;
+   732		int err;
+   733	
+   734		MA_STATE(mas, &ctx->dirty_regions, vmf->page->index, PAGE_SIZE);
+   735	
+   736		_enter("%lx", folio->index);
+   737	
+   738		if (ctx->ops->validate_for_write(inode, file) < 0)
+   739			return VM_FAULT_SIGBUS;
+   740	
+   741		sb_start_pagefault(inode->i_sb);
+   742	
+   743		if (folio_wait_writeback_killable(folio))
+   744			goto out;
+   745	
+   746		if (folio_lock_killable(folio) < 0)
+   747			goto out;
+   748	
+ > 749		if (mas_expected_entries(&mas, 2) < 0) {
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
