@@ -1,172 +1,165 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A51A369A;
-	Wed, 16 Feb 2022 21:36:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645047365; x=1676583365;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QRJWsN67I0MagKQyC+abvYxSy/SjgNmkZ4CnqMtZUZY=;
-  b=KWNrCLRJCZG4E2eG9UWCbeaOHStyoeeJ8r2wqWWQ+CF2pkYjWE7Bp5AP
-   BFQOLhADRup1F2G/YTS37jKry6sOoifszcfSOsTlmmKKvmj9vmVzlOxsW
-   RukHLyYvJDwjFe0HHvxo7b7yXBxImwb5JHCxlhLpWyFTGqFVO+cjKrSYf
-   sXVx4o9srgSEiCG2TXeFQ35xR1SmeT4H1qkAIkyexxCMbMKW/xTp4DvJc
-   1U2Cxz7SvFDN0neGz3X7gI/MCF8W21fjdj+bdt2lQgjhSwCuoNbBJN/Q8
-   HxIfWlgQtxECzX4hoWFkfyLyWy5/UuZQz7fr3E3ej/KPMbsDWU6FsCdiP
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="248327931"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="248327931"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 13:35:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="503215036"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 16 Feb 2022 13:35:50 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nKRxl-000B8b-Q8; Wed, 16 Feb 2022 21:35:49 +0000
-Date: Thu, 17 Feb 2022 05:35:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, dan.carpenter@oracle.com,
-	Larry.Finger@lwfinger.net, straube.linux@gmail.com,
-	martin@kaiser.cx, linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org, paskripkin@gmail.com
-Subject: Re: [PATCH v2 05/15] staging: r8188eu: remove DBG_88E calls from hal
- subdir
-Message-ID: <202202170549.Ns7hoYfn-lkp@intel.com>
-References: <20220216010709.791-6-phil@philpotter.co.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70DAC1FC7
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 22:13:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1645049614;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GInsY8EWMmzWnfSQud73Z6xT/DOtOKlNQiWr2Elb/hk=;
+	b=fl675JxTZgTbBucqo+Nzsk334blOKLUHliJr+sjUB/Dzdr+F0tHISroTyMZssOSQuZxLqw
+	POpVO22kBY/Yoh1bCR3BOVh+QUnfd5iNDPH+aH90GJ/cJK8s9A3SdCZ8HALTJd8LGdRIwq
+	wYzbgPntI20qQ6HDqVyReqM+Q4kS/QQ=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-595-LC6_aXFnNu6vBEpEsvbwxg-1; Wed, 16 Feb 2022 17:13:31 -0500
+X-MC-Unique: LC6_aXFnNu6vBEpEsvbwxg-1
+Received: by mail-qk1-f198.google.com with SMTP id t10-20020a37aa0a000000b00605b9764f71so2423490qke.22
+        for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 14:13:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GInsY8EWMmzWnfSQud73Z6xT/DOtOKlNQiWr2Elb/hk=;
+        b=ch3RUhr6YbjwLHQRBbTfabSM6u1HbljlIZZS3vL+XgXMiqis8X+2/SnRy8yVzgzZ3W
+         siP9F5DsFN7tzrTLw0GU8PcYKOyWNjpdsI8YW/JcIojAnPQkCJvrWVR8gK0wZenzU58E
+         zhM90/DAV77u81PbGzigtthv1e+QdqOOqD0UEffYoK6yfuu26V6RSgzzwbrMv7GH0Kg+
+         uIlccouHISq178eKINf9eHvinSQIhYfoIfBgu99TNxZlBvW6lUc75G2sfaJ3+jIot2/h
+         zSJegQOtUO3Lprl4by1VRyMTlRnTbPJWfDSTyt5ZFiyrmtLy+M87PJpkFWv3iUgqZAvN
+         m2Nw==
+X-Gm-Message-State: AOAM533vSHelSHPHiAdIe6yIogD0MShiDnzSZuGIAcxirFu4aiATzNFR
+	PvMi9x/EtCjwmVDfptzGy5cDwHQRBeJbt8lVfohmmWYCB/JBDjOzj3k+VORnr77Rl2VDqTmVW3D
+	TrVvTnf5kE1gH3A==
+X-Received: by 2002:a37:bcd:0:b0:508:19df:59ac with SMTP id 196-20020a370bcd000000b0050819df59acmr2498053qkl.227.1645049610690;
+        Wed, 16 Feb 2022 14:13:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJylNMRi17SxjrpZK57rI6C9v3gwc8m6LOiygd1+pTiydJMqSsqj+XSkhj9zykPsZ8CKxgwdIw==
+X-Received: by 2002:a37:bcd:0:b0:508:19df:59ac with SMTP id 196-20020a370bcd000000b0050819df59acmr2497996qkl.227.1645049610346;
+        Wed, 16 Feb 2022 14:13:30 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id m22sm19966780qkn.35.2022.02.16.14.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 14:13:29 -0800 (PST)
+Date: Wed, 16 Feb 2022 14:13:24 -0800
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+	=?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
+	linux-hardening@vger.kernel.org, x86@kernel.org,
+	Borislav Petkov <bp@alien8.de>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Kristen Carlson Accardi <kristen@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	Bruce Schlobohm <bruce.schlobohm@intel.com>,
+	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Marios Pomonis <pomonis@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
+ unique-symbol` is available
+Message-ID: <20220216221324.4b4avd5l3qdmqfcv@treble>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-3-alexandr.lobakin@intel.com>
+ <20220211174130.xxgjoqr2vidotvyw@treble>
+ <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
+ <20220211183529.q7qi2qmlyuscxyto@treble>
+ <20220214122433.288910-1-alexandr.lobakin@intel.com>
+ <20220214181000.xln2qgyzgswjxwcz@treble>
+ <Yg1fab6h1rTjVbYO@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <Yg1fab6h1rTjVbYO@redhat.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220216010709.791-6-phil@philpotter.co.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Phillip,
+On Wed, Feb 16, 2022 at 03:32:41PM -0500, Joe Lawrence wrote:
+> > Right, so we'd have to abandon position-based search in favor of
+> > file+func based search.
+> > 
+> > It's not perfect because there are still a few file+func duplicates.
+> > But it might be good enough.  We would presumably just refuse to patch a
+> > duplicate.  Or we could remove them (and enforce their continued removal
+> > with tooling-based warnings).
+> > 
+> 
+> You're talking about duplicate file+func combinations as stored in the
+> symbol table?
 
-I love your patch! Perhaps something to improve:
+Right.
 
-[auto build test WARNING on staging/staging-testing]
+> ...
+>       6 OBJECT core.c::__func__.3
+>       6 OBJECT core.c::__func__.5
+>       7 OBJECT core.c::__func__.1
+>       8 OBJECT core.c::__func__.0
+>       8 OBJECT core.c::__func__.2
+> 
+> We could probably minimize the FUNC duplicates with unique names, but
+> I'm not as optimistic about the OBJECTs as most are created via macros
+> like __already_done.X.  Unless clever macro magic?
 
-url:    https://github.com/0day-ci/linux/commits/Phillip-Potter/staging-r8188eu-Cleanup-and-removal-of-DBG_88E-macro/20220216-090900
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git e9685834b1db754cbd07e31ad1a091f5d366dacf
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220217/202202170549.Ns7hoYfn-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/b481114992de793aca50ace1616b6b3947fde0a0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Phillip-Potter/staging-r8188eu-Cleanup-and-removal-of-DBG_88E-macro/20220216-090900
-        git checkout b481114992de793aca50ace1616b6b3947fde0a0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/leds/ drivers/net/ethernet/mellanox/mlxsw/ drivers/platform/chrome/ drivers/staging/r8188eu/ mm/damon/
+Good point about objects, as we rely on disambiguating them for klp
+relocations.  Luckily, the fact that most of them are created by macros
+is largely a good thing.  We consider most of those to be "special"
+static locals, which don't actually need to be correlated or referenced
+with a klp reloc.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+For example:
 
-All warnings (new ones prefixed by >>):
+- '__func__' is just the function name.  The patched function shouldn't
+  need to reference the original function's function name string.
 
->> drivers/staging/r8188eu/hal/usb_halinit.c:1546:6: warning: variable 'arg' set but not used [-Wunused-but-set-variable]
-                   u8 arg;
-                      ^
-   1 warning generated.
+- '__already_done' is used for printk_once(); no harm in making a new
+  variable initialized to false and printing it again; or converting
+  printk_once() to just printk() to avoid an extra print.
 
+- '__key' is used by lockdep to track lock usage and validate locking
+  order.  It probably makes sense to use a new key in the patched
+  function, since the new function might have different locking
+  behavior.
 
-vim +/arg +1546 drivers/staging/r8188eu/hal/usb_halinit.c
+> Next question: what are the odds that these entries, at least the ones
+> we can't easily rename, need disambiguity for livepatching?  or
+> kpatch-build for related purposes?
 
-8cd574e6af5463a Phillip Potter  2021-07-28  1490  
-b561d2f0dc01ab0 Michael Straube 2021-09-06  1491  void UpdateHalRAMask8188EUsb(struct adapter *adapt, u32 mac_id, u8 rssi_level)
-8cd574e6af5463a Phillip Potter  2021-07-28  1492  {
-8cd574e6af5463a Phillip Potter  2021-07-28  1493  	u8 init_rate = 0;
-8cd574e6af5463a Phillip Potter  2021-07-28  1494  	u8 networkType, raid;
-8cd574e6af5463a Phillip Potter  2021-07-28  1495  	u32 mask, rate_bitmap;
-8cd574e6af5463a Phillip Potter  2021-07-28  1496  	u8 shortGIrate = false;
-8cd574e6af5463a Phillip Potter  2021-07-28  1497  	int	supportRateNum = 0;
-8cd574e6af5463a Phillip Potter  2021-07-28  1498  	struct sta_info	*psta;
-d904512db6f3727 Michael Straube 2021-12-07  1499  	struct hal_data_8188e *haldata = &adapt->haldata;
-8cd574e6af5463a Phillip Potter  2021-07-28  1500  	struct mlme_ext_priv	*pmlmeext = &adapt->mlmeextpriv;
-6839ff57baa4a60 Michael Straube 2021-08-09  1501  	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
-6839ff57baa4a60 Michael Straube 2021-08-09  1502  	struct wlan_bssid_ex	*cur_network = &pmlmeinfo->network;
-8cd574e6af5463a Phillip Potter  2021-07-28  1503  
-8cd574e6af5463a Phillip Potter  2021-07-28  1504  	if (mac_id >= NUM_STA) /* CAM_SIZE */
-8cd574e6af5463a Phillip Potter  2021-07-28  1505  		return;
-8cd574e6af5463a Phillip Potter  2021-07-28  1506  	psta = pmlmeinfo->FW_sta_info[mac_id].psta;
-725a3f1c4d56b73 Michael Straube 2021-08-01  1507  	if (!psta)
-8cd574e6af5463a Phillip Potter  2021-07-28  1508  		return;
-8cd574e6af5463a Phillip Potter  2021-07-28  1509  	switch (mac_id) {
-8cd574e6af5463a Phillip Potter  2021-07-28  1510  	case 0:/*  for infra mode */
-8cd574e6af5463a Phillip Potter  2021-07-28  1511  		supportRateNum = rtw_get_rateset_len(cur_network->SupportedRates);
-8cd574e6af5463a Phillip Potter  2021-07-28  1512  		networkType = judge_network_type(adapt, cur_network->SupportedRates, supportRateNum) & 0xf;
-8cd574e6af5463a Phillip Potter  2021-07-28  1513  		raid = networktype_to_raid(networkType);
-8cd574e6af5463a Phillip Potter  2021-07-28  1514  		mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
-6839ff57baa4a60 Michael Straube 2021-08-09  1515  		mask |= (pmlmeinfo->HT_enable) ? update_MSC_rate(&pmlmeinfo->HT_caps) : 0;
-6839ff57baa4a60 Michael Straube 2021-08-09  1516  		if (support_short_GI(adapt, &pmlmeinfo->HT_caps))
-8cd574e6af5463a Phillip Potter  2021-07-28  1517  			shortGIrate = true;
-8cd574e6af5463a Phillip Potter  2021-07-28  1518  		break;
-8cd574e6af5463a Phillip Potter  2021-07-28  1519  	case 1:/* for broadcast/multicast */
-8cd574e6af5463a Phillip Potter  2021-07-28  1520  		supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
-8cd574e6af5463a Phillip Potter  2021-07-28  1521  		if (pmlmeext->cur_wireless_mode & WIRELESS_11B)
-8cd574e6af5463a Phillip Potter  2021-07-28  1522  			networkType = WIRELESS_11B;
-8cd574e6af5463a Phillip Potter  2021-07-28  1523  		else
-8cd574e6af5463a Phillip Potter  2021-07-28  1524  			networkType = WIRELESS_11G;
-8cd574e6af5463a Phillip Potter  2021-07-28  1525  		raid = networktype_to_raid(networkType);
-8cd574e6af5463a Phillip Potter  2021-07-28  1526  		mask = update_basic_rate(cur_network->SupportedRates, supportRateNum);
-8cd574e6af5463a Phillip Potter  2021-07-28  1527  		break;
-8cd574e6af5463a Phillip Potter  2021-07-28  1528  	default: /* for each sta in IBSS */
-8cd574e6af5463a Phillip Potter  2021-07-28  1529  		supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
-8cd574e6af5463a Phillip Potter  2021-07-28  1530  		networkType = judge_network_type(adapt, pmlmeinfo->FW_sta_info[mac_id].SupportedRates, supportRateNum) & 0xf;
-8cd574e6af5463a Phillip Potter  2021-07-28  1531  		raid = networktype_to_raid(networkType);
-8cd574e6af5463a Phillip Potter  2021-07-28  1532  		mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
-8cd574e6af5463a Phillip Potter  2021-07-28  1533  
-8cd574e6af5463a Phillip Potter  2021-07-28  1534  		/* todo: support HT in IBSS */
-8cd574e6af5463a Phillip Potter  2021-07-28  1535  		break;
-8cd574e6af5463a Phillip Potter  2021-07-28  1536  	}
-8cd574e6af5463a Phillip Potter  2021-07-28  1537  
-8cd574e6af5463a Phillip Potter  2021-07-28  1538  	rate_bitmap = 0x0fffffff;
-8cd574e6af5463a Phillip Potter  2021-07-28  1539  	rate_bitmap = ODM_Get_Rate_Bitmap(&haldata->odmpriv, mac_id, mask, rssi_level);
-8cd574e6af5463a Phillip Potter  2021-07-28  1540  
-8cd574e6af5463a Phillip Potter  2021-07-28  1541  	mask &= rate_bitmap;
-8cd574e6af5463a Phillip Potter  2021-07-28  1542  
-8cd574e6af5463a Phillip Potter  2021-07-28  1543  	init_rate = get_highest_rate_idx(mask) & 0x3f;
-8cd574e6af5463a Phillip Potter  2021-07-28  1544  
-8cd574e6af5463a Phillip Potter  2021-07-28  1545  	if (haldata->fw_ractrl) {
-8cd574e6af5463a Phillip Potter  2021-07-28 @1546  		u8 arg;
-8cd574e6af5463a Phillip Potter  2021-07-28  1547  
-8cd574e6af5463a Phillip Potter  2021-07-28  1548  		arg = mac_id & 0x1f;/* MACID */
-8cd574e6af5463a Phillip Potter  2021-07-28  1549  		arg |= BIT(7);
-8cd574e6af5463a Phillip Potter  2021-07-28  1550  		if (shortGIrate)
-8cd574e6af5463a Phillip Potter  2021-07-28  1551  			arg |= BIT(5);
-8cd574e6af5463a Phillip Potter  2021-07-28  1552  		mask |= ((raid << 28) & 0xf0000000);
-8cd574e6af5463a Phillip Potter  2021-07-28  1553  		psta->ra_mask = mask;
-8cd574e6af5463a Phillip Potter  2021-07-28  1554  		mask |= ((raid << 28) & 0xf0000000);
-8cd574e6af5463a Phillip Potter  2021-07-28  1555  
-8cd574e6af5463a Phillip Potter  2021-07-28  1556  		/* to do ,for 8188E-SMIC */
-8cd574e6af5463a Phillip Potter  2021-07-28  1557  		rtl8188e_set_raid_cmd(adapt, mask);
-8cd574e6af5463a Phillip Potter  2021-07-28  1558  	} else {
-6839ff57baa4a60 Michael Straube 2021-08-09  1559  		ODM_RA_UpdateRateInfo_8188E(&haldata->odmpriv,
-8cd574e6af5463a Phillip Potter  2021-07-28  1560  				mac_id,
-8cd574e6af5463a Phillip Potter  2021-07-28  1561  				raid,
-8cd574e6af5463a Phillip Potter  2021-07-28  1562  				mask,
-8cd574e6af5463a Phillip Potter  2021-07-28  1563  				shortGIrate
-8cd574e6af5463a Phillip Potter  2021-07-28  1564  				);
-8cd574e6af5463a Phillip Potter  2021-07-28  1565  	}
-8cd574e6af5463a Phillip Potter  2021-07-28  1566  	/* set ra_id */
-8cd574e6af5463a Phillip Potter  2021-07-28  1567  	psta->raid = raid;
-8cd574e6af5463a Phillip Potter  2021-07-28  1568  	psta->init_rate = init_rate;
-8cd574e6af5463a Phillip Potter  2021-07-28  1569  }
-8cd574e6af5463a Phillip Potter  2021-07-28  1570  
+I would guess the odds are rather low, given the fact that there are so
+few functions, and we don't care about most of the objects on the list.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+If duplicates were to become problematic then we could consider adding
+tooling which warns on a duplicate file:sym pair with the goal of
+eliminating duplicates (exculding the "special" objects).
+
+-- 
+Josh
+
