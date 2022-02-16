@@ -1,125 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8652E3686
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 19:52:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A28A9C340E8;
-	Wed, 16 Feb 2022 19:52:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645041167;
-	bh=iVdvkGs6o+pM836ic+gfHxMTHCz3vO/zvvlWvBaTn2A=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=pwo465a6XrA1957AT1lpolW9mFFRNxPzRukoNTkRoPLLlCWy69Sz/YStbN3tpn7Fw
-	 N/Pr2mg4S8PgW848nPl9yaQnqh0Vvm7bQORcYNUkdLHfe7kdk5Vo5gl4M1YsQpQF//
-	 UCYYMruTYPrU+AWvilYLCdrqlQOmeiNMe1ehZyudUU9iLeU6xl5CZzB7v7UE2MareJ
-	 S+ZDF2GGekxj8AXMitRHsHC7WCJ4Cx8cix5HSMpOu4/2LFIbO6/TyXKMOWQA2L3oS0
-	 M7u9N2Mtici3cGX3xMV0oU+ehQBha/0v0+Dqug4ri703A7gHhCjJtUYwjoYE7w/ev+
-	 z/hK7PaOs8QSA==
-Message-ID: <8d84c25fa277988b36969f1d08543aec8183d7c3.camel@kernel.org>
-Subject: Re: [ceph-client:testing 13/14] fs/ceph/snap.c:438:14: warning:
- variable '_realm' is uninitialized when used here
-From: Jeff Layton <jlayton@kernel.org>
-To: kernel test robot <lkp@intel.com>, Xiubo Li <xiubli@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ceph-devel@vger.kernel.org
-Date: Wed, 16 Feb 2022 14:52:45 -0500
-In-Reply-To: <202202170318.82LIXBXX-lkp@intel.com>
-References: <202202170318.82LIXBXX-lkp@intel.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE63A187C
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 19:55:20 +0000 (UTC)
+Received: by mail-ed1-f53.google.com with SMTP id q17so5826543edd.4
+        for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 11:55:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PD6yzCgOYpWVSwenJgOD3M2UZqs8pw6XfrocvAB3tzQ=;
+        b=LW13VbLkwTWAZedb390gkobGLU9vJgjeSnIV+ZGYVYe26PJNMm7yXL4LjCeRv2Lg5X
+         W1OVyibLduGH1TDCldY5uIkkMCuAFmSwwAGrATLjBGM0rkV4dNZCciBzlAs9FXJuKDzt
+         a42VB6GOtSAAKARxnXVWWoLUa8+9hyJ4JFq68f8CkQZi+HBNlOAEIHfuZ6a7AUBVDUaq
+         P+HFnmIABQejUZFNDj7/CgtECH8x/GOXxItG8tdmFPjy7F0qmfaoeiUOX331JgeRwjXN
+         9lp+7kiN29bFKciIhvtQ/UevMttvbRBSn3bk7zRUeEeoe89Oxzae9a0UaHgJyO+rKtUo
+         wEcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PD6yzCgOYpWVSwenJgOD3M2UZqs8pw6XfrocvAB3tzQ=;
+        b=mXK8QV+LMdVaMwp+7PLiZV3HfWl0jftlCVvntNqcd9A6f0Coh6feoOdtOKgBBh1DOS
+         w0Scls+jvO+JP4OsfUc5Aq7uiFLjosCFS8euIhiEKHi6B0Yq3WG6M47sb6rpolZboPqA
+         xuk+1Y1eLkMB71bo+Ihx8Tlk3NQzRKJxGQ828twMr5ExCtWcay2kwJEpiyicWpZmdS89
+         bI9X0ppRnhgzxxzSaGU+/6C9fqW395nWcPHyrEICT+sgoFqgjryI1+aK4hLhbZ+PCuHO
+         dj6r44zNGnitR8NWjEv6ynjjMCYY3O0PAi82iINzvxf41ylq3k8OZEl42umn2nmPh+l0
+         nR1w==
+X-Gm-Message-State: AOAM5327jaXLHMittFo6SopMuj+Ao1wghWFm1VG6T4pfGsgwZdRrIGzt
+	EfMjVDrodEPe21AAHTe9O8E=
+X-Google-Smtp-Source: ABdhPJwzX9rXztPm8dfsc3nzWcIwAAE+AuY4iJwnmgmrnaoHyGFSukZqgjH8Mhp/D9pIU+CXifMmyA==
+X-Received: by 2002:a05:6402:b62:b0:3e2:a75f:b949 with SMTP id cb2-20020a0564020b6200b003e2a75fb949mr4770157edb.62.1645041319061;
+        Wed, 16 Feb 2022 11:55:19 -0800 (PST)
+Received: from skbuf ([188.27.184.105])
+        by smtp.gmail.com with ESMTPSA id z5sm284783eja.20.2022.02.16.11.55.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 11:55:18 -0800 (PST)
+Date: Wed, 16 Feb 2022 21:55:17 +0200
+From: Vladimir Oltean <olteanv@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Mans Rullgard <mans@mansr.com>, Andrew Lunn <andrew@lunn.ch>,
+	Vivien Didelot <vivien.didelot@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Juergen Borleis <kernel@pengutronix.de>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: lan9303: add VLAN IDs to master device
+Message-ID: <20220216195517.o6dk64gwoe4sizl6@skbuf>
+References: <20220216151111.6376-1-mans@mansr.com>
+ <202202170327.RiXqUeGc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202202170327.RiXqUeGc-lkp@intel.com>
 
-On Thu, 2022-02-17 at 03:33 +0800, kernel test robot wrote:
-> tree:   https://github.com/ceph/ceph-client.git testing
-> head:   91e59cfc6ca1a2bf594f60474996c71047edd1e5
-> commit: 7c7e63bc9910b15ffd1f791838ff0a919058f97c [13/14] ceph: eliminate the recursion when rebuilding the snap context
-> config: hexagon-randconfig-r005-20220216 (https://download.01.org/0day-ci/archive/20220217/202202170318.82LIXBXX-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/ceph/ceph-client/commit/7c7e63bc9910b15ffd1f791838ff0a919058f97c
->         git remote add ceph-client https://github.com/ceph/ceph-client.git
->         git fetch --no-tags ceph-client testing
->         git checkout 7c7e63bc9910b15ffd1f791838ff0a919058f97c
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ceph/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> > > fs/ceph/snap.c:438:14: warning: variable '_realm' is uninitialized when used here [-Wuninitialized]
->                            list_del(&_realm->rebuild_item);
->                                      ^~~~~~
->    fs/ceph/snap.c:430:33: note: initialize the variable '_realm' to silence this warning
->                    struct ceph_snap_realm *_realm, *child;
->                                                  ^
->                                                   = NULL
->    1 warning generated.
-> 
-> 
-> vim +/_realm +438 fs/ceph/snap.c
-> 
->    417	
->    418	/*
->    419	 * rebuild snap context for the given realm and all of its children.
->    420	 */
->    421	static void rebuild_snap_realms(struct ceph_snap_realm *realm,
->    422					struct list_head *dirty_realms)
->    423	{
->    424		LIST_HEAD(realm_queue);
->    425		int last = 0;
->    426	
->    427		list_add_tail(&realm->rebuild_item, &realm_queue);
->    428	
->    429		while (!list_empty(&realm_queue)) {
->    430			struct ceph_snap_realm *_realm, *child;
->    431	
->    432			/*
->    433			 * If the last building failed dues to memory
->    434			 * issue, just empty the realm_queue and return
->    435			 * to avoid infinite loop.
->    436			 */
->    437			if (last < 0) {
->  > 438				list_del(&_realm->rebuild_item);
->    439				continue;
->    440			}
->    441	
->    442			_realm = list_first_entry(&realm_queue,
->    443						  struct ceph_snap_realm,
->    444						  rebuild_item);
+On Thu, Feb 17, 2022 at 03:33:39AM +0800, kernel test robot wrote:
+> >> drivers/net/dsa/lan9303-core.c:1095:2: error: implicit declaration of function 'vlan_vid_add' [-Werror,-Wimplicit-function-declaration]
+>            vlan_vid_add(cpu_dp->master, htons(ETH_P_8021Q), port);
+>            ^
+> >> drivers/net/dsa/lan9303-core.c:1111:2: error: implicit declaration of function 'vlan_vid_del' [-Werror,-Wimplicit-function-declaration]
+>            vlan_vid_del(cpu_dp->master, htons(ETH_P_8021Q), port);
+>            ^
 
-Xiubo, I think we just need to move this assignment of _realm above the
-previous if block. I've made that change in-tree. Please take a look and
-make sure it looks OK to you.
+#include <linux/if_vlan.h>
 
+drivers/net/dsa/Kconfig:
 
->    445			last = build_snap_context(_realm, &realm_queue, dirty_realms);
->    446			dout("rebuild_snap_realms %llx %p, %s\n", _realm->ino, _realm,
->    447			     last > 0 ? "is deferred" : !last ? "succeeded" : "failed");
->    448	
->    449			list_for_each_entry(child, &_realm->children, child_item)
->    450				list_add_tail(&child->rebuild_item, &realm_queue);
->    451	
->    452			/* last == 1 means need to build parent first */
->    453			if (last <= 0)
->    454				list_del(&_realm->rebuild_item);
->    455		}
->    456	}
->    457	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+config NET_DSA_SMSC_LAN9303
+	depends on VLAN_8021Q || VLAN_8021Q=n
 
-Thanks, KTR!
--- 
-Jeff Layton <jlayton@kernel.org>
+and maybe you can access using dp->cpu_dp in the next revision.
