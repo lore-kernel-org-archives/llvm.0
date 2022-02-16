@@ -1,130 +1,92 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB6523A9
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 07:54:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644998076; x=1676534076;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vdPa9R5BjgCaVVicsZ9eZ/gq8vB5/OnDmoGpO0xT5Ng=;
-  b=PZTI0+FDxVWkll8SfOSc/8A0tyWuBh9LqmRAQFc/L6YwQ8Ad936ur3pT
-   9KuLG97V5GB+kQCfCw0XkWb//Zw241P+xdtaf/sK3k5JuQefxIcHIh4eK
-   AefikUl8QuAnj0wRKAuzUxSDsol5Ttu+cNpQu8gs5IVdBYaPJPa+AFRq3
-   IM9noeKjkM4grmDEvyDbR/bcXOe7ITe1h0V9aQgl4jjJ9YgigWyFu4p9G
-   eoFGHQ6+IrPs4I1X/ODYiiYLvbFCCu1opt3s+ym9S9Ql6y3z74TvT5pFK
-   YjOVF2Hgrkp542F2gShT7m3QW7/TahUtlAhnKummae5Z/OeZpk0nY1yZS
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="248143487"
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="248143487"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:54:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="571169143"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 15 Feb 2022 23:54:30 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nKF8v-000Aah-DY; Wed, 16 Feb 2022 07:54:29 +0000
-Date: Wed, 16 Feb 2022 15:53:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: cgel.zte@gmail.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] soc/qcom: use struct_size over open coded arithmetic
-Message-ID: <202202161548.Pvcgszt3-lkp@intel.com>
-References: <20220216030759.1839582-1-chi.minghao@zte.com.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222FE23AB
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 08:00:14 +0000 (UTC)
+Date: Wed, 16 Feb 2022 09:00:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1644998411;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L3wE8zC2jYkj5x3k+oWAafJ5133fm1wlh+aJZav8UAA=;
+	b=jaXSSzyje7OAjBr0pNyS0kC9631YB1d0r1xiJeJPjaji5U2NKpyppIrJV5amnFvQkcYG9Q
+	8d0SSRbXsJAOSdUb89yBAfAS4FfeX5DSV/GCIQKXw2q6KKwkyRoq8lOlfMMew4LXLA+OCO
+	Cp2N/xN6XosIIIT78a+yaNDYInxTNZ/9JiJ/uJC+n30MVenmAMOt6mQgywm7LKqwjG7Qh0
+	2YjthQae5zOy9x/vGdYHMP/akgtArO8bY4pyPDFkJ5QURwqR9oUcSVhIhCHe6vE0BSlguK
+	WI5xR4MGgO1OKhrm+rKXMoOw5dLg5JWT2D09F2WC4s1ozE6QDTPKpFfpySqCMQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1644998411;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L3wE8zC2jYkj5x3k+oWAafJ5133fm1wlh+aJZav8UAA=;
+	b=cx7+VPwBYMo2YklIKj2fj9LIDfDAb3Ai+sBh0/4P+3PYdLJawOMwiPIaYrG+cdU1BBB3iR
+	JJd8W0dzCP+bV5AQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	"kernelci.org bot" <bot@kernelci.org>
+Subject: Re: [PATCH] mm/page_alloc: Mark pagesets as __maybe_unused
+Message-ID: <YgyvCTiIWAFKq6G4@linutronix.de>
+References: <20220215184322.440969-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220216030759.1839582-1-chi.minghao@zte.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220215184322.440969-1-nathan@kernel.org>
 
-Hi,
+On 2022-02-15 11:43:22 [-0700], Nathan Chancellor wrote:
+> Commit 9983a9d577db ("locking/local_lock: Make the empty local_lock_*()
+> function a macro.") in the -tip tree converted the local_lock_*()
+> functions into macros, which causes a warning with clang with
+> CONFIG_PREEMPT_RT=n + CONFIG_DEBUG_LOCK_ALLOC=n:
+> 
+>   mm/page_alloc.c:131:40: error: variable 'pagesets' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+>   static DEFINE_PER_CPU(struct pagesets, pagesets) = {
+>                                          ^
+>   1 error generated.
+> 
+> Prior to that change, clang was not able to tell that pagesets was
+> unused in this configuration because it does not perform cross function
+> analysis in the frontend. After that change, it sees that the macros
+> just do a typecheck on the lock member of pagesets, which is evaluated
+> at compile time (so the variable is technically "used"), meaning the
+> variable is not needed in the final assembly, as the warning states.
+> 
+> Mark the variable as __maybe_unused to make it clear to clang that this
+> is expected in this configuration so there is no more warning.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1593
+> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  mm/page_alloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 7ff1efc84205..406f5d0c610f 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -128,7 +128,7 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
+>  struct pagesets {
+>  	local_lock_t lock;
+>  };
+> -static DEFINE_PER_CPU(struct pagesets, pagesets) = {
+> +static DEFINE_PER_CPU(struct pagesets, pagesets) __maybe_unused = {
 
-Thank you for the patch! Yet something to improve:
+No, I need to think of something else then for the local_lock thing.  I
+haven't seen it with gcc. There is probably more than just this one.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc4 next-20220215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>  	.lock = INIT_LOCAL_LOCK(lock),
+>  };
 
-url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/soc-qcom-use-struct_size-over-open-coded-arithmetic/20220216-111200
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c5d9ae265b105d9a67575fb67bd4650a6fc08e25
-config: hexagon-randconfig-r045-20220216 (https://download.01.org/0day-ci/archive/20220216/202202161548.Pvcgszt3-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/51dde142db132ac922a62df2932acb6f27528e99
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/soc-qcom-use-struct_size-over-open-coded-arithmetic/20220216-111200
-        git checkout 51dde142db132ac922a62df2932acb6f27528e99
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/qcom/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/soc/qcom/apr.c:174:18: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-           abuf = kzalloc((struct_size(abuf, buf, len), GFP_ATOMIC);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:193:2: note: expanded from macro 'struct_size'
-           __ab_c_size(count,                                              \
-           ^~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/soc/qcom/apr.c:174:58: error: expected ')'
-           abuf = kzalloc((struct_size(abuf, buf, len), GFP_ATOMIC);
-                                                                   ^
-   drivers/soc/qcom/apr.c:174:16: note: to match this '('
-           abuf = kzalloc((struct_size(abuf, buf, len), GFP_ATOMIC);
-                         ^
-   1 warning and 1 error generated.
-
-
-vim +174 drivers/soc/qcom/apr.c
-
-   160	
-   161	static int apr_callback(struct rpmsg_device *rpdev, void *buf,
-   162					  int len, void *priv, u32 addr)
-   163	{
-   164		struct packet_router *apr = dev_get_drvdata(&rpdev->dev);
-   165		struct apr_rx_buf *abuf;
-   166		unsigned long flags;
-   167	
-   168		if (len <= APR_HDR_SIZE) {
-   169			dev_err(apr->dev, "APR: Improper apr pkt received:%p %d\n",
-   170				buf, len);
-   171			return -EINVAL;
-   172		}
-   173	
- > 174		abuf = kzalloc((struct_size(abuf, buf, len), GFP_ATOMIC);
-   175		if (!abuf)
-   176			return -ENOMEM;
-   177	
-   178		abuf->len = len;
-   179		memcpy(abuf->buf, buf, len);
-   180	
-   181		spin_lock_irqsave(&apr->rx_lock, flags);
-   182		list_add_tail(&abuf->node, &apr->rx_list);
-   183		spin_unlock_irqrestore(&apr->rx_lock, flags);
-   184	
-   185		queue_work(apr->rxwq, &apr->rx_work);
-   186	
-   187		return 0;
-   188	}
-   189	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Sebastian
