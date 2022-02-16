@@ -1,93 +1,134 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5596D1844
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 04:51:37 +0000 (UTC)
-Received: by mail-pg1-f169.google.com with SMTP id f8so1108383pgc.8
-        for <llvm@lists.linux.dev>; Tue, 15 Feb 2022 20:51:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=U8eQUsaiuvfdO3IgfBqvbUSDsbva5gKLb5MEIzgw2eE=;
-        b=cZIDOJeahCGn3AdKZfVPt+MiKrc+rR+MukeFhI+8YawjGR9fnZiZtpUUvOFDzSRHh3
-         9kCzHQke5DEYQROn/0+O3cCFmAttsee0CJ3kG8lNF4p5hB49AFumVtCYtepWTGtWqu9d
-         NnrQbyyvoXrLTdyoZ7IddsvbVPuekOi7EcrImSl9Ebmc693O0PJ2rdPzuwxZWzhLnN2I
-         Ud8ZROljBZYzqjmb0971DJFJPmkLkMnX/3gg3Ouht1OiZgcTXlngU8hWVhNrhrlq2lX3
-         Kcacu8E+fHVDsrylulXA1rxiDT2EVjULsR3Kyb3sAJq+hKxd3HRZbrqaXBH1fKFTNaM7
-         lPSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=U8eQUsaiuvfdO3IgfBqvbUSDsbva5gKLb5MEIzgw2eE=;
-        b=eVM5DyC3g3OShiBcE96J4V0gEjqeqi50JNOKP+sD45YRfBYyVrpiDxW25MIuK3GnOx
-         CHnI5E/+QJaUN+FqBRO3ZcEJzFUeZLoLvV9SM66z7UwgMYppfR7OVfYlY6F19whcua3S
-         xRfDkXBhh5rxk46R3yoEhRsYgD8DLG2lKeNSJ202wwhMm7ddNBEJvE2SNAJhm+ZjpNZE
-         XTj6XZcSP0Gey2PIVehR2yPI9wNXUQQh+zqPjL7W39Xw2gJY42F3AHOeNq65kcb8kO+Q
-         hpl7bvnfHULiDoxUKzMBSiL4C5+/gnXBeTVzsQiCj4DC474PyfJuFh4c0kcwZK2aW8aV
-         df8Q==
-X-Gm-Message-State: AOAM532BH8BxTc2xgivSKdP05eIKOYHXuN7T1cjtauSkksUGJADdAozr
-	SXiE9Ap0gVPSYSjviZTEe1YzrQ==
-X-Google-Smtp-Source: ABdhPJwOgmr4/U+0CQce1FmUkpL5w9ASN5368AKCh9x8pGmOIigflKL2cjulpUa3pybTAQZ9Wa9Idg==
-X-Received: by 2002:a63:4cf:0:b0:363:c42:c135 with SMTP id 198-20020a6304cf000000b003630c42c135mr887140pge.82.1644987096612;
-        Tue, 15 Feb 2022 20:51:36 -0800 (PST)
-Received: from [192.168.10.24] (203-7-124-83.dyn.iinet.net.au. [203.7.124.83])
-        by smtp.gmail.com with ESMTPSA id t11sm4251105pgi.90.2022.02.15.20.51.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 20:51:36 -0800 (PST)
-Message-ID: <5b021d73-51c1-164f-6136-483eeebef6fb@ozlabs.ru>
-Date: Wed, 16 Feb 2022 15:51:31 +1100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5318B1844
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 05:32:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644989548; x=1676525548;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L21kMTrGxDNdeX4jyf3m94UTHwyvHra7W9k6YdTErX0=;
+  b=fac/vghQpIOkPIOwVjbtjDG7WZRBdj3F/ZAMznnEiXr9eCcmhLL+hVDu
+   poOngDcDIRjfTM8CkxUwkOn3gF13FnhVDoy0Qocj4CgDgpmtsFEKpSlqs
+   OFuexQCHqcZt6KW4o5tFCkppn/SEWT2nXaGcaRYUM1BO8BQusuCJXHJ/j
+   DHu/hOO1/7AZrlquV5ayHxBcLx+poJUJqK4KTr+ZUfXxVXtdj+bFWQraJ
+   q2F08NairR8evE4wM7Xbb1FpFvlEtM6QYZmiYM8i4jaKGbMQ1tvs0C/3T
+   3itiI72/0Ut+ZKf1Kidw/Qa/5m9YkHDupHYoJwe1bvUjcJRDHARP1G6p3
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="275107826"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="275107826"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 21:32:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="502862919"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 15 Feb 2022 21:32:26 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nKCvR-000ATP-Gt; Wed, 16 Feb 2022 05:32:25 +0000
+Date: Wed, 16 Feb 2022 13:31:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v5 2/2] drm/msm/dp: enable widebus feature for display
+ port
+Message-ID: <202202161301.3AAqRD00-lkp@intel.com>
+References: <1644960302-4096-3-git-send-email-quic_khsieh@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101
- Thunderbird/97.0
-Subject: Re: [RFC PATCH kernel] trace: Make FTRACE_MCOUNT_USE_RECORDMCOUNT
- configurable
-Content-Language: en-US
-To: Sami Tolvanen <samitolvanen@google.com>,
- Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
- LKML <linux-kernel@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Nathan Chancellor <nathan@kernel.org>, Ingo Molnar <mingo@redhat.com>
-References: <20220211014313.1790140-1-aik@ozlabs.ru>
- <CAKwvOdkKsoYw9KOfwdHYg7OkTz0TQ6YgZZcqQ5PNg+_O1Q5bgg@mail.gmail.com>
- <CABCJKudj5VJ-f+QU0qmnODoadEzpVME2rXhtUZbzrEV8o69hqQ@mail.gmail.com>
-From: Alexey Kardashevskiy <aik@ozlabs.ru>
-In-Reply-To: <CABCJKudj5VJ-f+QU0qmnODoadEzpVME2rXhtUZbzrEV8o69hqQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644960302-4096-3-git-send-email-quic_khsieh@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+Hi Kuogee,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.17-rc4 next-20220215]
+[cannot apply to airlied/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Kuogee-Hsieh/drm-msm-dp-enable-widebus-feature-base-on-chip-hardware-revision/20220216-052636
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: hexagon-buildonly-randconfig-r005-20220216 (https://download.01.org/0day-ci/archive/20220216/202202161301.3AAqRD00-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/294e6c4f98a10e815d8673f550f4470b0b71e34d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Kuogee-Hsieh/drm-msm-dp-enable-widebus-feature-base-on-chip-hardware-revision/20220216-052636
+        git checkout 294e6c4f98a10e815d8673f550f4470b0b71e34d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/msm/hdmi/hdmi_phy_8996.c:9:
+   In file included from drivers/gpu/drm/msm/hdmi/hdmi.h:19:
+>> drivers/gpu/drm/msm/msm_drv.h:453:6: warning: no previous prototype for function 'msm_dp_wide_bus_enable' [-Wmissing-prototypes]
+   bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+        ^
+   drivers/gpu/drm/msm/msm_drv.h:453:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+   ^
+   static 
+   1 warning generated.
+--
+   In file included from drivers/gpu/drm/msm/disp/mdp5/mdp5_mdss.c:9:
+>> drivers/gpu/drm/msm/msm_drv.h:453:6: warning: no previous prototype for function 'msm_dp_wide_bus_enable' [-Wmissing-prototypes]
+   bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+        ^
+   drivers/gpu/drm/msm/msm_drv.h:453:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+   ^
+   static 
+   drivers/gpu/drm/msm/disp/mdp5/mdp5_mdss.c:29:20: warning: unused function 'mdss_write' [-Wunused-function]
+   static inline void mdss_write(struct mdp5_mdss *mdp5_mdss, u32 reg, u32 data)
+                      ^
+   2 warnings generated.
+--
+   In file included from drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:17:
+>> drivers/gpu/drm/msm/msm_drv.h:453:6: warning: no previous prototype for function 'msm_dp_wide_bus_enable' [-Wmissing-prototypes]
+   bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+        ^
+   drivers/gpu/drm/msm/msm_drv.h:453:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+   ^
+   static 
+   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:1155:26: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
+           struct msm_drm_private *priv;
+                                   ^
+   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:1192:26: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
+           struct msm_drm_private *priv;
+                                   ^
+   3 warnings generated.
 
 
+vim +/msm_dp_wide_bus_enable +453 drivers/gpu/drm/msm/msm_drv.h
 
-On 2/15/22 03:10, Sami Tolvanen wrote:
-> On Fri, Feb 11, 2022 at 4:11 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
->>
->> + Sami, Kees
->>
->> Do you guys remember why we don't support
->> FTRACE_MCOUNT_USE_RECORDMCOUNT with LTO?
-> 
-> It's because recordmcount cannot distinguish between calls and other
-> references to mcount/fentry, which is a problem with LTO where we have
-> to process the entire vmlinux.o and cannot ignore individual
-> translation units. Instead of resorting to workarounds, Peter was kind
-> enough to implement a smarter mcount pass in objtool, which we now use
-> on x86_64 with LTO.
+   452	
+ > 453	bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+   454	{
+   455		return false;
+   456	}
+   457	
 
-
-So can x86_64 have both FTRACE_MCOUNT_USE_RECORDMCOUNT and LTO?
-
-> Alexey, which architecture are you trying to fix here?
-
-
-powerpc64le.
-
-> 
-> Sami
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
