@@ -1,124 +1,86 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8515C23CA
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 09:51:50 +0000 (UTC)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21G976Ah026432;
-	Wed, 16 Feb 2022 09:51:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=yf4t3ShCrKuXwWCOP4KRr37srROtug739mg8Yy/Gjss=;
- b=mZpIrIE0Bk1S2N/RUsao3D779LfpndDPcd0mz+IJdNryTTJL7oOfhszSYXLDdvyUeoOF
- dUPZDoid7eNypkPWO8sbgOsh4I79ZxRCu7wd0Fm+yA+65b4b/axIbosMEZdMdL3xL8bT
- nKjLQFKMjFWyRBskmT+JT0LfGpFulHfdtFZkVbUC4R1xyHaXhygnHzIfPrwIDjv8Q0To
- qkG2bZjro6FkkioblICM1E07o5tPwSEbdwAjD6aE5oEK4xPBFdwoyQTL24O9GxxOmSKL
- zQfbtoTRdCV5WMLm5vN5pgce/nRu+x44QLRl3q8N6g/HJh1pwgL9IfXFDs9CmkN9hg8A Sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3e8spgebjd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 16 Feb 2022 09:51:25 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21G9YCXc029763;
-	Wed, 16 Feb 2022 09:51:24 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3e8spgebhq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 16 Feb 2022 09:51:24 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-	by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21G9gfmx027926;
-	Wed, 16 Feb 2022 09:51:22 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-	by ppma06ams.nl.ibm.com with ESMTP id 3e645jxvvs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 16 Feb 2022 09:51:22 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-	by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21G9pJXM39518630
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Feb 2022 09:51:19 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3C8A2A4066;
-	Wed, 16 Feb 2022 09:51:19 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C334AA405B;
-	Wed, 16 Feb 2022 09:51:18 +0000 (GMT)
-Received: from localhost (unknown [9.43.36.29])
-	by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Wed, 16 Feb 2022 09:51:18 +0000 (GMT)
-Date: Wed, 16 Feb 2022 15:21:17 +0530
-From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [RFC PATCH kernel] trace: Make FTRACE_MCOUNT_USE_RECORDMCOUNT
- configurable
-To: Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Nick Desaulniers
-	<ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>
-Cc: Kees Cook <keescook@chromium.org>, LKML <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-        Nathan Chancellor
-	<nathan@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sathvika Vasireddy
-	<sv@linux.ibm.com>
-References: <20220211014313.1790140-1-aik@ozlabs.ru>
-	<CAKwvOdkKsoYw9KOfwdHYg7OkTz0TQ6YgZZcqQ5PNg+_O1Q5bgg@mail.gmail.com>
-	<CABCJKudj5VJ-f+QU0qmnODoadEzpVME2rXhtUZbzrEV8o69hqQ@mail.gmail.com>
-	<5b021d73-51c1-164f-6136-483eeebef6fb@ozlabs.ru>
-In-Reply-To: <5b021d73-51c1-164f-6136-483eeebef6fb@ozlabs.ru>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1645004616.cxeynmpwuy.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FPBhCMV6JrxnCylzAp7nmoDIStgx8mBy
-X-Proofpoint-ORIG-GUID: n4IDfE2iqmYzbW99sdWTVmaLfXbGssWw
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D81C7C
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 10:49:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645008590; x=1676544590;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EUKFDEji/6gwt9hwxzLLJjF4ArMNNPU0gl41KspXdJs=;
+  b=PqqtbX8lwlphbn1NoAyPhDX2G8vqtpPrRgvX9rj045L5LKaK6aRKEiDx
+   WbBwP7ZfgXxuOm6Anr6zHzf6iBLAcio10Y2tYtV2kSJC+VUE3UT5aI86o
+   BNaLUFBZ1HNHnWNGnBnM5/55+X+pQNXxZHc5dQMBwIa1aRD5AvLc/M9tE
+   IEmuT5SlwwqBaschLwAhTHgEsVkzT+nIV2l9uVrO27U86mgjKDArmNKwm
+   JaUL+m+bhwkQItERBZsVdDd61X+KhPZtSNd/XRlSwD+lif+8S2cBeJGTL
+   6WRSAhTcQHHNWGm4wfuWunb7OZgv2NveKhLR6OnSWjj5NQKYw0gXD+ewp
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="337011937"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="337011937"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 02:49:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="539979933"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Feb 2022 02:49:34 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nKHsL-000Aih-SQ; Wed, 16 Feb 2022 10:49:33 +0000
+Date: Wed, 16 Feb 2022 18:49:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [linux-next:master 127/5952] ld.lld: error: undefined symbol:
+ generic_handle_arch_irq
+Message-ID: <202202161817.n8HQcj2s-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-16_04,2022-02-14_04,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 mlxscore=0 clxscore=1011
- bulkscore=0 phishscore=0 impostorscore=0 spamscore=0 mlxlogscore=981
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202160054
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Alexey Kardashevskiy wrote:
->=20
->=20
-> On 2/15/22 03:10, Sami Tolvanen wrote:
->> On Fri, Feb 11, 2022 at 4:11 PM Nick Desaulniers
->> <ndesaulniers@google.com> wrote:
->>>
->>> + Sami, Kees
->>>
->>> Do you guys remember why we don't support
->>> FTRACE_MCOUNT_USE_RECORDMCOUNT with LTO?
->>=20
->> It's because recordmcount cannot distinguish between calls and other
->> references to mcount/fentry, which is a problem with LTO where we have
->> to process the entire vmlinux.o and cannot ignore individual
->> translation units. Instead of resorting to workarounds, Peter was kind
->> enough to implement a smarter mcount pass in objtool, which we now use
->> on x86_64 with LTO.
+Hi Arnd,
 
-I had responded on a different thread about this:
-http://lkml.kernel.org/r/1644579444.bal9kji6uc.naveen@linux.ibm.com
+FYI, the error/warning still remains.
 
-We are working on enabling 'objtool check --mcount' on powerpc.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   b593b8979eac3f6255401663fa42f3473b8f6cb1
+commit: 54f481a2308efab49d2b14c3f8263b34fdb1c65e [127/5952] ARM: remove old-style irq entry
+config: arm-buildonly-randconfig-r004-20220216 (https://download.01.org/0day-ci/archive/20220216/202202161817.n8HQcj2s-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=54f481a2308efab49d2b14c3f8263b34fdb1c65e
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 54f481a2308efab49d2b14c3f8263b34fdb1c65e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
->=20
->=20
-> So can x86_64 have both FTRACE_MCOUNT_USE_RECORDMCOUNT and LTO?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-No. x86_64 now supports HAVE_OBJTOOL_MCOUNT, which enables=20
-FTRACE_MCOUNT_USE_OBJTOOL. That allows LTO to be used.
+All errors (new ones prefixed by >>):
 
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+>> ld.lld: error: undefined symbol: generic_handle_arch_irq
+   >>> referenced by kernel/entry-armv.o:(__irq_svc) in archive arch/arm/built-in.a
+   >>> referenced by kernel/entry-armv.o:(__irq_usr) in archive arch/arm/built-in.a
 
-- Naveen
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
