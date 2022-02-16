@@ -1,165 +1,169 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70DAC1FC7
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 22:13:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1645049614;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GInsY8EWMmzWnfSQud73Z6xT/DOtOKlNQiWr2Elb/hk=;
-	b=fl675JxTZgTbBucqo+Nzsk334blOKLUHliJr+sjUB/Dzdr+F0tHISroTyMZssOSQuZxLqw
-	POpVO22kBY/Yoh1bCR3BOVh+QUnfd5iNDPH+aH90GJ/cJK8s9A3SdCZ8HALTJd8LGdRIwq
-	wYzbgPntI20qQ6HDqVyReqM+Q4kS/QQ=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-595-LC6_aXFnNu6vBEpEsvbwxg-1; Wed, 16 Feb 2022 17:13:31 -0500
-X-MC-Unique: LC6_aXFnNu6vBEpEsvbwxg-1
-Received: by mail-qk1-f198.google.com with SMTP id t10-20020a37aa0a000000b00605b9764f71so2423490qke.22
-        for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 14:13:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GInsY8EWMmzWnfSQud73Z6xT/DOtOKlNQiWr2Elb/hk=;
-        b=ch3RUhr6YbjwLHQRBbTfabSM6u1HbljlIZZS3vL+XgXMiqis8X+2/SnRy8yVzgzZ3W
-         siP9F5DsFN7tzrTLw0GU8PcYKOyWNjpdsI8YW/JcIojAnPQkCJvrWVR8gK0wZenzU58E
-         zhM90/DAV77u81PbGzigtthv1e+QdqOOqD0UEffYoK6yfuu26V6RSgzzwbrMv7GH0Kg+
-         uIlccouHISq178eKINf9eHvinSQIhYfoIfBgu99TNxZlBvW6lUc75G2sfaJ3+jIot2/h
-         zSJegQOtUO3Lprl4by1VRyMTlRnTbPJWfDSTyt5ZFiyrmtLy+M87PJpkFWv3iUgqZAvN
-         m2Nw==
-X-Gm-Message-State: AOAM533vSHelSHPHiAdIe6yIogD0MShiDnzSZuGIAcxirFu4aiATzNFR
-	PvMi9x/EtCjwmVDfptzGy5cDwHQRBeJbt8lVfohmmWYCB/JBDjOzj3k+VORnr77Rl2VDqTmVW3D
-	TrVvTnf5kE1gH3A==
-X-Received: by 2002:a37:bcd:0:b0:508:19df:59ac with SMTP id 196-20020a370bcd000000b0050819df59acmr2498053qkl.227.1645049610690;
-        Wed, 16 Feb 2022 14:13:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJylNMRi17SxjrpZK57rI6C9v3gwc8m6LOiygd1+pTiydJMqSsqj+XSkhj9zykPsZ8CKxgwdIw==
-X-Received: by 2002:a37:bcd:0:b0:508:19df:59ac with SMTP id 196-20020a370bcd000000b0050819df59acmr2497996qkl.227.1645049610346;
-        Wed, 16 Feb 2022 14:13:30 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id m22sm19966780qkn.35.2022.02.16.14.13.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 14:13:29 -0800 (PST)
-Date: Wed, 16 Feb 2022 14:13:24 -0800
-From: Josh Poimboeuf <jpoimboe@redhat.com>
-To: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-	=?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-	linux-hardening@vger.kernel.org, x86@kernel.org,
-	Borislav Petkov <bp@alien8.de>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Kristen Carlson Accardi <kristen@linux.intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	Bruce Schlobohm <bruce.schlobohm@intel.com>,
-	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Marios Pomonis <pomonis@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-Message-ID: <20220216221324.4b4avd5l3qdmqfcv@treble>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-3-alexandr.lobakin@intel.com>
- <20220211174130.xxgjoqr2vidotvyw@treble>
- <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
- <20220211183529.q7qi2qmlyuscxyto@treble>
- <20220214122433.288910-1-alexandr.lobakin@intel.com>
- <20220214181000.xln2qgyzgswjxwcz@treble>
- <Yg1fab6h1rTjVbYO@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C6638C0
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 22:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645052276; x=1676588276;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3nDVg0ZMV12L+QQ0qFHSYQQ0u6Vucqad2IoLdsACIeQ=;
+  b=T1nhiLlG2X+sqAxzlF6xxpIWUb9yUg9qTXAQK6ISPvO/PaaZ/5rX85rX
+   cwyjZJnveIE+fD0Sq8j2uX0SjN5cpdEwUAuhztIeggOUfwlcr53OTUgEx
+   wWneJGe/BcWkqSG+dEv0BoqPedV22fDatAoGBJ51+0VsKT2bHI3FIBETl
+   oEGv2HSjAJOaKZjzt09ODw3SvqqEk+cVfR30C2QyJzwBcjlj4duV4q9lZ
+   C7xZTar2/OOE/zV3JIvAb3tjop1x3uY1ZmCKvmuadkAHJ6/ujbUFYuouV
+   L1hMzMXijJW3pF73TAgE3e8prbj3eL5I2+bWMjHdB+s3lSSY14cfN97qL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="234275625"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="234275625"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 14:57:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="625651573"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Feb 2022 14:57:53 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nKTFA-000BDA-UF; Wed, 16 Feb 2022 22:57:52 +0000
+Date: Thu, 17 Feb 2022 06:56:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lkdtm/usercopy: Expand size of "out of frame" object
+Message-ID: <202202170613.eIFMv4np-lkp@intel.com>
+References: <20220216201743.2088344-1-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <Yg1fab6h1rTjVbYO@redhat.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220216201743.2088344-1-keescook@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Feb 16, 2022 at 03:32:41PM -0500, Joe Lawrence wrote:
-> > Right, so we'd have to abandon position-based search in favor of
-> > file+func based search.
-> > 
-> > It's not perfect because there are still a few file+func duplicates.
-> > But it might be good enough.  We would presumably just refuse to patch a
-> > duplicate.  Or we could remove them (and enforce their continued removal
-> > with tooling-based warnings).
-> > 
-> 
-> You're talking about duplicate file+func combinations as stored in the
-> symbol table?
+Hi Kees,
 
-Right.
+I love your patch! Yet something to improve:
 
-> ...
->       6 OBJECT core.c::__func__.3
->       6 OBJECT core.c::__func__.5
->       7 OBJECT core.c::__func__.1
->       8 OBJECT core.c::__func__.0
->       8 OBJECT core.c::__func__.2
-> 
-> We could probably minimize the FUNC duplicates with unique names, but
-> I'm not as optimistic about the OBJECTs as most are created via macros
-> like __already_done.X.  Unless clever macro magic?
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on soc/for-next kees/for-next/pstore v5.17-rc4 next-20220216]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Good point about objects, as we rely on disambiguating them for klp
-relocations.  Luckily, the fact that most of them are created by macros
-is largely a good thing.  We consider most of those to be "special"
-static locals, which don't actually need to be correlated or referenced
-with a klp reloc.
+url:    https://github.com/0day-ci/linux/commits/Kees-Cook/lkdtm-usercopy-Expand-size-of-out-of-frame-object/20220217-041936
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git e6cb9c167eeb8f90ab924666c573e69e85e700a0
+config: hexagon-randconfig-r045-20220216 (https://download.01.org/0day-ci/archive/20220217/202202170613.eIFMv4np-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/aa676e88f535bd79a3e22a1cc70c9b6cc51dbbfe
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Kees-Cook/lkdtm-usercopy-Expand-size-of-out-of-frame-object/20220217-041936
+        git checkout aa676e88f535bd79a3e22a1cc70c9b6cc51dbbfe
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/misc/lkdtm/
 
-For example:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-- '__func__' is just the function name.  The patched function shouldn't
-  need to reference the original function's function name string.
+All errors (new ones prefixed by >>):
 
-- '__already_done' is used for printk_once(); no harm in making a new
-  variable initialized to false and printing it again; or converting
-  printk_once() to just printk() to avoid an extra print.
+>> drivers/misc/lkdtm/usercopy.c:74:39: error: use of undeclared identifier 'current_stack_pointer'
+           pr_info("stack     : %px\n", (void *)current_stack_pointer);
+                                                ^
+   1 error generated.
 
-- '__key' is used by lockdep to track lock usage and validate locking
-  order.  It probably makes sense to use a new key in the patched
-  function, since the new function might have different locking
-  behavior.
 
-> Next question: what are the odds that these entries, at least the ones
-> we can't easily rename, need disambiguity for livepatching?  or
-> kpatch-build for related purposes?
+vim +/current_stack_pointer +74 drivers/misc/lkdtm/usercopy.c
 
-I would guess the odds are rather low, given the fact that there are so
-few functions, and we don't care about most of the objects on the list.
+    53	
+    54	static noinline void do_usercopy_stack(bool to_user, bool bad_frame)
+    55	{
+    56		unsigned long user_addr;
+    57		unsigned char good_stack[32];
+    58		unsigned char *bad_stack;
+    59		int i;
+    60	
+    61		/* Exercise stack to avoid everything living in registers. */
+    62		for (i = 0; i < sizeof(good_stack); i++)
+    63			good_stack[i] = test_text[i % sizeof(test_text)];
+    64	
+    65		/* This is a pointer to outside our current stack frame. */
+    66		if (bad_frame) {
+    67			bad_stack = do_usercopy_stack_callee((uintptr_t)&bad_stack);
+    68		} else {
+    69			/* Put start address just inside stack. */
+    70			bad_stack = task_stack_page(current) + THREAD_SIZE;
+    71			bad_stack -= sizeof(unsigned long);
+    72		}
+    73	
+  > 74		pr_info("stack     : %px\n", (void *)current_stack_pointer);
+    75		pr_info("good_stack: %px-%px\n", good_stack, good_stack + sizeof(good_stack));
+    76		pr_info("bad_stack : %px-%px\n", bad_stack, bad_stack + sizeof(good_stack));
+    77	
+    78		user_addr = vm_mmap(NULL, 0, PAGE_SIZE,
+    79				    PROT_READ | PROT_WRITE | PROT_EXEC,
+    80				    MAP_ANONYMOUS | MAP_PRIVATE, 0);
+    81		if (user_addr >= TASK_SIZE) {
+    82			pr_warn("Failed to allocate user memory\n");
+    83			return;
+    84		}
+    85	
+    86		if (to_user) {
+    87			pr_info("attempting good copy_to_user of local stack\n");
+    88			if (copy_to_user((void __user *)user_addr, good_stack,
+    89					 unconst + sizeof(good_stack))) {
+    90				pr_warn("copy_to_user failed unexpectedly?!\n");
+    91				goto free_user;
+    92			}
+    93	
+    94			pr_info("attempting bad copy_to_user of distant stack\n");
+    95			if (copy_to_user((void __user *)user_addr, bad_stack,
+    96					 unconst + sizeof(good_stack))) {
+    97				pr_warn("copy_to_user failed, but lacked Oops\n");
+    98				goto free_user;
+    99			}
+   100		} else {
+   101			/*
+   102			 * There isn't a safe way to not be protected by usercopy
+   103			 * if we're going to write to another thread's stack.
+   104			 */
+   105			if (!bad_frame)
+   106				goto free_user;
+   107	
+   108			pr_info("attempting good copy_from_user of local stack\n");
+   109			if (copy_from_user(good_stack, (void __user *)user_addr,
+   110					   unconst + sizeof(good_stack))) {
+   111				pr_warn("copy_from_user failed unexpectedly?!\n");
+   112				goto free_user;
+   113			}
+   114	
+   115			pr_info("attempting bad copy_from_user of distant stack\n");
+   116			if (copy_from_user(bad_stack, (void __user *)user_addr,
+   117					   unconst + sizeof(good_stack))) {
+   118				pr_warn("copy_from_user failed, but lacked Oops\n");
+   119				goto free_user;
+   120			}
+   121		}
+   122	
+   123	free_user:
+   124		vm_munmap(user_addr, PAGE_SIZE);
+   125	}
+   126	
 
-If duplicates were to become problematic then we could consider adding
-tooling which warns on a duplicate file:sym pair with the goal of
-eliminating duplicates (exculding the "special" objects).
-
--- 
-Josh
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
