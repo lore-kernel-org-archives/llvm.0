@@ -1,136 +1,125 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B13C1B75
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 19:33:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645040031; x=1676576031;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vdbKgdDHdZFkbCvwB5I4kA5Ddz4ZRh56woj0KUxGhj0=;
-  b=hkXPVTUKloqexR8PQHV1/f1mO/4wOO5Xo3HAKCzSQp6t/o1Zd+LpV2/9
-   o07Kx42cWei93bgqOxLgrCS8MkaqzZ7T8MgwTM8dMKtwIMunpO6/JfMaA
-   qs5YsGcgZ/beviocAlX6P/3TBkyDNtQLZscyOvwiCp3m3iM2jskj3wOg7
-   cNOeyprbSe1VQItqEfIwvFo92EM4AlSD2ILMf4v7DVhoXnuwK9sSX0urd
-   kWXwhj1ZCWI6e6pBRbf+uKM/vqBs2JbHpXBv59q+Nizhhh8VbFZJPvJgu
-   WwXjxtt9rANwLlWDTtH4eBxkm14KifdK+bw920L+BRyafObBqqFK4dcQC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="275290039"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="275290039"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:33:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="571437048"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 11:33:48 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nKQ3f-000B3n-D4; Wed, 16 Feb 2022 19:33:47 +0000
-Date: Thu, 17 Feb 2022 03:33:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mans Rullgard <mans@mansr.com>, Andrew Lunn <andrew@lunn.ch>,
-	Vivien Didelot <vivien.didelot@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Juergen Borleis <kernel@pengutronix.de>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: lan9303: add VLAN IDs to master device
-Message-ID: <202202170327.RiXqUeGc-lkp@intel.com>
-References: <20220216151111.6376-1-mans@mansr.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8652E3686
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 19:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A28A9C340E8;
+	Wed, 16 Feb 2022 19:52:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645041167;
+	bh=iVdvkGs6o+pM836ic+gfHxMTHCz3vO/zvvlWvBaTn2A=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=pwo465a6XrA1957AT1lpolW9mFFRNxPzRukoNTkRoPLLlCWy69Sz/YStbN3tpn7Fw
+	 N/Pr2mg4S8PgW848nPl9yaQnqh0Vvm7bQORcYNUkdLHfe7kdk5Vo5gl4M1YsQpQF//
+	 UCYYMruTYPrU+AWvilYLCdrqlQOmeiNMe1ehZyudUU9iLeU6xl5CZzB7v7UE2MareJ
+	 S+ZDF2GGekxj8AXMitRHsHC7WCJ4Cx8cix5HSMpOu4/2LFIbO6/TyXKMOWQA2L3oS0
+	 M7u9N2Mtici3cGX3xMV0oU+ehQBha/0v0+Dqug4ri703A7gHhCjJtUYwjoYE7w/ev+
+	 z/hK7PaOs8QSA==
+Message-ID: <8d84c25fa277988b36969f1d08543aec8183d7c3.camel@kernel.org>
+Subject: Re: [ceph-client:testing 13/14] fs/ceph/snap.c:438:14: warning:
+ variable '_realm' is uninitialized when used here
+From: Jeff Layton <jlayton@kernel.org>
+To: kernel test robot <lkp@intel.com>, Xiubo Li <xiubli@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ceph-devel@vger.kernel.org
+Date: Wed, 16 Feb 2022 14:52:45 -0500
+In-Reply-To: <202202170318.82LIXBXX-lkp@intel.com>
+References: <202202170318.82LIXBXX-lkp@intel.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216151111.6376-1-mans@mansr.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 
-Hi Mans,
+On Thu, 2022-02-17 at 03:33 +0800, kernel test robot wrote:
+> tree:   https://github.com/ceph/ceph-client.git testing
+> head:   91e59cfc6ca1a2bf594f60474996c71047edd1e5
+> commit: 7c7e63bc9910b15ffd1f791838ff0a919058f97c [13/14] ceph: eliminate the recursion when rebuilding the snap context
+> config: hexagon-randconfig-r005-20220216 (https://download.01.org/0day-ci/archive/20220217/202202170318.82LIXBXX-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/ceph/ceph-client/commit/7c7e63bc9910b15ffd1f791838ff0a919058f97c
+>         git remote add ceph-client https://github.com/ceph/ceph-client.git
+>         git fetch --no-tags ceph-client testing
+>         git checkout 7c7e63bc9910b15ffd1f791838ff0a919058f97c
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ceph/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> > > fs/ceph/snap.c:438:14: warning: variable '_realm' is uninitialized when used here [-Wuninitialized]
+>                            list_del(&_realm->rebuild_item);
+>                                      ^~~~~~
+>    fs/ceph/snap.c:430:33: note: initialize the variable '_realm' to silence this warning
+>                    struct ceph_snap_realm *_realm, *child;
+>                                                  ^
+>                                                   = NULL
+>    1 warning generated.
+> 
+> 
+> vim +/_realm +438 fs/ceph/snap.c
+> 
+>    417	
+>    418	/*
+>    419	 * rebuild snap context for the given realm and all of its children.
+>    420	 */
+>    421	static void rebuild_snap_realms(struct ceph_snap_realm *realm,
+>    422					struct list_head *dirty_realms)
+>    423	{
+>    424		LIST_HEAD(realm_queue);
+>    425		int last = 0;
+>    426	
+>    427		list_add_tail(&realm->rebuild_item, &realm_queue);
+>    428	
+>    429		while (!list_empty(&realm_queue)) {
+>    430			struct ceph_snap_realm *_realm, *child;
+>    431	
+>    432			/*
+>    433			 * If the last building failed dues to memory
+>    434			 * issue, just empty the realm_queue and return
+>    435			 * to avoid infinite loop.
+>    436			 */
+>    437			if (last < 0) {
+>  > 438				list_del(&_realm->rebuild_item);
+>    439				continue;
+>    440			}
+>    441	
+>    442			_realm = list_first_entry(&realm_queue,
+>    443						  struct ceph_snap_realm,
+>    444						  rebuild_item);
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc4 next-20220216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Mans-Rullgard/net-dsa-lan9303-add-VLAN-IDs-to-master-device/20220216-231201
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c5d9ae265b105d9a67575fb67bd4650a6fc08e25
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220217/202202170327.RiXqUeGc-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/960beb0e82f5d219a4f7e8bdcc49fb548a82a69d
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Mans-Rullgard/net-dsa-lan9303-add-VLAN-IDs-to-master-device/20220216-231201
-        git checkout 960beb0e82f5d219a4f7e8bdcc49fb548a82a69d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/dsa/lan9303-core.c:1095:2: error: implicit declaration of function 'vlan_vid_add' [-Werror,-Wimplicit-function-declaration]
-           vlan_vid_add(cpu_dp->master, htons(ETH_P_8021Q), port);
-           ^
->> drivers/net/dsa/lan9303-core.c:1111:2: error: implicit declaration of function 'vlan_vid_del' [-Werror,-Wimplicit-function-declaration]
-           vlan_vid_del(cpu_dp->master, htons(ETH_P_8021Q), port);
-           ^
-   2 errors generated.
+Xiubo, I think we just need to move this assignment of _realm above the
+previous if block. I've made that change in-tree. Please take a look and
+make sure it looks OK to you.
 
 
-vim +/vlan_vid_add +1095 drivers/net/dsa/lan9303-core.c
+>    445			last = build_snap_context(_realm, &realm_queue, dirty_realms);
+>    446			dout("rebuild_snap_realms %llx %p, %s\n", _realm->ino, _realm,
+>    447			     last > 0 ? "is deferred" : !last ? "succeeded" : "failed");
+>    448	
+>    449			list_for_each_entry(child, &_realm->children, child_item)
+>    450				list_add_tail(&child->rebuild_item, &realm_queue);
+>    451	
+>    452			/* last == 1 means need to build parent first */
+>    453			if (last <= 0)
+>    454				list_del(&_realm->rebuild_item);
+>    455		}
+>    456	}
+>    457	
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
-  1082	
-  1083	static int lan9303_port_enable(struct dsa_switch *ds, int port,
-  1084				       struct phy_device *phy)
-  1085	{
-  1086		struct lan9303 *chip = ds->priv;
-  1087		struct dsa_port *cpu_dp;
-  1088	
-  1089		if (!dsa_is_user_port(ds, port))
-  1090			return 0;
-  1091	
-  1092		dsa_switch_for_each_cpu_port(cpu_dp, ds)
-  1093			break;
-  1094	
-> 1095		vlan_vid_add(cpu_dp->master, htons(ETH_P_8021Q), port);
-  1096	
-  1097		return lan9303_enable_processing_port(chip, port);
-  1098	}
-  1099	
-  1100	static void lan9303_port_disable(struct dsa_switch *ds, int port)
-  1101	{
-  1102		struct lan9303 *chip = ds->priv;
-  1103		struct dsa_port *cpu_dp;
-  1104	
-  1105		if (!dsa_is_user_port(ds, port))
-  1106			return;
-  1107	
-  1108		dsa_switch_for_each_cpu_port(cpu_dp, ds)
-  1109			break;
-  1110	
-> 1111		vlan_vid_del(cpu_dp->master, htons(ETH_P_8021Q), port);
-  1112	
-  1113		lan9303_disable_processing_port(chip, port);
-  1114		lan9303_phy_write(ds, chip->phy_addr_base + port, MII_BMCR, BMCR_PDOWN);
-  1115	}
-  1116	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks, KTR!
+-- 
+Jeff Layton <jlayton@kernel.org>
