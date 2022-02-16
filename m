@@ -1,42 +1,41 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369AA23A1
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 07:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB6523A9
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 07:54:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644995671; x=1676531671;
+  t=1644998076; x=1676534076;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7U5oGMWf02SUVa1LAPpCRrhjG1lzNajEeU86IkZlmic=;
-  b=WTynbeyVvOz/mZbXiAlLE4QA/vmJOVhhkoGYBs7TGf3XZH5cGzMjZtcE
-   eyKvm1e9f798jH3dakjUy/S1fqb8nhipJiepA+Z/d3dig+HAk3CReRzqD
-   lLHJJNnSQ2jPwLE2lkGy+oII5Vi8d+pafVVX0yMvaVmcFIvw4warFldrw
-   z2rlgltflI60LPPTF3vCqLRbRopWQ3Gq4p4S/DcMFoD27womV++qz/DpF
-   uP3kwyeNP9fj9ZwGnMClpO1AaqUWMzn/ZmEDqrmwl6pa/5W3uZha+JmVy
-   zEXWCNFP9D5huqUW18qcEvspBH6Q+0B2j9TSbijmI01f07bflIBb+46Aq
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="313813925"
+  bh=vdPa9R5BjgCaVVicsZ9eZ/gq8vB5/OnDmoGpO0xT5Ng=;
+  b=PZTI0+FDxVWkll8SfOSc/8A0tyWuBh9LqmRAQFc/L6YwQ8Ad936ur3pT
+   9KuLG97V5GB+kQCfCw0XkWb//Zw241P+xdtaf/sK3k5JuQefxIcHIh4eK
+   AefikUl8QuAnj0wRKAuzUxSDsol5Ttu+cNpQu8gs5IVdBYaPJPa+AFRq3
+   IM9noeKjkM4grmDEvyDbR/bcXOe7ITe1h0V9aQgl4jjJ9YgigWyFu4p9G
+   eoFGHQ6+IrPs4I1X/ODYiiYLvbFCCu1opt3s+ym9S9Ql6y3z74TvT5pFK
+   YjOVF2Hgrkp542F2gShT7m3QW7/TahUtlAhnKummae5Z/OeZpk0nY1yZS
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="248143487"
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="313813925"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:14:30 -0800
+   d="scan'208";a="248143487"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:54:31 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="529305275"
+   d="scan'208";a="571169143"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 15 Feb 2022 23:14:29 -0800
+  by orsmga001.jf.intel.com with ESMTP; 15 Feb 2022 23:54:30 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nKEWC-000AYw-GX; Wed, 16 Feb 2022 07:14:28 +0000
-Date: Wed, 16 Feb 2022 15:13:26 +0800
+	id 1nKF8v-000Aah-DY; Wed, 16 Feb 2022 07:54:29 +0000
+Date: Wed, 16 Feb 2022 15:53:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>
+To: cgel.zte@gmail.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 3/4] NTB: EPF: support NTB transfer between PCI RC
- and EP connection
-Message-ID: <202202161525.BBBVV79O-lkp@intel.com>
-References: <20220215053844.7119-4-Frank.Li@nxp.com>
+Subject: Re: [PATCH] soc/qcom: use struct_size over open coded arithmetic
+Message-ID: <202202161548.Pvcgszt3-lkp@intel.com>
+References: <20220216030759.1839582-1-chi.minghao@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,72 +44,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215053844.7119-4-Frank.Li@nxp.com>
+In-Reply-To: <20220216030759.1839582-1-chi.minghao@zte.com.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Frank,
+Hi,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on helgaas-pci/next]
-[also build test WARNING on jonmason-ntb/ntb-next v5.17-rc4 next-20220215]
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17-rc4 next-20220215]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Frank-Li/NTB-function-for-PCIe-RC-to-EP-connection/20220215-134115
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220216/202202161525.BBBVV79O-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/soc-qcom-use-struct_size-over-open-coded-arithmetic/20220216-111200
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c5d9ae265b105d9a67575fb67bd4650a6fc08e25
+config: hexagon-randconfig-r045-20220216 (https://download.01.org/0day-ci/archive/20220216/202202161548.Pvcgszt3-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/84bf6254010435435a8c196e30bb2d25fd22763c
+        # https://github.com/0day-ci/linux/commit/51dde142db132ac922a62df2932acb6f27528e99
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Frank-Li/NTB-function-for-PCIe-RC-to-EP-connection/20220215-134115
-        git checkout 84bf6254010435435a8c196e30bb2d25fd22763c
+        git fetch --no-tags linux-review cgel-zte-gmail-com/soc-qcom-use-struct_size-over-open-coded-arithmetic/20220216-111200
+        git checkout 51dde142db132ac922a62df2932acb6f27528e99
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/gvt/ drivers/media/i2c/ drivers/pci/endpoint/functions/ kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/qcom/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: no previous prototype for function 'pci_read' [-Wmissing-prototypes]
-   int pci_read(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 *val)
-       ^
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:975:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int pci_read(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 *val)
-   ^
-   static 
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:984:5: warning: no previous prototype for function 'pci_write' [-Wmissing-prototypes]
-   int pci_write(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 val)
-       ^
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:984:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int pci_write(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 val)
-   ^
-   static 
-   2 warnings generated.
+>> drivers/soc/qcom/apr.c:174:18: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+           abuf = kzalloc((struct_size(abuf, buf, len), GFP_ATOMIC);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:193:2: note: expanded from macro 'struct_size'
+           __ab_c_size(count,                                              \
+           ^~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/qcom/apr.c:174:58: error: expected ')'
+           abuf = kzalloc((struct_size(abuf, buf, len), GFP_ATOMIC);
+                                                                   ^
+   drivers/soc/qcom/apr.c:174:16: note: to match this '('
+           abuf = kzalloc((struct_size(abuf, buf, len), GFP_ATOMIC);
+                         ^
+   1 warning and 1 error generated.
 
 
-vim +/pci_read +975 drivers/pci/endpoint/functions/pci-epf-vntb.c
+vim +174 drivers/soc/qcom/apr.c
 
-   974	
- > 975	int pci_read(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 *val)
-   976	{
-   977		if (devfn == 0) {
-   978			memcpy(val, ((uint8_t *)pci_space) + where, size);
-   979			return 0;
-   980		}
-   981		return -1;
-   982	}
-   983	
- > 984	int pci_write(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 val)
-   985	{
-   986		return 0;
-   987	}
-   988	
+   160	
+   161	static int apr_callback(struct rpmsg_device *rpdev, void *buf,
+   162					  int len, void *priv, u32 addr)
+   163	{
+   164		struct packet_router *apr = dev_get_drvdata(&rpdev->dev);
+   165		struct apr_rx_buf *abuf;
+   166		unsigned long flags;
+   167	
+   168		if (len <= APR_HDR_SIZE) {
+   169			dev_err(apr->dev, "APR: Improper apr pkt received:%p %d\n",
+   170				buf, len);
+   171			return -EINVAL;
+   172		}
+   173	
+ > 174		abuf = kzalloc((struct_size(abuf, buf, len), GFP_ATOMIC);
+   175		if (!abuf)
+   176			return -ENOMEM;
+   177	
+   178		abuf->len = len;
+   179		memcpy(abuf->buf, buf, len);
+   180	
+   181		spin_lock_irqsave(&apr->rx_lock, flags);
+   182		list_add_tail(&abuf->node, &apr->rx_list);
+   183		spin_unlock_irqrestore(&apr->rx_lock, flags);
+   184	
+   185		queue_work(apr->rxwq, &apr->rx_work);
+   186	
+   187		return 0;
+   188	}
+   189	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
