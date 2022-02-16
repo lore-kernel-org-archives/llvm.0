@@ -1,152 +1,102 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8F6187C
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 15:15:23 +0000 (UTC)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-	by smtp-out1.suse.de (Postfix) with ESMTP id 5D49C218B0;
-	Wed, 16 Feb 2022 15:15:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1645024521; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yBnvgUiufkd6hqXyIL1xCUzZ9EdBPJ7jQt3pk+22Jeo=;
-	b=aWHBGySjkoi4X4eJw6em22aIBrUvu9NxLgBGA1YPe5teGkVd+OZMbfz5mAR/H5p27cqtNr
-	eTyibmLvFW46B/0440TTtOsAILpkMgsqB/KGMtndC8IzoufDHI25QQen3Or6hJ/HuWla6K
-	Pa5Mx18v2FogkqbxvqZV2A45oG5hbUQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1645024521;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yBnvgUiufkd6hqXyIL1xCUzZ9EdBPJ7jQt3pk+22Jeo=;
-	b=LP1Mp5P/8Rc3AyVBb8kXt+yBGl6ouToT79WXn4Nyw3u61X15U3AEuc87d4w0SeVJ1668cR
-	KD0RqNXhlm6bqmAA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by relay2.suse.de (Postfix) with ESMTPS id EBB23A3B83;
-	Wed, 16 Feb 2022 15:15:20 +0000 (UTC)
-Date: Wed, 16 Feb 2022 16:15:20 +0100 (CET)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Josh Poimboeuf <jpoimboe@redhat.com>
-cc: =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>, 
-    Alexander Lobakin <alexandr.lobakin@intel.com>, 
-    linux-hardening@vger.kernel.org, x86@kernel.org, 
-    Borislav Petkov <bp@alien8.de>, 
-    Jesse Brandeburg <jesse.brandeburg@intel.com>, 
-    Kristen Carlson Accardi <kristen@linux.intel.com>, 
-    Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>, 
-    Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-    Bruce Schlobohm <bruce.schlobohm@intel.com>, Jessica Yu <jeyu@kernel.org>, 
-    kernel test robot <lkp@intel.com>, 
-    Evgenii Shatokhin <eshatokhin@virtuozzo.com>, 
-    Jonathan Corbet <corbet@lwn.net>, Masahiro Yamada <masahiroy@kernel.org>, 
-    Michal Marek <michal.lkml@markovi.net>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Herbert Xu <herbert@gondor.apana.org.au>, 
-    "David S. Miller" <davem@davemloft.net>, 
-    Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
-    Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>, 
-    Dave Hansen <dave.hansen@linux.intel.com>, 
-    "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
-    Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Masami Hiramatsu <mhiramat@kernel.org>, 
-    Marios Pomonis <pomonis@google.com>, 
-    Sami Tolvanen <samitolvanen@google.com>, "H.J. Lu" <hjl.tools@gmail.com>, 
-    Nicolas Pitre <nico@fluxnic.net>, linux-kernel@vger.kernel.org, 
-    linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
-    live-patching@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-In-Reply-To: <20220211183529.q7qi2qmlyuscxyto@treble>
-Message-ID: <alpine.LSU.2.21.2202161606430.1475@pobox.suse.cz>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble> <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
- <20220211183529.q7qi2qmlyuscxyto@treble>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CECE187C
+	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 15:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE471C004E1;
+	Wed, 16 Feb 2022 15:50:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645026655;
+	bh=SFNdUdbviVuwsH4h90rOML9Z996F328RaBfL4P8s3dM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oj5fpci1jHz1H55wQp76gOIJCXMFRUFI3BjWhaSX82iHKgncmP6hA1UUjEUoWqeYI
+	 3Ab9eS1RHRzahzf3lCXWT2D6Dq66/gtrVdFac+2RpOmnUEu2A4A8mdyuv1rJ/3DM/L
+	 1eGThY/89DyIfpV3MtlDe5RxlCpgfnNPbGVpTwamRd7eoq5itZFNcREkDfmCSQvc8B
+	 dv5Ra3sfarVvztyXI9UUU0NHTE3ziM3eyxfjJ9gzXrIgtSyNxuXWN6pTdXHDF1vGY6
+	 UbVAjuSyqeUXjU44QFQBbJyBzDTzyb74dA3t6p6qgEfdpZzoQxfa/1g7o9UjLwlt2x
+	 ZMOchAVzzvaAw==
+Date: Wed, 16 Feb 2022 08:50:51 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	"kernelci.org bot" <bot@kernelci.org>
+Subject: Re: [PATCH] mm/page_alloc: Mark pagesets as __maybe_unused
+Message-ID: <Yg0dWwfpGyGC/q40@dev-arch.archlinux-ax161>
+References: <20220215184322.440969-1-nathan@kernel.org>
+ <YgyvCTiIWAFKq6G4@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="1678380546-2016212218-1645024395=:1475"
-Content-ID: <alpine.LSU.2.21.2202161614020.1475@pobox.suse.cz>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgyvCTiIWAFKq6G4@linutronix.de>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---1678380546-2016212218-1645024395=:1475
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <alpine.LSU.2.21.2202161614021.1475@pobox.suse.cz>
-
-On Fri, 11 Feb 2022, Josh Poimboeuf wrote:
-
-> On Fri, Feb 11, 2022 at 10:05:02AM -0800, Fāng-ruì Sòng wrote:
-> > On Fri, Feb 11, 2022 at 9:41 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> > >
-> > > On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
-> > > > Position-based search, which means that if there are several symbols
-> > > > with the same name, the user needs to additionally provide the
-> > > > "index" of a desired symbol, is fragile. For example, it breaks
-> > > > when two symbols with the same name are located in different
-> > > > sections.
-> > > >
-> > > > Since a while, LD has a flag `-z unique-symbol` which appends
-> > > > numeric suffixes to the functions with the same name (in symtab
-> > > > and strtab). It can be used to effectively prevent from having
-> > > > any ambiguity when referring to a symbol by its name.
-> > >
-> > > In the patch description can you also give the version of binutils (and
-> > > possibly other linkers) which have the flag?
+On Wed, Feb 16, 2022 at 09:00:09AM +0100, Sebastian Andrzej Siewior wrote:
+> On 2022-02-15 11:43:22 [-0700], Nathan Chancellor wrote:
+> > Commit 9983a9d577db ("locking/local_lock: Make the empty local_lock_*()
+> > function a macro.") in the -tip tree converted the local_lock_*()
+> > functions into macros, which causes a warning with clang with
+> > CONFIG_PREEMPT_RT=n + CONFIG_DEBUG_LOCK_ALLOC=n:
 > > 
-> > GNU ld>=2.36 supports -z unique-symbol. ld.lld doesn't support -z unique-symbol.
+> >   mm/page_alloc.c:131:40: error: variable 'pagesets' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+> >   static DEFINE_PER_CPU(struct pagesets, pagesets) = {
+> >                                          ^
+> >   1 error generated.
 > > 
-> > I subscribe to llvm@lists.linux.dev and happen to notice this message
-> > (can't keep up with the changes...)
-> > I am a bit concerned with this option and replied last time on
-> > https://lore.kernel.org/r/20220105032456.hs3od326sdl4zjv4@google.com
+> > Prior to that change, clang was not able to tell that pagesets was
+> > unused in this configuration because it does not perform cross function
+> > analysis in the frontend. After that change, it sees that the macros
+> > just do a typecheck on the lock member of pagesets, which is evaluated
+> > at compile time (so the variable is technically "used"), meaning the
+> > variable is not needed in the final assembly, as the warning states.
 > > 
-> > My full reasoning is on
-> > https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+> > Mark the variable as __maybe_unused to make it clear to clang that this
+> > is expected in this configuration so there is no more warning.
+> > 
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1593
+> > Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  mm/page_alloc.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index 7ff1efc84205..406f5d0c610f 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -128,7 +128,7 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
+> >  struct pagesets {
+> >  	local_lock_t lock;
+> >  };
+> > -static DEFINE_PER_CPU(struct pagesets, pagesets) = {
+> > +static DEFINE_PER_CPU(struct pagesets, pagesets) __maybe_unused = {
 > 
-> Ah, right.  Also discussed here:
-> 
->   https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
->   https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
-> 
-> I'm not qualified to comment on LTO/PGO stability issues, but it doesn't
-> sound good.  And we want to support livepatch for LTO kernels.
+> No, I need to think of something else then for the local_lock thing.  I
+> haven't seen it with gcc. There is probably more than just this one.
 
-Hm, bear with me, because I am very likely missing something which is 
-clear to everyone else...
+As far as I am aware, this is a clang only warning.
 
-Is the stability really a problem for the live patching (and I am talking 
-about the live patching only here. It may be a problem elsewhere, but I am 
-just trying to understand.)? I understand that two different kernel builds 
-could have a different name mapping between the original symbols and their 
-unique renames. Not nice. But we can prepare two different live patches 
-for these two different kernels. Something one would like to avoid if 
-possible, but it is not impossible. Am I missing something?
- 
-> Also I realized that this flag would have a negative effect on
-> kpatch-build, as it currently does its analysis on .o files.  So it
-> would have to figure out how to properly detect function renames, to
-> avoid patching the wrong function for example.
+From my brief audit of uses of local_lock_t, I believe this is the only
+one that will trigger this warning because every other structure that
+has a local_lock_t also has another member that is unconditionally used,
+meaning an instance of that structure will not just be used at compile
+time. In this case, 'struct pagesets' ONLY contains a local_lock_t,
+which is only used at compile time in this configuration, hence the
+warning.
 
-Yes, that is unfortunate. And not only for kpatch-build.
+Of course, if you can think of something that works for your use case
+and doesn't make clang warn, that would be ideal but I don't see this
+patch as the worst solution. I'll run through my full set of builds
+tonight and see if there are any other instances of this warning; this
+particular instance was visible in several defconfigs so I fixed it
+first.
 
-> And if LLD doesn't plan to support the flag then it will be a headache
-> for livepatch (and the kernel in general) to deal with the divergent
-> configs.
-
-True.
-
-The position-based approach clearly shows its limits. I like <file+func> 
-approach based on kallsyms tracking, that you proposed elsewhere in the 
-thread, more.
-
-Miroslav
---1678380546-2016212218-1645024395=:1475--
+Cheers,
+Nathan
