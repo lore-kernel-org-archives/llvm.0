@@ -1,43 +1,47 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6357B4353
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 23:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA6A28E5
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 23:54:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645140849; x=1676676849;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TRKiPX3hDotMG4QNJzX8Q8QFFFUAgodi9q4LNypUsiY=;
-  b=jjusBa1V7JIjpfoVt7t6IOrVrD5m2YbLh7U5DQxz0pAmbDaJlkPkEVSm
-   DDgPziXsjKOjhgj34jpGj17wbs86t330NrbRzfSg0IzgRjh6Dgbx5s3kS
-   zsBjfvSDaZ7S9PP5fKYq7B98oSXIY288QWaEqtMIIVQkBkeB5u9Or9ZB6
-   sKlCjBSbPmB4jylqxYb/+ZEH9ekkMjn/jkula7rsE6vv7BQwt96ZAGPpE
-   M0qQU9CanC6tLbWoaDy/yNfT30FHMhIszcC25T10E4DiyqNy+ZwoJxRCQ
-   kQVAHs+jmCESpZuCN1Hzqlvk1W00Wny5IbkDkfk3O3TewZn/7gzoDw6fs
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="250757848"
+  t=1645142049; x=1676678049;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=92Ff743k9f5xb7UqMnuVpZi3B3e1//FHbyHUAo9IICU=;
+  b=RlDiAg1U5KMnHxrN+z4TS+4dsN6lIix6U8Zm2YA6T4jJR/THlzR8SEws
+   jKjKCw/hff21cFvJqWpWDYXDSqJHAi4clqKJu55iBNQmGz0263QOb2LGr
+   16BMs1AdKr3euqrNCXd7tYzglXhiHHmVHRe1FXn7EZ22qdrLM4ZBPAimL
+   /KQQ+ENSukPkEa2eyg9ut1Nvj6oEIIJ8dIdscGUVf4kyQtFajhLBUPbAF
+   XbsqpiTD9GQjgppEEmDDKJTctGERsjVt2pxUKgNUcUaM1tY6h7Y+51TcP
+   QzIl+K3TjppaRrQubKDDqYt4E+1+4MMgZezZu3RCX4ye42jV92QQYJcZe
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="238410477"
 X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="250757848"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 15:34:08 -0800
+   d="scan'208";a="238410477"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 15:54:09 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="637445350"
+   d="scan'208";a="775019261"
 Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Feb 2022 15:34:06 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 17 Feb 2022 15:54:07 -0800
 Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nKqHm-0000jl-3z; Thu, 17 Feb 2022 23:34:06 +0000
-Date: Fri, 18 Feb 2022 07:33:10 +0800
+	id 1nKqb8-0000kq-KC; Thu, 17 Feb 2022 23:54:06 +0000
+Date: Fri, 18 Feb 2022 07:53:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Amit Cohen <amcohen@nvidia.com>
+To: Andi Shyti <andi.shyti@linux.intel.com>,
+	Intel GFX <intel-gfx@lists.freedesktop.org>,
+	DRI Devel <dri-devel@lists.freedesktop.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:ubridge 29/50]
- drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c:458:12: warning: stack
- frame size (1092) exceeds limit (1024) in
- 'mlxsw_sp_fid_erif_eport_to_vid_map'
-Message-ID: <202202180705.ObvKcGBW-lkp@intel.com>
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Chris Wilson <chris@chris-wilson.co.uk>,
+	Matthew Auld <matthew.auld@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v5 5/7] drm/i915/gt: Create per-tile RC6
+ sysfs interface
+Message-ID: <202202180713.xhySMQW4-lkp@intel.com>
+References: <20220217144158.21555-6-andi.shyti@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,92 +50,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220217144158.21555-6-andi.shyti@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/jpirko/linux_mlxsw ubridge
-head:   a9a4f2bd50dde60a52d9dda03d38875255fe0b9c
-commit: e6f8d1542cdc497206db6e9cd460cba6ca34e9a3 [29/50] mlxsw: spectrum_fid: Configure layer 3 egress VID classification
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220218/202202180705.ObvKcGBW-lkp@intel.com/config)
+Hi Andi,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on drm-tip/drm-tip]
+[cannot apply to drm-intel/for-linux-next drm-exynos/exynos-drm-next drm/drm-next tegra-drm/drm/tegra/for-next airlied/drm-next v5.17-rc4 next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Andi-Shyti/Introduce-multitile-support/20220217-224547
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220218/202202180713.xhySMQW4-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/e6f8d1542cdc497206db6e9cd460cba6ca34e9a3
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw ubridge
-        git checkout e6f8d1542cdc497206db6e9cd460cba6ca34e9a3
+        # https://github.com/0day-ci/linux/commit/b358d991c154dc27fa4ef2fc99f8819f4f3e97e7
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Andi-Shyti/Introduce-multitile-support/20220217-224547
+        git checkout b358d991c154dc27fa4ef2fc99f8819f4f3e97e7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c:458:12: warning: stack frame size (1092) exceeds limit (1024) in 'mlxsw_sp_fid_erif_eport_to_vid_map' [-Wframe-larger-than]
-   static int mlxsw_sp_fid_erif_eport_to_vid_map(struct mlxsw_sp_fid *fid,
-              ^
-   drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c:705:12: warning: stack frame size (1124) exceeds limit (1024) in '__mlxsw_sp_fid_port_vid_map' [-Wframe-larger-than]
-   static int __mlxsw_sp_fid_port_vid_map(const struct mlxsw_sp_fid *fid,
-              ^
-   2 warnings generated.
-
-
-vim +/mlxsw_sp_fid_erif_eport_to_vid_map +458 drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c
-
-   457	
- > 458	static int mlxsw_sp_fid_erif_eport_to_vid_map(struct mlxsw_sp_fid *fid,
-   459						      u16 rif_index, bool valid)
-   460	{
-   461		struct mlxsw_sp *mlxsw_sp = fid->fid_family->mlxsw_sp;
-   462		struct mlxsw_sp_fid_port_vid *port_vid, *tmp;
-   463		char reiv_pl[MLXSW_REG_REIV_LEN] = {};
-   464		bool records_to_write = false;
-   465		u8 rec_num, current_page = 0;
-   466		u16 last_local_port;
-   467		int err;
-   468	
-   469		mlxsw_reg_reiv_pack(reiv_pl, current_page, rif_index);
-   470		last_local_port = current_page * MLXSW_REG_REIV_REC_MAX_COUNT +
-   471				  MLXSW_REG_REIV_REC_MAX_COUNT - 1;
-   472	
-   473		list_for_each_entry_safe(port_vid, tmp, &fid->port_vid_list, list) {
-   474			/* The list is sorted by local_port. */
-   475			if (port_vid->local_port > last_local_port)
-   476				goto reg_write;
-   477	
-   478	new_record_fill:
-   479			rec_num = port_vid->local_port % MLXSW_REG_REIV_REC_MAX_COUNT;
-   480			mlxsw_reg_reiv_rec_update_set(reiv_pl, rec_num, true);
-   481			mlxsw_reg_reiv_rec_evid_set(reiv_pl, rec_num,
-   482						    valid ? port_vid->vid : 0);
-   483			records_to_write = true;
-   484			goto next_list_node;
-   485	
-   486	reg_write:
-   487		err = mlxsw_reg_write(mlxsw_sp->core, MLXSW_REG(reiv), reiv_pl);
-   488		if (err)
-   489			return err;
-   490	
-   491		records_to_write = false;
-   492		current_page++;
-   493		memset(reiv_pl, 0, MLXSW_REG_REIV_LEN);
-   494		mlxsw_reg_reiv_pack(reiv_pl, current_page, rif_index);
-   495		last_local_port = current_page * MLXSW_REG_REIV_REC_MAX_COUNT +
-   496				  MLXSW_REG_REIV_REC_MAX_COUNT - 1;
-   497		goto new_record_fill;
-   498	
-   499	next_list_node:
-   500			continue;
-   501		}
-   502	
-   503		if (records_to_write)
-   504			return mlxsw_reg_write(mlxsw_sp->core, MLXSW_REG(reiv),
-   505					       reiv_pl);
-   506		return 0;
-   507	}
-   508	
+>> ld.lld: error: undefined symbol: __divdi3
+   >>> referenced by intel_gt_sysfs_pm.c:35 (drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:35)
+   >>>               gpu/drm/i915/gt/intel_gt_sysfs_pm.o:(rc6_residency_ms_show) in archive drivers/built-in.a
+   >>> referenced by intel_gt_sysfs_pm.c:35 (drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:35)
+   >>>               gpu/drm/i915/gt/intel_gt_sysfs_pm.o:(rc6p_residency_ms_show) in archive drivers/built-in.a
+   >>> referenced by intel_gt_sysfs_pm.c:35 (drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:35)
+   >>>               gpu/drm/i915/gt/intel_gt_sysfs_pm.o:(rc6pp_residency_ms_show) in archive drivers/built-in.a
+   >>> referenced 1 more times
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
