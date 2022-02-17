@@ -1,89 +1,91 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB373B46
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 06:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 285F43B48
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 07:07:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645079787; x=1676615787;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jGCPnNhPH+YegAPSMgRBd6jdjRJZA4MmgAk4a72HVkk=;
-  b=XGEI2rhQSNT+kgXHkBoIW4K+4DGSqbslvRTWfN8tR/sYG+P8w3ai/14S
-   9a669cifmEeQOkny3bKTmjrI3JiXdpp8p9t9n1dr8z37Gk5fS/RbOsRy8
-   whd1z7Iw2hhMXS58VttmB9iam8lSXN4Mzf6h9QmDtpHXiHRqYelWQqsA7
-   ALJy8AXUX76hptfu7rkVLa/T6e/aA5nMm8oqho849OvhUtY+A7kbYQ6YB
-   gLYWuSXWV3nnAy/k36I7S6u3niBhflFK0MB5Q1I2AXMEQiSBpDkEewcVy
-   MLLoN7Oi5OiC7qUhX/0pcV57daOWrAvzfHX7PWSNSsexFDDK2ggiBQm63
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="251005520"
+  t=1645081626; x=1676617626;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aIAIHiSYFQs1OHO8vn3EML5N+RuWuBiMvLCuRRsbiQw=;
+  b=bsnwByORsjByS9SwMaYeQl+Q5bwoXxZvOCdfrr0/kA7YNFG+FDR+4KPp
+   vnmFr/Rht36sp8oV/mXW41swW3GN+hbVB7u7sX+nAMje75jZmNLdluZ66
+   /kSnM9K8cur59FCt4CJLaBw9/fQgCQnbmQixETNaT7EmJZUfceVW97aT+
+   7MCvrgnYn35Cvxqw1eFqfvpV7pLLN+svB7BNfADozN6BvvyUSKzuPB1mR
+   16MFAHHZ421yYJSjkjGNLU1Bs5P03tEvw5SXkioQ/pNw9peSXPcqLOGyW
+   MdHcsQgH1LEtLxRQVAPjT7+zgphOtOgDUFVIpHmqZ4s6geDZMWsC/MWQq
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="314079846"
 X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="251005520"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:36:27 -0800
+   d="scan'208";a="314079846"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 23:07:05 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="774444079"
-Received: from zcmahone-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.252.137.102])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:36:26 -0800
-Date: Wed, 16 Feb 2022 22:36:25 -0800
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Douglas Anderson <dianders@chromium.org>, javierm@redhat.com,
-	intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, dri-devel@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [drm-tip:drm-tip 4/8]
- drivers/gpu/drm/solomon/ssd130x.c:451:18: error: incomplete definition of
- type 'struct dma_buf_map'
-Message-ID: <20220217063625.sm5ua5xf4jo2ekku@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <202202171455.bclm1YBC-lkp@intel.com>
+   d="scan'208";a="776955949"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Feb 2022 23:07:03 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nKasZ-000BYK-1x; Thu, 17 Feb 2022 07:07:03 +0000
+Date: Thu, 17 Feb 2022 15:06:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: drivers/fpga/microchip-spi.c:341:34: warning: unused variable
+ 'mpf_of_ids'
+Message-ID: <202202171552.gFz6PXXK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202202171455.bclm1YBC-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-+Javier
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220217-002021/Ivan-Bornyakov/fpga-microsemi-spi-add-Microsemi-FPGA-manager/20220214-222923
+head:   6acf97cc27bd55298cb9d6a365b078b09e2b6acf
+commit: 6acf97cc27bd55298cb9d6a365b078b09e2b6acf fpga: microchip-spi: add Microchip FPGA manager
+date:   15 hours ago
+config: mips-randconfig-r006-20220217 (https://download.01.org/0day-ci/archive/20220217/202202171552.gFz6PXXK-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/6acf97cc27bd55298cb9d6a365b078b09e2b6acf
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20220217-002021/Ivan-Bornyakov/fpga-microsemi-spi-add-Microsemi-FPGA-manager/20220214-222923
+        git checkout 6acf97cc27bd55298cb9d6a365b078b09e2b6acf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/fpga/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/fpga/microchip-spi.c:341:34: warning: unused variable 'mpf_of_ids' [-Wunused-const-variable]
+   static const struct of_device_id mpf_of_ids[] = {
+                                    ^
+   1 warning generated.
 
 
-On Thu, Feb 17, 2022 at 02:25:08PM +0800, kernel test robot wrote:
->tree:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
->head:   e141e36b2871c529379f7ec7d5d6ebae3137a51b
->commit: 7ca6504c36709f35c4cc38ae6acc1c9c3d72136f [4/8] Merge remote-tracking branch 'drm-misc/drm-misc-next' into drm-tip
->config: mips-buildonly-randconfig-r002-20220217 (https://download.01.org/0day-ci/archive/20220217/202202171455.bclm1YBC-lkp@intel.com/config)
->compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
->reproduce (this is a W=1 build):
->        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->        chmod +x ~/bin/make.cross
->        # install mips cross compiling tool for clang build
->        # apt-get install binutils-mips-linux-gnu
->        git remote add drm-tip git://anongit.freedesktop.org/drm/drm-tip
->        git fetch --no-tags drm-tip drm-tip
->        git checkout 7ca6504c36709f35c4cc38ae6acc1c9c3d72136f
->        # save the config file to linux build tree
->        mkdir build_dir
->        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/solomon/
->
->If you fix the issue, kindly add following tag as appropriate
->Reported-by: kernel test robot <lkp@intel.com>
->
->All error/warnings (new ones prefixed by >>):
->
->>> drivers/gpu/drm/solomon/ssd130x.c:447:74: warning: declaration of 'struct dma_buf_map' will not be visible outside of this function [-Wvisibility]
->   static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct dma_buf_map *map,
->                                                                            ^
+vim +/mpf_of_ids +341 drivers/fpga/microchip-spi.c
 
-this is now called iosys_map in drm-intel... drm-tip will need a fixup
-for the merge.
+   340	
+ > 341	static const struct of_device_id mpf_of_ids[] = {
+   342		{ .compatible = "microchip,mpf-spi-fpga-mgr" },
+   343		{},
+   344	};
+   345	MODULE_DEVICE_TABLE(of, mpf_of_ids);
+   346	
 
->>> drivers/gpu/drm/solomon/ssd130x.c:451:18: error: incomplete definition of type 'struct dma_buf_map'
->           void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
->                        ~~~^
-
-this shouldn't really be done.
-
-Lucas De Marchi
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
