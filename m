@@ -1,137 +1,195 @@
-Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE87C3B33
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 05:02:58 +0000 (UTC)
-Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-06.nifty.com with ESMTP id 21H4txD4019569
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 13:55:59 +0900
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54]) (authenticated)
-	by conssluserg-01.nifty.com with ESMTP id 21H4tbgx030315
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 13:55:38 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 21H4tbgx030315
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1645073738;
-	bh=XT+hixO3OHzRLvB8+uXJ8rcVlX1aTroBtBRh2n+1zQY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=y7dYjnFd4wsC3TTZW1BdEoNjB4sXAHPx0oJ8ABx+P0g3nx4tKIj8RHnGp5PTqxZxP
-	 F/NwszPL7gcDNXn8C95gahpJKOuhawN36TQNiyqpII8iJ7j1obZhq9H1Jm8mU4AoDo
-	 tYEsoc19rtHNgG0UMiUzgfJi6rdU5DmfXuNc6rgFuhRYpHfhA52pBSeYa4fofhQDYN
-	 ARoDDn05/6oJ8613UFpkQwaDNAV3QbUGSNTBVmLB+VEJ/3eyMmAXbAvyCJOZ4ZvD2i
-	 sKEiwUEm3utUkypeph7bZ8SWyRkIahSFZHZrsY4kepFKduHoMAgcYGBF7Vz4YdhaHP
-	 qCnjo7q5wYCSQ==
-X-Nifty-SrcIP: [209.85.216.54]
-Received: by mail-pj1-f54.google.com with SMTP id v8-20020a17090a634800b001bb78857ccdso6051829pjs.1
-        for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 20:55:38 -0800 (PST)
-X-Gm-Message-State: AOAM530oWO7/1IqSf6HHoirzIKJUW2sEKRd0JXzKCIujvwqmh3wSWcyH
-	uz7GObFQCNXw6sST6X8UtognPpwf6FFUO02fzf0=
-X-Google-Smtp-Source: ABdhPJxFswrX5ZhULOVqkkTeNUddZz5GKFlBSh38FlNOFO45DNJA/a61t3Ziez+i+J+9QUNCxhaseXwszlPu87Vxsso=
-X-Received: by 2002:a17:902:e8d7:b0:149:3b5d:2b8b with SMTP id
- v23-20020a170902e8d700b001493b5d2b8bmr1173473plg.162.1645073737215; Wed, 16
- Feb 2022 20:55:37 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26D53B35
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 05:55:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645077317; x=1676613317;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RdTt6BGShDvUUcAA2iDcdi03DN9Q7l6a/aTqafr1Y2s=;
+  b=SnivOg9erL4aVMliqsXAlvY7FGFOmExhCupwiC6KGTCT9HRZPiAz1bFH
+   rwHVnFJbSK1sDPNHmmmxthdxlCbr42UoEyLxn9ZP954aYU6zeqfy/Rpx7
+   zfDxJTTOPSJ6g5y5MBQcJU0GKhxX+YrqoypeBJkh5Ch6myDuSZmMMh7bw
+   w1v+1+Ma8vNv7YLSydTUOgZXZk3RLTPC+RYfgp/TmzJWB8RcLrkcqm+Lf
+   urCefBwqQRJGP5CX9QcB9sb5kPwb5VQT9nvDBqoUFfMiFpOej7RWJTH6j
+   jLRppJX1O7zzB98EkOiwpVKWbGhEQ7mduD4rPSvSEnEq11W+vDJ4o/odz
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="250537591"
+X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
+   d="scan'208";a="250537591"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 21:55:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
+   d="scan'208";a="503359164"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 16 Feb 2022 21:55:07 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nKZks-000BVh-6G; Thu, 17 Feb 2022 05:55:02 +0000
+Date: Thu, 17 Feb 2022 13:54:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <sean.j.christopherson@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+	Mike Rapoport <rppt@linux.ibm.com>,
+	Yang Weijiang <weijiang.yang@intel.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Subject: [rppt:cet/kvm 38/49] arch/x86/kvm/x86.c:6587:3: warning: unannotated
+ fall-through between switch labels
+Message-ID: <202202171337.rVd4JM09-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220217002843.2312603-1-keescook@chromium.org>
-In-Reply-To: <20220217002843.2312603-1-keescook@chromium.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 17 Feb 2022 13:54:58 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
-Message-ID: <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
-Subject: Re: [PATCH] um: Allow builds with Clang
-To: Kees Cook <keescook@chromium.org>
-Cc: Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, David Gow <davidgow@google.com>,
-        linux-um@lists.infradead.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        kunit-dev@googlegroups.com, llvm@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Feb 17, 2022 at 9:28 AM Kees Cook <keescook@chromium.org> wrote:
->
-> Add x86-64 target for Clang+um and update user-offsets.c to use
-> Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
-> ("kbuild: fix asm-offset generation to work with clang").
->
-> This lets me run KUnit tests with Clang:
->
-> $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
-> ...
-> $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
-> ...
->
-> Cc: Jeff Dike <jdike@addtoit.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: David Gow <davidgow@google.com>
-> Cc: linux-um@lists.infradead.org
-> Cc: linux-kbuild@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/x86/um/user-offsets.c | 4 ++--
->  scripts/Makefile.clang     | 1 +
->  2 files changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
-> index bae61554abcc..d9071827b515 100644
-> --- a/arch/x86/um/user-offsets.c
-> +++ b/arch/x86/um/user-offsets.c
-> @@ -10,10 +10,10 @@
->  #include <asm/types.h>
->
->  #define DEFINE(sym, val) \
-> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
-> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
->
->  #define DEFINE_LONGS(sym, val) \
-> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
-> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
->
->  void foo(void)
->  {
-> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> index 51fc23e2e9e5..857b23de51c6 100644
-> --- a/scripts/Makefile.clang
-> +++ b/scripts/Makefile.clang
-> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
->  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
->  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
->  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
-> +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git cet/kvm
+head:   e2f9808bd7530f44cd5d95332036bb660b66b8db
+commit: 6189c6f50e022a416cbd8620b5c17b0a88b6a0c7 [38/49] KVM: x86: Report XSS as an MSR to be saved if there are supported features
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220217/202202171337.rVd4JM09-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=6189c6f50e022a416cbd8620b5c17b0a88b6a0c7
+        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
+        git fetch --no-tags rppt cet/kvm
+        git checkout 6189c6f50e022a416cbd8620b5c17b0a88b6a0c7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kvm/x86.c:6587:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+                   case MSR_IA32_XSS:
+                   ^
+   arch/x86/kvm/x86.c:6587:3: note: insert '__attribute__((fallthrough));' to silence this warning
+                   case MSR_IA32_XSS:
+                   ^
+                   __attribute__((fallthrough)); 
+   arch/x86/kvm/x86.c:6587:3: note: insert 'break;' to avoid fall-through
+                   case MSR_IA32_XSS:
+                   ^
+                   break; 
+   1 warning generated.
 
 
-Does this work for the i386 host?
+vim +6587 arch/x86/kvm/x86.c
 
-UML supports i386 and x86_64 as the host architecture as of now,
-but this always compiles UML for x86_64?
+  6513	
+  6514	static void kvm_init_msr_list(void)
+  6515	{
+  6516		struct x86_pmu_capability x86_pmu;
+  6517		u32 dummy[2];
+  6518		unsigned i;
+  6519	
+  6520		BUILD_BUG_ON_MSG(INTEL_PMC_MAX_FIXED != 4,
+  6521				 "Please update the fixed PMCs in msrs_to_saved_all[]");
+  6522	
+  6523		perf_get_x86_pmu_capability(&x86_pmu);
+  6524	
+  6525		num_msrs_to_save = 0;
+  6526		num_emulated_msrs = 0;
+  6527		num_msr_based_features = 0;
+  6528	
+  6529		for (i = 0; i < ARRAY_SIZE(msrs_to_save_all); i++) {
+  6530			if (rdmsr_safe(msrs_to_save_all[i], &dummy[0], &dummy[1]) < 0)
+  6531				continue;
+  6532	
+  6533			/*
+  6534			 * Even MSRs that are valid in the host may not be exposed
+  6535			 * to the guests in some cases.
+  6536			 */
+  6537			switch (msrs_to_save_all[i]) {
+  6538			case MSR_IA32_BNDCFGS:
+  6539				if (!kvm_mpx_supported())
+  6540					continue;
+  6541				break;
+  6542			case MSR_TSC_AUX:
+  6543				if (!kvm_cpu_cap_has(X86_FEATURE_RDTSCP) &&
+  6544				    !kvm_cpu_cap_has(X86_FEATURE_RDPID))
+  6545					continue;
+  6546				break;
+  6547			case MSR_IA32_UMWAIT_CONTROL:
+  6548				if (!kvm_cpu_cap_has(X86_FEATURE_WAITPKG))
+  6549					continue;
+  6550				break;
+  6551			case MSR_IA32_RTIT_CTL:
+  6552			case MSR_IA32_RTIT_STATUS:
+  6553				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT))
+  6554					continue;
+  6555				break;
+  6556			case MSR_IA32_RTIT_CR3_MATCH:
+  6557				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
+  6558				    !intel_pt_validate_hw_cap(PT_CAP_cr3_filtering))
+  6559					continue;
+  6560				break;
+  6561			case MSR_IA32_RTIT_OUTPUT_BASE:
+  6562			case MSR_IA32_RTIT_OUTPUT_MASK:
+  6563				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
+  6564					(!intel_pt_validate_hw_cap(PT_CAP_topa_output) &&
+  6565					 !intel_pt_validate_hw_cap(PT_CAP_single_range_output)))
+  6566					continue;
+  6567				break;
+  6568			case MSR_IA32_RTIT_ADDR0_A ... MSR_IA32_RTIT_ADDR3_B:
+  6569				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
+  6570					msrs_to_save_all[i] - MSR_IA32_RTIT_ADDR0_A >=
+  6571					intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2)
+  6572					continue;
+  6573				break;
+  6574			case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 17:
+  6575				if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
+  6576				    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
+  6577					continue;
+  6578				break;
+  6579			case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 17:
+  6580				if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
+  6581				    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
+  6582					continue;
+  6583				break;
+  6584			case MSR_IA32_XFD:
+  6585			case MSR_IA32_XFD_ERR:
+  6586				if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
+> 6587			case MSR_IA32_XSS:
+  6588				if (!supported_xss)
+  6589					continue;
+  6590				break;
+  6591			default:
+  6592				break;
+  6593			}
+  6594	
+  6595			msrs_to_save[num_msrs_to_save++] = msrs_to_save_all[i];
+  6596		}
+  6597	
+  6598		for (i = 0; i < ARRAY_SIZE(emulated_msrs_all); i++) {
+  6599			if (!static_call(kvm_x86_has_emulated_msr)(NULL, emulated_msrs_all[i]))
+  6600				continue;
+  6601	
+  6602			emulated_msrs[num_emulated_msrs++] = emulated_msrs_all[i];
+  6603		}
+  6604	
+  6605		for (i = 0; i < ARRAY_SIZE(msr_based_features_all); i++) {
+  6606			struct kvm_msr_entry msr;
+  6607	
+  6608			msr.index = msr_based_features_all[i];
+  6609			if (kvm_get_msr_feature(&msr))
+  6610				continue;
+  6611	
+  6612			msr_based_features[num_msr_based_features++] = msr_based_features_all[i];
+  6613		}
+  6614	}
+  6615	
 
-
-
-
-
-
-
->  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
->
->  ifeq ($(CROSS_COMPILE),)
-> --
-> 2.30.2
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
