@@ -1,118 +1,231 @@
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F31523AC
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 07:48:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5683B56
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 07:58:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645084092; x=1676620092;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=99+dhgli+TBsASZWY8Mrl5qU4Lz7MyY/5DzeBpVia5E=;
-  b=evx+9DmKQConkhRgTM5wiRPj4U6ymAwK3G6SvzhJMgGAMu07pnTHXGWs
-   qYYVIwDFk0bQ9N+ezerLKLhb6Eq/83HXLAKypOmLuOnX5NwQ1sZlOkK7K
-   oxWbjiylGxJ2O+QKrn3WG8Y7lODkrGgIDMXVIQ4SrVMW+KQbx9vwxRb+y
-   9sWpRLOj0AzL7oYqYnXz12wagItn3kH/6cnRunpSbNtVFkfSc3ixPnoCO
-   EQdKugIBBibCoV4yYsqG7PvBPxgP+UModkS/uUPCVPOCpQgTef74Nu91O
-   vGr4/MNEAN6gFr10gmsNdQYdigllVIY7VlyfADaxyUXIMlSK/KB8bahk9
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249652809"
+  t=1645084687; x=1676620687;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E+S2XgOfKvZbrZXwYK6bp/IHd/T6iGi01fgJ6j+hiXo=;
+  b=dEN7R2f/udl8OsOoOyfDpkznZGOxlcPSyBxzQx7p/RY87xuOQ+w1SQlr
+   +mIRcuhVWuxpybk7+7+rymj59vkTKct7rR/YgQ0x3+8Z8v5yOq+Q/RdBh
+   bWIMK515Jpfa2y6LFZP2frqIVo3Y7VvDmoEySMlL/OxqxzdOFRQDWkiiZ
+   JsAFNeAfSAGSGqH6SztMNGYVbiYJ4HZKx9udhT0grMWIkPCE8NDurYoGJ
+   1m0CcSrkR8x94nGAnHu3Tca5+8QZEkhX6Co9gLhJn4KqG1ekKnWexbcaY
+   XOk/OBB8KYImxgvN7avTtBDK7eh8oIylOWIZ1+2p42K4+fBJbfi+yCUPM
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249654293"
 X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="249652809"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 23:48:11 -0800
+   d="scan'208";a="249654293"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 23:58:06 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="636953141"
-Received: from acushion-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.21.45])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 23:48:07 -0800
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Nathan Chancellor <nathan@kernel.org>, Tong Zhang <ztong0001@gmail.com>
-Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi
- <rodrigo.vivi@intel.com>, Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
- David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nick
- Desaulniers <ndesaulniers@google.com>, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH v2] drm/i915: fix build issue when using clang
-In-Reply-To: <Ygv2fvIKiM9w+aSb@dev-arch.archlinux-ax161>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <YglQW7gVNoRJ7QpQ@dev-arch.archlinux-ax161>
- <20220214195821.29809-1-ztong0001@gmail.com>
- <Ygv2fvIKiM9w+aSb@dev-arch.archlinux-ax161>
-Date: Thu, 17 Feb 2022 09:48:04 +0200
-Message-ID: <877d9u3pe3.fsf@intel.com>
+   d="scan'208";a="530022721"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 16 Feb 2022 23:58:04 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nKbfv-000Bai-VH; Thu, 17 Feb 2022 07:58:03 +0000
+Date: Thu, 17 Feb 2022 15:57:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Vitor Massaru Iha <vitor@massaru.org>
+Subject: [kees:for-next/overflow 4/4] lib/overflow_kunit.c:96:1: warning:
+ unused variable 'u64_tests'
+Message-ID: <202202171558.vQiKL7mj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, 15 Feb 2022, Nathan Chancellor <nathan@kernel.org> wrote:
-> On Mon, Feb 14, 2022 at 11:58:20AM -0800, Tong Zhang wrote:
->> drm/i915 adds some extra cflags, namely -Wall, which causes
->> instances of -Wformat-security to appear when building with clang, even
->> though this warning is turned off kernel-wide in the main Makefile:
->> 
->> > drivers/gpu/drm/i915/gt/intel_gt.c:983:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
->> >         GEM_TRACE("ERROR\n");
->> >         ^~~~~~~~~~~~~~~~~~~~
->> > ./drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
->> >  #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
->> >                        ^~~~~~~~~~~~~~~~~~~~~~~~~
->> > ./include/linux/kernel.h:369:3: note: expanded from macro 'trace_printk'
->> >                 do_trace_printk(fmt, ##__VA_ARGS__);    \
->> >                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> > ./include/linux/kernel.h:383:30: note: expanded from macro 'do_trace_printk'
->> >                 __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
->> >                                           ^~~~~~~~~~~~~~~~
->> >drivers/gpu/drm/i915/gt/intel_gt.c:983:2: note: treat the string as an argument to avoid this
->> 
->> This does not happen with GCC because it does not enable
->> -Wformat-security with -Wall. Disable -Wformat-security within the i915
->> Makefile so that these warnings do not show up with clang.
->> 
->> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
->
-> Given this is not enabled for GCC and it is disabled in the main
-> Makefile:
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> Additionally, it seems like trace_printk() is designed to be able to
-> take a string literal without a format argument, so this should be fine.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/overflow
+head:   df523415488222202d88ef6b3d0bad7276c52b85
+commit: df523415488222202d88ef6b3d0bad7276c52b85 [4/4] lib: overflow: Convert to Kunit
+config: mips-randconfig-r033-20220217 (https://download.01.org/0day-ci/archive/20220217/202202171558.vQiKL7mj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=df523415488222202d88ef6b3d0bad7276c52b85
+        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+        git fetch --no-tags kees for-next/overflow
+        git checkout df523415488222202d88ef6b3d0bad7276c52b85
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Thanks for the patch and review, pushed to drm-intel-next. I appreciate
-the support in maintaining fairly strict warning levels in i915.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-BR,
-Jani.
+All warnings (new ones prefixed by >>):
 
->
->> ---
->> 
->> v2: revise commit message
->> 
->>  drivers/gpu/drm/i915/Makefile | 1 +
->>  1 file changed, 1 insertion(+)
->> 
->> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
->> index 1b62b9f65196..c04e05a3d39f 100644
->> --- a/drivers/gpu/drm/i915/Makefile
->> +++ b/drivers/gpu/drm/i915/Makefile
->> @@ -13,6 +13,7 @@
->>  # will most likely get a sudden build breakage... Hopefully we will fix
->>  # new warnings before CI updates!
->>  subdir-ccflags-y := -Wall -Wextra
->> +subdir-ccflags-y += -Wno-format-security
->>  subdir-ccflags-y += -Wno-unused-parameter
->>  subdir-ccflags-y += -Wno-type-limits
->>  subdir-ccflags-y += -Wno-missing-field-initializers
->> -- 
->> 2.25.1
->> 
->> 
+>> lib/overflow_kunit.c:96:1: warning: unused variable 'u64_tests' [-Wunused-const-variable]
+   DEFINE_TEST_ARRAY(u64) = {
+   ^
+   lib/overflow_kunit.c:26:4: note: expanded from macro 'DEFINE_TEST_ARRAY'
+           } t ## _tests[]
+             ^
+   <scratch space>:110:1: note: expanded from here
+   u64_tests
+   ^
+>> lib/overflow_kunit.c:193:1: warning: unused variable 's64_tests' [-Wunused-const-variable]
+   DEFINE_TEST_ARRAY(s64) = {
+   ^
+   lib/overflow_kunit.c:26:4: note: expanded from macro 'DEFINE_TEST_ARRAY'
+           } t ## _tests[]
+             ^
+   <scratch space>:118:1: note: expanded from here
+   s64_tests
+   ^
+   2 warnings generated.
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+
+vim +/u64_tests +96 lib/overflow_kunit.c
+
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08   95  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  @96  DEFINE_TEST_ARRAY(u64) = {
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08   97  	{0, 0, 0, 0, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08   98  	{1, 1, 2, 0, 1, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08   99  	{0, 1, 1, U64_MAX, 0, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  100  	{1, 0, 1, 1, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  101  	{0, U64_MAX, U64_MAX, 1, 0, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  102  	{U64_MAX, 0, U64_MAX, U64_MAX, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  103  	{1, U64_MAX, 0, 2, U64_MAX, true, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  104  	{U64_MAX, 1, 0, U64_MAX-1, U64_MAX, true, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  105  	{U64_MAX, U64_MAX, U64_MAX-1, 0, 1, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  106  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  107  	{U64_MAX, U64_MAX-1, U64_MAX-2, 1, 2, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  108  	{U64_MAX-1, U64_MAX, U64_MAX-2, U64_MAX, 2, true, true, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  109  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  110  	{1ULL << 31, 1ULL << 31, 1ULL << 32, 0, 1ULL << 62, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  111  	{1ULL << 32, 1ULL << 32, 1ULL << 33, 0, 0, false, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  112  	{1ULL << 32, 1ULL << 31, 3*(1ULL << 31), 1ULL << 31, 1ULL << 63, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  113  	{1ULL << 63, 1ULL << 63, 0, 0, 0, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  114  	{1000000000ULL /* 10^9 */, 10000000000ULL /* 10^10 */,
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  115  	 11000000000ULL, 18446744064709551616ULL, 10000000000000000000ULL,
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  116  	 false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  117  	{-15ULL, 10ULL, -5ULL, -25ULL, -150ULL, false, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  118  };
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  119  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  120  DEFINE_TEST_ARRAY(s8) = {
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  121  	{0, 0, 0, 0, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  122  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  123  	{0, S8_MAX, S8_MAX, -S8_MAX, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  124  	{S8_MAX, 0, S8_MAX, S8_MAX, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  125  	{0, S8_MIN, S8_MIN, S8_MIN, 0, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  126  	{S8_MIN, 0, S8_MIN, S8_MIN, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  127  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  128  	{-1, S8_MIN, S8_MAX, S8_MAX, S8_MIN, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  129  	{S8_MIN, -1, S8_MAX, -S8_MAX, S8_MIN, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  130  	{-1, S8_MAX, S8_MAX-1, S8_MIN, -S8_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  131  	{S8_MAX, -1, S8_MAX-1, S8_MIN, -S8_MAX, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  132  	{-1, -S8_MAX, S8_MIN, S8_MAX-1, S8_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  133  	{-S8_MAX, -1, S8_MIN, S8_MIN+2, S8_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  134  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  135  	{1, S8_MIN, -S8_MAX, -S8_MAX, S8_MIN, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  136  	{S8_MIN, 1, -S8_MAX, S8_MAX, S8_MIN, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  137  	{1, S8_MAX, S8_MIN, S8_MIN+2, S8_MAX, true, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  138  	{S8_MAX, 1, S8_MIN, S8_MAX-1, S8_MAX, true, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  139  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  140  	{S8_MIN, S8_MIN, 0, 0, 0, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  141  	{S8_MAX, S8_MAX, -2, 0, 1, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  142  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  143  	{-4, -32, -36, 28, -128, false, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  144  	{-4, 32, 28, -36, -128, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  145  };
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  146  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  147  DEFINE_TEST_ARRAY(s16) = {
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  148  	{0, 0, 0, 0, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  149  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  150  	{0, S16_MAX, S16_MAX, -S16_MAX, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  151  	{S16_MAX, 0, S16_MAX, S16_MAX, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  152  	{0, S16_MIN, S16_MIN, S16_MIN, 0, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  153  	{S16_MIN, 0, S16_MIN, S16_MIN, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  154  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  155  	{-1, S16_MIN, S16_MAX, S16_MAX, S16_MIN, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  156  	{S16_MIN, -1, S16_MAX, -S16_MAX, S16_MIN, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  157  	{-1, S16_MAX, S16_MAX-1, S16_MIN, -S16_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  158  	{S16_MAX, -1, S16_MAX-1, S16_MIN, -S16_MAX, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  159  	{-1, -S16_MAX, S16_MIN, S16_MAX-1, S16_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  160  	{-S16_MAX, -1, S16_MIN, S16_MIN+2, S16_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  161  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  162  	{1, S16_MIN, -S16_MAX, -S16_MAX, S16_MIN, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  163  	{S16_MIN, 1, -S16_MAX, S16_MAX, S16_MIN, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  164  	{1, S16_MAX, S16_MIN, S16_MIN+2, S16_MAX, true, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  165  	{S16_MAX, 1, S16_MIN, S16_MAX-1, S16_MAX, true, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  166  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  167  	{S16_MIN, S16_MIN, 0, 0, 0, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  168  	{S16_MAX, S16_MAX, -2, 0, 1, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  169  };
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  170  DEFINE_TEST_ARRAY(s32) = {
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  171  	{0, 0, 0, 0, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  172  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  173  	{0, S32_MAX, S32_MAX, -S32_MAX, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  174  	{S32_MAX, 0, S32_MAX, S32_MAX, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  175  	{0, S32_MIN, S32_MIN, S32_MIN, 0, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  176  	{S32_MIN, 0, S32_MIN, S32_MIN, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  177  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  178  	{-1, S32_MIN, S32_MAX, S32_MAX, S32_MIN, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  179  	{S32_MIN, -1, S32_MAX, -S32_MAX, S32_MIN, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  180  	{-1, S32_MAX, S32_MAX-1, S32_MIN, -S32_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  181  	{S32_MAX, -1, S32_MAX-1, S32_MIN, -S32_MAX, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  182  	{-1, -S32_MAX, S32_MIN, S32_MAX-1, S32_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  183  	{-S32_MAX, -1, S32_MIN, S32_MIN+2, S32_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  184  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  185  	{1, S32_MIN, -S32_MAX, -S32_MAX, S32_MIN, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  186  	{S32_MIN, 1, -S32_MAX, S32_MAX, S32_MIN, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  187  	{1, S32_MAX, S32_MIN, S32_MIN+2, S32_MAX, true, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  188  	{S32_MAX, 1, S32_MIN, S32_MAX-1, S32_MAX, true, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  189  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  190  	{S32_MIN, S32_MIN, 0, 0, 0, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  191  	{S32_MAX, S32_MAX, -2, 0, 1, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  192  };
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08 @193  DEFINE_TEST_ARRAY(s64) = {
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  194  	{0, 0, 0, 0, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  195  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  196  	{0, S64_MAX, S64_MAX, -S64_MAX, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  197  	{S64_MAX, 0, S64_MAX, S64_MAX, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  198  	{0, S64_MIN, S64_MIN, S64_MIN, 0, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  199  	{S64_MIN, 0, S64_MIN, S64_MIN, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  200  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  201  	{-1, S64_MIN, S64_MAX, S64_MAX, S64_MIN, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  202  	{S64_MIN, -1, S64_MAX, -S64_MAX, S64_MIN, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  203  	{-1, S64_MAX, S64_MAX-1, S64_MIN, -S64_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  204  	{S64_MAX, -1, S64_MAX-1, S64_MIN, -S64_MAX, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  205  	{-1, -S64_MAX, S64_MIN, S64_MAX-1, S64_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  206  	{-S64_MAX, -1, S64_MIN, S64_MIN+2, S64_MAX, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  207  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  208  	{1, S64_MIN, -S64_MAX, -S64_MAX, S64_MIN, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  209  	{S64_MIN, 1, -S64_MAX, S64_MAX, S64_MIN, false, true, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  210  	{1, S64_MAX, S64_MIN, S64_MIN+2, S64_MAX, true, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  211  	{S64_MAX, 1, S64_MIN, S64_MAX-1, S64_MAX, true, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  212  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  213  	{S64_MIN, S64_MIN, 0, 0, 0, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  214  	{S64_MAX, S64_MAX, -2, 0, 1, true, false, true},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  215  
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  216  	{-1, -1, -2, 0, 1, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  217  	{-1, -128, -129, 127, 128, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  218  	{-128, -1, -129, -127, 128, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  219  	{0, -S64_MAX, -S64_MAX, S64_MAX, 0, false, false, false},
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  220  };
+455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  221  
+
+:::::: The code at line 96 was first introduced by commit
+:::::: 455a35a6cdb6f53fe9294e23301eb056f2908bd9 lib: add runtime test of check_*_overflow functions
+
+:::::: TO: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+:::::: CC: Kees Cook <keescook@chromium.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
