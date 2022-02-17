@@ -1,51 +1,41 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3763D6A
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 19:48:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CE34602
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 19:59:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645127292; x=1676663292;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=46Ao89wMcgm6jN7Eq+CdMeAAf93pn4JVEULNHnEFEMY=;
-  b=SFb9AHQ/uLvBX1UaS+Rd4shzZWpPwUs6zsal3t+B3xVJirEr4wqs1ZAR
-   GQS38Bls3RZsqcoTxMl0GCwFRhpHvTRb0GvRL+krlyd5tio0F75Dq3cFr
-   EX0fC/HN4dnWXO8eEaw5ZyR+DSZkCxcqVKfgLfdj73RlqYvVEzr+3a+Wf
-   kLr7/uHldXdkwSYMCaThMaLxmHXog3sv1Y/eT/Pg09m7++ARpPV6ZcNLf
-   jMn+YTf4EYXY/sPZIolWcK0pe1Xfw9niBy/ueOUQdiScY39ragE0jhFiv
-   oLUHeZ8GqKneVhNGxciyzJ6ikRmUW95PB545SDYcwy3vwujRoc2BKIVS8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="234491591"
+  t=1645127945; x=1676663945;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=T/dy5bFV0hFt5PA339JCU431TnB8St9YIJsJ095SE54=;
+  b=OKLJG2k2ZLmkG6z8A0kanEytjHmDGjFNKa+ateshcAI4GAB70UXRmO2K
+   CKv3ix+fR9FaNQj2tJgChyixMv5enTidi4Ok/9uu68F3/kb3lLIpVNPFT
+   7cguxlN84J484noDBtWPZWkGOWu5OsRgZxcyw5OunxL8OmwlBXjjrEZsD
+   2RPsJ3G61tU5tLUakoe7wLTAEjsIHKhAyDUQUIJ6o+xTosJGftpffMGrI
+   sue0dKkUryEAK+dtLcpUeSrgy0MJ9+yRzo9VZ7S+5ZKrYiYWZaqeIk+Xv
+   vN2uB4jM/bJsw1mJ00U1qEXJ536KalsX4WviVt99SvzeJpGtCa7G5DcLm
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="275555712"
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="234491591"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 11:48:12 -0800
+   d="scan'208";a="275555712"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 11:59:05 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="774877289"
+   d="scan'208";a="488646551"
 Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Feb 2022 11:48:07 -0800
+  by orsmga003.jf.intel.com with ESMTP; 17 Feb 2022 11:59:02 -0800
 Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nKmkz-0000Xa-E7; Thu, 17 Feb 2022 19:48:01 +0000
-Date: Fri, 18 Feb 2022 03:47:09 +0800
+	id 1nKmvd-0000aO-W2; Thu, 17 Feb 2022 19:59:01 +0000
+Date: Fri, 18 Feb 2022 03:58:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>, agross@kernel.org,
-	bjorn.andersson@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-	robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@codeaurora.org,
-	perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-	rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-	alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, swboyd@chromium.org,
-	judyhsiao@chromium.org
+To: Yury Norov <yury.norov@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-	Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH] ASoC: codecs: Add power domains support in digital macro
- codecs
-Message-ID: <202202180153.WSEbQejW-lkp@intel.com>
-References: <1645108786-25990-1-git-send-email-quic_srivasam@quicinc.com>
+	linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [ulfh-mmc:next 20/24] drivers/memstick/core/ms_block.c:158:6: error:
+ implicit declaration of function 'bitmap_weight_eq'
+Message-ID: <202202180327.nT5gZudK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,57 +44,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1645108786-25990-1-git-send-email-quic_srivasam@quicinc.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Srinivasa,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on broonie-sound/for-next]
-[also build test ERROR on next-20220217]
-[cannot apply to v5.17-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Srinivasa-Rao-Mandadapu/ASoC-codecs-Add-power-domains-support-in-digital-macro-codecs/20220217-224032
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-config: hexagon-randconfig-r045-20220217 (https://download.01.org/0day-ci/archive/20220218/202202180153.WSEbQejW-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git next
+head:   4b67100bafbb3f60e6eecf87631e4d400d9b6f17
+commit: 5f8d171cd8a93ff425556e7fde5d59fefc677bf7 [20/24] memstick: replace bitmap_weight with bitmap_weight_eq where appropriate
+config: hexagon-randconfig-r045-20220217 (https://download.01.org/0day-ci/archive/20220218/202202180327.nT5gZudK-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/a1e8b5e6a2baa8ce5b2373bfbdfce5a771132448
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Srinivasa-Rao-Mandadapu/ASoC-codecs-Add-power-domains-support-in-digital-macro-codecs/20220217-224032
-        git checkout a1e8b5e6a2baa8ce5b2373bfbdfce5a771132448
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git/commit/?id=5f8d171cd8a93ff425556e7fde5d59fefc677bf7
+        git remote add ulfh-mmc git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git
+        git fetch --no-tags ulfh-mmc next
+        git checkout 5f8d171cd8a93ff425556e7fde5d59fefc677bf7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/memstick/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: lpass_macro_pds_init
-   >>> referenced by lpass-rx-macro.c
-   >>> soc/codecs/lpass-rx-macro.o:(rx_macro_probe) in archive sound/built-in.a
-   >>> referenced by lpass-rx-macro.c
-   >>> soc/codecs/lpass-rx-macro.o:(rx_macro_probe) in archive sound/built-in.a
-   >>> referenced by lpass-tx-macro.c
-   >>> soc/codecs/lpass-tx-macro.o:(tx_macro_probe) in archive sound/built-in.a
-   >>> referenced 1 more times
---
->> ld.lld: error: undefined symbol: lpass_macro_pds_exit
-   >>> referenced by lpass-rx-macro.c
-   >>> soc/codecs/lpass-rx-macro.o:(rx_macro_remove) in archive sound/built-in.a
-   >>> referenced by lpass-rx-macro.c
-   >>> soc/codecs/lpass-rx-macro.o:(rx_macro_remove) in archive sound/built-in.a
-   >>> referenced by lpass-tx-macro.c
-   >>> soc/codecs/lpass-tx-macro.o:(tx_macro_remove) in archive sound/built-in.a
-   >>> referenced 1 more times
+>> drivers/memstick/core/ms_block.c:158:6: error: implicit declaration of function 'bitmap_weight_eq' [-Werror,-Wimplicit-function-declaration]
+           if (bitmap_weight_eq(msb->used_blocks_bitmap, msb->block_count,
+               ^
+   drivers/memstick/core/ms_block.c:158:6: note: did you mean 'bitmap_weight'?
+   include/linux/bitmap.h:399:28: note: 'bitmap_weight' declared here
+   static __always_inline int bitmap_weight(const unsigned long *src, unsigned int nbits)
+                              ^
+   1 error generated.
+
+
+vim +/bitmap_weight_eq +158 drivers/memstick/core/ms_block.c
+
+   145	
+   146	/* Debug test to validate free block counts */
+   147	static int msb_validate_used_block_bitmap(struct msb_data *msb)
+   148	{
+   149		int total_free_blocks = 0;
+   150		int i;
+   151	
+   152		if (!debug)
+   153			return 0;
+   154	
+   155		for (i = 0; i < msb->zone_count; i++)
+   156			total_free_blocks += msb->free_block_count[i];
+   157	
+ > 158		if (bitmap_weight_eq(msb->used_blocks_bitmap, msb->block_count,
+   159					msb->block_count - total_free_blocks))
+   160			return 0;
+   161	
+   162		pr_err("BUG: free block counts don't match the bitmap");
+   163		msb->read_only = true;
+   164		return -EINVAL;
+   165	}
+   166	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
