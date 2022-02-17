@@ -1,104 +1,158 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FFC3D9F
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 14:29:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645108154; x=1676644154;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+R1AK/gkRyoYr+8UNtwo0B5YbNI0hu+NA3H6Pu/+d1c=;
-  b=loA/krPHMJXzFmSTthy/MKwV7mebxl8rZIibsxOvXARcZQBUswmV8FTA
-   9ggiAjMIRB+d4+VVNpc8pbWxywdlQYDqB6q8s39fnk+Zcw7/n1OlPyfif
-   VjDfWCaCAjCwpOr+CQJGEglOQVqCw7EZWjWpGGB2ppfqCE77IaIq1Kyeh
-   QJcDJMzCm4TAFQviS7nA7g6p42h6f4oqGzjjMVWqWi5+Tmeae9Fdspr+z
-   xDZtVO6pfV2saQH1SJJZI9ngYy2QNuNwTwiOWB4f46g0yWaYI4RccELUQ
-   xYht6MwbhgRZpygt8qfm1t3IutFk/rym8VuMzmY+GyVOKVzUHYoO0V1vf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="230846227"
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="230846227"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 06:29:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="488309143"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Feb 2022 06:28:51 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nKhm6-0000Gj-SC; Thu, 17 Feb 2022 14:28:50 +0000
-Date: Thu, 17 Feb 2022 22:28:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marcello Sylvester Bauer <sylv@sylv.io>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: Re: [PATCH v1 3/3] hwmon (xdpe12284): Add regulator support
-Message-ID: <202202172254.TL5ZxxMO-lkp@intel.com>
-References: <6c8a38efa0b61e3ba8de023f56f59043b99e5947.1645088804.git.sylv@sylv.io>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8224349
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 15:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1645112335;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CoTxwG5lqMogkG1tkhH6Op74mbfSGaKHCACVBM5sEqs=;
+	b=i8zWxnN1EQrC4lpbglJ4scP44oGKStEg3l5HQbckAaRYJcLgiaA9Gov7IR/H8xciHBKm6x
+	ceE3fNHDGH909nEm0xTDKQ/obWMVjgo8iENI0vidssqKn2mICn60uXqMs1SOsbG8FWPAiX
+	j6TCMm5WFPosnwayi1KetGGhMRN7yWk=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-481-4Gx92fE_Mw-DzEkIyWWmVg-1; Thu, 17 Feb 2022 10:38:54 -0500
+X-MC-Unique: 4Gx92fE_Mw-DzEkIyWWmVg-1
+Received: by mail-ot1-f72.google.com with SMTP id v17-20020a9d6051000000b005acf76789e9so7305otj.1
+        for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 07:38:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CoTxwG5lqMogkG1tkhH6Op74mbfSGaKHCACVBM5sEqs=;
+        b=mJw8Wy6upiZEyzb3GrIXdGdDT7Ms2I2f9rYV1TUeTvmbFMhtZildpww5OzBJ5GHXem
+         cQjNOtEoUG/cxfjK2mb90um/MH3jgA69A8FXq1pWTw6ZQ1KSpfzMTvrpUEg9el0hC774
+         wm76BoM2p/G+j7vhz3QaO8RzWKsKhlr/Bdktfy0QhFGX+v6nHdua9PzZzxir2DiHNIQb
+         yrT3Fx0LCq+9sKV3sTX4sKUaAOfQfTt/KvO8aois8KlMuQt+hxJJlmnMAY2xXUAIq1fB
+         4rUWAJjzvaHhUxoUpZJdtOtFRkEm9PAfml3wPAik4rcgx6mAh88lgHUszHHLcGS4Y+XL
+         r8Tg==
+X-Gm-Message-State: AOAM530sr/Cz3ZrbWyI5T1u5JXNX6goVinTOyQzSNHO7wAfNhstMfGIN
+	kL4stYHTGOeSg+ygaDs1AWrT3Eb0i7WdPTRSLddpAdwf2Ca2IUq5CffZmR8Y/G1sTh8h2iYx+Nu
+	5c81+tT+WWPeohQ==
+X-Received: by 2002:a05:6830:41:b0:5a0:93fa:161d with SMTP id d1-20020a056830004100b005a093fa161dmr1020924otp.88.1645112333718;
+        Thu, 17 Feb 2022 07:38:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzNPtTeWpYlbfs2THVEoksmj7PsLvm2GLCm7n8pIk1AhH37AWo21W37FGBs4lG0Kd2SS1+XmQ==
+X-Received: by 2002:a05:6830:41:b0:5a0:93fa:161d with SMTP id d1-20020a056830004100b005a093fa161dmr1020900otp.88.1645112333470;
+        Thu, 17 Feb 2022 07:38:53 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id q28sm2691306ots.76.2022.02.17.07.38.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 07:38:53 -0800 (PST)
+From: trix@redhat.com
+To: alexander.deucher@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@linux.ie,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	Hawking.Zhang@amd.com,
+	john.clements@amd.com,
+	tao.zhou1@amd.com,
+	YiPeng.Chai@amd.com,
+	luben.tuikov@amd.com,
+	Stanley.Yang@amd.com,
+	Dennis.Li@amd.com,
+	mukul.joshi@amd.com,
+	nirmoy.das@amd.com
+Cc: amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amdgpu: fix amdgpu_ras_block_late_init error handler
+Date: Thu, 17 Feb 2022 07:38:42 -0800
+Message-Id: <20220217153842.3252424-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c8a38efa0b61e3ba8de023f56f59043b99e5947.1645088804.git.sylv@sylv.io>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-Hi Marcello,
+From: Tom Rix <trix@redhat.com>
 
-Thank you for the patch! Perhaps something to improve:
+Clang build fails with
+amdgpu_ras.c:2416:7: error: variable 'ras_obj' is used uninitialized
+  whenever 'if' condition is true
+  if (adev->in_suspend || amdgpu_in_reset(adev)) {
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on robh/for-next linux/master linus/master v5.17-rc4 next-20220217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+amdgpu_ras.c:2453:6: note: uninitialized use occurs here
+ if (ras_obj->ras_cb)
+     ^~~~~~~
 
-url:    https://github.com/0day-ci/linux/commits/Marcello-Sylvester-Bauer/Support-XDPE112/20220217-172831
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: s390-randconfig-r044-20220217 (https://download.01.org/0day-ci/archive/20220217/202202172254.TL5ZxxMO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/7d607e48fd68499470da6630cff4d23f43f29aa9
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Marcello-Sylvester-Bauer/Support-XDPE112/20220217-172831
-        git checkout 7d607e48fd68499470da6630cff4d23f43f29aa9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/hwmon/pmbus/
+There is a logic error in the error handler's labels.
+ex/ The sysfs: is the last goto label in the normal code but
+is the middle of error handler.  Rework the error handler.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+cleanup: is the first error, so it's handler should be last.
 
-All warnings (new ones prefixed by >>):
+interrupt: is the second error, it's handler is next.  interrupt:
+handles the failure of amdgpu_ras_interrupt_add_hander() by
+calling amdgpu_ras_interrupt_remove_handler().  This is wrong,
+remove() assumes the interrupt has been setup, not torn down by
+add().  Change the goto label to cleanup.
 
->> drivers/hwmon/pmbus/xdpe12284.c:125:36: warning: unused variable 'xdpe122_reg_desc' [-Wunused-const-variable]
-   static const struct regulator_desc xdpe122_reg_desc[] = {
-                                      ^
-   1 warning generated.
+sysfs is the last error, it's handler should be first.  sysfs:
+handles the failure of amdgpu_ras_sysfs_create() by calling
+amdgpu_ras_sysfs_remove().  But when the create() fails there
+is nothing added so there is nothing to remove.  This error
+handler is not needed. Remove the error handler and change
+goto label to interrupt.
 
-
-vim +/xdpe122_reg_desc +125 drivers/hwmon/pmbus/xdpe12284.c
-
-   124	
- > 125	static const struct regulator_desc xdpe122_reg_desc[] = {
-   126		PMBUS_REGULATOR("vout", 0),
-   127		PMBUS_REGULATOR("vout", 1),
-   128	};
-   129	
-
+Fixes: b293e891b057 ("drm/amdgpu: add helper function to do common ras_late_init/fini (v3)")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+index b5cd21cb6e58..c5c8a666110f 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+@@ -2432,12 +2432,12 @@ int amdgpu_ras_block_late_init(struct amdgpu_device *adev,
+ 	if (ras_obj->ras_cb) {
+ 		r = amdgpu_ras_interrupt_add_handler(adev, ras_block);
+ 		if (r)
+-			goto interrupt;
++			goto cleanup;
+ 	}
+ 
+ 	r = amdgpu_ras_sysfs_create(adev, ras_block);
+ 	if (r)
+-		goto sysfs;
++		goto interrupt;
+ 
+ 	/* Those are the cached values at init.
+ 	 */
+@@ -2447,12 +2447,11 @@ int amdgpu_ras_block_late_init(struct amdgpu_device *adev,
+ 	}
+ 
+ 	return 0;
+-cleanup:
+-	amdgpu_ras_sysfs_remove(adev, ras_block);
+-sysfs:
++
++interrupt:
+ 	if (ras_obj->ras_cb)
+ 		amdgpu_ras_interrupt_remove_handler(adev, ras_block);
+-interrupt:
++cleanup:
+ 	amdgpu_ras_feature_enable(adev, ras_block, 0);
+ 	return r;
+ }
+-- 
+2.26.3
+
