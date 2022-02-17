@@ -1,309 +1,147 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5830C1FD2
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 01:49:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FE938F0
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 02:10:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645062598; x=1676598598;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=czzfWBrjb8/Osvn3imucbLg8DsWiNu63pEa+Sbg06hA=;
-  b=ckpqzq8Hv0TUFWK4gZDVMCvDHLGcfSPKKBZdwCjCcs03l0GznY2/4MAI
-   FHv925SqdhJhGD/c2poA9sRbtY09x61gAfd86Q9YqYrv2+2n4FCsM5P6j
-   YT7ORD3feA6z7arZSfsGMDzcaIQRW+y2cYCPkcr8gMQxVqxZAFPEHE/M9
-   DWL/u3UV73A8Jacc/fO1gmXB7AYa0ttbRC8P2YedRJcOa/988e+Q2ILNL
-   P3Sz4Qjj3G6lvAsnwzr5ICPfjWJqYfbAHkArtGdar6dHikA0OxNIIJT9W
-   sSeKruWTq4FeTViGP2+H1CMCDU0qBvRbGk7iJqanoffBulFVgl9nbj8i2
+  t=1645063858; x=1676599858;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nITptgXpuhXyOJm3BD4dZdDkSkJedyIZl3ZF/x2QsiY=;
+  b=MZQtZ748pkyB+kFZ08aia/KZ1RQzCP5vVX78fqCFUQ6cdv5Lfzip8PzI
+   T0GcGbXZpnIE53iopF9EuumlrnvqsJDO4qs8JoKrCnlJEeKUIznSXKwnS
+   nssOVfUoIwUwc+eMgLJIRCGyBcjFjmbPB/+i/S3pa6WvpFoFZZOkvo60I
+   67fCQQrDCjNMvfvPvJqzp6Is778DnZNfRqsldI1MDGnItxYVavQuU2dEe
+   58l5tQ9mkGvv43lYwrd/a7D7wNKqkgmXyTDYiPr4dUOMwFIM1aFpzf1Lx
+   uhf5/nO2kjp/sPmDHmLb8TaQ4qvPBIRxvFKL4oUsFyC4hsw1GdYzS9Jwj
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="231390974"
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="275355082"
 X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="231390974"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 17:49:57 -0800
+   d="scan'208";a="275355082"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 18:10:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="540552227"
+   d="scan'208";a="776790974"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Feb 2022 17:49:55 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 16 Feb 2022 18:10:56 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nKVvf-000BJ3-Ad; Thu, 17 Feb 2022 01:49:55 +0000
-Date: Thu, 17 Feb 2022 09:49:41 +0800
+	id 1nKWFz-000BJs-Kg; Thu, 17 Feb 2022 02:10:55 +0000
+Date: Thu, 17 Feb 2022 10:10:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
+To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: drivers/net/ethernet/marvell/pxa168_eth.c:1575:34: warning: unused
- variable 'pxa168_eth_of_match'
-Message-ID: <202202170947.93cVhp12-lkp@intel.com>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 29/42]
+ fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer
+ types ('typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *') and
+ 'typeof (size) *' (aka 'unsigned int *'))
+Message-ID: <202202171009.cJVDSV3U-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Masahiro,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3593030761630e09200072a4bd06468892c27be3
-commit: ea29b20a828511de3348334e529a3d046a180416 init/Kconfig: make COMPILE_TEST depend on HAS_IOMEM
-date:   11 months ago
-config: s390-randconfig-r044-20220217 (https://download.01.org/0day-ci/archive/20220217/202202170947.93cVhp12-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   5cb7f190822d09757b30cd9539e57eef72552d1f
+commit: 261cd621bd0477d43de460dea6c7bf7fa81824be [29/42] netfs: Implement buffered writes through netfs_file_write_iter()
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220217/202202171009.cJVDSV3U-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea29b20a828511de3348334e529a3d046a180416
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ea29b20a828511de3348334e529a3d046a180416
+        # https://github.com/ammarfaizi2/linux-block/commit/261cd621bd0477d43de460dea6c7bf7fa81824be
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 261cd621bd0477d43de460dea6c7bf7fa81824be
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/marvell/ drivers/staging/media/hantro/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
-                     ^
-   In file included from drivers/net/ethernet/marvell/pxa168_eth.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-                     ^
-   In file included from drivers/net/ethernet/marvell/pxa168_eth.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/net/ethernet/marvell/pxa168_eth.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/net/ethernet/marvell/pxa168_eth.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/net/ethernet/marvell/pxa168_eth.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/ethernet/marvell/pxa168_eth.c:1575:34: warning: unused variable 'pxa168_eth_of_match' [-Wunused-const-variable]
-   static const struct of_device_id pxa168_eth_of_match[] = {
-                                    ^
-   21 warnings generated.
---
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-                     ^
-   In file included from drivers/staging/media/hantro/hantro_drv.c:23:
-   In file included from include/media/v4l2-mem2mem.h:16:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:18:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/dma-buf-map.h:9:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/staging/media/hantro/hantro_drv.c:23:
-   In file included from include/media/v4l2-mem2mem.h:16:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:18:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/dma-buf-map.h:9:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/staging/media/hantro/hantro_drv.c:23:
-   In file included from include/media/v4l2-mem2mem.h:16:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:18:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/dma-buf-map.h:9:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/staging/media/hantro/hantro_drv.c:23:
-   In file included from include/media/v4l2-mem2mem.h:16:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:18:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/dma-buf-map.h:9:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/staging/media/hantro/hantro_drv.c:473:34: warning: unused variable 'of_hantro_match' [-Wunused-const-variable]
-   static const struct of_device_id of_hantro_match[] = {
-                                    ^
-   21 warnings generated.
+>> fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer types ('typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+                   unsigned int psize   = min(PAGE_SIZE - offset, size);
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   fs/netfs/buffered_write.c:95:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
+           target->from  = min(target->from, folio_pos(folio) + offset);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   fs/netfs/buffered_write.c:96:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
+           target->to    = max(target->to,   folio_pos(folio) + offset + len);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   3 warnings generated.
 
 
-vim +/pxa168_eth_of_match +1575 drivers/net/ethernet/marvell/pxa168_eth.c
+vim +28 fs/netfs/buffered_write.c
 
-a49f37eed22b74 drivers/net/pxa168_eth.c                  Sachin Sanap   2010-08-13  1574  
-43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30 @1575  static const struct of_device_id pxa168_eth_of_match[] = {
-43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30  1576  	{ .compatible = "marvell,pxa168-eth" },
-43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30  1577  	{ },
-43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30  1578  };
-43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30  1579  MODULE_DEVICE_TABLE(of, pxa168_eth_of_match);
-43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30  1580  
-
-:::::: The code at line 1575 was first introduced by commit
-:::::: 43d3ddf87a57ce34fad298138b892744c33bfca5 net: pxa168_eth: add device tree support
-
-:::::: TO: Antoine Ténart <antoine.tenart@free-electrons.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+    18	
+    19	static size_t copy_folio_from_iter_atomic(struct folio *folio,
+    20						  unsigned int offset, size_t size,
+    21						  struct iov_iter *i)
+    22	{
+    23		size_t copied = 0, n;
+    24	
+    25		do {
+    26			unsigned int index   = offset / PAGE_SIZE;
+    27			unsigned int poffset = offset % PAGE_SIZE;
+  > 28			unsigned int psize   = min(PAGE_SIZE - offset, size);
+    29	
+    30			n = copy_page_from_iter_atomic(folio_file_page(folio, index),
+    31						       poffset, psize, i);
+    32			copied += n;
+    33			if (n < psize)
+    34				break;
+    35			size -= n;
+    36		} while (size);
+    37		return copied;
+    38	}
+    39	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
