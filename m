@@ -1,46 +1,45 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2486C28E1
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 09:09:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8482928E1
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 09:25:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645088979; x=1676624979;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   in-reply-to;
-  bh=QLImBsVrgi/x/4Rm0YNgTPeFNVR7cNvUKbkdLBPpB9M=;
-  b=JUEuDXvKip0FkqMyUOR4lQbMfdUKQzlW4yG/O5ldG3SRyvGgqEnoF6/H
-   Zb8gTOvpqsvMJRbyJjtCEgAp9v9hVPjart9aIgvBH0U/i4SBqOV/qZmNA
-   cG62gO2o5Bok6qba0PzRsboSKInCUngDCr5CxOaIad+GMch+qoh13gBi6
-   E0A+suoiRGF9pui/6OE2KfFhh0uI44iCuPYs+w79am+ULBjUCuLh4SEpg
-   0LXm+ZnY44U8eQZZeRd0ChEnwahVeh515y9CcIXMEaO6THl4LUEVspJAL
-   3RunO2KIYmhGUn1dBORdyWv2Yju/5pSJDYmWy98dSed+6bic2Nk8ddsCX
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="231455283"
+  t=1645089947; x=1676625947;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c9VpxmpqyPbdKVv7bGkudznhAWVeNpsJ2GNtw03B7g4=;
+  b=StrNxHg6tZyS9afVkzXdEQ/vPJmZE25ALMBdBYqu9PqkVvQV46MsFDyf
+   Tq3kFU2famR92azHTXcPcR5nDOnLJFYga4ZVOLlU3FDyDz/TBMEsLv6i/
+   hzi2hj8HvPQTWLJZHCmXp7Kx+oGF8lNR9YME9D7mD3xCRkWzxFjmTf3xO
+   VywTHGrH+thTDdJbGMRJA2yvObld7iDHLuMdPJl/Ggm+ryZ1Zfa5TRJc/
+   RlqI3XP3JkVNtgxqeCs9+yR9Wyfl7NBBSySIptyPz62QEXa86MrkGv7fa
+   25miy07mJ2WkBv8wadr078FgrOqqMqV960wI4bGAQZc7lW7BmueTKKWNt
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="248431635"
 X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="231455283"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 01:09:38 -0800
+   d="scan'208";a="248431635"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 01:25:46 -0800
 X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="503416358"
+   d="scan'208";a="540878738"
 Received: from zcmahone-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.252.137.102])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 01:09:37 -0800
-Date: Thu, 17 Feb 2022 01:09:37 -0800
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 01:25:46 -0800
+Date: Thu, 17 Feb 2022 01:25:45 -0800
 From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, intel-gfx@lists.freedesktop.org,
-	llvm@lists.linux.dev, Douglas Anderson <dianders@chromium.org>,
-	dri-devel@lists.freedesktop.org,
-	"javierm@redhat.com Jani Nikula" <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>
+Cc: kernel test robot <lkp@intel.com>, intel-gfx@lists.freedesktop.org,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Douglas Anderson <dianders@chromium.org>,
+	dri-devel@lists.freedesktop.org
 Subject: Re: [Intel-gfx] [drm-tip:drm-tip 4/8]
  drivers/gpu/drm/solomon/ssd130x.c:451:18: error: incomplete definition of
  type 'struct dma_buf_map'
-Message-ID: <20220217090937.luhryuuoj6fqj6w6@ldmartin-desk2>
+Message-ID: <20220217092545.4zpjnh344fmrcg26@ldmartin-desk2>
 X-Patchwork-Hint: comment
+References: <202202171455.bclm1YBC-lkp@intel.com>
+ <20220217063625.sm5ua5xf4jo2ekku@ldmartin-desk2>
+ <79301ef2-03d4-ca96-3d7f-6f9b80f319e1@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,69 +48,139 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220217063625.sm5ua5xf4jo2ekku@ldmartin-desk2>
+In-Reply-To: <79301ef2-03d4-ca96-3d7f-6f9b80f319e1@redhat.com>
 
-On Wed, Feb 16, 2022 at 10:36:25PM -0800, Lucas De Marchi wrote:
->+Javier
+On Thu, Feb 17, 2022 at 10:00:42AM +0100, Javier Martinez Canillas wrote:
+>Hello Lucas,
 >
+>On 2/17/22 07:36, Lucas De Marchi wrote:
+>> +Javier
+>>
+>>
+>> On Thu, Feb 17, 2022 at 02:25:08PM +0800, kernel test robot wrote:
+>>> tree:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+>>> head:   e141e36b2871c529379f7ec7d5d6ebae3137a51b
+>>> commit: 7ca6504c36709f35c4cc38ae6acc1c9c3d72136f [4/8] Merge remote-tracking branch 'drm-misc/drm-misc-next' into drm-tip
+>>> config: mips-buildonly-randconfig-r002-20220217 (https://download.01.org/0day-ci/archive/20220217/202202171455.bclm1YBC-lkp@intel.com/config)
+>>> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
+>>> reproduce (this is a W=1 build):
+>>>        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>        chmod +x ~/bin/make.cross
+>>>        # install mips cross compiling tool for clang build
+>>>        # apt-get install binutils-mips-linux-gnu
+>>>        git remote add drm-tip git://anongit.freedesktop.org/drm/drm-tip
+>>>        git fetch --no-tags drm-tip drm-tip
+>>>        git checkout 7ca6504c36709f35c4cc38ae6acc1c9c3d72136f
+>>>        # save the config file to linux build tree
+>>>        mkdir build_dir
+>>>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/solomon/
+>>>
+>>> If you fix the issue, kindly add following tag as appropriate
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>
+>>> All error/warnings (new ones prefixed by >>):
+>>>
+>>>>> drivers/gpu/drm/solomon/ssd130x.c:447:74: warning: declaration of 'struct dma_buf_map' will not be visible outside of this function [-Wvisibility]
+>>>   static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct dma_buf_map *map,
+>>>                                                                            ^
+>>
+>> this is now called iosys_map in drm-intel... drm-tip will need a fixup
+>> for the merge.
+>>
 >
->On Thu, Feb 17, 2022 at 02:25:08PM +0800, kernel test robot wrote:
->>tree:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
->>head:   e141e36b2871c529379f7ec7d5d6ebae3137a51b
->>commit: 7ca6504c36709f35c4cc38ae6acc1c9c3d72136f [4/8] Merge remote-tracking branch 'drm-misc/drm-misc-next' into drm-tip
->>config: mips-buildonly-randconfig-r002-20220217 (https://download.01.org/0day-ci/archive/20220217/202202171455.bclm1YBC-lkp@intel.com/config)
->>compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
->>reproduce (this is a W=1 build):
->>       wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>       chmod +x ~/bin/make.cross
->>       # install mips cross compiling tool for clang build
->>       # apt-get install binutils-mips-linux-gnu
->>       git remote add drm-tip git://anongit.freedesktop.org/drm/drm-tip
->>       git fetch --no-tags drm-tip drm-tip
->>       git checkout 7ca6504c36709f35c4cc38ae6acc1c9c3d72136f
->>       # save the config file to linux build tree
->>       mkdir build_dir
->>       COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/solomon/
->>
->>If you fix the issue, kindly add following tag as appropriate
->>Reported-by: kernel test robot <lkp@intel.com>
->>
->>All error/warnings (new ones prefixed by >>):
->>
->>>>drivers/gpu/drm/solomon/ssd130x.c:447:74: warning: declaration of 'struct dma_buf_map' will not be visible outside of this function [-Wvisibility]
->>  static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct dma_buf_map *map,
->>                                                                           ^
+>I thought that the drm-intel tree was only for Intel DRM drivers changes and
+>subsystem wide changes should be merged through drm-mic ?
+>
+>Doing refactoring in that tree will likely lead to merge conflicts like this.
 
-just did a dim rebuild-tip and added a fixup to drm-misc-next.
+Yes, I know. My initial proposal was to split the rename and do it per
+branch to avoid this kind of situation, but it was requested to be done
+all in a single patch. Since I had other ~15 patches dependent on that
+one to be merged in drm-intel, it was agreed to do the rename via
+drm-intel. See 
+https://lore.kernel.org/lkml/e3813696-7b91-510c-987f-85ed2fd502d6@suse.de/
 
-+Cc other maintainers
+I guess the conflicts won't be that terrible and can be fixed as they
+show up.
 
---------------------8<------------------------
-diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
-index 19697c8c5a2c..92c1902f53e4 100644
---- a/drivers/gpu/drm/solomon/ssd130x.c
-+++ b/drivers/gpu/drm/solomon/ssd130x.c
-@@ -444,7 +444,7 @@ static void ssd130x_clear_screen(struct ssd130x_device *ssd130x)
-  	kfree(buf);
-  }
-  
--static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct dma_buf_map *map,
-+static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_map *map,
-  				struct drm_rect *rect)
-  {
-  	struct ssd130x_device *ssd130x = drm_to_ssd130x(fb->dev);
---------------------8<------------------------
+>Noticed your series in dri-devel but missed that already landed in drm-intel.
+>
+>The resolution should just be [0] right? If you confirm that then I can post
+>a proper patch to dri-devel.
+>
+>>>>> drivers/gpu/drm/solomon/ssd130x.c:451:18: error: incomplete definition of type 'struct dma_buf_map'
+>>>           void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
+>>>                        ~~~^
+>>
+>> this shouldn't really be done.
+>>
+>
+>Yes, I know but asked what would be the proper way and didn't get an answer.
+>We have many drivers doing the same and I couldn't find one that was doing
+>it correctly to use as a reference:
+>
+>$ git grep "TODO: Use mapping abstraction properly" | wc -l
+>15
+>
+>If you point me the proper way, I'll be happy to post a patch to change it.
+
+It depends what you want to do with the address. There are APIs to copy
+from/to. I also added a few to read/write to an offset. It seems the
+problem here is that you need to pass that to a helper,
+drm_fb_xrgb8888_to_mono_reversed(). I think the proper solution would be
+to change the helper to accept an iosys_map* as argument rather than a
+void*.
 
 Lucas De Marchi
 
 >
->this is now called iosys_map in drm-intel... drm-tip will need a fixup
->for the merge.
+>> Lucas De Marchi
+>>
 >
->>>>drivers/gpu/drm/solomon/ssd130x.c:451:18: error: incomplete definition of type 'struct dma_buf_map'
->>          void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
->>                       ~~~^
+>[0]
+>From f8268e5b15c321b56862904665f5e312bf50d397 Mon Sep 17 00:00:00 2001
+>From: Javier Martinez Canillas <javierm@redhat.com>
+>Date: Thu, 17 Feb 2022 09:52:37 +0100
+>Subject: [PATCH] drm/solomon: Rename dma-buf-map to iosys-map
 >
->this shouldn't really be done.
+>Commit 7938f4218168 ("dma-buf-map: Rename to iosys-map") renamed the struct
+>dma_buf_map to struct iosys_map, but this change wasn't present in drm-misc
+>when the ssd130x driver was merged, and it created a merge conflict.
 >
->Lucas De Marchi
+>Fix this by renaming the data structure type in the ssd130x driver.
+>
+>Reported-by: kernel test robot <lkp@intel.com>
+>Suggested-by: Lucas De Marchi <lucas.demarchi@intel.com>
+>Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+>---
+> drivers/gpu/drm/solomon/ssd130x.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+>index 19697c8c5a2c..92c1902f53e4 100644
+>--- a/drivers/gpu/drm/solomon/ssd130x.c
+>+++ b/drivers/gpu/drm/solomon/ssd130x.c
+>@@ -444,7 +444,7 @@ static void ssd130x_clear_screen(struct ssd130x_device *ssd130x)
+> 	kfree(buf);
+> }
+>
+>-static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct dma_buf_map *map,
+>+static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_map *map,
+
+I added this as a fixup to dim, so it's applied on the merge commit. I
+think it would be preferred to have this in the merge resolution when
+drm-intel propagates all the way back to drm-misc
+
+
+> 				struct drm_rect *rect)
+> {
+> 	struct ssd130x_device *ssd130x = drm_to_ssd130x(fb->dev);
+>-- 
+>2.34.1
+>
+>Best regards,
+>-- 
+>Javier Martinez Canillas
+>Linux Engineering
+>Red Hat
+>
