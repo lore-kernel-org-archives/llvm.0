@@ -1,41 +1,41 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FAD3D9E
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 14:21:43 +0000 (UTC)
-Received: by mail-ej1-f50.google.com with SMTP id p9so7668912ejd.6
-        for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 06:21:43 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66357291C
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 14:21:48 +0000 (UTC)
+Received: by mail-ej1-f53.google.com with SMTP id k25so7671010ejp.5
+        for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 06:21:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pszNuayq3uAwPjpzq/uwyInszVpNCtaI4non2ruEen8=;
-        b=EzWUOMPttCGG5Yg3G3nXzK6cU6fkvWMUdfJ1CNKVYIofnQ8MBABhzHGcjpeaFGveKU
-         1OJ87QrSEX1uuPUc7BJfeIXXIytBzZXFv4LINWFVY4q0nOBh21i+Dm+TNrqGBcP6ILHL
-         RYij2xEsD4K9kfiKIPn1kgvc5FXRqQJe3rsjuiXcLRwTgOEY8S7C5EP47XiYxycZvsQX
-         tsBHRGZih1VxQ8SDY14SgZdLKxYb6uPxBy9oA9ytoZh6iBNdvdycVP8Shj7JdvFwV3aL
-         UaZfCHoIRd/1OXv2XTyFj0JQvyUlRQ2nvRshbjkDNpVEAMTxb0OOkGByWao2Bj/kbnqT
-         ErnQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EuHmUQyH6qnHd858RqknP0s0QcJF0aPYhchgl7zVC2A=;
+        b=a/cRpJjYorSNEhv8rgzuuwu8DtqJBBjyo6H/urhBzQeA8gCrmajvBkEHM7if60gNmo
+         2UhRRWooKMiMJ9joFoQRdXTMAQZCrFUroZuBnUTi0oYCGwMI792kPeYppaccmY0thftX
+         LXMC0uCUt4Xyw5YvGFTzgxlZ/kWlk7UGIiXXLxekUjCJq3XUFmBiDj3yW+zTLDPQ4N5R
+         gp6aGQvov4zzK47ZsNnCDl+9ZRn7LURFYAk8JqeVI5jY3tdS5ZZraNv8t3BISmCWvAax
+         49qJ5LTGcp9GKqPzdNnrQiJaiwl2Slcuh+0Md+vvG3fCAs/1SFNYVZF5za0LSllI7RjJ
+         FYXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pszNuayq3uAwPjpzq/uwyInszVpNCtaI4non2ruEen8=;
-        b=Q42ANYuHwCDW4bkWVhKThkjAp52PDMjxoBh54O3b4CPjb70ErK9MsBUEoR9GJlPQdr
-         xsZazu9Ie1XhB5L57W7ob65yUKRe8c0R31G0i55tdFolhMDyOa6pK5AGXp7oNP9oYXcF
-         ETPBxjfv3elaJJZ+Mv9np+RRFkOgB2OYnk3p6VZ5IhXkBJv5RkLM3jsPzL4Xr+mzOu/o
-         5gDWjM2eSUxkEgatg80YokStnTA/oKKAw7tLaED0cH9pJTQ8T03J+02I2EmrKvaPDcx7
-         HbJMs1KMhEYlrGM0B2hpncAHrBSvI4gViIoYaTbyJ0SFPmWmz2tE77tyKiJ+6HGQH3vp
-         JAqw==
-X-Gm-Message-State: AOAM530MNBdqDcvdSd/hU0nmsnx4GMfGuYMWBggWiLsEmp9zT8AH5yo0
-	H5PCkgjmvaPjmfcgV2ni4y0=
-X-Google-Smtp-Source: ABdhPJwa0W7mI8nYQ7LIYGYeZKKRoW7ww/i5hwmuOBPRPmWmW0gWn5Vc8PxZZvea3wi00KlNvupvhQ==
-X-Received: by 2002:a17:906:c08a:b0:6ce:36f8:bfe8 with SMTP id f10-20020a170906c08a00b006ce36f8bfe8mr2553503ejz.52.1645107701726;
-        Thu, 17 Feb 2022 06:21:41 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EuHmUQyH6qnHd858RqknP0s0QcJF0aPYhchgl7zVC2A=;
+        b=msCImTrr4ksqOBqLdsYKHuShJOClgI/ilPFbkBQnR1612OlW5s9cIISAyHk3SLOE7s
+         cV7rzO1KNy31mKxUegNqdN/CgXguR6hRKYbRrRlBsCtIo21UZN+scdGBi7YYalldD7ow
+         0RX6BOkwUgem+1+rcrdHEBrjCEBtzsQ97Aq2YjDkB+YXiXC7SXUOOGeffPpOw2GF6Zsm
+         3MpeW7DiY+vq0uC8dODktjKeJDWniXBbpMIaHazSuw0QIu0gBFRTSZ8nU9+l8dRpGfdc
+         GFFqY1Jrdw7ffoq1vPpCoMnbNm4+8FLTCBhStMBDcKuumYXHUuc8oWWRae/qr9yKOJmu
+         PxRw==
+X-Gm-Message-State: AOAM530fx4Q5tIr9m4TMS2xBABf42CbvYkU07S5mpq7QCxBm0tPI4wr0
+	q1fOMEB6hk/gdEuf/ceXrm0=
+X-Google-Smtp-Source: ABdhPJxTYJvXI6TOu7Yyy7Lxd7Q0QAwjxFNf0pSk+WK3sVTcBhx4oOQ5Q+ZQQ7967AqOazORGuxVew==
+X-Received: by 2002:a17:907:9956:b0:6b9:a6d9:a535 with SMTP id kl22-20020a170907995600b006b9a6d9a535mr2533960ejc.64.1645107706743;
+        Thu, 17 Feb 2022 06:21:46 -0800 (PST)
 Received: from debianHome.localdomain (dynamic-077-001-066-240.77.1.pool.telefonica.de. [77.1.66.240])
-        by smtp.gmail.com with ESMTPSA id a13sm578436edn.25.2022.02.17.06.21.40
+        by smtp.gmail.com with ESMTPSA id a13sm578436edn.25.2022.02.17.06.21.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 06:21:41 -0800 (PST)
+        Thu, 17 Feb 2022 06:21:46 -0800 (PST)
 From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
 To: selinux@vger.kernel.org
 Cc: Paul Moore <paul@paul-moore.com>,
@@ -44,16 +44,19 @@ Cc: Paul Moore <paul@paul-moore.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Ondrej Mosnacek <omosnace@redhat.com>,
+	James Morris <jamorris@linux.microsoft.com>,
 	Austin Kim <austin.kim@lge.com>,
-	Kees Cook <keescook@chromium.org>,
-	Yang Li <yang.lee@linux.alibaba.com>,
 	Casey Schaufler <casey@schaufler-ca.com>,
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+	Yang Li <yang.lee@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 2/5] selinux: use correct type for context length
-Date: Thu, 17 Feb 2022 15:21:25 +0100
-Message-Id: <20220217142133.72205-1-cgzones@googlemail.com>
+Subject: [PATCH 3/5] selinux: use consistent pointer types for boolean arrays
+Date: Thu, 17 Feb 2022 15:21:26 +0100
+Message-Id: <20220217142133.72205-2-cgzones@googlemail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220217142133.72205-1-cgzones@googlemail.com>
+References: <20220217142133.72205-1-cgzones@googlemail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,33 +66,98 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-security_sid_to_context() expects a pointer to an u32 as the address
-where to store the length of the computed context.
+Use a consistent type of unsigned int* for boolean arrays, instead of
+using implicit casts to and from int*.
 
 Reported by sparse:
 
-    security/selinux/xfrm.c:359:39: warning: incorrect type in argument 4 (different signedness)
-    security/selinux/xfrm.c:359:39:    expected unsigned int [usertype] *scontext_len
-    security/selinux/xfrm.c:359:39:    got int *
+    security/selinux/selinuxfs.c:1481:30: warning: incorrect type in assignment (different signedness)
+    security/selinux/selinuxfs.c:1481:30:    expected unsigned int *
+    security/selinux/selinuxfs.c:1481:30:    got int *[addressable] values
+    security/selinux/selinuxfs.c:1398:48: warning: incorrect type in argument 3 (different signedness)
+    security/selinux/selinuxfs.c:1398:48:    expected int *values
+    security/selinux/selinuxfs.c:1398:48:    got unsigned int *bool_pending_values
 
 Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
----
- security/selinux/xfrm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/selinux/xfrm.c b/security/selinux/xfrm.c
-index 90697317895f..c576832febc6 100644
---- a/security/selinux/xfrm.c
-+++ b/security/selinux/xfrm.c
-@@ -347,7 +347,7 @@ int selinux_xfrm_state_alloc_acquire(struct xfrm_state *x,
- 	int rc;
- 	struct xfrm_sec_ctx *ctx;
- 	char *ctx_str = NULL;
--	int str_len;
-+	u32 str_len;
+---
+A more invasive change would be to change all boolean arrays to bool*.
+---
+ security/selinux/include/conditional.h | 4 ++--
+ security/selinux/selinuxfs.c           | 2 +-
+ security/selinux/ss/services.c         | 9 +++++----
+ 3 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/security/selinux/include/conditional.h b/security/selinux/include/conditional.h
+index b09343346e3f..9e65aa409318 100644
+--- a/security/selinux/include/conditional.h
++++ b/security/selinux/include/conditional.h
+@@ -14,9 +14,9 @@
+ #include "security.h"
  
- 	if (!polsec)
- 		return 0;
+ int security_get_bools(struct selinux_policy *policy,
+-		       u32 *len, char ***names, int **values);
++		       u32 *len, char ***names, unsigned int **values);
+ 
+-int security_set_bools(struct selinux_state *state, u32 len, int *values);
++int security_set_bools(struct selinux_state *state, u32 len, unsigned int *values);
+ 
+ int security_get_bool_value(struct selinux_state *state, u32 index);
+ 
+diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+index f2f6203e0fff..5216a321bbb0 100644
+--- a/security/selinux/selinuxfs.c
++++ b/security/selinux/selinuxfs.c
+@@ -1428,7 +1428,7 @@ static int sel_make_bools(struct selinux_policy *newpolicy, struct dentry *bool_
+ 	struct inode_security_struct *isec;
+ 	char **names = NULL, *page;
+ 	u32 i, num;
+-	int *values = NULL;
++	unsigned int *values = NULL;
+ 	u32 sid;
+ 
+ 	ret = -ENOMEM;
+diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
+index 6901dc07680d..7865926962ab 100644
+--- a/security/selinux/ss/services.c
++++ b/security/selinux/ss/services.c
+@@ -3023,7 +3023,7 @@ int security_fs_use(struct selinux_state *state, struct super_block *sb)
+ }
+ 
+ int security_get_bools(struct selinux_policy *policy,
+-		       u32 *len, char ***names, int **values)
++		       u32 *len, char ***names, unsigned int **values)
+ {
+ 	struct policydb *policydb;
+ 	u32 i;
+@@ -3045,7 +3045,7 @@ int security_get_bools(struct selinux_policy *policy,
+ 		goto err;
+ 
+ 	rc = -ENOMEM;
+-	*values = kcalloc(*len, sizeof(int), GFP_ATOMIC);
++	*values = kcalloc(*len, sizeof(unsigned int), GFP_ATOMIC);
+ 	if (!*values)
+ 		goto err;
+ 
+@@ -3075,7 +3075,7 @@ int security_get_bools(struct selinux_policy *policy,
+ }
+ 
+ 
+-int security_set_bools(struct selinux_state *state, u32 len, int *values)
++int security_set_bools(struct selinux_state *state, u32 len, unsigned int *values)
+ {
+ 	struct selinux_policy *newpolicy, *oldpolicy;
+ 	int rc;
+@@ -3175,7 +3175,8 @@ int security_get_bool_value(struct selinux_state *state,
+ static int security_preserve_bools(struct selinux_policy *oldpolicy,
+ 				struct selinux_policy *newpolicy)
+ {
+-	int rc, *bvalues = NULL;
++	int rc;
++	unsigned int *bvalues = NULL;
+ 	char **bnames = NULL;
+ 	struct cond_bool_datum *booldatum;
+ 	u32 i, nbools = 0;
 -- 
 2.35.1
 
