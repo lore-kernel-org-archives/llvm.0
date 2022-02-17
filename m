@@ -1,42 +1,51 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B9138DA
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 09:41:40 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 028C61F37D;
-	Thu, 17 Feb 2022 09:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1645090899; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA5C38DA
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 09:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1645091518;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VIvcIvC7mYpBKP1I/vHBxVjHVwfgu1TcpXXFXE5sFDU=;
-	b=XUONyLDwncWCVDsuIZzCNtJUV0QXc+QaoH3U+41M7grP+JeeL+lS1m5sK17Q9ElxqIgmav
-	GcPAGBO4VzgfxFx0U9WCYwSsTpgJfeRj+dCef1x1oLh9vKeRoX9Az5GfKeg57xxiRmBhwN
-	Zip/bTQe4UDNSOIQjEbfRJjqViliEfE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1645090899;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VIvcIvC7mYpBKP1I/vHBxVjHVwfgu1TcpXXFXE5sFDU=;
-	b=yqk7N+CBqISrvo9Lv3uaoJ9Rw60KmJA2sXEgMDWph2rDedw9ZoQmURlgS5MvpBDJpRc3bh
-	i4oH9fWO7lTa0IBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C98D813BBF;
-	Thu, 17 Feb 2022 09:41:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id GN80MFIYDmIbKQAAMHmgww
-	(envelope-from <tzimmermann@suse.de>); Thu, 17 Feb 2022 09:41:38 +0000
-Message-ID: <95cce34d-fa67-2da9-f065-a6dacfa980d6@suse.de>
-Date: Thu, 17 Feb 2022 10:41:38 +0100
+	bh=GjAkGPjCABeyW0Gcd3V5/Yp+7WRVwbV3GUQOEkRq3r4=;
+	b=e7cwtOyBqDM5FL5qtdoQfSuXizTaN92mi2uUprXAsBP4PIdilV0zTAP8dQv23i9GKzonCI
+	o5tarvYMh5MyDRkRgtRF0Ni3kYKTrEZ1+i+YeU4HR7LyRvN7vVzPHv1420YmX/gmP3EQ2f
+	MP1PK9bKqVXybeaJtV/2G/2oLUnzJsA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-479-cdrxtrrFP8K-NvDYvV3znA-1; Thu, 17 Feb 2022 04:51:57 -0500
+X-MC-Unique: cdrxtrrFP8K-NvDYvV3znA-1
+Received: by mail-wm1-f72.google.com with SMTP id p24-20020a05600c1d9800b0037be98d03a1so4025897wms.0
+        for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 01:51:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GjAkGPjCABeyW0Gcd3V5/Yp+7WRVwbV3GUQOEkRq3r4=;
+        b=oQhPik4gzPH51A0Q+irgVvcf7hvYHiLm4MirejVo8phOweL5zNBCx9WTGD6pqJ34zh
+         S3koEFOvEMH5iHNhHtVRhPnGFcrwqrTXI8Gw0VzqKM2A/wdOr6/o9JUuPOxgJbMqlKb+
+         T1o71Ialh+YyD4lhRs00T7A2cOgCBHXFGV5TTquuQQ/VQn+j/1y6g4J/SJc0+AA3O+hm
+         fb6qfXN0F6PKqNCme/RuApIGO45UBgXgiPqg4Q5N+AmYf22qfAZp8NBX9NCDSNL7RbYD
+         emAFWNWBx/quCtRAwzmlh1yGAgCe+y9l9SMEC+y1stUC2nPHrCIPkDU7wgVIGFox8632
+         dK7g==
+X-Gm-Message-State: AOAM533bvVBXCeJeAJS4+eFBWHM/dcbGunmxgkiYESnAG5EJfsDNyPsU
+	39nEXQ75mpkO7mZr13jfzZj3lpjTiEOzslXfK53o6xpY6GerraXUFMT50QPzZOvDdQSQCpeWHw7
+	OZrjpTYpGw9wD9g==
+X-Received: by 2002:adf:f44e:0:b0:1a9:f21:2250 with SMTP id f14-20020adff44e000000b001a90f212250mr1658098wrp.263.1645091515965;
+        Thu, 17 Feb 2022 01:51:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyZllfGRweBQ8shZ+yBvcfWtgaeNv0G0mGqBezZOKeBuh1xIW/cWJX8HtYpgXMY57Gpy8G+/w==
+X-Received: by 2002:adf:f44e:0:b0:1a9:f21:2250 with SMTP id f14-20020adff44e000000b001a90f212250mr1658084wrp.263.1645091515744;
+        Thu, 17 Feb 2022 01:51:55 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id n7sm688930wmd.30.2022.02.17.01.51.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 01:51:55 -0800 (PST)
+Message-ID: <dc350aa0-9f59-36c2-9534-f0798f3d0d6a@redhat.com>
+Date: Thu, 17 Feb 2022 10:51:54 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,131 +57,70 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
 Subject: Re: [Intel-gfx] [drm-tip:drm-tip 4/8]
  drivers/gpu/drm/solomon/ssd130x.c:451:18: error: incomplete definition of
  type 'struct dma_buf_map'
+To: Thomas Zimmermann <tzimmermann@suse.de>,
+ Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: kbuild-all@lists.01.org, kernel test robot <lkp@intel.com>,
+ intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
+ Douglas Anderson <dianders@chromium.org>, dri-devel@lists.freedesktop.org
+References: <202202171455.bclm1YBC-lkp@intel.com>
+ <20220217063625.sm5ua5xf4jo2ekku@ldmartin-desk2>
+ <79301ef2-03d4-ca96-3d7f-6f9b80f319e1@redhat.com>
+ <20220217092545.4zpjnh344fmrcg26@ldmartin-desk2>
+ <95cce34d-fa67-2da9-f065-a6dacfa980d6@suse.de>
+From: Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <95cce34d-fa67-2da9-f065-a6dacfa980d6@suse.de>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=javierm@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Language: en-US
-To: Lucas De Marchi <lucas.demarchi@intel.com>,
- Javier Martinez Canillas <javierm@redhat.com>
-Cc: kbuild-all@lists.01.org, kernel test robot <lkp@intel.com>,
- intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
- Douglas Anderson <dianders@chromium.org>, dri-devel@lists.freedesktop.org
-References: <202202171455.bclm1YBC-lkp@intel.com>
- <20220217063625.sm5ua5xf4jo2ekku@ldmartin-desk2>
- <79301ef2-03d4-ca96-3d7f-6f9b80f319e1@redhat.com>
- <20220217092545.4zpjnh344fmrcg26@ldmartin-desk2>
-From: Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220217092545.4zpjnh344fmrcg26@ldmartin-desk2>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------YuhADYhmsOwshkWQOQFsb7QJ"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------YuhADYhmsOwshkWQOQFsb7QJ
-Content-Type: multipart/mixed; boundary="------------pT3bPkC1ApmQhXoBnnjJcE4x";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Lucas De Marchi <lucas.demarchi@intel.com>,
- Javier Martinez Canillas <javierm@redhat.com>
-Cc: kbuild-all@lists.01.org, kernel test robot <lkp@intel.com>,
- intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
- Douglas Anderson <dianders@chromium.org>, dri-devel@lists.freedesktop.org
-Message-ID: <95cce34d-fa67-2da9-f065-a6dacfa980d6@suse.de>
-Subject: Re: [Intel-gfx] [drm-tip:drm-tip 4/8]
- drivers/gpu/drm/solomon/ssd130x.c:451:18: error: incomplete definition of
- type 'struct dma_buf_map'
-References: <202202171455.bclm1YBC-lkp@intel.com>
- <20220217063625.sm5ua5xf4jo2ekku@ldmartin-desk2>
- <79301ef2-03d4-ca96-3d7f-6f9b80f319e1@redhat.com>
- <20220217092545.4zpjnh344fmrcg26@ldmartin-desk2>
-In-Reply-To: <20220217092545.4zpjnh344fmrcg26@ldmartin-desk2>
+On 2/17/22 10:41, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 17.02.22 um 10:25 schrieb Lucas De Marchi:
+> [...]
+>>> $ git grep "TODO: Use mapping abstraction properly" | wc -l
+>>> 15
+>>>
+>>> If you point me the proper way, I'll be happy to post a patch to 
+>>> change it.
+>>
+>> It depends what you want to do with the address. There are APIs to copy
+>> from/to. I also added a few to read/write to an offset. It seems the
+>> problem here is that you need to pass that to a helper,
+>> drm_fb_xrgb8888_to_mono_reversed(). I think the proper solution would be
+>> to change the helper to accept an iosys_map* as argument rather than a
+>> void*.
+> 
+> There are several of these TODOs in the DRM code, because our 
+> format-conversion helpers are still from the time before 
+> dma_buf_map/iosys_map. The easiest workaround is to take the raw pointer 
+> and give it to them. One day, DRM's public blit and conversion 
+> interfaces will take an iosys_map and handle the different memory types 
+> internally.
+>
 
---------------pT3bPkC1ApmQhXoBnnjJcE4x
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Yes, as Lucas mentioned there are copy from/to helpers but didn't want to
+use it because would be another unnecessary copy just to avoid to take the
+map->vaddr raw pointer and pass directly to the format-conversion helper.
 
-SGkNCg0KQW0gMTcuMDIuMjIgdW0gMTA6MjUgc2NocmllYiBMdWNhcyBEZSBNYXJjaGk6DQpb
-Li4uXQ0KPj4gJCBnaXQgZ3JlcCAiVE9ETzogVXNlIG1hcHBpbmcgYWJzdHJhY3Rpb24gcHJv
-cGVybHkiIHwgd2MgLWwNCj4+IDE1DQo+Pg0KPj4gSWYgeW91IHBvaW50IG1lIHRoZSBwcm9w
-ZXIgd2F5LCBJJ2xsIGJlIGhhcHB5IHRvIHBvc3QgYSBwYXRjaCB0byANCj4+IGNoYW5nZSBp
-dC4NCj4gDQo+IEl0IGRlcGVuZHMgd2hhdCB5b3Ugd2FudCB0byBkbyB3aXRoIHRoZSBhZGRy
-ZXNzLiBUaGVyZSBhcmUgQVBJcyB0byBjb3B5DQo+IGZyb20vdG8uIEkgYWxzbyBhZGRlZCBh
-IGZldyB0byByZWFkL3dyaXRlIHRvIGFuIG9mZnNldC4gSXQgc2VlbXMgdGhlDQo+IHByb2Js
-ZW0gaGVyZSBpcyB0aGF0IHlvdSBuZWVkIHRvIHBhc3MgdGhhdCB0byBhIGhlbHBlciwNCj4g
-ZHJtX2ZiX3hyZ2I4ODg4X3RvX21vbm9fcmV2ZXJzZWQoKS4gSSB0aGluayB0aGUgcHJvcGVy
-IHNvbHV0aW9uIHdvdWxkIGJlDQo+IHRvIGNoYW5nZSB0aGUgaGVscGVyIHRvIGFjY2VwdCBh
-biBpb3N5c19tYXAqIGFzIGFyZ3VtZW50IHJhdGhlciB0aGFuIGENCj4gdm9pZCouDQoNClRo
-ZXJlIGFyZSBzZXZlcmFsIG9mIHRoZXNlIFRPRE9zIGluIHRoZSBEUk0gY29kZSwgYmVjYXVz
-ZSBvdXIgDQpmb3JtYXQtY29udmVyc2lvbiBoZWxwZXJzIGFyZSBzdGlsbCBmcm9tIHRoZSB0
-aW1lIGJlZm9yZSANCmRtYV9idWZfbWFwL2lvc3lzX21hcC4gVGhlIGVhc2llc3Qgd29ya2Fy
-b3VuZCBpcyB0byB0YWtlIHRoZSByYXcgcG9pbnRlciANCmFuZCBnaXZlIGl0IHRvIHRoZW0u
-IE9uZSBkYXksIERSTSdzIHB1YmxpYyBibGl0IGFuZCBjb252ZXJzaW9uIA0KaW50ZXJmYWNl
-cyB3aWxsIHRha2UgYW4gaW9zeXNfbWFwIGFuZCBoYW5kbGUgdGhlIGRpZmZlcmVudCBtZW1v
-cnkgdHlwZXMgDQppbnRlcm5hbGx5Lg0KDQpKYXZpZXJtLCB0aGF0J3Mgd2hlbiB0aGUgaW50
-ZXJuYWwgX2xpbmUoKSBoZWxwZXJzIHdpbGwgYmVjb21lIHVzZWZ1bC4gDQpUaGV5IGNhbiB1
-c2Ugc3lzdGVtIG1lbW9yeSBkaXJlY3RseSwgYW5kIGZvciBJL08gbWVtb3J5IHRoZSANCmJs
-aXQvY29udmVyc2lvbiBoZWxwZXJzIGFsbG9jYXRlIGFuIGludGVybmFsIHRlbXBvcmFyeSBw
-ZXItbGluZSBidWZmZXIuIA0KVGhlIGNvZGUgeW91IG1hZGUgZm9yIHRoZSBuZXcgZHJpdmVy
-IGhhcyB0aGlzIGRlc2lnbmVkIG91dGxpbmVkIGFscmVhZHkuDQoNCkJlc3QgcmVnYXJkcw0K
-VGhvbWFzDQoNCj4gDQo+IEx1Y2FzIERlIE1hcmNoaQ0KPiANCj4+DQo+Pj4gTHVjYXMgRGUg
-TWFyY2hpDQo+Pj4NCj4+DQo+PiBbMF0NCj4+IEZyb20gZjgyNjhlNWIxNWMzMjFiNTY4NjI5
-MDQ2NjVmNWUzMTJiZjUwZDM5NyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDENCj4+IEZyb206
-IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyA8amF2aWVybUByZWRoYXQuY29tPg0KPj4gRGF0
-ZTogVGh1LCAxNyBGZWIgMjAyMiAwOTo1MjozNyArMDEwMA0KPj4gU3ViamVjdDogW1BBVENI
-XSBkcm0vc29sb21vbjogUmVuYW1lIGRtYS1idWYtbWFwIHRvIGlvc3lzLW1hcA0KPj4NCj4+
-IENvbW1pdCA3OTM4ZjQyMTgxNjggKCJkbWEtYnVmLW1hcDogUmVuYW1lIHRvIGlvc3lzLW1h
-cCIpIHJlbmFtZWQgdGhlIA0KPj4gc3RydWN0DQo+PiBkbWFfYnVmX21hcCB0byBzdHJ1Y3Qg
-aW9zeXNfbWFwLCBidXQgdGhpcyBjaGFuZ2Ugd2Fzbid0IHByZXNlbnQgaW4gDQo+PiBkcm0t
-bWlzYw0KPj4gd2hlbiB0aGUgc3NkMTMweCBkcml2ZXIgd2FzIG1lcmdlZCwgYW5kIGl0IGNy
-ZWF0ZWQgYSBtZXJnZSBjb25mbGljdC4NCj4+DQo+PiBGaXggdGhpcyBieSByZW5hbWluZyB0
-aGUgZGF0YSBzdHJ1Y3R1cmUgdHlwZSBpbiB0aGUgc3NkMTMweCBkcml2ZXIuDQo+Pg0KPj4g
-UmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPg0KPj4gU3Vn
-Z2VzdGVkLWJ5OiBMdWNhcyBEZSBNYXJjaGkgPGx1Y2FzLmRlbWFyY2hpQGludGVsLmNvbT4N
-Cj4+IFNpZ25lZC1vZmYtYnk6IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyA8amF2aWVybUBy
-ZWRoYXQuY29tPg0KPj4gLS0tDQo+PiBkcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4
-LmMgfCAyICstDQo+PiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRp
-b24oLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3NvbG9tb24vc3Nk
-MTMweC5jIA0KPj4gYi9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMNCj4+IGlu
-ZGV4IDE5Njk3YzhjNWEyYy4uOTJjMTkwMmY1M2U0IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVy
-cy9ncHUvZHJtL3NvbG9tb24vc3NkMTMweC5jDQo+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0v
-c29sb21vbi9zc2QxMzB4LmMNCj4+IEBAIC00NDQsNyArNDQ0LDcgQEAgc3RhdGljIHZvaWQg
-c3NkMTMweF9jbGVhcl9zY3JlZW4oc3RydWN0IA0KPj4gc3NkMTMweF9kZXZpY2UgKnNzZDEz
-MHgpDQo+PiDCoMKgwqDCoGtmcmVlKGJ1Zik7DQo+PiB9DQo+Pg0KPj4gLXN0YXRpYyBpbnQg
-c3NkMTMweF9mYl9ibGl0X3JlY3Qoc3RydWN0IGRybV9mcmFtZWJ1ZmZlciAqZmIsIGNvbnN0
-IA0KPj4gc3RydWN0IGRtYV9idWZfbWFwICptYXAsDQo+PiArc3RhdGljIGludCBzc2QxMzB4
-X2ZiX2JsaXRfcmVjdChzdHJ1Y3QgZHJtX2ZyYW1lYnVmZmVyICpmYiwgY29uc3QgDQo+PiBz
-dHJ1Y3QgaW9zeXNfbWFwICptYXAsDQo+IA0KPiBJIGFkZGVkIHRoaXMgYXMgYSBmaXh1cCB0
-byBkaW0sIHNvIGl0J3MgYXBwbGllZCBvbiB0aGUgbWVyZ2UgY29tbWl0LiBJDQo+IHRoaW5r
-IGl0IHdvdWxkIGJlIHByZWZlcnJlZCB0byBoYXZlIHRoaXMgaW4gdGhlIG1lcmdlIHJlc29s
-dXRpb24gd2hlbg0KPiBkcm0taW50ZWwgcHJvcGFnYXRlcyBhbGwgdGhlIHdheSBiYWNrIHRv
-IGRybS1taXNjDQo+IA0KPiANCj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBz
-dHJ1Y3QgZHJtX3JlY3QgKnJlY3QpDQo+PiB7DQo+PiDCoMKgwqDCoHN0cnVjdCBzc2QxMzB4
-X2RldmljZSAqc3NkMTMweCA9IGRybV90b19zc2QxMzB4KGZiLT5kZXYpOw0KPj4gLS0gDQo+
-PiAyLjM0LjENCj4+DQo+PiBCZXN0IHJlZ2FyZHMsDQo+PiAtLSANCj4+IEphdmllciBNYXJ0
-aW5leiBDYW5pbGxhcw0KPj4gTGludXggRW5naW5lZXJpbmcNCj4+IFJlZCBIYXQNCj4+DQoN
-Ci0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNV
-U0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0
-MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNj
-aMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+> Javierm, that's when the internal _line() helpers will become useful. 
+> They can use system memory directly, and for I/O memory the 
+> blit/conversion helpers allocate an internal temporary per-line buffer. 
+> The code you made for the new driver has this designed outlined already.
+>
 
---------------pT3bPkC1ApmQhXoBnnjJcE4x--
+Indeed. I understand now what you meant when proposing to add those helpers.
+ 
+> Best regards
+> Thomas
+> 
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
---------------YuhADYhmsOwshkWQOQFsb7QJ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIOGFIFAwAAAAAACgkQlh/E3EQov+BW
-4Q//XeiyvJJcoP45U1PBaRWcK8SZmeRP7eDASiIcs+d3jFk0QHsAuAeUFKKUjdFdBznbDfPLey95
-nwUcWLv9ajgHbCVMlqnqyRqhWvAcb3Y8raQ34bKpxN4OzD9lPOwJ31RRtCe5grrMKUTjEwMbyPPv
-+2bJFXARNoLGEMxzU/tdawQLpdkJCAk87P4RcBqvzrueRzLEOjCA+OQJLfwlEPZtQpPIEnfvKGwF
-X8xWJ8VvIIRa97yO3k2jlMUBasp66p39Wwy83p1wnSrBZl0kL973C981HaDK7ldo8g9pifb7t0q6
-45y+yneB3zBnZ8otE8AdhpIu9C8vM1D2sTXd0j/qAjzxXRAyGPCo/DjtnGalF91LRqHgO4eztysA
-QUal6bEFQMf0vFbdrMcWGBha71NiAyo3o4c+aHAvVotGJe3f0Gw1TZlMAsybu+dnYEPr+SPK5zdz
-nG3majXELGSBYLNUJMPm3rYSDCl00J689ETjHraKg2bOVlU5JsoZGWyzhFz/3GV7kleOMK2Jy3h5
-0qnYuOTnsPVUkf8/ptzDR3b6902rveN32D4FfTjKysaUGOQ9dxCOVaoo9jODxiuJr4N3iIgw4Mc0
-D+nvF5LyWel0K8H+zGDultDlZNwTYyTpmjQgRkemt26SheO4JeZAUQArkmrNA2cpvtuwHhhlFwY/
-aSk=
-=tSjT
------END PGP SIGNATURE-----
-
---------------YuhADYhmsOwshkWQOQFsb7QJ--
