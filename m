@@ -1,300 +1,310 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0892238E6
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 01:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75EBFC340EC;
-	Thu, 17 Feb 2022 01:16:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645060574;
-	bh=xYn+gAhFNelcYMGtcx1zuj5mBydfNAevycx/MBcfC68=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uKAQUccZRq0RXPgD7LNGAfplDAh1BRFoVsNIm/4QV8+3/RLPTrgV8xtMHtdxiW7F6
-	 f8CJrfoXWiNrjQ3RZlvKNZnJlQlZQOew3j/z/AK/y68iIMuf5i0H7nBe36QXbBLH6R
-	 tHBLLg0QdJXxhuLx6oywctq17nLqN00kXUw3Bw0bIgkJ6v4/EUTE3Ya9XXlJjPcQ+4
-	 rNAeqsjfQ6J2FFR4wTdhqt2wG3fSwQr91iQsWxg4FmtTc2kAi+tUuoLIf+nVWR+xKB
-	 m7lDT+6n5NY9Ejk8zePiCP7Piwt6+NjgkncRfvM3nRXdVNEBPbhIM/Hitu6RkJu6bo
-	 +i9AkVF0qKk7w==
-Date: Wed, 16 Feb 2022 18:16:09 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>, rcu <rcu@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Subject: Re: BUG: Kernel NULL pointer dereference on write at 0x00000000
- (rtmsg_ifinfo_build_skb)
-Message-ID: <Yg2h2Q2vXFkkLGTh@dev-arch.archlinux-ax161>
-References: <159db05f-539c-fe29-608b-91b036588033@molgen.mpg.de>
- <CAABZP2xampOLo8k93OLgaOfv9LreJ+f0g0_1mXwqtrv_LKewQg@mail.gmail.com>
- <3534d781-7d01-b42a-8974-0b1c367946f0@molgen.mpg.de>
- <CAABZP2zFDY-hrZqE=-c0uW8vFMH+Q9XezYd2DcBX4Wm+sxzK1g@mail.gmail.com>
- <04a597dc-64aa-57e6-f7fb-17bd2ec58159@molgen.mpg.de>
- <CAABZP2yb7-xa4F_2c6tuzkv7x902wU-hqgD_pqRooGC6C7S20A@mail.gmail.com>
- <f41550c7-26c0-cf81-7de9-aa924434a565@molgen.mpg.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5830C1FD2
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 01:49:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645062598; x=1676598598;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=czzfWBrjb8/Osvn3imucbLg8DsWiNu63pEa+Sbg06hA=;
+  b=ckpqzq8Hv0TUFWK4gZDVMCvDHLGcfSPKKBZdwCjCcs03l0GznY2/4MAI
+   FHv925SqdhJhGD/c2poA9sRbtY09x61gAfd86Q9YqYrv2+2n4FCsM5P6j
+   YT7ORD3feA6z7arZSfsGMDzcaIQRW+y2cYCPkcr8gMQxVqxZAFPEHE/M9
+   DWL/u3UV73A8Jacc/fO1gmXB7AYa0ttbRC8P2YedRJcOa/988e+Q2ILNL
+   P3Sz4Qjj3G6lvAsnwzr5ICPfjWJqYfbAHkArtGdar6dHikA0OxNIIJT9W
+   sSeKruWTq4FeTViGP2+H1CMCDU0qBvRbGk7iJqanoffBulFVgl9nbj8i2
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="231390974"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="231390974"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 17:49:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="540552227"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Feb 2022 17:49:55 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nKVvf-000BJ3-Ad; Thu, 17 Feb 2022 01:49:55 +0000
+Date: Thu, 17 Feb 2022 09:49:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: drivers/net/ethernet/marvell/pxa168_eth.c:1575:34: warning: unused
+ variable 'pxa168_eth_of_match'
+Message-ID: <202202170947.93cVhp12-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <f41550c7-26c0-cf81-7de9-aa924434a565@molgen.mpg.de>
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Paul,
+Hi Masahiro,
 
-On Wed, Feb 16, 2022 at 02:19:51PM +0100, Paul Menzel wrote:
-> [Cc: +LLVM/clang build support folks]
-> 
-> 
-> Dear Zhouyi, dear Nathan, dear Nick,
-> 
-> 
-> To recap: On a ppc64le machine, building Linux in Ubuntu 21.10 with *llvm*
-> and *clang* 1:13.0-53~exp1
-> 
->     $ clang --version
->     Ubuntu clang version 13.0.0-2
->     Target: powerpc64le-unknown-linux-gnu
->     Thread model: posix
->     InstalledDir: /usr/bin
-> 
-> results in a segmentation fault, while it works when building with GCC.
-> 
->     $ gcc --version
->     gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0
+First bad commit (maybe != root cause):
 
-Thank you for keying us in. I am going to have a bit of a brain dump
-here based on the information I have uncovered after a couple of hours
-of debugging.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3593030761630e09200072a4bd06468892c27be3
+commit: ea29b20a828511de3348334e529a3d046a180416 init/Kconfig: make COMPILE_TEST depend on HAS_IOMEM
+date:   11 months ago
+config: s390-randconfig-r044-20220217 (https://download.01.org/0day-ci/archive/20220217/202202170947.93cVhp12-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea29b20a828511de3348334e529a3d046a180416
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ea29b20a828511de3348334e529a3d046a180416
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/marvell/ drivers/staging/media/hantro/
 
-TL;DR: It seems like something is broken with __read_mostly + ld.lld
-before 14.0.0.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-My initial reproduction steps (boot-qemu.sh comes from
-https://github.com/ClangBuiltLinux/boot-utils):
+All warnings (new ones prefixed by >>):
 
-$ clang --version
-clang version 13.0.1 (Fedora 13.0.1-1.fc37)
-Target: x86_64-redhat-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
+                     ^
+   In file included from drivers/net/ethernet/marvell/pxa168_eth.c:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
+                     ^
+   In file included from drivers/net/ethernet/marvell/pxa168_eth.c:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
+                     ^
+   In file included from drivers/net/ethernet/marvell/pxa168_eth.c:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+                     ^
+   In file included from drivers/net/ethernet/marvell/pxa168_eth.c:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+                     ^
+   In file included from drivers/net/ethernet/marvell/pxa168_eth.c:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/ethernet/marvell/pxa168_eth.c:1575:34: warning: unused variable 'pxa168_eth_of_match' [-Wunused-const-variable]
+   static const struct of_device_id pxa168_eth_of_match[] = {
+                                    ^
+   21 warnings generated.
+--
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
+                     ^
+   In file included from drivers/staging/media/hantro/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/dma-buf-map.h:9:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
+                     ^
+   In file included from drivers/staging/media/hantro/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/dma-buf-map.h:9:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+                     ^
+   In file included from drivers/staging/media/hantro/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/dma-buf-map.h:9:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+                     ^
+   In file included from drivers/staging/media/hantro/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/dma-buf-map.h:9:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/staging/media/hantro/hantro_drv.c:473:34: warning: unused variable 'of_hantro_match' [-Wunused-const-variable]
+   static const struct of_device_id of_hantro_match[] = {
+                                    ^
+   21 warnings generated.
 
-$ powerpc64le-linux-gnu-as --version
-GNU assembler version 2.37-2.fc36
-Copyright (C) 2021 Free Software Foundation, Inc.
-This program is free software; you may redistribute it under the terms of
-the GNU General Public License version 3 or later.
-This program has absolutely no warranty.
-This assembler was configured for a target of `powerpc64le-linux-gnu'.
 
-$ curl -LSso .config https://lore.kernel.org/all/f41550c7-26c0-cf81-7de9-aa924434a565@molgen.mpg.de/3-linux-5.17-rc4-rcu-dev-config.txt
+vim +/pxa168_eth_of_match +1575 drivers/net/ethernet/marvell/pxa168_eth.c
 
-$ scripts/config --set-val INITRAMFS_SOURCE '""'
+a49f37eed22b74 drivers/net/pxa168_eth.c                  Sachin Sanap   2010-08-13  1574  
+43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30 @1575  static const struct of_device_id pxa168_eth_of_match[] = {
+43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30  1576  	{ .compatible = "marvell,pxa168-eth" },
+43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30  1577  	{ },
+43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30  1578  };
+43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30  1579  MODULE_DEVICE_TABLE(of, pxa168_eth_of_match);
+43d3ddf87a57ce drivers/net/ethernet/marvell/pxa168_eth.c Antoine Tenart 2014-09-30  1580  
 
-$ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-gnu- LLVM=1 LLVM_IAS=0 all
+:::::: The code at line 1575 was first introduced by commit
+:::::: 43d3ddf87a57ce34fad298138b892744c33bfca5 net: pxa168_eth: add device tree support
 
-$ boot-qemu.sh -a ppc64le -k . -t 45s
-QEMU location: /usr/bin
+:::::: TO: Antoine Ténart <antoine.tenart@free-electrons.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
-QEMU version: QEMU emulator version 6.2.0 (qemu-6.2.0-5.fc37)
-
-+ timeout --foreground 45s stdbuf -oL -eL qemu-system-ppc64 -initrd \
-/home/nathan/cbl/github/boot-utils-ro/images/ppc64le/rootfs.cpio -device \
-ipmi-bmc-sim,id=bmc0 -device isa-ipmi-bt,bmc=bmc0,irq=10 -L \
-/home/nathan/cbl/github/boot-utils-ro/images/ppc64le/ -bios skiboot.lid \
--machine powernv8 -display none -kernel \
-/home/nathan/cbl/src/linux/arch/powerpc/boot/zImage.epapr -m 2G \
--nodefaults -serial mon:stdio
-...
-[    1.478028][    T1] BUG: Kernel NULL pointer dereference on read at 0x00000000
-[    1.478630][    T1] Faulting instruction address: 0xc00000000090bee0
-[    1.479521][    T1] Oops: Kernel access of bad area, sig: 11 [#1]
-[    1.480036][    T1] LE PAGE_SIZE=64K MMU=Hash PREEMPT SMP NR_CPUS=16 NUMA PowerNV
-[    1.480853][    T1] Modules linked in:
-[    1.481265][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc4-00001-gfa15c7cb550f #1
-[    1.481967][    T1] NIP:  c00000000090bee0 LR: c000000000d96b60 CTR: c0000000000d5b4c
-[    1.482596][    T1] REGS: c000000007443330 TRAP: 0380   Not tainted  (5.17.0-rc4-00001-gfa15c7cb550f)
-[    1.483305][    T1] MSR:  9000000002009033 <SF,HV,VEC,EE,ME,IR,DR,RI,LE>  CR: 22800a87  XER: 00000000
-[    1.484277][    T1] CFAR: c000000000d96b5c IRQMASK: 0
-[    1.484277][    T1] GPR00: c000000000d96b54 c0000000074435d0 c0000000028bc600 0000000000000000
-[    1.484277][    T1] GPR04: ffffffffffffffff ffffffffff1ea558 ffffffffff1ebfe4 c00000000261ae88
-[    1.484277][    T1] GPR08: 0000000000000003 0000000000000004 c00000000261ae88 0000000000000000
-[    1.484277][    T1] GPR12: 0000000000800000 c000000002a60000 c000000000012518 0000000000000000
-[    1.484277][    T1] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
-[    1.484277][    T1] GPR20: 0000000000000000 c0000000027bff80 0000000000000cc0 0000000000000000
-[    1.484277][    T1] GPR24: 0000000000000010 0000000000000000 0000000000000000 0000000000000000
-[    1.484277][    T1] GPR28: c0000000028fcfd8 c000000007b83000 0000000000000000 c0000000074435d0
-[    1.490325][    T1] NIP [c00000000090bee0] strlen+0x10/0x30
-[    1.490788][    T1] LR [c000000000d96b60] if_nlmsg_size+0x2b0/0x390
-[    1.491319][    T1] Call Trace:
-[    1.491573][    T1] [c0000000074435d0] [c000000000d96b54] if_nlmsg_size+0x2a4/0x390 (unreliable)
-[    1.492291][    T1] [c000000007443680] [c000000000d96790] rtmsg_ifinfo_build_skb+0x80/0x1a0
-[    1.492958][    T1] [c000000007443740] [c000000000d97590] rtmsg_ifinfo+0x70/0xd0
-[    1.493559][    T1] [c000000007443790] [c000000000d7d528] register_netdevice+0x5d8/0x670
-[    1.494205][    T1] [c000000007443820] [c000000000d7d94c] register_netdev+0x4c/0x80
-[    1.494823][    T1] [c000000007443850] [c000000000f826d8] sit_init_net+0x1b8/0x200
-[    1.495426][    T1] [c0000000074438d0] [c000000000d63b5c] ops_init+0x14c/0x1c0
-[    1.496014][    T1] [c000000007443930] [c000000000d6314c] register_pernet_operations+0xec/0x1e0
-[    1.496716][    T1] [c000000007443990] [c000000000d633d0] register_pernet_device+0x60/0xd0
-[    1.497372][    T1] [c0000000074439e0] [c000000002085194] sit_init+0x54/0x160
-[    1.497950][    T1] [c000000007443a70] [c000000000011c58] do_one_initcall+0x108/0x3e0
-[    1.498573][    T1] [c000000007443c70] [c000000002006190] do_initcall_level+0xe4/0x1c4
-[    1.499219][    T1] [c000000007443cc0] [c00000000200604c] do_initcalls+0x84/0xe4
-[    1.499799][    T1] [c000000007443d40] [c000000002005da8] kernel_init_freeable+0x160/0x1ec
-[    1.500444][    T1] [c000000007443da0] [c00000000001254c] kernel_init+0x3c/0x270
-[    1.501042][    T1] [c000000007443e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0x64
-[    1.501721][    T1] Instruction dump:
-[    1.502202][    T1] eb81ffe0 7c0803a6 4e800020 00000000 00000000 00000000 60000000 60000000
-[    1.502934][    T1] 3883ffff 60000000 60000000 60000000 <8ca40001> 28050000 4082fff8 7c632050
-[    1.504028][    T1] ---[ end trace 0000000000000000 ]---
-...
-
-First thing was figuring out where the NULL pointer dereference happens,
-which appears to the "strlen(ops->kind)" in rtnl_link_get_size():
-
-515 static size_t rtnl_link_get_size(const struct net_device *dev)
-516 {
-517 	const struct rtnl_link_ops *ops = dev->rtnl_link_ops;
-518 	size_t size;
-519 
-520 	if (!ops)
-521 		return 0;
-522 
-523 	size = nla_total_size(sizeof(struct nlattr)) + /* IFLA_LINKINFO */
-524 	       nla_total_size(strlen(ops->kind) + 1);  /* IFLA_INFO_KIND */
-
-which I confirmed some really rudimentary printk debugging:
-
-[    1.476862][    T1] nathan: rtnl_link_get_size(): name: sit0, ops: c0000000028fcfd8, ops->kind: (null)
-
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index 710da8a36729..c8d928e83aec 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -520,6 +520,9 @@ static size_t rtnl_link_get_size(const struct net_device *dev)
- 	if (!ops)
- 		return 0;
- 
-+	pr_err("nathan: %s(): name: %s, ops: %px, ops->kind: %s\n", __func__,
-+	       dev->name, ops, ops->kind);
-+
- 	size = nla_total_size(sizeof(struct nlattr)) + /* IFLA_LINKINFO */
- 	       nla_total_size(strlen(ops->kind) + 1);  /* IFLA_INFO_KIND */
- 
-
-Okay... how did sit0 end up with a NULL kind...? It is very clearly
-defined as "sit":
-
-1830 static struct rtnl_link_ops sit_link_ops __read_mostly = {
-1831 	.kind		= "sit",
-
-Adding some more debug prints to net/ipv6/sit.c:
-
-diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-index c0b138c20992..7b9edbed2fcd 100644
---- a/net/ipv6/sit.c
-+++ b/net/ipv6/sit.c
-@@ -1920,6 +1920,12 @@ static int __net_init sit_init_net(struct net *net)
- 	 */
- 	sitn->fb_tunnel_dev->features |= NETIF_F_NETNS_LOCAL;
- 
-+	pr_err("nathan: %s(): &sit_link_ops: %px\n", __func__, &sit_link_ops);
-+	pr_err("nathan: %s(): sit_link_ops.kind: %s\n", __func__, sit_link_ops.kind);
-+	pr_err("nathan: %s(): sit_link_ops.maxtype: %u\n", __func__, sit_link_ops.maxtype);
-+	pr_err("nathan: %s(): sitn->fb_tunnel_dev->rtnl_link_ops: %px\n", __func__, sitn->fb_tunnel_dev->rtnl_link_ops);
-+	pr_err("nathan: %s(): sitn->fb_tunnel_dev->rtnl_link_ops->kind: %s\n", __func__, sitn->fb_tunnel_dev->rtnl_link_ops->kind);
-+
- 	err = register_netdev(sitn->fb_tunnel_dev);
- 	if (err)
- 		goto err_reg_dev;
-
-reveals:
-
-[    1.471920][    T1] sit: nathan: sit_init_net(): &sit_link_ops: c0000000028fcfd8
-[    1.472534][    T1] sit: nathan: sit_init_net(): sit_link_ops.kind: (null)
-[    1.473088][    T1] sit: nathan: sit_init_net(): sit_link_ops.maxtype: 20
-[    1.473639][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops: c0000000028fcfd8
-[    1.474370][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops->kind: (null)
-
-This is super bizarre, as the maxtype member appears to have the correct
-value, but how is kind's initial getting dropped on the floor?
-
-Removing the __read_mostly annotation "fixes" it:
-
-[    1.481708][    T1] sit: nathan: sit_init_net(): &sit_link_ops: c0000000027d3f60
-[    1.482319][    T1] sit: nathan: sit_init_net(): sit_link_ops.kind: sit
-[    1.482878][    T1] sit: nathan: sit_init_net(): sit_link_ops.maxtype: 20
-[    1.483429][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops: c0000000027d3f60
-[    1.484174][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops->kind: sit
-...
-Linux version 5.17.0-rc4-00001-g956f02ad5c31-dirty (nathan@dev-fedora.archlinux-ax161) (clang version 13.0.1 (Fedora 13.0.1-1.fc37), LLD 13.0.1) #2 SMP PREEMPT Wed Feb 16 13:29:49 MST 2022
-...
-
-diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-index 7b9edbed2fcd..f109c7a0233b 100644
---- a/net/ipv6/sit.c
-+++ b/net/ipv6/sit.c
-@@ -70,7 +70,7 @@ static void ipip6_tunnel_setup(struct net_device *dev);
- static void ipip6_dev_free(struct net_device *dev);
- static bool check_6rd(struct ip_tunnel *tunnel, const struct in6_addr *v6dst,
- 		      __be32 *v4dst);
--static struct rtnl_link_ops sit_link_ops __read_mostly;
-+static struct rtnl_link_ops sit_link_ops;
- 
- static unsigned int sit_net_id __read_mostly;
- struct sit_net {
-@@ -1827,7 +1827,7 @@ static void ipip6_dellink(struct net_device *dev, struct list_head *head)
- 		unregister_netdevice_queue(dev, head);
- }
- 
--static struct rtnl_link_ops sit_link_ops __read_mostly = {
-+static struct rtnl_link_ops sit_link_ops = {
- 	.kind		= "sit",
- 	.maxtype	= IFLA_IPTUN_MAX,
- 	.policy		= ipip6_policy,
-
-Switching to ld.bfd also resolves it:
-
-[    1.470405][    T1] sit: nathan: sit_init_net(): &sit_link_ops: c0000000028acfd8
-[    1.471016][    T1] sit: nathan: sit_init_net(): sit_link_ops.kind: sit
-[    1.471534][    T1] sit: nathan: sit_init_net(): sit_link_ops.maxtype: 20
-[    1.472062][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops: c0000000028acfd8
-[    1.472790][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops->kind: sit
-...
-Linux version 5.17.0-rc4-00001-g956f02ad5c31 (nathan@dev-fedora.archlinux-ax161) (clang version 13.0.1 (Fedora 13.0.1-1.fc37), GNU ld version 2.37-2.fc36) #3 SMP PREEMPT Wed Feb 16 13:33:42 MST 2022
-...
-
-I tested with ToT LLVM (or at least, close to it, since there is an
-unrelated ld.lld regression there) and I could not reproduce it there,
-so I did a reverse bisect to see what commit fixes this issue in LLVM 14
-and I landed on:
-
-commit 55c14d6dbfd8e7b86c15d2613fea3490078e2ae4
-Author: Fangrui Song <i@maskray.me>
-Date:   Thu Nov 25 14:12:34 2021 -0800
-
-    [ELF] Simplify DynamicSection content computation. NFC
-
-    The new code computes the content twice, but avoides the tricky
-    std::function<uint64_t()>. Removed 13KiB code in a Release build.
-
- lld/ELF/SyntheticSections.cpp | 117 ++++++++++++++++--------------------------
- lld/ELF/SyntheticSections.h   |  12 +----
- 2 files changed, 44 insertions(+), 85 deletions(-)
-
-That's... interesting, given that commit title says No Functional
-Change, even though there clearly is one. That commit has a couple
-mentions of PowerPC synthetic sections, so it is possible that the
-new content calculation lines up with ld.bfd?
-
-I am not really sure where to go from here, as I don't fully understand
-what the problem was before that LLD change. I'll see if I can do some
-more investigation tomorrow (unless someone wants to beat me to it ;)
-
-Cheers,
-Nathan
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
