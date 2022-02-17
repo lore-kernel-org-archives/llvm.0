@@ -1,41 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5683B56
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 07:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728AE3B58
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 08:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645084687; x=1676620687;
+  t=1645085287; x=1676621287;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E+S2XgOfKvZbrZXwYK6bp/IHd/T6iGi01fgJ6j+hiXo=;
-  b=dEN7R2f/udl8OsOoOyfDpkznZGOxlcPSyBxzQx7p/RY87xuOQ+w1SQlr
-   +mIRcuhVWuxpybk7+7+rymj59vkTKct7rR/YgQ0x3+8Z8v5yOq+Q/RdBh
-   bWIMK515Jpfa2y6LFZP2frqIVo3Y7VvDmoEySMlL/OxqxzdOFRQDWkiiZ
-   JsAFNeAfSAGSGqH6SztMNGYVbiYJ4HZKx9udhT0grMWIkPCE8NDurYoGJ
-   1m0CcSrkR8x94nGAnHu3Tca5+8QZEkhX6Co9gLhJn4KqG1ekKnWexbcaY
-   XOk/OBB8KYImxgvN7avTtBDK7eh8oIylOWIZ1+2p42K4+fBJbfi+yCUPM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249654293"
+  bh=BaxvtiLXacnxCrgDjRqJ72VHJT4+//agaSkLkp8qmz8=;
+  b=jCQdsOesmvQ/hpdAjw8kvqkQRZ1NUfT4HfjFjYoSOv++GrqYfFEyj9wg
+   OFSjlBvbA0VPy/cfd9zUzrnIlfUPtMMaylDajZm1qV893f8gnK8PiHukA
+   M2MzM0imbMo8rUCaCgL0LwwuGk5QRpzyJmNoO2bkdRzAeqw3EqrSX9qMH
+   8B7epXgYTkqDXBkp3F0mSG+Yx2nI4jd2gKaQuEjdh+n3D6eMAiFWN+0c8
+   56HcU3Vnh4+sH3TV9spFtVxctoQuz6m9jJXb1FXRvCUtAcYJfNlKLM8js
+   9YSTWY5dbdrNijhJPd16R/Dd5+m82xf/yxOmzrOOU6gpoS/lUPRSZu1S/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="275408741"
 X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="249654293"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 23:58:06 -0800
+   d="scan'208";a="275408741"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 00:08:06 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="530022721"
+   d="scan'208";a="540820272"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 16 Feb 2022 23:58:04 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 17 Feb 2022 00:08:05 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nKbfv-000Bai-VH; Thu, 17 Feb 2022 07:58:03 +0000
-Date: Thu, 17 Feb 2022 15:57:07 +0800
+	id 1nKbpc-000BbP-I0; Thu, 17 Feb 2022 08:08:04 +0000
+Date: Thu, 17 Feb 2022 16:07:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
+To: Hector Martin <marcan@marcan.st>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Vitor Massaru Iha <vitor@massaru.org>
-Subject: [kees:for-next/overflow 4/4] lib/overflow_kunit.c:96:1: warning:
- unused variable 'u64_tests'
-Message-ID: <202202171558.vQiKL7mj-lkp@intel.com>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:axboe/linux-block/m1-test 343/385]
+ drivers/platform/apple/smc_rtkit.c:73:9: error: implicit declaration of
+ function 'FIELD_PREP'
+Message-ID: <202202171656.Usxovuzb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,185 +48,215 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/overflow
-head:   df523415488222202d88ef6b3d0bad7276c52b85
-commit: df523415488222202d88ef6b3d0bad7276c52b85 [4/4] lib: overflow: Convert to Kunit
-config: mips-randconfig-r033-20220217 (https://download.01.org/0day-ci/archive/20220217/202202171558.vQiKL7mj-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/m1-test
+head:   e226b395bc2d49a6a1411765875e0864c9a0e0da
+commit: 63615eb2a0f68ad3d05cf48ccf0771dd613e1f44 [343/385] platform/apple: Add new Apple Mac SMC driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220217/202202171656.Usxovuzb-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=df523415488222202d88ef6b3d0bad7276c52b85
-        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-        git fetch --no-tags kees for-next/overflow
-        git checkout df523415488222202d88ef6b3d0bad7276c52b85
+        # https://github.com/ammarfaizi2/linux-block/commit/63615eb2a0f68ad3d05cf48ccf0771dd613e1f44
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/m1-test
+        git checkout 63615eb2a0f68ad3d05cf48ccf0771dd613e1f44
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/platform/apple/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> lib/overflow_kunit.c:96:1: warning: unused variable 'u64_tests' [-Wunused-const-variable]
-   DEFINE_TEST_ARRAY(u64) = {
-   ^
-   lib/overflow_kunit.c:26:4: note: expanded from macro 'DEFINE_TEST_ARRAY'
-           } t ## _tests[]
-             ^
-   <scratch space>:110:1: note: expanded from here
-   u64_tests
-   ^
->> lib/overflow_kunit.c:193:1: warning: unused variable 's64_tests' [-Wunused-const-variable]
-   DEFINE_TEST_ARRAY(s64) = {
-   ^
-   lib/overflow_kunit.c:26:4: note: expanded from macro 'DEFINE_TEST_ARRAY'
-           } t ## _tests[]
-             ^
-   <scratch space>:118:1: note: expanded from here
-   s64_tests
-   ^
-   2 warnings generated.
+>> drivers/platform/apple/smc_rtkit.c:73:9: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+           msg = (FIELD_PREP(SMC_MSG, SMC_MSG_WRITE_KEY) |
+                  ^
+>> drivers/platform/apple/smc_rtkit.c:93:6: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           if (FIELD_GET(SMC_ID, smc->cmd_ret) != smc->msg_id) {
+               ^
+   drivers/platform/apple/smc_rtkit.c:93:6: note: did you mean 'FIELD_PREP'?
+   drivers/platform/apple/smc_rtkit.c:73:9: note: 'FIELD_PREP' declared here
+           msg = (FIELD_PREP(SMC_MSG, SMC_MSG_WRITE_KEY) |
+                  ^
+>> drivers/platform/apple/smc_rtkit.c:76:20: warning: shift count >= width of type [-Wshift-count-overflow]
+                  FIELD_PREP(SMC_DATA, key));
+                             ^~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:20: note: expanded from macro 'SMC_DATA'
+   #define SMC_DATA                        GENMASK(63, 32)
+                                           ^~~~~~~~~~~~~~~
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^~~~~~~~~~~~~~~
+   include/linux/bits.h:35:22: note: expanded from macro '__GENMASK'
+           (((~UL(0)) - (UL(1) << (l)) + 1) & \
+                               ^  ~~~
+>> drivers/platform/apple/smc_rtkit.c:76:20: warning: shift count is negative [-Wshift-count-negative]
+                  FIELD_PREP(SMC_DATA, key));
+                             ^~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:20: note: expanded from macro 'SMC_DATA'
+   #define SMC_DATA                        GENMASK(63, 32)
+                                           ^~~~~~~~~~~~~~~
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^~~~~~~~~~~~~~~
+   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
+            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+                    ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:119:9: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+           msg = (FIELD_PREP(SMC_MSG, cmd) |
+                  ^
+   drivers/platform/apple/smc_rtkit.c:136:7: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+                   if (FIELD_GET(SMC_ID, smc->cmd_ret) == smc->msg_id)
+                       ^
+   drivers/platform/apple/smc_rtkit.c:142:11: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           result = FIELD_GET(SMC_RESULT, smc->cmd_ret);
+                    ^
+   drivers/platform/apple/smc_rtkit.c:123:20: warning: shift count >= width of type [-Wshift-count-overflow]
+                  FIELD_PREP(SMC_DATA, arg));
+                             ^~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:20: note: expanded from macro 'SMC_DATA'
+   #define SMC_DATA                        GENMASK(63, 32)
+                                           ^~~~~~~~~~~~~~~
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^~~~~~~~~~~~~~~
+   include/linux/bits.h:35:22: note: expanded from macro '__GENMASK'
+           (((~UL(0)) - (UL(1) << (l)) + 1) & \
+                               ^  ~~~
+   drivers/platform/apple/smc_rtkit.c:123:20: warning: shift count is negative [-Wshift-count-negative]
+                  FIELD_PREP(SMC_DATA, arg));
+                             ^~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:20: note: expanded from macro 'SMC_DATA'
+   #define SMC_DATA                        GENMASK(63, 32)
+                                           ^~~~~~~~~~~~~~~
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^~~~~~~~~~~~~~~
+   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
+            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+                    ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:147:25: warning: shift count >= width of type [-Wshift-count-overflow]
+                   *ret_data = FIELD_GET(SMC_DATA, smc->cmd_ret);
+                                         ^~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:20: note: expanded from macro 'SMC_DATA'
+   #define SMC_DATA                        GENMASK(63, 32)
+                                           ^~~~~~~~~~~~~~~
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^~~~~~~~~~~~~~~
+   include/linux/bits.h:35:22: note: expanded from macro '__GENMASK'
+           (((~UL(0)) - (UL(1) << (l)) + 1) & \
+                               ^  ~~~
+   drivers/platform/apple/smc_rtkit.c:147:25: warning: shift count is negative [-Wshift-count-negative]
+                   *ret_data = FIELD_GET(SMC_DATA, smc->cmd_ret);
+                                         ^~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:20: note: expanded from macro 'SMC_DATA'
+   #define SMC_DATA                        GENMASK(63, 32)
+                                           ^~~~~~~~~~~~~~~
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^~~~~~~~~~~~~~~
+   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
+            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+                    ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:298:13: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           } else if (FIELD_GET(SMC_MSG, message) == SMC_MSG_NOTIFICATION) {
+                      ^
+   drivers/platform/apple/smc_rtkit.c:322:6: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           if (FIELD_GET(SMC_MSG, message) != SMC_MSG_NOTIFICATION) {
+               ^
+   drivers/platform/apple/smc_rtkit.c:327:48: warning: shift count >= width of type [-Wshift-count-overflow]
+           apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
+                                                         ^~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:20: note: expanded from macro 'SMC_DATA'
+   #define SMC_DATA                        GENMASK(63, 32)
+                                           ^~~~~~~~~~~~~~~
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^~~~~~~~~~~~~~~
+   include/linux/bits.h:35:22: note: expanded from macro '__GENMASK'
+           (((~UL(0)) - (UL(1) << (l)) + 1) & \
+                               ^  ~~~
+   drivers/platform/apple/smc_rtkit.c:327:48: warning: shift count is negative [-Wshift-count-negative]
+           apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
+                                                         ^~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:20: note: expanded from macro 'SMC_DATA'
+   #define SMC_DATA                        GENMASK(63, 32)
+                                           ^~~~~~~~~~~~~~~
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^~~~~~~~~~~~~~~
+   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
+            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+                    ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:381:12: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+                                          FIELD_PREP(SMC_MSG, SMC_MSG_INITIALIZE));
+                                          ^
+>> drivers/platform/apple/smc_rtkit.c:429:25: error: use of undeclared identifier 'apple_smc_of_match'; did you mean 'apple_smc_rtkit_of_match'?
+   MODULE_DEVICE_TABLE(of, apple_smc_of_match);
+                           ^~~~~~~~~~~~~~~~~~
+                           apple_smc_rtkit_of_match
+   include/linux/module.h:244:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
+   extern typeof(name) __mod_##type##__##name##_device_table               \
+                 ^
+   drivers/platform/apple/smc_rtkit.c:425:34: note: 'apple_smc_rtkit_of_match' declared here
+   static const struct of_device_id apple_smc_rtkit_of_match[] = {
+                                    ^
+   8 warnings and 9 errors generated.
 
 
-vim +/u64_tests +96 lib/overflow_kunit.c
+vim +/FIELD_PREP +73 drivers/platform/apple/smc_rtkit.c
 
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08   95  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  @96  DEFINE_TEST_ARRAY(u64) = {
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08   97  	{0, 0, 0, 0, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08   98  	{1, 1, 2, 0, 1, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08   99  	{0, 1, 1, U64_MAX, 0, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  100  	{1, 0, 1, 1, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  101  	{0, U64_MAX, U64_MAX, 1, 0, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  102  	{U64_MAX, 0, U64_MAX, U64_MAX, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  103  	{1, U64_MAX, 0, 2, U64_MAX, true, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  104  	{U64_MAX, 1, 0, U64_MAX-1, U64_MAX, true, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  105  	{U64_MAX, U64_MAX, U64_MAX-1, 0, 1, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  106  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  107  	{U64_MAX, U64_MAX-1, U64_MAX-2, 1, 2, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  108  	{U64_MAX-1, U64_MAX, U64_MAX-2, U64_MAX, 2, true, true, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  109  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  110  	{1ULL << 31, 1ULL << 31, 1ULL << 32, 0, 1ULL << 62, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  111  	{1ULL << 32, 1ULL << 32, 1ULL << 33, 0, 0, false, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  112  	{1ULL << 32, 1ULL << 31, 3*(1ULL << 31), 1ULL << 31, 1ULL << 63, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  113  	{1ULL << 63, 1ULL << 63, 0, 0, 0, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  114  	{1000000000ULL /* 10^9 */, 10000000000ULL /* 10^10 */,
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  115  	 11000000000ULL, 18446744064709551616ULL, 10000000000000000000ULL,
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  116  	 false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  117  	{-15ULL, 10ULL, -5ULL, -25ULL, -150ULL, false, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  118  };
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  119  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  120  DEFINE_TEST_ARRAY(s8) = {
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  121  	{0, 0, 0, 0, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  122  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  123  	{0, S8_MAX, S8_MAX, -S8_MAX, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  124  	{S8_MAX, 0, S8_MAX, S8_MAX, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  125  	{0, S8_MIN, S8_MIN, S8_MIN, 0, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  126  	{S8_MIN, 0, S8_MIN, S8_MIN, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  127  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  128  	{-1, S8_MIN, S8_MAX, S8_MAX, S8_MIN, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  129  	{S8_MIN, -1, S8_MAX, -S8_MAX, S8_MIN, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  130  	{-1, S8_MAX, S8_MAX-1, S8_MIN, -S8_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  131  	{S8_MAX, -1, S8_MAX-1, S8_MIN, -S8_MAX, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  132  	{-1, -S8_MAX, S8_MIN, S8_MAX-1, S8_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  133  	{-S8_MAX, -1, S8_MIN, S8_MIN+2, S8_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  134  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  135  	{1, S8_MIN, -S8_MAX, -S8_MAX, S8_MIN, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  136  	{S8_MIN, 1, -S8_MAX, S8_MAX, S8_MIN, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  137  	{1, S8_MAX, S8_MIN, S8_MIN+2, S8_MAX, true, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  138  	{S8_MAX, 1, S8_MIN, S8_MAX-1, S8_MAX, true, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  139  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  140  	{S8_MIN, S8_MIN, 0, 0, 0, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  141  	{S8_MAX, S8_MAX, -2, 0, 1, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  142  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  143  	{-4, -32, -36, 28, -128, false, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  144  	{-4, 32, 28, -36, -128, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  145  };
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  146  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  147  DEFINE_TEST_ARRAY(s16) = {
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  148  	{0, 0, 0, 0, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  149  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  150  	{0, S16_MAX, S16_MAX, -S16_MAX, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  151  	{S16_MAX, 0, S16_MAX, S16_MAX, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  152  	{0, S16_MIN, S16_MIN, S16_MIN, 0, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  153  	{S16_MIN, 0, S16_MIN, S16_MIN, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  154  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  155  	{-1, S16_MIN, S16_MAX, S16_MAX, S16_MIN, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  156  	{S16_MIN, -1, S16_MAX, -S16_MAX, S16_MIN, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  157  	{-1, S16_MAX, S16_MAX-1, S16_MIN, -S16_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  158  	{S16_MAX, -1, S16_MAX-1, S16_MIN, -S16_MAX, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  159  	{-1, -S16_MAX, S16_MIN, S16_MAX-1, S16_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  160  	{-S16_MAX, -1, S16_MIN, S16_MIN+2, S16_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  161  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  162  	{1, S16_MIN, -S16_MAX, -S16_MAX, S16_MIN, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  163  	{S16_MIN, 1, -S16_MAX, S16_MAX, S16_MIN, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  164  	{1, S16_MAX, S16_MIN, S16_MIN+2, S16_MAX, true, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  165  	{S16_MAX, 1, S16_MIN, S16_MAX-1, S16_MAX, true, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  166  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  167  	{S16_MIN, S16_MIN, 0, 0, 0, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  168  	{S16_MAX, S16_MAX, -2, 0, 1, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  169  };
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  170  DEFINE_TEST_ARRAY(s32) = {
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  171  	{0, 0, 0, 0, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  172  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  173  	{0, S32_MAX, S32_MAX, -S32_MAX, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  174  	{S32_MAX, 0, S32_MAX, S32_MAX, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  175  	{0, S32_MIN, S32_MIN, S32_MIN, 0, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  176  	{S32_MIN, 0, S32_MIN, S32_MIN, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  177  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  178  	{-1, S32_MIN, S32_MAX, S32_MAX, S32_MIN, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  179  	{S32_MIN, -1, S32_MAX, -S32_MAX, S32_MIN, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  180  	{-1, S32_MAX, S32_MAX-1, S32_MIN, -S32_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  181  	{S32_MAX, -1, S32_MAX-1, S32_MIN, -S32_MAX, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  182  	{-1, -S32_MAX, S32_MIN, S32_MAX-1, S32_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  183  	{-S32_MAX, -1, S32_MIN, S32_MIN+2, S32_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  184  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  185  	{1, S32_MIN, -S32_MAX, -S32_MAX, S32_MIN, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  186  	{S32_MIN, 1, -S32_MAX, S32_MAX, S32_MIN, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  187  	{1, S32_MAX, S32_MIN, S32_MIN+2, S32_MAX, true, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  188  	{S32_MAX, 1, S32_MIN, S32_MAX-1, S32_MAX, true, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  189  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  190  	{S32_MIN, S32_MIN, 0, 0, 0, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  191  	{S32_MAX, S32_MAX, -2, 0, 1, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  192  };
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08 @193  DEFINE_TEST_ARRAY(s64) = {
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  194  	{0, 0, 0, 0, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  195  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  196  	{0, S64_MAX, S64_MAX, -S64_MAX, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  197  	{S64_MAX, 0, S64_MAX, S64_MAX, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  198  	{0, S64_MIN, S64_MIN, S64_MIN, 0, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  199  	{S64_MIN, 0, S64_MIN, S64_MIN, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  200  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  201  	{-1, S64_MIN, S64_MAX, S64_MAX, S64_MIN, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  202  	{S64_MIN, -1, S64_MAX, -S64_MAX, S64_MIN, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  203  	{-1, S64_MAX, S64_MAX-1, S64_MIN, -S64_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  204  	{S64_MAX, -1, S64_MAX-1, S64_MIN, -S64_MAX, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  205  	{-1, -S64_MAX, S64_MIN, S64_MAX-1, S64_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  206  	{-S64_MAX, -1, S64_MIN, S64_MIN+2, S64_MAX, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  207  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  208  	{1, S64_MIN, -S64_MAX, -S64_MAX, S64_MIN, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  209  	{S64_MIN, 1, -S64_MAX, S64_MAX, S64_MIN, false, true, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  210  	{1, S64_MAX, S64_MIN, S64_MIN+2, S64_MAX, true, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  211  	{S64_MAX, 1, S64_MIN, S64_MAX-1, S64_MAX, true, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  212  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  213  	{S64_MIN, S64_MIN, 0, 0, 0, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  214  	{S64_MAX, S64_MAX, -2, 0, 1, true, false, true},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  215  
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  216  	{-1, -1, -2, 0, 1, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  217  	{-1, -128, -129, 127, 128, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  218  	{-128, -1, -129, -127, 128, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  219  	{0, -S64_MAX, -S64_MAX, S64_MAX, 0, false, false, false},
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  220  };
-455a35a6cdb6f5 lib/test_overflow.c Rasmus Villemoes 2018-05-08  221  
-
-:::::: The code at line 96 was first introduced by commit
-:::::: 455a35a6cdb6f53fe9294e23301eb056f2908bd9 lib: add runtime test of check_*_overflow functions
-
-:::::: TO: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-:::::: CC: Kees Cook <keescook@chromium.org>
+    57	
+    58	static int apple_smc_rtkit_write_key_atomic(void *cookie, smc_key key, void *buf, size_t size)
+    59	{
+    60		struct apple_smc_rtkit *smc = cookie;
+    61		int ret;
+    62		u64 msg;
+    63		u8 result;
+    64	
+    65		if (size > SMC_SHMEM_SIZE || size == 0)
+    66			return -EINVAL;
+    67	
+    68		if (!smc->alive)
+    69			return -EIO;
+    70	
+    71		memcpy_toio(smc->shmem.iomem, buf, size);
+    72		smc->msg_id = (smc->msg_id + 1) & 0xf;
+  > 73		msg = (FIELD_PREP(SMC_MSG, SMC_MSG_WRITE_KEY) |
+    74		       FIELD_PREP(SMC_SIZE, size) |
+    75		       FIELD_PREP(SMC_ID, smc->msg_id) |
+  > 76		       FIELD_PREP(SMC_DATA, key));
+    77		smc->atomic_pending = true;
+    78	
+    79		ret = apple_rtkit_send_message_atomic(smc->rtk, SMC_ENDPOINT, msg);
+    80		if (ret < 0) {
+    81			dev_err(smc->dev, "Failed to send command\n");
+    82			return ret;
+    83		}
+    84	
+    85		while (smc->atomic_pending) {
+    86			ret = apple_rtkit_poll(smc->rtk);
+    87			if (ret < 0) {
+    88				dev_err(smc->dev, "RTKit poll failed (%llx)", msg);
+    89				return ret;
+    90			}
+    91		}
+    92		
+  > 93		if (FIELD_GET(SMC_ID, smc->cmd_ret) != smc->msg_id) {
+    94			dev_err(smc->dev, "Command sequence mismatch (expected %d, got %d)\n",
+    95				smc->msg_id, (unsigned int)FIELD_GET(SMC_ID, smc->cmd_ret));
+    96			return -EIO;
+    97		}
+    98	
+    99		result = FIELD_GET(SMC_RESULT, smc->cmd_ret);
+   100		if (result != 0)
+   101			return -result;
+   102	
+   103		return FIELD_GET(SMC_SIZE, smc->cmd_ret);
+   104	}
+   105	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
