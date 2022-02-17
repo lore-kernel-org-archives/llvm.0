@@ -1,187 +1,127 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D044A38D1
-	for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 23:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645055276; x=1676591276;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fs4JKPq5X+QC5yD0VVUEKvyhnjnWCNRaHddlh6dhTqI=;
-  b=gU2kDXxqSWYQmS1Siqz5wSfGd32W76O/VPW/WHdk/pkyRWqZiyjb58Gw
-   z+rZKBxzRl+GyxY1YyLG5iySKSlZGqzIXGvGBKeXL0BBF0Lespg8cgkk+
-   qZDzuDmzRpTiox1N0o2OlIy3JP1rfRYV3zqy9x1Oq5uVb1cil3BuBFJI4
-   3D6469UWrMv5ukg1E0hEKKqg8SU/75DBlL9bnXk9rY3EHuGsTcVXW84+d
-   40jv41aVwI0AP0gYo97P2pn90YwPHIVr9QqS8d+1MVceyvFG09YXxprgI
-   XVf2ywxSaE7Ekk8J3g5hDgmGtkJ+Ofs4d4K6Tbax8eiJNBvcxRCS5l5oh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249585733"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="249585733"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 15:47:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="704516440"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Feb 2022 15:47:54 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nKU1Z-000BFL-P5; Wed, 16 Feb 2022 23:47:53 +0000
-Date: Thu, 17 Feb 2022 07:47:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 31/42]
- fs/netfs/buffered_write.c:749:6: warning: variable 'spare_region' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202202170739.jOmFwlAm-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BD638D1
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 00:28:46 +0000 (UTC)
+Received: by mail-pg1-f180.google.com with SMTP id p23so3544949pgj.2
+        for <llvm@lists.linux.dev>; Wed, 16 Feb 2022 16:28:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FGcQO3MYiNVzzOdQ6PURsZcaUd8RxaLP2F5BG8x7eyQ=;
+        b=Lqy2LJOcN+upnxmIuTwy3fpzudc0qiFDVU+dx5qCPOwHk6QfaFIX97c4efamZKjMMi
+         euF0m2g0IF54Vfa68IeK+IXk2NUQXtaq7kA0Uod+Y2cXxKbxzrX4PExsECyuXGTltvrA
+         i2leezKeoQtfK2DYFOiqo//LmWYDTGnE5l2q8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FGcQO3MYiNVzzOdQ6PURsZcaUd8RxaLP2F5BG8x7eyQ=;
+        b=gPe1R5MPlMZsTzUsCYKpH+Qeqt5jsvQtlFM0tgs6wy7otginh2MXRoVnZxsyfcIIAj
+         GfAHLQSXPplfU2VQX6huT/OVH5Mulp9hAgIRIDIJ7zpeXFAfoUuyZTuKsAvY7IhvtH5Y
+         8F5lmthUtRJyR2RvP+tEAx9ohJtpS4QM0PQobtom43WU3RqeCDPlbV8kXdBrC+zxZkng
+         VtxNjLG1f5A7wKh5/VnL+dFTLrPbca1f/oX/v+DmPkJb175N2om0ED8FJ7GZ3xOMtsUA
+         gx86GG5i+RVQCUF1N1aC9agKQLo5n6WCZmRfgVnYWVe8ff8br+f3AidZ8M7nzDRyfNRE
+         dvyA==
+X-Gm-Message-State: AOAM531lspyeboMrjpi5ScVdY0IpjXz19rbGKl10FZ0siTml2q6tVvnA
+	AD1pHjS9QwBUffdQlr4n+H2qKw==
+X-Google-Smtp-Source: ABdhPJxm+8yfHYB9vBipUYW1o+9PJNIevacMU+b/iaFcke9KfnDnfNB1BpC49YXhw4myccRnzpcrRQ==
+X-Received: by 2002:a63:8bca:0:b0:370:2717:3756 with SMTP id j193-20020a638bca000000b0037027173756mr396843pge.604.1645057725956;
+        Wed, 16 Feb 2022 16:28:45 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id mj21sm199355pjb.20.2022.02.16.16.28.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 16:28:45 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Jeff Dike <jdike@addtoit.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	David Gow <davidgow@google.com>,
+	linux-um@lists.infradead.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] um: Allow builds with Clang
+Date: Wed, 16 Feb 2022 16:28:43 -0800
+Message-Id: <20220217002843.2312603-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2149; h=from:subject; bh=vShMU0xnxVexx4MO5nHaUDLC8EDUgfNlHp2nsWHEiy8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiDZa6UafTd6YGrYc+tswDkAPHU5vTnnAfc+6lyNW/ iJEEJS+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYg2WugAKCRCJcvTf3G3AJrobD/ 94N3eFm682VZ5KXRjhfpVMnBOe7gen8xGGN/fUaNo7D5ELCrVTZ2MtlaOxpZg3gFE2QOS9Qi3KfN4T evcT3Sx7e2eCQQVIH989akOsLuFQkuDsJRZoHarM0gDLFJzqJYV5DD2F2x802pGeBcAYXME1KMkgYv cjzKSXixhur7fi/4i8v1+oGXSW39WRHeZMsb2tZhhiZerHcEkgc2Z5CBLFgBWBNwdcq0G2bza84e8J /LETYVec+LxaEtcVGZEquYASEuBwVhfnU1ELznR5msJ1OE3CpBJdUq9rFIhJY+FpU3yW1O2FSELINI zyUhxrRYDxplhqkV/9AZtB/cNiD4KJpd7yHH19JsB+773pA2qjFHej71yPlqO76eLGq85fnpkPVLAs OeUT9i/B0TfTI9W2PdqsUuXV2EeAUt52hIJ7Tc0bFsewLzdpgwT+88sk5Gx8/X3eR07rEpVTGVPx8d VhPQDd+eYjbAkmdCIco+FoxapSJq/+HtPyDFsrqsJvHyzfaiSXCkHc4cNjJAOB0P+T4/RTrk5EgpIC Q1k75VinAtx6s3sX/wE3+X7/bDeN2MSznWVfMYpwbZuJ42y6W+HD7mZPRXCg+pBUBzo6xPucFqLzXN MpOxLvy+jlg8HUr9uGvI0UoDqaix1aidkMMl2KM5AWa+wnAS5UJHGqjM7euQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   5cb7f190822d09757b30cd9539e57eef72552d1f
-commit: eefdd180445e96088f4a69f0e733643e9a794b1f [31/42] netfs: Allow buffered shared-writeable mmap through netfs_page_mkwrite()
-config: hexagon-randconfig-r005-20220216 (https://download.01.org/0day-ci/archive/20220217/202202170739.jOmFwlAm-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/eefdd180445e96088f4a69f0e733643e9a794b1f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout eefdd180445e96088f4a69f0e733643e9a794b1f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
+Add x86-64 target for Clang+um and update user-offsets.c to use
+Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
+("kbuild: fix asm-offset generation to work with clang").
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This lets me run KUnit tests with Clang:
 
-All warnings (new ones prefixed by >>):
+$ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+...
+$ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+...
 
-   fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer types ('typeof ((1UL << 14) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   unsigned int psize   = min(PAGE_SIZE - offset, size);
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:95:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->from  = min(target->from, folio_pos(folio) + offset);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:96:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->to    = max(target->to,   folio_pos(folio) + offset + len);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:52:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/buffered_write.c:749:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (mas_expected_entries(&mas, 2) < 0) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:785:30: note: uninitialized use occurs here
-           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
-                                       ^~~~~~~~~~~~
-   fs/netfs/buffered_write.c:749:2: note: remove the 'if' if its condition is always false
-           if (mas_expected_entries(&mas, 2) < 0) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:746:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (folio_lock_killable(folio) < 0)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:785:30: note: uninitialized use occurs here
-           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
-                                       ^~~~~~~~~~~~
-   fs/netfs/buffered_write.c:746:2: note: remove the 'if' if its condition is always false
-           if (folio_lock_killable(folio) < 0)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:743:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (folio_wait_writeback_killable(folio))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:785:30: note: uninitialized use occurs here
-           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
-                                       ^~~~~~~~~~~~
-   fs/netfs/buffered_write.c:743:2: note: remove the 'if' if its condition is always false
-           if (folio_wait_writeback_killable(folio))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:726:41: note: initialize the variable 'spare_region' to silence this warning
-           struct netfs_dirty_region *spare_region;
-                                                  ^
-                                                   = NULL
-   6 warnings generated.
-
-
-vim +749 fs/netfs/buffered_write.c
-
-   719	
-   720	/*
-   721	 * Notification that a previously read-only page is about to become writable.
-   722	 * Note that the caller indicates a single page of a multipage folio.
-   723	 */
-   724	vm_fault_t netfs_page_mkwrite(struct vm_fault *vmf)
-   725	{
-   726		struct netfs_dirty_region *spare_region;
-   727		struct folio *folio = page_folio(vmf->page);
-   728		struct file *file = vmf->vma->vm_file;
-   729		struct inode *inode = file_inode(file);
-   730		struct netfs_i_context *ctx = netfs_i_context(inode);
-   731		vm_fault_t ret = VM_FAULT_RETRY;
-   732		int err;
-   733	
-   734		MA_STATE(mas, &ctx->dirty_regions, vmf->page->index, PAGE_SIZE);
-   735	
-   736		_enter("%lx", folio->index);
-   737	
-   738		if (ctx->ops->validate_for_write(inode, file) < 0)
-   739			return VM_FAULT_SIGBUS;
-   740	
-   741		sb_start_pagefault(inode->i_sb);
-   742	
-   743		if (folio_wait_writeback_killable(folio))
-   744			goto out;
-   745	
-   746		if (folio_lock_killable(folio) < 0)
-   747			goto out;
-   748	
- > 749		if (mas_expected_entries(&mas, 2) < 0) {
-
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: David Gow <davidgow@google.com>
+Cc: linux-um@lists.infradead.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/x86/um/user-offsets.c | 4 ++--
+ scripts/Makefile.clang     | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+index bae61554abcc..d9071827b515 100644
+--- a/arch/x86/um/user-offsets.c
++++ b/arch/x86/um/user-offsets.c
+@@ -10,10 +10,10 @@
+ #include <asm/types.h>
+ 
+ #define DEFINE(sym, val) \
+-	asm volatile("\n->" #sym " %0 " #val : : "i" (val))
++	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
+ 
+ #define DEFINE_LONGS(sym, val) \
+-	asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
++	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
+ 
+ void foo(void)
+ {
+diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+index 51fc23e2e9e5..857b23de51c6 100644
+--- a/scripts/Makefile.clang
++++ b/scripts/Makefile.clang
+@@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
+ CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
+ CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
+ CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
++CLANG_TARGET_FLAGS_um		:= x86_64-linux-gnu
+ CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
+ 
+ ifeq ($(CROSS_COMPILE),)
+-- 
+2.30.2
+
