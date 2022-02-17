@@ -1,100 +1,153 @@
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E1C4366
-	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 17:17:22 +0000 (UTC)
-Received: by mail-oi1-f179.google.com with SMTP id a6so296748oid.9
-        for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 09:17:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k9zgQPfz8LOJwvyN9TkCqdRl9MbRaNDX/aR5wunJ990=;
-        b=DINAnzkZ3yxrbaFtDAYZmhpuXrR/mzBHe+vr2DEiBG3ftwzLyGNCDwNo0aWdundMlY
-         sYYPRo2ua/mUlkwsglmxpqxr04T8gzaIFbZPVILJZWFtt6KG8gOjF3ltKVAs7NB4Ll5A
-         EYztNyGCg/NYX3KCvFPleeQ8mjTULOIut+sofWlAJbUmSJoGUrcL1hBg30XDPTzG2P4w
-         UWMCShLbWEJwlle7OziBionFS3Twi3vfDUcs+1sPf0IUcWblXibpCNNarLcSJGdhlNIm
-         72+weM6Yxvsi1mB0VDx+GRhGhoxE3g+vEl5TjBcOqh2X+IF/XQmtQZkwcqnFb9FB84W5
-         fZfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k9zgQPfz8LOJwvyN9TkCqdRl9MbRaNDX/aR5wunJ990=;
-        b=vf44kbB7s9qxbqubW7QktFGffNzfxArBYoTvhc/KR5G0oT+Ubc5Y6CU3ukXQdrSX89
-         15LCJHafivyM+YHZEgGOZYJNEeX7eMEurxljS9iUsVoZheYsjaASNpjORz1vK209tFxM
-         vIrmS02/61T/Vcg8Fdt12hXkx7+uWvAAUsUYsu61zj7pGVTOjStWmH52vScBXRaQqcSh
-         XpLsTH3Rr5bz9Mkw+KKf6tvBpoMijz/a6XuRLCJ6cmSHwQtoxXPEIKTXlENZV274ju+4
-         jWJuHOph6ZygbT+yx2u/B6qR969hgtivIERSwORGBdmL1mfGpmoFsr7vzMajgJtd9iDv
-         sZfg==
-X-Gm-Message-State: AOAM532qndT/pqqspD6ZjCtykQJeVPgtX4PmVzGrXiuLp9h0rrgeotlt
-	dghZlbxGypgEHGXjSKFMBWtEwN8kYr58n5pxpRM=
-X-Google-Smtp-Source: ABdhPJw6jj/QGKAkol2tdthTwTYyyoP4CDqrp37TKDAO46tPjdL6fNFaDwTVUFznUtAy4H33vyaax1MFxyQNLygI+KE=
-X-Received: by 2002:a05:6808:f8b:b0:2ce:6ee7:2c99 with SMTP id
- o11-20020a0568080f8b00b002ce6ee72c99mr3309777oiw.199.1645118241433; Thu, 17
- Feb 2022 09:17:21 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA95436A
+	for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 17:41:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467FFC340E8;
+	Thu, 17 Feb 2022 17:41:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645119703;
+	bh=8pbZj/3cVuW2vQLaHmXTlBvSAEOnHZPHPU8EvjwJvmY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lICo15JaGIZ/+wRcv2OoGVinuJEdNg3fOgujgAyrExKrBVNZWnseGROU0F8zsi3XY
+	 SwZR4kNdyhOIKqUv8y+gsMfXk8TBoQPckN91MTym3WTpQB1X7VLe8CL/u5O+Pf9x9a
+	 UxRJvr1+jg2PvqdiG+nBI0C+x2ZyLUiI3nyUguqk62WvzsT2+H3tL3JabPWuJXf4cU
+	 AKOkKRnJBf9FTiqOTbx2N6qVW5b2iVuCWLutJcz2kv473EmYc2TlKYMhu4n1/gj0d9
+	 1TjxBU5O4nVFT1ikddcrYzGZ55h/hVIr4rQws6yNoehya20EIeOGWhPPzUpR1bL+Nv
+	 XQ6Bz+csenJuw==
+Date: Thu, 17 Feb 2022 10:41:37 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	kunit-dev@googlegroups.com, llvm@lists.linux.dev,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] um: Allow builds with Clang
+Message-ID: <Yg6I0YZAh5yWYpT2@dev-arch.archlinux-ax161>
+References: <20220217002843.2312603-1-keescook@chromium.org>
+ <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220217164110.3258269-1-trix@redhat.com>
-In-Reply-To: <20220217164110.3258269-1-trix@redhat.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Thu, 17 Feb 2022 12:17:10 -0500
-Message-ID: <CADnq5_OasHZ=P_tkZrSSA87HACHJhQ49oMGSdFxzQ5g7GhjWMw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdkfd: fix typo in setting enum value
-To: Tom Rix <trix@redhat.com>
-Cc: "Kuehling, Felix" <Felix.Kuehling@amd.com>, 
-	"Deucher, Alexander" <alexander.deucher@amd.com>, Christian Koenig <christian.koenig@amd.com>, 
-	xinhui pan <Xinhui.Pan@amd.com>, Dave Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"Kim, Jonathan" <jonathan.kim@amd.com>, llvm@lists.linux.dev, 
-	Maling list - DRI developers <dri-devel@lists.freedesktop.org>, 
-	amd-gfx list <amd-gfx@lists.freedesktop.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
 
-Nathan just sent out the same patch and I already applied it.  Thanks!
+On Thu, Feb 17, 2022 at 01:54:58PM +0900, Masahiro Yamada wrote:
+> On Thu, Feb 17, 2022 at 9:28 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Add x86-64 target for Clang+um and update user-offsets.c to use
+> > Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
+> > ("kbuild: fix asm-offset generation to work with clang").
+> >
+> > This lets me run KUnit tests with Clang:
+> >
+> > $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+> > ...
+> > $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+> > ...
+> >
+> > Cc: Jeff Dike <jdike@addtoit.com>
+> > Cc: Richard Weinberger <richard@nod.at>
+> > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: David Gow <davidgow@google.com>
+> > Cc: linux-um@lists.infradead.org
+> > Cc: linux-kbuild@vger.kernel.org
+> > Cc: linux-kselftest@vger.kernel.org
+> > Cc: kunit-dev@googlegroups.com
+> > Cc: llvm@lists.linux.dev
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  arch/x86/um/user-offsets.c | 4 ++--
+> >  scripts/Makefile.clang     | 1 +
+> >  2 files changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+> > index bae61554abcc..d9071827b515 100644
+> > --- a/arch/x86/um/user-offsets.c
+> > +++ b/arch/x86/um/user-offsets.c
+> > @@ -10,10 +10,10 @@
+> >  #include <asm/types.h>
+> >
+> >  #define DEFINE(sym, val) \
+> > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+> > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
+> >
+> >  #define DEFINE_LONGS(sym, val) \
+> > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
+> > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
+> >
+> >  void foo(void)
+> >  {
+> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > index 51fc23e2e9e5..857b23de51c6 100644
+> > --- a/scripts/Makefile.clang
+> > +++ b/scripts/Makefile.clang
+> > @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
+> >  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+> >  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+> >  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+> > +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
+> 
+> 
+> Does this work for the i386 host?
+> 
+> UML supports i386 and x86_64 as the host architecture as of now,
+> but this always compiles UML for x86_64?
 
-Alex
+I think the current code will work because arch/x86/Makefile.um includes
+-m32 for CONFIG_X86_32, which will implicitly change x86_64-linux-gnu
+into a 32-bit target triple:
 
-On Thu, Feb 17, 2022 at 11:41 AM <trix@redhat.com> wrote:
->
-> From: Tom Rix <trix@redhat.com>
->
-> Clang build fails with
-> kfd_packet_manager_v9.c:267:3: error: implicit conversion
->   from enumeration type 'enum mes_map_queues_extended_engine_sel_enum'
->   to different enumeration type
->   'enum mes_unmap_queues_extended_engine_sel_enum'
->    extended_engine_sel__mes_map_queues__sdma0_to_7_sel :
->    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> This looks like a typo, the function is _unmap_, the enum
-> extended_engine_sel__mes_map_queues__sdma0_to_7_sel  is _map_.
-> To match the packet->bitfields2.extended_engine_set type
-> it should be extended_engine_sel__mes_unmap_queues__sdma0_to_7_sel.
->
-> Fixes: 009e9a158505 ("drm/amdkfd: navi2x requires extended engines to map and unmap sdma queues")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c b/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c
-> index 806a03566a24..18250845a989 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c
-> @@ -264,7 +264,7 @@ static int pm_unmap_queues_v9(struct packet_manager *pm, uint32_t *buffer,
->                                         sizeof(struct pm4_mes_unmap_queues));
->
->         packet->bitfields2.extended_engine_sel = pm_use_ext_eng(pm->dqm->dev) ?
-> -               extended_engine_sel__mes_map_queues__sdma0_to_7_sel :
-> +               extended_engine_sel__mes_unmap_queues__sdma0_to_7_sel :
->                 extended_engine_sel__mes_unmap_queues__legacy_engine_sel;
->
->         packet->bitfields2.engine_sel =
-> --
-> 2.26.3
->
+$ echo | clang --target=x86_64-linux-gnu -x c -c -o test.o -
+
+$ file test.o
+test.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+
+$ echo | clang --target=x86_64-linux-gnu -m32 -x c -c -o test.o -
+
+$ file test.o
+test.o: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), not stripped
+
+In fact, we rely on this for ARCH=i386 LLVM=1 right now, as it uses
+x86_64-linux-gnu for the target flag.
+
+While UML only supports x86, maybe it is worth using SUBARCH instead of
+hardcoding the triple? No strong opinion around that though.
+
+diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+index 51fc23e2e9e5..87285b76adb2 100644
+--- a/scripts/Makefile.clang
++++ b/scripts/Makefile.clang
+@@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
+ CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
+ CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
+ CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
++CLANG_TARGET_FLAGS_um		:= $(CLANG_TARGET_FLAGS_$(SUBARCH))
+ CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
+ 
+ ifeq ($(CROSS_COMPILE),)
+
+> >  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+> >
+> >  ifeq ($(CROSS_COMPILE),)
+> > --
+> > 2.30.2
+> >
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
