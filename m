@@ -1,124 +1,134 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C760E1FD3
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 06:32:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645165938; x=1676701938;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QCSnJGsGA/3rLBnDEPq7JsVckny++B8iF6OISwIiGcc=;
-  b=BRAiyCTNBu/wi/jO4T6alPPkHII2eWOHbGDEJ0USF3hLS1jaPXtRJk3a
-   FP1qgx1JUUUhOaS5vbDdJZPsBOQswpGRfaNItEcGOOAGYD4jpLrflNZgM
-   s4gF2Jts8ZV4HLLwMVw3vUvJ1UwAWdWQb6acrmo6PfzYA5yUShsKQz7AW
-   ScUGNEN0mW1pZcHeUjF4Jql7RKoSp2XC6qS5dLA7Mp7MeqDoHt66oBDqx
-   scMF2SwUGI79exHgvexUm2t5iFz8MMHWJ/GWL2AiJUTgV4LSKwbLSoxJi
-   1g5wGZp1ygChiV/ZI3iJPWjmA3opZuduTNy9kiNc4eH4fLEf3y2mWHDf+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="231046366"
-X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
-   d="scan'208";a="231046366"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 22:32:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
-   d="scan'208";a="637641755"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Feb 2022 22:32:15 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nKwoR-00011m-6V; Fri, 18 Feb 2022 06:32:15 +0000
-Date: Fri, 18 Feb 2022 14:31:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: yipechai <YiPeng.Chai@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Tao Zhou <tao.zhou1@amd.com>
-Subject: [agd5f:drm-next 73/91]
- drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2460:5: warning: no previous
- prototype for function 'amdgpu_ras_block_late_init_default'
-Message-ID: <202202181417.bZQAVKEY-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938993239
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 07:28:07 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(Authenticated sender: aratiu)
+	with ESMTPSA id F3BC81F464F4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1645169280;
+	bh=KYLq7eNzr+XRZuirnWBJLVeUqZ6BEc4ttbFcZk8iUGk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=U6IzTeuS1C+9np66UfM0lKpZF0ZKxDj3xYfdA5C4d9HrIROIyV/RyA2jMUd2BNOz3
+	 sGl2U7h0GuVIpNXqneRPSmoSK+E0lHgdD+mi3foUCPxf73o9EVHvFIn1QiUxe8MgPT
+	 L8SU7BZy9V5lD9EmjJd9qtP1dTFOskQgGX07ipGgvN3DW9W5F/NOGO8CPlMk+ibsaR
+	 NlXwtCJQRxpBtzNatU97rvLq8HfGcKA36bCUc/jxLWpPZJqUPNKXgmrzcR05o3JuJR
+	 ujv7dXmfGgx/ly3f+Oh7FZwWA9dZoBv5tAkxQcctMyqjtBwPB/+MZuJsNvk7eliUNV
+	 33O8pUAIYIqaA==
+From: Adrian Ratiu <adrian.ratiu@collabora.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, Nick Desaulniers
+ <ndesaulniers@google.com>, Manoj Gupta <manojgupta@chromium.com>
+Subject: Re: [PATCH] tools: fix unavoidable GCC call in Clang builds
+In-Reply-To: <Yg6PousYSZXimFCS@dev-arch.archlinux-ax161>
+References: <20220217033648.1453303-1-adrian.ratiu@collabora.com>
+ <Yg6PousYSZXimFCS@dev-arch.archlinux-ax161>
+Date: Fri, 18 Feb 2022 09:27:57 +0200
+Message-ID: <87czjk4osi.fsf@ryzen9.i-did-not-set--mail-host-address--so-tickle-me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; format=flowed
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   7dfbe38cecadbaf6dd426855d8bf8f34a4ca2c30
-commit: 418abce203fc2e936bf8c7632a9a429e861f6283 [73/91] drm/amdgpu: Remove redundant .ras_late_init initialization in some ras blocks
-config: arm-randconfig-r036-20220217 (https://download.01.org/0day-ci/archive/20220218/202202181417.bZQAVKEY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout 418abce203fc2e936bf8c7632a9a429e861f6283
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+On Thu, 17 Feb 2022, Nathan Chancellor <nathan@kernel.org> wrote:
+> Hi Adrian 
+> 
+> On Thu, Feb 17, 2022 at 05:36:48AM +0200, Adrian Ratiu wrote: 
+>> In ChromeOS and Gentoo we catch any unwanted mixed Clang/LLVM 
+>> and GCC/binutils usage via toolchain wrappers which fail 
+>> builds. 
+> 
+> Neat for hermetic builds. 
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks! We're doing this for the entire build and found quite some 
+bugs in upstream userspace projects as well, like configure/m4 
+hardcoding things like binutils ar instead of our toolchain 
+configured llvm-ar.
 
-All warnings (new ones prefixed by >>):
+>> This has revealed that GCC is called unconditionally in Clang 
+>> configured builds to populate GCC_TOOLCHAIN_DIR.   Allow 
+>> overriding the variable to avoid the GCC call - in our case we 
+>> can set GCC_TOOLCHAIN_DIR directly in the ebuild recipe. 
+> 
+> Would you just set GCC_TOOLCHAIN_DIR to nothing to avoid 
+> triggering the 'gcc -print-sysroot' call?
 
-   drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2416:3: warning: variable 'ras_obj' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (adev->in_suspend || amdgpu_in_reset(adev)) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2453:6: note: uninitialized use occurs here
-           if (ras_obj->ras_cb)
-               ^~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2416:3: note: remove the 'if' if its condition is always false
-                   if (adev->in_suspend || amdgpu_in_reset(adev)) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2403:41: note: initialize the variable 'ras_obj' to silence this warning
-           struct amdgpu_ras_block_object *ras_obj;
-                                                  ^
-                                                   = NULL
->> drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2460:5: warning: no previous prototype for function 'amdgpu_ras_block_late_init_default' [-Wmissing-prototypes]
-   int amdgpu_ras_block_late_init_default(struct amdgpu_device *adev,
-       ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2460:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int amdgpu_ras_block_late_init_default(struct amdgpu_device *adev,
-   ^
-   static 
-   2 warnings generated.
+Yes, the intention was to set GCC_TOOLCHAIN_DIR="" in the ebuild, 
+but now we have a better approach suggested by you below :)
 
+What we do right now is add an exception for the entire kernel, to 
+allow it to make mixed toolchain calls (wrappers don't fail the 
+build). AFAICT this is the last bug before we can start enforcing 
+"pure" LLVM builds, at least on more recent kernels.
 
-vim +/amdgpu_ras_block_late_init_default +2460 drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+Older kernels have been known to work as well (eg 5.4) after 
+fixing some bugs which were not strictly in the kernel codebase, 
+like: 
 
-  2459	
-> 2460	int amdgpu_ras_block_late_init_default(struct amdgpu_device *adev,
-  2461				 struct ras_common_if *ras_block)
-  2462	{
-  2463		return amdgpu_ras_block_late_init(adev, ras_block);
-  2464	}
-  2465	
+https://archives.gentoo.org/gentoo-dev/message/a4aefebf8969b2ddbbf7298c67659996
+ 
+> 
+> An alternative might be allowing CLANG_CROSS_FLAGS to be 
+> supplied by the user, so that you can stil benefit from cross 
+> compiling tools, but with the flags and sysroot that you expect. 
+>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+That seems like a better approach, thanks. It makes sense to allow 
+distributions to specify locations of their userspace libraries 
+since the kernel has no control over how various distros are 
+configured.
+
+According to the original commit message adding this change, in 
+some cases Clang might be able to autodetect these paths, but 
+autodetection does not work for all possible configurations.
+
+If a reliable generic Clang autodetection mechanism is possible, 
+then setting these vars/flags becomes a no-op and can be dropped, 
+until then CLANG_CROSS_FLAGS solves our problem.
+ 
+>> Suggested-by: Manoj Gupta <manojgupta@chromium.com> 
+>> Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com> 
+> 
+> Regardless, as long as it works for your use case: 
+> 
+> Acked-by: Nathan Chancellor <nathan@kernel.org> 
+> 
+> The change that this patch fixes [1] went via bpf-next [2] last 
+> cycle, you could either target that tree to have it fixed for 
+> 5.18 or make a case for having it merged in the 5.17 cycle via 
+> bpf [3]. I would resend this change to the kernel/bpf 
+> maintainers, as Nick and I do not currently pick up patches.
+
+If Nick is also ok with the CLANG_CROSS_FLAGS approach, I'll send 
+that to bpf-next. Thanks again!
+
+>
+> [1]: https://lore.kernel.org/r/20211216163842.829836-2-jean-philippe@linaro.org/
+> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/
+> [3]: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/
+>
+>> ---
+>>  tools/scripts/Makefile.include | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+>> index 79d102304470..98c098c064dd 100644
+>> --- a/tools/scripts/Makefile.include
+>> +++ b/tools/scripts/Makefile.include
+>> @@ -90,7 +90,7 @@ EXTRA_WARNINGS += -Wstrict-aliasing=3
+>>  
+>>  else ifneq ($(CROSS_COMPILE),)
+>>  CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
+>> -GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc 2>/dev/null))
+>> +GCC_TOOLCHAIN_DIR ?= $(dir $(shell which $(CROSS_COMPILE)gcc 2>/dev/null))
+>>  ifneq ($(GCC_TOOLCHAIN_DIR),)
+>>  CLANG_CROSS_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
+>>  CLANG_CROSS_FLAGS += --sysroot=$(shell $(CROSS_COMPILE)gcc -print-sysroot)
+>> -- 
+>> 2.35.0
+>> 
