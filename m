@@ -1,34 +1,34 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3C73217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C760E1FD3
 	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 06:32:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1645165938; x=1676701938;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=t+iPf7fvBn97STbfV9cBO5nH2UsusKphjRT7QJvzWgc=;
-  b=U/rzUtrzZJbOjsiJgM6fDzBaNhkowLNcogDvbiPa+6GKK8pbyskG3jxw
-   quEkfkchratO+kISnSJe30wh9qpjub+J9PgKnxUchRxRna1OztNG2w08j
-   owb1p86RuYnZn2bSCvOARfpyMIXNFsbNasv82erljWhuFRmjCqkmF8MTd
-   tfxvLYapT/GjdBg9N2dN5eFSfin5PIdSjH0EE4y4cOmMYT51ZXyfrnuBN
-   8xE0tkH7RuuEh65dOA442DlKT8xEXtwVw92yGqj8yHf8IVoVd9KfDWkLd
-   1u5Dnip+NRHs1F+51MrMxCk8b5NJY4BVCgScYVKyNtQdE5fu+NaagvAB6
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="248658202"
+  bh=QCSnJGsGA/3rLBnDEPq7JsVckny++B8iF6OISwIiGcc=;
+  b=BRAiyCTNBu/wi/jO4T6alPPkHII2eWOHbGDEJ0USF3hLS1jaPXtRJk3a
+   FP1qgx1JUUUhOaS5vbDdJZPsBOQswpGRfaNItEcGOOAGYD4jpLrflNZgM
+   s4gF2Jts8ZV4HLLwMVw3vUvJ1UwAWdWQb6acrmo6PfzYA5yUShsKQz7AW
+   ScUGNEN0mW1pZcHeUjF4Jql7RKoSp2XC6qS5dLA7Mp7MeqDoHt66oBDqx
+   scMF2SwUGI79exHgvexUm2t5iFz8MMHWJ/GWL2AiJUTgV4LSKwbLSoxJi
+   1g5wGZp1ygChiV/ZI3iJPWjmA3opZuduTNy9kiNc4eH4fLEf3y2mWHDf+
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="231046366"
 X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
-   d="scan'208";a="248658202"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 22:32:17 -0800
+   d="scan'208";a="231046366"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 22:32:18 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
-   d="scan'208";a="546139257"
+   d="scan'208";a="637641755"
 Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 17 Feb 2022 22:32:15 -0800
+  by orsmga004.jf.intel.com with ESMTP; 17 Feb 2022 22:32:15 -0800
 Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nKwoR-00011g-59; Fri, 18 Feb 2022 06:32:15 +0000
-Date: Fri, 18 Feb 2022 14:31:30 +0800
+	id 1nKwoR-00011m-6V; Fri, 18 Feb 2022 06:32:15 +0000
+Date: Fri, 18 Feb 2022 14:31:27 +0800
 From: kernel test robot <lkp@intel.com>
 To: yipechai <YiPeng.Chai@amd.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -38,7 +38,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 Subject: [agd5f:drm-next 73/91]
  drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2460:5: warning: no previous
  prototype for function 'amdgpu_ras_block_late_init_default'
-Message-ID: <202202181428.CYxC9JXm-lkp@intel.com>
+Message-ID: <202202181417.bZQAVKEY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,19 +52,19 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
 head:   7dfbe38cecadbaf6dd426855d8bf8f34a4ca2c30
 commit: 418abce203fc2e936bf8c7632a9a429e861f6283 [73/91] drm/amdgpu: Remove redundant .ras_late_init initialization in some ras blocks
-config: riscv-randconfig-r042-20220217 (https://download.01.org/0day-ci/archive/20220218/202202181428.CYxC9JXm-lkp@intel.com/config)
+config: arm-randconfig-r036-20220217 (https://download.01.org/0day-ci/archive/20220218/202202181417.bZQAVKEY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
         git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
         git fetch --no-tags agd5f drm-next
         git checkout 418abce203fc2e936bf8c7632a9a429e861f6283
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
