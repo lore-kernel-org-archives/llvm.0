@@ -1,116 +1,98 @@
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DDDE4AB1
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 17:20:05 +0000 (UTC)
-Received: by mail-oo1-f43.google.com with SMTP id d134-20020a4a528c000000b00319244f4b04so4247663oob.8
-        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 09:20:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9AEE4AB2
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 17:24:51 +0000 (UTC)
+Received: by mail-oo1-f51.google.com with SMTP id o128-20020a4a4486000000b003181707ed40so4259306ooa.11
+        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 09:24:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9CKMthUXCokgWPQMB0IqyzdQ/Xmbb9rlJivmagQi36I=;
-        b=cydyiGcMci/xbRpUq63u1Hv+UdC/Vor48jhWgM7lnEFrIn3NnvwrUKdNfQL/0Fw3sF
-         BPu6GRfWcYeuJIW0u0sEfSq/qHLjsHrf0Lr1QlWxT9DHzJ4CtDczMy2Ih6PCgNjqFMoe
-         0Jwiw76Ky/0w+VPlCcij25Qcmzrr4WJfMVppv7iJxRlseur+qiVYeMkBO/y1cvuQqCll
-         qntNTuHAjURsYJVdD8NLvjqIb56sxiqWTxTy/6IZzvOt/MtWGDXvw8lTBJ9E4rMIIT+/
-         o7qHHhgWo8AD24vQQnBiC2Ygm1AUVGrIgmhYLjtfUtM431V/1dc62FN14QHkSBMze8GV
-         /99g==
+         :cc:content-transfer-encoding;
+        bh=e48rbRghZ1DHjEo5oAQPObeUfspj3j2bBv68xgwxZDg=;
+        b=B6b07vv9/aGPNg6S485OaHdVCheTvWziFVBg71SY0DOhjK7WDiRUJjBrnomP+yCPKi
+         beF4zz1XqIgM7q5h2UVDA+K8EpzE3Sl+CMTCJsteOe3Uff1qUlw2cMEnQbQdzGIJxrky
+         h5S4rMM94onJIbUS4+dMB/YhGIoP9j4x5M9nwUrrPXfqWDeBDAMIELL3VvvxGvWgqMyN
+         2sDxR/EXKyqEFQuyCKBLH5dt6DZfY+nJuWLYklzfI6v5JzlhIXSdACTerkZmhXouMGIK
+         Sr3GDvB6hVLLANmcqhh1hmdwzXn9Dh8nOcvYbLVllThUGCpHBQn80TLrYsdpNN2UshO2
+         C4WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9CKMthUXCokgWPQMB0IqyzdQ/Xmbb9rlJivmagQi36I=;
-        b=iLUobHDlqvtP5mZK/dV6mHPwxgtlV/ISyAg+1l0vTanFY4ihCH8GCvErnRg+a7OoBn
-         JNrSWwZa76x+Miu9p/+rlhX6mqKbmLHA2sp1PCCZMTm706nRmpJ4j7+UYS8dnY/0DDhY
-         eYvWTz11SWObeZOcU89Gm58QiUmpq1BvI4hzA9a6JCxsR8r3vBIYpFK84q34DMP7XAmY
-         hZIanAZ1O6/zkflP75PLHFdxm6sRgLEz56DVr80PjJr2uAEI7JJpLNrJLWv8Vh2cpsNY
-         gzfe1IUR2FJ+CsQhRn4bWjpzq+cbucwdmUTWvzF9qtAIhL4fa9HIPQwxPBxa4Xe5c3g0
-         zQZg==
-X-Gm-Message-State: AOAM530GbuqV9hhfnPZdOwYzZNkVlO641t7LXxdNFjrKpsnTj+/xw02a
-	HoX11THKCYvBJc17e5KIElmIrhnF3KDnbLMLqQbTpw==
-X-Google-Smtp-Source: ABdhPJy4WTc78tZjJuxIgpcdJcD0ARkv52fe0fcQtgKg4EF2No3CqEz35B6g2+kkVmHNmdLz8XExDdjk1pj92tWB4lE=
-X-Received: by 2002:a05:6870:12d1:b0:ce:c0c9:6e0 with SMTP id
- 17-20020a05687012d100b000cec0c906e0mr4581469oam.306.1645204802484; Fri, 18
- Feb 2022 09:20:02 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=e48rbRghZ1DHjEo5oAQPObeUfspj3j2bBv68xgwxZDg=;
+        b=TOWZRA09x3a4DYpxfDb5JxK8BMweVpSiBenCX8c0oYnmK7Eskv2Qu/rea2o+ad4dZI
+         7hdDLHZcgqcJIxTjMAkMXQhxyb6ejPmcfdEr6NhzESBJXfSUR9BNEf5TOuK7POhcDSyg
+         qBYe9KCXzK63+okplmp5qhyzIw8hH6Er2rEB30hqX52lOnCSIABhjShuT+HgYYCGA0b8
+         XZ7bS6hDr1CUUC/BSXrW7huhIhhR4JZj+chXKTrYdcLYrAXcyIb73ZrAvTTcp5lUmEhY
+         s4EvcQ79W6HE7wz+D5JF/9EIOQEn5ofBp/fRidr+mV7IxnTd5lbn9rwqc3uJ6JjIJUiG
+         6yhA==
+X-Gm-Message-State: AOAM531yicFipJKEzshipxLBal23Wv7hq6+0KzzYOKlZLasf5S6fy3Dc
+	k+gjmXrx2045VYOKrImBG43S0VkMSAcIp5XYLASv2Q==
+X-Google-Smtp-Source: ABdhPJxeMGrNQo5p4UItQyXTMpqQBxLO8zARxmITPMT0p8OolI64JRzNUI3LaxZS0U2ddwM3nEFeutNzi0O3h5nsuGI=
+X-Received: by 2002:a05:6870:3491:b0:d2:48b5:7a4c with SMTP id
+ n17-20020a056870349100b000d248b57a4cmr4553827oah.288.1645205090740; Fri, 18
+ Feb 2022 09:24:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
+References: <20220217142133.72205-1-cgzones@googlemail.com>
+ <20220217142133.72205-3-cgzones@googlemail.com> <CAHC9VhT77Ft4+5LmNP0dwtaeNzF+r0b=9M5vh7qA1poY9jesJA@mail.gmail.com>
+In-Reply-To: <CAHC9VhT77Ft4+5LmNP0dwtaeNzF+r0b=9M5vh7qA1poY9jesJA@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 18 Feb 2022 09:19:51 -0800
-Message-ID: <CAKwvOd=4uwMVBwYU8XPP+cHkw5V1S_t7i8psMTRySsKEcDVZ_A@mail.gmail.com>
-Subject: Re: [PATCH] slab: remove __alloc_size attribute from __kmalloc_track_caller
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>, 
-	Kees Cook <keescook@chromium.org>, Daniel Micay <danielmicay@gmail.com>, 
-	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, David Rientjes <rientjes@google.com>, 
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Vlastimil Babka <vbabka@suse.cz>, Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org, 
-	llvm@lists.linux.dev
+Date: Fri, 18 Feb 2022 09:24:39 -0800
+Message-ID: <CAKwvOdkioR+7aebgzPu2Exe0oD9rwAeHK=CgM6vAkpBWdHnF2Q@mail.gmail.com>
+Subject: Re: [PATCH 4/5] selinux: declare data arrays const
+To: Paul Moore <paul@paul-moore.com>
+Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
+	selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Eric Paris <eparis@parisplace.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Jeremy Kerr <jk@codeconstruct.com.au>, 
+	"David S. Miller" <davem@davemloft.net>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Yang Li <yang.lee@linux.alibaba.com>, Austin Kim <austin.kim@lge.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 18, 2022 at 5:14 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Fri, Feb 18, 2022 at 8:13 AM Paul Moore <paul@paul-moore.com> wrote:
 >
-> Commit c37495d6254c ("slab: add __alloc_size attributes for better
-> bounds checking") added __alloc_size attributes to a bunch of kmalloc
-> function prototypes.  Unfortunately the change to __kmalloc_track_caller
-> seems to cause clang to generate broken code and the first time this is
-> called when booting, the box will crash.
+> On Thu, Feb 17, 2022 at 9:21 AM Christian G=C3=B6ttsche
+> <cgzones@googlemail.com> wrote:
+> >
+> > diff --git a/security/selinux/include/initial_sid_to_string.h b/securit=
+y/selinux/include/initial_sid_to_string.h
+> > index 5d332aeb8b6c..915283cd89bd 100644
+> > --- a/security/selinux/include/initial_sid_to_string.h
+> > +++ b/security/selinux/include/initial_sid_to_string.h
+> > @@ -1,5 +1,12 @@
+> >  /* SPDX-License-Identifier: GPL-2.0 */
+> > -static const char *initial_sid_to_string[] =3D
+> > +
+> > +#ifdef __SELINUX_GENHEADERS__
+> > +# define const_qual
+> > +#else
+> > +# define const_qual const
+> > +#endif
+> > +
+> > +static const char *const_qual initial_sid_to_string[] =3D
+> >  {
+> >         NULL,
+> >         "kernel",
 >
-> While the compiler problems are being reworked and attempted to be
-> solved, let's just drop the attribute to solve the issue now.  Once it
-> is resolved it can be added back.
+> Thanks for this Christian.  I generally like when we can const'ify
+> things like this, but I'm not excited about the const_qual hack on
+> core SELinux kernel code to satisfy genheaders.c.  I understand why it
+> is needed, but I would rather clutter the genheaders.c code than the
+> core SELinux kernel code.  If we can't cast away the const'ification
+> in genheaders.c could we simply allocate duplicate arrays in
+> genheaders.c and store the transformed strings into the new arrays?
 
-Sorry about the mess; we'll get it cleaned up!
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1599
-
->
-> Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
-> Cc: stable <stable@vger.kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Daniel Micay <danielmicay@gmail.com>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Pekka Enberg <penberg@kernel.org>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  include/linux/slab.h | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 37bde99b74af..5b6193fd8bd9 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -660,8 +660,7 @@ static inline __alloc_size(1, 2) void *kcalloc(size_t n, size_t size, gfp_t flag
->   * allocator where we care about the real place the memory allocation
->   * request comes from.
->   */
-> -extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller)
-> -                                  __alloc_size(1);
-> +extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller);
->  #define kmalloc_track_caller(size, flags) \
->         __kmalloc_track_caller(size, flags, _RET_IP_)
->
-> --
-> 2.35.1
->
-
-
--- 
+Note: casting off const is UB. I've had to fix multiple bugs where
+clang will drop writes to variables declared const but had const'ness
+casted away.
+--=20
 Thanks,
 ~Nick Desaulniers
