@@ -1,216 +1,109 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969634A8D
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 16:31:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645201913; x=1676737913;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4W6IsG6XIGFsgxzcIzhA34FiQVuplRXxJf4Nr78Hxdk=;
-  b=OtGx0frLUtIsMpnE8VKKrsOSGmTg1gZE5O1QsL4EGzKSJtbqRoZ7301q
-   17SaemDuN5IkehWV/TjG398ydbkK8wbjZ5lW2I/Iky9pLqyUenx72XdAC
-   gUSfbsN8zTjBTo2CU+X6SNBhNkGMv/KhvErqgjzkIbD/pedN3yKmp9o/r
-   Zlrtcd/qKC+vsqo0mNUY+yCRdhFmTl/CP7qNQb2d8jinxS+KJmvUvK3bP
-   V9nD+JBIMUrNwQRamOKYMVr5syIa0BukfoLf2RDgatqCAYO4lxocdB2fM
-   Eu+e/dJN/wS4f2DrXLH1heNIfjlTNE/Tbtppl8g+F7hte+rF5FKQzeDHJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="250914052"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="250914052"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 08:31:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="635880026"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Feb 2022 08:31:43 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 21IGVegh000316;
-	Fri, 18 Feb 2022 16:31:40 GMT
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z unique-symbol` is available
-Date: Fri, 18 Feb 2022 17:31:11 +0100
-Message-Id: <20220218163111.98564-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <alpine.LSU.2.21.2202161606430.1475@pobox.suse.cz>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble> <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com> <20220211183529.q7qi2qmlyuscxyto@treble> <alpine.LSU.2.21.2202161606430.1475@pobox.suse.cz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB4428E5
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 16:34:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005E3C340E9;
+	Fri, 18 Feb 2022 16:34:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645202066;
+	bh=3mfSjeFg5UvPQyM+d6QjT4buHJvJkQj1rCBa6ArkwLs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZuRn1OerTeB+bGjnhGoQE/AGo69mdoiz0E94CWlv2O8qyXt8tljx3FyIj8RrliyvM
+	 WGRoGjBmzmAvbayY/2fINCHlio9C9JYdxFIpqVQcRbhxfyj+EWFZgDIB/645q83692
+	 ZcePfNUtvxSL+MD8fic+EX/SikK+JkWHZBPBjvj1V2YEswppYXOCxRdcjhPnYx8U1r
+	 d0/ViUsO9e0tFx6SuBL9yhMRwlJwPPRCFMxcQRDikG1o69g2DygDes4CUt66T+xAtt
+	 g1wjcbQ3cLNEJEbcsYE97yvpt8ezTQO6pjTQRdDdiAJkdvjWpRDNAFsqB3MoF1yoHq
+	 YjXANXrPgSL0A==
+Date: Fri, 18 Feb 2022 09:34:22 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Fangrui Song <maskray@google.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] arm64 module: remove (NOLOAD)
+Message-ID: <Yg/KjpHOZ7HwZq9f@dev-arch.archlinux-ax161>
+References: <20220218081209.354383-1-maskray@google.com>
+ <CAMj1kXGZuOWOPEHv0YSM4GseG2PnTgS8mSLXQ+imo-TN7MmvaQ@mail.gmail.com>
+ <20220218085016.jv4qcfaxav5fxhrs@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218085016.jv4qcfaxav5fxhrs@google.com>
 
-From: Miroslav Benes <mbenes@suse.cz>
-Date: Wed, 16 Feb 2022 16:15:20 +0100 (CET)
-
-> On Fri, 11 Feb 2022, Josh Poimboeuf wrote:
-> 
-> > On Fri, Feb 11, 2022 at 10:05:02AM -0800, Fāng-ruì Sòng wrote:
-> > > On Fri, Feb 11, 2022 at 9:41 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> > > >
-> > > > On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
-> > > > > Position-based search, which means that if there are several symbols
-> > > > > with the same name, the user needs to additionally provide the
-> > > > > "index" of a desired symbol, is fragile. For example, it breaks
-> > > > > when two symbols with the same name are located in different
-> > > > > sections.
-> > > > >
-> > > > > Since a while, LD has a flag `-z unique-symbol` which appends
-> > > > > numeric suffixes to the functions with the same name (in symtab
-> > > > > and strtab). It can be used to effectively prevent from having
-> > > > > any ambiguity when referring to a symbol by its name.
-> > > >
-> > > > In the patch description can you also give the version of binutils (and
-> > > > possibly other linkers) which have the flag?
+On Fri, Feb 18, 2022 at 12:50:16AM -0800, Fangrui Song wrote:
+> On 2022-02-18, Ard Biesheuvel wrote:
+> > On Fri, 18 Feb 2022 at 09:12, Fangrui Song <maskray@google.com> wrote:
 > > > 
-> > > GNU ld>=2.36 supports -z unique-symbol. ld.lld doesn't support -z unique-symbol.
+> > > On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+> > > inappropriate for .plt and .text.* sections which are always
+> > > SHT_PROGBITS.
 > > > 
-> > > I subscribe to llvm@lists.linux.dev and happen to notice this message
-> > > (can't keep up with the changes...)
-> > > I am a bit concerned with this option and replied last time on
-> > > https://lore.kernel.org/r/20220105032456.hs3od326sdl4zjv4@google.com
+> > > In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+> > > and (NOLOAD) will be essentially ignored. In ld.lld, since
+> > > https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+> > > customize the output section type"), ld.lld will report a `section type
+> > > mismatch` error. Just remove (NOLOAD) to fix the error.
 > > > 
-> > > My full reasoning is on
-> > > https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+> > > [1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+> > > section should be marked as not loadable" on
+> > > https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+> > > outdated for ELF.
 > > 
-> > Ah, right.  Also discussed here:
+> > This patch lacks a SOB line.
 > > 
-> >   https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
-> >   https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
+> > With one added,
 > > 
-> > I'm not qualified to comment on LTO/PGO stability issues, but it doesn't
-> > sound good.  And we want to support livepatch for LTO kernels.
+> > Acked-by: Ard Biesheuvel <ardb@kernel.org>
 > 
-> Hm, bear with me, because I am very likely missing something which is 
-> clear to everyone else...
+> Ah, yes. Sorry, I haven't sent a kernel patch for a while...
 > 
-> Is the stability really a problem for the live patching (and I am talking 
-> about the live patching only here. It may be a problem elsewhere, but I am 
-> just trying to understand.)? I understand that two different kernel builds 
-> could have a different name mapping between the original symbols and their 
-> unique renames. Not nice. But we can prepare two different live patches 
-> for these two different kernels. Something one would like to avoid if 
-> possible, but it is not impossible. Am I missing something?
->  
-> > Also I realized that this flag would have a negative effect on
-> > kpatch-build, as it currently does its analysis on .o files.  So it
-> > would have to figure out how to properly detect function renames, to
-> > avoid patching the wrong function for example.
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Fangrui Song <maskray@google.com>
+> Acked-by: Ard Biesheuvel <ardb@kernel.org>
+
+I am assuming this patch is the solution we want, as opposed to Ard's
+suggestion of renaming these sections at
+https://reviews.llvm.org/D118840 (unless that was a tangential
+suggestion).
+
+I have verified that modules still load. Additionally, this needs to go
+to stable so that groups who upgrade their toolchain to a revision that
+include the LLD patch don't get broken as well.
+
+Cc: stable@vger.kernel.org
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
+
+> > > ---
+> > >  arch/arm64/include/asm/module.lds.h | 6 +++---
+> > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
+> > > index a11ccadd47d2..094701ec5500 100644
+> > > --- a/arch/arm64/include/asm/module.lds.h
+> > > +++ b/arch/arm64/include/asm/module.lds.h
+> > > @@ -1,8 +1,8 @@
+> > >  SECTIONS {
+> > >  #ifdef CONFIG_ARM64_MODULE_PLTS
+> > > -       .plt 0 (NOLOAD) : { BYTE(0) }
+> > > -       .init.plt 0 (NOLOAD) : { BYTE(0) }
+> > > -       .text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
+> > > +       .plt 0 : { BYTE(0) }
+> > > +       .init.plt 0 : { BYTE(0) }
+> > > +       .text.ftrace_trampoline 0 : { BYTE(0) }
+> > >  #endif
+> > > 
+> > >  #ifdef CONFIG_KASAN_SW_TAGS
+> > > --
+> > > 2.35.1.265.g69c8d7142f-goog
+> > > 
 > 
-> Yes, that is unfortunate. And not only for kpatch-build.
-> 
-> > And if LLD doesn't plan to support the flag then it will be a headache
-> > for livepatch (and the kernel in general) to deal with the divergent
-> > configs.
-> 
-> True.
-> 
-> The position-based approach clearly shows its limits. I like <file+func> 
-> approach based on kallsyms tracking, that you proposed elsewhere in the 
-> thread, more.
-
-Hmm, same.
-
-For FG-KASLR part, `-ffunction-sections` has no options, it only
-appends the function name to the name of a function, i.e. it can
-be only ".text.dup".
-However, LD scripts allow to specify a particular input file for
-the section being described, i.e.:
-
-.text.dup {         .text.file1_dup {
-    (.text.dup) ->      file1.o(.text.dup)
-}                   }
-                    .text.file2_dup {
-                        file2.o(.text.dup)
-                    }
-
-But the problem is that currently vmlinux is being linked from
-vmlinux.o solely, so there are no input files apart from vmlinux.o.
-I could probably (not 100% sure, I'm not deep into the details of
-thin archives) create a temporary linker script for vmlinux.o
-itself to process duplicates. Then vmlinux.o will always have only
-unique section names right from the start.
-It may not worth it: I don't mind that random functions with the
-same name go into one section, it's not a big deal and/or security
-risk, and it doesn't help livepatch which operates with symbol
-names, not sections.
-
-Re livepatch, the best option would probably be storing relative
-paths to the object files in kallsyms. By relative I mean starting
-from $srctree -- this would keep their versatility (no abspaths),
-but provide needed uniquity:
-
-dup()    main.o:dup()    init/main.o:dup()       /mnt/init/main.o:dup()
-dup()    main.o:dup()    foo/bar/main.o:dup()    /mnt/foo/bar/main.o:dup()
-
-                         ^^^^^^ here ^^^^^^
-
-The problem is that kallsyms are being generated at the moment of
-(re)linking vmlinux already and no earlier.
-If I could catch STT_FILE (can't say for sure now), it would provide
-only filenames, so wouldn't be enough.
-...oh wait, kallsyms rely on `nm` output. I checked nm's `-l` which
-tries to find a file corresponding to each symbol and got a nice
-output:
-
-ffffffff8109ad00 T switch_mm_irqs_off	/home/alobakin/Documents/work/xdp_hints/linux/arch/x86/mm/tlb.c:488
-
-So this could be parsed with no issues nto:
-
-name: switch_mm_irqs_off
-addr: 0x9ad00 (rel)
-file: arch/x86/mm/tlb.c
-
-This solves a lot. One problem is that
-
-> time nm -ln vmlinux > ~/Documents/tmp/nml
-nm -ln vmlinux > ~/Documents/tmp/nml  120.80s user 1.77s system 99% cpu 2:02.94 total
-
-it took 2 minutes to generate the whole map (instead of a split
-second) (on 64-core CPU, but I guess nm runs in one thread).
-I guess it can be optimized? I'm no a binutils master (will take a
-look after sending this), is there a way to do it manually skipping
-this nm lag or maybe make nm emit filenames without such delays?
-
-> 
-> Miroslav
-
-Thanks,
-Al
