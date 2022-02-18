@@ -1,75 +1,78 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1A54A9F
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 15:44:29 +0000 (UTC)
-Received: by mail-pg1-f170.google.com with SMTP id 27so2986747pgk.10
-        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 07:44:29 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCED728E2
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 15:47:56 +0000 (UTC)
+Received: by mail-pl1-f182.google.com with SMTP id w1so7471179plb.6
+        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 07:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=doT7bK7EPrJiz241mVjN8JSE6X0c4y1Cn7yH47MmQuY=;
-        b=f7IrV8Co4YLWgbQabeAxKnaaARwhRRuipRCEkgrAJCQqP2XFBjrXQKuLiqPrbblMp4
-         1I0PyweE1qWbuBRwiem9GlWvoesOq6Y1GB8AnDJbzrRXaD1VWQKp8irajqq+k55dCKAi
-         CseUDopHDjNGPOjBaX9WvpduIweYhYqPDAMXxxYv0yiDD8iPLrA7BZIetCe3CCIYdVYV
-         ASZLZRL6vD/Zv40jqnzmkhX/ZXHdMbZSSn8xdx8/UI1a++gVGYKlWrJhfahzStHzBbVt
-         iFKohUn9z3TIl5lLqD6/ZqoBkVkbxJ6dRJy+TTq14nDy33ykAI0H/nBHragcZH98I9mN
-         Pgvw==
+        bh=R7TNHVy3VEleA7R3NGQqJ4zyGtuvT0iWporTmytRR1U=;
+        b=KON7l6sZDqK4j+UT/SLLl9wF0aR06ZernKJUjbdRwbfCJF4h8uSdazOttrU1iG8NaU
+         aDhQOQ0jYzLFylcXFA+taa/4jHZodaAoym1QARbYZmSzL/dtrbqDNyP1bH7glXmkRDNB
+         FgykfB4u+o0F5Wf7FQZatjp2JwJiMs99Jds6X9y6FTpVYUQfDJmJw4lwcpv/Bke0AcGM
+         I9KzBB297Tq9W0BEPf3DdlvRXIJTreFFHtgRJxEyLP/qthEggEsUGDqsx4vOGXTbMXQj
+         6pfGH4+qTrnMgO7msiSZaQu4ZEWxJe8HvXUAiuDmXrGYvJCHe3iaponKD1TLutiDi3YY
+         +hzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=doT7bK7EPrJiz241mVjN8JSE6X0c4y1Cn7yH47MmQuY=;
-        b=OjOheTvjb+h2mwN85EYruB4vbGbeC7SpALUFVIp2q8qqNYIRty5FyNA+/BEDzftOjl
-         XhFLlIXh4VkjtURHq1TFQsbUQ9tZyO5KZJXwCThP5RJ9v35Dk+qfIQw5m+LRc3cc75ws
-         5IP9psB74mcLdItVjl1ggMMCBDuaYoDz8PDNJO5kcEX3ovmXRWBXPDFQWkfQp/3gF/14
-         ZiYEkP0McqHtXut00pHZtlCqjk9h0TvauSjKXKoPFevVvXV0nY9kFMbHdWyVTiHLs70C
-         9ehLvwFFtcJ2xWcf8NJkt3rupAa4FOs1Rrfw+2Qj85T+Igeg4hY7iMsRmHnnI8LQzIZW
-         XuKA==
-X-Gm-Message-State: AOAM531NDNWvq0YFvN25uIFA6RoXrykdwIfyQ9xI4FewygrIZwDSKr4P
-	Zkjt6jb/R4f4zJ6huGnFWqlNPZnoZXgCIX9aJ02J
-X-Google-Smtp-Source: ABdhPJzPTn2nMsDVP8pfZnyivdp+JN2LbHE/ubEBj9MgLJGKutLru+hZtPhdSKHgoM+BCyRoh2SY4sYUhFcJlHlQacc=
-X-Received: by 2002:a63:da4d:0:b0:36c:2302:1940 with SMTP id
- l13-20020a63da4d000000b0036c23021940mr6764465pgj.261.1645199069118; Fri, 18
- Feb 2022 07:44:29 -0800 (PST)
+        bh=R7TNHVy3VEleA7R3NGQqJ4zyGtuvT0iWporTmytRR1U=;
+        b=674yAmK4SyuCwnqZbQhz45HzpjJSQkVPooKy3OvdNkfejICutY1kDyGIwtZv0eL/yN
+         XpZXyi00MRE129aTnOI8QwOPpx0APS3svR7c5/wIM84/sV8I8jxjQua1YOOD69P8dwJS
+         7cB7SXt0zQ5zcmJbbYidhI7E76xHYurqDq1KH0fw9sbuEH81CBzsETptFurdX0Szlxdf
+         0JsLrmGqukCD2rd97Ajiajl6rrSJw3RNzRWogSSBEtKM8EFZEVncbS4vjqDHmOc2/fnM
+         G6l5bNBOwPsG9NZAD08ckTmUiGTsfp7Mjc3Hdv5B2rPn63eHZmDJ+5T5gGdEi7uXm3Oq
+         1b6g==
+X-Gm-Message-State: AOAM530ufPZGRwkSjE5LTxgcvJTMhApM9qcqlINXuDsR+o1i7PzKlVwY
+	FHYOyoR4fYWGQx1GBIy/zBmHEWpBv6+iSWQ41VbM
+X-Google-Smtp-Source: ABdhPJzodkaf8k/ZT66s8Hyu+Nb97VQ60hfUBvzEFWPT3b+9kE7PaFflndfYJBSvH3GRCP/p8PpArYs83Tx8ZDOUlPU=
+X-Received: by 2002:a17:902:b94b:b0:14e:f1a8:9b99 with SMTP id
+ h11-20020a170902b94b00b0014ef1a89b99mr8066539pls.28.1645199276295; Fri, 18
+ Feb 2022 07:47:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220217142133.72205-1-cgzones@googlemail.com> <20220217142133.72205-5-cgzones@googlemail.com>
-In-Reply-To: <20220217142133.72205-5-cgzones@googlemail.com>
+References: <20220217142133.72205-1-cgzones@googlemail.com>
+In-Reply-To: <20220217142133.72205-1-cgzones@googlemail.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 18 Feb 2022 10:44:18 -0500
-Message-ID: <CAHC9VhQ6hTa2ZrNHBWeE2hcr9uAbD1r351oZvxRzO6H357-H0g@mail.gmail.com>
-Subject: Re: [PATCH 1/5] selinux: drop return statement at end of void functions
+Date: Fri, 18 Feb 2022 10:47:45 -0500
+Message-ID: <CAHC9VhSuVr6NPVToScGQ=6Ugm1BFbijtzXxuTW3bs4ze57fn6g@mail.gmail.com>
+Subject: Re: [PATCH 2/5] selinux: use correct type for context length
 To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
 Cc: selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
 	Eric Paris <eparis@parisplace.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Serge Hallyn <serge@hallyn.com>, Yang Li <yang.lee@linux.alibaba.com>, 
-	Austin Kim <austin.kim@lge.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Austin Kim <austin.kim@lge.com>, Kees Cook <keescook@chromium.org>, 
+	Yang Li <yang.lee@linux.alibaba.com>, Casey Schaufler <casey@schaufler-ca.com>, 
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 17, 2022 at 9:22 AM Christian G=C3=B6ttsche
+On Thu, Feb 17, 2022 at 9:21 AM Christian G=C3=B6ttsche
 <cgzones@googlemail.com> wrote:
 >
-> Those return statements at the end of a void function are redundant.
+> security_sid_to_context() expects a pointer to an u32 as the address
+> where to store the length of the computed context.
 >
-> Reported by clang-tidy [readability-redundant-control-flow]
+> Reported by sparse:
+>
+>     security/selinux/xfrm.c:359:39: warning: incorrect type in argument 4=
+ (different signedness)
+>     security/selinux/xfrm.c:359:39:    expected unsigned int [usertype] *=
+scontext_len
+>     security/selinux/xfrm.c:359:39:    got int *
 >
 > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
 > ---
->  security/selinux/hooks.c          | 2 --
->  security/selinux/ss/conditional.c | 2 --
->  security/selinux/ss/ebitmap.c     | 1 -
->  security/selinux/ss/mls.c         | 1 -
->  security/selinux/ss/services.c    | 2 --
->  5 files changed, 8 deletions(-)
+>  security/selinux/xfrm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Merged into selinux/next, thanks.
 
