@@ -1,134 +1,87 @@
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938993239
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 07:28:07 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(Authenticated sender: aratiu)
-	with ESMTPSA id F3BC81F464F4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1645169280;
-	bh=KYLq7eNzr+XRZuirnWBJLVeUqZ6BEc4ttbFcZk8iUGk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=U6IzTeuS1C+9np66UfM0lKpZF0ZKxDj3xYfdA5C4d9HrIROIyV/RyA2jMUd2BNOz3
-	 sGl2U7h0GuVIpNXqneRPSmoSK+E0lHgdD+mi3foUCPxf73o9EVHvFIn1QiUxe8MgPT
-	 L8SU7BZy9V5lD9EmjJd9qtP1dTFOskQgGX07ipGgvN3DW9W5F/NOGO8CPlMk+ibsaR
-	 NlXwtCJQRxpBtzNatU97rvLq8HfGcKA36bCUc/jxLWpPZJqUPNKXgmrzcR05o3JuJR
-	 ujv7dXmfGgx/ly3f+Oh7FZwWA9dZoBv5tAkxQcctMyqjtBwPB/+MZuJsNvk7eliUNV
-	 33O8pUAIYIqaA==
-From: Adrian Ratiu <adrian.ratiu@collabora.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, Nick Desaulniers
- <ndesaulniers@google.com>, Manoj Gupta <manojgupta@chromium.com>
-Subject: Re: [PATCH] tools: fix unavoidable GCC call in Clang builds
-In-Reply-To: <Yg6PousYSZXimFCS@dev-arch.archlinux-ax161>
-References: <20220217033648.1453303-1-adrian.ratiu@collabora.com>
- <Yg6PousYSZXimFCS@dev-arch.archlinux-ax161>
-Date: Fri, 18 Feb 2022 09:27:57 +0200
-Message-ID: <87czjk4osi.fsf@ryzen9.i-did-not-set--mail-host-address--so-tickle-me>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A7B323F
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 08:12:20 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 2-20020a251302000000b006118f867dadso12684850ybt.12
+        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 00:12:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=LY6LzpHZdIBxY444vO4HWJP1kgYlpz84LA6VZYt38hY=;
+        b=lEuSn3l5pcezU1xInfoD249SjcfV6GaVFory27iWzbW7ZT7zmkar496VK30MXNJk7x
+         789tElCsrFcMjN6iW4M0SbGSgFcN94e5GteBtfV6rt/GjbUNjQsnptSi3adn0kHyWwoj
+         /AjelhWScjsbeOMhC+fHS+cHCVwAdMgloltoS9zdXhtqrQTvBapwSHCxhl3DjTB5fy38
+         HNolxKHOxT0fBft8mmI3ZP4/+GjGdm9TltWJ4MhKH6Wm/utyS3p3X3HyKNiAAViTAbaZ
+         GocNFUTq6VjrdohFHC8YgLDjm6I7O87roTjWj+vI+igE4vicWRZLPvIBkEazW6m5GkH5
+         jb/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=LY6LzpHZdIBxY444vO4HWJP1kgYlpz84LA6VZYt38hY=;
+        b=j8JVt11AQorD8G8DdHre01pZ8H/pq9naP2mRr2fspMuQ0n6ik07dqQ31LZY/Qn6VmH
+         GG0S0KLVCA2ryyZgq+tyZf55Wn/aN2iaf2KwzETuiZLOI4E7cCRPogDqH07aZQBjNt/3
+         9DyrDIRo9P2A5e+m86VSifYj1O0M0HaDCKOGef+H1MUZZONBcPdnSft+PGuekT80dH7J
+         jlqqfsSvjqq1jh5Zuun+vISwhCwFU1pk3k0LfWwbkmKGB+LZEVcqdyETTzlC2pGTjLfV
+         QhW9C3gM13eto7DHwrmVadATLuzWnd+YatEf0sx8pneGWpiUzNrL/6QABiD1ndmhrIZl
+         cACw==
+X-Gm-Message-State: AOAM533Qpnu8hztjuD4k9/4G/6akuxRKp5dTzXLaFaFG8mpYPku+4lK7
+	sV6CY4z5IIfsIrqvvMVKezMOwGQaF7l7
+X-Google-Smtp-Source: ABdhPJyUH15xOgfJE/7Eoy6tw1EPASMqd2Dis3ZnH3C2ddCvFItgcrZSngmFaM+Jm6gD5vKMDevc9gHUk2Xe
+X-Received: from maskray1.svl.corp.google.com ([2620:15c:2ce:200:bdb7:3728:9760:87c])
+ (user=maskray job=sendgmr) by 2002:a81:364b:0:b0:2cf:5d3f:d256 with SMTP id
+ d72-20020a81364b000000b002cf5d3fd256mr6356301ywa.458.1645171939884; Fri, 18
+ Feb 2022 00:12:19 -0800 (PST)
+Date: Fri, 18 Feb 2022 00:12:09 -0800
+Message-Id: <20220218081209.354383-1-maskray@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; format=flowed
+Mime-Version: 1.0
+Subject: [PATCH] arm64 module: remove (NOLOAD)
+From: Fangrui Song <maskray@google.com>
+To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, linux-arm-kernel@lists.infradead.org
+Cc: Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 17 Feb 2022, Nathan Chancellor <nathan@kernel.org> wrote:
-> Hi Adrian 
-> 
-> On Thu, Feb 17, 2022 at 05:36:48AM +0200, Adrian Ratiu wrote: 
->> In ChromeOS and Gentoo we catch any unwanted mixed Clang/LLVM 
->> and GCC/binutils usage via toolchain wrappers which fail 
->> builds. 
-> 
-> Neat for hermetic builds. 
-> 
+On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+inappropriate for .plt and .text.* sections which are always
+SHT_PROGBITS.
 
-Thanks! We're doing this for the entire build and found quite some 
-bugs in upstream userspace projects as well, like configure/m4 
-hardcoding things like binutils ar instead of our toolchain 
-configured llvm-ar.
+In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+and (NOLOAD) will be essentially ignored. In ld.lld, since
+https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+customize the output section type"), ld.lld will report a `section type
+mismatch` error. Just remove (NOLOAD) to fix the error.
 
->> This has revealed that GCC is called unconditionally in Clang 
->> configured builds to populate GCC_TOOLCHAIN_DIR.   Allow 
->> overriding the variable to avoid the GCC call - in our case we 
->> can set GCC_TOOLCHAIN_DIR directly in the ebuild recipe. 
-> 
-> Would you just set GCC_TOOLCHAIN_DIR to nothing to avoid 
-> triggering the 'gcc -print-sysroot' call?
+[1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+section should be marked as not loadable" on
+https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+outdated for ELF.
+---
+ arch/arm64/include/asm/module.lds.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Yes, the intention was to set GCC_TOOLCHAIN_DIR="" in the ebuild, 
-but now we have a better approach suggested by you below :)
-
-What we do right now is add an exception for the entire kernel, to 
-allow it to make mixed toolchain calls (wrappers don't fail the 
-build). AFAICT this is the last bug before we can start enforcing 
-"pure" LLVM builds, at least on more recent kernels.
-
-Older kernels have been known to work as well (eg 5.4) after 
-fixing some bugs which were not strictly in the kernel codebase, 
-like: 
-
-https://archives.gentoo.org/gentoo-dev/message/a4aefebf8969b2ddbbf7298c67659996
+diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
+index a11ccadd47d2..094701ec5500 100644
+--- a/arch/arm64/include/asm/module.lds.h
++++ b/arch/arm64/include/asm/module.lds.h
+@@ -1,8 +1,8 @@
+ SECTIONS {
+ #ifdef CONFIG_ARM64_MODULE_PLTS
+-	.plt 0 (NOLOAD) : { BYTE(0) }
+-	.init.plt 0 (NOLOAD) : { BYTE(0) }
+-	.text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
++	.plt 0 : { BYTE(0) }
++	.init.plt 0 : { BYTE(0) }
++	.text.ftrace_trampoline 0 : { BYTE(0) }
+ #endif
  
-> 
-> An alternative might be allowing CLANG_CROSS_FLAGS to be 
-> supplied by the user, so that you can stil benefit from cross 
-> compiling tools, but with the flags and sysroot that you expect. 
->
+ #ifdef CONFIG_KASAN_SW_TAGS
+-- 
+2.35.1.265.g69c8d7142f-goog
 
-That seems like a better approach, thanks. It makes sense to allow 
-distributions to specify locations of their userspace libraries 
-since the kernel has no control over how various distros are 
-configured.
-
-According to the original commit message adding this change, in 
-some cases Clang might be able to autodetect these paths, but 
-autodetection does not work for all possible configurations.
-
-If a reliable generic Clang autodetection mechanism is possible, 
-then setting these vars/flags becomes a no-op and can be dropped, 
-until then CLANG_CROSS_FLAGS solves our problem.
- 
->> Suggested-by: Manoj Gupta <manojgupta@chromium.com> 
->> Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com> 
-> 
-> Regardless, as long as it works for your use case: 
-> 
-> Acked-by: Nathan Chancellor <nathan@kernel.org> 
-> 
-> The change that this patch fixes [1] went via bpf-next [2] last 
-> cycle, you could either target that tree to have it fixed for 
-> 5.18 or make a case for having it merged in the 5.17 cycle via 
-> bpf [3]. I would resend this change to the kernel/bpf 
-> maintainers, as Nick and I do not currently pick up patches.
-
-If Nick is also ok with the CLANG_CROSS_FLAGS approach, I'll send 
-that to bpf-next. Thanks again!
-
->
-> [1]: https://lore.kernel.org/r/20211216163842.829836-2-jean-philippe@linaro.org/
-> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/
-> [3]: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/
->
->> ---
->>  tools/scripts/Makefile.include | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
->> index 79d102304470..98c098c064dd 100644
->> --- a/tools/scripts/Makefile.include
->> +++ b/tools/scripts/Makefile.include
->> @@ -90,7 +90,7 @@ EXTRA_WARNINGS += -Wstrict-aliasing=3
->>  
->>  else ifneq ($(CROSS_COMPILE),)
->>  CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
->> -GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc 2>/dev/null))
->> +GCC_TOOLCHAIN_DIR ?= $(dir $(shell which $(CROSS_COMPILE)gcc 2>/dev/null))
->>  ifneq ($(GCC_TOOLCHAIN_DIR),)
->>  CLANG_CROSS_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
->>  CLANG_CROSS_FLAGS += --sysroot=$(shell $(CROSS_COMPILE)gcc -print-sysroot)
->> -- 
->> 2.35.0
->> 
