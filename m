@@ -1,116 +1,162 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2DE4AB3
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 17:31:51 +0000 (UTC)
-Received: by mail-ot1-f44.google.com with SMTP id w16-20020a056830281000b005ad480e8dd5so923792otu.9
-        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 09:31:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nebMkmur+LCxBFBdQ4EXcYnlngkdDHM11vfdWfCglsQ=;
-        b=qOv30FszpMXxedCYqw7Wlk3PgAiJh6cKSD3NQ7aJFQyHEdlXr13TAv3jxhrAWun9sO
-         YKvcPV8jrrIF/QJEAYVnBOnyEdF1iCqU+rHIVvS4VFGPyAf3gDFsqsBU6+DZxonWYQcE
-         6N0xBLSI5cD6TXX/dSD2bA3g7id7/dnJaTN4QkJGJZvTvL3WJ0beg+N8Tg+UcJPZ1b4E
-         Vdy054NfIH5ql9x01R86PI3sjjb5Gf0u9uqo6E2keDLxW5SdFy+qrIB8Aft1WCxC+Zyr
-         2BCpWFj3rQdi7WtkjEIGgKatb4JD5Jx8axCFz7I8+zyr0564OtCpQ+wIIvX9uy7nUq93
-         0nTw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF72E28E5
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 17:39:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1645205960;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xAam+qFCmo3Rl80e7z26slziDVWmWKJYDMPephJD4B8=;
+	b=W+cnxnrZExiM2xXXj0YhNsaF+qpgZJjiD7kvzyGH7LfogY5vjVhteQHP4BzIrWyByVHXdY
+	WbiLMMTSoUtD1qdtiFXEH1B8YbWUjSbXlFTakw762dP11nLpchOWbu9MbkBYc/Eamn0eJq
+	GM165eOlYemGmiYpBeM1VGzFsEr2cdQ=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-gU-olMCEN1mTiZsJqv4UFQ-1; Fri, 18 Feb 2022 12:39:19 -0500
+X-MC-Unique: gU-olMCEN1mTiZsJqv4UFQ-1
+Received: by mail-qv1-f70.google.com with SMTP id 3-20020a0562140d0300b0042d7c7ac26aso9575291qvh.7
+        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 09:39:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nebMkmur+LCxBFBdQ4EXcYnlngkdDHM11vfdWfCglsQ=;
-        b=wcuO08BScdWQKQjYRc3mCKKXGOYj304Q2d5nWGnUVe6x9G82jO5qgDNeaI7w5i4kUy
-         IdEeUY4FIq7fRTiX11Lx5DAquIO2cXzwx8fbF48GLPhOvVQDk5n0ou1FNA8IvNAQLY5l
-         f+KoWQHhG1rG8Ewb3CMlwLlQeubd29a5VNTVwMI1pvyXYnaZ3Qv2R+OaeWXHW3vjS/rf
-         FXw9BeAl5zoulj+vBvaNNU35+tViEYPBQGErqJP07PhyMKNdSLhUYQlwu1tu72yKc6Ba
-         0fovmMdBJW0jlbYa4k3YSVRoQPXFQFETENWSh4/O1HML4dT4U0rMKjfApS6aZG+bhgLF
-         b9Ew==
-X-Gm-Message-State: AOAM532vmcXaNAUT6UsRUJTMjzQalel93UTKhcFmB3YxQfmIal3uTRIQ
-	Z7RPewfcvO2Db2vhxJVO+Aj95ZWtkdnmq1DgkPmuug==
-X-Google-Smtp-Source: ABdhPJwHuglG3+2+j2XRYDFvOYqQuaKHBnuw+/dO3Bw5z0CIdEYLx0tl4quY7Mc68D/E3dWCqQGvzAzwhhXj3decPis=
-X-Received: by 2002:a9d:27e8:0:b0:599:976a:c873 with SMTP id
- c95-20020a9d27e8000000b00599976ac873mr2843690otb.305.1645205510543; Fri, 18
- Feb 2022 09:31:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xAam+qFCmo3Rl80e7z26slziDVWmWKJYDMPephJD4B8=;
+        b=5yys6nMM+5nfRFVZQcSfMmE6rPq7mZKgaC+rfHKb0+E8fRxtRr5PI5eEp9Hl3nvmZB
+         gCbNwtm88/sKWoEu+m3m11SYJ0VZEzFlXcVdQWkekL0aw8j8tfRpopZAkErAJi+0Pm+g
+         8zZmyZb/HQd4aYePnSyfPlt0xobcGKMwt0MW4UpuD4D3tquUXYSMKYPQ33g34say0V9H
+         hSwlvsupbHP59P6yvdTRXMS2c8LylEF3WcqTo9cumnzA5H7CsI81bpbPrpHaQMsMDcc2
+         yaX7RrZBJHb6B9SOnhWddjLN+jj0HY0TFMvOKFWHHyZiD4+a9ogAZe5pViRuxrqSb2lo
+         LGzQ==
+X-Gm-Message-State: AOAM532xnLj/TJnk4/GU4r7VBnq9txM86rRIEds/HLFfuKbElM0VLdEZ
+	CXDXQsG9JExJrFtd8DqxsWrrJk4/UQFd/bGWM0CV1J9huNSBBnEL4bpRHIDK3NB75PQgGz72rZL
+	O3aSEP6NaBVUSSg==
+X-Received: by 2002:a05:6214:6ae:b0:42d:8c32:9697 with SMTP id s14-20020a05621406ae00b0042d8c329697mr6639079qvz.128.1645205959278;
+        Fri, 18 Feb 2022 09:39:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyHRTUjyiPCyav3YHqFIKehE5vskU34OYALKehiwfJAPYRDA2JG2akysROtDLt0A6lF7XH17w==
+X-Received: by 2002:a05:6214:6ae:b0:42d:8c32:9697 with SMTP id s14-20020a05621406ae00b0042d8c329697mr6639057qvz.128.1645205959074;
+        Fri, 18 Feb 2022 09:39:19 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id g22sm3425738qkp.63.2022.02.18.09.39.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 09:39:18 -0800 (PST)
+From: trix@redhat.com
+To: Felix.Kuehling@amd.com,
+	alexander.deucher@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@linux.ie,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	david.yatsin@amd.com,
+	rajneesh.bhardwaj@amd.com
+Cc: amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amdkfd: rework criu_restore_bos error handling
+Date: Fri, 18 Feb 2022 09:39:13 -0800
+Message-Id: <20220218173913.3376948-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220217142133.72205-1-cgzones@googlemail.com> <20220217142133.72205-4-cgzones@googlemail.com>
-In-Reply-To: <20220217142133.72205-4-cgzones@googlemail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 18 Feb 2022 09:31:39 -0800
-Message-ID: <CAKwvOdkNZ3W9amcQKHOEfQLbdWC=4VDtrBdbOVHtWruipQnyKg@mail.gmail.com>
-Subject: Re: [PATCH 5/5] selinux: drop unnecessary NULL check
-To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc: selinux@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Ondrej Mosnacek <omosnace@redhat.com>, Serge Hallyn <serge@hallyn.com>, 
-	Austin Kim <austin.kim@lge.com>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Yang Li <yang.lee@linux.alibaba.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-On Thu, Feb 17, 2022 at 6:22 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
-> introduced a NULL check on the context after a successful call to
-> security_sid_to_context().  This is on the one hand redundant after
-> checking for success and on the other hand insufficient on an actual
-> NULL pointer, since the context is passed to seq_escape() leading to a
-> call of strlen() on it.
->
-> Reported by Clang analyzer:
->
->     In file included from security/selinux/hooks.c:28:
->     In file included from ./include/linux/tracehook.h:50:
->     In file included from ./include/linux/memcontrol.h:13:
->     In file included from ./include/linux/cgroup.h:18:
->     ./include/linux/seq_file.h:136:25: warning: Null pointer passed as 1s=
-t argument to string length function [unix.cstring.NullArg]
->             seq_escape_mem(m, src, strlen(src), flags, esc);
->                                    ^~~~~~~~~~~
+From: Tom Rix <trix@redhat.com>
 
-I'm guessing there was more to this trace for this instance of this warning=
-?
+Clang static analysis reports this problem
+kfd_chardev.c:2327:2: warning: 1st function call argument
+  is an uninitialized value
+  kvfree(bo_privs);
+  ^~~~~~~~~~~~~~~~
 
->
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> ---
->  security/selinux/hooks.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 1e69f88eb326..ac802b99d36c 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -1020,7 +1020,7 @@ static int show_sid(struct seq_file *m, u32 sid)
->         rc =3D security_sid_to_context(&selinux_state, sid,
->                                              &context, &len);
->         if (!rc) {
+If the copy_from_users(bo_buckets, ...) fails, there is a jump to
+the generic error handler at exit:.  The freeing of bo_privs and
+unwinding of the dmabuf_fd loop do not need to be done.
 
-^ perhaps changing this condition to:
+Add some specific labels for the early failures.
+Reorder the frees to be the reverse of their allocs.
 
-if (!rc && context) {
+Move the initialize of 'i' back to the loop.
+The problem with the early frees predates the loop
+unwinding problem.
 
-It might be nice to retain the null ptr check should the semantics of
-security_sid_to_context ever change.
+Fixes: 73fa13b6a511 ("drm/amdkfd: CRIU Implement KFD restore ioctl")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/amdkfd/kfd_chardev.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-> -               bool has_comma =3D context && strchr(context, ',');
-> +               bool has_comma =3D strchr(context, ',');
->
->                 seq_putc(m, '=3D');
->                 if (has_comma)
-> --
-> 2.35.1
->
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+index 965af2a08bc0..1d5f41ac3832 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+@@ -2102,7 +2102,7 @@ static int criu_restore_bos(struct kfd_process *p,
+ 	const bool criu_resume = true;
+ 	bool flush_tlbs = false;
+ 	int ret = 0, j = 0;
+-	uint32_t i = 0;
++	uint32_t i;
+ 
+ 	if (*priv_offset + (args->num_bos * sizeof(*bo_privs)) > max_priv_data_size)
+ 		return -EINVAL;
+@@ -2119,13 +2119,13 @@ static int criu_restore_bos(struct kfd_process *p,
+ 	if (ret) {
+ 		pr_err("Failed to copy BOs information from user\n");
+ 		ret = -EFAULT;
+-		goto exit;
++		goto free_buckets;
+ 	}
+ 
+ 	bo_privs = kvmalloc_array(args->num_bos, sizeof(*bo_privs), GFP_KERNEL);
+ 	if (!bo_privs) {
+ 		ret = -ENOMEM;
+-		goto exit;
++		goto free_buckets;
+ 	}
+ 
+ 	ret = copy_from_user(bo_privs, (void __user *)args->priv_data + *priv_offset,
+@@ -2133,12 +2133,12 @@ static int criu_restore_bos(struct kfd_process *p,
+ 	if (ret) {
+ 		pr_err("Failed to copy BOs information from user\n");
+ 		ret = -EFAULT;
+-		goto exit;
++		goto free_privs;
+ 	}
+ 	*priv_offset += args->num_bos * sizeof(*bo_privs);
+ 
+ 	/* Create and map new BOs */
+-	for (; i < args->num_bos; i++) {
++	for (i = 0; i < args->num_bos; i++) {
+ 		struct kfd_criu_bo_bucket *bo_bucket;
+ 		struct kfd_criu_bo_priv_data *bo_priv;
+ 		struct kfd_dev *dev;
+@@ -2323,8 +2323,11 @@ static int criu_restore_bos(struct kfd_process *p,
+ 		if (bo_buckets[i].alloc_flags & KFD_IOC_ALLOC_MEM_FLAGS_VRAM)
+ 			close_fd(bo_buckets[i].dmabuf_fd);
+ 	}
+-	kvfree(bo_buckets);
++free_privs:
+ 	kvfree(bo_privs);
++free_buckets:
++	kvfree(bo_buckets);
++
+ 	return ret;
+ }
+ 
+-- 
+2.26.3
 
-
---=20
-Thanks,
-~Nick Desaulniers
