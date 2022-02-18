@@ -1,114 +1,86 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B012919
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 08:50:20 +0000 (UTC)
-Received: by mail-pj1-f52.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so11795123pjl.2
-        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 00:50:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=b7z6iiw22lnHjci/Ii1/zt223km1527nVd9KogEQtMU=;
-        b=seeuPptDfkero5sztHjnfTdR7kAX0RDQ+GXKIYPmD9/YMJP1s/q1+WUrOEvfXGR7S0
-         2KDZBfbuc6AyrLHQr5yV8jEBMmXJXCcdZ5N6HivQXxMR5W6FVV5diWMQMLAIxpEhlG2M
-         iY/M6jiEV7sn40uD+OfH0H7ZQiTGEqUek1GmoMXA9kc/fF7hsXGbhWqjVNgPvZJjifQA
-         DlR8sjSQC5xn6p3QCtM9E8bfCsH6azPSSjjpUQD6UxKusGPR9G+UzqQ+OyI26qUJS5KO
-         LaHkIN1dwzN66kfSzZnRnOUFkEa1mF6Raq1psC4+zvSNWD5cGF1C7c5lVCX4nCHaf22N
-         dKAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=b7z6iiw22lnHjci/Ii1/zt223km1527nVd9KogEQtMU=;
-        b=x8Gisae9DjOhkX3rImfUDOVe2l+IbMpS02raziB5VA69DELCQWfwjjtC9MjcwEr+GJ
-         SaM5rlbHlhYSLdE+BxOVdorzpIkQ1q/rO8TukWb7rTTvdctZE3zvOEQNeTHST9LOnFZH
-         CmmYyx9vvKEIWGhSyqaJXsJkI2vYE+Y50QeQWTmazQbz1reUfHn4NF++GYJ1QAkAsWqS
-         XYL8nprvvI4/wKhJTybrLw2pC4Sh9gWPDE5nO1auxqhCS8FMI6U7PfkSyUolH6LvYsiK
-         gpWTF1RtVhwhOyxqY6VR6GZp/jPKY02f6g9ZbfAEAtjkfy4UCBxvoP0mOoy0XXl6bQkr
-         61CA==
-X-Gm-Message-State: AOAM5322PvTuiotckCxWO1zXJNgX0dCSVP1ULesMEew4bDjDWTZlpkjE
-	aEB1AkCw+wXUF13uPMrgjktneA==
-X-Google-Smtp-Source: ABdhPJwpYaB42zV9cx7WtkoPcQKhcNvCEW0vB7/C4F6IE0jCZlGR4uQYV9WGq9VayBg64TbURiE0aQ==
-X-Received: by 2002:a17:903:31cd:b0:14d:bb40:2a17 with SMTP id v13-20020a17090331cd00b0014dbb402a17mr6448398ple.1.1645174219918;
-        Fri, 18 Feb 2022 00:50:19 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:200:bdb7:3728:9760:87c])
-        by smtp.gmail.com with ESMTPSA id d16sm2192602pfj.1.2022.02.18.00.50.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 00:50:19 -0800 (PST)
-Date: Fri, 18 Feb 2022 00:50:16 -0800
-From: Fangrui Song <maskray@google.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] arm64 module: remove (NOLOAD)
-Message-ID: <20220218085016.jv4qcfaxav5fxhrs@google.com>
-References: <20220218081209.354383-1-maskray@google.com>
- <CAMj1kXGZuOWOPEHv0YSM4GseG2PnTgS8mSLXQ+imo-TN7MmvaQ@mail.gmail.com>
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 3620848C9
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 11:16:03 +0000 (UTC)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Fri, 18 Feb 2022 19:08:01
+ +0800 (GMT+08:00)
+X-Originating-IP: [180.169.129.130]
+Date: Fri, 18 Feb 2022 19:08:01 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Jing Leng" <3090101217@zju.edu.cn>
+To: "kernel test robot" <lkp@intel.com>
+Cc: laurent.pinchart@ideasonboard.com, balbi@kernel.org, 
+	gregkh@linuxfoundation.org, corbet@lwn.net, 
+	mchehab+huawei@kernel.org, rdunlap@infradead.org, bilbao@vt.edu, 
+	pawell@cadence.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	"Jing Leng" <jleng@ambarella.com>
+Subject: Re: Re: [PATCH] usb: gadget: uvc: add framebased stream support
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <202202170211.van9U4Ha-lkp@intel.com>
+References: <20220216081651.9089-1-3090101217@zju.edu.cn>
+ <202202170211.van9U4Ha-lkp@intel.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGZuOWOPEHv0YSM4GseG2PnTgS8mSLXQ+imo-TN7MmvaQ@mail.gmail.com>
+Message-ID: <f182e7e.aba73.17f0c847394.Coremail.3090101217@zju.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID:cC_KCgDnX_MRfg9izEJ5DQ--.8248W
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwMFBVNG3FklugADsM
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-On 2022-02-18, Ard Biesheuvel wrote:
->On Fri, 18 Feb 2022 at 09:12, Fangrui Song <maskray@google.com> wrote:
->>
->> On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
->> inappropriate for .plt and .text.* sections which are always
->> SHT_PROGBITS.
->>
->> In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
->> and (NOLOAD) will be essentially ignored. In ld.lld, since
->> https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
->> customize the output section type"), ld.lld will report a `section type
->> mismatch` error. Just remove (NOLOAD) to fix the error.
->>
->> [1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
->> section should be marked as not loadable" on
->> https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
->> outdated for ELF.
->
->This patch lacks a SOB line.
->
->With one added,
->
->Acked-by: Ard Biesheuvel <ardb@kernel.org>
-
-Ah, yes. Sorry, I haven't sent a kernel patch for a while...
-
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Fangrui Song <maskray@google.com>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-
->> ---
->>  arch/arm64/include/asm/module.lds.h | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
->> index a11ccadd47d2..094701ec5500 100644
->> --- a/arch/arm64/include/asm/module.lds.h
->> +++ b/arch/arm64/include/asm/module.lds.h
->> @@ -1,8 +1,8 @@
->>  SECTIONS {
->>  #ifdef CONFIG_ARM64_MODULE_PLTS
->> -       .plt 0 (NOLOAD) : { BYTE(0) }
->> -       .init.plt 0 (NOLOAD) : { BYTE(0) }
->> -       .text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
->> +       .plt 0 : { BYTE(0) }
->> +       .init.plt 0 : { BYTE(0) }
->> +       .text.ftrace_trampoline 0 : { BYTE(0) }
->>  #endif
->>
->>  #ifdef CONFIG_KASAN_SW_TAGS
->> --
->> 2.35.1.265.g69c8d7142f-goog
->>
+SGkgR3JlZyBLSCwKCj4gV2h5IG5vdCB1c2UgYSB1bmlvbiBoZXJlIGFzIHRoaXMgaXMgY29taW5n
+IGZyb20gdGhlIGhhcmR3YXJlLCByaWdodD8KPgoKSSB1c2VkIHVuaW9uIGluIFBBVENIIHYxLCBJ
+IGNvbXBpbGVkIGl0IHRvIGFybTY0IGJpbmFyeSB3aXRoIEdDQyAxMS4yLjEsIAp0aGUgYmluYXJ5
+IHdvcmtzIHByb3Blcmx5LgpCdXQgImtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPiIg
+cmVwb3J0ZWQgYSB3YXJuaW5nczoKID4+IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNf
+Y29uZmlnZnMuYzoxMDkxOjM6IHdhcm5pbmc6IAogZmllbGQgIHdpdGhpbiAnc3RydWN0IHV2Y2df
+ZnJhbWU6Oih1bm5hbWVkIGF0IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNfY29uZmln
+ZnMuYzoxMDY4OjIpJyAKIGlzIGxlc3MgYWxpZ25lZCB0aGFuICd1bmlvbiB1dmNnX2ZyYW1lOjoo
+YW5vbnltb3VzIGF0IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNfY29uZmlnZnMuYzox
+MDkxOjMpJyAKIGFuZCBpcyB1c3VhbGx5IGR1ZSB0byAnc3RydWN0IHV2Y2dfZnJhbWU6Oih1bm5h
+bWVkIGF0IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNfY29uZmlnZnMuYzoxMDY4OjIp
+JyAKIGJlaW5nIHBhY2tlZCwgd2hpY2ggY2FuIGxlYWQgdG8gdW5hbGlnbmVkIGFjY2Vzc2VzIFst
+V3VuYWxpZ25lZC1hY2Nlc3NdCiAgICAgICAgICAgICAgICAgICB1bmlvbiB7CiAgICAgICAgICAg
+ICAgICAgICBeCiAgIDEgd2FybmluZyBnZW5lcmF0ZWQuClNvIEkgdXNlIGFub3RoZXIgd2F5IHRv
+IGhhbmRsZSB0aGUgZnJhbWUgc3RydWN0dXJlLgoKPiBXaHkgaXMgdGhpcyB3cml0YWJsZSwgYnV0
+IHRoZSBvdGhlciB2YXJpYWJsZXMgYXJlIG5vdD8KPiAKCjEuIGJGb3JtYXRJbmRleCBpcyBhdXRv
+bWF0aWMgYXV0byBjYWxjdWxhdGVkIGJ5IHRoZSBkcml2ZXIuCiAgIFNvIGl0IGlzIHJlYWQtb25s
+eS4KMi4gSSBkb24ndCBrbm93IHdoeSAiYl9hc3BlY3RfcmF0aW9feCAvIGJfYXNwZWN0X3JhdGlv
+X3kgLyBibV9pbnRlcmZhY2VfZmxhZ3MiCiAgIGFyZSByZWFkLW9ubHksIFBlcmhhcHMgdGhlc2Ug
+cGFyYW1ldGVycyBjYW4gYmUgb2J0YWluZWQgZGlyZWN0bHkgZnJvbSBhY3R1YWwgc3RyZWFtLgog
+ICBzbyBkcml2ZXIgZG9lcyBub3QgbmVlZCB0byBjYXJlIGFib3V0IHRoZXNlIHBhcmFtZXRlcnMu
+CjMuIElmIGJWYXJpYWJsZVNpemUgaXMgMSwgdGhlbiBkd0J5dGVzUGVyTGluZSBtdXN0IGJlIHNl
+dCB0byB6ZXJvICgwKS4KICAgSWYgYlZhcmlhYmxlU2l6ZSBpcyAwLCB0aGVuIGR3Qnl0ZXNQZXJM
+aW5lIGNhbiBiZSBzZXR0ZWQgdG8gb3RoZXIgdmFsdWUuCiAgIFNvIGl0IGlzIHdyaXRhYmxlLgoK
+PiA+IC0JCSpzaXplICs9IHNpemVvZihmcm0tPmZyYW1lKTsKPiA+ICsJCSpzaXplICs9IHNpemVv
+Zihmcm0tPmZyYW1lKSAtIDQ7Cj4gCj4gV2hlcmUgZGlkICI0IiBjb21lIGZyb20/Cj4KClVuY29t
+cHJlc3NlZCBmcmFtZSBkb2Vzbid0IGhhdmUgInUzMiBkd19ieXRlc19wZXJsaW5lIi4KRnJhbWVi
+YXNlZCBmcmFtZSBkb2Vzbid0IGhhdmUgInUzMiBkd19tYXhfdmlkZW9fZnJhbWVfYnVmZmVyX3Np
+emUiLgpJZiB3ZSB1c2UgdW5pb24sIHRoZXJlJ3Mgbm8gbmVlZCB0byBkbyB0aGlzLgpNYXliZSB3
+ZSBjYW4gYWRkICIjZGVmaW5lIFVWQ0dfU1VCX0ZSQU1FX1BBWUxPQURfTEVOR1RIIDI2IiwgYW5k
+IHVzZQoiVVZDR19TVUJfRlJBTUVfUEFZTE9BRF9MRU5HVEgiIHRvIHJlcGxhY2UgInNpemVvZihm
+cm0tPmZyYW1lKSAtIDQiLgoKPiA+ICsJLyogYlZhcmlhYmxlU2l6ZSBpcyBvbmx5IGZvciBmcmFt
+ZWJhc2VkIGZvcm1hdC4gKi8KPiA+ICsJX191OCAgYlZhcmlhYmxlU2l6ZTsKPiAKPiBUaGlzIGp1
+c3QgY2hhbmdlZCBhIHVzZXIgdmlzYWJsZSBzdHJ1Y3R1cmUgc2l6ZS4gIFdoYXQgYnJva2Ugd2hl
+biBkb2luZwo+IHRoaXM/ICBXaGF0IHRvb2wgdXNlcyB0aGlzPwo+IAoKQXMgbG9uZyBhcyB1c2Vy
+cyB1c2UgIlVWQ19EVF9GT1JNQVRfVU5DT01QUkVTU0VEX1NJWkUiIGluc3RlYWQgb2YKInNpemVv
+ZihzdHJ1Y3QgdXZjX2Zvcm1hdF91bmNvbXByZXNzZWQpIiB0byBnZXQgdGhlIGxlbmd0aCwgdGhl
+cmUgaXMKbm8gcHJvYmxlbS4gU28gSSBoYXZlIHRoZSBmb2xsb3dpbmcgbW9kaWZpY2F0aW9uczoK
+ICAgIC0JCQkqc2l6ZSArPSBzaXplb2YodS0+ZGVzYyk7CiAgICArCQkJKnNpemUgKz0gdS0+ZGVz
+Yy5iTGVuZ3RoOwoKQ3VycmVudGx5IHRoaXMgY2hhbmdlIGRvZXMgbm90IGJyZWFrIHRoZSBrZXJu
+ZWwsIGFuZCB1dmMgc3RyZWFtIEFQUApiYXNlZCBvbiBVVkMgZ2FkZ2V0IGRvZXNuJ3QgbmVlZCB0
+byB1c2UgInN0cnVjdCB1dmNfZm9ybWF0X3VuY29tcHJlc3NlZCIuCgpUaGVyZSBtYXkgYmUgc29t
+ZSB0b29scyB0aGF0IHVzZSBpdCwgVGhleSBjYW4gdXNlICJVVkNfRFRfRk9STUFUX1VOQ09NUFJF
+U1NFRF9TSVpFIgp0byBjb3ZlciB0aGUgbW9kaWZpY2F0aW9uLgoKV2UgZG9uJ3QgbmVlZCAiY29w
+eSBhbGwgdW5jb21wcmVzc2VkIGNvZGUsIHJlbmFtZQp1bmNvbXByZXNzZWQgYXMgZnJhbWViYXNl
+ZCwgbWFrZSBhIGxpdHRsZSBjaGFuZ2UiIHRvIGFjY2VzcyBmcmFtZWJhc2VkCnN0cmVhbSBzdXBw
+b3J0LgoKVGhhbmtzLApKaW5nIExlbmc=
