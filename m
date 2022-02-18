@@ -1,109 +1,159 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3258C4AA1
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 16:01:22 +0000 (UTC)
-Received: by mail-pj1-f52.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso8936615pjj.1
-        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 08:01:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDA64AA4
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 16:13:40 +0000 (UTC)
+Received: by mail-ej1-f44.google.com with SMTP id a8so16171641ejc.8
+        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 08:13:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=XFjNobaT2htcA4k2+rACGDlyXr0w1b0IEeXMGWoU+GQ=;
-        b=EPaXCh+QRxSRoSgsWxmJwRg6tqGCP82QzcP53X8m2d27haBnyVeGZM/TmoF1kloVEv
-         7uQ7xQGri+04tUGGioLH9mW/QWzlVs+zX7RZTBaQOhJJwwzqnHwshwpwJ6HUuR1cM/sN
-         jIEDk5XztFcGgigk325bNCeR1Ru4VN9kqMAvfG6ip18Rjx3zzJ3oKs4CEcrfw7ByvDt2
-         B1XNj1b9UPfOQEqnwvGeyQQ9Cr0MFD+oF5AaJlW4klqELqyMnDOo9UBdgnu6QmXprStY
-         4Kp5UNnyQlMzncVujkp9F47AvHEfza+1X5MHABFWaCkzNpUMMPQomJCv57ZgHaXhwpSb
-         YjMQ==
+        bh=/gwC4bHRIUcSmFZT9uFBPhpMuizFhmgAEkJI/24KZZA=;
+        b=SpNNtNFHQA2/1GYEtVOybDgFDXU1mx66Kr19Or0dQymEGAZ0wnqq5mjyUFd8w7EUPl
+         /gYWk/B6lqXCJqEG80bZYsW82GEccd3Ktr91AmA2V3eJhfqVerMf2Hmx/vLOlNg9sQxh
+         sR8yqNV9fp++DcQlT8pIebpwYENUpToWZUjrLM2H2meQqLFdwt7cF6aW43n+n9flXoWn
+         NBHNSIpaY/cHB+kjs5ExznkuFDcXuwbQtOuPd3WuxCCeHcg6cs38Jp3FPLeycSHNI8xI
+         gUNOGibfvVSA7xvyTLG0388qHZcrGVTg9sZJ1/9MTyChKE4Tyz6swWaa3/GKiti41cIV
+         uiHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XFjNobaT2htcA4k2+rACGDlyXr0w1b0IEeXMGWoU+GQ=;
-        b=bblBYqFb4KWliSu9k6QDSS4RaOeOA0utrner/naWmfCByQZvjthTkYR2+sWZFNa4dO
-         j0UbU8nfGMV4aRF3v3brvrL5kLrIQmvjpBFAa08xo3fb/O7cvtLu/V12E1Oc0JZHuJiq
-         lNAhyDZRSzM9QTcrEqBeZMdpRCe3wf8u93yVQ1240z2eLt0J9IDmgaFi4Ynxy3WQfPEq
-         v8T+Pop6w52oTvP/Go/+eNO/Ym0qA3EaXDapisG/sqeaePR4OkZ2kzfm5TjmR854YhAT
-         EQeClaVU06OR7+NfYsVwqfQYHeBjnS5X8nmvljqI9n8Zh8uK0atgETc53+7sHT3Jx/Px
-         blgg==
-X-Gm-Message-State: AOAM532lX0OxXAlJX4to2WgdB1XaKfEBvOgR7MFRC80XG9J5ZaIRi+mS
-	i+WG401Fa+9qXk9Tl1b8u84b81Bh80drq06AuCka
-X-Google-Smtp-Source: ABdhPJwLt+s8aeYwD2rdVVWp7ivVPPj6qTMkm8CczLA4ox6HcF14gZmFwHu1ScwIEJ2iHUDfWyR9MXBzmMJA0gyJ1CA=
-X-Received: by 2002:a17:90a:9294:b0:1b9:48e9:a030 with SMTP id
- n20-20020a17090a929400b001b948e9a030mr13317434pjo.200.1645200081628; Fri, 18
- Feb 2022 08:01:21 -0800 (PST)
+        bh=/gwC4bHRIUcSmFZT9uFBPhpMuizFhmgAEkJI/24KZZA=;
+        b=ZOHkqIQprgPLdWyOQPlaSLax2SQJ/SylQpH/zjcvC9sJs14wFMVtI9lPQnF7aQwuUV
+         SmMzUb8qN9eSQsF/G1XTOVo7q1NnckEUkQKXP35On2HgV4mkt8qR1Ki43NdS4bSLUlB2
+         3YNEu+a4w3Hmzx/n9+IvjRU/D/DOqhtUrdhbf6cLZT9O8WQK9sPi1iZDwr0jEN/RcJjr
+         gQtVF69vRmuwjgAf5K/V14q0/hnjchuFbCPDzyCuqmz10u7e1h1m7cE7oUqY/FmbDe2k
+         Kj6UP7V/xg8AEbVEgdyPBZ0JNQa6rE4b6kvWisdsXXbHzCgSxK6EEuPEBb/pAZyFh0vy
+         CARw==
+X-Gm-Message-State: AOAM530NpmpNXGCTMSRyB3puuPSWxRrYV91u82aEUhKekGeFIte830VX
+	CBAQDweaYJ3BzjNOrhWh+/A2VCdjCSO9Q2MjTaES
+X-Google-Smtp-Source: ABdhPJwfLu2AVHkXTP/KsJf25nvpYv+OIT3wySs7qBTBv+dcFHrlzw5xHDR+oh7tnMLK4SVmS000xwXCiaxJ/g/3G5g=
+X-Received: by 2002:a17:906:3901:b0:6b2:9fc6:9b2 with SMTP id
+ f1-20020a170906390100b006b29fc609b2mr6836636eje.327.1645200818564; Fri, 18
+ Feb 2022 08:13:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220217142133.72205-1-cgzones@googlemail.com> <20220217142133.72205-2-cgzones@googlemail.com>
-In-Reply-To: <20220217142133.72205-2-cgzones@googlemail.com>
+References: <20220217142133.72205-1-cgzones@googlemail.com> <20220217142133.72205-3-cgzones@googlemail.com>
+In-Reply-To: <20220217142133.72205-3-cgzones@googlemail.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 18 Feb 2022 11:01:10 -0500
-Message-ID: <CAHC9VhQPZ3_dXvM9eqwsxZ2c+2mcdvNNJbtUNs_-9Md5F3P8vA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] selinux: use consistent pointer types for boolean arrays
+Date: Fri, 18 Feb 2022 11:13:26 -0500
+Message-ID: <CAHC9VhT77Ft4+5LmNP0dwtaeNzF+r0b=9M5vh7qA1poY9jesJA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] selinux: declare data arrays const
 To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
 Cc: selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
 	Eric Paris <eparis@parisplace.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	James Morris <jamorris@linux.microsoft.com>, Austin Kim <austin.kim@lge.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
-	Yang Li <yang.lee@linux.alibaba.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
+	Jeremy Kerr <jk@codeconstruct.com.au>, "David S. Miller" <davem@davemloft.net>, 
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Yang Li <yang.lee@linux.alibaba.com>, 
+	Austin Kim <austin.kim@lge.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Thu, Feb 17, 2022 at 9:21 AM Christian G=C3=B6ttsche
 <cgzones@googlemail.com> wrote:
 >
-> Use a consistent type of unsigned int* for boolean arrays, instead of
-> using implicit casts to and from int*.
+> The arrays for the policy capability names, the initial sid identifiers
+> and the class and permission names are not changed at runtime.  Declare
+> them const to avoid accidental modification.
 >
-> Reported by sparse:
->
->     security/selinux/selinuxfs.c:1481:30: warning: incorrect type in assi=
-gnment (different signedness)
->     security/selinux/selinuxfs.c:1481:30:    expected unsigned int *
->     security/selinux/selinuxfs.c:1481:30:    got int *[addressable] value=
-s
->     security/selinux/selinuxfs.c:1398:48: warning: incorrect type in argu=
-ment 3 (different signedness)
->     security/selinux/selinuxfs.c:1398:48:    expected int *values
->     security/selinux/selinuxfs.c:1398:48:    got unsigned int *bool_pendi=
-ng_values
+> The build time script genheaders needs to be exempted, since it converts
+> the entries to uppercase.
 >
 > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
->
 > ---
-> A more invasive change would be to change all boolean arrays to bool*.
+>  scripts/selinux/genheaders/genheaders.c          | 2 ++
+>  scripts/selinux/mdp/mdp.c                        | 4 ++--
+>  security/selinux/avc.c                           | 2 +-
+>  security/selinux/include/avc_ss.h                | 2 +-
+>  security/selinux/include/classmap.h              | 8 +++++++-
+>  security/selinux/include/initial_sid_to_string.h | 9 ++++++++-
+>  security/selinux/include/policycap.h             | 2 +-
+>  security/selinux/include/policycap_names.h       | 2 +-
+>  security/selinux/ss/services.c                   | 4 ++--
+>  9 files changed, 25 insertions(+), 10 deletions(-)
 
-I think that might be a worthwhile change, although that can happen at
-a later date.
+...
 
-A quick general comment: please try to stick to 80-char long lines.  I
-realize Linus/checkpatch.pl has started to allow longer lines but I
-would still like SELinux to try and keep to 80-chars or under.
+> diff --git a/scripts/selinux/genheaders/genheaders.c b/scripts/selinux/ge=
+nheaders/genheaders.c
+> index f355b3e0e968..5f7c0b7d9260 100644
+> --- a/scripts/selinux/genheaders/genheaders.c
+> +++ b/scripts/selinux/genheaders/genheaders.c
+> @@ -15,6 +15,8 @@ struct security_class_mapping {
+>         const char *perms[sizeof(unsigned) * 8 + 1];
+>  };
+>
+> +/* Allow to convert entries in mappings to uppercase */
+> +#define __SELINUX_GENHEADERS__
+>  #include "classmap.h"
+>  #include "initial_sid_to_string.h"
 
-> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/service=
-s.c
-> index 6901dc07680d..7865926962ab 100644
-> --- a/security/selinux/ss/services.c
-> +++ b/security/selinux/ss/services.c
-> @@ -3175,7 +3175,8 @@ int security_get_bool_value(struct selinux_state *s=
-tate,
->  static int security_preserve_bools(struct selinux_policy *oldpolicy,
->                                 struct selinux_policy *newpolicy)
+...
+
+> diff --git a/security/selinux/include/classmap.h b/security/selinux/inclu=
+de/classmap.h
+> index 35aac62a662e..07ade4af85ff 100644
+> --- a/security/selinux/include/classmap.h
+> +++ b/security/selinux/include/classmap.h
+> @@ -2,6 +2,12 @@
+>  #include <linux/capability.h>
+>  #include <linux/socket.h>
+>
+> +#ifdef __SELINUX_GENHEADERS__
+> +# define const_qual
+> +#else
+> +# define const_qual const
+> +#endif
+> +
+>  #define COMMON_FILE_SOCK_PERMS "ioctl", "read", "write", "create", \
+>      "getattr", "setattr", "lock", "relabelfrom", "relabelto", "append", =
+"map"
+>
+> @@ -38,7 +44,7 @@
+>   * Note: The name for any socket class should be suffixed by "socket",
+>   *      and doesn't contain more than one substr of "socket".
+>   */
+> -struct security_class_mapping secclass_map[] =3D {
+> +const_qual struct security_class_mapping secclass_map[] =3D {
+>         { "security",
+>           { "compute_av", "compute_create", "compute_member",
+>             "check_context", "load_policy", "compute_relabel",
+
+...
+
+> diff --git a/security/selinux/include/initial_sid_to_string.h b/security/=
+selinux/include/initial_sid_to_string.h
+> index 5d332aeb8b6c..915283cd89bd 100644
+> --- a/security/selinux/include/initial_sid_to_string.h
+> +++ b/security/selinux/include/initial_sid_to_string.h
+> @@ -1,5 +1,12 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+> -static const char *initial_sid_to_string[] =3D
+> +
+> +#ifdef __SELINUX_GENHEADERS__
+> +# define const_qual
+> +#else
+> +# define const_qual const
+> +#endif
+> +
+> +static const char *const_qual initial_sid_to_string[] =3D
 >  {
-> -       int rc, *bvalues =3D NULL;
-> +       int rc;
-> +       unsigned int *bvalues =3D NULL;
+>         NULL,
+>         "kernel",
 
-Doesn't this cause a type mismatch (unsigned int vs int) when an entry
-from bvalues[] is assigned to cond_bool_datum::state later in the
-security_preserve_bools() function?
+Thanks for this Christian.  I generally like when we can const'ify
+things like this, but I'm not excited about the const_qual hack on
+core SELinux kernel code to satisfy genheaders.c.  I understand why it
+is needed, but I would rather clutter the genheaders.c code than the
+core SELinux kernel code.  If we can't cast away the const'ification
+in genheaders.c could we simply allocate duplicate arrays in
+genheaders.c and store the transformed strings into the new arrays?
 
 --=20
 paul-moore.com
