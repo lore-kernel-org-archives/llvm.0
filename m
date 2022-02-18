@@ -1,190 +1,140 @@
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FAA2F32
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 02:20:30 +0000 (UTC)
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
-	by conssluserg-01.nifty.com with ESMTP id 21I2KCpB023306
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 11:20:12 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 21I2KCpB023306
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1645150813;
-	bh=oTkWcaEf9jnFVKJN3p9Suk7c1bsGL0A3lknSj12v+7I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VDAcoaHNdUsbQLowZjruNwVk9mblUqzQo6ITBxcrlZY8Ma44uNYNxVO5bNPVUCt+s
-	 1teshno3NGiIKYkFuxIqTE0lp2tDvcQM2/1aF7ViyKuPrSAJFg+YOvDu+3AbP9ieD4
-	 yNqvtGdNJ8EtKFAKV9jJBMfgfVWBSsjS7I1WlME1f48bRfvOd4wHHbwn01MtauNIUD
-	 FtWmkSBFYZpHKMZrFB3LjAfxv+RVB03iP0e6bV53GYDMLjTxlNEG32ibk4c0THVeFp
-	 T8pWE/bPL4ppW9+sbjsdjMlTrKurERvsQgFE80ws1vcqbHBT5DiN3vR1SAn3g47+qu
-	 wVt93TczYyScQ==
-X-Nifty-SrcIP: [209.85.216.47]
-Received: by mail-pj1-f47.google.com with SMTP id y9so7359571pjf.1
-        for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 18:20:12 -0800 (PST)
-X-Gm-Message-State: AOAM531fmyI8siNvUxD9FHR0iwgFWGI3XxlNqsJgIxrpHdIhS0b9Q6h7
-	Rd+8XDPnZoot9p5Q+Wj5Q0zW/VKBPFASCMdZa1g=
-X-Google-Smtp-Source: ABdhPJy36VTNx/GOTLfwWDr/Q6D5q1UHnWRQBNMl4BqD+jlNw2u9WpWNKjA00Rdwo2aBqEiQuiXaVDyH9pWT8wCO1AY=
-X-Received: by 2002:a17:90a:ab17:b0:1b9:b61a:aadb with SMTP id
- m23-20020a17090aab1700b001b9b61aaadbmr6008892pjq.77.1645150811855; Thu, 17
- Feb 2022 18:20:11 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7465738DA
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 03:07:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645153634; x=1676689634;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Cz980iip9pCG1rLc1y1oqzoo/FsN4EbcxNCIFmruno8=;
+  b=IQ4ue/GuUoFbIkpDniJLnHYlrcKLVNTXHa18F+AvsXUkU/6U4gMwH3e7
+   2Vy/ls6ca5DFOLXKODiuOiRVFtvDUWDzCc0dVjIchou3LdwvOQQ26ut2p
+   JlkpG0K3tPSMZb3iCY81MR4FLE3m5X+kvvjDdtRonwCHVCnzWX8N5WMsR
+   X5iGwVNJM5Hja+6U4OYn/1D7Gk8vYhOjCQt4bgTno1rAXKAmsF+OF3fYo
+   FzU27m6eiKxgJxowcTQzX2zGdZpR497DS7G+7nm/dgV/JdSKmGXrVuGKX
+   DtrA2Xfom/wxA4NtzgnU1I8s32JeiujOfct2mCUg4U3EMyyJHQA8qbz9V
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="275634708"
+X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
+   d="scan'208";a="275634708"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 19:07:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
+   d="scan'208";a="503821882"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 17 Feb 2022 19:07:10 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nKtby-0000sp-5A; Fri, 18 Feb 2022 03:07:10 +0000
+Date: Fri, 18 Feb 2022 11:06:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v12 2/2] leds: Add driver for Qualcomm LPG
+Message-ID: <202202181023.H7VNk5J7-lkp@intel.com>
+References: <20220216045620.1716537-2-bjorn.andersson@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220217002843.2312603-1-keescook@chromium.org>
- <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com> <Yg6I0YZAh5yWYpT2@dev-arch.archlinux-ax161>
-In-Reply-To: <Yg6I0YZAh5yWYpT2@dev-arch.archlinux-ax161>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 18 Feb 2022 11:19:32 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARbP_xxc21N4VO95RQNn5MzGW2HpKxS_vxNWy4mqP+GxA@mail.gmail.com>
-Message-ID: <CAK7LNARbP_xxc21N4VO95RQNn5MzGW2HpKxS_vxNWy4mqP+GxA@mail.gmail.com>
-Subject: Re: [PATCH] um: Allow builds with Clang
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        kunit-dev@googlegroups.com, llvm@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216045620.1716537-2-bjorn.andersson@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Feb 18, 2022 at 2:41 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Thu, Feb 17, 2022 at 01:54:58PM +0900, Masahiro Yamada wrote:
-> > On Thu, Feb 17, 2022 at 9:28 AM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > Add x86-64 target for Clang+um and update user-offsets.c to use
-> > > Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
-> > > ("kbuild: fix asm-offset generation to work with clang").
-> > >
-> > > This lets me run KUnit tests with Clang:
-> > >
-> > > $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
-> > > ...
-> > > $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
-> > > ...
-> > >
-> > > Cc: Jeff Dike <jdike@addtoit.com>
-> > > Cc: Richard Weinberger <richard@nod.at>
-> > > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> > > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > > Cc: Nathan Chancellor <nathan@kernel.org>
-> > > Cc: David Gow <davidgow@google.com>
-> > > Cc: linux-um@lists.infradead.org
-> > > Cc: linux-kbuild@vger.kernel.org
-> > > Cc: linux-kselftest@vger.kernel.org
-> > > Cc: kunit-dev@googlegroups.com
-> > > Cc: llvm@lists.linux.dev
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >  arch/x86/um/user-offsets.c | 4 ++--
-> > >  scripts/Makefile.clang     | 1 +
-> > >  2 files changed, 3 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
-> > > index bae61554abcc..d9071827b515 100644
-> > > --- a/arch/x86/um/user-offsets.c
-> > > +++ b/arch/x86/um/user-offsets.c
-> > > @@ -10,10 +10,10 @@
-> > >  #include <asm/types.h>
-> > >
-> > >  #define DEFINE(sym, val) \
-> > > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
-> > > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
-> > >
-> > >  #define DEFINE_LONGS(sym, val) \
-> > > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
-> > > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
-> > >
-> > >  void foo(void)
-> > >  {
-> > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> > > index 51fc23e2e9e5..857b23de51c6 100644
-> > > --- a/scripts/Makefile.clang
-> > > +++ b/scripts/Makefile.clang
-> > > @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
-> > >  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
-> > >  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
-> > >  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
-> > > +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
-> >
-> >
-> > Does this work for the i386 host?
-> >
-> > UML supports i386 and x86_64 as the host architecture as of now,
-> > but this always compiles UML for x86_64?
->
-> I think the current code will work because arch/x86/Makefile.um includes
-> -m32 for CONFIG_X86_32, which will implicitly change x86_64-linux-gnu
-> into a 32-bit target triple:
+Hi Bjorn,
 
-Ah, you are right!
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on pavel-leds/for-next]
+[also build test WARNING on robh/for-next linus/master v5.17-rc4 next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Bjorn-Andersson/dt-bindings-leds-Add-Qualcomm-Light-Pulse-Generator-binding/20220216-125508
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220218/202202181023.H7VNk5J7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/88352f2526296902090ed67f8b07f3fa348dad57
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Bjorn-Andersson/dt-bindings-leds-Add-Qualcomm-Light-Pulse-Generator-binding/20220216-125508
+        git checkout 88352f2526296902090ed67f8b07f3fa348dad57
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/leds/rgb/ drivers/net/ethernet/mellanox/mlxsw/ mm/damon/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/leds/rgb/leds-qcom-lpg.c:920:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (state->enabled) {
+               ^~~~~~~~~~~~~~
+   drivers/leds/rgb/leds-qcom-lpg.c:936:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/leds/rgb/leds-qcom-lpg.c:920:2: note: remove the 'if' if its condition is always true
+           if (state->enabled) {
+           ^~~~~~~~~~~~~~~~~~~~
+   drivers/leds/rgb/leds-qcom-lpg.c:913:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
 
->
-> $ echo | clang --target=x86_64-linux-gnu -x c -c -o test.o -
->
-> $ file test.o
-> test.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
->
-> $ echo | clang --target=x86_64-linux-gnu -m32 -x c -c -o test.o -
->
-> $ file test.o
-> test.o: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), not stripped
->
-> In fact, we rely on this for ARCH=i386 LLVM=1 right now, as it uses
-> x86_64-linux-gnu for the target flag.
->
-> While UML only supports x86, maybe it is worth using SUBARCH instead of
-> hardcoding the triple? No strong opinion around that though.
->
-> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> index 51fc23e2e9e5..87285b76adb2 100644
-> --- a/scripts/Makefile.clang
-> +++ b/scripts/Makefile.clang
-> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
->  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
->  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
->  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
-> +CLANG_TARGET_FLAGS_um          := $(CLANG_TARGET_FLAGS_$(SUBARCH))
+vim +920 drivers/leds/rgb/leds-qcom-lpg.c
 
+   900	
+   901	/*
+   902	 * Limitations:
+   903	 * - Updating both duty and period is not done atomically, so the output signal
+   904	 *   will momentarily be a mix of the settings.
+   905	 * - Changed parameters takes effect immediately.
+   906	 * - A disabled channel outputs a logical 0.
+   907	 */
+   908	static int lpg_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+   909				 const struct pwm_state *state)
+   910	{
+   911		struct lpg *lpg = container_of(chip, struct lpg, pwm);
+   912		struct lpg_channel *chan = &lpg->channels[pwm->hwpwm];
+   913		int ret;
+   914	
+   915		if (state->polarity != PWM_POLARITY_NORMAL)
+   916			return -EINVAL;
+   917	
+   918		mutex_lock(&lpg->lock);
+   919	
+ > 920		if (state->enabled) {
+   921			ret = lpg_calc_freq(chan, state->period);
+   922			if (ret < 0)
+   923				goto out_unlock;
+   924	
+   925			lpg_calc_duty(chan, state->duty_cycle);
+   926		}
+   927		chan->enabled = state->enabled;
+   928	
+   929		lpg_apply(chan);
+   930	
+   931		triled_set(lpg, chan->triled_mask, chan->enabled ? chan->triled_mask : 0);
+   932	
+   933	out_unlock:
+   934		mutex_unlock(&lpg->lock);
+   935	
+   936		return ret;
+   937	}
+   938	
 
-LGTM.
-
-I also thought of not passing --target at all for ARCH=um, but
-we decided to override --target all the time (for reproducibility?).
-Anyway, Nathan's way is clean, and looks OK to me.
-
-
-
-
-
-
-
->  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
->
->  ifeq ($(CROSS_COMPILE),)
->
-> > >  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
-> > >
-> > >  ifeq ($(CROSS_COMPILE),)
-> > > --
-> > > 2.30.2
-> > >
-> >
-> >
-> > --
-> > Best Regards
-> > Masahiro Yamada
-
-
-
---
-Best Regards
-Masahiro Yamada
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
