@@ -1,101 +1,121 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788A32F2D
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 18:54:22 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id BA49D1F380;
-	Fri, 18 Feb 2022 18:54:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1645210454; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7xBLRQZhq3/skvOmeDBJB14+LYXLehKVzIynhx/JjM0=;
-	b=0jXyJ65ecJsaSLvPCVibOVAuY3OGK4usVKD2EERKyiLsHHz0e7QV4ZYTI3Rbt+GijfiPAG
-	xIwopJxYs0ot03/jzftod8OrUCu8aNBPsxw0mQJkerkALjDt7nHVaIaaaszd+tdaM61Yh8
-	d+1wWi8yXTM/1QG71yycfwTLocwKzPk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1645210454;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7xBLRQZhq3/skvOmeDBJB14+LYXLehKVzIynhx/JjM0=;
-	b=80A1QJM3/GCBQg8FBevUB/VqXoEnD5gOwj9dFfPlDytKxWCjOlLQ3vd3yEu21dWjq5f7Ox
-	JiaCkAMG6wXNfDDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 87D2513C9F;
-	Fri, 18 Feb 2022 18:54:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id Zl1lIFbrD2KneQAAMHmgww
-	(envelope-from <vbabka@suse.cz>); Fri, 18 Feb 2022 18:54:14 +0000
-Message-ID: <c237f6d1-4219-0e6d-6aca-9c29d060bb4f@suse.cz>
-Date: Fri, 18 Feb 2022 19:54:14 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F1F4C6F
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 19:08:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A3BC340F1
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 19:08:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645211336;
+	bh=0ANPVcYiGjV9CbXYsCpHaQ5gI/JNFJsxlUk9bhKhnGo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ZYhp7l+uzUYGgxUYINN4dWQOgJfqGL749UJgp5kHXX/jz2RPpN2G9MqeWYikpA4p2
+	 cCvl/BEQTq0PTRMvorm7QOAARZena/HDYDpFVd2Rp1y2O2IeMu8u2Pc3Cv/es/vEt4
+	 krYGcjmijgBSgQF0sG/aTZ2K8Yb0/uRtIYxKycDCvYNEZZiWr9s+fQKCEPUPIUabWX
+	 kkH1w8/xwdJiwgCYFF5loDnDCRDljmcdpB/h74Q8LZKpqxdHwZ1ywleHB58c7aweCT
+	 4AdhzsDTgv8qSHJsL3zSF/nvgrRWHkGdYkIbN4iP1TkO0zR2czvumN4wVjPfKExDl3
+	 vGJVLI2HSEWmA==
+Received: by mail-wm1-f54.google.com with SMTP id bg21-20020a05600c3c9500b0035283e7a012so7116323wmb.0
+        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 11:08:56 -0800 (PST)
+X-Gm-Message-State: AOAM533vVIiPZ4vt34o+tfvkmptat83vSKJeKC3vjlzU6tbwLT+GINP6
+	FR27tBCI/Q3biR1kqa7ihPEEZMBdDWQ+hA13h0U=
+X-Google-Smtp-Source: ABdhPJzKg9qhWEhyz1nvDZz+sCoU7KQ6y6fKhkLMhReQq7NUX2utYbD3eBjOhzBjnL/eImO6Ut4c+1iZeUMTM0+Y1eM=
+X-Received: by 2002:a1c:f205:0:b0:37b:ec48:72a with SMTP id
+ s5-20020a1cf205000000b0037bec48072amr8292384wmc.190.1645211334959; Fri, 18
+ Feb 2022 11:08:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] slab: remove __alloc_size attribute from
- __kmalloc_track_caller
-Content-Language: en-US
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
- Kees Cook <keescook@chromium.org>, Daniel Micay <danielmicay@gmail.com>,
- Nick Desaulniers <ndesaulniers@google.com>, Christoph Lameter
- <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
- David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
- llvm@lists.linux.dev
-References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
- <a5ab4496-8190-6221-72c7-d1ff2e6cf1d4@suse.cz> <Yg/eG4X7Esa0h1al@kroah.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Yg/eG4X7Esa0h1al@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220218081209.354383-1-maskray@google.com> <CAMj1kXGZuOWOPEHv0YSM4GseG2PnTgS8mSLXQ+imo-TN7MmvaQ@mail.gmail.com>
+ <20220218085016.jv4qcfaxav5fxhrs@google.com> <Yg/KjpHOZ7HwZq9f@dev-arch.archlinux-ax161>
+In-Reply-To: <Yg/KjpHOZ7HwZq9f@dev-arch.archlinux-ax161>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 18 Feb 2022 20:08:43 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHjAxf9gxcAXGpDwR2DUc5jYVdJFzWbwJxcMLg5-y=kxA@mail.gmail.com>
+Message-ID: <CAMj1kXHjAxf9gxcAXGpDwR2DUc5jYVdJFzWbwJxcMLg5-y=kxA@mail.gmail.com>
+Subject: Re: [PATCH] arm64 module: remove (NOLOAD)
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Fangrui Song <maskray@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 2/18/22 18:57, Greg Kroah-Hartman wrote:
-> On Fri, Feb 18, 2022 at 06:14:55PM +0100, Vlastimil Babka wrote:
->> On 2/18/22 14:13, Greg Kroah-Hartman wrote:
->> > Commit c37495d6254c ("slab: add __alloc_size attributes for better
->> > bounds checking") added __alloc_size attributes to a bunch of kmalloc
->> > function prototypes.  Unfortunately the change to __kmalloc_track_caller
->> > seems to cause clang to generate broken code and the first time this is
->> > called when booting, the box will crash.
->> > 
->> > While the compiler problems are being reworked and attempted to be
->> > solved, let's just drop the attribute to solve the issue now.  Once it
->> > is resolved it can be added back.
->> 
->> Could we instead wrap it in some #ifdef that' only true for clang build?
->> That would make the workaround more precise and self-documented. Even
->> better if it can trigger using clang version range and once a fixed
->> clang version is here, it can be updated to stay true for older clangs.
-> 
-> It's not doing all that much good like this, let's just remove it for
-> now until it does actually provide a benifit and not just crash the box :)
-> 
-> This is only 1 function, that is used in only a very small number of
-> callers.  I do not think it will be missed.
+On Fri, 18 Feb 2022 at 17:34, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Fri, Feb 18, 2022 at 12:50:16AM -0800, Fangrui Song wrote:
+> > On 2022-02-18, Ard Biesheuvel wrote:
+> > > On Fri, 18 Feb 2022 at 09:12, Fangrui Song <maskray@google.com> wrote:
+> > > >
+> > > > On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+> > > > inappropriate for .plt and .text.* sections which are always
+> > > > SHT_PROGBITS.
+> > > >
+> > > > In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+> > > > and (NOLOAD) will be essentially ignored. In ld.lld, since
+> > > > https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+> > > > customize the output section type"), ld.lld will report a `section type
+> > > > mismatch` error. Just remove (NOLOAD) to fix the error.
+> > > >
+> > > > [1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+> > > > section should be marked as not loadable" on
+> > > > https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+> > > > outdated for ELF.
+> > >
+> > > This patch lacks a SOB line.
+> > >
+> > > With one added,
+> > >
+> > > Acked-by: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > Ah, yes. Sorry, I haven't sent a kernel patch for a while...
+> >
+> > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > Signed-off-by: Fangrui Song <maskray@google.com>
+> > Acked-by: Ard Biesheuvel <ardb@kernel.org>
+>
+> I am assuming this patch is the solution we want, as opposed to Ard's
+> suggestion of renaming these sections at
+> https://reviews.llvm.org/D118840 (unless that was a tangential
+> suggestion).
+>
 
-Fair enough, added to the slab tree:
+Renaming will not make the problem go away. It will only clear up the
+confusion regarding the contents of these sections, which are not in
+fact linker emitted PLT entries, but branching veneers emitted by the
+kernel's module loader.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=for-5.17/fixup5
-
-> thanks,
-> 
-> greg k-h
-> 
-
+> I have verified that modules still load. Additionally, this needs to go
+> to stable so that groups who upgrade their toolchain to a revision that
+> include the LLD patch don't get broken as well.
+>
+> Cc: stable@vger.kernel.org
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+>
+>
+> > > > ---
+> > > >  arch/arm64/include/asm/module.lds.h | 6 +++---
+> > > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
+> > > > index a11ccadd47d2..094701ec5500 100644
+> > > > --- a/arch/arm64/include/asm/module.lds.h
+> > > > +++ b/arch/arm64/include/asm/module.lds.h
+> > > > @@ -1,8 +1,8 @@
+> > > >  SECTIONS {
+> > > >  #ifdef CONFIG_ARM64_MODULE_PLTS
+> > > > -       .plt 0 (NOLOAD) : { BYTE(0) }
+> > > > -       .init.plt 0 (NOLOAD) : { BYTE(0) }
+> > > > -       .text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
+> > > > +       .plt 0 : { BYTE(0) }
+> > > > +       .init.plt 0 : { BYTE(0) }
+> > > > +       .text.ftrace_trampoline 0 : { BYTE(0) }
+> > > >  #endif
+> > > >
+> > > >  #ifdef CONFIG_KASAN_SW_TAGS
+> > > > --
+> > > > 2.35.1.265.g69c8d7142f-goog
+> > > >
+> >
