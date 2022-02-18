@@ -1,86 +1,91 @@
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 3620848C9
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 11:16:03 +0000 (UTC)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Fri, 18 Feb 2022 19:08:01
- +0800 (GMT+08:00)
-X-Originating-IP: [180.169.129.130]
-Date: Fri, 18 Feb 2022 19:08:01 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Jing Leng" <3090101217@zju.edu.cn>
-To: "kernel test robot" <lkp@intel.com>
-Cc: laurent.pinchart@ideasonboard.com, balbi@kernel.org, 
-	gregkh@linuxfoundation.org, corbet@lwn.net, 
-	mchehab+huawei@kernel.org, rdunlap@infradead.org, bilbao@vt.edu, 
-	pawell@cadence.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	"Jing Leng" <jleng@ambarella.com>
-Subject: Re: Re: [PATCH] usb: gadget: uvc: add framebased stream support
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <202202170211.van9U4Ha-lkp@intel.com>
-References: <20220216081651.9089-1-3090101217@zju.edu.cn>
- <202202170211.van9U4Ha-lkp@intel.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A4A3211
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 13:14:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B61C340E9;
+	Fri, 18 Feb 2022 13:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1645190048;
+	bh=tYfeunHQUCJoMBW4KCGOeDi3CMtMJKFVuq09f4Qy3/c=;
+	h=From:To:Cc:Subject:Date:From;
+	b=vBbXWXZfhyx61GlN+4nIkKHAofV3Tmyr7SoPL/JEr5O8aDuGGFkaqtwjsuHp/aWJd
+	 NyVHxUGohJ8znulkcU6/mgN478hdbs6CnYqpPVU4HyjCX7mZdBjeSEtJOQLoG+JX8i
+	 tfgZ0yR1aFtzmkQnXpRV3CxMiyI7vkizA2SIxd24=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-kernel@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	stable <stable@vger.kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Micay <danielmicay@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Christoph Lameter <cl@linux.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] slab: remove __alloc_size attribute from __kmalloc_track_caller
+Date: Fri, 18 Feb 2022 14:13:58 +0100
+Message-Id: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-ID: <f182e7e.aba73.17f0c847394.Coremail.3090101217@zju.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:cC_KCgDnX_MRfg9izEJ5DQ--.8248W
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwMFBVNG3FklugADsM
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1953; h=from:subject; bh=tYfeunHQUCJoMBW4KCGOeDi3CMtMJKFVuq09f4Qy3/c=; b=owGbwMvMwCRo6H6F97bub03G02pJDEn8s6c4O30y6vORX/ORQXjx0QO+yZ+7OfqrVN2bJEW4TmtN 7uPpiGVhEGRikBVTZPmyjefo/opDil6Gtqdh5rAygQxh4OIUgIlYJDIsaL/7pkRd/rig6sTwLMFXHx PEKo9OYpifbbZwheqTPMfejscylVHLrm1gNdQFAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 
-SGkgR3JlZyBLSCwKCj4gV2h5IG5vdCB1c2UgYSB1bmlvbiBoZXJlIGFzIHRoaXMgaXMgY29taW5n
-IGZyb20gdGhlIGhhcmR3YXJlLCByaWdodD8KPgoKSSB1c2VkIHVuaW9uIGluIFBBVENIIHYxLCBJ
-IGNvbXBpbGVkIGl0IHRvIGFybTY0IGJpbmFyeSB3aXRoIEdDQyAxMS4yLjEsIAp0aGUgYmluYXJ5
-IHdvcmtzIHByb3Blcmx5LgpCdXQgImtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPiIg
-cmVwb3J0ZWQgYSB3YXJuaW5nczoKID4+IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNf
-Y29uZmlnZnMuYzoxMDkxOjM6IHdhcm5pbmc6IAogZmllbGQgIHdpdGhpbiAnc3RydWN0IHV2Y2df
-ZnJhbWU6Oih1bm5hbWVkIGF0IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNfY29uZmln
-ZnMuYzoxMDY4OjIpJyAKIGlzIGxlc3MgYWxpZ25lZCB0aGFuICd1bmlvbiB1dmNnX2ZyYW1lOjoo
-YW5vbnltb3VzIGF0IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNfY29uZmlnZnMuYzox
-MDkxOjMpJyAKIGFuZCBpcyB1c3VhbGx5IGR1ZSB0byAnc3RydWN0IHV2Y2dfZnJhbWU6Oih1bm5h
-bWVkIGF0IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNfY29uZmlnZnMuYzoxMDY4OjIp
-JyAKIGJlaW5nIHBhY2tlZCwgd2hpY2ggY2FuIGxlYWQgdG8gdW5hbGlnbmVkIGFjY2Vzc2VzIFst
-V3VuYWxpZ25lZC1hY2Nlc3NdCiAgICAgICAgICAgICAgICAgICB1bmlvbiB7CiAgICAgICAgICAg
-ICAgICAgICBeCiAgIDEgd2FybmluZyBnZW5lcmF0ZWQuClNvIEkgdXNlIGFub3RoZXIgd2F5IHRv
-IGhhbmRsZSB0aGUgZnJhbWUgc3RydWN0dXJlLgoKPiBXaHkgaXMgdGhpcyB3cml0YWJsZSwgYnV0
-IHRoZSBvdGhlciB2YXJpYWJsZXMgYXJlIG5vdD8KPiAKCjEuIGJGb3JtYXRJbmRleCBpcyBhdXRv
-bWF0aWMgYXV0byBjYWxjdWxhdGVkIGJ5IHRoZSBkcml2ZXIuCiAgIFNvIGl0IGlzIHJlYWQtb25s
-eS4KMi4gSSBkb24ndCBrbm93IHdoeSAiYl9hc3BlY3RfcmF0aW9feCAvIGJfYXNwZWN0X3JhdGlv
-X3kgLyBibV9pbnRlcmZhY2VfZmxhZ3MiCiAgIGFyZSByZWFkLW9ubHksIFBlcmhhcHMgdGhlc2Ug
-cGFyYW1ldGVycyBjYW4gYmUgb2J0YWluZWQgZGlyZWN0bHkgZnJvbSBhY3R1YWwgc3RyZWFtLgog
-ICBzbyBkcml2ZXIgZG9lcyBub3QgbmVlZCB0byBjYXJlIGFib3V0IHRoZXNlIHBhcmFtZXRlcnMu
-CjMuIElmIGJWYXJpYWJsZVNpemUgaXMgMSwgdGhlbiBkd0J5dGVzUGVyTGluZSBtdXN0IGJlIHNl
-dCB0byB6ZXJvICgwKS4KICAgSWYgYlZhcmlhYmxlU2l6ZSBpcyAwLCB0aGVuIGR3Qnl0ZXNQZXJM
-aW5lIGNhbiBiZSBzZXR0ZWQgdG8gb3RoZXIgdmFsdWUuCiAgIFNvIGl0IGlzIHdyaXRhYmxlLgoK
-PiA+IC0JCSpzaXplICs9IHNpemVvZihmcm0tPmZyYW1lKTsKPiA+ICsJCSpzaXplICs9IHNpemVv
-Zihmcm0tPmZyYW1lKSAtIDQ7Cj4gCj4gV2hlcmUgZGlkICI0IiBjb21lIGZyb20/Cj4KClVuY29t
-cHJlc3NlZCBmcmFtZSBkb2Vzbid0IGhhdmUgInUzMiBkd19ieXRlc19wZXJsaW5lIi4KRnJhbWVi
-YXNlZCBmcmFtZSBkb2Vzbid0IGhhdmUgInUzMiBkd19tYXhfdmlkZW9fZnJhbWVfYnVmZmVyX3Np
-emUiLgpJZiB3ZSB1c2UgdW5pb24sIHRoZXJlJ3Mgbm8gbmVlZCB0byBkbyB0aGlzLgpNYXliZSB3
-ZSBjYW4gYWRkICIjZGVmaW5lIFVWQ0dfU1VCX0ZSQU1FX1BBWUxPQURfTEVOR1RIIDI2IiwgYW5k
-IHVzZQoiVVZDR19TVUJfRlJBTUVfUEFZTE9BRF9MRU5HVEgiIHRvIHJlcGxhY2UgInNpemVvZihm
-cm0tPmZyYW1lKSAtIDQiLgoKPiA+ICsJLyogYlZhcmlhYmxlU2l6ZSBpcyBvbmx5IGZvciBmcmFt
-ZWJhc2VkIGZvcm1hdC4gKi8KPiA+ICsJX191OCAgYlZhcmlhYmxlU2l6ZTsKPiAKPiBUaGlzIGp1
-c3QgY2hhbmdlZCBhIHVzZXIgdmlzYWJsZSBzdHJ1Y3R1cmUgc2l6ZS4gIFdoYXQgYnJva2Ugd2hl
-biBkb2luZwo+IHRoaXM/ICBXaGF0IHRvb2wgdXNlcyB0aGlzPwo+IAoKQXMgbG9uZyBhcyB1c2Vy
-cyB1c2UgIlVWQ19EVF9GT1JNQVRfVU5DT01QUkVTU0VEX1NJWkUiIGluc3RlYWQgb2YKInNpemVv
-ZihzdHJ1Y3QgdXZjX2Zvcm1hdF91bmNvbXByZXNzZWQpIiB0byBnZXQgdGhlIGxlbmd0aCwgdGhl
-cmUgaXMKbm8gcHJvYmxlbS4gU28gSSBoYXZlIHRoZSBmb2xsb3dpbmcgbW9kaWZpY2F0aW9uczoK
-ICAgIC0JCQkqc2l6ZSArPSBzaXplb2YodS0+ZGVzYyk7CiAgICArCQkJKnNpemUgKz0gdS0+ZGVz
-Yy5iTGVuZ3RoOwoKQ3VycmVudGx5IHRoaXMgY2hhbmdlIGRvZXMgbm90IGJyZWFrIHRoZSBrZXJu
-ZWwsIGFuZCB1dmMgc3RyZWFtIEFQUApiYXNlZCBvbiBVVkMgZ2FkZ2V0IGRvZXNuJ3QgbmVlZCB0
-byB1c2UgInN0cnVjdCB1dmNfZm9ybWF0X3VuY29tcHJlc3NlZCIuCgpUaGVyZSBtYXkgYmUgc29t
-ZSB0b29scyB0aGF0IHVzZSBpdCwgVGhleSBjYW4gdXNlICJVVkNfRFRfRk9STUFUX1VOQ09NUFJF
-U1NFRF9TSVpFIgp0byBjb3ZlciB0aGUgbW9kaWZpY2F0aW9uLgoKV2UgZG9uJ3QgbmVlZCAiY29w
-eSBhbGwgdW5jb21wcmVzc2VkIGNvZGUsIHJlbmFtZQp1bmNvbXByZXNzZWQgYXMgZnJhbWViYXNl
-ZCwgbWFrZSBhIGxpdHRsZSBjaGFuZ2UiIHRvIGFjY2VzcyBmcmFtZWJhc2VkCnN0cmVhbSBzdXBw
-b3J0LgoKVGhhbmtzLApKaW5nIExlbmc=
+Commit c37495d6254c ("slab: add __alloc_size attributes for better
+bounds checking") added __alloc_size attributes to a bunch of kmalloc
+function prototypes.  Unfortunately the change to __kmalloc_track_caller
+seems to cause clang to generate broken code and the first time this is
+called when booting, the box will crash.
+
+While the compiler problems are being reworked and attempted to be
+solved, let's just drop the attribute to solve the issue now.  Once it
+is resolved it can be added back.
+
+Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
+Cc: stable <stable@vger.kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Daniel Micay <danielmicay@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Pekka Enberg <penberg@kernel.org>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ include/linux/slab.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 37bde99b74af..5b6193fd8bd9 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -660,8 +660,7 @@ static inline __alloc_size(1, 2) void *kcalloc(size_t n, size_t size, gfp_t flag
+  * allocator where we care about the real place the memory allocation
+  * request comes from.
+  */
+-extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller)
+-				   __alloc_size(1);
++extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller);
+ #define kmalloc_track_caller(size, flags) \
+ 	__kmalloc_track_caller(size, flags, _RET_IP_)
+ 
+-- 
+2.35.1
+
