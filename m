@@ -1,109 +1,190 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39A8460E
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 00:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645145847; x=1676681847;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Vj2CsOTUkQBHhjNBO3qfYzU6/jLsbz73fewBTx19X8E=;
-  b=QllaDTV/1FmRpdb57kzUE9b48YveJcfhCtX6Gr4yO9EIBS6/KGudw9be
-   g944ZI6NdG5ZqeNEykrredLI5YChhTKYMsD1E1jSJrSBBsgEeJoODsec8
-   kHxDC+Fgh+2smG5QTevgNY0JArQ9ZssrJ4ZhMIP+iVSCADZMunF+kyL9x
-   s4v7nhuqkak/qxYB73wT0xAl233k6lj82r1w+D3dcRQwEYBx3THfJlgTg
-   hEBbszKEZ9MxLqnitHXZQkuYR5f6N7Wt0+tz3TxIMSo0G+ML6mdaKFNrM
-   ZiODhNv9jPh/rQcLoTvfO6EBGdjjV4TPM7gIZa2Ixc3hxTEjXmH8z2fF0
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="275612418"
-X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="275612418"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 16:55:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="682263638"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Feb 2022 16:55:07 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nKrYB-0000mT-Ag; Fri, 18 Feb 2022 00:55:07 +0000
-Date: Fri, 18 Feb 2022 08:54:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amit Cohen <amcohen@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:ubridge 44/50]
- drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c:818:1: warning: stack
- frame size (1080) exceeds limit (1024) in
- 'mlxsw_sp_fid_erif_eport_to_vid_map_one'
-Message-ID: <202202180823.WrBulKvy-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FAA2F32
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 02:20:30 +0000 (UTC)
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
+	by conssluserg-01.nifty.com with ESMTP id 21I2KCpB023306
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 11:20:12 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 21I2KCpB023306
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1645150813;
+	bh=oTkWcaEf9jnFVKJN3p9Suk7c1bsGL0A3lknSj12v+7I=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VDAcoaHNdUsbQLowZjruNwVk9mblUqzQo6ITBxcrlZY8Ma44uNYNxVO5bNPVUCt+s
+	 1teshno3NGiIKYkFuxIqTE0lp2tDvcQM2/1aF7ViyKuPrSAJFg+YOvDu+3AbP9ieD4
+	 yNqvtGdNJ8EtKFAKV9jJBMfgfVWBSsjS7I1WlME1f48bRfvOd4wHHbwn01MtauNIUD
+	 FtWmkSBFYZpHKMZrFB3LjAfxv+RVB03iP0e6bV53GYDMLjTxlNEG32ibk4c0THVeFp
+	 T8pWE/bPL4ppW9+sbjsdjMlTrKurERvsQgFE80ws1vcqbHBT5DiN3vR1SAn3g47+qu
+	 wVt93TczYyScQ==
+X-Nifty-SrcIP: [209.85.216.47]
+Received: by mail-pj1-f47.google.com with SMTP id y9so7359571pjf.1
+        for <llvm@lists.linux.dev>; Thu, 17 Feb 2022 18:20:12 -0800 (PST)
+X-Gm-Message-State: AOAM531fmyI8siNvUxD9FHR0iwgFWGI3XxlNqsJgIxrpHdIhS0b9Q6h7
+	Rd+8XDPnZoot9p5Q+Wj5Q0zW/VKBPFASCMdZa1g=
+X-Google-Smtp-Source: ABdhPJy36VTNx/GOTLfwWDr/Q6D5q1UHnWRQBNMl4BqD+jlNw2u9WpWNKjA00Rdwo2aBqEiQuiXaVDyH9pWT8wCO1AY=
+X-Received: by 2002:a17:90a:ab17:b0:1b9:b61a:aadb with SMTP id
+ m23-20020a17090aab1700b001b9b61aaadbmr6008892pjq.77.1645150811855; Thu, 17
+ Feb 2022 18:20:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220217002843.2312603-1-keescook@chromium.org>
+ <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com> <Yg6I0YZAh5yWYpT2@dev-arch.archlinux-ax161>
+In-Reply-To: <Yg6I0YZAh5yWYpT2@dev-arch.archlinux-ax161>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 18 Feb 2022 11:19:32 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARbP_xxc21N4VO95RQNn5MzGW2HpKxS_vxNWy4mqP+GxA@mail.gmail.com>
+Message-ID: <CAK7LNARbP_xxc21N4VO95RQNn5MzGW2HpKxS_vxNWy4mqP+GxA@mail.gmail.com>
+Subject: Re: [PATCH] um: Allow builds with Clang
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        kunit-dev@googlegroups.com, llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/jpirko/linux_mlxsw ubridge
-head:   a9a4f2bd50dde60a52d9dda03d38875255fe0b9c
-commit: df1dd79ad7b8bcecdae432f7ce94ded5a2358f20 [44/50] WIP: Add FID families
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220218/202202180823.WrBulKvy-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/df1dd79ad7b8bcecdae432f7ce94ded5a2358f20
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw ubridge
-        git checkout df1dd79ad7b8bcecdae432f7ce94ded5a2358f20
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/
+On Fri, Feb 18, 2022 at 2:41 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Thu, Feb 17, 2022 at 01:54:58PM +0900, Masahiro Yamada wrote:
+> > On Thu, Feb 17, 2022 at 9:28 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > Add x86-64 target for Clang+um and update user-offsets.c to use
+> > > Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
+> > > ("kbuild: fix asm-offset generation to work with clang").
+> > >
+> > > This lets me run KUnit tests with Clang:
+> > >
+> > > $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+> > > ...
+> > > $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+> > > ...
+> > >
+> > > Cc: Jeff Dike <jdike@addtoit.com>
+> > > Cc: Richard Weinberger <richard@nod.at>
+> > > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> > > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > Cc: Nathan Chancellor <nathan@kernel.org>
+> > > Cc: David Gow <davidgow@google.com>
+> > > Cc: linux-um@lists.infradead.org
+> > > Cc: linux-kbuild@vger.kernel.org
+> > > Cc: linux-kselftest@vger.kernel.org
+> > > Cc: kunit-dev@googlegroups.com
+> > > Cc: llvm@lists.linux.dev
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > >  arch/x86/um/user-offsets.c | 4 ++--
+> > >  scripts/Makefile.clang     | 1 +
+> > >  2 files changed, 3 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+> > > index bae61554abcc..d9071827b515 100644
+> > > --- a/arch/x86/um/user-offsets.c
+> > > +++ b/arch/x86/um/user-offsets.c
+> > > @@ -10,10 +10,10 @@
+> > >  #include <asm/types.h>
+> > >
+> > >  #define DEFINE(sym, val) \
+> > > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+> > > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
+> > >
+> > >  #define DEFINE_LONGS(sym, val) \
+> > > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
+> > > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
+> > >
+> > >  void foo(void)
+> > >  {
+> > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > > index 51fc23e2e9e5..857b23de51c6 100644
+> > > --- a/scripts/Makefile.clang
+> > > +++ b/scripts/Makefile.clang
+> > > @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
+> > >  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+> > >  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+> > >  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+> > > +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
+> >
+> >
+> > Does this work for the i386 host?
+> >
+> > UML supports i386 and x86_64 as the host architecture as of now,
+> > but this always compiles UML for x86_64?
+>
+> I think the current code will work because arch/x86/Makefile.um includes
+> -m32 for CONFIG_X86_32, which will implicitly change x86_64-linux-gnu
+> into a 32-bit target triple:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c:545:12: warning: stack frame size (1096) exceeds limit (1024) in 'mlxsw_sp_fid_erif_eport_to_vid_map' [-Wframe-larger-than]
-   static int mlxsw_sp_fid_erif_eport_to_vid_map(struct mlxsw_sp_fid *fid,
-              ^
->> drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c:818:1: warning: stack frame size (1080) exceeds limit (1024) in 'mlxsw_sp_fid_erif_eport_to_vid_map_one' [-Wframe-larger-than]
-   mlxsw_sp_fid_erif_eport_to_vid_map_one(const struct mlxsw_sp_fid *fid,
-   ^
-   2 warnings generated.
+Ah, you are right!
 
 
-vim +/mlxsw_sp_fid_erif_eport_to_vid_map_one +818 drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c
+>
+> $ echo | clang --target=x86_64-linux-gnu -x c -c -o test.o -
+>
+> $ file test.o
+> test.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+>
+> $ echo | clang --target=x86_64-linux-gnu -m32 -x c -c -o test.o -
+>
+> $ file test.o
+> test.o: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), not stripped
+>
+> In fact, we rely on this for ARCH=i386 LLVM=1 right now, as it uses
+> x86_64-linux-gnu for the target flag.
+>
+> While UML only supports x86, maybe it is worth using SUBARCH instead of
+> hardcoding the triple? No strong opinion around that though.
+>
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 51fc23e2e9e5..87285b76adb2 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
+>  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+>  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+> +CLANG_TARGET_FLAGS_um          := $(CLANG_TARGET_FLAGS_$(SUBARCH))
 
-237f4f76837b01 Amit Cohen 2022-01-06  816  
-e6f8d1542cdc49 Amit Cohen 2022-01-10  817  static int
-e6f8d1542cdc49 Amit Cohen 2022-01-10 @818  mlxsw_sp_fid_erif_eport_to_vid_map_one(const struct mlxsw_sp_fid *fid,
-e6f8d1542cdc49 Amit Cohen 2022-01-10  819  				       u16 rif_index, u16 local_port, u16 vid,
-e6f8d1542cdc49 Amit Cohen 2022-01-10  820  				       bool valid)
-e6f8d1542cdc49 Amit Cohen 2022-01-10  821  {
-e6f8d1542cdc49 Amit Cohen 2022-01-10  822  	u8 port_page = local_port / (MLXSW_REG_REIV_REC_MAX_COUNT - 1);
-e6f8d1542cdc49 Amit Cohen 2022-01-10  823  	u8 rec_num = local_port % MLXSW_REG_REIV_REC_MAX_COUNT;
-e6f8d1542cdc49 Amit Cohen 2022-01-10  824  	struct mlxsw_sp *mlxsw_sp = fid->fid_family->mlxsw_sp;
-e6f8d1542cdc49 Amit Cohen 2022-01-10  825  	char reiv_pl[MLXSW_REG_REIV_LEN];
-e6f8d1542cdc49 Amit Cohen 2022-01-10  826  
-e6f8d1542cdc49 Amit Cohen 2022-01-10  827  	mlxsw_reg_reiv_pack(reiv_pl, port_page, rif_index);
-e6f8d1542cdc49 Amit Cohen 2022-01-10  828  	mlxsw_reg_reiv_rec_update_set(reiv_pl, rec_num, true);
-e6f8d1542cdc49 Amit Cohen 2022-01-10  829  	mlxsw_reg_reiv_rec_evid_set(reiv_pl, rec_num, valid ? vid : 0);
-e6f8d1542cdc49 Amit Cohen 2022-01-10  830  	return mlxsw_reg_write(mlxsw_sp->core, MLXSW_REG(reiv), reiv_pl);
-e6f8d1542cdc49 Amit Cohen 2022-01-10  831  }
-e6f8d1542cdc49 Amit Cohen 2022-01-10  832  
 
-:::::: The code at line 818 was first introduced by commit
-:::::: e6f8d1542cdc497206db6e9cd460cba6ca34e9a3 mlxsw: spectrum_fid: Configure layer 3 egress VID classification
+LGTM.
 
-:::::: TO: Amit Cohen <amcohen@nvidia.com>
-:::::: CC: Amit Cohen <amcohen@nvidia.com>
+I also thought of not passing --target at all for ARCH=um, but
+we decided to override --target all the time (for reproducibility?).
+Anyway, Nathan's way is clean, and looks OK to me.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+
+
+
+
+>  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+>
+>  ifeq ($(CROSS_COMPILE),)
+>
+> > >  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+> > >
+> > >  ifeq ($(CROSS_COMPILE),)
+> > > --
+> > > 2.30.2
+> > >
+> >
+> >
+> > --
+> > Best Regards
+> > Masahiro Yamada
+
+
+
+--
+Best Regards
+Masahiro Yamada
