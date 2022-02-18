@@ -1,87 +1,91 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A7B323F
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 08:12:20 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id 2-20020a251302000000b006118f867dadso12684850ybt.12
-        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 00:12:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=LY6LzpHZdIBxY444vO4HWJP1kgYlpz84LA6VZYt38hY=;
-        b=lEuSn3l5pcezU1xInfoD249SjcfV6GaVFory27iWzbW7ZT7zmkar496VK30MXNJk7x
-         789tElCsrFcMjN6iW4M0SbGSgFcN94e5GteBtfV6rt/GjbUNjQsnptSi3adn0kHyWwoj
-         /AjelhWScjsbeOMhC+fHS+cHCVwAdMgloltoS9zdXhtqrQTvBapwSHCxhl3DjTB5fy38
-         HNolxKHOxT0fBft8mmI3ZP4/+GjGdm9TltWJ4MhKH6Wm/utyS3p3X3HyKNiAAViTAbaZ
-         GocNFUTq6VjrdohFHC8YgLDjm6I7O87roTjWj+vI+igE4vicWRZLPvIBkEazW6m5GkH5
-         jb/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=LY6LzpHZdIBxY444vO4HWJP1kgYlpz84LA6VZYt38hY=;
-        b=j8JVt11AQorD8G8DdHre01pZ8H/pq9naP2mRr2fspMuQ0n6ik07dqQ31LZY/Qn6VmH
-         GG0S0KLVCA2ryyZgq+tyZf55Wn/aN2iaf2KwzETuiZLOI4E7cCRPogDqH07aZQBjNt/3
-         9DyrDIRo9P2A5e+m86VSifYj1O0M0HaDCKOGef+H1MUZZONBcPdnSft+PGuekT80dH7J
-         jlqqfsSvjqq1jh5Zuun+vISwhCwFU1pk3k0LfWwbkmKGB+LZEVcqdyETTzlC2pGTjLfV
-         QhW9C3gM13eto7DHwrmVadATLuzWnd+YatEf0sx8pneGWpiUzNrL/6QABiD1ndmhrIZl
-         cACw==
-X-Gm-Message-State: AOAM533Qpnu8hztjuD4k9/4G/6akuxRKp5dTzXLaFaFG8mpYPku+4lK7
-	sV6CY4z5IIfsIrqvvMVKezMOwGQaF7l7
-X-Google-Smtp-Source: ABdhPJyUH15xOgfJE/7Eoy6tw1EPASMqd2Dis3ZnH3C2ddCvFItgcrZSngmFaM+Jm6gD5vKMDevc9gHUk2Xe
-X-Received: from maskray1.svl.corp.google.com ([2620:15c:2ce:200:bdb7:3728:9760:87c])
- (user=maskray job=sendgmr) by 2002:a81:364b:0:b0:2cf:5d3f:d256 with SMTP id
- d72-20020a81364b000000b002cf5d3fd256mr6356301ywa.458.1645171939884; Fri, 18
- Feb 2022 00:12:19 -0800 (PST)
-Date: Fri, 18 Feb 2022 00:12:09 -0800
-Message-Id: <20220218081209.354383-1-maskray@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A70B4610
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 08:17:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A23C340EF
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 08:17:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645172279;
+	bh=985JkUSSqBbFVhxRLYWrMBKJNtQrzXhfGYWAxKvGD2k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GDpS5aQdX0+PcjsMR4nWvYjgomG6SvCv9AXeneV0V1gKIEZcY2WolYPn/OxaP/742
+	 IR6oQBAKYLZ0D4YJjsZqZmlKq8dwzwK/baLUVs1aVeUUJhS6xj3bunSx9zKyJF2hVR
+	 KkcLK2tUdWC1VmEgA21X7gJEnoQ1gtuscU7m+5cfdljAyNrJKmw5QjWqHYf+W1+zG1
+	 wkWPYI9xglKLY6dolJe1VPCfSV/x2lQVSOt60Mgv9P6nlt7P7UwmOt5FrSjjvdr38A
+	 n/PNxEn+ROeKgeHxAd9w6Md4sF1XfbOWoRP2/58b260NtxcKOYTYKik6dXALB5SXpp
+	 FdbWZS0JlEmAw==
+Received: by mail-wm1-f52.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so5782173wml.5
+        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 00:17:59 -0800 (PST)
+X-Gm-Message-State: AOAM533u0FLa04XiDK/gZ5NIulZfZWqAc2FD2+xhWAG513W2vmKyHCm5
+	Gi02RFkuN5IhyvNdImqW9TwzLZvKYIbRr6E+Izw=
+X-Google-Smtp-Source: ABdhPJygcK+9HPjiV7c9DwLpRitODVPkrvDT03tsroNDlzqHAfUF9g2qwoiJ34Dj1Mdg8SyMda/7xu6nXLX7omU9ASY=
+X-Received: by 2002:a1c:2742:0:b0:37b:b481:321f with SMTP id
+ n63-20020a1c2742000000b0037bb481321fmr6035958wmn.56.1645172278148; Fri, 18
+ Feb 2022 00:17:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Subject: [PATCH] arm64 module: remove (NOLOAD)
-From: Fangrui Song <maskray@google.com>
-To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, linux-arm-kernel@lists.infradead.org
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Fangrui Song <maskray@google.com>
+MIME-Version: 1.0
+References: <20220218081209.354383-1-maskray@google.com>
+In-Reply-To: <20220218081209.354383-1-maskray@google.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 18 Feb 2022 09:17:46 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGZuOWOPEHv0YSM4GseG2PnTgS8mSLXQ+imo-TN7MmvaQ@mail.gmail.com>
+Message-ID: <CAMj1kXGZuOWOPEHv0YSM4GseG2PnTgS8mSLXQ+imo-TN7MmvaQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64 module: remove (NOLOAD)
+To: Fangrui Song <maskray@google.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
-inappropriate for .plt and .text.* sections which are always
-SHT_PROGBITS.
+On Fri, 18 Feb 2022 at 09:12, Fangrui Song <maskray@google.com> wrote:
+>
+> On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+> inappropriate for .plt and .text.* sections which are always
+> SHT_PROGBITS.
+>
+> In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+> and (NOLOAD) will be essentially ignored. In ld.lld, since
+> https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+> customize the output section type"), ld.lld will report a `section type
+> mismatch` error. Just remove (NOLOAD) to fix the error.
+>
+> [1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+> section should be marked as not loadable" on
+> https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+> outdated for ELF.
 
-In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
-and (NOLOAD) will be essentially ignored. In ld.lld, since
-https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
-customize the output section type"), ld.lld will report a `section type
-mismatch` error. Just remove (NOLOAD) to fix the error.
+This patch lacks a SOB line.
 
-[1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
-section should be marked as not loadable" on
-https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
-outdated for ELF.
----
- arch/arm64/include/asm/module.lds.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+With one added,
 
-diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
-index a11ccadd47d2..094701ec5500 100644
---- a/arch/arm64/include/asm/module.lds.h
-+++ b/arch/arm64/include/asm/module.lds.h
-@@ -1,8 +1,8 @@
- SECTIONS {
- #ifdef CONFIG_ARM64_MODULE_PLTS
--	.plt 0 (NOLOAD) : { BYTE(0) }
--	.init.plt 0 (NOLOAD) : { BYTE(0) }
--	.text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
-+	.plt 0 : { BYTE(0) }
-+	.init.plt 0 : { BYTE(0) }
-+	.text.ftrace_trampoline 0 : { BYTE(0) }
- #endif
- 
- #ifdef CONFIG_KASAN_SW_TAGS
--- 
-2.35.1.265.g69c8d7142f-goog
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
+> ---
+>  arch/arm64/include/asm/module.lds.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
+> index a11ccadd47d2..094701ec5500 100644
+> --- a/arch/arm64/include/asm/module.lds.h
+> +++ b/arch/arm64/include/asm/module.lds.h
+> @@ -1,8 +1,8 @@
+>  SECTIONS {
+>  #ifdef CONFIG_ARM64_MODULE_PLTS
+> -       .plt 0 (NOLOAD) : { BYTE(0) }
+> -       .init.plt 0 (NOLOAD) : { BYTE(0) }
+> -       .text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
+> +       .plt 0 : { BYTE(0) }
+> +       .init.plt 0 : { BYTE(0) }
+> +       .text.ftrace_trampoline 0 : { BYTE(0) }
+>  #endif
+>
+>  #ifdef CONFIG_KASAN_SW_TAGS
+> --
+> 2.35.1.265.g69c8d7142f-goog
+>
