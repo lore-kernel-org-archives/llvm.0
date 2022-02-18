@@ -1,92 +1,102 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B762FAE
-	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 18:47:32 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id l73so8592105pge.11
-        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 10:47:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1DC24C6C
+	for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 18:53:52 +0000 (UTC)
+Received: by mail-pj1-f43.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso9363099pjj.1
+        for <llvm@lists.linux.dev>; Fri, 18 Feb 2022 10:53:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=9s/ZIHrGES7feK2tz5dP1rmrFQ/RLT8GNy7zBmf9EgA=;
-        b=f0H3TVA9AOk2uGP+1p95rEv5SaFwf75XopgpbmOxZY8zZsMWRS7/ilyAzemq42ESPm
-         wlFR7t4VyV+eB83JWky1FqzO4CdSZjDePKhOC5uuKA42mL9nd98/EVdL9zpuiudJCRHG
-         E/569cf/0s3ZM93xiPP35gjTOIeT6l97ECf0fifUKeerHnYhMsaBs/uZnBlqlDJvqtX8
-         9zyEy2gnZm6ck0iYurd/2iReR+k7ZeFKo/nzibUUGYQkf6MeYCCb7CUMpRqjEUOum+zH
-         z0+tIlA6QCpa+mIRTL/DQP/NDl3xZeu/8IIub+8KNEX5t30zXH6yiACac5mO3G2kSuAH
-         2HyA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=McwjLSLaytCtK7tV2i/coh6cpneHZuWc7h/cZMMLVaQ=;
+        b=qS5kgw9dlzff3cynK7hHxw9gR3U0R6hubv+YKcGJnsGj3VYm2oM+4O8weoW2p2sZyw
+         c20WORhh8vLskTonGbwQkhF8S2qVv87wVcmcCnpfCuniNqBKPpM3SHHkZI1UBVKT3hdc
+         /YYE0ThFOusvkuKpKTcnSmn257veUPiLnnl1YAaAZJfOWUdbvmQIunP9HnqoMI57Y1p3
+         wrQfbe6PsnVJTG7l7cwGBJAlOs7W0U1A2yfEgqIt4vCTpNWdhS6rmjOn1/dRvj6lItI7
+         5a4xFx3R6iXDH5namFQ8U8M1i30J62YRRSyRjFQ671TIwRe1D0dHHSvemmvCUID/eKhv
+         rtrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=9s/ZIHrGES7feK2tz5dP1rmrFQ/RLT8GNy7zBmf9EgA=;
-        b=JWgQhryLfeBW9cfg9/0Ovz/sp9nZmGKqao2JnOQ/8AfdOcQJizPV+mszStNgtFNUTa
-         xWbAfPY7ZEYKhy1Vki7SMUxi922/VfClfwcW9fgn3BdNSyXw9SPcGDONwv0FW8Z13RXS
-         OrdispgIkOZMqmVu0Sl5ynRvHKAqkh9KmBAi+HmUMG6/97/zl05yeMjdTt6UqlCHtids
-         ShNlYA+9uyGzTGhjFvL2H8O4/YjkvRxCib6EGDY9lo07gRPJZBMZg57o0rIq6aPkqRlm
-         M0dGU9jW+ZjCgrgIYfD0gbaWsOAQGMtL8GUVeofRvQ1pWKHhfoiicwW/QvJuWdrIyCFj
-         G/eQ==
-X-Gm-Message-State: AOAM532LSaS2DkDfiQcDNVQT0hPXlMP07ESH/4yDk68yOB63iyPhRKbM
-	XUnJBy1EeVYEc71GFdVlmSQ25A==
-X-Google-Smtp-Source: ABdhPJxbZeaBnK2HPkHb7qJeePZrSd31i9bN8DyNF4o8wa3tB2DdFjfjcOKFTXhdLq/D0WfDRNYbsQ==
-X-Received: by 2002:a62:3085:0:b0:4e0:1218:6d03 with SMTP id w127-20020a623085000000b004e012186d03mr9053021pfw.19.1645210051404;
-        Fri, 18 Feb 2022 10:47:31 -0800 (PST)
-Received: from [2620:15c:29:204:701:472c:4005:6710] ([2620:15c:29:204:701:472c:4005:6710])
-        by smtp.gmail.com with ESMTPSA id h5sm3534755pfc.118.2022.02.18.10.47.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=McwjLSLaytCtK7tV2i/coh6cpneHZuWc7h/cZMMLVaQ=;
+        b=MFEvcJ+wMUsQq2ibwnlBAYzkFVB9tQikYikn9fUGjcKjTSV+HhesXYDwyvlyJ18X8M
+         F22M/FWNxgaTSXuUYWP4digi4pOLtlIb52FU2qXSHw7Mzmnx/AmwCSmCyIRIp06fyvQP
+         SmUbYpTkzFy3khM2goG3/dwfMwTBYjXEVuD88yhFCVHPtkZlc0uZNzNrTkNaJ/wgBEyF
+         UK2+qEgqbX2ee+hCLtJ5XcLK37zDWQwXNpaRv7E4TL5Mzx3j1rpgxuF4Rr3lQ/TvWg3L
+         ZHTiKCxCpJTCHM/ZMPEri3ld66bEx3ixYADUC3FPqyc9GlpGIPgb0WCe2QVL6eWdt0dZ
+         cFLA==
+X-Gm-Message-State: AOAM530kABMSbrBvnAwm3LPit2HNR7HZAUNZpsG6gf/jDDMj9UCugNve
+	a7GdGk85GkZnbfWZJjzkOt0=
+X-Google-Smtp-Source: ABdhPJzQQSZPxtLkIpcflnhLn+ubFoe7B07qM/ToZ1Aq0GEshzZY7TCT7UmLcClTvTCsiaUJa7UVgQ==
+X-Received: by 2002:a17:902:da82:b0:14d:c6d8:822f with SMTP id j2-20020a170902da8200b0014dc6d8822fmr8509644plx.55.1645210432081;
+        Fri, 18 Feb 2022 10:53:52 -0800 (PST)
+Received: from localhost.localdomain ([2405:201:9005:88cd:7443:8052:dc37:e678])
+        by smtp.gmail.com with ESMTPSA id p2sm125106pjo.38.2022.02.18.10.53.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 10:47:30 -0800 (PST)
-Date: Fri, 18 Feb 2022 10:47:30 -0800 (PST)
-From: David Rientjes <rientjes@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc: linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>, 
-    Kees Cook <keescook@chromium.org>, Daniel Micay <danielmicay@gmail.com>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, 
-    Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
-    Andrew Morton <akpm@linux-foundation.org>, 
-    Vlastimil Babka <vbabka@suse.cz>, Nathan Chancellor <nathan@kernel.org>, 
-    linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] slab: remove __alloc_size attribute from
- __kmalloc_track_caller
-In-Reply-To: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
-Message-ID: <b8e9dcd2-5b2d-af7d-e4e6-c6bd4a7e4315@google.com>
-References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
+        Fri, 18 Feb 2022 10:53:51 -0800 (PST)
+From: Souptick Joarder <jrdr.linux@gmail.com>
+To: alexander.deucher@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@linux.ie,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	desaulniers@google.com,
+	Felix.Kuehling@amd.com,
+	Oak.Zeng@amd.com,
+	nirmoy.das@amd.com,
+	jonathan.kim@amd.com,
+	kevin1.wang@amd.com,
+	tzimmermann@suse.de,
+	Philip.Yang@amd.com
+Cc: amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	"Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] drm/amdgpu: Initialize value of r in amdgpu_fill_buffer()
+Date: Sat, 19 Feb 2022 00:23:12 +0530
+Message-Id: <20220218185312.34464-1-jrdr.linux@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 
-On Fri, 18 Feb 2022, Greg Kroah-Hartman wrote:
+From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
 
-> Commit c37495d6254c ("slab: add __alloc_size attributes for better
-> bounds checking") added __alloc_size attributes to a bunch of kmalloc
-> function prototypes.  Unfortunately the change to __kmalloc_track_caller
-> seems to cause clang to generate broken code and the first time this is
-> called when booting, the box will crash.
-> 
-> While the compiler problems are being reworked and attempted to be
-> solved, let's just drop the attribute to solve the issue now.  Once it
-> is resolved it can be added back.
-> 
-> Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
-> Cc: stable <stable@vger.kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Daniel Micay <danielmicay@gmail.com>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Pekka Enberg <penberg@kernel.org>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Kernel test robot reported warning ->
+drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c:2129:2: warning: Undefined
+or garbage value returned to caller [clang-analyzer-core.
+uninitialized.UndefReturn]
 
-Acked-by: David Rientjes <rientjes@google.com>
+Initialize r inside amdgpu_fill_buffer().
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index 414a22dddc78..5fafb223177f 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -2089,7 +2089,7 @@ int amdgpu_fill_buffer(struct amdgpu_bo *bo,
+ 	struct amdgpu_ring *ring = adev->mman.buffer_funcs_ring;
+ 	struct dma_fence *fence = NULL;
+ 	struct amdgpu_res_cursor dst;
+-	int r;
++	int r = 0;
+ 
+ 	if (!adev->mman.buffer_funcs_enabled) {
+ 		DRM_ERROR("Trying to clear memory with ring turned off.\n");
+-- 
+2.25.1
+
