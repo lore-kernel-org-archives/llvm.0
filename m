@@ -1,56 +1,42 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A1057DF
-	for <llvm@lists.linux.dev>; Sat, 19 Feb 2022 23:58:53 +0000 (UTC)
-Received: by mail-pf1-f174.google.com with SMTP id p8so5434658pfh.8
-        for <llvm@lists.linux.dev>; Sat, 19 Feb 2022 15:58:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pyKnh0rifNC4U8/SpWhjiS3uUcC5kmVNLLaPc0IhXvY=;
-        b=eFv9LIHn5T7yu7SXdfr1xRt6PH8DYtfvvMqPlhlsZ6bZC6Gwo4CnvRkxkLGP4v1/za
-         xH7WDZlsGzhKXMPVZxNtJvfV97TeYC/+z2zTWMOzSyPurTe9RIkmSZRk2tNYowdcG0FS
-         fqY5kUxdDE9sZFT3ljh+x03Lnvopm2Tk7vorM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pyKnh0rifNC4U8/SpWhjiS3uUcC5kmVNLLaPc0IhXvY=;
-        b=t2LlveaIRGdeCBVMlbaqZAz2M9bjbFszIu99NGAe3Meeo4DTjwBOovKZT8mnY/cg90
-         IcWoAYCi2YdUlUV6i3JYcv8mgViMmyIC1hauc17ooAXqtDqeOQ4uDY0lirYGiQbLRUff
-         ftJA5JQFTUzaD/Y5/Sb6n/Flq8A2gUJAHf3X8Vz+rlYzDceAMLWeh6fk4ZmfGZeWfZCB
-         8oABbLNQSkYi0KV+9syGk4T8J55FHJkbEfIgzTLpwbH2a1m+UJ2qkfq0TMUPAg6EXiGD
-         CGjmNB8YBdJVi0CdI4fhpHumGkh3I3OU4M6P61IiMrmkEMJKV6380NJkDss8DYcqQmir
-         9aQg==
-X-Gm-Message-State: AOAM531nHXdrmUyD+ywDPMaNfgKayHaK1leOcycvt8E2+GDvFFHVmh13
-	xqYnpffCP9AdGqb+5K8f9/MwKQ==
-X-Google-Smtp-Source: ABdhPJz2B7x/obkYAxIzuuWmK0eIrem1Iyubh1rAOvTpZqyu2/XzDhnjlP1qJpC13eAFz3bW7Wje1A==
-X-Received: by 2002:a05:6a00:cd3:b0:4df:7b9e:2557 with SMTP id b19-20020a056a000cd300b004df7b9e2557mr14045768pfv.25.1645315133327;
-        Sat, 19 Feb 2022 15:58:53 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u11sm7756421pfi.71.2022.02.19.15.58.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 15:58:52 -0800 (PST)
-Date: Sat, 19 Feb 2022 15:58:51 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
-	Daniel Micay <danielmicay@gmail.com>,
-	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] slab: remove __alloc_size attribute from
- __kmalloc_track_caller
-Message-ID: <202202191558.11C173F04@keescook>
-References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
- <CAKwvOd=4uwMVBwYU8XPP+cHkw5V1S_t7i8psMTRySsKEcDVZ_A@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B38F5CA1
+	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 11:59:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645358380; x=1676894380;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=V6t1s+N4Qo02wBaYneDR8yb6gI7yY2iEv7Z2/hqvKfo=;
+  b=cBJlThkY2k/pAnWfMPayMR3svlt8P3lyfWMqnUyIzCBls6pkW0OHdQi+
+   01iMeslE1kw+jhG7gZ5ZDVOVPdpPvLYJwHnFqvFe53v1Lvob1iqChIYho
+   5RLldu9+oDK2/nEuqarRG/Gu4wv9IUyl1S9AwCpGcVPaapyO5K3nwP5pu
+   wCN2MiKb4Y7eAji+6A7Zqj9i0DzeVrP7HLuFpjYjM6sCnIiIbQNq7V918
+   1Te9TwgwU9uvMz6FShaRe656g9kLpVxp0XOFf/lQzpK/+T/03a/BQFr6Q
+   Pzo9yOB6YvESdwnUUBmWCOCqpCFTjCvGvbtsjG3y1pR8cWqKAK28zVNpg
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10263"; a="251118968"
+X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
+   d="scan'208";a="251118968"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 03:59:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
+   d="scan'208";a="605967502"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 20 Feb 2022 03:59:38 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nLksL-0000JR-HN; Sun, 20 Feb 2022 11:59:37 +0000
+Date: Sun, 20 Feb 2022 19:58:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Janne Grunau <j@jannau.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/090-spi-hid 11/11]
+ drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
+ prototype for function 'spihid_get_data'
+Message-ID: <202202201900.zV3sUGeO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,29 +45,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOd=4uwMVBwYU8XPP+cHkw5V1S_t7i8psMTRySsKEcDVZ_A@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Feb 18, 2022 at 09:19:51AM -0800, Nick Desaulniers wrote:
-> On Fri, Feb 18, 2022 at 5:14 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > Commit c37495d6254c ("slab: add __alloc_size attributes for better
-> > bounds checking") added __alloc_size attributes to a bunch of kmalloc
-> > function prototypes.  Unfortunately the change to __kmalloc_track_caller
-> > seems to cause clang to generate broken code and the first time this is
-> > called when booting, the box will crash.
-> >
-> > While the compiler problems are being reworked and attempted to be
-> > solved, let's just drop the attribute to solve the issue now.  Once it
-> > is resolved it can be added back.
-> 
-> Sorry about the mess; we'll get it cleaned up!
-> Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1599
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   6503ad96bc85209be90119188ff30d21612bbbf8
+commit: 6503ad96bc85209be90119188ff30d21612bbbf8 [11/11] WIP: HID: transport: spi: add Apple SPI transport
+config: arm64-randconfig-r005-20220220 (https://download.01.org/0day-ci/archive/20220220/202202201900.zV3sUGeO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/6503ad96bc85209be90119188ff30d21612bbbf8
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout 6503ad96bc85209be90119188ff30d21612bbbf8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hid/spi-hid/
 
-Thanks for the issue link!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Acked-by: Kees Cook <keescook@chromium.org>
+All warnings (new ones prefixed by >>):
 
--- 
-Kees Cook
+>> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for function 'spihid_get_data' [-Wmissing-prototypes]
+   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+                        ^
+   drivers/hid/spi-hid/spi-hid-apple-core.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+   ^
+   static 
+   drivers/hid/spi-hid/spi-hid-apple-core.c:56:17: warning: variable 'spi_hid_apple_status_ok' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+   static const u8 spi_hid_apple_status_ok[4] = { 0xac, 0x27, 0x68, 0xd5 };
+                   ^
+   2 warnings generated.
+--
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for function 'spihid_apple_of_power_on' [-Wmissing-prototypes]
+   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for function 'spihid_apple_of_power_off' [-Wmissing-prototypes]
+   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for function 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
+   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for function 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
+   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
+   ^
+   static 
+   4 warnings generated.
+
+
+vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
+
+   258	
+ > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+   260	{
+   261		switch (idev->id) {
+   262		case SPIHID_DEVICE_ID_KBD:
+   263			return container_of(idev, struct spihid_apple, kbd);
+   264		case SPIHID_DEVICE_ID_TP:
+   265			return container_of(idev, struct spihid_apple, tp);
+   266		default:
+   267			return NULL;
+   268		}
+   269	}
+   270	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
