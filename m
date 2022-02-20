@@ -1,41 +1,41 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B7C5EC8
-	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 19:39:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480CC5ED1
+	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 20:19:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645385990; x=1676921990;
+  t=1645388393; x=1676924393;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XsbeTOOlLEfRYDPfCbEIZ8Da9mi8EWXphJOG64kuYTg=;
-  b=BEv0HaaIgIm+8N9NQdxLg91YpVQ3XTWfAg5Lqf0JxVY3ueXFjO5pmndD
-   gWtHkM2e+2QXm3kuOQU5ou//icNQy+U4AXXo36tK78DmoL/F8iPWCon8B
-   mr/rCyQuhAxbZC9rVetujkTA7+OMH6JjQSxyA8TSUyyagSs4qh+SIsZPL
-   ufyVGG7ACwKUs2WI+crrH8k7Y5T8eOtIUaEoXcBRQFZevOfihyww9z3yt
-   6g5PFCFYebb+BBe3NHtfT/0i9RA63I5POyxDSfgd1t2Dk/1pvxJuQfLQW
-   qhODdEsfEeubVOS8rMJ1QCWxw919DKshhLDAvcxKg4imNMSeV9ADc4wgY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="238809847"
+  bh=3PqThoQs7A3jRhv9b5IrLNFPWKtT2W4Mm8oW2k1KaJA=;
+  b=ly4b/mROPAr9jkwZPqjjPG04cMpaYoUF+2VKdNgh9pKFugSDyVEWfnzl
+   LuZbXBcLiG6/7CqtSmZKapWeDY5rHSI5Xq/t7AfwTZLZ/kRat+Cpeilio
+   B5Cigo9566Xbm2S7R13PohDm2bXRyZ5FCLmxRthMlYfkgTmDZpNKfyB4H
+   p+DK+Fv3+7okMrAoO16t7YVekuCtT+9S6DFLF8NGx+MAOT26x1PfpCfQq
+   6k+w5jqqODlj7X3DIpWYxyjIvaubkZRnAA3sBY7VXMPl9c2oyY8xGK/uv
+   GgXEIjTylE+7CkfMPs1dnDqWZO1tws9Z/tYCh1y1JZnnCmbX2CPkp1E0B
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231370068"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="238809847"
+   d="scan'208";a="231370068"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 11:39:49 -0800
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 12:19:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="504591297"
+   d="scan'208";a="504624690"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 20 Feb 2022 11:39:48 -0800
+  by orsmga002.jf.intel.com with ESMTP; 20 Feb 2022 12:19:50 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nLs3g-0000fA-3Y; Sun, 20 Feb 2022 19:39:48 +0000
-Date: Mon, 21 Feb 2022 03:38:46 +0800
+	id 1nLsgP-0000iA-QZ; Sun, 20 Feb 2022 20:19:49 +0000
+Date: Mon, 21 Feb 2022 04:19:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To: Aaron Tomlin <atomlin@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [intel-tdx:guest-upstream 2/32] ld.lld: error: undefined symbol:
- cc_init
-Message-ID: <202202210333.fwcQuz3x-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: [mcgrof:modules-next 6/10] kernel/module/strict_rwx.c:16:10: error:
+ implicit declaration of function 'PAGE_ALIGNED'
+Message-ID: <202202210447.UvDGgsQA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,30 +46,72 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/intel/tdx.git guest-upstream
-head:   b87676dfde7b501c019b1e2c01f4c7ef5c83a12c
-commit: 7f8e5b1391350249c5f6810ff425db9adbf6d38c [2/32] x86/coco: Add API to handle encryption mask
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220221/202202210333.fwcQuz3x-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+head:   c55dc78176e6fe97a9e92d24a7ff3015b14ac858
+commit: e5973a14d18785b893d383fbd9dc2f98edc16f1b [6/10] module: Move strict rwx support to a separate file
+config: arm64-randconfig-r005-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210447.UvDGgsQA-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/7f8e5b1391350249c5f6810ff425db9adbf6d38c
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-upstream
-        git checkout 7f8e5b1391350249c5f6810ff425db9adbf6d38c
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=e5973a14d18785b893d383fbd9dc2f98edc16f1b
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof modules-next
+        git checkout e5973a14d18785b893d383fbd9dc2f98edc16f1b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: cc_init
-   >>> referenced by mshyperv.c:349 (arch/x86/kernel/cpu/mshyperv.c:349)
-   >>>               kernel/cpu/mshyperv.o:(ms_hyperv_init_platform) in archive arch/x86/built-in.a
+>> kernel/module/strict_rwx.c:16:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->base));
+                   ^
+   kernel/module/strict_rwx.c:17:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->text_size));
+                   ^
+   kernel/module/strict_rwx.c:18:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->ro_size));
+                   ^
+   kernel/module/strict_rwx.c:26:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->base));
+                   ^
+   kernel/module/strict_rwx.c:27:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->ro_size));
+                   ^
+   kernel/module/strict_rwx.c:28:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
+                   ^
+   kernel/module/strict_rwx.c:36:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->base));
+                   ^
+   kernel/module/strict_rwx.c:37:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
+                   ^
+   kernel/module/strict_rwx.c:38:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->size));
+                   ^
+   9 errors generated.
+
+
+vim +/PAGE_ALIGNED +16 kernel/module/strict_rwx.c
+
+    12	
+    13	void frob_rodata(const struct module_layout *layout,
+    14			 int (*set_memory)(unsigned long start, int num_pages))
+    15	{
+  > 16		BUG_ON(!PAGE_ALIGNED(layout->base));
+    17		BUG_ON(!PAGE_ALIGNED(layout->text_size));
+    18		BUG_ON(!PAGE_ALIGNED(layout->ro_size));
+    19		set_memory((unsigned long)layout->base + layout->text_size,
+    20			   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
+    21	}
+    22	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
