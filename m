@@ -1,45 +1,42 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF205EDC
-	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 20:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082805EDC
+	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 21:12:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645390313; x=1676926313;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fc0oPIN8bo58fg7IS1/4O7tOIZiHjQPHCnNLqEDAWD0=;
-  b=P9Bmy/RDOwUgh4yBdufziyZ9ikRG7lDXMmAlidqaywK2w8rj5H76ocJn
-   faDIh0r5RlsaVKMh/n2nqLrAI2FGrMkBbodPlxW31R/9qLxXhw5l7MhNX
-   Ukg1vib3D3otdioAmKkIRDQ+CQLgmlvA5D/yQ9WddzWtbnduZsMhtw+Z6
-   JMO/F0vVzT2un7NmEIGAoUf9nj8i+JWre7vyfzgsgwR3J47loXZlsPVba
-   IjcRl/qg0DjAEqxv6RhvGNQ1rbX5fIjrt4/CiYHBHpRUJaU52oaZ7zIJk
-   8MVXkLqvfjncjfekTQ9cbSgp0CANxHMHJ0seOKMKe/rB2+3FY4Dr2QTQM
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="248982122"
+  t=1645391574; x=1676927574;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kDvBkajyuI0yMdhFNn9L6trMYaOtPexxgVyu4XYgKR0=;
+  b=k695VtqYGHYkaDAzJ/gVG9NstCeNbmQORdc+rZiwDB2Jyq6ZMxjQ452P
+   suZMqi3eZnAdX9j5NUae3fnb9Gd8bf54HVfSamhv8WnxPyelFPSy4OKiD
+   +CELvDfaOhAx4NZSAkVrrniG11UTVgaREVwAXO61IiL58hgQjFZJRY0lJ
+   ZoNEvxpM3ZQBgIYNxKfSI2bq7qfBndggbxqkAMIc5J405jjJ0mYVmuii2
+   Iui/hmm/kvG9zTAP806wjEnVR4n7bq37cP5fS74NGSYKbACyxlZkHeo5G
+   A5GDVUFypXPUhRrpp2xMyx4GM4Nw1BeNycMpVrI5wuki+Mq7UrW18Ttjk
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231372650"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="248982122"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 12:51:53 -0800
+   d="scan'208";a="231372650"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:12:53 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="590758922"
+   d="scan'208";a="504639535"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Feb 2022 12:51:51 -0800
+  by orsmga002.jf.intel.com with ESMTP; 20 Feb 2022 13:12:51 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nLtBO-0000kV-Ji; Sun, 20 Feb 2022 20:51:50 +0000
-Date: Mon, 21 Feb 2022 04:51:15 +0800
+	id 1nLtVj-0000lz-5N; Sun, 20 Feb 2022 21:12:51 +0000
+Date: Mon, 21 Feb 2022 05:12:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Olivier Langlois <olivier@trillion01.com>, Jens Axboe <axboe@kernel.dk>
+To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Hao Xu <haoxu@linux.alibaba.com>,
-	io-uring <io-uring@vger.kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] io_uring: Add support for napi_busy_poll
-Message-ID: <202202210455.Gdq2HOnj-lkp@intel.com>
-References: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 643/2574]
+ include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h'
+ file not found
+Message-ID: <202202210526.ll6ZQU7s-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,118 +45,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Olivier,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc4]
-[cannot apply to next-20220217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Olivier-Langlois/io_uring-Add-support-for-napi_busy_poll/20220220-190634
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4f12b742eb2b3a850ac8be7dc4ed52976fc6cb0b
-config: arm64-randconfig-r002-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210455.Gdq2HOnj-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   39e8a0edc8fae20758051dadf7846849edc18b88
+commit: 121f4f0dd58c5fa0666a732d13b7ad770af3559b [643/2574] headers/deps: Add header dependencies to .h files: <asm/vdso/processor.h>
+config: hexagon-randconfig-r045-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210526.ll6ZQU7s-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/ad36ae938f354b0cd3b38716572385f710accdb0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Olivier-Langlois/io_uring-Add-support-for-napi_busy_poll/20220220-190634
-        git checkout ad36ae938f354b0cd3b38716572385f710accdb0
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=121f4f0dd58c5fa0666a732d13b7ad770af3559b
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 121f4f0dd58c5fa0666a732d13b7ad770af3559b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> fs/io_uring.c:1472:23: error: no member named 'napi_list' in 'struct io_ring_ctx'
-           INIT_LIST_HEAD(&ctx->napi_list);
-                           ~~~  ^
+   In file included from kernel/bounds.c:13:
+   In file included from include/linux/log2.h:12:
+   In file included from include/linux/bitops.h:28:
+   In file included from arch/hexagon/include/asm/bitops.h:13:
+   In file included from arch/hexagon/include/asm/atomic.h:13:
+   In file included from ./arch/hexagon/include/generated/asm/barrier.h:1:
+>> include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h' file not found
+   #include <asm/vdso/processor.h>
+            ^~~~~~~~~~~~~~~~~~~~~~
    1 error generated.
+   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +1472 fs/io_uring.c
+vim +16 include/asm-generic/barrier.h
 
-  1413	
-  1414	static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
-  1415	{
-  1416		struct io_ring_ctx *ctx;
-  1417		int hash_bits;
-  1418	
-  1419		ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-  1420		if (!ctx)
-  1421			return NULL;
-  1422	
-  1423		/*
-  1424		 * Use 5 bits less than the max cq entries, that should give us around
-  1425		 * 32 entries per hash list if totally full and uniformly spread.
-  1426		 */
-  1427		hash_bits = ilog2(p->cq_entries);
-  1428		hash_bits -= 5;
-  1429		if (hash_bits <= 0)
-  1430			hash_bits = 1;
-  1431		ctx->cancel_hash_bits = hash_bits;
-  1432		ctx->cancel_hash = kmalloc((1U << hash_bits) * sizeof(struct hlist_head),
-  1433						GFP_KERNEL);
-  1434		if (!ctx->cancel_hash)
-  1435			goto err;
-  1436		__hash_init(ctx->cancel_hash, 1U << hash_bits);
-  1437	
-  1438		ctx->dummy_ubuf = kzalloc(sizeof(*ctx->dummy_ubuf), GFP_KERNEL);
-  1439		if (!ctx->dummy_ubuf)
-  1440			goto err;
-  1441		/* set invalid range, so io_import_fixed() fails meeting it */
-  1442		ctx->dummy_ubuf->ubuf = -1UL;
-  1443	
-  1444		if (percpu_ref_init(&ctx->refs, io_ring_ctx_ref_free,
-  1445				    PERCPU_REF_ALLOW_REINIT, GFP_KERNEL))
-  1446			goto err;
-  1447	
-  1448		ctx->flags = p->flags;
-  1449		init_waitqueue_head(&ctx->sqo_sq_wait);
-  1450		INIT_LIST_HEAD(&ctx->sqd_list);
-  1451		INIT_LIST_HEAD(&ctx->cq_overflow_list);
-  1452		init_completion(&ctx->ref_comp);
-  1453		xa_init_flags(&ctx->io_buffers, XA_FLAGS_ALLOC1);
-  1454		xa_init_flags(&ctx->personalities, XA_FLAGS_ALLOC1);
-  1455		mutex_init(&ctx->uring_lock);
-  1456		init_waitqueue_head(&ctx->cq_wait);
-  1457		spin_lock_init(&ctx->completion_lock);
-  1458		spin_lock_init(&ctx->timeout_lock);
-  1459		INIT_WQ_LIST(&ctx->iopoll_list);
-  1460		INIT_LIST_HEAD(&ctx->defer_list);
-  1461		INIT_LIST_HEAD(&ctx->timeout_list);
-  1462		INIT_LIST_HEAD(&ctx->ltimeout_list);
-  1463		spin_lock_init(&ctx->rsrc_ref_lock);
-  1464		INIT_LIST_HEAD(&ctx->rsrc_ref_list);
-  1465		INIT_DELAYED_WORK(&ctx->rsrc_put_work, io_rsrc_put_work);
-  1466		init_llist_head(&ctx->rsrc_put_llist);
-  1467		INIT_LIST_HEAD(&ctx->tctx_list);
-  1468		ctx->submit_state.free_list.next = NULL;
-  1469		INIT_WQ_LIST(&ctx->locked_free_list);
-  1470		INIT_DELAYED_WORK(&ctx->fallback_work, io_fallback_req_func);
-  1471		INIT_WQ_LIST(&ctx->submit_state.compl_reqs);
-> 1472		INIT_LIST_HEAD(&ctx->napi_list);
-  1473		return ctx;
-  1474	err:
-  1475		kfree(ctx->dummy_ubuf);
-  1476		kfree(ctx->cancel_hash);
-  1477		kfree(ctx);
-  1478		return NULL;
-  1479	}
-  1480	
+    15	
+  > 16	#include <asm/vdso/processor.h>
+    17	#include <linux/compiler.h>
+    18	#include <linux/kcsan-checks.h>
+    19	#include <asm/rwonce.h>
+    20	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
