@@ -1,42 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082805EDC
-	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 21:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488DA5EDC
+	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 21:53:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645391574; x=1676927574;
+  t=1645394036; x=1676930036;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kDvBkajyuI0yMdhFNn9L6trMYaOtPexxgVyu4XYgKR0=;
-  b=k695VtqYGHYkaDAzJ/gVG9NstCeNbmQORdc+rZiwDB2Jyq6ZMxjQ452P
-   suZMqi3eZnAdX9j5NUae3fnb9Gd8bf54HVfSamhv8WnxPyelFPSy4OKiD
-   +CELvDfaOhAx4NZSAkVrrniG11UTVgaREVwAXO61IiL58hgQjFZJRY0lJ
-   ZoNEvxpM3ZQBgIYNxKfSI2bq7qfBndggbxqkAMIc5J405jjJ0mYVmuii2
-   Iui/hmm/kvG9zTAP806wjEnVR4n7bq37cP5fS74NGSYKbACyxlZkHeo5G
-   A5GDVUFypXPUhRrpp2xMyx4GM4Nw1BeNycMpVrI5wuki+Mq7UrW18Ttjk
+  bh=XqpnqgHPC/Ik8W5X+1lA7B+lZPCX3Xmfo4WeCVewY7k=;
+  b=Co6eZI8zRUnyHNECUfMqWQOseJFNR2Wquk8fYHnkrunlp9JsDb89FbM1
+   BNazfEPu+9hj8BIWQIAm3SKtp6zVgI0WMrezCUBULqS6FTLs8Au+MgZU9
+   2aEn4u0x/1xc3ppZGr4Kf/E4dFIlnBOMaJ6pLTCzDDrv6sUeA1oTi03Kr
+   vEhaJqbsWul3xzkz7TPKXcBX+/8oHKVCybyH3biAG5dnOYVMgxxwgB68c
+   S0M33tihTuT35pId60G+0Xgcz3Cke8+CQYxo7FTHDlJlQmSCicrNIoCEu
+   XcWkdRXVB/8ztBu4bZ5eR8laGv+v6PXvciULJ9P1OdfhS4Nl+gzHRmDTy
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231372650"
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="314668317"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="231372650"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:12:53 -0800
+   d="scan'208";a="314668317"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:53:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="504639535"
+   d="scan'208";a="706030248"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 20 Feb 2022 13:12:51 -0800
+  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2022 13:53:54 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nLtVj-0000lz-5N; Sun, 20 Feb 2022 21:12:51 +0000
-Date: Mon, 21 Feb 2022 05:12:04 +0800
+	id 1nLu9R-0000te-Vw; Sun, 20 Feb 2022 21:53:53 +0000
+Date: Mon, 21 Feb 2022 05:53:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Anup Patel <apatel@ventanamicro.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 643/2574]
- include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h'
- file not found
-Message-ID: <202202210526.ll6ZQU7s-lkp@intel.com>
+Subject: [avpatel:riscv_kvm_aia_v1 24/25] arch/riscv/kvm/aia_aplic.c:264:6:
+ warning: variable 'inject' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202202210540.uT5p7irn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,53 +47,108 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   39e8a0edc8fae20758051dadf7846849edc18b88
-commit: 121f4f0dd58c5fa0666a732d13b7ad770af3559b [643/2574] headers/deps: Add header dependencies to .h files: <asm/vdso/processor.h>
-config: hexagon-randconfig-r045-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210526.ll6ZQU7s-lkp@intel.com/config)
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   369a4053b30158ffb5cf12a2ae33d844fbf37658
+commit: 33031ffc1ee88857fd6614826d158030effac50a [24/25] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+config: riscv-randconfig-r032-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210540.uT5p7irn-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=121f4f0dd58c5fa0666a732d13b7ad770af3559b
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 121f4f0dd58c5fa0666a732d13b7ad770af3559b
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/33031ffc1ee88857fd6614826d158030effac50a
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout 33031ffc1ee88857fd6614826d158030effac50a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:28:
-   In file included from arch/hexagon/include/asm/bitops.h:13:
-   In file included from arch/hexagon/include/asm/atomic.h:13:
-   In file included from ./arch/hexagon/include/generated/asm/barrier.h:1:
->> include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h' file not found
-   #include <asm/vdso/processor.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
+           if (inject)
+               ^~~~~~
+   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
+           bool inject, ie;
+                      ^
+                       = 0
+   1 warning generated.
 
 
-vim +16 include/asm-generic/barrier.h
+vim +264 arch/riscv/kvm/aia_aplic.c
 
-    15	
-  > 16	#include <asm/vdso/processor.h>
-    17	#include <linux/compiler.h>
-    18	#include <linux/kcsan-checks.h>
-    19	#include <asm/rwonce.h>
-    20	
+   248	
+   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
+   250	{
+   251		u32 target;
+   252		bool inject, ie;
+   253		unsigned long flags;
+   254		struct aplic_irq *irqd;
+   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
+   256	
+   257		if (!aplic || !source || (aplic->nr_irqs <= source))
+   258			return -ENODEV;
+   259		irqd = &aplic->irqs[source];
+   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
+   261	
+   262		raw_spin_lock_irqsave(&irqd->lock, flags);
+   263	
+ > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+   265			goto skip_unlock;
+   266	
+   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
+   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
+   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   272			break;
+   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
+   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   277			break;
+   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
+   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   281			break;
+   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
+   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   285			break;
+   286		}
+   287	
+   288		if (level)
+   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
+   290		else
+   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
+   292	
+   293		inject = false;
+   294		target = irqd->target;
+   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
+   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
+   297			inject = true;
+   298		}
+   299	
+   300	skip_unlock:
+   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
+   302	
+   303		if (inject)
+   304			aplic_inject_msi(kvm, source, target);
+   305	
+   306		return 0;
+   307	}
+   308	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
