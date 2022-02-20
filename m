@@ -1,42 +1,57 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD015EBF
-	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 19:07:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6045EC8
+	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 19:28:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645384069; x=1676920069;
+  t=1645385333; x=1676921333;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zsQhKBKlCJcznhe7mFrC0c4fnSZI3vB+KnX51VQBYjs=;
-  b=GNdFQ9wBfevQpRolQ8KcyLFjYBuPaGRtufAj4qAFjyc/+pi2/92LxflY
-   DycwYNOvvSlT355qxMjrSVjwt+OS4ObupmQFi1UyJh3dFYXDIiX99ztMA
-   la+P/oYon/MCOi3g0QgyidNYqHGO3C7y+yea4VhZBSLQ8ncZLkPiAiDDg
-   81vA5a5qczMM+vsOk1S55oLQm/8g0XH7l7zah7djIMBbaF45WVB8G+rTj
-   MO6SokOrtW9K07bPVB0aNmWkYINf1R98GZNg2WUAtThtkgAM1TtL46WlX
-   Ql6y+smebXDjp6ltWqWA29x69EMrB6AhsiY/MJ/SPhvVx5iSHhLyRfV8X
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="251148206"
+  bh=M7/i6xnRFkEXEKJukN+sGwvyQIdCKObg+1yeNQa6vvI=;
+  b=BNK/veTKDtiptWH5dxPMC5ZcvrLF5fLhtLjyP+ShFD2U0qTCZDlJJU63
+   BzPcnLU1vyekFx5rQ/HZIsvsVtBPKXzoSx4kAF+I2/RNOvIrTqf3Y/mMa
+   6heqxyTifuQSp/sKwNxHohx7HNcDn6Az3c+2XEftOZmhbtp6HA7YqoNtr
+   ZMWm8MpawNwM5BptEMLtxE65lI59gntrbXdPBERFb66UG76nGskJR/mBI
+   GILIG7kPfW7TSveyx9bZnoAonj0MtYEMgCpkdY1JBZf3wvA5nxSHeKwaj
+   uigWJ+38ReYvXQsUQqsKPZAjd71IaWGy3UnL+GtB26d9bysLRVvaxPiY1
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="234937630"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="251148206"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 11:07:49 -0800
+   d="scan'208";a="234937630"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 11:28:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="542409487"
+   d="scan'208";a="778502463"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Feb 2022 11:07:47 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 20 Feb 2022 11:28:48 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nLrYh-0000cP-3M; Sun, 20 Feb 2022 19:07:47 +0000
-Date: Mon, 21 Feb 2022 03:07:29 +0800
+	id 1nLrt1-0000e7-Q2; Sun, 20 Feb 2022 19:28:47 +0000
+Date: Mon, 21 Feb 2022 03:28:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Melanie Plageman (Microsoft)" <melanieplageman@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH RFC v1 2/5] scsi: map_queues() takes tag set instead of
- host
-Message-ID: <202202210247.G728msgj-lkp@intel.com>
-References: <20220218184157.176457-3-melanieplageman@gmail.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Milan Stevanovic <milan.stevanovic@se.com>,
+	Jimmy Lalande <jimmy.lalande@se.com>,
+	Laetitia MARIOTTINI <laetitia.mariottini@se.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH 3/8] soc: renesas: rzn1-sysc: Export function to set
+ dmamux
+Message-ID: <202202210355.JzDJ9Lyz-lkp@intel.com>
+References: <20220218181226.431098-4-miquel.raynal@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,76 +60,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220218184157.176457-3-melanieplageman@gmail.com>
+In-Reply-To: <20220218181226.431098-4-miquel.raynal@bootlin.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi "Melanie,
+Hi Miquel,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on v5.17-rc4]
-[also build test ERROR on next-20220217]
-[cannot apply to mkp-scsi/for-next jejb-scsi/for-next powerpc/next]
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on geert-renesas-devel/next]
+[also build test WARNING on geert-renesas-drivers/renesas-clk robh/for-next linus/master v5.17-rc4 next-20220217]
+[cannot apply to vkoul-dmaengine/next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Melanie-Plageman-Microsoft/Add-SCSI-per-device-tagsets/20220220-182321
-base:    754e0b0e35608ed5206d6a67a791563c631cec07
-config: riscv-randconfig-c006-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210247.G728msgj-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Miquel-Raynal/RZN1-DMA-support/20220220-182519
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
+config: arm-randconfig-r022-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210355.JzDJ9Lyz-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/bf42e0d6e85e5f78470f952213d0cfcd20c7461d
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/ed9b880ea7f2b23b42feeed7a6ed898cd09ae2f1
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Melanie-Plageman-Microsoft/Add-SCSI-per-device-tagsets/20220220-182321
-        git checkout bf42e0d6e85e5f78470f952213d0cfcd20c7461d
+        git fetch --no-tags linux-review Miquel-Raynal/RZN1-DMA-support/20220220-182519
+        git checkout ed9b880ea7f2b23b42feeed7a6ed898cd09ae2f1
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/scsi/ufs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/renesas/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/scsi/ufs/ufshcd.c:8188:17: error: incompatible function pointer types initializing 'int (*)(struct blk_mq_tag_set *)' with an expression of type 'int (struct Scsi_Host *)' [-Werror,-Wincompatible-function-pointer-types]
-           .map_queues             = ufshcd_map_queues,
-                                     ^~~~~~~~~~~~~~~~~
-   1 error generated.
+>> drivers/clk/renesas/r9a06g032-clocks.c:320:5: warning: no previous prototype for function 'r9a06g032_syscon_set_dmamux' [-Wmissing-prototypes]
+   int r9a06g032_syscon_set_dmamux(u32 mask, u32 val)
+       ^
+   drivers/clk/renesas/r9a06g032-clocks.c:320:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int r9a06g032_syscon_set_dmamux(u32 mask, u32 val)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +8188 drivers/scsi/ufs/ufshcd.c
+vim +/r9a06g032_syscon_set_dmamux +320 drivers/clk/renesas/r9a06g032-clocks.c
 
-90b8491c003391 Stanley Chu        2020-05-09  8183  
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8184  static struct scsi_host_template ufshcd_driver_template = {
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8185  	.module			= THIS_MODULE,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8186  	.name			= UFSHCD,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8187  	.proc_name		= UFSHCD,
-eaab9b57305496 Bart Van Assche    2021-12-03 @8188  	.map_queues		= ufshcd_map_queues,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8189  	.queuecommand		= ufshcd_queuecommand,
-eaab9b57305496 Bart Van Assche    2021-12-03  8190  	.mq_poll		= ufshcd_poll,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8191  	.slave_alloc		= ufshcd_slave_alloc,
-eeda47499f0187 Akinobu Mita       2014-07-01  8192  	.slave_configure	= ufshcd_slave_configure,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8193  	.slave_destroy		= ufshcd_slave_destroy,
-4264fd613a6a4b Sujit Reddy Thumma 2014-06-29  8194  	.change_queue_depth	= ufshcd_change_queue_depth,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8195  	.eh_abort_handler	= ufshcd_abort,
-3441da7ddbdedf Sujit Reddy Thumma 2014-05-26  8196  	.eh_device_reset_handler = ufshcd_eh_device_reset_handler,
-3441da7ddbdedf Sujit Reddy Thumma 2014-05-26  8197  	.eh_host_reset_handler   = ufshcd_eh_host_reset_handler,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8198  	.this_id		= -1,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8199  	.sg_tablesize		= SG_ALL,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8200  	.cmd_per_lun		= UFSHCD_CMD_PER_LUN,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8201  	.can_queue		= UFSHCD_CAN_QUEUE,
-552a990ca16688 Christoph Hellwig  2019-06-17  8202  	.max_segment_size	= PRDT_DATA_BYTE_COUNT_MAX,
-1ab27c9cf8b63d Sahitya Tummala    2014-09-25  8203  	.max_host_blocked	= 1,
-c40ecc12cfdb63 Christoph Hellwig  2014-11-13  8204  	.track_queue_depth	= 1,
-d829fc8a105885 Stanislav Nijnikov 2018-02-15  8205  	.sdev_groups		= ufshcd_driver_groups,
-4af14d113bcf95 Christoph Hellwig  2018-12-13  8206  	.dma_boundary		= PAGE_SIZE - 1,
-49615ba144a092 Stanley Chu        2019-09-16  8207  	.rpm_autosuspend_delay	= RPM_AUTOSUSPEND_DELAY_MS,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8208  };
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8209  
+   317	
+   318	/* Exported helper to access the DMAMUX register */
+   319	static struct r9a06g032_priv *syscon_priv;
+ > 320	int r9a06g032_syscon_set_dmamux(u32 mask, u32 val)
+   321	{
+   322		u32 dmamux;
+   323	
+   324		if (!syscon_priv)
+   325			return -EPROBE_DEFER;
+   326	
+   327		spin_lock(&syscon_priv->lock);
+   328	
+   329		dmamux = readl(syscon_priv->reg + R9A06G032_SYSCON_DMAMUX);
+   330		dmamux &= ~mask;
+   331		dmamux |= val & mask;
+   332		writel(dmamux, syscon_priv->reg + R9A06G032_SYSCON_DMAMUX);
+   333	
+   334		spin_unlock(&syscon_priv->lock);
+   335	
+   336		return 0;
+   337	}
+   338	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
