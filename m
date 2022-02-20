@@ -1,40 +1,45 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646435EBE
-	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 20:40:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF205EDC
+	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 20:51:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645389652; x=1676925652;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=SXXGu34h+DZ/mxH3AA/rw/vdBuPWP3hSpRq78Ge0y2A=;
-  b=I9rVzZjLR6XSvkHcoa35AHeD6XA3vOrZdMF1RNELlfaOpCvSae0Q/kJy
-   njlezKOMKvIFD4xijPwhSxxvslux910O7bzY2qxE0yHm9HtXbZYHjSavD
-   Ar4/bcZRX6/ApZ7lqNG6N2pPHcsWaWxMRcmY8UVF/2lqcTuWdQhQvDRqn
-   ddaMzBbR0It+ptzDJ8imcH599MQKuadAyPnTKXdwxrESDHgooSIR1rWE7
-   AL5wACCKLptVKp/1rzcmaAnB4lY9bEPDpbbK1JCX2teMagsoxBqiNxBej
-   zIloPZ6TzbrFA/sbJfANePw7Zca3zENPWTahaFzA59noj4XNGApAHMfBU
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="312143058"
+  t=1645390313; x=1676926313;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fc0oPIN8bo58fg7IS1/4O7tOIZiHjQPHCnNLqEDAWD0=;
+  b=P9Bmy/RDOwUgh4yBdufziyZ9ikRG7lDXMmAlidqaywK2w8rj5H76ocJn
+   faDIh0r5RlsaVKMh/n2nqLrAI2FGrMkBbodPlxW31R/9qLxXhw5l7MhNX
+   Ukg1vib3D3otdioAmKkIRDQ+CQLgmlvA5D/yQ9WddzWtbnduZsMhtw+Z6
+   JMO/F0vVzT2un7NmEIGAoUf9nj8i+JWre7vyfzgsgwR3J47loXZlsPVba
+   IjcRl/qg0DjAEqxv6RhvGNQ1rbX5fIjrt4/CiYHBHpRUJaU52oaZ7zIJk
+   8MVXkLqvfjncjfekTQ9cbSgp0CANxHMHJ0seOKMKe/rB2+3FY4Dr2QTQM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="248982122"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="312143058"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 12:40:52 -0800
+   d="scan'208";a="248982122"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 12:51:53 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="507402436"
+   d="scan'208";a="590758922"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Feb 2022 12:40:51 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 20 Feb 2022 12:51:51 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nLt0k-0000jM-Bw; Sun, 20 Feb 2022 20:40:50 +0000
-Date: Mon, 21 Feb 2022 04:40:39 +0800
+	id 1nLtBO-0000kV-Ji; Sun, 20 Feb 2022 20:51:50 +0000
+Date: Mon, 21 Feb 2022 04:51:15 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-stable-rc:queue/5.10 5180/9999] ld.lld: error:
- arch/hexagon/kernel/head.o:(.init.text+0xd4): relocation R_HEX_B22_PCREL out
- of range: 2376176 is not in [-2097152, 2097151]; references __vmnewmap
-Message-ID: <202202210431.kYDLukry-lkp@intel.com>
+To: Olivier Langlois <olivier@trillion01.com>, Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Hao Xu <haoxu@linux.alibaba.com>,
+	io-uring <io-uring@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] io_uring: Add support for napi_busy_poll
+Message-ID: <202202210455.Gdq2HOnj-lkp@intel.com>
+References: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,49 +48,118 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-CC: linux-kernel@vger.kernel.org
-TO: Nathan Chancellor <nathan@kernel.org>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: Nick Desaulniers <ndesaulniers@google.com>
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Linux Memory Management List <linux-mm@kvack.org>
-CC: Sasha Levin <sashal@kernel.org>
+Hi Olivier,
 
-Hi Nathan,
+Thank you for the patch! Yet something to improve:
 
-First bad commit (maybe != root cause):
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17-rc4]
+[cannot apply to next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
-head:   69d6613f68347043222bc45a6627fb94b5b80f04
-commit: f7121692795c654b52b460a11107a87285bb1dcd [5180/9999] hexagon: handle {,SOFT}IRQENTRY_TEXT in linker script
-config: hexagon-randconfig-r025-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210431.kYDLukry-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Olivier-Langlois/io_uring-Add-support-for-napi_busy_poll/20220220-190634
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4f12b742eb2b3a850ac8be7dc4ed52976fc6cb0b
+config: arm64-randconfig-r002-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210455.Gdq2HOnj-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f7121692795c654b52b460a11107a87285bb1dcd
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.10
-        git checkout f7121692795c654b52b460a11107a87285bb1dcd
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/ad36ae938f354b0cd3b38716572385f710accdb0
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Olivier-Langlois/io_uring-Add-support-for-napi_busy_poll/20220220-190634
+        git checkout ad36ae938f354b0cd3b38716572385f710accdb0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: arch/hexagon/kernel/head.o:(.init.text+0xd4): relocation R_HEX_B22_PCREL out of range: 2376176 is not in [-2097152, 2097151]; references __vmnewmap
-   >>> defined in arch/hexagon/kernel/built-in.a(vm_ops.o)
---
->> ld.lld: error: arch/hexagon/kernel/head.o:(.init.text+0x12c): relocation R_HEX_B22_PCREL out of range: 2376048 is not in [-2097152, 2097151]; references __vmsetvec
-   >>> defined in arch/hexagon/kernel/built-in.a(vm_ops.o)
---
->> ld.lld: error: arch/hexagon/kernel/head.o:(.init.text+0x160): relocation R_HEX_B22_PCREL out of range: 2390320 is not in [-2097152, 2097151]; references memset
-   >>> defined in arch/hexagon/lib/built-in.a(memset.o)
+>> fs/io_uring.c:1472:23: error: no member named 'napi_list' in 'struct io_ring_ctx'
+           INIT_LIST_HEAD(&ctx->napi_list);
+                           ~~~  ^
+   1 error generated.
+
+
+vim +1472 fs/io_uring.c
+
+  1413	
+  1414	static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+  1415	{
+  1416		struct io_ring_ctx *ctx;
+  1417		int hash_bits;
+  1418	
+  1419		ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+  1420		if (!ctx)
+  1421			return NULL;
+  1422	
+  1423		/*
+  1424		 * Use 5 bits less than the max cq entries, that should give us around
+  1425		 * 32 entries per hash list if totally full and uniformly spread.
+  1426		 */
+  1427		hash_bits = ilog2(p->cq_entries);
+  1428		hash_bits -= 5;
+  1429		if (hash_bits <= 0)
+  1430			hash_bits = 1;
+  1431		ctx->cancel_hash_bits = hash_bits;
+  1432		ctx->cancel_hash = kmalloc((1U << hash_bits) * sizeof(struct hlist_head),
+  1433						GFP_KERNEL);
+  1434		if (!ctx->cancel_hash)
+  1435			goto err;
+  1436		__hash_init(ctx->cancel_hash, 1U << hash_bits);
+  1437	
+  1438		ctx->dummy_ubuf = kzalloc(sizeof(*ctx->dummy_ubuf), GFP_KERNEL);
+  1439		if (!ctx->dummy_ubuf)
+  1440			goto err;
+  1441		/* set invalid range, so io_import_fixed() fails meeting it */
+  1442		ctx->dummy_ubuf->ubuf = -1UL;
+  1443	
+  1444		if (percpu_ref_init(&ctx->refs, io_ring_ctx_ref_free,
+  1445				    PERCPU_REF_ALLOW_REINIT, GFP_KERNEL))
+  1446			goto err;
+  1447	
+  1448		ctx->flags = p->flags;
+  1449		init_waitqueue_head(&ctx->sqo_sq_wait);
+  1450		INIT_LIST_HEAD(&ctx->sqd_list);
+  1451		INIT_LIST_HEAD(&ctx->cq_overflow_list);
+  1452		init_completion(&ctx->ref_comp);
+  1453		xa_init_flags(&ctx->io_buffers, XA_FLAGS_ALLOC1);
+  1454		xa_init_flags(&ctx->personalities, XA_FLAGS_ALLOC1);
+  1455		mutex_init(&ctx->uring_lock);
+  1456		init_waitqueue_head(&ctx->cq_wait);
+  1457		spin_lock_init(&ctx->completion_lock);
+  1458		spin_lock_init(&ctx->timeout_lock);
+  1459		INIT_WQ_LIST(&ctx->iopoll_list);
+  1460		INIT_LIST_HEAD(&ctx->defer_list);
+  1461		INIT_LIST_HEAD(&ctx->timeout_list);
+  1462		INIT_LIST_HEAD(&ctx->ltimeout_list);
+  1463		spin_lock_init(&ctx->rsrc_ref_lock);
+  1464		INIT_LIST_HEAD(&ctx->rsrc_ref_list);
+  1465		INIT_DELAYED_WORK(&ctx->rsrc_put_work, io_rsrc_put_work);
+  1466		init_llist_head(&ctx->rsrc_put_llist);
+  1467		INIT_LIST_HEAD(&ctx->tctx_list);
+  1468		ctx->submit_state.free_list.next = NULL;
+  1469		INIT_WQ_LIST(&ctx->locked_free_list);
+  1470		INIT_DELAYED_WORK(&ctx->fallback_work, io_fallback_req_func);
+  1471		INIT_WQ_LIST(&ctx->submit_state.compl_reqs);
+> 1472		INIT_LIST_HEAD(&ctx->napi_list);
+  1473		return ctx;
+  1474	err:
+  1475		kfree(ctx->dummy_ubuf);
+  1476		kfree(ctx->cancel_hash);
+  1477		kfree(ctx);
+  1478		return NULL;
+  1479	}
+  1480	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
