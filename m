@@ -1,42 +1,41 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3D97B
-	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 16:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76385EA4
+	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 17:45:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645372964; x=1676908964;
+  t=1645379147; x=1676915147;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9NwTRpNDu/tHD2XIwBr3TAhromGmgxkpOIaxlQGO8Cw=;
-  b=DtudGcMmsz3YdPtnzjrcfmCEI3uN1dhy/v04mmWlo8t6o71IYGDMP0yF
-   8MAhKueWmVqscOdpk9W2U0K6dEsdXyoGBNvTa0uYoL2k8zwhiR7+lRktV
-   U67F2C0lpW3WcUyezWFQa/iP7WiCSAC7WGSG3kUi1P96b5M77Jn1EZVs3
-   9JkqHBDZLDeVA7owEaHYprYUgucdQY2VKRiIYqng9VddqcCRS8Pfj+X2d
-   7UJNEtIJI3fJhy5kvSmDs9oZfQG5vTuBAUp+RNoiQzuC9wyt+4PzYMwQL
-   EsoqtT90AhPzka5PWzFU9CuhfgrpsK43oVyp4MKhedAmuKWtp71JZy6JW
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231353986"
+  bh=kPWamF18+3uayzkEvIG/RE3/V46F9kV8YNM12YzBwyQ=;
+  b=FZ+1BKKiFtxgf1TBqci64QqbdH2kGD7iHRDYWSsakMDzKFpDiIexJ3Vt
+   PM70kp9lbA93wH1yaxHHp7sg/cGbGwK8WpETJORHcsRVasOmB5Wt6HW4w
+   aJGA2ZbMOq2YfGwSmgWZhuyEWmE4yhdraC9LngJajZFUiQlm94D8t2Kh9
+   9fClYKXdlSqJTpaQQbHMD3iW10S6ymY6EbMkm1jmZdxgQX7MlR8XHpZ22
+   mwwm+mXu9jFa8fHB6gjcbCEmQeBYLYGWIIAoy5CuApRwv91foy+X0ig5X
+   +Vlfju8mq0xdAsO1maMEjHgO+0u9yQ4UEcsyXKK8yQTAXBY1F+Pk1gEwq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="251337795"
 X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="231353986"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 08:02:43 -0800
+   d="scan'208";a="251337795"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 09:45:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="682973476"
+   d="scan'208";a="705975874"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Feb 2022 08:02:42 -0800
+  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2022 09:45:45 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nLofZ-0000RQ-GN; Sun, 20 Feb 2022 16:02:41 +0000
-Date: Mon, 21 Feb 2022 00:02:29 +0800
+	id 1nLqHI-0000Wt-Ng; Sun, 20 Feb 2022 17:45:44 +0000
+Date: Mon, 21 Feb 2022 01:45:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
+To: Aaron Tomlin <atomlin@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [peterz-queue:x86/wip.ibt 19/31]
- arch/x86/kernel/alternative.c:761:16: error: expected string literal in
- 'asm'
-Message-ID: <202202202357.ldfBr75W-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: [mcgrof:modules-next 1/10] kernel/module/main.c:4802:6: warning: no
+ previous prototype for function 'module_layout'
+Message-ID: <202202210111.TM1W8D5R-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,77 +46,52 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
-head:   fecdb8a84191710ffe01c9492fceb34a15f1576a
-commit: 97e04204b3c4f0515f956be22a19229878b9253e [19/31] x86/ibt: Annotate text references
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220220/202202202357.ldfBr75W-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+head:   c55dc78176e6fe97a9e92d24a7ff3015b14ac858
+commit: 87b31159f78ab89d8ccda30d3eb9966af51bca64 [1/10] module: Move all into module/
+config: hexagon-randconfig-r041-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210111.TM1W8D5R-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=97e04204b3c4f0515f956be22a19229878b9253e
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue x86/wip.ibt
-        git checkout 97e04204b3c4f0515f956be22a19229878b9253e
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=87b31159f78ab89d8ccda30d3eb9966af51bca64
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof modules-next
+        git checkout 87b31159f78ab89d8ccda30d3eb9966af51bca64
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/module/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   arch/x86/kernel/alternative.c:716:2: error: expected ')'
-           ANNOTATE_NOENDBR
-           ^
-   arch/x86/kernel/alternative.c:712:5: note: to match this '('
-   asm (
-       ^
->> arch/x86/kernel/alternative.c:761:16: error: expected string literal in 'asm'
-           asm volatile (ANNOTATE_NOENDBR
-                         ^
-   2 errors generated.
+>> kernel/module/main.c:4802:6: warning: no previous prototype for function 'module_layout' [-Wmissing-prototypes]
+   void module_layout(struct module *mod,
+        ^
+   kernel/module/main.c:4802:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void module_layout(struct module *mod,
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/asm +761 arch/x86/kernel/alternative.c
+vim +/module_layout +4802 kernel/module/main.c
 
-   743	
-   744	static void __init int3_selftest(void)
-   745	{
-   746		static __initdata struct notifier_block int3_exception_nb = {
-   747			.notifier_call	= int3_exception_notify,
-   748			.priority	= INT_MAX-1, /* last */
-   749		};
-   750		unsigned int val = 0;
-   751	
-   752		BUG_ON(register_die_notifier(&int3_exception_nb));
-   753	
-   754		/*
-   755		 * Basically: int3_magic(&val); but really complicated :-)
-   756		 *
-   757		 * Stick the address of the INT3 instruction into int3_selftest_ip,
-   758		 * then trigger the INT3, padded with NOPs to match a CALL instruction
-   759		 * length.
-   760		 */
- > 761		asm volatile (ANNOTATE_NOENDBR
-   762			      "1: int3; nop; nop; nop; nop\n\t"
-   763			      ".pushsection .init.data,\"aw\"\n\t"
-   764			      ".align " __ASM_SEL(4, 8) "\n\t"
-   765			      ".type int3_selftest_ip, @object\n\t"
-   766			      ".size int3_selftest_ip, " __ASM_SEL(4, 8) "\n\t"
-   767			      "int3_selftest_ip:\n\t"
-   768			      __ASM_SEL(.long, .quad) " 1b\n\t"
-   769			      ".popsection\n\t"
-   770			      : ASM_CALL_CONSTRAINT
-   771			      : __ASM_SEL_RAW(a, D) (&val)
-   772			      : "memory");
-   773	
-   774		BUG_ON(val != 1);
-   775	
-   776		unregister_die_notifier(&int3_exception_nb);
-   777	}
-   778	
+^1da177e4c3f41 kernel/module.c Linus Torvalds  2005-04-16  4796  
+^1da177e4c3f41 kernel/module.c Linus Torvalds  2005-04-16  4797  #ifdef CONFIG_MODVERSIONS
+24b9f0d2208145 kernel/module.c Sergey Shtylyov 2020-11-07  4798  /*
+24b9f0d2208145 kernel/module.c Sergey Shtylyov 2020-11-07  4799   * Generate the signature for all relevant module structures here.
+24b9f0d2208145 kernel/module.c Sergey Shtylyov 2020-11-07  4800   * If these change, we don't want to try to parse the module.
+24b9f0d2208145 kernel/module.c Sergey Shtylyov 2020-11-07  4801   */
+8c8ef42aee8fcf kernel/module.c Rusty Russell   2009-03-31 @4802  void module_layout(struct module *mod,
+
+:::::: The code at line 4802 was first introduced by commit
+:::::: 8c8ef42aee8fcfb4128bb94c50d55c9f80ade525 module: include other structures in module version check
+
+:::::: TO: Rusty Russell <rusty@rustcorp.com.au>
+:::::: CC: Rusty Russell <rusty@rustcorp.com.au>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
