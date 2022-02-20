@@ -1,42 +1,41 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488DA5EDC
-	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 21:53:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5186121
+	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 22:04:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645394036; x=1676930036;
+  t=1645394697; x=1676930697;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XqpnqgHPC/Ik8W5X+1lA7B+lZPCX3Xmfo4WeCVewY7k=;
-  b=Co6eZI8zRUnyHNECUfMqWQOseJFNR2Wquk8fYHnkrunlp9JsDb89FbM1
-   BNazfEPu+9hj8BIWQIAm3SKtp6zVgI0WMrezCUBULqS6FTLs8Au+MgZU9
-   2aEn4u0x/1xc3ppZGr4Kf/E4dFIlnBOMaJ6pLTCzDDrv6sUeA1oTi03Kr
-   vEhaJqbsWul3xzkz7TPKXcBX+/8oHKVCybyH3biAG5dnOYVMgxxwgB68c
-   S0M33tihTuT35pId60G+0Xgcz3Cke8+CQYxo7FTHDlJlQmSCicrNIoCEu
-   XcWkdRXVB/8ztBu4bZ5eR8laGv+v6PXvciULJ9P1OdfhS4Nl+gzHRmDTy
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="314668317"
+  bh=RI/NMBBHuecMHPiz+yMjnwUai41Dse4trg9ZoOraha8=;
+  b=VUNwZ7B5gQEJNX/g+v70/3h+sLM1y+u5v4PwufunBU4F8scUPTJlRKYm
+   eEUZxo58K6VRqirsUjYEe9Cj+PRUJYAn0o1qS4NOfZTIfRudeiMOT+BZx
+   3RpSuNN6reispWFfnq7JvDfkt66X5jPonLMANGukNs2yT3N3bhIr3zUWF
+   R0aeNVDrQDZHFSvEogwoSSMKAs5UnsFDz5MmSNFIELePYi/zbTPcumgzZ
+   Y8GGZYqRcbKvByhCa1dchP6pdWR81pnrijLCNiyKFvrkbXCpghIRaIacI
+   eI2TyswLQgN2E/qeRYuaAPgTZRv6J1gROEldmAHxFwcUEeACidJ+PGcmk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231375487"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="314668317"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:53:55 -0800
+   d="scan'208";a="231375487"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 14:04:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="706030248"
+   d="scan'208";a="507418150"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2022 13:53:54 -0800
+  by orsmga006.jf.intel.com with ESMTP; 20 Feb 2022 14:04:54 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nLu9R-0000te-Vw; Sun, 20 Feb 2022 21:53:53 +0000
-Date: Mon, 21 Feb 2022 05:53:38 +0800
+	id 1nLuK6-0000uf-87; Sun, 20 Feb 2022 22:04:54 +0000
+Date: Mon, 21 Feb 2022 06:04:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
+To: Andi Kleen <ak@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 24/25] arch/riscv/kvm/aia_aplic.c:264:6:
- warning: variable 'inject' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202202210540.uT5p7irn-lkp@intel.com>
+Subject: [ak-misc:lto-5.17-1-wip 51/52] drivers/cpufreq/amd-pstate.c:108:15:
+ warning: no previous prototype for function 'do_amd_pstate_enable'
+Message-ID: <202202210648.Go90eR5C-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,108 +46,137 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   369a4053b30158ffb5cf12a2ae33d844fbf37658
-commit: 33031ffc1ee88857fd6614826d158030effac50a [24/25] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-r032-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210540.uT5p7irn-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ak/linux-misc.git lto-5.17-1-wip
+head:   e3a498b1f0eadc0a91ae725fd924588fd660a9af
+commit: a06b63a434e176a8ece9d057b89c4bd08a3f32c7 [51/52] cpufreq, amd-pstate, lto: Fix for gcc LTO
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220221/202202210648.Go90eR5C-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/33031ffc1ee88857fd6614826d158030effac50a
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout 33031ffc1ee88857fd6614826d158030effac50a
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ak/linux-misc.git/commit/?id=a06b63a434e176a8ece9d057b89c4bd08a3f32c7
+        git remote add ak-misc https://git.kernel.org/pub/scm/linux/kernel/git/ak/linux-misc.git
+        git fetch --no-tags ak-misc lto-5.17-1-wip
+        git checkout a06b63a434e176a8ece9d057b89c4bd08a3f32c7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpufreq/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
+>> drivers/cpufreq/amd-pstate.c:108:15: warning: no previous prototype for function 'do_amd_pstate_enable' [-Wmissing-prototypes]
+   __visible int do_amd_pstate_enable(bool enable)
+                 ^
+   drivers/cpufreq/amd-pstate.c:108:11: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __visible int do_amd_pstate_enable(bool enable)
+             ^
+             static 
+>> drivers/cpufreq/amd-pstate.c:133:15: warning: no previous prototype for function 'do_amd_pstate_init_perf' [-Wmissing-prototypes]
+   __visible int do_amd_pstate_init_perf(struct amd_cpudata *cpudata)
+                 ^
+   drivers/cpufreq/amd-pstate.c:133:11: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __visible int do_amd_pstate_init_perf(struct amd_cpudata *cpudata)
+             ^
+             static 
+>> drivers/cpufreq/amd-pstate.c:181:16: warning: no previous prototype for function 'do_amd_pstate_update_perf' [-Wmissing-prototypes]
+   __visible void do_amd_pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+                  ^
+   drivers/cpufreq/amd-pstate.c:181:11: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __visible void do_amd_pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+             ^
+             static 
+   3 warnings generated.
 
 
-vim +264 arch/riscv/kvm/aia_aplic.c
+vim +/do_amd_pstate_enable +108 drivers/cpufreq/amd-pstate.c
 
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
+   107	
+ > 108	__visible int do_amd_pstate_enable(bool enable)
+   109	{
+   110		return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
+   111	}
+   112	
+   113	static int cppc_enable(bool enable)
+   114	{
+   115		int cpu, ret = 0;
+   116	
+   117		for_each_present_cpu(cpu) {
+   118			ret = cppc_set_enable(cpu, enable);
+   119			if (ret)
+   120				return ret;
+   121		}
+   122	
+   123		return ret;
+   124	}
+   125	
+   126	DEFINE_STATIC_CALL(amd_pstate_enable, do_amd_pstate_enable);
+   127	
+   128	static inline int amd_pstate_enable(bool enable)
+   129	{
+   130		return static_call(amd_pstate_enable)(enable);
+   131	}
+   132	
+ > 133	__visible int do_amd_pstate_init_perf(struct amd_cpudata *cpudata)
+   134	{
+   135		u64 cap1;
+   136	
+   137		int ret = rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
+   138					     &cap1);
+   139		if (ret)
+   140			return ret;
+   141	
+   142		/*
+   143		 * TODO: Introduce AMD specific power feature.
+   144		 *
+   145		 * CPPC entry doesn't indicate the highest performance in some ASICs.
+   146		 */
+   147		WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
+   148	
+   149		WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
+   150		WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PERF(cap1));
+   151		WRITE_ONCE(cpudata->lowest_perf, AMD_CPPC_LOWEST_PERF(cap1));
+   152	
+   153		return 0;
+   154	}
+   155	
+   156	static int cppc_init_perf(struct amd_cpudata *cpudata)
+   157	{
+   158		struct cppc_perf_caps cppc_perf;
+   159	
+   160		int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+   161		if (ret)
+   162			return ret;
+   163	
+   164		WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
+   165	
+   166		WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
+   167		WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+   168			   cppc_perf.lowest_nonlinear_perf);
+   169		WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
+   170	
+   171		return 0;
+   172	}
+   173	
+   174	DEFINE_STATIC_CALL(amd_pstate_init_perf, do_amd_pstate_init_perf);
+   175	
+   176	static inline int amd_pstate_init_perf(struct amd_cpudata *cpudata)
+   177	{
+   178		return static_call(amd_pstate_init_perf)(cpudata);
+   179	}
+   180	
+ > 181	__visible void do_amd_pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+   182				       u32 des_perf, u32 max_perf, bool fast_switch)
+   183	{
+   184		if (fast_switch)
+   185			wrmsrl(MSR_AMD_CPPC_REQ, READ_ONCE(cpudata->cppc_req_cached));
+   186		else
+   187			wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ,
+   188				      READ_ONCE(cpudata->cppc_req_cached));
+   189	}
+   190	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
