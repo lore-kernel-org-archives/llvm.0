@@ -1,41 +1,40 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480CC5ED1
-	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 20:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646435EBE
+	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 20:40:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645388393; x=1676924393;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3PqThoQs7A3jRhv9b5IrLNFPWKtT2W4Mm8oW2k1KaJA=;
-  b=ly4b/mROPAr9jkwZPqjjPG04cMpaYoUF+2VKdNgh9pKFugSDyVEWfnzl
-   LuZbXBcLiG6/7CqtSmZKapWeDY5rHSI5Xq/t7AfwTZLZ/kRat+Cpeilio
-   B5Cigo9566Xbm2S7R13PohDm2bXRyZ5FCLmxRthMlYfkgTmDZpNKfyB4H
-   p+DK+Fv3+7okMrAoO16t7YVekuCtT+9S6DFLF8NGx+MAOT26x1PfpCfQq
-   6k+w5jqqODlj7X3DIpWYxyjIvaubkZRnAA3sBY7VXMPl9c2oyY8xGK/uv
-   GgXEIjTylE+7CkfMPs1dnDqWZO1tws9Z/tYCh1y1JZnnCmbX2CPkp1E0B
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231370068"
+  t=1645389652; x=1676925652;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=SXXGu34h+DZ/mxH3AA/rw/vdBuPWP3hSpRq78Ge0y2A=;
+  b=I9rVzZjLR6XSvkHcoa35AHeD6XA3vOrZdMF1RNELlfaOpCvSae0Q/kJy
+   njlezKOMKvIFD4xijPwhSxxvslux910O7bzY2qxE0yHm9HtXbZYHjSavD
+   Ar4/bcZRX6/ApZ7lqNG6N2pPHcsWaWxMRcmY8UVF/2lqcTuWdQhQvDRqn
+   ddaMzBbR0It+ptzDJ8imcH599MQKuadAyPnTKXdwxrESDHgooSIR1rWE7
+   AL5wACCKLptVKp/1rzcmaAnB4lY9bEPDpbbK1JCX2teMagsoxBqiNxBej
+   zIloPZ6TzbrFA/sbJfANePw7Zca3zENPWTahaFzA59noj4XNGApAHMfBU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="312143058"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="231370068"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 12:19:52 -0800
+   d="scan'208";a="312143058"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 12:40:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="504624690"
+   d="scan'208";a="507402436"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 20 Feb 2022 12:19:50 -0800
+  by orsmga006.jf.intel.com with ESMTP; 20 Feb 2022 12:40:51 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nLsgP-0000iA-QZ; Sun, 20 Feb 2022 20:19:49 +0000
-Date: Mon, 21 Feb 2022 04:19:40 +0800
+	id 1nLt0k-0000jM-Bw; Sun, 20 Feb 2022 20:40:50 +0000
+Date: Mon, 21 Feb 2022 04:40:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aaron Tomlin <atomlin@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
-Subject: [mcgrof:modules-next 6/10] kernel/module/strict_rwx.c:16:10: error:
- implicit declaration of function 'PAGE_ALIGNED'
-Message-ID: <202202210447.UvDGgsQA-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-stable-rc:queue/5.10 5180/9999] ld.lld: error:
+ arch/hexagon/kernel/head.o:(.init.text+0xd4): relocation R_HEX_B22_PCREL out
+ of range: 2376176 is not in [-2097152, 2097151]; references __vmnewmap
+Message-ID: <202202210431.kYDLukry-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,72 +45,47 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
-head:   c55dc78176e6fe97a9e92d24a7ff3015b14ac858
-commit: e5973a14d18785b893d383fbd9dc2f98edc16f1b [6/10] module: Move strict rwx support to a separate file
-config: arm64-randconfig-r005-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210447.UvDGgsQA-lkp@intel.com/config)
+CC: linux-kernel@vger.kernel.org
+TO: Nathan Chancellor <nathan@kernel.org>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Nick Desaulniers <ndesaulniers@google.com>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linux Memory Management List <linux-mm@kvack.org>
+CC: Sasha Levin <sashal@kernel.org>
+
+Hi Nathan,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+head:   69d6613f68347043222bc45a6627fb94b5b80f04
+commit: f7121692795c654b52b460a11107a87285bb1dcd [5180/9999] hexagon: handle {,SOFT}IRQENTRY_TEXT in linker script
+config: hexagon-randconfig-r025-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210431.kYDLukry-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=e5973a14d18785b893d383fbd9dc2f98edc16f1b
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof modules-next
-        git checkout e5973a14d18785b893d383fbd9dc2f98edc16f1b
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f7121692795c654b52b460a11107a87285bb1dcd
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.10
+        git checkout f7121692795c654b52b460a11107a87285bb1dcd
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/module/strict_rwx.c:16:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
-           BUG_ON(!PAGE_ALIGNED(layout->base));
-                   ^
-   kernel/module/strict_rwx.c:17:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
-           BUG_ON(!PAGE_ALIGNED(layout->text_size));
-                   ^
-   kernel/module/strict_rwx.c:18:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
-           BUG_ON(!PAGE_ALIGNED(layout->ro_size));
-                   ^
-   kernel/module/strict_rwx.c:26:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
-           BUG_ON(!PAGE_ALIGNED(layout->base));
-                   ^
-   kernel/module/strict_rwx.c:27:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
-           BUG_ON(!PAGE_ALIGNED(layout->ro_size));
-                   ^
-   kernel/module/strict_rwx.c:28:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
-           BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
-                   ^
-   kernel/module/strict_rwx.c:36:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
-           BUG_ON(!PAGE_ALIGNED(layout->base));
-                   ^
-   kernel/module/strict_rwx.c:37:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
-           BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
-                   ^
-   kernel/module/strict_rwx.c:38:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
-           BUG_ON(!PAGE_ALIGNED(layout->size));
-                   ^
-   9 errors generated.
-
-
-vim +/PAGE_ALIGNED +16 kernel/module/strict_rwx.c
-
-    12	
-    13	void frob_rodata(const struct module_layout *layout,
-    14			 int (*set_memory)(unsigned long start, int num_pages))
-    15	{
-  > 16		BUG_ON(!PAGE_ALIGNED(layout->base));
-    17		BUG_ON(!PAGE_ALIGNED(layout->text_size));
-    18		BUG_ON(!PAGE_ALIGNED(layout->ro_size));
-    19		set_memory((unsigned long)layout->base + layout->text_size,
-    20			   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
-    21	}
-    22	
+>> ld.lld: error: arch/hexagon/kernel/head.o:(.init.text+0xd4): relocation R_HEX_B22_PCREL out of range: 2376176 is not in [-2097152, 2097151]; references __vmnewmap
+   >>> defined in arch/hexagon/kernel/built-in.a(vm_ops.o)
+--
+>> ld.lld: error: arch/hexagon/kernel/head.o:(.init.text+0x12c): relocation R_HEX_B22_PCREL out of range: 2376048 is not in [-2097152, 2097151]; references __vmsetvec
+   >>> defined in arch/hexagon/kernel/built-in.a(vm_ops.o)
+--
+>> ld.lld: error: arch/hexagon/kernel/head.o:(.init.text+0x160): relocation R_HEX_B22_PCREL out of range: 2390320 is not in [-2097152, 2097151]; references memset
+   >>> defined in arch/hexagon/lib/built-in.a(memset.o)
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
