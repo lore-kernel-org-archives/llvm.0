@@ -1,112 +1,186 @@
-Received: from condef-02.nifty.com (condef-02.nifty.com [202.248.20.67])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B027E
-	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 15:53:58 +0000 (UTC)
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-02.nifty.com with ESMTP id 21LFmjTF015917
-	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 00:48:45 +0900
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178]) (authenticated)
-	by conssluserg-05.nifty.com with ESMTP id 21LFmFOZ020076
-	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 00:48:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 21LFmFOZ020076
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1645458495;
-	bh=Eq86KaLsmhn/jol5Cl8rzxgkWiNMVMb0uEfZ1QLZapo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ts3bbvIUNhE0Y6Bzss57FFqwRvn8Wc/PkOSyPLDeypC1k78+CvrOTRlgjsEXuxEYE
-	 5NTs5N/PTQLeNrWbp4d4e58Yd2W74J89cZRrBxhyhraLmAxDlKeRQi3mhi3D/LoKx1
-	 S5E92VIWwX4sB2oSs6RlucNfUIWqS27MOST4QzglE5L92ogAJhAXXFYI/UKNm9+Fq9
-	 D890iCMxRvvmOj+y91+gLM4MDwZeBA1clPKkJnDvV+kkY01C97mX1Eae/JMZBqL6V0
-	 2oOAwlzGRR/FukvlPYLTJ0Z6lRj8vqk1yXYnLSh4Wy9z2vnvjMaw1snJDIDBB0dXEB
-	 W7CLgcztMYI0A==
-X-Nifty-SrcIP: [209.85.210.178]
-Received: by mail-pf1-f178.google.com with SMTP id d187so9221668pfa.10
-        for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 07:48:15 -0800 (PST)
-X-Gm-Message-State: AOAM533JT8AHxsBp4EuDGFgMOak0yNu4nNQT0PlooF34ZX9ygdn5GhpB
-	wk41WfhQCV+Xm95tnI+uAktjPP1KKHqDEI5Up1U=
-X-Google-Smtp-Source: ABdhPJyIDoa3KpkYnOJOjGfpO89oU3Wb/HC5/pM/hhJVkCzjD2oDLvQEdThWSSXmLxjexnlDDXnTVXnsngQ2AX1NiQI=
-X-Received: by 2002:a65:5341:0:b0:363:da77:99df with SMTP id
- w1-20020a655341000000b00363da7799dfmr16423493pgr.126.1645458494757; Mon, 21
- Feb 2022 07:48:14 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2052569
+	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 16:32:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645461163; x=1676997163;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pr/Mp3XwZgiZMD7V6bzTmJaiLnTlkc7pKFRNKwbKdAc=;
+  b=AYxANenqEwnnlE9KISVCJWsRLyE+zWVlKZS4BJVaexv1286jrNwPQlg6
+   Lu10Xl+OIokhgL/sell+/EUiioQemn6oXw49eJIhPQqWzsudr6+RM1R3q
+   +OZXQh9WqP3TE8SoqEuRn9pn2WsSbHreoAv55kaoF7iNh99zrQHXrxirN
+   TbaeCRNlO6Nl6EukPaGqdwp45dXzygOMV3LNcmWJNqDfRxRbfTZeOny/U
+   AZewU2mSznJY71F/R5HHh5oz/fMSx5/TcVLhUsf01VPnPd/Wgwdtr6UWP
+   s2v2JhYZnkfSr0NFc1G6XPxaiDFygFmzBJhrtHAz4/8gM57VTLJWaZLR/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="312283918"
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="312283918"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 08:32:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="507687536"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 21 Feb 2022 08:32:34 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nMBc1-0001mY-UJ; Mon, 21 Feb 2022 16:32:33 +0000
+Date: Tue, 22 Feb 2022 00:32:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiawei Gu <Jiawei.Gu@amd.com>, dri-devel@lists.freedesktop.org,
+	amd-gfx@lists.freedesktop.org, Christian.Koenig@amd.com,
+	Andrey.Grodzovsky@amd.com, Monk.Liu@amd.com, Emily.Deng@amd.com,
+	Horace.Chen@amd.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Jiawei Gu <Jiawei.Gu@amd.com>
+Subject: Re: [PATCH] drm/sched: Add device pointer to drm_gpu_scheduler
+Message-ID: <202202220034.6C0UzU5E-lkp@intel.com>
+References: <20220221095705.5290-1-Jiawei.Gu@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220201013257.17926-1-changbin.du@gmail.com> <20220221143758.7wln3mklyaj7mzod@mail.google.com>
-In-Reply-To: <20220221143758.7wln3mklyaj7mzod@mail.google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 22 Feb 2022 00:47:36 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQtuMujS32JTmjj3kPwiHALmV+izV4_mjRtFq6szC-e2Q@mail.gmail.com>
-Message-ID: <CAK7LNAQtuMujS32JTmjj3kPwiHALmV+izV4_mjRtFq6szC-e2Q@mail.gmail.com>
-Subject: Re: [PATCH] kallsyms: ignore all local labels prefixed by '.L'
-To: Changbin Du <changbin.du@gmail.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SIFIVE DRIVERS" <linux-riscv@lists.infradead.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221095705.5290-1-Jiawei.Gu@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Feb 21, 2022 at 11:38 PM Changbin Du <changbin.du@gmail.com> wrote:
->
-> Hi, Masahiro,
-> Could you consider picking up this change if you have no objection?
->
-> On Tue, Feb 01, 2022 at 09:32:57AM +0800, Changbin Du wrote:
-> > The llvm compiler can generate lots of local labels ('.LBB', '.Ltmpxxx',
-> > '.L__unnamed_xx', etc.). These symbols usually are useless for debugging.
-> > And they might overlap with handwritten symbols.
-> >
-> > Before this change, a dumpstack shows a local symbol for epc:
-> > [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
-> > [    0.040452][    T0]  ra : restore_all+0x12/0x6e
-> >
-> > The simple solution is that we can ignore all local labels prefixed by '.L'.
-> > For handwritten symbols which need to be preserved should drop the '.L'
-> > prefix.
-> >
-> > After this change, the C defined symbol is shown so we can locate the
-> > problematical code immediately:
-> > [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
-> > [    0.036567][    T0]  ra : restore_all+0x12/0x6e
-> >
-> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
+Hi Jiawei,
 
-Now applied to linux-kbuild. Thanks.
+Thank you for the patch! Yet something to improve:
 
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on drm-intel/for-linux-next drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.17-rc5 next-20220217]
+[cannot apply to drm-tip/drm-tip airlied/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/0day-ci/linux/commits/Jiawei-Gu/drm-sched-Add-device-pointer-to-drm_gpu_scheduler/20220221-175818
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: hexagon-randconfig-r004-20220221 (https://download.01.org/0day-ci/archive/20220222/202202220034.6C0UzU5E-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/9fdafca855faca0a3b8f213f024985c4112fa0bb
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jiawei-Gu/drm-sched-Add-device-pointer-to-drm_gpu_scheduler/20220221-175818
+        git checkout 9fdafca855faca0a3b8f213f024985c4112fa0bb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/v3d/
 
-> > ---
-> >  scripts/kallsyms.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> > index 54ad86d13784..8caabddf817c 100644
-> > --- a/scripts/kallsyms.c
-> > +++ b/scripts/kallsyms.c
-> > @@ -108,7 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
-> >       /* Symbol names that begin with the following are ignored.*/
-> >       static const char * const ignored_prefixes[] = {
-> >               "$",                    /* local symbols for ARM, MIPS, etc. */
-> > -             ".LASANPC",             /* s390 kasan local symbols */
-> > +             ".L",                   /* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
-> >               "__crc_",               /* modversions */
-> >               "__efistub_",           /* arm64 EFI stub namespace */
-> >               "__kvm_nvhe_",          /* arm64 non-VHE KVM namespace */
-> > --
-> > 2.32.0
-> >
->
-> --
-> Cheers,
-> Changbin Du
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/v3d/v3d_sched.c:394:28: error: implicit declaration of function 'to_platform_device' [-Werror,-Wimplicit-function-declaration]
+                                NULL, "v3d_bin", &(v3d_to_pdev(v3d)->dev));
+                                                   ^
+   drivers/gpu/drm/v3d/v3d_drv.h:158:26: note: expanded from macro 'v3d_to_pdev'
+   #define v3d_to_pdev(v3d) to_platform_device((v3d)->drm.dev)
+                            ^
+>> drivers/gpu/drm/v3d/v3d_sched.c:394:46: error: member reference type 'int' is not a pointer
+                                NULL, "v3d_bin", &(v3d_to_pdev(v3d)->dev));
+                                                   ~~~~~~~~~~~~~~~~  ^
+   drivers/gpu/drm/v3d/v3d_sched.c:404:49: error: member reference type 'int' is not a pointer
+                                NULL, "v3d_render", &(v3d_to_pdev(v3d)->dev));
+                                                      ~~~~~~~~~~~~~~~~  ^
+   drivers/gpu/drm/v3d/v3d_sched.c:416:46: error: member reference type 'int' is not a pointer
+                                NULL, "v3d_tfu", &(v3d_to_pdev(v3d)->dev));
+                                                   ~~~~~~~~~~~~~~~~  ^
+   drivers/gpu/drm/v3d/v3d_sched.c:429:47: error: member reference type 'int' is not a pointer
+                                        NULL, "v3d_csd", &(v3d_to_pdev(v3d)->dev));
+                                                           ~~~~~~~~~~~~~~~~  ^
+   drivers/gpu/drm/v3d/v3d_sched.c:441:55: error: member reference type 'int' is not a pointer
+                                        NULL, "v3d_cache_clean", &(v3d_to_pdev(v3d)->dev));
+                                                                   ~~~~~~~~~~~~~~~~  ^
+   6 errors generated.
 
 
+vim +/to_platform_device +394 drivers/gpu/drm/v3d/v3d_sched.c
 
--- 
-Best Regards
-Masahiro Yamada
+   381	
+   382	int
+   383	v3d_sched_init(struct v3d_dev *v3d)
+   384	{
+   385		int hw_jobs_limit = 1;
+   386		int job_hang_limit = 0;
+   387		int hang_limit_ms = 500;
+   388		int ret;
+   389	
+   390		ret = drm_sched_init(&v3d->queue[V3D_BIN].sched,
+   391				     &v3d_bin_sched_ops,
+   392				     hw_jobs_limit, job_hang_limit,
+   393				     msecs_to_jiffies(hang_limit_ms), NULL,
+ > 394				     NULL, "v3d_bin", &(v3d_to_pdev(v3d)->dev));
+   395		if (ret) {
+   396			dev_err(v3d->drm.dev, "Failed to create bin scheduler: %d.", ret);
+   397			return ret;
+   398		}
+   399	
+   400		ret = drm_sched_init(&v3d->queue[V3D_RENDER].sched,
+   401				     &v3d_render_sched_ops,
+   402				     hw_jobs_limit, job_hang_limit,
+   403				     msecs_to_jiffies(hang_limit_ms), NULL,
+   404				     NULL, "v3d_render", &(v3d_to_pdev(v3d)->dev));
+   405		if (ret) {
+   406			dev_err(v3d->drm.dev, "Failed to create render scheduler: %d.",
+   407				ret);
+   408			v3d_sched_fini(v3d);
+   409			return ret;
+   410		}
+   411	
+   412		ret = drm_sched_init(&v3d->queue[V3D_TFU].sched,
+   413				     &v3d_tfu_sched_ops,
+   414				     hw_jobs_limit, job_hang_limit,
+   415				     msecs_to_jiffies(hang_limit_ms), NULL,
+   416				     NULL, "v3d_tfu", &(v3d_to_pdev(v3d)->dev));
+   417		if (ret) {
+   418			dev_err(v3d->drm.dev, "Failed to create TFU scheduler: %d.",
+   419				ret);
+   420			v3d_sched_fini(v3d);
+   421			return ret;
+   422		}
+   423	
+   424		if (v3d_has_csd(v3d)) {
+   425			ret = drm_sched_init(&v3d->queue[V3D_CSD].sched,
+   426					     &v3d_csd_sched_ops,
+   427					     hw_jobs_limit, job_hang_limit,
+   428					     msecs_to_jiffies(hang_limit_ms), NULL,
+   429					     NULL, "v3d_csd", &(v3d_to_pdev(v3d)->dev));
+   430			if (ret) {
+   431				dev_err(v3d->drm.dev, "Failed to create CSD scheduler: %d.",
+   432					ret);
+   433				v3d_sched_fini(v3d);
+   434				return ret;
+   435			}
+   436	
+   437			ret = drm_sched_init(&v3d->queue[V3D_CACHE_CLEAN].sched,
+   438					     &v3d_cache_clean_sched_ops,
+   439					     hw_jobs_limit, job_hang_limit,
+   440					     msecs_to_jiffies(hang_limit_ms), NULL,
+   441					     NULL, "v3d_cache_clean", &(v3d_to_pdev(v3d)->dev));
+   442			if (ret) {
+   443				dev_err(v3d->drm.dev, "Failed to create CACHE_CLEAN scheduler: %d.",
+   444					ret);
+   445				v3d_sched_fini(v3d);
+   446				return ret;
+   447			}
+   448		}
+   449	
+   450		return 0;
+   451	}
+   452	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
