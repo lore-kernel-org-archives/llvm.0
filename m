@@ -1,99 +1,108 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DEF96143
-	for <llvm@lists.linux.dev>; Sun, 20 Feb 2022 23:59:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645401541; x=1676937541;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dQKAu3rAAJoABD4ppJ5sxiHeQSkmbG9VaqoiWB5FUbU=;
-  b=D163E/jhOnYHvGHuquJdeVWutoRTVHYaxttm9gBI0Ims2qAcG8nxEUwi
-   jL1dAuT20wnAvo9LX3js7DJpsvHg87zFAZYTsrBb3pnn4f00RbopkzUAG
-   HZFbtdsjNFOfCoT2s/KceoskPh0lzziTNmPN+QqQDggTCDxsOddBkFSbf
-   CBMH8pAiwWRQeKLo/wDdZIq+EC4dzbN++5Z9or7/CPnVKkpVFsFOru2h/
-   +dsg20Nn1/PYynTYZImkSIX1/Ex0pZPYriDodaDxh0UOnBn2ikASeX+F7
-   8w14jwSlEP/LmWUmCO5Ha3EGMLGiSe1oHbjlruA3a/7HKqtcIOKvlki3t
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="251593313"
-X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="251593313"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 15:59:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="706055875"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2022 15:58:58 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nLw6T-00012p-OT; Sun, 20 Feb 2022 23:58:57 +0000
-Date: Mon, 21 Feb 2022 07:58:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Jami Kettunen <jami.kettunen@somainline.org>
-Subject: [drm-msm:msm-next-staging 29/60]
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:855:34: warning: unused
- variable 'msm8998_dspp'
-Message-ID: <202202210759.N4dlTbHV-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D897E
+	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 00:16:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=badeba3b8450; t=1645402560;
+	bh=u55hKlChXTEXIJuV+e0xiIjiT2nKtCrwDTUv/GZniC8=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=SC+12ipn9rbHMsrVsmYy3Un09pxQVpkeoSYVL7Fp76hgJ8ynyDYZDTEOwe8xxl3W1
+	 iCr0qqG1r3UuIJkMV49Fc6EfibX2It0gNibwDTnDaW6FDOckJNJi2SJEFvWLMmMm4r
+	 YZY1P/nbxYR/sm74d4/3jwSyLE1j7ub86SJqAGiA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx004
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1Msq2E-1oEioR24W8-00tBUZ; Mon, 21
+ Feb 2022 01:16:00 +0100
+Message-ID: <0a2e57ad-2973-ea01-ceda-3262cde1f5aa@gmx.com>
+Date: Mon, 21 Feb 2022 08:15:52 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] btrfs: Initialize ret to 0 in scrub_simple_mirror()
+Content-Language: en-US
+To: Souptick Joarder <jrdr.linux@gmail.com>, clm@fb.com,
+ josef@toxicpanda.com, dsterba@suse.com, nathan@kernel.org,
+ ndesaulniers@google.com
+Cc: linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+References: <20220220144606.5695-1-jrdr.linux@gmail.com>
+From: Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <20220220144606.5695-1-jrdr.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:C8JAjspcmErs2qvGcN+rf+gs5pzGazDeRknGb4nSBztbmyzskiA
+ m9rvdxjYIuSlPwQKNsJs1CwrpBoPxYQ/puNKMgElBHkhgjzY//jcZtbFn7w+HX377mox0yY
+ 8ksMF6XX0qOIuy7Un30A/N+W7hwryUj0Bkya3FCNQuPjoNLn8Hry02cTy+19fs8f/UnaeFG
+ iyqjwOaM/nUeUHDRhEE8Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yHT8ct1YwXg=:4qNAuuwGPL0dLqTUBv6r62
+ zj5vSKm4vU4+6oz1vjcziodlfbEPOa0pj9GfCrG9SS3JMaiwIhYjSbPr9nCXZZuojMOxWMQFQ
+ 7RtidxnLHDRq+JsCooYST+0Inw154w8Km/qCwm/Z0d8OV6on0YCDmuk9FLJlFdQBhoCGg/TfA
+ FIlIDGSyqfnZgO1AlrbK1KSLNHZoTD4VJhwiHXmzsBPBYWXLK5XqKXwzAzPKwj6UvqGg+Zvli
+ Uvnf0b7sxgbybCb0VLbjvlSqYg+UxA/h3z1zcAi40yo+ywuxDWgt8FI9pNKYdZLOHYIjDi4vu
+ QKTVAWA+rdoErEMn9NDwKK8kfJ8wBqhFC+VL8AZUlH5r2afOLE5kiuBp200ONqKP+Q1vCRr2t
+ UtfIqgkIs6X3V45EwoiZoHdXGiEC9lKr39EJWn1ekWDtD8OkvujklKpvnfVb3HPudNH2+gW+R
+ +9mEP2wbKPyfdu0YN+IHxu6OAxhCPoaFkaBI6OZJmTsXctGIetf0q83mTcyNPV0hv/3WswbcA
+ UY+6UTD327ePsxsSknt8FjWaddkcRuvYVXhsJEHLfnN1KxApInZc21ZMzGKnw5lXBcHjsnKpD
+ mRrGk0Hl5hTuTP/IH0/lXrbWO0lJ48nHkeJ+5GQl451Pk2g5SwVNSizwecbELyA+0BrZ9OlRf
+ c44lgZ9cQyxV1trcDOYlBWpzC1XGBgdp7LT+VWxJm0FY8eSHuN+Qvl8lsI9FDI4FkxeIQcXDS
+ rthFP3zPRbZNn942ZiAkBOcnBEe0tajPq6GINlKy839j/TkGdwdhsxp5i/zHyY0HeOEfZBKiY
+ dQ8GiaCYMRNthEnz/lSxZAiqjUL215EpJZ03RWdjAS1pecJyqnYSy+1Du42qPhQcJQd9SGR/X
+ YsTWykG99zSWMcxtDQFb5rVnLOK/Zr1Y0ibPg4KgXmWsU/za1R6xIVf25D0Uurc+fiEqc6Nqt
+ UJcW7p6fDiXeXNHETw/uh6tF2i1+khedwzMa4Tzu92FU25n2KVI9ra8nEBuymO9bovJmypWnY
+ 91Kw0Tj5y8nw0oEXi7baNMjpIFxS7l8bHzfBDY49/bsQE3ZgLLDayrujOchaDdVA4hqBWNCqn
+ 2DbeNLW8aA/Orw=
 
-tree:   https://gitlab.freedesktop.org/drm/msm.git msm-next-staging
-head:   bc2112583a0b473f5c4ba87c00da84abd5d0b3fd
-commit: 94391a14fc27383a60fc9499b631e5b6ccd9f075 [29/60] drm/msm/dpu1: Add MSM8998 to hw catalog
-config: hexagon-randconfig-r041-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210759.N4dlTbHV-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add drm-msm https://gitlab.freedesktop.org/drm/msm.git
-        git fetch --no-tags drm-msm msm-next-staging
-        git checkout 94391a14fc27383a60fc9499b631e5b6ccd9f075
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:855:34: warning: unused variable 'msm8998_dspp' [-Wunused-const-variable]
-   static const struct dpu_dspp_cfg msm8998_dspp[] = {
-                                    ^
-   1 warning generated.
 
 
-vim +/msm8998_dspp +855 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+On 2022/2/20 22:46, Souptick Joarder wrote:
+> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+>
+> Kernel test robot reported below warning ->
+> fs/btrfs/scrub.c:3439:2: warning: Undefined or garbage value
+> returned to caller [clang-analyzer-core.uninitialized.UndefReturn]
+>
+> Initialize ret to 0.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
 
-   846	
-   847	#define DSPP_BLK(_name, _id, _base, _mask, _sblk) \
-   848			{\
-   849			.name = _name, .id = _id, \
-   850			.base = _base, .len = 0x1800, \
-   851			.features = _mask, \
-   852			.sblk = _sblk \
-   853			}
-   854	
- > 855	static const struct dpu_dspp_cfg msm8998_dspp[] = {
-   856		DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_MSM8998_MASK,
-   857			 &msm8998_dspp_sblk),
-   858		DSPP_BLK("dspp_1", DSPP_1, 0x56000, DSPP_MSM8998_MASK,
-   859			 &msm8998_dspp_sblk),
-   860	};
-   861	
+Although the patch is not yet merged, but I have to say, it's a false aler=
+t.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Firstly, the while loop will always get at least one run.
+
+Secondly, in that loop, we either set ret to some error value and break,
+or after at least one find_first_extent_item() and scrub_extent() call,
+we increase cur_logical and reached the limit of the while loop and exit.
+
+So there is no possible routine to leave @ret uninitialized and returned
+to caller.
+
+Thanks,
+Qu
+
+> ---
+>   fs/btrfs/scrub.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
+> index 4baa8e43d585..5ca7e5ffbc96 100644
+> --- a/fs/btrfs/scrub.c
+> +++ b/fs/btrfs/scrub.c
+> @@ -3325,7 +3325,7 @@ static int scrub_simple_mirror(struct scrub_ctx *s=
+ctx,
+>   	const u32 max_length =3D SZ_64K;
+>   	struct btrfs_path path =3D {};
+>   	u64 cur_logical =3D logical_start;
+> -	int ret;
+> +	int ret =3D 0;
+>
+>   	/* The range must be inside the bg */
+>   	ASSERT(logical_start >=3D bg->start &&
