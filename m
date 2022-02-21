@@ -1,35 +1,35 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2052569
-	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 16:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57C15EBB
+	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 17:13:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645461163; x=1676997163;
+  t=1645463618; x=1676999618;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=pr/Mp3XwZgiZMD7V6bzTmJaiLnTlkc7pKFRNKwbKdAc=;
-  b=AYxANenqEwnnlE9KISVCJWsRLyE+zWVlKZS4BJVaexv1286jrNwPQlg6
-   Lu10Xl+OIokhgL/sell+/EUiioQemn6oXw49eJIhPQqWzsudr6+RM1R3q
-   +OZXQh9WqP3TE8SoqEuRn9pn2WsSbHreoAv55kaoF7iNh99zrQHXrxirN
-   TbaeCRNlO6Nl6EukPaGqdwp45dXzygOMV3LNcmWJNqDfRxRbfTZeOny/U
-   AZewU2mSznJY71F/R5HHh5oz/fMSx5/TcVLhUsf01VPnPd/Wgwdtr6UWP
-   s2v2JhYZnkfSr0NFc1G6XPxaiDFygFmzBJhrtHAz4/8gM57VTLJWaZLR/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="312283918"
+  bh=d9R1l+t6g3iE2bFfr1t2C1MAzM4hajXoz6i5aqnlTRA=;
+  b=iKAGFcTJ8bYFNSZTzl0rL8mNVG6PPURYRzFpCh+rC34yXwof1xsVudvu
+   9Z2H+374x3UZgiFz7WByUlk7Xech2kvZjSZde9IOpItzVayduztcKspvI
+   pXTXxH0AUaNe1MbQqAnMy0Aa1aJeWoEq+ZQ/i4pFG0XnuGkh/itScN028
+   E6BBfEom7KYRNaVTd9Fxg2Lt6uhr0xSuRa79l4tn9eFepFD8QfLGEQuoQ
+   zNcXq8j+0r9834M6up9aglES9w1arPnSVakOAZ0PJB731uuH3yuw2kvLo
+   LdFdQ6NQweeg/7cy99Xi3deQQ3U2lZMawaMpOUeBpxNctt87hiQcxRvqJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251301345"
 X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="312283918"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 08:32:42 -0800
+   d="scan'208";a="251301345"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 09:13:38 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="507687536"
+   d="scan'208";a="591024169"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 21 Feb 2022 08:32:34 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 21 Feb 2022 09:13:35 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMBc1-0001mY-UJ; Mon, 21 Feb 2022 16:32:33 +0000
-Date: Tue, 22 Feb 2022 00:32:21 +0800
+	id 1nMCFj-0001oS-0U; Mon, 21 Feb 2022 17:13:35 +0000
+Date: Tue, 22 Feb 2022 01:12:55 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jiawei Gu <Jiawei.Gu@amd.com>, dri-devel@lists.freedesktop.org,
 	amd-gfx@lists.freedesktop.org, Christian.Koenig@amd.com,
@@ -38,7 +38,7 @@ To: Jiawei Gu <Jiawei.Gu@amd.com>, dri-devel@lists.freedesktop.org,
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Jiawei Gu <Jiawei.Gu@amd.com>
 Subject: Re: [PATCH] drm/sched: Add device pointer to drm_gpu_scheduler
-Message-ID: <202202220034.6C0UzU5E-lkp@intel.com>
+Message-ID: <202202220108.kzXHnO9I-lkp@intel.com>
 References: <20220221095705.5290-1-Jiawei.Gu@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,14 +57,14 @@ Thank you for the patch! Yet something to improve:
 
 [auto build test ERROR on drm/drm-next]
 [also build test ERROR on drm-intel/for-linux-next drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.17-rc5 next-20220217]
-[cannot apply to drm-tip/drm-tip airlied/drm-next]
+[cannot apply to drm-tip/drm-tip]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Jiawei-Gu/drm-sched-Add-device-pointer-to-drm_gpu_scheduler/20220221-175818
 base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: hexagon-randconfig-r004-20220221 (https://download.01.org/0day-ci/archive/20220222/202202220034.6C0UzU5E-lkp@intel.com/config)
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220222/202202220108.kzXHnO9I-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -75,111 +75,89 @@ reproduce (this is a W=1 build):
         git checkout 9fdafca855faca0a3b8f213f024985c4112fa0bb
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/v3d/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/v3d/v3d_sched.c:394:28: error: implicit declaration of function 'to_platform_device' [-Werror,-Wimplicit-function-declaration]
-                                NULL, "v3d_bin", &(v3d_to_pdev(v3d)->dev));
-                                                   ^
-   drivers/gpu/drm/v3d/v3d_drv.h:158:26: note: expanded from macro 'v3d_to_pdev'
-   #define v3d_to_pdev(v3d) to_platform_device((v3d)->drm.dev)
-                            ^
->> drivers/gpu/drm/v3d/v3d_sched.c:394:46: error: member reference type 'int' is not a pointer
-                                NULL, "v3d_bin", &(v3d_to_pdev(v3d)->dev));
-                                                   ~~~~~~~~~~~~~~~~  ^
-   drivers/gpu/drm/v3d/v3d_sched.c:404:49: error: member reference type 'int' is not a pointer
-                                NULL, "v3d_render", &(v3d_to_pdev(v3d)->dev));
-                                                      ~~~~~~~~~~~~~~~~  ^
-   drivers/gpu/drm/v3d/v3d_sched.c:416:46: error: member reference type 'int' is not a pointer
-                                NULL, "v3d_tfu", &(v3d_to_pdev(v3d)->dev));
-                                                   ~~~~~~~~~~~~~~~~  ^
-   drivers/gpu/drm/v3d/v3d_sched.c:429:47: error: member reference type 'int' is not a pointer
-                                        NULL, "v3d_csd", &(v3d_to_pdev(v3d)->dev));
-                                                           ~~~~~~~~~~~~~~~~  ^
-   drivers/gpu/drm/v3d/v3d_sched.c:441:55: error: member reference type 'int' is not a pointer
-                                        NULL, "v3d_cache_clean", &(v3d_to_pdev(v3d)->dev));
-                                                                   ~~~~~~~~~~~~~~~~  ^
-   6 errors generated.
+>> drivers/gpu/drm/msm/msm_ringbuffer.c:92:41: error: too few arguments to function call, expected 9, have 8
+                           NULL, NULL, to_msm_bo(ring->bo)->name);
+                                                                ^
+   include/drm/gpu_scheduler.h:463:5: note: 'drm_sched_init' declared here
+   int drm_sched_init(struct drm_gpu_scheduler *sched,
+       ^
+   1 error generated.
 
 
-vim +/to_platform_device +394 drivers/gpu/drm/v3d/v3d_sched.c
+vim +92 drivers/gpu/drm/msm/msm_ringbuffer.c
 
-   381	
-   382	int
-   383	v3d_sched_init(struct v3d_dev *v3d)
-   384	{
-   385		int hw_jobs_limit = 1;
-   386		int job_hang_limit = 0;
-   387		int hang_limit_ms = 500;
-   388		int ret;
-   389	
-   390		ret = drm_sched_init(&v3d->queue[V3D_BIN].sched,
-   391				     &v3d_bin_sched_ops,
-   392				     hw_jobs_limit, job_hang_limit,
-   393				     msecs_to_jiffies(hang_limit_ms), NULL,
- > 394				     NULL, "v3d_bin", &(v3d_to_pdev(v3d)->dev));
-   395		if (ret) {
-   396			dev_err(v3d->drm.dev, "Failed to create bin scheduler: %d.", ret);
-   397			return ret;
-   398		}
-   399	
-   400		ret = drm_sched_init(&v3d->queue[V3D_RENDER].sched,
-   401				     &v3d_render_sched_ops,
-   402				     hw_jobs_limit, job_hang_limit,
-   403				     msecs_to_jiffies(hang_limit_ms), NULL,
-   404				     NULL, "v3d_render", &(v3d_to_pdev(v3d)->dev));
-   405		if (ret) {
-   406			dev_err(v3d->drm.dev, "Failed to create render scheduler: %d.",
-   407				ret);
-   408			v3d_sched_fini(v3d);
-   409			return ret;
-   410		}
-   411	
-   412		ret = drm_sched_init(&v3d->queue[V3D_TFU].sched,
-   413				     &v3d_tfu_sched_ops,
-   414				     hw_jobs_limit, job_hang_limit,
-   415				     msecs_to_jiffies(hang_limit_ms), NULL,
-   416				     NULL, "v3d_tfu", &(v3d_to_pdev(v3d)->dev));
-   417		if (ret) {
-   418			dev_err(v3d->drm.dev, "Failed to create TFU scheduler: %d.",
-   419				ret);
-   420			v3d_sched_fini(v3d);
-   421			return ret;
-   422		}
-   423	
-   424		if (v3d_has_csd(v3d)) {
-   425			ret = drm_sched_init(&v3d->queue[V3D_CSD].sched,
-   426					     &v3d_csd_sched_ops,
-   427					     hw_jobs_limit, job_hang_limit,
-   428					     msecs_to_jiffies(hang_limit_ms), NULL,
-   429					     NULL, "v3d_csd", &(v3d_to_pdev(v3d)->dev));
-   430			if (ret) {
-   431				dev_err(v3d->drm.dev, "Failed to create CSD scheduler: %d.",
-   432					ret);
-   433				v3d_sched_fini(v3d);
-   434				return ret;
-   435			}
-   436	
-   437			ret = drm_sched_init(&v3d->queue[V3D_CACHE_CLEAN].sched,
-   438					     &v3d_cache_clean_sched_ops,
-   439					     hw_jobs_limit, job_hang_limit,
-   440					     msecs_to_jiffies(hang_limit_ms), NULL,
-   441					     NULL, "v3d_cache_clean", &(v3d_to_pdev(v3d)->dev));
-   442			if (ret) {
-   443				dev_err(v3d->drm.dev, "Failed to create CACHE_CLEAN scheduler: %d.",
-   444					ret);
-   445				v3d_sched_fini(v3d);
-   446				return ret;
-   447			}
-   448		}
-   449	
-   450		return 0;
-   451	}
-   452	
+1d8a5ca436ee4a Rob Clark     2021-07-27   47  
+f97decac5f4c2d Jordan Crouse 2017-10-20   48  struct msm_ringbuffer *msm_ringbuffer_new(struct msm_gpu *gpu, int id,
+f97decac5f4c2d Jordan Crouse 2017-10-20   49  		void *memptrs, uint64_t memptrs_iova)
+7198e6b03155f6 Rob Clark     2013-07-19   50  {
+7198e6b03155f6 Rob Clark     2013-07-19   51  	struct msm_ringbuffer *ring;
+1d8a5ca436ee4a Rob Clark     2021-07-27   52  	long sched_timeout;
+f97decac5f4c2d Jordan Crouse 2017-10-20   53  	char name[32];
+7198e6b03155f6 Rob Clark     2013-07-19   54  	int ret;
+7198e6b03155f6 Rob Clark     2013-07-19   55  
+f97decac5f4c2d Jordan Crouse 2017-10-20   56  	/* We assume everwhere that MSM_GPU_RINGBUFFER_SZ is a power of 2 */
+f97decac5f4c2d Jordan Crouse 2017-10-20   57  	BUILD_BUG_ON(!is_power_of_2(MSM_GPU_RINGBUFFER_SZ));
+7198e6b03155f6 Rob Clark     2013-07-19   58  
+7198e6b03155f6 Rob Clark     2013-07-19   59  	ring = kzalloc(sizeof(*ring), GFP_KERNEL);
+7198e6b03155f6 Rob Clark     2013-07-19   60  	if (!ring) {
+7198e6b03155f6 Rob Clark     2013-07-19   61  		ret = -ENOMEM;
+7198e6b03155f6 Rob Clark     2013-07-19   62  		goto fail;
+7198e6b03155f6 Rob Clark     2013-07-19   63  	}
+7198e6b03155f6 Rob Clark     2013-07-19   64  
+7198e6b03155f6 Rob Clark     2013-07-19   65  	ring->gpu = gpu;
+f97decac5f4c2d Jordan Crouse 2017-10-20   66  	ring->id = id;
+84c6127580c1ce Jordan Crouse 2018-11-07   67  
+f97decac5f4c2d Jordan Crouse 2017-10-20   68  	ring->start = msm_gem_kernel_new(gpu->dev, MSM_GPU_RINGBUFFER_SZ,
+604234f33658cd Jordan Crouse 2020-09-03   69  		check_apriv(gpu, MSM_BO_WC | MSM_BO_GPU_READONLY),
+604234f33658cd Jordan Crouse 2020-09-03   70  		gpu->aspace, &ring->bo, &ring->iova);
+8223286d62e296 Jordan Crouse 2017-07-27   71  
+69a834c28fb514 Rob Clark     2016-05-24   72  	if (IS_ERR(ring->start)) {
+69a834c28fb514 Rob Clark     2016-05-24   73  		ret = PTR_ERR(ring->start);
+375f9a63a66bae Rob Clark     2021-07-27   74  		ring->start = NULL;
+69a834c28fb514 Rob Clark     2016-05-24   75  		goto fail;
+69a834c28fb514 Rob Clark     2016-05-24   76  	}
+0815d7749a6852 Jordan Crouse 2018-11-07   77  
+0815d7749a6852 Jordan Crouse 2018-11-07   78  	msm_gem_object_set_name(ring->bo, "ring%d", id);
+0815d7749a6852 Jordan Crouse 2018-11-07   79  
+f97decac5f4c2d Jordan Crouse 2017-10-20   80  	ring->end   = ring->start + (MSM_GPU_RINGBUFFER_SZ >> 2);
+4c7085a5d581a5 Jordan Crouse 2017-10-20   81  	ring->next  = ring->start;
+7198e6b03155f6 Rob Clark     2013-07-19   82  	ring->cur   = ring->start;
+7198e6b03155f6 Rob Clark     2013-07-19   83  
+f97decac5f4c2d Jordan Crouse 2017-10-20   84  	ring->memptrs = memptrs;
+f97decac5f4c2d Jordan Crouse 2017-10-20   85  	ring->memptrs_iova = memptrs_iova;
+f97decac5f4c2d Jordan Crouse 2017-10-20   86  
+1d8a5ca436ee4a Rob Clark     2021-07-27   87  	 /* currently managing hangcheck ourselves: */
+1d8a5ca436ee4a Rob Clark     2021-07-27   88  	sched_timeout = MAX_SCHEDULE_TIMEOUT;
+1d8a5ca436ee4a Rob Clark     2021-07-27   89  
+1d8a5ca436ee4a Rob Clark     2021-07-27   90  	ret = drm_sched_init(&ring->sched, &msm_sched_ops,
+1d8a5ca436ee4a Rob Clark     2021-07-27   91  			num_hw_submissions, 0, sched_timeout,
+f1b7996551a40a Dave Airlie   2021-07-30  @92  			NULL, NULL, to_msm_bo(ring->bo)->name);
+1d8a5ca436ee4a Rob Clark     2021-07-27   93  	if (ret) {
+1d8a5ca436ee4a Rob Clark     2021-07-27   94  		goto fail;
+1d8a5ca436ee4a Rob Clark     2021-07-27   95  	}
+1d8a5ca436ee4a Rob Clark     2021-07-27   96  
+f97decac5f4c2d Jordan Crouse 2017-10-20   97  	INIT_LIST_HEAD(&ring->submits);
+77d205290aa944 Rob Clark     2020-10-23   98  	spin_lock_init(&ring->submit_lock);
+77c406038e830a Rob Clark     2020-10-23   99  	spin_lock_init(&ring->preempt_lock);
+f97decac5f4c2d Jordan Crouse 2017-10-20  100  
+f97decac5f4c2d Jordan Crouse 2017-10-20  101  	snprintf(name, sizeof(name), "gpu-ring-%d", ring->id);
+f97decac5f4c2d Jordan Crouse 2017-10-20  102  
+da3d378dec8634 Rob Clark     2021-07-26  103  	ring->fctx = msm_fence_context_alloc(gpu->dev, &ring->memptrs->fence, name);
+7198e6b03155f6 Rob Clark     2013-07-19  104  
+7198e6b03155f6 Rob Clark     2013-07-19  105  	return ring;
+7198e6b03155f6 Rob Clark     2013-07-19  106  
+7198e6b03155f6 Rob Clark     2013-07-19  107  fail:
+7198e6b03155f6 Rob Clark     2013-07-19  108  	msm_ringbuffer_destroy(ring);
+7198e6b03155f6 Rob Clark     2013-07-19  109  	return ERR_PTR(ret);
+7198e6b03155f6 Rob Clark     2013-07-19  110  }
+7198e6b03155f6 Rob Clark     2013-07-19  111  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
