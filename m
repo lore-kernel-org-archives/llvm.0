@@ -1,52 +1,41 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7F22581
-	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 12:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED0B29A3
+	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 13:18:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645445780; x=1676981780;
+  t=1645449498; x=1676985498;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=h4aWaGti2tAEy4oAus0l5hbQLeQa2irOVt+PXvWL6Ds=;
-  b=Nz9GtaNiARaNZ8tBPtVvWQ/E8L0QnrGp0cqidxMIUm5GaS7Ny2MkTJbN
-   3TfdUFpYkQIj43B59Z+OYHLby3+Qi7sGZfP9RY864Ja8fBnEF4q89/3Sp
-   P+OkwkQubUr9A9o4l3IZCRCi7g9rMx6Vz9ADYEzOLDoCJllpF/VJiTQaL
-   JDaNCEDUYqxXzfExvokuJJfEYF43ht09ehlsTB+Df7z1ihV7J2pDwD/hC
-   D0N5byZnir+e+cbu4dvqdXUS5JxVLvJ59I/K7CMqaqXUBMt0nyyfsEPZ4
-   I6QCndlyznn9UjCqLm00QkutvpiK9l2nxIsy8I1dzZq+7s6yfzXyPrUVL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="251447285"
+  bh=vcJYgubBwS5EWIZVc7wEuxJrBDMZX2y3GacrrLk695Y=;
+  b=Ra7EVIZdB+3b4SQuvi4A0Bmv3ic/M7MpXGs4trnnA14Jg/YnBU0aqbBd
+   J843CASvPHgLJpq5oLL0jpPAEhRfhTXWTEoJs7EbDJzYoGbt5yfztQqGO
+   ejVFUnaztnCC285/W3ByP2ypKQ+1iDGAZ+JsZd0qn94jgAVkK2j3+S/E0
+   9ITqmHkTx/+OXEqXZgowk4rn1s7QQRJqguDujfpdYrcz94oMxdvWHsnrZ
+   r0gpenFeDabx90QUazP1KRXZc2JO0OK6oXCas+YrQXlv19YOx199MBKQh
+   lb7Krwvx7BxgN0Br0PFdhzHdwxiOGO8gZTZm8DFtlZY/zn2mMRYcIf0Qz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="232126808"
 X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="251447285"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 04:16:19 -0800
+   d="scan'208";a="232126808"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 05:18:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="683189300"
+   d="scan'208";a="638553145"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Feb 2022 04:16:14 -0800
+  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2022 05:18:16 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nM7by-0001a1-5L; Mon, 21 Feb 2022 12:16:14 +0000
-Date: Mon, 21 Feb 2022 20:15:48 +0800
+	id 1nM8Zz-0001dP-9V; Mon, 21 Feb 2022 13:18:15 +0000
+Date: Mon, 21 Feb 2022 21:18:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Miguel Ojeda <ojeda@kernel.org>
+To: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Finn Behrens <me@kloenk.de>,
-	Adam Bratschi-Kaye <ark.email@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@google.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Sven Van Asbroeck <thesven73@gmail.com>,
-	Gary Guo <gary@garyguo.net>, Boris-Chengbiao Zhou <bobo1239@web.de>,
-	Boqun Feng <boqun.feng@gmail.com>, Douglas Su <d0u9.su@outlook.com>,
-	Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-	Antonio Terceiro <antonio.terceiro@linaro.org>,
-	Daniel Xu <dxu@dxuuu.xyz>, Miguel Cano <macanroj@gmail.com>
-Subject: [linux-next:master 4779/6564] include/asm-generic/io.h:464:31:
- warning: performing pointer arithmetic on a null pointer has undefined
- behavior err: false
-Message-ID: <202202212032.wX67i4TG-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
+Subject: drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused
+ function 'readq_ch'
+Message-ID: <202202212129.7Gipg08u-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,85 +46,83 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3c30cf91b5ecc7272b3d2942ae0505dd8320b81c
-commit: 17295a6760d551958a773a8342cff03630f3bff8 [4779/6564] Kbuild: add Rust support
-config: riscv-buildonly-randconfig-r006-20220221 (https://download.01.org/0day-ci/archive/20220221/202202212032.wX67i4TG-lkp@intel.com/config)
+Hi Gustavo,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
+commit: e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec dmaengine: dw-edma: Add support for the HDMA feature
+date:   11 months ago
+config: mips-randconfig-r001-20220221 (https://download.01.org/0day-ci/archive/20220221/202202212129.7Gipg08u-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=17295a6760d551958a773a8342cff03630f3bff8
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 17295a6760d551958a773a8342cff03630f3bff8
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
         # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/cavium-octeon/crypto/ arch/mips/cavium-octeon/executive/ arch/mips/kernel/ drivers/dma/dw-edma/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
->> include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
-   cannot find function `iounmap` in module `bindings`
-   --> rust/kernel/io_mem.rs:225:28
-   |
-   225 | unsafe { bindings::iounmap(self.ptr as _) };
-   | ^^^^^^^ help: a function with a similar name exists: `ioremap`
-   |
-   ::: rust/bindings_helpers_generated.rs:40:5
-   |
-   40 | / pub fn ioremap(
-   41 | | offset: resource_size_t,
-   42 | | size: c_types::c_ulong,
-   43 | | ) -> c_types::c_void;
-   | |______________________________- similarly named function `ioremap` defined here
+>> drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused function 'readq_ch'
+   static inline u64 readq_ch(struct dw_edma enum dw_edma_dir dir, u16 ch,
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 16, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept (1 - (0x00 == 0x04)); sync 0x00; .endr; .set pop; .else; ; .endif'
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+   Target: mips64el-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-d271fc04d5/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch drivers include kernel nr_bisected scripts source usr
 
 
-vim +464 include/asm-generic/io.h
+vim +/readq_ch +192 drivers/dma/dw-edma/dw-edma-v0-core.c
 
-3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
-9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
-9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
-9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
-9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
-9216efafc52ff9 Thierry Reding 2014-10-01  455   */
-9216efafc52ff9 Thierry Reding 2014-10-01  456  
-f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
-f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
-214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
-9216efafc52ff9 Thierry Reding 2014-10-01  460  {
-87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
-87fe2d543f8173 Sinan Kaya     2018-04-05  462  
-87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
-87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
-abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
-87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
-9216efafc52ff9 Thierry Reding 2014-10-01  467  }
-9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
-9216efafc52ff9 Thierry Reding 2014-10-01  469  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  191  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @192  static inline u64 readq_ch(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch,
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  193  			   const void __iomem *addr)
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  194  {
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  195  	u32 value;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  196  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  197  	if (dw->mf == EDMA_MF_EDMA_LEGACY) {
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  198  		u32 viewport_sel;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  199  		unsigned long flags;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  200  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  201  		raw_spin_lock_irqsave(&dw->lock, flags);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  202  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  203  		viewport_sel = FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  204  		if (dir == EDMA_DIR_READ)
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  205  			viewport_sel |= BIT(31);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  206  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  207  		writel(viewport_sel,
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  208  		       &(__dw_regs(dw)->type.legacy.viewport_sel));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  209  		value = readq(addr);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  210  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  211  		raw_spin_unlock_irqrestore(&dw->lock, flags);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  212  	} else {
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  213  		value = readq(addr);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  214  	}
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  215  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  216  	return value;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  217  }
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  218  
 
-:::::: The code at line 464 was first introduced by commit
-:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
+:::::: The code at line 192 was first introduced by commit
+:::::: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
 
-:::::: TO: Sinan Kaya <okaya@codeaurora.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+:::::: TO: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
+:::::: CC: Vinod Koul <vkoul@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
