@@ -1,376 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from condef-02.nifty.com (condef-02.nifty.com [202.248.20.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54AA7E
-	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 15:29:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 533DFC340E9;
-	Mon, 21 Feb 2022 15:29:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645457391;
-	bh=4xasrBK9g2lknvlHzxRMQcEOrfRCGdZUImy474TlECA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l7c3KWbS27su49NfV3eSq8OisR0z35wzm0U68PFhMF51wTMFGDsXjAemmtDZ23TEV
-	 7sLPtNm95WY5J6uoEOunXFlGA6UfZuvpuO4tDQMWYT8gPhGyaGmUgSTBexJPaQgLih
-	 K3mkkGgCGUGL7jwpgzTsOJBtwhvZ7JDZhqPSKH+SQTEtlkxQ6FXE/CpS7+I+M7R3Zu
-	 IUonE2yh9dKthIfyCMG3/Uv7/mKobN/f+RRtVzTyL6WlgeBtD0hY8K0v/by+zvOTgF
-	 W9iAY/XXsmW7dA5qA4FD/RTZZ1kQKCWAV3rYeaWCnMZY2bmgxNl4EMxGpgpH1xDUEu
-	 NAJN2rRuuRlMA==
-Date: Mon, 21 Feb 2022 08:29:46 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	Fangrui Song <i@maskray.me>
-Subject: Re: BUG: Kernel NULL pointer dereference on write at 0x00000000
- (rtmsg_ifinfo_build_skb)
-Message-ID: <YhOv6m3K7rsPjTA8@archlinux-ax161>
-References: <159db05f-539c-fe29-608b-91b036588033@molgen.mpg.de>
- <CAABZP2xampOLo8k93OLgaOfv9LreJ+f0g0_1mXwqtrv_LKewQg@mail.gmail.com>
- <3534d781-7d01-b42a-8974-0b1c367946f0@molgen.mpg.de>
- <CAABZP2zFDY-hrZqE=-c0uW8vFMH+Q9XezYd2DcBX4Wm+sxzK1g@mail.gmail.com>
- <04a597dc-64aa-57e6-f7fb-17bd2ec58159@molgen.mpg.de>
- <CAABZP2yb7-xa4F_2c6tuzkv7x902wU-hqgD_pqRooGC6C7S20A@mail.gmail.com>
- <f41550c7-26c0-cf81-7de9-aa924434a565@molgen.mpg.de>
- <Yg2h2Q2vXFkkLGTh@dev-arch.archlinux-ax161>
- <265b1953-36b4-6a65-1a36-67a61248f27f@molgen.mpg.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B027E
+	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 15:53:58 +0000 (UTC)
+Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-02.nifty.com with ESMTP id 21LFmjTF015917
+	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 00:48:45 +0900
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178]) (authenticated)
+	by conssluserg-05.nifty.com with ESMTP id 21LFmFOZ020076
+	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 00:48:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 21LFmFOZ020076
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1645458495;
+	bh=Eq86KaLsmhn/jol5Cl8rzxgkWiNMVMb0uEfZ1QLZapo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Ts3bbvIUNhE0Y6Bzss57FFqwRvn8Wc/PkOSyPLDeypC1k78+CvrOTRlgjsEXuxEYE
+	 5NTs5N/PTQLeNrWbp4d4e58Yd2W74J89cZRrBxhyhraLmAxDlKeRQi3mhi3D/LoKx1
+	 S5E92VIWwX4sB2oSs6RlucNfUIWqS27MOST4QzglE5L92ogAJhAXXFYI/UKNm9+Fq9
+	 D890iCMxRvvmOj+y91+gLM4MDwZeBA1clPKkJnDvV+kkY01C97mX1Eae/JMZBqL6V0
+	 2oOAwlzGRR/FukvlPYLTJ0Z6lRj8vqk1yXYnLSh4Wy9z2vnvjMaw1snJDIDBB0dXEB
+	 W7CLgcztMYI0A==
+X-Nifty-SrcIP: [209.85.210.178]
+Received: by mail-pf1-f178.google.com with SMTP id d187so9221668pfa.10
+        for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 07:48:15 -0800 (PST)
+X-Gm-Message-State: AOAM533JT8AHxsBp4EuDGFgMOak0yNu4nNQT0PlooF34ZX9ygdn5GhpB
+	wk41WfhQCV+Xm95tnI+uAktjPP1KKHqDEI5Up1U=
+X-Google-Smtp-Source: ABdhPJyIDoa3KpkYnOJOjGfpO89oU3Wb/HC5/pM/hhJVkCzjD2oDLvQEdThWSSXmLxjexnlDDXnTVXnsngQ2AX1NiQI=
+X-Received: by 2002:a65:5341:0:b0:363:da77:99df with SMTP id
+ w1-20020a655341000000b00363da7799dfmr16423493pgr.126.1645458494757; Mon, 21
+ Feb 2022 07:48:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <265b1953-36b4-6a65-1a36-67a61248f27f@molgen.mpg.de>
+References: <20220201013257.17926-1-changbin.du@gmail.com> <20220221143758.7wln3mklyaj7mzod@mail.google.com>
+In-Reply-To: <20220221143758.7wln3mklyaj7mzod@mail.google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 22 Feb 2022 00:47:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQtuMujS32JTmjj3kPwiHALmV+izV4_mjRtFq6szC-e2Q@mail.gmail.com>
+Message-ID: <CAK7LNAQtuMujS32JTmjj3kPwiHALmV+izV4_mjRtFq6szC-e2Q@mail.gmail.com>
+Subject: Re: [PATCH] kallsyms: ignore all local labels prefixed by '.L'
+To: Changbin Du <changbin.du@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:SIFIVE DRIVERS" <linux-riscv@lists.infradead.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Paul,
+On Mon, Feb 21, 2022 at 11:38 PM Changbin Du <changbin.du@gmail.com> wrote:
+>
+> Hi, Masahiro,
+> Could you consider picking up this change if you have no objection?
+>
+> On Tue, Feb 01, 2022 at 09:32:57AM +0800, Changbin Du wrote:
+> > The llvm compiler can generate lots of local labels ('.LBB', '.Ltmpxxx',
+> > '.L__unnamed_xx', etc.). These symbols usually are useless for debugging.
+> > And they might overlap with handwritten symbols.
+> >
+> > Before this change, a dumpstack shows a local symbol for epc:
+> > [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
+> > [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
+> > [    0.040452][    T0]  ra : restore_all+0x12/0x6e
+> >
+> > The simple solution is that we can ignore all local labels prefixed by '.L'.
+> > For handwritten symbols which need to be preserved should drop the '.L'
+> > prefix.
+> >
+> > After this change, the C defined symbol is shown so we can locate the
+> > problematical code immediately:
+> > [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
+> > [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
+> > [    0.036567][    T0]  ra : restore_all+0x12/0x6e
+> >
+> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
 
-On Mon, Feb 21, 2022 at 12:17:40PM +0100, Paul Menzel wrote:
-> Am 17.02.22 um 02:16 schrieb Nathan Chancellor:
-> 
-> > On Wed, Feb 16, 2022 at 02:19:51PM +0100, Paul Menzel wrote:
-> > > [Cc: +LLVM/clang build support folks]
-> 
-> […]
-> 
-> > > To recap: On a ppc64le machine, building Linux in Ubuntu 21.10 with *llvm*
-> > > and *clang* 1:13.0-53~exp1
-> > > 
-> > >      $ clang --version
-> > >      Ubuntu clang version 13.0.0-2
-> > >      Target: powerpc64le-unknown-linux-gnu
-> > >      Thread model: posix
-> > >      InstalledDir: /usr/bin
-> > > 
-> > > results in a segmentation fault, while it works when building with GCC.
-> > > 
-> > >      $ gcc --version
-> > >      gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0
-> > 
-> > Thank you for keying us in. I am going to have a bit of a brain dump
-> > here based on the information I have uncovered after a couple of hours
-> > of debugging.
-> > 
-> > TL;DR: It seems like something is broken with __read_mostly + ld.lld
-> > before 14.0.0.
-> > 
-> > My initial reproduction steps (boot-qemu.sh comes from
-> > https://github.com/ClangBuiltLinux/boot-utils):
-> > 
-> > $ clang --version
-> > clang version 13.0.1 (Fedora 13.0.1-1.fc37)
-> > Target: x86_64-redhat-linux-gnu
-> > Thread model: posix
-> > InstalledDir: /usr/bin
-> > 
-> > $ powerpc64le-linux-gnu-as --version
-> > GNU assembler version 2.37-2.fc36
-> > Copyright (C) 2021 Free Software Foundation, Inc.
-> > This program is free software; you may redistribute it under the terms of
-> > the GNU General Public License version 3 or later.
-> > This program has absolutely no warranty.
-> > This assembler was configured for a target of `powerpc64le-linux-gnu'.
-> > 
-> > $ curl -LSso .config https://lore.kernel.org/all/f41550c7-26c0-cf81-7de9-aa924434a565@molgen.mpg.de/3-linux-5.17-rc4-rcu-dev-config.txt
-> > 
-> > $ scripts/config --set-val INITRAMFS_SOURCE '""'
-> > 
-> > $ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-gnu- LLVM=1 LLVM_IAS=0 all
-> > 
-> > $ boot-qemu.sh -a ppc64le -k . -t 45s
-> > QEMU location: /usr/bin
-> > 
-> > QEMU version: QEMU emulator version 6.2.0 (qemu-6.2.0-5.fc37)
-> > 
-> > + timeout --foreground 45s stdbuf -oL -eL qemu-system-ppc64 -initrd \
-> > /home/nathan/cbl/github/boot-utils-ro/images/ppc64le/rootfs.cpio -device \
-> > ipmi-bmc-sim,id=bmc0 -device isa-ipmi-bt,bmc=bmc0,irq=10 -L \
-> > /home/nathan/cbl/github/boot-utils-ro/images/ppc64le/ -bios skiboot.lid \
-> > -machine powernv8 -display none -kernel \
-> > /home/nathan/cbl/src/linux/arch/powerpc/boot/zImage.epapr -m 2G \
-> > -nodefaults -serial mon:stdio
-> > ...
-> > [    1.478028][    T1] BUG: Kernel NULL pointer dereference on read at 0x00000000
-> > [    1.478630][    T1] Faulting instruction address: 0xc00000000090bee0
-> > [    1.479521][    T1] Oops: Kernel access of bad area, sig: 11 [#1]
-> > [    1.480036][    T1] LE PAGE_SIZE=64K MMU=Hash PREEMPT SMP NR_CPUS=16 NUMA PowerNV
-> > [    1.480853][    T1] Modules linked in:
-> > [    1.481265][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc4-00001-gfa15c7cb550f #1
-> > [    1.481967][    T1] NIP:  c00000000090bee0 LR: c000000000d96b60 CTR: c0000000000d5b4c
-> > [    1.482596][    T1] REGS: c000000007443330 TRAP: 0380   Not tainted  (5.17.0-rc4-00001-gfa15c7cb550f)
-> > [    1.483305][    T1] MSR:  9000000002009033 <SF,HV,VEC,EE,ME,IR,DR,RI,LE>  CR: 22800a87  XER: 00000000
-> > [    1.484277][    T1] CFAR: c000000000d96b5c IRQMASK: 0
-> > [    1.484277][    T1] GPR00: c000000000d96b54 c0000000074435d0 c0000000028bc600 0000000000000000
-> > [    1.484277][    T1] GPR04: ffffffffffffffff ffffffffff1ea558 ffffffffff1ebfe4 c00000000261ae88
-> > [    1.484277][    T1] GPR08: 0000000000000003 0000000000000004 c00000000261ae88 0000000000000000
-> > [    1.484277][    T1] GPR12: 0000000000800000 c000000002a60000 c000000000012518 0000000000000000
-> > [    1.484277][    T1] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> > [    1.484277][    T1] GPR20: 0000000000000000 c0000000027bff80 0000000000000cc0 0000000000000000
-> > [    1.484277][    T1] GPR24: 0000000000000010 0000000000000000 0000000000000000 0000000000000000
-> > [    1.484277][    T1] GPR28: c0000000028fcfd8 c000000007b83000 0000000000000000 c0000000074435d0
-> > [    1.490325][    T1] NIP [c00000000090bee0] strlen+0x10/0x30
-> > [    1.490788][    T1] LR [c000000000d96b60] if_nlmsg_size+0x2b0/0x390
-> > [    1.491319][    T1] Call Trace:
-> > [    1.491573][    T1] [c0000000074435d0] [c000000000d96b54] if_nlmsg_size+0x2a4/0x390 (unreliable)
-> > [    1.492291][    T1] [c000000007443680] [c000000000d96790] rtmsg_ifinfo_build_skb+0x80/0x1a0
-> > [    1.492958][    T1] [c000000007443740] [c000000000d97590] rtmsg_ifinfo+0x70/0xd0
-> > [    1.493559][    T1] [c000000007443790] [c000000000d7d528] register_netdevice+0x5d8/0x670
-> > [    1.494205][    T1] [c000000007443820] [c000000000d7d94c] register_netdev+0x4c/0x80
-> > [    1.494823][    T1] [c000000007443850] [c000000000f826d8] sit_init_net+0x1b8/0x200
-> > [    1.495426][    T1] [c0000000074438d0] [c000000000d63b5c] ops_init+0x14c/0x1c0
-> > [    1.496014][    T1] [c000000007443930] [c000000000d6314c] register_pernet_operations+0xec/0x1e0
-> > [    1.496716][    T1] [c000000007443990] [c000000000d633d0] register_pernet_device+0x60/0xd0
-> > [    1.497372][    T1] [c0000000074439e0] [c000000002085194] sit_init+0x54/0x160
-> > [    1.497950][    T1] [c000000007443a70] [c000000000011c58] do_one_initcall+0x108/0x3e0
-> > [    1.498573][    T1] [c000000007443c70] [c000000002006190] do_initcall_level+0xe4/0x1c4
-> > [    1.499219][    T1] [c000000007443cc0] [c00000000200604c] do_initcalls+0x84/0xe4
-> > [    1.499799][    T1] [c000000007443d40] [c000000002005da8] kernel_init_freeable+0x160/0x1ec
-> > [    1.500444][    T1] [c000000007443da0] [c00000000001254c] kernel_init+0x3c/0x270
-> > [    1.501042][    T1] [c000000007443e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0x64
-> > [    1.501721][    T1] Instruction dump:
-> > [    1.502202][    T1] eb81ffe0 7c0803a6 4e800020 00000000 00000000 00000000 60000000 60000000
-> > [    1.502934][    T1] 3883ffff 60000000 60000000 60000000 <8ca40001> 28050000 4082fff8 7c632050
-> > [    1.504028][    T1] ---[ end trace 0000000000000000 ]---
-> > ...
-> > 
-> > First thing was figuring out where the NULL pointer dereference happens,
-> > which appears to the "strlen(ops->kind)" in rtnl_link_get_size():
-> > 
-> > 515 static size_t rtnl_link_get_size(const struct net_device *dev)
-> > 516 {
-> > 517 	const struct rtnl_link_ops *ops = dev->rtnl_link_ops;
-> > 518 	size_t size;
-> > 519
-> > 520 	if (!ops)
-> > 521 		return 0;
-> > 522
-> > 523 	size = nla_total_size(sizeof(struct nlattr)) + /* IFLA_LINKINFO */
-> > 524 	       nla_total_size(strlen(ops->kind) + 1);  /* IFLA_INFO_KIND */
-> > 
-> > which I confirmed some really rudimentary printk debugging:
-> > 
-> > [    1.476862][    T1] nathan: rtnl_link_get_size(): name: sit0, ops: c0000000028fcfd8, ops->kind: (null)
-> > 
-> > diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-> > index 710da8a36729..c8d928e83aec 100644
-> > --- a/net/core/rtnetlink.c
-> > +++ b/net/core/rtnetlink.c
-> > @@ -520,6 +520,9 @@ static size_t rtnl_link_get_size(const struct net_device *dev)
-> >   	if (!ops)
-> >   		return 0;
-> > +	pr_err("nathan: %s(): name: %s, ops: %px, ops->kind: %s\n", __func__,
-> > +	       dev->name, ops, ops->kind);
-> > +
-> >   	size = nla_total_size(sizeof(struct nlattr)) + /* IFLA_LINKINFO */
-> >   	       nla_total_size(strlen(ops->kind) + 1);  /* IFLA_INFO_KIND */
-> > 
-> > Okay... how did sit0 end up with a NULL kind...? It is very clearly
-> > defined as "sit":
-> > 
-> > 1830 static struct rtnl_link_ops sit_link_ops __read_mostly = {
-> > 1831 	.kind		= "sit",
-> > 
-> > Adding some more debug prints to net/ipv6/sit.c:
-> > 
-> > diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-> > index c0b138c20992..7b9edbed2fcd 100644
-> > --- a/net/ipv6/sit.c
-> > +++ b/net/ipv6/sit.c
-> > @@ -1920,6 +1920,12 @@ static int __net_init sit_init_net(struct net *net)
-> >   	 */
-> >   	sitn->fb_tunnel_dev->features |= NETIF_F_NETNS_LOCAL;
-> > +	pr_err("nathan: %s(): &sit_link_ops: %px\n", __func__, &sit_link_ops);
-> > +	pr_err("nathan: %s(): sit_link_ops.kind: %s\n", __func__, sit_link_ops.kind);
-> > +	pr_err("nathan: %s(): sit_link_ops.maxtype: %u\n", __func__, sit_link_ops.maxtype);
-> > +	pr_err("nathan: %s(): sitn->fb_tunnel_dev->rtnl_link_ops: %px\n", __func__, sitn->fb_tunnel_dev->rtnl_link_ops);
-> > +	pr_err("nathan: %s(): sitn->fb_tunnel_dev->rtnl_link_ops->kind: %s\n", __func__, sitn->fb_tunnel_dev->rtnl_link_ops->kind);
-> > +
-> >   	err = register_netdev(sitn->fb_tunnel_dev);
-> >   	if (err)
-> >   		goto err_reg_dev;
-> > 
-> > reveals:
-> > 
-> > [    1.471920][    T1] sit: nathan: sit_init_net(): &sit_link_ops: c0000000028fcfd8
-> > [    1.472534][    T1] sit: nathan: sit_init_net(): sit_link_ops.kind: (null)
-> > [    1.473088][    T1] sit: nathan: sit_init_net(): sit_link_ops.maxtype: 20
-> > [    1.473639][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops: c0000000028fcfd8
-> > [    1.474370][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops->kind: (null)
-> > 
-> > This is super bizarre, as the maxtype member appears to have the correct
-> > value, but how is kind's initial getting dropped on the floor?
-> > 
-> > Removing the __read_mostly annotation "fixes" it:
-> > 
-> > [    1.481708][    T1] sit: nathan: sit_init_net(): &sit_link_ops: c0000000027d3f60
-> > [    1.482319][    T1] sit: nathan: sit_init_net(): sit_link_ops.kind: sit
-> > [    1.482878][    T1] sit: nathan: sit_init_net(): sit_link_ops.maxtype: 20
-> > [    1.483429][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops: c0000000027d3f60
-> > [    1.484174][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops->kind: sit
-> > ...
-> > Linux version 5.17.0-rc4-00001-g956f02ad5c31-dirty (nathan@dev-fedora.archlinux-ax161) (clang version 13.0.1 (Fedora 13.0.1-1.fc37), LLD 13.0.1) #2 SMP PREEMPT Wed Feb 16 13:29:49 MST 2022
-> > ...
-> > 
-> > diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-> > index 7b9edbed2fcd..f109c7a0233b 100644
-> > --- a/net/ipv6/sit.c
-> > +++ b/net/ipv6/sit.c
-> > @@ -70,7 +70,7 @@ static void ipip6_tunnel_setup(struct net_device *dev);
-> >   static void ipip6_dev_free(struct net_device *dev);
-> >   static bool check_6rd(struct ip_tunnel *tunnel, const struct in6_addr *v6dst,
-> >   		      __be32 *v4dst);
-> > -static struct rtnl_link_ops sit_link_ops __read_mostly;
-> > +static struct rtnl_link_ops sit_link_ops;
-> >   static unsigned int sit_net_id __read_mostly;
-> >   struct sit_net {
-> > @@ -1827,7 +1827,7 @@ static void ipip6_dellink(struct net_device *dev, struct list_head *head)
-> >   		unregister_netdevice_queue(dev, head);
-> >   }
-> > -static struct rtnl_link_ops sit_link_ops __read_mostly = {
-> > +static struct rtnl_link_ops sit_link_ops = {
-> >   	.kind		= "sit",
-> >   	.maxtype	= IFLA_IPTUN_MAX,
-> >   	.policy		= ipip6_policy,
-> > 
-> > Switching to ld.bfd also resolves it:
-> > 
-> > [    1.470405][    T1] sit: nathan: sit_init_net(): &sit_link_ops: c0000000028acfd8
-> > [    1.471016][    T1] sit: nathan: sit_init_net(): sit_link_ops.kind: sit
-> > [    1.471534][    T1] sit: nathan: sit_init_net(): sit_link_ops.maxtype: 20
-> > [    1.472062][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops: c0000000028acfd8
-> > [    1.472790][    T1] sit: nathan: sit_init_net(): sitn->fb_tunnel_dev->rtnl_link_ops->kind: sit
-> > ...
-> > Linux version 5.17.0-rc4-00001-g956f02ad5c31 (nathan@dev-fedora.archlinux-ax161) (clang version 13.0.1 (Fedora 13.0.1-1.fc37), GNU ld version 2.37-2.fc36) #3 SMP PREEMPT Wed Feb 16 13:33:42 MST 2022
-> > ...
-> > 
-> > I tested with ToT LLVM (or at least, close to it, since there is an
-> > unrelated ld.lld regression there) and I could not reproduce it there,
-> > so I did a reverse bisect to see what commit fixes this issue in LLVM 14
-> > and I landed on:
-> > 
-> > commit 55c14d6dbfd8e7b86c15d2613fea3490078e2ae4
-> > Author: Fangrui Song <i@maskray.me>
-> > Date:   Thu Nov 25 14:12:34 2021 -0800
-> > 
-> >      [ELF] Simplify DynamicSection content computation. NFC
-> > 
-> >      The new code computes the content twice, but avoides the tricky
-> >      std::function<uint64_t()>. Removed 13KiB code in a Release build.
-> > 
-> >   lld/ELF/SyntheticSections.cpp | 117 ++++++++++++++++--------------------------
-> >   lld/ELF/SyntheticSections.h   |  12 +----
-> >   2 files changed, 44 insertions(+), 85 deletions(-)
-> > 
-> > That's... interesting, given that commit title says No Functional
-> > Change, even though there clearly is one. That commit has a couple
-> > mentions of PowerPC synthetic sections, so it is possible that the
-> > new content calculation lines up with ld.bfd?
-> > 
-> > I am not really sure where to go from here, as I don't fully understand
-> > what the problem was before that LLD change. I'll see if I can do some
-> > more investigation tomorrow (unless someone wants to beat me to it ;)
-> 
-> Thank you for looking into this, and sharing your analysis.
-> 
-> I built LLVM/clang from the master branch, rebuilt, but can still reproduce
-> this.
-> 
->     $ git clone --depth=1 https://github.com/llvm/llvm-project.git
->     $ cd llvm-project/
->     $ git log --oneline
->     41cb504b7 [mlir][linalg][bufferize][NFC] Move interface impl to Linalg
-> Transforms
->     $ mkdir build
->     $ cd build
->     $ cmake -DLLVM_ENABLE_PROJECTS=clang -G "Unix Makefiles"
+Now applied to linux-kbuild. Thanks.
 
-Since this is something related to ld.lld, not clang, this should be:
 
-... -DLLVM_ENABLE_PROJECTS="clang;lld" ...
 
-> -DCMAKE_BUILD_TYPE=Release -DLLVM_INSTALL_UTILS=ON
-> -DCMAKE_INSTALL_PREFIX=/scratch/local2/llvm ../llvm
->     $ make -j20
->     $ make -j20 clang-check
+> > ---
+> >  scripts/kallsyms.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> > index 54ad86d13784..8caabddf817c 100644
+> > --- a/scripts/kallsyms.c
+> > +++ b/scripts/kallsyms.c
+> > @@ -108,7 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
+> >       /* Symbol names that begin with the following are ignored.*/
+> >       static const char * const ignored_prefixes[] = {
+> >               "$",                    /* local symbols for ARM, MIPS, etc. */
+> > -             ".LASANPC",             /* s390 kasan local symbols */
+> > +             ".L",                   /* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
+> >               "__crc_",               /* modversions */
+> >               "__efistub_",           /* arm64 EFI stub namespace */
+> >               "__kvm_nvhe_",          /* arm64 non-VHE KVM namespace */
+> > --
+> > 2.32.0
+> >
+>
+> --
+> Cheers,
+> Changbin Du
 
-You can also do 'check-lld' if you want.
 
->     $ make install
->     $ /scratch/local2/llvm/bin/clang --version
->     clang version 15.0.0 (https://github.com/llvm/llvm-project.git
-> 41cb504b7c4b18ac15830107431a0c1eec73a6b2)
->     Target: powerpc64le-unknown-linux-gnu
->     Thread model: posix
->     InstalledDir: /scratch/local2/llvm/bin
-> 
-> Then build Linux after `make clean` with `/scratch/local2/llvm/bin` in the
-> path.
-> 
->     $ LLVM=1 LLVM_IAS=0 eatmydata make -j20
-> 
->     $ qemu-system-ppc64 -enable-kvm -nographic -smp cores=1,threads=1 -net
-> none -enable-kvm -M pseries -nodefaults -device spapr-vscsi -serial stdio -m
-> 512 -kernel /dev/shm/linux/vmlinux -append "debug_boot_weak_hash panic=-1
-> console=ttyS0 rcupdate.rcu_cpu_stall_suppress_at_boot=1
-> torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000
-> rcupdate.rcu_self_test=1 rcutorture.onoff_interval=1000
-> rcutorture.onoff_holdoff=30 rcutorture.n_barrier_cbs=4
-> rcutorture.stat_interval=15 rcutorture.shutdown_secs=420
-> rcutorture.test_no_idle_hz=1 rcutorture.verbose=1"
->     […]
->     Preparing to boot Linux version 5.17.0-rc5-00178-ga4b9a8fb20e7
-> (pmenzel@flughafenberlinbrandenburgwillybrandt.molgen.mpg.de) (clang version
-> 15.0.0 (https://github.com/llvm/llvm-project.git
-> 41cb504b7c4b18ac15830107431a0c1eec73a6b2), LLD 13.0.0) #29 SMP PREEMPT Mon
 
-                                             ^ still using ld.lld 13.0.0.
-
-If you want to test the master branch, I would checkout LLVM at
-460830a9c664e8cce959c660648faa7747ad8bdc, as the next commit introduces
-a boot regression unrelated to this issue:
-
-https://github.com/ClangBuiltLinux/linux/issues/1581
-
-That should at least confirm this is resolved in a newer release.
-
-> Feb 21 10:58:54 CET 2022
->     […]
->     [    0.465889][    T1] BUG: Kernel NULL pointer dereference on read at
-> 0x00000000
->     [    0.466749][    T1] Faulting instruction address: 0xc0000000008fc300
->     [    0.467507][    T1] Oops: Kernel access of bad area, sig: 11 [#1]
->     […]
-
-I do intend to do further analysis at some point over the next few days
-to see if I can figure out exactly why that commit that I mentioned
-above fixes the issue then we can look into what we should do about it
-in the kernel sources.
-
-Cheers,
-Nathan
+-- 
+Best Regards
+Masahiro Yamada
