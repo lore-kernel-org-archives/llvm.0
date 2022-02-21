@@ -1,41 +1,52 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED0B29A3
-	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 13:18:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645449498; x=1676985498;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vcJYgubBwS5EWIZVc7wEuxJrBDMZX2y3GacrrLk695Y=;
-  b=Ra7EVIZdB+3b4SQuvi4A0Bmv3ic/M7MpXGs4trnnA14Jg/YnBU0aqbBd
-   J843CASvPHgLJpq5oLL0jpPAEhRfhTXWTEoJs7EbDJzYoGbt5yfztQqGO
-   ejVFUnaztnCC285/W3ByP2ypKQ+1iDGAZ+JsZd0qn94jgAVkK2j3+S/E0
-   9ITqmHkTx/+OXEqXZgowk4rn1s7QQRJqguDujfpdYrcz94oMxdvWHsnrZ
-   r0gpenFeDabx90QUazP1KRXZc2JO0OK6oXCas+YrQXlv19YOx199MBKQh
-   lb7Krwvx7BxgN0Br0PFdhzHdwxiOGO8gZTZm8DFtlZY/zn2mMRYcIf0Qz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="232126808"
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="232126808"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 05:18:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="638553145"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2022 05:18:16 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nM8Zz-0001dP-9V; Mon, 21 Feb 2022 13:18:15 +0000
-Date: Mon, 21 Feb 2022 21:18:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused
- function 'readq_ch'
-Message-ID: <202202212129.7Gipg08u-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C5F7E
+	for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 14:38:08 +0000 (UTC)
+Received: by mail-qk1-f173.google.com with SMTP id c7so14746731qka.7
+        for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 06:38:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SQkkpjsX6TpHTIkwX4rlheMVKzlTSUCBOIkGIhUmEnk=;
+        b=lFloJT5XTRR77kzfHXTKnbI4pb8ZRFszg5NJtpODh2xdLUe/I00E73ECSqJvCocxE2
+         b91NgLxHbLq2mKguKL6+A8vg59eCEqgoc3DveKrETnDLj1w3kQOwUnqmAyyMEzwuyF++
+         1oz4fM9tYT3W1pjPYzepabrJTciPcMKBtMn9aK5T3gg7gaxtxK3qGRDfcii8PSRqH1m5
+         jTfcfIxVWzqsyre+F9ScBo3PJyTGXXcumCcPycf5oTgrENXqutdnUW36PETYhvnU0X6i
+         kE5fYBI0/0sqdCVOLbEJmColObNXJPYvXf2JzQQK0cwu9DtCZ/5LkSqn+45P9FbV6RjB
+         gqew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SQkkpjsX6TpHTIkwX4rlheMVKzlTSUCBOIkGIhUmEnk=;
+        b=WFbmKEsw9qOObhpLuEKB4oCLC8K6oGUgYynBxfSdCwY+edbWeJbLbL8gvMNmKAx/fv
+         OU0n1or6PEfmcDHfYifGZMfvkmPKyHgDVTd5MgzdoHmsxavWLLl9AbfFj6OBWocxnzYO
+         gS6i0M+vkx0OTTufYi+saqmZkuk8cGnM02vxErESuK5gMuSBhylwLdLS4TIHfZqfjLQN
+         5BbEvRNgsQeeoyG+9yYeFMxqbotFOq5BGVieMV5Y8aYCYL7Ac3LV6fkyk9bZM50527wF
+         sVECrIJRgwYKCH8HDtfDK9WkXms7WeNzI2ur68O8spLXw/dFbuw7XZgRiEp253ZGJ3Sn
+         SslA==
+X-Gm-Message-State: AOAM532yiAONxg4XGPrG164DOfAAj18Clr3X52YqevEq/R9iV9vHnCD8
+	Wu6wYyjSN2MYuFF1yLL0G6w=
+X-Google-Smtp-Source: ABdhPJxlKmrxFZuT/FAITTFKtimqCuPmpqJElllBfSaAREj/db8P6HZlcu9ug388nFgwdaclSsMcRA==
+X-Received: by 2002:ae9:df42:0:b0:47e:fe7b:a202 with SMTP id t63-20020ae9df42000000b0047efe7ba202mr12266908qkf.256.1645454287319;
+        Mon, 21 Feb 2022 06:38:07 -0800 (PST)
+Received: from mail.google.com ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id bm8sm20942916qkb.25.2022.02.21.06.38.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 06:38:07 -0800 (PST)
+Date: Mon, 21 Feb 2022 22:37:58 +0800
+From: Changbin Du <changbin.du@gmail.com>
+To: Changbin Du <changbin.du@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] kallsyms: ignore all local labels prefixed by '.L'
+Message-ID: <20220221143758.7wln3mklyaj7mzod@mail.google.com>
+References: <20220201013257.17926-1-changbin.du@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,86 +55,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220201013257.17926-1-changbin.du@gmail.com>
 
-Hi Gustavo,
+Hi, Masahiro,
+Could you consider picking up this change if you have no objection?
 
-FYI, the error/warning still remains.
+On Tue, Feb 01, 2022 at 09:32:57AM +0800, Changbin Du wrote:
+> The llvm compiler can generate lots of local labels ('.LBB', '.Ltmpxxx',
+> '.L__unnamed_xx', etc.). These symbols usually are useless for debugging.
+> And they might overlap with handwritten symbols.
+> 
+> Before this change, a dumpstack shows a local symbol for epc:
+> [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
+> [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
+> [    0.040452][    T0]  ra : restore_all+0x12/0x6e
+> 
+> The simple solution is that we can ignore all local labels prefixed by '.L'.
+> For handwritten symbols which need to be preserved should drop the '.L'
+> prefix.
+> 
+> After this change, the C defined symbol is shown so we can locate the
+> problematical code immediately:
+> [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
+> [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
+> [    0.036567][    T0]  ra : restore_all+0x12/0x6e
+> 
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> ---
+>  scripts/kallsyms.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 54ad86d13784..8caabddf817c 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -108,7 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
+>  	/* Symbol names that begin with the following are ignored.*/
+>  	static const char * const ignored_prefixes[] = {
+>  		"$",			/* local symbols for ARM, MIPS, etc. */
+> -		".LASANPC",		/* s390 kasan local symbols */
+> +		".L",			/* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
+>  		"__crc_",		/* modversions */
+>  		"__efistub_",		/* arm64 EFI stub namespace */
+>  		"__kvm_nvhe_",		/* arm64 non-VHE KVM namespace */
+> -- 
+> 2.32.0
+> 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
-commit: e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec dmaengine: dw-edma: Add support for the HDMA feature
-date:   11 months ago
-config: mips-randconfig-r001-20220221 (https://download.01.org/0day-ci/archive/20220221/202202212129.7Gipg08u-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/cavium-octeon/crypto/ arch/mips/cavium-octeon/executive/ arch/mips/kernel/ drivers/dma/dw-edma/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused function 'readq_ch'
-   static inline u64 readq_ch(struct dw_edma enum dw_edma_dir dir, u16 ch,
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 16, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept (1 - (0x00 == 0x04)); sync 0x00; .endr; .set pop; .else; ; .endif'
-   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-   Target: mips64el-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-d271fc04d5/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch drivers include kernel nr_bisected scripts source usr
-
-
-vim +/readq_ch +192 drivers/dma/dw-edma/dw-edma-v0-core.c
-
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  191  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @192  static inline u64 readq_ch(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch,
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  193  			   const void __iomem *addr)
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  194  {
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  195  	u32 value;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  196  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  197  	if (dw->mf == EDMA_MF_EDMA_LEGACY) {
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  198  		u32 viewport_sel;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  199  		unsigned long flags;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  200  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  201  		raw_spin_lock_irqsave(&dw->lock, flags);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  202  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  203  		viewport_sel = FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  204  		if (dir == EDMA_DIR_READ)
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  205  			viewport_sel |= BIT(31);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  206  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  207  		writel(viewport_sel,
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  208  		       &(__dw_regs(dw)->type.legacy.viewport_sel));
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  209  		value = readq(addr);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  210  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  211  		raw_spin_unlock_irqrestore(&dw->lock, flags);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  212  	} else {
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  213  		value = readq(addr);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  214  	}
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  215  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  216  	return value;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  217  }
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  218  
-
-:::::: The code at line 192 was first introduced by commit
-:::::: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
-
-:::::: TO: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-:::::: CC: Vinod Koul <vkoul@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Cheers,
+Changbin Du
