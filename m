@@ -1,162 +1,87 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608F266CD
-	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 18:47:09 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7C69106F;
-	Tue, 22 Feb 2022 10:47:08 -0800 (PST)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3FD213F66F;
-	Tue, 22 Feb 2022 10:47:06 -0800 (PST)
-Date: Tue, 22 Feb 2022 18:47:03 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Dan Li <ashimida@linux.alibaba.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, nathan@kernel.org,
-	ndesaulniers@google.com, keescook@chromium.org,
-	masahiroy@kernel.org, tglx@linutronix.de, akpm@linux-foundation.org,
-	samitolvanen@google.com, npiggin@gmail.com, linux@roeck-us.net,
-	mhiramat@kernel.org, ojeda@kernel.org, luc.vanoostenryck@gmail.com,
-	elver@google.com, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
-Message-ID: <YhUvp5RHkTlBXX3o@lakrids>
-References: <20220222095736.24898-1-ashimida@linux.alibaba.com>
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0ADA66CF
+	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 19:12:49 +0000 (UTC)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2d641c31776so186026197b3.12
+        for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 11:12:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MIuf7B6ggNpBhnBC4BV4Wx/yI126tWB3veseg963gIw=;
+        b=oO4DLFIdF57cng91nz+ABsKhV3TEZMT4YH2lr4gu+QyKiHY/p9DVOaozbT73qgUo+w
+         xQ27MwmBRWjReen46DDOboOnddmO9/G+2my87QZxKBkXv4l+/ZIkzCE+YibDvGS82tr0
+         HZoBeNSLHqIdxa1Bqoclcc2rWWVKuuZ97ifQkHXI6/n3++k7W9wF8snW9tx1VykggiAd
+         hu4BJF221YTv/PUYb8MOBSrE1s9NmmfgNSMv7MEWWG2IgolZVZtOzOZbfb9F9dGBcui2
+         No4HnBw2U9LDz6tICVmKGe/4TXVP/KGT/hXXO865Xl+3ZFSgHikjXcCE37PmLXsefax7
+         bpcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MIuf7B6ggNpBhnBC4BV4Wx/yI126tWB3veseg963gIw=;
+        b=7owAZo/ArszdMdnRQ1XSOio0NhAEqhVUQpxTgxe45q5soxMS5zJbAu4QwjJKgoCNAQ
+         pU8OMxH+oin2WKiIWjm/6MiptndtygBIxPZ4F3ODYieFv+V6fYYi375bTxV6tkzDh1JC
+         iwJeHtNczafm/lS8jQ8Iypl54nUzs9dfRRFhXLS70TbWAsEowT5o/N0dO2PxNbqE315T
+         r3hFDm8LQnEV00FY9ITpMC/m/zS7FOOdiufOhOMHQI1aufMnyX2QHJY6tyL90fjniLpr
+         RYWlk90k2mA32ufUzZUpbm86oPfArn/EoZJ3RKQug+O6c9q9AZsEjjHAN1FcWlvmu+9i
+         GZlw==
+X-Gm-Message-State: AOAM533K3VPX+Xa4f1ne4RnvsvZBOsMEMnRVPsMDKPeLDDTxVl4CjRkh
+	LXJNgaf8vXyl4swvyx4zq2PoMN36Ew4dezlbwow=
+X-Google-Smtp-Source: ABdhPJwogRs4v3RoIbi9LLn5frjoRnppXVlb2XUr+i5bRqLbpZZJ4wuR98W0v903ktfUAXqLtpj99zYOXAJ1elSwzCI=
+X-Received: by 2002:a81:184f:0:b0:2d0:e2b1:1995 with SMTP id
+ 76-20020a81184f000000b002d0e2b11995mr24474079ywy.364.1645557168674; Tue, 22
+ Feb 2022 11:12:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222095736.24898-1-ashimida@linux.alibaba.com>
+References: <20220217153842.3252424-1-trix@redhat.com> <51018469-3bab-e56d-7407-b16170b5d74c@amd.com>
+ <CADnq5_OGEURo76mzc4Sb2Jar465Xt4vkSMECDi5jCMH332zUAg@mail.gmail.com>
+ <CAKwvOdnYTC7mku1=eVaDLGQFHdoN3u8Afoo582OAQ+ApJmfhQQ@mail.gmail.com> <CADnq5_PniW+-8G5AhOSwuovESpfeMxL4r6P30b3F1coa_NmMEQ@mail.gmail.com>
+In-Reply-To: <CADnq5_PniW+-8G5AhOSwuovESpfeMxL4r6P30b3F1coa_NmMEQ@mail.gmail.com>
+From: Kenny Ho <y2kenny@gmail.com>
+Date: Tue, 22 Feb 2022 14:12:37 -0500
+Message-ID: <CAOWid-cXYze56YmUACWP4emNeGHXMFf4q5aZfFGUwVXWNFAvSg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: fix amdgpu_ras_block_late_init error handler
+To: Alex Deucher <alexdeucher@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, "Joshi, Mukul" <mukul.joshi@amd.com>, 
+	Tao Zhou <tao.zhou1@amd.com>, llvm@lists.linux.dev, Dave Airlie <airlied@linux.ie>, 
+	Tom Rix <trix@redhat.com>, xinhui pan <Xinhui.Pan@amd.com>, Nirmoy Das <nirmoy.das@amd.com>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	Maling list - DRI developers <dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Luben Tuikov <luben.tuikov@amd.com>, "Stanley.Yang" <Stanley.Yang@amd.com>, 
+	amd-gfx list <amd-gfx@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>, 
+	"Deucher, Alexander" <alexander.deucher@amd.com>, "Chai, Thomas" <YiPeng.Chai@amd.com>, 
+	John Clements <john.clements@amd.com>, Christian Koenig <christian.koenig@amd.com>, 
+	Dennis Li <Dennis.Li@amd.com>, Hawking Zhang <Hawking.Zhang@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+On Thu, Feb 17, 2022 at 2:06 PM Alex Deucher <alexdeucher@gmail.com> wrote:
+>
+> On Thu, Feb 17, 2022 at 2:04 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> >
+> > Alex,
+> > Has AMD been able to set up clang builds, yet?
+>
+> No.  I think some individual teams do, but it's never been integrated
+> into our larger CI systems as of yet as far as I know.
 
-On Tue, Feb 22, 2022 at 01:57:36AM -0800, Dan Li wrote:
-> Shadow call stack is available in GCC > 11.2.0, this patch makes
-> the corresponding kernel configuration available when compiling
-> the kernel with gcc.
+I have just added clang build to our CI last night so hopefully we
+should be catching these now.
 
-Neat!
+Kenny
 
-My local GCC devs told me that means GCC 12.x.x rather than 11.2.x or
-11.3.x, so as others have said it'd be clearer to say `GCC >= 12.0.0`.
-
-I'd like to try this with a GCC binary before I provide an Ack or R-b;
-but in the mean time I have a few comments below.
-
-> Note that the implementation in GCC is slightly different from Clang.
-> With SCS enabled, functions will only pop x30 once in the epilogue,
-> like:
-> 
->    str     x30, [x18], #8
->    stp     x29, x30, [sp, #-16]!
->    ......
-> -  ldp     x29, x30, [sp], #16	  //clang
-> +  ldr     x29, [sp], #16	  //GCC
->    ldr     x30, [x18, #-8]!
-
-Given the prologue still pushes both x29 and x30 (which we critically
-depend upon) that sounds OK to me.
-
-> 
-> Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ce09ab17ddd21f73ff2caf6eec3b0ee9b0e1a11e
-> 
-> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
-> ---
-> FYI:
-> This function can be used to test if the shadow call stack works:
-> //noinline void __noscs scs_test(void)
-> noinline void scs_test(void)
-> {
->     register unsigned long *sp asm("sp");
->     unsigned long * lr = sp + 1;
-> 
->     asm volatile("":::"x30");
->     *lr = 0;
-> }
-
-It's probably be better to use __builtin_frame_address(0) to get the
-address of the frame record rather than assuming that fp==sp in the
-middle of the function.
-
-> ffff800008012704:       d503233f        paciasp
-> ffff800008012708:       f800865e        str     x30, [x18], #8
-> ffff80000801270c:       a9bf7bfd        stp     x29, x30, [sp, #-16]!
-> ffff800008012710:       910003fd        mov     x29, sp
-> ffff800008012714:       910003e0        mov     x0, sp
-> ffff800008012718:       f900041f        str     xzr, [x0, #8]
-> ffff80000801271c:       f85f8e5e        ldr     x30, [x18, #-8]!
-> ffff800008012720:       f84107fd        ldr     x29, [sp], #16
-> ffff800008012724:       d50323bf        autiasp
-> ffff800008012728:       d65f03c0        ret
-> 
-> If SCS protection is enabled, this function will return normally.
-> If the function has __noscs attribute (scs disabled), it will crash due to 0
-> address access.
-> 
->  arch/Kconfig                 | 6 +++---
->  arch/arm64/Kconfig           | 2 +-
->  include/linux/compiler-gcc.h | 4 ++++
->  3 files changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 678a80713b21..35db7b72bdb0 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -604,11 +604,11 @@ config ARCH_SUPPORTS_SHADOW_CALL_STACK
->  	  switching.
->  
->  config SHADOW_CALL_STACK
-> -	bool "Clang Shadow Call Stack"
-> -	depends on CC_IS_CLANG && ARCH_SUPPORTS_SHADOW_CALL_STACK
-> +	bool "Shadow Call Stack"
-> +	depends on ARCH_SUPPORTS_SHADOW_CALL_STACK
->  	depends on DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
->  	help
-> -	  This option enables Clang's Shadow Call Stack, which uses a
-> +	  This option enables Clang/GCC's Shadow Call Stack, which uses a
->  	  shadow stack to protect function return addresses from being
->  	  overwritten by an attacker. More information can be found in
->  	  Clang's documentation:
-
-Is there any additional GCC documentation that we can refer to?
-
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 09b885cc4db5..a48a604301aa 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1255,7 +1255,7 @@ config HW_PERF_EVENTS
->  config ARCH_HAS_FILTER_PGPROT
->  	def_bool y
->  
-> -# Supported by clang >= 7.0
-> +# Supported by clang >= 7.0 or GCC > 11.2.0
-
-As above, I beleive that should be `GCC >= 12.0.0`.
-
-Thanks,
-Mark
-
->  config CC_HAVE_SHADOW_CALL_STACK
->  	def_bool $(cc-option, -fsanitize=shadow-call-stack -ffixed-x18)
->  
-> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> index ccbbd31b3aae..deff5b308470 100644
-> --- a/include/linux/compiler-gcc.h
-> +++ b/include/linux/compiler-gcc.h
-> @@ -97,6 +97,10 @@
->  #define KASAN_ABI_VERSION 4
->  #endif
->  
-> +#ifdef CONFIG_SHADOW_CALL_STACK
-> +#define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
-> +#endif
-> +
->  #if __has_attribute(__no_sanitize_address__)
->  #define __no_sanitize_address __attribute__((no_sanitize_address))
->  #else
-> -- 
-> 2.17.1
-> 
+>
+> Alex
+>
+>
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
