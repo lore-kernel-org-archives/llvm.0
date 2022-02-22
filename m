@@ -1,42 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F2C625
-	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 05:50:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A9E625
+	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 06:10:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645509056; x=1677045056;
+  t=1645510256; x=1677046256;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FpTtmPw41hisDff68vmLmLvhusiJ3pxgDtt1JI9XhxU=;
-  b=n0+ER/6I+X+hlgH7ZtRf+SnrrYxSWTAljAE7GLg9xKpiWF+DkTFYeNcD
-   cLBqY1LAVngPbhQPn0elSdrcM+2/c0DNWWDYI9c1IyNBhcoNv4WOjfV6s
-   yanPsXZIfQ73IrRQzjRqQDTCypkCKSZbdw884gn1mjwgaGM4+n/i5ukKv
-   m2Tv3aiCorRdrtlJ6gsN5k+1zqENUnESdXjL5CP960zYMGegde7Neoiu4
-   3VGtf+Ve9u+VG3VIZNTLDxhVFUNI67wa4A6fJIKEjFyo+FnxN099GKN54
-   b6LA6ZJPcxvT3wpGZDzIaO8AwrY9NSNsKnbOOE8+FJyjm/JY5ghgHgqbP
+  bh=9ilr9rbsDwfjmR9iFtIV52yKRpeR9y4HwxI7wXpXrB8=;
+  b=kwA5A0SvKwnYj5a/BrhSkCyZk6oDgk7Z0Q868LRy4+BpBZkjVzBCmE36
+   kFX1OcZpK20dyirXX+RC8LjOPwkYLPbKcZ6PDsoXtcs15aDR1OUgok0CI
+   lag2Ejrj3gPgY9MD/R5c5wHcY0sYUqjWpkqnIQJreFqGMXBgagkhm31vp
+   kmDq7KCfkBpVY7pMe+n0OvVzMYxIVcfvymKqG/HRXiqniNYbc35RkeKED
+   CS+gUC8XSRF8saQMIFLImUxSgcm+u566xfuG9Qpb1FnIM1oIfrw+I3C1B
+   G3NJCFPKme32VltfbjAVCqFho1vlXWzkA5S33sB50jQBhvK8tJ1B9uwK8
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="250438012"
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="312365860"
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="250438012"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 21:50:55 -0800
+   d="scan'208";a="312365860"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 22:10:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="706484527"
+   d="scan'208";a="532099330"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 21 Feb 2022 21:50:53 -0800
+  by orsmga007.jf.intel.com with ESMTP; 21 Feb 2022 22:10:54 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMO4a-0002Nn-Pt; Tue, 22 Feb 2022 05:50:52 +0000
-Date: Tue, 22 Feb 2022 13:50:06 +0800
+	id 1nMONx-0002Oa-CP; Tue, 22 Feb 2022 06:10:53 +0000
+Date: Tue, 22 Feb 2022 14:10:41 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 641/2541]
- include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h'
- file not found
-Message-ID: <202202221335.rSY1P2K8-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 2122/2541]
+ arch/s390/include/asm/processor.h:307:13: error: use of undeclared
+ identifier '_THIS_IP_'
+Message-ID: <202202221415.RGRWi3xN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,36 +49,54 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   601144c0da5edfa67a9654158370da19c67e17e2
-commit: 09a297eeea223eb1785cb3680149c82f6407fbd1 [641/2541] headers/deps: Add header dependencies to .h files: <asm/vdso/processor.h>
-config: hexagon-randconfig-r045-20220221 (https://download.01.org/0day-ci/archive/20220222/202202221335.rSY1P2K8-lkp@intel.com/config)
+commit: 58809689cf88dc9300f57d8a653053ae3d36acbd [2122/2541] headers/deps: Add header dependencies to .h files: <linux/xarray_api.h>
+config: s390-randconfig-r044-20220221 (https://download.01.org/0day-ci/archive/20220222/202202221415.RGRWi3xN-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=09a297eeea223eb1785cb3680149c82f6407fbd1
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=58809689cf88dc9300f57d8a653053ae3d36acbd
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 09a297eeea223eb1785cb3680149c82f6407fbd1
+        git checkout 58809689cf88dc9300f57d8a653053ae3d36acbd
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:28:
-   In file included from arch/hexagon/include/asm/bitops.h:13:
-   In file included from arch/hexagon/include/asm/atomic.h:13:
-   In file included from ./arch/hexagon/include/generated/asm/barrier.h:1:
->> include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h' file not found
-   #include <asm/vdso/processor.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:6:
+   In file included from include/linux/xarray_api.h:15:
+   In file included from include/linux/lockdep_api.h:27:
+   In file included from include/linux/smp_api.h:15:
+   In file included from arch/s390/include/asm/smp.h:13:
+>> arch/s390/include/asm/processor.h:307:13: error: use of undeclared identifier '_THIS_IP_'
+           psw.addr = _THIS_IP_;
+                      ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:6:
+   In file included from include/linux/xarray_api.h:15:
+   In file included from include/linux/lockdep_api.h:27:
+   In file included from include/linux/smp_api.h:15:
+   arch/s390/include/asm/smp.h:20:30: error: expected ';' after top level declarator
+   extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
+                                ^
+                                ;
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:6:
+   In file included from include/linux/xarray_api.h:19:
+   In file included from include/linux/rcupdate.h:35:
+   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
+   # include <generated/asm-offsets.h>
+             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/s390/kernel/asm-offsets.s] Error 1
    make[2]: Target '__build' not remade because of errors.
    make[1]: *** [Makefile:1191: prepare0] Error 2
    make[1]: Target 'prepare' not remade because of errors.
@@ -86,14 +104,28 @@ All errors (new ones prefixed by >>):
    make: Target 'prepare' not remade because of errors.
 
 
-vim +16 include/asm-generic/barrier.h
+vim +/_THIS_IP_ +307 arch/s390/include/asm/processor.h
 
-    15	
-  > 16	#include <asm/vdso/processor.h>
-    17	#include <linux/compiler.h>
-    18	#include <linux/kcsan-checks.h>
-    19	#include <asm/rwonce.h>
-    20	
+ccf45cafb08059 arch/s390/include/asm/processor.h Martin Schwidefsky 2011-10-30  298  
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  299  /*
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  300   * Function to drop a processor into disabled wait state
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  301   */
+c2e06e15ad92ba arch/s390/include/asm/processor.h Vasily Gorbik      2019-11-22  302  static __always_inline void __noreturn disabled_wait(void)
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  303  {
+f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  304  	psw_t psw;
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  305  
+f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  306  	psw.mask = PSW_MASK_BASE | PSW_MASK_WAIT | PSW_MASK_BA | PSW_MASK_EA;
+98587c2d894c34 arch/s390/include/asm/processor.h Martin Schwidefsky 2019-04-30 @307  	psw.addr = _THIS_IP_;
+f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  308  	__load_psw(psw);
+edd5378740fe77 arch/s390/include/asm/processor.h Heiko Carstens     2008-12-25  309  	while (1);
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  310  }
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  311  
+
+:::::: The code at line 307 was first introduced by commit
+:::::: 98587c2d894c34c9af5cd84ca169e1cd493aa692 s390: simplify disabled_wait
+
+:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
+:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
