@@ -1,172 +1,103 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42B17E
-	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 22:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645569608; x=1677105608;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=176wQLv+JPu+ax5PyfIh5eLueGcR4pg2eaaptBLTKaI=;
-  b=QKxEELChJSvs5eVT87usAEpTSfdnGYQHLdbL7X8stX6s1Y1orfqdGvvQ
-   f0CanqKz26XcgueUcDcM4TDVsH1YYcULB94anzYMyk6r1LqfdtxevpW/d
-   vthNmmGdmRu6tI1Q+1AHvyjTy3s40ow5J8mgF8QSGTwZnVRGMSVomj2uD
-   phAZGm9gdF91ip7TgduDUw1WbV0qGdrpyopEYvcvoM9OiEO9bpekVQe++
-   3QNYqSJIIc9pdl6V3pKn87rK/2JMsJ8JPTCVrghTpw0WgUIAObKwsvGhD
-   USDeqz8VOxdjt1PrRW98Js4BPcylMku5UPTgWyJC48CK/8URiXKtpN2DC
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="276441748"
-X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
-   d="scan'208";a="276441748"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 14:40:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
-   d="scan'208";a="683686011"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Feb 2022 14:40:06 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nMdpF-0000h7-Dh; Tue, 22 Feb 2022 22:40:05 +0000
-Date: Wed, 23 Feb 2022 06:39:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Phillip Potter <phil@philpotter.co.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [staging:staging-next 55/83]
- drivers/staging/r8188eu/hal/usb_halinit.c:1541:6: warning: variable 'arg'
- set but not used
-Message-ID: <202202230620.BKXzonUy-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AB67E
+	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 23:16:46 +0000 (UTC)
+Received: by mail-ej1-f47.google.com with SMTP id r13so24493321ejd.5
+        for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 15:16:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KzvH9ZQaXdUgSyIdwCtFzNEtbBoZxdQVld6HVvqC3h0=;
+        b=S/IydQVZc46d4zetWnmQ5U0e/PzMQNOi9DIjYeoinrNryqb/zeu17/TuDGbIX/KWpC
+         72p/RUQcIO43sVlxpFBZmQdfy6WJtCivMolKcubjDm1vgXMy8k/BPNGr/UPBh9C4W41h
+         4OMcW3ugJLilxrgRaLIAK4YLgo1M1xTJxv0gptrzQotyWQ8BVbQgyOuu/RAZGlM5Bw8P
+         JmKxduxWoEh8ZNP3EI0O00LrNVhJlX3v4Rw2jBvCxgmBre2DuzWvIcOX5LuS+YxoHWGU
+         YdMkjRgsLGwFaosBa6vzrp7EVsu7uc8gPip0/Bri8/5SM/66BSW/Pl4hxH3OB0jOdfoL
+         rEiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KzvH9ZQaXdUgSyIdwCtFzNEtbBoZxdQVld6HVvqC3h0=;
+        b=YhqoKexFcgiisLr56P25gaTqaXPjyvFeJvvqmwc1nM8MtvNoRmVHo1txsm/hEQn3b3
+         FudqmhVNRjIqhpc+Yu8pigyiGI7GYWmEXfVdo1UcbMKGVjt+Wa6fuuHZfMjzfPBYkwIf
+         Vvv5H3qEYk6Ln0uxCejH6iruV2Zi0A7OcNwQNNzKDA7yELVn19oscuix/4BeyThlxUw6
+         /nXH8wrl/SqVs6Jw4plkVXezEfrn4f+6lrMJVHV3q5TVwODufY6Rphz24zsmEFQ87p/H
+         VAlA69e5u2OiQ8G97NkM9GUzDfGeo8QERDeQiUj4hoY4kSu9dRWTd5AozpQZgxQTTi2F
+         UX+g==
+X-Gm-Message-State: AOAM533S2QYRMg43KW2VfXRR3ZwOea4R69+HwR64LB4N+uQovVKyf6uc
+	SK/YD1EW87NcxfbbI2KcASZ0cbmGBw8iIECtrr6t
+X-Google-Smtp-Source: ABdhPJyC5JfFslCe0iSc7dk6uE4kYr0sXtIjOP3+4cJ8OXdGFLZZdB3wUVrWstGC2q8isedVNDR8Em5of/ldksyZE6c=
+X-Received: by 2002:a17:907:2a54:b0:6d5:879d:aca4 with SMTP id
+ fe20-20020a1709072a5400b006d5879daca4mr419389ejc.29.1645571804662; Tue, 22
+ Feb 2022 15:16:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220217142133.72205-1-cgzones@googlemail.com>
+ <20220217142133.72205-3-cgzones@googlemail.com> <CAHC9VhT77Ft4+5LmNP0dwtaeNzF+r0b=9M5vh7qA1poY9jesJA@mail.gmail.com>
+ <CAKwvOdkioR+7aebgzPu2Exe0oD9rwAeHK=CgM6vAkpBWdHnF2Q@mail.gmail.com>
+In-Reply-To: <CAKwvOdkioR+7aebgzPu2Exe0oD9rwAeHK=CgM6vAkpBWdHnF2Q@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 22 Feb 2022 18:16:33 -0500
+Message-ID: <CAHC9VhSKZes9g_GHMKJdhd_BEt7GT4FKOLeMJ=o=FU8TtOZ-gg@mail.gmail.com>
+Subject: Re: [PATCH 4/5] selinux: declare data arrays const
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
+	selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Eric Paris <eparis@parisplace.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Jeremy Kerr <jk@codeconstruct.com.au>, 
+	"David S. Miller" <davem@davemloft.net>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Yang Li <yang.lee@linux.alibaba.com>, Austin Kim <austin.kim@lge.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git staging-next
-head:   7c6444d8e0f1be30e7fd910e40c0d495c36e6935
-commit: db67ebf6b49cd6909f210ee44eb51d3cf2e39ae4 [55/83] staging: r8188eu: remove DBG_88E calls from hal subdir
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220223/202202230620.BKXzonUy-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?id=db67ebf6b49cd6909f210ee44eb51d3cf2e39ae4
-        git remote add staging https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-        git fetch --no-tags staging staging-next
-        git checkout db67ebf6b49cd6909f210ee44eb51d3cf2e39ae4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pinctrl/ drivers/remoteproc/ drivers/staging/r8188eu/
+On Fri, Feb 18, 2022 at 12:24 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+> On Fri, Feb 18, 2022 at 8:13 AM Paul Moore <paul@paul-moore.com> wrote:
+> > On Thu, Feb 17, 2022 at 9:21 AM Christian G=C3=B6ttsche
+> > <cgzones@googlemail.com> wrote:
+> > >
+> > > diff --git a/security/selinux/include/initial_sid_to_string.h b/secur=
+ity/selinux/include/initial_sid_to_string.h
+> > > index 5d332aeb8b6c..915283cd89bd 100644
+> > > --- a/security/selinux/include/initial_sid_to_string.h
+> > > +++ b/security/selinux/include/initial_sid_to_string.h
+> > > @@ -1,5 +1,12 @@
+> > >  /* SPDX-License-Identifier: GPL-2.0 */
+> > > -static const char *initial_sid_to_string[] =3D
+> > > +
+> > > +#ifdef __SELINUX_GENHEADERS__
+> > > +# define const_qual
+> > > +#else
+> > > +# define const_qual const
+> > > +#endif
+> > > +
+> > > +static const char *const_qual initial_sid_to_string[] =3D
+> > >  {
+> > >         NULL,
+> > >         "kernel",
+> >
+> > Thanks for this Christian.  I generally like when we can const'ify
+> > things like this, but I'm not excited about the const_qual hack on
+> > core SELinux kernel code to satisfy genheaders.c.  I understand why it
+> > is needed, but I would rather clutter the genheaders.c code than the
+> > core SELinux kernel code.  If we can't cast away the const'ification
+> > in genheaders.c could we simply allocate duplicate arrays in
+> > genheaders.c and store the transformed strings into the new arrays?
+>
+> Note: casting off const is UB. I've had to fix multiple bugs where
+> clang will drop writes to variables declared const but had const'ness
+> casted away.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Then let's just memcpy the array in genheaders.c.  I'm okay with
+genheaders being a little ugly if it helps keep the core code cleaner.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/staging/r8188eu/hal/usb_halinit.c:1541:6: warning: variable 'arg' set but not used [-Wunused-but-set-variable]
-                   u8 arg;
-                      ^
-   1 warning generated.
-
-
-vim +/arg +1541 drivers/staging/r8188eu/hal/usb_halinit.c
-
-8cd574e6af5463a Phillip Potter  2021-07-28  1485  
-b561d2f0dc01ab0 Michael Straube 2021-09-06  1486  void UpdateHalRAMask8188EUsb(struct adapter *adapt, u32 mac_id, u8 rssi_level)
-8cd574e6af5463a Phillip Potter  2021-07-28  1487  {
-8cd574e6af5463a Phillip Potter  2021-07-28  1488  	u8 init_rate = 0;
-8cd574e6af5463a Phillip Potter  2021-07-28  1489  	u8 networkType, raid;
-8cd574e6af5463a Phillip Potter  2021-07-28  1490  	u32 mask, rate_bitmap;
-8cd574e6af5463a Phillip Potter  2021-07-28  1491  	u8 shortGIrate = false;
-8cd574e6af5463a Phillip Potter  2021-07-28  1492  	int	supportRateNum = 0;
-8cd574e6af5463a Phillip Potter  2021-07-28  1493  	struct sta_info	*psta;
-d904512db6f3727 Michael Straube 2021-12-07  1494  	struct hal_data_8188e *haldata = &adapt->haldata;
-8cd574e6af5463a Phillip Potter  2021-07-28  1495  	struct mlme_ext_priv	*pmlmeext = &adapt->mlmeextpriv;
-6839ff57baa4a60 Michael Straube 2021-08-09  1496  	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
-6839ff57baa4a60 Michael Straube 2021-08-09  1497  	struct wlan_bssid_ex	*cur_network = &pmlmeinfo->network;
-8cd574e6af5463a Phillip Potter  2021-07-28  1498  
-8cd574e6af5463a Phillip Potter  2021-07-28  1499  	if (mac_id >= NUM_STA) /* CAM_SIZE */
-8cd574e6af5463a Phillip Potter  2021-07-28  1500  		return;
-8cd574e6af5463a Phillip Potter  2021-07-28  1501  	psta = pmlmeinfo->FW_sta_info[mac_id].psta;
-725a3f1c4d56b73 Michael Straube 2021-08-01  1502  	if (!psta)
-8cd574e6af5463a Phillip Potter  2021-07-28  1503  		return;
-8cd574e6af5463a Phillip Potter  2021-07-28  1504  	switch (mac_id) {
-8cd574e6af5463a Phillip Potter  2021-07-28  1505  	case 0:/*  for infra mode */
-8cd574e6af5463a Phillip Potter  2021-07-28  1506  		supportRateNum = rtw_get_rateset_len(cur_network->SupportedRates);
-8cd574e6af5463a Phillip Potter  2021-07-28  1507  		networkType = judge_network_type(adapt, cur_network->SupportedRates, supportRateNum) & 0xf;
-8cd574e6af5463a Phillip Potter  2021-07-28  1508  		raid = networktype_to_raid(networkType);
-8cd574e6af5463a Phillip Potter  2021-07-28  1509  		mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
-6839ff57baa4a60 Michael Straube 2021-08-09  1510  		mask |= (pmlmeinfo->HT_enable) ? update_MSC_rate(&pmlmeinfo->HT_caps) : 0;
-6839ff57baa4a60 Michael Straube 2021-08-09  1511  		if (support_short_GI(adapt, &pmlmeinfo->HT_caps))
-8cd574e6af5463a Phillip Potter  2021-07-28  1512  			shortGIrate = true;
-8cd574e6af5463a Phillip Potter  2021-07-28  1513  		break;
-8cd574e6af5463a Phillip Potter  2021-07-28  1514  	case 1:/* for broadcast/multicast */
-8cd574e6af5463a Phillip Potter  2021-07-28  1515  		supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
-8cd574e6af5463a Phillip Potter  2021-07-28  1516  		if (pmlmeext->cur_wireless_mode & WIRELESS_11B)
-8cd574e6af5463a Phillip Potter  2021-07-28  1517  			networkType = WIRELESS_11B;
-8cd574e6af5463a Phillip Potter  2021-07-28  1518  		else
-8cd574e6af5463a Phillip Potter  2021-07-28  1519  			networkType = WIRELESS_11G;
-8cd574e6af5463a Phillip Potter  2021-07-28  1520  		raid = networktype_to_raid(networkType);
-8cd574e6af5463a Phillip Potter  2021-07-28  1521  		mask = update_basic_rate(cur_network->SupportedRates, supportRateNum);
-8cd574e6af5463a Phillip Potter  2021-07-28  1522  		break;
-8cd574e6af5463a Phillip Potter  2021-07-28  1523  	default: /* for each sta in IBSS */
-8cd574e6af5463a Phillip Potter  2021-07-28  1524  		supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
-8cd574e6af5463a Phillip Potter  2021-07-28  1525  		networkType = judge_network_type(adapt, pmlmeinfo->FW_sta_info[mac_id].SupportedRates, supportRateNum) & 0xf;
-8cd574e6af5463a Phillip Potter  2021-07-28  1526  		raid = networktype_to_raid(networkType);
-8cd574e6af5463a Phillip Potter  2021-07-28  1527  		mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
-8cd574e6af5463a Phillip Potter  2021-07-28  1528  
-8cd574e6af5463a Phillip Potter  2021-07-28  1529  		/* todo: support HT in IBSS */
-8cd574e6af5463a Phillip Potter  2021-07-28  1530  		break;
-8cd574e6af5463a Phillip Potter  2021-07-28  1531  	}
-8cd574e6af5463a Phillip Potter  2021-07-28  1532  
-8cd574e6af5463a Phillip Potter  2021-07-28  1533  	rate_bitmap = 0x0fffffff;
-8cd574e6af5463a Phillip Potter  2021-07-28  1534  	rate_bitmap = ODM_Get_Rate_Bitmap(&haldata->odmpriv, mac_id, mask, rssi_level);
-8cd574e6af5463a Phillip Potter  2021-07-28  1535  
-8cd574e6af5463a Phillip Potter  2021-07-28  1536  	mask &= rate_bitmap;
-8cd574e6af5463a Phillip Potter  2021-07-28  1537  
-8cd574e6af5463a Phillip Potter  2021-07-28  1538  	init_rate = get_highest_rate_idx(mask) & 0x3f;
-8cd574e6af5463a Phillip Potter  2021-07-28  1539  
-8cd574e6af5463a Phillip Potter  2021-07-28  1540  	if (haldata->fw_ractrl) {
-8cd574e6af5463a Phillip Potter  2021-07-28 @1541  		u8 arg;
-8cd574e6af5463a Phillip Potter  2021-07-28  1542  
-8cd574e6af5463a Phillip Potter  2021-07-28  1543  		arg = mac_id & 0x1f;/* MACID */
-8cd574e6af5463a Phillip Potter  2021-07-28  1544  		arg |= BIT(7);
-8cd574e6af5463a Phillip Potter  2021-07-28  1545  		if (shortGIrate)
-8cd574e6af5463a Phillip Potter  2021-07-28  1546  			arg |= BIT(5);
-8cd574e6af5463a Phillip Potter  2021-07-28  1547  		mask |= ((raid << 28) & 0xf0000000);
-8cd574e6af5463a Phillip Potter  2021-07-28  1548  		psta->ra_mask = mask;
-8cd574e6af5463a Phillip Potter  2021-07-28  1549  		mask |= ((raid << 28) & 0xf0000000);
-8cd574e6af5463a Phillip Potter  2021-07-28  1550  
-8cd574e6af5463a Phillip Potter  2021-07-28  1551  		/* to do ,for 8188E-SMIC */
-8cd574e6af5463a Phillip Potter  2021-07-28  1552  		rtl8188e_set_raid_cmd(adapt, mask);
-8cd574e6af5463a Phillip Potter  2021-07-28  1553  	} else {
-6839ff57baa4a60 Michael Straube 2021-08-09  1554  		ODM_RA_UpdateRateInfo_8188E(&haldata->odmpriv,
-8cd574e6af5463a Phillip Potter  2021-07-28  1555  				mac_id,
-8cd574e6af5463a Phillip Potter  2021-07-28  1556  				raid,
-8cd574e6af5463a Phillip Potter  2021-07-28  1557  				mask,
-8cd574e6af5463a Phillip Potter  2021-07-28  1558  				shortGIrate
-8cd574e6af5463a Phillip Potter  2021-07-28  1559  				);
-8cd574e6af5463a Phillip Potter  2021-07-28  1560  	}
-8cd574e6af5463a Phillip Potter  2021-07-28  1561  	/* set ra_id */
-8cd574e6af5463a Phillip Potter  2021-07-28  1562  	psta->raid = raid;
-8cd574e6af5463a Phillip Potter  2021-07-28  1563  	psta->init_rate = init_rate;
-8cd574e6af5463a Phillip Potter  2021-07-28  1564  }
-8cd574e6af5463a Phillip Potter  2021-07-28  1565  
-
-:::::: The code at line 1541 was first introduced by commit
-:::::: 8cd574e6af5463af7d693d111c61212e52c44810 staging: r8188eu: introduce new hal dir for RTL8188eu driver
-
-:::::: TO: Phillip Potter <phil@philpotter.co.uk>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--=20
+paul-moore.com
