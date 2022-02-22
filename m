@@ -1,42 +1,42 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A9E625
-	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 06:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA067E
+	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 06:42:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645510256; x=1677046256;
+  t=1645512177; x=1677048177;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9ilr9rbsDwfjmR9iFtIV52yKRpeR9y4HwxI7wXpXrB8=;
-  b=kwA5A0SvKwnYj5a/BrhSkCyZk6oDgk7Z0Q868LRy4+BpBZkjVzBCmE36
-   kFX1OcZpK20dyirXX+RC8LjOPwkYLPbKcZ6PDsoXtcs15aDR1OUgok0CI
-   lag2Ejrj3gPgY9MD/R5c5wHcY0sYUqjWpkqnIQJreFqGMXBgagkhm31vp
-   kmDq7KCfkBpVY7pMe+n0OvVzMYxIVcfvymKqG/HRXiqniNYbc35RkeKED
-   CS+gUC8XSRF8saQMIFLImUxSgcm+u566xfuG9Qpb1FnIM1oIfrw+I3C1B
-   G3NJCFPKme32VltfbjAVCqFho1vlXWzkA5S33sB50jQBhvK8tJ1B9uwK8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="312365860"
+  bh=voJ0cCZC0eL2orT94+vc9vUjmlp6DZeqEERqkUOzhTM=;
+  b=I4ObjuvV9KYiCXPn5f+CzXLa5ofvcc+Ln25PuGiycbPOTzA7GtyNKfe3
+   0hDYJEFA6832FmzbWTwJI+9TWXZzJdHCh461GWe6R3r9M5ZlMnM1tqfHb
+   S6zOxKBA6ArbzLVfvVML0dquKdJ0uEd1NLaMcYEdlAgbcbkqx+fy74I3b
+   Tn6Iex6N2RaYs08bbiNz9dhpqwHGxV4YEPpjPvVjBVyV/cX5UnqhjlO2O
+   UGZSIOLdgoZr8FQnQ2sqZj/1JLdc7/QFzKKYJIkEMorO3VNl3xP7LbzUt
+   SJKsR7Xg3hEE165RgXzee/KO++U3Db6EEJmfnbiFGvXh0xXIpOhk6xQUk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="314887658"
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="312365860"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 22:10:55 -0800
+   d="scan'208";a="314887658"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 22:42:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="532099330"
+   d="scan'208";a="606588599"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 21 Feb 2022 22:10:54 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 21 Feb 2022 22:42:55 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMONx-0002Oa-CP; Tue, 22 Feb 2022 06:10:53 +0000
-Date: Tue, 22 Feb 2022 14:10:41 +0800
+	id 1nMOsw-0002Pq-Kw; Tue, 22 Feb 2022 06:42:54 +0000
+Date: Tue, 22 Feb 2022 14:41:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2122/2541]
- arch/s390/include/asm/processor.h:307:13: error: use of undeclared
- identifier '_THIS_IP_'
-Message-ID: <202202221415.RGRWi3xN-lkp@intel.com>
+Subject: [peterz-queue:x86/wip.ibt 31/39] arch/x86/xen/enlighten_pv.c:627:2:
+ error: use of undeclared identifier 'asm_exc_control_protection'; did you
+ mean 'asm_exc_general_protection'?
+Message-ID: <202202221419.DMC8nDHf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,85 +47,115 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   601144c0da5edfa67a9654158370da19c67e17e2
-commit: 58809689cf88dc9300f57d8a653053ae3d36acbd [2122/2541] headers/deps: Add header dependencies to .h files: <linux/xarray_api.h>
-config: s390-randconfig-r044-20220221 (https://download.01.org/0day-ci/archive/20220222/202202221415.RGRWi3xN-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+head:   1436dce5f32d577e8cef693e09f4bb1faa0e2692
+commit: 3c80adbe1204e92a048cb149b966c2a990c89ec6 [31/39] x86/ibt,xen: Annotate away warnings
+config: x86_64-randconfig-a011-20220221 (https://download.01.org/0day-ci/archive/20220222/202202221419.DMC8nDHf-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=58809689cf88dc9300f57d8a653053ae3d36acbd
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 58809689cf88dc9300f57d8a653053ae3d36acbd
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=3c80adbe1204e92a048cb149b966c2a990c89ec6
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue x86/wip.ibt
+        git checkout 3c80adbe1204e92a048cb149b966c2a990c89ec6
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:6:
-   In file included from include/linux/xarray_api.h:15:
-   In file included from include/linux/lockdep_api.h:27:
-   In file included from include/linux/smp_api.h:15:
-   In file included from arch/s390/include/asm/smp.h:13:
->> arch/s390/include/asm/processor.h:307:13: error: use of undeclared identifier '_THIS_IP_'
-           psw.addr = _THIS_IP_;
-                      ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:6:
-   In file included from include/linux/xarray_api.h:15:
-   In file included from include/linux/lockdep_api.h:27:
-   In file included from include/linux/smp_api.h:15:
-   arch/s390/include/asm/smp.h:20:30: error: expected ';' after top level declarator
-   extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
-                                ^
-                                ;
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:6:
-   In file included from include/linux/xarray_api.h:19:
-   In file included from include/linux/rcupdate.h:35:
-   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
-   # include <generated/asm-offsets.h>
-             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/s390/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> arch/x86/xen/enlighten_pv.c:627:2: error: use of undeclared identifier 'asm_exc_control_protection'; did you mean 'asm_exc_general_protection'?
+           TRAP_ENTRY(exc_control_protection,              false ),
+           ^
+   arch/x86/xen/enlighten_pv.c:592:11: note: expanded from macro 'TRAP_ENTRY'
+           .orig           = asm_##func,                   \
+                             ^
+   <scratch space>:77:1: note: expanded from here
+   asm_exc_control_protection
+   ^
+   arch/x86/include/asm/idtentry.h:564:1: note: 'asm_exc_general_protection' declared here
+   DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_GP, exc_general_protection);
+   ^
+   arch/x86/include/asm/idtentry.h:83:18: note: expanded from macro 'DECLARE_IDTENTRY_ERRORCODE'
+           asmlinkage void asm_##func(void);                               \
+                           ^
+   <scratch space>:35:1: note: expanded from here
+   asm_exc_general_protection
+   ^
+>> arch/x86/xen/enlighten_pv.c:627:2: error: use of undeclared identifier 'xen_asm_exc_control_protection'; did you mean 'xen_asm_exc_general_protection'?
+           TRAP_ENTRY(exc_control_protection,              false ),
+           ^
+   arch/x86/xen/enlighten_pv.c:593:10: note: expanded from macro 'TRAP_ENTRY'
+           .xen            = xen_asm_##func,               \
+                             ^
+   <scratch space>:78:1: note: expanded from here
+   xen_asm_exc_control_protection
+   ^
+   arch/x86/include/asm/idtentry.h:564:1: note: 'xen_asm_exc_general_protection' declared here
+   DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_GP, exc_general_protection);
+   ^
+   arch/x86/include/asm/idtentry.h:84:18: note: expanded from macro 'DECLARE_IDTENTRY_ERRORCODE'
+           asmlinkage void xen_asm_##func(void);                           \
+                           ^
+   <scratch space>:36:1: note: expanded from here
+   xen_asm_exc_general_protection
+   ^
+   arch/x86/xen/enlighten_pv.c:1184:34: warning: no previous prototype for function 'xen_start_kernel' [-Wmissing-prototypes]
+   asmlinkage __visible void __init xen_start_kernel(void)
+                                    ^
+   arch/x86/xen/enlighten_pv.c:1184:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage __visible void __init xen_start_kernel(void)
+                        ^
+                        static 
+   1 warning and 2 errors generated.
 
 
-vim +/_THIS_IP_ +307 arch/s390/include/asm/processor.h
+vim +627 arch/x86/xen/enlighten_pv.c
 
-ccf45cafb08059 arch/s390/include/asm/processor.h Martin Schwidefsky 2011-10-30  298  
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  299  /*
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  300   * Function to drop a processor into disabled wait state
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  301   */
-c2e06e15ad92ba arch/s390/include/asm/processor.h Vasily Gorbik      2019-11-22  302  static __always_inline void __noreturn disabled_wait(void)
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  303  {
-f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  304  	psw_t psw;
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  305  
-f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  306  	psw.mask = PSW_MASK_BASE | PSW_MASK_WAIT | PSW_MASK_BA | PSW_MASK_EA;
-98587c2d894c34 arch/s390/include/asm/processor.h Martin Schwidefsky 2019-04-30 @307  	psw.addr = _THIS_IP_;
-f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  308  	__load_psw(psw);
-edd5378740fe77 arch/s390/include/asm/processor.h Heiko Carstens     2008-12-25  309  	while (1);
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  310  }
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  311  
-
-:::::: The code at line 307 was first introduced by commit
-:::::: 98587c2d894c34c9af5cd84ca169e1cd493aa692 s390: simplify disabled_wait
-
-:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
-:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
+   590	
+   591	#define TRAP_ENTRY(func, ist_ok) {			\
+   592		.orig		= asm_##func,			\
+   593		.xen		= xen_asm_##func,		\
+   594		.ist_okay	= ist_ok }
+   595	
+   596	#define TRAP_ENTRY_REDIR(func, ist_ok) {		\
+   597		.orig		= asm_##func,			\
+   598		.xen		= xen_asm_xenpv_##func,		\
+   599		.ist_okay	= ist_ok }
+   600	
+   601	static struct trap_array_entry trap_array[] = {
+   602		TRAP_ENTRY_REDIR(exc_debug,			true  ),
+   603		TRAP_ENTRY_REDIR(exc_double_fault,		true  ),
+   604	#ifdef CONFIG_X86_MCE
+   605		TRAP_ENTRY_REDIR(exc_machine_check,		true  ),
+   606	#endif
+   607		TRAP_ENTRY_REDIR(exc_nmi,			true  ),
+   608		TRAP_ENTRY(exc_int3,				false ),
+   609		TRAP_ENTRY(exc_overflow,			false ),
+   610	#ifdef CONFIG_IA32_EMULATION
+   611		{ entry_INT80_compat,          xen_entry_INT80_compat,          false },
+   612	#endif
+   613		TRAP_ENTRY(exc_page_fault,			false ),
+   614		TRAP_ENTRY(exc_divide_error,			false ),
+   615		TRAP_ENTRY(exc_bounds,				false ),
+   616		TRAP_ENTRY(exc_invalid_op,			false ),
+   617		TRAP_ENTRY(exc_device_not_available,		false ),
+   618		TRAP_ENTRY(exc_coproc_segment_overrun,		false ),
+   619		TRAP_ENTRY(exc_invalid_tss,			false ),
+   620		TRAP_ENTRY(exc_segment_not_present,		false ),
+   621		TRAP_ENTRY(exc_stack_segment,			false ),
+   622		TRAP_ENTRY(exc_general_protection,		false ),
+   623		TRAP_ENTRY(exc_spurious_interrupt_bug,		false ),
+   624		TRAP_ENTRY(exc_coprocessor_error,		false ),
+   625		TRAP_ENTRY(exc_alignment_check,			false ),
+   626		TRAP_ENTRY(exc_simd_coprocessor_error,		false ),
+ > 627		TRAP_ENTRY(exc_control_protection,		false ),
+   628	};
+   629	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
