@@ -1,41 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD2F364
-	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 05:00:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45817625
+	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 05:29:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645506003; x=1677042003;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NSYjEYnh0IwAQTorHEgFKb0m1zcBhwj7AmGboDg8XBw=;
-  b=CgZDrUuy0MGD5n35lLrKJDeaUKA5b5OVuIuSEvqEDnIDLqHWR6RqnnlH
-   kMe2mXxklJqV8Rg6txKrXl/5daOk9+i1vOyL7Vse5ISwl/UOKysP1d50a
-   pzffljXvkkFXd1iIpXitiF3i49JwvRqAp3T7rOig4AzkE+WCVYDiex8Wr
-   51IPNm5lHzVTuYBAMBF/WXqUms5Zh7oEAG4uHuUJLptSqm18KrX2foO6W
-   2/Bp2JCGN+CE7iefR1rRWmOcz2tGewScVsKa4FzMY/4V9+Cx2GEeekaMW
-   QmfvVoXZnSSmmhj8TOkpoI2RWC6362/ZqvsKZYklN1ox8gWcq6v2Q8Qvh
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="232231353"
+  t=1645507795; x=1677043795;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xPlMY5HbW2NIpTgp8o3lSo81cO1eklitZ61WhdHyADA=;
+  b=WNYeIC0XYLHZ38DLlu3Xpz6nu+6Eg12AevcXlTt0m9LTWl/vB4A5ANvB
+   T77guXB83WJp8DXJkA+sKhwUrBLRvd8xixlC5EOLnFus0jUNAw4BQ86Qy
+   JdqJxDyxQY+h2Ep4U8ZcZbOXOiX2+Zy6J8MEljdoxLKr28ddnymQJyRZo
+   /+7Rd73iy6k63La3UhXaM1HpjRYOzaPRXCW+UzyaSwVntAUofw6rCygF+
+   B09LYtf2+OPqya3DltJLZRe+AkdmFjlz4YAnD6kRgdJMlqluttTIYhwoy
+   X7QuKvQPaQsW92i0zj+q7mC4/jyU9iAmiB2VXtTFy+DZiI7A65PcK/BrU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="235156152"
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="232231353"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 20:59:53 -0800
+   d="scan'208";a="235156152"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 21:29:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="776179469"
+   d="scan'208";a="532088045"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Feb 2022 20:59:52 -0800
+  by orsmga007.jf.intel.com with ESMTP; 21 Feb 2022 21:29:53 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMNHD-0002Lq-M6; Tue, 22 Feb 2022 04:59:51 +0000
-Date: Tue, 22 Feb 2022 12:59:00 +0800
+	id 1nMNkG-0002Mj-DX; Tue, 22 Feb 2022 05:29:52 +0000
+Date: Tue, 22 Feb 2022 13:29:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v20 2/2] dmaengine: tegra: Add tegra gpcdma driver
-Message-ID: <202202221207.lQ53BwKp-lkp@intel.com>
-References: <20220221153934.5226-3-akhilrajeev@nvidia.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2085/2541]
+ arch/s390/include/asm/smp.h:20:30: error: expected ';' after top level
+ declarator
+Message-ID: <202202221326.M5B48PIB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,120 +45,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220221153934.5226-3-akhilrajeev@nvidia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Akhil,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on vkoul-dmaengine/next]
-[also build test WARNING on v5.17-rc5 next-20220217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Akhil-R/Add-NVIDIA-Tegra-GPC-DMA-driver/20220221-234342
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-config: s390-randconfig-c005-20220222 (https://download.01.org/0day-ci/archive/20220222/202202221207.lQ53BwKp-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   601144c0da5edfa67a9654158370da19c67e17e2
+commit: 2ac1be4afbf13b2f3907d2ec134195629a04b13c [2085/2541] headers/deps: locking/lockdep: Split <linux/lockep.h> into <linux/lockep_types.h> and <linux/lockep_api.h>
+config: s390-randconfig-r044-20220221 (https://download.01.org/0day-ci/archive/20220222/202202221326.M5B48PIB-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install s390 cross compiling tool for clang build
         # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/9788a023bf1c6b2221e7246794c13f3690bf5baa
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Akhil-R/Add-NVIDIA-Tegra-GPC-DMA-driver/20220221-234342
-        git checkout 9788a023bf1c6b2221e7246794c13f3690bf5baa
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=2ac1be4afbf13b2f3907d2ec134195629a04b13c
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 2ac1be4afbf13b2f3907d2ec134195629a04b13c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/dma/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/dma/tegra186-gpc-dma.c:9:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/dma/tegra186-gpc-dma.c:9:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/dma/tegra186-gpc-dma.c:9:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/dma/tegra186-gpc-dma.c:1488:21: warning: attribute declaration must precede definition [-Wignored-attributes]
-   static const struct __maybe_unused dev_pm_ops tegra_dma_dev_pm_ops = {
-                       ^
-   include/linux/compiler_attributes.h:286:56: note: expanded from macro '__maybe_unused'
-   #define __maybe_unused                  __attribute__((__unused__))
-                                                          ^
-   include/linux/pm.h:278:8: note: previous definition is here
-   struct dev_pm_ops {
-          ^
-   13 warnings generated.
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hashtable_api.h:16:
+   In file included from include/linux/rculist.h:11:
+   In file included from include/linux/rcupdate.h:23:
+   In file included from include/linux/lockdep_api.h:27:
+   In file included from include/linux/smp_api.h:15:
+>> arch/s390/include/asm/smp.h:20:30: error: expected ';' after top level declarator
+   extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
+                                ^
+                                ;
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hashtable_api.h:16:
+   In file included from include/linux/rculist.h:11:
+   In file included from include/linux/rcupdate.h:35:
+   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
+   # include <generated/asm-offsets.h>
+             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/s390/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +1488 drivers/dma/tegra186-gpc-dma.c
+vim +20 arch/s390/include/asm/smp.h
 
-  1487	
-> 1488	static const struct __maybe_unused dev_pm_ops tegra_dma_dev_pm_ops = {
-  1489		SET_SYSTEM_SLEEP_PM_OPS(tegra_dma_pm_suspend, tegra_dma_pm_resume)
-  1490	};
-  1491	
+^1da177e4c3f41 include/asm-s390/smp.h      Linus Torvalds     2005-04-16  16  
+dbd70fb499952d include/asm-s390/smp.h      Heiko Carstens     2008-04-17  17  extern struct mutex smp_cpu_state_mutex;
+10ad34bc76dfbc arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  18  extern unsigned int smp_cpu_mt_shift;
+10ad34bc76dfbc arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  19  extern unsigned int smp_cpu_mtid;
+1a36a39e225d35 arch/s390/include/asm/smp.h Martin Schwidefsky 2015-10-29 @20  extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
+a052096bdd6809 arch/s390/include/asm/smp.h Sven Schnelle      2021-08-27  21  extern cpumask_t cpu_setup_mask;
+8b646bd759086f arch/s390/include/asm/smp.h Martin Schwidefsky 2012-03-11  22  
+
+:::::: The code at line 20 was first introduced by commit
+:::::: 1a36a39e225d3558fb3776a3d3d7736cf1ec9f60 s390/dump: rework CPU register dump code
+
+:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
+:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
