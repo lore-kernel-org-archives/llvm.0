@@ -1,36 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1745F66A1
-	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 15:23:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00490C340E8;
-	Tue, 22 Feb 2022 15:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325FA66A1
+	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 16:16:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4680EC340E8;
+	Tue, 22 Feb 2022 16:16:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645543411;
-	bh=36C5XSTwUOyfNvIcqQ9TuoXhkklJD5exPe/8nUTTeMo=;
+	s=k20201202; t=1645546572;
+	bh=cw0B3xLAFu8eNbwEcUhRaoqQRgX+dp6zyPu8ZZdGJEk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=urLBibFGvdPJvEFgJ9BsfC5Bsg1TMwd4yAIQItElZeHpfxbBUwiq+uVBZ6rCsy5nZ
-	 DxRN/Jf4b9JFwNA19WCikuBAWnLuwy60r33trFBY6LkxYWmfxJ8bA41GzTQQejHvh2
-	 fDBuky1YfbotkK4ulW8pGdbsQlt4kaC+F/21xSno517Mn2E/8owx36fe3zGd1KsiQO
-	 mDU/XdDw89zUgNRcgJNnSfNFcD3mlI1zeNB1MP2mCkVJUlkw4uToyxzF6+J1Ty58Vz
-	 PBIJOjNCNVBFgiubAridjRXeowbCoQdTPM5+iqTddQJ90VTYucnhiCMhOIYYXu750w
-	 bkLWBMZnUmJJA==
-Date: Tue, 22 Feb 2022 08:23:27 -0700
+	b=qj86MVS/KFRmoD+RX0XD9c17t6PhYBpAVK2L0e5Q9rEYYmGvy3lPSYVHbxwcCipPP
+	 HVYOBhnbW7+HWqQCFQZkCV9g3uLtuiH5ui5FHaf8E/FtjfyDPnHdqw9bHUOddo/n7e
+	 QrjcN4gNhqxsmIXws4gG9YN4zhuZJ50zuVJkj7ZPRccPHeJyZReHlXF6Vuy+yGiiI+
+	 4xKcSV2iHrUsDkzQehs9UCoZ+/ttImhKiJGLJgZPsl6BZWb+isFSFWKJu6+DzBYADd
+	 pGceMxRln8XU6aDGRzJLfXkXnaX5UYpkRgZdycqMmQeoi9zdGGLMvN0xm+aJ+/A60G
+	 vaN3NGqhSrlwQ==
+Date: Tue, 22 Feb 2022 09:16:06 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Philippe CORNU <philippe.cornu@foss.st.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Yannick Fertre <yannick.fertre@foss.st.com>,
-	Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-	dri-devel@lists.freedesktop.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] drm/stm: Avoid using val uninitialized in
- ltdc_set_ycbcr_config()
-Message-ID: <YhT/73ZM7IytO3+Q@dev-arch.archlinux-ax161>
-References: <20220207165304.1046867-1-nathan@kernel.org>
- <CAKwvOdkXe8CB3QGe2e6Fhz8_SLOsOpcMumoKBiAzGE_VTXCkVg@mail.gmail.com>
- <430ee06d-04e7-3b8b-bf11-48a7b62eaf18@foss.st.com>
+To: Dan Li <ashimida@linux.alibaba.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, ndesaulniers@google.com,
+	keescook@chromium.org, masahiroy@kernel.org, tglx@linutronix.de,
+	akpm@linux-foundation.org, mark.rutland@arm.com,
+	samitolvanen@google.com, npiggin@gmail.com, linux@roeck-us.net,
+	mhiramat@kernel.org, ojeda@kernel.org, luc.vanoostenryck@gmail.com,
+	elver@google.com, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
+Message-ID: <YhUMRoLDan7tJRiL@dev-arch.archlinux-ax161>
+References: <20220222095736.24898-1-ashimida@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,90 +37,121 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <430ee06d-04e7-3b8b-bf11-48a7b62eaf18@foss.st.com>
+In-Reply-To: <20220222095736.24898-1-ashimida@linux.alibaba.com>
 
-On Tue, Feb 22, 2022 at 11:54:04AM +0100, Philippe CORNU wrote:
+On Tue, Feb 22, 2022 at 01:57:36AM -0800, Dan Li wrote:
+> Shadow call stack is available in GCC > 11.2.0, this patch makes
+> the corresponding kernel configuration available when compiling
+> the kernel with gcc.
 > 
+> Note that the implementation in GCC is slightly different from Clang.
+> With SCS enabled, functions will only pop x30 once in the epilogue,
+> like:
 > 
-> On 2/7/22 8:44 PM, Nick Desaulniers wrote:
-> > On Mon, Feb 7, 2022 at 8:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > 
-> > > Clang warns:
-> > > 
-> > >    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-> > >            default:
-> > >            ^~~~~~~
-> > >    drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
-> > >            val |= LxPCR_YCEN;
-> > >            ^~~
-> > >    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
-> > >            u32 val;
-> > >                   ^
-> > >                    = 0
-> > >    1 warning generated.
-> > > 
-> > > Use a return instead of break in the default case to fix the warning.
-> > > Add an error message so that this return is not silent, which could hide
-> > > issues in the future.
-> > > 
-> > > Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1575
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >   drivers/gpu/drm/stm/ltdc.c | 3 ++-
-> > >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-> > > index 5eeb32c9c9ce..447ddde1786c 100644
-> > > --- a/drivers/gpu/drm/stm/ltdc.c
-> > > +++ b/drivers/gpu/drm/stm/ltdc.c
-> > > @@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
-> > >                  break;
-> > >          default:
-> > >                  /* RGB or not a YCbCr supported format */
-> > > -               break;
-> > > +               drm_err(plane->dev, "Unsupported pixel format: %u\n", drm_pix_fmt);
-> > 
-> > This is fine, but in the future you should add an explicit
-> > #include <drm/drm_print.h>
-> > to avoid implicit header dependencies (like the ones that Mingo is
-> > trying to detangle) for the declaration of drm_err. `drm_vprintf`
-> > needs it, too.
-> > 
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > 
+>    str     x30, [x18], #8
+>    stp     x29, x30, [sp, #-16]!
+>    ......
+> -  ldp     x29, x30, [sp], #16	  //clang
+> +  ldr     x29, [sp], #16	  //GCC
+>    ldr     x30, [x18, #-8]!
 > 
-> Hi Nick,
-> and thank you for having pointing this.
+> Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ce09ab17ddd21f73ff2caf6eec3b0ee9b0e1a11e
 > 
-> Hi Nathan,
-> May I ask you please to update your patch changing drm_err(plane->dev, )
-> with DRM_ERROR().
+> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
 
-Sure thing, v2 has been sent:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-https://lore.kernel.org/r/20220222152045.484610-1-nathan@kernel.org/
+A few open-ended comments below.
 
-I used drm_err() as I saw DRM_ERROR() was deprecated but I get internal
-driver consistency is important.
+> ---
+> FYI:
+> This function can be used to test if the shadow call stack works:
+> //noinline void __noscs scs_test(void)
+> noinline void scs_test(void)
+> {
+>     register unsigned long *sp asm("sp");
+>     unsigned long * lr = sp + 1;
+> 
+>     asm volatile("":::"x30");
+>     *lr = 0;
+> }
+> 
+> ffff800008012704:       d503233f        paciasp
+> ffff800008012708:       f800865e        str     x30, [x18], #8
+> ffff80000801270c:       a9bf7bfd        stp     x29, x30, [sp, #-16]!
+> ffff800008012710:       910003fd        mov     x29, sp
+> ffff800008012714:       910003e0        mov     x0, sp
+> ffff800008012718:       f900041f        str     xzr, [x0, #8]
+> ffff80000801271c:       f85f8e5e        ldr     x30, [x18, #-8]!
+> ffff800008012720:       f84107fd        ldr     x29, [sp], #16
+> ffff800008012724:       d50323bf        autiasp
+> ffff800008012728:       d65f03c0        ret
+> 
+> If SCS protection is enabled, this function will return normally.
+> If the function has __noscs attribute (scs disabled), it will crash due to 0
+> address access.
+> 
+>  arch/Kconfig                 | 6 +++---
+>  arch/arm64/Kconfig           | 2 +-
+>  include/linux/compiler-gcc.h | 4 ++++
+>  3 files changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 678a80713b21..35db7b72bdb0 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -604,11 +604,11 @@ config ARCH_SUPPORTS_SHADOW_CALL_STACK
+>  	  switching.
+>  
+>  config SHADOW_CALL_STACK
+> -	bool "Clang Shadow Call Stack"
+> -	depends on CC_IS_CLANG && ARCH_SUPPORTS_SHADOW_CALL_STACK
+> +	bool "Shadow Call Stack"
+> +	depends on ARCH_SUPPORTS_SHADOW_CALL_STACK
+>  	depends on DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
+>  	help
+> -	  This option enables Clang's Shadow Call Stack, which uses a
+> +	  This option enables Clang/GCC's Shadow Call Stack, which uses a
 
-Cheers,
-Nathan
+I wonder if we want to just ditch the mention of the compiler if both
+support it?
 
-> Big thank you,
+>  	  shadow stack to protect function return addresses from being
+>  	  overwritten by an attacker. More information can be found in
+>  	  Clang's documentation:
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 09b885cc4db5..a48a604301aa 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1255,7 +1255,7 @@ config HW_PERF_EVENTS
+>  config ARCH_HAS_FILTER_PGPROT
+>  	def_bool y
+>  
+> -# Supported by clang >= 7.0
+> +# Supported by clang >= 7.0 or GCC > 11.2.0
+
+Same thing here, although eventually there may be a minimum GCC version
+bump to something newer than 11.2.0, which would allow us to just drop
+CONFIG_CC_HAVE_SHADOW_CALL_STACK altogether. No strong opinion.
+
+>  config CC_HAVE_SHADOW_CALL_STACK
+>  	def_bool $(cc-option, -fsanitize=shadow-call-stack -ffixed-x18)
+>  
+> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> index ccbbd31b3aae..deff5b308470 100644
+> --- a/include/linux/compiler-gcc.h
+> +++ b/include/linux/compiler-gcc.h
+> @@ -97,6 +97,10 @@
+>  #define KASAN_ABI_VERSION 4
+>  #endif
+>  
+> +#ifdef CONFIG_SHADOW_CALL_STACK
+> +#define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
+> +#endif
+> +
+>  #if __has_attribute(__no_sanitize_address__)
+>  #define __no_sanitize_address __attribute__((no_sanitize_address))
+>  #else
+> -- 
+> 2.17.1
 > 
-> Philippe :-)
-> 
-> 
-> 
-> > > +               return;
-> > >          }
-> > > 
-> > >          /* Enable limited range */
-> > > 
-> > > base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
-> > > --
-> > > 2.35.1
-> > > 
-> > 
-> > 
