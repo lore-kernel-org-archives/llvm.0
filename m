@@ -1,103 +1,104 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AB67E
-	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 23:16:46 +0000 (UTC)
-Received: by mail-ej1-f47.google.com with SMTP id r13so24493321ejd.5
-        for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 15:16:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KzvH9ZQaXdUgSyIdwCtFzNEtbBoZxdQVld6HVvqC3h0=;
-        b=S/IydQVZc46d4zetWnmQ5U0e/PzMQNOi9DIjYeoinrNryqb/zeu17/TuDGbIX/KWpC
-         72p/RUQcIO43sVlxpFBZmQdfy6WJtCivMolKcubjDm1vgXMy8k/BPNGr/UPBh9C4W41h
-         4OMcW3ugJLilxrgRaLIAK4YLgo1M1xTJxv0gptrzQotyWQ8BVbQgyOuu/RAZGlM5Bw8P
-         JmKxduxWoEh8ZNP3EI0O00LrNVhJlX3v4Rw2jBvCxgmBre2DuzWvIcOX5LuS+YxoHWGU
-         YdMkjRgsLGwFaosBa6vzrp7EVsu7uc8gPip0/Bri8/5SM/66BSW/Pl4hxH3OB0jOdfoL
-         rEiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KzvH9ZQaXdUgSyIdwCtFzNEtbBoZxdQVld6HVvqC3h0=;
-        b=YhqoKexFcgiisLr56P25gaTqaXPjyvFeJvvqmwc1nM8MtvNoRmVHo1txsm/hEQn3b3
-         FudqmhVNRjIqhpc+Yu8pigyiGI7GYWmEXfVdo1UcbMKGVjt+Wa6fuuHZfMjzfPBYkwIf
-         Vvv5H3qEYk6Ln0uxCejH6iruV2Zi0A7OcNwQNNzKDA7yELVn19oscuix/4BeyThlxUw6
-         /nXH8wrl/SqVs6Jw4plkVXezEfrn4f+6lrMJVHV3q5TVwODufY6Rphz24zsmEFQ87p/H
-         VAlA69e5u2OiQ8G97NkM9GUzDfGeo8QERDeQiUj4hoY4kSu9dRWTd5AozpQZgxQTTi2F
-         UX+g==
-X-Gm-Message-State: AOAM533S2QYRMg43KW2VfXRR3ZwOea4R69+HwR64LB4N+uQovVKyf6uc
-	SK/YD1EW87NcxfbbI2KcASZ0cbmGBw8iIECtrr6t
-X-Google-Smtp-Source: ABdhPJyC5JfFslCe0iSc7dk6uE4kYr0sXtIjOP3+4cJ8OXdGFLZZdB3wUVrWstGC2q8isedVNDR8Em5of/ldksyZE6c=
-X-Received: by 2002:a17:907:2a54:b0:6d5:879d:aca4 with SMTP id
- fe20-20020a1709072a5400b006d5879daca4mr419389ejc.29.1645571804662; Tue, 22
- Feb 2022 15:16:44 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E508F6946
+	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 23:31:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645572675; x=1677108675;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QIgfrZlOCONxvByS59oh2FTC9H9a2J1Z4J1fWPdqKZY=;
+  b=QgTmdcPCoY5cXAIwA1JqdtpAVo7xpFCdgWpyUrFp/c4cdsPZ9V2KxxT5
+   hM2wMTVL+4xC8rFsAMjMCYfmYnORq205CcXue4S+0bN/KwwycMhFUf1Ej
+   5eB7Z8wCxhte2WIPNRgmpaninUY2ArhVfEqPKhS5i1cI+b68lfpWB7boX
+   ICcRx+75RFAJ1HSPV+WISWJZJV5Orl0sXmYHM1/wKI9/G3YRdFJbAcP3k
+   yuHWqqiApPj47i1M1Dbo/w5cYA3Hc44sg8+wHhwQZMa5Z6zc1aLs0xQY4
+   e3Z3eUS05hxVJpwIcp5U8MJAd8SFDNV3WgcrViFKnX9wH8dT1OreY0z0z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="231811652"
+X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
+   d="scan'208";a="231811652"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 15:31:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
+   d="scan'208";a="591494403"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Feb 2022 15:31:07 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nMecc-0000je-Rc; Tue, 22 Feb 2022 23:31:06 +0000
+Date: Wed, 23 Feb 2022 07:31:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Cheng <michael.cheng@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	tvrtko.ursulin@linux.intel.com, michael.cheng@intel.com,
+	balasubramani.vivekanandan@intel.com, wayne.boyer@intel.com,
+	casey.g.bowman@intel.com, lucas.demarchi@intel.com,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v3 1/3] drm_cache: Add logic for wbvind_on_all_cpus
+Message-ID: <202202230702.Ya7PkY7G-lkp@intel.com>
+References: <20220222172649.331661-2-michael.cheng@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220217142133.72205-1-cgzones@googlemail.com>
- <20220217142133.72205-3-cgzones@googlemail.com> <CAHC9VhT77Ft4+5LmNP0dwtaeNzF+r0b=9M5vh7qA1poY9jesJA@mail.gmail.com>
- <CAKwvOdkioR+7aebgzPu2Exe0oD9rwAeHK=CgM6vAkpBWdHnF2Q@mail.gmail.com>
-In-Reply-To: <CAKwvOdkioR+7aebgzPu2Exe0oD9rwAeHK=CgM6vAkpBWdHnF2Q@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 22 Feb 2022 18:16:33 -0500
-Message-ID: <CAHC9VhSKZes9g_GHMKJdhd_BEt7GT4FKOLeMJ=o=FU8TtOZ-gg@mail.gmail.com>
-Subject: Re: [PATCH 4/5] selinux: declare data arrays const
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
-	selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Eric Paris <eparis@parisplace.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Jeremy Kerr <jk@codeconstruct.com.au>, 
-	"David S. Miller" <davem@davemloft.net>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
-	Yang Li <yang.lee@linux.alibaba.com>, Austin Kim <austin.kim@lge.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222172649.331661-2-michael.cheng@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Feb 18, 2022 at 12:24 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
-> On Fri, Feb 18, 2022 at 8:13 AM Paul Moore <paul@paul-moore.com> wrote:
-> > On Thu, Feb 17, 2022 at 9:21 AM Christian G=C3=B6ttsche
-> > <cgzones@googlemail.com> wrote:
-> > >
-> > > diff --git a/security/selinux/include/initial_sid_to_string.h b/secur=
-ity/selinux/include/initial_sid_to_string.h
-> > > index 5d332aeb8b6c..915283cd89bd 100644
-> > > --- a/security/selinux/include/initial_sid_to_string.h
-> > > +++ b/security/selinux/include/initial_sid_to_string.h
-> > > @@ -1,5 +1,12 @@
-> > >  /* SPDX-License-Identifier: GPL-2.0 */
-> > > -static const char *initial_sid_to_string[] =3D
-> > > +
-> > > +#ifdef __SELINUX_GENHEADERS__
-> > > +# define const_qual
-> > > +#else
-> > > +# define const_qual const
-> > > +#endif
-> > > +
-> > > +static const char *const_qual initial_sid_to_string[] =3D
-> > >  {
-> > >         NULL,
-> > >         "kernel",
-> >
-> > Thanks for this Christian.  I generally like when we can const'ify
-> > things like this, but I'm not excited about the const_qual hack on
-> > core SELinux kernel code to satisfy genheaders.c.  I understand why it
-> > is needed, but I would rather clutter the genheaders.c code than the
-> > core SELinux kernel code.  If we can't cast away the const'ification
-> > in genheaders.c could we simply allocate duplicate arrays in
-> > genheaders.c and store the transformed strings into the new arrays?
->
-> Note: casting off const is UB. I've had to fix multiple bugs where
-> clang will drop writes to variables declared const but had const'ness
-> casted away.
+Hi Michael,
 
-Then let's just memcpy the array in genheaders.c.  I'm okay with
-genheaders being a little ugly if it helps keep the core code cleaner.
+Thank you for the patch! Perhaps something to improve:
 
---=20
-paul-moore.com
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm/drm-next drm-tip/drm-tip v5.17-rc5 next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Michael-Cheng/Move-define-wbvind_on_all_cpus/20220223-012853
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: hexagon-randconfig-r041-20220221 (https://download.01.org/0day-ci/archive/20220223/202202230702.Ya7PkY7G-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/3aaa40c95b16a78c9059a77536de70bb08ce05e9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Michael-Cheng/Move-define-wbvind_on_all_cpus/20220223-012853
+        git checkout 3aaa40c95b16a78c9059a77536de70bb08ce05e9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/drm_cache.c:37:
+   In file included from include/drm/drm_cache.h:37:
+>> arch/hexagon/include/asm/smp.h:13:9: warning: 'raw_smp_processor_id' macro redefined [-Wmacro-redefined]
+   #define raw_smp_processor_id() (current_thread_info()->cpu)
+           ^
+   include/linux/smp.h:191:9: note: previous definition is here
+   #define raw_smp_processor_id()                  0
+           ^
+   1 warning generated.
+
+
+vim +/raw_smp_processor_id +13 arch/hexagon/include/asm/smp.h
+
+43afdf50838634 Richard Kuo 2011-10-31  12  
+43afdf50838634 Richard Kuo 2011-10-31 @13  #define raw_smp_processor_id() (current_thread_info()->cpu)
+43afdf50838634 Richard Kuo 2011-10-31  14  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
