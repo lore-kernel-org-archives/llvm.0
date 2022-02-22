@@ -1,79 +1,104 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5957E
-	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 07:44:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645515842; x=1677051842;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=pNBLq+N1cbUSoyakQQ3hiSs5O/hIcYraNQyGKv9znF8=;
-  b=DuFiw2wH+8UfMTq44w/P1+9g2oCfRzLoLJWDtZRl2jq53gNfOe7Yr8Fa
-   NDpYHRsh3oeZlCZ3AGrV0JcM57DwSkrfzHKmpYkEDoSuw4HBEGw4vbOOA
-   EdBiHmJLcTyMVQobVFF8nICzizxuUm8+SZtrx8314QyJ9Z2q57D+e82LL
-   p28yCB5hVHUMO9XqUZ+nnA7tZf4gVytUsvxo7tcz3q3YQvUFK5cqnfFeg
-   FCMWylNUfERK3S/vRV31ezBRsyC5ZvCO2NjHjOoQDTXVxCTLh4Qy3zA2w
-   miDELoxRB5Vuvks7hoceMuM5RDY9tuaR/J11GJZUltH29IpiyXTgIEd7O
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="338064791"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="338064791"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 23:44:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="507885880"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 21 Feb 2022 23:43:57 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nMPq0-0002Uc-Hi; Tue, 22 Feb 2022 07:43:56 +0000
-Date: Tue, 22 Feb 2022 15:43:25 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [peterz-queue:x86/wip.ibt 34/39] arch/x86/xen/xen-asm.o: warning:
- objtool: bad .discard.noendbr entry
-Message-ID: <202202221525.2v8cxcwx-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732267E
+	for <llvm@lists.linux.dev>; Tue, 22 Feb 2022 07:50:58 +0000 (UTC)
+Received: by mail-vs1-f46.google.com with SMTP id d11so16161331vsm.5
+        for <llvm@lists.linux.dev>; Mon, 21 Feb 2022 23:50:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uzFl6sqnppLbE/reSAw0Z5UcOZ1BcsboAOECKBIl91c=;
+        b=a5Xuu8aA+xACIZl3B7LWvPIlbuhmt8vIyo1mz/GH3brKs0JizVcUTzmv1gQTT5Iin6
+         YrdNLDg2lBUZ9srG4BI/EDO45xLd2v6rUtqD1R5Nh9Xw9DqnJ+PhEclWzGdVv40daqPU
+         RkGgdc1v3DfbQHPx8rB1EV4i7YLQGQSkPttx0meFhXJhA42rgK+XGl3CAW/LqFX4nzpo
+         g+3m9nXNPC3YKj0507M7//7Hg6mln+Y1UhYFA/7POLikvUd0mz6g5VF5plkog765RCiT
+         f3pUlGVT+hRIEoY5L2/S+HvSgl45GLQBndPIu9m7vgDyOw3FUpAuYTZFyRGKZ5kDCxc8
+         QwZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uzFl6sqnppLbE/reSAw0Z5UcOZ1BcsboAOECKBIl91c=;
+        b=M2w3sftk0t+FrDGkLWs+28RE/OCrWsMxrmgRqD/1IWqcpZ6vuHw+uQMhNlEasgyx02
+         0lt9x0bInet25PvLAt6CqGAlDtm+ySYRRp5FzYkptMLRX/1uRy//I1ZCptFBggBIpwbD
+         uHAiFTJscl0NHxIBs1KIyveVI9Z0xYGkyqwBYfPS2QWEpTOwWYH8YkH5EaKS/odSKAbY
+         eat7ie68LBeFKLmILF/cCwbNR60ZO5zrCXjVoDUqOcEY2RoOalVIz++EjccO0R0Qxd2F
+         OWYeK/47fd3DyHvjT16hsuzqTKUEya7U4UfvqDIpQDi7s6Ljwb1TUVahW1XSTQbW/2EK
+         3ZPA==
+X-Gm-Message-State: AOAM530/615Yj8vGBXgOfCKFASluIZ9RURx5Dqcquz+BBnHubnY0vtN1
+	4rWSTQ9MgSasW/rscmDXSCf0RA79QWrlgsOjc0M=
+X-Google-Smtp-Source: ABdhPJzocCr94zTr+ZAkP6jgRQmORnoaN5tSWsl5OKqascjV1wkde9J5Fpxth9MD5BMsQ4o3FzhOKRbu7zx2QdnUrnA=
+X-Received: by 2002:a67:eb9a:0:b0:31b:db46:4c82 with SMTP id
+ e26-20020a67eb9a000000b0031bdb464c82mr8999722vso.38.1645516257285; Mon, 21
+ Feb 2022 23:50:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220220144606.5695-1-jrdr.linux@gmail.com> <0a2e57ad-2973-ea01-ceda-3262cde1f5aa@gmx.com>
+In-Reply-To: <0a2e57ad-2973-ea01-ceda-3262cde1f5aa@gmx.com>
+From: Souptick Joarder <jrdr.linux@gmail.com>
+Date: Tue, 22 Feb 2022 13:20:45 +0530
+Message-ID: <CAFqt6zZsv+bMwbdqrcOMCZE08O_q7DGa0ejVAbokLybsSch5fw@mail.gmail.com>
+Subject: Re: [PATCH] btrfs: Initialize ret to 0 in scrub_simple_mirror()
+To: Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc: Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, dsterba@suse.com, 
+	nathan@kernel.org, Nick Desaulniers <ndesaulniers@google.com>, linux-btrfs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-CC: linux-kernel@vger.kernel.org
-TO: Peter Zijlstra <peterz@infradead.org>
+On Mon, Feb 21, 2022 at 5:46 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>
+>
+>
+> On 2022/2/20 22:46, Souptick Joarder wrote:
+> > From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+> >
+> > Kernel test robot reported below warning ->
+> > fs/btrfs/scrub.c:3439:2: warning: Undefined or garbage value
+> > returned to caller [clang-analyzer-core.uninitialized.UndefReturn]
+> >
+> > Initialize ret to 0.
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+>
+> Although the patch is not yet merged, but I have to say, it's a false alert.
 
-Hi Peter,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
-head:   1436dce5f32d577e8cef693e09f4bb1faa0e2692
-commit: d94342a792e1b38f567c728a969ae70ed77dfba0 [34/39] objtool: Read the NOENDBR annotation
-config: x86_64-randconfig-a011-20220221 (https://download.01.org/0day-ci/archive/20220222/202202221525.2v8cxcwx-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=d94342a792e1b38f567c728a969ae70ed77dfba0
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue x86/wip.ibt
-        git checkout d94342a792e1b38f567c728a969ae70ed77dfba0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/xen/xen-asm.o: warning: objtool: bad .discard.noendbr entry
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Yes, I agree it is a false positive but this patch will at least keep
+kernel test robot happy :)
+>
+> Firstly, the while loop will always get at least one run.
+>
+> Secondly, in that loop, we either set ret to some error value and break,
+> or after at least one find_first_extent_item() and scrub_extent() call,
+> we increase cur_logical and reached the limit of the while loop and exit.
+>
+> So there is no possible routine to leave @ret uninitialized and returned
+> to caller.
+>
+> Thanks,
+> Qu
+>
+> > ---
+> >   fs/btrfs/scrub.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
+> > index 4baa8e43d585..5ca7e5ffbc96 100644
+> > --- a/fs/btrfs/scrub.c
+> > +++ b/fs/btrfs/scrub.c
+> > @@ -3325,7 +3325,7 @@ static int scrub_simple_mirror(struct scrub_ctx *sctx,
+> >       const u32 max_length = SZ_64K;
+> >       struct btrfs_path path = {};
+> >       u64 cur_logical = logical_start;
+> > -     int ret;
+> > +     int ret = 0;
+> >
+> >       /* The range must be inside the bg */
+> >       ASSERT(logical_start >= bg->start &&
