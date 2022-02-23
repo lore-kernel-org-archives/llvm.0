@@ -1,90 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8DFA56
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 11:49:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C7BC340FA
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 11:49:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645616951;
-	bh=+ioWVHNgMYeDeBDsUP7f/drz0hwa8yRvXmdVGF3eiFQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=amipTyugIxJO3OK3SYdgOFAUabSp6w39r0/eyVWT+fJDXgPBbmQOnORSBUTQR+O0Z
-	 bjZnZzvujx/rFKnqDifCEtVemDXzMXqCYKkWzWDOVRjTqXoFletbgV1Av+aN7SdIdv
-	 ls/RPtf/RUjv5uqSdUbrTvKFxt/BGjABV70qd1mf2zDB9oVwFHEZKP3LdgQ0rK66jn
-	 Cy0KwhZpUuoUvvLku+ZvlMUo7MuzAAzpc323fDtqdartLYEiI2YbFLE5m6bEWe0vQ0
-	 KvVXhHWvrqeFmU0UBHkCw5wWBJrMROVNWfDNRBUdmFK0gB7WfGkZosotO2JFzH6qFq
-	 NqlkwHQKA7Yuw==
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2d68d519a33so206232487b3.7
-        for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 03:49:11 -0800 (PST)
-X-Gm-Message-State: AOAM5314YTe656hrE/evsBefgJkgScBAKgf5/En+xDQJ0NTM1pda9lU6
-	6GvbDSi96QnWO9NC01K1V20ILjBBxLOFF/H1oMs=
-X-Google-Smtp-Source: ABdhPJwQIornAPE/LrSfmaLY9p5F4ZAJgJS6+jzrvvmVxK04wF1Vvvs+R7teI3vNg74R7BJvxG5X95O2qSVBFpjInRc=
-X-Received: by 2002:a81:4a45:0:b0:2d6:b212:6a76 with SMTP id
- x66-20020a814a45000000b002d6b2126a76mr26808813ywa.60.1645616950272; Wed, 23
- Feb 2022 03:49:10 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB44D62A
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 12:36:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645619794; x=1677155794;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OdSCkrvWTIGBVhz8S1EekPKKnza/NTZR76i2du7AwlM=;
+  b=K0oljg/hJDQcZZZzIi5G6kTt13pUYHZj92EbnVHm915pDJVZA6eGrG76
+   lUPplJflzUgD/9LlrHOI9UG27n5n23BcF916SmIdHb7WEz4C1b4A5uCCy
+   6+JPTL4D8gFcxvqrOxaRHOEnCzC0+GOEiC1ATrcHNwqjGMoxMDmyTBf83
+   WuonjCMg00HJ+qhyCaOMgF80gDzVma6fcKzqlmHbzVv93xClL7Vgp6i7G
+   eZFvtwjx8GM/gYXWACLOJm1Hx5CJPkc9j7S22tgmAMiqzs7IzlcPQt0QN
+   W3pexn4Xy8VLJE+75YYD7CKrGDhe2VEaa/S0TdzAYm9DBQqcFPpTh4sdv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="276571318"
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="276571318"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:36:33 -0800
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="532666200"
+Received: from rli9-dbox.sh.intel.com (HELO rli9-dbox) ([10.239.159.142])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:36:26 -0800
+Date: Wed, 23 Feb 2022 20:34:05 +0800
+From: Philip Li <philip.li@intel.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Kalesh Singh <kaleshsingh@google.com>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, will@kernel.org, qperret@google.com,
+	tabba@google.com, surenb@google.com, kernel-team@android.com,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	James Morse <james.morse@arm.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Peter Collingbourne <pcc@google.com>,
+	Andrew Scull <ascull@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.cs.columbia.edu
+Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
+ hypervisor stack overflows
+Message-ID: <YhYpvfZaSjrAtkZp@rli9-dbox>
+References: <20220222165212.2005066-7-kaleshsingh@google.com>
+ <202202231727.L621fVgD-lkp@intel.com>
+ <875yp63ptg.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220222095736.24898-1-ashimida@linux.alibaba.com> <YhUvp5RHkTlBXX3o@lakrids>
-In-Reply-To: <YhUvp5RHkTlBXX3o@lakrids>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 23 Feb 2022 12:48:58 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHXz_CFL1A53J+h6EgRCKcrRfd_pMAy9Z+PztfzZYAawg@mail.gmail.com>
-Message-ID: <CAMj1kXHXz_CFL1A53J+h6EgRCKcrRfd_pMAy9Z+PztfzZYAawg@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Dan Li <ashimida@linux.alibaba.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Kees Cook <keescook@chromium.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Nicholas Piggin <npiggin@gmail.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, luc.vanoostenryck@gmail.com, 
-	Marco Elver <elver@google.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <875yp63ptg.wl-maz@kernel.org>
 
-On Tue, 22 Feb 2022 at 19:48, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi,
->
-> On Tue, Feb 22, 2022 at 01:57:36AM -0800, Dan Li wrote:
-> > Shadow call stack is available in GCC > 11.2.0, this patch makes
-> > the corresponding kernel configuration available when compiling
-> > the kernel with gcc.
->
-> Neat!
->
-> My local GCC devs told me that means GCC 12.x.x rather than 11.2.x or
-> 11.3.x, so as others have said it'd be clearer to say `GCC >= 12.0.0`.
->
-> I'd like to try this with a GCC binary before I provide an Ack or R-b;
-> but in the mean time I have a few comments below.
->
-> > Note that the implementation in GCC is slightly different from Clang.
-> > With SCS enabled, functions will only pop x30 once in the epilogue,
-> > like:
+On Wed, Feb 23, 2022 at 09:16:59AM +0000, Marc Zyngier wrote:
+> On Wed, 23 Feb 2022 09:05:18 +0000,
+> kernel test robot <lkp@intel.com> wrote:
+> > 
+> > Hi Kalesh,
+> > 
+> > Thank you for the patch! Perhaps something to improve:
 > >
-> >    str     x30, [x18], #8
-> >    stp     x29, x30, [sp, #-16]!
-> >    ......
-> > -  ldp     x29, x30, [sp], #16          //clang
-> > +  ldr     x29, [sp], #16       //GCC
-> >    ldr     x30, [x18, #-8]!
->
-> Given the prologue still pushes both x29 and x30 (which we critically
-> depend upon) that sounds OK to me.
->
+> > [auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
+> > 
+> > url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+> > base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
+> > config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install arm64 cross compiling tool for clang build
+> >         # apt-get install binutils-aarch64-linux-gnu
+> >         # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
+> >         git remote add linux-review https://github.com/0day-ci/linux
+> >         git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+> >         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+> >    #define NULL ((void *)0)
+> >                 ^~~~~~~~~~~
+> >    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+> >            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
+> >                                              ^~~~~~~~~~~~~~~~~~~~~
+> >    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
+> >            [0 ... ESR_ELx_EC_MAX]          = NULL,
+> >                                              ^~~~
+> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+> >    #define NULL ((void *)0)
+> >                 ^~~~~~~~~~~
+> 
+> Kalesh, please ignore this nonsense. There may be things to improve,
+> but this is *NOT* one of them.
+> 
+> These reports are pretty useless, and just lead people to ignore real
+> bug reports.
 
-Indeed.
+Hi Kalesh, sorry there're some irrelevant issues mixed in the report,
+kindly ignore them. And the valuable ones are the new ones that
+prefixed by >>, as the below one in original report.
 
-What did come up in the discussion on the GCC side was runtime
-patching (to avoid the overhead of having both PAC and SCS), but it
-seems far more likely that we would patch PACIASP/AUTIASP instructions
-into SCS pushes/pops rather than the other way around, and so loading
-x30 only once should be fine.
+>> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
+   void __noreturn hyp_panic_bad_stack(void)
+                   ^
+Thanks
+
+> 
+> 	M.
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
