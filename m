@@ -1,159 +1,127 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E52C6A
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 12:48:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645620519; x=1677156519;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SeCtxrXr47ee1ECiebJOHKwJcw5JwFiRtxOV0liAsAM=;
-  b=dcgKiE3An/4rdlXBa3EWBAGLf4iLHWBICyeJARAEZuQvUr6FNMnu5E2a
-   gVdhnqFO8ICn6nDs+ZoFfmVHxvoXlDK6g8OMPwnsy4CQ1soer6Mphrb1D
-   Ni15xQh3L3Fpb4GKJqDHUEAd+vbZrBQrJrNYCIsLyaM/DOHpMDmUNcXTj
-   CvMDDnEcPPnwTamfD648bSQJVENYHZBNsG8Gi7wZG9IWdDbFRL+xJwLHM
-   TuteyHoYwc7OExeZWq6I5lazgcjPQ+EMc1+BmRqE7YJOTr+g/EHRQaZ6Q
-   JgomaNhlOWnLpBihtS5O3E2fnEmKLCalLDimLVK8LmJ8xiRXCC/69XCww
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="235462147"
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="235462147"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:48:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="683884207"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2022 04:48:30 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nMr4I-0001Q5-6I; Wed, 23 Feb 2022 12:48:30 +0000
-Date: Wed, 23 Feb 2022 20:47:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sui Jingfeng <15330273260@189.cn>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Roland Scheidegger <sroland@vmware.com>,
-	Zack Rusin <zackr@vmware.com>,
-	Christian Gmeiner <christian.gmeiner@gmail.com>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	Rob Herring <robh+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dan Carpenter <error27@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Ilia Mirkin <imirkin@alum.mit.edu>,
-	Qing Zhang <zhangqing@loongson.cn>,
-	suijingfeng <suijingfeng@loongson.cn>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	Randy Dunlap <rdunlap@infradead.org>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v10 3/4] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <202202231909.8x2nM3si-lkp@intel.com>
-References: <20220220145554.117854-4-15330273260@189.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63F7C6A
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 12:54:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 713F8C340E7;
+	Wed, 23 Feb 2022 12:54:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645620857;
+	bh=KabldDCUxNI5N0bArBHqR/7UI4fMhp6C7OzTfnPNseY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=sX+0/Zl3DoDwAA+MolP7ywo2/n7hs2TkupNKHBYtTmASBUZdHGID4QJ3iTR5MeoEW
+	 RtU8wvSgg/5ZOMxZFGb89LUzOQS/PP+U6tVplQNYYlR3Tji+8E4xRPDaD94AuJGGq9
+	 y1NgFWrQRk6E9kJve6icn8xklej+TgzeuuCr0ijH37b8qVuEKXGTh5XApZ+VIY8aoB
+	 BFBfKLXoyU9vrQZCAy8S4igxLoXn/DueNfKaPvLFXVp8sk9zkadRRcVU2WLn/xz/1K
+	 MqSOnYQ+yDHnhux+EwT+49wXk4npgC2KG6a/J/d7pstO38QspF5dfjspQtiHvx4enQ
+	 dlEpV4sGLs2Qw==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <maz@kernel.org>)
+	id 1nMr9q-009u6b-UM; Wed, 23 Feb 2022 12:54:15 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220220145554.117854-4-15330273260@189.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Date: Wed, 23 Feb 2022 12:54:14 +0000
+From: Marc Zyngier <maz@kernel.org>
+To: Philip Li <philip.li@intel.com>
+Cc: Kalesh Singh <kaleshsingh@google.com>, kernel test robot
+ <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com,
+ kernel-team@android.com, Catalin Marinas <catalin.marinas@arm.com>, James
+ Morse <james.morse@arm.com>, Alexandru Elisei <alexandru.elisei@arm.com>,
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Pasha Tatashin
+ <pasha.tatashin@soleen.com>, Joey Gouly <joey.gouly@arm.com>, Peter
+ Collingbourne <pcc@google.com>, Andrew Scull <ascull@google.com>, Paolo
+ Bonzini <pbonzini@redhat.com>, Zenghui Yu <yuzenghui@huawei.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ kvmarm@lists.cs.columbia.edu
+Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
+ hypervisor stack overflows
+In-Reply-To: <YhYpvfZaSjrAtkZp@rli9-dbox>
+References: <20220222165212.2005066-7-kaleshsingh@google.com>
+ <202202231727.L621fVgD-lkp@intel.com> <875yp63ptg.wl-maz@kernel.org>
+ <YhYpvfZaSjrAtkZp@rli9-dbox>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <cb750267af0636c49d2f8aa354f086a5@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: philip.li@intel.com, kaleshsingh@google.com, lkp@intel.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, ardb@kernel.org, mark.rutland@arm.com, pasha.tatashin@soleen.com, joey.gouly@arm.com, pcc@google.com, ascull@google.com, pbonzini@redhat.com, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi Sui,
+On 2022-02-23 12:34, Philip Li wrote:
+> On Wed, Feb 23, 2022 at 09:16:59AM +0000, Marc Zyngier wrote:
+>> On Wed, 23 Feb 2022 09:05:18 +0000,
+>> kernel test robot <lkp@intel.com> wrote:
+>> >
+>> > Hi Kalesh,
+>> >
+>> > Thank you for the patch! Perhaps something to improve:
+>> >
+>> > [auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
+>> >
+>> > url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+>> > base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
+>> > config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
+>> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+>> > reproduce (this is a W=1 build):
+>> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>> >         chmod +x ~/bin/make.cross
+>> >         # install arm64 cross compiling tool for clang build
+>> >         # apt-get install binutils-aarch64-linux-gnu
+>> >         # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
+>> >         git remote add linux-review https://github.com/0day-ci/linux
+>> >         git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+>> >         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
+>> >         # save the config file to linux build tree
+>> >         mkdir build_dir
+>> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+>> >
+>> > If you fix the issue, kindly add following tag as appropriate
+>> > Reported-by: kernel test robot <lkp@intel.com>
+>> >
+>> > All warnings (new ones prefixed by >>):
+>> >
+>> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>> >    #define NULL ((void *)0)
+>> >                 ^~~~~~~~~~~
+>> >    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+>> >            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
+>> >                                              ^~~~~~~~~~~~~~~~~~~~~
+>> >    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
+>> >            [0 ... ESR_ELx_EC_MAX]          = NULL,
+>> >                                              ^~~~
+>> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>> >    #define NULL ((void *)0)
+>> >                 ^~~~~~~~~~~
+>> 
+>> Kalesh, please ignore this nonsense. There may be things to improve,
+>> but this is *NOT* one of them.
+>> 
+>> These reports are pretty useless, and just lead people to ignore real
+>> bug reports.
+> 
+> Hi Kalesh, sorry there're some irrelevant issues mixed in the report,
+> kindly ignore them. And the valuable ones are the new ones that
+> prefixed by >>, as the below one in original report.
+> 
+>>> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous 
+>>> prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
+>    void __noreturn hyp_panic_bad_stack(void)
+>                    ^
 
-Thank you for the patch! Yet something to improve:
+This is only called from assembly code, so a prototype wouldn't bring 
+much.
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on robh/for-next v5.17-rc5 next-20220222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Sui-Jingfeng/drm-lsdc-add-drm-driver-for-loongson-display-controller/20220220-225801
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: riscv-randconfig-r012-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231909.8x2nM3si-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/3891cda03ed77e66fafaf7cfe075042e13f20173
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sui-Jingfeng/drm-lsdc-add-drm-driver-for-loongson-display-controller/20220220-225801
-        git checkout 3891cda03ed77e66fafaf7cfe075042e13f20173
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: ttm_bo_init
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(drm_gem_vram_create) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: ttm_bo_put
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(drm_gem_vram_put) in archive drivers/built-in.a
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(drm_gem_vram_object_free) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: ttm_tt_init
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(bo_driver_ttm_tt_create) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: ttm_tt_fini
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(bo_driver_ttm_tt_destroy) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: ttm_bo_move_memcpy
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(bo_driver_move) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: ttm_bo_vunmap
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(drm_gem_vram_bo_driver_move_notify) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_gem_ttm_print_info
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(drm_gem_vram_object_funcs) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_gem_ttm_mmap
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(drm_gem_vram_object_funcs) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: ttm_bo_eviction_valuable
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(bo_driver) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_gem_ttm_dumb_map_offset
-   >>> referenced by lsdc_drv.c
-   >>> gpu/drm/lsdc/lsdc_drv.o:(lsdc_vram_driver_stub) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: ttm_bo_move_to_lru_tail
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(drm_gem_vram_pin) in archive drivers/built-in.a
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(drm_gem_vram_unpin) in archive drivers/built-in.a
-   >>> referenced by drm_gem_vram_helper.c
-   >>> gpu/drm/drm_gem_vram_helper.o:(drm_gem_vram_vmap) in archive drivers/built-in.a
-   >>> referenced 1 more times
-..
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+         M.
+-- 
+Jazz is not dead. It just smells funny...
