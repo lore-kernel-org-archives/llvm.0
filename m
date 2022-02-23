@@ -1,75 +1,142 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1562F5C
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 22:23:22 +0000 (UTC)
-Received: by mail-wr1-f44.google.com with SMTP id v21so177095wrv.5
-        for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 14:23:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Fy0MJJJI2gB4ymq6roYJN6kjAzccxttzL2stNrD8v6Y=;
-        b=q+siJwh1ClLPC329FhiZBRM/m1SdJmWASDiwDzeM2hdV49NiAohHJV382Bkumyw60k
-         9Bk/UJzwAlELq6ogiBk5CRY+u0dekRGvG4jSQTAGdlW0AcV1L4ozPVTc46T/gDvBH0GS
-         Fh5hPswPyIBfNE4o7n6k2g+Ewo8cD2q1hjp9bC+lBjcycuqvXCUmNk0GLPSSBnGIa9YN
-         XxD2JTpuz2aewJJOOzZCMelJLkAnrmoMFpKtwXv1pwHel3Z1uwyQmOcC4C267uPl7vIT
-         nXRXRj6DUo1NlyXEpmlu+U+DelDNvF/yZNefMQGOp+25cE79/lCldftG82ueqaAsIqix
-         11/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fy0MJJJI2gB4ymq6roYJN6kjAzccxttzL2stNrD8v6Y=;
-        b=rVPHYGKtyOhJqSh2CsQiejWuwN2FVTL/EWVrGidpNlasxv1GjtABifXrw3MufIDRO5
-         wPdbsVT7VWyqSWXGoTpdxrm/OTh4zxCQsfPlmzU5OAvQQuFwY5CTP45K6uVlEo0qZ5eu
-         A+N41R4ep5D9hwWGEdZfAYJjlSINg5R8unK8JKx9/UGtEu+t4NRxyFVnbZEPLzolh1Sj
-         VJTwq2ROPLgfMLIYeN6XCOLv1VR74jqU3SWc4bVK6UMjw2rdSpNbC1WXJZrWUrH5LXLu
-         n26rYJGb1RtHjMktnnup+kY5WpAqshho1PNA2Hl2N/cSm8lLxIQBLaHnQjALPB7plBTo
-         5zmg==
-X-Gm-Message-State: AOAM530IeGNk55l+dEQQoe7Ud6DIo3VjaQVM4bVkHWfFVR7Pji0pM8Bd
-	bckQEMLduWD8q1O/F05gjeqh5leu+P4S+DPSgraehw==
-X-Google-Smtp-Source: ABdhPJweT+T0f+0zMs40/eYau4mlgt5Tzm7+i1OsSNV+ijoy0wYETR7YVYWprmL26EgW870OfgvbQCsGvPlnuOb9Jjo=
-X-Received: by 2002:a05:6000:1e0b:b0:1ea:99dd:db35 with SMTP id
- bj11-20020a0560001e0b00b001ea99dddb35mr1188067wrb.384.1645655001209; Wed, 23
- Feb 2022 14:23:21 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E427A
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 23:02:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645657373; x=1677193373;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cA/iBK1zv2TL2d3+yePnyMO9t24T6zwT8uyJGvJ28EM=;
+  b=CJWC1p8lgdq9WTPa4dPIvgyyX6nWht5PKqoIzSVX6szSvAUMjs5fQSg0
+   ROSe1UvaCOkcIkkzZDnLIfjiweeFVAzqUXKPPNjbUeyZf/V4gmP9PK8xX
+   tgc2uDvVIODItzDOYsl1h9gUnY1o0OdPK3A90hU1E4JXXraqS6Da8bp06
+   FlbUS5Gqb3pdSGwbrCf6j9E5ZQEgqFFDu0mOodIQvSPvPatHGArdC2rOE
+   sd6nIeX8qwiIJ3RQ7TqeZIYAkNH4ZrQTpYsDGsgZrRWodN+yz6qJiTPwv
+   OmWgUmdtVMM4zyqD7/uIvsKsX0AmZsob2kGnVG8OgRZxoz6Bd5HWe+LiE
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="250930680"
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="250930680"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:02:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="637609511"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2022 15:02:51 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nN0eo-0001vE-QR; Wed, 23 Feb 2022 23:02:50 +0000
+Date: Thu, 24 Feb 2022 07:01:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1426/2340] fs/xfs/xfs_aops.c:185:3: error:
+ implicit declaration of function 'cond_resched'
+Message-ID: <202202240635.yBLA03nm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220223162355.3174907-1-seanjc@google.com>
-In-Reply-To: <20220223162355.3174907-1-seanjc@google.com>
-From: David Dunn <daviddunn@google.com>
-Date: Wed, 23 Feb 2022 14:23:10 -0800
-Message-ID: <CABOYuvbO3ugf7RrgfsBJEP1m6RujNN0B_jmAU1UJ3k13E5tdkw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86: Fix pointer mistmatch warning when patching
- RET0 static calls
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Wanpeng Li <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>, 
-	Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Reviewed-by: David Dunn <daviddunn@google.com>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
+commit: 696f8f602b998e5e83e2f71d3dd79e06dbb4e4ea [1426/2340] headers/deps: block/ioprio: Remove the <linux/sched.h> dependency from <linux/ioprio.h>
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220224/202202240635.yBLA03nm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=696f8f602b998e5e83e2f71d3dd79e06dbb4e4ea
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 696f8f602b998e5e83e2f71d3dd79e06dbb4e4ea
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-On Wed, Feb 23, 2022 at 8:24 AM Sean Christopherson <seanjc@google.com> wrote:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 713e08f62385..f285ddb8b66b 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1547,8 +1547,8 @@ static inline void kvm_ops_static_call_update(void)
->         WARN_ON(!kvm_x86_ops.func); __KVM_X86_OP(func)
->  #define KVM_X86_OP_OPTIONAL __KVM_X86_OP
->  #define KVM_X86_OP_OPTIONAL_RET0(func) \
-> -       static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
-> -                          (void *) __static_call_return0);
-> +       static_call_update(kvm_x86_##func, (void *)kvm_x86_ops.func ? : \
-> +                                          (void *)__static_call_return0);
->  #include <asm/kvm-x86-ops.h>
->  #undef __KVM_X86_OP
->  }
+Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+>> fs/xfs/xfs_aops.c:185:3: error: implicit declaration of function 'cond_resched' [-Werror,-Wimplicit-function-declaration]
+                   cond_resched();
+                   ^
+   fs/xfs/xfs_aops.c:185:3: note: did you mean '__cond_resched'?
+   include/linux/kernel.h:95:12: note: '__cond_resched' declared here
+   extern int __cond_resched(void);
+              ^
+   1 error generated.
+--
+>> fs/btrfs/ioctl.c:1655:3: error: implicit declaration of function 'cond_resched' [-Werror,-Wimplicit-function-declaration]
+                   cond_resched();
+                   ^
+   fs/btrfs/ioctl.c:1655:3: note: did you mean '__cond_resched'?
+   include/linux/kernel.h:95:12: note: '__cond_resched' declared here
+   extern int __cond_resched(void);
+              ^
+   1 error generated.
+
+
+vim +/cond_resched +185 fs/xfs/xfs_aops.c
+
+3994fc48957520 Darrick J. Wong   2019-04-15  150  
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  151  /*
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  152   * Finish all pending IO completions that require transactional modifications.
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  153   *
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  154   * We try to merge physical and logically contiguous ioends before completion to
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  155   * minimise the number of transactions we need to perform during IO completion.
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  156   * Both unwritten extent conversion and COW remapping need to iterate and modify
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  157   * one physical extent at a time, so we gain nothing by merging physically
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  158   * discontiguous extents here.
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  159   *
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  160   * The ioend chain length that we can be processing here is largely unbound in
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  161   * length and we may have to perform significant amounts of work on each ioend
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  162   * to complete it. Hence we have to be careful about holding the CPU for too
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  163   * long in this loop.
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  164   */
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  165  void
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  166  xfs_end_io(
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  167  	struct work_struct	*work)
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  168  {
+433dad94ec5d6b Christoph Hellwig 2019-10-17  169  	struct xfs_inode	*ip =
+433dad94ec5d6b Christoph Hellwig 2019-10-17  170  		container_of(work, struct xfs_inode, i_ioend_work);
+598ecfbaa742ac Christoph Hellwig 2019-10-17  171  	struct iomap_ioend	*ioend;
+433dad94ec5d6b Christoph Hellwig 2019-10-17  172  	struct list_head	tmp;
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  173  	unsigned long		flags;
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  174  
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  175  	spin_lock_irqsave(&ip->i_ioend_lock, flags);
+433dad94ec5d6b Christoph Hellwig 2019-10-17  176  	list_replace_init(&ip->i_ioend_list, &tmp);
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  177  	spin_unlock_irqrestore(&ip->i_ioend_lock, flags);
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  178  
+598ecfbaa742ac Christoph Hellwig 2019-10-17  179  	iomap_sort_ioends(&tmp);
+598ecfbaa742ac Christoph Hellwig 2019-10-17  180  	while ((ioend = list_first_entry_or_null(&tmp, struct iomap_ioend,
+433dad94ec5d6b Christoph Hellwig 2019-10-17  181  			io_list))) {
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  182  		list_del_init(&ioend->io_list);
+6e552494fb90ac Brian Foster      2021-05-04  183  		iomap_ioend_try_merge(ioend, &tmp);
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  184  		xfs_end_ioend(ioend);
+ebb7fb1557b1d0 Dave Chinner      2022-01-26 @185  		cond_resched();
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  186  	}
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  187  }
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  188  
+
+:::::: The code at line 185 was first introduced by commit
+:::::: ebb7fb1557b1d03b906b668aa2164b51e6b7d19a xfs, iomap: limit individual ioend chain lengths in writeback
+
+:::::: TO: Dave Chinner <dchinner@redhat.com>
+:::::: CC: Darrick J. Wong <djwong@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
