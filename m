@@ -1,41 +1,36 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01997B
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 09:06:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645607187; x=1677143187;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UmG8QUkK9khDhXRiw9N34JhJQ0VKWF9hY6tPnln+/Xk=;
-  b=XIL8F8FGozAUw9/ypXTljD5mI8fuaciOkDIU+cRe6q5QkyNcfQSrDnOZ
-   9zNmU89HqrCxQzFNkAeITIn+pcUgbhaSJt7H//kkiGTlAJ7ySFK9j2w9j
-   QQ6MM9i2ycqX746bPQ47FyWHFda2oBxJqhYlfAzlUW40qc0Bp5QaphHx6
-   gJBWQAmX6WPlpdZtd8Pbqvx4nYLA6fZQUfoK3H7aHBpsyUHnfYwR9nxdu
-   Zc7/EuSlRG7mZSae8LUfyXfTPs/aSkllUPyK3Tdi/cuJaRAAHvwfQEJOy
-   pjNkI9R9mgTLFzCVarpkVQYQmDgix6424NgyHmr/eKEY6lIvwY4mJQ0ik
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="252111204"
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="252111204"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 01:06:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="543248029"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2022 01:06:21 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nMnbJ-0001C6-7M; Wed, 23 Feb 2022 09:06:21 +0000
-Date: Wed, 23 Feb 2022 17:05:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kalesh Singh <kaleshsingh@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org,
-	maz@kernel.org, qperret@google.com, tabba@google.com,
-	surenb@google.com, kernel-team@android.com,
-	Kalesh Singh <kaleshsingh@google.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64437B
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 09:17:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CC7C340E7;
+	Wed, 23 Feb 2022 09:17:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645607822;
+	bh=hs5yvpcvkFNU908smRGHGIeMdSnQU/rvrtNyOkhgjmo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=oS+r2DvjETmvxCC1BXd9xacjOnzrS66dVqi7HzqdW7a51zqGXc6n0l2F8x4+feIem
+	 ldFxFw1SXfXDb231UnIKK/DZ8+O64B4wZEeJCgN//LGmsmAdLQrk9tfE89h2c7npvF
+	 M5kXB0C8+FlHIm6U+xIJb4hvC/jR+DQFp4PLXN6xy/YfhQ+ev31ivr0xm3FGfNOi/Y
+	 ewOUvvSjQk5W6x+x1HIVGtzz3rMFWUcd74bctRrxpmHsAjKcoiGUCiH0mO3Ir8Az17
+	 9eq2/7sZv8xw+T9BoLNRbML2vhZLft/aY1fLM8n2VUEXRFDKWlaN54MvfwtSCSdveh
+	 mA26mYM1L9OJA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <maz@kernel.org>)
+	id 1nMnlc-009rC7-95; Wed, 23 Feb 2022 09:17:00 +0000
+Date: Wed, 23 Feb 2022 09:16:59 +0000
+Message-ID: <875yp63ptg.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Kalesh Singh <kaleshsingh@google.com>, kernel test robot <lkp@intel.com>
+Cc: 	llvm@lists.linux.dev,
+	kbuild-all@lists.01.org,
+	will@kernel.org,
+	qperret@google.com,
+	tabba@google.com,
+	surenb@google.com,
+	kernel-team@android.com,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	James Morse <james.morse@arm.com>,
 	Alexandru Elisei <alexandru.elisei@arm.com>,
@@ -48,177 +43,79 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org,
 	Andrew Scull <ascull@google.com>,
 	Paolo Bonzini <pbonzini@redhat.com>,
 	Zenghui Yu <yuzenghui@huawei.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
 	kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v2 6/9] KVM: arm64: Detect and handle hypervisor stack
- overflows
-Message-ID: <202202231727.L621fVgD-lkp@intel.com>
+Subject: Re: [PATCH v2 6/9] KVM: arm64: Detect and handle hypervisor stack overflows
+In-Reply-To: <202202231727.L621fVgD-lkp@intel.com>
 References: <20220222165212.2005066-7-kaleshsingh@google.com>
+	<202202231727.L621fVgD-lkp@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222165212.2005066-7-kaleshsingh@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, lkp@intel.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, ardb@kernel.org, mark.rutland@arm.com, pasha.tatashin@soleen.com, joey.gouly@arm.com, pcc@google.com, ascull@google.com, pbonzini@redhat.com, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi Kalesh,
+On Wed, 23 Feb 2022 09:05:18 +0000,
+kernel test robot <lkp@intel.com> wrote:
+> 
+> Hi Kalesh,
+> 
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+> base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
+> config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+>         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>    #define NULL ((void *)0)
+>                 ^~~~~~~~~~~
+>    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+>            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
+>                                              ^~~~~~~~~~~~~~~~~~~~~
+>    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
+>            [0 ... ESR_ELx_EC_MAX]          = NULL,
+>                                              ^~~~
+>    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>    #define NULL ((void *)0)
+>                 ^~~~~~~~~~~
 
-Thank you for the patch! Perhaps something to improve:
+Kalesh, please ignore this nonsense. There may be things to improve,
+but this is *NOT* one of them.
 
-[auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
+These reports are pretty useless, and just lead people to ignore real
+bug reports.
 
-url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
-base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
-config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
-        git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+	M.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
-                                             ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:201:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_IABT_LOW]           = kvm_hyp_handle_iabt_low,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:202:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_DABT_LOW]           = kvm_hyp_handle_dabt_low,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:203:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_PAC]                = kvm_hyp_handle_ptrauth,
-                                             ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:208:24: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SYS64]              = kvm_handle_pvm_sys64,
-                                             ^~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:209:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SVE]                = kvm_handle_pvm_restricted,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:210:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_FP_ASIMD]           = kvm_handle_pvm_fpsimd,
-                                             ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:211:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_IABT_LOW]           = kvm_hyp_handle_iabt_low,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:212:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_DABT_LOW]           = kvm_hyp_handle_dabt_low,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:213:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_PAC]                = kvm_hyp_handle_ptrauth,
-                                             ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:350:17: warning: no previous prototype for function 'hyp_panic' [-Wmissing-prototypes]
-   void __noreturn hyp_panic(void)
-                   ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:350:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __noreturn hyp_panic(void)
-   ^
-   static 
->> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
-   void __noreturn hyp_panic_bad_stack(void)
-                   ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:372:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __noreturn hyp_panic_bad_stack(void)
-   ^
-   static 
-   arch/arm64/kvm/hyp/nvhe/switch.c:377:17: warning: no previous prototype for function 'kvm_unexpected_el2_exception' [-Wmissing-prototypes]
-   asmlinkage void kvm_unexpected_el2_exception(void)
-                   ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:377:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void kvm_unexpected_el2_exception(void)
-              ^
-              static 
-   16 warnings generated.
-
-
-vim +/hyp_panic_bad_stack +372 arch/arm64/kvm/hyp/nvhe/switch.c
-
-   371	
- > 372	void __noreturn hyp_panic_bad_stack(void)
-   373	{
-   374		hyp_panic();
-   375	}
-   376	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Without deviation from the norm, progress is not possible.
