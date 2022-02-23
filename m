@@ -1,42 +1,50 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E073C6A
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 12:59:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128ECC6A
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 13:09:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645621173; x=1677157173;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EdwXpwxeqUH7Cq2Ae1obglVV8LjCsQ3JhjCcS4UhTeo=;
-  b=AfPFac9uxphUsmJ8ocT0fOocb+7bmqYt9OUIW1YnP0rouj703ZVEZOLx
-   SKoGfGM+qaIO33KwaPPGRcccEkhB66gsGibCjc6b5m2NN1ttja0O+Tgsn
-   AodS36KLd4hqiqEnkKucFdiyNiM/asiYW+OoyH4Eo3HgVfAq7dXcrXP5r
-   K0fry0d3TToXVJJay7PZ5ylRFfVIPInTDca8Y8r3aaNLeZ2DJ4+7kTxHv
-   7pgCC6/a4HduKfWLyEpIKDyOsHR7hinlvILnR0ll0qStU9xzVwxcY+fph
-   w4Srp6k7PAjxzvNKV2NSEglsEufC+nPslht7jlY3nQWbm+VUR+9nZlMd0
+  t=1645621775; x=1677157775;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z0pOnIngaHQctwWQT9OpJguHuDyTKdtIQ2KjPmHmvAA=;
+  b=cAJ6/TcB/w5ctoxrlZqiOmUQQdAJ/iktBbh2MLsbT/lZ9kMac3O4CFSw
+   S6BIzKbCQ8GHBan/X4q5BBwKDikF+4OLarL+Rlb4OdxYxyt+goN4OYmB4
+   xuHEoAslpsM2/FsmPoIfyhH15oCf+Kyo9ZPNL9unn3GZvExRXl+WfUvNr
+   2Lzr7ZLKpFI7SMtF4A+jTOObuSP7g3ZOXDxCZ0+Ot8LlPW5B3e7DRmr+l
+   /7uYSJ/fVo90dEAmyKjZofOtCzUSOww4r4Fagf6eCf8YlPzaiK872ydQh
+   aLM/oeNexilkHwqa+bYTjqtlBo6RGSWM5b2iMrH+Fpo5OPqiX7752s0q/
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="338393097"
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="239347436"
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="338393097"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:59:32 -0800
+   d="scan'208";a="239347436"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 05:09:34 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="543306233"
+   d="scan'208";a="548238032"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2022 04:59:31 -0800
+  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 05:09:31 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMrEw-0001S1-Ip; Wed, 23 Feb 2022 12:59:30 +0000
-Date: Wed, 23 Feb 2022 20:58:34 +0800
+	id 1nMrOc-0001Sy-Si; Wed, 23 Feb 2022 13:09:30 +0000
+Date: Wed, 23 Feb 2022 21:09:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nathan Huckleberry <nhuck@google.com>
+To: Sascha Hauer <s.hauer@pengutronix.de>, linux-clk@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>
-Subject: [ebiggers:crypto-pending 7/7]
- arch/arm64/crypto/polyval-ce-glue.c:355:33: warning: unused variable
- 'polyval_cpu_feature'
-Message-ID: <202202232016.TAxtXYiJ-lkp@intel.com>
+	Abel Vesa <abel.vesa@nxp.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Adrian Alonso <adrian.alonso@nxp.com>,
+	Mads Bligaard Nielsen <bli@bang-olufsen.dk>,
+	Sascha Hauer <s.hauer@pengutronix.de>
+Subject: Re: [PATCH 3/8] clk: imx: pll14xx: Use FIELD_GET/FIELD_PREP
+Message-ID: <202202232030.DHNZfsc4-lkp@intel.com>
+References: <20220223075601.3652543-4-s.hauer@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,45 +53,193 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220223075601.3652543-4-s.hauer@pengutronix.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crypto-pending
-head:   a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48
-commit: a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48 [7/7] crypto: arm64/polyval: Add PMULL accelerated implementation of POLYVAL
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220223/202202232016.TAxtXYiJ-lkp@intel.com/config)
+Hi Sascha,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on shawnguo/for-next]
+[also build test ERROR on clk/clk-next v5.17-rc5 next-20220222]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Sascha-Hauer/clk-i-MX-PLL14xx-Support-dynamic-rates/20220223-155846
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+config: hexagon-randconfig-r015-20220221 (https://download.01.org/0day-ci/archive/20220223/202202232030.DHNZfsc4-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48
-        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-        git fetch --no-tags ebiggers crypto-pending
-        git checkout a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48
+        # https://github.com/0day-ci/linux/commit/c12e6c700842e937d181c80ce6ada39017ed6268
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sascha-Hauer/clk-i-MX-PLL14xx-Support-dynamic-rates/20220223-155846
+        git checkout c12e6c700842e937d181c80ce6ada39017ed6268
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/crypto/ arch/arm64/kvm/hyp/nvhe/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/arm64/crypto/polyval-ce-glue.c:355:33: warning: unused variable 'polyval_cpu_feature' [-Wunused-const-variable]
-   static const struct cpu_feature polyval_cpu_feature[] = {
-                                   ^
-   1 warning generated.
+>> drivers/clk/imx/clk-pll14xx.c:123:9: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           mdiv = FIELD_GET(MDIV_MASK, pll_div);
+                  ^
+   drivers/clk/imx/clk-pll14xx.c:143:9: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           mdiv = FIELD_GET(MDIV_MASK, pll_div_ctl0);
+                  ^
+   drivers/clk/imx/clk-pll14xx.c:162:13: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           old_mdiv = FIELD_GET(MDIV_MASK, pll_div);
+                      ^
+>> drivers/clk/imx/clk-pll14xx.c:195:10: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+                   tmp |= FIELD_PREP(SDIV_MASK, rate->sdiv);
+                          ^
+   drivers/clk/imx/clk-pll14xx.c:214:12: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+           div_val = FIELD_PREP(MDIV_MASK, rate->mdiv) | FIELD_PREP(PDIV_MASK, rate->pdiv) |
+                     ^
+   drivers/clk/imx/clk-pll14xx.c:261:10: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+                   tmp |= FIELD_PREP(SDIV_MASK, rate->sdiv);
+                          ^
+   drivers/clk/imx/clk-pll14xx.c:279:12: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+           div_val = FIELD_PREP(MDIV_MASK, rate->mdiv) |
+                     ^
+   7 errors generated.
 
 
-vim +/polyval_cpu_feature +355 arch/arm64/crypto/polyval-ce-glue.c
+vim +/FIELD_GET +123 drivers/clk/imx/clk-pll14xx.c
 
-   354	
- > 355	static const struct cpu_feature polyval_cpu_feature[] = {
-   356		{ cpu_feature(PMULL) }, { }
-   357	};
-   358	MODULE_DEVICE_TABLE(cpu, polyval_cpu_feature);
-   359	
+   114	
+   115	static unsigned long clk_pll1416x_recalc_rate(struct clk_hw *hw,
+   116							  unsigned long parent_rate)
+   117	{
+   118		struct clk_pll14xx *pll = to_clk_pll14xx(hw);
+   119		u32 mdiv, pdiv, sdiv, pll_div;
+   120		u64 fvco = parent_rate;
+   121	
+   122		pll_div = readl_relaxed(pll->base + DIV_CTL0);
+ > 123		mdiv = FIELD_GET(MDIV_MASK, pll_div);
+   124		pdiv = FIELD_GET(PDIV_MASK, pll_div);
+   125		sdiv = FIELD_GET(SDIV_MASK, pll_div);
+   126	
+   127		fvco *= mdiv;
+   128		do_div(fvco, pdiv << sdiv);
+   129	
+   130		return fvco;
+   131	}
+   132	
+   133	static unsigned long clk_pll1443x_recalc_rate(struct clk_hw *hw,
+   134							  unsigned long parent_rate)
+   135	{
+   136		struct clk_pll14xx *pll = to_clk_pll14xx(hw);
+   137		u32 mdiv, pdiv, sdiv, pll_div_ctl0, pll_div_ctl1;
+   138		short int kdiv;
+   139		u64 fvco = parent_rate;
+   140	
+   141		pll_div_ctl0 = readl_relaxed(pll->base + DIV_CTL0);
+   142		pll_div_ctl1 = readl_relaxed(pll->base + DIV_CTL1);
+   143		mdiv = FIELD_GET(MDIV_MASK, pll_div_ctl0);
+   144		pdiv = FIELD_GET(PDIV_MASK, pll_div_ctl0);
+   145		sdiv = FIELD_GET(SDIV_MASK, pll_div_ctl0);
+   146		kdiv = FIELD_GET(KDIV_MASK, pll_div_ctl1);
+   147	
+   148		/* fvco = (m * 65536 + k) * Fin / (p * 65536) */
+   149		fvco *= (mdiv * 65536 + kdiv);
+   150		pdiv *= 65536;
+   151	
+   152		do_div(fvco, pdiv << sdiv);
+   153	
+   154		return fvco;
+   155	}
+   156	
+   157	static inline bool clk_pll14xx_mp_change(const struct imx_pll14xx_rate_table *rate,
+   158						  u32 pll_div)
+   159	{
+   160		u32 old_mdiv, old_pdiv;
+   161	
+   162		old_mdiv = FIELD_GET(MDIV_MASK, pll_div);
+   163		old_pdiv = FIELD_GET(PDIV_MASK, pll_div);
+   164	
+   165		return rate->mdiv != old_mdiv || rate->pdiv != old_pdiv;
+   166	}
+   167	
+   168	static int clk_pll14xx_wait_lock(struct clk_pll14xx *pll)
+   169	{
+   170		u32 val;
+   171	
+   172		return readl_poll_timeout(pll->base + GNRL_CTL, val, val & LOCK_STATUS, 0,
+   173				LOCK_TIMEOUT_US);
+   174	}
+   175	
+   176	static int clk_pll1416x_set_rate(struct clk_hw *hw, unsigned long drate,
+   177					 unsigned long prate)
+   178	{
+   179		struct clk_pll14xx *pll = to_clk_pll14xx(hw);
+   180		const struct imx_pll14xx_rate_table *rate;
+   181		u32 tmp, div_val;
+   182		int ret;
+   183	
+   184		rate = imx_get_pll_settings(pll, drate);
+   185		if (!rate) {
+   186			pr_err("%s: Invalid rate : %lu for pll clk %s\n", __func__,
+   187			       drate, clk_hw_get_name(hw));
+   188			return -EINVAL;
+   189		}
+   190	
+   191		tmp = readl_relaxed(pll->base + DIV_CTL0);
+   192	
+   193		if (!clk_pll14xx_mp_change(rate, tmp)) {
+   194			tmp &= ~SDIV_MASK;
+ > 195			tmp |= FIELD_PREP(SDIV_MASK, rate->sdiv);
+   196			writel_relaxed(tmp, pll->base + DIV_CTL0);
+   197	
+   198			return 0;
+   199		}
+   200	
+   201		/* Bypass clock and set lock to pll output lock */
+   202		tmp = readl_relaxed(pll->base + GNRL_CTL);
+   203		tmp |= LOCK_SEL_MASK;
+   204		writel_relaxed(tmp, pll->base + GNRL_CTL);
+   205	
+   206		/* Enable RST */
+   207		tmp &= ~RST_MASK;
+   208		writel_relaxed(tmp, pll->base + GNRL_CTL);
+   209	
+   210		/* Enable BYPASS */
+   211		tmp |= BYPASS_MASK;
+   212		writel(tmp, pll->base + GNRL_CTL);
+   213	
+   214		div_val = FIELD_PREP(MDIV_MASK, rate->mdiv) | FIELD_PREP(PDIV_MASK, rate->pdiv) |
+   215			FIELD_PREP(SDIV_MASK, rate->sdiv);
+   216		writel_relaxed(div_val, pll->base + DIV_CTL0);
+   217	
+   218		/*
+   219		 * According to SPEC, t3 - t2 need to be greater than
+   220		 * 1us and 1/FREF, respectively.
+   221		 * FREF is FIN / Prediv, the prediv is [1, 63], so choose
+   222		 * 3us.
+   223		 */
+   224		udelay(3);
+   225	
+   226		/* Disable RST */
+   227		tmp |= RST_MASK;
+   228		writel_relaxed(tmp, pll->base + GNRL_CTL);
+   229	
+   230		/* Wait Lock */
+   231		ret = clk_pll14xx_wait_lock(pll);
+   232		if (ret)
+   233			return ret;
+   234	
+   235		/* Bypass */
+   236		tmp &= ~BYPASS_MASK;
+   237		writel_relaxed(tmp, pll->base + GNRL_CTL);
+   238	
+   239		return 0;
+   240	}
+   241	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
