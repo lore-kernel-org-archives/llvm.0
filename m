@@ -1,44 +1,43 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED487A
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 23:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970267466
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 23:43:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645659834; x=1677195834;
+  t=1645659835; x=1677195835;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EP/cxWxSY2BPsDYO/Ne+Bkz6iXl8Och+674LWcxezuU=;
-  b=frChPZTEJCgW7QIibdtbeVnStAkXLtGxgqEGRXJiZ23WTbTiYOP8T6fM
-   Lt4aGe6T6tOuKRs6IsQbGMynaNzMSuhQOVoh7TnF2+gkb3gxt+Me+ETff
-   0Jqx2p7Ns2EOfr8rH0pZ5jH2Q5jL60UQCKErr3FFZcXvTs/NbBdCxtEYo
-   NzapmZCVVyX/WhbS5cRopbj96z7FJ8+JCCNbYfGTqLA1wdUxmHXs3NrRP
-   +C3tNAJ684SJrFatGgn9xNG1qQ3/We/wQZRngXj6xlykMXXGQS0V8ayl3
-   FKm32ZYbM0hvQ4UUQVMHcyg62Lr/2W/gJzBE5b3KRB4yOLMTdOIiLu3Xr
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232729839"
+  bh=uXYaV7LYD6ugYzUxE2cBAI2z2LHzHz1Q7NNQM3baKts=;
+  b=FYCmRDdN9jmHMc988qLwVrw4RDXSoTsp5RXCNaoxdF/wxva9kVjx6+da
+   KT9JonFOevXpYmhRu5IJw9HREri35zrMoX2ntPWdkY1+uNuHTJ9nW7IIf
+   FEhiCq94u9hRkuZomagTxfYCFYgJ8gz8W1ucWeulwPXSwnPWNrOlCn0kb
+   C1/XJDq/r3ge9eGqNHPA7kasQsodbdtDVnaBZ8lS7zdXrLE2oDoikZbqT
+   CuS4UjpEL8dyqbcdNXJ8awFwb+PMBAAgkW8GQ+E9u0Ipf0HRgeTan3rvG
+   n8pDrq+fI1CwMDB0lFj2FcvDCeuhHvytJ1Xf05A+ZWJDUUiU3JSeJOCV2
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="251844281"
 X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="232729839"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:43:54 -0800
+   d="scan'208";a="251844281"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:43:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="783802826"
+   d="scan'208";a="707235252"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Feb 2022 15:43:52 -0800
+  by orsmga005.jf.intel.com with ESMTP; 23 Feb 2022 15:43:52 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nN1IV-0001y1-Tu; Wed, 23 Feb 2022 23:43:51 +0000
-Date: Thu, 24 Feb 2022 07:43:17 +0800
+	id 1nN1IV-0001xw-Sm; Wed, 23 Feb 2022 23:43:51 +0000
+Date: Thu, 24 Feb 2022 07:43:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
+To: Filipe Manana <fdmanana@suse.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Linux Memory Management List <linux-mm@kvack.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: [linux-next:master 4926/7526] include/linux/fortify-string.h:336:4:
- warning: call to __read_overflow2_field declared with 'warning' attribute:
- detected read beyond size of field (2nd parameter); maybe use
- struct_group()?
-Message-ID: <202202240750.ZC6gMTEp-lkp@intel.com>
+	David Sterba <dsterba@suse.com>, linux-doc@vger.kernel.org
+Subject: [linux-next:master 5106/7526] fs/btrfs/tree-log.c:6755: warning:
+ This comment starts with '/**', but isn't a kernel-doc comment. Refer
+ Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202202240704.pQD40A9L-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,141 +50,97 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
 head:   196d330d7fb1e7cc0d85641c89ce4602cb36f12e
-commit: 281d0c962752fb40866dd8d4cade68656f34bd1f [4926/7526] fortify: Add Clang support
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220224/202202240750.ZC6gMTEp-lkp@intel.com/config)
+commit: 4f847b757f9c206d86986d302a94382c14721031 [5106/7526] btrfs: pass the dentry to btrfs_log_new_name() instead of the inode
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220224/202202240704.pQD40A9L-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=281d0c962752fb40866dd8d4cade68656f34bd1f
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=4f847b757f9c206d86986d302a94382c14721031
         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
         git fetch --no-tags linux-next master
-        git checkout 281d0c962752fb40866dd8d4cade68656f34bd1f
+        git checkout 4f847b757f9c206d86986d302a94382c14721031
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/ net/core/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/btrfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from net/core/flow_dissector.c:3:
-   In file included from include/linux/skbuff.h:15:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/x86/include/asm/timex.h:5:
-   In file included from arch/x86/include/asm/processor.h:22:
-   In file included from arch/x86/include/asm/msr.h:11:
-   In file included from arch/x86/include/asm/cpumask.h:5:
-   In file included from include/linux/cpumask.h:12:
-   In file included from include/linux/bitmap.h:11:
-   In file included from include/linux/string.h:253:
->> include/linux/fortify-string.h:336:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-                           __read_overflow2_field(q_size_field, size);
-                           ^
-   1 warning generated.
+>> fs/btrfs/tree-log.c:6755: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Update the log after adding a new name for an inode.
 
 
-vim +/warning +336 include/linux/fortify-string.h
+vim +6755 fs/btrfs/tree-log.c
 
-28e77cc1c06866 Kees Cook      2021-06-16  267  
-28e77cc1c06866 Kees Cook      2021-06-16  268  /*
-28e77cc1c06866 Kees Cook      2021-06-16  269   * __builtin_object_size() must be captured here to avoid evaluating argument
-28e77cc1c06866 Kees Cook      2021-06-16  270   * side-effects further into the macro layers.
-28e77cc1c06866 Kees Cook      2021-06-16  271   */
-28e77cc1c06866 Kees Cook      2021-06-16  272  #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
-28e77cc1c06866 Kees Cook      2021-06-16  273  		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
-a28a6e860c6cf2 Francis Laniel 2021-02-25  274  
-f68f2ff91512c1 Kees Cook      2021-04-20  275  /*
-f68f2ff91512c1 Kees Cook      2021-04-20  276   * To make sure the compiler can enforce protection against buffer overflows,
-f68f2ff91512c1 Kees Cook      2021-04-20  277   * memcpy(), memmove(), and memset() must not be used beyond individual
-f68f2ff91512c1 Kees Cook      2021-04-20  278   * struct members. If you need to copy across multiple members, please use
-f68f2ff91512c1 Kees Cook      2021-04-20  279   * struct_group() to create a named mirror of an anonymous struct union.
-f68f2ff91512c1 Kees Cook      2021-04-20  280   * (e.g. see struct sk_buff.) Read overflow checking is currently only
-f68f2ff91512c1 Kees Cook      2021-04-20  281   * done when a write overflow is also present, or when building with W=1.
-f68f2ff91512c1 Kees Cook      2021-04-20  282   *
-f68f2ff91512c1 Kees Cook      2021-04-20  283   * Mitigation coverage matrix
-f68f2ff91512c1 Kees Cook      2021-04-20  284   *					Bounds checking at:
-f68f2ff91512c1 Kees Cook      2021-04-20  285   *					+-------+-------+-------+-------+
-f68f2ff91512c1 Kees Cook      2021-04-20  286   *					| Compile time  |   Run time    |
-f68f2ff91512c1 Kees Cook      2021-04-20  287   * memcpy() argument sizes:		| write | read  | write | read  |
-f68f2ff91512c1 Kees Cook      2021-04-20  288   *        dest     source   length      +-------+-------+-------+-------+
-f68f2ff91512c1 Kees Cook      2021-04-20  289   * memcpy(known,   known,   constant)	|   y   |   y   |  n/a  |  n/a  |
-f68f2ff91512c1 Kees Cook      2021-04-20  290   * memcpy(known,   unknown, constant)	|   y   |   n   |  n/a  |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  291   * memcpy(known,   known,   dynamic)	|   n   |   n   |   B   |   B   |
-f68f2ff91512c1 Kees Cook      2021-04-20  292   * memcpy(known,   unknown, dynamic)	|   n   |   n   |   B   |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  293   * memcpy(unknown, known,   constant)	|   n   |   y   |   V   |  n/a  |
-f68f2ff91512c1 Kees Cook      2021-04-20  294   * memcpy(unknown, unknown, constant)	|   n   |   n   |   V   |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  295   * memcpy(unknown, known,   dynamic)	|   n   |   n   |   V   |   B   |
-f68f2ff91512c1 Kees Cook      2021-04-20  296   * memcpy(unknown, unknown, dynamic)	|   n   |   n   |   V   |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  297   *					+-------+-------+-------+-------+
-f68f2ff91512c1 Kees Cook      2021-04-20  298   *
-f68f2ff91512c1 Kees Cook      2021-04-20  299   * y = perform deterministic compile-time bounds checking
-f68f2ff91512c1 Kees Cook      2021-04-20  300   * n = cannot perform deterministic compile-time bounds checking
-f68f2ff91512c1 Kees Cook      2021-04-20  301   * n/a = no run-time bounds checking needed since compile-time deterministic
-f68f2ff91512c1 Kees Cook      2021-04-20  302   * B = can perform run-time bounds checking (currently unimplemented)
-f68f2ff91512c1 Kees Cook      2021-04-20  303   * V = vulnerable to run-time overflow (will need refactoring to solve)
-f68f2ff91512c1 Kees Cook      2021-04-20  304   *
-f68f2ff91512c1 Kees Cook      2021-04-20  305   */
-f68f2ff91512c1 Kees Cook      2021-04-20  306  __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
-f68f2ff91512c1 Kees Cook      2021-04-20  307  					 const size_t p_size,
-f68f2ff91512c1 Kees Cook      2021-04-20  308  					 const size_t q_size,
-f68f2ff91512c1 Kees Cook      2021-04-20  309  					 const size_t p_size_field,
-f68f2ff91512c1 Kees Cook      2021-04-20  310  					 const size_t q_size_field,
-f68f2ff91512c1 Kees Cook      2021-04-20  311  					 const char *func)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  312  {
-a28a6e860c6cf2 Francis Laniel 2021-02-25  313  	if (__builtin_constant_p(size)) {
-f68f2ff91512c1 Kees Cook      2021-04-20  314  		/*
-f68f2ff91512c1 Kees Cook      2021-04-20  315  		 * Length argument is a constant expression, so we
-f68f2ff91512c1 Kees Cook      2021-04-20  316  		 * can perform compile-time bounds checking where
-f68f2ff91512c1 Kees Cook      2021-04-20  317  		 * buffer sizes are known.
-f68f2ff91512c1 Kees Cook      2021-04-20  318  		 */
-f68f2ff91512c1 Kees Cook      2021-04-20  319  
-f68f2ff91512c1 Kees Cook      2021-04-20  320  		/* Error when size is larger than enclosing struct. */
-f68f2ff91512c1 Kees Cook      2021-04-20  321  		if (p_size > p_size_field && p_size < size)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  322  			__write_overflow();
-f68f2ff91512c1 Kees Cook      2021-04-20  323  		if (q_size > q_size_field && q_size < size)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  324  			__read_overflow2();
-f68f2ff91512c1 Kees Cook      2021-04-20  325  
-f68f2ff91512c1 Kees Cook      2021-04-20  326  		/* Warn when write size argument larger than dest field. */
-f68f2ff91512c1 Kees Cook      2021-04-20  327  		if (p_size_field < size)
-f68f2ff91512c1 Kees Cook      2021-04-20  328  			__write_overflow_field(p_size_field, size);
-f68f2ff91512c1 Kees Cook      2021-04-20  329  		/*
-f68f2ff91512c1 Kees Cook      2021-04-20  330  		 * Warn for source field over-read when building with W=1
-f68f2ff91512c1 Kees Cook      2021-04-20  331  		 * or when an over-write happened, so both can be fixed at
-f68f2ff91512c1 Kees Cook      2021-04-20  332  		 * the same time.
-f68f2ff91512c1 Kees Cook      2021-04-20  333  		 */
-f68f2ff91512c1 Kees Cook      2021-04-20  334  		if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
-f68f2ff91512c1 Kees Cook      2021-04-20  335  		    q_size_field < size)
-f68f2ff91512c1 Kees Cook      2021-04-20 @336  			__read_overflow2_field(q_size_field, size);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  337  	}
-f68f2ff91512c1 Kees Cook      2021-04-20  338  	/*
-f68f2ff91512c1 Kees Cook      2021-04-20  339  	 * At this point, length argument may not be a constant expression,
-f68f2ff91512c1 Kees Cook      2021-04-20  340  	 * so run-time bounds checking can be done where buffer sizes are
-f68f2ff91512c1 Kees Cook      2021-04-20  341  	 * known. (This is not an "else" because the above checks may only
-f68f2ff91512c1 Kees Cook      2021-04-20  342  	 * be compile-time warnings, and we want to still warn for run-time
-f68f2ff91512c1 Kees Cook      2021-04-20  343  	 * overflows.)
-f68f2ff91512c1 Kees Cook      2021-04-20  344  	 */
-f68f2ff91512c1 Kees Cook      2021-04-20  345  
-f68f2ff91512c1 Kees Cook      2021-04-20  346  	/*
-f68f2ff91512c1 Kees Cook      2021-04-20  347  	 * Always stop accesses beyond the struct that contains the
-f68f2ff91512c1 Kees Cook      2021-04-20  348  	 * field, when the buffer's remaining size is known.
-f68f2ff91512c1 Kees Cook      2021-04-20  349  	 * (The -1 test is to optimize away checks where the buffer
-f68f2ff91512c1 Kees Cook      2021-04-20  350  	 * lengths are unknown.)
-f68f2ff91512c1 Kees Cook      2021-04-20  351  	 */
-f68f2ff91512c1 Kees Cook      2021-04-20  352  	if ((p_size != (size_t)(-1) && p_size < size) ||
-f68f2ff91512c1 Kees Cook      2021-04-20  353  	    (q_size != (size_t)(-1) && q_size < size))
-f68f2ff91512c1 Kees Cook      2021-04-20  354  		fortify_panic(func);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  355  }
-a28a6e860c6cf2 Francis Laniel 2021-02-25  356  
-
-:::::: The code at line 336 was first introduced by commit
-:::::: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
-
-:::::: TO: Kees Cook <keescook@chromium.org>
-:::::: CC: Kees Cook <keescook@chromium.org>
+  6753	
+  6754	/**
+> 6755	 * Update the log after adding a new name for an inode.
+  6756	 *
+  6757	 * @trans:              Transaction handle.
+  6758	 * @old_dentry:         The dentry associated with the old name and the old
+  6759	 *                      parent directory.
+  6760	 * @old_dir:            The inode of the previous parent directory for the case
+  6761	 *                      of a rename. For a link operation, it must be NULL.
+  6762	 * @parent:             The dentry associated with the directory under which the
+  6763	 *                      new name is located.
+  6764	 *
+  6765	 * Call this after adding a new name for an inode, as a result of a link or
+  6766	 * rename operation, and it will properly update the log to reflect the new name.
+  6767	 */
+  6768	void btrfs_log_new_name(struct btrfs_trans_handle *trans,
+  6769				struct dentry *old_dentry, struct btrfs_inode *old_dir,
+  6770				struct dentry *parent)
+  6771	{
+  6772		struct btrfs_inode *inode = BTRFS_I(d_inode(old_dentry));
+  6773		struct btrfs_log_ctx ctx;
+  6774	
+  6775		/*
+  6776		 * this will force the logging code to walk the dentry chain
+  6777		 * up for the file
+  6778		 */
+  6779		if (!S_ISDIR(inode->vfs_inode.i_mode))
+  6780			inode->last_unlink_trans = trans->transid;
+  6781	
+  6782		/*
+  6783		 * if this inode hasn't been logged and directory we're renaming it
+  6784		 * from hasn't been logged, we don't need to log it
+  6785		 */
+  6786		if (!inode_logged(trans, inode) &&
+  6787		    (!old_dir || !inode_logged(trans, old_dir)))
+  6788			return;
+  6789	
+  6790		/*
+  6791		 * If we are doing a rename (old_dir is not NULL) from a directory that
+  6792		 * was previously logged, make sure the next log attempt on the directory
+  6793		 * is not skipped and logs the inode again. This is because the log may
+  6794		 * not currently be authoritative for a range including the old
+  6795		 * BTRFS_DIR_INDEX_KEY key, so we want to make sure after a log replay we
+  6796		 * do not end up with both the new and old dentries around (in case the
+  6797		 * inode is a directory we would have a directory with two hard links and
+  6798		 * 2 inode references for different parents). The next log attempt of
+  6799		 * old_dir will happen at btrfs_log_all_parents(), called through
+  6800		 * btrfs_log_inode_parent() below, because we have previously set
+  6801		 * inode->last_unlink_trans to the current transaction ID, either here or
+  6802		 * at btrfs_record_unlink_dir() in case the inode is a directory.
+  6803		 */
+  6804		if (old_dir)
+  6805			old_dir->logged_trans = 0;
+  6806	
+  6807		btrfs_init_log_ctx(&ctx, &inode->vfs_inode);
+  6808		ctx.logging_new_name = true;
+  6809		/*
+  6810		 * We don't care about the return value. If we fail to log the new name
+  6811		 * then we know the next attempt to sync the log will fallback to a full
+  6812		 * transaction commit (due to a call to btrfs_set_log_full_commit()), so
+  6813		 * we don't need to worry about getting a log committed that has an
+  6814		 * inconsistent state after a rename operation.
+  6815		 */
+  6816		btrfs_log_inode_parent(trans, inode, parent, LOG_INODE_EXISTS, &ctx);
+  6817	}
+  6818	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
