@@ -1,41 +1,56 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7680EBD
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 17:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645638824; x=1677174824;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fHYT0rJk61VDmMPPmyxAmM38cIqoSqWvBFRBSs/L088=;
-  b=BDiwr1R4GxRp3GmqOSife8o+8v47eEWRbFaCmIcl8e0OTIaTMSly/Mx1
-   EEkNE1+j6advTV+Clh9ldTXKK90qkWlIfwmfqzGRKUQHRG9gdtbsljKQz
-   0OJG3pLlvGWv9OMOj5b0PEMuZKEnvUFfnv0Sy+0UdU3WqJCac5X4osdCJ
-   dZpWkYsYH7q/V+oA/dieelFzf8t/xrnQ7KZhlbgDG89c/zyZtGdHEdlSD
-   vYRX4CNTI15b/5wXBWHT37EyB8fY3YO7PP40jMx4aSWJKxBlWeIjYI2gz
-   eAMFxlsWk1TtHGQB4ZLFd8NwBnredaO/chmJ/8oF63Dz6wluNEJK3dZGm
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232015513"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="232015513"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 09:53:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="491294958"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 23 Feb 2022 09:53:41 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nMvpc-0001fd-Mk; Wed, 23 Feb 2022 17:53:40 +0000
-Date: Thu, 24 Feb 2022 01:53:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2151/2340] net/ceph/messenger.c:537:3:
- error: implicit declaration of function '__free_page'
-Message-ID: <202202240158.V9IDShLu-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D1F6958
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 17:59:11 +0000 (UTC)
+Received: by mail-pg1-f177.google.com with SMTP id o23so4381159pgk.13
+        for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 09:59:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i9ZmGUIwkyC7vjnII3cOeTZiB9a3MACRa2J9UXGI/ow=;
+        b=XJHhTu/IhJCZ37/XrmsRBgCMoxE7LQi7Lo2Wi2s9PrXp0NKXlVd6zNTxZYdlTEDAqx
+         L/j6e0Yamrbm7MLR3xgUc3Lw2+IT950x0WmnqU5OXUM//6aHcMBdwkA7rIK6YFT0JUhc
+         sZvfycmuBlW+7vxVI4IDjx+/5a+Tmn8tspepbIAylqOg5aUfL+ulyJwBswjF0ItOtVKO
+         97WUPmaUab1x3mwDYSGjTBxch3l8b3hxugErDO2pW1LUwJTeMVzMA6djZdYgR5ys3I6O
+         QnwB+tBGJWUDAijMLK5HnyZoR8nHcsOuSTEBguK42TJ00sTtcT0wbBla4qArjLsIo/nN
+         0v+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i9ZmGUIwkyC7vjnII3cOeTZiB9a3MACRa2J9UXGI/ow=;
+        b=KTNd6zYw2AuQPRxb/uMESNLyWHcCWagK93mxyccQoctCFIJNJyojSwkohMIlzTXPAd
+         E9WNlg/0fTrAzNrTwlslvfgzYS7vuo/eLY3ZS3X+1QWWbYj+BryAUCCg1Q+n28gfx6yq
+         I6WQ8CIADqniT0hvWzI9FX8dVUmeP69d4pn1KJxvRd0xfQjHlJXKNc1HbZ5re1KGvlMd
+         bxeOejRTusITGjRtKy2tZtPRUNsMOsyRyeOfukPJ9FEcizhsig7EsObfhvM/MJZCEs91
+         KxAikVq8d9gqRX34XFHSscM+sGIb6Bl0QS7FMBBhY0uTF1i4z9VEUuz+i0oFbUUY/RaP
+         g0DQ==
+X-Gm-Message-State: AOAM5309GvI9hKbxU5Zj+4epCAOUXH1ieLw39Pe1DNQnIVwTf6+gmxDU
+	SoCyZQAeJIPeOCsOO7MdrM+h+Q==
+X-Google-Smtp-Source: ABdhPJyWY8cS3LAxq9EqCzdtTUyda9OxIuVZO+b/1nALlGyO7RfH+5KzoRu/A7B8I7ghZ74CG6Bi7Q==
+X-Received: by 2002:a05:6a00:174e:b0:4e1:7cfb:7a26 with SMTP id j14-20020a056a00174e00b004e17cfb7a26mr928875pfc.50.1645639150179;
+        Wed, 23 Feb 2022 09:59:10 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h27sm170144pgb.20.2022.02.23.09.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 09:59:09 -0800 (PST)
+Date: Wed, 23 Feb 2022 17:59:05 +0000
+From: Sean Christopherson <seanjc@google.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Wanpeng Li <wanpengli@tencent.com>,
+	Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>,
+	kvm@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [PATCH] KVM: x86: Fix pointer mistmatch warning when patching
+ RET0 static calls
+Message-ID: <YhZ16cMMcHQIvS9d@google.com>
+References: <20220223162355.3174907-1-seanjc@google.com>
+ <YhZuk8eA6rsDuJkd@dev-arch.archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,88 +59,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YhZuk8eA6rsDuJkd@dev-arch.archlinux-ax161>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
-commit: d7899a3cb5a99cae76ab9cec969146e459e7deff [2151/2340] headers/deps: mm: Optimize <linux/mm_api.h> dependencies, remove <linux/gfp_api.h> inclusion
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220224/202202240158.V9IDShLu-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=d7899a3cb5a99cae76ab9cec969146e459e7deff
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout d7899a3cb5a99cae76ab9cec969146e459e7deff
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
+On Wed, Feb 23, 2022, Nathan Chancellor wrote:
+> Hi Sean,
+> 
+> On Wed, Feb 23, 2022 at 04:23:55PM +0000, Sean Christopherson wrote:
+> > Cast kvm_x86_ops.func to 'void *' when updating KVM static calls that are
+> > conditionally patched to __static_call_return0().  clang complains about
+> > using mismatching pointers in the ternary operator, which breaks the
+> > build when compiling with CONFIG_KVM_WERROR=y.
+> > 
+> >   >> arch/x86/include/asm/kvm-x86-ops.h:82:1: warning: pointer type mismatch
+> >   ('bool (*)(struct kvm_vcpu *)' and 'void *') [-Wpointer-type-mismatch]
+> > 
+> > Fixes: 5be2226f417d ("KVM: x86: allow defining return-0 static calls")
+> > Reported-by: Like Xu <like.xu.linux@gmail.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> 
+> Thank you for the patch! Is this a bug in clang?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+IMO, no.  I think it's completely reasonable for the compiler to complain that KVM
+is generating two different pointer types out of a ternary operator.
 
-Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
-      It only hurts bisectability.
+clang is somewhat inconsistent, though it may be deliberate.  clang doesn't complain
+about implicitly casting a 'void *' to another data type, e.g. this complies clean,
+where "data" is a 'void *'
 
-All errors (new ones prefixed by >>):
+	struct kvm_vcpu *x = vcpu ? : data;
 
-   In file included from net/ceph/messenger.c:40:
-   In file included from include/linux/ceph/libceph.h:16:
-   include/linux/pagemap.h:362:9: error: implicit declaration of function 'folio_alloc' [-Werror,-Wimplicit-function-declaration]
-           return folio_alloc(gfp, order);
-                  ^
-   include/linux/pagemap.h:362:9: note: did you mean 'bio_alloc'?
-   include/linux/bio.h:427:27: note: 'bio_alloc' declared here
-   static inline struct bio *bio_alloc(gfp_t gfp_mask, unsigned short nr_iovecs)
-                             ^
-   In file included from net/ceph/messenger.c:40:
-   In file included from include/linux/ceph/libceph.h:16:
-   include/linux/pagemap.h:362:9: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct folio *' [-Wint-conversion]
-           return folio_alloc(gfp, order);
-                  ^~~~~~~~~~~~~~~~~~~~~~~
->> net/ceph/messenger.c:537:3: error: implicit declaration of function '__free_page' [-Werror,-Wimplicit-function-declaration]
-                   __free_page(con->bounce_page);
-                   ^
-   1 warning and 2 errors generated.
+But changing it to a function on the lhs triggers the warn:
 
+	typeof(kvm_x86_ops.vcpu_run) x = kvm_x86_ops.vcpu_run ? : data;
 
-vim +/__free_page +537 net/ceph/messenger.c
-
-31b8006e1d79e1 fs/ceph/messenger.c  Sage Weil    2009-10-06  520  
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  521  static void ceph_con_reset_protocol(struct ceph_connection *con)
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  522  {
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  523  	dout("%s con %p\n", __func__, con);
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  524  
-6503e0b69c9d4d net/ceph/messenger.c Ilya Dryomov 2020-11-09  525  	ceph_con_close_socket(con);
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  526  	if (con->in_msg) {
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  527  		WARN_ON(con->in_msg->con != con);
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  528  		ceph_msg_put(con->in_msg);
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  529  		con->in_msg = NULL;
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  530  	}
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  531  	if (con->out_msg) {
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  532  		WARN_ON(con->out_msg->con != con);
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  533  		ceph_msg_put(con->out_msg);
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  534  		con->out_msg = NULL;
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  535  	}
-038b8d1d1ab1cc net/ceph/messenger.c Ilya Dryomov 2021-12-30  536  	if (con->bounce_page) {
-038b8d1d1ab1cc net/ceph/messenger.c Ilya Dryomov 2021-12-30 @537  		__free_page(con->bounce_page);
-038b8d1d1ab1cc net/ceph/messenger.c Ilya Dryomov 2021-12-30  538  		con->bounce_page = NULL;
-038b8d1d1ab1cc net/ceph/messenger.c Ilya Dryomov 2021-12-30  539  	}
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  540  
-cd1a677cad9940 net/ceph/messenger.c Ilya Dryomov 2020-11-19  541  	if (ceph_msgr2(from_msgr(con->msgr)))
-cd1a677cad9940 net/ceph/messenger.c Ilya Dryomov 2020-11-19  542  		ceph_con_v2_reset_protocol(con);
-cd1a677cad9940 net/ceph/messenger.c Ilya Dryomov 2020-11-19  543  	else
-566050e17e53db net/ceph/messenger.c Ilya Dryomov 2020-11-12  544  		ceph_con_v1_reset_protocol(con);
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  545  }
-3596f4c1241d3c net/ceph/messenger.c Ilya Dryomov 2020-11-06  546  
-
-:::::: The code at line 537 was first introduced by commit
-:::::: 038b8d1d1ab1cce11a158d30bf080ff41a2cfd15 libceph: optionally use bounce buffer on recv path in crc mode
-
-:::::: TO: Ilya Dryomov <idryomov@gmail.com>
-:::::: CC: Ilya Dryomov <idryomov@gmail.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Again, complaining in the function pointer case seems reasonable.
