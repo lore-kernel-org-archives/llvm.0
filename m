@@ -1,42 +1,41 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C80800
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 05:10:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B817A
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 06:32:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645593018; x=1677129018;
+  t=1645597945; x=1677133945;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VkIlCTKu/Ajt9hsKrHvbW/AW/3dptdRZcGy7KrznaWs=;
-  b=KAoh0HNuY8GuhPc0NeMHiFFshF5LtZK7qvV4m6FpJQFm7rS8LGB/8a2c
-   RGlBOii1qt+QlAZtTSMyQHkrkiK7hHZsFU+9SiH/enuZc6xA/uJbbfQ7S
-   u4dYdmbZS1KXyladALdbP1j+EICvwB9+c+VpjgXjIP1P9uRWVO3GbngpP
-   GcOyjuwgX3+o7BAkq2rKH7aEcizlzl6QBC8s5g+oVLZvwjuhM/zWUAN8R
-   HVqhofEhkkF1Mm2o8LYtxPilq+bgFn0uQ1G062CKxtHpqkhqgFXalRWQV
-   sVJMnP3qanxIDHj2ZPWfft0TXrSPe5+dC/EQ993Kj2EnmT/BFGHCQnWXq
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="251805791"
+  bh=BJKKHGzT8sd85iftXcDNzClCea0ssKINnhWdOpD6gxg=;
+  b=W4ZHeAODNHjvplqFJFlgIVjkJj2omOM3t3Wwuc9AqHgu+wM2a+5qM+Pr
+   u6IJZY4NQcPwiRzO5CP2z3iQpe+tCVAxyGbwJ+mZoB+FblFvNyW+slNDw
+   hbWDRWkVY3IME2S+QKec9+ArmkskOSEZaDt8y+8WB/VvJFnzBUczvcAq2
+   44NeMKhzU9CK75xbY+YvnKqPeSRsw4oHw1tB/7IMbiVHmWEgu4mjdtuJX
+   KzNBLVMrMW6xAm5wem0kL/6S415R+jfEign/Rtiets1BUWqhXMIs0bW2U
+   yWeDMpB9rUjwYJiIToqhHBEn6M6i+un3542SIMK2j27QWSwyt9x7iF+i7
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="338332288"
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="251805791"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 21:10:17 -0800
+   d="scan'208";a="338332288"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 22:32:25 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="532531609"
+   d="scan'208";a="508309092"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 22 Feb 2022 21:10:16 -0800
+  by orsmga006.jf.intel.com with ESMTP; 22 Feb 2022 22:32:23 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMjup-00010C-It; Wed, 23 Feb 2022 05:10:15 +0000
-Date: Wed, 23 Feb 2022 13:10:05 +0800
+	id 1nMlCD-00014S-RS; Wed, 23 Feb 2022 06:32:17 +0000
+Date: Wed, 23 Feb 2022 14:31:54 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2000/2324]
- arch/mips/kernel/irq-msc01.c:29:40: warning: declaration of 'struct
- irq_data' will not be visible outside of this function
-Message-ID: <202202231337.vXRfwNhS-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 2000/2324] kernel/up.c:14:5: warning: no
+ previous prototype for function 'smp_call_function_single'
+Message-ID: <202202231421.ToPGledC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +49,7 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   7d9efc989eceed6a8fa475a186880ec4a1ad54a3
 commit: 59438ff3251170bd7d1c9795532bd3dcc127e3f2 [2000/2324] headers/deps: genirq: Optimize <linux/interrupt.h> dependencies, remove <linux/hardirq.h>
-config: mips-malta_kvm_defconfig (https://download.01.org/0day-ci/archive/20220223/202202231337.vXRfwNhS-lkp@intel.com/config)
+config: mips-ath25_defconfig (https://download.01.org/0day-ci/archive/20220223/202202231421.ToPGledC-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -63,99 +62,106 @@ reproduce (this is a W=1 build):
         git checkout 59438ff3251170bd7d1c9795532bd3dcc127e3f2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/ arch/mips/mti-malta/ arch/mips/pci/ drivers/rtc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/mips/kernel/irq-msc01.c:29:40: warning: declaration of 'struct irq_data' will not be visible outside of this function [-Wvisibility]
-   static inline void mask_msc_irq(struct irq_data *d)
-                                          ^
-   arch/mips/kernel/irq-msc01.c:31:22: error: incomplete definition of type 'struct irq_data'
-           unsigned int irq = d->irq;
-                              ~^
-   arch/mips/kernel/irq-msc01.c:29:40: note: forward declaration of 'struct irq_data'
-   static inline void mask_msc_irq(struct irq_data *d)
-                                          ^
-   arch/mips/kernel/irq-msc01.c:40:42: warning: declaration of 'struct irq_data' will not be visible outside of this function [-Wvisibility]
-   static inline void unmask_msc_irq(struct irq_data *d)
-                                            ^
-   arch/mips/kernel/irq-msc01.c:42:22: error: incomplete definition of type 'struct irq_data'
-           unsigned int irq = d->irq;
-                              ~^
-   arch/mips/kernel/irq-msc01.c:40:42: note: forward declaration of 'struct irq_data'
-   static inline void unmask_msc_irq(struct irq_data *d)
-                                            ^
-   arch/mips/kernel/irq-msc01.c:53:47: warning: declaration of 'struct irq_data' will not be visible outside of this function [-Wvisibility]
-   static void level_mask_and_ack_msc_irq(struct irq_data *d)
-                                                 ^
-   arch/mips/kernel/irq-msc01.c:55:15: error: incompatible pointer types passing 'struct irq_data *' to parameter of type 'struct irq_data *' [-Werror,-Wincompatible-pointer-types]
-           mask_msc_irq(d);
-                        ^
-   arch/mips/kernel/irq-msc01.c:29:50: note: passing argument to parameter 'd' here
-   static inline void mask_msc_irq(struct irq_data *d)
-                                                    ^
-   arch/mips/kernel/irq-msc01.c:63:46: warning: declaration of 'struct irq_data' will not be visible outside of this function [-Wvisibility]
-   static void edge_mask_and_ack_msc_irq(struct irq_data *d)
-                                                ^
-   arch/mips/kernel/irq-msc01.c:65:22: error: incomplete definition of type 'struct irq_data'
-           unsigned int irq = d->irq;
-                              ~^
-   arch/mips/kernel/irq-msc01.c:63:46: note: forward declaration of 'struct irq_data'
-   static void edge_mask_and_ack_msc_irq(struct irq_data *d)
-                                                ^
-   arch/mips/kernel/irq-msc01.c:67:15: error: incompatible pointer types passing 'struct irq_data *' to parameter of type 'struct irq_data *' [-Werror,-Wincompatible-pointer-types]
-           mask_msc_irq(d);
-                        ^
-   arch/mips/kernel/irq-msc01.c:29:50: note: passing argument to parameter 'd' here
-   static inline void mask_msc_irq(struct irq_data *d)
-                                                    ^
-   arch/mips/kernel/irq-msc01.c:100:24: error: variable has incomplete type 'struct irq_chip'
-   static struct irq_chip msc_levelirq_type = {
-                          ^
-   arch/mips/kernel/irq-msc01.c:100:15: note: forward declaration of 'struct irq_chip'
-   static struct irq_chip msc_levelirq_type = {
-                 ^
-   arch/mips/kernel/irq-msc01.c:109:24: error: variable has incomplete type 'struct irq_chip'
-   static struct irq_chip msc_edgeirq_type = {
-                          ^
-   arch/mips/kernel/irq-msc01.c:100:15: note: forward declaration of 'struct irq_chip'
-   static struct irq_chip msc_levelirq_type = {
-                 ^
-   arch/mips/kernel/irq-msc01.c:133:4: error: implicit declaration of function 'irq_set_chip_and_handler_name' [-Werror,-Wimplicit-function-declaration]
-                           irq_set_chip_and_handler_name(irqbase + n,
-                           ^
-   arch/mips/kernel/irq-msc01.c:135:13: error: use of undeclared identifier 'handle_edge_irq'
-                                                         handle_edge_irq,
-                                                         ^
-   arch/mips/kernel/irq-msc01.c:145:13: error: use of undeclared identifier 'handle_level_irq'
-                                                         handle_level_irq,
-                                                         ^
-   4 warnings and 10 errors generated.
+   In file included from kernel/up.c:8:
+   In file included from include/linux/interrupt.h:23:
+   arch/mips/include/asm/irq.h:23:19: error: expected ';' after top level declarator
+   extern void __init init_IRQ(void);
+                     ^
+                     ;
+>> kernel/up.c:14:5: warning: no previous prototype for function 'smp_call_function_single' [-Wmissing-prototypes]
+   int smp_call_function_single(int cpu, void (*func) (void *info), void *info,
+       ^
+   kernel/up.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int smp_call_function_single(int cpu, void (*func) (void *info), void *info,
+   ^
+   static 
+>> kernel/up.c:30:5: warning: no previous prototype for function 'smp_call_function_single_async' [-Wmissing-prototypes]
+   int smp_call_function_single_async(int cpu, struct __call_single_data *csd)
+       ^
+   kernel/up.c:30:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int smp_call_function_single_async(int cpu, struct __call_single_data *csd)
+   ^
+   static 
+>> kernel/up.c:45:6: warning: no previous prototype for function 'on_each_cpu_cond_mask' [-Wmissing-prototypes]
+   void on_each_cpu_cond_mask(smp_cond_func_t cond_func, smp_call_func_t func,
+        ^
+   kernel/up.c:45:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void on_each_cpu_cond_mask(smp_cond_func_t cond_func, smp_call_func_t func,
+   ^
+   static 
+>> kernel/up.c:60:5: warning: no previous prototype for function 'smp_call_on_cpu' [-Wmissing-prototypes]
+   int smp_call_on_cpu(unsigned int cpu, int (*func)(void *), void *par, bool phys)
+       ^
+   kernel/up.c:60:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int smp_call_on_cpu(unsigned int cpu, int (*func)(void *), void *par, bool phys)
+   ^
+   static 
+   4 warnings and 1 error generated.
 
 
-vim +29 arch/mips/kernel/irq-msc01.c
+vim +/smp_call_function_single +14 kernel/up.c
 
-^1da177e4c3f415 Linus Torvalds  2005-04-16  27  
-^1da177e4c3f415 Linus Torvalds  2005-04-16  28  /* mask off an interrupt */
-e15883da8a8b83c Thomas Gleixner 2011-03-23 @29  static inline void mask_msc_irq(struct irq_data *d)
-^1da177e4c3f415 Linus Torvalds  2005-04-16  30  {
-e15883da8a8b83c Thomas Gleixner 2011-03-23  31  	unsigned int irq = d->irq;
-e15883da8a8b83c Thomas Gleixner 2011-03-23  32  
-^1da177e4c3f415 Linus Torvalds  2005-04-16  33  	if (irq < (irq_base + 32))
-^1da177e4c3f415 Linus Torvalds  2005-04-16  34  		MSCIC_WRITE(MSC01_IC_DISL, 1<<(irq - irq_base));
-^1da177e4c3f415 Linus Torvalds  2005-04-16  35  	else
-^1da177e4c3f415 Linus Torvalds  2005-04-16  36  		MSCIC_WRITE(MSC01_IC_DISH, 1<<(irq - irq_base - 32));
-^1da177e4c3f415 Linus Torvalds  2005-04-16  37  }
-^1da177e4c3f415 Linus Torvalds  2005-04-16  38  
+53ce3d95649087 Andrew Morton             2009-01-09  13  
+53ce3d95649087 Andrew Morton             2009-01-09 @14  int smp_call_function_single(int cpu, void (*func) (void *info), void *info,
+53ce3d95649087 Andrew Morton             2009-01-09  15  				int wait)
+53ce3d95649087 Andrew Morton             2009-01-09  16  {
+081192b25c2d46 David Daney               2013-09-11  17  	unsigned long flags;
+081192b25c2d46 David Daney               2013-09-11  18  
+1e474b28e78897 Paul E. McKenney          2020-02-05  19  	if (cpu != 0)
+1e474b28e78897 Paul E. McKenney          2020-02-05  20  		return -ENXIO;
+93423b8665f43a Ingo Molnar               2009-01-11  21  
+081192b25c2d46 David Daney               2013-09-11  22  	local_irq_save(flags);
+081192b25c2d46 David Daney               2013-09-11  23  	func(info);
+081192b25c2d46 David Daney               2013-09-11  24  	local_irq_restore(flags);
+93423b8665f43a Ingo Molnar               2009-01-11  25  
+53ce3d95649087 Andrew Morton             2009-01-09  26  	return 0;
+53ce3d95649087 Andrew Morton             2009-01-09  27  }
+53ce3d95649087 Andrew Morton             2009-01-09  28  EXPORT_SYMBOL(smp_call_function_single);
+fa688207c9db48 David Daney               2013-09-11  29  
+1139aeb1c521eb Arnd Bergmann             2021-05-05 @30  int smp_call_function_single_async(int cpu, struct __call_single_data *csd)
+40c01e8bd5575e Christoph Hellwig         2013-11-14  31  {
+40c01e8bd5575e Christoph Hellwig         2013-11-14  32  	unsigned long flags;
+40c01e8bd5575e Christoph Hellwig         2013-11-14  33  
+40c01e8bd5575e Christoph Hellwig         2013-11-14  34  	local_irq_save(flags);
+40c01e8bd5575e Christoph Hellwig         2013-11-14  35  	csd->func(csd->info);
+40c01e8bd5575e Christoph Hellwig         2013-11-14  36  	local_irq_restore(flags);
+08eed44c7249d3 Jan Kara                  2014-02-24  37  	return 0;
+40c01e8bd5575e Christoph Hellwig         2013-11-14  38  }
+c46fff2a3b2979 Frederic Weisbecker       2014-02-24  39  EXPORT_SYMBOL(smp_call_function_single_async);
+40c01e8bd5575e Christoph Hellwig         2013-11-14  40  
+fa688207c9db48 David Daney               2013-09-11  41  /*
+fa688207c9db48 David Daney               2013-09-11  42   * Preemption is disabled here to make sure the cond_func is called under the
+f0fffaff0b8960 Bhaskar Chowdhury         2021-05-06  43   * same conditions in UP and SMP.
+fa688207c9db48 David Daney               2013-09-11  44   */
+5671d814dbd204 Sebastian Andrzej Siewior 2020-01-17 @45  void on_each_cpu_cond_mask(smp_cond_func_t cond_func, smp_call_func_t func,
+cb923159bbb8cc Sebastian Andrzej Siewior 2020-01-17  46  			   void *info, bool wait, const struct cpumask *mask)
+fa688207c9db48 David Daney               2013-09-11  47  {
+fa688207c9db48 David Daney               2013-09-11  48  	unsigned long flags;
+fa688207c9db48 David Daney               2013-09-11  49  
+fa688207c9db48 David Daney               2013-09-11  50  	preempt_disable();
+a5aa5ce3005972 Nadav Amit                2021-02-20  51  	if ((!cond_func || cond_func(0, info)) && cpumask_test_cpu(0, mask)) {
+fa688207c9db48 David Daney               2013-09-11  52  		local_irq_save(flags);
+fa688207c9db48 David Daney               2013-09-11  53  		func(info);
+fa688207c9db48 David Daney               2013-09-11  54  		local_irq_restore(flags);
+fa688207c9db48 David Daney               2013-09-11  55  	}
+fa688207c9db48 David Daney               2013-09-11  56  	preempt_enable();
+fa688207c9db48 David Daney               2013-09-11  57  }
+7d49b28a80b830 Rik van Riel              2018-09-25  58  EXPORT_SYMBOL(on_each_cpu_cond_mask);
+7d49b28a80b830 Rik van Riel              2018-09-25  59  
+df8ce9d78a4e7f Juergen Gross             2016-08-29 @60  int smp_call_on_cpu(unsigned int cpu, int (*func)(void *), void *par, bool phys)
 
-:::::: The code at line 29 was first introduced by commit
-:::::: e15883da8a8b83c73bf1ba030cddeb2cfd92a555 MIPS: MSC01: Convert to new irq_chip functions
+:::::: The code at line 14 was first introduced by commit
+:::::: 53ce3d9564908794ae7dd32969089b57df5fc098 smp_call_function_single(): be slightly less stupid
 
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+:::::: TO: Andrew Morton <akpm@linux-foundation.org>
+:::::: CC: Ingo Molnar <mingo@elte.hu>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
