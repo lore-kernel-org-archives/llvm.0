@@ -1,49 +1,42 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D8E7EC
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 18:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625A56AA1
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 18:55:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645641287; x=1677177287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hYE64FDl6K6kQJWJlpwZ7YzJ0HVW33P+k3nNd98unpw=;
-  b=FPYuPY6hArlQX2kYpFwgApJxsPJ4e6o45qwCwRrso2naFey33HK+/UBK
-   cx4w5EqjxijQjaFVGRsYovKh9/SMGEyHMjYgT89zdWoJ8l835YG38A7pe
-   MRzjWAJXtkA0NsSIhetXY5Vmvexi41DZ3adUg8qfsBfdYshww3YBpt4af
-   9K3rkDK6KdN51qYCNO45NwVCR7Gk8Q+gQ8leXU58OoagP8aKVGUxg1Ags
-   whtdloL9ocpvrQ8DFmI68UHE5kt25ZsOOJaNUmXtUSE4yovOe2hfNGima
-   wyP/MVTn6/nQG9HOFMGOn06ESR38HaTUHiuUipZGeBBVyJfmjiu5NZjJL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="251788724"
+  t=1645642547; x=1677178547;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=55FeCcb1ARGRmEKxVh+6A3zlRphXv2FFw32s6I+V6sk=;
+  b=DFo0qSOI16BsmGd+qiL8vDFxbxG9uqY/Ek5nGRbFDrlR67ShEvnarXvY
+   le5O4LZjBMKHkFQGYV4EQEEie7Ql4GHV8MtICokHkQakL7vYF9/YptMpp
+   y9XgHNxHMKkl//baOO7yawmgxI/UIBSMmmmAl03MCvivKDxPmZFEHiKmF
+   KN1LOkolCzwZ/i33/gjouTieVCpgREP6O46aXPd/+iHRkQcyLWvJnC7GR
+   FLUUflvMhtvzW4frdlA9sQkuTL/eGm6FaHrXiMRBv9bJZF38DQmBl6sKR
+   rBGjmMabaYxp/SPWbkCiJFz+Xlk03y4mbZzouMZsB74AjjGhxLmkfSFnx
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="252247819"
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="251788724"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 10:34:46 -0800
+   d="scan'208";a="252247819"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 10:55:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="628190773"
+   d="scan'208";a="707153545"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Feb 2022 10:34:42 -0800
+  by orsmga005.jf.intel.com with ESMTP; 23 Feb 2022 10:55:44 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMwTJ-0001hU-Nb; Wed, 23 Feb 2022 18:34:41 +0000
-Date: Thu, 24 Feb 2022 02:34:29 +0800
+	id 1nMwnf-0001iF-LT; Wed, 23 Feb 2022 18:55:43 +0000
+Date: Thu, 24 Feb 2022 02:54:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
-	alsa-devel@alsa-project.org
+To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Alexander.Deucher@amd.com, Sunil-kumar.Dommati@amd.com,
-	krisman@collabora.com, wtli@nuvoton.com,
-	Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/9] ASoC: amd: vg: fix for pm resume callback sequence
-Message-ID: <202202240237.RkL3TEe3-lkp@intel.com>
-References: <20220223071959.13539-1-Vijendar.Mukunda@amd.com>
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>,
+	Lee Shawn C <shawn.c.lee@intel.com>
+Subject: drivers/gpu/drm/i915/display/intel_cursor.c:155:6: error: implicit
+ declaration of function 'intel_crtc_is_bigjoiner_slave'
+Message-ID: <202202240216.mijx1JlB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,106 +45,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223071959.13539-1-Vijendar.Mukunda@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Vijendar,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on v5.17-rc5 next-20220222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Vijendar-Mukunda/ASoC-amd-vg-fix-for-pm-resume-callback-sequence/20220223-152636
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220224/202202240237.RkL3TEe3-lkp@intel.com/config)
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220223-215130/Ville-Syrjala/drm-i915-Fix-cursor-coordinates-on-bigjoiner-slave/20220215-142435
+head:   57b0973986ab3f838289ef1e4d27e8638c04b72f
+commit: 57b0973986ab3f838289ef1e4d27e8638c04b72f drm/i915: Fix cursor coordinates on bigjoiner slave
+date:   5 hours ago
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220224/202202240216.mijx1JlB-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/43c5f728cf59371b29569d941fb2ef2bdc3a279d
+        # https://github.com/0day-ci/linux/commit/57b0973986ab3f838289ef1e4d27e8638c04b72f
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Vijendar-Mukunda/ASoC-amd-vg-fix-for-pm-resume-callback-sequence/20220223-152636
-        git checkout 43c5f728cf59371b29569d941fb2ef2bdc3a279d
+        git fetch --no-tags linux-review UPDATE-20220223-215130/Ville-Syrjala/drm-i915-Fix-cursor-coordinates-on-bigjoiner-slave/20220215-142435
+        git checkout 57b0973986ab3f838289ef1e4d27e8638c04b72f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/amd/vangogh/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/soc/amd/vangogh/acp5x-pcm-dma.c:430:20: warning: variable 'frmt_val' set but not used [-Wunused-but-set-variable]
-           u32 val, reg_val, frmt_val;
-                             ^
->> sound/soc/amd/vangogh/acp5x-pcm-dma.c:430:11: warning: variable 'reg_val' set but not used [-Wunused-but-set-variable]
-           u32 val, reg_val, frmt_val;
-                    ^
-   2 warnings generated.
+>> drivers/gpu/drm/i915/display/intel_cursor.c:155:6: error: implicit declaration of function 'intel_crtc_is_bigjoiner_slave' [-Werror,-Wimplicit-function-declaration]
+           if (intel_crtc_is_bigjoiner_slave(crtc_state))
+               ^
+   1 error generated.
 
 
-vim +/frmt_val +430 sound/soc/amd/vangogh/acp5x-pcm-dma.c
+vim +/intel_crtc_is_bigjoiner_slave +155 drivers/gpu/drm/i915/display/intel_cursor.c
 
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  425  
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  426  static int __maybe_unused acp5x_pcm_resume(struct device *dev)
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  427  {
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  428  	struct i2s_dev_data *adata;
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  429  	struct i2s_stream_instance *rtd;
-361414dc1f07b7 Vijendar Mukunda 2021-07-21 @430  	u32 val, reg_val, frmt_val;
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  431  
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  432  	reg_val = 0;
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  433  	frmt_val = 0;
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  434  	adata = dev_get_drvdata(dev);
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  435  
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  436  	if (adata->play_stream && adata->play_stream->runtime) {
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  437  		rtd = adata->play_stream->runtime->private_data;
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  438  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  439  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_ITER);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  440  		if (adata->tdm_mode == TDM_ENABLE) {
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  441  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_TXFRMT);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  442  			val = acp_readl(adata->acp5x_base + ACP_HSTDM_ITER);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  443  			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_ITER);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  444  		}
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  445  	}
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  446  	if (adata->i2ssp_play_stream && adata->i2ssp_play_stream->runtime) {
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  447  		rtd = adata->i2ssp_play_stream->runtime->private_data;
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  448  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  449  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_ITER);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  450  		if (adata->tdm_mode == TDM_ENABLE) {
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  451  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_TXFRMT);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  452  			val = acp_readl(adata->acp5x_base + ACP_I2STDM_ITER);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  453  			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_ITER);
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  454  		}
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  455  	}
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  456  
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  457  	if (adata->capture_stream && adata->capture_stream->runtime) {
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  458  		rtd = adata->capture_stream->runtime->private_data;
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  459  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  460  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_IRER);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  461  		if (adata->tdm_mode == TDM_ENABLE) {
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  462  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_RXFRMT);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  463  			val = acp_readl(adata->acp5x_base + ACP_HSTDM_IRER);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  464  			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_IRER);
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  465  		}
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  466  	}
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  467  	if (adata->i2ssp_capture_stream && adata->i2ssp_capture_stream->runtime) {
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  468  		rtd = adata->i2ssp_capture_stream->runtime->private_data;
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  469  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  470  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_IRER);
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  471  		if (adata->tdm_mode == TDM_ENABLE) {
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  472  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_RXFRMT);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  473  			val = acp_readl(adata->acp5x_base + ACP_I2STDM_IRER);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  474  			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_IRER);
-43c5f728cf5937 Vijendar Mukunda 2022-02-23  475  		}
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  476  	}
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  477  	acp_writel(1, adata->acp5x_base + ACP_EXTERNAL_INTR_ENB);
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  478  	return 0;
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  479  }
-361414dc1f07b7 Vijendar Mukunda 2021-07-21  480  
+   130	
+   131	static int intel_check_cursor(struct intel_crtc_state *crtc_state,
+   132				      struct intel_plane_state *plane_state)
+   133	{
+   134		const struct drm_framebuffer *fb = plane_state->hw.fb;
+   135		struct drm_i915_private *i915 = to_i915(plane_state->uapi.plane->dev);
+   136		const struct drm_rect src = plane_state->uapi.src;
+   137		const struct drm_rect dst = plane_state->uapi.dst;
+   138		int ret;
+   139	
+   140		if (fb && fb->modifier != DRM_FORMAT_MOD_LINEAR) {
+   141			drm_dbg_kms(&i915->drm, "cursor cannot be tiled\n");
+   142			return -EINVAL;
+   143		}
+   144	
+   145		ret = intel_atomic_plane_check_clipping(plane_state, crtc_state,
+   146							DRM_PLANE_HELPER_NO_SCALING,
+   147							DRM_PLANE_HELPER_NO_SCALING,
+   148							true);
+   149		if (ret)
+   150			return ret;
+   151	
+   152		/* Use the unclipped src/dst rectangles, which we program to hw */
+   153		plane_state->uapi.src = src;
+   154		plane_state->uapi.dst = dst;
+ > 155		if (intel_crtc_is_bigjoiner_slave(crtc_state))
+   156			drm_rect_translate(&plane_state->uapi.dst,
+   157					   -crtc_state->pipe_src_w, 0);
+   158	
+   159		ret = intel_cursor_check_surface(plane_state);
+   160		if (ret)
+   161			return ret;
+   162	
+   163		if (!plane_state->uapi.visible)
+   164			return 0;
+   165	
+   166		ret = intel_plane_check_src_coordinates(plane_state);
+   167		if (ret)
+   168			return ret;
+   169	
+   170		return 0;
+   171	}
+   172	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
