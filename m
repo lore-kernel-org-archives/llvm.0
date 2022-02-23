@@ -1,87 +1,75 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE4B6AD8
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 22:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645654923; x=1677190923;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Y0ULTfkhad/nQeKXA04T3Tx1dd52Rg2fikNnBCk51Yg=;
-  b=VbowFMcuX9JyloMcaVDJ+gqryp7suxUZotno3pKos8nT3Ss3Bai8atHt
-   TSU+Q7/b6iiZx8sHTMEwpR2E5PKir13u99rAzSK51m29ATtC0IP+amiom
-   Mq1KgrnRuR8iLhAnj+H8LfjnBUOpebCWs7xq4lljD6zvibRvEZR7zJOiM
-   IJ6faMszdRuh9sPn3sS8AdBlSvYfEgr9KbiFFLvvkoGx+n4kIkSET/IYL
-   g3vmy42Hn+qEmceDWYXIYnj/NWg9uL+UoAhiJWQ0AbmQ3O/pRCDOH1U8d
-   x6c009v7l+1xy022R/CfcXLm6V5AbXtcPlE/HGOJ7TCLci2hwNJaEuRSC
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="312808898"
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="312808898"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 14:21:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="506090542"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 23 Feb 2022 14:21:50 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nN018-0001tP-0R; Wed, 23 Feb 2022 22:21:50 +0000
-Date: Thu, 24 Feb 2022 06:20:48 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 4467/7526] ld.lld: error:
- kernel/built-in.a(kallsyms.o):(function update_iter: .text+0xd04):
- relocation R_RISCV_PCREL_HI20 out of range: -524409 is not in [-524288,
- 524287]; references kallsyms_offsets
-Message-ID: <202202240636.szzbhplB-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1562F5C
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 22:23:22 +0000 (UTC)
+Received: by mail-wr1-f44.google.com with SMTP id v21so177095wrv.5
+        for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 14:23:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fy0MJJJI2gB4ymq6roYJN6kjAzccxttzL2stNrD8v6Y=;
+        b=q+siJwh1ClLPC329FhiZBRM/m1SdJmWASDiwDzeM2hdV49NiAohHJV382Bkumyw60k
+         9Bk/UJzwAlELq6ogiBk5CRY+u0dekRGvG4jSQTAGdlW0AcV1L4ozPVTc46T/gDvBH0GS
+         Fh5hPswPyIBfNE4o7n6k2g+Ewo8cD2q1hjp9bC+lBjcycuqvXCUmNk0GLPSSBnGIa9YN
+         XxD2JTpuz2aewJJOOzZCMelJLkAnrmoMFpKtwXv1pwHel3Z1uwyQmOcC4C267uPl7vIT
+         nXRXRj6DUo1NlyXEpmlu+U+DelDNvF/yZNefMQGOp+25cE79/lCldftG82ueqaAsIqix
+         11/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fy0MJJJI2gB4ymq6roYJN6kjAzccxttzL2stNrD8v6Y=;
+        b=rVPHYGKtyOhJqSh2CsQiejWuwN2FVTL/EWVrGidpNlasxv1GjtABifXrw3MufIDRO5
+         wPdbsVT7VWyqSWXGoTpdxrm/OTh4zxCQsfPlmzU5OAvQQuFwY5CTP45K6uVlEo0qZ5eu
+         A+N41R4ep5D9hwWGEdZfAYJjlSINg5R8unK8JKx9/UGtEu+t4NRxyFVnbZEPLzolh1Sj
+         VJTwq2ROPLgfMLIYeN6XCOLv1VR74jqU3SWc4bVK6UMjw2rdSpNbC1WXJZrWUrH5LXLu
+         n26rYJGb1RtHjMktnnup+kY5WpAqshho1PNA2Hl2N/cSm8lLxIQBLaHnQjALPB7plBTo
+         5zmg==
+X-Gm-Message-State: AOAM530IeGNk55l+dEQQoe7Ud6DIo3VjaQVM4bVkHWfFVR7Pji0pM8Bd
+	bckQEMLduWD8q1O/F05gjeqh5leu+P4S+DPSgraehw==
+X-Google-Smtp-Source: ABdhPJweT+T0f+0zMs40/eYau4mlgt5Tzm7+i1OsSNV+ijoy0wYETR7YVYWprmL26EgW870OfgvbQCsGvPlnuOb9Jjo=
+X-Received: by 2002:a05:6000:1e0b:b0:1ea:99dd:db35 with SMTP id
+ bj11-20020a0560001e0b00b001ea99dddb35mr1188067wrb.384.1645655001209; Wed, 23
+ Feb 2022 14:23:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220223162355.3174907-1-seanjc@google.com>
+In-Reply-To: <20220223162355.3174907-1-seanjc@google.com>
+From: David Dunn <daviddunn@google.com>
+Date: Wed, 23 Feb 2022 14:23:10 -0800
+Message-ID: <CABOYuvbO3ugf7RrgfsBJEP1m6RujNN0B_jmAU1UJ3k13E5tdkw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: Fix pointer mistmatch warning when patching
+ RET0 static calls
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Wanpeng Li <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>, 
+	Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-BCC: lkp@intel.com
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Miguel Ojeda <ojeda@kernel.org>
-CC: Alex Gaynor <alex.gaynor@gmail.com>
-CC: Wedson Almeida Filho <wedsonaf@google.com>
-CC: Gary Guo <gary@garyguo.net>
-CC: Boqun Feng <boqun.feng@gmail.com>
-CC: Matthew Wilcox <willy@infradead.org>
+Reviewed-by: David Dunn <daviddunn@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   196d330d7fb1e7cc0d85641c89ce4602cb36f12e
-commit: ae45d5d7dc111be61c577f072fed2d3d55db7112 [4467/7526] kallsyms: support "big" kernel symbols
-config: riscv-randconfig-r022-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240636.szzbhplB-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ae45d5d7dc111be61c577f072fed2d3d55db7112
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout ae45d5d7dc111be61c577f072fed2d3d55db7112
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Wed, Feb 23, 2022 at 8:24 AM Sean Christopherson <seanjc@google.com> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function update_iter: .text+0xd04): relocation R_RISCV_PCREL_HI20 out of range: -524409 is not in [-524288, 524287]; references kallsyms_offsets
-   >>> referenced by kallsyms.c
-   >>> defined in kernel/built-in.a(kallsyms.o)
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 713e08f62385..f285ddb8b66b 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1547,8 +1547,8 @@ static inline void kvm_ops_static_call_update(void)
+>         WARN_ON(!kvm_x86_ops.func); __KVM_X86_OP(func)
+>  #define KVM_X86_OP_OPTIONAL __KVM_X86_OP
+>  #define KVM_X86_OP_OPTIONAL_RET0(func) \
+> -       static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
+> -                          (void *) __static_call_return0);
+> +       static_call_update(kvm_x86_##func, (void *)kvm_x86_ops.func ? : \
+> +                                          (void *)__static_call_return0);
+>  #include <asm/kvm-x86-ops.h>
+>  #undef __KVM_X86_OP
+>  }
