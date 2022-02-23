@@ -1,42 +1,49 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40497695D
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 18:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D8E7EC
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 18:34:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645640684; x=1677176684;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GtToj3XA7dhDdUq8JlVvJnjByb1H4klR3e9Su2/tvTk=;
-  b=Fn+EMP+rD8cbvImeO06+U1DUtUMLvLjZPJSWcKUItY5sJLBYBCsX0U0i
-   iV2bUtYljbvbQ5TFaPErr51PTk4iAppknscroMfFftBHJhezNT3vjiLk/
-   dnWx0q2x256SXt0dJhb1bVB0e63pRYZMynb1ubShuUgI0+pYjItNgMwZ9
-   xMJ35Y1qez2hZVK2nEblWxk6837c685DCRwcapiTcDl495xXYH+mVb4Zz
-   jI3sy5Rz5FNO/8OU6fo3430ybgiccE11J9l7gJn9F330YScax6EpBlcme
-   IsC4gqr+8cg0PFq5+kVYEiR+9RZBOsUz4F5fibeaS4S30O90eZMOWXRmv
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="251968924"
+  t=1645641287; x=1677177287;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hYE64FDl6K6kQJWJlpwZ7YzJ0HVW33P+k3nNd98unpw=;
+  b=FPYuPY6hArlQX2kYpFwgApJxsPJ4e6o45qwCwRrso2naFey33HK+/UBK
+   cx4w5EqjxijQjaFVGRsYovKh9/SMGEyHMjYgT89zdWoJ8l835YG38A7pe
+   MRzjWAJXtkA0NsSIhetXY5Vmvexi41DZ3adUg8qfsBfdYshww3YBpt4af
+   9K3rkDK6KdN51qYCNO45NwVCR7Gk8Q+gQ8leXU58OoagP8aKVGUxg1Ags
+   whtdloL9ocpvrQ8DFmI68UHE5kt25ZsOOJaNUmXtUSE4yovOe2hfNGima
+   wyP/MVTn6/nQG9HOFMGOn06ESR38HaTUHiuUipZGeBBVyJfmjiu5NZjJL
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="251788724"
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="251968924"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 10:24:43 -0800
+   d="scan'208";a="251788724"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 10:34:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="491309303"
+   d="scan'208";a="628190773"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 23 Feb 2022 10:24:42 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Feb 2022 10:34:42 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMwJd-0001hA-KE; Wed, 23 Feb 2022 18:24:41 +0000
-Date: Thu, 24 Feb 2022 02:24:11 +0800
+	id 1nMwTJ-0001hU-Nb; Wed, 23 Feb 2022 18:34:41 +0000
+Date: Thu, 24 Feb 2022 02:34:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
+	alsa-devel@alsa-project.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1693/2340]
- drivers/net/dsa/lan9303-core.c:1098:2: error: implicit declaration of
- function 'vlan_vid_add'
-Message-ID: <202202240246.JOktuuHV-lkp@intel.com>
+	Alexander.Deucher@amd.com, Sunil-kumar.Dommati@amd.com,
+	krisman@collabora.com, wtli@nuvoton.com,
+	Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/9] ASoC: amd: vg: fix for pm resume callback sequence
+Message-ID: <202202240237.RkL3TEe3-lkp@intel.com>
+References: <20220223071959.13539-1-Vijendar.Mukunda@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,78 +52,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220223071959.13539-1-Vijendar.Mukunda@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
-commit: f2ea4c6dbf9c7f05dedc83b9c74d5ec82b9af164 [1693/2340] headers/deps: net: Optimize <linux/if_vlan.h>, remove <linux/if_vlan_api.h> inclusion
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220224/202202240246.JOktuuHV-lkp@intel.com/config)
+Hi Vijendar,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on v5.17-rc5 next-20220222]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Vijendar-Mukunda/ASoC-amd-vg-fix-for-pm-resume-callback-sequence/20220223-152636
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220224/202202240237.RkL3TEe3-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=f2ea4c6dbf9c7f05dedc83b9c74d5ec82b9af164
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout f2ea4c6dbf9c7f05dedc83b9c74d5ec82b9af164
+        # https://github.com/0day-ci/linux/commit/43c5f728cf59371b29569d941fb2ef2bdc3a279d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Vijendar-Mukunda/ASoC-amd-vg-fix-for-pm-resume-callback-sequence/20220223-152636
+        git checkout 43c5f728cf59371b29569d941fb2ef2bdc3a279d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/ net/dsa/ net/smc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/amd/vangogh/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
-      It only hurts bisectability.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>):
-
->> drivers/net/dsa/lan9303-core.c:1098:2: error: implicit declaration of function 'vlan_vid_add' [-Werror,-Wimplicit-function-declaration]
-           vlan_vid_add(dp->cpu_dp->master, htons(ETH_P_8021Q), port);
-           ^
->> drivers/net/dsa/lan9303-core.c:1111:2: error: implicit declaration of function 'vlan_vid_del' [-Werror,-Wimplicit-function-declaration]
-           vlan_vid_del(dp->cpu_dp->master, htons(ETH_P_8021Q), port);
-           ^
-   2 errors generated.
+>> sound/soc/amd/vangogh/acp5x-pcm-dma.c:430:20: warning: variable 'frmt_val' set but not used [-Wunused-but-set-variable]
+           u32 val, reg_val, frmt_val;
+                             ^
+>> sound/soc/amd/vangogh/acp5x-pcm-dma.c:430:11: warning: variable 'reg_val' set but not used [-Wunused-but-set-variable]
+           u32 val, reg_val, frmt_val;
+                    ^
+   2 warnings generated.
 
 
-vim +/vlan_vid_add +1098 drivers/net/dsa/lan9303-core.c
+vim +/frmt_val +430 sound/soc/amd/vangogh/acp5x-pcm-dma.c
 
-4d6a78b477dd96 Egil Hjelmeland 2017-09-19  1088  
-a1292595e00607 Juergen Beisert 2017-04-18  1089  static int lan9303_port_enable(struct dsa_switch *ds, int port,
-a1292595e00607 Juergen Beisert 2017-04-18  1090  			       struct phy_device *phy)
-a1292595e00607 Juergen Beisert 2017-04-18  1091  {
-430065e2671905 Mans Rullgard   2022-02-16  1092  	struct dsa_port *dp = dsa_to_port(ds, port);
-a1292595e00607 Juergen Beisert 2017-04-18  1093  	struct lan9303 *chip = ds->priv;
-a1292595e00607 Juergen Beisert 2017-04-18  1094  
-430065e2671905 Mans Rullgard   2022-02-16  1095  	if (!dsa_port_is_user(dp))
-74be4babe72fd1 Vivien Didelot  2019-08-19  1096  		return 0;
-74be4babe72fd1 Vivien Didelot  2019-08-19  1097  
-430065e2671905 Mans Rullgard   2022-02-16 @1098  	vlan_vid_add(dp->cpu_dp->master, htons(ETH_P_8021Q), port);
-430065e2671905 Mans Rullgard   2022-02-16  1099  
-9c84258ed68a1d Egil Hjelmeland 2017-08-05  1100  	return lan9303_enable_processing_port(chip, port);
-a1292595e00607 Juergen Beisert 2017-04-18  1101  }
-a1292595e00607 Juergen Beisert 2017-04-18  1102  
-75104db0cb353e Andrew Lunn     2019-02-24  1103  static void lan9303_port_disable(struct dsa_switch *ds, int port)
-a1292595e00607 Juergen Beisert 2017-04-18  1104  {
-430065e2671905 Mans Rullgard   2022-02-16  1105  	struct dsa_port *dp = dsa_to_port(ds, port);
-a1292595e00607 Juergen Beisert 2017-04-18  1106  	struct lan9303 *chip = ds->priv;
-a1292595e00607 Juergen Beisert 2017-04-18  1107  
-430065e2671905 Mans Rullgard   2022-02-16  1108  	if (!dsa_port_is_user(dp))
-74be4babe72fd1 Vivien Didelot  2019-08-19  1109  		return;
-74be4babe72fd1 Vivien Didelot  2019-08-19  1110  
-430065e2671905 Mans Rullgard   2022-02-16 @1111  	vlan_vid_del(dp->cpu_dp->master, htons(ETH_P_8021Q), port);
-430065e2671905 Mans Rullgard   2022-02-16  1112  
-9c84258ed68a1d Egil Hjelmeland 2017-08-05  1113  	lan9303_disable_processing_port(chip, port);
-b17c6b1f4538b6 Egil Hjelmeland 2017-12-29  1114  	lan9303_phy_write(ds, chip->phy_addr_base + port, MII_BMCR, BMCR_PDOWN);
-a1292595e00607 Juergen Beisert 2017-04-18  1115  }
-a1292595e00607 Juergen Beisert 2017-04-18  1116  
-
-:::::: The code at line 1098 was first introduced by commit
-:::::: 430065e2671905ac675f97b7af240cc255964e93 net: dsa: lan9303: add VLAN IDs to master device
-
-:::::: TO: Mans Rullgard <mans@mansr.com>
-:::::: CC: Jakub Kicinski <kuba@kernel.org>
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  425  
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  426  static int __maybe_unused acp5x_pcm_resume(struct device *dev)
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  427  {
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  428  	struct i2s_dev_data *adata;
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  429  	struct i2s_stream_instance *rtd;
+361414dc1f07b7 Vijendar Mukunda 2021-07-21 @430  	u32 val, reg_val, frmt_val;
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  431  
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  432  	reg_val = 0;
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  433  	frmt_val = 0;
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  434  	adata = dev_get_drvdata(dev);
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  435  
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  436  	if (adata->play_stream && adata->play_stream->runtime) {
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  437  		rtd = adata->play_stream->runtime->private_data;
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  438  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  439  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_ITER);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  440  		if (adata->tdm_mode == TDM_ENABLE) {
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  441  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_TXFRMT);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  442  			val = acp_readl(adata->acp5x_base + ACP_HSTDM_ITER);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  443  			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_ITER);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  444  		}
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  445  	}
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  446  	if (adata->i2ssp_play_stream && adata->i2ssp_play_stream->runtime) {
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  447  		rtd = adata->i2ssp_play_stream->runtime->private_data;
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  448  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  449  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_ITER);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  450  		if (adata->tdm_mode == TDM_ENABLE) {
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  451  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_TXFRMT);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  452  			val = acp_readl(adata->acp5x_base + ACP_I2STDM_ITER);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  453  			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_ITER);
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  454  		}
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  455  	}
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  456  
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  457  	if (adata->capture_stream && adata->capture_stream->runtime) {
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  458  		rtd = adata->capture_stream->runtime->private_data;
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  459  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  460  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_IRER);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  461  		if (adata->tdm_mode == TDM_ENABLE) {
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  462  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_RXFRMT);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  463  			val = acp_readl(adata->acp5x_base + ACP_HSTDM_IRER);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  464  			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_IRER);
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  465  		}
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  466  	}
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  467  	if (adata->i2ssp_capture_stream && adata->i2ssp_capture_stream->runtime) {
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  468  		rtd = adata->i2ssp_capture_stream->runtime->private_data;
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  469  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  470  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_IRER);
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  471  		if (adata->tdm_mode == TDM_ENABLE) {
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  472  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_RXFRMT);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  473  			val = acp_readl(adata->acp5x_base + ACP_I2STDM_IRER);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  474  			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_IRER);
+43c5f728cf5937 Vijendar Mukunda 2022-02-23  475  		}
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  476  	}
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  477  	acp_writel(1, adata->acp5x_base + ACP_EXTERNAL_INTR_ENB);
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  478  	return 0;
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  479  }
+361414dc1f07b7 Vijendar Mukunda 2021-07-21  480  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
