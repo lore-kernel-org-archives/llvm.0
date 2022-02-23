@@ -1,41 +1,42 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B817A
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 06:32:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A22D7A
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 06:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645597945; x=1677133945;
+  t=1645599202; x=1677135202;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BJKKHGzT8sd85iftXcDNzClCea0ssKINnhWdOpD6gxg=;
-  b=W4ZHeAODNHjvplqFJFlgIVjkJj2omOM3t3Wwuc9AqHgu+wM2a+5qM+Pr
-   u6IJZY4NQcPwiRzO5CP2z3iQpe+tCVAxyGbwJ+mZoB+FblFvNyW+slNDw
-   hbWDRWkVY3IME2S+QKec9+ArmkskOSEZaDt8y+8WB/VvJFnzBUczvcAq2
-   44NeMKhzU9CK75xbY+YvnKqPeSRsw4oHw1tB/7IMbiVHmWEgu4mjdtuJX
-   KzNBLVMrMW6xAm5wem0kL/6S415R+jfEign/Rtiets1BUWqhXMIs0bW2U
-   yWeDMpB9rUjwYJiIToqhHBEn6M6i+un3542SIMK2j27QWSwyt9x7iF+i7
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="338332288"
+  bh=hz66yamgSPcK6ReMvpFGXRaca4CTfCu9WiXkPmGGFW4=;
+  b=cqgosRc4/hJbV/rEHuTSMyPSGTWbix+rLmJIGNlr8tGM1kMZRC3itI2R
+   wU9vE1PFdzgxLRdKiTBJLwRV9mEeH0HRYICAK1ljAWMtJd2MdCch/2pzJ
+   G9g9vErgvdd9LiE5Cj0YEc4Qa1bKr+QuEsQcriCZC1CAzh9GART3Kcqd5
+   n9h28ex78UOPbYyug5PHr+xSn3TLeDe0f6gL1ZGBd9FMDTCfOz5srs4HO
+   Vq6l1/FviuEzFRTr8qVqun8MtPwA1JhOyzuT5XnHq87vILdKC7TdDFHlk
+   mCmKg0b+XQj4stQJEw/Y4F0sBYVxy5vsCfuvFfeTW7JxO8AHiwaiKTaBQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="232519661"
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="338332288"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 22:32:25 -0800
+   d="scan'208";a="232519661"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 22:53:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="508309092"
+   d="scan'208";a="637308579"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Feb 2022 22:32:23 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 22 Feb 2022 22:53:19 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMlCD-00014S-RS; Wed, 23 Feb 2022 06:32:17 +0000
-Date: Wed, 23 Feb 2022 14:31:54 +0800
+	id 1nMlWY-000169-Cq; Wed, 23 Feb 2022 06:53:18 +0000
+Date: Wed, 23 Feb 2022 14:52:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: David Hildenbrand <david@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2000/2324] kernel/up.c:14:5: warning: no
- previous prototype for function 'smp_call_function_single'
-Message-ID: <202202231421.ToPGledC-lkp@intel.com>
+Subject: [davidhildenbrand:cow_fixes_part_2 11/25]
+ mm/memory-failure.c:1465:19: warning: parameter 'page_flags' set but not
+ used
+Message-ID: <202202231420.BvLSwH9N-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,122 +47,77 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   7d9efc989eceed6a8fa475a186880ec4a1ad54a3
-commit: 59438ff3251170bd7d1c9795532bd3dcc127e3f2 [2000/2324] headers/deps: genirq: Optimize <linux/interrupt.h> dependencies, remove <linux/hardirq.h>
-config: mips-ath25_defconfig (https://download.01.org/0day-ci/archive/20220223/202202231421.ToPGledC-lkp@intel.com/config)
+tree:   git://github.com/davidhildenbrand/linux cow_fixes_part_2
+head:   f818ce6b393017761287bf06620a25d322639053
+commit: 6a6823bd941bee73b1a65936f6d2c70d2c3bc086 [11/25] mm/page-flags: reuse PG_slab as PG_anon_exclusive for PageAnon() pages
+config: i386-randconfig-a012-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231420.BvLSwH9N-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=59438ff3251170bd7d1c9795532bd3dcc127e3f2
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 59438ff3251170bd7d1c9795532bd3dcc127e3f2
+        # https://github.com/davidhildenbrand/linux/commit/6a6823bd941bee73b1a65936f6d2c70d2c3bc086
+        git remote add davidhildenbrand git://github.com/davidhildenbrand/linux
+        git fetch --no-tags davidhildenbrand cow_fixes_part_2
+        git checkout 6a6823bd941bee73b1a65936f6d2c70d2c3bc086
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from kernel/up.c:8:
-   In file included from include/linux/interrupt.h:23:
-   arch/mips/include/asm/irq.h:23:19: error: expected ';' after top level declarator
-   extern void __init init_IRQ(void);
-                     ^
-                     ;
->> kernel/up.c:14:5: warning: no previous prototype for function 'smp_call_function_single' [-Wmissing-prototypes]
-   int smp_call_function_single(int cpu, void (*func) (void *info), void *info,
-       ^
-   kernel/up.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int smp_call_function_single(int cpu, void (*func) (void *info), void *info,
-   ^
-   static 
->> kernel/up.c:30:5: warning: no previous prototype for function 'smp_call_function_single_async' [-Wmissing-prototypes]
-   int smp_call_function_single_async(int cpu, struct __call_single_data *csd)
-       ^
-   kernel/up.c:30:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int smp_call_function_single_async(int cpu, struct __call_single_data *csd)
-   ^
-   static 
->> kernel/up.c:45:6: warning: no previous prototype for function 'on_each_cpu_cond_mask' [-Wmissing-prototypes]
-   void on_each_cpu_cond_mask(smp_cond_func_t cond_func, smp_call_func_t func,
-        ^
-   kernel/up.c:45:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void on_each_cpu_cond_mask(smp_cond_func_t cond_func, smp_call_func_t func,
-   ^
-   static 
->> kernel/up.c:60:5: warning: no previous prototype for function 'smp_call_on_cpu' [-Wmissing-prototypes]
-   int smp_call_on_cpu(unsigned int cpu, int (*func)(void *), void *par, bool phys)
-       ^
-   kernel/up.c:60:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int smp_call_on_cpu(unsigned int cpu, int (*func)(void *), void *par, bool phys)
-   ^
-   static 
-   4 warnings and 1 error generated.
+>> mm/memory-failure.c:1465:19: warning: parameter 'page_flags' set but not used [-Wunused-but-set-parameter]
+                                   unsigned long page_flags)
+                                                 ^
+   1 warning generated.
 
 
-vim +/smp_call_function_single +14 kernel/up.c
+vim +/page_flags +1465 mm/memory-failure.c
 
-53ce3d95649087 Andrew Morton             2009-01-09  13  
-53ce3d95649087 Andrew Morton             2009-01-09 @14  int smp_call_function_single(int cpu, void (*func) (void *info), void *info,
-53ce3d95649087 Andrew Morton             2009-01-09  15  				int wait)
-53ce3d95649087 Andrew Morton             2009-01-09  16  {
-081192b25c2d46 David Daney               2013-09-11  17  	unsigned long flags;
-081192b25c2d46 David Daney               2013-09-11  18  
-1e474b28e78897 Paul E. McKenney          2020-02-05  19  	if (cpu != 0)
-1e474b28e78897 Paul E. McKenney          2020-02-05  20  		return -ENXIO;
-93423b8665f43a Ingo Molnar               2009-01-11  21  
-081192b25c2d46 David Daney               2013-09-11  22  	local_irq_save(flags);
-081192b25c2d46 David Daney               2013-09-11  23  	func(info);
-081192b25c2d46 David Daney               2013-09-11  24  	local_irq_restore(flags);
-93423b8665f43a Ingo Molnar               2009-01-11  25  
-53ce3d95649087 Andrew Morton             2009-01-09  26  	return 0;
-53ce3d95649087 Andrew Morton             2009-01-09  27  }
-53ce3d95649087 Andrew Morton             2009-01-09  28  EXPORT_SYMBOL(smp_call_function_single);
-fa688207c9db48 David Daney               2013-09-11  29  
-1139aeb1c521eb Arnd Bergmann             2021-05-05 @30  int smp_call_function_single_async(int cpu, struct __call_single_data *csd)
-40c01e8bd5575e Christoph Hellwig         2013-11-14  31  {
-40c01e8bd5575e Christoph Hellwig         2013-11-14  32  	unsigned long flags;
-40c01e8bd5575e Christoph Hellwig         2013-11-14  33  
-40c01e8bd5575e Christoph Hellwig         2013-11-14  34  	local_irq_save(flags);
-40c01e8bd5575e Christoph Hellwig         2013-11-14  35  	csd->func(csd->info);
-40c01e8bd5575e Christoph Hellwig         2013-11-14  36  	local_irq_restore(flags);
-08eed44c7249d3 Jan Kara                  2014-02-24  37  	return 0;
-40c01e8bd5575e Christoph Hellwig         2013-11-14  38  }
-c46fff2a3b2979 Frederic Weisbecker       2014-02-24  39  EXPORT_SYMBOL(smp_call_function_single_async);
-40c01e8bd5575e Christoph Hellwig         2013-11-14  40  
-fa688207c9db48 David Daney               2013-09-11  41  /*
-fa688207c9db48 David Daney               2013-09-11  42   * Preemption is disabled here to make sure the cond_func is called under the
-f0fffaff0b8960 Bhaskar Chowdhury         2021-05-06  43   * same conditions in UP and SMP.
-fa688207c9db48 David Daney               2013-09-11  44   */
-5671d814dbd204 Sebastian Andrzej Siewior 2020-01-17 @45  void on_each_cpu_cond_mask(smp_cond_func_t cond_func, smp_call_func_t func,
-cb923159bbb8cc Sebastian Andrzej Siewior 2020-01-17  46  			   void *info, bool wait, const struct cpumask *mask)
-fa688207c9db48 David Daney               2013-09-11  47  {
-fa688207c9db48 David Daney               2013-09-11  48  	unsigned long flags;
-fa688207c9db48 David Daney               2013-09-11  49  
-fa688207c9db48 David Daney               2013-09-11  50  	preempt_disable();
-a5aa5ce3005972 Nadav Amit                2021-02-20  51  	if ((!cond_func || cond_func(0, info)) && cpumask_test_cpu(0, mask)) {
-fa688207c9db48 David Daney               2013-09-11  52  		local_irq_save(flags);
-fa688207c9db48 David Daney               2013-09-11  53  		func(info);
-fa688207c9db48 David Daney               2013-09-11  54  		local_irq_restore(flags);
-fa688207c9db48 David Daney               2013-09-11  55  	}
-fa688207c9db48 David Daney               2013-09-11  56  	preempt_enable();
-fa688207c9db48 David Daney               2013-09-11  57  }
-7d49b28a80b830 Rik van Riel              2018-09-25  58  EXPORT_SYMBOL(on_each_cpu_cond_mask);
-7d49b28a80b830 Rik van Riel              2018-09-25  59  
-df8ce9d78a4e7f Juergen Gross             2016-08-29 @60  int smp_call_on_cpu(unsigned int cpu, int (*func)(void *), void *par, bool phys)
+6a46079cf57a7f7 Andi Kleen        2009-09-16  1463  
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1464  static int identify_page_state(unsigned long pfn, struct page *p,
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10 @1465  				unsigned long page_flags)
+761ad8d7c7b5485 Naoya Horiguchi   2017-07-10  1466  {
+761ad8d7c7b5485 Naoya Horiguchi   2017-07-10  1467  	struct page_state *ps;
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1468  
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1469  	/*
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1470  	 * The first check uses the current page flags which may not have any
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1471  	 * relevant information. The second check with the saved page flags is
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1472  	 * carried out only if the first check can't determine the page status.
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1473  	 *
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1474  	 * Note that PG_slab is also used as PG_anon_exclusive for PageAnon()
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1475  	 * pages. Most of these pages should have been handled previously,
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1476  	 * however, let's play safe and verify via PageAnon().
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1477  	 */
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1478  	for (ps = error_states;; ps++) {
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1479  		if ((p->flags & ps->mask) != ps->res)
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1480  			continue;
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1481  		if ((ps->type == MF_MSG_SLAB) && PageAnon(p))
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1482  			continue;
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1483  		break;
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1484  	}
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1485  
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1486  	page_flags |= (p->flags & (1UL << PG_dirty));
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1487  
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1488  	if (!ps->mask)
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1489  		for (ps = error_states;; ps++) {
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1490  			if ((p->flags & ps->mask) != ps->res)
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1491  				continue;
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1492  			if ((ps->type == MF_MSG_SLAB) && PageAnon(p))
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1493  				continue;
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1494  			break;
+6a6823bd941bee7 David Hildenbrand 2021-12-20  1495  		}
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1496  	return page_action(ps, p, pfn);
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1497  }
+0348d2ebec9b00e Naoya Horiguchi   2017-07-10  1498  
 
-:::::: The code at line 14 was first introduced by commit
-:::::: 53ce3d9564908794ae7dd32969089b57df5fc098 smp_call_function_single(): be slightly less stupid
+:::::: The code at line 1465 was first introduced by commit
+:::::: 0348d2ebec9b00ea87b42dffdb3f393007303b82 mm: hwpoison: introduce idenfity_page_state
 
-:::::: TO: Andrew Morton <akpm@linux-foundation.org>
-:::::: CC: Ingo Molnar <mingo@elte.hu>
+:::::: TO: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
