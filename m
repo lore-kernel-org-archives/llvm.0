@@ -1,125 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94ABC6A
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 12:57:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8670DC340F6
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 12:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645621031;
-	bh=T3RPLphnpfjwjFji7iWJDHhlKcmc/lW8LSE7GNk2LKQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oRYCnN+JtWTk+ZS+CT7d6jaqcSPRpUuFonbOK9xP0xB7QUUTpeIRYil0Z6yC0IrpP
-	 +STyaafk7/Yc//R5yR3Na6Wq8JTsYEQhJulAeoMOY2cxmshWudggYn9SYfYhvPbjqz
-	 S1XqLyRVOh1UX3uZwyDM/14Yi7HSPfG4EpA2kazhE8+xmwWUoOWTd1WMI99ANMWTg5
-	 oUulsYyUXWW2XP5os7plGfrs4dIepLnvkI1ZUGsK82KQIbU31vVFcj+qNNgPrdztYc
-	 n9a+b11/5Pe1Vquy+iQtBZEfvkVQqFxTCFvave+ELkO89WpT/CSxx1FVOJ2uZ5FkkF
-	 B3pJD/7n4mIIQ==
-Received: by mail-yb1-f182.google.com with SMTP id y189so26172153ybe.4
-        for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 04:57:11 -0800 (PST)
-X-Gm-Message-State: AOAM532UemXwjfJyTWJgFptZ0IZCgpAiXKMeZJaDOPuLrfDPpgTUp6PH
-	Lk6tX+KWm9FNxi5eXbCoKYqP9hd0RFq0CikbSHc=
-X-Google-Smtp-Source: ABdhPJwEL3v2n7dXLiGGSxBUDiI1buHwdZ4ctEc1Ksn2/qthjXJ6pwsBtWyB0/G9MaH4qLrswEBFghsg5dkZhl8K2zI=
-X-Received: by 2002:a25:e014:0:b0:619:a368:c3b5 with SMTP id
- x20-20020a25e014000000b00619a368c3b5mr27062454ybg.383.1645621030432; Wed, 23
- Feb 2022 04:57:10 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E073C6A
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 12:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645621173; x=1677157173;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EdwXpwxeqUH7Cq2Ae1obglVV8LjCsQ3JhjCcS4UhTeo=;
+  b=AfPFac9uxphUsmJ8ocT0fOocb+7bmqYt9OUIW1YnP0rouj703ZVEZOLx
+   SKoGfGM+qaIO33KwaPPGRcccEkhB66gsGibCjc6b5m2NN1ttja0O+Tgsn
+   AodS36KLd4hqiqEnkKucFdiyNiM/asiYW+OoyH4Eo3HgVfAq7dXcrXP5r
+   K0fry0d3TToXVJJay7PZ5ylRFfVIPInTDca8Y8r3aaNLeZ2DJ4+7kTxHv
+   7pgCC6/a4HduKfWLyEpIKDyOsHR7hinlvILnR0ll0qStU9xzVwxcY+fph
+   w4Srp6k7PAjxzvNKV2NSEglsEufC+nPslht7jlY3nQWbm+VUR+9nZlMd0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="338393097"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="338393097"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:59:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="543306233"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2022 04:59:31 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nMrEw-0001S1-Ip; Wed, 23 Feb 2022 12:59:30 +0000
+Date: Wed, 23 Feb 2022 20:58:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nathan Huckleberry <nhuck@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>
+Subject: [ebiggers:crypto-pending 7/7]
+ arch/arm64/crypto/polyval-ce-glue.c:355:33: warning: unused variable
+ 'polyval_cpu_feature'
+Message-ID: <202202232016.TAxtXYiJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220222165212.2005066-7-kaleshsingh@google.com>
- <202202231727.L621fVgD-lkp@intel.com> <875yp63ptg.wl-maz@kernel.org>
- <YhYpvfZaSjrAtkZp@rli9-dbox> <cb750267af0636c49d2f8aa354f086a5@kernel.org>
-In-Reply-To: <cb750267af0636c49d2f8aa354f086a5@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 23 Feb 2022 13:56:59 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
-Message-ID: <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
-Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
- hypervisor stack overflows
-To: Marc Zyngier <maz@kernel.org>
-Cc: Philip Li <philip.li@intel.com>, Kalesh Singh <kaleshsingh@google.com>, 
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Will Deacon <will@kernel.org>, Quentin Perret <qperret@google.com>, Fuad Tabba <tabba@google.com>, 
-	surenb@google.com, Android Kernel Team <kernel-team@android.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, James Morse <james.morse@arm.com>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Joey Gouly <joey.gouly@arm.com>, Peter Collingbourne <pcc@google.com>, Andrew Scull <ascull@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, kvmarm <kvmarm@lists.cs.columbia.edu>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, 23 Feb 2022 at 13:54, Marc Zyngier <maz@kernel.org> wrote:
->
-> On 2022-02-23 12:34, Philip Li wrote:
-> > On Wed, Feb 23, 2022 at 09:16:59AM +0000, Marc Zyngier wrote:
-> >> On Wed, 23 Feb 2022 09:05:18 +0000,
-> >> kernel test robot <lkp@intel.com> wrote:
-> >> >
-> >> > Hi Kalesh,
-> >> >
-> >> > Thank you for the patch! Perhaps something to improve:
-> >> >
-> >> > [auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
-> >> >
-> >> > url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
-> >> > base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
-> >> > config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
-> >> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> >> > reproduce (this is a W=1 build):
-> >> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >> >         chmod +x ~/bin/make.cross
-> >> >         # install arm64 cross compiling tool for clang build
-> >> >         # apt-get install binutils-aarch64-linux-gnu
-> >> >         # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
-> >> >         git remote add linux-review https://github.com/0day-ci/linux
-> >> >         git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
-> >> >         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
-> >> >         # save the config file to linux build tree
-> >> >         mkdir build_dir
-> >> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
-> >> >
-> >> > If you fix the issue, kindly add following tag as appropriate
-> >> > Reported-by: kernel test robot <lkp@intel.com>
-> >> >
-> >> > All warnings (new ones prefixed by >>):
-> >> >
-> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-> >> >    #define NULL ((void *)0)
-> >> >                 ^~~~~~~~~~~
-> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-> >> >            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
-> >> >                                              ^~~~~~~~~~~~~~~~~~~~~
-> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
-> >> >            [0 ... ESR_ELx_EC_MAX]          = NULL,
-> >> >                                              ^~~~
-> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-> >> >    #define NULL ((void *)0)
-> >> >                 ^~~~~~~~~~~
-> >>
-> >> Kalesh, please ignore this nonsense. There may be things to improve,
-> >> but this is *NOT* one of them.
-> >>
-> >> These reports are pretty useless, and just lead people to ignore real
-> >> bug reports.
-> >
-> > Hi Kalesh, sorry there're some irrelevant issues mixed in the report,
-> > kindly ignore them. And the valuable ones are the new ones that
-> > prefixed by >>, as the below one in original report.
-> >
-> >>> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous
-> >>> prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
-> >    void __noreturn hyp_panic_bad_stack(void)
-> >                    ^
->
-> This is only called from assembly code, so a prototype wouldn't bring
-> much.
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crypto-pending
+head:   a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48
+commit: a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48 [7/7] crypto: arm64/polyval: Add PMULL accelerated implementation of POLYVAL
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220223/202202232016.TAxtXYiJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48
+        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+        git fetch --no-tags ebiggers crypto-pending
+        git checkout a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/crypto/ arch/arm64/kvm/hyp/nvhe/
 
-Should probably be marked as 'asmlinkage' then. I've suggested many
-times already that this bogus diagnostic should either be disabled, or
-disregard 'asmlinkage' symbols.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/crypto/polyval-ce-glue.c:355:33: warning: unused variable 'polyval_cpu_feature' [-Wunused-const-variable]
+   static const struct cpu_feature polyval_cpu_feature[] = {
+                                   ^
+   1 warning generated.
+
+
+vim +/polyval_cpu_feature +355 arch/arm64/crypto/polyval-ce-glue.c
+
+   354	
+ > 355	static const struct cpu_feature polyval_cpu_feature[] = {
+   356		{ cpu_feature(PMULL) }, { }
+   357	};
+   358	MODULE_DEVICE_TABLE(cpu, polyval_cpu_feature);
+   359	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
