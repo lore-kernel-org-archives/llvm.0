@@ -1,41 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E427A
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 23:02:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED487A
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 23:43:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645657373; x=1677193373;
+  t=1645659834; x=1677195834;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cA/iBK1zv2TL2d3+yePnyMO9t24T6zwT8uyJGvJ28EM=;
-  b=CJWC1p8lgdq9WTPa4dPIvgyyX6nWht5PKqoIzSVX6szSvAUMjs5fQSg0
-   ROSe1UvaCOkcIkkzZDnLIfjiweeFVAzqUXKPPNjbUeyZf/V4gmP9PK8xX
-   tgc2uDvVIODItzDOYsl1h9gUnY1o0OdPK3A90hU1E4JXXraqS6Da8bp06
-   FlbUS5Gqb3pdSGwbrCf6j9E5ZQEgqFFDu0mOodIQvSPvPatHGArdC2rOE
-   sd6nIeX8qwiIJ3RQ7TqeZIYAkNH4ZrQTpYsDGsgZrRWodN+yz6qJiTPwv
-   OmWgUmdtVMM4zyqD7/uIvsKsX0AmZsob2kGnVG8OgRZxoz6Bd5HWe+LiE
+  bh=EP/cxWxSY2BPsDYO/Ne+Bkz6iXl8Och+674LWcxezuU=;
+  b=frChPZTEJCgW7QIibdtbeVnStAkXLtGxgqEGRXJiZ23WTbTiYOP8T6fM
+   Lt4aGe6T6tOuKRs6IsQbGMynaNzMSuhQOVoh7TnF2+gkb3gxt+Me+ETff
+   0Jqx2p7Ns2EOfr8rH0pZ5jH2Q5jL60UQCKErr3FFZcXvTs/NbBdCxtEYo
+   NzapmZCVVyX/WhbS5cRopbj96z7FJ8+JCCNbYfGTqLA1wdUxmHXs3NrRP
+   +C3tNAJ684SJrFatGgn9xNG1qQ3/We/wQZRngXj6xlykMXXGQS0V8ayl3
+   FKm32ZYbM0hvQ4UUQVMHcyg62Lr/2W/gJzBE5b3KRB4yOLMTdOIiLu3Xr
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="250930680"
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232729839"
 X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="250930680"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:02:53 -0800
+   d="scan'208";a="232729839"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:43:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="637609511"
+   d="scan'208";a="783802826"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2022 15:02:51 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 23 Feb 2022 15:43:52 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nN0eo-0001vE-QR; Wed, 23 Feb 2022 23:02:50 +0000
-Date: Thu, 24 Feb 2022 07:01:50 +0800
+	id 1nN1IV-0001y1-Tu; Wed, 23 Feb 2022 23:43:51 +0000
+Date: Thu, 24 Feb 2022 07:43:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Kees Cook <keescook@chromium.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1426/2340] fs/xfs/xfs_aops.c:185:3: error:
- implicit declaration of function 'cond_resched'
-Message-ID: <202202240635.yBLA03nm-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: [linux-next:master 4926/7526] include/linux/fortify-string.h:336:4:
+ warning: call to __read_overflow2_field declared with 'warning' attribute:
+ detected read beyond size of field (2nd parameter); maybe use
+ struct_group()?
+Message-ID: <202202240750.ZC6gMTEp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,96 +49,143 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
-commit: 696f8f602b998e5e83e2f71d3dd79e06dbb4e4ea [1426/2340] headers/deps: block/ioprio: Remove the <linux/sched.h> dependency from <linux/ioprio.h>
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220224/202202240635.yBLA03nm-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   196d330d7fb1e7cc0d85641c89ce4602cb36f12e
+commit: 281d0c962752fb40866dd8d4cade68656f34bd1f [4926/7526] fortify: Add Clang support
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220224/202202240750.ZC6gMTEp-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=696f8f602b998e5e83e2f71d3dd79e06dbb4e4ea
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 696f8f602b998e5e83e2f71d3dd79e06dbb4e4ea
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=281d0c962752fb40866dd8d4cade68656f34bd1f
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 281d0c962752fb40866dd8d4cade68656f34bd1f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/ net/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
-      It only hurts bisectability.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>):
-
->> fs/xfs/xfs_aops.c:185:3: error: implicit declaration of function 'cond_resched' [-Werror,-Wimplicit-function-declaration]
-                   cond_resched();
-                   ^
-   fs/xfs/xfs_aops.c:185:3: note: did you mean '__cond_resched'?
-   include/linux/kernel.h:95:12: note: '__cond_resched' declared here
-   extern int __cond_resched(void);
-              ^
-   1 error generated.
---
->> fs/btrfs/ioctl.c:1655:3: error: implicit declaration of function 'cond_resched' [-Werror,-Wimplicit-function-declaration]
-                   cond_resched();
-                   ^
-   fs/btrfs/ioctl.c:1655:3: note: did you mean '__cond_resched'?
-   include/linux/kernel.h:95:12: note: '__cond_resched' declared here
-   extern int __cond_resched(void);
-              ^
-   1 error generated.
+   In file included from net/core/flow_dissector.c:3:
+   In file included from include/linux/skbuff.h:15:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:65:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:22:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:12:
+   In file included from include/linux/bitmap.h:11:
+   In file included from include/linux/string.h:253:
+>> include/linux/fortify-string.h:336:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
+                           __read_overflow2_field(q_size_field, size);
+                           ^
+   1 warning generated.
 
 
-vim +/cond_resched +185 fs/xfs/xfs_aops.c
+vim +/warning +336 include/linux/fortify-string.h
 
-3994fc48957520 Darrick J. Wong   2019-04-15  150  
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  151  /*
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  152   * Finish all pending IO completions that require transactional modifications.
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  153   *
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  154   * We try to merge physical and logically contiguous ioends before completion to
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  155   * minimise the number of transactions we need to perform during IO completion.
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  156   * Both unwritten extent conversion and COW remapping need to iterate and modify
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  157   * one physical extent at a time, so we gain nothing by merging physically
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  158   * discontiguous extents here.
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  159   *
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  160   * The ioend chain length that we can be processing here is largely unbound in
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  161   * length and we may have to perform significant amounts of work on each ioend
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  162   * to complete it. Hence we have to be careful about holding the CPU for too
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  163   * long in this loop.
-ebb7fb1557b1d0 Dave Chinner      2022-01-26  164   */
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  165  void
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  166  xfs_end_io(
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  167  	struct work_struct	*work)
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  168  {
-433dad94ec5d6b Christoph Hellwig 2019-10-17  169  	struct xfs_inode	*ip =
-433dad94ec5d6b Christoph Hellwig 2019-10-17  170  		container_of(work, struct xfs_inode, i_ioend_work);
-598ecfbaa742ac Christoph Hellwig 2019-10-17  171  	struct iomap_ioend	*ioend;
-433dad94ec5d6b Christoph Hellwig 2019-10-17  172  	struct list_head	tmp;
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  173  	unsigned long		flags;
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  174  
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  175  	spin_lock_irqsave(&ip->i_ioend_lock, flags);
-433dad94ec5d6b Christoph Hellwig 2019-10-17  176  	list_replace_init(&ip->i_ioend_list, &tmp);
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  177  	spin_unlock_irqrestore(&ip->i_ioend_lock, flags);
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  178  
-598ecfbaa742ac Christoph Hellwig 2019-10-17  179  	iomap_sort_ioends(&tmp);
-598ecfbaa742ac Christoph Hellwig 2019-10-17  180  	while ((ioend = list_first_entry_or_null(&tmp, struct iomap_ioend,
-433dad94ec5d6b Christoph Hellwig 2019-10-17  181  			io_list))) {
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  182  		list_del_init(&ioend->io_list);
-6e552494fb90ac Brian Foster      2021-05-04  183  		iomap_ioend_try_merge(ioend, &tmp);
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  184  		xfs_end_ioend(ioend);
-ebb7fb1557b1d0 Dave Chinner      2022-01-26 @185  		cond_resched();
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  186  	}
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  187  }
-cb357bf3d105f6 Darrick J. Wong   2019-04-15  188  
+28e77cc1c06866 Kees Cook      2021-06-16  267  
+28e77cc1c06866 Kees Cook      2021-06-16  268  /*
+28e77cc1c06866 Kees Cook      2021-06-16  269   * __builtin_object_size() must be captured here to avoid evaluating argument
+28e77cc1c06866 Kees Cook      2021-06-16  270   * side-effects further into the macro layers.
+28e77cc1c06866 Kees Cook      2021-06-16  271   */
+28e77cc1c06866 Kees Cook      2021-06-16  272  #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
+28e77cc1c06866 Kees Cook      2021-06-16  273  		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
+a28a6e860c6cf2 Francis Laniel 2021-02-25  274  
+f68f2ff91512c1 Kees Cook      2021-04-20  275  /*
+f68f2ff91512c1 Kees Cook      2021-04-20  276   * To make sure the compiler can enforce protection against buffer overflows,
+f68f2ff91512c1 Kees Cook      2021-04-20  277   * memcpy(), memmove(), and memset() must not be used beyond individual
+f68f2ff91512c1 Kees Cook      2021-04-20  278   * struct members. If you need to copy across multiple members, please use
+f68f2ff91512c1 Kees Cook      2021-04-20  279   * struct_group() to create a named mirror of an anonymous struct union.
+f68f2ff91512c1 Kees Cook      2021-04-20  280   * (e.g. see struct sk_buff.) Read overflow checking is currently only
+f68f2ff91512c1 Kees Cook      2021-04-20  281   * done when a write overflow is also present, or when building with W=1.
+f68f2ff91512c1 Kees Cook      2021-04-20  282   *
+f68f2ff91512c1 Kees Cook      2021-04-20  283   * Mitigation coverage matrix
+f68f2ff91512c1 Kees Cook      2021-04-20  284   *					Bounds checking at:
+f68f2ff91512c1 Kees Cook      2021-04-20  285   *					+-------+-------+-------+-------+
+f68f2ff91512c1 Kees Cook      2021-04-20  286   *					| Compile time  |   Run time    |
+f68f2ff91512c1 Kees Cook      2021-04-20  287   * memcpy() argument sizes:		| write | read  | write | read  |
+f68f2ff91512c1 Kees Cook      2021-04-20  288   *        dest     source   length      +-------+-------+-------+-------+
+f68f2ff91512c1 Kees Cook      2021-04-20  289   * memcpy(known,   known,   constant)	|   y   |   y   |  n/a  |  n/a  |
+f68f2ff91512c1 Kees Cook      2021-04-20  290   * memcpy(known,   unknown, constant)	|   y   |   n   |  n/a  |   V   |
+f68f2ff91512c1 Kees Cook      2021-04-20  291   * memcpy(known,   known,   dynamic)	|   n   |   n   |   B   |   B   |
+f68f2ff91512c1 Kees Cook      2021-04-20  292   * memcpy(known,   unknown, dynamic)	|   n   |   n   |   B   |   V   |
+f68f2ff91512c1 Kees Cook      2021-04-20  293   * memcpy(unknown, known,   constant)	|   n   |   y   |   V   |  n/a  |
+f68f2ff91512c1 Kees Cook      2021-04-20  294   * memcpy(unknown, unknown, constant)	|   n   |   n   |   V   |   V   |
+f68f2ff91512c1 Kees Cook      2021-04-20  295   * memcpy(unknown, known,   dynamic)	|   n   |   n   |   V   |   B   |
+f68f2ff91512c1 Kees Cook      2021-04-20  296   * memcpy(unknown, unknown, dynamic)	|   n   |   n   |   V   |   V   |
+f68f2ff91512c1 Kees Cook      2021-04-20  297   *					+-------+-------+-------+-------+
+f68f2ff91512c1 Kees Cook      2021-04-20  298   *
+f68f2ff91512c1 Kees Cook      2021-04-20  299   * y = perform deterministic compile-time bounds checking
+f68f2ff91512c1 Kees Cook      2021-04-20  300   * n = cannot perform deterministic compile-time bounds checking
+f68f2ff91512c1 Kees Cook      2021-04-20  301   * n/a = no run-time bounds checking needed since compile-time deterministic
+f68f2ff91512c1 Kees Cook      2021-04-20  302   * B = can perform run-time bounds checking (currently unimplemented)
+f68f2ff91512c1 Kees Cook      2021-04-20  303   * V = vulnerable to run-time overflow (will need refactoring to solve)
+f68f2ff91512c1 Kees Cook      2021-04-20  304   *
+f68f2ff91512c1 Kees Cook      2021-04-20  305   */
+f68f2ff91512c1 Kees Cook      2021-04-20  306  __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
+f68f2ff91512c1 Kees Cook      2021-04-20  307  					 const size_t p_size,
+f68f2ff91512c1 Kees Cook      2021-04-20  308  					 const size_t q_size,
+f68f2ff91512c1 Kees Cook      2021-04-20  309  					 const size_t p_size_field,
+f68f2ff91512c1 Kees Cook      2021-04-20  310  					 const size_t q_size_field,
+f68f2ff91512c1 Kees Cook      2021-04-20  311  					 const char *func)
+a28a6e860c6cf2 Francis Laniel 2021-02-25  312  {
+a28a6e860c6cf2 Francis Laniel 2021-02-25  313  	if (__builtin_constant_p(size)) {
+f68f2ff91512c1 Kees Cook      2021-04-20  314  		/*
+f68f2ff91512c1 Kees Cook      2021-04-20  315  		 * Length argument is a constant expression, so we
+f68f2ff91512c1 Kees Cook      2021-04-20  316  		 * can perform compile-time bounds checking where
+f68f2ff91512c1 Kees Cook      2021-04-20  317  		 * buffer sizes are known.
+f68f2ff91512c1 Kees Cook      2021-04-20  318  		 */
+f68f2ff91512c1 Kees Cook      2021-04-20  319  
+f68f2ff91512c1 Kees Cook      2021-04-20  320  		/* Error when size is larger than enclosing struct. */
+f68f2ff91512c1 Kees Cook      2021-04-20  321  		if (p_size > p_size_field && p_size < size)
+a28a6e860c6cf2 Francis Laniel 2021-02-25  322  			__write_overflow();
+f68f2ff91512c1 Kees Cook      2021-04-20  323  		if (q_size > q_size_field && q_size < size)
+a28a6e860c6cf2 Francis Laniel 2021-02-25  324  			__read_overflow2();
+f68f2ff91512c1 Kees Cook      2021-04-20  325  
+f68f2ff91512c1 Kees Cook      2021-04-20  326  		/* Warn when write size argument larger than dest field. */
+f68f2ff91512c1 Kees Cook      2021-04-20  327  		if (p_size_field < size)
+f68f2ff91512c1 Kees Cook      2021-04-20  328  			__write_overflow_field(p_size_field, size);
+f68f2ff91512c1 Kees Cook      2021-04-20  329  		/*
+f68f2ff91512c1 Kees Cook      2021-04-20  330  		 * Warn for source field over-read when building with W=1
+f68f2ff91512c1 Kees Cook      2021-04-20  331  		 * or when an over-write happened, so both can be fixed at
+f68f2ff91512c1 Kees Cook      2021-04-20  332  		 * the same time.
+f68f2ff91512c1 Kees Cook      2021-04-20  333  		 */
+f68f2ff91512c1 Kees Cook      2021-04-20  334  		if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
+f68f2ff91512c1 Kees Cook      2021-04-20  335  		    q_size_field < size)
+f68f2ff91512c1 Kees Cook      2021-04-20 @336  			__read_overflow2_field(q_size_field, size);
+a28a6e860c6cf2 Francis Laniel 2021-02-25  337  	}
+f68f2ff91512c1 Kees Cook      2021-04-20  338  	/*
+f68f2ff91512c1 Kees Cook      2021-04-20  339  	 * At this point, length argument may not be a constant expression,
+f68f2ff91512c1 Kees Cook      2021-04-20  340  	 * so run-time bounds checking can be done where buffer sizes are
+f68f2ff91512c1 Kees Cook      2021-04-20  341  	 * known. (This is not an "else" because the above checks may only
+f68f2ff91512c1 Kees Cook      2021-04-20  342  	 * be compile-time warnings, and we want to still warn for run-time
+f68f2ff91512c1 Kees Cook      2021-04-20  343  	 * overflows.)
+f68f2ff91512c1 Kees Cook      2021-04-20  344  	 */
+f68f2ff91512c1 Kees Cook      2021-04-20  345  
+f68f2ff91512c1 Kees Cook      2021-04-20  346  	/*
+f68f2ff91512c1 Kees Cook      2021-04-20  347  	 * Always stop accesses beyond the struct that contains the
+f68f2ff91512c1 Kees Cook      2021-04-20  348  	 * field, when the buffer's remaining size is known.
+f68f2ff91512c1 Kees Cook      2021-04-20  349  	 * (The -1 test is to optimize away checks where the buffer
+f68f2ff91512c1 Kees Cook      2021-04-20  350  	 * lengths are unknown.)
+f68f2ff91512c1 Kees Cook      2021-04-20  351  	 */
+f68f2ff91512c1 Kees Cook      2021-04-20  352  	if ((p_size != (size_t)(-1) && p_size < size) ||
+f68f2ff91512c1 Kees Cook      2021-04-20  353  	    (q_size != (size_t)(-1) && q_size < size))
+f68f2ff91512c1 Kees Cook      2021-04-20  354  		fortify_panic(func);
+a28a6e860c6cf2 Francis Laniel 2021-02-25  355  }
+a28a6e860c6cf2 Francis Laniel 2021-02-25  356  
 
-:::::: The code at line 185 was first introduced by commit
-:::::: ebb7fb1557b1d03b906b668aa2164b51e6b7d19a xfs, iomap: limit individual ioend chain lengths in writeback
+:::::: The code at line 336 was first introduced by commit
+:::::: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
 
-:::::: TO: Dave Chinner <dchinner@redhat.com>
-:::::: CC: Darrick J. Wong <djwong@kernel.org>
+:::::: TO: Kees Cook <keescook@chromium.org>
+:::::: CC: Kees Cook <keescook@chromium.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
