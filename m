@@ -1,41 +1,42 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F1D6AC1
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 20:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AC116AD6
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 22:20:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645649391; x=1677185391;
+  t=1645654852; x=1677190852;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CfN0XEMsU5/qod2CtJNDeIwiwGBSjbl6ma6LIKdrH4E=;
-  b=NV+4zHG5doP7mS4CvF8kZA2VG5z2iZAmVO+5RPncCZcRJnEHdK8XdexM
-   4MF7ix0I8DcZBeuqv1u/E/GhgVRPTkNIH99LFwGD/H6LJUum5wrvQ9HT7
-   XoafGs+UZbYRi8Lg7Bhu+0BuBwR9JLdXPM+3GCfK2oaR8phsO7Jc57g5j
-   VeqI1rMEbJ8a56lxbrVBy1saUeXsjDb1rSDkA6eeoklHI9XffNVABGSIT
-   Uvq8mJmNOuOz3ID2zSDObr7seC1rIqQNggs7nsOezQA/i33OatJ/g+hC6
-   Xm/j2cu/OT8RGxXqi3vWfFD4yRCufLo2TAYo82p7WkmjomqG9j0+4FiCk
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="252270617"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="252270617"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 12:49:50 -0800
+  bh=z29YhyUzvRRkn2b8sdYAneR6GXWhzbZDYKkYcCitR1o=;
+  b=kfpAyHj/nl7wUE1JP4nsKa5XcsW05x/htLShAKfQjV7neyCNWYxFyTlg
+   C6Ka0OMibiIOQUa05hkyw4ghWQv3DOCNXrYZnPhTTXhCgBiJBbOKuoIFl
+   pZ7MdT/g9Un0NEzd/uvQmkP7CXo0a2/YuY3rV/zJDTDg2r7AO+StlXZJo
+   cTkDW2dL7NE/KHtrVbbRddyXtqi0zIoj2N/VRJCzenwDQEgaONAiYsdMR
+   7tibJV5lu6bhRadbHryh3j4JlaJPUSl9rS+LIlEOfXZOzp3uSmgnKWwJq
+   CgnCc2bYALBenj/PxGrbE+8Ie8mCzPh3INZTqITLLnJANLNkdlVx6xLBa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232066571"
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="232066571"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 14:20:52 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="506065753"
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="637595374"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 23 Feb 2022 12:49:48 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2022 14:20:50 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMya3-0001pA-Qp; Wed, 23 Feb 2022 20:49:47 +0000
-Date: Thu, 24 Feb 2022 04:48:53 +0800
+	id 1nN009-0001tA-VL; Wed, 23 Feb 2022 22:20:49 +0000
+Date: Thu, 24 Feb 2022 06:20:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Daniel Palmer <daniel@0x0f.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2133/2340] net/dsa/tag_lan9303.c:94:3:
- error: implicit declaration of function 'skb_push_rcsum'
-Message-ID: <202202240411.5lMVIT5k-lkp@intel.com>
+Subject: [chenxing:msc313_mainlining 62/93]
+ drivers/irqchip/irq-msc313-pm-wakeup.c:132:2: warning: ignoring return value
+ of function declared with 'warn_unused_result' attribute
+Message-ID: <202202240645.Grybzjbk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,83 +47,80 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
-commit: 2ac0ad655704cc7c3109124f8ef6427a09d7b623 [2133/2340] headers/deps: net: Optimize <linux/skbuff_api.h> dependencies, remove <net/checksum.h> inclusion
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220224/202202240411.5lMVIT5k-lkp@intel.com/config)
+tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
+head:   99a396728dcff78ca3eddcbd2085f11eeb8a01b8
+commit: 10f8a601bff9d43fdf11deba38af93f47faa1ea2 [62/93] irqchip: MStar wakeup intc
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220224/202202240645.Grybzjbk-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=2ac0ad655704cc7c3109124f8ef6427a09d7b623
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 2ac0ad655704cc7c3109124f8ef6427a09d7b623
+        # https://github.com/linux-chenxing/linux/commit/10f8a601bff9d43fdf11deba38af93f47faa1ea2
+        git remote add chenxing git://github.com/linux-chenxing/linux.git
+        git fetch --no-tags chenxing msc313_mainlining
+        git checkout 10f8a601bff9d43fdf11deba38af93f47faa1ea2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/dsa/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/ drivers/irqchip/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
-      It only hurts bisectability.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>):
-
->> net/dsa/tag_lan9303.c:94:3: error: implicit declaration of function 'skb_push_rcsum' [-Werror,-Wimplicit-function-declaration]
-                   skb_push_rcsum(skb, ETH_HLEN);
-                   ^
-   net/dsa/tag_lan9303.c:94:3: note: did you mean 'skb_pull_rcsum'?
-   include/linux/skbuff_api.h:2026:7: note: 'skb_pull_rcsum' declared here
-   void *skb_pull_rcsum(struct sk_buff *skb, unsigned int len);
-         ^
-   1 error generated.
+>> drivers/irqchip/irq-msc313-pm-wakeup.c:132:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+           request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
+           ^~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/skb_push_rcsum +94 net/dsa/tag_lan9303.c
+vim +/warn_unused_result +132 drivers/irqchip/irq-msc313-pm-wakeup.c
 
-e8fe177a62feaf Juergen Beisert 2017-04-18   78  
-29a097b7747725 Vladimir Oltean 2021-07-31   79  static struct sk_buff *lan9303_rcv(struct sk_buff *skb, struct net_device *dev)
-e8fe177a62feaf Juergen Beisert 2017-04-18   80  {
-1a48fbd9ec1483 Egil Hjelmeland 2017-11-13   81  	u16 lan9303_tag1;
-e8fe177a62feaf Juergen Beisert 2017-04-18   82  	unsigned int source_port;
-e8fe177a62feaf Juergen Beisert 2017-04-18   83  
-e8fe177a62feaf Juergen Beisert 2017-04-18   84  	if (unlikely(!pskb_may_pull(skb, LAN9303_TAG_LEN))) {
-e8fe177a62feaf Juergen Beisert 2017-04-18   85  		dev_warn_ratelimited(&dev->dev,
-e8fe177a62feaf Juergen Beisert 2017-04-18   86  				     "Dropping packet, cannot pull\n");
-e8fe177a62feaf Juergen Beisert 2017-04-18   87  		return NULL;
-e8fe177a62feaf Juergen Beisert 2017-04-18   88  	}
-e8fe177a62feaf Juergen Beisert 2017-04-18   89  
-017b355bbdc662 Mans Rullgard   2022-02-16   90  	if (skb_vlan_tag_present(skb)) {
-017b355bbdc662 Mans Rullgard   2022-02-16   91  		lan9303_tag1 = skb_vlan_tag_get(skb);
-017b355bbdc662 Mans Rullgard   2022-02-16   92  		__vlan_hwaccel_clear_tag(skb);
-017b355bbdc662 Mans Rullgard   2022-02-16   93  	} else {
-017b355bbdc662 Mans Rullgard   2022-02-16  @94  		skb_push_rcsum(skb, ETH_HLEN);
-017b355bbdc662 Mans Rullgard   2022-02-16   95  		__skb_vlan_pop(skb, &lan9303_tag1);
-017b355bbdc662 Mans Rullgard   2022-02-16   96  		skb_pull_rcsum(skb, ETH_HLEN);
-e8fe177a62feaf Juergen Beisert 2017-04-18   97  	}
-e8fe177a62feaf Juergen Beisert 2017-04-18   98  
-1a48fbd9ec1483 Egil Hjelmeland 2017-11-13   99  	source_port = lan9303_tag1 & 0x3;
-e8fe177a62feaf Juergen Beisert 2017-04-18  100  
-2231c43b560403 Vivien Didelot  2017-10-16  101  	skb->dev = dsa_master_find_slave(dev, 0, source_port);
-3775b1b7f0c330 Vivien Didelot  2017-09-29  102  	if (!skb->dev) {
-e8fe177a62feaf Juergen Beisert 2017-04-18  103  		dev_warn_ratelimited(&dev->dev, "Dropping packet due to invalid source port\n");
-e8fe177a62feaf Juergen Beisert 2017-04-18  104  		return NULL;
-e8fe177a62feaf Juergen Beisert 2017-04-18  105  	}
-e8fe177a62feaf Juergen Beisert 2017-04-18  106  
-bea7907837c57a Vladimir Oltean 2021-07-29  107  	if (!(lan9303_tag1 & LAN9303_TAG_RX_TRAPPED_TO_CPU))
-bea7907837c57a Vladimir Oltean 2021-07-29  108  		dsa_default_offload_fwd_mark(skb);
-4672cd36053e4a Egil Hjelmeland 2017-11-10  109  
-e8fe177a62feaf Juergen Beisert 2017-04-18  110  	return skb;
-e8fe177a62feaf Juergen Beisert 2017-04-18  111  }
-e8fe177a62feaf Juergen Beisert 2017-04-18  112  
-
-:::::: The code at line 94 was first introduced by commit
-:::::: 017b355bbdc6620fd8fe05fe297f553ce9d855ee net: dsa: lan9303: handle hwaccel VLAN tags
-
-:::::: TO: Mans Rullgard <mans@mansr.com>
-:::::: CC: Jakub Kicinski <kuba@kernel.org>
+    97	
+    98	static int __init msc313_pm_wakeup_intc_of_init(struct device_node *node,
+    99					   struct device_node *parent)
+   100	{
+   101		int ret = 0, irq;
+   102		struct regmap *pmsleep;
+   103		struct msc313_sleep_intc *intc;
+   104		struct irq_domain *domain;
+   105	
+   106		irq = of_irq_get(node, 0);
+   107		if (irq <= 0)
+   108			return irq;
+   109	
+   110		pmsleep = syscon_regmap_lookup_by_phandle(node, "mstar,pmsleep");
+   111		if (IS_ERR(pmsleep))
+   112			return PTR_ERR(pmsleep);
+   113	
+   114		intc = kzalloc(sizeof(*intc), GFP_KERNEL);
+   115		if (!intc)
+   116			return -ENOMEM;
+   117	
+   118		intc->mask = regmap_field_alloc(pmsleep, mask_field);
+   119		intc->type = regmap_field_alloc(pmsleep, type_field);
+   120		intc->status = regmap_field_alloc(pmsleep, status_field);
+   121	
+   122		/* The masks survive deep sleep so clear them. */
+   123		regmap_field_write(intc->mask, ~0);
+   124	
+   125		domain = irq_domain_add_linear(node, NUM_IRQ,
+   126				&msc313_pm_wakeup_intc_domain_ops, intc);
+   127		if (!domain) {
+   128			ret = -ENOMEM;
+   129			goto out_free;
+   130		}
+   131	
+ > 132		request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
+   133					"pmsleep", domain);
+   134	
+   135		return 0;
+   136	
+   137	out_free:
+   138		kfree(intc);
+   139		return ret;
+   140	}
+   141	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
