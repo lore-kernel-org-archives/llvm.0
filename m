@@ -1,43 +1,48 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4D9800
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 04:40:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36AC800
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 05:00:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645591218; x=1677127218;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L+2Qr8V6KUyJCrvg3kEW5Q15nQ2Fw9Yx3P2tGHF4ZQ0=;
-  b=FIUrd4+nvg6DObrVczpKv2k/f2NiVGjXC9nfPVCyvqLW4OLSEVzOUoRr
-   F0ilQmgedn99zPJV3sVfCrWU4jGUOebsLQpv9D1x35bPfDfI7cY7TSgS5
-   4RV0QzQC/n/662O3vC9/znWT1yHZ78fqAtg+bcXglek8p+lE8GanBoigA
-   kEtjH2esuehPAfnjFeuKGdclYSVwcq3wKPNfp4km4W4qxMHtrtcTMRkcT
-   Vq2XrMQtYzNhQqi33fe9CWuT/FpEMdCWmyDixHgAR7kxmC8kyqPWB5o/0
-   tkJ50e2v3LdGJ/7dhT8V+v2P6u5caRkxZKlaw5w3XxEJOcH8Yi1kEgUm+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="249465707"
+  t=1645592419; x=1677128419;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6FLKm6fp0tyd6+4vW4Mst9f8YW1kXerksPWJZQnchhs=;
+  b=bemAQRmfBd4QjWuSoHkTYeRi9b2xigHFI9GkEPVoj4tCEYDEPty5FglH
+   AFGTXfjRwd4U33H3DXoRfLPJ9/mqmyn2noFz8WHWIDD3TkTw1XtEwchRF
+   +jlgocSyd/2dO/lrhlCZrCU5BJlgkp08ifDStJ24IbtVpoV56tdrlgT08
+   YXOC2KEfshhcJST8rbQOQKPzz6qntqtxJ0SF3YTqa+P4h+GgaiLswzkax
+   Fij2duv2TcoQ3jAEqzWbKEyD9iAYwaKLzlVS6sDu9thxCfGIDFueG5SuM
+   YIchs+t7NbsGO7hVTHRbkjMrYL6BNUt2zAWXaz3whfscZ66isGk4sVVXD
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="250710792"
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="249465707"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 20:40:18 -0800
+   d="scan'208";a="250710792"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 21:00:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="508278615"
+   d="scan'208";a="639175040"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Feb 2022 20:40:15 -0800
+  by orsmga004.jf.intel.com with ESMTP; 22 Feb 2022 21:00:16 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMjRm-0000z4-VL; Wed, 23 Feb 2022 04:40:14 +0000
-Date: Wed, 23 Feb 2022 12:39:13 +0800
+	id 1nMjl9-0000zj-DA; Wed, 23 Feb 2022 05:00:15 +0000
+Date: Wed, 23 Feb 2022 12:59:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Imre Deak <imre.deak@intel.com>
+To: Markuss Broks <markuss.broks@gmail.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [ammarfaizi2-block:next/linux-next/master 97/182]
- drivers/gpu/drm/dp/drm_dp.c:210:4: warning: no previous prototype for
- function 'drm_dp_get_adjust_request_post_cursor'
-Message-ID: <202202231250.VkvwGjL3-lkp@intel.com>
+	phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+	Markuss Broks <markuss.broks@gmail.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Henrik Rydberg <rydberg@bitmath.org>, linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] Input: add Imagis touchscreen driver
+Message-ID: <202202231213.Vj9yo4tW-lkp@intel.com>
+References: <20220222203414.8656-3-markuss.broks@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,58 +51,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220222203414.8656-3-markuss.broks@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block next/linux-next/master
-head:   196d330d7fb1e7cc0d85641c89ce4602cb36f12e
-commit: b885fbed0eb9d79d96a1f8145dc430e14fb33808 [97/182] Merge branch 'for-linux-next' of git://anongit.freedesktop.org/drm-intel
-config: i386-randconfig-a011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231250.VkvwGjL3-lkp@intel.com/config)
+Hi Markuss,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on linux/master robh/for-next linus/master v5.17-rc5 next-20220222]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Markuss-Broks/Add-support-for-Imagis-touchscreens/20220223-043645
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220223/202202231213.Vj9yo4tW-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/b885fbed0eb9d79d96a1f8145dc430e14fb33808
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block next/linux-next/master
-        git checkout b885fbed0eb9d79d96a1f8145dc430e14fb33808
+        # https://github.com/0day-ci/linux/commit/bc77ee5e0d7309edca7d65925c6afa05334b0b01
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Markuss-Broks/Add-support-for-Imagis-touchscreens/20220223-043645
+        git checkout bc77ee5e0d7309edca7d65925c6afa05334b0b01
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/dp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/input/touchscreen/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/dp/drm_dp.c:210:4: warning: no previous prototype for function 'drm_dp_get_adjust_request_post_cursor' [-Wmissing-prototypes]
-   u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
-      ^
-   drivers/gpu/drm/dp/drm_dp.c:210:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
-   ^
-   static 
-   1 warning generated.
+>> drivers/input/touchscreen/imagis.c:300:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (input_device_enabled(ts->input_dev))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/input/touchscreen/imagis.c:305:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/input/touchscreen/imagis.c:300:2: note: remove the 'if' if its condition is always true
+           if (input_device_enabled(ts->input_dev))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/input/touchscreen/imagis.c:296:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   drivers/input/touchscreen/imagis.c:316:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (input_device_enabled(ts->input_dev))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/input/touchscreen/imagis.c:321:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/input/touchscreen/imagis.c:316:2: note: remove the 'if' if its condition is always true
+           if (input_device_enabled(ts->input_dev))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/input/touchscreen/imagis.c:312:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   2 warnings generated.
 
 
-vim +/drm_dp_get_adjust_request_post_cursor +210 drivers/gpu/drm/dp/drm_dp.c
+vim +300 drivers/input/touchscreen/imagis.c
 
-0192c25c03cd2f drivers/gpu/drm/drm_dp_helper.c Jani Nikula    2022-02-03  209  
-79465e0ffeb9e4 drivers/gpu/drm/drm_dp_helper.c Thierry Reding 2019-10-21 @210  u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
-79465e0ffeb9e4 drivers/gpu/drm/drm_dp_helper.c Thierry Reding 2019-10-21  211  					 unsigned int lane)
-79465e0ffeb9e4 drivers/gpu/drm/drm_dp_helper.c Thierry Reding 2019-10-21  212  {
-79465e0ffeb9e4 drivers/gpu/drm/drm_dp_helper.c Thierry Reding 2019-10-21  213  	unsigned int offset = DP_ADJUST_REQUEST_POST_CURSOR2;
-79465e0ffeb9e4 drivers/gpu/drm/drm_dp_helper.c Thierry Reding 2019-10-21  214  	u8 value = dp_link_status(link_status, offset);
-79465e0ffeb9e4 drivers/gpu/drm/drm_dp_helper.c Thierry Reding 2019-10-21  215  
-79465e0ffeb9e4 drivers/gpu/drm/drm_dp_helper.c Thierry Reding 2019-10-21  216  	return (value >> (lane << 1)) & 0x3;
-79465e0ffeb9e4 drivers/gpu/drm/drm_dp_helper.c Thierry Reding 2019-10-21  217  }
-79465e0ffeb9e4 drivers/gpu/drm/drm_dp_helper.c Thierry Reding 2019-10-21  218  EXPORT_SYMBOL(drm_dp_get_adjust_request_post_cursor);
-79465e0ffeb9e4 drivers/gpu/drm/drm_dp_helper.c Thierry Reding 2019-10-21  219  
-
-:::::: The code at line 210 was first introduced by commit
-:::::: 79465e0ffeb9e4866939ea562bc55367be91e595 drm/dp: Add helper to get post-cursor adjustments
-
-:::::: TO: Thierry Reding <treding@nvidia.com>
-:::::: CC: Thierry Reding <treding@nvidia.com>
+   291	
+   292	static int __maybe_unused imagis_suspend(struct device *dev)
+   293	{
+   294		struct i2c_client *client = to_i2c_client(dev);
+   295		struct imagis_ts *ts = i2c_get_clientdata(client);
+   296		int ret;
+   297	
+   298		mutex_lock(&ts->input_dev->mutex);
+   299	
+ > 300		if (input_device_enabled(ts->input_dev))
+   301			ret = imagis_stop(ts);
+   302	
+   303		mutex_unlock(&ts->input_dev->mutex);
+   304	
+   305		return ret;
+   306	}
+   307	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
