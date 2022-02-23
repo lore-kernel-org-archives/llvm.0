@@ -1,50 +1,41 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F300FC9D
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 20:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F1D6AC1
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 20:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645648731; x=1677184731;
+  t=1645649391; x=1677185391;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BU0GOWTUhF9yJXXVIV+UeYaKiM/2sV3bpXc7BZH9FDo=;
-  b=E5Vft63d8FBPgr9m0gkQKiFPEmXyKl45pH13YQaAXA5VUWMl2Mk+avV4
-   /3tok/nmKfZanDcWAA1iJbJp/pwwewgcDmMNBi6UCKKoODJqBc33sNiXF
-   pwAFEAmaCIxQhH4Z1zuep1JJs3c6dNCD51fddKcrcBi3csVXB30p+TUBp
-   yduR4RbLLXeUL7wpfIgg1mFSsEta+BA08maI3cAJgMKjxwcIX2wpQIF9S
-   kDrDpZi3rwCYs3KBuTOTHyKo+0SyaaM7OOeRoMBxioqL2YlylYVMwfWOO
-   c37X2BDPS71ShQCdcb98BvS/wzTS1PliBw6cKGPJKTPv6ANjYvPthmfD6
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="251995298"
+  bh=CfN0XEMsU5/qod2CtJNDeIwiwGBSjbl6ma6LIKdrH4E=;
+  b=NV+4zHG5doP7mS4CvF8kZA2VG5z2iZAmVO+5RPncCZcRJnEHdK8XdexM
+   4MF7ix0I8DcZBeuqv1u/E/GhgVRPTkNIH99LFwGD/H6LJUum5wrvQ9HT7
+   XoafGs+UZbYRi8Lg7Bhu+0BuBwR9JLdXPM+3GCfK2oaR8phsO7Jc57g5j
+   VeqI1rMEbJ8a56lxbrVBy1saUeXsjDb1rSDkA6eeoklHI9XffNVABGSIT
+   Uvq8mJmNOuOz3ID2zSDObr7seC1rIqQNggs7nsOezQA/i33OatJ/g+hC6
+   Xm/j2cu/OT8RGxXqi3vWfFD4yRCufLo2TAYo82p7WkmjomqG9j0+4FiCk
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="252270617"
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="251995298"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 12:38:50 -0800
+   d="scan'208";a="252270617"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 12:49:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="591842134"
+   d="scan'208";a="506065753"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Feb 2022 12:38:47 -0800
+  by orsmga002.jf.intel.com with ESMTP; 23 Feb 2022 12:49:48 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMyPO-0001oE-Q8; Wed, 23 Feb 2022 20:38:46 +0000
-Date: Thu, 24 Feb 2022 04:38:32 +0800
+	id 1nMya3-0001pA-Qp; Wed, 23 Feb 2022 20:49:47 +0000
+Date: Thu, 24 Feb 2022 04:48:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Quinn Tran <qutran@marvell.com>
+To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Hannes Reinecke <hare@suse.de>,
-	Himanshu Madhani <himanshu.madhani@oracle.com>,
-	Larry Wisneski <Larry.Wisneski@marvell.com>,
-	Duane Grigsby <duane.grigsby@marvell.com>,
-	Rick Hicksted Jr <rhicksted@marvell.com>,
-	Nilesh Javali <njavali@marvell.com>
-Subject: drivers/scsi/qla2xxx/qla_edif_bsg.h:93:12: warning: field remote_pid
- within 'struct app_pinfo_req' is less aligned than 'port_id_t' and is
- usually due to 'struct app_pinfo_req' being packed, which can lead to
- unaligned accesses
-Message-ID: <202202240422.NUeO1V58-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2133/2340] net/dsa/tag_lan9303.c:94:3:
+ error: implicit declaration of function 'skb_push_rcsum'
+Message-ID: <202202240411.5lMVIT5k-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,64 +46,83 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Quinn,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5c1ee569660d4a205dced9cb4d0306b907fb7599
-commit: 7878f22a2e03b69baf792f74488962981a1c9547 scsi: qla2xxx: edif: Add getfcinfo and statistic bsgs
-date:   7 months ago
-config: arm-randconfig-r033-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240422.NUeO1V58-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
+commit: 2ac0ad655704cc7c3109124f8ef6427a09d7b623 [2133/2340] headers/deps: net: Optimize <linux/skbuff_api.h> dependencies, remove <net/checksum.h> inclusion
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220224/202202240411.5lMVIT5k-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7878f22a2e03b69baf792f74488962981a1c9547
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7878f22a2e03b69baf792f74488962981a1c9547
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=2ac0ad655704cc7c3109124f8ef6427a09d7b623
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 2ac0ad655704cc7c3109124f8ef6427a09d7b623
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/dsa/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
+      It only hurts bisectability.
 
-   In file included from drivers/scsi/qla2xxx/qla_edif.c:6:
-   In file included from drivers/scsi/qla2xxx/qla_def.h:34:
-   include/uapi/scsi/scsi_bsg_fc.h:280:4: warning: field rqst_data within 'struct fc_bsg_request' is less aligned than 'union (unnamed union at include/uapi/scsi/scsi_bsg_fc.h:271:2)' and is usually due to 'struct fc_bsg_request' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rqst_data;
-             ^
-   In file included from drivers/scsi/qla2xxx/qla_edif.c:6:
-   In file included from drivers/scsi/qla2xxx/qla_def.h:74:
-   In file included from drivers/scsi/qla2xxx/qla_bsg.h:298:
->> drivers/scsi/qla2xxx/qla_edif_bsg.h:93:12: warning: field remote_pid within 'struct app_pinfo_req' is less aligned than 'port_id_t' and is usually due to 'struct app_pinfo_req' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           port_id_t remote_pid;
-                     ^
-   2 warnings generated.
+All errors (new ones prefixed by >>):
+
+>> net/dsa/tag_lan9303.c:94:3: error: implicit declaration of function 'skb_push_rcsum' [-Werror,-Wimplicit-function-declaration]
+                   skb_push_rcsum(skb, ETH_HLEN);
+                   ^
+   net/dsa/tag_lan9303.c:94:3: note: did you mean 'skb_pull_rcsum'?
+   include/linux/skbuff_api.h:2026:7: note: 'skb_pull_rcsum' declared here
+   void *skb_pull_rcsum(struct sk_buff *skb, unsigned int len);
+         ^
+   1 error generated.
 
 
-vim +93 drivers/scsi/qla2xxx/qla_edif_bsg.h
+vim +/skb_push_rcsum +94 net/dsa/tag_lan9303.c
 
-7ebb336e45ef1c Quinn Tran 2021-06-23  89  
-7ebb336e45ef1c Quinn Tran 2021-06-23  90  struct app_pinfo_req {
-7ebb336e45ef1c Quinn Tran 2021-06-23  91  	struct app_id app_info;
-7ebb336e45ef1c Quinn Tran 2021-06-23  92  	uint8_t	 num_ports;
-7ebb336e45ef1c Quinn Tran 2021-06-23 @93  	port_id_t remote_pid;
-7ebb336e45ef1c Quinn Tran 2021-06-23  94  	uint8_t	 reserved[VND_CMD_APP_RESERVED_SIZE];
-7ebb336e45ef1c Quinn Tran 2021-06-23  95  } __packed;
-7ebb336e45ef1c Quinn Tran 2021-06-23  96  
+e8fe177a62feaf Juergen Beisert 2017-04-18   78  
+29a097b7747725 Vladimir Oltean 2021-07-31   79  static struct sk_buff *lan9303_rcv(struct sk_buff *skb, struct net_device *dev)
+e8fe177a62feaf Juergen Beisert 2017-04-18   80  {
+1a48fbd9ec1483 Egil Hjelmeland 2017-11-13   81  	u16 lan9303_tag1;
+e8fe177a62feaf Juergen Beisert 2017-04-18   82  	unsigned int source_port;
+e8fe177a62feaf Juergen Beisert 2017-04-18   83  
+e8fe177a62feaf Juergen Beisert 2017-04-18   84  	if (unlikely(!pskb_may_pull(skb, LAN9303_TAG_LEN))) {
+e8fe177a62feaf Juergen Beisert 2017-04-18   85  		dev_warn_ratelimited(&dev->dev,
+e8fe177a62feaf Juergen Beisert 2017-04-18   86  				     "Dropping packet, cannot pull\n");
+e8fe177a62feaf Juergen Beisert 2017-04-18   87  		return NULL;
+e8fe177a62feaf Juergen Beisert 2017-04-18   88  	}
+e8fe177a62feaf Juergen Beisert 2017-04-18   89  
+017b355bbdc662 Mans Rullgard   2022-02-16   90  	if (skb_vlan_tag_present(skb)) {
+017b355bbdc662 Mans Rullgard   2022-02-16   91  		lan9303_tag1 = skb_vlan_tag_get(skb);
+017b355bbdc662 Mans Rullgard   2022-02-16   92  		__vlan_hwaccel_clear_tag(skb);
+017b355bbdc662 Mans Rullgard   2022-02-16   93  	} else {
+017b355bbdc662 Mans Rullgard   2022-02-16  @94  		skb_push_rcsum(skb, ETH_HLEN);
+017b355bbdc662 Mans Rullgard   2022-02-16   95  		__skb_vlan_pop(skb, &lan9303_tag1);
+017b355bbdc662 Mans Rullgard   2022-02-16   96  		skb_pull_rcsum(skb, ETH_HLEN);
+e8fe177a62feaf Juergen Beisert 2017-04-18   97  	}
+e8fe177a62feaf Juergen Beisert 2017-04-18   98  
+1a48fbd9ec1483 Egil Hjelmeland 2017-11-13   99  	source_port = lan9303_tag1 & 0x3;
+e8fe177a62feaf Juergen Beisert 2017-04-18  100  
+2231c43b560403 Vivien Didelot  2017-10-16  101  	skb->dev = dsa_master_find_slave(dev, 0, source_port);
+3775b1b7f0c330 Vivien Didelot  2017-09-29  102  	if (!skb->dev) {
+e8fe177a62feaf Juergen Beisert 2017-04-18  103  		dev_warn_ratelimited(&dev->dev, "Dropping packet due to invalid source port\n");
+e8fe177a62feaf Juergen Beisert 2017-04-18  104  		return NULL;
+e8fe177a62feaf Juergen Beisert 2017-04-18  105  	}
+e8fe177a62feaf Juergen Beisert 2017-04-18  106  
+bea7907837c57a Vladimir Oltean 2021-07-29  107  	if (!(lan9303_tag1 & LAN9303_TAG_RX_TRAPPED_TO_CPU))
+bea7907837c57a Vladimir Oltean 2021-07-29  108  		dsa_default_offload_fwd_mark(skb);
+4672cd36053e4a Egil Hjelmeland 2017-11-10  109  
+e8fe177a62feaf Juergen Beisert 2017-04-18  110  	return skb;
+e8fe177a62feaf Juergen Beisert 2017-04-18  111  }
+e8fe177a62feaf Juergen Beisert 2017-04-18  112  
 
-:::::: The code at line 93 was first introduced by commit
-:::::: 7ebb336e45ef1ce23462c3bbd03779929008901f scsi: qla2xxx: edif: Add start + stop bsgs
+:::::: The code at line 94 was first introduced by commit
+:::::: 017b355bbdc6620fd8fe05fe297f553ce9d855ee net: dsa: lan9303: handle hwaccel VLAN tags
 
-:::::: TO: Quinn Tran <qutran@marvell.com>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+:::::: TO: Mans Rullgard <mans@mansr.com>
+:::::: CC: Jakub Kicinski <kuba@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
