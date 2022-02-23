@@ -1,74 +1,76 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDE17A
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 08:25:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645604722; x=1677140722;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sUIJizs+jsV9BZI9X1fxroEL3Cg5oANWcK9QUyljVuo=;
-  b=hJmkzeHW8Fqn6FGHzQgD6qHEHsH995Q510aMZo/O2Z8SDPn/Mmi0Q/3a
-   wY1YR9JBPeX7fnEtiHLxpDUvh0jzR5V//8J/4+wCnCGPEwVjmClM1F89H
-   0R6AcfvSsC27XSJ7/yJKBcQw7+DsQ5/IyyP8iasfwzv3qLiQGbdqtB0gS
-   2k5I7jD7SbOeF7Gl1SG9Jgf/ROIsUnhXW8b/w44osz/a9qykPObFz3T1k
-   0r7qyLcWmd2EO1tdj1H0oIJM+xz5IAUZNU25TYBuxGHvWMItEVO/LDUR6
-   BJH0x0dgQKDLhNxCc6nogvzbq9Xu9GvlGE4HGewal4GULc3Yp4rqH14F9
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="231886400"
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="231886400"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 00:25:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="776596195"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2022 00:25:20 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nMmxb-00019t-VN; Wed, 23 Feb 2022 08:25:19 +0000
-Date: Wed, 23 Feb 2022 16:24:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [boqun:dev/arm64 4/4] ERROR: modpost: "memory_block_size_bytes"
- [drivers/hv/hv_balloon.ko] undefined!
-Message-ID: <202202231610.E8BW2Nc5-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627357B
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 08:55:45 +0000 (UTC)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V5HULum_1645606540;
+Received: from 192.168.193.152(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V5HULum_1645606540)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 23 Feb 2022 16:55:41 +0800
+Message-ID: <769ae7ad-e860-722d-59b7-cd7be5f6f1ee@linux.alibaba.com>
+Date: Wed, 23 Feb 2022 00:55:40 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
+Content-Language: en-US
+To: Guenter Roeck <linux@roeck-us.net>, Nathan Chancellor <nathan@kernel.org>
+Cc: catalin.marinas@arm.com, will@kernel.org, ndesaulniers@google.com,
+ keescook@chromium.org, masahiroy@kernel.org, tglx@linutronix.de,
+ akpm@linux-foundation.org, mark.rutland@arm.com, samitolvanen@google.com,
+ npiggin@gmail.com, mhiramat@kernel.org, ojeda@kernel.org,
+ luc.vanoostenryck@gmail.com, elver@google.com, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+References: <20220222095736.24898-1-ashimida@linux.alibaba.com>
+ <YhUMRoLDan7tJRiL@dev-arch.archlinux-ax161>
+ <f44612ce-5bb1-da45-d6cb-39464898c4ff@roeck-us.net>
+From: Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <f44612ce-5bb1-da45-d6cb-39464898c4ff@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git dev/arm64
-head:   abd696a42824ab4956b5f81bbfdfa54c4ef28d88
-commit: abd696a42824ab4956b5f81bbfdfa54c4ef28d88 [4/4] Drivers: hv: balloon: Support memory hot add for larger page sizes
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220223/202202231610.E8BW2Nc5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git/commit/?id=abd696a42824ab4956b5f81bbfdfa54c4ef28d88
-        git remote add boqun https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git
-        git fetch --no-tags boqun dev/arm64
-        git checkout abd696a42824ab4956b5f81bbfdfa54c4ef28d88
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+On 2/22/22 08:47, Guenter Roeck wrote:
+> On 2/22/22 08:16, Nathan Chancellor wrote:
+>> On Tue, Feb 22, 2022 at 01:57:36AM -0800, Dan Li wrote:
+>>> Shadow call stack is available in GCC > 11.2.0, this patch makes
+> 
+> The above suggests that the option will be available with gcc 11.3.0.
+> Information available in public suggests that it will be introduced
+> with gcc 12.0.
+> 
 
->> ERROR: modpost: "memory_block_size_bytes" [drivers/hv/hv_balloon.ko] undefined!
+Ah, yes, I think we could use "gcc >= 12.0.0" here.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> The point here, I think, is to list the minimum gcc version.
+> It is going to be a long time until gcc 12.0 is the minimum version,
+> so I think it makes sense to list the minimum version number for
+> each compiler here.
+> 
+> However, it may make sense to add some reference indicating that
+> support will indeed be added with gcc 11.3.0, and not only starting
+
+I took a quick look at the gcc description, and it seems like the
+y in x.y.z is usually used to fix bugs, and new features should be
+added directly to the trunk.
+
+Link: https://gcc.gnu.org/develop.html
+
+> with gcc 12.0 (and maybe wait with applying this patch until it is
+> actually available in gcc and can be confirmed to work as intended).
+> 
+
+It's also fine to wait for gcc 12 to be released, and I thought maybe
+I could submit the "final" version of this patch to the community (or
+mailing list) first so maybe more people would test it and if there
+were any issues, it could be fixed before GCC 12 is released :)
+
+Thanks,
+Dan.
