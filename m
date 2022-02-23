@@ -1,42 +1,41 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213396AAF
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 19:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA986AAF
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 19:36:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645645009; x=1677181009;
+  t=1645645016; x=1677181016;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mk3aN3pcpAB7oiE45QTenKkiA2nwTqBeLt06UaOynF4=;
-  b=jb9ytYSi4pJMwqMIXliwKCSiotGpMh4+HwdRSp1ycDmLNpV6kzz+WVdc
-   u6UknZMZnH16KLjnLZii2/2SdYUWu0dPCi0Dyk63LP64ewuScROkoe0Db
-   aYQD2qUYaZ9D7a/cwaO6sCVA0SGQ3m9cYwLewM43txVZHV0MVLvUMui6Y
-   bfmU6M7VL6UWdwZxXtlxZlOBC8Ne5srThfmlr4EsMz9uN9YOHvQBnCeD1
-   syzzXXURIU7WfnYFBv4hPUIVqxYo+z53xaxRiUXVbN0ulpFUtHIYLZR9o
-   J0AvoIkHH/mW19nW0QcBYNk2Y5y/9e8BbQySWOOXkfpdsVY4nnmVkq38k
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="250892992"
+  bh=28eVFkMm3SOoNUQ1iwI8a71le4xUQriqCX4Mto4jfSA=;
+  b=aYunqQZllSJN9A2+nSG1q6Pu3k7gTmg1kUGW+w5hlRdPmxowr1lCnS3m
+   gNbddmQqLMfdL8su3r6vBBCaGCI4Qr02BU+7N9jT0dWeHL6Zhfd8xxjnX
+   3NT+v8RUBuZFM8Xu9BAi/KHzq1hM/ZDgZi9Zr/eyNzxVWGu4ruxUQ77Wv
+   GlO/0i03N9hNsOHg+Hx/cFj9a2UtoZsJYH5DvTJkHByqLST93vpGbBUEG
+   US+qEcB7f25kfaaCN9ViZYW2Cv+TBeSyi0I2xIiWllpozXqwFhwe9zicW
+   gOrqqMSJR9RCkXwEhURUf3bXqBSFwht1V7iwTQiFRZdqHiqa5BezWhSBw
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232686537"
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="250892992"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:36:48 -0800
+   d="scan'208";a="232686537"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:36:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="776797599"
+   d="scan'208";a="491331805"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2022 11:36:45 -0800
+  by orsmga003.jf.intel.com with ESMTP; 23 Feb 2022 11:36:45 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMxRM-0001kK-S2; Wed, 23 Feb 2022 19:36:44 +0000
-Date: Thu, 24 Feb 2022 03:35:56 +0800
+	id 1nMxRM-0001kH-Ph; Wed, 23 Feb 2022 19:36:44 +0000
+Date: Thu, 24 Feb 2022 03:36:07 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 571/2340]
- arch/s390/include/asm/preempt.h:110:42: error: implicit declaration of
- function 'task_thread_info'
-Message-ID: <202202240337.1ug9UnXJ-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 2233/2340] net/ceph/messenger_v1.c:1066:3:
+ error: implicit declaration of function 'memcpy_to_page'
+Message-ID: <202202240347.8dLJwUNW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,170 +48,96 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
-commit: 32c0f4ef20d93c78fce830a2fe6cc83db8bb29d0 [571/2340] headers/deps: Move task->thread_info to per_task()
-config: s390-randconfig-r044-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240337.1ug9UnXJ-lkp@intel.com/config)
+commit: 7134c56595f0f35bb1f17fcbf4dcca28c52b8ae8 [2233/2340] headers/deps: mm: Introduce <linux/highmem_extra.h> for rarely used APIs
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220224/202202240347.8dLJwUNW-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=32c0f4ef20d93c78fce830a2fe6cc83db8bb29d0
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=7134c56595f0f35bb1f17fcbf4dcca28c52b8ae8
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 32c0f4ef20d93c78fce830a2fe6cc83db8bb29d0
+        git checkout 7134c56595f0f35bb1f17fcbf4dcca28c52b8ae8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
+      It only hurts bisectability.
 
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:6:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
->> arch/s390/include/asm/preempt.h:110:42: error: implicit declaration of function 'task_thread_info' [-Werror,-Wimplicit-function-declaration]
-           return !--S390_lowcore.preempt_count && tif_need_resched();
-                                                   ^
-   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
-   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
-                              ^
-   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
-           test_ti_thread_flag(current_thread_info(), flag)
-                               ^
-   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
-   # define current_thread_info() task_thread_info(current)
-                                  ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:6:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
->> arch/s390/include/asm/preempt.h:110:42: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct thread_info *' [-Wint-conversion]
-           return !--S390_lowcore.preempt_count && tif_need_resched();
-                                                   ^~~~~~~~~~~~~~~~~~
-   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
-   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
-           test_ti_thread_flag(current_thread_info(), flag)
-                               ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
-   # define current_thread_info() task_thread_info(current)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sched/thread_info_api_lowlevel.h:39:59: note: passing argument to parameter 'ti' here
-   static inline int test_ti_thread_flag(struct thread_info *ti, int flag)
-                                                             ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:6:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
-   arch/s390/include/asm/preempt.h:116:4: error: implicit declaration of function 'task_thread_info' [-Werror,-Wimplicit-function-declaration]
-                           tif_need_resched());
-                           ^
-   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
-   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
-                              ^
-   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
-           test_ti_thread_flag(current_thread_info(), flag)
-                               ^
-   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
-   # define current_thread_info() task_thread_info(current)
-                                  ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:6:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
-   arch/s390/include/asm/preempt.h:116:4: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct thread_info *' [-Wint-conversion]
-                           tif_need_resched());
-                           ^~~~~~~~~~~~~~~~~~~
-   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
-   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
-                              ^
-   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
-           test_ti_thread_flag(current_thread_info(), flag)
-                               ^
-   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
-   # define current_thread_info() task_thread_info(current)
-                                  ^
-   include/linux/compiler.h:48:41: note: expanded from macro 'unlikely'
-   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   include/linux/sched/thread_info_api_lowlevel.h:39:59: note: passing argument to parameter 'ti' here
-   static inline int test_ti_thread_flag(struct thread_info *ti, int flag)
-                                                             ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:6:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
-   arch/s390/include/asm/preempt.h:116:4: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct thread_info *' [-Wint-conversion]
-                           tif_need_resched());
-                           ^~~~~~~~~~~~~~~~~~~
-   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
-   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
-                              ^
-   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
-           test_ti_thread_flag(current_thread_info(), flag)
-                               ^
-   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
-   # define current_thread_info() task_thread_info(current)
-                                  ^
-   include/linux/compiler.h:48:68: note: expanded from macro 'unlikely'
-   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
-   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
-                                                expect, is_constant);      \
-                                                        ^~~~~~~~~~~
-   include/linux/sched/thread_info_api_lowlevel.h:39:59: note: passing argument to parameter 'ti' here
-   static inline int test_ti_thread_flag(struct thread_info *ti, int flag)
-                                                             ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:9:
-   In file included from include/linux/sched.h:12:
-   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
-   # include <generated/asm-offsets.h>
-             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings and 3 errors generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/s390/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
+All errors (new ones prefixed by >>):
+
+>> net/ceph/messenger_v1.c:1066:3: error: implicit declaration of function 'memcpy_to_page' [-Werror,-Wimplicit-function-declaration]
+                   memcpy_to_page(page, off, page_address(con->bounce_page), ret);
+                   ^
+   net/ceph/messenger_v1.c:1066:3: note: did you mean 'memcpy_to_msg'?
+   include/linux/skbuff_api.h:2215:19: note: 'memcpy_to_msg' declared here
+   static inline int memcpy_to_msg(struct msghdr *msg, void *data, int len)
+                     ^
+   1 error generated.
+--
+>> net/ceph/messenger_v2.c:1805:3: error: implicit declaration of function 'memcpy_to_page' [-Werror,-Wimplicit-function-declaration]
+                   memcpy_to_page(bv.bv_page, bv.bv_offset,
+                   ^
+   net/ceph/messenger_v2.c:1805:3: note: did you mean 'memcpy_to_msg'?
+   include/linux/skbuff_api.h:2215:19: note: 'memcpy_to_msg' declared here
+   static inline int memcpy_to_msg(struct msghdr *msg, void *data, int len)
+                     ^
+   1 error generated.
 
 
-vim +/task_thread_info +110 arch/s390/include/asm/preempt.h
+vim +/memcpy_to_page +1066 net/ceph/messenger_v1.c
 
-c360192bf4a8dc Martin Schwidefsky 2016-10-25  107  
-c360192bf4a8dc Martin Schwidefsky 2016-10-25  108  static inline bool __preempt_count_dec_and_test(void)
-c360192bf4a8dc Martin Schwidefsky 2016-10-25  109  {
-c360192bf4a8dc Martin Schwidefsky 2016-10-25 @110  	return !--S390_lowcore.preempt_count && tif_need_resched();
-c360192bf4a8dc Martin Schwidefsky 2016-10-25  111  }
-c360192bf4a8dc Martin Schwidefsky 2016-10-25  112  
+2f713615ddd9d8 Ilya Dryomov 2020-11-12  1034  
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1035  static int read_partial_msg_data_bounce(struct ceph_connection *con)
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1036  {
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1037  	struct ceph_msg_data_cursor *cursor = &con->in_msg->cursor;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1038  	struct page *page;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1039  	size_t off, len;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1040  	u32 crc;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1041  	int ret;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1042  
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1043  	if (unlikely(!con->bounce_page)) {
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1044  		con->bounce_page = alloc_page(GFP_NOIO);
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1045  		if (!con->bounce_page) {
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1046  			pr_err("failed to allocate bounce page\n");
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1047  			return -ENOMEM;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1048  		}
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1049  	}
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1050  
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1051  	crc = con->in_data_crc;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1052  	while (cursor->total_resid) {
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1053  		if (!cursor->resid) {
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1054  			ceph_msg_data_advance(cursor, 0);
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1055  			continue;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1056  		}
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1057  
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1058  		page = ceph_msg_data_next(cursor, &off, &len, NULL);
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1059  		ret = ceph_tcp_recvpage(con->sock, con->bounce_page, 0, len);
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1060  		if (ret <= 0) {
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1061  			con->in_data_crc = crc;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1062  			return ret;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1063  		}
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1064  
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1065  		crc = crc32c(crc, page_address(con->bounce_page), ret);
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30 @1066  		memcpy_to_page(page, off, page_address(con->bounce_page), ret);
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1067  
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1068  		ceph_msg_data_advance(cursor, ret);
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1069  	}
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1070  	con->in_data_crc = crc;
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1071  
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1072  	return 1;	/* must return > 0 to indicate success */
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1073  }
+038b8d1d1ab1cc Ilya Dryomov 2021-12-30  1074  
 
-:::::: The code at line 110 was first introduced by commit
-:::::: c360192bf4a8dc72f102dd6a4e1bf8bd0b404cfa s390/preempt: move preempt_count to the lowcore
+:::::: The code at line 1066 was first introduced by commit
+:::::: 038b8d1d1ab1cce11a158d30bf080ff41a2cfd15 libceph: optionally use bounce buffer on recv path in crc mode
 
-:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
-:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
+:::::: TO: Ilya Dryomov <idryomov@gmail.com>
+:::::: CC: Ilya Dryomov <idryomov@gmail.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
