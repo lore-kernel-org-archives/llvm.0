@@ -1,34 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E55AEBD
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 17:27:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCDDCC340E7;
-	Wed, 23 Feb 2022 17:27:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D576CEBD
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 17:39:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4F2DC340E7;
+	Wed, 23 Feb 2022 17:39:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645637273;
-	bh=BZ72Cv96SDULoZqRBhdwvA8X1c4BIfcsSZ5Rny2PuLM=;
+	s=k20201202; t=1645637982;
+	bh=UB/fdzNnOIHMXBBBmk61V4+OoYvesbVZ2l0elnEufzg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FQmygXJJt2g54V+d9trXkiWWQ7HNa3uYnsgmfTn6/B4dZ5SMh4YaGrrt7GRNds8ZH
-	 ca94NfYv9xzDeUgKAYn/mqUPhvs9wEgDQiy99FDhAToFjjXygK6KA5tHDwXET17R8J
-	 hnpD2jrwkrz1jh5ZXtC8WX04Ts76+WfixivAPUt+DFgzd1sW4Gi3qmGOwnloxEyMJM
-	 E5LK4j8dUD6tK9xdFNsM8ZvmzDx4RmaQuNGu9DESaHaqoN7eYNMs1kIN2Iufkwdv0V
-	 xaCpPFNhNQWPQyVz1MncyaBU8arQl/1WA01U6Cjjr0wmX/xgLJqjIsNYfMbilN4xLd
-	 5fsrqlEinDLPg==
-Date: Wed, 23 Feb 2022 10:27:47 -0700
+	b=Kf3D2LPejolRCxzzwXBAjLaXRzKYJp3PVnWiPo6fUoWNajRrzf0DJpnrbGS310o+b
+	 d5Wp8WWyMsyHMqh1H4aXG7CkNqkqxv4nhSAXKmxgG0Wi4NmyoI0VJTpvgAse7fDhqh
+	 IEWoXVixG3N+TSSAF24zW1hB0F9jxPdSQghzIwFhmQqihwyNKVgQvCn5z5dfmBNCs9
+	 ynAGTrmCV1hFtBbw+754CjyRqQN4nDhp5+vTuDH098HsUtx/ZeikW8QnO3DspbBz89
+	 7KSa29WNpvX4IFs+d+kut4AytrYJVsnDTmBX/9nQDNosRbphm1Fr657UDS/CNoBrXU
+	 yp1WsX2CJWy7Q==
+Date: Wed, 23 Feb 2022 10:39:35 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>,
-	kvm@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Subject: Re: [PATCH] KVM: x86: Fix pointer mistmatch warning when patching
- RET0 static calls
-Message-ID: <YhZuk8eA6rsDuJkd@dev-arch.archlinux-ax161>
-References: <20220223162355.3174907-1-seanjc@google.com>
+To: Dan Li <ashimida@linux.alibaba.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, ndesaulniers@google.com,
+	keescook@chromium.org, masahiroy@kernel.org, tglx@linutronix.de,
+	akpm@linux-foundation.org, mark.rutland@arm.com,
+	samitolvanen@google.com, npiggin@gmail.com, linux@roeck-us.net,
+	mhiramat@kernel.org, ojeda@kernel.org, luc.vanoostenryck@gmail.com,
+	elver@google.com, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
+Message-ID: <YhZxVwoshSwwJkJO@dev-arch.archlinux-ax161>
+References: <20220222095736.24898-1-ashimida@linux.alibaba.com>
+ <YhUMRoLDan7tJRiL@dev-arch.archlinux-ax161>
+ <69d351c6-a69d-6ebb-53bc-b46dfe4da08a@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,56 +39,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223162355.3174907-1-seanjc@google.com>
+In-Reply-To: <69d351c6-a69d-6ebb-53bc-b46dfe4da08a@linux.alibaba.com>
 
-Hi Sean,
-
-On Wed, Feb 23, 2022 at 04:23:55PM +0000, Sean Christopherson wrote:
-> Cast kvm_x86_ops.func to 'void *' when updating KVM static calls that are
-> conditionally patched to __static_call_return0().  clang complains about
-> using mismatching pointers in the ternary operator, which breaks the
-> build when compiling with CONFIG_KVM_WERROR=y.
+On Wed, Feb 23, 2022 at 12:50:21AM -0800, Dan Li wrote:
 > 
->   >> arch/x86/include/asm/kvm-x86-ops.h:82:1: warning: pointer type mismatch
->   ('bool (*)(struct kvm_vcpu *)' and 'void *') [-Wpointer-type-mismatch]
 > 
-> Fixes: 5be2226f417d ("KVM: x86: allow defining return-0 static calls")
-> Reported-by: Like Xu <like.xu.linux@gmail.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-
-Thank you for the patch! Is this a bug in clang? I ended up creating a
-small reproducer in case we need to file a bug with clang upstream:
-
-https://godbolt.org/z/P7nEdzejE
-
-This does shut up the warning and I can still spawn guests on my AMD and
-Intel systems so:
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  arch/x86/include/asm/kvm_host.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> On 2/22/22 08:16, Nathan Chancellor wrote:
+> > On Tue, Feb 22, 2022 at 01:57:36AM -0800, Dan Li wrote:
+> > > Shadow call stack is available in GCC > 11.2.0, this patch makes
+> > > the corresponding kernel configuration available when compiling
+> > > the kernel with gcc.
+> > >   config SHADOW_CALL_STACK
+> > > -	bool "Clang Shadow Call Stack"
+> > > -	depends on CC_IS_CLANG && ARCH_SUPPORTS_SHADOW_CALL_STACK
+> > > +	bool "Shadow Call Stack"
+> > > +	depends on ARCH_SUPPORTS_SHADOW_CALL_STACK
+> > >   	depends on DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
+> > >   	help
+> > > -	  This option enables Clang's Shadow Call Stack, which uses a
+> > > +	  This option enables Clang/GCC's Shadow Call Stack, which uses a
+> > 
+> > I wonder if we want to just ditch the mention of the compiler if both
+> > support it?
+> > 
 > 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 713e08f62385..f285ddb8b66b 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1547,8 +1547,8 @@ static inline void kvm_ops_static_call_update(void)
->  	WARN_ON(!kvm_x86_ops.func); __KVM_X86_OP(func)
->  #define KVM_X86_OP_OPTIONAL __KVM_X86_OP
->  #define KVM_X86_OP_OPTIONAL_RET0(func) \
-> -	static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
-> -			   (void *) __static_call_return0);
-> +	static_call_update(kvm_x86_##func, (void *)kvm_x86_ops.func ? : \
-> +					   (void *)__static_call_return0);
->  #include <asm/kvm-x86-ops.h>
->  #undef __KVM_X86_OP
->  }
+> My intention is to remind users that this is a compiler feature.
+> But since there is also a hint in CC_HAVE_SHADOW_CALL_STACK:
+> +# Supported by clang >= 7.0 or GCC ...
 > 
-> base-commit: f4bc051fc91ab9f1d5225d94e52d369ef58bec58
-> -- 
-> 2.35.1.473.g83b2b277ed-goog
+> Removing the specific compiler here also looks fine to me.
+> Would this look better?
 > 
+> "This option enables Shadow Call Stack, which uses a ..."
+> 
+> or maybe:
+> 
+> "This option enables compiler's Shadow Call Stack, which uses a ..."
+
+I do not honestly have a strong opinion around removing mention of the
+compiler so either looks fine to me (might be better to say "the
+compiler's Shadow ..." in the second one).
+
+> > >   	  shadow stack to protect function return addresses from being
+> > >   	  overwritten by an attacker. More information can be found in
+> > >   	  Clang's documentation:
+> > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > > index 09b885cc4db5..a48a604301aa 100644
+> > > --- a/arch/arm64/Kconfig
+> > > +++ b/arch/arm64/Kconfig
+> > > @@ -1255,7 +1255,7 @@ config HW_PERF_EVENTS
+> > >   config ARCH_HAS_FILTER_PGPROT
+> > >   	def_bool y
+> > > -# Supported by clang >= 7.0
+> > > +# Supported by clang >= 7.0 or GCC > 11.2.0
+> > 
+> > Same thing here, although eventually there may be a minimum GCC version
+> > bump to something newer than 11.2.0, which would allow us to just drop
+> > CONFIG_CC_HAVE_SHADOW_CALL_STACK altogether. No strong opinion.
+> > 
+> 
+> As Guenter said, I thought maybe we could mark the minimum available
+> version for users :)
+
+Yes, that is what I was getting at with the "minimum version" comment.
+It should remain around.
+
+Cheers,
+Nathan
