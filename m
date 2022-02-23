@@ -1,48 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36AC800
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 05:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C80800
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 05:10:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645592419; x=1677128419;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6FLKm6fp0tyd6+4vW4Mst9f8YW1kXerksPWJZQnchhs=;
-  b=bemAQRmfBd4QjWuSoHkTYeRi9b2xigHFI9GkEPVoj4tCEYDEPty5FglH
-   AFGTXfjRwd4U33H3DXoRfLPJ9/mqmyn2noFz8WHWIDD3TkTw1XtEwchRF
-   +jlgocSyd/2dO/lrhlCZrCU5BJlgkp08ifDStJ24IbtVpoV56tdrlgT08
-   YXOC2KEfshhcJST8rbQOQKPzz6qntqtxJ0SF3YTqa+P4h+GgaiLswzkax
-   Fij2duv2TcoQ3jAEqzWbKEyD9iAYwaKLzlVS6sDu9thxCfGIDFueG5SuM
-   YIchs+t7NbsGO7hVTHRbkjMrYL6BNUt2zAWXaz3whfscZ66isGk4sVVXD
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="250710792"
+  t=1645593018; x=1677129018;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VkIlCTKu/Ajt9hsKrHvbW/AW/3dptdRZcGy7KrznaWs=;
+  b=KAoh0HNuY8GuhPc0NeMHiFFshF5LtZK7qvV4m6FpJQFm7rS8LGB/8a2c
+   RGlBOii1qt+QlAZtTSMyQHkrkiK7hHZsFU+9SiH/enuZc6xA/uJbbfQ7S
+   u4dYdmbZS1KXyladALdbP1j+EICvwB9+c+VpjgXjIP1P9uRWVO3GbngpP
+   GcOyjuwgX3+o7BAkq2rKH7aEcizlzl6QBC8s5g+oVLZvwjuhM/zWUAN8R
+   HVqhofEhkkF1Mm2o8LYtxPilq+bgFn0uQ1G062CKxtHpqkhqgFXalRWQV
+   sVJMnP3qanxIDHj2ZPWfft0TXrSPe5+dC/EQ993Kj2EnmT/BFGHCQnWXq
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="251805791"
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="250710792"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 21:00:19 -0800
+   d="scan'208";a="251805791"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 21:10:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="639175040"
+   d="scan'208";a="532531609"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 Feb 2022 21:00:16 -0800
+  by orsmga007.jf.intel.com with ESMTP; 22 Feb 2022 21:10:16 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMjl9-0000zj-DA; Wed, 23 Feb 2022 05:00:15 +0000
-Date: Wed, 23 Feb 2022 12:59:48 +0800
+	id 1nMjup-00010C-It; Wed, 23 Feb 2022 05:10:15 +0000
+Date: Wed, 23 Feb 2022 13:10:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Markuss Broks <markuss.broks@gmail.com>, linux-kernel@vger.kernel.org
+To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-	Markuss Broks <markuss.broks@gmail.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Henrik Rydberg <rydberg@bitmath.org>, linux-input@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] Input: add Imagis touchscreen driver
-Message-ID: <202202231213.Vj9yo4tW-lkp@intel.com>
-References: <20220222203414.8656-3-markuss.broks@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2000/2324]
+ arch/mips/kernel/irq-msc01.c:29:40: warning: declaration of 'struct
+ irq_data' will not be visible outside of this function
+Message-ID: <202202231337.vXRfwNhS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,87 +45,117 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222203414.8656-3-markuss.broks@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Markuss,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on linux/master robh/for-next linus/master v5.17-rc5 next-20220222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Markuss-Broks/Add-support-for-Imagis-touchscreens/20220223-043645
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220223/202202231213.Vj9yo4tW-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   7d9efc989eceed6a8fa475a186880ec4a1ad54a3
+commit: 59438ff3251170bd7d1c9795532bd3dcc127e3f2 [2000/2324] headers/deps: genirq: Optimize <linux/interrupt.h> dependencies, remove <linux/hardirq.h>
+config: mips-malta_kvm_defconfig (https://download.01.org/0day-ci/archive/20220223/202202231337.vXRfwNhS-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/bc77ee5e0d7309edca7d65925c6afa05334b0b01
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Markuss-Broks/Add-support-for-Imagis-touchscreens/20220223-043645
-        git checkout bc77ee5e0d7309edca7d65925c6afa05334b0b01
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=59438ff3251170bd7d1c9795532bd3dcc127e3f2
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 59438ff3251170bd7d1c9795532bd3dcc127e3f2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/input/touchscreen/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/ arch/mips/mti-malta/ arch/mips/pci/ drivers/rtc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/input/touchscreen/imagis.c:300:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (input_device_enabled(ts->input_dev))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/touchscreen/imagis.c:305:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/input/touchscreen/imagis.c:300:2: note: remove the 'if' if its condition is always true
-           if (input_device_enabled(ts->input_dev))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/touchscreen/imagis.c:296:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   drivers/input/touchscreen/imagis.c:316:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (input_device_enabled(ts->input_dev))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/touchscreen/imagis.c:321:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/input/touchscreen/imagis.c:316:2: note: remove the 'if' if its condition is always true
-           if (input_device_enabled(ts->input_dev))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/touchscreen/imagis.c:312:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   2 warnings generated.
+>> arch/mips/kernel/irq-msc01.c:29:40: warning: declaration of 'struct irq_data' will not be visible outside of this function [-Wvisibility]
+   static inline void mask_msc_irq(struct irq_data *d)
+                                          ^
+   arch/mips/kernel/irq-msc01.c:31:22: error: incomplete definition of type 'struct irq_data'
+           unsigned int irq = d->irq;
+                              ~^
+   arch/mips/kernel/irq-msc01.c:29:40: note: forward declaration of 'struct irq_data'
+   static inline void mask_msc_irq(struct irq_data *d)
+                                          ^
+   arch/mips/kernel/irq-msc01.c:40:42: warning: declaration of 'struct irq_data' will not be visible outside of this function [-Wvisibility]
+   static inline void unmask_msc_irq(struct irq_data *d)
+                                            ^
+   arch/mips/kernel/irq-msc01.c:42:22: error: incomplete definition of type 'struct irq_data'
+           unsigned int irq = d->irq;
+                              ~^
+   arch/mips/kernel/irq-msc01.c:40:42: note: forward declaration of 'struct irq_data'
+   static inline void unmask_msc_irq(struct irq_data *d)
+                                            ^
+   arch/mips/kernel/irq-msc01.c:53:47: warning: declaration of 'struct irq_data' will not be visible outside of this function [-Wvisibility]
+   static void level_mask_and_ack_msc_irq(struct irq_data *d)
+                                                 ^
+   arch/mips/kernel/irq-msc01.c:55:15: error: incompatible pointer types passing 'struct irq_data *' to parameter of type 'struct irq_data *' [-Werror,-Wincompatible-pointer-types]
+           mask_msc_irq(d);
+                        ^
+   arch/mips/kernel/irq-msc01.c:29:50: note: passing argument to parameter 'd' here
+   static inline void mask_msc_irq(struct irq_data *d)
+                                                    ^
+   arch/mips/kernel/irq-msc01.c:63:46: warning: declaration of 'struct irq_data' will not be visible outside of this function [-Wvisibility]
+   static void edge_mask_and_ack_msc_irq(struct irq_data *d)
+                                                ^
+   arch/mips/kernel/irq-msc01.c:65:22: error: incomplete definition of type 'struct irq_data'
+           unsigned int irq = d->irq;
+                              ~^
+   arch/mips/kernel/irq-msc01.c:63:46: note: forward declaration of 'struct irq_data'
+   static void edge_mask_and_ack_msc_irq(struct irq_data *d)
+                                                ^
+   arch/mips/kernel/irq-msc01.c:67:15: error: incompatible pointer types passing 'struct irq_data *' to parameter of type 'struct irq_data *' [-Werror,-Wincompatible-pointer-types]
+           mask_msc_irq(d);
+                        ^
+   arch/mips/kernel/irq-msc01.c:29:50: note: passing argument to parameter 'd' here
+   static inline void mask_msc_irq(struct irq_data *d)
+                                                    ^
+   arch/mips/kernel/irq-msc01.c:100:24: error: variable has incomplete type 'struct irq_chip'
+   static struct irq_chip msc_levelirq_type = {
+                          ^
+   arch/mips/kernel/irq-msc01.c:100:15: note: forward declaration of 'struct irq_chip'
+   static struct irq_chip msc_levelirq_type = {
+                 ^
+   arch/mips/kernel/irq-msc01.c:109:24: error: variable has incomplete type 'struct irq_chip'
+   static struct irq_chip msc_edgeirq_type = {
+                          ^
+   arch/mips/kernel/irq-msc01.c:100:15: note: forward declaration of 'struct irq_chip'
+   static struct irq_chip msc_levelirq_type = {
+                 ^
+   arch/mips/kernel/irq-msc01.c:133:4: error: implicit declaration of function 'irq_set_chip_and_handler_name' [-Werror,-Wimplicit-function-declaration]
+                           irq_set_chip_and_handler_name(irqbase + n,
+                           ^
+   arch/mips/kernel/irq-msc01.c:135:13: error: use of undeclared identifier 'handle_edge_irq'
+                                                         handle_edge_irq,
+                                                         ^
+   arch/mips/kernel/irq-msc01.c:145:13: error: use of undeclared identifier 'handle_level_irq'
+                                                         handle_level_irq,
+                                                         ^
+   4 warnings and 10 errors generated.
 
 
-vim +300 drivers/input/touchscreen/imagis.c
+vim +29 arch/mips/kernel/irq-msc01.c
 
-   291	
-   292	static int __maybe_unused imagis_suspend(struct device *dev)
-   293	{
-   294		struct i2c_client *client = to_i2c_client(dev);
-   295		struct imagis_ts *ts = i2c_get_clientdata(client);
-   296		int ret;
-   297	
-   298		mutex_lock(&ts->input_dev->mutex);
-   299	
- > 300		if (input_device_enabled(ts->input_dev))
-   301			ret = imagis_stop(ts);
-   302	
-   303		mutex_unlock(&ts->input_dev->mutex);
-   304	
-   305		return ret;
-   306	}
-   307	
+^1da177e4c3f415 Linus Torvalds  2005-04-16  27  
+^1da177e4c3f415 Linus Torvalds  2005-04-16  28  /* mask off an interrupt */
+e15883da8a8b83c Thomas Gleixner 2011-03-23 @29  static inline void mask_msc_irq(struct irq_data *d)
+^1da177e4c3f415 Linus Torvalds  2005-04-16  30  {
+e15883da8a8b83c Thomas Gleixner 2011-03-23  31  	unsigned int irq = d->irq;
+e15883da8a8b83c Thomas Gleixner 2011-03-23  32  
+^1da177e4c3f415 Linus Torvalds  2005-04-16  33  	if (irq < (irq_base + 32))
+^1da177e4c3f415 Linus Torvalds  2005-04-16  34  		MSCIC_WRITE(MSC01_IC_DISL, 1<<(irq - irq_base));
+^1da177e4c3f415 Linus Torvalds  2005-04-16  35  	else
+^1da177e4c3f415 Linus Torvalds  2005-04-16  36  		MSCIC_WRITE(MSC01_IC_DISH, 1<<(irq - irq_base - 32));
+^1da177e4c3f415 Linus Torvalds  2005-04-16  37  }
+^1da177e4c3f415 Linus Torvalds  2005-04-16  38  
+
+:::::: The code at line 29 was first introduced by commit
+:::::: e15883da8a8b83c73bf1ba030cddeb2cfd92a555 MIPS: MSC01: Convert to new irq_chip functions
+
+:::::: TO: Thomas Gleixner <tglx@linutronix.de>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
