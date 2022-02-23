@@ -1,57 +1,41 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB44D62A
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 12:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A01562A
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 12:47:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645619794; x=1677155794;
+  t=1645620452; x=1677156452;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OdSCkrvWTIGBVhz8S1EekPKKnza/NTZR76i2du7AwlM=;
-  b=K0oljg/hJDQcZZZzIi5G6kTt13pUYHZj92EbnVHm915pDJVZA6eGrG76
-   lUPplJflzUgD/9LlrHOI9UG27n5n23BcF916SmIdHb7WEz4C1b4A5uCCy
-   6+JPTL4D8gFcxvqrOxaRHOEnCzC0+GOEiC1ATrcHNwqjGMoxMDmyTBf83
-   WuonjCMg00HJ+qhyCaOMgF80gDzVma6fcKzqlmHbzVv93xClL7Vgp6i7G
-   eZFvtwjx8GM/gYXWACLOJm1Hx5CJPkc9j7S22tgmAMiqzs7IzlcPQt0QN
-   W3pexn4Xy8VLJE+75YYD7CKrGDhe2VEaa/S0TdzAYm9DBQqcFPpTh4sdv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="276571318"
+  bh=40R8y5mfM19mjGFaPRSHjolz9q9P3C6aH+9x9F59J2c=;
+  b=KhXcYXEIAnLPG/Vz/LDRUXGWkq0dttK/8llbGcKWm+0VO0odPfKCiIMd
+   zC+yz3QMYI3ymSUerkSyOBY/UmdUfbBbuEOZyZiHOkpQ1Q4RbFrGmGnfu
+   AEQf08VflsmupobFQnWC8L7PxWaiWwe5plE6TxRRTK1JC8rvOcf9eLOkB
+   UABG03k5xYBjqgzujcGefDs/F5NQ1uFjCv52BSZt4NViL3tMUWZ+hIRd7
+   v6hSfbrBpNxL9MnY6hmGqLF+BNtmzUA91tMIo/RBmYOD5vk55yUOC8VX9
+   lVAeLrM6NRSxDRdwGYjQp2kLPuBj3TTFAITA/aMs7/puSLk0y9kWoKSTh
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="315180169"
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="276571318"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:36:33 -0800
+   d="scan'208";a="315180169"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:47:31 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="532666200"
-Received: from rli9-dbox.sh.intel.com (HELO rli9-dbox) ([10.239.159.142])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:36:26 -0800
-Date: Wed, 23 Feb 2022 20:34:05 +0800
-From: Philip Li <philip.li@intel.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Kalesh Singh <kaleshsingh@google.com>,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, will@kernel.org, qperret@google.com,
-	tabba@google.com, surenb@google.com, kernel-team@android.com,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	James Morse <james.morse@arm.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Peter Collingbourne <pcc@google.com>,
-	Andrew Scull <ascull@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kvmarm@lists.cs.columbia.edu
-Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
- hypervisor stack overflows
-Message-ID: <YhYpvfZaSjrAtkZp@rli9-dbox>
-References: <20220222165212.2005066-7-kaleshsingh@google.com>
- <202202231727.L621fVgD-lkp@intel.com>
- <875yp63ptg.wl-maz@kernel.org>
+   d="scan'208";a="591689186"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Feb 2022 04:47:30 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nMr3J-0001Of-UY; Wed, 23 Feb 2022 12:47:29 +0000
+Date: Wed, 23 Feb 2022 20:46:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suraj Kandpal <suraj.kandpal@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [Intel-gfx] [RFC PATCH 2/2] drm/i915: Enabling WD Transcoder
+Message-ID: <202202231835.QH8Iu0VY-lkp@intel.com>
+References: <20220223062043.8337-3-suraj.kandpal@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,73 +44,133 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <875yp63ptg.wl-maz@kernel.org>
+In-Reply-To: <20220223062043.8337-3-suraj.kandpal@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Feb 23, 2022 at 09:16:59AM +0000, Marc Zyngier wrote:
-> On Wed, 23 Feb 2022 09:05:18 +0000,
-> kernel test robot <lkp@intel.com> wrote:
-> > 
-> > Hi Kalesh,
-> > 
-> > Thank you for the patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
-> > 
-> > url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
-> > base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
-> > config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm64 cross compiling tool for clang build
-> >         # apt-get install binutils-aarch64-linux-gnu
-> >         # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
-> >         git remote add linux-review https://github.com/0day-ci/linux
-> >         git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
-> >         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-> >    #define NULL ((void *)0)
-> >                 ^~~~~~~~~~~
-> >    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-> >            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
-> >                                              ^~~~~~~~~~~~~~~~~~~~~
-> >    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
-> >            [0 ... ESR_ELx_EC_MAX]          = NULL,
-> >                                              ^~~~
-> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-> >    #define NULL ((void *)0)
-> >                 ^~~~~~~~~~~
-> 
-> Kalesh, please ignore this nonsense. There may be things to improve,
-> but this is *NOT* one of them.
-> 
-> These reports are pretty useless, and just lead people to ignore real
-> bug reports.
+Hi Suraj,
 
-Hi Kalesh, sorry there're some irrelevant issues mixed in the report,
-kindly ignore them. And the valuable ones are the new ones that
-prefixed by >>, as the below one in original report.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on drm-intel/for-linux-next]
+[also build test ERROR on drm-tip/drm-tip next-20220222]
+[cannot apply to v5.17-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
->> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
-   void __noreturn hyp_panic_bad_stack(void)
-                   ^
-Thanks
+url:    https://github.com/0day-ci/linux/commits/Suraj-Kandpal/Patches-to-enable-writeback-in-i915/20220223-141252
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: i386-randconfig-a014-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231835.QH8Iu0VY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0bebda2fa91f41b1cd2c0ff7aa92fc6c653bc03c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Suraj-Kandpal/Patches-to-enable-writeback-in-i915/20220223-141252
+        git checkout 0bebda2fa91f41b1cd2c0ff7aa92fc6c653bc03c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-> 
-> 	M.
-> 
-> -- 
-> Without deviation from the norm, progress is not possible.
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/display/intel_display.c:1575:38: error: no member named 'wb_connector' in 'struct drm_connector'
+                   drm_writeback_queue_job(connector->wb_connector, new_conn_state);
+                                           ~~~~~~~~~  ^
+   1 error generated.
+--
+>> drivers/gpu/drm/i915/display/intel_wd.c:50:38: error: no member named 'wb_connector' in 'struct drm_connector'
+                   intel_wd->attached_connector->base.wb_connector;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+>> drivers/gpu/drm/i915/display/intel_wd.c:66:6: warning: no previous prototype for function 'print_connectors' [-Wmissing-prototypes]
+   void print_connectors(struct drm_i915_private *dev_priv)
+        ^
+   drivers/gpu/drm/i915/display/intel_wd.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void print_connectors(struct drm_i915_private *dev_priv)
+   ^
+   static 
+>> drivers/gpu/drm/i915/display/intel_wd.c:397:16: error: assigning to 'struct drm_connector' from incompatible type 'struct drm_connector *'; remove &
+           wb_conn->base = &intel_connector->base;
+                         ^ ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/i915/display/intel_wd.c:398:19: error: assigning to 'struct drm_encoder' from incompatible type 'struct drm_encoder *'; remove &
+           wb_conn->encoder = &intel_wd->base.base;
+                            ^ ~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/i915/display/intel_wd.c:430:27: error: passing 'struct drm_connector' to parameter of incompatible type 'struct drm_connector *'; take the address with &
+           drm_connector_helper_add(wb_conn->base, &wd_connector_helper_funcs);
+                                    ^~~~~~~~~~~~~
+                                    &
+   include/drm/drm_modeset_helper_vtables.h:1153:67: note: passing argument to parameter 'connector' here
+   static inline void drm_connector_helper_add(struct drm_connector *connector,
+                                                                     ^
+>> drivers/gpu/drm/i915/display/intel_wd.c:432:15: error: member reference type 'struct drm_connector' is not a pointer; did you mean to use '.'?
+           wb_conn->base->status = connector_status_connected;
+           ~~~~~~~~~~~~~^~
+                        .
+>> drivers/gpu/drm/i915/display/intel_wd.c:432:24: error: expression is not assignable
+           wb_conn->base->status = connector_status_connected;
+           ~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/gpu/drm/i915/display/intel_wd.c:444:38: error: no member named 'wb_connector' in 'struct drm_connector'
+                   intel_wd->attached_connector->base.wb_connector;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+>> drivers/gpu/drm/i915/display/intel_wd.c:440:6: warning: no previous prototype for function 'intel_wd_writeback_complete' [-Wmissing-prototypes]
+   void intel_wd_writeback_complete(struct intel_wd *intel_wd,
+        ^
+   drivers/gpu/drm/i915/display/intel_wd.c:440:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void intel_wd_writeback_complete(struct intel_wd *intel_wd,
+   ^
+   static 
+>> drivers/gpu/drm/i915/display/intel_wd.c:448:5: warning: no previous prototype for function 'intel_wd_setup_transcoder' [-Wmissing-prototypes]
+   int intel_wd_setup_transcoder(struct intel_wd *intel_wd,
+       ^
+   drivers/gpu/drm/i915/display/intel_wd.c:448:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int intel_wd_setup_transcoder(struct intel_wd *intel_wd,
+   ^
+   static 
+>> drivers/gpu/drm/i915/display/intel_wd.c:613:5: warning: no previous prototype for function 'intel_wd_capture' [-Wmissing-prototypes]
+   int intel_wd_capture(struct intel_wd *intel_wd,
+       ^
+   drivers/gpu/drm/i915/display/intel_wd.c:613:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int intel_wd_capture(struct intel_wd *intel_wd,
+   ^
+   static 
+   4 warnings and 7 errors generated.
+
+
+vim +1575 drivers/gpu/drm/i915/display/intel_display.c
+
+  1551	
+  1552	static void intel_queue_writeback_job(struct intel_atomic_state *state,
+  1553			struct intel_crtc *intel_crtc, struct intel_crtc_state *crtc_state)
+  1554	{
+  1555		struct drm_connector_state *new_conn_state;
+  1556		struct drm_connector *connector;
+  1557		struct drm_i915_private *dev_priv = to_i915(intel_crtc->base.dev);
+  1558		struct intel_wd *intel_wd;
+  1559		struct intel_encoder *encoder;
+  1560		int i;
+  1561	
+  1562		for_each_intel_encoder_with_wd(&dev_priv->drm, encoder) {
+  1563			intel_wd = enc_to_intel_wd(encoder);
+  1564	
+  1565			if (intel_wd->wd_crtc != intel_crtc)
+  1566				return;
+  1567	
+  1568		}
+  1569	
+  1570		for_each_new_connector_in_state(&state->base, connector, new_conn_state,
+  1571						i) {
+  1572			if (!new_conn_state->writeback_job)
+  1573				continue;
+  1574	
+> 1575			drm_writeback_queue_job(connector->wb_connector, new_conn_state);
+  1576			drm_dbg_kms(&dev_priv->drm, "queueing writeback job\n");
+  1577		}
+  1578	}
+  1579	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
