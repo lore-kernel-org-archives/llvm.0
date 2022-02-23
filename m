@@ -1,45 +1,41 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B0B64E
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 01:44:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F91B64E
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 02:15:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645580653; x=1677116653;
+  t=1645582515; x=1677118515;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/na68BmwfNyxGVFT5C6eEJf+tN2PqzEAB+w5bQ4l544=;
-  b=eVzxIA+J5pd6e4KjKbYxWIR1F1nnRLMpk0+he4Eb3E4kGX1u9er7qCBU
-   Pdt6kG/kHPgkWLsz1ptjHDn21eYRJBpdySnc+KfqbbRkO3KNh/XvKvz8P
-   C5NEnJqq8kRqoFa0fCmEoZk6hs1rPS7PULjNUZxhIY8fEMgRYYS7fupiN
-   LgcabzQrRkzDpm0Rnyqg9JNv2HDVKRMnVQnFDIt+59k+yohukJlyrI2JB
-   mTGXMA60YBVWJnZ2ACnriEDE48FsRDR6Yr4xVjpI02XsMTdeeVcL7ztqp
-   nBoQ6rWGx7IvEv1zmXv8J0UfRhtQY77SA0N0TIY2GTNzcz+tBDEkHgbEr
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="239247805"
+  bh=TBR2m15LxR1rz1jzShUqlZ1KJmeyHe43BzY3hbXsQyE=;
+  b=iRHxGtc4gIyyas+DLAI1iEv0C0kdV3IY9FINv9D4lnG84ka6F3UoUivs
+   e25DASbfPoIIU7VpX6qJRnWs5TtBNHn5dWbYZ/fR8RHkwQpSpJIv5r8ee
+   v2eAuPqQUdX133uK+68Edi3fbZ+nN29LgBnhgkETtB10d0ODQTHsyBOvc
+   fdORDCzyriIfhe+5oO8mIquJ4CPQ1ENsP6KLQyyM+u1eseVTXAxiyujr4
+   hrrJsTVfw49EyRteTfxCtXg9c1AYw2o5NrKaRj92jjGTC4wkvSNI3pYgk
+   ZQU8IVsKOSeEAXaOl4Yi/Tyb8LJWwyDaEjMV5lIcOHGnx22Hnn9r7zCAr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="232485557"
 X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
-   d="scan'208";a="239247805"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 17:44:12 -0800
+   d="scan'208";a="232485557"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 18:15:14 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
-   d="scan'208";a="706843524"
+   d="scan'208";a="639138218"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 22 Feb 2022 17:44:10 -0800
+  by orsmga004.jf.intel.com with ESMTP; 22 Feb 2022 18:15:12 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMghN-0000ph-JX; Wed, 23 Feb 2022 01:44:09 +0000
-Date: Wed, 23 Feb 2022 09:43:48 +0800
+	id 1nMhBP-0000ro-M2; Wed, 23 Feb 2022 02:15:11 +0000
+Date: Wed, 23 Feb 2022 10:14:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
-	Robert Hu <robert.hu@intel.com>,
-	Farrah Chen <farrah.chen@intel.com>,
-	Danmei Wei <danmei.wei@intel.com>,
-	Sean Christopherson <seanjc@google.com>
-Subject: [kvm:next 100/102] arch/x86/include/asm/kvm-x86-ops.h:82:1: warning:
- pointer type mismatch ('bool (*)(struct kvm_vcpu *)' (aka '_Bool (*)(struct
- kvm_vcpu *)') and 'void *')
-Message-ID: <202202230922.YPbPSQvc-lkp@intel.com>
+To: hanchuanhua <hanchuanhua@oppo.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [palmer:for-next 3/3] arch/riscv/mm/fault.c:126:2: error: use of
+ undeclared identifier 'pgd'
+Message-ID: <202202231026.MjophNbG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,217 +46,123 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git next
-head:   0828824158b1cb8108bb2b1f5eeab5826e6017e7
-commit: 5be2226f417d5b06d17e6c52d6e341cf43c29e48 [100/102] KVM: x86: allow defining return-0 static calls
-config: x86_64-randconfig-c007-20220221 (https://download.01.org/0day-ci/archive/20220223/202202230922.YPbPSQvc-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git for-next
+head:   c4f1d47294c4a59c09d14c5802bc0e978bad7b9a
+commit: c4f1d47294c4a59c09d14c5802bc0e978bad7b9a [3/3] riscv: mm: Remove the copy operation of pmd
+config: riscv-randconfig-r042-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231026.MjophNbG-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=5be2226f417d5b06d17e6c52d6e341cf43c29e48
-        git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
-        git fetch --no-tags kvm next
-        git checkout 5be2226f417d5b06d17e6c52d6e341cf43c29e48
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?id=c4f1d47294c4a59c09d14c5802bc0e978bad7b9a
+        git remote add palmer https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git
+        git fetch --no-tags palmer for-next
+        git checkout c4f1d47294c4a59c09d14c5802bc0e978bad7b9a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/kvm/../../../virt/kvm/kvm_main.c:18:
-   In file included from include/linux/kvm_host.h:45:
-   In file included from arch/x86/include/asm/kvm_host.h:1557:
->> arch/x86/include/asm/kvm-x86-ops.h:82:1: warning: pointer type mismatch ('bool (*)(struct kvm_vcpu *)' (aka '_Bool (*)(struct kvm_vcpu *)') and 'void *') [-Wpointer-type-mismatch]
-   KVM_X86_OP_OPTIONAL_RET0(guest_apic_has_interrupt)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/kvm_host.h:1555:54: note: expanded from macro 'KVM_X86_OP_OPTIONAL_RET0'
-           static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/static_call.h:154:42: note: expanded from macro 'static_call_update'
-           typeof(&STATIC_CALL_TRAMP(name)) __F = (func);                  \
-                                                   ^~~~
-   In file included from arch/x86/kvm/../../../virt/kvm/kvm_main.c:18:
-   In file included from include/linux/kvm_host.h:45:
-   In file included from arch/x86/include/asm/kvm_host.h:1557:
->> arch/x86/include/asm/kvm-x86-ops.h:88:1: warning: pointer type mismatch ('int (*)(struct kvm *, unsigned int)' and 'void *') [-Wpointer-type-mismatch]
-   KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/kvm_host.h:1555:54: note: expanded from macro 'KVM_X86_OP_OPTIONAL_RET0'
-           static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/static_call.h:154:42: note: expanded from macro 'static_call_update'
-           typeof(&STATIC_CALL_TRAMP(name)) __F = (func);                  \
-                                                   ^~~~
-   In file included from arch/x86/kvm/../../../virt/kvm/kvm_main.c:18:
-   In file included from include/linux/kvm_host.h:45:
-   In file included from arch/x86/include/asm/kvm_host.h:1557:
->> arch/x86/include/asm/kvm-x86-ops.h:89:1: warning: pointer type mismatch ('int (*)(struct kvm *, u64)' (aka 'int (*)(struct kvm *, unsigned long long)') and 'void *') [-Wpointer-type-mismatch]
-   KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/kvm_host.h:1555:54: note: expanded from macro 'KVM_X86_OP_OPTIONAL_RET0'
-           static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/static_call.h:154:42: note: expanded from macro 'static_call_update'
-           typeof(&STATIC_CALL_TRAMP(name)) __F = (func);                  \
-                                                   ^~~~
-   In file included from arch/x86/kvm/../../../virt/kvm/kvm_main.c:18:
-   In file included from include/linux/kvm_host.h:45:
-   In file included from arch/x86/include/asm/kvm_host.h:1557:
->> arch/x86/include/asm/kvm-x86-ops.h:90:1: warning: pointer type mismatch ('u64 (*)(struct kvm_vcpu *, gfn_t, bool)' (aka 'unsigned long long (*)(struct kvm_vcpu *, unsigned long long, _Bool)') and 'void *') [-Wpointer-type-mismatch]
-   KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/kvm_host.h:1555:54: note: expanded from macro 'KVM_X86_OP_OPTIONAL_RET0'
-           static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/static_call.h:154:42: note: expanded from macro 'static_call_update'
-           typeof(&STATIC_CALL_TRAMP(name)) __F = (func);                  \
-                                                   ^~~~
-   In file included from arch/x86/kvm/../../../virt/kvm/kvm_main.c:18:
-   In file included from include/linux/kvm_host.h:45:
-   In file included from arch/x86/include/asm/kvm_host.h:1557:
-   arch/x86/include/asm/kvm-x86-ops.h:108:1: warning: pointer type mismatch ('bool (*)(struct kvm_vcpu *)' (aka '_Bool (*)(struct kvm_vcpu *)') and 'void *') [-Wpointer-type-mismatch]
-   KVM_X86_OP_OPTIONAL_RET0(dy_apicv_has_pending_interrupt)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/kvm_host.h:1555:54: note: expanded from macro 'KVM_X86_OP_OPTIONAL_RET0'
-           static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/static_call.h:154:42: note: expanded from macro 'static_call_update'
-           typeof(&STATIC_CALL_TRAMP(name)) __F = (func);                  \
-                                                   ^~~~
-   5 warnings generated.
+>> arch/riscv/mm/fault.c:126:2: error: use of undeclared identifier 'pgd'
+           pgd = (pgd_t *)pfn_to_virt(pfn) + index;
+           ^
+   arch/riscv/mm/fault.c:133:10: error: use of undeclared identifier 'pgd'
+           set_pgd(pgd, *pgd_k);
+                   ^
+   2 errors generated.
 
 
-vim +82 arch/x86/include/asm/kvm-x86-ops.h
+vim +/pgd +126 arch/riscv/mm/fault.c
 
-     5	
-     6	/*
-     7	 * KVM_X86_OP() and KVM_X86_OP_OPTIONAL() are used to help generate
-     8	 * both DECLARE/DEFINE_STATIC_CALL() invocations and
-     9	 * "static_call_update()" calls.
-    10	 *
-    11	 * KVM_X86_OP_OPTIONAL() can be used for those functions that can have
-    12	 * a NULL definition, for example if "static_call_cond()" will be used
-    13	 * at the call sites.  KVM_X86_OP_OPTIONAL_RET0() can be used likewise
-    14	 * to make a definition optional, but in this case the default will
-    15	 * be __static_call_return0.
-    16	 */
-    17	KVM_X86_OP(hardware_enable)
-    18	KVM_X86_OP(hardware_disable)
-    19	KVM_X86_OP(hardware_unsetup)
-    20	KVM_X86_OP(has_emulated_msr)
-    21	KVM_X86_OP(vcpu_after_set_cpuid)
-    22	KVM_X86_OP(vm_init)
-    23	KVM_X86_OP_OPTIONAL(vm_destroy)
-    24	KVM_X86_OP(vcpu_create)
-    25	KVM_X86_OP(vcpu_free)
-    26	KVM_X86_OP(vcpu_reset)
-    27	KVM_X86_OP(prepare_switch_to_guest)
-    28	KVM_X86_OP(vcpu_load)
-    29	KVM_X86_OP(vcpu_put)
-    30	KVM_X86_OP(update_exception_bitmap)
-    31	KVM_X86_OP(get_msr)
-    32	KVM_X86_OP(set_msr)
-    33	KVM_X86_OP(get_segment_base)
-    34	KVM_X86_OP(get_segment)
-    35	KVM_X86_OP(get_cpl)
-    36	KVM_X86_OP(set_segment)
-    37	KVM_X86_OP(get_cs_db_l_bits)
-    38	KVM_X86_OP(set_cr0)
-    39	KVM_X86_OP_OPTIONAL(post_set_cr3)
-    40	KVM_X86_OP(is_valid_cr4)
-    41	KVM_X86_OP(set_cr4)
-    42	KVM_X86_OP(set_efer)
-    43	KVM_X86_OP(get_idt)
-    44	KVM_X86_OP(set_idt)
-    45	KVM_X86_OP(get_gdt)
-    46	KVM_X86_OP(set_gdt)
-    47	KVM_X86_OP(sync_dirty_debug_regs)
-    48	KVM_X86_OP(set_dr7)
-    49	KVM_X86_OP(cache_reg)
-    50	KVM_X86_OP(get_rflags)
-    51	KVM_X86_OP(set_rflags)
-    52	KVM_X86_OP(get_if_flag)
-    53	KVM_X86_OP(flush_tlb_all)
-    54	KVM_X86_OP(flush_tlb_current)
-    55	KVM_X86_OP_OPTIONAL(tlb_remote_flush)
-    56	KVM_X86_OP_OPTIONAL(tlb_remote_flush_with_range)
-    57	KVM_X86_OP(flush_tlb_gva)
-    58	KVM_X86_OP(flush_tlb_guest)
-    59	KVM_X86_OP(vcpu_pre_run)
-    60	KVM_X86_OP(vcpu_run)
-    61	KVM_X86_OP(handle_exit)
-    62	KVM_X86_OP(skip_emulated_instruction)
-    63	KVM_X86_OP_OPTIONAL(update_emulated_instruction)
-    64	KVM_X86_OP(set_interrupt_shadow)
-    65	KVM_X86_OP(get_interrupt_shadow)
-    66	KVM_X86_OP(patch_hypercall)
-    67	KVM_X86_OP(inject_irq)
-    68	KVM_X86_OP(inject_nmi)
-    69	KVM_X86_OP(queue_exception)
-    70	KVM_X86_OP(cancel_injection)
-    71	KVM_X86_OP(interrupt_allowed)
-    72	KVM_X86_OP(nmi_allowed)
-    73	KVM_X86_OP(get_nmi_mask)
-    74	KVM_X86_OP(set_nmi_mask)
-    75	KVM_X86_OP(enable_nmi_window)
-    76	KVM_X86_OP(enable_irq_window)
-    77	KVM_X86_OP_OPTIONAL(update_cr8_intercept)
-    78	KVM_X86_OP(check_apicv_inhibit_reasons)
-    79	KVM_X86_OP(refresh_apicv_exec_ctrl)
-    80	KVM_X86_OP_OPTIONAL(hwapic_irr_update)
-    81	KVM_X86_OP_OPTIONAL(hwapic_isr_update)
-  > 82	KVM_X86_OP_OPTIONAL_RET0(guest_apic_has_interrupt)
-    83	KVM_X86_OP_OPTIONAL(load_eoi_exitmap)
-    84	KVM_X86_OP_OPTIONAL(set_virtual_apic_mode)
-    85	KVM_X86_OP_OPTIONAL(set_apic_access_page_addr)
-    86	KVM_X86_OP(deliver_interrupt)
-    87	KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
-  > 88	KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
-  > 89	KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
-  > 90	KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
-    91	KVM_X86_OP(load_mmu_pgd)
-    92	KVM_X86_OP(has_wbinvd_exit)
-    93	KVM_X86_OP(get_l2_tsc_offset)
-    94	KVM_X86_OP(get_l2_tsc_multiplier)
-    95	KVM_X86_OP(write_tsc_offset)
-    96	KVM_X86_OP(write_tsc_multiplier)
-    97	KVM_X86_OP(get_exit_info)
-    98	KVM_X86_OP(check_intercept)
-    99	KVM_X86_OP(handle_exit_irqoff)
-   100	KVM_X86_OP(request_immediate_exit)
-   101	KVM_X86_OP(sched_in)
-   102	KVM_X86_OP_OPTIONAL(update_cpu_dirty_logging)
-   103	KVM_X86_OP_OPTIONAL(vcpu_blocking)
-   104	KVM_X86_OP_OPTIONAL(vcpu_unblocking)
-   105	KVM_X86_OP_OPTIONAL(pi_update_irte)
-   106	KVM_X86_OP_OPTIONAL(pi_start_assignment)
-   107	KVM_X86_OP_OPTIONAL(apicv_post_state_restore)
-   108	KVM_X86_OP_OPTIONAL_RET0(dy_apicv_has_pending_interrupt)
-   109	KVM_X86_OP_OPTIONAL(set_hv_timer)
-   110	KVM_X86_OP_OPTIONAL(cancel_hv_timer)
-   111	KVM_X86_OP(setup_mce)
-   112	KVM_X86_OP(smi_allowed)
-   113	KVM_X86_OP(enter_smm)
-   114	KVM_X86_OP(leave_smm)
-   115	KVM_X86_OP(enable_smi_window)
-   116	KVM_X86_OP_OPTIONAL(mem_enc_ioctl)
-   117	KVM_X86_OP_OPTIONAL(mem_enc_register_region)
-   118	KVM_X86_OP_OPTIONAL(mem_enc_unregister_region)
-   119	KVM_X86_OP_OPTIONAL(vm_copy_enc_context_from)
-   120	KVM_X86_OP_OPTIONAL(vm_move_enc_context_from)
-   121	KVM_X86_OP(get_msr_feature)
-   122	KVM_X86_OP(can_emulate_instruction)
-   123	KVM_X86_OP(apic_init_signal_blocked)
-   124	KVM_X86_OP_OPTIONAL(enable_direct_tlbflush)
-   125	KVM_X86_OP_OPTIONAL(migrate_timers)
-   126	KVM_X86_OP(msr_filter_changed)
-   127	KVM_X86_OP(complete_emulated_msr)
-   128	KVM_X86_OP(vcpu_deliver_sipi_vector)
-   129	
+a51271d99cdd04 Pekka Enberg 2020-08-25  101  
+2baa6d9506f24d Pekka Enberg 2020-09-05  102  static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long addr)
+ac416a724f1132 Pekka Enberg 2020-08-25  103  {
+c4f1d47294c4a5 hanchuanhua  2022-01-27  104  	pgd_t *pgd_k;
+c4f1d47294c4a5 hanchuanhua  2022-01-27  105  	pud_t *pud_k;
+c4f1d47294c4a5 hanchuanhua  2022-01-27  106  	p4d_t *p4d_k;
+c4f1d47294c4a5 hanchuanhua  2022-01-27  107  	pmd_t *pmd_k;
+ac416a724f1132 Pekka Enberg 2020-08-25  108  	pte_t *pte_k;
+ac416a724f1132 Pekka Enberg 2020-08-25  109  	int index;
+bcacf5f6f239a9 Liu Shaohua  2020-10-26  110  	unsigned long pfn;
+ac416a724f1132 Pekka Enberg 2020-08-25  111  
+ac416a724f1132 Pekka Enberg 2020-08-25  112  	/* User mode accesses just cause a SIGSEGV */
+ac416a724f1132 Pekka Enberg 2020-08-25  113  	if (user_mode(regs))
+ac416a724f1132 Pekka Enberg 2020-08-25  114  		return do_trap(regs, SIGSEGV, code, addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  115  
+ac416a724f1132 Pekka Enberg 2020-08-25  116  	/*
+ac416a724f1132 Pekka Enberg 2020-08-25  117  	 * Synchronize this task's top level page-table
+ac416a724f1132 Pekka Enberg 2020-08-25  118  	 * with the 'reference' page table.
+ac416a724f1132 Pekka Enberg 2020-08-25  119  	 *
+ac416a724f1132 Pekka Enberg 2020-08-25  120  	 * Do _not_ use "tsk->active_mm->pgd" here.
+ac416a724f1132 Pekka Enberg 2020-08-25  121  	 * We might be inside an interrupt in the middle
+ac416a724f1132 Pekka Enberg 2020-08-25  122  	 * of a task switch.
+ac416a724f1132 Pekka Enberg 2020-08-25  123  	 */
+ac416a724f1132 Pekka Enberg 2020-08-25  124  	index = pgd_index(addr);
+bcacf5f6f239a9 Liu Shaohua  2020-10-26  125  	pfn = csr_read(CSR_SATP) & SATP_PPN;
+bcacf5f6f239a9 Liu Shaohua  2020-10-26 @126  	pgd = (pgd_t *)pfn_to_virt(pfn) + index;
+ac416a724f1132 Pekka Enberg 2020-08-25  127  	pgd_k = init_mm.pgd + index;
+ac416a724f1132 Pekka Enberg 2020-08-25  128  
+ac416a724f1132 Pekka Enberg 2020-08-25  129  	if (!pgd_present(*pgd_k)) {
+ac416a724f1132 Pekka Enberg 2020-08-25  130  		no_context(regs, addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  131  		return;
+ac416a724f1132 Pekka Enberg 2020-08-25  132  	}
+ac416a724f1132 Pekka Enberg 2020-08-25  133  	set_pgd(pgd, *pgd_k);
+ac416a724f1132 Pekka Enberg 2020-08-25  134  
+ac416a724f1132 Pekka Enberg 2020-08-25  135  	p4d_k = p4d_offset(pgd_k, addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  136  	if (!p4d_present(*p4d_k)) {
+ac416a724f1132 Pekka Enberg 2020-08-25  137  		no_context(regs, addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  138  		return;
+ac416a724f1132 Pekka Enberg 2020-08-25  139  	}
+ac416a724f1132 Pekka Enberg 2020-08-25  140  
+ac416a724f1132 Pekka Enberg 2020-08-25  141  	pud_k = pud_offset(p4d_k, addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  142  	if (!pud_present(*pud_k)) {
+ac416a724f1132 Pekka Enberg 2020-08-25  143  		no_context(regs, addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  144  		return;
+ac416a724f1132 Pekka Enberg 2020-08-25  145  	}
+ac416a724f1132 Pekka Enberg 2020-08-25  146  
+ac416a724f1132 Pekka Enberg 2020-08-25  147  	/*
+ac416a724f1132 Pekka Enberg 2020-08-25  148  	 * Since the vmalloc area is global, it is unnecessary
+ac416a724f1132 Pekka Enberg 2020-08-25  149  	 * to copy individual PTEs
+ac416a724f1132 Pekka Enberg 2020-08-25  150  	 */
+ac416a724f1132 Pekka Enberg 2020-08-25  151  	pmd_k = pmd_offset(pud_k, addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  152  	if (!pmd_present(*pmd_k)) {
+ac416a724f1132 Pekka Enberg 2020-08-25  153  		no_context(regs, addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  154  		return;
+ac416a724f1132 Pekka Enberg 2020-08-25  155  	}
+ac416a724f1132 Pekka Enberg 2020-08-25  156  
+ac416a724f1132 Pekka Enberg 2020-08-25  157  	/*
+ac416a724f1132 Pekka Enberg 2020-08-25  158  	 * Make sure the actual PTE exists as well to
+ac416a724f1132 Pekka Enberg 2020-08-25  159  	 * catch kernel vmalloc-area accesses to non-mapped
+ac416a724f1132 Pekka Enberg 2020-08-25  160  	 * addresses. If we don't do this, this will just
+ac416a724f1132 Pekka Enberg 2020-08-25  161  	 * silently loop forever.
+ac416a724f1132 Pekka Enberg 2020-08-25  162  	 */
+ac416a724f1132 Pekka Enberg 2020-08-25  163  	pte_k = pte_offset_kernel(pmd_k, addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  164  	if (!pte_present(*pte_k)) {
+ac416a724f1132 Pekka Enberg 2020-08-25  165  		no_context(regs, addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  166  		return;
+ac416a724f1132 Pekka Enberg 2020-08-25  167  	}
+ac416a724f1132 Pekka Enberg 2020-08-25  168  
+ac416a724f1132 Pekka Enberg 2020-08-25  169  	/*
+ac416a724f1132 Pekka Enberg 2020-08-25  170  	 * The kernel assumes that TLBs don't cache invalid
+ac416a724f1132 Pekka Enberg 2020-08-25  171  	 * entries, but in RISC-V, SFENCE.VMA specifies an
+ac416a724f1132 Pekka Enberg 2020-08-25  172  	 * ordering constraint, not a cache flush; it is
+ac416a724f1132 Pekka Enberg 2020-08-25  173  	 * necessary even after writing invalid entries.
+ac416a724f1132 Pekka Enberg 2020-08-25  174  	 */
+ac416a724f1132 Pekka Enberg 2020-08-25  175  	local_flush_tlb_page(addr);
+ac416a724f1132 Pekka Enberg 2020-08-25  176  }
+ac416a724f1132 Pekka Enberg 2020-08-25  177  
+
+:::::: The code at line 126 was first introduced by commit
+:::::: bcacf5f6f239a9e60287680514f392748cb4ec39 riscv: fix pfn_to_virt err in do_page_fault().
+
+:::::: TO: Liu Shaohua <liush@allwinnertech.com>
+:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
