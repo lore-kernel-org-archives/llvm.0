@@ -1,43 +1,41 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF2F6AA3
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 19:25:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905E26AA3
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 19:36:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645644351; x=1677180351;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=amQaGc1KIsJ13G32G3Xr6iYz+fX7KyuUC+u3T0GfmjI=;
-  b=RHE/9kgMzGYAuC7cXFOL+6QBSULkh/mZvlSTpeWktTjnUBs3fZgyqE7V
-   5QVWobKn7eoeiTvLlXoNNORO3x0v1uImdoFWCnQp+Bl/GnvZc3ip08W00
-   +DwkKyElFKJzNG07tR4hVtAdT/M9mAR7MAyhhzJ/GLkIEIpRZrxaXRac/
-   z6KpJ1GwPQuTYljIvdh32dV/vzD+dQhEGrD/DARzxGU3j32Br32v3wJVd
-   9fvn3YmGoWnLW5+V3XkIQfaDWSSMNuPZqOCtruGH4xAanOlCP4rfk+CAD
-   JM9YGrRDglRgJuV7BunvygA7PEKm3uwDU1xhRkDz3QIoukyfm0BSH1F6d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="338500535"
+  t=1645645007; x=1677181007;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2zmfYt4EdwabPNOzPi87WTUglmkIqLUynWqzZQqp2CQ=;
+  b=JTq4trmZVK3FLRQdXIUVMMDL9+pAQD8yuBdnqT0pUikN6ZoPwaBYysCR
+   vkeqtJgLYUEz0LUVWliW0op+jIjYk5NuPRt2vOvpYZqjS4qnnkHGGCsTJ
+   OmA6rOgDugS54BHi8AWKH8qB5Z4WEiYMu+f6S6mm9DNjUZzYBT9xNdGPz
+   iwQ4NmwmMSU/0ea/kFltqvm9d+Kow5WS8vQ0E7Zziwd87KEqex3GaIpLm
+   V616Zm/jnPhob3MhsJAVz8I+w5q/ccTv2IBCw3IbvaudXiB80JeyeSWje
+   9lQEeRemLVjyOkBTJk77Y2Sm62DIwYyCWkjoCE2mjPLYoXvCbmmnjUB8H
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="312781513"
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="338500535"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:25:51 -0800
+   d="scan'208";a="312781513"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:36:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="543437237"
+   d="scan'208";a="532819952"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2022 11:25:45 -0800
+  by orsmga007.jf.intel.com with ESMTP; 23 Feb 2022 11:36:45 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMxGi-0001jZ-Cv; Wed, 23 Feb 2022 19:25:44 +0000
-Date: Thu, 24 Feb 2022 03:25:32 +0800
+	id 1nMxRM-0001kB-Lk; Wed, 23 Feb 2022 19:36:44 +0000
+Date: Thu, 24 Feb 2022 03:36:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
+To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-s390@vger.kernel.org, imbrenda@linux.ibm.com,
-	david@redhat.com, borntraeger@linux.ibm.com
-Subject: Re: [PATCH 6/9] kvm: s390: Add configuration dump functionality
-Message-ID: <202202240358.kEydOdbz-lkp@intel.com>
-References: <20220223092007.3163-7-frankja@linux.ibm.com>
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1897/2340] net/smc/smc.h:284:44: error: use
+ of undeclared identifier 'SK_USER_DATA_NOCOPY'
+Message-ID: <202202240341.mxu0MQrq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,217 +44,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223092007.3163-7-frankja@linux.ibm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Janosch,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on kvms390/next]
-[also build test WARNING on next-20220222]
-[cannot apply to kvm/master s390/features v5.17-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Janosch-Frank/kvm-s390-Add-PV-dump-support/20220223-172213
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git next
-config: s390-randconfig-c005-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240358.kEydOdbz-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
+commit: 5c5994d6ff9b0f6c42142054bd317726ff1d9ef4 [1897/2340] headers/deps: net: Optimize <net/inet_timewait_sock.h> dependencies
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220224/202202240341.mxu0MQrq-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/63a2029ece7e8fee92aa5ad277e2cbd8b13b7e6b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Janosch-Frank/kvm-s390-Add-PV-dump-support/20220223-172213
-        git checkout 63a2029ece7e8fee92aa5ad277e2cbd8b13b7e6b
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=5c5994d6ff9b0f6c42142054bd317726ff1d9ef4
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 5c5994d6ff9b0f6c42142054bd317726ff1d9ef4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/dsa/ net/smc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
+      It only hurts bisectability.
 
-   In file included from arch/s390/kvm/pv.c:9:
-   In file included from include/linux/kvm_host.h:41:
-   In file included from include/linux/kvm_para.h:5:
-   In file included from include/uapi/linux/kvm_para.h:37:
-   In file included from arch/s390/include/asm/kvm_para.h:25:
-   In file included from arch/s390/include/asm/diag.h:12:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from arch/s390/kvm/pv.c:9:
-   In file included from include/linux/kvm_host.h:41:
-   In file included from include/linux/kvm_para.h:5:
-   In file included from include/uapi/linux/kvm_para.h:37:
-   In file included from arch/s390/include/asm/kvm_para.h:25:
-   In file included from arch/s390/include/asm/diag.h:12:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from arch/s390/kvm/pv.c:9:
-   In file included from include/linux/kvm_host.h:41:
-   In file included from include/linux/kvm_para.h:5:
-   In file included from include/uapi/linux/kvm_para.h:37:
-   In file included from arch/s390/include/asm/kvm_para.h:25:
-   In file included from arch/s390/include/asm/diag.h:12:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   arch/s390/kvm/pv.c:369:6: warning: variable 'cc' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!buff_kvm)
-               ^~~~~~~~~
-   arch/s390/kvm/pv.c:411:6: note: uninitialized use occurs here
-           if (cc || ret)
-               ^~
-   arch/s390/kvm/pv.c:369:2: note: remove the 'if' if its condition is always false
-           if (!buff_kvm)
-           ^~~~~~~~~~~~~~
-   arch/s390/kvm/pv.c:357:6: warning: variable 'cc' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!buff_user_len ||
-               ^~~~~~~~~~~~~~~~~
-   arch/s390/kvm/pv.c:411:6: note: uninitialized use occurs here
-           if (cc || ret)
-               ^~
-   arch/s390/kvm/pv.c:357:2: note: remove the 'if' if its condition is always false
-           if (!buff_user_len ||
-           ^~~~~~~~~~~~~~~~~~~~~
->> arch/s390/kvm/pv.c:357:6: warning: variable 'cc' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-           if (!buff_user_len ||
-               ^~~~~~~~~~~~~~
-   arch/s390/kvm/pv.c:411:6: note: uninitialized use occurs here
-           if (cc || ret)
-               ^~
-   arch/s390/kvm/pv.c:357:6: note: remove the '||' if its condition is always false
-           if (!buff_user_len ||
-               ^~~~~~~~~~~~~~~~~
-   arch/s390/kvm/pv.c:348:6: warning: variable 'cc' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (*gaddr & ~HPAGE_MASK)
-               ^~~~~~~~~~~~~~~~~~~~
-   arch/s390/kvm/pv.c:411:6: note: uninitialized use occurs here
-           if (cc || ret)
-               ^~
-   arch/s390/kvm/pv.c:348:2: note: remove the 'if' if its condition is always false
-           if (*gaddr & ~HPAGE_MASK)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/s390/kvm/pv.c:344:8: note: initialize the variable 'cc' to silence this warning
-           int cc, ret;
-                 ^
-                  = 0
-   16 warnings generated.
+All errors (new ones prefixed by >>):
+
+   In file included from net/smc/smc_wr.c:40:
+>> net/smc/smc.h:284:44: error: use of undeclared identifier 'SK_USER_DATA_NOCOPY'
+                  ((uintptr_t)clcsk->sk_user_data & ~SK_USER_DATA_NOCOPY);
+                                                     ^
+   1 error generated.
+--
+   In file included from net/smc/smc_tracepoint.c:4:
+   In file included from net/smc/smc_tracepoint.h:13:
+>> net/smc/smc.h:284:44: error: use of undeclared identifier 'SK_USER_DATA_NOCOPY'
+                  ((uintptr_t)clcsk->sk_user_data & ~SK_USER_DATA_NOCOPY);
+                                                     ^
+   In file included from net/smc/smc_tracepoint.c:4:
+   In file included from net/smc/smc_tracepoint.h:125:
+   include/trace/define_trace.h:95:10: fatal error: './smc_tracepoint.h' file not found
+   #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/trace/define_trace.h:90:32: note: expanded from macro 'TRACE_INCLUDE'
+   # define TRACE_INCLUDE(system) __TRACE_INCLUDE(system)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~
+   include/trace/define_trace.h:87:34: note: expanded from macro '__TRACE_INCLUDE'
+   # define __TRACE_INCLUDE(system) __stringify(TRACE_INCLUDE_PATH/system.h)
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/stringify.h:10:27: note: expanded from macro '__stringify'
+   #define __stringify(x...)       __stringify_1(x)
+                                   ^~~~~~~~~~~~~~~~
+   include/linux/stringify.h:9:29: note: expanded from macro '__stringify_1'
+   #define __stringify_1(x...)     #x
+                                   ^~
+   <scratch space>:113:1: note: expanded from here
+   "./smc_tracepoint.h"
+   ^~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +357 arch/s390/kvm/pv.c
+vim +/SK_USER_DATA_NOCOPY +284 net/smc/smc.h
 
-   309	
-   310	/*
-   311	 * kvm_s390_pv_dump_stor_state
-   312	 *
-   313	 * @kvm: pointer to the guest's KVM struct
-   314	 * @buff_user: Userspace pointer where we will write the results to
-   315	 * @gaddr: Starting absolute guest address for which the storage state
-   316	 *         is requested. This value will be updated with the last
-   317	 *         address for which data was written when returning to
-   318	 *         userspace.
-   319	 * @buff_user_len: Length of the buff_user buffer
-   320	 * @rc: Pointer to where the uvcb return code is stored
-   321	 * @rrc: Pointer to where the uvcb return reason code is stored
-   322	 *
-   323	 * Return:
-   324	 *  0 on success
-   325	 *  -ENOMEM if allocating the cache fails
-   326	 *  -EINVAL if gaddr is not aligned to 1MB
-   327	 *  -EINVAL if buff_user_len is not aligned to uv_info.conf_dump_storage_state_len
-   328	 *  -EINVAL if the UV call fails, rc and rrc will be set in this case
-   329	 *  -EFAULT if copying the result to buff_user failed
-   330	 */
-   331	int kvm_s390_pv_dump_stor_state(struct kvm *kvm, void __user *buff_user,
-   332					u64 *gaddr, u64 buff_user_len, u16 *rc, u16 *rrc)
-   333	{
-   334		struct uv_cb_dump_stor_state uvcb = {
-   335			.header.cmd = UVC_CMD_DUMP_CONF_STOR_STATE,
-   336			.header.len = sizeof(uvcb),
-   337			.config_handle = kvm->arch.pv.handle,
-   338			.gaddr = *gaddr,
-   339			.dump_area_origin = 0,
-   340		};
-   341		size_t buff_kvm_size;
-   342		size_t size_done = 0;
-   343		u8 *buff_kvm = NULL;
-   344		int cc, ret;
-   345	
-   346		ret = -EINVAL;
-   347		/* UV call processes 1MB guest storage chunks at a time */
-   348		if (*gaddr & ~HPAGE_MASK)
-   349			goto out;
-   350	
-   351		/*
-   352		 * We provide the storage state for 1MB chunks of guest
-   353		 * storage. The buffer will need to be aligned to
-   354		 * conf_dump_storage_state_len so we don't end on a partial
-   355		 * chunk.
-   356		 */
- > 357		if (!buff_user_len ||
+ac7138746e1413 Ursula Braun 2017-01-09  280  
+341adeec9adad0 Wen Gu       2022-01-26  281  static inline struct smc_sock *smc_clcsock_user_data(struct sock *clcsk)
+341adeec9adad0 Wen Gu       2022-01-26  282  {
+341adeec9adad0 Wen Gu       2022-01-26  283  	return (struct smc_sock *)
+341adeec9adad0 Wen Gu       2022-01-26 @284  	       ((uintptr_t)clcsk->sk_user_data & ~SK_USER_DATA_NOCOPY);
+341adeec9adad0 Wen Gu       2022-01-26  285  }
+341adeec9adad0 Wen Gu       2022-01-26  286  
+
+:::::: The code at line 284 was first introduced by commit
+:::::: 341adeec9adad0874f29a0a1af35638207352a39 net/smc: Forward wakeup to smc socket waitqueue after fallback
+
+:::::: TO: Wen Gu <guwen@linux.alibaba.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
