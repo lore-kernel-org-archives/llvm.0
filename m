@@ -1,116 +1,263 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669506AA2
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 18:56:33 +0000 (UTC)
-Received: by mail-pg1-f175.google.com with SMTP id 27so15775425pgk.10
-        for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 10:56:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WO10LZXV2/UIWFExeWc5y4Axog2LtDZPkQsLOSvWfIQ=;
-        b=D8TkVS0SFNlR75Wec0ztTxmXYaKBMsKoUqb/Nhs2hNUiK/oaDz71s6bWwqHwBV1Wjz
-         cslgksXqAs492hjk4W5fOe6HJmIx2jOGr42dklLADLnuAj6O7rlxzR4je1EbsPrOP8wk
-         weGsjLeFnSuR/7vT+UaNHlsfv8241RQA0ZB5g3tenBZ3jhcHWHEPO1lvjP6HPgoGmptr
-         iscT1tlwsb64dhL/wSDAaCJ/0x3uLXRTToo1xd1dpg2OSIUJMis8ITDrAWCTvY2C72SG
-         xThZMVdYqHwxBZkQnHbX5lJxFn9v35CY9ZtkqKIMMIPzO/6GSf6aJeMr/VWZ4lkhrzKF
-         +BNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WO10LZXV2/UIWFExeWc5y4Axog2LtDZPkQsLOSvWfIQ=;
-        b=EKCKQ89+sEl4k0YpuOJfkRKJtlzEb6LpxquqCuLD8QHv5HEXX+1FIiEQm9UCEoJRD2
-         2oCs8S+QfR7glD2Yarv+14lj9pcL7MAM1U1MxTamRJ/qY3eWTqOASvotRHTUScs9dBV/
-         LCw8f++axetl2bZsK0+sz4r7UpF4C8nU+jpQpi8/tK+fvj7qKvgkc46QqdQ+dPMl+FYU
-         9W5CjodGRecsz5gJpt61nsHIos3RBqxqx2Cbxr74kxwWx5kIG7YF2WXuJpXhVkD+mv96
-         7s5eHD8lcKIAF7M+IK5EeEKL/RoWg7lx2r3Z2Oox37jcO9pvqU+nZm0TO4ZrAN9RE7kc
-         jHyA==
-X-Gm-Message-State: AOAM530GbgYWUcQC2YO+8TmYtSaOkwvE4TtLV0vwkjSGxe/yNFo55Kvl
-	6XvkyDW4xShcINpSeOwQlfz8AQ==
-X-Google-Smtp-Source: ABdhPJxWzseRIGwjKlr0g3XO7WPLxpsY657PyUA0i4zsqM9a8QWHzQK5Zdw5cIoRSvIs8eDmqn0I2g==
-X-Received: by 2002:a63:31ce:0:b0:34e:4052:1bce with SMTP id x197-20020a6331ce000000b0034e40521bcemr735240pgx.459.1645642592668;
-        Wed, 23 Feb 2022 10:56:32 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id i11sm231887pgs.58.2022.02.23.10.56.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 10:56:31 -0800 (PST)
-Date: Wed, 23 Feb 2022 18:56:28 +0000
-From: Sean Christopherson <seanjc@google.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>,
-	kvm@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Subject: Re: [PATCH] KVM: x86: Fix pointer mistmatch warning when patching
- RET0 static calls
-Message-ID: <YhaDXDfLBQtkmbtV@google.com>
-References: <20220223162355.3174907-1-seanjc@google.com>
- <YhZuk8eA6rsDuJkd@dev-arch.archlinux-ax161>
- <YhZ16cMMcHQIvS9d@google.com>
- <YhZ5Q8DNoGGWUBLh@dev-arch.archlinux-ax161>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF2F6AA3
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 19:25:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645644351; x=1677180351;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=amQaGc1KIsJ13G32G3Xr6iYz+fX7KyuUC+u3T0GfmjI=;
+  b=RHE/9kgMzGYAuC7cXFOL+6QBSULkh/mZvlSTpeWktTjnUBs3fZgyqE7V
+   5QVWobKn7eoeiTvLlXoNNORO3x0v1uImdoFWCnQp+Bl/GnvZc3ip08W00
+   +DwkKyElFKJzNG07tR4hVtAdT/M9mAR7MAyhhzJ/GLkIEIpRZrxaXRac/
+   z6KpJ1GwPQuTYljIvdh32dV/vzD+dQhEGrD/DARzxGU3j32Br32v3wJVd
+   9fvn3YmGoWnLW5+V3XkIQfaDWSSMNuPZqOCtruGH4xAanOlCP4rfk+CAD
+   JM9YGrRDglRgJuV7BunvygA7PEKm3uwDU1xhRkDz3QIoukyfm0BSH1F6d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="338500535"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="338500535"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:25:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="543437237"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2022 11:25:45 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nMxGi-0001jZ-Cv; Wed, 23 Feb 2022 19:25:44 +0000
+Date: Thu, 24 Feb 2022 03:25:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-s390@vger.kernel.org, imbrenda@linux.ibm.com,
+	david@redhat.com, borntraeger@linux.ibm.com
+Subject: Re: [PATCH 6/9] kvm: s390: Add configuration dump functionality
+Message-ID: <202202240358.kEydOdbz-lkp@intel.com>
+References: <20220223092007.3163-7-frankja@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YhZ5Q8DNoGGWUBLh@dev-arch.archlinux-ax161>
+In-Reply-To: <20220223092007.3163-7-frankja@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Feb 23, 2022, Nathan Chancellor wrote:
-> On Wed, Feb 23, 2022 at 05:59:05PM +0000, Sean Christopherson wrote:
-> > On Wed, Feb 23, 2022, Nathan Chancellor wrote:
-> > > Hi Sean,
-> > > 
-> > > On Wed, Feb 23, 2022 at 04:23:55PM +0000, Sean Christopherson wrote:
-> > > > Cast kvm_x86_ops.func to 'void *' when updating KVM static calls that are
-> > > > conditionally patched to __static_call_return0().  clang complains about
-> > > > using mismatching pointers in the ternary operator, which breaks the
-> > > > build when compiling with CONFIG_KVM_WERROR=y.
-> > > > 
-> > > >   >> arch/x86/include/asm/kvm-x86-ops.h:82:1: warning: pointer type mismatch
-> > > >   ('bool (*)(struct kvm_vcpu *)' and 'void *') [-Wpointer-type-mismatch]
-> > > > 
-> > > > Fixes: 5be2226f417d ("KVM: x86: allow defining return-0 static calls")
-> > > > Reported-by: Like Xu <like.xu.linux@gmail.com>
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > > 
-> > > Thank you for the patch! Is this a bug in clang?
-> > 
-> > IMO, no.  I think it's completely reasonable for the compiler to complain that KVM
-> > is generating two different pointer types out of a ternary operator.
-> > 
-> > clang is somewhat inconsistent, though it may be deliberate.  clang doesn't complain
-> > about implicitly casting a 'void *' to another data type, e.g. this complies clean,
-> > where "data" is a 'void *'
-> > 
-> > 	struct kvm_vcpu *x = vcpu ? : data;
-> 
-> Right, I would assume this is deliberate. I think warning in this case
-> might be quite noisy, as the kernel implicitly converts 'void *' to
-> typed pointers for certain function pointer callbacks (although this
-> particular case is probably pretty rare).
+Hi Janosch,
 
-Aha!  Looks like clang's behavior is correct, assuming a function is not considered
-an "object".  From C99 "6.5.15 Conditional operator":
+I love your patch! Perhaps something to improve:
 
-  One of the following shall hold for the second and third operands:
-    — both operands have arithmetic type;
-    — both operands have the same structure or union type;
-    — both operands have void type;
-    — both operands are pointers to qualified or unqualified versions of compatible types;
-    — one operand is a pointer and the other is a null pointer constant; or
-    — one operand is a pointer to an object or incomplete type and the other is a pointer to a
-      qualified or unqualified version of void.
+[auto build test WARNING on kvms390/next]
+[also build test WARNING on next-20220222]
+[cannot apply to kvm/master s390/features v5.17-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-That last case would explain why clang warns about a function pointer but not a
-object pointer when the third operand is a 'void *'.
+url:    https://github.com/0day-ci/linux/commits/Janosch-Frank/kvm-s390-Add-PV-dump-support/20220223-172213
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git next
+config: s390-randconfig-c005-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240358.kEydOdbz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/63a2029ece7e8fee92aa5ad277e2cbd8b13b7e6b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Janosch-Frank/kvm-s390-Add-PV-dump-support/20220223-172213
+        git checkout 63a2029ece7e8fee92aa5ad277e2cbd8b13b7e6b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kvm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/s390/kvm/pv.c:9:
+   In file included from include/linux/kvm_host.h:41:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from arch/s390/kvm/pv.c:9:
+   In file included from include/linux/kvm_host.h:41:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from arch/s390/kvm/pv.c:9:
+   In file included from include/linux/kvm_host.h:41:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   arch/s390/kvm/pv.c:369:6: warning: variable 'cc' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!buff_kvm)
+               ^~~~~~~~~
+   arch/s390/kvm/pv.c:411:6: note: uninitialized use occurs here
+           if (cc || ret)
+               ^~
+   arch/s390/kvm/pv.c:369:2: note: remove the 'if' if its condition is always false
+           if (!buff_kvm)
+           ^~~~~~~~~~~~~~
+   arch/s390/kvm/pv.c:357:6: warning: variable 'cc' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!buff_user_len ||
+               ^~~~~~~~~~~~~~~~~
+   arch/s390/kvm/pv.c:411:6: note: uninitialized use occurs here
+           if (cc || ret)
+               ^~
+   arch/s390/kvm/pv.c:357:2: note: remove the 'if' if its condition is always false
+           if (!buff_user_len ||
+           ^~~~~~~~~~~~~~~~~~~~~
+>> arch/s390/kvm/pv.c:357:6: warning: variable 'cc' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+           if (!buff_user_len ||
+               ^~~~~~~~~~~~~~
+   arch/s390/kvm/pv.c:411:6: note: uninitialized use occurs here
+           if (cc || ret)
+               ^~
+   arch/s390/kvm/pv.c:357:6: note: remove the '||' if its condition is always false
+           if (!buff_user_len ||
+               ^~~~~~~~~~~~~~~~~
+   arch/s390/kvm/pv.c:348:6: warning: variable 'cc' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (*gaddr & ~HPAGE_MASK)
+               ^~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/pv.c:411:6: note: uninitialized use occurs here
+           if (cc || ret)
+               ^~
+   arch/s390/kvm/pv.c:348:2: note: remove the 'if' if its condition is always false
+           if (*gaddr & ~HPAGE_MASK)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/pv.c:344:8: note: initialize the variable 'cc' to silence this warning
+           int cc, ret;
+                 ^
+                  = 0
+   16 warnings generated.
+
+
+vim +357 arch/s390/kvm/pv.c
+
+   309	
+   310	/*
+   311	 * kvm_s390_pv_dump_stor_state
+   312	 *
+   313	 * @kvm: pointer to the guest's KVM struct
+   314	 * @buff_user: Userspace pointer where we will write the results to
+   315	 * @gaddr: Starting absolute guest address for which the storage state
+   316	 *         is requested. This value will be updated with the last
+   317	 *         address for which data was written when returning to
+   318	 *         userspace.
+   319	 * @buff_user_len: Length of the buff_user buffer
+   320	 * @rc: Pointer to where the uvcb return code is stored
+   321	 * @rrc: Pointer to where the uvcb return reason code is stored
+   322	 *
+   323	 * Return:
+   324	 *  0 on success
+   325	 *  -ENOMEM if allocating the cache fails
+   326	 *  -EINVAL if gaddr is not aligned to 1MB
+   327	 *  -EINVAL if buff_user_len is not aligned to uv_info.conf_dump_storage_state_len
+   328	 *  -EINVAL if the UV call fails, rc and rrc will be set in this case
+   329	 *  -EFAULT if copying the result to buff_user failed
+   330	 */
+   331	int kvm_s390_pv_dump_stor_state(struct kvm *kvm, void __user *buff_user,
+   332					u64 *gaddr, u64 buff_user_len, u16 *rc, u16 *rrc)
+   333	{
+   334		struct uv_cb_dump_stor_state uvcb = {
+   335			.header.cmd = UVC_CMD_DUMP_CONF_STOR_STATE,
+   336			.header.len = sizeof(uvcb),
+   337			.config_handle = kvm->arch.pv.handle,
+   338			.gaddr = *gaddr,
+   339			.dump_area_origin = 0,
+   340		};
+   341		size_t buff_kvm_size;
+   342		size_t size_done = 0;
+   343		u8 *buff_kvm = NULL;
+   344		int cc, ret;
+   345	
+   346		ret = -EINVAL;
+   347		/* UV call processes 1MB guest storage chunks at a time */
+   348		if (*gaddr & ~HPAGE_MASK)
+   349			goto out;
+   350	
+   351		/*
+   352		 * We provide the storage state for 1MB chunks of guest
+   353		 * storage. The buffer will need to be aligned to
+   354		 * conf_dump_storage_state_len so we don't end on a partial
+   355		 * chunk.
+   356		 */
+ > 357		if (!buff_user_len ||
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
