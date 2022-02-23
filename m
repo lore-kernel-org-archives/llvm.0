@@ -1,50 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128ECC6A
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 13:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF89C6A
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 13:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645621775; x=1677157775;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z0pOnIngaHQctwWQT9OpJguHuDyTKdtIQ2KjPmHmvAA=;
-  b=cAJ6/TcB/w5ctoxrlZqiOmUQQdAJ/iktBbh2MLsbT/lZ9kMac3O4CFSw
-   S6BIzKbCQ8GHBan/X4q5BBwKDikF+4OLarL+Rlb4OdxYxyt+goN4OYmB4
-   xuHEoAslpsM2/FsmPoIfyhH15oCf+Kyo9ZPNL9unn3GZvExRXl+WfUvNr
-   2Lzr7ZLKpFI7SMtF4A+jTOObuSP7g3ZOXDxCZ0+Ot8LlPW5B3e7DRmr+l
-   /7uYSJ/fVo90dEAmyKjZofOtCzUSOww4r4Fagf6eCf8YlPzaiK872ydQh
-   aLM/oeNexilkHwqa+bYTjqtlBo6RGSWM5b2iMrH+Fpo5OPqiX7752s0q/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="239347436"
+  t=1645623036; x=1677159036;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=f/0m4v1D7Q4FmvcA0EB0g3hgY2m0AgicOQr1GIshUWQ=;
+  b=f7uQk3TiF0YJRMifmiWrRG23fQOrE84WYKxh8Bl9JWY9LsjgtnfFyI4T
+   /k5XkiBR7PwzmT3HvlWuPw9gM8yg0Nqpnm2zHdab44Aphwk5eCjerOoYR
+   13Elxp9Lyn7ulssDdKUzHgbenPWniUyzPyPODR9B7hm6CJqodxExUtCTr
+   MH7DWyoNNV5knpQNH5ERnO+kyoOzZrdYTtKZkbVSbMp2LXqKmn+S+q8WM
+   JEPELphPwXWVXa+k9noc2TfrVyXycpeMZDEGCkxv8q6ke09RFVAMJCav1
+   IZIX+OxUO311qavwIxyQv9LmAn8vLlX9MCd1/6PdL4anRWlE7CC2ORfEX
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="250787726"
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="239347436"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 05:09:34 -0800
+   d="scan'208";a="250787726"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 05:30:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="548238032"
+   d="scan'208";a="491195689"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 05:09:31 -0800
+  by orsmga003.jf.intel.com with ESMTP; 23 Feb 2022 05:30:33 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMrOc-0001Sy-Si; Wed, 23 Feb 2022 13:09:30 +0000
-Date: Wed, 23 Feb 2022 21:09:02 +0800
+	id 1nMriy-0001Us-Mg; Wed, 23 Feb 2022 13:30:32 +0000
+Date: Wed, 23 Feb 2022 21:29:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sascha Hauer <s.hauer@pengutronix.de>, linux-clk@vger.kernel.org
+To: Cosmin Tanislav <demonsingur@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Abel Vesa <abel.vesa@nxp.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Adrian Alonso <adrian.alonso@nxp.com>,
-	Mads Bligaard Nielsen <bli@bang-olufsen.dk>,
-	Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH 3/8] clk: imx: pll14xx: Use FIELD_GET/FIELD_PREP
-Message-ID: <202202232030.DHNZfsc4-lkp@intel.com>
-References: <20220223075601.3652543-4-s.hauer@pengutronix.de>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [linux-next:master 7091/7526] drivers/iio/accel/adxl367.c:887:2:
+ warning: variable 'handled' is uninitialized when used here
+Message-ID: <202202232151.V9qvCes4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,193 +45,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223075601.3652543-4-s.hauer@pengutronix.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Sascha,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on clk/clk-next v5.17-rc5 next-20220222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Sascha-Hauer/clk-i-MX-PLL14xx-Support-dynamic-rates/20220223-155846
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-config: hexagon-randconfig-r015-20220221 (https://download.01.org/0day-ci/archive/20220223/202202232030.DHNZfsc4-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   196d330d7fb1e7cc0d85641c89ce4602cb36f12e
+commit: cbab791c5e2a58c123d84bd9202c054e5449bc96 [7091/7526] iio: accel: add ADXL367 driver
+config: hexagon-randconfig-r022-20220223 (https://download.01.org/0day-ci/archive/20220223/202202232151.V9qvCes4-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/c12e6c700842e937d181c80ce6ada39017ed6268
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sascha-Hauer/clk-i-MX-PLL14xx-Support-dynamic-rates/20220223-155846
-        git checkout c12e6c700842e937d181c80ce6ada39017ed6268
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=cbab791c5e2a58c123d84bd9202c054e5449bc96
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout cbab791c5e2a58c123d84bd9202c054e5449bc96
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/accel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/clk/imx/clk-pll14xx.c:123:9: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
-           mdiv = FIELD_GET(MDIV_MASK, pll_div);
-                  ^
-   drivers/clk/imx/clk-pll14xx.c:143:9: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
-           mdiv = FIELD_GET(MDIV_MASK, pll_div_ctl0);
-                  ^
-   drivers/clk/imx/clk-pll14xx.c:162:13: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
-           old_mdiv = FIELD_GET(MDIV_MASK, pll_div);
-                      ^
->> drivers/clk/imx/clk-pll14xx.c:195:10: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
-                   tmp |= FIELD_PREP(SDIV_MASK, rate->sdiv);
-                          ^
-   drivers/clk/imx/clk-pll14xx.c:214:12: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
-           div_val = FIELD_PREP(MDIV_MASK, rate->mdiv) | FIELD_PREP(PDIV_MASK, rate->pdiv) |
-                     ^
-   drivers/clk/imx/clk-pll14xx.c:261:10: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
-                   tmp |= FIELD_PREP(SDIV_MASK, rate->sdiv);
-                          ^
-   drivers/clk/imx/clk-pll14xx.c:279:12: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
-           div_val = FIELD_PREP(MDIV_MASK, rate->mdiv) |
-                     ^
-   7 errors generated.
+>> drivers/iio/accel/adxl367.c:887:2: warning: variable 'handled' is uninitialized when used here [-Wuninitialized]
+           handled |= adxl367_push_event(indio_dev, status);
+           ^~~~~~~
+   drivers/iio/accel/adxl367.c:879:14: note: initialize the variable 'handled' to silence this warning
+           bool handled;
+                       ^
+                        = 0
+   1 warning generated.
 
 
-vim +/FIELD_GET +123 drivers/clk/imx/clk-pll14xx.c
+vim +/handled +887 drivers/iio/accel/adxl367.c
 
-   114	
-   115	static unsigned long clk_pll1416x_recalc_rate(struct clk_hw *hw,
-   116							  unsigned long parent_rate)
-   117	{
-   118		struct clk_pll14xx *pll = to_clk_pll14xx(hw);
-   119		u32 mdiv, pdiv, sdiv, pll_div;
-   120		u64 fvco = parent_rate;
-   121	
-   122		pll_div = readl_relaxed(pll->base + DIV_CTL0);
- > 123		mdiv = FIELD_GET(MDIV_MASK, pll_div);
-   124		pdiv = FIELD_GET(PDIV_MASK, pll_div);
-   125		sdiv = FIELD_GET(SDIV_MASK, pll_div);
-   126	
-   127		fvco *= mdiv;
-   128		do_div(fvco, pdiv << sdiv);
-   129	
-   130		return fvco;
-   131	}
-   132	
-   133	static unsigned long clk_pll1443x_recalc_rate(struct clk_hw *hw,
-   134							  unsigned long parent_rate)
-   135	{
-   136		struct clk_pll14xx *pll = to_clk_pll14xx(hw);
-   137		u32 mdiv, pdiv, sdiv, pll_div_ctl0, pll_div_ctl1;
-   138		short int kdiv;
-   139		u64 fvco = parent_rate;
-   140	
-   141		pll_div_ctl0 = readl_relaxed(pll->base + DIV_CTL0);
-   142		pll_div_ctl1 = readl_relaxed(pll->base + DIV_CTL1);
-   143		mdiv = FIELD_GET(MDIV_MASK, pll_div_ctl0);
-   144		pdiv = FIELD_GET(PDIV_MASK, pll_div_ctl0);
-   145		sdiv = FIELD_GET(SDIV_MASK, pll_div_ctl0);
-   146		kdiv = FIELD_GET(KDIV_MASK, pll_div_ctl1);
-   147	
-   148		/* fvco = (m * 65536 + k) * Fin / (p * 65536) */
-   149		fvco *= (mdiv * 65536 + kdiv);
-   150		pdiv *= 65536;
-   151	
-   152		do_div(fvco, pdiv << sdiv);
-   153	
-   154		return fvco;
-   155	}
-   156	
-   157	static inline bool clk_pll14xx_mp_change(const struct imx_pll14xx_rate_table *rate,
-   158						  u32 pll_div)
-   159	{
-   160		u32 old_mdiv, old_pdiv;
-   161	
-   162		old_mdiv = FIELD_GET(MDIV_MASK, pll_div);
-   163		old_pdiv = FIELD_GET(PDIV_MASK, pll_div);
-   164	
-   165		return rate->mdiv != old_mdiv || rate->pdiv != old_pdiv;
-   166	}
-   167	
-   168	static int clk_pll14xx_wait_lock(struct clk_pll14xx *pll)
-   169	{
-   170		u32 val;
-   171	
-   172		return readl_poll_timeout(pll->base + GNRL_CTL, val, val & LOCK_STATUS, 0,
-   173				LOCK_TIMEOUT_US);
-   174	}
-   175	
-   176	static int clk_pll1416x_set_rate(struct clk_hw *hw, unsigned long drate,
-   177					 unsigned long prate)
-   178	{
-   179		struct clk_pll14xx *pll = to_clk_pll14xx(hw);
-   180		const struct imx_pll14xx_rate_table *rate;
-   181		u32 tmp, div_val;
-   182		int ret;
-   183	
-   184		rate = imx_get_pll_settings(pll, drate);
-   185		if (!rate) {
-   186			pr_err("%s: Invalid rate : %lu for pll clk %s\n", __func__,
-   187			       drate, clk_hw_get_name(hw));
-   188			return -EINVAL;
-   189		}
-   190	
-   191		tmp = readl_relaxed(pll->base + DIV_CTL0);
-   192	
-   193		if (!clk_pll14xx_mp_change(rate, tmp)) {
-   194			tmp &= ~SDIV_MASK;
- > 195			tmp |= FIELD_PREP(SDIV_MASK, rate->sdiv);
-   196			writel_relaxed(tmp, pll->base + DIV_CTL0);
-   197	
-   198			return 0;
-   199		}
-   200	
-   201		/* Bypass clock and set lock to pll output lock */
-   202		tmp = readl_relaxed(pll->base + GNRL_CTL);
-   203		tmp |= LOCK_SEL_MASK;
-   204		writel_relaxed(tmp, pll->base + GNRL_CTL);
-   205	
-   206		/* Enable RST */
-   207		tmp &= ~RST_MASK;
-   208		writel_relaxed(tmp, pll->base + GNRL_CTL);
-   209	
-   210		/* Enable BYPASS */
-   211		tmp |= BYPASS_MASK;
-   212		writel(tmp, pll->base + GNRL_CTL);
-   213	
-   214		div_val = FIELD_PREP(MDIV_MASK, rate->mdiv) | FIELD_PREP(PDIV_MASK, rate->pdiv) |
-   215			FIELD_PREP(SDIV_MASK, rate->sdiv);
-   216		writel_relaxed(div_val, pll->base + DIV_CTL0);
-   217	
-   218		/*
-   219		 * According to SPEC, t3 - t2 need to be greater than
-   220		 * 1us and 1/FREF, respectively.
-   221		 * FREF is FIN / Prediv, the prediv is [1, 63], so choose
-   222		 * 3us.
-   223		 */
-   224		udelay(3);
-   225	
-   226		/* Disable RST */
-   227		tmp |= RST_MASK;
-   228		writel_relaxed(tmp, pll->base + GNRL_CTL);
-   229	
-   230		/* Wait Lock */
-   231		ret = clk_pll14xx_wait_lock(pll);
-   232		if (ret)
-   233			return ret;
-   234	
-   235		/* Bypass */
-   236		tmp &= ~BYPASS_MASK;
-   237		writel_relaxed(tmp, pll->base + GNRL_CTL);
-   238	
-   239		return 0;
-   240	}
-   241	
+   873	
+   874	static irqreturn_t adxl367_irq_handler(int irq, void *private)
+   875	{
+   876		struct iio_dev *indio_dev = private;
+   877		struct adxl367_state *st = iio_priv(indio_dev);
+   878		u16 fifo_entries;
+   879		bool handled;
+   880		u8 status;
+   881		int ret;
+   882	
+   883		ret = adxl367_get_status(st, &status, &fifo_entries);
+   884		if (ret)
+   885			return IRQ_NONE;
+   886	
+ > 887		handled |= adxl367_push_event(indio_dev, status);
+   888		handled |= adxl367_push_fifo_data(indio_dev, status, fifo_entries);
+   889	
+   890		return handled ? IRQ_HANDLED : IRQ_NONE;
+   891	}
+   892	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
