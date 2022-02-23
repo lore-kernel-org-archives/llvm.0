@@ -1,35 +1,35 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D706AA3
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 19:46:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593EB6AA3
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 19:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645645611; x=1677181611;
+  t=1645646269; x=1677182269;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=83yi7+J2BaWupY0URhVucnRMpWAXsu49yuiZO526r4A=;
-  b=kFNQlwXt5s0+f4rLonw93a7z5zlUP8pOdTup2rgIpeTLTy5+2zmNc5Zw
-   u70BtKPc2e8MTsWIoonqkN+v4lL6Xs//Nv8mYJoIO6eTenPwnAxuuy4NR
-   rhUtQzONu7onh1mW7ccHSCJBSNmc649gXkuPT+SQfE9WbUGo/hJ3zi89A
-   HilhzV2ldyZ4tk8NpmuvTG8/TreRrqX+0nK3BHzDa926T4eXcvs8z6HhP
-   CJD+APonR6cZKKwIuq/pz31S1xH7SPMlHGGUfJylkbueBA4SRkF0tWVb8
-   R09mlMj9cTIBvSE/s+8VUMGcDVCu/oXggYh3zO7/Q85sxRkkgpGdU+LDX
+  bh=ldrwldCU5gsBt1seEEqjOtl356f4DibFuHjEzUZfiwg=;
+  b=gEYEXGvB6x1KIy+gBgwyU+V1IeMUeBwMHo6wRHt8y6EvhZnlwFErqb2t
+   RZhbHAEhgyE8l97RFNNTziFdN045Q2bx/7ZRgCL0WAT+guWN334zd33TS
+   8NCiV1m0FmRRQXU38or3zKl8qH1fylHr5COIm1mcdKavNlU2VI1WeuyK7
+   nl8Fk1KUf8wgQxLGOjfGWAQDfEsMvQoXVdwRMzO7CREX3EVUizb57N8S1
+   ymHBT1sjuU+nqhe+DG+7YqF1Hvjh856WmJ3NZYDc93icq0ZGsCXkT3PHA
+   W7M8ouscaXzKEPSMLy5Fg0iFgB6JwwKadJCMmB/ia7I12AsXy6gowhrq6
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="249647049"
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232689604"
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="249647049"
+   d="scan'208";a="232689604"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:46:48 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:57:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="628208534"
+   d="scan'208";a="628210831"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Feb 2022 11:46:45 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Feb 2022 11:57:46 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMxb3-0001l4-5P; Wed, 23 Feb 2022 19:46:45 +0000
-Date: Thu, 24 Feb 2022 03:46:34 +0800
+	id 1nMxlh-0001lz-Ja; Wed, 23 Feb 2022 19:57:45 +0000
+Date: Thu, 24 Feb 2022 03:56:54 +0800
 From: kernel test robot <lkp@intel.com>
 To: Raghu Bankapur <quic_rbankapu@quicinc.com>,
 	Jaroslav Kysela <perex@perex.cz>, linux-kernel@vger.kernel.org,
@@ -39,7 +39,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Raghu Bankapur <quic_rbankapu@quicinc.com>
 Subject: Re: [PATCH V1 1/1] ASoC: compress: propagate the error code from the
  compress framework
-Message-ID: <202202240324.GFUDFcms-lkp@intel.com>
+Message-ID: <202202240311.3VkBiyO2-lkp@intel.com>
 References: <eda8b6cdd53576c5487422e46af20bae1a5c864f.1645618332.git.quic_rbankapu@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -64,7 +64,7 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Raghu-Bankapur/ASoC-compress-propagate-the-error-code-from-the-compress-framework/20220223-215509
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-config: hexagon-buildonly-randconfig-r001-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240324.GFUDFcms-lkp@intel.com/config)
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220224/202202240311.3VkBiyO2-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -75,18 +75,18 @@ reproduce (this is a W=1 build):
         git checkout 6154c602c715dac9253695c89bebd921f43cc81d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/core/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/core/compress_offload.c:34:35: warning: extra tokens at end of #include directive [-Wextra-tokens]
+   sound/core/compress_offload.c:34:35: warning: extra tokens at end of #include directive [-Wextra-tokens]
    #include <sound/compress_driver.h>ASoC: compress: propagate the error code from the compress framework
                                      ^
                                      //
->> sound/core/compress_offload.c:36:1: error: unknown type name 'Propagate'
+   sound/core/compress_offload.c:36:1: error: unknown type name 'Propagate'
    Propagate the error code from the compress framework for the timestamp
    ^
 >> sound/core/compress_offload.c:36:14: error: expected ';' after top level declarator
@@ -268,29 +268,8 @@ All error/warnings (new ones prefixed by >>):
    1 warning and 20 errors generated.
 
 
-vim +/Propagate +36 sound/core/compress_offload.c
+vim +36 sound/core/compress_offload.c
 
-    14	
-    15	#include <linux/file.h>
-    16	#include <linux/fs.h>
-    17	#include <linux/list.h>
-    18	#include <linux/math64.h>
-    19	#include <linux/mm.h>
-    20	#include <linux/mutex.h>
-    21	#include <linux/poll.h>
-    22	#include <linux/slab.h>
-    23	#include <linux/sched.h>
-    24	#include <linux/types.h>
-    25	#include <linux/uio.h>
-    26	#include <linux/uaccess.h>
-    27	#include <linux/module.h>
-    28	#include <linux/compat.h>
-    29	#include <sound/core.h>
-    30	#include <sound/initval.h>
-    31	#include <sound/info.h>
-    32	#include <sound/compress_params.h>
-    33	#include <sound/compress_offload.h>
-  > 34	#include <sound/compress_driver.h>ASoC: compress: propagate the error code from the compress framework
     35	
   > 36	Propagate the error code from the compress framework for the timestamp
     37	query. This error code will be used by the client to handle the
