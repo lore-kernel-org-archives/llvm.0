@@ -1,168 +1,231 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F91B64E
-	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 02:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836E264D
+	for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 02:56:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645582515; x=1677118515;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TBR2m15LxR1rz1jzShUqlZ1KJmeyHe43BzY3hbXsQyE=;
-  b=iRHxGtc4gIyyas+DLAI1iEv0C0kdV3IY9FINv9D4lnG84ka6F3UoUivs
-   e25DASbfPoIIU7VpX6qJRnWs5TtBNHn5dWbYZ/fR8RHkwQpSpJIv5r8ee
-   v2eAuPqQUdX133uK+68Edi3fbZ+nN29LgBnhgkETtB10d0ODQTHsyBOvc
-   fdORDCzyriIfhe+5oO8mIquJ4CPQ1ENsP6KLQyyM+u1eseVTXAxiyujr4
-   hrrJsTVfw49EyRteTfxCtXg9c1AYw2o5NrKaRj92jjGTC4wkvSNI3pYgk
-   ZQU8IVsKOSeEAXaOl4Yi/Tyb8LJWwyDaEjMV5lIcOHGnx22Hnn9r7zCAr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="232485557"
-X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
-   d="scan'208";a="232485557"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 18:15:14 -0800
+  t=1645584975; x=1677120975;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=d1c8QT29N7ks+2/EYCEs/x9GaXS2sb8QK/ApyPchNZE=;
+  b=UEhE8kBAbkSXxp9W8p0bMSXoY+SIYwuwzdCN6a4Eq7ec1dp+iIF9ziMZ
+   bARlHcHJ11ReFtuheV7guwCs5tRPiAjapkGK+7He/KvkA7CujhdA5U9X4
+   qLRC2DG9QKuf9sHWElj6ryr89IO2snXozvA7z+NsLiwjBGTiwbdKlaCkt
+   X+dtJgWVJcBOmTIXG6TuyQ0PUj7yAPH5oJC/xWOSEg3NyQaL+twU9X5Qx
+   EmcO6a0cSLYs9hIPBBVSGDjdqbUwSJ9rKQx6+UW6JobZSSz1X43wH0sIA
+   BaRxfSX6rw4N8ooL36aQ/rYAiZPegF3hBuiJIENk8gZeUPwGSSg0mYXnq
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="315099111"
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="315099111"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 18:56:15 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
-   d="scan'208";a="639138218"
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="627924828"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 Feb 2022 18:15:12 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Feb 2022 18:56:13 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nMhBP-0000ro-M2; Wed, 23 Feb 2022 02:15:11 +0000
-Date: Wed, 23 Feb 2022 10:14:49 +0800
+	id 1nMhp6-0000uZ-Rc; Wed, 23 Feb 2022 02:56:12 +0000
+Date: Wed, 23 Feb 2022 10:55:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: hanchuanhua <hanchuanhua@oppo.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [palmer:for-next 3/3] arch/riscv/mm/fault.c:126:2: error: use of
- undeclared identifier 'pgd'
-Message-ID: <202202231026.MjophNbG-lkp@intel.com>
+To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC] Bluetooth: SCO: Fix codec when using
+ HCI_Enhanced_Setup_Synchronous_Connection
+Message-ID: <202202231010.N2dnVcSC-lkp@intel.com>
+References: <20220222212227.24515-1-luiz.dentz@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220222212227.24515-1-luiz.dentz@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git for-next
-head:   c4f1d47294c4a59c09d14c5802bc0e978bad7b9a
-commit: c4f1d47294c4a59c09d14c5802bc0e978bad7b9a [3/3] riscv: mm: Remove the copy operation of pmd
-config: riscv-randconfig-r042-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231026.MjophNbG-lkp@intel.com/config)
+Hi Luiz,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on bluetooth-next/master]
+[also build test WARNING on linus/master v5.17-rc5 next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Luiz-Augusto-von-Dentz/Bluetooth-SCO-Fix-codec-when-using-HCI_Enhanced_Setup_Synchronous_Connection/20220223-052337
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+config: x86_64-randconfig-a011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231010.N2dnVcSC-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?id=c4f1d47294c4a59c09d14c5802bc0e978bad7b9a
-        git remote add palmer https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git
-        git fetch --no-tags palmer for-next
-        git checkout c4f1d47294c4a59c09d14c5802bc0e978bad7b9a
+        # https://github.com/0day-ci/linux/commit/04f5ce131261635df1672e71bb21ddd6ed96cbde
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Luiz-Augusto-von-Dentz/Bluetooth-SCO-Fix-codec-when-using-HCI_Enhanced_Setup_Synchronous_Connection/20220223-052337
+        git checkout 04f5ce131261635df1672e71bb21ddd6ed96cbde
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/bluetooth/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/riscv/mm/fault.c:126:2: error: use of undeclared identifier 'pgd'
-           pgd = (pgd_t *)pfn_to_virt(pfn) + index;
-           ^
-   arch/riscv/mm/fault.c:133:10: error: use of undeclared identifier 'pgd'
-           set_pgd(pgd, *pgd_k);
-                   ^
-   2 errors generated.
+>> net/bluetooth/sco.c:885:15: warning: variable 'hdev' is uninitialized when used here [-Wuninitialized]
+                   hci_dev_put(hdev);
+                               ^~~~
+   net/bluetooth/sco.c:833:22: note: initialize the variable 'hdev' to silence this warning
+           struct hci_dev *hdev;
+                               ^
+                                = NULL
+   1 warning generated.
 
 
-vim +/pgd +126 arch/riscv/mm/fault.c
+vim +/hdev +885 net/bluetooth/sco.c
 
-a51271d99cdd04 Pekka Enberg 2020-08-25  101  
-2baa6d9506f24d Pekka Enberg 2020-09-05  102  static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long addr)
-ac416a724f1132 Pekka Enberg 2020-08-25  103  {
-c4f1d47294c4a5 hanchuanhua  2022-01-27  104  	pgd_t *pgd_k;
-c4f1d47294c4a5 hanchuanhua  2022-01-27  105  	pud_t *pud_k;
-c4f1d47294c4a5 hanchuanhua  2022-01-27  106  	p4d_t *p4d_k;
-c4f1d47294c4a5 hanchuanhua  2022-01-27  107  	pmd_t *pmd_k;
-ac416a724f1132 Pekka Enberg 2020-08-25  108  	pte_t *pte_k;
-ac416a724f1132 Pekka Enberg 2020-08-25  109  	int index;
-bcacf5f6f239a9 Liu Shaohua  2020-10-26  110  	unsigned long pfn;
-ac416a724f1132 Pekka Enberg 2020-08-25  111  
-ac416a724f1132 Pekka Enberg 2020-08-25  112  	/* User mode accesses just cause a SIGSEGV */
-ac416a724f1132 Pekka Enberg 2020-08-25  113  	if (user_mode(regs))
-ac416a724f1132 Pekka Enberg 2020-08-25  114  		return do_trap(regs, SIGSEGV, code, addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  115  
-ac416a724f1132 Pekka Enberg 2020-08-25  116  	/*
-ac416a724f1132 Pekka Enberg 2020-08-25  117  	 * Synchronize this task's top level page-table
-ac416a724f1132 Pekka Enberg 2020-08-25  118  	 * with the 'reference' page table.
-ac416a724f1132 Pekka Enberg 2020-08-25  119  	 *
-ac416a724f1132 Pekka Enberg 2020-08-25  120  	 * Do _not_ use "tsk->active_mm->pgd" here.
-ac416a724f1132 Pekka Enberg 2020-08-25  121  	 * We might be inside an interrupt in the middle
-ac416a724f1132 Pekka Enberg 2020-08-25  122  	 * of a task switch.
-ac416a724f1132 Pekka Enberg 2020-08-25  123  	 */
-ac416a724f1132 Pekka Enberg 2020-08-25  124  	index = pgd_index(addr);
-bcacf5f6f239a9 Liu Shaohua  2020-10-26  125  	pfn = csr_read(CSR_SATP) & SATP_PPN;
-bcacf5f6f239a9 Liu Shaohua  2020-10-26 @126  	pgd = (pgd_t *)pfn_to_virt(pfn) + index;
-ac416a724f1132 Pekka Enberg 2020-08-25  127  	pgd_k = init_mm.pgd + index;
-ac416a724f1132 Pekka Enberg 2020-08-25  128  
-ac416a724f1132 Pekka Enberg 2020-08-25  129  	if (!pgd_present(*pgd_k)) {
-ac416a724f1132 Pekka Enberg 2020-08-25  130  		no_context(regs, addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  131  		return;
-ac416a724f1132 Pekka Enberg 2020-08-25  132  	}
-ac416a724f1132 Pekka Enberg 2020-08-25  133  	set_pgd(pgd, *pgd_k);
-ac416a724f1132 Pekka Enberg 2020-08-25  134  
-ac416a724f1132 Pekka Enberg 2020-08-25  135  	p4d_k = p4d_offset(pgd_k, addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  136  	if (!p4d_present(*p4d_k)) {
-ac416a724f1132 Pekka Enberg 2020-08-25  137  		no_context(regs, addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  138  		return;
-ac416a724f1132 Pekka Enberg 2020-08-25  139  	}
-ac416a724f1132 Pekka Enberg 2020-08-25  140  
-ac416a724f1132 Pekka Enberg 2020-08-25  141  	pud_k = pud_offset(p4d_k, addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  142  	if (!pud_present(*pud_k)) {
-ac416a724f1132 Pekka Enberg 2020-08-25  143  		no_context(regs, addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  144  		return;
-ac416a724f1132 Pekka Enberg 2020-08-25  145  	}
-ac416a724f1132 Pekka Enberg 2020-08-25  146  
-ac416a724f1132 Pekka Enberg 2020-08-25  147  	/*
-ac416a724f1132 Pekka Enberg 2020-08-25  148  	 * Since the vmalloc area is global, it is unnecessary
-ac416a724f1132 Pekka Enberg 2020-08-25  149  	 * to copy individual PTEs
-ac416a724f1132 Pekka Enberg 2020-08-25  150  	 */
-ac416a724f1132 Pekka Enberg 2020-08-25  151  	pmd_k = pmd_offset(pud_k, addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  152  	if (!pmd_present(*pmd_k)) {
-ac416a724f1132 Pekka Enberg 2020-08-25  153  		no_context(regs, addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  154  		return;
-ac416a724f1132 Pekka Enberg 2020-08-25  155  	}
-ac416a724f1132 Pekka Enberg 2020-08-25  156  
-ac416a724f1132 Pekka Enberg 2020-08-25  157  	/*
-ac416a724f1132 Pekka Enberg 2020-08-25  158  	 * Make sure the actual PTE exists as well to
-ac416a724f1132 Pekka Enberg 2020-08-25  159  	 * catch kernel vmalloc-area accesses to non-mapped
-ac416a724f1132 Pekka Enberg 2020-08-25  160  	 * addresses. If we don't do this, this will just
-ac416a724f1132 Pekka Enberg 2020-08-25  161  	 * silently loop forever.
-ac416a724f1132 Pekka Enberg 2020-08-25  162  	 */
-ac416a724f1132 Pekka Enberg 2020-08-25  163  	pte_k = pte_offset_kernel(pmd_k, addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  164  	if (!pte_present(*pte_k)) {
-ac416a724f1132 Pekka Enberg 2020-08-25  165  		no_context(regs, addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  166  		return;
-ac416a724f1132 Pekka Enberg 2020-08-25  167  	}
-ac416a724f1132 Pekka Enberg 2020-08-25  168  
-ac416a724f1132 Pekka Enberg 2020-08-25  169  	/*
-ac416a724f1132 Pekka Enberg 2020-08-25  170  	 * The kernel assumes that TLBs don't cache invalid
-ac416a724f1132 Pekka Enberg 2020-08-25  171  	 * entries, but in RISC-V, SFENCE.VMA specifies an
-ac416a724f1132 Pekka Enberg 2020-08-25  172  	 * ordering constraint, not a cache flush; it is
-ac416a724f1132 Pekka Enberg 2020-08-25  173  	 * necessary even after writing invalid entries.
-ac416a724f1132 Pekka Enberg 2020-08-25  174  	 */
-ac416a724f1132 Pekka Enberg 2020-08-25  175  	local_flush_tlb_page(addr);
-ac416a724f1132 Pekka Enberg 2020-08-25  176  }
-ac416a724f1132 Pekka Enberg 2020-08-25  177  
-
-:::::: The code at line 126 was first introduced by commit
-:::::: bcacf5f6f239a9e60287680514f392748cb4ec39 riscv: fix pfn_to_virt err in do_page_fault().
-
-:::::: TO: Liu Shaohua <liush@allwinnertech.com>
-:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
+20714bfef84d3e Frédéric Dalleau       2012-11-21  824  
+c4297e8f7f453c Marcel Holtmann        2015-10-26  825  static int sco_sock_setsockopt(struct socket *sock, int level, int optname,
+a7b75c5a8c4144 Christoph Hellwig      2020-07-23  826  			       sockptr_t optval, unsigned int optlen)
+^1da177e4c3f41 Linus Torvalds         2005-04-16  827  {
+^1da177e4c3f41 Linus Torvalds         2005-04-16  828  	struct sock *sk = sock->sk;
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  829  	int len, err = 0;
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  830  	struct bt_voice voice;
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  831  	u32 opt;
+f6873401a60865 Kiran K                2021-09-07  832  	struct bt_codecs *codecs;
+f6873401a60865 Kiran K                2021-09-07  833  	struct hci_dev *hdev;
+f6873401a60865 Kiran K                2021-09-07  834  	__u8 buffer[255];
+^1da177e4c3f41 Linus Torvalds         2005-04-16  835  
+^1da177e4c3f41 Linus Torvalds         2005-04-16  836  	BT_DBG("sk %p", sk);
+^1da177e4c3f41 Linus Torvalds         2005-04-16  837  
+^1da177e4c3f41 Linus Torvalds         2005-04-16  838  	lock_sock(sk);
+^1da177e4c3f41 Linus Torvalds         2005-04-16  839  
+^1da177e4c3f41 Linus Torvalds         2005-04-16  840  	switch (optname) {
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  841  
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  842  	case BT_DEFER_SETUP:
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  843  		if (sk->sk_state != BT_BOUND && sk->sk_state != BT_LISTEN) {
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  844  			err = -EINVAL;
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  845  			break;
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  846  		}
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  847  
+a7b75c5a8c4144 Christoph Hellwig      2020-07-23  848  		if (copy_from_sockptr(&opt, optval, sizeof(u32))) {
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  849  			err = -EFAULT;
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  850  			break;
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  851  		}
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  852  
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  853  		if (opt)
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  854  			set_bit(BT_SK_DEFER_SETUP, &bt_sk(sk)->flags);
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  855  		else
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  856  			clear_bit(BT_SK_DEFER_SETUP, &bt_sk(sk)->flags);
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  857  		break;
+b96e9c671b05f9 Frédéric Dalleau       2012-11-21  858  
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  859  	case BT_VOICE:
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  860  		if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND &&
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  861  		    sk->sk_state != BT_CONNECT2) {
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  862  			err = -EINVAL;
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  863  			break;
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  864  		}
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  865  
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  866  		voice.setting = sco_pi(sk)->setting;
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  867  
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  868  		len = min_t(unsigned int, sizeof(voice), optlen);
+a7b75c5a8c4144 Christoph Hellwig      2020-07-23  869  		if (copy_from_sockptr(&voice, optval, len)) {
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  870  			err = -EFAULT;
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  871  			break;
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  872  		}
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  873  
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  874  		/* Explicitly check for these values */
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  875  		if (voice.setting != BT_VOICE_TRANSPARENT &&
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  876  		    voice.setting != BT_VOICE_CVSD_16BIT) {
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  877  			err = -EINVAL;
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  878  			break;
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  879  		}
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  880  
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  881  		sco_pi(sk)->setting = voice.setting;
+04f5ce13126163 Luiz Augusto von Dentz 2022-02-22  882  		if (voice.setting == BT_VOICE_TRANSPARENT)
+04f5ce13126163 Luiz Augusto von Dentz 2022-02-22  883  			sco_pi(sk)->codec.id = BT_CODEC_MSBC;
+04f5ce13126163 Luiz Augusto von Dentz 2022-02-22  884  
+b2af264ad3af43 Kiran K                2021-09-07 @885  		hci_dev_put(hdev);
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  886  		break;
+ad10b1a48754b1 Frédéric Dalleau       2013-08-19  887  
+00398e1d518309 Alain Michaud          2020-06-11  888  	case BT_PKT_STATUS:
+83a33b248763f0 David S. Miller        2020-07-31  889  		if (copy_from_sockptr(&opt, optval, sizeof(u32))) {
+00398e1d518309 Alain Michaud          2020-06-11  890  			err = -EFAULT;
+00398e1d518309 Alain Michaud          2020-06-11  891  			break;
+00398e1d518309 Alain Michaud          2020-06-11  892  		}
+00398e1d518309 Alain Michaud          2020-06-11  893  
+00398e1d518309 Alain Michaud          2020-06-11  894  		if (opt)
+00398e1d518309 Alain Michaud          2020-06-11  895  			sco_pi(sk)->cmsg_mask |= SCO_CMSG_PKT_STATUS;
+00398e1d518309 Alain Michaud          2020-06-11  896  		else
+00398e1d518309 Alain Michaud          2020-06-11  897  			sco_pi(sk)->cmsg_mask &= SCO_CMSG_PKT_STATUS;
+00398e1d518309 Alain Michaud          2020-06-11  898  		break;
+00398e1d518309 Alain Michaud          2020-06-11  899  
+f6873401a60865 Kiran K                2021-09-07  900  	case BT_CODEC:
+f6873401a60865 Kiran K                2021-09-07  901  		if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND &&
+f6873401a60865 Kiran K                2021-09-07  902  		    sk->sk_state != BT_CONNECT2) {
+f6873401a60865 Kiran K                2021-09-07  903  			err = -EINVAL;
+f6873401a60865 Kiran K                2021-09-07  904  			break;
+f6873401a60865 Kiran K                2021-09-07  905  		}
+f6873401a60865 Kiran K                2021-09-07  906  
+f6873401a60865 Kiran K                2021-09-07  907  		hdev = hci_get_route(&sco_pi(sk)->dst, &sco_pi(sk)->src,
+f6873401a60865 Kiran K                2021-09-07  908  				     BDADDR_BREDR);
+f6873401a60865 Kiran K                2021-09-07  909  		if (!hdev) {
+f6873401a60865 Kiran K                2021-09-07  910  			err = -EBADFD;
+f6873401a60865 Kiran K                2021-09-07  911  			break;
+f6873401a60865 Kiran K                2021-09-07  912  		}
+f6873401a60865 Kiran K                2021-09-07  913  
+f6873401a60865 Kiran K                2021-09-07  914  		if (!hci_dev_test_flag(hdev, HCI_OFFLOAD_CODECS_ENABLED)) {
+f6873401a60865 Kiran K                2021-09-07  915  			hci_dev_put(hdev);
+f6873401a60865 Kiran K                2021-09-07  916  			err = -EOPNOTSUPP;
+f6873401a60865 Kiran K                2021-09-07  917  			break;
+f6873401a60865 Kiran K                2021-09-07  918  		}
+f6873401a60865 Kiran K                2021-09-07  919  
+f6873401a60865 Kiran K                2021-09-07  920  		if (!hdev->get_data_path_id) {
+f6873401a60865 Kiran K                2021-09-07  921  			hci_dev_put(hdev);
+f6873401a60865 Kiran K                2021-09-07  922  			err = -EOPNOTSUPP;
+f6873401a60865 Kiran K                2021-09-07  923  			break;
+f6873401a60865 Kiran K                2021-09-07  924  		}
+f6873401a60865 Kiran K                2021-09-07  925  
+f6873401a60865 Kiran K                2021-09-07  926  		if (optlen < sizeof(struct bt_codecs) ||
+f6873401a60865 Kiran K                2021-09-07  927  		    optlen > sizeof(buffer)) {
+f6873401a60865 Kiran K                2021-09-07  928  			hci_dev_put(hdev);
+f6873401a60865 Kiran K                2021-09-07  929  			err = -EINVAL;
+f6873401a60865 Kiran K                2021-09-07  930  			break;
+f6873401a60865 Kiran K                2021-09-07  931  		}
+f6873401a60865 Kiran K                2021-09-07  932  
+f6873401a60865 Kiran K                2021-09-07  933  		if (copy_from_sockptr(buffer, optval, optlen)) {
+f6873401a60865 Kiran K                2021-09-07  934  			hci_dev_put(hdev);
+f6873401a60865 Kiran K                2021-09-07  935  			err = -EFAULT;
+f6873401a60865 Kiran K                2021-09-07  936  			break;
+f6873401a60865 Kiran K                2021-09-07  937  		}
+f6873401a60865 Kiran K                2021-09-07  938  
+f6873401a60865 Kiran K                2021-09-07  939  		codecs = (void *)buffer;
+f6873401a60865 Kiran K                2021-09-07  940  
+f6873401a60865 Kiran K                2021-09-07  941  		if (codecs->num_codecs > 1) {
+f6873401a60865 Kiran K                2021-09-07  942  			hci_dev_put(hdev);
+f6873401a60865 Kiran K                2021-09-07  943  			err = -EINVAL;
+f6873401a60865 Kiran K                2021-09-07  944  			break;
+f6873401a60865 Kiran K                2021-09-07  945  		}
+f6873401a60865 Kiran K                2021-09-07  946  
+f6873401a60865 Kiran K                2021-09-07  947  		sco_pi(sk)->codec = codecs->codecs[0];
+f6873401a60865 Kiran K                2021-09-07  948  		hci_dev_put(hdev);
+f6873401a60865 Kiran K                2021-09-07  949  		break;
+f6873401a60865 Kiran K                2021-09-07  950  
+^1da177e4c3f41 Linus Torvalds         2005-04-16  951  	default:
+^1da177e4c3f41 Linus Torvalds         2005-04-16  952  		err = -ENOPROTOOPT;
+^1da177e4c3f41 Linus Torvalds         2005-04-16  953  		break;
+^1da177e4c3f41 Linus Torvalds         2005-04-16  954  	}
+^1da177e4c3f41 Linus Torvalds         2005-04-16  955  
+^1da177e4c3f41 Linus Torvalds         2005-04-16  956  	release_sock(sk);
+^1da177e4c3f41 Linus Torvalds         2005-04-16  957  	return err;
+^1da177e4c3f41 Linus Torvalds         2005-04-16  958  }
+^1da177e4c3f41 Linus Torvalds         2005-04-16  959  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
