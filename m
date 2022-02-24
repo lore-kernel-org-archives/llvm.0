@@ -1,79 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6CD1373;
-	Thu, 24 Feb 2022 21:10:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD011C340E9;
-	Thu, 24 Feb 2022 21:10:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645737052;
-	bh=of0dgeyEYw65+FoM0blva960Bmm/NelYeS+8mwZtaRw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=mgnFTy+/Iw2w+HIhZsZoaHPokVk3nb3ubMC28rB2vt41gH4zN3nUGWXzupmPwlFB4
-	 UVcnE1nRRyzORca95Dl7NH1hOmC49WPuJGE3/ysl0rSFj/Dgpw2YWL++MGFlb/SvBH
-	 nh5pSRSfYwB8oygB7+2ewJeXeqDlr3g1xZkSNQdS1LAz9kwpPYihiAJR+1HSywvjYj
-	 uVD5C2BcmuOeZTRleDeMxYU8XF30foNAyKeflBHSC4afltmMzQ4MFNag5vmDMTIOOZ
-	 jcAVLsnjJVuJo2dS/7RyDtgJT8f549o7LTd4ppbVRMCpnFuVSHiLb6QDrG25YhRb3q
-	 /FGWrKZ0Q5mXA==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Cosmin Tanislav <cosmin.tanislav@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>
-Cc: linux-iio@vger.kernel.org,
-	patches@lists.linux.dev,
-	llvm@lists.linux.dev,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14DE1373
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 22:05:59 +0000 (UTC)
+Received: by mail-wr1-f50.google.com with SMTP id s13so1721454wrb.6
+        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 14:05:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=et1Z6Z/KvYWUodJYfEuS39IO1XCVclEySq/foYvH8dk=;
+        b=mnf1tq4FpyWGBrbpbVW1mM5mQw5kAPuj7gsOJFmF1yavYT2tdb6vETJ3pe6Dag3IHp
+         pPBkr7t3Cn7aW2ZtN/KcQ7D60rgBUkHbNMjjvjP5KI3Ah3t2aLxXp6dTvlmNPY8r2ygn
+         nMaPnuIHGiYTHyhzZqZSwiUt6yo2d90NYr6E9iH6J4Cgk1IrVQhUH6MY75fInLmHBYBa
+         Q0i+KpyWeznUJbJ63DiwNXkkUiqOVuNJvX/7Yumxs8jnAKO/nVm5G0gSoHuT0x3tMYAV
+         PanbL0lw5881Pf0gJ9d5nXpkzhVVe1LkbbIxv93q3SqzreIff097RpzuGM3udF0Vtn5A
+         hs3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=et1Z6Z/KvYWUodJYfEuS39IO1XCVclEySq/foYvH8dk=;
+        b=emawP7oZ6bHZef1vu3Kk3d4xiMpLbkEVlC9RbQxbAGzZLLvS6brK9/53hH6YefmRu+
+         qIY9d1tuzkhtngF1BnOf1PwJs2EAgLZMrlOOwc11Sk/LVw7C9VmJ69ZfiTdJSY5uYPTO
+         0kUeV97+W04eHgJnQrG5CLLKoYwXy+5v7Y+GdeDySSRbms6XijfpaInU/f+nbnrSKBQQ
+         tNCtbrGMFo3vpU4qX8RXLcEq2btWRWDNjmLA7D+BhgfWASGvMamGYcr49bbK7yPvHO3L
+         VtTgvnj9eERStuwfTQQvGgOB0TRjvFP3eyPSSTv3WAUYK2YX27nYQmZOpoFzfjdGhScs
+         9uoQ==
+X-Gm-Message-State: AOAM531ARbNE0l5hZlCem2bDbGv34hbYg+QWDlneATMQ4SHOHs2D1TRP
+	yQV9JBKeJb1nFClZ3FSTLFc=
+X-Google-Smtp-Source: ABdhPJxdmTL9qm2lX9wZlAGeBlGH0yxb/0WSSYGgg/cAt1Yo78pwYN9T0mgdpPvBtnk+KcI6OE643w==
+X-Received: by 2002:adf:910a:0:b0:1ed:c3fc:2dcf with SMTP id j10-20020adf910a000000b001edc3fc2dcfmr3845237wrj.430.1645740358055;
+        Thu, 24 Feb 2022 14:05:58 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id v5-20020adfe4c5000000b001edc1e5053esm461372wrm.82.2022.02.24.14.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 14:05:57 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Vivien Didelot <vivien.didelot@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] iio: accel: adxl367: Fix handled initialization in adxl367_irq_handler()
-Date: Thu, 24 Feb 2022 14:10:34 -0700
-Message-Id: <20220224211034.625130-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Russell King <rmk+kernel@armlinux.org.uk>,
+	netdev@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH][next] net: dsa: qca8k: return with -EINVAL on invalid port
+Date: Thu, 24 Feb 2022 22:05:57 +0000
+Message-Id: <20220224220557.147075-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Clang warns:
+Currently an invalid port throws a WARN_ON warning however invalid
+uninitialized values in reg and cpu_port_index are being used later
+on. Fix this by returning -EINVAL for an invalid port value.
 
-  drivers/iio/accel/adxl367.c:887:2: error: variable 'handled' is uninitialized when used here [-Werror,-Wuninitialized]
-          handled |= adxl367_push_event(indio_dev, status);
-          ^~~~~~~
-  drivers/iio/accel/adxl367.c:879:14: note: initialize the variable 'handled' to silence this warning
-          bool handled;
-                      ^
-                       = 0
-  1 error generated.
+Addresses clang-scan warnings:
+drivers/net/dsa/qca8k.c:1981:3: warning: 2nd function call argument is an
+  uninitialized value [core.CallAndMessage]
+drivers/net/dsa/qca8k.c:1999:9: warning: 2nd function call argument is an
+  uninitialized value [core.CallAndMessage]
 
-This should have used '=' instead of '|='; make that change to resolve
-the warning.
-
-Fixes: cbab791c5e2a ("iio: accel: add ADXL367 driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1605
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Fixes: 7544b3ff745b ("net: dsa: qca8k: move pcs configuration")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/iio/accel/adxl367.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/dsa/qca8k.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
-index b452d74b1d4d..350a89b61179 100644
---- a/drivers/iio/accel/adxl367.c
-+++ b/drivers/iio/accel/adxl367.c
-@@ -884,7 +884,7 @@ static irqreturn_t adxl367_irq_handler(int irq, void *private)
- 	if (ret)
- 		return IRQ_NONE;
+diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
+index 04fa21e37dfa..2ed45f69b8e4 100644
+--- a/drivers/net/dsa/qca8k.c
++++ b/drivers/net/dsa/qca8k.c
+@@ -1937,6 +1937,7 @@ static int qca8k_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
  
--	handled |= adxl367_push_event(indio_dev, status);
-+	handled = adxl367_push_event(indio_dev, status);
- 	handled |= adxl367_push_fifo_data(indio_dev, status, fifo_entries);
+ 	default:
+ 		WARN_ON(1);
++		return -EINVAL;
+ 	}
  
- 	return handled ? IRQ_HANDLED : IRQ_NONE;
-
-base-commit: 2be8795a609800e5071d868d459ce29232fce2c8
+ 	/* Enable/disable SerDes auto-negotiation as necessary */
 -- 
-2.35.1
+2.34.1
 
