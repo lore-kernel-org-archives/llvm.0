@@ -1,74 +1,93 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1ECD7481
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 22:41:30 +0000 (UTC)
-Received: by mail-qk1-f179.google.com with SMTP id d84so3099768qke.8
-        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 14:41:30 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0617481
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 22:43:18 +0000 (UTC)
+Received: by mail-wr1-f54.google.com with SMTP id j17so1910456wrc.0
+        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 14:43:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O55dG59ND2a/g7lYO2wfvmMneplJJEKkRL2CoScDnj0=;
-        b=e5/hLsrNFpWReKY1/jTKQpPZ+/TK/HqrGw8wiKLEkYuPv3WKHMaVjfyEty1JrNF6Lh
-         rFW1Yc0aGeDcgnI3Xas50xRAsKrDQaGdxB4gxOcAmSR3C97Pd4YB63n7EFBmT0emZI7B
-         2gKV0LWIk298WU26tm/4nYsRT//xnxEBobpJQ=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bWKLMT4aebSJWW8C7UiCQ3/EbG02GUUsHveIfrNn2xE=;
+        b=hm/yI1Cy2Kc8mLeeLsOCHupF1kEHeji6XjXMjWyWbiitXdcqzotkVsqhN+bU7+hwc5
+         t/Jct+cxOWL03KF/nmu3K5nzMPMgen47vrPBS0NpiuJd/X0wuYF5NXJZvIQIRiPt2m2w
+         t2heHb5g/O+V72fy/UUlcjmfXgRF1p8E3GHQEcggq0h2lJaFK8l+BwBN9SYa65n/7a0w
+         2C53p+XtaPhGaJgtIquK/MEhhm+6m50rt73HguwdIImHYO/TW5gJo2qec+hnLWvUZBh3
+         2QRVv8+FfvYeIyvjXTU9Cn8tYpHjqa6RN24Eips/xUqhHgITJM9cj76iUEBh5xuAIJv1
+         Izig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O55dG59ND2a/g7lYO2wfvmMneplJJEKkRL2CoScDnj0=;
-        b=PYADoJBIkE0tI5t5xx/1+Tkx3sWrs+6O3My82456DY2VAqq+5PyxhTotowUDvIwdL9
-         rHRYPUI8/M8zXdfblKP+vMyIh/fNvO0zPLPCSksnRWaM8Lmlu3ZYLxR0Gu2GMaa6LOid
-         2CoPNNV0eHoyResZNO4vKYzoThT86pQlteew4musd4oc+lSZPldNnJ4OBeGBJt/Y2dgM
-         wLxCBr9Oa4+5+pBlPGN5wpJi0ob/wd8yw4K2oFf8n6uwfBo9oxNndup2+IgWi1grq47Q
-         0Mxtf6ysBYLwwJFTDOpomCmkCAuFKCCmBOh4kNg00YXIuNiPU/Rruf6JQOmimYBcHszj
-         QJxQ==
-X-Gm-Message-State: AOAM531hNgFDHD9XO1Vz+a5qUHe6bVKrnKrA5zwi709E9ASIqdzR72BI
-	pr2akj6757nV2buIpeemnlZzMMZarRUY20VN
-X-Google-Smtp-Source: ABdhPJxr2sKow82sDGAquVMrlk1bfPxvnVUbvMF2sGan6VjwohuxsYxIC882+vyadyJoOe3WfUrR8g==
-X-Received: by 2002:a05:620a:1103:b0:60d:e5c8:a597 with SMTP id o3-20020a05620a110300b0060de5c8a597mr3099816qkk.513.1645742489360;
-        Thu, 24 Feb 2022 14:41:29 -0800 (PST)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id r14-20020a05622a034e00b002de72634a7asm380646qtw.37.2022.02.24.14.41.28
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 14:41:28 -0800 (PST)
-Received: by mail-yb1-f170.google.com with SMTP id j2so2471983ybu.0
-        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 14:41:28 -0800 (PST)
-X-Received: by 2002:a25:3188:0:b0:61d:5ab9:c969 with SMTP id
- x130-20020a253188000000b0061d5ab9c969mr4710651ybx.346.1645742488451; Thu, 24
- Feb 2022 14:41:28 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bWKLMT4aebSJWW8C7UiCQ3/EbG02GUUsHveIfrNn2xE=;
+        b=mNReUoYB7iftPneb14GdxskdDmBti0GcOMJHaSyCXoWfyrt2lojUZ46IVPoRl+zw80
+         3mjqwy6jj9/XTlZFA3HVyI4R8bkz/7GMWNBuNIA01onXKuzAMZZdO3JH99hpXnXhpBvD
+         cjYzkEZ2YEVsiRbjJbNQqDBkJZqglZQguqj4NQwrAH9ML5GkwIMkctuelG+TorCwUDyZ
+         DRsOznay8Q5WQW8vjDHVfxKJXEIuHr4psWsub+JmpKxVwPpT2TkWN+fwYmNMH6vHRua/
+         JK3qkyhjzksGoYu+jE3hRwiZ0VYcGkx/AvTiZBmuPBl/2i/x2XwHgGtJbzpVtRr4KkvA
+         dYcA==
+X-Gm-Message-State: AOAM532F67t2mf6jYB9qhvXnBoB7NQ0MehQH/Gh2muKyxROS7Xi+27R/
+	ypP0uI4iDiDHmLvj6yUl8sT7x0F4ZBNJqA==
+X-Google-Smtp-Source: ABdhPJx+iF7F/adABVhKlAG8I0mrA22SnXPr653iA75eyj2+GDckFVmGWApaNaHjkGCuXsZThToCeQ==
+X-Received: by 2002:a05:6000:2c4:b0:1ea:910c:151c with SMTP id o4-20020a05600002c400b001ea910c151cmr3801018wry.92.1645742597131;
+        Thu, 24 Feb 2022 14:43:17 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id a17-20020a5d5091000000b001edb61b2687sm736421wrt.63.2022.02.24.14.43.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 14:43:16 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Alex Deucher <alexander.deucher@amd.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Xinhui.Pan@amd.com,
+	David Airlie <airlied@linux.ie>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH][next] drm/amdgpu: Fix missing assignment to variable r
+Date: Thu, 24 Feb 2022 22:43:16 +0000
+Message-Id: <20220224224316.149704-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <61fb8055.1c69fb81.ddcb.6101@mx.google.com> <CAKwvOdn6=fW+vRLfiVBP4LgpySjFw3628KpE6wWvtQAc-z+F8Q@mail.gmail.com>
-In-Reply-To: <CAKwvOdn6=fW+vRLfiVBP4LgpySjFw3628KpE6wWvtQAc-z+F8Q@mail.gmail.com>
-From: Kees Cook <keescook@chromium.org>
-Date: Thu, 24 Feb 2022 14:40:51 -0800
-X-Gmail-Original-Message-ID: <CAGXu5jLZYLVy46E_BQZPbXkJqpNxABL0EVbHsR1=_u2zp8YJAQ@mail.gmail.com>
-Message-ID: <CAGXu5jLZYLVy46E_BQZPbXkJqpNxABL0EVbHsR1=_u2zp8YJAQ@mail.gmail.com>
-Subject: Re: next/master build: 201 builds: 18 failed, 183 passed, 30 errors,
- 334 warnings (next-20220203)
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, "kernelci.org bot" <bot@kernelci.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 3, 2022 at 12:59 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> + Kees, for the -Warray-bounds and -Wattribute-warning warnings (in
-> case they weren't already reported elsewhere)
+Currently the call to function amdgpu_benchmark_move should be
+assigning the return value to variable r as this is checked in
+the next statement, however, this assignment is missing. Fix
+this by adding in the missing assignment.
 
-Thanks! I think I've fixed all of these now (though I didn't see this
-email until just now because I filter out all the public lists I read
-@chromium.org -- this got sent to @google.com and apparently I am bad
-at filters). :)
+Addresses clang scan warning:
+drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c:168:7: warning:
+variable 'r' is uninitialized when used here [-Wuninitialized]
 
--Kees
+Fixes: 9645c9c9fb15 ("drm/amdgpu: plumb error handling though amdgpu_benchmark()")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c
+index 3136a9ad2d54..bb293a5c6fd5 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c
+@@ -163,7 +163,7 @@ int amdgpu_benchmark(struct amdgpu_device *adev, int test_number)
+ 			 "benchmark test: %d (simple test, VRAM to VRAM)\n",
+ 			 test_number);
+ 		/* simple test, VRAM to VRAM */
+-		amdgpu_benchmark_move(adev, 1024*1024, AMDGPU_GEM_DOMAIN_VRAM,
++		r = amdgpu_benchmark_move(adev, 1024*1024, AMDGPU_GEM_DOMAIN_VRAM,
+ 				      AMDGPU_GEM_DOMAIN_VRAM);
+ 		if (r)
+ 			goto done;
 -- 
-Kees Cook
+2.34.1
+
