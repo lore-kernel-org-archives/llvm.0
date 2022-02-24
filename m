@@ -1,95 +1,74 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A111373
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 22:15:27 +0000 (UTC)
-Received: by mail-wr1-f43.google.com with SMTP id s1so1718170wrg.10
-        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 14:15:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1ECD7481
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 22:41:30 +0000 (UTC)
+Received: by mail-qk1-f179.google.com with SMTP id d84so3099768qke.8
+        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 14:41:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=23uPqqlxtmnZRHLs9v3vgksA5KeOpFw/ThnhTpkf+2w=;
-        b=S6nCprqxh0JglbBAqwKJDoHoVIjtj4T6nsOoxoor9OqZxzcWSmesnc8rh8G+UcJWwk
-         mc13iC3iU8uKZp4mj0CgARdJtp+90Ud9bgn5xxixO3CyqpAeGCn0AN3oF1cX3oJB8QHI
-         8UDrUzs36GYtOFY6uAjLWQanpjCWTIYlFlqjK+5LUI+xyxfWFQ6tVS0z0hiVKS+6d/0p
-         uDzEg8pnt+wxr4pKPMoXM/zFFnEQk9VlaKv2+C5Vd2mQ7edNv+t4RTkX4Sr9Xtq8hNMz
-         ujeMJtqjfqPyaAiw66xkhG8E57AyVTyOdWffuxDtoxuEQE1wiizAlDyCwHPUFQtj1pHX
-         q82g==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O55dG59ND2a/g7lYO2wfvmMneplJJEKkRL2CoScDnj0=;
+        b=e5/hLsrNFpWReKY1/jTKQpPZ+/TK/HqrGw8wiKLEkYuPv3WKHMaVjfyEty1JrNF6Lh
+         rFW1Yc0aGeDcgnI3Xas50xRAsKrDQaGdxB4gxOcAmSR3C97Pd4YB63n7EFBmT0emZI7B
+         2gKV0LWIk298WU26tm/4nYsRT//xnxEBobpJQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=23uPqqlxtmnZRHLs9v3vgksA5KeOpFw/ThnhTpkf+2w=;
-        b=3JDDlg95htH1mkBBx9Ae80asvqvT+8/IW7vFL+y6MHkEin1AkOt96wjlHch3p77Xri
-         SLVUb2u6OTsIfVc8tr1yUkl8riw/zqoKYiLKee2wHcbEhwBZ0WdK41eP07HwIh/jqS8C
-         emSSLJwuIsVUAxFHyKFzx5XlVa8CvNT4pnSECUQKxoQDr5DOnqQQOm3Su5+3J53eQg6Q
-         yn19gjrN9CN04sVBnceoqOMAhAi7oOQqBhXbFp5O6JYOttQZEfoR7HDY3yAMrFzbjPTq
-         N6ti3c9aiJbYm7HNBQQ1b7VRuPXKex5FgqRCQw+dmFqw/Wqsd9yMnCzkrz3RVAXmoUGr
-         OiDg==
-X-Gm-Message-State: AOAM530yDId95hUhYbRBJBpWj5DrOPKNvEGTlYoOUdzPx3yUSuewlUVo
-	mFdeOBZZ5Nbo1DlDCR7C+Ec=
-X-Google-Smtp-Source: ABdhPJwAm/jUbae804Iirsh2TE+k/iRCYA06xF1rFmTlmPTvYCNCE4wR20beM9tBYDQ6CUCuGmHO7g==
-X-Received: by 2002:a05:6000:1789:b0:1ea:7bb7:312c with SMTP id e9-20020a056000178900b001ea7bb7312cmr3861415wrg.660.1645740926020;
-        Thu, 24 Feb 2022 14:15:26 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r15-20020a05600c35cf00b003808165fbc2sm584330wmq.25.2022.02.24.14.15.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 14:15:25 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Roi Dayan <roid@nvidia.com>,
-	netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] net/mlx5e: Fix return of a kfree'd object instead of NULL
-Date: Thu, 24 Feb 2022 22:15:24 +0000
-Message-Id: <20220224221525.147744-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O55dG59ND2a/g7lYO2wfvmMneplJJEKkRL2CoScDnj0=;
+        b=PYADoJBIkE0tI5t5xx/1+Tkx3sWrs+6O3My82456DY2VAqq+5PyxhTotowUDvIwdL9
+         rHRYPUI8/M8zXdfblKP+vMyIh/fNvO0zPLPCSksnRWaM8Lmlu3ZYLxR0Gu2GMaa6LOid
+         2CoPNNV0eHoyResZNO4vKYzoThT86pQlteew4musd4oc+lSZPldNnJ4OBeGBJt/Y2dgM
+         wLxCBr9Oa4+5+pBlPGN5wpJi0ob/wd8yw4K2oFf8n6uwfBo9oxNndup2+IgWi1grq47Q
+         0Mxtf6ysBYLwwJFTDOpomCmkCAuFKCCmBOh4kNg00YXIuNiPU/Rruf6JQOmimYBcHszj
+         QJxQ==
+X-Gm-Message-State: AOAM531hNgFDHD9XO1Vz+a5qUHe6bVKrnKrA5zwi709E9ASIqdzR72BI
+	pr2akj6757nV2buIpeemnlZzMMZarRUY20VN
+X-Google-Smtp-Source: ABdhPJxr2sKow82sDGAquVMrlk1bfPxvnVUbvMF2sGan6VjwohuxsYxIC882+vyadyJoOe3WfUrR8g==
+X-Received: by 2002:a05:620a:1103:b0:60d:e5c8:a597 with SMTP id o3-20020a05620a110300b0060de5c8a597mr3099816qkk.513.1645742489360;
+        Thu, 24 Feb 2022 14:41:29 -0800 (PST)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id r14-20020a05622a034e00b002de72634a7asm380646qtw.37.2022.02.24.14.41.28
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 14:41:28 -0800 (PST)
+Received: by mail-yb1-f170.google.com with SMTP id j2so2471983ybu.0
+        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 14:41:28 -0800 (PST)
+X-Received: by 2002:a25:3188:0:b0:61d:5ab9:c969 with SMTP id
+ x130-20020a253188000000b0061d5ab9c969mr4710651ybx.346.1645742488451; Thu, 24
+ Feb 2022 14:41:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <61fb8055.1c69fb81.ddcb.6101@mx.google.com> <CAKwvOdn6=fW+vRLfiVBP4LgpySjFw3628KpE6wWvtQAc-z+F8Q@mail.gmail.com>
+In-Reply-To: <CAKwvOdn6=fW+vRLfiVBP4LgpySjFw3628KpE6wWvtQAc-z+F8Q@mail.gmail.com>
+From: Kees Cook <keescook@chromium.org>
+Date: Thu, 24 Feb 2022 14:40:51 -0800
+X-Gmail-Original-Message-ID: <CAGXu5jLZYLVy46E_BQZPbXkJqpNxABL0EVbHsR1=_u2zp8YJAQ@mail.gmail.com>
+Message-ID: <CAGXu5jLZYLVy46E_BQZPbXkJqpNxABL0EVbHsR1=_u2zp8YJAQ@mail.gmail.com>
+Subject: Re: next/master build: 201 builds: 18 failed, 183 passed, 30 errors,
+ 334 warnings (next-20220203)
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Currently in the case where parse_attr fails to be allocated the memory
-pointed to by attr2 is kfree'd but the non-null pointer attr2 is returned
-and a potential use of a kfree'd object can occur.  Fix this by returning
-NULL to indicate a memory allocation error.
+On Thu, Feb 3, 2022 at 12:59 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> + Kees, for the -Warray-bounds and -Wattribute-warning warnings (in
+> case they weren't already reported elsewhere)
 
-Addresses issue found by clang-scan:
-drivers/net/ethernet/mellanox/mlx5/core/en_tc.c:3401:3: warning: Use of
-memory after it is freed [unix.Malloc]
+Thanks! I think I've fixed all of these now (though I didn't see this
+email until just now because I filter out all the public lists I read
+@chromium.org -- this got sent to @google.com and apparently I am bad
+at filters). :)
 
-Fixes: 8300f225268b ("net/mlx5e: Create new flow attr for multi table actions")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-Kees
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-index 76a015dfc5fc..c0776a4a3845 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-@@ -3398,7 +3398,7 @@ mlx5e_clone_flow_attr_for_post_act(struct mlx5_flow_attr *attr,
- 	if (!attr2 || !parse_attr) {
- 		kvfree(parse_attr);
- 		kfree(attr2);
--		return attr2;
-+		return NULL;
- 	}
- 
- 	memcpy(attr2, attr, attr_sz);
 -- 
-2.34.1
-
+Kees Cook
