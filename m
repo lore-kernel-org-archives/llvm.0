@@ -1,48 +1,41 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3797B
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 17:58:21 +0000 (UTC)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-	by smtp-out1.suse.de (Postfix) with ESMTP id D599D212B6;
-	Thu, 24 Feb 2022 17:58:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1645725492;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y+SfGyKbjJ/KD7Gcn4fvmLlw2ONQyJxRmjN1xSRW1T8=;
-	b=qYo9rvy9wBBnLaLlKedVi+vZtJRAc5PXMubxDLXnJZtX9xp/1YSOPnyZmxaVDXBWuA20r1
-	Sk/35YCQidanVN9NokQ9ULxojJNUkF05GJAORU6eytzYXxJl4o0EcUr2No6DHvG6bnXzeW
-	di+J6SfhYnNWyVzy1XYZFO9zt9JE12Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1645725492;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y+SfGyKbjJ/KD7Gcn4fvmLlw2ONQyJxRmjN1xSRW1T8=;
-	b=XyhdSA8s5izrePQgl3LCccpzBYO4I8Udi1H7oemQi31Qo4Y47hGUIlrKc+ZqTjhv1sinX4
-	bC88YTG6RWBkG8Cw==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-	by relay2.suse.de (Postfix) with ESMTP id C96AFA3B85;
-	Thu, 24 Feb 2022 17:58:12 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-	id DCC10DA818; Thu, 24 Feb 2022 18:54:23 +0100 (CET)
-Date: Thu, 24 Feb 2022 18:54:23 +0100
-From: David Sterba <dsterba@suse.cz>
-To: kernel test robot <lkp@intel.com>
-Cc: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	David Sterba <dsterba@suse.com>
-Subject: Re: [kdave-btrfs-devel:for-next-20220222 101/120]
- fs/btrfs/super.c:75:13: warning: unused function 'btrfs_state_to_string'
-Message-ID: <20220224175423.GY12643@suse.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, kernel test robot <lkp@intel.com>,
-	Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.com>
-References: <202202241019.HFKHBOYe-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47616749D
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 19:10:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645729834; x=1677265834;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OFXhX5BHPoiyCzftDXmBe7qGYMY+MXINhMiZIOvCd2k=;
+  b=KuTF/dY4wMG4GUFKVpM/CnLSmVuoMb7a7u6oPLfSUiEvUK+w0MzIYFSl
+   fdEzdL4x4y/7ZrdS287yj+FH3g1ZFkJWFd0BQMZiicBht9YsxoZjsEJsX
+   bPLCYW2LCWCEuDnHebLUyBV5ziUVEVQTSgDMIswEgMR/4TuudncRBjmxO
+   W/VxSShniWb1eSKyibPzAF6nrmyuvopUOtPjM3Yg/CqvvgF7JHEwjaFQC
+   bRqkOXRC0hbe80Rm6eIDkPDn3i97gx4BjcQTRCVFG2eeljQfCIibev56B
+   12Yv0YfL8eq4TnfNoFx065CqyHMW6f/ZLbkvHKfX8Ry1R8v4JfRjzgrn/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="232951374"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="232951374"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 11:10:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="684388990"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Feb 2022 11:10:32 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nNJVX-0003Ob-ME; Thu, 24 Feb 2022 19:10:31 +0000
+Date: Fri, 25 Feb 2022 03:09:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guo Ren <guoren@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [csky-linux:riscv_compat_v6 17/20] arch/riscv/kernel/vdso.c:221:15:
+ error: use of undeclared identifier 'compat_vdso_info'
+Message-ID: <202202250133.pL6WVC3v-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,11 +44,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202202241019.HFKHBOYe-lkp@intel.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Feb 24, 2022 at 10:59:56AM +0800, kernel test robot wrote:
-> >> fs/btrfs/super.c:75:13: warning: unused function 'btrfs_state_to_string'
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v6
+head:   4aafa1859382d5a159bdafe2956453feafd38845
+commit: 77ed3d205a86f67815d8d074ff26e73ac1905772 [17/20] riscv: compat: vdso: Add setup additional pages implementation
+config: riscv-buildonly-randconfig-r003-20220223 (https://download.01.org/0day-ci/archive/20220225/202202250133.pL6WVC3v-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/c-sky/csky-linux/commit/77ed3d205a86f67815d8d074ff26e73ac1905772
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v6
+        git checkout 77ed3d205a86f67815d8d074ff26e73ac1905772
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-This happens when CONFIG_PRINTK is not defined, I'll add the ifdefs
-around the definition.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/kernel/vdso.c:221:15: error: use of undeclared identifier 'compat_vdso_info'
+           __vdso_init(&compat_vdso_info);
+                        ^
+   1 error generated.
+
+
+vim +/compat_vdso_info +221 arch/riscv/kernel/vdso.c
+
+   217	
+   218	static int __init vdso_init(void)
+   219	{
+   220		__vdso_init(&vdso_info);
+ > 221		__vdso_init(&compat_vdso_info);
+   222	
+   223		return 0;
+   224	}
+   225	arch_initcall(vdso_init);
+   226	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
