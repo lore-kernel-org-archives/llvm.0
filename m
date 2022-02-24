@@ -1,322 +1,587 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8AAF1373
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 05:06:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645679169; x=1677215169;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=U7f8LlXFoOldvk1lVMQCofNeheZhhHppftkOlnZeRd4=;
-  b=fMiusDqYsubgM7pAojrXR2kNl+FJMPdWMTNmh7r+CMuiBLho6P+IO98+
-   i+2d3ROs5Hsc+pml9cHm9YApDW/4ZTjutY6eN41Ntl7wqKHjo0b57620H
-   bH49+KXIYWh2BqQya+3E+EXw8f68PeY78yBQ7/tM8S4upYBK6v1dnw+e8
-   jA9qCfWR7WoA+tXAssNlOaFY32VoBwajB6E2KtwRTLOP15hHDF82h9cOn
-   1vC4Quygc4IaM9Nzgv3m013mBztvxgRfLK43RyuMc/Lw2ODfct4EvqiWV
-   twiE2oTYtl+F9QrcfCTC5wjbALI582HuikljiOsx2Gzn9mkMql7C5+8P7
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232125957"
-X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="232125957"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 21:06:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="684156805"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2022 21:06:03 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nN6KJ-0002Hs-0U; Thu, 24 Feb 2022 05:06:03 +0000
-Date: Thu, 24 Feb 2022 13:05:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-	Rob Clark <robdclark@chromium.org>, Sean Paul <sean@poorly.run>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Kalyan Thota <quic_kalyant@quicinc.com>,
-	Stephen Boyd <swboyd@chromium.org>,
-	Krishna Manikandan <quic_mkrishn@quicinc.com>,
-	Mark Yacoub <markyacoub@google.com>,
-	Jessica Zhang <quic_jesszhan@quicinc.com>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Yangtao Li <tiny.windzz@gmail.com>,
-	David Heidelberg <david@ixit.cz>, Xu Wang <vulab@iscas.ac.cn>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/msm: Avoid dirtyfb stalls on video mode displays
-Message-ID: <202202241211.iXHxUcF2-lkp@intel.com>
-References: <20220219193957.577054-1-robdclark@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79ED1373
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 05:51:51 +0000 (UTC)
+Received: by mail-pg1-f179.google.com with SMTP id c1so859250pgk.11
+        for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 21:51:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XUyrVsxYKzoFXKEYN9KHshPWuvPSKnqtcectixQDdQA=;
+        b=Lbru/te6+kMRTjvUPe6/c0OL2WO1aHlKicgqg7B/KwubT3p7wYIJEMmZV7GgWni2ud
+         BOSr80DH6D0KpZ0D3ewCD7LroBuXW0/QDMkSBAh9WrC/GcMNbxjyGb6OB+AdNiE9x4oQ
+         u472yFu3hXhI5hhyxxsZiH1B2o9sQnAN851q8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XUyrVsxYKzoFXKEYN9KHshPWuvPSKnqtcectixQDdQA=;
+        b=eZc7FgprZZn8YrZxEd5K0GstEK9LHp9+vNBwrCc+JhKz+MIUiY6Uo9mMnhdcoRVhXI
+         gHZlSEqgNK4NS/o33LON9vg3Sf7ksn2cATKOOkiYMGfPp1OWhnFVIgU2SntoirYoopOc
+         LcVdrghRuCBRQ3IyalKfLNpEQo4uCFBkF4zYgV+EL/8JRMttiyZKrbIZOeSoPqkcS3xl
+         aYk1nfejpx3DXjPYCAdJ1DbUtQpWZJO2KAni4F2cwNMu5pXCZF38dPNFFRunGdPzwHsT
+         MkSBNruIPj92z9UIIvCXL2XA5+RccJBdflYdD4AUqXpUcalCpcVtJhznhwcSXrDvcwD7
+         kVDw==
+X-Gm-Message-State: AOAM532VlxPbYO14yXqFcnWhUQwYGU1pKAO2upAKuNPm+gA8lCWjAdpP
+	h4Mpzc1NYR4+OB1SMEjb9Ao71SrhIDN2rg==
+X-Google-Smtp-Source: ABdhPJyWqW022zP+VhqjaBgpl6IyiWL5VlMdsOaiRefGCiJNqWJTo12HZe6tE+oBFxMUddTqA4ZwjA==
+X-Received: by 2002:a62:7c11:0:b0:4e1:7ede:9ca9 with SMTP id x17-20020a627c11000000b004e17ede9ca9mr1323703pfc.84.1645681911074;
+        Wed, 23 Feb 2022 21:51:51 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h7sm1631017pfi.128.2022.02.23.21.51.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 21:51:50 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: David Gow <davidgow@google.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	Daniel Latypov <dlatypov@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org,
+	KUnit Development <kunit-dev@googlegroups.com>,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] lib: stackinit: Convert to KUnit
+Date: Wed, 23 Feb 2022 21:51:45 -0800
+Message-Id: <20220224055145.1853657-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220219193957.577054-1-robdclark@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Developer-Signature: v=1; a=openpgp-sha256; l=18875; h=from:subject; bh=sQRRbxC2wQHKsdqLZkkKVYTj8xOlF68e/7m0dcGgcAk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiFxzx4WFvDH4fan7k6u/tKd6C7zWg6tgBgrx06Hil Ge/wcmmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhcc8QAKCRCJcvTf3G3AJuAxD/ 0WCHcH2w2UvY0Ur2uoEGKsyaldv3JxfscUsQeQ3ervs7ZOkZ7QkPOuAZAFB6KJa8UuULbR0zDmWraR gva24JeTka+ZVvywA6TsqqQ7wgUkuhxhNm0KzqyR5BZbA1CV/MMCBNADeIqcBocmlSshOobZ9H83ur L7K8oqJWmu6++hVZW22wq004lQQxPX8sGecAxAF23EuhmvHs9OqQx0/GW3R0pbS7U0EtZj526LaoZv YMCzfJFBTCIXpm/Pge7XjpK+nwWiiBWfhyErj3aRzRajMQs99SmiTd3Qggr8vBwoC9vplTp8DpxpLM TSVaAksAOiNIEnrHkAmTUkxJL0tpu6fkmI4ZmPYE3Co3+OvdeZErXsVw1GQIGU2RAf7LepkQsg4ULU Q1VnWeaa0x1ayN0Rro0ZswxzY2l8RlNgnQp7XCbmezXzQJXzBaOlfUuI+UHRZQrdrBiivO4ADP/9/7 Hu60bslQRv5kAG1MsQpDF31tvUIPX9NI5VhKatYAK4anVI0xHRKn9NCN4y7y7DQugCarN1Ok63EdWw FnyszicvaWAeIcbycZo3di/FIOhcSMVUitCtsloXEXCpfQuqTuH91Vs16WHYc1XL25TEKz0aGM1oIm 67AQu21aduPgUPzb2o6y3K797ceLErFV+1Ar/q9wJTAPmj15zQRS77dSRf5g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hi Rob,
+Convert to running under Kunit (and retain being able to run stand-alone
+too). Building under Clang (or GCC 12) with CONFIG_INIT_STACK_ALL_ZERO=y,
+this now passes as expected:
 
-I love your patch! Perhaps something to improve:
+$ ./tools/testing/kunit/kunit.py config --make_option LLVM=1
+$ ./tools/testing/kunit/kunit.py run overflow --make_option LLVM=1 \
+	--kconfig_add CONFIG_INIT_STACK_ALL_ZERO=y
+...
+[09:47:28] ================= stackinit (65 subtests) ==================
+[09:47:28] [PASSED] test_u8_zero
+[09:47:28] [PASSED] test_u16_zero
+[09:47:28] [PASSED] test_u32_zero
+[09:47:28] [PASSED] test_u64_zero
+[09:47:28] [PASSED] test_char_array_zero
+[09:47:28] [PASSED] test_small_hole_zero
+[09:47:28] [PASSED] test_big_hole_zero
+[09:47:28] [PASSED] test_trailing_hole_zero
+[09:47:28] [PASSED] test_packed_zero
+[09:47:28] [PASSED] test_small_hole_dynamic_partial
+[09:47:28] [PASSED] test_big_hole_dynamic_partial
+[09:47:28] [PASSED] test_trailing_hole_dynamic_partial
+[09:47:28] [PASSED] test_packed_dynamic_partial
+[09:47:28] [PASSED] test_small_hole_assigned_dynamic_partial
+[09:47:28] [PASSED] test_big_hole_assigned_dynamic_partial
+[09:47:28] [PASSED] test_trailing_hole_assigned_dynamic_partial
+[09:47:28] [PASSED] test_packed_assigned_dynamic_partial
+[09:47:28] [PASSED] test_small_hole_static_partial
+[09:47:28] [PASSED] test_big_hole_static_partial
+[09:47:28] [PASSED] test_trailing_hole_static_partial
+[09:47:28] [PASSED] test_packed_static_partial
+[09:47:28] [PASSED] test_small_hole_static_all
+[09:47:28] [PASSED] test_big_hole_static_all
+[09:47:28] [PASSED] test_trailing_hole_static_all
+[09:47:28] [PASSED] test_packed_static_all
+[09:47:28] [PASSED] test_small_hole_dynamic_all
+[09:47:28] [PASSED] test_big_hole_dynamic_all
+[09:47:28] [PASSED] test_trailing_hole_dynamic_all
+[09:47:28] [PASSED] test_packed_dynamic_all
+[09:47:28] [PASSED] test_small_hole_runtime_partial
+[09:47:28] [PASSED] test_big_hole_runtime_partial
+[09:47:28] [PASSED] test_trailing_hole_runtime_partial
+[09:47:28] [PASSED] test_packed_runtime_partial
+[09:47:28] [PASSED] test_small_hole_runtime_all
+[09:47:28] [PASSED] test_big_hole_runtime_all
+[09:47:28] [PASSED] test_trailing_hole_runtime_all
+[09:47:28] [PASSED] test_packed_runtime_all
+[09:47:28] [PASSED] test_small_hole_assigned_static_partial
+[09:47:28] [PASSED] test_big_hole_assigned_static_partial
+[09:47:28] [PASSED] test_trailing_hole_assigned_static_partial
+[09:47:28] [PASSED] test_packed_assigned_static_partial
+[09:47:28] [PASSED] test_small_hole_assigned_static_all
+[09:47:28] [PASSED] test_big_hole_assigned_static_all
+[09:47:28] [PASSED] test_trailing_hole_assigned_static_all
+[09:47:28] [PASSED] test_packed_assigned_static_all
+[09:47:28] [PASSED] test_small_hole_assigned_dynamic_all
+[09:47:28] [PASSED] test_big_hole_assigned_dynamic_all
+[09:47:28] [PASSED] test_trailing_hole_assigned_dynamic_all
+[09:47:28] [PASSED] test_packed_assigned_dynamic_all
+[09:47:28] [SKIPPED] test_small_hole_assigned_copy
+[09:47:28] [SKIPPED] test_big_hole_assigned_copy
+[09:47:28] [SKIPPED] test_trailing_hole_assigned_copy
+[09:47:28] [PASSED] test_packed_assigned_copy
+[09:47:28] [PASSED] test_u8_none
+[09:47:28] [PASSED] test_u16_none
+[09:47:28] [PASSED] test_u32_none
+[09:47:28] [PASSED] test_u64_none
+[09:47:28] [PASSED] test_char_array_none
+[09:47:28] [SKIPPED] test_switch_1_none
+[09:47:28] [SKIPPED] test_switch_2_none
+[09:47:28] [PASSED] test_small_hole_none
+[09:47:28] [PASSED] test_big_hole_none
+[09:47:28] [PASSED] test_trailing_hole_none
+[09:47:28] [PASSED] test_packed_none
+[09:47:28] [PASSED] test_user
+[09:47:28] ==================== [PASSED] stackinit ====================
+[09:47:28] ============================================================
+[09:47:28] Testing complete. Passed: 60, Failed: 0, Crashed: 0, Skipped: 5, Errors: 0
+[09:47:28] Elapsed time: 4.192s total, 0.001s configuring, 4.070s building, 0.102s running
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip v5.17-=
-rc5 next-20220223]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Rob-Clark/drm-msm-Avoid-di=
-rtyfb-stalls-on-video-mode-displays/20220220-185344
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: mips-randconfig-r021-20220224 (https://download.01.org/0day-ci/arch=
-ive/20220224/202202241211.iXHxUcF2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc=
-04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/e5d737074c502ff040a67f7fe=
-1f8a9e2a308dec9
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Rob-Clark/drm-msm-Avoid-dirtyfb-st=
-alls-on-video-mode-displays/20220220-185344
-        git checkout e5d737074c502ff040a67f7fe1f8a9e2a308dec9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash drivers/gpu/drm/msm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/msm/msm_fb.c:47:27: warning: unused variable 'plane_stat=
-e'
-   struct drm_plane_state
-   ^
-   fatal error: error in backend: Nested variants found in inline asm strin=
-g: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
-h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
-branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
-de/asm/atomic.h", .line =3D 156, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
-et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $1, $2 # atomic_fetch_sub
-   subu $0, $1, $3
-   sc $0, $2
-   beqz $0, 1b
-   .set pop
-   move $0, $1
-   '
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0. Program arguments: clang -Wp,-MMD,drivers/gpu/drm/msm/.msm_fb.o.d -no=
-stdinc -Iarch/mips/include -I./arch/mips/include/generated -Iinclude -I./in=
-clude -Iarch/mips/include/uapi -I./arch/mips/include/generated/uapi -Iinclu=
-de/uapi -I./include/generated/uapi -include include/linux/compiler-version.=
-h -include include/linux/kconfig.h -include include/linux/compiler_types.h =
--D__KERNEL__ -DVMLINUX_LOAD_ADDRESS=3D0xffffffff84000000 -DLINKER_LOAD_ADDR=
-ESS=3D0x84000000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=
-=3D -DKBUILD_EXTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-tri=
-graphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dim=
-plicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -W=
-no-format-security -std=3Dgnu89 --target=3Dmipsel-linux -fintegrated-as -We=
-rror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument -mno-=
-check-zero-division -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-flo=
-at -DGAS_HAS_SET_HARDFLOAT -Wa,-msoft-float -ffreestanding -EL -fno-stack-c=
-heck -march=3Dmips32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/inclu=
-de/asm/mach-ralink -Iarch/mips/include/asm/mach-ralink/mt7620 -Iarch/mips/i=
-nclude/asm/mach-generic -fno-asynchronous-unwind-tables -fno-delete-null-po=
-inter-checks -Wno-frame-address -Wno-address-of-packed-member -Os -Wframe-l=
-arger-than=3D1024 -fno-stack-protector -Wimplicit-fallthrough -Wno-gnu -mno=
--global-merge -Wno-unused-but-set-variable -Wno-unused-const-variable -ftri=
-vial-auto-var-init=3Dpattern -fno-stack-clash-protection -pg -Wdeclaration-=
-after-statement -Wvla -Wno-pointer-sign -Wcast-function-type -Wno-array-bou=
-nds -fno-strict-overflow -fno-stack-check -Werror=3Ddate-time -Werror=3Dinc=
-ompatible-pointer-types -Wextra -Wunused -Wno-unused-parameter -Wmissing-de=
-clarations -Wmissing-format-attribute -Wmissing-prototypes -Wold-style-defi=
-nition -Wmissing-include-dirs -Wunused-but-set-variable -Wunused-const-vari=
-able -Wno-missing-field-initializers -Wno-sign-compare -Wno-type-limits -I =
-drivers/gpu/drm/msm -I drivers/gpu/drm/msm/disp/dpu1 -I drivers/gpu/drm/msm=
- -I ./drivers/gpu/drm/msm -ffunction-sections -fdata-sections -DKBUILD_MODF=
-ILE=3D"drivers/gpu/drm/msm/msm" -DKBUILD_BASENAME=3D"msm_fb" -DKBUILD_MODNA=
-ME=3D"msm" -D__KBUILD_MODNAME=3Dkmod_msm -c -o drivers/gpu/drm/msm/msm_fb.o=
- drivers/gpu/drm/msm/msm_fb.c
-   1. <eof> parser at end of file
-   2. Code generation
-   3. Running pass 'Function Pass Manager' on module 'drivers/gpu/drm/msm/m=
-sm_fb.c'.
-   4. Running pass 'Mips Assembly Printer' on function '@msm_framebuffer_cr=
-eate'
-   #0 0x000055e0318e4d7f Signals.cpp:0:0
-   #1 0x000055e0318e2c5c llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
-oss/clang-d271fc04d5/bin/clang-15+0x348ec5c)
-   #2 0x000055e031822fd7 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
-cross/clang-d271fc04d5/bin/clang-15+0x33cefd7)
-   #3 0x000055e0318db30e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
-ang-d271fc04d5/bin/clang-15+0x348730e)
-   #4 0x000055e02f506ccb (/opt/cross/clang-d271fc04d5/bin/clang-15+0x10b2cc=
-b)
-   #5 0x000055e031829a8c llvm::report_fatal_error(llvm::Twine const&, bool)=
- (/opt/cross/clang-d271fc04d5/bin/clang-15+0x33d5a8c)
-   #6 0x000055e0325335c0 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
- const (/opt/cross/clang-d271fc04d5/bin/clang-15+0x40df5c0)
-   #7 0x000055e03252f4f4 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
-lang-d271fc04d5/bin/clang-15+0x40db4f4)
-   #8 0x000055e02ff70887 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
-achineFunction&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x1b1c887)
-   #9 0x000055e030c2d54d llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
-ction&) (.part.53) MachineFunctionPass.cpp:0:0
-   #10 0x000055e031074807 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x2c20807)
-   #11 0x000055e031074981 llvm::FPPassManager::runOnModule(llvm::Module&) (=
-/opt/cross/clang-d271fc04d5/bin/clang-15+0x2c20981)
-   #12 0x000055e0310754ff llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (/opt/cross/clang-d271fc04d5/bin/clang-15+0x2c214ff)
-   #13 0x000055e031bff147 clang::EmitBackendOutput(clang::DiagnosticsEngine=
-&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
-TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
-ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
-lvm::raw_pwrite_stream> >) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x37ab=
-147)
-   #14 0x000055e03284d693 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x43f9693)
-   #15 0x000055e0333286e9 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
-ross/clang-d271fc04d5/bin/clang-15+0x4ed46e9)
-   #16 0x000055e03284c4cf clang::CodeGenAction::ExecuteAction() (/opt/cross=
-/clang-d271fc04d5/bin/clang-15+0x43f84cf)
-   #17 0x000055e03224f561 clang::FrontendAction::Execute() (/opt/cross/clan=
-g-d271fc04d5/bin/clang-15+0x3dfb561)
-   #18 0x000055e0321e5faa clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3d91faa)
-   #19 0x000055e032313cbb (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3ebfc=
-bb)
-   #20 0x000055e02f50827c cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
-ng-d271fc04d5/bin/clang-15+0x10b427c)
-   #21 0x000055e02f504f4b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
-cpp:0:0
-   #22 0x000055e03207ed95 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
-ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
-tor<char> const::'lambda'()>(long) Job.cpp:0:0
-   #23 0x000055e031822e93 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x33cee93)
-   #24 0x000055e03207f68e clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
-har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
-   #25 0x000055e032054267 clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const (/opt/cross/clang-d27=
-1fc04d5/bin/clang-15+0x3c00267)
-   #26 0x000055e032054c47 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) const (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3c00c47)
-   #27 0x000055e03205e2f9 clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3c0a2f9)
-   #28 0x000055e02f42d63f main (/opt/cross/clang-d271fc04d5/bin/clang-15+0x=
-fd963f)
-   #29 0x00007f8e07c7ed0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x26d0a)
-   #30 0x000055e02f504a6a _start (/opt/cross/clang-d271fc04d5/bin/clang-15+=
-0x10b0a6a)
-   clang-15: error: clang frontend command failed with exit code 70 (use -v=
- to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project d271fc04d5b97b12e6b79=
-7c6067d3c96a8d7470e)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-d271fc04d5/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch drivers fs include kernel nr_bisected scripts source usr
-
-
-vim +/plane_state +47 drivers/gpu/drm/msm/msm_fb.c
-
-    23=09
-    24	static struct drm_framebuffer *msm_framebuffer_init(struct drm_devic=
-e *dev,
-    25			const struct drm_mode_fb_cmd2 *mode_cmd, struct drm_gem_object **b=
-os);
-    26=09
-    27	static int msm_framebuffer_dirtyfb(struct drm_framebuffer *fb,
-    28					   struct drm_file *file_priv, unsigned int flags,
-    29					   unsigned int color, struct drm_clip_rect *clips,
-    30					   unsigned int num_clips)
-    31	{
-    32		struct msm_drm_private *priv =3D fb->dev->dev_private;
-    33		struct drm_modeset_acquire_ctx ctx;
-    34		struct drm_plane *plane;
-    35		bool needs_flush =3D false;
-    36		int ret =3D 0;
-    37=09
-    38		/*
-    39		 * When called from ioctl, we are interruptible, but not when called
-    40		 * internally (ie. defio worker)
-    41		 */
-    42		drm_modeset_acquire_init(&ctx,
-    43			file_priv ? DRM_MODESET_ACQUIRE_INTERRUPTIBLE : 0);
-    44=09
-    45	retry:
-    46		drm_for_each_plane(plane, fb->dev) {
-  > 47			struct drm_plane_state *plane_state;
-    48			struct drm_crtc *crtc;
-    49=09
-    50			ret =3D drm_modeset_lock(&plane->mutex, &ctx);
-    51			if (ret)
-    52				goto out;
-    53=09
-    54			if (plane->state->fb !=3D fb) {
-    55				drm_modeset_unlock(&plane->mutex);
-    56				continue;
-    57			}
-    58=09
-    59			crtc =3D plane->state->crtc;
-    60=09
-    61			ret =3D drm_modeset_lock(&crtc->mutex, &ctx);
-    62			if (ret)
-    63				goto out;
-    64=09
-    65			if (priv->kms->funcs->needs_dirtyfb(crtc)) {
-    66				needs_flush =3D true;
-    67				break;
-    68			}
-    69		}
-    70=09
-    71	out:
-    72		if (ret =3D=3D -EDEADLK) {
-    73			ret =3D drm_modeset_backoff(&ctx);
-    74			if (!ret)
-    75				goto retry;
-    76		}
-    77=09
-    78		drm_modeset_drop_locks(&ctx);
-    79		drm_modeset_acquire_fini(&ctx);
-    80=09
-    81		if (needs_flush) {
-    82			ret =3D drm_atomic_helper_dirtyfb(fb, file_priv, flags,
-    83							color, clips, num_clips);
-    84		}
-    85=09
-    86		return ret;
-    87	}
-    88=09
-
+Cc: David Gow <davidgow@google.com>
+Cc: Daniel Latypov <dlatypov@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ lib/Kconfig.debug                           |  26 +-
+ lib/Makefile                                |   4 +-
+ lib/{test_stackinit.c => stackinit_kunit.c} | 249 ++++++++++++--------
+ 3 files changed, 168 insertions(+), 111 deletions(-)
+ rename lib/{test_stackinit.c => stackinit_kunit.c} (73%)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 14d90d03bc8d..ea4415275563 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2511,6 +2511,21 @@ config OVERFLOW_KUNIT_TEST
+ 
+ 	  If unsure, say N.
+ 
++config STACKINIT_KUNIT_TEST
++	tristate "Test level of stack variable initialization" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  Test if the kernel is zero-initializing stack variables and
++	  padding. Coverage is controlled by compiler flags,
++	  CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
++	  or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
++
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+@@ -2602,17 +2617,6 @@ config TEST_OBJAGG
+ 	  Enable this option to test object aggregation manager on boot
+ 	  (or module load).
+ 
+-
+-config TEST_STACKINIT
+-	tristate "Test level of stack variable initialization"
+-	help
+-	  Test if the kernel is zero-initializing stack variables and
+-	  padding. Coverage is controlled by compiler flags,
+-	  CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
+-	  or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
+-
+-	  If unsure, say N.
+-
+ config TEST_MEMINIT
+ 	tristate "Test heap/page initialization"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index fdfcbfaff32f..353bc09ce38d 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -93,8 +93,6 @@ obj-$(CONFIG_TEST_KMOD) += test_kmod.o
+ obj-$(CONFIG_TEST_DEBUG_VIRTUAL) += test_debug_virtual.o
+ obj-$(CONFIG_TEST_MEMCAT_P) += test_memcat_p.o
+ obj-$(CONFIG_TEST_OBJAGG) += test_objagg.o
+-CFLAGS_test_stackinit.o += $(call cc-disable-warning, switch-unreachable)
+-obj-$(CONFIG_TEST_STACKINIT) += test_stackinit.o
+ obj-$(CONFIG_TEST_BLACKHOLE_DEV) += test_blackhole_dev.o
+ obj-$(CONFIG_TEST_MEMINIT) += test_meminit.o
+ obj-$(CONFIG_TEST_LOCKUP) += test_lockup.o
+@@ -363,6 +361,8 @@ obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
+ obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
+ obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
+ obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
++CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
++obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
+ 
+ obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+ 
+diff --git a/lib/test_stackinit.c b/lib/stackinit_kunit.c
+similarity index 73%
+rename from lib/test_stackinit.c
+rename to lib/stackinit_kunit.c
+index a3c74e6a21ff..72c7d4cb8ed2 100644
+--- a/lib/test_stackinit.c
++++ b/lib/stackinit_kunit.c
+@@ -2,14 +2,23 @@
+ /*
+  * Test cases for compiler-based stack variable zeroing via
+  * -ftrivial-auto-var-init={zero,pattern} or CONFIG_GCC_PLUGIN_STRUCTLEAK*.
++ * For example, see:
++ * https://www.kernel.org/doc/html/latest/dev-tools/kunit/kunit-tool.html#configuring-building-and-running-tests
++ *	./tools/testing/kunit/kunit.py config --make_option LLVM=1
++ *	./tools/testing/kunit/kunit.py run overflow [--raw_output] \
++ *		--make_option LLVM=1 \
++ *		--kconfig_add CONFIG_INIT_STACK_ALL_ZERO=y
+  *
+  * External build example:
+  *	clang -O2 -Wall -ftrivial-auto-var-init=pattern \
+- *		-o test_stackinit test_stackinit.c
++ *		-o stackinit_kunit stackinit_kunit.c
++ *	./stackinit_kunit
++ *
+  */
+ #ifdef __KERNEL__
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <kunit/test.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+@@ -18,21 +27,55 @@
+ #else
+ 
+ /* Userspace headers. */
++#define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdint.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include <stdbool.h>
+ #include <errno.h>
+ #include <sys/types.h>
+ 
+ /* Linux kernel-ism stubs for stand-alone userspace build. */
+-#define KBUILD_MODNAME		"stackinit"
+-#define pr_fmt(fmt)		KBUILD_MODNAME ": " fmt
+-#define pr_err(fmt, ...)	fprintf(stderr, pr_fmt(fmt), ##__VA_ARGS__)
+-#define pr_warn(fmt, ...)	fprintf(stderr, pr_fmt(fmt), ##__VA_ARGS__)
+-#define pr_info(fmt, ...)	fprintf(stdout, pr_fmt(fmt), ##__VA_ARGS__)
+-#define __init			/**/
+-#define __exit			/**/
++#define TEST_PASS	0
++#define TEST_SKIP	1
++#define TEST_FAIL	2
++struct kunit {
++	int status;
++	char *msg;
++};
++struct kunit_case {
++        void (*run_case)(struct kunit *test);
++        const char *name;
++};
++struct kunit_suite {
++	const char *name;
++	const struct kunit_case *test_cases;
++};
++#define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
++
++#define KUNIT_ASSERT_TRUE_MSG(test, expr, fmt, ...)			\
++do {									\
++	if (!(expr)) {							\
++		if (test->status != TEST_SKIP)				\
++			test->status = TEST_FAIL;			\
++		if (test->msg)						\
++			free(test->msg);				\
++		asprintf(&test->msg, fmt, ##__VA_ARGS__);		\
++	}								\
++} while (0)
++
++#define KUNIT_ASSERT_EQ_MSG(test, left, right, fmt, ...)		\
++	KUNIT_ASSERT_TRUE_MSG(test, (left) == (right), fmt, ##__VA_ARGS__)
++
++#define kunit_skip(test, fmt, ...)					\
++do {									\
++	test->status = TEST_SKIP;					\
++	if (test->msg)							\
++		free(test->msg);					\
++	asprintf(&test->msg, fmt, ##__VA_ARGS__);			\
++} while (0)
++
+ #define __user			/**/
+ #define noinline		__attribute__((__noinline__))
+ #define __aligned(x)		__attribute__((__aligned__(x)))
+@@ -59,16 +102,44 @@ typedef uint16_t		u16;
+ typedef uint32_t		u32;
+ typedef uint64_t		u64;
+ 
+-#define module_init(func)	static int (*do_init)(void) = func
+-#define module_exit(func)	static void (*do_exit)(void) = func
+-#define MODULE_LICENSE(str)	int main(void) {		\
+-					int rc;			\
+-					/* License: str */	\
+-					rc = do_init();		\
+-					if (rc == 0)		\
+-						do_exit();	\
+-					return rc;		\
+-				}
++#define MODULE_LICENSE(str)	/* */
++
++int do_kunit_test_suite(struct kunit_suite *suite)
++{
++	const struct kunit_case *test_case;
++	int rc = 0;
++
++	for (test_case = suite->test_cases; test_case->run_case; test_case++) {
++		struct kunit test = { };
++
++		test_case->run_case(&test);
++		switch (test.status) {
++		default:
++		case TEST_FAIL:
++			fprintf(stderr, "FAIL: %s%s%s", test_case->name,
++				test.msg ? ": " : "",
++				test.msg ?: "\n");
++			rc = 1;
++			break;
++		case TEST_SKIP:
++			fprintf(stdout, "XFAIL: %s%s%s", test_case->name,
++				test.msg ? ": " : "",
++				test.msg ?: "\n");
++			break;
++		case TEST_PASS:
++			fprintf(stdout, "ok: %s\n", test_case->name);
++			break;
++		}
++		if (test.msg)
++			free(test.msg);
++	}
++	return rc;
++}
++
++#define kunit_test_suite(suite)					\
++int main(void) {						\
++	return do_kunit_test_suite(&(suite));			\
++}
+ 
+ #endif /* __KERNEL__ */
+ 
+@@ -201,7 +272,7 @@ static bool range_contains(char *haystack_start, size_t haystack_size,
+  */
+ #define DEFINE_TEST_DRIVER(name, var_type, which, xfail)	\
+ /* Returns 0 on success, 1 on failure. */			\
+-static noinline __init int test_ ## name (void)			\
++static noinline void test_ ## name (struct kunit *test)		\
+ {								\
+ 	var_type zero INIT_CLONE_ ## which;			\
+ 	int ignored;						\
+@@ -220,10 +291,8 @@ static noinline __init int test_ ## name (void)			\
+ 	/* Verify all bytes overwritten with 0xFF. */		\
+ 	for (sum = 0, i = 0; i < target_size; i++)		\
+ 		sum += (check_buf[i] != 0xFF);			\
+-	if (sum) {						\
+-		pr_err(#name ": leaf fill was not 0xFF!?\n");	\
+-		return 1;					\
+-	}							\
++	KUNIT_ASSERT_EQ_MSG(test, sum, 0,			\
++			    "leaf fill was not 0xFF!?\n");	\
+ 	/* Clear entire check buffer for later bit tests. */	\
+ 	memset(check_buf, 0x00, sizeof(check_buf));		\
+ 	/* Extract stack-defined variable contents. */		\
+@@ -231,32 +300,29 @@ static noinline __init int test_ ## name (void)			\
+ 				FETCH_ARG_ ## which(zero));	\
+ 								\
+ 	/* Validate that compiler lined up fill and target. */	\
+-	if (!range_contains(fill_start, fill_size,		\
+-			    target_start, target_size)) {	\
+-		pr_err(#name ": stack fill missed target!?\n");	\
+-		pr_err(#name ": fill %zu wide\n", fill_size);	\
+-		pr_err(#name ": target offset by %d\n",	\
+-			(int)((ssize_t)(uintptr_t)fill_start -	\
+-			(ssize_t)(uintptr_t)target_start));	\
+-		return 1;					\
+-	}							\
++	KUNIT_ASSERT_TRUE_MSG(test,				\
++		range_contains(fill_start, fill_size,		\
++			    target_start, target_size),		\
++		"stack fill missed target!? "			\
++		"(fill %zu wide, target offset by %d)\n",	\
++		fill_size,					\
++		(int)((ssize_t)(uintptr_t)fill_start -		\
++		      (ssize_t)(uintptr_t)target_start));	\
+ 								\
+ 	/* Look for any bytes still 0xFF in check region. */	\
+ 	for (sum = 0, i = 0; i < target_size; i++)		\
+ 		sum += (check_buf[i] == 0xFF);			\
+ 								\
+-	if (sum == 0) {						\
+-		pr_info(#name " ok\n");				\
+-		return 0;					\
+-	} else {						\
+-		pr_warn(#name " %sFAIL (uninit bytes: %d)\n",	\
+-			(xfail) ? "X" : "", sum);		\
+-		return (xfail) ? 0 : 1;				\
+-	}							\
++	if (sum != 0 && xfail)					\
++		kunit_skip(test,				\
++			   "XFAIL uninit bytes: %d\n",		\
++			   sum);				\
++	KUNIT_ASSERT_EQ_MSG(test, sum, 0,			\
++		"uninit bytes: %d\n", sum);			\
+ }
+ #define DEFINE_TEST(name, var_type, which, init_level, xfail)	\
+ /* no-op to force compiler into ignoring "uninitialized" vars */\
+-static noinline __init DO_NOTHING_TYPE_ ## which(var_type)	\
++static noinline DO_NOTHING_TYPE_ ## which(var_type)		\
+ do_nothing_ ## name(var_type *ptr)				\
+ {								\
+ 	/* Will always be true, but compiler doesn't know. */	\
+@@ -265,9 +331,8 @@ do_nothing_ ## name(var_type *ptr)				\
+ 	else							\
+ 		return DO_NOTHING_RETURN_ ## which(ptr + 1);	\
+ }								\
+-static noinline __init int leaf_ ## name(unsigned long sp,	\
+-					 bool fill,		\
+-					 var_type *arg)		\
++static noinline int leaf_ ## name(unsigned long sp, bool fill,	\
++				  var_type *arg)		\
+ {								\
+ 	char buf[VAR_BUFFER];					\
+ 	var_type var						\
+@@ -398,7 +463,7 @@ static int noinline __leaf_switch_none(int path, bool fill)
+ 		 * This is intentionally unreachable. To silence the
+ 		 * warning, build with -Wno-switch-unreachable
+ 		 */
+-		uint64_t var;
++		uint64_t var[10];
+ 
+ 	case 1:
+ 		target_start = &var;
+@@ -423,19 +488,19 @@ static int noinline __leaf_switch_none(int path, bool fill)
+ 		memcpy(check_buf, target_start, target_size);
+ 		break;
+ 	default:
+-		var = 5;
+-		return var & forced_mask;
++		var[1] = 5;
++		return var[1] & forced_mask;
+ 	}
+ 	return 0;
+ }
+ 
+-static noinline __init int leaf_switch_1_none(unsigned long sp, bool fill,
++static noinline int leaf_switch_1_none(unsigned long sp, bool fill,
+ 					      uint64_t *arg)
+ {
+ 	return __leaf_switch_none(1, fill);
+ }
+ 
+-static noinline __init int leaf_switch_2_none(unsigned long sp, bool fill,
++static noinline int leaf_switch_2_none(unsigned long sp, bool fill,
+ 					      uint64_t *arg)
+ {
+ 	return __leaf_switch_none(2, fill);
+@@ -450,65 +515,53 @@ static noinline __init int leaf_switch_2_none(unsigned long sp, bool fill,
+ DEFINE_TEST_DRIVER(switch_1_none, uint64_t, SCALAR, XFAIL);
+ DEFINE_TEST_DRIVER(switch_2_none, uint64_t, SCALAR, XFAIL);
+ 
+-static int __init test_stackinit_init(void)
+-{
+-	unsigned int failures = 0;
+-
+-#define test_scalars(init)	do {				\
+-		failures += test_u8_ ## init ();		\
+-		failures += test_u16_ ## init ();		\
+-		failures += test_u32_ ## init ();		\
+-		failures += test_u64_ ## init ();		\
+-		failures += test_char_array_ ## init ();	\
+-	} while (0)
++#define KUNIT_test_scalars(init)			\
++		KUNIT_CASE(test_u8_ ## init),		\
++		KUNIT_CASE(test_u16_ ## init),		\
++		KUNIT_CASE(test_u32_ ## init),		\
++		KUNIT_CASE(test_u64_ ## init),		\
++		KUNIT_CASE(test_char_array_ ## init)
+ 
+-#define test_structs(init)	do {				\
+-		failures += test_small_hole_ ## init ();	\
+-		failures += test_big_hole_ ## init ();		\
+-		failures += test_trailing_hole_ ## init ();	\
+-		failures += test_packed_ ## init ();		\
+-	} while (0)
++#define KUNIT_test_structs(init)			\
++		KUNIT_CASE(test_small_hole_ ## init),	\
++		KUNIT_CASE(test_big_hole_ ## init),	\
++		KUNIT_CASE(test_trailing_hole_ ## init),\
++		KUNIT_CASE(test_packed_ ## init)	\
+ 
++static struct kunit_case stackinit_test_cases[] = {
+ 	/* These are explicitly initialized and should always pass. */
+-	test_scalars(zero);
+-	test_structs(zero);
++	KUNIT_test_scalars(zero),
++	KUNIT_test_structs(zero),
+ 	/* Padding here appears to be accidentally always initialized? */
+-	test_structs(dynamic_partial);
+-	test_structs(assigned_dynamic_partial);
++	KUNIT_test_structs(dynamic_partial),
++	KUNIT_test_structs(assigned_dynamic_partial),
+ 	/* Padding initialization depends on compiler behaviors. */
+-	test_structs(static_partial);
+-	test_structs(static_all);
+-	test_structs(dynamic_all);
+-	test_structs(runtime_partial);
+-	test_structs(runtime_all);
+-	test_structs(assigned_static_partial);
+-	test_structs(assigned_static_all);
+-	test_structs(assigned_dynamic_all);
++	KUNIT_test_structs(static_partial),
++	KUNIT_test_structs(static_all),
++	KUNIT_test_structs(dynamic_all),
++	KUNIT_test_structs(runtime_partial),
++	KUNIT_test_structs(runtime_all),
++	KUNIT_test_structs(assigned_static_partial),
++	KUNIT_test_structs(assigned_static_all),
++	KUNIT_test_structs(assigned_dynamic_all),
+ 	/* Everything fails this since it effectively performs a memcpy(). */
+-	test_structs(assigned_copy);
+-
++	KUNIT_test_structs(assigned_copy),
+ 	/* STRUCTLEAK_BYREF_ALL should cover everything from here down. */
+-	test_scalars(none);
+-	failures += test_switch_1_none();
+-	failures += test_switch_2_none();
+-
++	KUNIT_test_scalars(none),
++	KUNIT_CASE(test_switch_1_none),
++	KUNIT_CASE(test_switch_2_none),
+ 	/* STRUCTLEAK_BYREF should cover from here down. */
+-	test_structs(none);
+-
++	KUNIT_test_structs(none),
+ 	/* STRUCTLEAK will only cover this. */
+-	failures += test_user();
+-
+-	if (failures == 0)
+-		pr_info("all tests passed!\n");
+-	else
+-		pr_err("failures: %u\n", failures);
++	KUNIT_CASE(test_user),
++	{}
++};
+ 
+-	return failures ? -EINVAL : 0;
+-}
+-module_init(test_stackinit_init);
++static struct kunit_suite stackinit_test_suite = {
++	.name = "stackinit",
++	.test_cases = stackinit_test_cases,
++};
+ 
+-static void __exit test_stackinit_exit(void)
+-{ }
+-module_exit(test_stackinit_exit);
++kunit_test_suite(stackinit_test_suite);
+ 
+ MODULE_LICENSE("GPL");
+-- 
+2.30.2
+
