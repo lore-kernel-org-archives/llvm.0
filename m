@@ -1,196 +1,143 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A12184D
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 09:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=badeba3b8450; t=1645696617;
-	bh=C332AhrDIlzT/2XoIViHK7bqj7AuxbydaVZvJnTmdTY=;
-	h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
-	b=hJUDoDIkTmmgyqDMp8CywHnVIVZ3QH2hSBdSRJ/Bj1cIMUHXRaCP2kzsxKQf3KqpU
-	 +zXZdIV1+07BbWCj5OMsQQ1DItLvef4gmAzMCPw7evTwyJa2O0IsHi2jhWsRJhGbuW
-	 bEZmbU62/9JcQIJRHCH52WlWTwprii0DJ5E6+Hg8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MdvqW-1nuqze24EY-00b2BT; Thu, 24
- Feb 2022 10:56:57 +0100
-Message-ID: <205e5941-6ae0-0482-b083-874daf0e5a46@gmx.com>
-Date: Thu, 24 Feb 2022 17:56:49 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E15185D
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 10:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D07C340E9;
+	Thu, 24 Feb 2022 10:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645699160;
+	bh=JE74vM6F239/HyTrEDsqOE00ec9BmQ42Y4OdvszfnpU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=qAs+hGS6Ri7GNCE9Har0J+LPVD+ewhbDdPU45i37O7fJZZKp9bcyVQb4eE4Jvb94e
+	 4P7PTXOxSwb3MNglKP4zsZgu0734lr6EMTGVUWMidtpZi/GhVgwZ526WxmlhJoS4TG
+	 YRULgtIp5lITDHTUl9XTZCrjWmaMCwnAGOoYJNecxrXJ6mmAhqGJGnTvqePx+ruLxE
+	 ykAsn+5JTIlB+HnsujxgbU1U9Oqd14UR0JDzrh6Cer3YxKsG6gNuVywh/pMQBr6qml
+	 W5n6O49t1pX+X4FoiLqeMlFzNIxpXPXlFriizE+cwWKxUdjN7brcP0yLpz3y41GVEr
+	 BKjT6Li1tOwig==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <maz@kernel.org>)
+	id 1nNBWo-00A9YD-5V; Thu, 24 Feb 2022 10:39:18 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Content-Language: en-US
-To: Yujie Liu <yujie.liu@intel.com>, Qu Wenruo <wqu@suse.com>,
- Souptick Joarder <jrdr.linux@gmail.com>
-Cc: Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
- dsterba@suse.com, nathan@kernel.org,
- Nick Desaulniers <ndesaulniers@google.com>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- kernel test robot <lkp@intel.com>
-References: <20220220144606.5695-1-jrdr.linux@gmail.com>
- <0a2e57ad-2973-ea01-ceda-3262cde1f5aa@gmx.com>
- <CAFqt6zZsv+bMwbdqrcOMCZE08O_q7DGa0ejVAbokLybsSch5fw@mail.gmail.com>
- <a1d126df-a5ee-d47d-bfaa-95b3b221e41a@suse.com>
- <b2536c4b-bf0f-a2ff-58cf-ef7d17acaf48@intel.com>
-From: Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [PATCH] btrfs: Initialize ret to 0 in scrub_simple_mirror()
-In-Reply-To: <b2536c4b-bf0f-a2ff-58cf-ef7d17acaf48@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Y3w1cSk5CyKdUvcBcH7SHZzqBGO/AIkIUDmfQ9EPXDacHy9yCkt
- iWTDFG9uPyOGG1CPtqA9esJUdBnRE2wgJjaTjEslssQMomDhUs6xOpBzM8xva9tuPsgzwmn
- aQ6hrmpUtRXDR6v2FS9fWTI7nUE+N1dU4/0vKJsiu4JcEQCVv0M3ZqwUMurYcTYXV34MdR1
- t1UBkDFYBapvZeJbgLNEg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CbhHkVsKYkI=:DQAbSz6tP7yo27vVEv4KXt
- hvq+4l5HUVTtY6s00/JFu/ScxELHHs0dbAOr1/9rJ9p9PA0+M+oQuTrIwAG+GJlIH/aFwt/So
- nJ6NelIwIsDTPT07YPhnbRxYrGIL+/U1LPw5hR3t81/Ob1Adw7PA/8If/cf/O7Qu9NhMBfHXM
- gROkD9sUW7kxM/RMgPq8mRGADR+t2UG+07kNTcf7RJYPz5oDA+mzRHvblLXPDl9BkZixP3A7P
- +cFqX2NBSOUNsp8YG7T0j1ZGoX937LRl+hjO2UHB5iMg0bNgCYpGwGdCxRR1dbLDPMvqelXRd
- xbQZRCfxdV4d2xh2okzc1JBapcRQ7+oq4WwHCYBlYqPipT4vEDGY81V08da+O9oHYbC3gTM+V
- 2pFEpzyGVxTDSCGzF4y/DocAI5a1sxjHro75/yOIOjk56WWXfjBxXVJBBGaOeUNH9/MJtDGFh
- FY6wvRToF9BG8pz+pDPtZTwSMurj7AD6O5M8kF797CKoda1P6ZLhf/20xD2NiwVxjyaLaebEe
- 24gl7XyMASYCePg9NoL3Nf1sCtZ/soPmGH4vlI0swDF3b7NI/ydZrpthqi2x/tEDKATTVk5W8
- VHTCJUCF9ShkwxqWQb8BUT5DxFdIuCta5KnK2DLGkCPiGMUgmcwDMByLrUpKL1Pcl8bNsUCD5
- L5iVU49GThrr17KYHtHmZ9ZnIFbSOSvP55/utbicc9W1CDTvRH8XD76LjXvW57chSi3Apfa4N
- g/rNA6afPA/O9O4o5VWkAOv998SmxkPEFVgwWfTDfONbiRVhvT7yOWg74+XOLFJAvGM2VEjFq
- 9We4p8P3uLYYtIY2XOtc1phZfcwtlHlwOvd2K1EbQuHQdpsJrSyOzTUnhZOvq4+YZNBz72SGO
- CGh6zf7s3E3pGXjmzHOBEyMdr2IPi2zmnQxyid3TdnAjkEZST2GG0NzKOjuDc66rTi8G1XXeS
- U8fo3tegY07Uv8tVBsaYo1c5YVbeIUuL/GIao5tRht86M18Lb/BH1wjgS7OXBgoGnB/0eTD+6
- W/5mjOJvz2Sl8zFK8W6jzpqPAIq8O3Vlzi2sTpiCPB5bXqOGmt4+GdXBQlL9clfw4XeU+e7w9
- ob6skbFR+w2eKk=
+Date: Thu, 24 Feb 2022 10:39:17 +0000
+From: Marc Zyngier <maz@kernel.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Philip Li <philip.li@intel.com>, Kalesh Singh <kaleshsingh@google.com>,
+ kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, Will Deacon <will@kernel.org>, Quentin Perret
+ <qperret@google.com>, Fuad Tabba <tabba@google.com>, surenb@google.com,
+ Android Kernel Team <kernel-team@android.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, James Morse <james.morse@arm.com>, Alexandru
+ Elisei <alexandru.elisei@arm.com>, Suzuki K Poulose
+ <suzuki.poulose@arm.com>, Mark Rutland <mark.rutland@arm.com>, Pasha
+ Tatashin <pasha.tatashin@soleen.com>, Joey Gouly <joey.gouly@arm.com>, Peter
+ Collingbourne <pcc@google.com>, Andrew Scull <ascull@google.com>, Paolo
+ Bonzini <pbonzini@redhat.com>, Zenghui Yu <yuzenghui@huawei.com>, Linux ARM
+ <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, kvmarm <kvmarm@lists.cs.columbia.edu>
+Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
+ hypervisor stack overflows
+In-Reply-To: <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
+References: <20220222165212.2005066-7-kaleshsingh@google.com>
+ <202202231727.L621fVgD-lkp@intel.com> <875yp63ptg.wl-maz@kernel.org>
+ <YhYpvfZaSjrAtkZp@rli9-dbox> <cb750267af0636c49d2f8aa354f086a5@kernel.org>
+ <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <89c48bd2a9b32b4607d1515714fa3c1b@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: ardb@kernel.org, philip.li@intel.com, kaleshsingh@google.com, lkp@intel.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, mark.rutland@arm.com, pasha.tatashin@soleen.com, joey.gouly@arm.com, pcc@google.com, ascull@google.com, pbonzini@redhat.com, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
+On 2022-02-23 12:56, Ard Biesheuvel wrote:
+> On Wed, 23 Feb 2022 at 13:54, Marc Zyngier <maz@kernel.org> wrote:
+>> 
+>> On 2022-02-23 12:34, Philip Li wrote:
+>> > On Wed, Feb 23, 2022 at 09:16:59AM +0000, Marc Zyngier wrote:
+>> >> On Wed, 23 Feb 2022 09:05:18 +0000,
+>> >> kernel test robot <lkp@intel.com> wrote:
+>> >> >
+>> >> > Hi Kalesh,
+>> >> >
+>> >> > Thank you for the patch! Perhaps something to improve:
+>> >> >
+>> >> > [auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
+>> >> >
+>> >> > url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+>> >> > base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
+>> >> > config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
+>> >> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+>> >> > reproduce (this is a W=1 build):
+>> >> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>> >> >         chmod +x ~/bin/make.cross
+>> >> >         # install arm64 cross compiling tool for clang build
+>> >> >         # apt-get install binutils-aarch64-linux-gnu
+>> >> >         # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
+>> >> >         git remote add linux-review https://github.com/0day-ci/linux
+>> >> >         git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+>> >> >         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
+>> >> >         # save the config file to linux build tree
+>> >> >         mkdir build_dir
+>> >> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+>> >> >
+>> >> > If you fix the issue, kindly add following tag as appropriate
+>> >> > Reported-by: kernel test robot <lkp@intel.com>
+>> >> >
+>> >> > All warnings (new ones prefixed by >>):
+>> >> >
+>> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>> >> >    #define NULL ((void *)0)
+>> >> >                 ^~~~~~~~~~~
+>> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+>> >> >            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
+>> >> >                                              ^~~~~~~~~~~~~~~~~~~~~
+>> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
+>> >> >            [0 ... ESR_ELx_EC_MAX]          = NULL,
+>> >> >                                              ^~~~
+>> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>> >> >    #define NULL ((void *)0)
+>> >> >                 ^~~~~~~~~~~
+>> >>
+>> >> Kalesh, please ignore this nonsense. There may be things to improve,
+>> >> but this is *NOT* one of them.
+>> >>
+>> >> These reports are pretty useless, and just lead people to ignore real
+>> >> bug reports.
+>> >
+>> > Hi Kalesh, sorry there're some irrelevant issues mixed in the report,
+>> > kindly ignore them. And the valuable ones are the new ones that
+>> > prefixed by >>, as the below one in original report.
+>> >
+>> >>> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous
+>> >>> prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
+>> >    void __noreturn hyp_panic_bad_stack(void)
+>> >                    ^
+>> 
+>> This is only called from assembly code, so a prototype wouldn't bring
+>> much.
+>> 
+> 
+> Should probably be marked as 'asmlinkage' then. I've suggested many
+> times already that this bogus diagnostic should either be disabled, or
+> disregard 'asmlinkage' symbols.
 
+Yes, asmlinkage is definitely missing.
 
-On 2022/2/24 17:48, Yujie Liu wrote:
-> Hi,
->
-> Sorry for the noise of this false alert.
+But it is pretty obvious that the robot people aren't interested in
+fixing this particular issue, given how long we have been suggesting
+this...
 
-No problem at all, in fact your bots are awesome detecting real bugs
-like previously it detects some uninitialized values from my patches.
-
-Kudos to your guys!
-LKP bots really rocks.
-
->
-> For clang analyzer reports, usually we do internal check firstly. We'll
-> send out the
-> report only when we think that it is highly possible to be a true alert.
-
-BTW, do performance benchmarks also go through the same procedure?
-
-Although your bots are awesome at detect compiling warning/errors,
-sometimes it's not that straightforward to reproduce the same
-performance regressions.
-
-So it may be worthy some extra steps to verify certain performance
-regressions.
-
-Thanks,
-Qu
-
->
-> We scanned our report history and found this report was produced on
-> 1/26, but it was
-> still in the internal check domain and was not likely to be sent to Qu
-> or mailing lists,
-> so we are kind of confusing about this consequence.
->
-> Souptick, could you help to provide the original report by link or
-> attachment?
-> Then we can do some check to figure out whether we have any flaw in our
-> process.
->
-> Thanks,
-> Yujie
->
-> On 2/22/2022 16:04, Qu Wenruo wrote:
->>
->>
->> On 2022/2/22 15:50, Souptick Joarder wrote:
->>> On Mon, Feb 21, 2022 at 5:46 AM Qu Wenruo <quwenruo.btrfs@gmx.com>
->>> wrote:
->>>>
->>>>
->>>>
->>>> On 2022/2/20 22:46, Souptick Joarder wrote:
->>>>> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
->>>>>
->>>>> Kernel test robot reported below warning ->
->>>>> fs/btrfs/scrub.c:3439:2: warning: Undefined or garbage value
->>>>> returned to caller [clang-analyzer-core.uninitialized.UndefReturn]
->>>>>
->>>>> Initialize ret to 0.
->>>>>
->>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
->>>>
->>>> Although the patch is not yet merged, but I have to say, it's a
->>>> false alert.
->>>
->>> Yes, I agree it is a false positive but this patch will at least keep
->>> kernel test robot happy :)
->>
->> I'd say we should enhance the compiler to fix the false alert.
->>
->> Thus adding LLVM list here is correct.
->>
->>
->> To me, the root problem is that, we lack the hint to allow clang to
->> know that, @logical_length passed in would not cause u64 overflow.
->>
->> Unfortunately the sanity check to prevent overflow is hidden far away
->> inside tree-checker.c.
->>
->> Maybe some ASSERT() for overflow check would help LLVM to know that?
->>
->> Thanks,
->> Qu
->>
->>>>
->>>> Firstly, the while loop will always get at least one run.
->>>>
->>>> Secondly, in that loop, we either set ret to some error value and
->>>> break,
->>>> or after at least one find_first_extent_item() and scrub_extent() cal=
-l,
->>>> we increase cur_logical and reached the limit of the while loop and
->>>> exit.
->>>>
->>>> So there is no possible routine to leave @ret uninitialized and
->>>> returned
->>>> to caller.
->>>>
->>>> Thanks,
->>>> Qu
->>>>
->>>>> ---
->>>>> =C2=A0=C2=A0 fs/btrfs/scrub.c | 2 +-
->>>>> =C2=A0=C2=A0 1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
->>>>> index 4baa8e43d585..5ca7e5ffbc96 100644
->>>>> --- a/fs/btrfs/scrub.c
->>>>> +++ b/fs/btrfs/scrub.c
->>>>> @@ -3325,7 +3325,7 @@ static int scrub_simple_mirror(struct
->>>>> scrub_ctx *sctx,
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const u32 max_length =3D SZ_64K=
-;
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct btrfs_path path =3D {};
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 cur_logical =3D logical_sta=
-rt;
->>>>> -=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 int ret =3D 0;
->>>>>
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* The range must be inside the=
- bg */
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ASSERT(logical_start >=3D bg->s=
-tart &&
->>>
->>
+         M.
+-- 
+Jazz is not dead. It just smells funny...
