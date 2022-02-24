@@ -1,150 +1,144 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726EA1373
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 05:58:34 +0000 (UTC)
-Received: by mail-pl1-f172.google.com with SMTP id s1so788178plg.12
-        for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 21:58:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zAnejYzjMLOw9nDkVzejCfKZ6oBBZ5wn5KiXGCpLjMA=;
-        b=ngRxHm3L+/PjW4guu4lIB7R2vAimLs2Yef4Disoe//YgHKnOK/FKD3M2CdZYJjFwjP
-         NPHCFYPZT/Le825KrJuJWI1EwYb4+M1mQ+NIf96KxpVqDlL8bEZx6LB+mKGvJwFkFKVF
-         RqzsPe4Myj0OCUQeY0I7JxpBX8A3GUqjWv/yQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zAnejYzjMLOw9nDkVzejCfKZ6oBBZ5wn5KiXGCpLjMA=;
-        b=Uij/T7zn7f/nPlVFDYeJQ7C39k562P3cQWmjzbvnjdiLB4SoWd8+UUtpfD22arJ4nl
-         Fue4WdjZt3oeDMfvoU8pyASynvY+v0REQ5QM6owmVbl+/sVo+NrvQyzjVzuhVAwBr9mM
-         pzb8xGbSdhEllC5Hjac0TrNWpRTeAlvUSFrx4TRAEWWRDW978X42745bng6fizEGfFYV
-         ZiMJXUn5txmABMd5yKEyW3VZaMGRdOoxHCTqfzE7KmgKKxKaziUhZBuBysislQks02/c
-         DjJG1SOUWwMfdVaE+709VZeHcw4ABDyvT62iF/lhUtfKyayCM6em/SrsyA4g0TfX2aqP
-         yHwQ==
-X-Gm-Message-State: AOAM532A1tNlgK6B0ubLmc8up2L1u6bHoMZaJdjSyCjnWl19DLFCBrOo
-	6w1ZCSDy9Ze4GLcrtUXREMgPOw==
-X-Google-Smtp-Source: ABdhPJyJ9xUurNYX2PkzlWyR0k1G5n6hF4pFLyT3YuG8dMdiPW/0Tc4RSx6Lns8rrrPi2W3XrglbrQ==
-X-Received: by 2002:a17:90b:17c3:b0:1b8:cda0:bc08 with SMTP id me3-20020a17090b17c300b001b8cda0bc08mr12981731pjb.72.1645682313918;
-        Wed, 23 Feb 2022 21:58:33 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm4840603pju.44.2022.02.23.21.58.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 21:58:33 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Jeff Dike <jdike@addtoit.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	David Gow <davidgow@google.com>,
-	linux-um@lists.infradead.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v2] um: Allow builds with Clang
-Date: Wed, 23 Feb 2022 21:58:31 -0800
-Message-Id: <20220224055831.1854786-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7154138C
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 07:09:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645686550; x=1677222550;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Zz1uw34srLEy1L619ihfRSNoYf33JmEVqY+EzVqdyW4=;
+  b=awXQppctUw26RP0WeKhhnLczjsy/9IwsHOTcZ8zPHDP/82/k1SwBYvcv
+   RcHzWzoUjIHO+nTMCQaWwCPqxBOtKaUh0AgRmsQTJ4BqLffimhno92KZF
+   2fztH0qBd45og3BrYFeta6bM4SJkWnbAZBo6ERBqDmKLfwj49JgZtHCwF
+   5B3VSTppNnRuxlux0UGqOESBOurtNasEDfd8noY+2pzfIiDwWtHkrTw1d
+   iBUl3F3Ze0GEWJuJTZ7as6aBcnCxSyaIjeB60cSIPik4tsMjzD0Ne6XRm
+   nn118l6Ye3uEFp3pdzyE5NSdkHqx7l4kovVLp5518eqCtHSfmBjegZ/pc
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232142326"
+X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
+   d="scan'208";a="232142326"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 23:09:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
+   d="scan'208";a="548613863"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 23:09:08 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nN8FP-0002R8-A1; Thu, 24 Feb 2022 07:09:07 +0000
+Date: Thu, 24 Feb 2022 15:08:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [ammarfaizi2-block:next/linux-next/akpm 334/334]
+ lib/Kconfig.debug:337:error: recursive dependency detected!
+Message-ID: <202202241529.J5wGzdi8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3199; h=from:subject; bh=ORjKUvuElRuveNhaPtG55IXvBNRDQtztW8DXNHkaB6o=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiFx6H2Rp6e7Ak5NdBJtPWHhMi31ltuCxXU+/l480f UATwZt2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhcehwAKCRCJcvTf3G3AJkQlD/ 4pCZ2mWoBuXFc2QpaBO0O3ONucPC8rUors6QDfZuMU1xAyl8Spj1bUbGEnl1BMT5VYBXBygi5tQqJK DtecMG/4Sy9fGup2xayFUu2DX8O9RHBeV71eroXdeYg2dh0+O1sb5iwXZVbLj3OV6HOGoUkiWDpms3 U6ogMwfe5Mb9GXwSncSK76Cbp9bXnSvRMJTzmxfGJlZ4dGpkRY8a6kMKlxwog8W7wzlM2+BK4MG+D9 s/waoLXueOywfOD63bJDfqHimMj18NbCinyQiTwiqjTFEEEXwjzZ8jlC9jBhfXHbje6Uyn7DNGEiBi 2TmbgbA1Mq09IHEtbQ33ExSsNJl/mcONkTiYEsofTtkCA7KwkLz0yu1RW0SMwanMSq5tL3pzMRmR4c uPEB1vUFm3b6VqDmrsFIEfRmBE8WDEYmaklgv8vxRBlXeu/BPeb4HJAO0Hmuy/jTPwoSr4B7vTlNKD Mux7qGTGcGgOwnFxQ3diqxvi4PnN/UW+6atTfzH2wTVYhNFxQNez0tiMEmAwGP2tJ+2J76UstlpRXY r8V1oopSzb18Qq11SBU53h3tIDPq2gNIvfPmmPOh6MtOjsp7EMCJ9Wk3vcfkHZusGFcxjRJPgJnbBx sC5IKds+n1EERQpguuWcbRt3p5W3K1zvBvcpJQ0aHrutERV3LkYlfSmzO1TA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Add x86-64 target for Clang+um and update user-offsets.c to use
-Clang-friendly assembly, similar to the fix from commit cf0c3e68aa81
-("kbuild: fix asm-offset generation to work with clang").
+tree:   https://github.com/ammarfaizi2/linux-block next/linux-next/akpm
+head:   4b738f94b3a6492ae5adad0940d580851fb9019b
+commit: 4b738f94b3a6492ae5adad0940d580851fb9019b [334/334] Merge commit 'next-20220215~2' into tmp-akpm/master
+config: riscv-randconfig-r023-20220223
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/4b738f94b3a6492ae5adad0940d580851fb9019b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block next/linux-next/akpm
+        git checkout 4b738f94b3a6492ae5adad0940d580851fb9019b
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv  randconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
 
-This lets me run KUnit tests with Clang:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-$ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
-...
-$ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
-...
+All errors (new ones prefixed by >>):
 
-Cc: Jeff Dike <jdike@addtoit.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: David Gow <davidgow@google.com>
-Cc: linux-um@lists.infradead.org
-Cc: linux-kbuild@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
-Cc: llvm@lists.linux.dev
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/lkml/Yg2YubZxvYvx7%2Fnm@dev-arch.archlinux-ax161/
-Tested-by: David Gow <davidgow@google.com>
-Link: https://lore.kernel.org/lkml/CABVgOSk=oFxsbSbQE-v65VwR2+mXeGXDDjzq8t7FShwjJ3+kUg@mail.gmail.com/
-Signed-off-by: Kees Cook <keescook@chromium.org>
+   lib/Kconfig.debug:343:warning: choice value used outside its choice group
+   lib/Kconfig.debug:355:warning: choice value used outside its choice group
+   lib/Kconfig.debug:364:warning: choice value used outside its choice group
+>> lib/Kconfig.debug:337:error: recursive dependency detected!
+   lib/Kconfig.debug:337: choice <choice> contains symbol DEBUG_INFO
+   lib/Kconfig.debug:227: symbol DEBUG_INFO is selected by DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+   lib/Kconfig.debug:253: symbol DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is part of choice <choice>
+   lib/Kconfig.debug:234: choice <choice> contains symbol DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+   lib/Kconfig.debug:253: symbol DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is part of choice <choice>
+   For a resolution refer to Documentation/kbuild/kconfig-language.rst
+   subsection "Kconfig recursive dependency limitations"
+
+
+vim +337 lib/Kconfig.debug
+
+695afd3d7d58ec Sedat Dilek      2020-08-16  294  
+6dfc06651b3d29 Dave Hansen      2013-07-01  295  config DEBUG_INFO_REDUCED
+6dfc06651b3d29 Dave Hansen      2013-07-01  296  	bool "Reduce debugging information"
+6dfc06651b3d29 Dave Hansen      2013-07-01  297  	help
+6dfc06651b3d29 Dave Hansen      2013-07-01  298  	  If you say Y here gcc is instructed to generate less debugging
+6dfc06651b3d29 Dave Hansen      2013-07-01  299  	  information for structure types. This means that tools that
+6dfc06651b3d29 Dave Hansen      2013-07-01  300  	  need full debugging information (like kgdb or systemtap) won't
+6dfc06651b3d29 Dave Hansen      2013-07-01  301  	  be happy. But if you merely need debugging information to
+6dfc06651b3d29 Dave Hansen      2013-07-01  302  	  resolve line numbers there is no loss. Advantage is that
+6dfc06651b3d29 Dave Hansen      2013-07-01  303  	  build directory object sizes shrink dramatically over a full
+6dfc06651b3d29 Dave Hansen      2013-07-01  304  	  DEBUG_INFO build and compile times are reduced too.
+6dfc06651b3d29 Dave Hansen      2013-07-01  305  	  Only works with newer gcc versions.
+6dfc06651b3d29 Dave Hansen      2013-07-01  306  
+10e68b02c861cc Nick Desaulniers 2020-05-26  307  config DEBUG_INFO_COMPRESSED
+10e68b02c861cc Nick Desaulniers 2020-05-26  308  	bool "Compressed debugging information"
+10e68b02c861cc Nick Desaulniers 2020-05-26  309  	depends on $(cc-option,-gz=zlib)
+10e68b02c861cc Nick Desaulniers 2020-05-26  310  	depends on $(ld-option,--compress-debug-sections=zlib)
+10e68b02c861cc Nick Desaulniers 2020-05-26  311  	help
+10e68b02c861cc Nick Desaulniers 2020-05-26  312  	  Compress the debug information using zlib.  Requires GCC 5.0+ or Clang
+10e68b02c861cc Nick Desaulniers 2020-05-26  313  	  5.0+, binutils 2.26+, and zlib.
+10e68b02c861cc Nick Desaulniers 2020-05-26  314  
+10e68b02c861cc Nick Desaulniers 2020-05-26  315  	  Users of dpkg-deb via scripts/package/builddeb may find an increase in
+10e68b02c861cc Nick Desaulniers 2020-05-26  316  	  size of their debug .deb packages with this config set, due to the
+10e68b02c861cc Nick Desaulniers 2020-05-26  317  	  debug info being compressed with zlib, then the object files being
+10e68b02c861cc Nick Desaulniers 2020-05-26  318  	  recompressed with a different compression scheme. But this is still
+10e68b02c861cc Nick Desaulniers 2020-05-26  319  	  preferable to setting $KDEB_COMPRESS to "none" which would be even
+10e68b02c861cc Nick Desaulniers 2020-05-26  320  	  larger.
+10e68b02c861cc Nick Desaulniers 2020-05-26  321  
+866ced950bcd54 Andi Kleen       2014-07-30  322  config DEBUG_INFO_SPLIT
+866ced950bcd54 Andi Kleen       2014-07-30  323  	bool "Produce split debuginfo in .dwo files"
+9d9374440072eb Masahiro Yamada  2019-02-22  324  	depends on $(cc-option,-gsplit-dwarf)
+866ced950bcd54 Andi Kleen       2014-07-30  325  	help
+866ced950bcd54 Andi Kleen       2014-07-30  326  	  Generate debug info into separate .dwo files. This significantly
+866ced950bcd54 Andi Kleen       2014-07-30  327  	  reduces the build directory size for builds with DEBUG_INFO,
+866ced950bcd54 Andi Kleen       2014-07-30  328  	  because it stores the information only once on disk in .dwo
+866ced950bcd54 Andi Kleen       2014-07-30  329  	  files instead of multiple times in object files and executables.
+866ced950bcd54 Andi Kleen       2014-07-30  330  	  In addition the debug information is also compressed.
+866ced950bcd54 Andi Kleen       2014-07-30  331  
+866ced950bcd54 Andi Kleen       2014-07-30  332  	  Requires recent gcc (4.7+) and recent gdb/binutils.
+866ced950bcd54 Andi Kleen       2014-07-30  333  	  Any tool that packages or reads debug information would need
+866ced950bcd54 Andi Kleen       2014-07-30  334  	  to know about the .dwo files and include them.
+866ced950bcd54 Andi Kleen       2014-07-30  335  	  Incompatible with older versions of ccache.
+866ced950bcd54 Andi Kleen       2014-07-30  336  
+a66049e2cf0ef1 Nick Desaulniers 2021-02-05 @337  choice
+a66049e2cf0ef1 Nick Desaulniers 2021-02-05  338  	prompt "DWARF version"
+a66049e2cf0ef1 Nick Desaulniers 2021-02-05  339  	help
+a66049e2cf0ef1 Nick Desaulniers 2021-02-05  340  	  Which version of DWARF debug info to emit.
+a66049e2cf0ef1 Nick Desaulniers 2021-02-05  341  
+
+:::::: The code at line 337 was first introduced by commit
+:::::: a66049e2cf0ef166dba5bafdbb3062287fc965ad Kbuild: make DWARF version a choice
+
+:::::: TO: Nick Desaulniers <ndesaulniers@google.com>
+:::::: CC: Masahiro Yamada <masahiroy@kernel.org>
+
 ---
-v1: https://lore.kernel.org/lkml/20220217002843.2312603-1-keescook@chromium.org/
-v2:
- - tweak commit log phrasing and alphabetize targets (nathan)
- - fix a missing implicit fallthrough under 32-bit builds
- - add review tags
----
- arch/um/os-Linux/execvp.c  | 1 +
- arch/x86/um/user-offsets.c | 4 ++--
- scripts/Makefile.clang     | 1 +
- 3 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/arch/um/os-Linux/execvp.c b/arch/um/os-Linux/execvp.c
-index 84a0777c2a45..c09a5fd5e225 100644
---- a/arch/um/os-Linux/execvp.c
-+++ b/arch/um/os-Linux/execvp.c
-@@ -93,6 +93,7 @@ int execvp_noalloc(char *buf, const char *file, char *const argv[])
- 					   up finding no executable we can use, we want to diagnose
- 					   that we did find one but were denied access.  */
- 					got_eacces = 1;
-+					break;
- 				case ENOENT:
- 				case ESTALE:
- 				case ENOTDIR:
-diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
-index bae61554abcc..d9071827b515 100644
---- a/arch/x86/um/user-offsets.c
-+++ b/arch/x86/um/user-offsets.c
-@@ -10,10 +10,10 @@
- #include <asm/types.h>
- 
- #define DEFINE(sym, val) \
--	asm volatile("\n->" #sym " %0 " #val : : "i" (val))
-+	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
- 
- #define DEFINE_LONGS(sym, val) \
--	asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
-+	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
- 
- void foo(void)
- {
-diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-index 51fc23e2e9e5..6e49344c6db2 100644
---- a/scripts/Makefile.clang
-+++ b/scripts/Makefile.clang
-@@ -9,6 +9,7 @@ CLANG_TARGET_FLAGS_mips		:= mipsel-linux-gnu
- CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
- CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
- CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
-+CLANG_TARGET_FLAGS_um		:= x86_64-linux-gnu
- CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
- CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
- 
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
