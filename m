@@ -1,235 +1,79 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FCEC1B85
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 19:43:53 +0000 (UTC)
-Received: by mail-ed1-f49.google.com with SMTP id z22so4403978edd.1
-        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 11:43:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cT6VTaPBAvZcJT0C07jbq6jkkSfnrkv3DOfnLzZ77CM=;
-        b=cph9wo/cKs42xh7OHpJ1L4/fItWA1YtsVsR8Di5tl2igWrI3LjGzwy+GTVPrIL3I1Z
-         GPmf1B0NtZnAEE3hGPmw8LkPPA+8eTx1vMqrbiZJvC6TMFfHROnbmMiYXNJp8huLI+gx
-         qO7LzfpbfGtaHrKawj/KVlZawWWAemhDdkG+FfRsf2zbCwRLYY8yk1hUtHQPAc+vZfmk
-         RxJzf8gEOCvxp1Kuikw1mJyQ5GskvlzG3ChUBTmfgr88rXLMULIcbZFULMD36AaKUC3e
-         HhchVJPs5IExtwcXN/IpVT84JaqinlITjSuAktAm60Cw3JGxFH3MCqXm65fyUBe1lLZi
-         IxIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cT6VTaPBAvZcJT0C07jbq6jkkSfnrkv3DOfnLzZ77CM=;
-        b=cDXNkCpczuuJ1dURA1OItBtjDhou9siczAX328Uj5a0UnAqzYXGsIELacnncllm5b8
-         s8TqNNdv7UkhIIHv7gFzhStFBlktc2R8liwsMiZ4Z7jRQ0c+qgyR6Rj2SBiidajbPULA
-         vOqNj78emrAvXg6ESkaZJeZNoIhyspAE8Isv8LZL58aacVuP3PXDT2CIGTcJ4dOeN87Z
-         yhCTr+L98XYKjS3KyXEAFUKp/CXDzqWaWYSILzFnWDuy/2ZHCUP7Mg6cHi4LWQVA+Pf0
-         fil90QDV71Sn+CFudmfpTceAN+ZvFEUhfCCT64/iyk3FeXrZflc8WgxLJ47Sus63HAlj
-         xqow==
-X-Gm-Message-State: AOAM531sJ0vf3PCyvQ5HOf63cA7OjWtXw+boBvGiIiiAZLrs1VfF3tkY
-	jov8hInJdE5Ju22cMYehGhC+69nWnc8MnbtVVYzAJg==
-X-Google-Smtp-Source: ABdhPJwrdy9Ks+AvYVAONIODLhAaLZ43j966hZvJwXtEANqW/+4iWi8AF6gH87RMvVRxu+szCttnMs6KWkl6HKVvHdU=
-X-Received: by 2002:a05:6402:2546:b0:412:d0eb:2a4a with SMTP id
- l6-20020a056402254600b00412d0eb2a4amr3924248edb.306.1645731832090; Thu, 24
- Feb 2022 11:43:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6CD1373;
+	Thu, 24 Feb 2022 21:10:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD011C340E9;
+	Thu, 24 Feb 2022 21:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645737052;
+	bh=of0dgeyEYw65+FoM0blva960Bmm/NelYeS+8mwZtaRw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mgnFTy+/Iw2w+HIhZsZoaHPokVk3nb3ubMC28rB2vt41gH4zN3nUGWXzupmPwlFB4
+	 UVcnE1nRRyzORca95Dl7NH1hOmC49WPuJGE3/ysl0rSFj/Dgpw2YWL++MGFlb/SvBH
+	 nh5pSRSfYwB8oygB7+2ewJeXeqDlr3g1xZkSNQdS1LAz9kwpPYihiAJR+1HSywvjYj
+	 uVD5C2BcmuOeZTRleDeMxYU8XF30foNAyKeflBHSC4afltmMzQ4MFNag5vmDMTIOOZ
+	 jcAVLsnjJVuJo2dS/7RyDtgJT8f549o7LTd4ppbVRMCpnFuVSHiLb6QDrG25YhRb3q
+	 /FGWrKZ0Q5mXA==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Cosmin Tanislav <cosmin.tanislav@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>
+Cc: linux-iio@vger.kernel.org,
+	patches@lists.linux.dev,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] iio: accel: adxl367: Fix handled initialization in adxl367_irq_handler()
+Date: Thu, 24 Feb 2022 14:10:34 -0700
+Message-Id: <20220224211034.625130-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220224055145.1853657-1-keescook@chromium.org>
-In-Reply-To: <20220224055145.1853657-1-keescook@chromium.org>
-From: Daniel Latypov <dlatypov@google.com>
-Date: Thu, 24 Feb 2022 11:43:40 -0800
-Message-ID: <CAGS_qxrRi0zvGnoi-Ne=wp8xkuFKPzNj9d57eq=51gg5gwX=eA@mail.gmail.com>
-Subject: Re: [PATCH] lib: stackinit: Convert to KUnit
-To: Kees Cook <keescook@chromium.org>
-Cc: David Gow <davidgow@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	linux-kernel@vger.kernel.org, KUnit Development <kunit-dev@googlegroups.com>, 
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 23, 2022 at 9:51 PM Kees Cook <keescook@chromium.org> wrote:
->
+Clang warns:
 
-<snip>
+  drivers/iio/accel/adxl367.c:887:2: error: variable 'handled' is uninitialized when used here [-Werror,-Wuninitialized]
+          handled |= adxl367_push_event(indio_dev, status);
+          ^~~~~~~
+  drivers/iio/accel/adxl367.c:879:14: note: initialize the variable 'handled' to silence this warning
+          bool handled;
+                      ^
+                       = 0
+  1 error generated.
 
+This should have used '=' instead of '|='; make that change to resolve
+the warning.
 
->  /* Userspace headers. */
-> +#define _GNU_SOURCE
->  #include <stdio.h>
->  #include <stdint.h>
-> +#include <stdlib.h>
->  #include <string.h>
->  #include <stdbool.h>
->  #include <errno.h>
->  #include <sys/types.h>
->
->  /* Linux kernel-ism stubs for stand-alone userspace build. */
+Fixes: cbab791c5e2a ("iio: accel: add ADXL367 driver")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1605
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/iio/accel/adxl367.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This is neat and esp. so that it works.
-But may I ask, what's the value of using this vs UML?
+diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
+index b452d74b1d4d..350a89b61179 100644
+--- a/drivers/iio/accel/adxl367.c
++++ b/drivers/iio/accel/adxl367.c
+@@ -884,7 +884,7 @@ static irqreturn_t adxl367_irq_handler(int irq, void *private)
+ 	if (ret)
+ 		return IRQ_NONE;
+ 
+-	handled |= adxl367_push_event(indio_dev, status);
++	handled = adxl367_push_event(indio_dev, status);
+ 	handled |= adxl367_push_fifo_data(indio_dev, status, fifo_entries);
+ 
+ 	return handled ? IRQ_HANDLED : IRQ_NONE;
 
-Given this has changed into mainly just a KUnit-compatibility layer,
-it feels like it can maybe live as a standalone file, if there's ever
-interest in doing this for other tests.
+base-commit: 2be8795a609800e5071d868d459ce29232fce2c8
+-- 
+2.35.1
 
-It feels like something that will never quite be "supported", but I
-find it neat enough I'd have fun sending some patches to make it more
-realistic.
-
-> -#define KBUILD_MODNAME         "stackinit"
-> -#define pr_fmt(fmt)            KBUILD_MODNAME ": " fmt
-> -#define pr_err(fmt, ...)       fprintf(stderr, pr_fmt(fmt), ##__VA_ARGS__)
-> -#define pr_warn(fmt, ...)      fprintf(stderr, pr_fmt(fmt), ##__VA_ARGS__)
-> -#define pr_info(fmt, ...)      fprintf(stdout, pr_fmt(fmt), ##__VA_ARGS__)
-> -#define __init                 /**/
-> -#define __exit                 /**/
-> +#define TEST_PASS      0
-> +#define TEST_SKIP      1
-> +#define TEST_FAIL      2
-> +struct kunit {
-> +       int status;
-> +       char *msg;
-> +};
-> +struct kunit_case {
-> +        void (*run_case)(struct kunit *test);
-> +        const char *name;
-> +};
-> +struct kunit_suite {
-> +       const char *name;
-> +       const struct kunit_case *test_cases;
-> +};
-> +#define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
-> +
-> +#define KUNIT_ASSERT_TRUE_MSG(test, expr, fmt, ...)                    \
-> +do {                                                                   \
-> +       if (!(expr)) {                                                  \
-> +               if (test->status != TEST_SKIP)                          \
-> +                       test->status = TEST_FAIL;                       \
-> +               if (test->msg)                                          \
-> +                       free(test->msg);                                \
-> +               asprintf(&test->msg, fmt, ##__VA_ARGS__);               \
-> +       }                                                               \
-> +} while (0)
-
-This looks more like KUNIT_EXPECT_TRUE_MSG(), since this macro won't
-abort the test if the expectation fails.
-
-Looking at the code, it looks like we do want the ability to abort.
-Perhaps we can do what Googletest does in C++ and just add in a `return;`?
-
-It has some annoying implications, like using them from helper
-functions doesn't work as one would expect.
-But people seem to be doing fine with that tradeoff in C++ land.
-
-> +
-> +#define KUNIT_ASSERT_EQ_MSG(test, left, right, fmt, ...)               \
-> +       KUNIT_ASSERT_TRUE_MSG(test, (left) == (right), fmt, ##__VA_ARGS__)
-
-Very optional:
-
-It might be nice to show the expressions automatically on failure.
-We could implement that via something like
-
-KUNIT_ASSERT_TRUE_MSG(test, (left) == (right), #left " != " #right ":
-" fmt, ##__VA_ARGS__);
-
-E.g.
-KUNIT_ASSERT_EQ_MSG(test, 2+2, 5, "math is broken")
-=> 2+2 != 5: math is broken
-
-But I can see that being a bit too complicated to want to do here.
-And the failure messages we had before are already decent at giving context.
-
-> +
-> +#define kunit_skip(test, fmt, ...)                                     \
-> +do {                                                                   \
-> +       test->status = TEST_SKIP;                                       \
-> +       if (test->msg)                                                  \
-> +               free(test->msg);                                        \
-> +       asprintf(&test->msg, fmt, ##__VA_ARGS__);                       \
-> +} while (0)
-
-Similarly, this has no control flow implications, so the current
-semantics match kunit_mark_skipped().
-
-But looking at the code, I think we want to abort early here too.
-
-> +
->  #define __user                 /**/
->  #define noinline               __attribute__((__noinline__))
->  #define __aligned(x)           __attribute__((__aligned__(x)))
-> @@ -59,16 +102,44 @@ typedef uint16_t           u16;
->  typedef uint32_t               u32;
->  typedef uint64_t               u64;
->
-> -#define module_init(func)      static int (*do_init)(void) = func
-> -#define module_exit(func)      static void (*do_exit)(void) = func
-> -#define MODULE_LICENSE(str)    int main(void) {                \
-> -                                       int rc;                 \
-> -                                       /* License: str */      \
-> -                                       rc = do_init();         \
-> -                                       if (rc == 0)            \
-> -                                               do_exit();      \
-> -                                       return rc;              \
-> -                               }
-> +#define MODULE_LICENSE(str)    /* */
-> +
-> +int do_kunit_test_suite(struct kunit_suite *suite)
-> +{
-> +       const struct kunit_case *test_case;
-> +       int rc = 0;
-> +
-> +       for (test_case = suite->test_cases; test_case->run_case; test_case++) {
-> +               struct kunit test = { };
-> +
-> +               test_case->run_case(&test);
-> +               switch (test.status) {
-> +               default:
-> +               case TEST_FAIL:
-> +                       fprintf(stderr, "FAIL: %s%s%s", test_case->name,
-> +                               test.msg ? ": " : "",
-> +                               test.msg ?: "\n");
-> +                       rc = 1;
-> +                       break;
-> +               case TEST_SKIP:
-> +                       fprintf(stdout, "XFAIL: %s%s%s", test_case->name,
-> +                               test.msg ? ": " : "",
-> +                               test.msg ?: "\n");
-> +                       break;
-> +               case TEST_PASS:
-> +                       fprintf(stdout, "ok: %s\n", test_case->name);
-> +                       break;
-> +               }
-> +               if (test.msg)
-> +                       free(test.msg);
-> +       }
-> +       return rc;
-> +}
-> +
-> +#define kunit_test_suite(suite)                                        \
-> +int main(void) {                                               \
-> +       return do_kunit_test_suite(&(suite));                   \
-> +}
-
-very optional:
-emulating kunit_test_suites() might be more future-proof here, if we
-ever want to setup more suites.
-There's little reason to do so right now given the lack of init and
-exit support.
-
-Like the stuff above, it wouldn't be hard to do, but I can see it not
-being worth the extra code, i.e.
-
-#define kunit_test_suites(suites...) \
-  int main(void) {
-     static struct kunit_suite *suites =[] = { __VA_ARGS__ };
-     int i, ret = 0;
-     for (i = 0; i < ARRAY_SIZE(suites); ++i)
-       ret += do_kunit_test_suite(suites[i]);
-     return ret;
-   }
