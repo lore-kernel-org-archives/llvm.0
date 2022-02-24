@@ -1,77 +1,2711 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECEFAED6
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 03:11:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645672261; x=1677208261;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9EmUFqIg1GWaAbIjqrTM+RGEnJ987UvEwpJymzgaBoA=;
-  b=LNWiYNvm1dT6GqOfiXYAl7PCKrhDuSGfrWdR1ssprYmu8Lr2eQKK0U7w
-   NYsEoSxp/tap4F8uzHyFDJaKrwLKE5/U2c7YBIi/tWUiM87jUtAGHMAL+
-   EhaNE8Uahn2XcvLdDX99w4UOwm0+2bhpoljew/ANTimOSkMqfKyZKAGnP
-   vZezX3ylZLte+BzJb56/DotuKcXJAVEBsvu9whVk2V2hMUihBUElJtsCW
-   8Djvr4eArPkh+jwUTXsxUkb9PF7I/7631yu91KUXBBi+vuDhiQM45RJzm
-   Uv27N0BQDTndGfzDmvq77M+p8xJ791oa6oIofoJgBXtLzyXTnYHn9623P
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="315364559"
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="315364559"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 19:11:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="639564085"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 23 Feb 2022 19:11:00 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nN4Wx-0002A5-Ii; Thu, 24 Feb 2022 03:10:59 +0000
-Date: Thu, 24 Feb 2022 11:10:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [trondmy-nfs-2.6:testing 42/44] ld.lld: error: undefined symbol:
- xxh32
-Message-ID: <202202241119.1ZzPPbnV-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4718EED6
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 03:25:16 +0000 (UTC)
+Received: by mail-pl1-f170.google.com with SMTP id x11so555101pll.10
+        for <llvm@lists.linux.dev>; Wed, 23 Feb 2022 19:25:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=RLr+i+agQs9evgmE8zX+/ZaJuTItOVoH0QfYGW0HfNM=;
+        b=dCyXAK0M6jP1bRLW2Rus6t7YSz4UIVCEXjFI4nTxJ5kVWW6LrB4fUkKMy+ZZxShhBu
+         eXc/9lcLHJI6QmdJ646xLbz8csYu67Jeo9vQzmbLvOz2EUuvo+rjqI4i3UDvE8XvuQxz
+         GYXjEORM3YhtGSyLvwBkOuJI4Sspo27DlYfBFi2K4CKGMfifIMQgkr1DteGHtMlIEpHh
+         snnhHk/+Y4MzDvaYBXp72vuzIYf8QFDQm4KC/VzTGyyCTkqS0MvVSEjqKLuhKb5G1/Y0
+         SyoFAG0AIBbhlgSscQbhib1e5Q9HDC3mPsxPw8H+xxYBaLDAzdSqR0EqEWqZbuwKYzOe
+         89UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=RLr+i+agQs9evgmE8zX+/ZaJuTItOVoH0QfYGW0HfNM=;
+        b=qW6PmLhJTcnmIp5Ylw4ikZDElp9zfNX5B0+T9oRJzdirv7rtovtMRiXvvZTi+J16hk
+         bPKKBHlspgonY/ylVHtfiDOhDpDItSFC7+IbbcseL1dxHLOD4YUiwCt7CMmqaFxFtw1w
+         qoNXNgu8XdEL5enUP/Z8FJgnqnK7uLluJJ8TkPf0VvAJIORHuXxQUtm83C4k46bt1nko
+         S6Tw/mE0zaqlv8EbWJS3JqgrgVtea4ixCoh+PUK9zG9xMorBOM+hvgDDUwbtq0GlHwhn
+         SYkSjFJa+2srOSG4LYPhz4SqcoFun45k7QHFQt/NGAwKY9F5xkHc3H6wTQVkJ6VtkACi
+         WW2g==
+X-Gm-Message-State: AOAM531d3W+5v1in6qSqxc+YMYvGr0piIrR+wPxJW2eK4IK+o/vaxzS2
+	OiopXD97lj4EfqmgR8E0nsXnVNTfFlqh/E0cmaE=
+X-Google-Smtp-Source: ABdhPJwr2RfmyYH6onF3la7brqAdvY+ZK9ugoJP1wJ6wXdGV09vK5qjpskPEmjvC8feEdjPWnel13A==
+X-Received: by 2002:a17:902:e552:b0:14f:bfec:eb2c with SMTP id n18-20020a170902e55200b0014fbfeceb2cmr636728plf.108.1645673113059;
+        Wed, 23 Feb 2022 19:25:13 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m17-20020a17090ab79100b001b89fd7e298sm4261029pjr.4.2022.02.23.19.25.12
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 19:25:12 -0800 (PST)
+Message-ID: <6216fa98.1c69fb81.7cb76.ba23@mx.google.com>
+Date: Wed, 23 Feb 2022 19:25:12 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20220223
+Subject: next/master build: 214 builds: 31 failed, 183 passed, 43 errors,
+ 341 warnings (next-20220223)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-tree:   git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git testing
-head:   3882cc488a3048791d7f06393d3e7c55ba3eda6f
-commit: 5d2f1b8a2961967f7712baaea33b6e83daf732f8 [42/44] NFS: Convert readdir page cache to use a cookie based index
-config: arm-pcm027_defconfig (https://download.01.org/0day-ci/archive/20220224/202202241119.1ZzPPbnV-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add trondmy-nfs-2.6 git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git
-        git fetch --no-tags trondmy-nfs-2.6 testing
-        git checkout 5d2f1b8a2961967f7712baaea33b6e83daf732f8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+next/master build: 214 builds: 31 failed, 183 passed, 43 errors, 341 warnin=
+gs (next-20220223)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220223/
 
-All errors (new ones prefixed by >>):
+Tree: next
+Branch: master
+Git Describe: next-20220223
+Git Commit: d4a0ae62a277377de396850ed4b709b6bd9b7326
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
->> ld.lld: error: undefined symbol: xxh32
-   >>> referenced by dir.c
-   >>>               nfs/dir.o:(nfs_readdir_page_get_locked) in archive fs/built-in.a
+Build Failures Detected:
+
+arm64:
+    allmodconfig: (clang-14) FAIL
+
+arm:
+    allmodconfig: (clang-14) FAIL
+    omap2plus_defconfig: (gcc-10) FAIL
+    qcom_defconfig: (gcc-10) FAIL
+    realview_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+    sama5_defconfig: (gcc-10) FAIL
+    shmobile_defconfig: (gcc-10) FAIL
+    sunxi_defconfig: (gcc-10) FAIL
+    versatile_defconfig: (gcc-10) FAIL
+    vexpress_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-14) FAIL
+
+mips:
+    32r2el_defconfig: (gcc-10) FAIL
+    32r2el_defconfig+debug: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+    malta_defconfig: (gcc-10) FAIL
+    malta_kvm_defconfig: (gcc-10) FAIL
+    maltaaprp_defconfig: (gcc-10) FAIL
+    maltasmvp_defconfig: (gcc-10) FAIL
+    maltasmvp_eva_defconfig: (gcc-10) FAIL
+    maltaup_defconfig: (gcc-10) FAIL
+    maltaup_xpa_defconfig: (gcc-10) FAIL
+    xway_defconfig: (gcc-10) FAIL
+
+riscv:
+    defconfig+CONFIG_EFI=3Dn: (clang-14) FAIL
+    defconfig: (gcc-10) FAIL
+    defconfig+debug: (gcc-10) FAIL
+    defconfig+kselftest: (gcc-10) FAIL
+
+x86_64:
+    allmodconfig: (clang-14) FAIL
+    allmodconfig: (gcc-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    tinyconfig (gcc-10): 2 warnings
+
+arm64:
+    allmodconfig (clang-14): 1 error
+    defconfig (clang-14): 4 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-14): 6 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 1 warning
+
+arm:
+    allmodconfig (clang-14): 1 error, 13 warnings
+    am200epdkit_defconfig (gcc-10): 4 warnings
+    aspeed_g4_defconfig (gcc-10): 4 warnings
+    aspeed_g5_defconfig (clang-14): 14 warnings
+    assabet_defconfig (gcc-10): 4 warnings
+    at91_dt_defconfig (gcc-10): 4 warnings
+    axm55xx_defconfig (gcc-10): 4 warnings
+    badge4_defconfig (gcc-10): 4 warnings
+    cerfcube_defconfig (gcc-10): 4 warnings
+    cm_x300_defconfig (gcc-10): 4 warnings
+    colibri_pxa270_defconfig (gcc-10): 4 warnings
+    colibri_pxa300_defconfig (gcc-10): 4 warnings
+    collie_defconfig (gcc-10): 4 warnings
+    corgi_defconfig (gcc-10): 4 warnings
+    dove_defconfig (gcc-10): 4 warnings
+    ep93xx_defconfig (gcc-10): 4 warnings
+    eseries_pxa_defconfig (gcc-10): 4 warnings
+    ezx_defconfig (gcc-10): 4 warnings
+    footbridge_defconfig (gcc-10): 4 warnings
+    h3600_defconfig (gcc-10): 4 warnings
+    h5000_defconfig (gcc-10): 4 warnings
+    hackkit_defconfig (gcc-10): 4 warnings
+    hisi_defconfig (gcc-10): 4 warnings
+    imote2_defconfig (gcc-10): 4 warnings
+    imx_v4_v5_defconfig (gcc-10): 4 warnings
+    iop32x_defconfig (gcc-10): 4 warnings
+    ixp4xx_defconfig (gcc-10): 4 warnings
+    jornada720_defconfig (gcc-10): 4 warnings
+    lart_defconfig (gcc-10): 4 warnings
+    lpc18xx_defconfig (gcc-10): 1 warning
+    lpd270_defconfig (gcc-10): 4 warnings
+    lubbock_defconfig (gcc-10): 4 warnings
+    magician_defconfig (gcc-10): 4 warnings
+    mainstone_defconfig (gcc-10): 4 warnings
+    mini2440_defconfig (gcc-10): 4 warnings
+    mmp2_defconfig (gcc-10): 4 warnings
+    moxart_defconfig (gcc-10): 4 warnings
+    mps2_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (clang-14): 5 warnings
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 2 warnings
+    mvebu_v5_defconfig (gcc-10): 4 warnings
+    mvebu_v7_defconfig (gcc-10): 4 warnings
+    mxs_defconfig (gcc-10): 4 warnings
+    neponset_defconfig (gcc-10): 4 warnings
+    netwinder_defconfig (gcc-10): 4 warnings
+    omap1_defconfig (gcc-10): 4 warnings
+    omap2plus_defconfig (gcc-10): 1 error
+    orion5x_defconfig (gcc-10): 4 warnings
+    palmz72_defconfig (gcc-10): 4 warnings
+    pcm027_defconfig (gcc-10): 4 warnings
+    pleb_defconfig (gcc-10): 4 warnings
+    pxa168_defconfig (gcc-10): 4 warnings
+    pxa255-idp_defconfig (gcc-10): 4 warnings
+    pxa3xx_defconfig (gcc-10): 4 warnings
+    pxa910_defconfig (gcc-10): 4 warnings
+    pxa_defconfig (gcc-10): 4 warnings
+    qcom_defconfig (gcc-10): 1 error
+    realview_defconfig (gcc-10): 1 error
+    rpc_defconfig (gcc-10): 2 errors
+    s3c6400_defconfig (gcc-10): 4 warnings
+    s5pv210_defconfig (gcc-10): 4 warnings
+    sama5_defconfig (gcc-10): 1 error, 4 warnings
+    shannon_defconfig (gcc-10): 4 warnings
+    shmobile_defconfig (gcc-10): 1 error
+    simpad_defconfig (gcc-10): 4 warnings
+    socfpga_defconfig (gcc-10): 4 warnings
+    spear13xx_defconfig (gcc-10): 4 warnings
+    spear3xx_defconfig (gcc-10): 4 warnings
+    spear6xx_defconfig (gcc-10): 4 warnings
+    spitz_defconfig (gcc-10): 4 warnings
+    stm32_defconfig (gcc-10): 1 warning
+    sunxi_defconfig (gcc-10): 1 error
+    tct_hammer_defconfig (gcc-10): 6 warnings
+    trizeps4_defconfig (gcc-10): 4 warnings
+    versatile_defconfig (gcc-10): 1 error
+    vexpress_defconfig (gcc-10): 1 error
+    vf610m4_defconfig (gcc-10): 1 warning
+    vt8500_v6_v7_defconfig (gcc-10): 4 warnings
+    xcep_defconfig (gcc-10): 4 warnings
+    zeus_defconfig (gcc-10): 4 warnings
+
+i386:
+    allmodconfig (clang-14): 5 errors
+    allnoconfig (clang-14): 5 warnings
+    i386_defconfig (clang-14): 4 warnings
+    tinyconfig (gcc-10): 2 warnings
+
+mips:
+    32r2el_defconfig (gcc-10): 1 error, 1 warning
+    32r2el_defconfig+debug (gcc-10): 1 error, 1 warning
+    ci20_defconfig (gcc-10): 1 warning
+    fuloong2e_defconfig (gcc-10): 1 error
+    gcw0_defconfig (gcc-10): 1 warning
+    lemote2f_defconfig (gcc-10): 1 error, 1 warning
+    loongson2k_defconfig (gcc-10): 1 error, 1 warning
+    loongson3_defconfig (gcc-10): 1 error
+    malta_defconfig (gcc-10): 1 error
+    malta_kvm_defconfig (gcc-10): 1 error
+    maltaaprp_defconfig (gcc-10): 1 error
+    maltasmvp_defconfig (gcc-10): 1 error
+    maltasmvp_eva_defconfig (gcc-10): 1 error
+    maltaup_defconfig (gcc-10): 1 error
+    maltaup_xpa_defconfig (gcc-10): 1 error
+    xway_defconfig (gcc-10): 1 error
+
+riscv:
+    defconfig (gcc-10): 1 error
+    defconfig+CONFIG_EFI=3Dn (clang-14): 1 error
+    defconfig+debug (gcc-10): 1 error
+    defconfig+kselftest (gcc-10): 1 error
+    nommu_k210_defconfig (gcc-10): 1 warning
+
+x86_64:
+    allmodconfig (gcc-10): 2 errors
+    allmodconfig (clang-14): 6 errors, 1 warning
+    allnoconfig (clang-14): 4 warnings
+    tinyconfig (gcc-10): 2 warnings
+    x86_64_defconfig (clang-14): 5 warnings
+    x86_64_defconfig+debug (gcc-10): 2 warnings
+
+Errors summary:
+
+    10   arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =
+=E2=80=98mt_init=E2=80=99
+    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    3    lib/maple_tree.c:764:2: error: unannotated fall-through between sw=
+itch labels [-Werror,-Wimplicit-fallthrough]
+    3    arch/riscv/kernel/vdso.c:123:20: error: =E2=80=98next=E2=80=99 und=
+eclared (first use in this function); did you mean =E2=80=98net=E2=80=99?
+    2    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_au=
+x_backlight'
+    2    arch/x86/include/asm/kvm-x86-ops.h:90:1: error: pointer type misma=
+tch ('u64 (*)(struct kvm_vcpu *, gfn_t, bool)' (aka 'unsigned long long (*)=
+(struct kvm_vcpu *, unsigned long long, _Bool)') and 'void *') [-Werror,-Wp=
+ointer-type-mismatch]
+    2    arch/x86/include/asm/kvm-x86-ops.h:89:1: error: pointer type misma=
+tch ('int (*)(struct kvm *, u64)' (aka 'int (*)(struct kvm *, unsigned long=
+ long)') and 'void *') [-Werror,-Wpointer-type-mismatch]
+    2    arch/x86/include/asm/kvm-x86-ops.h:88:1: error: pointer type misma=
+tch ('int (*)(struct kvm *, unsigned int)' and 'void *') [-Werror,-Wpointer=
+-type-mismatch]
+    2    arch/x86/include/asm/kvm-x86-ops.h:82:1: error: pointer type misma=
+tch ('bool (*)(struct kvm_vcpu *)' (aka '_Bool (*)(struct kvm_vcpu *)') and=
+ 'void *') [-Werror,-Wpointer-type-mismatch]
+    2    arch/x86/include/asm/kvm-x86-ops.h:108:1: error: pointer type mism=
+atch ('bool (*)(struct kvm_vcpu *)' (aka '_Bool (*)(struct kvm_vcpu *)') an=
+d 'void *') [-Werror,-Wpointer-type-mismatch]
+    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
+:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
+irectory
+    2    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: und=
+efined reference to `drm_panel_dp_aux_backlight'
+    1    panel-edp.c:(.text+0xbdc): undefined reference to `drm_panel_dp_au=
+x_backlight'
+    1    panel-edp.c:(.text+0xb7c): undefined reference to `drm_panel_dp_au=
+x_backlight'
+    1    panel-edp.c:(.text+0xb28): undefined reference to `drm_panel_dp_au=
+x_backlight'
+    1    arch/riscv/kernel/vdso.c:123:20: error: use of undeclared identifi=
+er 'next'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    ERROR: modpost: "drm_panel_dp_aux_backlight" [drivers/gpu/drm/pane=
+l/panel-edp.ko] undefined!
+
+Warnings summary:
+
+    64   arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is ou=
+tside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 =
+[-Warray-bounds]
+    64   arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is ou=
+tside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 =
+[-Warray-bounds]
+    64   arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknow=
+n> is outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=
+=E2=80=99 [-Warray-bounds]
+    64   arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknow=
+n> is outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=
+=E2=80=99 [-Warray-bounds]
+    23   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    15   1 warning generated.
+    8    mm/page_alloc.c:131:40: warning: variable 'pagesets' is not needed=
+ and will not be emitted [-Wunneeded-internal-declaration]
+    8    lib/maple_tree.c:764:2: warning: unannotated fall-through between =
+switch labels [-Wimplicit-fallthrough]
+    5    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 =
+defined but not used [-Wunused-variable]
+    3    kernel/sched/rt.c:3020:12: warning: =E2=80=98sched_rr_handler=E2=
+=80=99 defined but not used [-Wunused-function]
+    3    kernel/sched/rt.c:2981:12: warning: =E2=80=98sched_rt_handler=E2=
+=80=99 defined but not used [-Wunused-function]
+    2    lib/maple_tree.c:4254:1: warning: the frame size of 1040 bytes is =
+larger than 1024 bytes [-Wframe-larger-than=3D]
+    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    2 warnings generated.
+    1    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable=
+ instruction
+    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x59: call to=
+ do_strnlen_user() with UACCESS enabled
+    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
+6: call to do_strncpy_from_user() with UACCESS enabled
+    1    lib/maple_tree.c:4208:20: warning: stack frame size (1096) exceeds=
+ limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1    lib/maple_tree.c:4208:20: warning: stack frame size (1084) exceeds=
+ limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1    kernel/sched/rt.c:3020:12: warning: 'sched_rr_handler' defined but=
+ not used [-Wunused-function]
+    1    kernel/sched/rt.c:2981:12: warning: 'sched_rt_handler' defined but=
+ not used [-Wunused-function]
+    1    include/asm-generic/unaligned.h:14:8: warning: array subscript -1 =
+is outside array bounds of =E2=80=98unsigned char[1]=E2=80=99 [-Warray-boun=
+ds]
+    1    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls t=
+hrough to next function startup_64_setup_env()
+    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
+_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
+ld not have leading "0x"
+    1    arch/arm64/kernel/elfcore.c:62:1: warning: the frame size of 2064 =
+bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    arch/arm64/kernel/elfcore.c:25:12: warning: stack frame size (2144=
+) exceeds limit (2048) in 'mte_dump_tag_range' [-Wframe-larger-than]
+    1    arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 i=
+s below array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=
+=80=99} [-Warray-bounds]
+    1    arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 i=
+s below array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=
+=80=99} [-Warray-bounds]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =E2=80=
+=98mt_init=E2=80=99
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0=
+ section mismatches
+
+Errors:
+    arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =E2=80=
+=98mt_init=E2=80=99
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 6 errors, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    arch/x86/include/asm/kvm-x86-ops.h:82:1: error: pointer type mismatch (=
+'bool (*)(struct kvm_vcpu *)' (aka '_Bool (*)(struct kvm_vcpu *)') and 'voi=
+d *') [-Werror,-Wpointer-type-mismatch]
+    arch/x86/include/asm/kvm-x86-ops.h:88:1: error: pointer type mismatch (=
+'int (*)(struct kvm *, unsigned int)' and 'void *') [-Werror,-Wpointer-type=
+-mismatch]
+    arch/x86/include/asm/kvm-x86-ops.h:89:1: error: pointer type mismatch (=
+'int (*)(struct kvm *, u64)' (aka 'int (*)(struct kvm *, unsigned long long=
+)') and 'void *') [-Werror,-Wpointer-type-mismatch]
+    arch/x86/include/asm/kvm-x86-ops.h:90:1: error: pointer type mismatch (=
+'u64 (*)(struct kvm_vcpu *, gfn_t, bool)' (aka 'unsigned long long (*)(stru=
+ct kvm_vcpu *, unsigned long long, _Bool)') and 'void *') [-Werror,-Wpointe=
+r-type-mismatch]
+    arch/x86/include/asm/kvm-x86-ops.h:108:1: error: pointer type mismatch =
+('bool (*)(struct kvm_vcpu *)' (aka '_Bool (*)(struct kvm_vcpu *)') and 'vo=
+id *') [-Werror,-Wpointer-type-mismatch]
+    lib/maple_tree.c:764:2: error: unannotated fall-through between switch =
+labels [-Werror,-Wimplicit-fallthrough]
+
+Warnings:
+    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls throug=
+h to next function startup_64_setup_env()
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    lib/maple_tree.c:764:2: error: unannotated fall-through between switch =
+labels [-Werror,-Wimplicit-fallthrough]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-14) =E2=80=94 FAIL, 5 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    arch/x86/include/asm/kvm-x86-ops.h:82:1: error: pointer type mismatch (=
+'bool (*)(struct kvm_vcpu *)' (aka '_Bool (*)(struct kvm_vcpu *)') and 'voi=
+d *') [-Werror,-Wpointer-type-mismatch]
+    arch/x86/include/asm/kvm-x86-ops.h:88:1: error: pointer type mismatch (=
+'int (*)(struct kvm *, unsigned int)' and 'void *') [-Werror,-Wpointer-type=
+-mismatch]
+    arch/x86/include/asm/kvm-x86-ops.h:89:1: error: pointer type mismatch (=
+'int (*)(struct kvm *, u64)' (aka 'int (*)(struct kvm *, unsigned long long=
+)') and 'void *') [-Werror,-Wpointer-type-mismatch]
+    arch/x86/include/asm/kvm-x86-ops.h:90:1: error: pointer type mismatch (=
+'u64 (*)(struct kvm_vcpu *, gfn_t, bool)' (aka 'unsigned long long (*)(stru=
+ct kvm_vcpu *, unsigned long long, _Bool)') and 'void *') [-Werror,-Wpointe=
+r-type-mismatch]
+    arch/x86/include/asm/kvm-x86-ops.h:108:1: error: pointer type mismatch =
+('bool (*)(struct kvm_vcpu *)' (aka '_Bool (*)(struct kvm_vcpu *)') and 'vo=
+id *') [-Werror,-Wpointer-type-mismatch]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-14) =E2=80=94 FAIL, 1 error, 13 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    lib/maple_tree.c:764:2: error: unannotated fall-through between switch =
+labels [-Werror,-Wimplicit-fallthrough]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/page_alloc.c:131:40: warning: variable 'pagesets' is not needed and =
+will not be emitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+    lib/maple_tree.c:764:2: warning: unannotated fall-through between switc=
+h labels [-Wimplicit-fallthrough]
+    lib/maple_tree.c:4208:20: warning: stack frame size (1084) exceeds limi=
+t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    2 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/page_alloc.c:131:40: warning: variable 'pagesets' is not needed and =
+will not be emitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+    lib/maple_tree.c:764:2: warning: unannotated fall-through between switc=
+h labels [-Wimplicit-fallthrough]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 14 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    mm/page_alloc.c:131:40: warning: variable 'pagesets' is not needed and =
+will not be emitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+    lib/maple_tree.c:764:2: warning: unannotated fall-through between switc=
+h labels [-Wimplicit-fallthrough]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
+ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
+t have leading "0x"
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings=
+, 0 section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings=
+, 0 section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mi=
+smatches
+
+Errors:
+    arch/riscv/kernel/vdso.c:123:20: error: =E2=80=98next=E2=80=99 undeclar=
+ed (first use in this function); did you mean =E2=80=98net=E2=80=99?
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
+ mismatches
+
+Warnings:
+    mm/page_alloc.c:131:40: warning: variable 'pagesets' is not needed and =
+will not be emitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+    lib/maple_tree.c:764:2: warning: unannotated fall-through between switc=
+h labels [-Wimplicit-fallthrough]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 6 warnings, 0 section mismatches
+
+Warnings:
+    arch/arm64/kernel/elfcore.c:25:12: warning: stack frame size (2144) exc=
+eeds limit (2048) in 'mte_dump_tag_range' [-Wframe-larger-than]
+    1 warning generated.
+    mm/page_alloc.c:131:40: warning: variable 'pagesets' is not needed and =
+will not be emitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+    lib/maple_tree.c:764:2: warning: unannotated fall-through between switc=
+h labels [-Wimplicit-fallthrough]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 1 warning, 0 section mismatches
+
+Warnings:
+    arch/arm64/kernel/elfcore.c:62:1: warning: the frame size of 2064 bytes=
+ is larger than 2048 bytes [-Wframe-larger-than=3D]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 FAIL, 1 error, 0 warni=
+ngs, 0 section mismatches
+
+Errors:
+    arch/riscv/kernel/vdso.c:123:20: error: use of undeclared identifier 'n=
+ext'
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/riscv/kernel/vdso.c:123:20: error: =E2=80=98next=E2=80=99 undeclar=
+ed (first use in this function); did you mean =E2=80=98net=E2=80=99?
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/riscv/kernel/vdso.c:123:20: error: =E2=80=98next=E2=80=99 undeclar=
+ed (first use in this function); did you mean =E2=80=98net=E2=80=99?
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
+ mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/asm-generic/unaligned.h:14:8: warning: array subscript -1 is ou=
+tside array bounds of =E2=80=98unsigned char[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/page_alloc.c:131:40: warning: variable 'pagesets' is not needed and =
+will not be emitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+    lib/maple_tree.c:764:2: warning: unannotated fall-through between switc=
+h labels [-Wimplicit-fallthrough]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 1 warning, 0 sec=
+tion mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+Warnings:
+    lib/maple_tree.c:4254:1: warning: the frame size of 1040 bytes is large=
+r than 1024 bytes [-Wframe-larger-than=3D]
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+Warnings:
+    lib/maple_tree.c:4254:1: warning: the frame size of 1040 bytes is large=
+r than 1024 bytes [-Wframe-larger-than=3D]
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
+ed but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =E2=80=
+=98mt_init=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =E2=80=
+=98mt_init=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =E2=80=
+=98mt_init=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =E2=80=
+=98mt_init=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings,=
+ 0 section mismatches
+
+Errors:
+    arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =E2=80=
+=98mt_init=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =E2=80=
+=98mt_init=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0=
+ section mismatches
+
+Errors:
+    arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =E2=80=
+=98mt_init=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
+ed but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
+section mismatches
+
+Warnings:
+    mm/page_alloc.c:131:40: warning: variable 'pagesets' is not needed and =
+will not be emitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+    lib/maple_tree.c:764:2: warning: unannotated fall-through between switc=
+h labels [-Wimplicit-fallthrough]
+    lib/maple_tree.c:4208:20: warning: stack frame size (1096) exceeds limi=
+t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    2 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2=
+ warnings, 0 section mismatches
+
+Warnings:
+    arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 is bel=
+ow array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=80=
+=99} [-Warray-bounds]
+    arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 is bel=
+ow array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=80=
+=99} [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
+ mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
+ section mismatches
+
+Warnings:
+    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
+ed but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    ERROR: modpost: "drm_panel_dp_aux_backlight" [drivers/gpu/drm/panel/pan=
+el-edp.ko] undefined!
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
+ mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: undefine=
+d reference to `drm_panel_dp_aux_backlight'
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    panel-edp.c:(.text+0xb7c): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 4 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    panel-edp.c:(.text+0xbdc): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
+ed but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    kernel/sched/rt.c:3020:12: warning: =E2=80=98sched_rr_handler=E2=80=99 =
+defined but not used [-Wunused-function]
+    kernel/sched/rt.c:2981:12: warning: =E2=80=98sched_rt_handler=E2=80=99 =
+defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section mi=
+smatches
+
+Warnings:
+    kernel/sched/rt.c:3020:12: warning: 'sched_rr_handler' defined but not =
+used [-Wunused-function]
+    kernel/sched/rt.c:2981:12: warning: 'sched_rt_handler' defined but not =
+used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sched/rt.c:3020:12: warning: =E2=80=98sched_rr_handler=E2=80=99 =
+defined but not used [-Wunused-function]
+    kernel/sched/rt.c:2981:12: warning: =E2=80=98sched_rt_handler=E2=80=99 =
+defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section m=
+ismatches
+
+Warnings:
+    kernel/sched/rt.c:3020:12: warning: =E2=80=98sched_rr_handler=E2=80=99 =
+defined but not used [-Wunused-function]
+    kernel/sched/rt.c:2981:12: warning: =E2=80=98sched_rt_handler=E2=80=99 =
+defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    panel-edp.c:(.text+0xb28): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: undefine=
+d reference to `drm_panel_dp_aux_backlight'
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
+ed but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, =
+0 section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 5 warnings, 0=
+ section mismatches
+
+Warnings:
+    mm/page_alloc.c:131:40: warning: variable 'pagesets' is not needed and =
+will not be emitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable inst=
+ruction
+    lib/maple_tree.c:764:2: warning: unannotated fall-through between switc=
+h labels [-Wimplicit-fallthrough]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x86: ca=
+ll to do_strncpy_from_user() with UACCESS enabled
+    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x59: call to do_s=
+trnlen_user() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for =E2=80=
+=98mt_init=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+For more info write to <info@kernelci.org>
