@@ -1,42 +1,42 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA95F1386
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 07:09:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240781386
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 07:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645686560; x=1677222560;
+  t=1645687817; x=1677223817;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1AEB+rXO4qYNx/T+8IC5iwE0UDDcuGwkqExAN7yCpKE=;
-  b=FNUP9QCIRe6QN/LMbOmTavlit6UDtaJl41x0CI/J7Rw7HkTTgqbmSSr7
-   kPxAFXlhlfCm+j2QuCk3j8RaF4q4mR6nCSQDxXD03xQS9qQR81PaFNk/R
-   MB9gs27Lt5f0A413ftI7kR2hs3sTRlvizkPoWG80P39aK52vsqTMNHSUr
-   p3YWjzusmYmUa7tpomc76k/SeAxLu4kRtOhQNsPpwOCrip1Rdn7DebSm6
-   /jxHW6HJps84sIg8CMg+x56pKIdB5VB/r1/q++v2QuoT08pxu3E6CtBM7
-   68ZHdAvzZFnBtjQQj0TKYGIHFL9HWhas9HVWVQSdCbVxKEqO4u4AiHOH5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="252087350"
+  bh=tgMF2lu5e7/DNFlZ2rsoq/AtCC+HWKVz9zdYejbO2wY=;
+  b=HR7a6/AMf2noaaMqr0uHqnihlPQ8ypu9jYqUR/Sm4+AAKcKqJkqjt24d
+   KheQK/0DghaTuIhGtBOhwCkqwnkuwOsLAD18a9z82uN1F9RqeNDbN41SL
+   HQy2AecDqR+p9H60AQx3JIqgGp/CA6FFyr6hUREaUPWCz/sEm6E4f8A7f
+   PjcQ0NW2SzrDWFHcomZEzcTuAhDhl/dlPAxihcO6v9QthBoxIVZOajETi
+   IKJowNQwvw4WhHhkSgJ4Enb/r/WdbA2KcdUkklq+N5rfgCgBhc+4AAZlk
+   deo14RuE0JT2c9WBX6AqqnK8eKcRCr9DXKZzjmcMyXfWa/MY7qdpHK/TF
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232791574"
 X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="252087350"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 23:09:10 -0800
+   d="scan'208";a="232791574"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 23:30:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="543609273"
+   d="scan'208";a="776963328"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2022 23:09:08 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2022 23:30:14 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nN8FP-0002R6-9V; Thu, 24 Feb 2022 07:09:07 +0000
-Date: Thu, 24 Feb 2022 15:08:46 +0800
+	id 1nN8Zq-0002pY-7g; Thu, 24 Feb 2022 07:30:14 +0000
+Date: Thu, 24 Feb 2022 15:29:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
+To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [ammarfaizi2-block:next/linux-next/akpm 334/334]
- lib/Kconfig.debug:337:error: recursive dependency detected!
-Message-ID: <202202241522.25enBK5u-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: [linux-next:master 6797/7915] mm/mmap.c:754:6: warning: no previous
+ prototype for function 'vma_store'
+Message-ID: <202202241511.4YOktWCD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,95 +47,61 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block next/linux-next/akpm
-head:   4b738f94b3a6492ae5adad0940d580851fb9019b
-commit: 4b738f94b3a6492ae5adad0940d580851fb9019b [334/334] Merge commit 'next-20220215~2' into tmp-akpm/master
-config: hexagon-randconfig-r045-20220223
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   d4a0ae62a277377de396850ed4b709b6bd9b7326
+commit: e1345552730700c6b405d20acdfb92da77d0cdbf [6797/7915] kernel/fork: Use maple tree for dup_mmap() during forking
+config: arm-pcm027_defconfig (https://download.01.org/0day-ci/archive/20220224/202202241511.4YOktWCD-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/4b738f94b3a6492ae5adad0940d580851fb9019b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block next/linux-next/akpm
-        git checkout 4b738f94b3a6492ae5adad0940d580851fb9019b
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon  randconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=e1345552730700c6b405d20acdfb92da77d0cdbf
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout e1345552730700c6b405d20acdfb92da77d0cdbf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   lib/Kconfig.debug:343:warning: choice value used outside its choice group
-   lib/Kconfig.debug:355:warning: choice value used outside its choice group
-   lib/Kconfig.debug:364:warning: choice value used outside its choice group
->> lib/Kconfig.debug:337:error: recursive dependency detected!
-   lib/Kconfig.debug:337: choice <choice> contains symbol DEBUG_INFO
-   lib/Kconfig.debug:227: symbol DEBUG_INFO is selected by DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-   lib/Kconfig.debug:253: symbol DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is part of choice <choice>
-   lib/Kconfig.debug:234: choice <choice> contains symbol DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-   lib/Kconfig.debug:253: symbol DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is part of choice <choice>
-   For a resolution refer to Documentation/kbuild/kconfig-language.rst
-   subsection "Kconfig recursive dependency limitations"
+>> mm/mmap.c:754:6: warning: no previous prototype for function 'vma_store' [-Wmissing-prototypes]
+   void vma_store(struct mm_struct *mm, struct vm_area_struct *vma)
+        ^
+   mm/mmap.c:754:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void vma_store(struct mm_struct *mm, struct vm_area_struct *vma)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +337 lib/Kconfig.debug
+vim +/vma_store +754 mm/mmap.c
 
-695afd3d7d58ec Sedat Dilek      2020-08-16  294  
-6dfc06651b3d29 Dave Hansen      2013-07-01  295  config DEBUG_INFO_REDUCED
-6dfc06651b3d29 Dave Hansen      2013-07-01  296  	bool "Reduce debugging information"
-6dfc06651b3d29 Dave Hansen      2013-07-01  297  	help
-6dfc06651b3d29 Dave Hansen      2013-07-01  298  	  If you say Y here gcc is instructed to generate less debugging
-6dfc06651b3d29 Dave Hansen      2013-07-01  299  	  information for structure types. This means that tools that
-6dfc06651b3d29 Dave Hansen      2013-07-01  300  	  need full debugging information (like kgdb or systemtap) won't
-6dfc06651b3d29 Dave Hansen      2013-07-01  301  	  be happy. But if you merely need debugging information to
-6dfc06651b3d29 Dave Hansen      2013-07-01  302  	  resolve line numbers there is no loss. Advantage is that
-6dfc06651b3d29 Dave Hansen      2013-07-01  303  	  build directory object sizes shrink dramatically over a full
-6dfc06651b3d29 Dave Hansen      2013-07-01  304  	  DEBUG_INFO build and compile times are reduced too.
-6dfc06651b3d29 Dave Hansen      2013-07-01  305  	  Only works with newer gcc versions.
-6dfc06651b3d29 Dave Hansen      2013-07-01  306  
-10e68b02c861cc Nick Desaulniers 2020-05-26  307  config DEBUG_INFO_COMPRESSED
-10e68b02c861cc Nick Desaulniers 2020-05-26  308  	bool "Compressed debugging information"
-10e68b02c861cc Nick Desaulniers 2020-05-26  309  	depends on $(cc-option,-gz=zlib)
-10e68b02c861cc Nick Desaulniers 2020-05-26  310  	depends on $(ld-option,--compress-debug-sections=zlib)
-10e68b02c861cc Nick Desaulniers 2020-05-26  311  	help
-10e68b02c861cc Nick Desaulniers 2020-05-26  312  	  Compress the debug information using zlib.  Requires GCC 5.0+ or Clang
-10e68b02c861cc Nick Desaulniers 2020-05-26  313  	  5.0+, binutils 2.26+, and zlib.
-10e68b02c861cc Nick Desaulniers 2020-05-26  314  
-10e68b02c861cc Nick Desaulniers 2020-05-26  315  	  Users of dpkg-deb via scripts/package/builddeb may find an increase in
-10e68b02c861cc Nick Desaulniers 2020-05-26  316  	  size of their debug .deb packages with this config set, due to the
-10e68b02c861cc Nick Desaulniers 2020-05-26  317  	  debug info being compressed with zlib, then the object files being
-10e68b02c861cc Nick Desaulniers 2020-05-26  318  	  recompressed with a different compression scheme. But this is still
-10e68b02c861cc Nick Desaulniers 2020-05-26  319  	  preferable to setting $KDEB_COMPRESS to "none" which would be even
-10e68b02c861cc Nick Desaulniers 2020-05-26  320  	  larger.
-10e68b02c861cc Nick Desaulniers 2020-05-26  321  
-866ced950bcd54 Andi Kleen       2014-07-30  322  config DEBUG_INFO_SPLIT
-866ced950bcd54 Andi Kleen       2014-07-30  323  	bool "Produce split debuginfo in .dwo files"
-9d9374440072eb Masahiro Yamada  2019-02-22  324  	depends on $(cc-option,-gsplit-dwarf)
-866ced950bcd54 Andi Kleen       2014-07-30  325  	help
-866ced950bcd54 Andi Kleen       2014-07-30  326  	  Generate debug info into separate .dwo files. This significantly
-866ced950bcd54 Andi Kleen       2014-07-30  327  	  reduces the build directory size for builds with DEBUG_INFO,
-866ced950bcd54 Andi Kleen       2014-07-30  328  	  because it stores the information only once on disk in .dwo
-866ced950bcd54 Andi Kleen       2014-07-30  329  	  files instead of multiple times in object files and executables.
-866ced950bcd54 Andi Kleen       2014-07-30  330  	  In addition the debug information is also compressed.
-866ced950bcd54 Andi Kleen       2014-07-30  331  
-866ced950bcd54 Andi Kleen       2014-07-30  332  	  Requires recent gcc (4.7+) and recent gdb/binutils.
-866ced950bcd54 Andi Kleen       2014-07-30  333  	  Any tool that packages or reads debug information would need
-866ced950bcd54 Andi Kleen       2014-07-30  334  	  to know about the .dwo files and include them.
-866ced950bcd54 Andi Kleen       2014-07-30  335  	  Incompatible with older versions of ccache.
-866ced950bcd54 Andi Kleen       2014-07-30  336  
-a66049e2cf0ef1 Nick Desaulniers 2021-02-05 @337  choice
-a66049e2cf0ef1 Nick Desaulniers 2021-02-05  338  	prompt "DWARF version"
-a66049e2cf0ef1 Nick Desaulniers 2021-02-05  339  	help
-a66049e2cf0ef1 Nick Desaulniers 2021-02-05  340  	  Which version of DWARF debug info to emit.
-a66049e2cf0ef1 Nick Desaulniers 2021-02-05  341  
+37f4270132af31d Liam R. Howlett 2020-07-24  748  
+37f4270132af31d Liam R. Howlett 2020-07-24  749  /*
+37f4270132af31d Liam R. Howlett 2020-07-24  750   * vma_store() - Store a given vm_area_struct in the maple tree.
+37f4270132af31d Liam R. Howlett 2020-07-24  751   * @mm: The struct_mm
+37f4270132af31d Liam R. Howlett 2020-07-24  752   * @vma: The vm_area_struct to store in the maple tree.
+37f4270132af31d Liam R. Howlett 2020-07-24  753   */
+37f4270132af31d Liam R. Howlett 2020-07-24 @754  void vma_store(struct mm_struct *mm, struct vm_area_struct *vma)
+37f4270132af31d Liam R. Howlett 2020-07-24  755  {
+37f4270132af31d Liam R. Howlett 2020-07-24  756  	MA_STATE(mas, &mm->mm_mt, 0, 0);
+37f4270132af31d Liam R. Howlett 2020-07-24  757  
+37f4270132af31d Liam R. Howlett 2020-07-24  758  	trace_vma_store(vma->vm_mm, vma);
+37f4270132af31d Liam R. Howlett 2020-07-24  759  	vma_mas_store(vma, &mas);
+37f4270132af31d Liam R. Howlett 2020-07-24  760  }
+37f4270132af31d Liam R. Howlett 2020-07-24  761  
 
-:::::: The code at line 337 was first introduced by commit
-:::::: a66049e2cf0ef166dba5bafdbb3062287fc965ad Kbuild: make DWARF version a choice
+:::::: The code at line 754 was first introduced by commit
+:::::: 37f4270132af31dd08a209799d420f72bfddb49c mm: Start tracking VMAs with maple tree
 
-:::::: TO: Nick Desaulniers <ndesaulniers@google.com>
-:::::: CC: Masahiro Yamada <masahiroy@kernel.org>
+:::::: TO: Liam R. Howlett <Liam.Howlett@Oracle.com>
+:::::: CC: Liam R. Howlett <Liam.Howlett@oracle.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
