@@ -1,135 +1,136 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45E07A
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 00:25:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1F07B
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 01:27:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645662355; x=1677198355;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ItM0Ed5jGXsDogudqlqJ3bPLvolWhLw5yq5+/f2NQuA=;
-  b=e9D6c1c7amiQKB4f+/a8gkrCfIgEhSNmqoGk+YKGFKJtGpOq4uDCxf0X
-   Lzj4hW7ilIznw7u9NTzxax73O0WPVgwdGpevVmKxQ6Ae+RrP0ems8mMXA
-   l1S4vgSJqMfQIUJYa4m4x68hEHISS0FgWSSlYnfeWsPI7171dyFcgdgHU
-   piXrl9Vb+S9k6cB5fhZoKMZ0NtQquY9nwN8GrAHI2NrXsrE/8f1PWUlQ3
-   m2VqrlQNppLdLMajG112GwM54nqg+1QxHbLOVYgmsRxYL/ns/4naNLEPe
-   5SQlw9yAOsRI9u1MBt5H+FOe/st2X/2VDep94RNEsvHhS7qX9QBWKobDf
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="239508024"
+  t=1645666078; x=1677202078;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nZoyXBEkZHnaqFDqTU7Y57leJ+5wkh6rallh9FFXIug=;
+  b=WR1XN857jrImIgD/zltXxgC1FbrbGonFozrDF8wqrBvp1weMdVcRGd+O
+   LA4p+mlgAewq5jxGIanIcEAXp5aCbRRgHHlHTJYpiJemHQZc0u6AA7Yff
+   40OKY1nb1IcupBXOob92nfT+hFFXJsedkCap76ZIR+HDypG0BzP8r+Vl6
+   4Av/8/AyeE2QdWvk8pkWV0rivflRtdfzWVPI51bFmkJfnV83jaGOvll93
+   gT7gJeZZRH2lbtAV6+StBSDz843sK5lR9zNcyvZtCI5oJcx9vRTyWkzNn
+   nXYpyXdQEOhMpc40o2Vw0/J7YOfKVanEPLJuBFgdnvjl+Zgd04r+ENkLG
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="276747749"
 X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="239508024"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 16:25:55 -0800
+   d="scan'208";a="276747749"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 17:27:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="684094941"
+   d="scan'208";a="491417490"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2022 16:25:53 -0800
+  by orsmga003.jf.intel.com with ESMTP; 23 Feb 2022 17:27:56 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nN1xB-00021P-BT; Thu, 24 Feb 2022 00:25:53 +0000
-Date: Thu, 24 Feb 2022 08:24:58 +0800
+	id 1nN2vD-00024W-FV; Thu, 24 Feb 2022 01:27:55 +0000
+Date: Thu, 24 Feb 2022 09:27:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
+To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [hare-scsi-devel:tls-upcall.v2 34/67] crypto/hkdf.c:26:5: warning:
- no previous prototype for function 'hkdf_extract'
-Message-ID: <202202240845.4HsZOLts-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [linux-next:master 5015/7526] drivers/spi/spi-amd.c:296:21: warning:
+ cast to smaller integer type 'enum amd_spi_versions' from 'const void *'
+Message-ID: <202202240908.Oxy0WRXe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v2
-head:   ac729ea3c52bda460616c71d5f5fc47b2e64da6d
-commit: 04ae9ad78a4ea9280f04e5e001fd8a179665d1c1 [34/67] crypto,fs: Separate out hkdf_extract() and hkdf_expand()
-config: riscv-buildonly-randconfig-r002-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240845.4HsZOLts-lkp@intel.com/config)
+Hi André,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   196d330d7fb1e7cc0d85641c89ce4602cb36f12e
+commit: 209043554915d7c51ac112a668ad1a255e1bea61 [5015/7526] spi: amd: Add support for version AMDI0062
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220224/202202240908.Oxy0WRXe-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=04ae9ad78a4ea9280f04e5e001fd8a179665d1c1
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel tls-upcall.v2
-        git checkout 04ae9ad78a4ea9280f04e5e001fd8a179665d1c1
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=209043554915d7c51ac112a668ad1a255e1bea61
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 209043554915d7c51ac112a668ad1a255e1bea61
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> crypto/hkdf.c:26:5: warning: no previous prototype for function 'hkdf_extract' [-Wmissing-prototypes]
-   int hkdf_extract(struct crypto_shash *hmac_tfm, const u8 *ikm,
-       ^
-   crypto/hkdf.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int hkdf_extract(struct crypto_shash *hmac_tfm, const u8 *ikm,
-   ^
-   static 
-   crypto/hkdf.c:57:5: warning: unused variable 'prefix' [-Wunused-variable]
-           u8 prefix[9];
-              ^
->> crypto/hkdf.c:52:5: warning: no previous prototype for function 'hkdf_expand' [-Wmissing-prototypes]
-   int hkdf_expand(struct crypto_shash *hmac_tfm,
-       ^
-   crypto/hkdf.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int hkdf_expand(struct crypto_shash *hmac_tfm,
-   ^
-   static 
-   3 warnings generated.
+>> drivers/spi/spi-amd.c:296:21: warning: cast to smaller integer type 'enum amd_spi_versions' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           amd_spi->version = (enum amd_spi_versions) device_get_match_data(dev);
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/hkdf_extract +26 crypto/hkdf.c
+vim +296 drivers/spi/spi-amd.c
 
-    14	
-    15	/*
-    16	 * HKDF consists of two steps:
-    17	 *
-    18	 * 1. HKDF-Extract: extract a pseudorandom key of length HKDF_HASHLEN bytes from
-    19	 *    the input keying material and optional salt.
-    20	 * 2. HKDF-Expand: expand the pseudorandom key into output keying material of
-    21	 *    any length, parameterized by an application-specific info string.
-    22	 *
-    23	 */
-    24	
-    25	/* HKDF-Extract (RFC 5869 section 2.2), unsalted */
-  > 26	int hkdf_extract(struct crypto_shash *hmac_tfm, const u8 *ikm,
-    27			 unsigned int ikmlen, u8 *prk)
-    28	{
-    29		unsigned int prklen = crypto_shash_digestsize(hmac_tfm);
-    30		u8 *default_salt;
-    31		int err;
-    32	
-    33		default_salt = kzalloc(prklen, GFP_KERNEL);
-    34		if (!default_salt)
-    35			return -ENOMEM;
-    36		err = crypto_shash_setkey(hmac_tfm, default_salt, prklen);
-    37		if (!err)
-    38			err = crypto_shash_tfm_digest(hmac_tfm, ikm, ikmlen, prk);
-    39	
-    40		kfree(default_salt);
-    41		return err;
-    42	}
-    43	EXPORT_SYMBOL_GPL(hkdf_extract);
-    44	
-    45	/*
-    46	 * HKDF-Expand (RFC 5869 section 2.3).
-    47	 * This expands the pseudorandom key, which was already keyed into @hmac_tfm,
-    48	 * into @okmlen bytes of output keying material parameterized by the
-    49	 * application-specific @info of length @infolen bytes.
-    50	 * This is thread-safe and may be called by multiple threads in parallel.
-    51	 */
-  > 52	int hkdf_expand(struct crypto_shash *hmac_tfm,
+   272	
+   273	static int amd_spi_probe(struct platform_device *pdev)
+   274	{
+   275		struct device *dev = &pdev->dev;
+   276		struct spi_master *master;
+   277		struct amd_spi *amd_spi;
+   278		int err = 0;
+   279	
+   280		/* Allocate storage for spi_master and driver private data */
+   281		master = spi_alloc_master(dev, sizeof(struct amd_spi));
+   282		if (!master) {
+   283			dev_err(dev, "Error allocating SPI master\n");
+   284			return -ENOMEM;
+   285		}
+   286	
+   287		amd_spi = spi_master_get_devdata(master);
+   288		amd_spi->io_remap_addr = devm_platform_ioremap_resource(pdev, 0);
+   289		if (IS_ERR(amd_spi->io_remap_addr)) {
+   290			err = PTR_ERR(amd_spi->io_remap_addr);
+   291			dev_err(dev, "error %d ioremap of SPI registers failed\n", err);
+   292			goto err_free_master;
+   293		}
+   294		dev_dbg(dev, "io_remap_address: %p\n", amd_spi->io_remap_addr);
+   295	
+ > 296		amd_spi->version = (enum amd_spi_versions) device_get_match_data(dev);
+   297	
+   298		/* Initialize the spi_master fields */
+   299		master->bus_num = 0;
+   300		master->num_chipselect = 4;
+   301		master->mode_bits = 0;
+   302		master->flags = SPI_MASTER_HALF_DUPLEX;
+   303		master->setup = amd_spi_master_setup;
+   304		master->transfer_one_message = amd_spi_master_transfer;
+   305	
+   306		/* Register the controller with SPI framework */
+   307		err = devm_spi_register_master(dev, master);
+   308		if (err) {
+   309			dev_err(dev, "error %d registering SPI controller\n", err);
+   310			goto err_free_master;
+   311		}
+   312	
+   313		return 0;
+   314	
+   315	err_free_master:
+   316		spi_master_put(master);
+   317	
+   318		return err;
+   319	}
+   320	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
