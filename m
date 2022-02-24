@@ -1,34 +1,34 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7154138C
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 07:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA95F1386
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 07:09:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645686550; x=1677222550;
+  t=1645686560; x=1677222560;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Zz1uw34srLEy1L619ihfRSNoYf33JmEVqY+EzVqdyW4=;
-  b=awXQppctUw26RP0WeKhhnLczjsy/9IwsHOTcZ8zPHDP/82/k1SwBYvcv
-   RcHzWzoUjIHO+nTMCQaWwCPqxBOtKaUh0AgRmsQTJ4BqLffimhno92KZF
-   2fztH0qBd45og3BrYFeta6bM4SJkWnbAZBo6ERBqDmKLfwj49JgZtHCwF
-   5B3VSTppNnRuxlux0UGqOESBOurtNasEDfd8noY+2pzfIiDwWtHkrTw1d
-   iBUl3F3Ze0GEWJuJTZ7as6aBcnCxSyaIjeB60cSIPik4tsMjzD0Ne6XRm
-   nn118l6Ye3uEFp3pdzyE5NSdkHqx7l4kovVLp5518eqCtHSfmBjegZ/pc
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232142326"
+  bh=1AEB+rXO4qYNx/T+8IC5iwE0UDDcuGwkqExAN7yCpKE=;
+  b=FNUP9QCIRe6QN/LMbOmTavlit6UDtaJl41x0CI/J7Rw7HkTTgqbmSSr7
+   kPxAFXlhlfCm+j2QuCk3j8RaF4q4mR6nCSQDxXD03xQS9qQR81PaFNk/R
+   MB9gs27Lt5f0A413ftI7kR2hs3sTRlvizkPoWG80P39aK52vsqTMNHSUr
+   p3YWjzusmYmUa7tpomc76k/SeAxLu4kRtOhQNsPpwOCrip1Rdn7DebSm6
+   /jxHW6HJps84sIg8CMg+x56pKIdB5VB/r1/q++v2QuoT08pxu3E6CtBM7
+   68ZHdAvzZFnBtjQQj0TKYGIHFL9HWhas9HVWVQSdCbVxKEqO4u4AiHOH5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="252087350"
 X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="232142326"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 23:09:10 -0800
+   d="scan'208";a="252087350"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 23:09:10 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="548613863"
+   d="scan'208";a="543609273"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 23:09:08 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2022 23:09:08 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nN8FP-0002R8-A1; Thu, 24 Feb 2022 07:09:07 +0000
-Date: Thu, 24 Feb 2022 15:08:51 +0800
+	id 1nN8FP-0002R6-9V; Thu, 24 Feb 2022 07:09:07 +0000
+Date: Thu, 24 Feb 2022 15:08:46 +0800
 From: kernel test robot <lkp@intel.com>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -36,7 +36,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Subject: [ammarfaizi2-block:next/linux-next/akpm 334/334]
  lib/Kconfig.debug:337:error: recursive dependency detected!
-Message-ID: <202202241529.J5wGzdi8-lkp@intel.com>
+Message-ID: <202202241522.25enBK5u-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,19 +50,17 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 tree:   https://github.com/ammarfaizi2/linux-block next/linux-next/akpm
 head:   4b738f94b3a6492ae5adad0940d580851fb9019b
 commit: 4b738f94b3a6492ae5adad0940d580851fb9019b [334/334] Merge commit 'next-20220215~2' into tmp-akpm/master
-config: riscv-randconfig-r023-20220223
+config: hexagon-randconfig-r045-20220223
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
         # https://github.com/ammarfaizi2/linux-block/commit/4b738f94b3a6492ae5adad0940d580851fb9019b
         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
         git fetch --no-tags ammarfaizi2-block next/linux-next/akpm
         git checkout 4b738f94b3a6492ae5adad0940d580851fb9019b
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv  randconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon  randconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
