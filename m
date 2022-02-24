@@ -1,143 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E15185D
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 10:39:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D07C340E9;
-	Thu, 24 Feb 2022 10:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645699160;
-	bh=JE74vM6F239/HyTrEDsqOE00ec9BmQ42Y4OdvszfnpU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qAs+hGS6Ri7GNCE9Har0J+LPVD+ewhbDdPU45i37O7fJZZKp9bcyVQb4eE4Jvb94e
-	 4P7PTXOxSwb3MNglKP4zsZgu0734lr6EMTGVUWMidtpZi/GhVgwZ526WxmlhJoS4TG
-	 YRULgtIp5lITDHTUl9XTZCrjWmaMCwnAGOoYJNecxrXJ6mmAhqGJGnTvqePx+ruLxE
-	 ykAsn+5JTIlB+HnsujxgbU1U9Oqd14UR0JDzrh6Cer3YxKsG6gNuVywh/pMQBr6qml
-	 W5n6O49t1pX+X4FoiLqeMlFzNIxpXPXlFriizE+cwWKxUdjN7brcP0yLpz3y41GVEr
-	 BKjT6Li1tOwig==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <maz@kernel.org>)
-	id 1nNBWo-00A9YD-5V; Thu, 24 Feb 2022 10:39:18 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD4E1B62
+	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 14:23:17 +0000 (UTC)
+Received: by mail-ed1-f42.google.com with SMTP id i11so3051274eda.9
+        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 06:23:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7auIWEJM6MC8ScpEmtv1C4E/fqB/KIkHM2nvPFKd6is=;
+        b=fLGvRvN1ISGysrGJQmdl7pQ/3vIpgylLRYVvIU9WbfeP/Z/gaAwPvmRzTuh3bDBcYs
+         9Qn4cwkSl5uja3X0Zde9CNJVlhtmBxUh67zsrKpaWMhTkv/rJjjvbvfbOPt1SgIHabMO
+         Aq9HDezf7wGyCUlS72Vm4beMvbbqvminJi7/xzTQwmA+MG3PmepPEw8Uo2s3vUOhVci0
+         QAhSIhTH8rE7cb0T18qhmu1Q7t+P0FHgiy1R+un+HB9TzdbWFJ3uwkyq4Y8d/6eyxHwg
+         FHoCIIanhpJhucybHC0iIPniWnyQk8jOhwwUGNuv49V72vsTmJcrXkuoJ3OCkxODxYCi
+         J7sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7auIWEJM6MC8ScpEmtv1C4E/fqB/KIkHM2nvPFKd6is=;
+        b=c2oCzB6QfW3d8oWn1DCWORgwbA+aX7dwmhxngDc7T9BzV/1Z1UG3itRmMblRRJatWC
+         57vFpSxAUESTm1C5jFPt8QOhvWMYbh4yqEvPWmUIsayuBRn33F/gRvW0sjqNlON0v1yB
+         zahc82k8WmGSyWzfHa9I3TNa54Wvyrv9l7Y5cKKRsirIwRx352tCEyvYKFXK+B6hEfjW
+         JbOI9tMwvYKnRXR4WLyR/PihAPiq5kogPnmeVK5w79/STWAyZL3smgYjEMywmO2P7RW8
+         zqwazJrbbddegRw1m/HMDOXjbjugIHtBlbGLfIy/rLMQnu9Qc81xod8MhjXzrABVpUBV
+         Qh3A==
+X-Gm-Message-State: AOAM5305y6TaxT4FqOQF85N7BYTXXXC6JJaC4TRTviEJS5Vov+cMoRaK
+	OKUG/wvDYQISaTPUdMTqdfk=
+X-Google-Smtp-Source: ABdhPJzDqdEuS1bbYLjr5rMNEoHcI3kLnIyJYrCsWsHZa4hdnXcj+uoj5Z+K9ploCv9Nlqc9oDWDOw==
+X-Received: by 2002:aa7:c3d5:0:b0:40f:b885:8051 with SMTP id l21-20020aa7c3d5000000b0040fb8858051mr2569264edr.395.1645712595524;
+        Thu, 24 Feb 2022 06:23:15 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id jz17sm1402326ejb.195.2022.02.24.06.23.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 06:23:14 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <4ce5ed1c-78e5-8150-65cd-288f1023c7a0@redhat.com>
+Date: Thu, 24 Feb 2022 15:23:12 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Thu, 24 Feb 2022 10:39:17 +0000
-From: Marc Zyngier <maz@kernel.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Philip Li <philip.li@intel.com>, Kalesh Singh <kaleshsingh@google.com>,
- kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, Will Deacon <will@kernel.org>, Quentin Perret
- <qperret@google.com>, Fuad Tabba <tabba@google.com>, surenb@google.com,
- Android Kernel Team <kernel-team@android.com>, Catalin Marinas
- <catalin.marinas@arm.com>, James Morse <james.morse@arm.com>, Alexandru
- Elisei <alexandru.elisei@arm.com>, Suzuki K Poulose
- <suzuki.poulose@arm.com>, Mark Rutland <mark.rutland@arm.com>, Pasha
- Tatashin <pasha.tatashin@soleen.com>, Joey Gouly <joey.gouly@arm.com>, Peter
- Collingbourne <pcc@google.com>, Andrew Scull <ascull@google.com>, Paolo
- Bonzini <pbonzini@redhat.com>, Zenghui Yu <yuzenghui@huawei.com>, Linux ARM
- <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, kvmarm <kvmarm@lists.cs.columbia.edu>
-Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
- hypervisor stack overflows
-In-Reply-To: <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
-References: <20220222165212.2005066-7-kaleshsingh@google.com>
- <202202231727.L621fVgD-lkp@intel.com> <875yp63ptg.wl-maz@kernel.org>
- <YhYpvfZaSjrAtkZp@rli9-dbox> <cb750267af0636c49d2f8aa354f086a5@kernel.org>
- <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <89c48bd2a9b32b4607d1515714fa3c1b@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] KVM: x86: Fix pointer mistmatch warning when patching
+ RET0 static calls
+Content-Language: en-US
+To: Sean Christopherson <seanjc@google.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>, Wanpeng Li
+ <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>,
+ Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
+References: <20220223162355.3174907-1-seanjc@google.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220223162355.3174907-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: ardb@kernel.org, philip.li@intel.com, kaleshsingh@google.com, lkp@intel.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, mark.rutland@arm.com, pasha.tatashin@soleen.com, joey.gouly@arm.com, pcc@google.com, ascull@google.com, pbonzini@redhat.com, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 2022-02-23 12:56, Ard Biesheuvel wrote:
-> On Wed, 23 Feb 2022 at 13:54, Marc Zyngier <maz@kernel.org> wrote:
->> 
->> On 2022-02-23 12:34, Philip Li wrote:
->> > On Wed, Feb 23, 2022 at 09:16:59AM +0000, Marc Zyngier wrote:
->> >> On Wed, 23 Feb 2022 09:05:18 +0000,
->> >> kernel test robot <lkp@intel.com> wrote:
->> >> >
->> >> > Hi Kalesh,
->> >> >
->> >> > Thank you for the patch! Perhaps something to improve:
->> >> >
->> >> > [auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
->> >> >
->> >> > url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
->> >> > base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
->> >> > config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
->> >> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
->> >> > reproduce (this is a W=1 build):
->> >> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->> >> >         chmod +x ~/bin/make.cross
->> >> >         # install arm64 cross compiling tool for clang build
->> >> >         # apt-get install binutils-aarch64-linux-gnu
->> >> >         # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
->> >> >         git remote add linux-review https://github.com/0day-ci/linux
->> >> >         git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
->> >> >         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
->> >> >         # save the config file to linux build tree
->> >> >         mkdir build_dir
->> >> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
->> >> >
->> >> > If you fix the issue, kindly add following tag as appropriate
->> >> > Reported-by: kernel test robot <lkp@intel.com>
->> >> >
->> >> > All warnings (new ones prefixed by >>):
->> >> >
->> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
->> >> >    #define NULL ((void *)0)
->> >> >                 ^~~~~~~~~~~
->> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
->> >> >            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
->> >> >                                              ^~~~~~~~~~~~~~~~~~~~~
->> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
->> >> >            [0 ... ESR_ELx_EC_MAX]          = NULL,
->> >> >                                              ^~~~
->> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
->> >> >    #define NULL ((void *)0)
->> >> >                 ^~~~~~~~~~~
->> >>
->> >> Kalesh, please ignore this nonsense. There may be things to improve,
->> >> but this is *NOT* one of them.
->> >>
->> >> These reports are pretty useless, and just lead people to ignore real
->> >> bug reports.
->> >
->> > Hi Kalesh, sorry there're some irrelevant issues mixed in the report,
->> > kindly ignore them. And the valuable ones are the new ones that
->> > prefixed by >>, as the below one in original report.
->> >
->> >>> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous
->> >>> prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
->> >    void __noreturn hyp_panic_bad_stack(void)
->> >                    ^
->> 
->> This is only called from assembly code, so a prototype wouldn't bring
->> much.
->> 
+On 2/23/22 17:23, Sean Christopherson wrote:
+> Cast kvm_x86_ops.func to 'void *' when updating KVM static calls that are
+> conditionally patched to __static_call_return0().  clang complains about
+> using mismatching pointers in the ternary operator, which breaks the
+> build when compiling with CONFIG_KVM_WERROR=y.
 > 
-> Should probably be marked as 'asmlinkage' then. I've suggested many
-> times already that this bogus diagnostic should either be disabled, or
-> disregard 'asmlinkage' symbols.
+>    >> arch/x86/include/asm/kvm-x86-ops.h:82:1: warning: pointer type mismatch
+>    ('bool (*)(struct kvm_vcpu *)' and 'void *') [-Wpointer-type-mismatch]
+> 
+> Fixes: 5be2226f417d ("KVM: x86: allow defining return-0 static calls")
+> Reported-by: Like Xu <like.xu.linux@gmail.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/x86/include/asm/kvm_host.h | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 713e08f62385..f285ddb8b66b 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1547,8 +1547,8 @@ static inline void kvm_ops_static_call_update(void)
+>   	WARN_ON(!kvm_x86_ops.func); __KVM_X86_OP(func)
+>   #define KVM_X86_OP_OPTIONAL __KVM_X86_OP
+>   #define KVM_X86_OP_OPTIONAL_RET0(func) \
+> -	static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
+> -			   (void *) __static_call_return0);
+> +	static_call_update(kvm_x86_##func, (void *)kvm_x86_ops.func ? : \
+> +					   (void *)__static_call_return0);
+>   #include <asm/kvm-x86-ops.h>
+>   #undef __KVM_X86_OP
+>   }
+> 
+> base-commit: f4bc051fc91ab9f1d5225d94e52d369ef58bec58
 
-Yes, asmlinkage is definitely missing.
+Queued, thanks.
 
-But it is pretty obvious that the robot people aren't interested in
-fixing this particular issue, given how long we have been suggesting
-this...
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Paolo
