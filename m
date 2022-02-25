@@ -1,159 +1,139 @@
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D7010EE
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 03:24:26 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0V5QtHnc_1645759451;
-Received: from localhost(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V5QtHnc_1645759451)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 25 Feb 2022 11:24:17 +0800
-From: Dan Li <ashimida@linux.alibaba.com>
-To: catalin.marinas@arm.com,
-	will@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	keescook@chromium.org,
-	masahiroy@kernel.org,
-	tglx@linutronix.de,
-	akpm@linux-foundation.org,
-	mark.rutland@arm.com,
-	samitolvanen@google.com,
-	npiggin@gmail.com,
-	linux@roeck-us.net,
-	mhiramat@kernel.org,
-	ojeda@kernel.org,
-	luc.vanoostenryck@gmail.com,
-	elver@google.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org,
-	Dan Li <ashimida@linux.alibaba.com>
-Subject: [PATCH] [PATCH v2] AARCH64: Add gcc Shadow Call Stack support
-Date: Thu, 24 Feb 2022 19:24:10 -0800
-Message-Id: <20220225032410.25622-1-ashimida@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03EFA10EE
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 04:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645761647; x=1677297647;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DUio7+OjU5jH0xfbFmSRXspu58YEyW4TxMOe3rFSEo4=;
+  b=dkvBZz9QsjhMFZTEPcAxlXeX3VzTeIQYBkVjlRG4Zq2i2bPbRk84TBnr
+   3IJd2oXawn/jNSWZNCrp9Ju1HvI93U6Qep81A06Z18GZs84kEmLCY38u0
+   M6UxxdB/MDna6BWKozbv2SjRLhfMww+b+t/51oK0UQI7VAlEQD0cvTEAQ
+   PN7x0ctvSWk72K/641t9oGgs/xLnSJfpVZaCzzOo2sBlqA3fJDIb70Iha
+   XvpLmjMy4uwdg3nf7qOfBnbhvi0U5BvGM/MwzIuYs4rvmOmL0GfPLiC9L
+   0dYHUQyaqCsVFWp1gGwZ8CYtDUA6BS0OPZSSoHQxiK8c7xlf21CbPbhVF
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="338851795"
+X-IronPort-AV: E=Sophos;i="5.90,135,1643702400"; 
+   d="scan'208";a="338851795"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 20:00:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,135,1643702400"; 
+   d="scan'208";a="707723685"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 24 Feb 2022 20:00:44 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nNRmd-0003ox-VW; Fri, 25 Feb 2022 04:00:43 +0000
+Date: Fri, 25 Feb 2022 12:00:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [linusw-nomadik:ux500-codina-v5.17-rc1 6/12]
+ drivers/input/touchscreen/zinitix.c:338:7: warning: logical not is only
+ applied to the left hand side of this bitwise operator
+Message-ID: <202202251155.D2cRSiJR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Shadow call stacks will be available in GCC >= 12, this patch makes
-the corresponding kernel configuration available when compiling
-the kernel with the gcc.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git ux500-codina-v5.17-rc1
+head:   55196848adbcea2ea36561a056bb610bf3ab40bf
+commit: 727f5e5be135b8f1f94922093b5c88565fdadcb0 [6/12] Input: zinitix - Do not report shadow fingers
+config: hexagon-randconfig-r045-20220224 (https://download.01.org/0day-ci/archive/20220225/202202251155.D2cRSiJR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git/commit/?id=727f5e5be135b8f1f94922093b5c88565fdadcb0
+        git remote add linusw-nomadik https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+        git fetch --no-tags linusw-nomadik ux500-codina-v5.17-rc1
+        git checkout 727f5e5be135b8f1f94922093b5c88565fdadcb0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/input/touchscreen/
 
-Note that the implementation in GCC is slightly different from Clang.
-With SCS enabled, functions will only pop x30 once in the epilogue,
-like:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-   str     x30, [x18], #8
-   stp     x29, x30, [sp, #-16]!
-   ......
--  ldp     x29, x30, [sp], #16	  //clang
-+  ldr     x29, [sp], #16	  //GCC
-   ldr     x30, [x18, #-8]!
+All warnings (new ones prefixed by >>):
 
-Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ce09ab17ddd21f73ff2caf6eec3b0ee9b0e1a11e
+>> drivers/input/touchscreen/zinitix.c:338:7: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
+                   if (!p->sub_status & SUB_BIT_EXIST)
+                       ^              ~
+   drivers/input/touchscreen/zinitix.c:338:7: note: add parentheses after the '!' to evaluate the bitwise operator first
+                   if (!p->sub_status & SUB_BIT_EXIST)
+                       ^
+                        (                            )
+   drivers/input/touchscreen/zinitix.c:338:7: note: add parentheses around left hand side expression to silence this warning
+                   if (!p->sub_status & SUB_BIT_EXIST)
+                       ^
+                       (             )
+   1 warning generated.
 
-Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+
+vim +338 drivers/input/touchscreen/zinitix.c
+
+   321	
+   322	static void zinitix_report_fingers(struct bt541_ts_data *bt541, struct touch_event *te)
+   323	{
+   324		struct point_coord *p;
+   325		u16 x, y;
+   326		unsigned long fmask;
+   327		int i;
+   328	
+   329		/*
+   330		 * If the corresponding finger is not active, do not report
+   331		 * what is happening on it.
+   332		 */
+   333		fmask = te->finger_mask;
+   334		for_each_set_bit(i, &fmask, MAX_SUPPORTED_FINGER_NUM) {
+   335			p = &te->point_coord[i];
+   336	
+   337			/* Skip nonexisting fingers */
+ > 338			if (!p->sub_status & SUB_BIT_EXIST)
+   339				continue;
+   340	
+   341			x = le16_to_cpu(p->x);
+   342			y = le16_to_cpu(p->y);
+   343	
+   344			input_mt_slot(bt541->input_dev, i);
+   345	
+   346			if (p->sub_status & BIT_DOWN) {
+   347				/* Finger down */
+   348				input_mt_report_slot_state(bt541->input_dev, MT_TOOL_FINGER, true);
+   349				touchscreen_report_pos(bt541->input_dev, &bt541->prop, x, y, true);
+   350				input_report_abs(bt541->input_dev, ABS_MT_TOUCH_MAJOR, p->width);
+   351				dev_dbg(&bt541->client->dev, "finger %d down (%u, %u)\n", i, x, y);
+   352			} else if (p->sub_status & BIT_UP) {
+   353				/* Release finger */
+   354				input_mt_report_slot_state(bt541->input_dev, MT_TOOL_FINGER, false);
+   355				touchscreen_report_pos(bt541->input_dev, &bt541->prop, x, y, true);
+   356				input_report_abs(bt541->input_dev, ABS_MT_TOUCH_MAJOR, 0);
+   357				dev_dbg(&bt541->client->dev, "finger %d up (%u, %u)\n", i, x, y);
+   358			} else if (p->sub_status & BIT_MOVE) {
+   359				/* Finger moves while pressed down */
+   360				input_mt_report_slot_state(bt541->input_dev, MT_TOOL_FINGER, true);
+   361				touchscreen_report_pos(bt541->input_dev, &bt541->prop, x, y, true);
+   362				input_report_abs(bt541->input_dev, ABS_MT_TOUCH_MAJOR, p->width);
+   363				dev_dbg(&bt541->client->dev, "finger %d move (%u, %u)\n", i, x, y);
+   364			} else {
+   365				dev_dbg(&bt541->client->dev, "unknown finger event\n");
+   366			}
+   367		}
+   368	}
+   369	
+
 ---
-FYI:
-This function can be used to test if the shadow call stack works:
-//noinline void __noscs scs_test(void)
-noinline void scs_test(void)
-{
-    unsigned long * lr = (unsigned long *)__builtin_frame_address(0) + 1;
-
-    asm volatile("str xzr, [%0]\n\t": : "r"(lr) : "x30");
-}                                                         
-
-ffff800008012770 <scs_test>:
-ffff800008012770:       d503245f        bti     c
-ffff800008012774:       d503233f        paciasp
-ffff800008012778:       f800865e        str     x30, [x18], #8
-ffff80000801277c:       a9bf7bfd        stp     x29, x30, [sp, #-16]!
-ffff800008012780:       910003fd        mov     x29, sp
-ffff800008012784:       910023a0        add     x0, x29, #0x8
-ffff800008012788:       f900001f        str     xzr, [x0]
-ffff80000801278c:       f85f8e5e        ldr     x30, [x18, #-8]!
-ffff800008012790:       f84107fd        ldr     x29, [sp], #16
-ffff800008012794:       d50323bf        autiasp
-ffff800008012798:       d65f03c0        ret
-
-If SCS protection is enabled, this function will return normally.
-If the function has __noscs attribute (scs disabled), it will crash due to 0
-address access.
-
- arch/Kconfig                 | 19 ++++++++++---------
- arch/arm64/Kconfig           |  2 +-
- include/linux/compiler-gcc.h |  4 ++++
- 3 files changed, 15 insertions(+), 10 deletions(-)
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 678a80713b21..c92683362ac2 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -599,21 +599,22 @@ config STACKPROTECTOR_STRONG
- config ARCH_SUPPORTS_SHADOW_CALL_STACK
- 	bool
- 	help
--	  An architecture should select this if it supports Clang's Shadow
--	  Call Stack and implements runtime support for shadow stack
-+	  An architecture should select this if it supports the compiler's
-+	  Shadow Call Stack and implements runtime support for shadow stack
- 	  switching.
- 
- config SHADOW_CALL_STACK
--	bool "Clang Shadow Call Stack"
--	depends on CC_IS_CLANG && ARCH_SUPPORTS_SHADOW_CALL_STACK
-+	bool "Shadow Call Stack"
-+	depends on ARCH_SUPPORTS_SHADOW_CALL_STACK
- 	depends on DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
- 	help
--	  This option enables Clang's Shadow Call Stack, which uses a
--	  shadow stack to protect function return addresses from being
--	  overwritten by an attacker. More information can be found in
--	  Clang's documentation:
-+	  This option enables the compiler's Shadow Call Stack, which
-+	  uses a shadow stack to protect function return addresses from
-+	  being overwritten by an attacker. More information can be found
-+	  in the compiler's documentation:
- 
--	    https://clang.llvm.org/docs/ShadowCallStack.html
-+	  - Clang (https://clang.llvm.org/docs/ShadowCallStack.html)
-+	  - GCC (https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html#Instrumentation-Options)
- 
- 	  Note that security guarantees in the kernel differ from the
- 	  ones documented for user space. The kernel must store addresses
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 09b885cc4db5..b7145337efae 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1255,7 +1255,7 @@ config HW_PERF_EVENTS
- config ARCH_HAS_FILTER_PGPROT
- 	def_bool y
- 
--# Supported by clang >= 7.0
-+# Supported by clang >= 7.0 or GCC >= 12.0.0
- config CC_HAVE_SHADOW_CALL_STACK
- 	def_bool $(cc-option, -fsanitize=shadow-call-stack -ffixed-x18)
- 
-diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-index ccbbd31b3aae..deff5b308470 100644
---- a/include/linux/compiler-gcc.h
-+++ b/include/linux/compiler-gcc.h
-@@ -97,6 +97,10 @@
- #define KASAN_ABI_VERSION 4
- #endif
- 
-+#ifdef CONFIG_SHADOW_CALL_STACK
-+#define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
-+#endif
-+
- #if __has_attribute(__no_sanitize_address__)
- #define __no_sanitize_address __attribute__((no_sanitize_address))
- #else
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
