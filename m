@@ -1,52 +1,35 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE7410EF
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 00:35:53 +0000 (UTC)
-Received: by mail-pg1-f170.google.com with SMTP id 75so3186167pgb.4
-        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 16:35:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=t9WDGudgTxtENWYDPYTPFz27xdCIdzpF9PzSXLCu+HE=;
-        b=nSdm1jF9UdfebBvADyqxpuC4Jir5BHroQmt0KoeK0N4eBfTFJPgN8sIu0y5MLvLMVL
-         TXKslUxZATYNHDr8g2iO63sCb1WQ0ZSzkWcQQX7j0nm3NtaWT65aF/iWLwtrl2Xi6OZa
-         94XZqUC4HyZarX0oc8WH5ZJBC7aG27LxapJ2U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=t9WDGudgTxtENWYDPYTPFz27xdCIdzpF9PzSXLCu+HE=;
-        b=6mi+AsbVhIuDJ3+YUrh/nNVv/3MoaqD8Dh2PV2VAkixJMBajBjUNUy+som/XFjBKeD
-         XCUORKXjGEwU9TieVFCXKbPHMQMWGS1kEURuUK47kknXTxewmPMGm9oTYH3JSTCZhFWY
-         n5VcJWEKFbiXjPnEwkPPX+inawpKBpbDjkC4pjMr1PYUk+6CaGuVx2SNEM4pjoSrAEUy
-         KzxQ3l9IXPv5QlGpVDgg8bX7s0Vs+Ynp1sG9JxJ4TKMv6uj5mMN8705MhHD+jhYIb0kb
-         cHNL56Xd27xXEj8Gh1kMGzWiukkV7i5k/21HeOjOupxpSj3m6Y2G9egKaLjrn7i9uqul
-         +PeQ==
-X-Gm-Message-State: AOAM530WRPqJrVtKaEp8w4RbHNmHeSZLoI/GuqcM3TlRIBujc0TzMMr6
-	1S+s1OmhBWlfYgs/7o6CTrr6yw==
-X-Google-Smtp-Source: ABdhPJzXjEWUx16LXa9vXAwYPTcx43KbIK8MVynbRR4B/TS5XnP5S84RYYzkGq04XuMpnFhct0w0kQ==
-X-Received: by 2002:a63:dd17:0:b0:36c:33aa:6d5f with SMTP id t23-20020a63dd17000000b0036c33aa6d5fmr4136992pgg.300.1645749353010;
-        Thu, 24 Feb 2022 16:35:53 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a15-20020a637f0f000000b00372e075b2efsm622127pgd.30.2022.02.24.16.35.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 16:35:52 -0800 (PST)
-Date: Thu, 24 Feb 2022 16:35:51 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-	jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-	linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-	samitolvanen@google.com, mark.rutland@arm.com,
-	alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-	mhiramat@kernel.org, alexei.starovoitov@gmail.com,
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BD810EF
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 00:47:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DC77C340E9;
+	Fri, 25 Feb 2022 00:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645750025;
+	bh=3m3SmJSHBHP3bsYWhgDTWGsAaPNj2eo5w38xwMsRoFc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b2V6mW4bFEWJF/zmPajGlPodxWuvHTsutZdYoBuEaofy1svc7CjmnhNYqeZzT1Y9G
+	 0JczrKrsyIR4iR5rvR02dfA4m1TXhASQecCiLScbi21p0RbSF4Or08VZeQSLAf0peC
+	 8Kl7jdrU/Mfj0JUxETeV3lqcoqDgt5fO3d0O/M4uInbF2mPj1otdESRNaUuvuXJNtE
+	 YR4c23/V++1w/aFWdU+0wFs2kbpyqtml3T+wEHurwENGXChYZzPSYOnMKt9ELqEZYF
+	 fnoM0UPV6yBJKPH7CGj2b1we9Axb1xLBeTvAKMm8yGpLTU7Pt6jRDYX9E3JtMiA3FR
+	 aC6dkKHGbi6aA==
+Date: Thu, 24 Feb 2022 17:46:59 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+	joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
+	andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+	ndesaulniers@google.com, samitolvanen@google.com,
+	mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+	rostedt@goodmis.org, mhiramat@kernel.org,
+	alexei.starovoitov@gmail.com, llvm@lists.linux.dev
 Subject: Re: [PATCH v2 05/39] x86: Base IBT bits
-Message-ID: <202202241627.EEF3D5D2@keescook>
+Message-ID: <YhgnA8O4Bp19hfse@dev-arch.archlinux-ax161>
 References: <20220224145138.952963315@infradead.org>
  <20220224151322.307406918@infradead.org>
+ <202202241627.EEF3D5D2@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,56 +38,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220224151322.307406918@infradead.org>
+In-Reply-To: <202202241627.EEF3D5D2@keescook>
 
-On Thu, Feb 24, 2022 at 03:51:43PM +0100, Peter Zijlstra wrote:
-> Add Kconfig, Makefile and basic instruction support for x86 IBT.
+On Thu, Feb 24, 2022 at 04:35:51PM -0800, Kees Cook wrote:
+> On Thu, Feb 24, 2022 at 03:51:43PM +0100, Peter Zijlstra wrote:
+> > Add Kconfig, Makefile and basic instruction support for x86 IBT.
+> > 
+> > XXX clang is not playing ball, probably lld being 'funny', I'm having
+> > problems with .plt entries appearing all over after linking.
 > 
-> XXX clang is not playing ball, probably lld being 'funny', I'm having
-> problems with .plt entries appearing all over after linking.
+> I'll try to look into this; I know you've been chatting with Nathan
+> about it. Is there an open bug for it? (And any kind of reproducer
+> smaller than a 39 patch series we can show the linker folks?) :)
 
-I'll try to look into this; I know you've been chatting with Nathan
-about it. Is there an open bug for it? (And any kind of reproducer
-smaller than a 39 patch series we can show the linker folks?) :)
+I should be able to create a reproducer with cvise and file a bug on
+GitHub around this tomorrow, I should have done it after Peter's
+comments on IRC.
 
-> [...]
-> +config X86_KERNEL_IBT
-> +	prompt "Indirect Branch Tracking"
-> +	bool
-> +	depends on X86_64 && CC_HAS_IBT
-> +	help
-> +	  Build the kernel with support for Indirect Branch Tracking, a
-> +	  hardware supported CFI scheme. Any indirect call must land on
+Cheers,
+Nathan
 
-	  hardware support course-grain forward-edge Control Flow Integrity
-	  protection. It enforces that all indirect calls must land on
-
-> +	  an ENDBR instruction, as such, the compiler will litter the
-> +	  code with them to make this happen.
-
-"litter the code" -> "instrument the machine code".
-
-
-> +
->  config X86_INTEL_MEMORY_PROTECTION_KEYS
->  	prompt "Memory Protection Keys"
->  	def_bool y
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -36,7 +36,7 @@ endif
->  
->  # How to compile the 16-bit code.  Note we always compile for -march=i386;
->  # that way we can complain to the user if the CPU is insufficient.
-> -REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING \
-> +REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING -D__DISABLE_EXPORTS \
->  		   -Wall -Wstrict-prototypes -march=i386 -mregparm=3 \
->  		   -fno-strict-aliasing -fomit-frame-pointer -fno-pic \
->  		   -mno-mmx -mno-sse $(call cc-option,-fcf-protection=none)
-
-This change seems important separately from this patch, yes? (Or at
-least a specific call-out in the commit log.)
-
-Otherwise, looks good.
-
--- 
-Kees Cook
+> > [...]
+> > +config X86_KERNEL_IBT
+> > +	prompt "Indirect Branch Tracking"
+> > +	bool
+> > +	depends on X86_64 && CC_HAS_IBT
+> > +	help
+> > +	  Build the kernel with support for Indirect Branch Tracking, a
+> > +	  hardware supported CFI scheme. Any indirect call must land on
+> 
+> 	  hardware support course-grain forward-edge Control Flow Integrity
+> 	  protection. It enforces that all indirect calls must land on
+> 
+> > +	  an ENDBR instruction, as such, the compiler will litter the
+> > +	  code with them to make this happen.
+> 
+> "litter the code" -> "instrument the machine code".
+> 
+> 
+> > +
+> >  config X86_INTEL_MEMORY_PROTECTION_KEYS
+> >  	prompt "Memory Protection Keys"
+> >  	def_bool y
+> > --- a/arch/x86/Makefile
+> > +++ b/arch/x86/Makefile
+> > @@ -36,7 +36,7 @@ endif
+> >  
+> >  # How to compile the 16-bit code.  Note we always compile for -march=i386;
+> >  # that way we can complain to the user if the CPU is insufficient.
+> > -REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING \
+> > +REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING -D__DISABLE_EXPORTS \
+> >  		   -Wall -Wstrict-prototypes -march=i386 -mregparm=3 \
+> >  		   -fno-strict-aliasing -fomit-frame-pointer -fno-pic \
+> >  		   -mno-mmx -mno-sse $(call cc-option,-fcf-protection=none)
+> 
+> This change seems important separately from this patch, yes? (Or at
+> least a specific call-out in the commit log.)
+> 
+> Otherwise, looks good.
+> 
+> -- 
+> Kees Cook
