@@ -1,72 +1,108 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559AD7C
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 14:32:33 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3914106F;
-	Fri, 25 Feb 2022 06:32:27 -0800 (PST)
-Received: from [10.57.39.47] (unknown [10.57.39.47])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5CC7D3F5A1;
-	Fri, 25 Feb 2022 06:32:26 -0800 (PST)
-Message-ID: <af255483-a2b9-64dd-ec4f-4be21427e23f@arm.com>
-Date: Fri, 25 Feb 2022 14:32:19 +0000
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3807E7C
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 15:10:29 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id j12so6454194ybh.8
+        for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 07:10:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6PHDsJtTHgIe1SVb8arRLmZRA4JR4a9wVJvHcDvAPGo=;
+        b=trRIzqNpzlNuRWiLVzygdNEan0Me79/SIic0/oMZpxN6rmJ/aNlkAcabB+wItPt81X
+         TOfI7t4yJDzIT5pEWYVheZ5Nj6bkvK2w4UQ6un6Y93zYzGj1xA7I0C2m6v+68nmFhvE7
+         4zY4+AaW9958KwjFjTsxtPIJcadBMeaGo25j+i0SGQd2QjdOyayrCrPRsprPzcG/uZJ1
+         TAEoMc0RtR+x4k4fnp/K90OQogG35pwlxplutHTNo5dpP/bgf4W08EFUSODa9LQUPlgN
+         qBbWWsy90QpmVRi4QeTA7oXZuxeFnotGOcoz/C8VhhSTX9Er7Tve/TX7NB7Yi9KgeeGH
+         3WGA==
+X-Gm-Message-State: AOAM533Wx3CDxcwQU/7WnObPCO6hd3TodROBxp5JWK+K48kM/TSBE/WL
+	owUj1AZiwlwruI9OXx6C5VR5lu0pMajsnydQVfQ=
+X-Google-Smtp-Source: ABdhPJzbCNciT/Vw4E176zijmDZb74ihGVfvi1mr48gxWn7RqdXe+0jEB+k+fPXqbvyly3jKI0SkyKS4ktc28TS8YP0=
+X-Received: by 2002:a25:7785:0:b0:614:c283:2a3d with SMTP id
+ s127-20020a257785000000b00614c2832a3dmr7796480ybc.137.1645801828185; Fri, 25
+ Feb 2022 07:10:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] iommu/arm-smmu: remove redundant assignment to variable
- res
-Content-Language: en-GB
-To: Colin Ian King <colin.i.king@gmail.com>, Will Deacon <will@kernel.org>,
- Joerg Roedel <joro@8bytes.org>, linux-arm-kernel@lists.infradead.org,
- iommu@lists.linux-foundation.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20220225093205.170973-1-colin.i.king@gmail.com>
-From: Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220225093205.170973-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <202202250758.oDiHyXAy-lkp@intel.com> <0d4d70ca-a17f-b8de-53f7-a85a59304d36@redhat.com>
+In-Reply-To: <0d4d70ca-a17f-b8de-53f7-a85a59304d36@redhat.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 25 Feb 2022 16:10:17 +0100
+Message-ID: <CAJZ5v0jmFJMrKT5RsR+JEfJHaYFxHTi2xjS0UnkNUhSn7-r==A@mail.gmail.com>
+Subject: Re: [rafael-pm:bleeding-edge 59/73] arch/x86/include/asm/pci_x86.h:133:19:
+ error: expected ';' after top level declarator
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
+	"open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 2022-02-25 09:32, Colin Ian King wrote:
-> The variable res is being assigned a value that isn't being read
-> later. The assignment is redundant and can be removed.
-> 
-> Cleans up clang scan warning:
-> drivers/iommu/arm/arm-smmu/arm-smmu.c:2109:10: warning: Although the
-> value stored to 'res' is used in the enclosing expression, the value
-> is never actually read from 'res' [deadcode.DeadStores]
+On Fri, Feb 25, 2022 at 12:49 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi Rafael,
+>
+> On 2/25/22 00:24, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+> > head:   8276cbee5a52543c614a1e1bc2624188d5970848
+> > commit: 62fabd56faafe033eb0be3ba24000b8db13d4c17 [59/73] x86/PCI: Disable exclusion of E820 reserved addresses in some cases
+> > config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220225/202202250758.oDiHyXAy-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=62fabd56faafe033eb0be3ba24000b8db13d4c17
+> >         git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+> >         git fetch --no-tags rafael-pm bleeding-edge
+> >         git checkout 62fabd56faafe033eb0be3ba24000b8db13d4c17
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >    In file included from arch/x86/kernel/resource.c:4:
+> >    arch/x86/include/asm/pci_x86.h:97:8: error: unknown type name 'raw_spinlock_t'
+> >    extern raw_spinlock_t pci_config_lock;
+> >           ^
+> >>> arch/x86/include/asm/pci_x86.h:133:19: error: expected ';' after top level declarator
+> >    extern void __init dmi_check_pciprobe(void);
+> >                      ^
+> >                      ;
+> >    arch/x86/include/asm/pci_x86.h:134:19: error: expected ';' after top level declarator
+> >    extern void __init dmi_check_skip_isa_align(void);
+> >                      ^
+> >                      ;
+>
+> So the problem here seems to be that arch/x86/include/asm/pci_x86.h does not include
+> all the headers which it relies on. Instead it release on the files which include it
+> to include those headers before hand.
+>
+> This should fix the errors reported here:
+>
+> --- a/arch/x86/include/asm/pci_x86.h
+> +++ b/arch/x86/include/asm/pci_x86.h
+> @@ -5,7 +5,9 @@
+>   *     (c) 1999 Martin Mares <mj@ucw.cz>
+>   */
+>
+> +#include <linux/init.h>
+>  #include <linux/ioport.h>
+> +#include <linux/spinlock.h>
+>
+>  #undef DEBUG
+>
+> I believe this is best squashed into the original commit,
 
-Thanks Colin, however in general we need to get rid of this 
-platform_get_resource() call ASAP anyway, so Will should hopefully be 
-picking up either [1] or [2] for 5.18.
+Done, thanks!
 
-Cheers,
-Robin.
-
-[1] 
-https://lore.kernel.org/linux-arm-kernel/b2a40caaf1622eb35c555074a0d72f4f0513cff9.1645106346.git.robin.murphy@arm.com/
-[2] 
-https://lore.kernel.org/linux-arm-kernel/20211223130046.9365-2-prabhakar.mahadev-lad.rj@bp.renesas.com/
-
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->   drivers/iommu/arm/arm-smmu/arm-smmu.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> index 4bc75c4ce402..f83d2c32b5a9 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> @@ -2106,7 +2106,7 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
->   		return PTR_ERR(smmu);
->   
->   	num_irqs = 0;
-> -	while ((res = platform_get_resource(pdev, IORESOURCE_IRQ, num_irqs))) {
-> +	while (platform_get_resource(pdev, IORESOURCE_IRQ, num_irqs)) {
->   		num_irqs++;
->   		if (num_irqs > smmu->num_global_irqs)
->   			smmu->num_context_irqs++;
+> but let me know if
+> you want me to send this out as a proper follow up patch; or if you want a
+> new version of the troublesome commit to replace the original one.
