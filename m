@@ -1,172 +1,79 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C9C1FA5
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 18:34:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645814068; x=1677350068;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AWcWqNTCdAVoq0CzsMS2d/hoo3sz2Vx6l2pyUzXy78w=;
-  b=ZmKWBoUfYgrcU7ulSO6BHUq7BPdn15eOuAE4KfetdXb38p1OBosjnEgz
-   4ZGQk9+UGNfRXzILcAa6S/CBGfJDsJuDzAfimT7gPqAiijOMDTEfGokwE
-   uHtH1qKvvIJhqlQy4UExSJZndxTala/I0u8+HnNC0KcUZICUWXpJ9x73K
-   EDFiRPUMw5RWr1fHgAWsKil2zmOcn/88iQYqn98km5T3jj5sP/usVrU65
-   8SMSHwiyfpPKTEAP6nhBHsunmPp6vlw2qvFaOiJ8LBeUMu3cP5BMwD1ar
-   e0jo12yUtvDYvmMAbbAfkRjJbNXUXyXX6SWG6rXZljkLPsOBJ20IljLe5
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252285764"
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="252285764"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 10:34:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
-   d="scan'208";a="549371034"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Feb 2022 10:34:22 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nNfQ5-0004bp-Ks; Fri, 25 Feb 2022 18:34:21 +0000
-Date: Sat, 26 Feb 2022 02:34:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Slaby <jslaby@suse.cz>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-serial@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [tty:tty-testing 31/42] drivers/mmc/core/sdio_uart.c:253:9: error:
- implicit declaration of function 'UART_LCR_WLEN'
-Message-ID: <202202260016.JwqeCxcs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726DE1B60
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 20:47:31 +0000 (UTC)
+Received: by mail-io1-f52.google.com with SMTP id c14so7876806ioa.12
+        for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 12:47:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VhQ6lKdQCvPa4Z8KH2JlJuyb4CM5CfZt3HGbqFOgQ4M=;
+        b=eegCtk9huTZTwXDWkYjkVEEZ5pesUUXBxlnsi20xEbSGwmTDenbsGqD7FfXQ4quQLR
+         oMGFfxk/+95IXHOck2zsyXN9Qb3MFG2FbcA85EPpUe+F17Yuygbvg6sQGrL97ZhV2W8k
+         RzU0LhY94wy+yc3uEEpLo09XXGh2GNaHtSlnrSz8Z0S+q81auadodsbblVnJWqjKXgV+
+         c9dO4Uz3tJE1MgCgr9V/hS/ihJXCOhe5c2Kt0s9hWOiQxoeuiYsBbVC/yjG2b2Ywy1Wb
+         6yaH70PUTXqYA6jrN8dOMYZpAxBE7Lyyzan1KInNNGh2YlRcjGpaS0qG1aqPO201F4V1
+         sIoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VhQ6lKdQCvPa4Z8KH2JlJuyb4CM5CfZt3HGbqFOgQ4M=;
+        b=D3D4pVIvc9spV4+rSUMltA31yClZZqO+q9QdLIM/FRmlJ441EEg8Mi3GCNZHVUNQgf
+         8RjO/7onj237jct1y2xP/3ZkCvF55xYcFpI40+PVGV6Dyt/neTOdOmDqBqWFP5o3Ol4x
+         goBaS6QClqbKQsKmdsdOEgnSdspEStEpULQEsNQYuqpPPoZnf2o3JI41R3M6ycQw/52w
+         IvCuUJ7AFnHb3pCu57Jy3YJ2kxQ2JBnQ6L2Etqk+SgOQsxyo0T5Vy9PLkImRz+aumxJS
+         l6LK+MVacycvmSUcBpgpJIgeDbKbK3wEgsx7J9wOMRep8bXzV5ZrRAVdUtj9NB4gFfF8
+         QNog==
+X-Gm-Message-State: AOAM530sIdCnVsDpFJu/pMJJYT2Zf9MjWrdUfmVYbVP9fjNOqAKgqzu1
+	q4Si9UHsH3bY3ZHR9ugOkboRviIKjR0cHh9Jo0U=
+X-Google-Smtp-Source: ABdhPJwMci6YtjBxOjakzW01EpDicV5XGJJDGczqNUCY1aXcEKVD0okYOyZY2SmasQNuCV5U0S3wfTU6mAJiYqXfSz0=
+X-Received: by 2002:a05:6602:2d90:b0:63d:b41e:e4e4 with SMTP id
+ k16-20020a0566022d9000b0063db41ee4e4mr6737452iow.172.1645822050350; Fri, 25
+ Feb 2022 12:47:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220225032410.25622-1-ashimida@linux.alibaba.com>
+In-Reply-To: <20220225032410.25622-1-ashimida@linux.alibaba.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 25 Feb 2022 21:47:19 +0100
+Message-ID: <CANiq72kXoonDYk095XvBwEtRCRNECd1iQOqJHE2cNcgLyUMfcQ@mail.gmail.com>
+Subject: Re: [PATCH] [PATCH v2] AARCH64: Add gcc Shadow Call Stack support
+To: Dan Li <ashimida@linux.alibaba.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Kees Cook <keescook@chromium.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Andrew Morton <akpm@linux-foundation.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Nicholas Piggin <npiggin@gmail.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Marco Elver <elver@google.com>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-head:   a6d8f09319fff9e6e7a91cadb19923b8cb2573e0
-commit: b6f8eaea0cf1afe2500f8af7b6cc805647fe4889 [31/42] sdio_uart: make use of UART_LCR_WLEN() + tty_get_char_size()
-config: arm-s3c2410_defconfig (https://download.01.org/0day-ci/archive/20220226/202202260016.JwqeCxcs-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/commit/?id=b6f8eaea0cf1afe2500f8af7b6cc805647fe4889
-        git remote add tty https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
-        git fetch --no-tags tty tty-testing
-        git checkout b6f8eaea0cf1afe2500f8af7b6cc805647fe4889
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/mmc/core/
+On Fri, Feb 25, 2022 at 4:24 AM Dan Li <ashimida@linux.alibaba.com> wrote:
+>
+> +         - Clang (https://clang.llvm.org/docs/ShadowCallStack.html)
+> +         - GCC (https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html#Instrumentation-Options)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Maybe Clang: and GCC: instead of the parenthesis?
 
-All errors (new ones prefixed by >>):
+> +#ifdef CONFIG_SHADOW_CALL_STACK
+> +#define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
+> +#endif
 
->> drivers/mmc/core/sdio_uart.c:253:9: error: implicit declaration of function 'UART_LCR_WLEN' [-Werror,-Wimplicit-function-declaration]
-           cval = UART_LCR_WLEN(tty_get_char_size(termios->c_cflag));
-                  ^
-   1 error generated.
+Since both compilers have it, and I guess the `#ifdef` condition would
+work for both, could this be moved into `compiler_types.h` where the
+empty `__noscs` definition is, and remove the one from
+`compiler-clang.h`?
 
-
-vim +/UART_LCR_WLEN +253 drivers/mmc/core/sdio_uart.c
-
-   245	
-   246	static void sdio_uart_change_speed(struct sdio_uart_port *port,
-   247					   struct ktermios *termios,
-   248					   struct ktermios *old)
-   249	{
-   250		unsigned char cval, fcr = 0;
-   251		unsigned int baud, quot;
-   252	
- > 253		cval = UART_LCR_WLEN(tty_get_char_size(termios->c_cflag));
-   254	
-   255		if (termios->c_cflag & CSTOPB)
-   256			cval |= UART_LCR_STOP;
-   257		if (termios->c_cflag & PARENB)
-   258			cval |= UART_LCR_PARITY;
-   259		if (!(termios->c_cflag & PARODD))
-   260			cval |= UART_LCR_EPAR;
-   261	
-   262		for (;;) {
-   263			baud = tty_termios_baud_rate(termios);
-   264			if (baud == 0)
-   265				baud = 9600;  /* Special case: B0 rate. */
-   266			if (baud <= port->uartclk)
-   267				break;
-   268			/*
-   269			 * Oops, the quotient was zero.  Try again with the old
-   270			 * baud rate if possible, otherwise default to 9600.
-   271			 */
-   272			termios->c_cflag &= ~CBAUD;
-   273			if (old) {
-   274				termios->c_cflag |= old->c_cflag & CBAUD;
-   275				old = NULL;
-   276			} else
-   277				termios->c_cflag |= B9600;
-   278		}
-   279		quot = (2 * port->uartclk + baud) / (2 * baud);
-   280	
-   281		if (baud < 2400)
-   282			fcr = UART_FCR_ENABLE_FIFO | UART_FCR_TRIGGER_1;
-   283		else
-   284			fcr = UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_10;
-   285	
-   286		port->read_status_mask = UART_LSR_OE | UART_LSR_THRE | UART_LSR_DR;
-   287		if (termios->c_iflag & INPCK)
-   288			port->read_status_mask |= UART_LSR_FE | UART_LSR_PE;
-   289		if (termios->c_iflag & (BRKINT | PARMRK))
-   290			port->read_status_mask |= UART_LSR_BI;
-   291	
-   292		/*
-   293		 * Characters to ignore
-   294		 */
-   295		port->ignore_status_mask = 0;
-   296		if (termios->c_iflag & IGNPAR)
-   297			port->ignore_status_mask |= UART_LSR_PE | UART_LSR_FE;
-   298		if (termios->c_iflag & IGNBRK) {
-   299			port->ignore_status_mask |= UART_LSR_BI;
-   300			/*
-   301			 * If we're ignoring parity and break indicators,
-   302			 * ignore overruns too (for real raw support).
-   303			 */
-   304			if (termios->c_iflag & IGNPAR)
-   305				port->ignore_status_mask |= UART_LSR_OE;
-   306		}
-   307	
-   308		/*
-   309		 * ignore all characters if CREAD is not set
-   310		 */
-   311		if ((termios->c_cflag & CREAD) == 0)
-   312			port->ignore_status_mask |= UART_LSR_DR;
-   313	
-   314		/*
-   315		 * CTS flow control flag and modem status interrupts
-   316		 */
-   317		port->ier &= ~UART_IER_MSI;
-   318		if ((termios->c_cflag & CRTSCTS) || !(termios->c_cflag & CLOCAL))
-   319			port->ier |= UART_IER_MSI;
-   320	
-   321		port->lcr = cval;
-   322	
-   323		sdio_out(port, UART_IER, port->ier);
-   324		sdio_out(port, UART_LCR, cval | UART_LCR_DLAB);
-   325		sdio_out(port, UART_DLL, quot & 0xff);
-   326		sdio_out(port, UART_DLM, quot >> 8);
-   327		sdio_out(port, UART_LCR, cval);
-   328		sdio_out(port, UART_FCR, fcr);
-   329	
-   330		sdio_uart_write_mctrl(port, port->mctrl);
-   331	}
-   332	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Miguel
