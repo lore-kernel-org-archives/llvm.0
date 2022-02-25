@@ -1,39 +1,39 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A137E7C
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 00:11:21 +0000 (UTC)
-Received: by mail-pl1-f179.google.com with SMTP id c9so3356490pll.0
-        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 16:11:21 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE7410EF
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 00:35:53 +0000 (UTC)
+Received: by mail-pg1-f170.google.com with SMTP id 75so3186167pgb.4
+        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 16:35:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=In77i2k/Dlw4li92tNBJEcVDYHwHTC77CKejZqvuXbc=;
-        b=OlRKKTR2+t3jjPbjPhpIQm/vd2ONEs1sAry0xgT22OV+Y7gNyQe3hHhtKwb/23SJYn
-         otuK2obTOnX+F82zXfT84xyVq8e1zZs2E2wA37gZ51HqOlZSDflMFgYD2VazECVTCYpv
-         SNLGFyH+3SnsPMGkm5hA7PgUEQEfRdd5r7HqE=
+        bh=t9WDGudgTxtENWYDPYTPFz27xdCIdzpF9PzSXLCu+HE=;
+        b=nSdm1jF9UdfebBvADyqxpuC4Jir5BHroQmt0KoeK0N4eBfTFJPgN8sIu0y5MLvLMVL
+         TXKslUxZATYNHDr8g2iO63sCb1WQ0ZSzkWcQQX7j0nm3NtaWT65aF/iWLwtrl2Xi6OZa
+         94XZqUC4HyZarX0oc8WH5ZJBC7aG27LxapJ2U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=In77i2k/Dlw4li92tNBJEcVDYHwHTC77CKejZqvuXbc=;
-        b=VpRrpgmTWxkYayasHbUjqwl0G5fMaVNoAeS9uGklatNWMeAY0Zx7fqfauwOCFLT4nK
-         I7/VO6Gl1D1hKphw+VHsFHwSMrU279MVFT4SLoqVcGksDe8qmBDi18K4TYwKK4QMdgAf
-         FWwOeTsJ2+8YQLNsod8YNRtzHcTMhbDMX6Y9pniHSzcOJWKezK9gkErB0AFAyRyhGAyu
-         bGEeZb4sLgpcKneUL100eqC7c/Cqq0nnijDXO9VvUzGknp1MLb4B1xRW1w3pbeSCoUJO
-         5v5VzcOD7FQVs9zaJGjFIa3LR1SeDffHKICW8mm3PJ9AHZzVnNCco1jPOBxRp7F6pcq0
-         3B+Q==
-X-Gm-Message-State: AOAM533A+7E81uYFj4xhGGa2VOWs/qfj2buQOp8te2EvehymsYdvRCzh
-	WAgPGnLATBEvE8JoQP8UeJzGtQ==
-X-Google-Smtp-Source: ABdhPJw0dQBRMsviBRsNqTIih90cTEDQO/hW5pKY58bUeKwoX86mCcTbmYvgJu7mJccn1eYsyXnrWg==
-X-Received: by 2002:a17:902:7207:b0:14d:938e:a88e with SMTP id ba7-20020a170902720700b0014d938ea88emr5095030plb.42.1645747881053;
-        Thu, 24 Feb 2022 16:11:21 -0800 (PST)
+        bh=t9WDGudgTxtENWYDPYTPFz27xdCIdzpF9PzSXLCu+HE=;
+        b=6mi+AsbVhIuDJ3+YUrh/nNVv/3MoaqD8Dh2PV2VAkixJMBajBjUNUy+som/XFjBKeD
+         XCUORKXjGEwU9TieVFCXKbPHMQMWGS1kEURuUK47kknXTxewmPMGm9oTYH3JSTCZhFWY
+         n5VcJWEKFbiXjPnEwkPPX+inawpKBpbDjkC4pjMr1PYUk+6CaGuVx2SNEM4pjoSrAEUy
+         KzxQ3l9IXPv5QlGpVDgg8bX7s0Vs+Ynp1sG9JxJ4TKMv6uj5mMN8705MhHD+jhYIb0kb
+         cHNL56Xd27xXEj8Gh1kMGzWiukkV7i5k/21HeOjOupxpSj3m6Y2G9egKaLjrn7i9uqul
+         +PeQ==
+X-Gm-Message-State: AOAM530WRPqJrVtKaEp8w4RbHNmHeSZLoI/GuqcM3TlRIBujc0TzMMr6
+	1S+s1OmhBWlfYgs/7o6CTrr6yw==
+X-Google-Smtp-Source: ABdhPJzXjEWUx16LXa9vXAwYPTcx43KbIK8MVynbRR4B/TS5XnP5S84RYYzkGq04XuMpnFhct0w0kQ==
+X-Received: by 2002:a63:dd17:0:b0:36c:33aa:6d5f with SMTP id t23-20020a63dd17000000b0036c33aa6d5fmr4136992pgg.300.1645749353010;
+        Thu, 24 Feb 2022 16:35:53 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g5-20020a63fa45000000b0037407b6ffdasm606419pgk.5.2022.02.24.16.11.20
+        by smtp.gmail.com with ESMTPSA id a15-20020a637f0f000000b00372e075b2efsm622127pgd.30.2022.02.24.16.35.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 16:11:20 -0800 (PST)
-Date: Thu, 24 Feb 2022 16:11:19 -0800
+        Thu, 24 Feb 2022 16:35:52 -0800 (PST)
+Date: Thu, 24 Feb 2022 16:35:51 -0800
 From: Kees Cook <keescook@chromium.org>
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
@@ -43,10 +43,10 @@ Cc: x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
 	alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
 	mhiramat@kernel.org, alexei.starovoitov@gmail.com,
 	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 01/39] kbuild: Fix clang build
-Message-ID: <202202241543.B1B6C77C@keescook>
+Subject: Re: [PATCH v2 05/39] x86: Base IBT bits
+Message-ID: <202202241627.EEF3D5D2@keescook>
 References: <20220224145138.952963315@infradead.org>
- <20220224151322.072632223@infradead.org>
+ <20220224151322.307406918@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,132 +55,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220224151322.072632223@infradead.org>
+In-Reply-To: <20220224151322.307406918@infradead.org>
 
-nit: Subject maybe could be something more specific like:
-"kbuild: Detect and apply clang version suffix to defaults"
-
-On Thu, Feb 24, 2022 at 03:51:39PM +0100, Peter Zijlstra wrote:
-> Debian (and derived) distros ship their compilers as -$ver suffixed
-> binaries. For gcc it is sufficent to use:
+On Thu, Feb 24, 2022 at 03:51:43PM +0100, Peter Zijlstra wrote:
+> Add Kconfig, Makefile and basic instruction support for x86 IBT.
 > 
->  $ make CC=gcc-12
-> 
-> However, clang builds (esp. clang-lto) need a whole array of tools to be
-> exactly right, leading to unweildy stuff like:
+> XXX clang is not playing ball, probably lld being 'funny', I'm having
+> problems with .plt entries appearing all over after linking.
 
-Yeah, I have had this problem with gcc versions too (when trying to
-select older compilers when cross compiling).
+I'll try to look into this; I know you've been chatting with Nathan
+about it. Is there an open bug for it? (And any kind of reproducer
+smaller than a 39 patch series we can show the linker folks?) :)
 
 > [...]
-> which is, quite franktly, totally insane and unusable. Instead make
-> the CC variable DTRT, enabling one such as myself to use:
-> 
->  $ make CC=clang-13
+> +config X86_KERNEL_IBT
+> +	prompt "Indirect Branch Tracking"
+> +	bool
+> +	depends on X86_64 && CC_HAS_IBT
+> +	help
+> +	  Build the kernel with support for Indirect Branch Tracking, a
+> +	  hardware supported CFI scheme. Any indirect call must land on
 
-This form is intended to mix clang and binutils, as there is a long tail
-of (usually architecture-specific) issues with ld.lld and Clang's
-assembler. It's only relatively recently that clang + ld.lld works
-happily on x86_64. Growing a way to split that logic by architecture
-might be interesting, but also confusing...
+	  hardware support course-grain forward-edge Control Flow Integrity
+	  protection. It enforces that all indirect calls must land on
 
-> This also lets one quickly test different clang versions.
-> Additionally, also support path based LLVM suites like:
-> 
->  $ make CC=/opt/llvm/bin/clang
-> 
-> This changes the default to LLVM=1 when CC is clang, mixing toolchains
-> is still possible by explicitly adding LLVM=0.
+> +	  an ENDBR instruction, as such, the compiler will litter the
+> +	  code with them to make this happen.
 
-I do like the path idea -- this is much cleaner in Clang's case than the
-gcc/binutils mixture where a versioned binutils might not even exist in
-a given environment. I've been fighting versioned cross compilers with
-gcc and ld.bfd. It's almost worse. ;)
+"litter the code" -> "instrument the machine code".
 
-> [...]
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -423,9 +423,29 @@ HOST_LFS_CFLAGS := $(shell getconf LFS_C
->  HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
->  HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
->  
-> -ifneq ($(LLVM),)
-> -HOSTCC	= clang
-> -HOSTCXX	= clang++
-> +# powerpc and s390 don't yet work with LLVM as a whole
 
-Er, this, uh, doesn't really capture the matrix. ;) See
-https://clangbuiltlinux.github.io/
-
-> +ifeq ($(ARCH),powerpc)
-> +LLVM = 0
-> +endif
-> +ifeq ($(ARCH),s390)
-> +LLVM = 0
-> +endif
 > +
-> +# otherwise, if CC=clang, default to using LLVM to enable LTO
+>  config X86_INTEL_MEMORY_PROTECTION_KEYS
+>  	prompt "Memory Protection Keys"
+>  	def_bool y
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -36,7 +36,7 @@ endif
+>  
+>  # How to compile the 16-bit code.  Note we always compile for -march=i386;
+>  # that way we can complain to the user if the CPU is insufficient.
+> -REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING \
+> +REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING -D__DISABLE_EXPORTS \
+>  		   -Wall -Wstrict-prototypes -march=i386 -mregparm=3 \
+>  		   -fno-strict-aliasing -fomit-frame-pointer -fno-pic \
+>  		   -mno-mmx -mno-sse $(call cc-option,-fcf-protection=none)
 
-I find this comment confusing: using LLVM=1 lets LTO be possible,
-strictly speaking, it doesn't enable it.
+This change seems important separately from this patch, yes? (Or at
+least a specific call-out in the commit log.)
 
-> +CC_BASE := $(shell echo $(CC) | sed 's/.*\///')
-
-I would expect $(shell basename $(CC)) (or similarly "dirname") for
-these sorts of path manipulations, but I'll bet there's some Makefile
-string syntax to do this too, to avoid $(shell) entirely...
-
-> +CC_NAME := $(shell echo $(CC_BASE) | cut -b "1-5")
-
-O_o  cut -d- -f1
-
-> +ifeq ($(shell test "$(CC_NAME)" = "clang"; echo $$?),0)
-> +LLVM ?= 1
-> +LLVM_PFX := $(shell echo $(CC) | sed 's/\(.*\/\)\?.*/\1/')
-
-dirname
-
-> +LLVM_SFX := $(shell echo $(CC_BASE) | cut -b "6-")
-
-cut -d- -f2-
-
-> +endif
-
-This versioned suffix logic I'm fine with, though I'd prefer we gain
-this for both Clang and GCC, as I've needed it there too, specifically
-with the handling of CROSS_COMPILE:
-
-$ make CROSS_COMPILE=/path/to/abi- CC=/path/to/abi-gcc-10 LD=/path/to/abi-ld-binutilsversion
-
-Anyway, I guess that could be a separate patch.
-
-> +# if not set by now, do not use LLVM
-> +LLVM ?= 0
-
-I think, however, the LLVM state needs to stay default=0. The "how to
-build with Clang" already details the "how" on this:
-https://www.kernel.org/doc/html/latest/kbuild/llvm.html
-
-But I do agree: extracting the version suffix would make things much
-easier.
-
-Regardless, even if LLVM=1 is made the default, I think that should be
-separate from the path and suffix logic.
-
-Also, please CC the "CLANG/LLVM BUILD SUPPORT" maintainers in the
-future:
-M:      Nathan Chancellor <nathan@kernel.org>
-M:      Nick Desaulniers <ndesaulniers@google.com>
-L:      llvm@lists.linux.dev
-S:      Supported
-W:      https://clangbuiltlinux.github.io/
-B:      https://github.com/ClangBuiltLinux/linux/issues
-C:      irc://irc.libera.chat/clangbuiltlinux
-F:      Documentation/kbuild/llvm.rst
-F:      include/linux/compiler-clang.h
-F:      scripts/Makefile.clang
-F:      scripts/clang-tools/
-K:      \b(?i:clang|llvm)\b
+Otherwise, looks good.
 
 -- 
 Kees Cook
