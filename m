@@ -1,44 +1,52 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3746ABC
-	for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 23:25:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645745139; x=1677281139;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IJ/rCmtcTnzEA6jA9Lx50cczK4xgpmPdTO7K/Z2aUcI=;
-  b=YMACHFREyiMdBih/1IF/nuVnH/pz/HpNPhy1h9sLbwnOottyP0szCX+0
-   6yf2WJHRabiBFggZrHWtjU8zIwovzyt5Iq/HKKT/aZhw+xS7NBvAuqk/B
-   1ntMCQiyJeBiq6cIVGwP2jp8+7XtTuYYkyL5MS0zmvx2wmsg6sp2AdJsV
-   SU6iHivB5DdC00lc7J4quhxMWOOdiN6fanM8Ljwt2XlyDJK8kXUefe1Qy
-   pQ4gTuuGzRYy92jL146XydjsllZCTjLuaJ0n0kXZHIZlYUqywcj5va92U
-   1alaseoSyR2ktMadZNS+csE563zALdTsswDrKacWDervd/92EuScErMsg
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="338810843"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="338810843"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 15:25:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="684461079"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Feb 2022 15:25:36 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nNNUO-0003Z5-47; Thu, 24 Feb 2022 23:25:36 +0000
-Date: Fri, 25 Feb 2022 07:24:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [rafael-pm:bleeding-edge 59/73]
- arch/x86/include/asm/pci_x86.h:133:19: error: expected ';' after top level
- declarator
-Message-ID: <202202250758.oDiHyXAy-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A137E7C
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 00:11:21 +0000 (UTC)
+Received: by mail-pl1-f179.google.com with SMTP id c9so3356490pll.0
+        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 16:11:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=In77i2k/Dlw4li92tNBJEcVDYHwHTC77CKejZqvuXbc=;
+        b=OlRKKTR2+t3jjPbjPhpIQm/vd2ONEs1sAry0xgT22OV+Y7gNyQe3hHhtKwb/23SJYn
+         otuK2obTOnX+F82zXfT84xyVq8e1zZs2E2wA37gZ51HqOlZSDflMFgYD2VazECVTCYpv
+         SNLGFyH+3SnsPMGkm5hA7PgUEQEfRdd5r7HqE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=In77i2k/Dlw4li92tNBJEcVDYHwHTC77CKejZqvuXbc=;
+        b=VpRrpgmTWxkYayasHbUjqwl0G5fMaVNoAeS9uGklatNWMeAY0Zx7fqfauwOCFLT4nK
+         I7/VO6Gl1D1hKphw+VHsFHwSMrU279MVFT4SLoqVcGksDe8qmBDi18K4TYwKK4QMdgAf
+         FWwOeTsJ2+8YQLNsod8YNRtzHcTMhbDMX6Y9pniHSzcOJWKezK9gkErB0AFAyRyhGAyu
+         bGEeZb4sLgpcKneUL100eqC7c/Cqq0nnijDXO9VvUzGknp1MLb4B1xRW1w3pbeSCoUJO
+         5v5VzcOD7FQVs9zaJGjFIa3LR1SeDffHKICW8mm3PJ9AHZzVnNCco1jPOBxRp7F6pcq0
+         3B+Q==
+X-Gm-Message-State: AOAM533A+7E81uYFj4xhGGa2VOWs/qfj2buQOp8te2EvehymsYdvRCzh
+	WAgPGnLATBEvE8JoQP8UeJzGtQ==
+X-Google-Smtp-Source: ABdhPJw0dQBRMsviBRsNqTIih90cTEDQO/hW5pKY58bUeKwoX86mCcTbmYvgJu7mJccn1eYsyXnrWg==
+X-Received: by 2002:a17:902:7207:b0:14d:938e:a88e with SMTP id ba7-20020a170902720700b0014d938ea88emr5095030plb.42.1645747881053;
+        Thu, 24 Feb 2022 16:11:21 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g5-20020a63fa45000000b0037407b6ffdasm606419pgk.5.2022.02.24.16.11.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 16:11:20 -0800 (PST)
+Date: Thu, 24 Feb 2022 16:11:19 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+	jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+	linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+	samitolvanen@google.com, mark.rutland@arm.com,
+	alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+	mhiramat@kernel.org, alexei.starovoitov@gmail.com,
+	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 01/39] kbuild: Fix clang build
+Message-ID: <202202241543.B1B6C77C@keescook>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.072632223@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,182 +55,132 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220224151322.072632223@infradead.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   8276cbee5a52543c614a1e1bc2624188d5970848
-commit: 62fabd56faafe033eb0be3ba24000b8db13d4c17 [59/73] x86/PCI: Disable exclusion of E820 reserved addresses in some cases
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220225/202202250758.oDiHyXAy-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=62fabd56faafe033eb0be3ba24000b8db13d4c17
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch --no-tags rafael-pm bleeding-edge
-        git checkout 62fabd56faafe033eb0be3ba24000b8db13d4c17
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+nit: Subject maybe could be something more specific like:
+"kbuild: Detect and apply clang version suffix to defaults"
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Feb 24, 2022 at 03:51:39PM +0100, Peter Zijlstra wrote:
+> Debian (and derived) distros ship their compilers as -$ver suffixed
+> binaries. For gcc it is sufficent to use:
+> 
+>  $ make CC=gcc-12
+> 
+> However, clang builds (esp. clang-lto) need a whole array of tools to be
+> exactly right, leading to unweildy stuff like:
 
-All errors (new ones prefixed by >>):
+Yeah, I have had this problem with gcc versions too (when trying to
+select older compilers when cross compiling).
 
-   In file included from arch/x86/kernel/resource.c:4:
-   arch/x86/include/asm/pci_x86.h:97:8: error: unknown type name 'raw_spinlock_t'
-   extern raw_spinlock_t pci_config_lock;
-          ^
->> arch/x86/include/asm/pci_x86.h:133:19: error: expected ';' after top level declarator
-   extern void __init dmi_check_pciprobe(void);
-                     ^
-                     ;
-   arch/x86/include/asm/pci_x86.h:134:19: error: expected ';' after top level declarator
-   extern void __init dmi_check_skip_isa_align(void);
-                     ^
-                     ;
->> arch/x86/include/asm/pci_x86.h:138:12: error: redeclaration of '__init' with a different type: 'int' vs 'void'
-   extern int __init pci_acpi_init(void);
-              ^
-   arch/x86/include/asm/pci_x86.h:134:13: note: previous declaration is here
-   extern void __init dmi_check_skip_isa_align(void);
-               ^
-   arch/x86/include/asm/pci_x86.h:138:18: error: expected ';' after top level declarator
-   extern int __init pci_acpi_init(void);
-                    ^
-                    ;
-   arch/x86/include/asm/pci_x86.h:145:19: error: expected ';' after top level declarator
-   extern void __init pcibios_irq_init(void);
-                     ^
-                     ;
-   arch/x86/include/asm/pci_x86.h:146:12: error: redeclaration of '__init' with a different type: 'int' vs 'void'
-   extern int __init pcibios_init(void);
-              ^
-   arch/x86/include/asm/pci_x86.h:145:13: note: previous declaration is here
-   extern void __init pcibios_irq_init(void);
-               ^
-   arch/x86/include/asm/pci_x86.h:146:18: error: expected ';' after top level declarator
-   extern int __init pcibios_init(void);
-                    ^
-                    ;
-   arch/x86/include/asm/pci_x86.h:166:12: error: redeclaration of '__init' with a different type: 'int' vs 'void'
-   extern int __init pci_mmcfg_arch_init(void);
-              ^
-   arch/x86/include/asm/pci_x86.h:145:13: note: previous declaration is here
-   extern void __init pcibios_irq_init(void);
-               ^
-   arch/x86/include/asm/pci_x86.h:166:18: error: expected ';' after top level declarator
-   extern int __init pci_mmcfg_arch_init(void);
-                    ^
-                    ;
-   arch/x86/include/asm/pci_x86.h:167:19: error: expected ';' after top level declarator
-   extern void __init pci_mmcfg_arch_free(void);
-                     ^
-                     ;
->> arch/x86/include/asm/pci_x86.h:174:33: error: redeclaration of '__init' with a different type: 'struct pci_mmcfg_region *' vs 'void'
-   extern struct pci_mmcfg_region *__init pci_mmconfig_add(int segment, int start,
-                                   ^
-   arch/x86/include/asm/pci_x86.h:167:13: note: previous declaration is here
-   extern void __init pci_mmcfg_arch_free(void);
-               ^
-   arch/x86/include/asm/pci_x86.h:174:39: error: expected ';' after top level declarator
-   extern struct pci_mmcfg_region *__init pci_mmconfig_add(int segment, int start,
-                                         ^
-                                         ;
-   13 errors generated.
+> [...]
+> which is, quite franktly, totally insane and unusable. Instead make
+> the CC variable DTRT, enabling one such as myself to use:
+> 
+>  $ make CC=clang-13
 
+This form is intended to mix clang and binutils, as there is a long tail
+of (usually architecture-specific) issues with ld.lld and Clang's
+assembler. It's only relatively recently that clang + ld.lld works
+happily on x86_64. Growing a way to split that logic by architecture
+might be interesting, but also confusing...
 
-vim +133 arch/x86/include/asm/pci_x86.h
+> This also lets one quickly test different clang versions.
+> Additionally, also support path based LLVM suites like:
+> 
+>  $ make CC=/opt/llvm/bin/clang
+> 
+> This changes the default to LLVM=1 when CC is clang, mixing toolchains
+> is still possible by explicitly adding LLVM=0.
 
-^1da177e4c3f41 arch/i386/pci/pci.h            Linus Torvalds     2005-04-16   96  
-d19f61f098ae93 arch/x86/include/asm/pci_x86.h Thomas Gleixner    2010-02-17  @97  extern raw_spinlock_t pci_config_lock;
-^1da177e4c3f41 arch/i386/pci/pci.h            Linus Torvalds     2005-04-16   98  
-^1da177e4c3f41 arch/i386/pci/pci.h            Linus Torvalds     2005-04-16   99  extern int (*pcibios_enable_irq)(struct pci_dev *dev);
-87bec66b969152 arch/i386/pci/pci.h            David Shaohua Li   2005-07-27  100  extern void (*pcibios_disable_irq)(struct pci_dev *dev);
-928cf8c6276334 arch/i386/pci/pci.h            Andi Kleen         2005-12-12  101  
-6c777e8799a93e arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2016-02-17  102  extern bool mp_should_keep_irq(struct device *dev);
-6c777e8799a93e arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2016-02-17  103  
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  104  struct pci_raw_ops {
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  105  	int (*read)(unsigned int domain, unsigned int bus, unsigned int devfn,
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  106  						int reg, int len, u32 *val);
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  107  	int (*write)(unsigned int domain, unsigned int bus, unsigned int devfn,
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  108  						int reg, int len, u32 val);
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  109  };
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  110  
-72da0b07b1b497 arch/x86/include/asm/pci_x86.h Jan Beulich        2011-09-15  111  extern const struct pci_raw_ops *raw_pci_ops;
-72da0b07b1b497 arch/x86/include/asm/pci_x86.h Jan Beulich        2011-09-15  112  extern const struct pci_raw_ops *raw_pci_ext_ops;
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  113  
-c0fa40784cce9c arch/x86/include/asm/pci_x86.h Jiang Liu          2012-06-22  114  extern const struct pci_raw_ops pci_mmcfg;
-72da0b07b1b497 arch/x86/include/asm/pci_x86.h Jan Beulich        2011-09-15  115  extern const struct pci_raw_ops pci_direct_conf1;
-14d7ca5c575853 arch/x86/pci/pci.h             H. Peter Anvin     2008-11-11  116  extern bool port_cf9_safe;
-928cf8c6276334 arch/i386/pci/pci.h            Andi Kleen         2005-12-12  117  
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02  118  /* arch_initcall level */
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  119  #ifdef CONFIG_PCI_DIRECT
-5e544d618f0fb2 arch/i386/pci/pci.h            Andi Kleen         2006-09-26  120  extern int pci_direct_probe(void);
-5e544d618f0fb2 arch/i386/pci/pci.h            Andi Kleen         2006-09-26  121  extern void pci_direct_init(int type);
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  122  #else
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  123  static inline int pci_direct_probe(void) { return -1; }
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  124  static inline  void pci_direct_init(int type) { }
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  125  #endif
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  126  
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  127  #ifdef CONFIG_PCI_BIOS
-92c05fc1a32e5c arch/i386/pci/pci.h            Andi Kleen         2006-03-23  128  extern void pci_pcbios_init(void);
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  129  #else
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  130  static inline void pci_pcbios_init(void) { }
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  131  #endif
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  132  
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02 @133  extern void __init dmi_check_pciprobe(void);
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02  134  extern void __init dmi_check_skip_isa_align(void);
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02  135  
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02  136  /* some common used subsys_initcalls */
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  137  #ifdef CONFIG_PCI
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02 @138  extern int __init pci_acpi_init(void);
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  139  #else
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  140  static inline int  __init pci_acpi_init(void)
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  141  {
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  142  	return -EINVAL;
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  143  }
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  144  #endif
-ab3b37937e8f4f arch/x86/include/asm/pci_x86.h Thomas Gleixner    2009-08-29  145  extern void __init pcibios_irq_init(void);
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02  146  extern int __init pcibios_init(void);
-b72d0db9dd41da arch/x86/include/asm/pci_x86.h Thomas Gleixner    2009-08-29  147  extern int pci_legacy_init(void);
-9325a28ce2fa7c arch/x86/include/asm/pci_x86.h Thomas Gleixner    2009-08-29  148  extern void pcibios_fixup_irqs(void);
-5e544d618f0fb2 arch/i386/pci/pci.h            Andi Kleen         2006-09-26  149  
-b78673944b22b6 arch/i386/pci/pci.h            Olivier Galibert   2007-02-13  150  /* pci-mmconfig.c */
-b78673944b22b6 arch/i386/pci/pci.h            Olivier Galibert   2007-02-13  151  
-56ddf4d3cf04e8 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  152  /* "PCI MMCONFIG %04x [bus %02x-%02x]" */
-56ddf4d3cf04e8 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  153  #define PCI_MMCFG_RESOURCE_NAME_LEN (22 + 4 + 2 + 2)
-56ddf4d3cf04e8 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  154  
-d215a9c8b46e55 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  155  struct pci_mmcfg_region {
-ff097ddd4aeac7 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  156  	struct list_head list;
-56ddf4d3cf04e8 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  157  	struct resource res;
-d215a9c8b46e55 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  158  	u64 address;
-3f0f5503926f74 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  159  	char __iomem *virt;
-d7e6b66fe87c9f arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  160  	u16 segment;
-d7e6b66fe87c9f arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  161  	u8 start_bus;
-d7e6b66fe87c9f arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  162  	u8 end_bus;
-56ddf4d3cf04e8 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  163  	char name[PCI_MMCFG_RESOURCE_NAME_LEN];
-d215a9c8b46e55 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  164  };
-d215a9c8b46e55 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  165  
-429d512e532ec9 arch/i386/pci/pci.h            OGAWA Hirofumi     2007-02-13 @166  extern int __init pci_mmcfg_arch_init(void);
-0b64ad7123eb01 arch/x86/pci/pci.h             Yinghai Lu         2008-02-15  167  extern void __init pci_mmcfg_arch_free(void);
-a18e3690a52790 arch/x86/include/asm/pci_x86.h Greg Kroah-Hartman 2012-12-21  168  extern int pci_mmcfg_arch_map(struct pci_mmcfg_region *cfg);
-9cf0105da5a315 arch/x86/include/asm/pci_x86.h Jiang Liu          2012-06-22  169  extern void pci_mmcfg_arch_unmap(struct pci_mmcfg_region *cfg);
-a18e3690a52790 arch/x86/include/asm/pci_x86.h Greg Kroah-Hartman 2012-12-21  170  extern int pci_mmconfig_insert(struct device *dev, u16 seg, u8 start, u8 end,
-a18e3690a52790 arch/x86/include/asm/pci_x86.h Greg Kroah-Hartman 2012-12-21  171  			       phys_addr_t addr);
-9c95111b330d2d arch/x86/include/asm/pci_x86.h Jiang Liu          2012-06-22  172  extern int pci_mmconfig_delete(u16 seg, u8 start, u8 end);
-f6e1d8cc38b377 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  173  extern struct pci_mmcfg_region *pci_mmconfig_lookup(int segment, int bus);
-6fa4a94e150be2 arch/x86/include/asm/pci_x86.h Otavio Pontes      2018-03-07 @174  extern struct pci_mmcfg_region *__init pci_mmconfig_add(int segment, int start,
-6fa4a94e150be2 arch/x86/include/asm/pci_x86.h Otavio Pontes      2018-03-07  175  							int end, u64 addr);
-3320ad994afb2c arch/i386/pci/pci.h            dean gaudet        2007-08-10  176  
+I do like the path idea -- this is much cleaner in Clang's case than the
+gcc/binutils mixture where a versioned binutils might not even exist in
+a given environment. I've been fighting versioned cross compilers with
+gcc and ld.bfd. It's almost worse. ;)
 
-:::::: The code at line 133 was first introduced by commit
-:::::: 8dd779b19ce5972072ad2372a86c8acbae4da768 x86/pci: removing subsys_initcall ordering dependencies
+> [...]
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -423,9 +423,29 @@ HOST_LFS_CFLAGS := $(shell getconf LFS_C
+>  HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
+>  HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
+>  
+> -ifneq ($(LLVM),)
+> -HOSTCC	= clang
+> -HOSTCXX	= clang++
+> +# powerpc and s390 don't yet work with LLVM as a whole
 
-:::::: TO: Robert Richter <robert.richter@amd.com>
-:::::: CC: Ingo Molnar <mingo@elte.hu>
+Er, this, uh, doesn't really capture the matrix. ;) See
+https://clangbuiltlinux.github.io/
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +ifeq ($(ARCH),powerpc)
+> +LLVM = 0
+> +endif
+> +ifeq ($(ARCH),s390)
+> +LLVM = 0
+> +endif
+> +
+> +# otherwise, if CC=clang, default to using LLVM to enable LTO
+
+I find this comment confusing: using LLVM=1 lets LTO be possible,
+strictly speaking, it doesn't enable it.
+
+> +CC_BASE := $(shell echo $(CC) | sed 's/.*\///')
+
+I would expect $(shell basename $(CC)) (or similarly "dirname") for
+these sorts of path manipulations, but I'll bet there's some Makefile
+string syntax to do this too, to avoid $(shell) entirely...
+
+> +CC_NAME := $(shell echo $(CC_BASE) | cut -b "1-5")
+
+O_o  cut -d- -f1
+
+> +ifeq ($(shell test "$(CC_NAME)" = "clang"; echo $$?),0)
+> +LLVM ?= 1
+> +LLVM_PFX := $(shell echo $(CC) | sed 's/\(.*\/\)\?.*/\1/')
+
+dirname
+
+> +LLVM_SFX := $(shell echo $(CC_BASE) | cut -b "6-")
+
+cut -d- -f2-
+
+> +endif
+
+This versioned suffix logic I'm fine with, though I'd prefer we gain
+this for both Clang and GCC, as I've needed it there too, specifically
+with the handling of CROSS_COMPILE:
+
+$ make CROSS_COMPILE=/path/to/abi- CC=/path/to/abi-gcc-10 LD=/path/to/abi-ld-binutilsversion
+
+Anyway, I guess that could be a separate patch.
+
+> +# if not set by now, do not use LLVM
+> +LLVM ?= 0
+
+I think, however, the LLVM state needs to stay default=0. The "how to
+build with Clang" already details the "how" on this:
+https://www.kernel.org/doc/html/latest/kbuild/llvm.html
+
+But I do agree: extracting the version suffix would make things much
+easier.
+
+Regardless, even if LLVM=1 is made the default, I think that should be
+separate from the path and suffix logic.
+
+Also, please CC the "CLANG/LLVM BUILD SUPPORT" maintainers in the
+future:
+M:      Nathan Chancellor <nathan@kernel.org>
+M:      Nick Desaulniers <ndesaulniers@google.com>
+L:      llvm@lists.linux.dev
+S:      Supported
+W:      https://clangbuiltlinux.github.io/
+B:      https://github.com/ClangBuiltLinux/linux/issues
+C:      irc://irc.libera.chat/clangbuiltlinux
+F:      Documentation/kbuild/llvm.rst
+F:      include/linux/compiler-clang.h
+F:      scripts/Makefile.clang
+F:      scripts/clang-tools/
+K:      \b(?i:clang|llvm)\b
+
+-- 
+Kees Cook
