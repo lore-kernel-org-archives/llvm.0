@@ -1,63 +1,195 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1AF62916
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 22:08:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 547D0C340E7;
-	Fri, 25 Feb 2022 22:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645826892;
-	bh=8p7WkXuGAypZbBNf4T87PSxeCyirSi+UTVXXW12vVOs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gv0D6s3pQeR8kgih9xJOwkPz/IXt3SA4RHJWwfcBzul6s3CvcQxQcT21MHTzIBgsE
-	 rid2yMfryrFqLMVwoxt2jBd6fXXpghzy8IVpfsuEtxXAIlb6b3RKKbVsGsXDBCyCS3
-	 wsKuXAcIS0QQplx5/rADmquYj70UJHk+cgc2VTt7wihnJhDPUBa1bqXMdSjohcNb99
-	 WbLduf8p2G58Dwf81dcAf83zyN+J66hr/9wqug08G2m8fGnlnrF/7EUibbsdhtO4q4
-	 gZL0QjDYeY1UhEaB4xbueXioxDH6msnhMpHRvRx9+B6laJJ9KtVcUjZeduc1DDceN2
-	 Jjl62N03qt/0A==
-Date: Fri, 25 Feb 2022 15:08:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-	joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-	andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-	ndesaulniers@google.com, samitolvanen@google.com,
-	mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-	rostedt@goodmis.org, mhiramat@kernel.org,
-	alexei.starovoitov@gmail.com, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 05/39] x86: Base IBT bits
-Message-ID: <YhlTRhh7qj538ygM@dev-arch.archlinux-ax161>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.307406918@infradead.org>
- <202202241627.EEF3D5D2@keescook>
- <YhgnA8O4Bp19hfse@dev-arch.archlinux-ax161>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42ED93667
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 22:16:31 +0000 (UTC)
+Received: by mail-pl1-f175.google.com with SMTP id e13so5936639plh.3
+        for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 14:16:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r3UP7sPeOE4tpdOZPQATV5IzX0JqoKCyo0Zu8w+yg68=;
+        b=cwzZ+z3+KNNPi5VuoY5g5Mm7AaXgLz08dHXsMzB+MR31s6wqXa+tCeTmE9+ysLd5BD
+         fJpMa+FxWBITL2PrYQMv2VSlaVI255BXR6egh3HWuU0yR7XMZgzbjwb7GFrm7qww8onl
+         AoE5BybnANZ8N/qlzz5rGhzJLWqQ/dDnY2OwU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r3UP7sPeOE4tpdOZPQATV5IzX0JqoKCyo0Zu8w+yg68=;
+        b=I8eRPCOyXZD4YXvq68j/ZghP646yPWUfGVDx0oNjRpQ+ZHwk4z8qcHSXaieiR/I6y1
+         Y1/Zeb5vbIntD5OFTlywk90G7nMIYuugQAqbHlOSwRBv04wp5mR0fJ8pjdXIHvgtt4oI
+         M0IC7WlAkX7TL6kbE+EqnmmPScWZO1d1XAHkZSsAFpydciONogBVZWRTr1eGlHNn8F5t
+         oI67Nb0xLdlN1GvsMmO30mI+RVCWEwIokdE/sd1S4aya3mQ2Hj5CwfMx9KIuc2gXJVtv
+         pzFR6sQX/ctaf4RlqbQsCiq0rMccbgq32+6/jFUjRvcmxT0+Mz2JJg/qNK6+bSGHf3R1
+         ETCQ==
+X-Gm-Message-State: AOAM531B/w6QvLaAVihvPyDkSHiyFiJiOg27y5j6OcVn3Ftttt/6gxtf
+	Mb9mjIs6gS/25fq957uViZ3H0w==
+X-Google-Smtp-Source: ABdhPJzMO0XmsB2Ylb7z3PBT/wwN9Bg5Lb62ntAtlDJaBxTGiqEJ8nNIZ4XE3X5AvapcOZmE2Rh/Kg==
+X-Received: by 2002:a17:902:e9c2:b0:14f:edeb:4b99 with SMTP id 2-20020a170902e9c200b0014fedeb4b99mr9057948plk.67.1645827390703;
+        Fri, 25 Feb 2022 14:16:30 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id il17-20020a17090b165100b001bcd92fd355sm3489471pjb.28.2022.02.25.14.16.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 14:16:30 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: llvm@lists.linux.dev
+Cc: Kees Cook <keescook@chromium.org>,
+	Marco Elver <elver@google.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	linux-mm@kvack.org,
+	stable@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Christoph Lameter <cl@linux.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Daniel Micay <danielmicay@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] mm: Handle ksize() vs __alloc_size by forgetting size
+Date: Fri, 25 Feb 2022 14:16:25 -0800
+Message-Id: <20220225221625.3531852-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhgnA8O4Bp19hfse@dev-arch.archlinux-ax161>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4876; h=from:subject; bh=ngJf13CKEOSfIOvi/uk/FkUtfIKyiY96MAZ3FgS6iVA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiGVU5zB3C19q1mxFo1Mzgjm0mZS1MOKexM4K+phaS h17iA9aJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhlVOQAKCRCJcvTf3G3AJr02D/ 9R0hItTprzV5mWNM8aCcX8L0F2v+v/e95RyzyLo1T7LwWVhuj3YWxObRY9FdOwFwxm9ZStrcp1DzKD 7Ma4Spws5QkpSywumc3NE/bvcFsiQAkjKTRH2gCETGC8mR5Tjlbu0AfXsaJ5GSwMIgKDNIOG8IsB05 sAjOzuEBwjB80XDX6LkCwTJ2PmT2X7PR/08PG4YsznVQ652jSZgp8ct86o/UJzbvjYZd5uGtNUE5OS Xe1YVaagQc1vQQ8YtcpOHbOyMoJ7V9NKvjL4QoMjOehY8f/Pheg4VoKk/n385neXo6qOoxxD2QNPUn DDZdMg4gZH6C/R049bmaaK8O+70Jz06PAyVpPUGQb1otFaGhsFwNbbhRk7dEFmbreQ8RgTN04FqOi6 Bsc8+r4aBkCckXO+Wtf2a2r7TIMQQi7kDkocM8rrjBe5EbUESv6ARikUDWWggtbDXkRkSCTNJp/jkg 69YqnTPy1oVQW72DSvsxc8Xwk1StTyy/23s4OiNfptDmBJSlK8SAwMQ7Ur/EHNc2SMhpxkxggisrfK 8VDE2Fk8jYI2jbxLsPyDCjw25Cb4YnMiYf3Wut7w00wJDZwGIWzO7Fhp04m85JeK97srjM1MijrCx+ t7H7HNVY0fh8eCrbcnpLFL5ETTKnY5lLSx0Dyj5X8ml3az/gU1ubUmeyPsCA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 24, 2022 at 05:46:59PM -0700, Nathan Chancellor wrote:
-> On Thu, Feb 24, 2022 at 04:35:51PM -0800, Kees Cook wrote:
-> > On Thu, Feb 24, 2022 at 03:51:43PM +0100, Peter Zijlstra wrote:
-> > > Add Kconfig, Makefile and basic instruction support for x86 IBT.
-> > > 
-> > > XXX clang is not playing ball, probably lld being 'funny', I'm having
-> > > problems with .plt entries appearing all over after linking.
-> > 
-> > I'll try to look into this; I know you've been chatting with Nathan
-> > about it. Is there an open bug for it? (And any kind of reproducer
-> > smaller than a 39 patch series we can show the linker folks?) :)
-> 
-> I should be able to create a reproducer with cvise and file a bug on
-> GitHub around this tomorrow, I should have done it after Peter's
-> comments on IRC.
+If ksize() is used on an allocation, the compiler cannot make any
+assumptions about its size any more (as hinted by __alloc_size). Force
+it to forget.
 
-https://github.com/ClangBuiltLinux/linux/issues/1606
+One caller was using a container_of() construction that needed to be
+worked around.
 
-Cheers,
-Nathan
+Cc: Marco Elver <elver@google.com>
+Cc: Pekka Enberg <penberg@kernel.org>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: linux-mm@kvack.org
+Link: https://github.com/ClangBuiltLinux/linux/issues/1599
+Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+This appears to work for me, but I'm waiting for more feedback on
+the specific instance got tripped over in Android.
+---
+ drivers/base/devres.c |  4 +++-
+ include/linux/slab.h  | 26 +++++++++++++++++++++++++-
+ mm/slab_common.c      | 19 +++----------------
+ 3 files changed, 31 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/base/devres.c b/drivers/base/devres.c
+index eaa9a5cd1db9..1a2645bd7234 100644
+--- a/drivers/base/devres.c
++++ b/drivers/base/devres.c
+@@ -855,6 +855,7 @@ void *devm_krealloc(struct device *dev, void *ptr, size_t new_size, gfp_t gfp)
+ 	size_t total_new_size, total_old_size;
+ 	struct devres *old_dr, *new_dr;
+ 	unsigned long flags;
++	void *allocation;
+ 
+ 	if (unlikely(!new_size)) {
+ 		devm_kfree(dev, ptr);
+@@ -874,7 +875,8 @@ void *devm_krealloc(struct device *dev, void *ptr, size_t new_size, gfp_t gfp)
+ 	if (!check_dr_size(new_size, &total_new_size))
+ 		return NULL;
+ 
+-	total_old_size = ksize(container_of(ptr, struct devres, data));
++	allocation = container_of(ptr, struct devres, data);
++	total_old_size = ksize(allocation);
+ 	if (total_old_size == 0) {
+ 		WARN(1, "Pointer doesn't point to dynamically allocated memory.");
+ 		return NULL;
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 37bde99b74af..a14f3bfa2f44 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -182,8 +182,32 @@ int kmem_cache_shrink(struct kmem_cache *s);
+ void * __must_check krealloc(const void *objp, size_t new_size, gfp_t flags) __alloc_size(2);
+ void kfree(const void *objp);
+ void kfree_sensitive(const void *objp);
++
++/**
++ * ksize - get the actual amount of memory allocated for a given object
++ * @objp: Pointer to the object
++ *
++ * kmalloc may internally round up allocations and return more memory
++ * than requested. ksize() can be used to determine the actual amount of
++ * memory allocated. The caller may use this additional memory, even though
++ * a smaller amount of memory was initially specified with the kmalloc call.
++ * The caller must guarantee that objp points to a valid object previously
++ * allocated with either kmalloc() or kmem_cache_alloc(). The object
++ * must not be freed during the duration of the call.
++ *
++ * Return: size of the actual memory used by @objp in bytes
++ */
++#define ksize(objp) ({							\
++	/*								\
++	 * Getting the actual allocation size means the __alloc_size	\
++	 * hints are no longer valid, and the compiler needs to		\
++	 * forget about them.						\
++	 */								\
++	OPTIMIZER_HIDE_VAR(objp);					\
++	_ksize(objp);							\
++})
+ size_t __ksize(const void *objp);
+-size_t ksize(const void *objp);
++size_t _ksize(const void *objp);
+ #ifdef CONFIG_PRINTK
+ bool kmem_valid_obj(void *object);
+ void kmem_dump_obj(void *object);
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 23f2ab0713b7..ba5fa8481396 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -1245,21 +1245,8 @@ void kfree_sensitive(const void *p)
+ }
+ EXPORT_SYMBOL(kfree_sensitive);
+ 
+-/**
+- * ksize - get the actual amount of memory allocated for a given object
+- * @objp: Pointer to the object
+- *
+- * kmalloc may internally round up allocations and return more memory
+- * than requested. ksize() can be used to determine the actual amount of
+- * memory allocated. The caller may use this additional memory, even though
+- * a smaller amount of memory was initially specified with the kmalloc call.
+- * The caller must guarantee that objp points to a valid object previously
+- * allocated with either kmalloc() or kmem_cache_alloc(). The object
+- * must not be freed during the duration of the call.
+- *
+- * Return: size of the actual memory used by @objp in bytes
+- */
+-size_t ksize(const void *objp)
++/* Should not be called directly: use "ksize" macro wrapper. */
++size_t _ksize(const void *objp)
+ {
+ 	size_t size;
+ 
+@@ -1289,7 +1276,7 @@ size_t ksize(const void *objp)
+ 	kasan_unpoison_range(objp, size);
+ 	return size;
+ }
+-EXPORT_SYMBOL(ksize);
++EXPORT_SYMBOL(_ksize);
+ 
+ /* Tracepoints definitions. */
+ EXPORT_TRACEPOINT_SYMBOL(kmalloc);
+-- 
+2.30.2
+
