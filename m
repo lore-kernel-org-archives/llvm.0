@@ -1,108 +1,99 @@
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3807E7C
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 15:10:29 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id j12so6454194ybh.8
-        for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 07:10:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6PHDsJtTHgIe1SVb8arRLmZRA4JR4a9wVJvHcDvAPGo=;
-        b=trRIzqNpzlNuRWiLVzygdNEan0Me79/SIic0/oMZpxN6rmJ/aNlkAcabB+wItPt81X
-         TOfI7t4yJDzIT5pEWYVheZ5Nj6bkvK2w4UQ6un6Y93zYzGj1xA7I0C2m6v+68nmFhvE7
-         4zY4+AaW9958KwjFjTsxtPIJcadBMeaGo25j+i0SGQd2QjdOyayrCrPRsprPzcG/uZJ1
-         TAEoMc0RtR+x4k4fnp/K90OQogG35pwlxplutHTNo5dpP/bgf4W08EFUSODa9LQUPlgN
-         qBbWWsy90QpmVRi4QeTA7oXZuxeFnotGOcoz/C8VhhSTX9Er7Tve/TX7NB7Yi9KgeeGH
-         3WGA==
-X-Gm-Message-State: AOAM533Wx3CDxcwQU/7WnObPCO6hd3TodROBxp5JWK+K48kM/TSBE/WL
-	owUj1AZiwlwruI9OXx6C5VR5lu0pMajsnydQVfQ=
-X-Google-Smtp-Source: ABdhPJzbCNciT/Vw4E176zijmDZb74ihGVfvi1mr48gxWn7RqdXe+0jEB+k+fPXqbvyly3jKI0SkyKS4ktc28TS8YP0=
-X-Received: by 2002:a25:7785:0:b0:614:c283:2a3d with SMTP id
- s127-20020a257785000000b00614c2832a3dmr7796480ybc.137.1645801828185; Fri, 25
- Feb 2022 07:10:28 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EFDF7C
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 15:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21370C340E7;
+	Fri, 25 Feb 2022 15:31:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645803106;
+	bh=OJP6GJj98Sjx4FzgK763MteoSg9awmetSsvPt3dPPiM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fVAKE6aS8+cJYj2hySBtQB2qZ8cLka3qwUkqw3LxzyKxsmSxUuDIZAuQ7NAFKzWFO
+	 UGjCcDO9+rWnS6gMvyx74BZrR/HuZ1lahD1rSC5tQbF6CEWdqigh9mIwF3vMtn39W5
+	 nzQ1H0Kgq3PhwEsaxeIgF6J46kTleltGmAlu61xOFifFRUMoTiUY8l+5JFsOAdhBMU
+	 S/GlpIWQJdQaGsIYkzGM242nG7XTZGFBEofpnUeHz2sLqSQ2ZPrFf2lsOf0ba7ua+F
+	 QcUNvTI3WogFDF2OYsRwRAF4xXVPv0QQ/IsMO+wWo0GrdMJvSHB1EsYqgVeaidn3f2
+	 OzCspGiVEQm3w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <maz@kernel.org>)
+	id 1nNcZL-00AYvf-Ro; Fri, 25 Feb 2022 15:31:43 +0000
+Date: Fri, 25 Feb 2022 15:31:43 +0000
+Message-ID: <87k0dj2c9s.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: "Chen, Rong A" <rong.a.chen@intel.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	kernel test robot <lkp@intel.com>,
+	llvm@lists.linux.dev,
+	kbuild-all@lists.01.org,
+	Will Deacon
+ <will@kernel.org>,
+	Quentin Perret <qperret@google.com>,
+	Fuad Tabba <tabba@google.com>,
+	surenb@google.com,
+	Android Kernel Team <kernel-team@android.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	James Morse
+ <james.morse@arm.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Peter Collingbourne <pcc@google.com>,
+	Andrew Scull <ascull@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	kvmarm <kvmarm@lists.cs.columbia.edu>
+Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle hypervisor stack overflows
+In-Reply-To: <16f47fa9-90b4-0b5c-33cb-cb004fc39266@intel.com>
+References: <20220222165212.2005066-7-kaleshsingh@google.com>
+	<202202231727.L621fVgD-lkp@intel.com>
+	<875yp63ptg.wl-maz@kernel.org>
+	<YhYpvfZaSjrAtkZp@rli9-dbox>
+	<cb750267af0636c49d2f8aa354f086a5@kernel.org>
+	<CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
+	<89c48bd2a9b32b4607d1515714fa3c1b@kernel.org>
+	<16f47fa9-90b4-0b5c-33cb-cb004fc39266@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <202202250758.oDiHyXAy-lkp@intel.com> <0d4d70ca-a17f-b8de-53f7-a85a59304d36@redhat.com>
-In-Reply-To: <0d4d70ca-a17f-b8de-53f7-a85a59304d36@redhat.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 25 Feb 2022 16:10:17 +0100
-Message-ID: <CAJZ5v0jmFJMrKT5RsR+JEfJHaYFxHTi2xjS0UnkNUhSn7-r==A@mail.gmail.com>
-Subject: Re: [rafael-pm:bleeding-edge 59/73] arch/x86/include/asm/pci_x86.h:133:19:
- error: expected ';' after top level declarator
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
-	"open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rong.a.chen@intel.com, ardb@kernel.org, kaleshsingh@google.com, lkp@intel.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, mark.rutland@arm.com, pasha.tatashin@soleen.com, joey.gouly@arm.com, pcc@google.com, ascull@google.com, pbonzini@redhat.com, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, Feb 25, 2022 at 12:49 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi Rafael,
->
-> On 2/25/22 00:24, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-> > head:   8276cbee5a52543c614a1e1bc2624188d5970848
-> > commit: 62fabd56faafe033eb0be3ba24000b8db13d4c17 [59/73] x86/PCI: Disable exclusion of E820 reserved addresses in some cases
-> > config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220225/202202250758.oDiHyXAy-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=62fabd56faafe033eb0be3ba24000b8db13d4c17
-> >         git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-> >         git fetch --no-tags rafael-pm bleeding-edge
-> >         git checkout 62fabd56faafe033eb0be3ba24000b8db13d4c17
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    In file included from arch/x86/kernel/resource.c:4:
-> >    arch/x86/include/asm/pci_x86.h:97:8: error: unknown type name 'raw_spinlock_t'
-> >    extern raw_spinlock_t pci_config_lock;
-> >           ^
-> >>> arch/x86/include/asm/pci_x86.h:133:19: error: expected ';' after top level declarator
-> >    extern void __init dmi_check_pciprobe(void);
-> >                      ^
-> >                      ;
-> >    arch/x86/include/asm/pci_x86.h:134:19: error: expected ';' after top level declarator
-> >    extern void __init dmi_check_skip_isa_align(void);
-> >                      ^
-> >                      ;
->
-> So the problem here seems to be that arch/x86/include/asm/pci_x86.h does not include
-> all the headers which it relies on. Instead it release on the files which include it
-> to include those headers before hand.
->
-> This should fix the errors reported here:
->
-> --- a/arch/x86/include/asm/pci_x86.h
-> +++ b/arch/x86/include/asm/pci_x86.h
-> @@ -5,7 +5,9 @@
->   *     (c) 1999 Martin Mares <mj@ucw.cz>
->   */
->
-> +#include <linux/init.h>
->  #include <linux/ioport.h>
-> +#include <linux/spinlock.h>
->
->  #undef DEBUG
->
-> I believe this is best squashed into the original commit,
+On Fri, 25 Feb 2022 02:12:32 +0000,
+"Chen, Rong A" <rong.a.chen@intel.com> wrote:
+> 
+> Hi Marc, Ard,
+> 
+> We have ignored the warning related to asmlinkage according to the
+> below advice:
+> 
+> https://lore.kernel.org/lkml/CAMj1kXHrRYagSVniSetHdG15rkQS+fm4zVOtN=Zda3W0QaEoJA@mail.gmail.com/
 
-Done, thanks!
+Ah, I didn't realise it had been updated. Apologies for the shouting!
 
-> but let me know if
-> you want me to send this out as a proper follow up patch; or if you want a
-> new version of the troublesome commit to replace the original one.
+> do you want the bot ignore such warning if asmlinkage not specified?
+
+No, there is some value in warning about this particular case.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
