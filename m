@@ -1,524 +1,722 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAEE1B60
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 05:52:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645768369; x=1677304369;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TA/k0CHLCiZ1r5tGqOAV5X4o5ff0zUY5Hb9mZJDsagM=;
-  b=AYoqLoa4TP1RDOS/bnjuNEFXH+LpHVcG8kUIzkSO221hHUEbkXSqqu80
-   7EuZL6XHv6Mz1yy1w3hf2WZTGvaBAJdBAsr6FvuDtXVMYcz2VGrDWBToG
-   TZ1o/FTsh2vyqB33G1UMeFFNc/z6kl03TWX8gsITgTsgH9vdR/r4rpv16
-   bialiTxJ1CVOfDkMQP85ZKR11iy6apo0NfZPy45PHlnW1wMQFnWAoSsIM
-   LpkN/SWX6rMmMIeSVCqFRh1lixKVQiPiC/Iv7ozVxYjWSwgpsfJ6soXPo
-   2yW5LOxumkGX9E4zVWQxvFwzb3P6GLAEf9VOSP0lk39f0tCA9SqZDsdw6
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="277062329"
-X-IronPort-AV: E=Sophos;i="5.90,135,1643702400"; 
-   d="scan'208";a="277062329"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 21:52:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,135,1643702400"; 
-   d="scan'208";a="491875486"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 24 Feb 2022 21:52:46 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nNTX3-0003tU-Uf; Fri, 25 Feb 2022 05:52:45 +0000
-Date: Fri, 25 Feb 2022 13:51:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dinh Nguyen <dinguyen@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [dinguyen:nios2_for_v5.18 6/6] include/asm-generic/uaccess.h:225:7:
- error: implicit declaration of function 'get_fs'
-Message-ID: <202202251308.WOVSZ75H-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C747B
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 06:53:28 +0000 (UTC)
+Received: by mail-wr1-f51.google.com with SMTP id d17so2946265wrc.9
+        for <llvm@lists.linux.dev>; Thu, 24 Feb 2022 22:53:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HYei12P/c9pL5ElXTIiPjKtlWTTDNp3tVgFas8CzWcE=;
+        b=GMi2Z/sgzaqc1Owt7jaNlGQ2t8xnbPUrc8ZMByJTFMuqc3qy1HH4eaK2cYGUMccpmG
+         cwroVkz1n96zhjK2MnFgymKaCSKrewitnGHJ41lewgjKUAeF0Eo5kjoF2NIYyJ9zMX+B
+         /mcyz5qmbG4ZiZXh/VVwLDcILiIshA+dSvv0p2A/TxWdQ0IVfLwu4i4c3udEehQcWERh
+         RM3FYOupIfsiuUEiD7Jz1f0i7p+9FhxkJu3+9Ul4K0KsTW2hYzBchqioy7rYUFkgNwBY
+         hzEJSjzfmh1UH/CNJS41ws1jNH8rQeVFTauKyAVkMP1zLGk1vICQr0XRmWviXcXT7S19
+         MXMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HYei12P/c9pL5ElXTIiPjKtlWTTDNp3tVgFas8CzWcE=;
+        b=NEP2pZ17c8qZCo36JR1x9BlkhCH3mdrk3rj/nnIuRST1nfeLu/tQZkjPywL3abpC0+
+         KBipZC+Q2qR41E2uenydSu8IdyP9Ojd2Hk1keDTyzerCz/naUk4RLhedaZoAqM2kirSs
+         0+e0iufgU6wZ2uOynNaqHhNDYW4C67fcBQiRGyCqntLiiLWM59WvzPIgXDuQDXo4OJKZ
+         rbLU7nZsAjGWN24DHfNKq8D740bhQGZ32xr92SImWF599O6MqTWw27l8zKLDHc6M5VTY
+         BP53IcjbiV1l2KdbFayGdv/Je8FqiSdY9DyC6pn4dMM5p3A++95p59I4Vvo1jZPDef9G
+         CaNQ==
+X-Gm-Message-State: AOAM531sJPi3TiKpe+JDPBaDW2I3CzRdo6w3oQXMjFNtL1GyyMzBGMRg
+	Ae1iAjTgr0mLpRzyanemXzcdlGWInd0C14zSvN9a6Q==
+X-Google-Smtp-Source: ABdhPJx3GSx9C2BQixJgAyjPQqlFVFLGcMw70nOrSTgtThIbmUTNuXL5taV2h3RX5GiPM3LG8ZarJfYq32ZWiocw70c=
+X-Received: by 2002:a5d:6346:0:b0:1ef:bde:17e0 with SMTP id
+ b6-20020a5d6346000000b001ef0bde17e0mr3124844wrw.395.1645772006675; Thu, 24
+ Feb 2022 22:53:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220224055145.1853657-1-keescook@chromium.org>
+In-Reply-To: <20220224055145.1853657-1-keescook@chromium.org>
+From: David Gow <davidgow@google.com>
+Date: Fri, 25 Feb 2022 14:53:15 +0800
+Message-ID: <CABVgOSkUb4wbyMnwsdO5AmEz31q_adJ2enaPuo8SkgbLTsgCTg@mail.gmail.com>
+Subject: Re: [PATCH] lib: stackinit: Convert to KUnit
+To: Kees Cook <keescook@chromium.org>
+Cc: Daniel Latypov <dlatypov@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	KUnit Development <kunit-dev@googlegroups.com>, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000de90b905d8d22756"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git nios2_for_v5.18
-head:   048b7695b48a3a4523a7a7fbfedc396b40ccf62f
-commit: 048b7695b48a3a4523a7a7fbfedc396b40ccf62f [6/6] uaccess: drop maining CONFIG_SET_FS users
-config: hexagon-randconfig-r004-20220225 (https://download.01.org/0day-ci/archive/20220225/202202251308.WOVSZ75H-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git/commit/?id=048b7695b48a3a4523a7a7fbfedc396b40ccf62f
-        git remote add dinguyen https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git
-        git fetch --no-tags dinguyen nios2_for_v5.18
-        git checkout 048b7695b48a3a4523a7a7fbfedc396b40ccf62f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
+--000000000000de90b905d8d22756
+Content-Type: text/plain; charset="UTF-8"
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Feb 24, 2022 at 1:51 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Convert to running under Kunit (and retain being able to run stand-alone
+> too). Building under Clang (or GCC 12) with CONFIG_INIT_STACK_ALL_ZERO=y,
+> this now passes as expected:
+>
+> $ ./tools/testing/kunit/kunit.py config --make_option LLVM=1
+> $ ./tools/testing/kunit/kunit.py run overflow --make_option LLVM=1 \
+>         --kconfig_add CONFIG_INIT_STACK_ALL_ZERO=y
 
-All errors (new ones prefixed by >>):
+Should this be "...kunit.py run 'stackinit'...", not overflow?
 
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/hexagon/include/asm/uaccess.h:60:
->> include/asm-generic/uaccess.h:225:7: error: implicit declaration of function 'get_fs' [-Werror,-Wimplicit-function-declaration]
-           if (!access_ok(to, n))
-                ^
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^
-   arch/hexagon/include/asm/uaccess.h:36:4: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-             ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/hexagon/include/asm/uaccess.h:60:
->> include/asm-generic/uaccess.h:225:7: error: member reference base type 'int' is not a structure or union
-           if (!access_ok(to, n))
-                ^~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:36:12: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-             ~~~~~~~~^~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/hexagon/include/asm/uaccess.h:60:
->> include/asm-generic/uaccess.h:225:7: error: use of undeclared identifier 'KERNEL_DS'
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^
-   arch/hexagon/include/asm/uaccess.h:36:20: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-                             ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/hexagon/include/asm/uaccess.h:60:
->> include/asm-generic/uaccess.h:225:7: error: member reference base type 'int' is not a structure or union
-           if (!access_ok(to, n))
-                ^~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:37:34: note: expanded from macro '__access_ok'
-           (((unsigned long)addr < get_fs().seg) && \
-                                   ~~~~~~~~^~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/hexagon/include/asm/uaccess.h:60:
->> include/asm-generic/uaccess.h:225:7: error: member reference base type 'int' is not a structure or union
-           if (!access_ok(to, n))
-                ^~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:38:35: note: expanded from macro '__access_ok'
-             (unsigned long)size < (get_fs().seg - (unsigned long)addr)))
-                                    ~~~~~~~~^~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/hexagon/include/asm/uaccess.h:60:
->> include/asm-generic/uaccess.h:225:7: error: member reference base type 'int' is not a structure or union
-           if (!access_ok(to, n))
-                ^~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:36:12: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-             ~~~~~~~~^~~~
-   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                                                        ^
-   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
-                                                expect, is_constant);      \
-                                                        ^~~~~~~~~~~
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/hexagon/include/asm/uaccess.h:60:
->> include/asm-generic/uaccess.h:225:7: error: use of undeclared identifier 'KERNEL_DS'
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^
-   arch/hexagon/include/asm/uaccess.h:36:20: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-                             ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/hexagon/include/asm/uaccess.h:60:
->> include/asm-generic/uaccess.h:225:7: error: member reference base type 'int' is not a structure or union
-           if (!access_ok(to, n))
-                ^~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:37:34: note: expanded from macro '__access_ok'
-           (((unsigned long)addr < get_fs().seg) && \
-                                   ~~~~~~~~^~~~
-   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                                                        ^
-   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
-                                                expect, is_constant);      \
-                                                        ^~~~~~~~~~~
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/hexagon/include/asm/uaccess.h:60:
->> include/asm-generic/uaccess.h:225:7: error: member reference base type 'int' is not a structure or union
-           if (!access_ok(to, n))
-                ^~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:38:35: note: expanded from macro '__access_ok'
-             (unsigned long)size < (get_fs().seg - (unsigned long)addr)))
-                                    ~~~~~~~~^~~~
-   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                                                        ^
-   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
-                                                expect, is_constant);      \
-                                                        ^~~~~~~~~~~
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
->> include/linux/uaccess.h:117:40: error: implicit declaration of function 'get_fs' [-Werror,-Wimplicit-function-declaration]
-           if (!should_fail_usercopy() && likely(access_ok(from, n))) {
-                                                 ^
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^
-   arch/hexagon/include/asm/uaccess.h:36:4: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-             ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
->> include/linux/uaccess.h:117:40: error: member reference base type 'int' is not a structure or union
-           if (!should_fail_usercopy() && likely(access_ok(from, n))) {
-                                                 ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:36:12: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-             ~~~~~~~~^~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
->> include/linux/uaccess.h:117:40: error: use of undeclared identifier 'KERNEL_DS'
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^
-   arch/hexagon/include/asm/uaccess.h:36:20: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-                             ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
->> include/linux/uaccess.h:117:40: error: member reference base type 'int' is not a structure or union
-           if (!should_fail_usercopy() && likely(access_ok(from, n))) {
-                                                 ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:37:34: note: expanded from macro '__access_ok'
-           (((unsigned long)addr < get_fs().seg) && \
-                                   ~~~~~~~~^~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
->> include/linux/uaccess.h:117:40: error: member reference base type 'int' is not a structure or union
-           if (!should_fail_usercopy() && likely(access_ok(from, n))) {
-                                                 ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:38:35: note: expanded from macro '__access_ok'
-             (unsigned long)size < (get_fs().seg - (unsigned long)addr)))
-                                    ~~~~~~~~^~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
->> include/linux/uaccess.h:117:40: error: member reference base type 'int' is not a structure or union
-           if (!should_fail_usercopy() && likely(access_ok(from, n))) {
-                                                 ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:36:12: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-             ~~~~~~~~^~~~
-   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                                                        ^
-   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
-                                                expect, is_constant);      \
-                                                        ^~~~~~~~~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
->> include/linux/uaccess.h:117:40: error: use of undeclared identifier 'KERNEL_DS'
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^
-   arch/hexagon/include/asm/uaccess.h:36:20: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-                             ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
->> include/linux/uaccess.h:117:40: error: member reference base type 'int' is not a structure or union
-           if (!should_fail_usercopy() && likely(access_ok(from, n))) {
-                                                 ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:37:34: note: expanded from macro '__access_ok'
-           (((unsigned long)addr < get_fs().seg) && \
-                                   ~~~~~~~~^~~~
-   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                                                        ^
-   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
-                                                expect, is_constant);      \
-                                                        ^~~~~~~~~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
->> include/linux/uaccess.h:117:40: error: member reference base type 'int' is not a structure or union
-           if (!should_fail_usercopy() && likely(access_ok(from, n))) {
-                                                 ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/uaccess.h:38:35: note: expanded from macro '__access_ok'
-             (unsigned long)size < (get_fs().seg - (unsigned long)addr)))
-                                    ~~~~~~~~^~~~
-   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                                                        ^
-   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
-                                                expect, is_constant);      \
-                                                        ^~~~~~~~~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
->> include/linux/uaccess.h:117:40: error: implicit declaration of function 'get_fs' [-Werror,-Wimplicit-function-declaration]
-   include/asm-generic/access_ok.h:48:38: note: expanded from macro 'access_ok'
-   #define access_ok(addr, size) likely(__access_ok(addr, size))
-                                        ^
-   arch/hexagon/include/asm/uaccess.h:36:4: note: expanded from macro '__access_ok'
-           ((get_fs().seg == KERNEL_DS.seg) || \
-             ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/hexagon/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+> ...
+> [09:47:28] ================= stackinit (65 subtests) ==================
+> [09:47:28] [PASSED] test_u8_zero
+> [09:47:28] [PASSED] test_u16_zero
+> [09:47:28] [PASSED] test_u32_zero
+> [09:47:28] [PASSED] test_u64_zero
+> [09:47:28] [PASSED] test_char_array_zero
+> [09:47:28] [PASSED] test_small_hole_zero
+> [09:47:28] [PASSED] test_big_hole_zero
+> [09:47:28] [PASSED] test_trailing_hole_zero
+> [09:47:28] [PASSED] test_packed_zero
+> [09:47:28] [PASSED] test_small_hole_dynamic_partial
+> [09:47:28] [PASSED] test_big_hole_dynamic_partial
+> [09:47:28] [PASSED] test_trailing_hole_dynamic_partial
+> [09:47:28] [PASSED] test_packed_dynamic_partial
+> [09:47:28] [PASSED] test_small_hole_assigned_dynamic_partial
+> [09:47:28] [PASSED] test_big_hole_assigned_dynamic_partial
+> [09:47:28] [PASSED] test_trailing_hole_assigned_dynamic_partial
+> [09:47:28] [PASSED] test_packed_assigned_dynamic_partial
+> [09:47:28] [PASSED] test_small_hole_static_partial
+> [09:47:28] [PASSED] test_big_hole_static_partial
+> [09:47:28] [PASSED] test_trailing_hole_static_partial
+> [09:47:28] [PASSED] test_packed_static_partial
+> [09:47:28] [PASSED] test_small_hole_static_all
+> [09:47:28] [PASSED] test_big_hole_static_all
+> [09:47:28] [PASSED] test_trailing_hole_static_all
+> [09:47:28] [PASSED] test_packed_static_all
+> [09:47:28] [PASSED] test_small_hole_dynamic_all
+> [09:47:28] [PASSED] test_big_hole_dynamic_all
+> [09:47:28] [PASSED] test_trailing_hole_dynamic_all
+> [09:47:28] [PASSED] test_packed_dynamic_all
+> [09:47:28] [PASSED] test_small_hole_runtime_partial
+> [09:47:28] [PASSED] test_big_hole_runtime_partial
+> [09:47:28] [PASSED] test_trailing_hole_runtime_partial
+> [09:47:28] [PASSED] test_packed_runtime_partial
+> [09:47:28] [PASSED] test_small_hole_runtime_all
+> [09:47:28] [PASSED] test_big_hole_runtime_all
+> [09:47:28] [PASSED] test_trailing_hole_runtime_all
+> [09:47:28] [PASSED] test_packed_runtime_all
+> [09:47:28] [PASSED] test_small_hole_assigned_static_partial
+> [09:47:28] [PASSED] test_big_hole_assigned_static_partial
+> [09:47:28] [PASSED] test_trailing_hole_assigned_static_partial
+> [09:47:28] [PASSED] test_packed_assigned_static_partial
+> [09:47:28] [PASSED] test_small_hole_assigned_static_all
+> [09:47:28] [PASSED] test_big_hole_assigned_static_all
+> [09:47:28] [PASSED] test_trailing_hole_assigned_static_all
+> [09:47:28] [PASSED] test_packed_assigned_static_all
+> [09:47:28] [PASSED] test_small_hole_assigned_dynamic_all
+> [09:47:28] [PASSED] test_big_hole_assigned_dynamic_all
+> [09:47:28] [PASSED] test_trailing_hole_assigned_dynamic_all
+> [09:47:28] [PASSED] test_packed_assigned_dynamic_all
+> [09:47:28] [SKIPPED] test_small_hole_assigned_copy
+> [09:47:28] [SKIPPED] test_big_hole_assigned_copy
+> [09:47:28] [SKIPPED] test_trailing_hole_assigned_copy
+> [09:47:28] [PASSED] test_packed_assigned_copy
+> [09:47:28] [PASSED] test_u8_none
+> [09:47:28] [PASSED] test_u16_none
+> [09:47:28] [PASSED] test_u32_none
+> [09:47:28] [PASSED] test_u64_none
+> [09:47:28] [PASSED] test_char_array_none
+> [09:47:28] [SKIPPED] test_switch_1_none
+> [09:47:28] [SKIPPED] test_switch_2_none
+> [09:47:28] [PASSED] test_small_hole_none
+> [09:47:28] [PASSED] test_big_hole_none
+> [09:47:28] [PASSED] test_trailing_hole_none
+> [09:47:28] [PASSED] test_packed_none
+> [09:47:28] [PASSED] test_user
+> [09:47:28] ==================== [PASSED] stackinit ====================
+> [09:47:28] ============================================================
+> [09:47:28] Testing complete. Passed: 60, Failed: 0, Crashed: 0, Skipped: 5, Errors: 0
+> [09:47:28] Elapsed time: 4.192s total, 0.001s configuring, 4.070s building, 0.102s running
+>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Daniel Latypov <dlatypov@google.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
 
+This looks pretty good as a KUnit test overall, even if it does some
+unusual (but cool!) things with the userland version.
 
-vim +/get_fs +225 include/asm-generic/uaccess.h
+A few comments inline.
 
-eed417ddd52146 Arnd Bergmann      2009-05-13  220  
-eed417ddd52146 Arnd Bergmann      2009-05-13  221  static inline __must_check unsigned long
-eed417ddd52146 Arnd Bergmann      2009-05-13  222  clear_user(void __user *to, unsigned long n)
-eed417ddd52146 Arnd Bergmann      2009-05-13  223  {
-e0acd0bd059416 Michael S. Tsirkin 2013-05-26  224  	might_fault();
-96d4f267e40f95 Linus Torvalds     2019-01-03 @225  	if (!access_ok(to, n))
-eed417ddd52146 Arnd Bergmann      2009-05-13  226  		return n;
-eed417ddd52146 Arnd Bergmann      2009-05-13  227  
-eed417ddd52146 Arnd Bergmann      2009-05-13  228  	return __clear_user(to, n);
-eed417ddd52146 Arnd Bergmann      2009-05-13  229  }
-eed417ddd52146 Arnd Bergmann      2009-05-13  230  
+Cheers,
+-- David
 
-:::::: The code at line 225 was first introduced by commit
-:::::: 96d4f267e40f9509e8a66e2b39e8b95655617693 Remove 'type' argument from access_ok() function
+>  lib/Kconfig.debug                           |  26 +-
+>  lib/Makefile                                |   4 +-
+>  lib/{test_stackinit.c => stackinit_kunit.c} | 249 ++++++++++++--------
+>  3 files changed, 168 insertions(+), 111 deletions(-)
+>  rename lib/{test_stackinit.c => stackinit_kunit.c} (73%)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 14d90d03bc8d..ea4415275563 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2511,6 +2511,21 @@ config OVERFLOW_KUNIT_TEST
+>
+>           If unsure, say N.
+>
+> +config STACKINIT_KUNIT_TEST
+> +       tristate "Test level of stack variable initialization" if !KUNIT_ALL_TESTS
+> +       depends on KUNIT
+> +       default KUNIT_ALL_TESTS
 
-:::::: TO: Linus Torvalds <torvalds@linux-foundation.org>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+We probably don't want to enable this test by default (with
+KUNIT_ALL_TESTS) if we don't have CONFIG_INIT_STACK_ALL_ZERO=y, as
+that'll result in a number of failures for any "all tests"
+configuration.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Does it make sense to either:
+1. Make this test depend on INIT_STACK_ALL_ZERO?
+2. Just change the default, so that KUNIT_ALL_TESTS doesn't trigger it
+(or doesn't trigger it unless INIT_STACK_ALL_ZERO is also enabled), so
+people can force it to build/run and see the failures?
+3. Make it run, but mark some or all tests as SKIPPED if
+INIT_STACK_ALL_ZERO is not set (as a failure here is expected)?
+
+> +       help
+> +         Test if the kernel is zero-initializing stack variables and
+> +         padding. Coverage is controlled by compiler flags,
+> +         CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
+> +         or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
+> +
+> +         For more information on KUnit and unit tests in general please refer
+> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +         If unsure, say N.
+> +
+>  config TEST_UDELAY
+>         tristate "udelay test driver"
+>         help
+> @@ -2602,17 +2617,6 @@ config TEST_OBJAGG
+>           Enable this option to test object aggregation manager on boot
+>           (or module load).
+>
+> -
+> -config TEST_STACKINIT
+> -       tristate "Test level of stack variable initialization"
+> -       help
+> -         Test if the kernel is zero-initializing stack variables and
+> -         padding. Coverage is controlled by compiler flags,
+> -         CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
+> -         or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
+> -
+> -         If unsure, say N.
+> -
+>  config TEST_MEMINIT
+>         tristate "Test heap/page initialization"
+>         help
+> diff --git a/lib/Makefile b/lib/Makefile
+> index fdfcbfaff32f..353bc09ce38d 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -93,8 +93,6 @@ obj-$(CONFIG_TEST_KMOD) += test_kmod.o
+>  obj-$(CONFIG_TEST_DEBUG_VIRTUAL) += test_debug_virtual.o
+>  obj-$(CONFIG_TEST_MEMCAT_P) += test_memcat_p.o
+>  obj-$(CONFIG_TEST_OBJAGG) += test_objagg.o
+> -CFLAGS_test_stackinit.o += $(call cc-disable-warning, switch-unreachable)
+> -obj-$(CONFIG_TEST_STACKINIT) += test_stackinit.o
+>  obj-$(CONFIG_TEST_BLACKHOLE_DEV) += test_blackhole_dev.o
+>  obj-$(CONFIG_TEST_MEMINIT) += test_meminit.o
+>  obj-$(CONFIG_TEST_LOCKUP) += test_lockup.o
+> @@ -363,6 +361,8 @@ obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
+>  obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
+>  obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
+>  obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+
+FYI: Due to this context line, this patch only applies cleanly if the
+overflow test port patch is applied first.
+
+> +CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
+> +obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
+>
+>  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+>
+> diff --git a/lib/test_stackinit.c b/lib/stackinit_kunit.c
+> similarity index 73%
+> rename from lib/test_stackinit.c
+> rename to lib/stackinit_kunit.c
+> index a3c74e6a21ff..72c7d4cb8ed2 100644
+> --- a/lib/test_stackinit.c
+> +++ b/lib/stackinit_kunit.c
+> @@ -2,14 +2,23 @@
+>  /*
+>   * Test cases for compiler-based stack variable zeroing via
+>   * -ftrivial-auto-var-init={zero,pattern} or CONFIG_GCC_PLUGIN_STRUCTLEAK*.
+> + * For example, see:
+> + * https://www.kernel.org/doc/html/latest/dev-tools/kunit/kunit-tool.html#configuring-building-and-running-tests
+> + *     ./tools/testing/kunit/kunit.py config --make_option LLVM=1
+> + *     ./tools/testing/kunit/kunit.py run overflow [--raw_output] \
+
+As above, this should probably be 'stackinit', not 'overflow'.
+
+> + *             --make_option LLVM=1 \
+> + *             --kconfig_add CONFIG_INIT_STACK_ALL_ZERO=y
+>   *
+>   * External build example:
+>   *     clang -O2 -Wall -ftrivial-auto-var-init=pattern \
+> - *             -o test_stackinit test_stackinit.c
+> + *             -o stackinit_kunit stackinit_kunit.c
+> + *     ./stackinit_kunit
+> + *
+>   */
+>  #ifdef __KERNEL__
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>
+> +#include <kunit/test.h>
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> @@ -18,21 +27,55 @@
+>  #else
+>
+>  /* Userspace headers. */
+> +#define _GNU_SOURCE
+>  #include <stdio.h>
+>  #include <stdint.h>
+> +#include <stdlib.h>
+>  #include <string.h>
+>  #include <stdbool.h>
+>  #include <errno.h>
+>  #include <sys/types.h>
+>
+>  /* Linux kernel-ism stubs for stand-alone userspace build. */
+> -#define KBUILD_MODNAME         "stackinit"
+> -#define pr_fmt(fmt)            KBUILD_MODNAME ": " fmt
+> -#define pr_err(fmt, ...)       fprintf(stderr, pr_fmt(fmt), ##__VA_ARGS__)
+> -#define pr_warn(fmt, ...)      fprintf(stderr, pr_fmt(fmt), ##__VA_ARGS__)
+> -#define pr_info(fmt, ...)      fprintf(stdout, pr_fmt(fmt), ##__VA_ARGS__)
+> -#define __init                 /**/
+> -#define __exit                 /**/
+> +#define TEST_PASS      0
+> +#define TEST_SKIP      1
+> +#define TEST_FAIL      2
+> +struct kunit {
+> +       int status;
+> +       char *msg;
+> +};
+> +struct kunit_case {
+> +        void (*run_case)(struct kunit *test);
+> +        const char *name;
+> +};
+> +struct kunit_suite {
+> +       const char *name;
+> +       const struct kunit_case *test_cases;
+> +};
+> +#define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
+> +
+> +#define KUNIT_ASSERT_TRUE_MSG(test, expr, fmt, ...)                    \
+> +do {                                                                   \
+> +       if (!(expr)) {                                                  \
+> +               if (test->status != TEST_SKIP)                          \
+> +                       test->status = TEST_FAIL;                       \
+> +               if (test->msg)                                          \
+> +                       free(test->msg);                                \
+> +               asprintf(&test->msg, fmt, ##__VA_ARGS__);               \
+> +       }                                                               \
+> +} while (0)
+> +
+> +#define KUNIT_ASSERT_EQ_MSG(test, left, right, fmt, ...)               \
+> +       KUNIT_ASSERT_TRUE_MSG(test, (left) == (right), fmt, ##__VA_ARGS__)
+> +
+> +#define kunit_skip(test, fmt, ...)                                     \
+> +do {                                                                   \
+> +       test->status = TEST_SKIP;                                       \
+> +       if (test->msg)                                                  \
+> +               free(test->msg);                                        \
+> +       asprintf(&test->msg, fmt, ##__VA_ARGS__);                       \
+> +} while (0)
+> +
+>  #define __user                 /**/
+>  #define noinline               __attribute__((__noinline__))
+>  #define __aligned(x)           __attribute__((__aligned__(x)))
+> @@ -59,16 +102,44 @@ typedef uint16_t           u16;
+>  typedef uint32_t               u32;
+>  typedef uint64_t               u64;
+>
+> -#define module_init(func)      static int (*do_init)(void) = func
+> -#define module_exit(func)      static void (*do_exit)(void) = func
+> -#define MODULE_LICENSE(str)    int main(void) {                \
+> -                                       int rc;                 \
+> -                                       /* License: str */      \
+> -                                       rc = do_init();         \
+> -                                       if (rc == 0)            \
+> -                                               do_exit();      \
+> -                                       return rc;              \
+> -                               }
+> +#define MODULE_LICENSE(str)    /* */
+> +
+> +int do_kunit_test_suite(struct kunit_suite *suite)
+> +{
+> +       const struct kunit_case *test_case;
+> +       int rc = 0;
+> +
+> +       for (test_case = suite->test_cases; test_case->run_case; test_case++) {
+> +               struct kunit test = { };
+> +
+> +               test_case->run_case(&test);
+> +               switch (test.status) {
+> +               default:
+> +               case TEST_FAIL:
+> +                       fprintf(stderr, "FAIL: %s%s%s", test_case->name,
+> +                               test.msg ? ": " : "",
+> +                               test.msg ?: "\n");
+> +                       rc = 1;
+> +                       break;
+> +               case TEST_SKIP:
+> +                       fprintf(stdout, "XFAIL: %s%s%s", test_case->name,
+> +                               test.msg ? ": " : "",
+> +                               test.msg ?: "\n");
+> +                       break;
+> +               case TEST_PASS:
+> +                       fprintf(stdout, "ok: %s\n", test_case->name);
+> +                       break;
+> +               }
+> +               if (test.msg)
+> +                       free(test.msg);
+> +       }
+> +       return rc;
+> +}
+
+This whole userspace mini-kunit thing is very neat. Daniel makes some
+good points about how it could be extended and made to match KUnit
+more (though I don't think we need to make a perfect userland KUnit
+for just this test). The one other thing I'll ask is if it makes sense
+to have this output something more similar to KTAP. If the target of
+the userspace version isn't kernel developers, I don't think it's
+necessary, but if there's no reason _not_ to, it'd be nice for it to
+be consistent with the kernel version.
+
+> +
+> +#define kunit_test_suite(suite)                                        \
+> +int main(void) {                                               \
+> +       return do_kunit_test_suite(&(suite));                   \
+> +}
+>
+>  #endif /* __KERNEL__ */
+>
+> @@ -201,7 +272,7 @@ static bool range_contains(char *haystack_start, size_t haystack_size,
+>   */
+>  #define DEFINE_TEST_DRIVER(name, var_type, which, xfail)       \
+>  /* Returns 0 on success, 1 on failure. */                      \
+> -static noinline __init int test_ ## name (void)                        \
+> +static noinline void test_ ## name (struct kunit *test)                \
+>  {                                                              \
+>         var_type zero INIT_CLONE_ ## which;                     \
+>         int ignored;                                            \
+> @@ -220,10 +291,8 @@ static noinline __init int test_ ## name (void)                    \
+>         /* Verify all bytes overwritten with 0xFF. */           \
+>         for (sum = 0, i = 0; i < target_size; i++)              \
+>                 sum += (check_buf[i] != 0xFF);                  \
+> -       if (sum) {                                              \
+> -               pr_err(#name ": leaf fill was not 0xFF!?\n");   \
+> -               return 1;                                       \
+> -       }                                                       \
+> +       KUNIT_ASSERT_EQ_MSG(test, sum, 0,                       \
+> +                           "leaf fill was not 0xFF!?\n");      \
+
+As Daniel noted, this is a behaviour change for the userspace version,
+as its implementation of KUNIT_ASSERT_EQ_MSG() doesn't exit the test
+early. So earlier errors will be overwritten with later ones, akin to
+KUNIT_EXPECT_EQ_MSG().
+
+In general, KUnit tests will often use the EXPECT variant where
+possible, as KUnit will print all failed expectations out, not just
+the last one, so ASSERT is usually reserved for things like memory
+allocation failures where continuing is no longer safe. That being
+said, it can get a bit spammy, so I'm happy with it either way.
+
+>         /* Clear entire check buffer for later bit tests. */    \
+>         memset(check_buf, 0x00, sizeof(check_buf));             \
+>         /* Extract stack-defined variable contents. */          \
+> @@ -231,32 +300,29 @@ static noinline __init int test_ ## name (void)                   \
+>                                 FETCH_ARG_ ## which(zero));     \
+>                                                                 \
+>         /* Validate that compiler lined up fill and target. */  \
+> -       if (!range_contains(fill_start, fill_size,              \
+> -                           target_start, target_size)) {       \
+> -               pr_err(#name ": stack fill missed target!?\n"); \
+> -               pr_err(#name ": fill %zu wide\n", fill_size);   \
+> -               pr_err(#name ": target offset by %d\n", \
+> -                       (int)((ssize_t)(uintptr_t)fill_start -  \
+> -                       (ssize_t)(uintptr_t)target_start));     \
+> -               return 1;                                       \
+> -       }                                                       \
+> +       KUNIT_ASSERT_TRUE_MSG(test,                             \
+> +               range_contains(fill_start, fill_size,           \
+> +                           target_start, target_size),         \
+> +               "stack fill missed target!? "                   \
+> +               "(fill %zu wide, target offset by %d)\n",       \
+> +               fill_size,                                      \
+> +               (int)((ssize_t)(uintptr_t)fill_start -          \
+> +                     (ssize_t)(uintptr_t)target_start));       \
+>                                                                 \
+>         /* Look for any bytes still 0xFF in check region. */    \
+>         for (sum = 0, i = 0; i < target_size; i++)              \
+>                 sum += (check_buf[i] == 0xFF);                  \
+>                                                                 \
+> -       if (sum == 0) {                                         \
+> -               pr_info(#name " ok\n");                         \
+> -               return 0;                                       \
+> -       } else {                                                \
+> -               pr_warn(#name " %sFAIL (uninit bytes: %d)\n",   \
+> -                       (xfail) ? "X" : "", sum);               \
+> -               return (xfail) ? 0 : 1;                         \
+> -       }                                                       \
+> +       if (sum != 0 && xfail)                                  \
+> +               kunit_skip(test,                                \
+> +                          "XFAIL uninit bytes: %d\n",          \
+> +                          sum);                                \
+> +       KUNIT_ASSERT_EQ_MSG(test, sum, 0,                       \
+> +               "uninit bytes: %d\n", sum);                     \
+>  }
+>  #define DEFINE_TEST(name, var_type, which, init_level, xfail)  \
+>  /* no-op to force compiler into ignoring "uninitialized" vars */\
+> -static noinline __init DO_NOTHING_TYPE_ ## which(var_type)     \
+> +static noinline DO_NOTHING_TYPE_ ## which(var_type)            \
+>  do_nothing_ ## name(var_type *ptr)                             \
+>  {                                                              \
+>         /* Will always be true, but compiler doesn't know. */   \
+> @@ -265,9 +331,8 @@ do_nothing_ ## name(var_type *ptr)                          \
+>         else                                                    \
+>                 return DO_NOTHING_RETURN_ ## which(ptr + 1);    \
+>  }                                                              \
+> -static noinline __init int leaf_ ## name(unsigned long sp,     \
+> -                                        bool fill,             \
+> -                                        var_type *arg)         \
+> +static noinline int leaf_ ## name(unsigned long sp, bool fill, \
+> +                                 var_type *arg)                \
+>  {                                                              \
+>         char buf[VAR_BUFFER];                                   \
+>         var_type var                                            \
+> @@ -398,7 +463,7 @@ static int noinline __leaf_switch_none(int path, bool fill)
+>                  * This is intentionally unreachable. To silence the
+>                  * warning, build with -Wno-switch-unreachable
+>                  */
+> -               uint64_t var;
+> +               uint64_t var[10];
+>
+>         case 1:
+>                 target_start = &var;
+> @@ -423,19 +488,19 @@ static int noinline __leaf_switch_none(int path, bool fill)
+>                 memcpy(check_buf, target_start, target_size);
+>                 break;
+>         default:
+> -               var = 5;
+> -               return var & forced_mask;
+> +               var[1] = 5;
+> +               return var[1] & forced_mask;
+>         }
+>         return 0;
+>  }
+>
+> -static noinline __init int leaf_switch_1_none(unsigned long sp, bool fill,
+> +static noinline int leaf_switch_1_none(unsigned long sp, bool fill,
+>                                               uint64_t *arg)
+>  {
+>         return __leaf_switch_none(1, fill);
+>  }
+>
+> -static noinline __init int leaf_switch_2_none(unsigned long sp, bool fill,
+> +static noinline int leaf_switch_2_none(unsigned long sp, bool fill,
+>                                               uint64_t *arg)
+>  {
+>         return __leaf_switch_none(2, fill);
+> @@ -450,65 +515,53 @@ static noinline __init int leaf_switch_2_none(unsigned long sp, bool fill,
+>  DEFINE_TEST_DRIVER(switch_1_none, uint64_t, SCALAR, XFAIL);
+>  DEFINE_TEST_DRIVER(switch_2_none, uint64_t, SCALAR, XFAIL);
+>
+> -static int __init test_stackinit_init(void)
+> -{
+> -       unsigned int failures = 0;
+> -
+> -#define test_scalars(init)     do {                            \
+> -               failures += test_u8_ ## init ();                \
+> -               failures += test_u16_ ## init ();               \
+> -               failures += test_u32_ ## init ();               \
+> -               failures += test_u64_ ## init ();               \
+> -               failures += test_char_array_ ## init ();        \
+> -       } while (0)
+> +#define KUNIT_test_scalars(init)                       \
+> +               KUNIT_CASE(test_u8_ ## init),           \
+> +               KUNIT_CASE(test_u16_ ## init),          \
+> +               KUNIT_CASE(test_u32_ ## init),          \
+> +               KUNIT_CASE(test_u64_ ## init),          \
+> +               KUNIT_CASE(test_char_array_ ## init)
+>
+> -#define test_structs(init)     do {                            \
+> -               failures += test_small_hole_ ## init ();        \
+> -               failures += test_big_hole_ ## init ();          \
+> -               failures += test_trailing_hole_ ## init ();     \
+> -               failures += test_packed_ ## init ();            \
+> -       } while (0)
+> +#define KUNIT_test_structs(init)                       \
+> +               KUNIT_CASE(test_small_hole_ ## init),   \
+> +               KUNIT_CASE(test_big_hole_ ## init),     \
+> +               KUNIT_CASE(test_trailing_hole_ ## init),\
+> +               KUNIT_CASE(test_packed_ ## init)        \
+>
+> +static struct kunit_case stackinit_test_cases[] = {
+>         /* These are explicitly initialized and should always pass. */
+> -       test_scalars(zero);
+> -       test_structs(zero);
+> +       KUNIT_test_scalars(zero),
+> +       KUNIT_test_structs(zero),
+>         /* Padding here appears to be accidentally always initialized? */
+> -       test_structs(dynamic_partial);
+> -       test_structs(assigned_dynamic_partial);
+> +       KUNIT_test_structs(dynamic_partial),
+> +       KUNIT_test_structs(assigned_dynamic_partial),
+>         /* Padding initialization depends on compiler behaviors. */
+> -       test_structs(static_partial);
+> -       test_structs(static_all);
+> -       test_structs(dynamic_all);
+> -       test_structs(runtime_partial);
+> -       test_structs(runtime_all);
+> -       test_structs(assigned_static_partial);
+> -       test_structs(assigned_static_all);
+> -       test_structs(assigned_dynamic_all);
+> +       KUNIT_test_structs(static_partial),
+> +       KUNIT_test_structs(static_all),
+> +       KUNIT_test_structs(dynamic_all),
+> +       KUNIT_test_structs(runtime_partial),
+> +       KUNIT_test_structs(runtime_all),
+> +       KUNIT_test_structs(assigned_static_partial),
+> +       KUNIT_test_structs(assigned_static_all),
+> +       KUNIT_test_structs(assigned_dynamic_all),
+>         /* Everything fails this since it effectively performs a memcpy(). */
+> -       test_structs(assigned_copy);
+> -
+> +       KUNIT_test_structs(assigned_copy),
+>         /* STRUCTLEAK_BYREF_ALL should cover everything from here down. */
+> -       test_scalars(none);
+> -       failures += test_switch_1_none();
+> -       failures += test_switch_2_none();
+> -
+> +       KUNIT_test_scalars(none),
+> +       KUNIT_CASE(test_switch_1_none),
+> +       KUNIT_CASE(test_switch_2_none),
+>         /* STRUCTLEAK_BYREF should cover from here down. */
+> -       test_structs(none);
+> -
+> +       KUNIT_test_structs(none),
+>         /* STRUCTLEAK will only cover this. */
+> -       failures += test_user();
+> -
+> -       if (failures == 0)
+> -               pr_info("all tests passed!\n");
+> -       else
+> -               pr_err("failures: %u\n", failures);
+> +       KUNIT_CASE(test_user),
+> +       {}
+> +};
+>
+> -       return failures ? -EINVAL : 0;
+> -}
+> -module_init(test_stackinit_init);
+> +static struct kunit_suite stackinit_test_suite = {
+> +       .name = "stackinit",
+> +       .test_cases = stackinit_test_cases,
+> +};
+>
+> -static void __exit test_stackinit_exit(void)
+> -{ }
+> -module_exit(test_stackinit_exit);
+> +kunit_test_suite(stackinit_test_suite);
+>
+>  MODULE_LICENSE("GPL");
+> --
+> 2.30.2
+>
+
+--000000000000de90b905d8d22756
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
+bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
+TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
+TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
+CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
+El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
+A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
+MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
+MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
+MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
+BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
+Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
+l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
+pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
+6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
++w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
+BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
+S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
+bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
+ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
+q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
+hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAFB5XJs46lHhs45dlgv
+lPcwDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
+c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjAyMDcy
+MDA0MDZaFw0yMjA4MDYyMDA0MDZaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
+b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC0RBy/38QAswohnM4+BbSvCjgfqx6l
+RZ05OpnPrwqbR8foYkoeQ8fvsoU+MkOAQlzaA5IaeOc6NZYDYl7PyNLLSdnRwaXUkHOJIn09IeqE
+9aKAoxWV8wiieIh3izFAHR+qm0hdG+Uet3mU85dzScP5UtFgctSEIH6Ay6pa5E2gdPEtO5frCOq2
+PpOgBNfXVa5nZZzgWOqtL44txbQw/IsOJ9VEC8Y+4+HtMIsnAtHem5wcQJ+MqKWZ0okg/wYl/PUj
+uaq2nM/5+Waq7BlBh+Wh4NoHIJbHHeGzAxeBcOU/2zPbSHpAcZ4WtpAKGvp67PlRYKSFXZvbORQz
+LdciYl8fAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
+DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKbSiBVQ
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBo
+fELKiqrNn7bjWrc3WMCcDF/1SYwM4fDK02QyVJcpbjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAyMjUwNjUzMjdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAPUzUBLI1IA3pXvKa4/5d
+7WjbULhpmcRQherk683yrZOwQ5xe4QjRedRCHt6m2ifa7wdOw7npwsWfqj3c/mmwvo5bTs/WKJvn
+0f/4PrRenBpafDxlc+UMm72f0Jzpj+/PKQr1pRHIJ2G27+PWb1IkALgu/ZueB3FMcCOzEumKx/6h
+V5lNbtJ5KRZK3oRJ2eJ1Wy1TcwqlOa7x+0V4bjl09iWokH9W+dB3Orpe7xfSImZkXQvvhAalREae
+UIkjNZ/31cXAhCOooAK1v50LlNycFo+8xIX7v4Y+qk5DX0Ii8x3q0DyVtp/yKpdI3QDR3F1xQxY7
+90zDHWgS4ZswGrd7dA==
+--000000000000de90b905d8d22756--
