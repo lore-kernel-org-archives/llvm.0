@@ -1,84 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D396F7C
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 15:38:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 818ECC340F3
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 15:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645803502;
-	bh=Qp6aGn+gfpXQjgM8XZgj/bDqpiOmsivhTJEvuTz+fDA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=vKYh1x0GLneHhE/0yXjH1+P2NcfgvGJ3rCBu/pBYythxhJYskOaY0cmc7hWO4hiPz
-	 68HtLHzakEQIt9ab4Oh9cw7bOTzhwh+6FB/vhIbFOQU+sQerX5/FIxGW+iEGN9b2NJ
-	 QbnFnvcW6iL0ElUVoOpWEik/X3w82RwNCbmdYvQWoxvBQTqI1yS7C5hgMgwx1/6750
-	 MR2ctkpc7CDcrWOGB07E7GwZY4AOzEqk1VQyG+269hgNHnaTA2X2g97sWnSVV8HZV/
-	 vY5Aw9WvYq/cnbeUBCD33rTerbIScpj1+E3HCzJftDyqekClorrI5KpA0qMfwcuJfb
-	 Z+RUrCbwGQZqg==
-Received: by mail-yb1-f179.google.com with SMTP id bt13so6642574ybb.2
-        for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 07:38:22 -0800 (PST)
-X-Gm-Message-State: AOAM530LjxvG2+HkQ85o7lnYdfTIYi7T8X+SetzfPZKhFhyMgRiZtN7Y
-	w9nFg3dCr6V8JQ/JuOvLjh9edZca+OB206x+TzU=
-X-Google-Smtp-Source: ABdhPJx3rvESMXLxmCbN7BFFRnF9VG0LfFW9lEx0SZZrJ9ggiEnkwCvqiu8bEDq0wko4R3DdaAXk1mMrwpgvYOmaWJ4=
-X-Received: by 2002:a25:6c43:0:b0:61d:e94b:3c55 with SMTP id
- h64-20020a256c43000000b0061de94b3c55mr7907145ybc.224.1645803501561; Fri, 25
- Feb 2022 07:38:21 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52E77C
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 15:42:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645803738; x=1677339738;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qS1UkjfVck3GZcFx0Xa3E9JeIwrYLsFicio417P3JbE=;
+  b=jRQkCg74cllO35UugUVITih8Cms1TOrAvYpzSJKDoeyTWVtjNrp+Iv1e
+   b7BrXY5vNr7sgbFBjBdfCt0Ut0WKlR7GD8NhlN+08pzAFZFkVUtZZ5j1a
+   oohasQ+3elUUUFwnbZMeK0wtcinddVzeCUEX9NE54mfevjc4pWpg+SU81
+   1UEtOYgOYSSO1mpYtHuJqAeVZK/JqnDcsX/hCSBx4EAcCtHZuCFHH6MYY
+   AvW3P/mPlrDorytngJ7RWkJ2ifpS6Gnnzg5H6/ic6tc77O8p+BQN3c5G4
+   E29e1J+gsFmD+Yno1mXMpXUQOZopPudLRYcIdufjqhzjn9V+hXsFhKEMN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="251348162"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="251348162"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 07:42:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="549305435"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 25 Feb 2022 07:42:16 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nNcjX-0004T4-Qa; Fri, 25 Feb 2022 15:42:15 +0000
+Date: Fri, 25 Feb 2022 23:41:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Pirko <jiri@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_linecards 38/39]
+ drivers/net/netdevsim/dev.c:119:25: error: too few arguments to function
+ call, expected 5, have 4
+Message-ID: <202202252349.rMN9E62A-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220222165212.2005066-7-kaleshsingh@google.com>
- <202202231727.L621fVgD-lkp@intel.com> <875yp63ptg.wl-maz@kernel.org>
- <YhYpvfZaSjrAtkZp@rli9-dbox> <cb750267af0636c49d2f8aa354f086a5@kernel.org>
- <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
- <89c48bd2a9b32b4607d1515714fa3c1b@kernel.org> <16f47fa9-90b4-0b5c-33cb-cb004fc39266@intel.com>
-In-Reply-To: <16f47fa9-90b4-0b5c-33cb-cb004fc39266@intel.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 25 Feb 2022 16:38:10 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEfsxj44t13rpgNddvTeM3qgfv5zU_xpnxn7HV3xUN2YA@mail.gmail.com>
-Message-ID: <CAMj1kXEfsxj44t13rpgNddvTeM3qgfv5zU_xpnxn7HV3xUN2YA@mail.gmail.com>
-Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
- hypervisor stack overflows
-To: "Chen, Rong A" <rong.a.chen@intel.com>
-Cc: Marc Zyngier <maz@kernel.org>, Kalesh Singh <kaleshsingh@google.com>, 
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Will Deacon <will@kernel.org>, Quentin Perret <qperret@google.com>, Fuad Tabba <tabba@google.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Android Kernel Team <kernel-team@android.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, James Morse <james.morse@arm.com>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Joey Gouly <joey.gouly@arm.com>, Peter Collingbourne <pcc@google.com>, Andrew Scull <ascull@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, kvmarm <kvmarm@lists.cs.columbia.edu>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, 25 Feb 2022 at 03:12, Chen, Rong A <rong.a.chen@intel.com> wrote:
->
->
->
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
+head:   24e52724258ba5d7b58b5a4a86640dadb30b07c4
+commit: 36f00f891469372ccec5b7d6442e13e284ceca13 [38/39] TMP: devlink device type
+config: arm64-randconfig-r011-20220225 (https://download.01.org/0day-ci/archive/20220225/202202252349.rMN9E62A-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/jpirko/linux_mlxsw/commit/36f00f891469372ccec5b7d6442e13e284ceca13
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
+        git checkout 36f00f891469372ccec5b7d6442e13e284ceca13
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/netdevsim/
 
-> Hi Marc, Ard,
->
-> We have ignored the warning related to asmlinkage according to the below
-> advice:
->
-> https://lore.kernel.org/lkml/CAMj1kXHrRYagSVniSetHdG15rkQS+fm4zVOtN=Zda3W0QaEoJA@mail.gmail.com/
->
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Excellent! Thanks for implementing this - I wasn't aware that you
-adopted this suggestion.
+All errors (new ones prefixed by >>):
 
-> do you want the bot ignore such warning if asmlinkage not specified?
->
+>> drivers/net/netdevsim/dev.c:119:25: error: too few arguments to function call, expected 5, have 4
+                                                           nsim_dev_linecard);
+                                                                            ^
+   include/net/devlink.h:1577:1: note: 'devlink_linecard_device_create' declared here
+   devlink_linecard_device_create(struct devlink_linecard *linecard,
+   ^
+   1 error generated.
 
-Even though I think this warning has little value, I think asmlinkage
-is sufficient for us to avoid it for symbols that are exported for use
-by assembler code.
 
-So I don't think this additional change is needed.
+vim +119 drivers/net/netdevsim/dev.c
 
--- 
-Ard.
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  100  
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  101  static int
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  102  nsim_dev_linecard_devices_create(struct nsim_dev_linecard *nsim_dev_linecard)
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  103  {
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  104  	struct devlink_linecard_device *device;
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  105  	char *component_name;
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  106  	int err;
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  107  	int i;
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  108  
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  109  	snprintf(nsim_dev_linecard->device_component_name,
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  110  		 sizeof(nsim_dev_linecard->device_component_name), "lc%u_dev0",
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  111  		 nsim_dev_linecard->linecard_index);
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  112  	component_name = nsim_dev_linecard->device_component_name;
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  113  
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  114  	for (i = 0; i < NSIM_DEV_LINECARD_DEVICE_COUNT; i++) {
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  115  		if (i > 0)
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  116  			component_name = NULL;
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  117  		device = devlink_linecard_device_create(nsim_dev_linecard->devlink_linecard,
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  118  							i, component_name,
+e8caa751f8b7e3 Jiri Pirko 2021-05-05 @119  							nsim_dev_linecard);
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  120  		if (IS_ERR(device)) {
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  121  			err = PTR_ERR(device);
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  122  			goto rollback;
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  123  		}
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  124  		nsim_dev_linecard->devlink_device[i] = device;
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  125  	}
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  126  	return 0;
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  127  
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  128  rollback:
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  129  	for (i--; i >= 0; i--) {
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  130  		device = nsim_dev_linecard->devlink_device[i];
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  131  		devlink_linecard_device_destroy(nsim_dev_linecard->devlink_linecard,
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  132  						device);
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  133  	}
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  134  	return err;
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  135  }
+e8caa751f8b7e3 Jiri Pirko 2021-05-05  136  
+
+:::::: The code at line 119 was first introduced by commit
+:::::: e8caa751f8b7e39b8286205755f61701496d4c79 netdevsim: create couple of devices on each linecard
+
+:::::: TO: Jiri Pirko <jiri@nvidia.com>
+:::::: CC: Jiri Pirko <jiri@nvidia.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
