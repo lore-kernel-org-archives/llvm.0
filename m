@@ -1,125 +1,72 @@
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A93D23A1
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 13:43:43 +0000 (UTC)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21PD7oji031571;
-	Fri, 25 Feb 2022 14:19:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=LkW62k1kez4onNz5WnO7tO0QIWuCB9ldqXvRsV6nPqw=;
- b=SVostm1nI+zn46O/FSyoSL038Zksrwu7/d4jbLLajBAFOENbSLEy0Zw6sdZKfZw176h/
- Nnhkow09gC+lg3WAIU8G9P6HQcm2JB/ODPSSlDAT6s3Tub1d7gZWUNZfLdQ7hRzlLY9w
- RSjv0jeFGgodwvwK9v3NxLcjmdSmSCOFSeQv63yqq+97kk9++aGrRb12Ygar49rNvbfq
- 38WsZRvfD3pajWcRtcVtCzoAS0UGTqbimhDyOGCOkhAQWxax4zGWhWVlC6xTwtKwc2wv
- CflTeGvXaGthztqES4z/YjJnrqgvcqKO8shiPN6OQx4IYUge35CHdiC1UH6UBYuQ3zi4 Kw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3eetrf25hn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Feb 2022 14:19:52 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4CDC010002A;
-	Fri, 25 Feb 2022 14:19:51 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3F423226FB7;
-	Fri, 25 Feb 2022 14:19:51 +0100 (CET)
-Received: from [10.201.22.81] (10.75.127.47) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 25 Feb
- 2022 14:19:50 +0100
-Message-ID: <c61d8a3f-6f19-48aa-ae69-e4f3670d4b16@foss.st.com>
-Date: Fri, 25 Feb 2022 14:19:50 +0100
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559AD7C
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 14:32:33 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3914106F;
+	Fri, 25 Feb 2022 06:32:27 -0800 (PST)
+Received: from [10.57.39.47] (unknown [10.57.39.47])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5CC7D3F5A1;
+	Fri, 25 Feb 2022 06:32:26 -0800 (PST)
+Message-ID: <af255483-a2b9-64dd-ec4f-4be21427e23f@arm.com>
+Date: Fri, 25 Feb 2022 14:32:19 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] drm/stm: Avoid using val uninitialized in
- ltdc_set_ycbcr_config()
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>,
-        Yannick Fertre
-	<yannick.fertre@foss.st.com>
-CC: Nick Desaulniers <ndesaulniers@google.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-References: <20220222152045.484610-1-nathan@kernel.org>
-From: Philippe CORNU <philippe.cornu@foss.st.com>
-In-Reply-To: <20220222152045.484610-1-nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] iommu/arm-smmu: remove redundant assignment to variable
+ res
+Content-Language: en-GB
+To: Colin Ian King <colin.i.king@gmail.com>, Will Deacon <will@kernel.org>,
+ Joerg Roedel <joro@8bytes.org>, linux-arm-kernel@lists.infradead.org,
+ iommu@lists.linux-foundation.org
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20220225093205.170973-1-colin.i.king@gmail.com>
+From: Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220225093205.170973-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-25_07,2022-02-25_01,2022-02-23_01
 
+On 2022-02-25 09:32, Colin Ian King wrote:
+> The variable res is being assigned a value that isn't being read
+> later. The assignment is redundant and can be removed.
+> 
+> Cleans up clang scan warning:
+> drivers/iommu/arm/arm-smmu/arm-smmu.c:2109:10: warning: Although the
+> value stored to 'res' is used in the enclosing expression, the value
+> is never actually read from 'res' [deadcode.DeadStores]
 
+Thanks Colin, however in general we need to get rid of this 
+platform_get_resource() call ASAP anyway, so Will should hopefully be 
+picking up either [1] or [2] for 5.18.
 
-On 2/22/22 16:20, Nathan Chancellor wrote:
-> Clang warns:
-> 
->    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->            default:
->            ^~~~~~~
->    drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
->            val |= LxPCR_YCEN;
->            ^~~
->    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
->            u32 val;
->                   ^
->                    = 0
->    1 warning generated.
-> 
-> Use a return instead of break in the default case to fix the warning.
-> Add an error message so that this return is not silent, which could hide
-> issues in the future.
-> 
-> Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1575
-> Acked-by: Yannick Fertre <yannick.fertre@foss.st.com>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Reviewed-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Cheers,
+Robin.
+
+[1] 
+https://lore.kernel.org/linux-arm-kernel/b2a40caaf1622eb35c555074a0d72f4f0513cff9.1645106346.git.robin.murphy@arm.com/
+[2] 
+https://lore.kernel.org/linux-arm-kernel/20211223130046.9365-2-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > ---
+>   drivers/iommu/arm/arm-smmu/arm-smmu.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> v1 -> v2: https://lore.kernel.org/r/20220207165304.1046867-1-nathan@kernel.org/
-> 
-> * Use DRM_ERROR() instead of drm_err() (Philippe).
-
-Hi Nathan,
-
-Applied on drm-misc-next.
-Many thanks for your patch,
-Philippe :-)
-
-> 
-> * Collect tags from v1, as nothing substantial has changed.
-> 
->   drivers/gpu/drm/stm/ltdc.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-> index 5eeb32c9c9ce..c9bc4ccb6d43 100644
-> --- a/drivers/gpu/drm/stm/ltdc.c
-> +++ b/drivers/gpu/drm/stm/ltdc.c
-> @@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
->   		break;
->   	default:
->   		/* RGB or not a YCbCr supported format */
-> -		break;
-> +		DRM_ERROR("Unsupported pixel format: %u\n", drm_pix_fmt);
-> +		return;
->   	}
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> index 4bc75c4ce402..f83d2c32b5a9 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> @@ -2106,7 +2106,7 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+>   		return PTR_ERR(smmu);
 >   
->   	/* Enable limited range */
-> 
-> base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
+>   	num_irqs = 0;
+> -	while ((res = platform_get_resource(pdev, IORESOURCE_IRQ, num_irqs))) {
+> +	while (platform_get_resource(pdev, IORESOURCE_IRQ, num_irqs)) {
+>   		num_irqs++;
+>   		if (num_irqs > smmu->num_global_irqs)
+>   			smmu->num_context_irqs++;
