@@ -1,76 +1,125 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C02A23A1
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 13:42:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=5qjyT+ZKelgJd14rLylT5OWqzGIhr+cM5+hmXw+z1ks=; b=vtxXtq6lyyGnmOQCvptEhOc4kd
-	9Mk9/G3y9yJsU3rG11DJg7uufbhi1tcznol8gzNChBKRSR3q6acBC6SCg5YpGNf/FlscIRDWyej6v
-	Qu7e32jyFeeA32ccazORQpuzjwncy9gjKVRYkaQfCiFZhadfbK9lwFErcx8G5cB5xdkJEb7P/o1Ye
-	hOgvQtD3duxvYglhM9j3lizp42/3O7SIK+9plV0GbNPdOHQUszsJNurUryHyEn+FMn6a7vn9d+3pP
-	9qkFOROW8pruhgArn0Fhf3SciLssYS4LxJZEIH+EyHdg+DHfjmbiK0SAqqhxfw5gTlWnnTQ8w5PwX
-	7qTtm5tw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nNar4-005p3W-H8; Fri, 25 Feb 2022 13:41:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A3839300067;
-	Fri, 25 Feb 2022 14:41:52 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 8077A235EF288; Fri, 25 Feb 2022 14:41:52 +0100 (CET)
-Date: Fri, 25 Feb 2022 14:41:52 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-	jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-	linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-	samitolvanen@google.com, mark.rutland@arm.com,
-	alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-	mhiramat@kernel.org, alexei.starovoitov@gmail.com,
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 05/39] x86: Base IBT bits
-Message-ID: <YhjcoHh0ar9K6QrA@hirez.programming.kicks-ass.net>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.307406918@infradead.org>
- <202202241627.EEF3D5D2@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A93D23A1
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 13:43:43 +0000 (UTC)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21PD7oji031571;
+	Fri, 25 Feb 2022 14:19:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=LkW62k1kez4onNz5WnO7tO0QIWuCB9ldqXvRsV6nPqw=;
+ b=SVostm1nI+zn46O/FSyoSL038Zksrwu7/d4jbLLajBAFOENbSLEy0Zw6sdZKfZw176h/
+ Nnhkow09gC+lg3WAIU8G9P6HQcm2JB/ODPSSlDAT6s3Tub1d7gZWUNZfLdQ7hRzlLY9w
+ RSjv0jeFGgodwvwK9v3NxLcjmdSmSCOFSeQv63yqq+97kk9++aGrRb12Ygar49rNvbfq
+ 38WsZRvfD3pajWcRtcVtCzoAS0UGTqbimhDyOGCOkhAQWxax4zGWhWVlC6xTwtKwc2wv
+ CflTeGvXaGthztqES4z/YjJnrqgvcqKO8shiPN6OQx4IYUge35CHdiC1UH6UBYuQ3zi4 Kw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3eetrf25hn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 25 Feb 2022 14:19:52 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4CDC010002A;
+	Fri, 25 Feb 2022 14:19:51 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3F423226FB7;
+	Fri, 25 Feb 2022 14:19:51 +0100 (CET)
+Received: from [10.201.22.81] (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 25 Feb
+ 2022 14:19:50 +0100
+Message-ID: <c61d8a3f-6f19-48aa-ae69-e4f3670d4b16@foss.st.com>
+Date: Fri, 25 Feb 2022 14:19:50 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202202241627.EEF3D5D2@keescook>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] drm/stm: Avoid using val uninitialized in
+ ltdc_set_ycbcr_config()
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>,
+        Yannick Fertre
+	<yannick.fertre@foss.st.com>
+CC: Nick Desaulniers <ndesaulniers@google.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+References: <20220222152045.484610-1-nathan@kernel.org>
+From: Philippe CORNU <philippe.cornu@foss.st.com>
+In-Reply-To: <20220222152045.484610-1-nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-25_07,2022-02-25_01,2022-02-23_01
 
-On Thu, Feb 24, 2022 at 04:35:51PM -0800, Kees Cook wrote:
 
-> > --- a/arch/x86/Makefile
-> > +++ b/arch/x86/Makefile
-> > @@ -36,7 +36,7 @@ endif
-> >  
-> >  # How to compile the 16-bit code.  Note we always compile for -march=i386;
-> >  # that way we can complain to the user if the CPU is insufficient.
-> > -REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING \
-> > +REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING -D__DISABLE_EXPORTS \
-> >  		   -Wall -Wstrict-prototypes -march=i386 -mregparm=3 \
-> >  		   -fno-strict-aliasing -fomit-frame-pointer -fno-pic \
-> >  		   -mno-mmx -mno-sse $(call cc-option,-fcf-protection=none)
+
+On 2/22/22 16:20, Nathan Chancellor wrote:
+> Clang warns:
 > 
-> This change seems important separately from this patch, yes? (Or at
-> least a specific call-out in the commit log.)
+>    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+>            default:
+>            ^~~~~~~
+>    drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
+>            val |= LxPCR_YCEN;
+>            ^~~
+>    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
+>            u32 val;
+>                   ^
+>                    = 0
+>    1 warning generated.
+> 
+> Use a return instead of break in the default case to fix the warning.
+> Add an error message so that this return is not silent, which could hide
+> issues in the future.
+> 
+> Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1575
+> Acked-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Reviewed-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> 
+> v1 -> v2: https://lore.kernel.org/r/20220207165304.1046867-1-nathan@kernel.org/
+> 
+> * Use DRM_ERROR() instead of drm_err() (Philippe).
 
-It was to not stuff endbr in realmode code. *something* complained about
-it (and Joao independently mentioned it on IRC).
+Hi Nathan,
 
-Could be I hit some compile fail somewhere and this was the cleanest way
-to simply make it go away.
+Applied on drm-misc-next.
+Many thanks for your patch,
+Philippe :-)
 
-I'll go mention it somewhere.
-
+> 
+> * Collect tags from v1, as nothing substantial has changed.
+> 
+>   drivers/gpu/drm/stm/ltdc.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+> index 5eeb32c9c9ce..c9bc4ccb6d43 100644
+> --- a/drivers/gpu/drm/stm/ltdc.c
+> +++ b/drivers/gpu/drm/stm/ltdc.c
+> @@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
+>   		break;
+>   	default:
+>   		/* RGB or not a YCbCr supported format */
+> -		break;
+> +		DRM_ERROR("Unsupported pixel format: %u\n", drm_pix_fmt);
+> +		return;
+>   	}
+>   
+>   	/* Enable limited range */
+> 
+> base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
