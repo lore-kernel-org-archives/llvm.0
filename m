@@ -1,101 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BD810EF
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 00:47:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DC77C340E9;
-	Fri, 25 Feb 2022 00:47:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645750025;
-	bh=3m3SmJSHBHP3bsYWhgDTWGsAaPNj2eo5w38xwMsRoFc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b2V6mW4bFEWJF/zmPajGlPodxWuvHTsutZdYoBuEaofy1svc7CjmnhNYqeZzT1Y9G
-	 0JczrKrsyIR4iR5rvR02dfA4m1TXhASQecCiLScbi21p0RbSF4Or08VZeQSLAf0peC
-	 8Kl7jdrU/Mfj0JUxETeV3lqcoqDgt5fO3d0O/M4uInbF2mPj1otdESRNaUuvuXJNtE
-	 YR4c23/V++1w/aFWdU+0wFs2kbpyqtml3T+wEHurwENGXChYZzPSYOnMKt9ELqEZYF
-	 fnoM0UPV6yBJKPH7CGj2b1we9Axb1xLBeTvAKMm8yGpLTU7Pt6jRDYX9E3JtMiA3FR
-	 aC6dkKHGbi6aA==
-Date: Thu, 24 Feb 2022 17:46:59 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-	joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-	andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-	ndesaulniers@google.com, samitolvanen@google.com,
-	mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-	rostedt@goodmis.org, mhiramat@kernel.org,
-	alexei.starovoitov@gmail.com, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 05/39] x86: Base IBT bits
-Message-ID: <YhgnA8O4Bp19hfse@dev-arch.archlinux-ax161>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.307406918@infradead.org>
- <202202241627.EEF3D5D2@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5706F10EF
+	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 00:50:46 +0000 (UTC)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V5Q66IT_1645749311;
+Received: from 192.168.193.153(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V5Q66IT_1645749311)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 25 Feb 2022 08:35:12 +0800
+Message-ID: <d2c864c0-6535-acfd-6c2f-f1175ce8a719@linux.alibaba.com>
+Date: Thu, 24 Feb 2022 16:34:08 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202202241627.EEF3D5D2@keescook>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: catalin.marinas@arm.com, will@kernel.org, ndesaulniers@google.com,
+ keescook@chromium.org, masahiroy@kernel.org, tglx@linutronix.de,
+ akpm@linux-foundation.org, mark.rutland@arm.com, samitolvanen@google.com,
+ npiggin@gmail.com, linux@roeck-us.net, mhiramat@kernel.org,
+ ojeda@kernel.org, luc.vanoostenryck@gmail.com, elver@google.com,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20220222095736.24898-1-ashimida@linux.alibaba.com>
+ <YhUMRoLDan7tJRiL@dev-arch.archlinux-ax161>
+ <69d351c6-a69d-6ebb-53bc-b46dfe4da08a@linux.alibaba.com>
+ <YhZxVwoshSwwJkJO@dev-arch.archlinux-ax161>
+From: Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <YhZxVwoshSwwJkJO@dev-arch.archlinux-ax161>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 24, 2022 at 04:35:51PM -0800, Kees Cook wrote:
-> On Thu, Feb 24, 2022 at 03:51:43PM +0100, Peter Zijlstra wrote:
-> > Add Kconfig, Makefile and basic instruction support for x86 IBT.
-> > 
-> > XXX clang is not playing ball, probably lld being 'funny', I'm having
-> > problems with .plt entries appearing all over after linking.
-> 
-> I'll try to look into this; I know you've been chatting with Nathan
-> about it. Is there an open bug for it? (And any kind of reproducer
-> smaller than a 39 patch series we can show the linker folks?) :)
 
-I should be able to create a reproducer with cvise and file a bug on
-GitHub around this tomorrow, I should have done it after Peter's
-comments on IRC.
 
-Cheers,
-Nathan
+On 2/23/22 09:39, Nathan Chancellor wrote:
+> On Wed, Feb 23, 2022 at 12:50:21AM -0800, Dan Li wrote:
+>> My intention is to remind users that this is a compiler feature.
+>> But since there is also a hint in CC_HAVE_SHADOW_CALL_STACK:
+>> +# Supported by clang >= 7.0 or GCC ...
+>>
+>> Removing the specific compiler here also looks fine to me.
+>> Would this look better?
+>>
+>> "This option enables Shadow Call Stack, which uses a ..."
+>>
+>> or maybe:
+>>
+>> "This option enables compiler's Shadow Call Stack, which uses a ..."
+> 
+> I do not honestly have a strong opinion around removing mention of the
+> compiler so either looks fine to me (might be better to say "the
+> compiler's Shadow ..." in the second one).
+> 
 
-> > [...]
-> > +config X86_KERNEL_IBT
-> > +	prompt "Indirect Branch Tracking"
-> > +	bool
-> > +	depends on X86_64 && CC_HAS_IBT
-> > +	help
-> > +	  Build the kernel with support for Indirect Branch Tracking, a
-> > +	  hardware supported CFI scheme. Any indirect call must land on
-> 
-> 	  hardware support course-grain forward-edge Control Flow Integrity
-> 	  protection. It enforces that all indirect calls must land on
-> 
-> > +	  an ENDBR instruction, as such, the compiler will litter the
-> > +	  code with them to make this happen.
-> 
-> "litter the code" -> "instrument the machine code".
-> 
-> 
-> > +
-> >  config X86_INTEL_MEMORY_PROTECTION_KEYS
-> >  	prompt "Memory Protection Keys"
-> >  	def_bool y
-> > --- a/arch/x86/Makefile
-> > +++ b/arch/x86/Makefile
-> > @@ -36,7 +36,7 @@ endif
-> >  
-> >  # How to compile the 16-bit code.  Note we always compile for -march=i386;
-> >  # that way we can complain to the user if the CPU is insufficient.
-> > -REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING \
-> > +REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING -D__DISABLE_EXPORTS \
-> >  		   -Wall -Wstrict-prototypes -march=i386 -mregparm=3 \
-> >  		   -fno-strict-aliasing -fomit-frame-pointer -fno-pic \
-> >  		   -mno-mmx -mno-sse $(call cc-option,-fcf-protection=none)
-> 
-> This change seems important separately from this patch, yes? (Or at
-> least a specific call-out in the commit log.)
-> 
-> Otherwise, looks good.
-> 
-> -- 
-> Kees Cook
+Ah, yes, thanks :)
+
+Dan.
