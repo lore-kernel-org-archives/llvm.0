@@ -1,44 +1,49 @@
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2502D1FBD
-	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 02:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E91D367F
+	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 02:33:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645842816; x=1677378816;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7D2r85Uwz0Z5IABKnR6r5ET9fkhKx0yU3xEnD/Vax8o=;
-  b=hAEl+KUrFWBuhzDh6ZpqxU2g9V/9V1VzRRRidMjGPk2Jisqb0g2uS/wa
-   Pgqj2ZzyPPH7qSC1EjuUqcv+tRhn4b474+/wR8IyV5a64opp+pjFdtISv
-   taunMNWXLOBVxceiSLqkExPeF05fpqepTY4p5rD+uHsT0bfdCcdPJ3WsR
-   MImSt+d81OtZrAiydmiVMhNe3BCmAbx+y6lp+6S++HOffpiq4FLRMWAOW
-   uJii0lk5/YqeHtUPcDN5nfOdvz2xtU4gbTvk9LdOgjEBtf/JagIC22u+R
-   ddy33jp0tLb9NYKQOCz3HB4K7cix2D1zOFfAQzJ4OTMBupfMa43rS28qD
+  t=1645842817; x=1677378817;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BVLclhNw0PC2QXbhzFkl59rdBrw4CM2n4+zDU93oWUg=;
+  b=RNVJUyw2sIrrFCX3/11XoDECw4DXBPvbYzrGFl/WEMWeW7WSsaaVS+A/
+   qn2yAA48G1ev27T3kVWif2b3DNqlOruLodgiVZIKS8UbiTIknC7o67Bg0
+   ehx1bogg3drzCYsSuStXAGsCzs4zymUe1JqT4Wz79q68ynTEyYmQSjxap
+   uF6H7VCDd8v6XuNO8ty6SXHd5TMqVSYhShY+ecyNHoOKDdfEqzmUoB+qy
+   mhroYyLfXmWL06ZGIg9FWgSKMMM/FX8SPq6w0YH+UiGnKUYOun5T3jOp+
+   eVVCEROnDnUaKHAfEbF6wCYjAdq4Czy3ij3+7z9HAH6A5GjH58yC+sSAK
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="236128927"
+X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="236128930"
 X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
-   d="scan'208";a="236128927"
+   d="scan'208";a="236128930"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 18:33:35 -0800
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 18:33:37 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
-   d="scan'208";a="574789080"
+   d="scan'208";a="574789079"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
   by orsmga001.jf.intel.com with ESMTP; 25 Feb 2022 18:33:33 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nNmto-0004yI-Pc; Sat, 26 Feb 2022 02:33:32 +0000
-Date: Sat, 26 Feb 2022 10:32:51 +0800
+	id 1nNmto-0004yB-O0; Sat, 26 Feb 2022 02:33:32 +0000
+Date: Sat, 26 Feb 2022 10:32:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Collingbourne <pcc@google.com>
+To: Hao Luo <haoluo@google.com>, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>
-Subject: [ammarfaizi2-block:arm64/linux/for-next/mte 2/6]
- include/linux/kasan-enabled.h:7:26: error: a parameter list without types is
- only allowed in a function definition
-Message-ID: <202202261019.v5uTU7PH-lkp@intel.com>
+	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+	Shakeel Butt <shakeelb@google.com>,
+	Joe Burton <jevburton.kernel@gmail.com>, Tejun Heo <tj@kernel.org>,
+	joshdon@google.com, sdf@google.com, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>
+Subject: Re: [PATCH bpf-next v1 8/9] bpf: Introduce cgroup iter
+Message-ID: <202202261010.IU59MxY8-lkp@intel.com>
+References: <20220225234339.2386398-9-haoluo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,73 +52,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220225234339.2386398-9-haoluo@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block arm64/linux/for-next/mte
-head:   766121ba5de38a6f67980ec24a6af76c55def100
-commit: 38ddf7dafaeaf3fcdea65b3b4dfb06b4bcd9cc15 [2/6] arm64: mte: avoid clearing PSTATE.TCO on entry unless necessary
-config: arm64-randconfig-r011-20220225 (https://download.01.org/0day-ci/archive/20220226/202202261019.v5uTU7PH-lkp@intel.com/config)
+Hi Hao,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/0day-ci/linux/commits/Hao-Luo/Extend-cgroup-interface-with-bpf/20220226-074615
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: hexagon-randconfig-r023-20220226 (https://download.01.org/0day-ci/archive/20220226/202202261010.IU59MxY8-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/38ddf7dafaeaf3fcdea65b3b4dfb06b4bcd9cc15
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block arm64/linux/for-next/mte
-        git checkout 38ddf7dafaeaf3fcdea65b3b4dfb06b4bcd9cc15
+        # https://github.com/0day-ci/linux/commit/ee74423719e2efb4efa7a4491920c78b60024ec7
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Hao-Luo/Extend-cgroup-interface-with-bpf/20220226-074615
+        git checkout ee74423719e2efb4efa7a4491920c78b60024ec7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/tty/serial/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/tty/serial/earlycon.c:16:
-   In file included from include/linux/io.h:13:
-   In file included from arch/arm64/include/asm/io.h:12:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm64/include/asm/pgtable.h:12:
-   In file included from arch/arm64/include/asm/mte.h:14:
->> include/linux/kasan-enabled.h:7:1: warning: declaration specifier missing, defaulting to 'int'
-   DECLARE_STATIC_KEY_FALSE(kasan_flag_enabled);
+>> kernel/bpf/cgroup_iter.c:107:39: warning: format specifies type 'unsigned long' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
+           seq_printf(seq, "cgroup_id:\t%lu\n", aux->cgroup_id);
+                                        ~~~     ^~~~~~~~~~~~~~
+                                        %llu
+>> kernel/bpf/cgroup_iter.c:101:6: warning: no previous prototype for function 'bpf_iter_cgroup_show_fdinfo' [-Wmissing-prototypes]
+   void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
+        ^
+   kernel/bpf/cgroup_iter.c:101:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
    ^
-   int
->> include/linux/kasan-enabled.h:7:26: error: a parameter list without types is only allowed in a function definition
-   DECLARE_STATIC_KEY_FALSE(kasan_flag_enabled);
-                            ^
->> include/linux/kasan-enabled.h:11:9: error: implicit declaration of function 'static_branch_likely' [-Werror,-Wimplicit-function-declaration]
-           return static_branch_likely(&kasan_flag_enabled);
-                  ^
->> include/linux/kasan-enabled.h:11:31: error: use of undeclared identifier 'kasan_flag_enabled'; did you mean 'kasan_enabled'?
-           return static_branch_likely(&kasan_flag_enabled);
-                                        ^~~~~~~~~~~~~~~~~~
-                                        kasan_enabled
-   include/linux/kasan-enabled.h:9:29: note: 'kasan_enabled' declared here
-   static __always_inline bool kasan_enabled(void)
-                               ^
-   1 warning and 3 errors generated.
+   static 
+>> kernel/bpf/cgroup_iter.c:111:5: warning: no previous prototype for function 'bpf_iter_cgroup_fill_link_info' [-Wmissing-prototypes]
+   int bpf_iter_cgroup_fill_link_info(const struct bpf_iter_aux_info *aux,
+       ^
+   kernel/bpf/cgroup_iter.c:111:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_iter_cgroup_fill_link_info(const struct bpf_iter_aux_info *aux,
+   ^
+   static 
+   3 warnings generated.
 
 
-vim +7 include/linux/kasan-enabled.h
+vim +107 kernel/bpf/cgroup_iter.c
 
-f9b5e46f4097eb2 Peter Collingbourne 2022-02-18   6  
-f9b5e46f4097eb2 Peter Collingbourne 2022-02-18  @7  DECLARE_STATIC_KEY_FALSE(kasan_flag_enabled);
-f9b5e46f4097eb2 Peter Collingbourne 2022-02-18   8  
-f9b5e46f4097eb2 Peter Collingbourne 2022-02-18   9  static __always_inline bool kasan_enabled(void)
-f9b5e46f4097eb2 Peter Collingbourne 2022-02-18  10  {
-f9b5e46f4097eb2 Peter Collingbourne 2022-02-18 @11  	return static_branch_likely(&kasan_flag_enabled);
-f9b5e46f4097eb2 Peter Collingbourne 2022-02-18  12  }
-f9b5e46f4097eb2 Peter Collingbourne 2022-02-18  13  
-
-:::::: The code at line 7 was first introduced by commit
-:::::: f9b5e46f4097eb298f68e5b02f70697a90a44739 kasan: split kasan_*enabled() functions into a separate header
-
-:::::: TO: Peter Collingbourne <pcc@google.com>
-:::::: CC: Will Deacon <will@kernel.org>
+   100	
+ > 101	void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
+   102					 struct seq_file *seq)
+   103	{
+   104		char buf[64] = {0};
+   105	
+   106		cgroup_path_from_kernfs_id(aux->cgroup_id, buf, sizeof(buf));
+ > 107		seq_printf(seq, "cgroup_id:\t%lu\n", aux->cgroup_id);
+   108		seq_printf(seq, "cgroup_path:\t%s\n", buf);
+   109	}
+   110	
+ > 111	int bpf_iter_cgroup_fill_link_info(const struct bpf_iter_aux_info *aux,
+   112					   struct bpf_link_info *info)
+   113	{
+   114		info->iter.cgroup.cgroup_id = aux->cgroup_id;
+   115		return 0;
+   116	}
+   117	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
