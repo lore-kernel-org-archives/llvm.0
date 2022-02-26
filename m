@@ -1,88 +1,238 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C573B3D70;
-	Sat, 26 Feb 2022 17:53:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2017C340E8;
-	Sat, 26 Feb 2022 17:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645898012;
-	bh=VIfKV/A7k3FnJWADKVUq0cdczoP09UdBX8T7X4jHHCo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=VIuYPZeKVVkLRGy2MbqyzV1ZhwEYvH2qfnxaLNNZcoYP9CSXExnHSiVzfqKdwD3AD
-	 qnP5XdmKKJvh9zTppnC+ng/wzxeQzBrK+EloN+oh4pLEMl3648gKT2+mIwZYQ5/2wr
-	 efu19OwcAHnDBeoxbREGR1jhA2LFHj2Qgozfw05ZbqBk2f2y8BzPYxwoGBigVXFtyv
-	 UPqPzCH0BbOL+Uo6vxAmQA1tzQIIV/23FdZWemRoE1oRLyWkAxpd1hx2TUhfOPeSUr
-	 ha/e47aMUxQdu1NrneragnIbpkHw4N69UDjP5IbN1AtOezNBJQ6XPMZ7yYvHhPGLf2
-	 pJhEFntjgBxdA==
-Date: Sat, 26 Feb 2022 18:00:32 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
- <Michael.Hennerich@analog.com>, Cosmin Tanislav
- <cosmin.tanislav@analog.com>, linux-iio@vger.kernel.org,
- patches@lists.linux.dev, llvm@lists.linux.dev, kernel test robot
- <lkp@intel.com>, Colin Ian King <colin.i.king@gmail.com>
-Subject: Re: [PATCH] iio: accel: adxl367: Fix handled initialization in
- adxl367_irq_handler()
-Message-ID: <20220226180032.455dc1c2@jic23-huawei>
-In-Reply-To: <20220224211034.625130-1-nathan@kernel.org>
-References: <20220224211034.625130-1-nathan@kernel.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13DB7B
+	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 19:14:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645902848; x=1677438848;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kIJBp/nzhxZ2xXsHsaI1ovOue0plIU8nsuK+IkB7K8U=;
+  b=CCWJsc27jPu2c1j5F+jVTNLoTx0eWNSUtZv9BdsNGEH+SvcNhOFDNuNU
+   gSTLs5zKvxzps0b/CB8l7zDQZFfAiJRJ9fUJjLH80KEERo+O4e+BcKiMv
+   TLpppNZB2j1nQRkSH2hLPhQVmYUimi+0GEaaY6EWZ8VkGoFIjoLLT0jd+
+   8jdsiBVzWNLASyGiK8IR8ctfqlVIw5x3LyJXeymIdJaasZ49umKEvrp+z
+   k6LaX6KgqQyWNh0S3YNeinODyYctIfEdFNBSJ+7xADA4xa54l5UukNLRb
+   fYBDl6lAENHHlkTcvTNt51LqA9I5zdXofFBMRVMV27vZTK+0XV9xxvdZz
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="252871314"
+X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
+   d="scan'208";a="252871314"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 11:14:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
+   d="scan'208";a="549700616"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 26 Feb 2022 11:14:06 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nO2W6-0005rw-1A; Sat, 26 Feb 2022 19:14:06 +0000
+Date: Sun, 27 Feb 2022 03:13:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@suse.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [hare-scsi-devel:tls-upcall.v2 149/159]
+ drivers/nvme/host/tcp.c:1299:35: warning: format specifies type 'unsigned
+ long' but the argument has type 'size_t' (aka 'unsigned int')
+Message-ID: <202202262102.YfMrKOTP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, 24 Feb 2022 14:10:34 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v2
+head:   21b520ae0b338bd30496feb1ca90a2820dab7a65
+commit: 96e2b9364c5e070dab1a5d438376a406ab66690d [149/159] nvme-tcp: cmsg for tls recvmsg()
+config: hexagon-randconfig-r023-20220226 (https://download.01.org/0day-ci/archive/20220226/202202262102.YfMrKOTP-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=96e2b9364c5e070dab1a5d438376a406ab66690d
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v2
+        git checkout 96e2b9364c5e070dab1a5d438376a406ab66690d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/nvme/host/
 
-> Clang warns:
-> 
->   drivers/iio/accel/adxl367.c:887:2: error: variable 'handled' is uninitialized when used here [-Werror,-Wuninitialized]
->           handled |= adxl367_push_event(indio_dev, status);
->           ^~~~~~~
->   drivers/iio/accel/adxl367.c:879:14: note: initialize the variable 'handled' to silence this warning
->           bool handled;
->                       ^
->                        = 0
->   1 error generated.
-> 
-> This should have used '=' instead of '|='; make that change to resolve
-> the warning.
-> 
-> Fixes: cbab791c5e2a ("iio: accel: add ADXL367 driver")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1605
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Applied to the togreg branch of iio.git.
-I also added a second reported-by to reflect the next patch setting in my inbox which
-was Colin fixing the same thing.
+All warnings (new ones prefixed by >>):
 
-Thanks!
+>> drivers/nvme/host/tcp.c:1299:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                    nvme_tcp_queue_id(queue), ret, iov.iov_len);
+                                                   ^~~~~~~~~~~
+   include/linux/printk.h:574:26: note: expanded from macro 'pr_debug'
+           dynamic_pr_debug(fmt, ##__VA_ARGS__)
+                            ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   drivers/nvme/host/tcp.c:1328:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                    nvme_tcp_queue_id(queue), ret, iov.iov_len);
+                                                   ^~~~~~~~~~~
+   include/linux/printk.h:574:26: note: expanded from macro 'pr_debug'
+           dynamic_pr_debug(fmt, ##__VA_ARGS__)
+                            ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   2 warnings generated.
 
-> ---
->  drivers/iio/accel/adxl367.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
-> index b452d74b1d4d..350a89b61179 100644
-> --- a/drivers/iio/accel/adxl367.c
-> +++ b/drivers/iio/accel/adxl367.c
-> @@ -884,7 +884,7 @@ static irqreturn_t adxl367_irq_handler(int irq, void *private)
->  	if (ret)
->  		return IRQ_NONE;
->  
-> -	handled |= adxl367_push_event(indio_dev, status);
-> +	handled = adxl367_push_event(indio_dev, status);
->  	handled |= adxl367_push_fifo_data(indio_dev, status, fifo_entries);
->  
->  	return handled ? IRQ_HANDLED : IRQ_NONE;
-> 
-> base-commit: 2be8795a609800e5071d868d459ce29232fce2c8
 
+vim +1299 drivers/nvme/host/tcp.c
+
+  1255	
+  1256	static int nvme_tcp_init_connection(struct nvme_tcp_queue *queue)
+  1257	{
+  1258		struct nvme_tcp_icreq_pdu *icreq;
+  1259		struct nvme_tcp_icresp_pdu *icresp;
+  1260		struct msghdr msg = {};
+  1261		char cbuf[CMSG_SPACE(sizeof(char))];
+  1262		struct cmsghdr *cmsg;
+  1263		unsigned char ctype;
+  1264		struct kvec iov;
+  1265		bool ctrl_hdgst, ctrl_ddgst;
+  1266		int ret;
+  1267	
+  1268		icreq = kzalloc(sizeof(*icreq), GFP_KERNEL);
+  1269		if (!icreq)
+  1270			return -ENOMEM;
+  1271	
+  1272		icresp = kzalloc(sizeof(*icresp), GFP_KERNEL);
+  1273		if (!icresp) {
+  1274			ret = -ENOMEM;
+  1275			goto free_icreq;
+  1276		}
+  1277	
+  1278		icreq->hdr.type = nvme_tcp_icreq;
+  1279		icreq->hdr.hlen = sizeof(*icreq);
+  1280		icreq->hdr.pdo = 0;
+  1281		icreq->hdr.plen = cpu_to_le32(icreq->hdr.hlen);
+  1282		icreq->pfv = cpu_to_le16(NVME_TCP_PFV_1_0);
+  1283		icreq->maxr2t = 0; /* single inflight r2t supported */
+  1284		icreq->hpda = 0; /* no alignment constraint */
+  1285		if (queue->hdr_digest)
+  1286			icreq->digest |= NVME_TCP_HDR_DIGEST_ENABLE;
+  1287		if (queue->data_digest)
+  1288			icreq->digest |= NVME_TCP_DATA_DIGEST_ENABLE;
+  1289	
+  1290		iov.iov_base = icreq;
+  1291		iov.iov_len = sizeof(*icreq);
+  1292		ret = kernel_sendmsg(queue->sock, &msg, &iov, 1, iov.iov_len);
+  1293		if (ret < 0) {
+  1294			pr_err("queue %d: failed to send icresp, error %d\n",
+  1295			       nvme_tcp_queue_id(queue), ret);
+  1296			goto free_icresp;
+  1297		}
+  1298		pr_debug("queue %d: sent %d/%lu icreq bytes\n",
+> 1299			 nvme_tcp_queue_id(queue), ret, iov.iov_len);
+  1300		memset(&msg, 0, sizeof(msg));
+  1301		msg.msg_control = cbuf;
+  1302		msg.msg_controllen = sizeof(cbuf);
+  1303		msg.msg_flags = MSG_WAITALL;
+  1304		iov.iov_base = icresp;
+  1305		iov.iov_len = sizeof(*icresp);
+  1306		ret = kernel_recvmsg(queue->sock, &msg, &iov, 1,
+  1307				iov.iov_len, msg.msg_flags);
+  1308		cmsg = CMSG_FIRSTHDR(&msg);
+  1309		if (cmsg) {
+  1310			pr_debug("queue %d: received cmsg level %d\n",
+  1311				 nvme_tcp_queue_id(queue), cmsg->cmsg_level);
+  1312			if (cmsg->cmsg_level == SOL_TLS) {
+  1313				pr_debug("queue %d: received tls cmsg %d\n",
+  1314					 nvme_tcp_queue_id(queue), cmsg->cmsg_type);
+  1315				if (cmsg->cmsg_type == TLS_GET_RECORD_TYPE) {
+  1316					ctype = *((unsigned char *)CMSG_DATA(cmsg));
+  1317					if (ctype != 100)
+  1318						ret = -ENOTCONN;
+  1319				}
+  1320			}
+  1321		}
+  1322		if (ret < 0) {
+  1323			pr_err("queue %d: failed to receive icresp, error %d\n",
+  1324			       nvme_tcp_queue_id(queue), ret);
+  1325			goto free_icresp;
+  1326		}
+  1327		pr_debug("queue %d: received %d/%lu icresp bytes\n",
+  1328			 nvme_tcp_queue_id(queue), ret, iov.iov_len);
+  1329		ret = -EINVAL;
+  1330		if (icresp->hdr.type != nvme_tcp_icresp) {
+  1331			pr_err("queue %d: bad type returned %d\n",
+  1332				nvme_tcp_queue_id(queue), icresp->hdr.type);
+  1333			print_hex_dump(KERN_ERR, "icresp: ", 0,
+  1334				       8, 1, icresp, iov.iov_len, true);
+  1335			goto free_icresp;
+  1336		}
+  1337	
+  1338		if (le32_to_cpu(icresp->hdr.plen) != sizeof(*icresp)) {
+  1339			pr_err("queue %d: bad pdu length returned %d\n",
+  1340				nvme_tcp_queue_id(queue), icresp->hdr.plen);
+  1341			goto free_icresp;
+  1342		}
+  1343	
+  1344		if (icresp->pfv != NVME_TCP_PFV_1_0) {
+  1345			pr_err("queue %d: bad pfv returned %d\n",
+  1346				nvme_tcp_queue_id(queue), icresp->pfv);
+  1347			goto free_icresp;
+  1348		}
+  1349	
+  1350		ctrl_ddgst = !!(icresp->digest & NVME_TCP_DATA_DIGEST_ENABLE);
+  1351		if ((queue->data_digest && !ctrl_ddgst) ||
+  1352		    (!queue->data_digest && ctrl_ddgst)) {
+  1353			pr_err("queue %d: data digest mismatch host: %s ctrl: %s\n",
+  1354				nvme_tcp_queue_id(queue),
+  1355				queue->data_digest ? "enabled" : "disabled",
+  1356				ctrl_ddgst ? "enabled" : "disabled");
+  1357			goto free_icresp;
+  1358		}
+  1359	
+  1360		ctrl_hdgst = !!(icresp->digest & NVME_TCP_HDR_DIGEST_ENABLE);
+  1361		if ((queue->hdr_digest && !ctrl_hdgst) ||
+  1362		    (!queue->hdr_digest && ctrl_hdgst)) {
+  1363			pr_err("queue %d: header digest mismatch host: %s ctrl: %s\n",
+  1364				nvme_tcp_queue_id(queue),
+  1365				queue->hdr_digest ? "enabled" : "disabled",
+  1366				ctrl_hdgst ? "enabled" : "disabled");
+  1367			goto free_icresp;
+  1368		}
+  1369	
+  1370		if (icresp->cpda != 0) {
+  1371			pr_err("queue %d: unsupported cpda returned %d\n",
+  1372				nvme_tcp_queue_id(queue), icresp->cpda);
+  1373			goto free_icresp;
+  1374		}
+  1375	
+  1376		ret = 0;
+  1377	free_icresp:
+  1378		kfree(icresp);
+  1379	free_icreq:
+  1380		kfree(icreq);
+  1381		return ret;
+  1382	}
+  1383	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
