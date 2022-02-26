@@ -1,49 +1,58 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E91D367F
-	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 02:33:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645842817; x=1677378817;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BVLclhNw0PC2QXbhzFkl59rdBrw4CM2n4+zDU93oWUg=;
-  b=RNVJUyw2sIrrFCX3/11XoDECw4DXBPvbYzrGFl/WEMWeW7WSsaaVS+A/
-   qn2yAA48G1ev27T3kVWif2b3DNqlOruLodgiVZIKS8UbiTIknC7o67Bg0
-   ehx1bogg3drzCYsSuStXAGsCzs4zymUe1JqT4Wz79q68ynTEyYmQSjxap
-   uF6H7VCDd8v6XuNO8ty6SXHd5TMqVSYhShY+ecyNHoOKDdfEqzmUoB+qy
-   mhroYyLfXmWL06ZGIg9FWgSKMMM/FX8SPq6w0YH+UiGnKUYOun5T3jOp+
-   eVVCEROnDnUaKHAfEbF6wCYjAdq4Czy3ij3+7z9HAH6A5GjH58yC+sSAK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="236128930"
-X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
-   d="scan'208";a="236128930"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 18:33:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
-   d="scan'208";a="574789079"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 25 Feb 2022 18:33:33 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nNmto-0004yB-O0; Sat, 26 Feb 2022 02:33:32 +0000
-Date: Sat, 26 Feb 2022 10:32:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hao Luo <haoluo@google.com>, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
-	Shakeel Butt <shakeelb@google.com>,
-	Joe Burton <jevburton.kernel@gmail.com>, Tejun Heo <tj@kernel.org>,
-	joshdon@google.com, sdf@google.com, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH bpf-next v1 8/9] bpf: Introduce cgroup iter
-Message-ID: <202202261010.IU59MxY8-lkp@intel.com>
-References: <20220225234339.2386398-9-haoluo@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A34369B
+	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 04:58:05 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id bd1so6398116plb.13
+        for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 20:58:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5WDq2AfJRdEk3uwNCX9CCL0Qxk/1zT3oEVQ37zTBxiQ=;
+        b=c3aDV/sWGC8Aav0gTokKYXKTVE9bAzdOg/VodTQkI1ZuWDFLBaAapUK41ly/1s3IY/
+         W+Z6/i2+AiHX1zTPTIWN0fxwS7weXUa9htEgesB3a3/aUvLro2QbUvmJvb7PuCo8MDxY
+         cWLiWBjaqvM9w53HJp7E2yo9+WCoeGP3wPwnw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5WDq2AfJRdEk3uwNCX9CCL0Qxk/1zT3oEVQ37zTBxiQ=;
+        b=R4fiXtcpa1zbzm6Jb7DHiHHQAo7ZdBGrA2Ko9zycWgJtU74SL3jFMaydqmM+wLVuSa
+         1qGgTS5kjAhNnvpn0mudF4kSuXoiqI1eSzOHXvsn+y0Od127aiu5X8YcGYpt21tpnj/V
+         bj/WGk2UNFLRphsRaF97sg/IcRRYmINEbsWJ5wbTKuyDGX7Olg0H85X2ExYQSeMibLKQ
+         dUsEzPKfa6oFiNw+SsXCliBmdTZwA7IG1gGwYGH3Zc52usnlisDQduKl4hHYT9iBd6hf
+         qo3QKMy1crpoKm8eS2JUqh1OQ9LJpCa5eTOzKPWy/nfNCHO+g39zJdJfkTMGUJstIGSW
+         yG/g==
+X-Gm-Message-State: AOAM532kXpx0ctC1JnOCAWdClLRvKUDMtolcolagtlXCWSP3BbalfMxL
+	1k0Kh7W+pqZKJ3Jg0Vub4MTKRw==
+X-Google-Smtp-Source: ABdhPJw+Pq5ORed8exj9wiY5jEUAPWkvWhs95qMwc9/ZjM7l7Vq7hTKWaYi8/0ifVsSFdaFo8S2A8g==
+X-Received: by 2002:a17:90a:6a45:b0:1bc:5899:c960 with SMTP id d5-20020a17090a6a4500b001bc5899c960mr6431453pjm.128.1645851484628;
+        Fri, 25 Feb 2022 20:58:04 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v3-20020a17090a088300b001bc76ed4ad9sm11129598pjc.9.2022.02.25.20.58.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 20:58:04 -0800 (PST)
+Date: Fri, 25 Feb 2022 20:58:03 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Joao Moreira <joao@overdrivepizza.com>,
+	Fangrui Song <maskray@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+	hjl.tools@gmail.com, jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+	linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+	samitolvanen@google.com, mark.rutland@arm.com,
+	alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+	mhiramat@kernel.org, alexei.starovoitov@gmail.com,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 05/39] x86: Base IBT bits
+Message-ID: <202202252055.AB16A4B8@keescook>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.307406918@infradead.org>
+ <202202241627.EEF3D5D2@keescook>
+ <YhgnA8O4Bp19hfse@dev-arch.archlinux-ax161>
+ <YhlTRhh7qj538ygM@dev-arch.archlinux-ax161>
+ <605731324a76f36aafa87bd9390808c3@overdrivepizza.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,77 +61,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220225234339.2386398-9-haoluo@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <605731324a76f36aafa87bd9390808c3@overdrivepizza.com>
 
-Hi Hao,
+On Fri, Feb 25, 2022 at 04:29:49PM -0800, Joao Moreira wrote:
+> > https://github.com/ClangBuiltLinux/linux/issues/1606
+> 
+> Candidate fix: https://reviews.llvm.org/D120600
 
-Thank you for the patch! Perhaps something to improve:
+And landed! Thanks!
 
-[auto build test WARNING on bpf-next/master]
+Since this is a pretty small change, do you think it could be backported
+to the clang-14 branch?
 
-url:    https://github.com/0day-ci/linux/commits/Hao-Luo/Extend-cgroup-interface-with-bpf/20220226-074615
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: hexagon-randconfig-r023-20220226 (https://download.01.org/0day-ci/archive/20220226/202202261010.IU59MxY8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ee74423719e2efb4efa7a4491920c78b60024ec7
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Hao-Luo/Extend-cgroup-interface-with-bpf/20220226-074615
-        git checkout ee74423719e2efb4efa7a4491920c78b60024ec7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/cgroup_iter.c:107:39: warning: format specifies type 'unsigned long' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
-           seq_printf(seq, "cgroup_id:\t%lu\n", aux->cgroup_id);
-                                        ~~~     ^~~~~~~~~~~~~~
-                                        %llu
->> kernel/bpf/cgroup_iter.c:101:6: warning: no previous prototype for function 'bpf_iter_cgroup_show_fdinfo' [-Wmissing-prototypes]
-   void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
-        ^
-   kernel/bpf/cgroup_iter.c:101:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
-   ^
-   static 
->> kernel/bpf/cgroup_iter.c:111:5: warning: no previous prototype for function 'bpf_iter_cgroup_fill_link_info' [-Wmissing-prototypes]
-   int bpf_iter_cgroup_fill_link_info(const struct bpf_iter_aux_info *aux,
-       ^
-   kernel/bpf/cgroup_iter.c:111:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_iter_cgroup_fill_link_info(const struct bpf_iter_aux_info *aux,
-   ^
-   static 
-   3 warnings generated.
-
-
-vim +107 kernel/bpf/cgroup_iter.c
-
-   100	
- > 101	void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
-   102					 struct seq_file *seq)
-   103	{
-   104		char buf[64] = {0};
-   105	
-   106		cgroup_path_from_kernfs_id(aux->cgroup_id, buf, sizeof(buf));
- > 107		seq_printf(seq, "cgroup_id:\t%lu\n", aux->cgroup_id);
-   108		seq_printf(seq, "cgroup_path:\t%s\n", buf);
-   109	}
-   110	
- > 111	int bpf_iter_cgroup_fill_link_info(const struct bpf_iter_aux_info *aux,
-   112					   struct bpf_link_info *info)
-   113	{
-   114		info->iter.cgroup.cgroup_id = aux->cgroup_id;
-   115		return 0;
-   116	}
-   117	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook
