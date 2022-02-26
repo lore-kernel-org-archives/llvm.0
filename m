@@ -1,44 +1,44 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9627A
-	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 02:12:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2502D1FBD
+	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 02:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645841555; x=1677377555;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kh/9vRAe+6sMDJj5qRL+ZnaKcTZ75FD5ND5I6N7S2uY=;
-  b=fLsVj11RIQc6mk1bgWjKgeRXN7tNcaaBJgHlxb5hSTQynqbrPd/FUIUw
-   ASC/+5DRMtSlYQ6daHxnmp0o1GSsUdNEeUtKH4MECW3MBiZjAiqvm7Uv1
-   RlP7C9Xsz+0o2/5jnI72qJdT1KsrlRYJSvqAvRnun1HtB50Px3r2DAlz7
-   mvxi3OjQW+rvdVVClDhe9Is2PmszHJMJYpVO6ewDjmZflkYGfPF/gL3hq
-   2MZsoavveA5x1FdbTthl1j+uhf2/KXiGTLPy3rQMPndgfN6zwTOWYAFoJ
-   rVsDIXg6+gFRaOL0Ltm+o4Fofx4VzjEWSHTxwgkADi4fSQGpxRwpb/voq
+  t=1645842816; x=1677378816;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7D2r85Uwz0Z5IABKnR6r5ET9fkhKx0yU3xEnD/Vax8o=;
+  b=hAEl+KUrFWBuhzDh6ZpqxU2g9V/9V1VzRRRidMjGPk2Jisqb0g2uS/wa
+   Pgqj2ZzyPPH7qSC1EjuUqcv+tRhn4b474+/wR8IyV5a64opp+pjFdtISv
+   taunMNWXLOBVxceiSLqkExPeF05fpqepTY4p5rD+uHsT0bfdCcdPJ3WsR
+   MImSt+d81OtZrAiydmiVMhNe3BCmAbx+y6lp+6S++HOffpiq4FLRMWAOW
+   uJii0lk5/YqeHtUPcDN5nfOdvz2xtU4gbTvk9LdOgjEBtf/JagIC22u+R
+   ddy33jp0tLb9NYKQOCz3HB4K7cix2D1zOFfAQzJ4OTMBupfMa43rS28qD
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="315835079"
+X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="236128927"
 X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
-   d="scan'208";a="315835079"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 18:12:34 -0800
+   d="scan'208";a="236128927"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 18:33:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
-   d="scan'208";a="549514219"
+   d="scan'208";a="574789080"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Feb 2022 18:12:32 -0800
+  by orsmga001.jf.intel.com with ESMTP; 25 Feb 2022 18:33:33 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nNmZU-0004xO-7V; Sat, 26 Feb 2022 02:12:32 +0000
-Date: Sat, 26 Feb 2022 10:12:17 +0800
+	id 1nNmto-0004yI-Pc; Sat, 26 Feb 2022 02:33:32 +0000
+Date: Sat, 26 Feb 2022 10:32:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alan Previn <alan.previn.teres.alexis@intel.com>,
-	intel-gfx@lists.freedesktop.org
+To: Peter Collingbourne <pcc@google.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Alan Previn <alan.previn.teres.alexis@intel.com>
-Subject: Re: [Intel-gfx] [PATCH 1/1] drm/i915/reset: Fix error_state_read ptr
- + offset use
-Message-ID: <202202261049.pxCmgeWV-lkp@intel.com>
-References: <20220225215705.248707-2-alan.previn.teres.alexis@intel.com>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>
+Subject: [ammarfaizi2-block:arm64/linux/for-next/mte 2/6]
+ include/linux/kasan-enabled.h:7:26: error: a parameter list without types is
+ only allowed in a function definition
+Message-ID: <202202261019.v5uTU7PH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,92 +47,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220225215705.248707-2-alan.previn.teres.alexis@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Alan,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on drm-intel/for-linux-next]
-[also build test WARNING on drm-tip/drm-tip drm-exynos/exynos-drm-next drm/drm-next tegra-drm/drm/tegra/for-next v5.17-rc5 next-20220224]
-[cannot apply to airlied/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Alan-Previn/Fix-i915-error_state_read-ptr-use/20220226-055549
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220226/202202261049.pxCmgeWV-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block arm64/linux/for-next/mte
+head:   766121ba5de38a6f67980ec24a6af76c55def100
+commit: 38ddf7dafaeaf3fcdea65b3b4dfb06b4bcd9cc15 [2/6] arm64: mte: avoid clearing PSTATE.TCO on entry unless necessary
+config: arm64-randconfig-r011-20220225 (https://download.01.org/0day-ci/archive/20220226/202202261019.v5uTU7PH-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/4ae08e2ae5d3ff4e465a35b05010e44d02b59aab
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Alan-Previn/Fix-i915-error_state_read-ptr-use/20220226-055549
-        git checkout 4ae08e2ae5d3ff4e465a35b05010e44d02b59aab
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/38ddf7dafaeaf3fcdea65b3b4dfb06b4bcd9cc15
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block arm64/linux/for-next/mte
+        git checkout 38ddf7dafaeaf3fcdea65b3b4dfb06b4bcd9cc15
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/tty/serial/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/i915_sysfs.c:447:3: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (off < len) {
-                   ^~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_sysfs.c:453:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/gpu/drm/i915/i915_sysfs.c:447:3: note: remove the 'if' if its condition is always true
-                   if (off < len) {
-                   ^~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   drivers/gpu/drm/i915/i915_sysfs.c:435:13: note: initialize the variable 'ret' to silence this warning
-           ssize_t ret;
-                      ^
-                       = 0
-   1 warning generated.
+   In file included from drivers/tty/serial/earlycon.c:16:
+   In file included from include/linux/io.h:13:
+   In file included from arch/arm64/include/asm/io.h:12:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm64/include/asm/pgtable.h:12:
+   In file included from arch/arm64/include/asm/mte.h:14:
+>> include/linux/kasan-enabled.h:7:1: warning: declaration specifier missing, defaulting to 'int'
+   DECLARE_STATIC_KEY_FALSE(kasan_flag_enabled);
+   ^
+   int
+>> include/linux/kasan-enabled.h:7:26: error: a parameter list without types is only allowed in a function definition
+   DECLARE_STATIC_KEY_FALSE(kasan_flag_enabled);
+                            ^
+>> include/linux/kasan-enabled.h:11:9: error: implicit declaration of function 'static_branch_likely' [-Werror,-Wimplicit-function-declaration]
+           return static_branch_likely(&kasan_flag_enabled);
+                  ^
+>> include/linux/kasan-enabled.h:11:31: error: use of undeclared identifier 'kasan_flag_enabled'; did you mean 'kasan_enabled'?
+           return static_branch_likely(&kasan_flag_enabled);
+                                        ^~~~~~~~~~~~~~~~~~
+                                        kasan_enabled
+   include/linux/kasan-enabled.h:9:29: note: 'kasan_enabled' declared here
+   static __always_inline bool kasan_enabled(void)
+                               ^
+   1 warning and 3 errors generated.
 
 
-vim +447 drivers/gpu/drm/i915/i915_sysfs.c
+vim +7 include/linux/kasan-enabled.h
 
-   431	
-   432		struct device *kdev = kobj_to_dev(kobj);
-   433		struct drm_i915_private *i915 = kdev_minor_to_i915(kdev);
-   434		struct i915_gpu_coredump *gpu;
-   435		ssize_t ret;
-   436	
-   437		gpu = i915_first_error_state(i915);
-   438		if (IS_ERR(gpu)) {
-   439			ret = PTR_ERR(gpu);
-   440		} else if (gpu) {
-   441			ret = i915_gpu_coredump_copy_to_buffer(gpu, buf, off, count);
-   442			i915_gpu_coredump_put(gpu);
-   443		} else {
-   444			const char *str = "No error state collected\n";
-   445			size_t len = strlen(str);
-   446	
- > 447			if (off < len) {
-   448				ret = min_t(size_t, count, len - off);
-   449				memcpy(buf, str + off, ret);
-   450			}
-   451		}
-   452	
-   453		return ret;
-   454	}
-   455	
+f9b5e46f4097eb2 Peter Collingbourne 2022-02-18   6  
+f9b5e46f4097eb2 Peter Collingbourne 2022-02-18  @7  DECLARE_STATIC_KEY_FALSE(kasan_flag_enabled);
+f9b5e46f4097eb2 Peter Collingbourne 2022-02-18   8  
+f9b5e46f4097eb2 Peter Collingbourne 2022-02-18   9  static __always_inline bool kasan_enabled(void)
+f9b5e46f4097eb2 Peter Collingbourne 2022-02-18  10  {
+f9b5e46f4097eb2 Peter Collingbourne 2022-02-18 @11  	return static_branch_likely(&kasan_flag_enabled);
+f9b5e46f4097eb2 Peter Collingbourne 2022-02-18  12  }
+f9b5e46f4097eb2 Peter Collingbourne 2022-02-18  13  
+
+:::::: The code at line 7 was first introduced by commit
+:::::: f9b5e46f4097eb298f68e5b02f70697a90a44739 kasan: split kasan_*enabled() functions into a separate header
+
+:::::: TO: Peter Collingbourne <pcc@google.com>
+:::::: CC: Will Deacon <will@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
