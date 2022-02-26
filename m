@@ -1,119 +1,95 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B76F38FF
-	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 22:22:03 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-218-qo9exv-6NkuKleZpLM9g_w-1; Sat, 26 Feb 2022 22:22:00 +0000
-X-MC-Unique: qo9exv-6NkuKleZpLM9g_w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Sat, 26 Feb 2022 22:21:58 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Sat, 26 Feb 2022 22:21:58 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: "'trix@redhat.com'" <trix@redhat.com>, "alexander.deucher@amd.com"
-	<alexander.deucher@amd.com>, "christian.koenig@amd.com"
-	<christian.koenig@amd.com>, "Xinhui.Pan@amd.com" <Xinhui.Pan@amd.com>,
-	"airlied@linux.ie" <airlied@linux.ie>, "daniel@ffwll.ch" <daniel@ffwll.ch>,
-	"nathan@kernel.org" <nathan@kernel.org>, "ndesaulniers@google.com"
-	<ndesaulniers@google.com>, "nirmoy.das@amd.com" <nirmoy.das@amd.com>,
-	"lijo.lazar@amd.com" <lijo.lazar@amd.com>, "tom.stdenis@amd.com"
-	<tom.stdenis@amd.com>, "evan.quan@amd.com" <evan.quan@amd.com>,
-	"kevin1.wang@amd.com" <kevin1.wang@amd.com>, "Amaranath.Somalapuram@amd.com"
-	<Amaranath.Somalapuram@amd.com>
-CC: "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [PATCH] drm/amdgpu: Fix realloc of ptr
-Thread-Topic: [PATCH] drm/amdgpu: Fix realloc of ptr
-Thread-Index: AQHYKynKuecV+YVBsEaifDyg6Kuo9qymZ9yQ
-Date: Sat, 26 Feb 2022 22:21:58 +0000
-Message-ID: <f863c19ccba34e50802836bcb3b0b622@AcuMS.aculab.com>
-References: <20220226155851.4176109-1-trix@redhat.com>
-In-Reply-To: <20220226155851.4176109-1-trix@redhat.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9CEE7A
+	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 23:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645917012; x=1677453012;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ahx7IuD5uBSfat9HGZzW/lxFspm9JreiJP4tVvzDlPI=;
+  b=nMSZopWF8WGi1/AQpURPoZ7jTweNOGMupYRfHTmhRfLCD4rKr+DK7f4L
+   3RmT75Aqox4OQ5RwLEcfGsi/u4ohPMu/zC8cJyFMGbFoApf9or36qgk0P
+   ElJY8ySnnPkx8y35WH+96rgedKJesR9mp25Ov/kDKN+g3UtZ0innNpcIH
+   RyQeTtzqy9YCx2bJ5IxDXMOasKZ49e32GJ3Oij6MWoijCsm3ORsxqgm3I
+   Ozg+OeNdm8XZWTxWVUSx40nimJduUzUBVp0oFFzXCJlns8GetUIu66fub
+   /geu4txpme+RLJ6lvSJAApxz+ruandWs99+BCDD+Wp416JlbBmnIVlWbE
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="236194424"
+X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
+   d="scan'208";a="236194424"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 15:10:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
+   d="scan'208";a="507044102"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 26 Feb 2022 15:10:10 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nO6CY-00061m-5F; Sat, 26 Feb 2022 23:10:10 +0000
+Date: Sun, 27 Feb 2022 07:09:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Collingbourne <pcc@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: mm/kasan/sw_tags.c:211:6: warning: no previous prototype for
+ function 'kasan_tag_mismatch'
+Message-ID: <202202270743.gaL2uEDw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: trix@redhat.com
-> Sent: 26 February 2022 15:59
->=20
-> From: Tom Rix <trix@redhat.com>
->=20
-> Clang static analysis reports this error
-> amdgpu_debugfs.c:1690:9: warning: 1st function call
->   argument is an uninitialized value
->   tmp =3D krealloc_array(tmp, i + 1,
->         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->=20
-> realloc will free tmp, so tmp can not be garbage.
-> And the return needs to be checked.
+Hi Peter,
 
-Are you sure?
-A quick check seems to show that krealloc() behaves the same
-way as libc realloc() and the pointer isn't freed on failure.
+FYI, the error/warning still remains.
 
-=09David
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2293be58d6a18cab800e25e42081bacb75c05752
+commit: 1cbdf60bd1b74e397d48aa877367cfc621f45ffe kasan: arm64: support specialized outlined tag mismatch checks
+date:   9 months ago
+config: arm64-randconfig-r013-20220227 (https://download.01.org/0day-ci/archive/20220227/202202270743.gaL2uEDw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1cbdf60bd1b74e397d48aa877367cfc621f45ffe
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 1cbdf60bd1b74e397d48aa877367cfc621f45ffe
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/ mm/kasan/
 
-> Fixes: 5ce5a584cb82 ("drm/amdgpu: add debugfs for reset registers list")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/dr=
-m/amd/amdgpu/amdgpu_debugfs.c
-> index 9eb9b440bd438..159b97c0b4ebc 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> @@ -1676,7 +1676,7 @@ static ssize_t amdgpu_reset_dump_register_list_writ=
-e(struct file *f,
->  {
->  =09struct amdgpu_device *adev =3D (struct amdgpu_device *)file_inode(f)-=
->i_private;
->  =09char reg_offset[11];
-> -=09uint32_t *tmp;
-> +=09uint32_t *tmp =3D NULL;
->  =09int ret, i =3D 0, len =3D 0;
->=20
->  =09do {
-> @@ -1688,6 +1688,10 @@ static ssize_t amdgpu_reset_dump_register_list_wri=
-te(struct file *f,
->  =09=09}
->=20
->  =09=09tmp =3D krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_KERNEL);
-> +=09=09if (!tmp) {
-> +=09=09=09ret =3D -ENOMEM;
-> +=09=09=09goto error_free;
-> +=09=09}
->  =09=09if (sscanf(reg_offset, "%X %n", &tmp[i], &ret) !=3D 1) {
->  =09=09=09ret =3D -EINVAL;
->  =09=09=09goto error_free;
-> --
-> 2.26.3
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+All warnings (new ones prefixed by >>):
 
+>> mm/kasan/sw_tags.c:211:6: warning: no previous prototype for function 'kasan_tag_mismatch' [-Wmissing-prototypes]
+   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+        ^
+   mm/kasan/sw_tags.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/kasan_tag_mismatch +211 mm/kasan/sw_tags.c
+
+   210	
+ > 211	void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
