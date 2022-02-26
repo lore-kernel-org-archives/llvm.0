@@ -1,62 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7B67B
-	for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 23:45:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5AD5C340E7;
-	Fri, 25 Feb 2022 23:45:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1645832720;
-	bh=NDHUSkypJld5d5CGQR6W7J8F3jQ+Dhc1F620s3ekMVg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=M3B7HMJmt3xObSeYIG/wl8EEhpwltcLfl74Qun9Npta6HKmi1lGd0bjzQTbrl7T7b
-	 961g+Ynw1WYvQ6fMSsP7ryJsEr6+GR1FHEo1VVtT8Vzf+xriyAxgU+8xWecdee4F2e
-	 WFr7BqMNe7tbXnbOaopVlZvMs9rr1WyUSSBjyo54=
-Date: Fri, 25 Feb 2022 15:45:18 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, Marco Elver <elver@google.com>, Pekka Enberg
- <penberg@kernel.org>, David Rientjes <rientjes@google.com>, Joonsoo Kim
- <iamjoonsoo.kim@lge.com>, Vlastimil Babka <vbabka@suse.cz>,
- linux-mm@kvack.org, stable@vger.kernel.org, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Christoph Lameter <cl@linux.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Daniel Micay
- <danielmicay@gmail.com>, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] mm: Handle ksize() vs __alloc_size by forgetting size
-Message-Id: <20220225154518.0d1159fdc6f37ee38e39e90c@linux-foundation.org>
-In-Reply-To: <20220225221625.3531852-1-keescook@chromium.org>
-References: <20220225221625.3531852-1-keescook@chromium.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED5F7A
+	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 00:48:02 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::227])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id C2A08C70A2
+	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 00:30:02 +0000 (UTC)
+Received: (Authenticated sender: joao@overdrivepizza.com)
+	by mail.gandi.net (Postfix) with ESMTPA id 0B58720003;
+	Sat, 26 Feb 2022 00:29:49 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Date: Fri, 25 Feb 2022 16:29:49 -0800
+From: Joao Moreira <joao@overdrivepizza.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>, Peter Zijlstra
+ <peterz@infradead.org>, x86@kernel.org, hjl.tools@gmail.com,
+ jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+ linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+ samitolvanen@google.com, mark.rutland@arm.com, alyssa.milburn@intel.com,
+ mbenes@suse.cz, rostedt@goodmis.org, mhiramat@kernel.org,
+ alexei.starovoitov@gmail.com, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 05/39] x86: Base IBT bits
+In-Reply-To: <YhlTRhh7qj538ygM@dev-arch.archlinux-ax161>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.307406918@infradead.org> <202202241627.EEF3D5D2@keescook>
+ <YhgnA8O4Bp19hfse@dev-arch.archlinux-ax161>
+ <YhlTRhh7qj538ygM@dev-arch.archlinux-ax161>
+Message-ID: <605731324a76f36aafa87bd9390808c3@overdrivepizza.com>
+X-Sender: joao@overdrivepizza.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Fri, 25 Feb 2022 14:16:25 -0800 Kees Cook <keescook@chromium.org> wrote:
+> https://github.com/ClangBuiltLinux/linux/issues/1606
 
-> If ksize() is used on an allocation, the compiler cannot make any
-> assumptions about its size any more (as hinted by __alloc_size). Force
-> it to forget.
-> 
-> One caller was using a container_of() construction that needed to be
-> worked around.
-
-Please, when fixing something do fully explain what that thing is.  I,
-for one, simply cannot understand why this change is being proposed.
-
-Especially when proposing a -stable backport!  Tell readers what was
-the end-user impact of the bug.
-
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1599
-
-Even that didn't tell me.  Is it just a clang warning?  Does the kernel
-post your private keys on reddit then scribble all over your disk
-drive?  I dunno.
-
-
+Candidate fix: https://reviews.llvm.org/D120600
