@@ -1,79 +1,139 @@
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507007A
-	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 01:28:05 +0000 (UTC)
-Received: by mail-io1-f49.google.com with SMTP id q8so8576472iod.2
-        for <llvm@lists.linux.dev>; Fri, 25 Feb 2022 17:28:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZnbbEMt3jkmlYOE0bA6a7Tz/qzU0Syhvt4pmLzBwk+U=;
-        b=RD+cBNsCKTgv1ZnZ1ww8dul+ibocM3XNMxPC3T5gBhIuZDqFh4/+kYvjgl+t3THB1t
-         TNY0vlilXIORXYvymwZxQrrjSEK1wd4iJiCthynJiK1XwO21rxyqWtt4NZcR05feyV2n
-         zFvQSxJsRzpiH2PfaXX410mFGoUH5iC6BS7r0YhEenMmvWUivRtYM5bBamYy/HJ4UfQf
-         mLKAjuy7qOm5PbBJEnJV+fLywhchcsy2LndGiD5cvN6P9igs3Jc+hC3E7bO8/PdkZFGK
-         Tm5PdGBeZ0zNFQ8NQgn4dY65bZy9Yq8Irbw8vHAUhXXnjcSAFaVjOaOFooFxtYNNcrVO
-         7N1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZnbbEMt3jkmlYOE0bA6a7Tz/qzU0Syhvt4pmLzBwk+U=;
-        b=hAwSiqVKzkdvD/eU93PMBuEsRqgN89cc2DKzoV0vE7OlwtTIQPRZ+rnaMQip6YHCO7
-         ZBsONoOXLn9oTTKVz9lse1vh9pO6PtoH/Z/+Bgbq2r60O0Xfx7hKxNCHmMdx/dhWblJe
-         dZOfhGH3sksZO3qTHyMKwI6n5qRKTNS4KIcjqc01xo8yaa7uhvpafY292fyq4pIR099G
-         fhy5VYHqZ77Q4Ln6sRsmmHecXan3welEKoyCVdkL0uBGKJ8fNDMsIiuIZLD1QqMxmTPI
-         3G4GYcmh+ZhktGBXADaUmlfgQJWMUqVnBNlt15VVS/Riotcpibpb2ciVhWGMBvlogsA0
-         hhHA==
-X-Gm-Message-State: AOAM533UBHJfipNX6GGcOFvzSZeEIaXxxT3yST0yt2tw2wusCY9wEzzQ
-	i8RqXZ/oZmTC7m6YIBVRIysyXxjHyw3DPVtoIoI=
-X-Google-Smtp-Source: ABdhPJwr8piYYKuKvOcgUuJp6nj91ylsWJvd8vpauApcGsvvimPOHYrtBAnaLmcM49B9zyvW3bEcZ47iiLi2OkJg/Kg=
-X-Received: by 2002:a05:6602:2d90:b0:63d:b41e:e4e4 with SMTP id
- k16-20020a0566022d9000b0063db41ee4e4mr7393250iow.172.1645838884294; Fri, 25
- Feb 2022 17:28:04 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9627A
+	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 02:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645841555; x=1677377555;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kh/9vRAe+6sMDJj5qRL+ZnaKcTZ75FD5ND5I6N7S2uY=;
+  b=fLsVj11RIQc6mk1bgWjKgeRXN7tNcaaBJgHlxb5hSTQynqbrPd/FUIUw
+   ASC/+5DRMtSlYQ6daHxnmp0o1GSsUdNEeUtKH4MECW3MBiZjAiqvm7Uv1
+   RlP7C9Xsz+0o2/5jnI72qJdT1KsrlRYJSvqAvRnun1HtB50Px3r2DAlz7
+   mvxi3OjQW+rvdVVClDhe9Is2PmszHJMJYpVO6ewDjmZflkYGfPF/gL3hq
+   2MZsoavveA5x1FdbTthl1j+uhf2/KXiGTLPy3rQMPndgfN6zwTOWYAFoJ
+   rVsDIXg6+gFRaOL0Ltm+o4Fofx4VzjEWSHTxwgkADi4fSQGpxRwpb/voq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="315835079"
+X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
+   d="scan'208";a="315835079"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 18:12:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
+   d="scan'208";a="549514219"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 25 Feb 2022 18:12:32 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nNmZU-0004xO-7V; Sat, 26 Feb 2022 02:12:32 +0000
+Date: Sat, 26 Feb 2022 10:12:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alan Previn <alan.previn.teres.alexis@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Alan Previn <alan.previn.teres.alexis@intel.com>
+Subject: Re: [Intel-gfx] [PATCH 1/1] drm/i915/reset: Fix error_state_read ptr
+ + offset use
+Message-ID: <202202261049.pxCmgeWV-lkp@intel.com>
+References: <20220225215705.248707-2-alan.previn.teres.alexis@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220225032410.25622-1-ashimida@linux.alibaba.com>
- <CANiq72kXoonDYk095XvBwEtRCRNECd1iQOqJHE2cNcgLyUMfcQ@mail.gmail.com> <202202251258.DB0F403B@keescook>
-In-Reply-To: <202202251258.DB0F403B@keescook>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 26 Feb 2022 02:27:53 +0100
-Message-ID: <CANiq72=KjCd8pWKuXFzoW7oBQM9DV=DDyGzCyz62F4B+e5Q_qg@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH v2] AARCH64: Add gcc Shadow Call Stack support
-To: Kees Cook <keescook@chromium.org>
-Cc: Dan Li <ashimida@linux.alibaba.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Andrew Morton <akpm@linux-foundation.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Nicholas Piggin <npiggin@gmail.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Marco Elver <elver@google.com>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225215705.248707-2-alan.previn.teres.alexis@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Feb 25, 2022 at 9:59 PM Kees Cook <keescook@chromium.org> wrote:
->
-> I thought about that too, but I think it's less simple due to the
-> __has_feature vs CONFIG differences, etc:
-> https://lore.kernel.org/lkml/202202251243.1E38256F9@keescook/
->
-> But maybe __has_feature doesn't really matter here?
+Hi Alan,
 
-I have not tested it, but I was assuming the `CONFIG` could do its
-job, since it comes from testing the compiler flag.
+Thank you for the patch! Perhaps something to improve:
 
-If the `__has_feature` is actually restricting it more than that, then
-we should probably get the `CONFIG` fixed so that it only gets enabled
-when really it is going to be used.
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm-tip/drm-tip drm-exynos/exynos-drm-next drm/drm-next tegra-drm/drm/tegra/for-next v5.17-rc5 next-20220224]
+[cannot apply to airlied/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Cheers,
-Miguel
+url:    https://github.com/0day-ci/linux/commits/Alan-Previn/Fix-i915-error_state_read-ptr-use/20220226-055549
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220226/202202261049.pxCmgeWV-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/4ae08e2ae5d3ff4e465a35b05010e44d02b59aab
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Alan-Previn/Fix-i915-error_state_read-ptr-use/20220226-055549
+        git checkout 4ae08e2ae5d3ff4e465a35b05010e44d02b59aab
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/i915_sysfs.c:447:3: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (off < len) {
+                   ^~~~~~~~~~~~~~
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_sysfs.c:453:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/gpu/drm/i915/i915_sysfs.c:447:3: note: remove the 'if' if its condition is always true
+                   if (off < len) {
+                   ^~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   drivers/gpu/drm/i915/i915_sysfs.c:435:13: note: initialize the variable 'ret' to silence this warning
+           ssize_t ret;
+                      ^
+                       = 0
+   1 warning generated.
+
+
+vim +447 drivers/gpu/drm/i915/i915_sysfs.c
+
+   431	
+   432		struct device *kdev = kobj_to_dev(kobj);
+   433		struct drm_i915_private *i915 = kdev_minor_to_i915(kdev);
+   434		struct i915_gpu_coredump *gpu;
+   435		ssize_t ret;
+   436	
+   437		gpu = i915_first_error_state(i915);
+   438		if (IS_ERR(gpu)) {
+   439			ret = PTR_ERR(gpu);
+   440		} else if (gpu) {
+   441			ret = i915_gpu_coredump_copy_to_buffer(gpu, buf, off, count);
+   442			i915_gpu_coredump_put(gpu);
+   443		} else {
+   444			const char *str = "No error state collected\n";
+   445			size_t len = strlen(str);
+   446	
+ > 447			if (off < len) {
+   448				ret = min_t(size_t, count, len - off);
+   449				memcpy(buf, str + off, ret);
+   450			}
+   451		}
+   452	
+   453		return ret;
+   454	}
+   455	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
