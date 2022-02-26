@@ -1,124 +1,88 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B423B5C
-	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 15:59:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1645891143;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Grhy4tvGVEY5R3BS2D+G2b4sVPmyn1TwoVnElYjF3HA=;
-	b=QPWXxsgIVcFlXPeDJwWVe+bwwcrjhxVqC4Dbm3fiH5BeJdF4xmi3MJgOnQjkAVQB+US4gc
-	WS7i7LGrBXzeXUe+R7n7KZaPFQIzo5u6+um3jqOvUF8GPkuUklUoyh6oTIRR0VK82O9r+q
-	/gbtbgHuAG8/9uxHmMqrHWQTlHVMR94=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-576-o32sktBaP7iBqfk0frShdg-1; Sat, 26 Feb 2022 10:59:01 -0500
-X-MC-Unique: o32sktBaP7iBqfk0frShdg-1
-Received: by mail-qv1-f70.google.com with SMTP id d16-20020a0cf0d0000000b004328ac68689so8087504qvl.3
-        for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 07:59:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Grhy4tvGVEY5R3BS2D+G2b4sVPmyn1TwoVnElYjF3HA=;
-        b=Pq2CMwol+4jn1ANEU1T5VseDrvcxSw1+jgJQ1pVc3AgGb+88KO0M5E71M/tcuvCw01
-         mqrMzhWy958I6X2V1zG9J7NIqOVr3v0JCv6mX3KQ+EkD+yDMlnNp+1OPA1CNSaxmaBXO
-         tWlrNmNu04KeqHDm7x/r+vLM/9VjsO5Dv3buW16121IVI1GUlr42izmWP6mQ0yizPI/K
-         HDuiJb3b60n2qPPO2YIZk7F3KcgT1h8aNhkDc+cBbYOr3JbxVP5ZYwvw6XAiUVaZk68p
-         0DAXz2OsPJIXyh8I8+lFwnpo6ZGzGHbIpOTPMKBHY3cTI06E2cFgk4N+I/li9XXoKO3W
-         81+Q==
-X-Gm-Message-State: AOAM533hXZuyZLhGV0Krk1K6YI2+GnDy8xcVJBBOIXfsDbZSZA9Mg6TE
-	ArBBpq+OJwt/tv1fPROTxafEC37V+OhOITbha04S3y9Q5eTyLOSlaEyMqWGu4Rf3Uq2xp2ucfDP
-	rhzIxbXzNb6MhsA==
-X-Received: by 2002:a05:620a:122c:b0:47e:1445:15e8 with SMTP id v12-20020a05620a122c00b0047e144515e8mr7667244qkj.200.1645891141072;
-        Sat, 26 Feb 2022 07:59:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyep784W30LsjYckoKZZTZAqrxmyuQo5OmviyaAolfcaSK5XfS1laivNCE0UKTxjerrO/TlHg==
-X-Received: by 2002:a05:620a:122c:b0:47e:1445:15e8 with SMTP id v12-20020a05620a122c00b0047e144515e8mr7667237qkj.200.1645891140834;
-        Sat, 26 Feb 2022 07:59:00 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id w9-20020a05620a148900b005f188f755adsm2640064qkj.32.2022.02.26.07.58.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 07:59:00 -0800 (PST)
-From: trix@redhat.com
-To: alexander.deucher@amd.com,
-	christian.koenig@amd.com,
-	Xinhui.Pan@amd.com,
-	airlied@linux.ie,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	nirmoy.das@amd.com,
-	lijo.lazar@amd.com,
-	tom.stdenis@amd.com,
-	evan.quan@amd.com,
-	kevin1.wang@amd.com,
-	Amaranath.Somalapuram@amd.com
-Cc: amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amdgpu: Fix realloc of ptr
-Date: Sat, 26 Feb 2022 07:58:51 -0800
-Message-Id: <20220226155851.4176109-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C573B3D70;
+	Sat, 26 Feb 2022 17:53:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2017C340E8;
+	Sat, 26 Feb 2022 17:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645898012;
+	bh=VIfKV/A7k3FnJWADKVUq0cdczoP09UdBX8T7X4jHHCo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=VIuYPZeKVVkLRGy2MbqyzV1ZhwEYvH2qfnxaLNNZcoYP9CSXExnHSiVzfqKdwD3AD
+	 qnP5XdmKKJvh9zTppnC+ng/wzxeQzBrK+EloN+oh4pLEMl3648gKT2+mIwZYQ5/2wr
+	 efu19OwcAHnDBeoxbREGR1jhA2LFHj2Qgozfw05ZbqBk2f2y8BzPYxwoGBigVXFtyv
+	 UPqPzCH0BbOL+Uo6vxAmQA1tzQIIV/23FdZWemRoE1oRLyWkAxpd1hx2TUhfOPeSUr
+	 ha/e47aMUxQdu1NrneragnIbpkHw4N69UDjP5IbN1AtOezNBJQ6XPMZ7yYvHhPGLf2
+	 pJhEFntjgBxdA==
+Date: Sat, 26 Feb 2022 18:00:32 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Cosmin Tanislav
+ <cosmin.tanislav@analog.com>, linux-iio@vger.kernel.org,
+ patches@lists.linux.dev, llvm@lists.linux.dev, kernel test robot
+ <lkp@intel.com>, Colin Ian King <colin.i.king@gmail.com>
+Subject: Re: [PATCH] iio: accel: adxl367: Fix handled initialization in
+ adxl367_irq_handler()
+Message-ID: <20220226180032.455dc1c2@jic23-huawei>
+In-Reply-To: <20220224211034.625130-1-nathan@kernel.org>
+References: <20220224211034.625130-1-nathan@kernel.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Tom Rix <trix@redhat.com>
+On Thu, 24 Feb 2022 14:10:34 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-Clang static analysis reports this error
-amdgpu_debugfs.c:1690:9: warning: 1st function call
-  argument is an uninitialized value
-  tmp = krealloc_array(tmp, i + 1,
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Clang warns:
+> 
+>   drivers/iio/accel/adxl367.c:887:2: error: variable 'handled' is uninitialized when used here [-Werror,-Wuninitialized]
+>           handled |= adxl367_push_event(indio_dev, status);
+>           ^~~~~~~
+>   drivers/iio/accel/adxl367.c:879:14: note: initialize the variable 'handled' to silence this warning
+>           bool handled;
+>                       ^
+>                        = 0
+>   1 error generated.
+> 
+> This should have used '=' instead of '|='; make that change to resolve
+> the warning.
+> 
+> Fixes: cbab791c5e2a ("iio: accel: add ADXL367 driver")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1605
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-realloc will free tmp, so tmp can not be garbage.
-And the return needs to be checked.
+Applied to the togreg branch of iio.git.
+I also added a second reported-by to reflect the next patch setting in my inbox which
+was Colin fixing the same thing.
 
-Fixes: 5ce5a584cb82 ("drm/amdgpu: add debugfs for reset registers list")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Thanks!
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-index 9eb9b440bd438..159b97c0b4ebc 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-@@ -1676,7 +1676,7 @@ static ssize_t amdgpu_reset_dump_register_list_write(struct file *f,
- {
- 	struct amdgpu_device *adev = (struct amdgpu_device *)file_inode(f)->i_private;
- 	char reg_offset[11];
--	uint32_t *tmp;
-+	uint32_t *tmp = NULL;
- 	int ret, i = 0, len = 0;
- 
- 	do {
-@@ -1688,6 +1688,10 @@ static ssize_t amdgpu_reset_dump_register_list_write(struct file *f,
- 		}
- 
- 		tmp = krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_KERNEL);
-+		if (!tmp) {
-+			ret = -ENOMEM;
-+			goto error_free;
-+		}
- 		if (sscanf(reg_offset, "%X %n", &tmp[i], &ret) != 1) {
- 			ret = -EINVAL;
- 			goto error_free;
--- 
-2.26.3
+> ---
+>  drivers/iio/accel/adxl367.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
+> index b452d74b1d4d..350a89b61179 100644
+> --- a/drivers/iio/accel/adxl367.c
+> +++ b/drivers/iio/accel/adxl367.c
+> @@ -884,7 +884,7 @@ static irqreturn_t adxl367_irq_handler(int irq, void *private)
+>  	if (ret)
+>  		return IRQ_NONE;
+>  
+> -	handled |= adxl367_push_event(indio_dev, status);
+> +	handled = adxl367_push_event(indio_dev, status);
+>  	handled |= adxl367_push_fifo_data(indio_dev, status, fifo_entries);
+>  
+>  	return handled ? IRQ_HANDLED : IRQ_NONE;
+> 
+> base-commit: 2be8795a609800e5071d868d459ce29232fce2c8
 
