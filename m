@@ -1,264 +1,268 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731553222
-	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 21:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645998167; x=1677534167;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=4MO/GDGtXS6Dv1CRiErf5GTXWaiBkVdvSHdu4GIfpxU=;
-  b=TABM+zW15IaeEgxb4WAhdLKNbe2Zy08kh2cLwZrQx1QplKhNqQQJXbfr
-   yyzyl19DBzM14SqtbXFwxcIHi6BQcr33bv6oZFEhNDdb0DwxZq1o2MFmj
-   lPX7UoCxb/yP6lNV+k0unnMOP+OqeOxp/ay6+2XoXD8XN1eBPLDYmsQIN
-   fag9Uhwzauae3TStj5TjQi+/u5KaVP6tf2lLq59zw7eONx/h2m6BoYpgp
-   24sE5XFrPk4xoOHnmicWt21V95n2jPlqqs8svmYyLACKrrRoiL7MZ9M+2
-   DdD/bFIl66R/kkqrkfaNdYWBNfKljYLtFkkc5etda++I6zDuXphjCvXUK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="339201072"
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="339201072"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 13:42:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="708436226"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Feb 2022 13:42:43 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nORJT-0006om-7e; Sun, 27 Feb 2022 21:42:43 +0000
-Date: Mon, 28 Feb 2022 05:42:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Olivier Langlois <olivier@trillion01.com>, Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Hao Xu <haoxu@linux.alibaba.com>,
-	io-uring <io-uring@vger.kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] io_uring: Add support for napi_busy_poll
-Message-ID: <202202280543.0QW3T3id-lkp@intel.com>
-References: <53ae4884ede7faab1f409ec635f723a0745d3656.1645981935.git.olivier@trillion01.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31CBE3222;
+	Sun, 27 Feb 2022 21:54:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 668FDC340E9;
+	Sun, 27 Feb 2022 21:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645998868;
+	bh=3t/p0jjcIOQ9cnqtHEjQ0OotL7Yc14GpfGoJxO8STBo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fEN1qIU97LxKCmuCdc9bVegKovR9x6UfjibzNHVn1irr0D+YEfGHf0yjjfo7iHueV
+	 4QgkmaAV4DSyjmNuWtZeHjsRM2jMUq0GjuVX47A2MeqPhpCY1+8G+anF3UaRWe7WqW
+	 ZgtocMGvAP2SC692l+obVuP6XHhAGoE8FGhgR3ofJZXpmYJlkxhPaWHdsxHto9/N8X
+	 bNwXhbBWv6P4LAa2hH6Escq0WtJV/NIhBCMO84e2RkGvxu7TmlN3zkB6yMNAwUfCtx
+	 FzOUXESTY0K3zlmNMpF+/voHgGnrAVayMih5W6jj+FQE4pUuWy4UZPFPZrhf4CuvdQ
+	 KEQHjoNZIeq4g==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	llvm@lists.linux.dev,
+	Jonathan Corbet <corbet@lwn.net>,
+	Federico Vaga <federico.vaga@vaga.pv.it>,
+	Alex Shi <alexs@kernel.org>,
+	Hu Haowen <src.res@email.cn>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc-tw-discuss@lists.sourceforge.net,
+	linux-arm-kernel@lists.infradead.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev,
+	linux-btrfs@vger.kernel.org
+Subject: [PATCH] Kbuild: remove -std=gnu89 from compiler arguments
+Date: Sun, 27 Feb 2022 22:52:43 +0100
+Message-Id: <20220227215408.3180023-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <53ae4884ede7faab1f409ec635f723a0745d3656.1645981935.git.olivier@trillion01.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Olivier,
+From: Arnd Bergmann <arnd@arndb.de>
 
-Thank you for the patch! Perhaps something to improve:
+During a patch discussion, Linus brought up the option of changing
+the C standard version from gnu89 to gnu99, which allows using variable
+declaration inside of a for() loop. While the C99, C11 and later standards
+introduce many other features, most of these are already available in
+gnu89 as GNU extensions as well.
 
-[auto build test WARNING on linus/master]
-[cannot apply to v5.17-rc5 next-20220225]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+An earlier attempt to do this when gcc-5 started defaulting to
+-std=gnu11 failed because at the time that caused warnings about
+designated initializers with older compilers. Now that gcc-5.1 is the
+minimum compiler version used for building kernels, that is no longer a
+concern. Similarly, the behavior of 'inline' functions changes between
+gnu89 and gnu89, but this was taken care of by defining 'inline' to
+include __attribute__((gnu_inline)) in order to allow building with
+clang a while ago.
 
-url:    https://github.com/0day-ci/linux/commits/Olivier-Langlois/io_uring-=
-Add-support-for-napi_busy_poll/20220228-012140
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git =
-2293be58d6a18cab800e25e42081bacb75c05752
-config: mips-buildonly-randconfig-r006-20220227 (https://download.01.org/0d=
-ay-ci/archive/20220228/202202280543.0QW3T3id-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc=
-04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/65e72f78c66272f7cf0e87dfe=
-ef88f5b79de2d91
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Olivier-Langlois/io_uring-Add-supp=
-ort-for-napi_busy_poll/20220228-012140
-        git checkout 65e72f78c66272f7cf0e87dfeef88f5b79de2d91
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 ARCH=3Dmips=20
+One minor issue that remains is an added gcc warning for shifts of
+negative integers when building with -Werror, which happens with the
+'make W=1' option, as well as for three drivers in the kernel that always
+enable -Werror, but it was only observed with the i915 driver so far.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Nathan Chancellor reported an additional -Wdeclaration-after-statement
+warning that appears in a system header on arm, this still needs a
+workaround.
 
-All warnings (new ones prefixed by >>):
+Since the differences between gnu99, gnu11 and gnu17 are fairly minimal
+and mainly impact warnings at the -Wpedantic level that the kernel
+never enables, the easiest way is to just leave out the -std=gnu89
+argument entirely, and rely on the compiler default language setting,
+which is gnu11 for gcc-5, and gnu1x/gnu17 for all other supported
+versions of gcc or clang.
 
->> fs/io_uring.c:7840:3: warning: comparison of distinct pointer types ('ty=
-peof ((to)) (aka 'long long and 'uint64_t (aka 'unsigned long long
-   do_div(to, 1000);
-   ^~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-   (void)(((typeof((n)) =3D=3D ((uint64_t ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~=
-~~~
-   fatal error: error in backend: Nested variants found in inline asm strin=
-g: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
-h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
-branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
-de/asm/atomic.h", .line =3D 155, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
-et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1 # atomic_add
-   addu $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0. Program arguments: clang -Wp,-MMD,fs/.io_uring.o.d -nostdinc -Iarch/m=
-ips/include -I./arch/mips/include/generated -Iinclude -I./include -Iarch/mi=
-ps/include/uapi -I./arch/mips/include/generated/uapi -Iinclude/uapi -I./inc=
-lude/generated/uapi -include include/linux/compiler-version.h -include incl=
-ude/linux/kconfig.h -include include/linux/compiler_types.h -D__KERNEL__ -D=
-VMLINUX_LOAD_ADDRESS=3D0xffffffff80002000 -DLINKER_LOAD_ADDRESS=3D0x8000200=
-0 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=3D -DKBUILD_EXT=
-RA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -fno-stri=
-ct-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-function-=
-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format-securi=
-ty -std=3Dgnu89 --target=3Dmips-linux -fintegrated-as -Werror=3Dunknown-war=
-ning-option -Werror=3Dignored-optimization-argument -mno-check-zero-divisio=
-n -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-float -DGAS_HAS_SET_H=
-ARDFLOAT -Wa,-msoft-float -ffreestanding -EB -fno-stack-check -march=3Dmips=
-32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/include/asm/mach-lantiq=
- -Iarch/mips/include/asm/mach-lantiq/xway -Iarch/mips/include/asm/mach-gene=
-ric -fno-asynchronous-unwind-tables -fno-delete-null-pointer-checks -Wno-fr=
-ame-address -Wno-address-of-packed-member -O2 -Wframe-larger-than=3D1024 -f=
-stack-protector-strong -Wimplicit-fallthrough -Wno-gnu -mno-global-merge -W=
-no-unused-but-set-variable -Wno-unused-const-variable -ftrivial-auto-var-in=
-it=3Dpattern -fno-stack-clash-protection -pg -Wdeclaration-after-statement =
--Wvla -Wno-pointer-sign -Wcast-function-type -Wno-array-bounds -fno-strict-=
-overflow -fno-stack-check -Werror=3Ddate-time -Werror=3Dincompatible-pointe=
-r-types -Wextra -Wunused -Wno-unused-parameter -Wmissing-declarations -Wmis=
-sing-format-attribute -Wmissing-prototypes -Wold-style-definition -Wmissing=
--include-dirs -Wunused-but-set-variable -Wunused-const-variable -Wno-missin=
-g-field-initializers -Wno-sign-compare -Wno-type-limits -I fs -I ./fs -DKBU=
-ILD_MODFILE=3D"fs/io_uring" -DKBUILD_BASENAME=3D"io_uring" -DKBUILD_MODNAME=
-=3D"io_uring" -D__KBUILD_MODNAME=3Dkmod_io_uring -c -o fs/io_uring.o fs/io_=
-uring.c
-   1. <eof> parser at end of file
-   2. Code generation
-   3. Running pass 'Function Pass Manager' on module 'fs/io_uring.c'.
-   4. Running pass 'Mips Assembly Printer' on function '@io_uring_cancel_ge=
-neric'
-   #0 0x000055a23ff64d7f Signals.cpp:0:0
-   #1 0x000055a23ff62c5c llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
-oss/clang-d271fc04d5/bin/clang-15+0x348ec5c)
-   #2 0x000055a23fea2fd7 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
-cross/clang-d271fc04d5/bin/clang-15+0x33cefd7)
-   #3 0x000055a23ff5b30e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
-ang-d271fc04d5/bin/clang-15+0x348730e)
-   #4 0x000055a23db86ccb (/opt/cross/clang-d271fc04d5/bin/clang-15+0x10b2cc=
-b)
-   #5 0x000055a23fea9a8c llvm::report_fatal_error(llvm::Twine const&, bool)=
- (/opt/cross/clang-d271fc04d5/bin/clang-15+0x33d5a8c)
-   #6 0x000055a240bb35c0 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
- const (/opt/cross/clang-d271fc04d5/bin/clang-15+0x40df5c0)
-   #7 0x000055a240baf4f4 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
-lang-d271fc04d5/bin/clang-15+0x40db4f4)
-   #8 0x000055a23e5f0887 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
-achineFunction&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x1b1c887)
-   #9 0x000055a23f2ad54d llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
-ction&) (.part.53) MachineFunctionPass.cpp:0:0
-   #10 0x000055a23f6f4807 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x2c20807)
-   #11 0x000055a23f6f4981 llvm::FPPassManager::runOnModule(llvm::Module&) (=
-/opt/cross/clang-d271fc04d5/bin/clang-15+0x2c20981)
-   #12 0x000055a23f6f54ff llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (/opt/cross/clang-d271fc04d5/bin/clang-15+0x2c214ff)
-   #13 0x000055a24027f147 clang::EmitBackendOutput(clang::DiagnosticsEngine=
-&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
-TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
-ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
-lvm::raw_pwrite_stream> >) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x37ab=
-147)
-   #14 0x000055a240ecd693 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x43f9693)
-   #15 0x000055a2419a86e9 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
-ross/clang-d271fc04d5/bin/clang-15+0x4ed46e9)
-   #16 0x000055a240ecc4cf clang::CodeGenAction::ExecuteAction() (/opt/cross=
-/clang-d271fc04d5/bin/clang-15+0x43f84cf)
-   #17 0x000055a2408cf561 clang::FrontendAction::Execute() (/opt/cross/clan=
-g-d271fc04d5/bin/clang-15+0x3dfb561)
-   #18 0x000055a240865faa clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3d91faa)
-   #19 0x000055a240993cbb (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3ebfc=
-bb)
-   #20 0x000055a23db8827c cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
-ng-d271fc04d5/bin/clang-15+0x10b427c)
-   #21 0x000055a23db84f4b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
-cpp:0:0
-   #22 0x000055a2406fed95 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
-ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
-tor<char> const::'lambda'()>(long) Job.cpp:0:0
-   #23 0x000055a23fea2e93 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x33cee93)
-   #24 0x000055a2406ff68e clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
-har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
-   #25 0x000055a2406d4267 clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const (/opt/cross/clang-d27=
-1fc04d5/bin/clang-15+0x3c00267)
-   #26 0x000055a2406d4c47 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) const (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3c00c47)
-   #27 0x000055a2406de2f9 clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3c0a2f9)
-   #28 0x000055a23daad63f main (/opt/cross/clang-d271fc04d5/bin/clang-15+0x=
-fd963f)
-   #29 0x00007f38edb9bd0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x26d0a)
-   #30 0x000055a23db84a6a _start (/opt/cross/clang-d271fc04d5/bin/clang-15+=
-0x10b0a6a)
-   clang-15: error: clang frontend command failed with exit code 70 (use -v=
- to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project d271fc04d5b97b12e6b79=
-7c6067d3c96a8d7470e)
-   Target: mips-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-d271fc04d5/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch block certs crypto drivers fs include init ipc kernel lib =
-mm net nr_bisected scripts security sound source usr virt
-
-
-vim +7840 fs/io_uring.c
-
-  7826=09
-  7827	#ifdef CONFIG_NET_RX_BUSY_POLL
-  7828	static void io_adjust_busy_loop_timeout(struct timespec64 *ts,
-  7829						struct io_wait_queue *iowq)
-  7830	{
-  7831		unsigned busy_poll_to =3D READ_ONCE(sysctl_net_busy_poll);
-  7832		struct timespec64 pollto =3D ns_to_timespec64(1000 * (s64)busy_poll=
-_to);
-  7833=09
-  7834		if (timespec64_compare(ts, &pollto) > 0) {
-  7835			*ts =3D timespec64_sub(*ts, pollto);
-  7836			iowq->busy_poll_to =3D busy_poll_to;
-  7837		} else {
-  7838			s64 to =3D timespec64_to_ns(ts);
-  7839=09
-> 7840			do_div(to, 1000);
-  7841			iowq->busy_poll_to =3D to;
-  7842			ts->tv_sec =3D 0;
-  7843			ts->tv_nsec =3D 0;
-  7844		}
-  7845	}
-  7846=09
-
+Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
+Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I put the suggestion into patch form, based on what we discussed
+in the thread.  I only gave it minimal testing, but it would
+be good to have it in linux-next if we want to do this in the
+merge window.
+---
+ Documentation/process/programming-language.rst             | 4 ++--
+ .../translations/it_IT/process/programming-language.rst    | 4 ++--
+ .../translations/zh_CN/process/programming-language.rst    | 4 ++--
+ .../translations/zh_TW/process/programming-language.rst    | 4 ++--
+ Makefile                                                   | 7 +++----
+ arch/arm64/kernel/vdso32/Makefile                          | 3 +--
+ drivers/gpu/drm/i915/Makefile                              | 1 +
+ drivers/staging/greybus/tools/Makefile                     | 3 ++-
+ fs/btrfs/Makefile                                          | 1 +
+ scripts/Makefile.extrawarn                                 | 1 +
+ 10 files changed, 17 insertions(+), 15 deletions(-)
+
+diff --git a/Documentation/process/programming-language.rst b/Documentation/process/programming-language.rst
+index ec474a70a02f..894f2a6eb9db 100644
+--- a/Documentation/process/programming-language.rst
++++ b/Documentation/process/programming-language.rst
+@@ -5,8 +5,8 @@ Programming Language
+ 
+ The kernel is written in the C programming language [c-language]_.
+ More precisely, the kernel is typically compiled with ``gcc`` [gcc]_
+-under ``-std=gnu89`` [gcc-c-dialect-options]_: the GNU dialect of ISO C90
+-(including some C99 features). ``clang`` [clang]_ is also supported, see
++under ``-std=gnu11`` [gcc-c-dialect-options]_: the GNU dialect of ISO C11
++(including some C17 features). ``clang`` [clang]_ is also supported, see
+ docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+ 
+ This dialect contains many extensions to the language [gnu-extensions]_,
+diff --git a/Documentation/translations/it_IT/process/programming-language.rst b/Documentation/translations/it_IT/process/programming-language.rst
+index 41db2598ce11..aa21097737ae 100644
+--- a/Documentation/translations/it_IT/process/programming-language.rst
++++ b/Documentation/translations/it_IT/process/programming-language.rst
+@@ -10,8 +10,8 @@ Linguaggio di programmazione
+ 
+ Il kernel è scritto nel linguaggio di programmazione C [it-c-language]_.
+ Più precisamente, il kernel viene compilato con ``gcc`` [it-gcc]_ usando
+-l'opzione ``-std=gnu89`` [it-gcc-c-dialect-options]_: il dialetto GNU
+-dello standard ISO C90 (con l'aggiunta di alcune funzionalità da C99).
++l'opzione ``-std=gnu11`` [it-gcc-c-dialect-options]_: il dialetto GNU
++dello standard ISO C11 (con l'aggiunta di alcune funzionalità da C17).
+ Linux supporta anche ``clang`` [it-clang]_, leggete la documentazione
+ :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+ 
+diff --git a/Documentation/translations/zh_CN/process/programming-language.rst b/Documentation/translations/zh_CN/process/programming-language.rst
+index 2a47a1d2ec20..58d2b3bd2d85 100644
+--- a/Documentation/translations/zh_CN/process/programming-language.rst
++++ b/Documentation/translations/zh_CN/process/programming-language.rst
+@@ -9,8 +9,8 @@
+ ============
+ 
+ 内核是用C语言 :ref:`c-language <cn_c-language>` 编写的。更准确地说，内核通常是用 :ref:`gcc <cn_gcc>`
+-在 ``-std=gnu89`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C90的 GNU 方言（
+-包括一些C99特性）
++在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C11的 GNU 方言（
++包括一些C17特性）
+ 
+ 这种方言包含对语言 :ref:`gnu-extensions <cn_gnu-extensions>` 的许多扩展，当然，它们许多都在内核中使用。
+ 
+diff --git a/Documentation/translations/zh_TW/process/programming-language.rst b/Documentation/translations/zh_TW/process/programming-language.rst
+index 54e3699eadf8..235de05f7e2c 100644
+--- a/Documentation/translations/zh_TW/process/programming-language.rst
++++ b/Documentation/translations/zh_TW/process/programming-language.rst
+@@ -12,8 +12,8 @@
+ ============
+ 
+ 內核是用C語言 :ref:`c-language <tw_c-language>` 編寫的。更準確地說，內核通常是用 :ref:`gcc <tw_gcc>`
+-在 ``-std=gnu89`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect-options>` 下編譯的：ISO C90的 GNU 方言（
+-包括一些C99特性）
++在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect-options>` 下編譯的：ISO C11的 GNU 方言（
++包括一些C17特性）
+ 
+ 這種方言包含對語言 :ref:`gnu-extensions <tw_gnu-extensions>` 的許多擴展，當然，它們許多都在內核中使用。
+ 
+diff --git a/Makefile b/Makefile
+index 289ce2be8032..3ff6ba766f02 100644
+--- a/Makefile
++++ b/Makefile
+@@ -432,7 +432,7 @@ HOSTCXX	= g++
+ endif
+ 
+ export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+-			      -O2 -fomit-frame-pointer -std=gnu89
++			      -O2 -fomit-frame-pointer
+ export KBUILD_USERLDFLAGS :=
+ 
+ KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
+@@ -514,8 +514,7 @@ KBUILD_AFLAGS   := -D__ASSEMBLY__ -fno-PIE
+ KBUILD_CFLAGS   := -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs \
+ 		   -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE \
+ 		   -Werror=implicit-function-declaration -Werror=implicit-int \
+-		   -Werror=return-type -Wno-format-security \
+-		   -std=gnu89
++		   -Werror=return-type -Wno-format-security
+ KBUILD_CPPFLAGS := -D__KERNEL__
+ KBUILD_AFLAGS_KERNEL :=
+ KBUILD_CFLAGS_KERNEL :=
+@@ -782,7 +781,7 @@ KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+ 
+ ifdef CONFIG_CC_IS_CLANG
+ KBUILD_CPPFLAGS += -Qunused-arguments
+-# The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
++# The kernel builds with '-std=gnu11' so use of GNU extensions is acceptable.
+ KBUILD_CFLAGS += -Wno-gnu
+ # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
+ # source of a reference will be _MergedGlobals and not on of the whitelisted names.
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+index 6c01b63ff56d..3250d0e25782 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -67,8 +67,7 @@ VDSO_CFLAGS += -DENABLE_COMPAT_VDSO=1
+ VDSO_CFLAGS += -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+                -fno-strict-aliasing -fno-common \
+                -Werror-implicit-function-declaration \
+-               -Wno-format-security \
+-               -std=gnu89
++               -Wno-format-security
+ VDSO_CFLAGS  += -O2
+ # Some useful compiler-dependent flags from top-level Makefile
+ VDSO_CFLAGS += $(call cc32-option,-Wdeclaration-after-statement,)
+diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
+index 1b62b9f65196..1618a6e0af4e 100644
+--- a/drivers/gpu/drm/i915/Makefile
++++ b/drivers/gpu/drm/i915/Makefile
+@@ -17,6 +17,7 @@ subdir-ccflags-y += -Wno-unused-parameter
+ subdir-ccflags-y += -Wno-type-limits
+ subdir-ccflags-y += -Wno-missing-field-initializers
+ subdir-ccflags-y += -Wno-sign-compare
++subdir-ccflags-y += -Wno-shift-negative-value
+ subdir-ccflags-y += $(call cc-disable-warning, unused-but-set-variable)
+ subdir-ccflags-y += $(call cc-disable-warning, frame-address)
+ subdir-ccflags-$(CONFIG_DRM_I915_WERROR) += -Werror
+diff --git a/drivers/staging/greybus/tools/Makefile b/drivers/staging/greybus/tools/Makefile
+index ad0ae8053b79..a3bbd73171f2 100644
+--- a/drivers/staging/greybus/tools/Makefile
++++ b/drivers/staging/greybus/tools/Makefile
+@@ -12,7 +12,8 @@ CFLAGS	+= -std=gnu99 -Wall -Wextra -g \
+ 	    -Wredundant-decls \
+ 	    -Wcast-align \
+ 	    -Wsign-compare \
+-	    -Wno-missing-field-initializers
++	    -Wno-missing-field-initializers \
++	    -Wno-shift-negative-value
+ 
+ CC	:= $(CROSS_COMPILE)gcc
+ 
+diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
+index 4188ba3fd8c3..99f9995670ea 100644
+--- a/fs/btrfs/Makefile
++++ b/fs/btrfs/Makefile
+@@ -17,6 +17,7 @@ subdir-ccflags-y += $(condflags)
+ subdir-ccflags-y += -Wno-missing-field-initializers
+ subdir-ccflags-y += -Wno-sign-compare
+ subdir-ccflags-y += -Wno-type-limits
++subdir-ccflags-y += -Wno-shift-negative-value
+ 
+ obj-$(CONFIG_BTRFS_FS) := btrfs.o
+ 
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index 8be892887d71..650d0b8ceec3 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -36,6 +36,7 @@ KBUILD_CFLAGS += $(call cc-option, -Wstringop-truncation)
+ KBUILD_CFLAGS += -Wno-missing-field-initializers
+ KBUILD_CFLAGS += -Wno-sign-compare
+ KBUILD_CFLAGS += -Wno-type-limits
++KBUILD_CFLAGS += -Wno-shift-negative-value
+ 
+ KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN1
+ 
+-- 
+2.29.2
+
