@@ -1,103 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D3F4A83
-	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 15:43:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1645976619;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=smOWqrVZ4eE9JROh4nQ4evf5L+Z1zd/JgqN0UrYlquk=;
-	b=aJ4tYEkJ8q2E15m/kPsCWo0zSQqXF6pIAeVlpfsC/Unyc4k1FDwGdO739N0yq4XXlpRkl1
-	HCq5ZxyCJS5LTr6dFzPHM//MjHE7dpDcRvr3O5HZaN6vylytKul3wzT9lVOkzC2a4vpUpg
-	cFDP6Bz9k33K8aQSH623gJXKud80CoQ=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-216-uCpCudfINsue-PbJthiKLw-1; Sun, 27 Feb 2022 10:43:38 -0500
-X-MC-Unique: uCpCudfINsue-PbJthiKLw-1
-Received: by mail-qk1-f197.google.com with SMTP id i10-20020a05620a144a00b00648d4fa059dso9545776qkl.0
-        for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 07:43:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=smOWqrVZ4eE9JROh4nQ4evf5L+Z1zd/JgqN0UrYlquk=;
-        b=odfGpsXlsQxpINdE01ccREDQs5CD/8W2mXJ3us7DjLg0Aa0E/BlmVK+BxcyDExCldl
-         /RXr9YRuwmG5MXhwLHWrIk1QucD3MYYQEnLVOC3nx5JxTlbBoLUS5hybHksPaC6ZLxWy
-         IIBXkAtkPMR1A+OszDXUL13diEMjvF96CdlebTjIP9D6/x5oPxBT9RWYV/z+VSHzBOt2
-         ov/au9+QFXzp6d1hkee6siAyXzD1K27fBNKYyF97otbSThpKpzIk7+6iRJjtCKXB8P2V
-         BjRDpz85NGL9hDoarmULIqIqTf1pqlEMgte4isIUWNDN1wtLi+0mXDwsG3PX2uI7DKIH
-         Kq/w==
-X-Gm-Message-State: AOAM5308+3xe5479Zk0rx1H6sRnkVGBsmy39rN5qe39WU6QglLDJuOGF
-	e4tVI1Ze5fahhtMW2OM87Lvr0+3NEhxmEV28ERPSpZAztdwpptG975pbuHfxVSM1zqxmAoYlgzJ
-	8kIOMo6kDgM1hcQ==
-X-Received: by 2002:a05:6214:23c8:b0:432:e64e:969a with SMTP id hr8-20020a05621423c800b00432e64e969amr5260656qvb.109.1645976617587;
-        Sun, 27 Feb 2022 07:43:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyWzeFRSiG3cOIAwp97dJ6GYhZ7NMFr89QVxs3UHGNUewDKGBxEIr1Lw8iFumUGLWe3rqDY1g==
-X-Received: by 2002:a05:6214:23c8:b0:432:e64e:969a with SMTP id hr8-20020a05621423c800b00432e64e969amr5260645qvb.109.1645976617352;
-        Sun, 27 Feb 2022 07:43:37 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id g19-20020ac87f53000000b002dd45d67a8esm5104596qtk.59.2022.02.27.07.43.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 07:43:36 -0800 (PST)
-From: trix@redhat.com
-To: roan@protonic.nl,
-	jic23@kernel.org,
-	lars@metafoo.de,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] iio: scd4x: check return of scd4x_write_and_fetch
-Date: Sun, 27 Feb 2022 07:43:31 -0800
-Message-Id: <20220227154331.80338-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661D14A83;
+	Sun, 27 Feb 2022 15:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645977460; x=1677513460;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uZVNRO0qfhvL5YBVwTKw1rTCJwkow3/0UaHUBIhgeNU=;
+  b=R/sTjaU4nao55nvyZ9Gpe5XuZD2kXNyWNklRfMOkgrXwLVrVy3h0Ykr/
+   PHYY1sDYevagtXK6mfDVYsqRO2MR2Ba1mCouUTwplC5DRvdFChQKYxH4B
+   bfbPwwDaIVEJMreWfEBS9VKAOx9Fx1GqsTUlr+ROlcMgMxeLA1rRRyEBs
+   Zls94BcMYCbxOr19BZUjUMUnPJXGHhq1kmMODHQaMUV0JLsJXuCvVck78
+   7icC502il0hXM+rKnMdp7Gi8hQaTSfrPDQEFun8bNhyah5Z/lA3DH7yD1
+   f/XohKvUehmmZ5G/wmghGvn0mP9cV7XeAX/lNyCWqAJjps7Fwz8ZutOk6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="236250292"
+X-IronPort-AV: E=Sophos;i="5.90,141,1643702400"; 
+   d="scan'208";a="236250292"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 07:57:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,141,1643702400"; 
+   d="scan'208";a="777852020"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 27 Feb 2022 07:57:36 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nOLvT-0006bd-Qq; Sun, 27 Feb 2022 15:57:35 +0000
+Date: Sun, 27 Feb 2022 23:57:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shiyang Ruan <ruansy.fnst@fujitsu.com>, linux-kernel@vger.kernel.org,
+	linux-xfs@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, djwong@kernel.org,
+	dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
+	jane.chu@oracle.com
+Subject: Re: [PATCH v11 8/8] fsdax: set a CoW flag when associate reflink
+ mappings
+Message-ID: <202202272359.2aizNPgB-lkp@intel.com>
+References: <20220227120747.711169-9-ruansy.fnst@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220227120747.711169-9-ruansy.fnst@fujitsu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+Hi Shiyang,
 
-Clang static analysis reports this problem
-scd4x.c:474:10: warning: The left operand of '==' is a
-  garbage value
-  if (val == 0xff) {
-      ~~~ ^
-val is only set from a successful call to scd4x_write_and_fetch()
-So check it's return.
+Thank you for the patch! Perhaps something to improve:
 
-Fixes: 49d22b695cbb ("drivers: iio: chemical: Add support for Sensirion SCD4x CO2 sensor")
-Signed-off-by: Tom Rix <trix@redhat.com>
+[auto build test WARNING on xfs-linux/for-next]
+[also build test WARNING on linux/master]
+[cannot apply to hnaz-mm/master linus/master v5.17-rc5 next-20220225]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220227-200849
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220227/202202272359.2aizNPgB-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/a0ac78065bbb4fbb3e5477c32686eca3b9f0e1ef
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220227-200849
+        git checkout a0ac78065bbb4fbb3e5477c32686eca3b9f0e1ef
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/dax.c:337:67: warning: parameter 'mapping' set but not used [-Wunused-but-set-parameter]
+   static inline void dax_mapping_set_cow_flag(struct address_space *mapping)
+                                                                     ^
+   1 warning generated.
+
+
+vim +/mapping +337 fs/dax.c
+
+   328	
+   329	/*
+   330	 * Iterate through all mapped pfns represented by an entry, i.e. skip
+   331	 * 'empty' and 'zero' entries.
+   332	 */
+   333	#define for_each_mapped_pfn(entry, pfn) \
+   334		for (pfn = dax_to_pfn(entry); \
+   335				pfn < dax_end_pfn(entry); pfn++)
+   336	
+ > 337	static inline void dax_mapping_set_cow_flag(struct address_space *mapping)
+   338	{
+   339		mapping = (struct address_space *)PAGE_MAPPING_DAX_COW;
+   340	}
+   341	
+
 ---
- drivers/iio/chemical/scd4x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/iio/chemical/scd4x.c b/drivers/iio/chemical/scd4x.c
-index 20d4e7584e923..b978330fb761c 100644
---- a/drivers/iio/chemical/scd4x.c
-+++ b/drivers/iio/chemical/scd4x.c
-@@ -471,7 +471,7 @@ static ssize_t calibration_forced_value_store(struct device *dev,
- 	ret = scd4x_write_and_fetch(state, CMD_FRC, arg, &val, sizeof(val));
- 	mutex_unlock(&state->lock);
- 
--	if (val == 0xff) {
-+	if (!ret && val == 0xff) {
- 		dev_err(dev, "forced calibration has failed");
- 		return -EINVAL;
- 	}
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
