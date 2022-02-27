@@ -1,42 +1,41 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9CEE7A
-	for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 23:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FB32F2F
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 01:53:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645917012; x=1677453012;
+  t=1645926796; x=1677462796;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ahx7IuD5uBSfat9HGZzW/lxFspm9JreiJP4tVvzDlPI=;
-  b=nMSZopWF8WGi1/AQpURPoZ7jTweNOGMupYRfHTmhRfLCD4rKr+DK7f4L
-   3RmT75Aqox4OQ5RwLEcfGsi/u4ohPMu/zC8cJyFMGbFoApf9or36qgk0P
-   ElJY8ySnnPkx8y35WH+96rgedKJesR9mp25Ov/kDKN+g3UtZ0innNpcIH
-   RyQeTtzqy9YCx2bJ5IxDXMOasKZ49e32GJ3Oij6MWoijCsm3ORsxqgm3I
-   Ozg+OeNdm8XZWTxWVUSx40nimJduUzUBVp0oFFzXCJlns8GetUIu66fub
-   /geu4txpme+RLJ6lvSJAApxz+ruandWs99+BCDD+Wp416JlbBmnIVlWbE
+  bh=1uvDqArwC09R6lFC53Xcn6vZTmk2HrLbjvMGEicphUU=;
+  b=E1e+Tn35gCqRnENBJHF9q7Nq5ORIvHMOL5+AB350BCiBpcBQ0CltOaZt
+   XMDC5YHVCjijbyW4+RAY7FRlVexWg6tMj+lI31octFOV3fffz2n9l4x9Y
+   M7sXkqRcz8UZKsjOWKZAbhcpAHpQyy01sGymCWgl0F015XoaTWKtL/dAi
+   PC50GrKf9QCZ4PVX86TlGkoPcyyNdb1QwLLbzw402SrSomg/2WxjzIDgN
+   G7WEb0gn4XLqQoW/ll0peknN2beacLwHJJYuaea9aZWBNb3NRvLNXQ4MQ
+   rvKxEUUBTcYcArsgrpn3HcSyZox0o3iiDE0tLdsehRBgOjcdnCxVBx4Vi
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="236194424"
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="232668163"
 X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="236194424"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 15:10:12 -0800
+   d="scan'208";a="232668163"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 17:53:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="507044102"
+   d="scan'208";a="684993607"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 26 Feb 2022 15:10:10 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 26 Feb 2022 17:53:14 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nO6CY-00061m-5F; Sat, 26 Feb 2022 23:10:10 +0000
-Date: Sun, 27 Feb 2022 07:09:13 +0800
+	id 1nO8kL-000689-Nl; Sun, 27 Feb 2022 01:53:13 +0000
+Date: Sun, 27 Feb 2022 09:52:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Collingbourne <pcc@google.com>
+To: Russell King <rmk+kernel@armlinux.org.uk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: mm/kasan/sw_tags.c:211:6: warning: no previous prototype for
- function 'kasan_tag_mismatch'
-Message-ID: <202202270743.gaL2uEDw-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [rmk-arm:cex7 184/189] drivers/net/phy/qsfp.c:1229:3: warning:
+ misleading indentation; statement is not part of the previous 'if'
+Message-ID: <202202270903.js3KOFR5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,48 +46,54 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Peter,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2293be58d6a18cab800e25e42081bacb75c05752
-commit: 1cbdf60bd1b74e397d48aa877367cfc621f45ffe kasan: arm64: support specialized outlined tag mismatch checks
-date:   9 months ago
-config: arm64-randconfig-r013-20220227 (https://download.01.org/0day-ci/archive/20220227/202202270743.gaL2uEDw-lkp@intel.com/config)
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm cex7
+head:   f53b9594a2bfdd612aca57e15167da1f64e62404
+commit: 1fb157e3d601a392c0d17d2c6a8367e799859e81 [184/189] net: add qsfp support                              [*experimental*]
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220227/202202270903.js3KOFR5-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1cbdf60bd1b74e397d48aa877367cfc621f45ffe
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 1cbdf60bd1b74e397d48aa877367cfc621f45ffe
+        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+        git fetch --no-tags rmk-arm cex7
+        git checkout 1fb157e3d601a392c0d17d2c6a8367e799859e81
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/ mm/kasan/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> mm/kasan/sw_tags.c:211:6: warning: no previous prototype for function 'kasan_tag_mismatch' [-Wmissing-prototypes]
-   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-        ^
-   mm/kasan/sw_tags.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-   ^
-   static 
+>> drivers/net/phy/qsfp.c:1229:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+                   qsfp_sm_ins_next(qsfp, SFP_MOD_PRESENT, 0);
+                   ^
+   drivers/net/phy/qsfp.c:1222:2: note: previous statement is here
+           if (!qsfp->gpio_irq[GPIO_INTL])
+           ^
    1 warning generated.
 
 
-vim +/kasan_tag_mismatch +211 mm/kasan/sw_tags.c
+vim +/if +1229 drivers/net/phy/qsfp.c
 
-   210	
- > 211	void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+  1215	
+  1216		if (qsfp->sm_dev_state == SFP_DEV_DETACHED) {
+  1217			qsfp_sm_ins_next(qsfp, SFP_MOD_WATTACH, 0);
+  1218			return;
+  1219		}
+  1220	
+  1221		// Start the poller if there is no interrupt support if not running
+  1222		if (!qsfp->gpio_irq[GPIO_INTL])
+  1223			queue_delayed_work(system_wq, &qsfp->poll, poll_jiffies);
+  1224	
+  1225	//	ret = sfp_module_insert(qsfp->sfp_bus, &id);
+  1226	//	if (ret < 0)
+  1227	//		qsfp_sm_ins_next(qsfp, SFP_MOD_ERROR, 0);
+  1228	//	else
+> 1229			qsfp_sm_ins_next(qsfp, SFP_MOD_PRESENT, 0);
+  1230	}
+  1231	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
