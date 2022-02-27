@@ -1,69 +1,60 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682014A83
-	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 15:39:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D3F4A83
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 15:43:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1645976394;
+	s=mimecast20190719; t=1645976619;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=JUKXRy9HtvoNJh5zgWKk9291k0gpOXjxfgvv4FNocC0=;
-	b=QDIFWwyzFEamCrdA1eWIFXTlRhdBlJFJPtJBUeKG0Ts5V2nuXykT3wzE2aA2RhhRKXDUDH
-	w7C2Uy63r31zqRhkn9L1bxSRc7VbcCIOPHhgEQlImfl/enhYBBK8NwL2APzrkeJcpnKC6k
-	XC9z5vVvRk0qS7ogwARswUIXJVGwWEE=
+	bh=smOWqrVZ4eE9JROh4nQ4evf5L+Z1zd/JgqN0UrYlquk=;
+	b=aJ4tYEkJ8q2E15m/kPsCWo0zSQqXF6pIAeVlpfsC/Unyc4k1FDwGdO739N0yq4XXlpRkl1
+	HCq5ZxyCJS5LTr6dFzPHM//MjHE7dpDcRvr3O5HZaN6vylytKul3wzT9lVOkzC2a4vpUpg
+	cFDP6Bz9k33K8aQSH623gJXKud80CoQ=
 Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
  [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-36-ti6bXXVzOhquNatgyvhQZQ-1; Sun, 27 Feb 2022 10:39:52 -0500
-X-MC-Unique: ti6bXXVzOhquNatgyvhQZQ-1
-Received: by mail-qk1-f197.google.com with SMTP id l82-20020a37a255000000b0060dd39f5d87so9486297qke.4
-        for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 07:39:52 -0800 (PST)
+ us-mta-216-uCpCudfINsue-PbJthiKLw-1; Sun, 27 Feb 2022 10:43:38 -0500
+X-MC-Unique: uCpCudfINsue-PbJthiKLw-1
+Received: by mail-qk1-f197.google.com with SMTP id i10-20020a05620a144a00b00648d4fa059dso9545776qkl.0
+        for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 07:43:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JUKXRy9HtvoNJh5zgWKk9291k0gpOXjxfgvv4FNocC0=;
-        b=ozmdjQopQaUMgM0I/BizUHfnJudplD8uUZ7r4pWcOIhegGKcBwSl4hepQlYvhLA9vm
-         JP4kWkOaPvBRjJiu6deXjrPh3SdeT4XSRHjhDiBSTTsrgBUbDCwvE4Ykhilcr7HN+AJZ
-         +GYNK50nrcrVVCiMCAbH0Oui6yu3Zk7v7tPHrfFTMAPgCEtg4r8yuv937kjuUkamDkcR
-         1NY70hmEtf9KJ1jYkdnPknqPEkEblgnV+EmrXHwyL9ZIFirP3v5naVZQ7u5aT7+1bqbJ
-         T57gO4iwUKIgjtZnE0azruTboaB/CslIbS9fP+6pGoJijX07Lk/fWygS818IWDdO5N0w
-         F45Q==
-X-Gm-Message-State: AOAM5315Qm7dfZjidyRvvEXMJm7yOqZNmiYbnwGfvjZVeuHTrmQERHvX
-	03GI/ixjrOhOsayLVxoxH8kXDftBSJpQ5rIpfgWhiX073mvNpBFrIiCnmGaSW2wKoFrhOrg/MKL
-	VeitQM/0x6OBDSA==
-X-Received: by 2002:ad4:5883:0:b0:432:b007:962b with SMTP id dz3-20020ad45883000000b00432b007962bmr10545692qvb.55.1645976392541;
-        Sun, 27 Feb 2022 07:39:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJypeMdQov6ivEZ1hmtZAlsJVizNYH0ogniT3ujzWNSu97z8PC8qPn1bhLsvRrQy0v8d6KuyjQ==
-X-Received: by 2002:ad4:5883:0:b0:432:b007:962b with SMTP id dz3-20020ad45883000000b00432b007962bmr10545670qvb.55.1645976392292;
-        Sun, 27 Feb 2022 07:39:52 -0800 (PST)
+        bh=smOWqrVZ4eE9JROh4nQ4evf5L+Z1zd/JgqN0UrYlquk=;
+        b=odfGpsXlsQxpINdE01ccREDQs5CD/8W2mXJ3us7DjLg0Aa0E/BlmVK+BxcyDExCldl
+         /RXr9YRuwmG5MXhwLHWrIk1QucD3MYYQEnLVOC3nx5JxTlbBoLUS5hybHksPaC6ZLxWy
+         IIBXkAtkPMR1A+OszDXUL13diEMjvF96CdlebTjIP9D6/x5oPxBT9RWYV/z+VSHzBOt2
+         ov/au9+QFXzp6d1hkee6siAyXzD1K27fBNKYyF97otbSThpKpzIk7+6iRJjtCKXB8P2V
+         BjRDpz85NGL9hDoarmULIqIqTf1pqlEMgte4isIUWNDN1wtLi+0mXDwsG3PX2uI7DKIH
+         Kq/w==
+X-Gm-Message-State: AOAM5308+3xe5479Zk0rx1H6sRnkVGBsmy39rN5qe39WU6QglLDJuOGF
+	e4tVI1Ze5fahhtMW2OM87Lvr0+3NEhxmEV28ERPSpZAztdwpptG975pbuHfxVSM1zqxmAoYlgzJ
+	8kIOMo6kDgM1hcQ==
+X-Received: by 2002:a05:6214:23c8:b0:432:e64e:969a with SMTP id hr8-20020a05621423c800b00432e64e969amr5260656qvb.109.1645976617587;
+        Sun, 27 Feb 2022 07:43:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyWzeFRSiG3cOIAwp97dJ6GYhZ7NMFr89QVxs3UHGNUewDKGBxEIr1Lw8iFumUGLWe3rqDY1g==
+X-Received: by 2002:a05:6214:23c8:b0:432:e64e:969a with SMTP id hr8-20020a05621423c800b00432e64e969amr5260645qvb.109.1645976617352;
+        Sun, 27 Feb 2022 07:43:37 -0800 (PST)
 Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id c6-20020ac87d86000000b002ddd9f33ed1sm5036371qtd.44.2022.02.27.07.39.49
+        by smtp.gmail.com with ESMTPSA id g19-20020ac87f53000000b002dd45d67a8esm5104596qtk.59.2022.02.27.07.43.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 07:39:51 -0800 (PST)
+        Sun, 27 Feb 2022 07:43:36 -0800 (PST)
 From: trix@redhat.com
-To: alexander.deucher@amd.com,
-	christian.koenig@amd.com,
-	Xinhui.Pan@amd.com,
-	airlied@linux.ie,
-	daniel@ffwll.ch,
+To: roan@protonic.nl,
+	jic23@kernel.org,
+	lars@metafoo.de,
 	nathan@kernel.org,
-	ndesaulniers@google.com,
-	lijo.lazar@amd.com,
-	nirmoy.das@amd.com,
-	kevin1.wang@amd.com,
-	tom.stdenis@amd.com,
-	evan.quan@amd.com,
-	Amaranath.Somalapuram@amd.com
-Cc: amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
+	ndesaulniers@google.com
+Cc: linux-iio@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] drm/amdgpu: Fix realloc of ptr
-Date: Sun, 27 Feb 2022 07:33:42 -0800
-Message-Id: <20220227153342.79546-1-trix@redhat.com>
+Subject: [PATCH] iio: scd4x: check return of scd4x_write_and_fetch
+Date: Sun, 27 Feb 2022 07:43:31 -0800
+Message-Id: <20220227154331.80338-1-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -80,52 +71,33 @@ Content-Type: text/plain; charset="US-ASCII"
 
 From: Tom Rix <trix@redhat.com>
 
-Clang static analysis reports this error
-amdgpu_debugfs.c:1690:9: warning: 1st function call
-  argument is an uninitialized value
-  tmp = krealloc_array(tmp, i + 1,
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+Clang static analysis reports this problem
+scd4x.c:474:10: warning: The left operand of '==' is a
+  garbage value
+  if (val == 0xff) {
+      ~~~ ^
+val is only set from a successful call to scd4x_write_and_fetch()
+So check it's return.
 
-realloc uses tmp, so tmp can not be garbage.
-And the return needs to be checked.
-
-Fixes: 5ce5a584cb82 ("drm/amdgpu: add debugfs for reset registers list")
+Fixes: 49d22b695cbb ("drivers: iio: chemical: Add support for Sensirion SCD4x CO2 sensor")
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-v2:
-  use 'new' to hold/check the ralloc return
-  fix commit log mistake on ralloc freeing to using input ptr
-  
- drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/iio/chemical/scd4x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-index 9eb9b440bd438..2f4f8c5618d81 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-@@ -1676,7 +1676,7 @@ static ssize_t amdgpu_reset_dump_register_list_write(struct file *f,
- {
- 	struct amdgpu_device *adev = (struct amdgpu_device *)file_inode(f)->i_private;
- 	char reg_offset[11];
--	uint32_t *tmp;
-+	uint32_t *new, *tmp = NULL;
- 	int ret, i = 0, len = 0;
+diff --git a/drivers/iio/chemical/scd4x.c b/drivers/iio/chemical/scd4x.c
+index 20d4e7584e923..b978330fb761c 100644
+--- a/drivers/iio/chemical/scd4x.c
++++ b/drivers/iio/chemical/scd4x.c
+@@ -471,7 +471,7 @@ static ssize_t calibration_forced_value_store(struct device *dev,
+ 	ret = scd4x_write_and_fetch(state, CMD_FRC, arg, &val, sizeof(val));
+ 	mutex_unlock(&state->lock);
  
- 	do {
-@@ -1687,7 +1687,12 @@ static ssize_t amdgpu_reset_dump_register_list_write(struct file *f,
- 			goto error_free;
- 		}
- 
--		tmp = krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_KERNEL);
-+		new = krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_KERNEL);
-+		if (!new) {
-+			ret = -ENOMEM;
-+			goto error_free;
-+		}
-+		tmp = new;
- 		if (sscanf(reg_offset, "%X %n", &tmp[i], &ret) != 1) {
- 			ret = -EINVAL;
- 			goto error_free;
+-	if (val == 0xff) {
++	if (!ret && val == 0xff) {
+ 		dev_err(dev, "forced calibration has failed");
+ 		return -EINVAL;
+ 	}
 -- 
 2.26.3
 
