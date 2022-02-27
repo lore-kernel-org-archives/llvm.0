@@ -1,90 +1,320 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F8F4C88
-	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 23:12:03 +0000 (UTC)
-Received: by mail-lj1-f181.google.com with SMTP id u7so15007152ljk.13
-        for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 15:12:03 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4730E7B
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 23:14:08 +0000 (UTC)
+Received: by mail-pf1-f175.google.com with SMTP id g1so9448051pfv.1
+        for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 15:14:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AJKFWkaNILgrND2ajpv99ahQRaE4hGQV9IUMvW6X5jc=;
-        b=COC/4g+XK0ncFFdjTFjbGI8kwJnazvpy+Y8Z5kBv2abHG/7OdfJl8XVUO/gQJQXrgU
-         7syJ6Bl4EH1rhevEXJDyJCzV6vXIrdiBYUsB99agtvA7QQFqI7pET+wt/bULnxpe/llB
-         DoHBp+DrTOur4By7IXXtsNs4+hSllcxUFM+zA=
+        d=chromium.org; s=google;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NEz8S7bFkwneq3PE9tC9dbzJqghqcLtq6Jn9Mzewnt8=;
+        b=GnJnp52S2sgob7YzJQwUJ2E/C4ktnqkOB3F8UtNdCrRtL2BOTqvlTf79FozbBrvB1T
+         OjFClYb6wrMcn4OIpJ7BZTtHDzJcrxoXoDUcuCGT4h9ZcOG+3qFO+V2SevTtNATYh6U1
+         C/Z6Jm3J2Vc0y3lSAVJ/MGGqDkzyu7vj8gTQs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AJKFWkaNILgrND2ajpv99ahQRaE4hGQV9IUMvW6X5jc=;
-        b=HPDLmSQFR8x1tXuLFbRtSVIQ6VQ5hbVTyxweUy+yt+zYhc4l4sccAyuxxX14pIVMk/
-         UX9boBrCWl3gOotZyIfpHMdc7EmoTDWTSzFb4h5upH0tI79F9wJb36TD+4COgLTglvPw
-         pY7h0vNBSO+IlvGBW7SfLOBVA1FJeUIBFd32+kO5+gfdRM/zqoSwawVUX5z6SeZyvdtF
-         MCKzLVP0mRJeiUawjfIAioVgP+wlyyXC0PR/kbB4WsolCEQgEDhbxDeez5uOvLhi7QfD
-         S9+kXaq1KTk6zY7SF7IMDMT2du+vJHTArVFTwHIMhYC80mVUoX2VvaN2nMWl9oX9iZaQ
-         JGnw==
-X-Gm-Message-State: AOAM531duXtHx5//cfX+m1lAlVOr9beiuxYw20XK60GGM/qcfJwnO586
-	7Y1S4NBhiquddCI/XlU65hniwu3730rk48R5dc4=
-X-Google-Smtp-Source: ABdhPJzJ5Ee0XVz5FjUF6TQnsaZtDnYFw8Hc2K4fYVT7xs3JKH8Eg6UDB0WMvLO2GaQgz7lynuFgqg==
-X-Received: by 2002:a2e:808b:0:b0:238:ea7c:faf8 with SMTP id i11-20020a2e808b000000b00238ea7cfaf8mr12515995ljg.513.1646003521837;
-        Sun, 27 Feb 2022 15:12:01 -0800 (PST)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05651c02cb00b00244bd3dd6bdsm1070740ljo.5.2022.02.27.15.11.58
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 15:11:58 -0800 (PST)
-Received: by mail-lj1-f175.google.com with SMTP id p20so15101965ljo.0
-        for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 15:11:58 -0800 (PST)
-X-Received: by 2002:a2e:b8cc:0:b0:246:4767:7a29 with SMTP id
- s12-20020a2eb8cc000000b0024647677a29mr12717079ljp.152.1646003517979; Sun, 27
- Feb 2022 15:11:57 -0800 (PST)
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NEz8S7bFkwneq3PE9tC9dbzJqghqcLtq6Jn9Mzewnt8=;
+        b=d1NRFS/zRytzxCRBUtlX67wT0BIpn2Zo9rnibS9ch3tisH0UtOkIPRxeTtONKEgf0v
+         DTmSUoJbstE35jQBmoChxDSB8UPaR2bZa8JU0tYFtRzJpAedQuUbyqeTggRiCTBFt9Pv
+         MeKYN7Dfr+iLouynr2zaNblzMmAfgw9k7G7jGh9nqD8kiZqcL1SBDIGxpso6+t2VemKj
+         ip77OD3MaQqjq6Gm9ig1ufqOWjN98YZGgo8HHZOI3iRNFecLf96lXiwiDxBLL8H3S43F
+         E+GHNWu//BbNnoJP29ITiz9wU/6Z+wPQq3pg2s5qxuhxI8i6J4DvRn+yCTD/rdapXmQC
+         o1OA==
+X-Gm-Message-State: AOAM530GrCaMaF+G5mKUOBCnD0JgGPV+8zPkraAeFSCMMXhPIhIUuWZP
+	FHA12wo4MpNhddQ/Cy1mNe42Vg==
+X-Google-Smtp-Source: ABdhPJwHXwSmdwy1jcXiNiohtMPQbFABBWndNv7Rc+IH8LJGX+ZYl0dMjBxKzDu/5pFtY9Up6dz9aQ==
+X-Received: by 2002:a63:fb44:0:b0:372:9ec8:745a with SMTP id w4-20020a63fb44000000b003729ec8745amr15051137pgj.551.1646003647597;
+        Sun, 27 Feb 2022 15:14:07 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b3-20020a056a00114300b004e099ec2871sm10766165pfm.154.2022.02.27.15.14.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 15:14:07 -0800 (PST)
+Date: Sun, 27 Feb 2022 15:14:06 -0800
+From: Kees Cook <keescook@chromium.org>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Vitor Massaru Iha <vitor@massaru.org>,
+	Daniel Latypov <dlatypov@google.com>,
+	David Gow <davidgow@google.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org,
+	kunit-dev@googlegroups.com, llvm@lists.linux.dev, x86@kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] UAPI: Introduce KUnit userspace compatibility
+Message-ID: <202202271513.3756A55EF7@keescook>
+References: <20220227184517.504931-1-keescook@chromium.org>
+ <20220227184517.504931-8-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220227215408.3180023-1-arnd@kernel.org> <dd41c574-05b0-23bc-646c-0bd341e6e50b@linaro.org>
-In-Reply-To: <dd41c574-05b0-23bc-646c-0bd341e6e50b@linaro.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 27 Feb 2022 15:11:41 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg_r01OASRuSFfbEk_YHjve2BsBbkDYiEiKTaX2jm=53g@mail.gmail.com>
-Message-ID: <CAHk-=wg_r01OASRuSFfbEk_YHjve2BsBbkDYiEiKTaX2jm=53g@mail.gmail.com>
-Subject: Re: [greybus-dev] [PATCH] Kbuild: remove -std=gnu89 from compiler arguments
-To: Alex Elder <elder@linaro.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev, 
-	Jonathan Corbet <corbet@lwn.net>, Federico Vaga <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, 
-	Hu Haowen <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, 
-	Nick Desaulniers <ndesaulniers@google.com>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-doc-tw-discuss@lists.sourceforge.net, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	intel-gfx <intel-gfx@lists.freedesktop.org>, 
-	dri-devel <dri-devel@lists.freedesktop.org>, greybus-dev@lists.linaro.org, 
-	linux-staging@lists.linux.dev, linux-btrfs <linux-btrfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220227184517.504931-8-keescook@chromium.org>
 
-On Sun, Feb 27, 2022 at 3:04 PM Alex Elder <elder@linaro.org> wrote:
->
-> Glancing at the Greybus code, I don't believe there's any
-> reason it needs to shift a negative value.  Such warnings
-> could be fixed by making certain variables unsigned, for
-> example.
+On Sun, Feb 27, 2022 at 10:45:17AM -0800, Kees Cook wrote:
+> The original lib/test_stackinit.c, which exclusively tests toolchain
+> features, was designed to also be built without the full Linux kernel
+> sources so that compiler developers and distro maintainers had an easy
+> way to check for toolchain behaviors. When it was ported to KUnit, this
+> mode was removed to simplify the code.
+> 
+> Add a small header that provides a minimally operational KUnit API that
+> can allow unit tests that don't depend on kernel-specific behaviors
+> to build and run strictly from userspace without kernel sources. Add
+> userspace-build support back to the renamed lib/stackinit_kunit.c test.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-As mentioned in the original thread, making things unsigned actually
-is likely to introduce bugs and make things worse.
+This fails the hdrtest checks, so I'll need to rework it...
 
-The warning is simply bogus, and the fact that it was enabled by
--Wextra in gcc for std=gnu99 and up was a mistake that looks likely to
-be fixed in gcc.
+-Kees
 
-So don't try to "fix" the code to make any possible warnings go away.
-You may just make things worse.
+> ---
+> v1: https://lore.kernel.org/lkml/20220224055145.1853657-1-keescook@chromium.org
+> v2:
+>  - split from stackinit_kunit.c refactoring patch
+>  - add missing returns (Daniel)
+>  - report expression mismatch in assert msg (Daniel)
+>  - emulate kunit_test_suites() (Daniel)
+>  - emit valid KTAP (David)
+> ---
+>  include/uapi/misc/kunit.h | 181 ++++++++++++++++++++++++++++++++++++++
+>  lib/stackinit_kunit.c     |  11 +++
+>  2 files changed, 192 insertions(+)
+>  create mode 100644 include/uapi/misc/kunit.h
+> 
+> diff --git a/include/uapi/misc/kunit.h b/include/uapi/misc/kunit.h
+> new file mode 100644
+> index 000000000000..afdffda583ae
+> --- /dev/null
+> +++ b/include/uapi/misc/kunit.h
+> @@ -0,0 +1,181 @@
+> +#ifndef __UAPI_MISC_KUNIT_H__
+> +#define __UAPI_MISC_KUNIT_H__
+> +/*
+> + * This is a light-weight userspace drop-in replacement for the in-kernel
+> + * KUnit API. It seeks to implement a minimal subset of features so that
+> + * a concisely written KUnit test can be made to run entirely in userspace
+> + * when it doesn't actually depend on any real kernel internals.
+> + *
+> + * Additionally contains many refactored kernel-isms to support building
+> + * and running in userspace without full kernel source.
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <stdio.h>
+> +#include <stdint.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <stdbool.h>
+> +#include <errno.h>
+> +#include <sys/types.h>
+> +
+> +#define __user			/**/
+> +#define noinline		__attribute__((__noinline__))
+> +#define __aligned(x)		__attribute__((__aligned__(x)))
+> +#ifdef __clang__
+> +# define __compiletime_error(message) /**/
+> +#else
+> +# define __compiletime_error(message) __attribute__((__error__(message)))
+> +#endif
+> +#define __compiletime_assert(condition, msg, prefix, suffix)		\
+> +	do {								\
+> +		extern void prefix ## suffix(void) __compiletime_error(msg); \
+> +		if (!(condition))					\
+> +			prefix ## suffix();				\
+> +	} while (0)
+> +#define _compiletime_assert(condition, msg, prefix, suffix) \
+> +	__compiletime_assert(condition, msg, prefix, suffix)
+> +#define compiletime_assert(condition, msg) \
+> +	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> +#define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+> +#define BUILD_BUG_ON(condition) \
+> +	BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+> +
+> +#define ARRAY_SIZE(a)		(sizeof (a) / sizeof ((a)[0]))
+> +
+> +#define MODULE_LICENSE(str)	/* str */
+> +
+> +typedef uint8_t			u8;
+> +typedef uint16_t		u16;
+> +typedef uint32_t		u32;
+> +typedef uint64_t		u64;
+> +
+> +#define TEST_PASS	0
+> +#define TEST_SKIP	1
+> +#define TEST_FAIL	2
+> +struct kunit {
+> +	int status;
+> +	char *msg;
+> +};
+> +struct kunit_case {
+> +        void (*run_case)(struct kunit *test);
+> +        const char *name;
+> +};
+> +struct kunit_suite {
+> +	const char *name;
+> +	const struct kunit_case *test_cases;
+> +};
+> +#define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
+> +
+> +#define KUNIT_ASSERT_TRUE_MSG(test, expr, fmt, ...)			\
+> +do {									\
+> +	if (!(expr)) {							\
+> +		if (test->status != TEST_SKIP)				\
+> +			test->status = TEST_FAIL;			\
+> +		if (test->msg)						\
+> +			free(test->msg);				\
+> +		asprintf(&test->msg, fmt, ##__VA_ARGS__);		\
+> +		return;							\
+> +	}								\
+> +} while (0)
+> +
+> +#define KUNIT_ASSERT_EQ_MSG(test, left, right, fmt, ...)		\
+> +	KUNIT_ASSERT_TRUE_MSG(test, (left) == (right),			\
+> +			      #left " != " #right ": " fmt,		\
+> +			      ##__VA_ARGS__)
+> +
+> +#define kunit_skip(test, fmt, ...)					\
+> +do {									\
+> +	test->status = TEST_SKIP;					\
+> +	if (test->msg)							\
+> +		free(test->msg);					\
+> +	asprintf(&test->msg, fmt, ##__VA_ARGS__);			\
+> +	return;								\
+> +} while (0)
+> +
+> +static int do_kunit_test_suite(struct kunit_suite *suite)
+> +{
+> +	const struct kunit_case *test_case;
+> +	int pass = 0, fail = 0, skip = 0;
+> +	int rc = 0;
+> +	size_t i = 0;
+> +
+> +	printf("  TAP version 14\n");
+> +	for (test_case = suite->test_cases; test_case->run_case; test_case++)
+> +		i++;
+> +	printf("  1..%zu\n", i);
+> +	i = 0;
+> +	for (test_case = suite->test_cases; test_case->run_case; test_case++) {
+> +		struct kunit test = { };
+> +
+> +		i++;
+> +		test_case->run_case(&test);
+> +		switch (test.status) {
+> +		default:
+> +		case TEST_FAIL:
+> +			fprintf(stderr, "  not ok %zu - %s%s%s",
+> +				i, test_case->name,
+> +				test.msg ? " # ERROR " : "",
+> +				test.msg ?: "\n");
+> +			rc = 1;
+> +			fail++;
+> +			break;
+> +		case TEST_SKIP:
+> +			fprintf(stdout, "  ok %zu - %s # SKIP%s%s",
+> +				i, test_case->name,
+> +				test.msg ? " " : "",
+> +				test.msg ?: "\n");
+> +			skip++;
+> +			break;
+> +		case TEST_PASS:
+> +			fprintf(stdout, "  ok %zu - %s\n",
+> +				i, test_case->name);
+> +			pass++;
+> +			break;
+> +		}
+> +		if (test.msg)
+> +			free(test.msg);
+> +	}
+> +	printf("# %s: pass:%d fail:%d skip:%d total:%zu\n",
+> +		suite->name, pass, fail, skip, i);
+> +	return rc;
+> +}
+> +
+> +static int run_suites(char *name, struct kunit_suite *suites[], size_t count)
+> +{
+> +	int pass = 0, fail = 0, skip = 0;
+> +	int one, ret = 0;
+> +	size_t i;
+> +
+> +	printf("TAP version 14\n");
+> +	printf("1..%zu\n", count);
+> +	for (i = 0; i < count; ++i) {
+> +		one = do_kunit_test_suite(suites[i]);
+> +		switch (one) {
+> +		case TEST_SKIP:
+> +			skip++;
+> +			break;
+> +		case TEST_PASS:
+> +			pass++;
+> +			break;
+> +		default:
+> +			fail++;
+> +			break;
+> +		}
+> +		printf("%sok %zu - %s\n",
+> +			one == TEST_FAIL ? "not " : "",
+> +			i + 1, suites[i]->name);
+> +		ret |= one;
+> +	}
+> +	printf("# %s: pass:%d fail:%d skip:%d total:%zu\n",
+> +		name, pass, fail, skip, count);
+> +	return ret;
+> +}
+> +
+> +#define kunit_test_suites(suite...)				\
+> +int main(int argc, char *argv[]) {				\
+> +	static struct kunit_suite *suites[] = { suite };	\
+> +	return run_suites(argv[0], suites, ARRAY_SIZE(suites));	\
+> +}
+> +
+> +#endif /* __UAPI_MISC_KUNIT_H__ */
+> diff --git a/lib/stackinit_kunit.c b/lib/stackinit_kunit.c
+> index 35c69aa425b2..6d468630c90a 100644
+> --- a/lib/stackinit_kunit.c
+> +++ b/lib/stackinit_kunit.c
+> @@ -8,7 +8,13 @@
+>   *		--make_option LLVM=1 \
+>   *		--kconfig_add CONFIG_INIT_STACK_ALL_ZERO=y
+>   *
+> + * External build example:
+> + *	clang -O2 -Wall -ftrivial-auto-var-init=pattern \
+> + *		-o stackinit_kunit stackinit_kunit.c
+> + *	./stackinit_kunit
+> + *
+>   */
+> +#ifdef __KERNEL__
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>  
+>  #include <kunit/test.h>
+> @@ -17,6 +23,11 @@
+>  #include <linux/module.h>
+>  #include <linux/string.h>
+>  
+> +#else
+> +/* Userspace KUnit stub header. */
+> +#include <misc/kunit.h>
+> +#endif
+> +
+>  /* Exfiltration buffer. */
+>  #define MAX_VAR_SIZE	128
+>  static u8 check_buf[MAX_VAR_SIZE];
+> -- 
+> 2.32.0
+> 
 
-(That is often true in general for the more esoteric warnings, but in
-this case it's just painfully more obvious).
-
-              Linus
+-- 
+Kees Cook
