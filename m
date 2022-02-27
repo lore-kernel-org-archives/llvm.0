@@ -1,48 +1,48 @@
 Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6E34AA9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C054AAB
 	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 18:45:22 +0000 (UTC)
-Received: by mail-pj1-f47.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso12898192pjk.1
+Received: by mail-pj1-f47.google.com with SMTP id h17-20020a17090acf1100b001bc68ecce4aso12874164pju.4
         for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 10:45:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rtQJ6+HWuDHNtXviDEv3CrUYrjsryDE8pWmriGiESg0=;
-        b=m2E7Mkc5+O/hSN+7zDdRObC+NbGDn8KfETTWlSmuj/vdJqDtWt/86czuCbSuNxGYsA
-         1Y8x9mmgL+ELb5DPf58L2FnoGs1NDCSPpYG1XAYvTOFZMvu4Tjtd1dL3M+2Uzub2AVmJ
-         mxFjyzhIpbnoLtl+uqKjMt1eDPuGbpgQO/92Y=
+        bh=hguOC+xPYO0eaAtZXq+RAjwSHPM/20IFHUGj359jpG8=;
+        b=Vt+FMmf2Lvacdy2VablByMnnRD1mjjC9+gDyfFfDq1B8f1Y4ajQPMV0pNVAwM0HZ9+
+         ta7G8l5pJ+K0fPQjp9rdTxZyZvDIpiK8a22ZNIYRBfHI4U0rZifX7Zi4ZWRI4jtYa0tl
+         LPTe8NuUbL6oMV+pLKAfdbADATj8s48JOZxcE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rtQJ6+HWuDHNtXviDEv3CrUYrjsryDE8pWmriGiESg0=;
-        b=vW0xiPzXbbKhMFCxYhJI6/R44DyPueEYFgjtgWK4MbbsytJI9KcSzRd3mLT7r7JeQj
-         UJqsmsd7bhOGtX1G6lfpssFYCFjigesOLnTcnz8JfZwYgAu/A6I0p6DjwQsNVngQIoL3
-         xlGJvfOwTpO0L63qzhb5WjvaclGH4wmCjPnlId/v6WL62CCU8Txc1CXGU/j0D0PsvuRX
-         XjL9m8C8yW6Ax7GZunPJxyM5mXoWINAot2fZNn6sQbsXqyFFtirSjWFF7WwSNHYI6o1d
-         Sm5B84iGqzZPnvGKFClFNgbqC99YbYvohDGsAmv96KqbeARlD3+aeHqsBHgGDFfnSBBp
-         hv3w==
-X-Gm-Message-State: AOAM531yuYV5lI3Z7RxocLeG6ykfMr63Rl0/mt6TznXd7+bJ7ZusD31d
-	UywbG2FG+mNzTZA2AqjU71kh6Q==
-X-Google-Smtp-Source: ABdhPJzVRRQGxF6e1NTngPEsB3I/EvTNRmSUfuQ6v7xj8PQt1X32lE1LoqLXaWLdGVbZluSQR3Vj5w==
-X-Received: by 2002:a17:90b:250f:b0:1bc:e520:91e6 with SMTP id ns15-20020a17090b250f00b001bce52091e6mr13355572pjb.43.1645987521825;
-        Sun, 27 Feb 2022 10:45:21 -0800 (PST)
+        bh=hguOC+xPYO0eaAtZXq+RAjwSHPM/20IFHUGj359jpG8=;
+        b=eY+vjRqognI4YKq5aCYm1D6oz0TvYGA6GrZb/SZ+9B5FYcc4j4SkfLwVoDaVobHNge
+         lssISJpVVNZcJNS/aDYf1B5X08TEHPgqEzC0Naol32f0Lxu5sT5V3vm5xVNWiXMxsReJ
+         GnfhvAW9cNmq70LxErbj59Rm1w2ggNv/3ImJ0aqJVMefGHYWAwDwB9484p6TylkP3tg/
+         bfdv7LmG/ZzKnb2mK4eu4OPGTki53qdWfdcts7I9ip+gIW8FtF4ivySDczoTulOsLEwL
+         B0L+WjNqgw0yU9cUPzygenDb63oAAomTxrf639Td9/9sefGTi9DFf8FYLckNUUCIm45F
+         yUVA==
+X-Gm-Message-State: AOAM530K+KusHoZmuyPKZi0jRG3Q1m2aQ6Q8f31/sXedQV6aCrmAmB86
+	NQe8PlqBBcEYHv5g4Ec/WGUpNQ==
+X-Google-Smtp-Source: ABdhPJwyo1rMccr+9zW0ZyrPf84LJWZt8qC3wyk+XmwEvTaVBmNHap92GcCcUQYiiBcW9n/4wUYQ/g==
+X-Received: by 2002:a17:902:8203:b0:14f:c36f:70c with SMTP id x3-20020a170902820300b0014fc36f070cmr17209832pln.95.1645987522375;
+        Sun, 27 Feb 2022 10:45:22 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056a00084a00b004f26d3f5d8fsm10450378pfk.25.2022.02.27.10.45.21
+        by smtp.gmail.com with ESMTPSA id bg3-20020a056a001f8300b004f40e8b3133sm694802pfb.188.2022.02.27.10.45.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 27 Feb 2022 10:45:21 -0800 (PST)
 From: Kees Cook <keescook@chromium.org>
 To: Kees Cook <keescook@chromium.org>
-Cc: "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+Cc: David Gow <davidgow@google.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
 	Vitor Massaru Iha <vitor@massaru.org>,
 	Daniel Latypov <dlatypov@google.com>,
-	David Gow <davidgow@google.com>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
 	Jeff Dike <jdike@addtoit.com>,
 	Richard Weinberger <richard@nod.at>,
 	Masahiro Yamada <masahiroy@kernel.org>,
@@ -54,9 +54,9 @@ Cc: "Gustavo A . R . Silva" <gustavoars@kernel.org>,
 	llvm@lists.linux.dev,
 	x86@kernel.org,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH v3 1/7] overflow: Provide constant expression struct_size
-Date: Sun, 27 Feb 2022 10:45:11 -0800
-Message-Id: <20220227184517.504931-2-keescook@chromium.org>
+Subject: [PATCH v3 4/7] um: Remove unused timeval_to_ns() function
+Date: Sun, 27 Feb 2022 10:45:14 -0800
+Message-Id: <20220227184517.504931-5-keescook@chromium.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220227184517.504931-1-keescook@chromium.org>
 References: <20220227184517.504931-1-keescook@chromium.org>
@@ -66,127 +66,48 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5098; h=from:subject; bh=2kZK8Pa8mdtDR/Nqo/3Vk6gXcxnyZeRVGJOFKK5/Dm4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiG8a7FSbvVC74wmbAmC12ksTVuBzN9xRSIPC+WKU3 EO0+lGSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhvGuwAKCRCJcvTf3G3AJksnD/ 9jFKmi/Ux9BHhxzZ2RpxelaewUNUU1aSHv57YDOG4L43fmRoLxzBROLz9OcWcP5/ejuFFtwfP5323z DZFpA+Ts0sy9zDjBAcP06aCVrZ0D5y/C1HsAUvPpk+yS2jUe50vXwu7X4wwMS//COr8VCW+aGk4dvG B9loTCNsEklQK46RkPdt0d/WAGj0xMnzHWyztM050GcaJUl4TSBtIeN+5BKRWOt045Npdnf3eCWXq5 24GX5UE5ts6sZKHIk4ywytyDoK+uftNnd8Ufbn8iG34ZO8/fbkf7WAilUNTQH/y1cfyx8qYSIDJ7eL ZqDZejMvx4eMGypzGXA4J2L+Isq+cRIXrbnFLxtUgJt9YvTRrfQdunOtMOTC2WmHAnEKzOs9jlymHB T+Vc4UxaWsdNIBMnhRu+nSHuG/JJK2iYBNxjlNh3xcFWcODPFhCJG4S93ANnr+fKRDE8kq9rAkOYna KxjcdpjVWN/jDTmLHOI3cXBRLG3AxPuwSNAvFKvnck0F8hRGoQDfqTXM10M3TLrNXL9tKJrEJ/eIuQ TT36kiajoi0oH2nbWk9ne714xn1lJ4NoqeFFDO05bz78F70Sb5SOe7nU5RN75Gdbpw18YhvTG6ojX6 cuKk1/+pWSBz29y7CCOHSd+MakbP+FqPYa4n7OorO435P4PZiQdZPAhov3Xw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1397; i=keescook@chromium.org; h=from:subject; bh=BBY0jyLtd6SE6A0Q+0QxoOVDMufJjpQntzXWcTVbBzQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiG8a7pgTujxq03iEogLI3HZhrantD7izHXSbMposM 3ezh8hWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhvGuwAKCRCJcvTf3G3AJvdxD/ oCEV1wTwasGpPxS1HOVrQMyGEgZMjg1DXdqdV6HOBfnHhLIsIzbWuxSG7ROL9d+etvNu4CZ+boboMy F7ft4nDST1eKRd78RKyyQPuhjph5qsS/hk7PIadhAeAy+zBCdKfXIPzdA+NlthXEVCBTJU7MfuhaS8 WnW0AsKPv7iPGwFgFd3xCJ9Bl4aLW8KtaOhcKju3e1VCGJ/s4Yzf+P9PKpsgoHBBjRJWAxHvpISG9J yuRL+4TvhGpwioQUFq1FxLJy3blx9iD3vtnGBT+uaTxYXgjQZ8DF6m/lUsVwR43OdedREO3Gle3h2O ArZdZq0I1UZ7NysvfZOXcGFyrF1+OrxIIee/APsPXfOUeFkk12RJNnNCBBXcFdv/AtnX69OORj4hLW 4VBpLH01GaHhh9bO+Nzgzoiygx0ZURY6DOIbGd85lHROMECQedbCVjnSZWrDz9aA0L2IaOw0Neipba vifUqc5dwEZaZaQ/qpTOeLvmmTlgrFN7xOfi4oLNykNb65NlKZm9AOveVJrTprb2lcc4Q+ssTRhJ79 66chg4/PouI37iL0kA7CQLexQvpIc9aUVlvvZ5E4N7heEOMbxZ85wYGG5KSjWp5dGCbDQ6UDSbqyQD PtbBq8sZX7srMnaXmhH0C7ni5QOuy5hpeXo9lOudn2EfJOcEdpCfihoVDUtg==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-There have been cases where struct_size() (or flex_array_size()) needs
-to be calculated for an initializer, which requires it be a constant
-expression. This is possible when the "count" argument is a constant
-expression, so provide this ability for the helpers.
+From: David Gow <davidgow@google.com>
 
-Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+The timeval_to_ns() function doesn't appear to be used anywhere, as far
+as I (or git grep) can tell, and clang throws up a warning about it:
+
+../arch/um/os-Linux/time.c:21:25: warning: unused function 'timeval_to_ns' [-Wunused-function]
+static inline long long timeval_to_ns(const struct timeval *tv)
+                        ^
+1 warning generated.
+
+Signed-off-by: David Gow <davidgow@google.com>
+Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Link: https://lore.kernel.org/lkml/78d6ac17-9492-7c41-d6dd-4c92dce8ce62@cambridgegreys.com
 Signed-off-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Tested-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Link: https://lore.kernel.org/lkml/20220210010407.GA701603@embeddedor
+Link: https://lore.kernel.org/r/20220224081233.1765788-1-davidgow@google.com
 ---
-v1: https://lore.kernel.org/linux-hardening/20220210004326.776574-1-keescook@chromium.org
-v2:
- - fix broken self-test due to CE optimization
+This is a resend of the above linked patch, just included in this series.
 ---
- include/linux/overflow.h | 10 +++++++---
- lib/test_overflow.c      | 26 +++++++++++++++++---------
- 2 files changed, 24 insertions(+), 12 deletions(-)
+ arch/um/os-Linux/time.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/include/linux/overflow.h b/include/linux/overflow.h
-index 59d7228104d0..f1221d11f8e5 100644
---- a/include/linux/overflow.h
-+++ b/include/linux/overflow.h
-@@ -4,6 +4,7 @@
+diff --git a/arch/um/os-Linux/time.c b/arch/um/os-Linux/time.c
+index 6c5041c5560b..4d5591d96d8c 100644
+--- a/arch/um/os-Linux/time.c
++++ b/arch/um/os-Linux/time.c
+@@ -18,12 +18,6 @@
  
- #include <linux/compiler.h>
- #include <linux/limits.h>
-+#include <linux/const.h>
+ static timer_t event_high_res_timer = 0;
  
- /*
-  * We need to compute the minimum and maximum values representable in a given
-@@ -221,8 +222,9 @@ static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
-  * Return: number of bytes needed or SIZE_MAX on overflow.
-  */
- #define flex_array_size(p, member, count)				\
--	size_mul(count,							\
--		 sizeof(*(p)->member) + __must_be_array((p)->member))
-+	__builtin_choose_expr(__is_constexpr(count),			\
-+		(count) * sizeof(*(p)->member) + __must_be_array((p)->member),	\
-+		size_mul(count, sizeof(*(p)->member) + __must_be_array((p)->member)))
- 
- /**
-  * struct_size() - Calculate size of structure with trailing flexible array.
-@@ -237,6 +239,8 @@ static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
-  * Return: number of bytes needed or SIZE_MAX on overflow.
-  */
- #define struct_size(p, member, count)					\
--	size_add(sizeof(*(p)), flex_array_size(p, member, count))
-+	__builtin_choose_expr(__is_constexpr(count),			\
-+		sizeof(*(p)) + flex_array_size(p, member, count),	\
-+		size_add(sizeof(*(p)), flex_array_size(p, member, count)))
- 
- #endif /* __LINUX_OVERFLOW_H */
-diff --git a/lib/test_overflow.c b/lib/test_overflow.c
-index 712fb2351c27..f6530fce799d 100644
---- a/lib/test_overflow.c
-+++ b/lib/test_overflow.c
-@@ -602,10 +602,18 @@ struct __test_flex_array {
- 
- static int __init test_overflow_size_helpers(void)
+-static inline long long timeval_to_ns(const struct timeval *tv)
+-{
+-	return ((long long) tv->tv_sec * UM_NSEC_PER_SEC) +
+-		tv->tv_usec * UM_NSEC_PER_USEC;
+-}
+-
+ static inline long long timespec_to_ns(const struct timespec *ts)
  {
-+	/* Make sure struct_size() can be used in a constant expression. */
-+	u8 ce_array[struct_size((struct __test_flex_array *)0, data, 55)];
- 	struct __test_flex_array *obj;
- 	int count = 0;
- 	int err = 0;
- 	int var;
-+	volatile int unconst = 0;
-+
-+	/* Verify constant expression against runtime version. */
-+	var = 55;
-+	OPTIMIZER_HIDE_VAR(var);
-+	err |= sizeof(ce_array) != struct_size(obj, data, var);
- 
- #define check_one_size_helper(expected, func, args...)	({	\
- 	bool __failure = false;					\
-@@ -663,28 +671,28 @@ static int __init test_overflow_size_helpers(void)
- 				     flex_array_size, obj, data, var++);
- 	err |= check_one_size_helper(5 * sizeof(*obj->data),
- 				     flex_array_size, obj, data, var++);
--	err |= check_one_size_helper(0, flex_array_size, obj, data, 0);
-+	err |= check_one_size_helper(0, flex_array_size, obj, data, 0 + unconst);
- 	err |= check_one_size_helper(sizeof(*obj->data),
--				     flex_array_size, obj, data, 1);
-+				     flex_array_size, obj, data, 1 + unconst);
- 	err |= check_one_size_helper(7 * sizeof(*obj->data),
--				     flex_array_size, obj, data, 7);
-+				     flex_array_size, obj, data, 7 + unconst);
- 	err |= check_one_size_helper(SIZE_MAX,
--				     flex_array_size, obj, data, -1);
-+				     flex_array_size, obj, data, -1 + unconst);
- 	err |= check_one_size_helper(SIZE_MAX,
--				     flex_array_size, obj, data, SIZE_MAX - 4);
-+				     flex_array_size, obj, data, SIZE_MAX - 4 + unconst);
- 
- 	var = 4;
- 	err |= check_one_size_helper(sizeof(*obj) + (4 * sizeof(*obj->data)),
- 				     struct_size, obj, data, var++);
- 	err |= check_one_size_helper(sizeof(*obj) + (5 * sizeof(*obj->data)),
- 				     struct_size, obj, data, var++);
--	err |= check_one_size_helper(sizeof(*obj), struct_size, obj, data, 0);
-+	err |= check_one_size_helper(sizeof(*obj), struct_size, obj, data, 0 + unconst);
- 	err |= check_one_size_helper(sizeof(*obj) + sizeof(*obj->data),
--				     struct_size, obj, data, 1);
-+				     struct_size, obj, data, 1 + unconst);
- 	err |= check_one_size_helper(SIZE_MAX,
--				     struct_size, obj, data, -3);
-+				     struct_size, obj, data, -3 + unconst);
- 	err |= check_one_size_helper(SIZE_MAX,
--				     struct_size, obj, data, SIZE_MAX - 3);
-+				     struct_size, obj, data, SIZE_MAX - 3 + unconst);
- 
- 	pr_info("%d overflow size helper tests finished\n", count);
- 
+ 	return ((long long) ts->tv_sec * UM_NSEC_PER_SEC) + ts->tv_nsec;
 -- 
 2.32.0
 
