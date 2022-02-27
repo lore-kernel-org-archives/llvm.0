@@ -1,78 +1,91 @@
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ED444A91
-	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 17:09:28 +0000 (UTC)
-Received: from [192.168.1.18] ([90.126.236.122])
-	by smtp.orange.fr with ESMTPA
-	id OMvbnV3p641cbOMvbnynb3; Sun, 27 Feb 2022 18:01:50 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 27 Feb 2022 18:01:50 +0100
-X-ME-IP: 90.126.236.122
-Message-ID: <5477fb05-d72f-ccc0-1c07-8f2f40d9dde0@wanadoo.fr>
-Date: Sun, 27 Feb 2022 18:01:47 +0100
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47774A91
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 17:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DE8C340EF;
+	Sun, 27 Feb 2022 17:39:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645983547;
+	bh=RlxsNBxWP23xW/4RVjjxHZDE4BG21qefYTNvuOdpYrc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BnRFAFvGMoca9d7oCUM2P30xUW2DQtTIu5s6WxGi5BJSKv92sBM2pOLtt0bONJw84
+	 PUssBow1aejad+JoryXbY3lumR1oHPOLjEcFlL0DiD1q4agnWJEZVCOgMLyufa7eee
+	 h4mpGQwP2xqEuWDvaitMcuoQqtqLe9ELsecnOm/GCzFyDWh1LSYTnIe4kFc+Ni9Zsz
+	 AB0gEOOZTM06m5PWFjgq+wnTLJEqiPm3hsYdQBwoan6dTP6d10opDdvM+NVkOm4N3/
+	 ZTjPCoQhbXInL81vfEM4s/WKlRL9HaLxwQwxflIFugFLA75hhu5x1O8oDxil9Pebcc
+	 GlYYk4SMQDklw==
+Date: Sun, 27 Feb 2022 17:46:10 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: trix@redhat.com
+Cc: vilhelm.gray@gmail.com, nathan@kernel.org, ndesaulniers@google.com,
+ Jonathan.Cameron@huawei.com, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] counter: add defaults to switch-statements
+Message-ID: <20220227174610.0e0e73e4@jic23-huawei>
+In-Reply-To: <20220227161746.82776-1-trix@redhat.com>
+References: <20220227161746.82776-1-trix@redhat.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] iio: adc: mt6360: strengthen return check of
- mt6360_adc_read_channel
-Content-Language: en-US
-To: jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
- nathan@kernel.org, ndesaulniers@google.com, linus.walleij@linaro.org,
- ardeleanalex@gmail.com, Tom Rix <trix@redhat.com>
-Cc: linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-References: <20220227164357.84742-1-trix@redhat.com>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220227164357.84742-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Le 27/02/2022 à 17:43, trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org a 
-écrit :
-> From: Tom Rix <trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+On Sun, 27 Feb 2022 08:17:46 -0800
+trix@redhat.com wrote:
+
+> From: Tom Rix <trix@redhat.com>
 > 
-> Clang static analysis reports this issue
-> mt6360-adc.c:277:20: warning: Assigned value is
->    garbage or undefined
->    data.values[i++] = val;
->                     ^ ~~~
+> Clang static analysis reports this representative problem
+> counter-chrdev.c:482:3: warning: Undefined or garbage value
+>   returned to caller
+>   return ret;
+>   ^~~~~~~~~~
 > 
-> val is set by a successful call to m6360_adc_read_channel().
-> A negative return is checked but within m6360_adc_read_channel,
-> a non zero check is done.
-> Strengthen the check to non zero.
-
-Hi, my understanding of m6360_adc_read_channel() is that on success, it 
-returns IIO_VAL_INT (i.e. 1).
-
-So, I think that with your patch, we will now always fail because 'ret' 
-is never 0 at this point.
-
-CJ
-
+> counter_get_data() has a multilevel switches, some without
+> defaults, so ret is sometimes not set.
+> Add returning -EINVAL similar to other defaults.
 > 
-> Signed-off-by: Tom Rix <trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+> Fixes: b6c50affda59 ("counter: Add character device interface")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+I'm fairly sure this one is warning supression rather than a fix as
+that type u8 being used in the switch is storing an enum which is
+set only by kernel code and all values of the enum are covered.
+
+However, that's not locally visible so to me the addition looks good, I'd
+just be tempted to drop the fixes tag as backporting this looks like noise
+to me.
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
 > ---
->   drivers/iio/adc/mt6360-adc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/counter/counter-chrdev.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/iio/adc/mt6360-adc.c b/drivers/iio/adc/mt6360-adc.c
-> index 07c0e67683910..9fb6dc305a392 100644
-> --- a/drivers/iio/adc/mt6360-adc.c
-> +++ b/drivers/iio/adc/mt6360-adc.c
-> @@ -269,7 +269,7 @@ static irqreturn_t mt6360_adc_trigger_handler(int irq, void *p)
->   	memset(&data, 0, sizeof(data));
->   	for_each_set_bit(bit, indio_dev->active_scan_mask, indio_dev->masklength) {
->   		ret = mt6360_adc_read_channel(mad, bit, &val);
-> -		if (ret < 0) {
-> +		if (ret) {
->   			dev_warn(&indio_dev->dev, "Failed to get channel %d conversion val\n", bit);
->   			goto out;
->   		}
+> diff --git a/drivers/counter/counter-chrdev.c b/drivers/counter/counter-chrdev.c
+> index b7c62f957a6a8..69d340be9c93f 100644
+> --- a/drivers/counter/counter-chrdev.c
+> +++ b/drivers/counter/counter-chrdev.c
+> @@ -477,6 +477,8 @@ static int counter_get_data(struct counter_device *const counter,
+>  		case COUNTER_SCOPE_COUNT:
+>  			ret = comp->count_u8_read(counter, parent, &value_u8);
+>  			break;
+> +		default:
+> +			return -EINVAL;
+>  		}
+>  		*value = value_u8;
+>  		return ret;
+> @@ -496,6 +498,8 @@ static int counter_get_data(struct counter_device *const counter,
+>  		case COUNTER_SCOPE_COUNT:
+>  			ret = comp->count_u32_read(counter, parent, &value_u32);
+>  			break;
+> +		default:
+> +			return -EINVAL;
+>  		}
+>  		*value = value_u32;
+>  		return ret;
 
