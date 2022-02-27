@@ -1,46 +1,41 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661D14A83;
-	Sun, 27 Feb 2022 15:57:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F704A83
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 16:18:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645977460; x=1677513460;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uZVNRO0qfhvL5YBVwTKw1rTCJwkow3/0UaHUBIhgeNU=;
-  b=R/sTjaU4nao55nvyZ9Gpe5XuZD2kXNyWNklRfMOkgrXwLVrVy3h0Ykr/
-   PHYY1sDYevagtXK6mfDVYsqRO2MR2Ba1mCouUTwplC5DRvdFChQKYxH4B
-   bfbPwwDaIVEJMreWfEBS9VKAOx9Fx1GqsTUlr+ROlcMgMxeLA1rRRyEBs
-   Zls94BcMYCbxOr19BZUjUMUnPJXGHhq1kmMODHQaMUV0JLsJXuCvVck78
-   7icC502il0hXM+rKnMdp7Gi8hQaTSfrPDQEFun8bNhyah5Z/lA3DH7yD1
-   f/XohKvUehmmZ5G/wmghGvn0mP9cV7XeAX/lNyCWqAJjps7Fwz8ZutOk6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="236250292"
+  t=1645978718; x=1677514718;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=lO3bLT5AeXWJ5qunGRLafy+z+nNfefN9Qlpa/NApswM=;
+  b=RGBlzrsbolP2lh2qQYcFgEt7bnbcwYvWt9d8d5vMcR821JYCBfYfdquP
+   G7VhoqKCelnla36JA8oKYVSAYqQOL3cSz67sjHa+hRzW0YfCY+h0cDH7Z
+   wIt3sNLQRNn8lGMrzQXJsThi9NhYxfy/FPmZSOtCTz1I9Z7fYr7T1k/7V
+   zi19/H0eyBHkPIMTiNF5NyOZikcliqqIEM1aksgJr7AttXXFIcGPi0FF6
+   9QdXiv0B8YldmdmaXgyE+ndXpPQsgcKKzN5UdiLmzCX0+nSuNSYXMFBYi
+   i7X7noSS4pesPYnFj7oKuBTZ1rAOLnORbEy9rPfMHNW2cOdPLGaJczkMU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="252670478"
 X-IronPort-AV: E=Sophos;i="5.90,141,1643702400"; 
-   d="scan'208";a="236250292"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 07:57:39 -0800
+   d="scan'208";a="252670478"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 08:18:38 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,141,1643702400"; 
-   d="scan'208";a="777852020"
+   d="scan'208";a="640635429"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Feb 2022 07:57:36 -0800
+  by orsmga004.jf.intel.com with ESMTP; 27 Feb 2022 08:18:37 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nOLvT-0006bd-Qq; Sun, 27 Feb 2022 15:57:35 +0000
-Date: Sun, 27 Feb 2022 23:57:18 +0800
+	id 1nOMFo-0006d5-EW; Sun, 27 Feb 2022 16:18:36 +0000
+Date: Mon, 28 Feb 2022 00:17:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shiyang Ruan <ruansy.fnst@fujitsu.com>, linux-kernel@vger.kernel.org,
-	linux-xfs@vger.kernel.org, nvdimm@lists.linux.dev,
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, djwong@kernel.org,
-	dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
-	jane.chu@oracle.com
-Subject: Re: [PATCH v11 8/8] fsdax: set a CoW flag when associate reflink
- mappings
-Message-ID: <202202272359.2aizNPgB-lkp@intel.com>
-References: <20220227120747.711169-9-ruansy.fnst@fujitsu.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [krzk-github:n/driver-override-v3 3/14] ld.lld: error:
+ kernel/built-in.a(bpf/btf.o):(function btf_parse_vmlinux: .text+0x1864):
+ relocation R_RISCV_PCREL_HI20 out of range: -524573 is not in [-524288,
+ 524287]; references __start_BTF
+Message-ID: <202202280057.yF03bpot-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,62 +44,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220227120747.711169-9-ruansy.fnst@fujitsu.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Shiyang,
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Krzysztof Kozlowski <krzk@kernel.org>
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on xfs-linux/for-next]
-[also build test WARNING on linux/master]
-[cannot apply to hnaz-mm/master linus/master v5.17-rc5 next-20220225]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220227-200849
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220227/202202272359.2aizNPgB-lkp@intel.com/config)
+tree:   https://github.com/krzk/linux n/driver-override-v3
+head:   2c511c1ba6dc5deb9712f2bcebfc964ea23b6209
+commit: e4823f160612e013b11cd211995b59554d07ea03 [3/14] fixup
+config: riscv-buildonly-randconfig-r006-20220227 (https://download.01.org/0day-ci/archive/20220228/202202280057.yF03bpot-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/a0ac78065bbb4fbb3e5477c32686eca3b9f0e1ef
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220227-200849
-        git checkout a0ac78065bbb4fbb3e5477c32686eca3b9f0e1ef
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/krzk/linux/commit/e4823f160612e013b11cd211995b59554d07ea03
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/driver-override-v3
+        git checkout e4823f160612e013b11cd211995b59554d07ea03
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/dax.c:337:67: warning: parameter 'mapping' set but not used [-Wunused-but-set-parameter]
-   static inline void dax_mapping_set_cow_flag(struct address_space *mapping)
-                                                                     ^
-   1 warning generated.
-
-
-vim +/mapping +337 fs/dax.c
-
-   328	
-   329	/*
-   330	 * Iterate through all mapped pfns represented by an entry, i.e. skip
-   331	 * 'empty' and 'zero' entries.
-   332	 */
-   333	#define for_each_mapped_pfn(entry, pfn) \
-   334		for (pfn = dax_to_pfn(entry); \
-   335				pfn < dax_end_pfn(entry); pfn++)
-   336	
- > 337	static inline void dax_mapping_set_cow_flag(struct address_space *mapping)
-   338	{
-   339		mapping = (struct address_space *)PAGE_MAPPING_DAX_COW;
-   340	}
-   341	
+>> ld.lld: error: kernel/built-in.a(bpf/btf.o):(function btf_parse_vmlinux: .text+0x1864): relocation R_RISCV_PCREL_HI20 out of range: -524573 is not in [-524288, 524287]; references __start_BTF
+   >>> referenced by btf.c
+   >>> defined in kernel/built-in.a(bpf/btf.o)
+--
+>> ld.lld: error: kernel/built-in.a(bpf/btf.o):(function btf_parse_vmlinux: .text+0x1870): relocation R_RISCV_PCREL_HI20 out of range: -524573 is not in [-524288, 524287]; references __stop_BTF
+   >>> referenced by btf.c
+   >>> defined in kernel/built-in.a(bpf/btf.o)
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
