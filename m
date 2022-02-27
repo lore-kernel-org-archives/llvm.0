@@ -1,100 +1,195 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FB32F2F
-	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 01:53:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645926796; x=1677462796;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1uvDqArwC09R6lFC53Xcn6vZTmk2HrLbjvMGEicphUU=;
-  b=E1e+Tn35gCqRnENBJHF9q7Nq5ORIvHMOL5+AB350BCiBpcBQ0CltOaZt
-   XMDC5YHVCjijbyW4+RAY7FRlVexWg6tMj+lI31octFOV3fffz2n9l4x9Y
-   M7sXkqRcz8UZKsjOWKZAbhcpAHpQyy01sGymCWgl0F015XoaTWKtL/dAi
-   PC50GrKf9QCZ4PVX86TlGkoPcyyNdb1QwLLbzw402SrSomg/2WxjzIDgN
-   G7WEb0gn4XLqQoW/ll0peknN2beacLwHJJYuaea9aZWBNb3NRvLNXQ4MQ
-   rvKxEUUBTcYcArsgrpn3HcSyZox0o3iiDE0tLdsehRBgOjcdnCxVBx4Vi
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="232668163"
-X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="232668163"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 17:53:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="684993607"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Feb 2022 17:53:14 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nO8kL-000689-Nl; Sun, 27 Feb 2022 01:53:13 +0000
-Date: Sun, 27 Feb 2022 09:52:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [rmk-arm:cex7 184/189] drivers/net/phy/qsfp.c:1229:3: warning:
- misleading indentation; statement is not part of the previous 'if'
-Message-ID: <202202270903.js3KOFR5-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013BB2F2E
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 04:04:04 +0000 (UTC)
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-09.nifty.com with ESMTP id 21R3w3BX007982
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 12:58:03 +0900
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169]) (authenticated)
+	by conssluserg-04.nifty.com with ESMTP id 21R3vinH010134
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 12:57:45 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 21R3vinH010134
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1645934265;
+	bh=8vul5cjxHnllEZ9R6kEDpmi+BU/2oY7ZUKtmPcOAiP4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ylAlrzaYHOIz+P1Py/lElRr8Oin5oBV0vItOMGnS7uuc3zxQON2WIpHwNtxYl4fmd
+	 vVGDSBcQa74Hwki4/sPqgfV/LevdM7JNwTSTrwnTwk7jnMC12I0HA77ucBiz9tqL6L
+	 DzW/2jrxEDj1RTC0g8HyZuDl0bYkONGuTDuAtvolWGMrq6pMEHeOBaRQMXVDAcoleM
+	 OHO1pMVcmjXDq6tIKAuK1cP8djpZANPMjXOZTlMnlk2FMwhAeo5Md8qVCa9hBOjMnl
+	 WISvXpcyCCYqbotUuqb0Ja57LohhiZCAHFK8uicuKJRbIB5ch8B7v2tOe3f3h1IwTP
+	 GkhlIx9EgqeBQ==
+X-Nifty-SrcIP: [209.85.210.169]
+Received: by mail-pf1-f169.google.com with SMTP id y11so8111553pfa.6
+        for <llvm@lists.linux.dev>; Sat, 26 Feb 2022 19:57:44 -0800 (PST)
+X-Gm-Message-State: AOAM530nemEqrdsw0Gg25YrBuklfMXmeEwnd0Z29kZqIT4IpNmV6UOHU
+	N6OsfQhPZ/paPnwYD+6wyOIpCTBXnpkBEHNWAQs=
+X-Google-Smtp-Source: ABdhPJxjVjGM+x2ubvRA5AcuT0fdFuqGSyU4IS6P8OuiKJceoIpY9wcwxuBtYN0eK7eF+0vaytCJWw4mPryhGf+UpR8=
+X-Received: by 2002:a63:1d44:0:b0:373:5612:629b with SMTP id
+ d4-20020a631d44000000b003735612629bmr12512970pgm.352.1645934264084; Sat, 26
+ Feb 2022 19:57:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220224055831.1854786-1-keescook@chromium.org>
+In-Reply-To: <20220224055831.1854786-1-keescook@chromium.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 27 Feb 2022 12:57:02 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQewgWYhioL-kWvgpQCnLeg6vgULbAotU-qi46NDoFw2w@mail.gmail.com>
+Message-ID: <CAK7LNAQewgWYhioL-kWvgpQCnLeg6vgULbAotU-qi46NDoFw2w@mail.gmail.com>
+Subject: Re: [PATCH v2] um: Allow builds with Clang
+To: Kees Cook <keescook@chromium.org>
+Cc: Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, David Gow <davidgow@google.com>,
+        linux-um@lists.infradead.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        kunit-dev@googlegroups.com, llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm cex7
-head:   f53b9594a2bfdd612aca57e15167da1f64e62404
-commit: 1fb157e3d601a392c0d17d2c6a8367e799859e81 [184/189] net: add qsfp support                              [*experimental*]
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220227/202202270903.js3KOFR5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm cex7
-        git checkout 1fb157e3d601a392c0d17d2c6a8367e799859e81
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
+On Thu, Feb 24, 2022 at 2:58 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Add x86-64 target for Clang+um and update user-offsets.c to use
+> Clang-friendly assembly, similar to the fix from commit cf0c3e68aa81
+> ("kbuild: fix asm-offset generation to work with clang").
+>
+> This lets me run KUnit tests with Clang:
+>
+> $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+> ...
+> $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+> ...
+>
+> Cc: Jeff Dike <jdike@addtoit.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: linux-um@lists.infradead.org
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Cc: llvm@lists.linux.dev
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Link: https://lore.kernel.org/lkml/Yg2YubZxvYvx7%2Fnm@dev-arch.archlinux-ax161/
+> Tested-by: David Gow <davidgow@google.com>
+> Link: https://lore.kernel.org/lkml/CABVgOSk=oFxsbSbQE-v65VwR2+mXeGXDDjzq8t7FShwjJ3+kUg@mail.gmail.com/
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v1: https://lore.kernel.org/lkml/20220217002843.2312603-1-keescook@chromium.org/
+> v2:
+>  - tweak commit log phrasing and alphabetize targets (nathan)
+>  - fix a missing implicit fallthrough under 32-bit builds
+>  - add review tags
+> ---
+>  arch/um/os-Linux/execvp.c  | 1 +
+>  arch/x86/um/user-offsets.c | 4 ++--
+>  scripts/Makefile.clang     | 1 +
+>  3 files changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/um/os-Linux/execvp.c b/arch/um/os-Linux/execvp.c
+> index 84a0777c2a45..c09a5fd5e225 100644
+> --- a/arch/um/os-Linux/execvp.c
+> +++ b/arch/um/os-Linux/execvp.c
+> @@ -93,6 +93,7 @@ int execvp_noalloc(char *buf, const char *file, char *const argv[])
+>                                            up finding no executable we can use, we want to diagnose
+>                                            that we did find one but were denied access.  */
+>                                         got_eacces = 1;
+> +                                       break;
+>                                 case ENOENT:
+>                                 case ESTALE:
+>                                 case ENOTDIR:
+> diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+> index bae61554abcc..d9071827b515 100644
+> --- a/arch/x86/um/user-offsets.c
+> +++ b/arch/x86/um/user-offsets.c
+> @@ -10,10 +10,10 @@
+>  #include <asm/types.h>
+>
+>  #define DEFINE(sym, val) \
+> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/phy/qsfp.c:1229:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-                   qsfp_sm_ins_next(qsfp, SFP_MOD_PRESENT, 0);
-                   ^
-   drivers/net/phy/qsfp.c:1222:2: note: previous statement is here
-           if (!qsfp->gpio_irq[GPIO_INTL])
-           ^
-   1 warning generated.
+Another way might be  #include <linux/kbuild.h> and delete this macro
+definition.
 
 
-vim +/if +1229 drivers/net/phy/qsfp.c
+>  #define DEFINE_LONGS(sym, val) \
+> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
+> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
 
-  1215	
-  1216		if (qsfp->sm_dev_state == SFP_DEV_DETACHED) {
-  1217			qsfp_sm_ins_next(qsfp, SFP_MOD_WATTACH, 0);
-  1218			return;
-  1219		}
-  1220	
-  1221		// Start the poller if there is no interrupt support if not running
-  1222		if (!qsfp->gpio_irq[GPIO_INTL])
-  1223			queue_delayed_work(system_wq, &qsfp->poll, poll_jiffies);
-  1224	
-  1225	//	ret = sfp_module_insert(qsfp->sfp_bus, &id);
-  1226	//	if (ret < 0)
-  1227	//		qsfp_sm_ins_next(qsfp, SFP_MOD_ERROR, 0);
-  1228	//	else
-> 1229			qsfp_sm_ins_next(qsfp, SFP_MOD_PRESENT, 0);
-  1230	}
-  1231	
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This generates wrong comments.
+
+In include/generated/user_constants.h,
+I see this:
+
+   #define HOST_BX 5 /* RBX */
+
+(Here, the value of RBX is 40.)
+
+
+
+  #define DEFINE_LONGS(sym, val)     asm volatile("\n.ascii \"->" #sym
+" %0 " #val "/sizeof(unsigned long)\"": : "i" (val/sizeof(unsigned
+long)))
+
+creates valid comments:
+
+   #define HOST_BX 5 /* RBX/sizeof(unsigned long) */
+
+
+
+Another way might be to do this indirectly.
+
+     #define DEFINE_LONGS(sym, val)     DEFINE(sym, val / sizeof(unsigned long))
+
+The comments in include/generated/user_constans.h do not retain
+the original macro names, though...
+
+
+
+
+
+
+
+>  void foo(void)
+>  {
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 51fc23e2e9e5..6e49344c6db2 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -9,6 +9,7 @@ CLANG_TARGET_FLAGS_mips         := mipsel-linux-gnu
+>  CLANG_TARGET_FLAGS_powerpc     := powerpc64le-linux-gnu
+>  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+> +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
+
+
+Personally, I like Nathan's idea, but we can live with the hard-coding
+since we see no efforts for UML on other host arch.
+
+
+
+
+>  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+>  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+>
+> --
+> 2.30.2
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
