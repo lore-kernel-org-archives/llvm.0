@@ -1,59 +1,64 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1B72F25
-	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 16:30:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67E84A91
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 16:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1645979418;
+	s=mimecast20190719; t=1645980244;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=UEEZb2DOh5vylG1x1VMy8AuvAs8IP8CoCmlX2Vt9jDU=;
-	b=DZdmQIPKvh+eJwmJx13G2EubxRe91sYgE35gLPCX9Glca1d2kBQfu4kYt4p5hS8MnZGvi4
-	hOa2VxNqpxaEBIDeo+1iaPtBDhZcUWrT7LSmPzOiCMrYQtccmJL9APFiy4RndNSEu6BYMD
-	AqtTxzThTi0xcnafFpUjTpaDuu8RLFU=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=V5Y+mhXtEe4aHWk4DE77nNDoAlUo3znM4yBU3KLbx5o=;
+	b=OUalcefBWArWR6GhnfmbGtrEZ/bPX4DU/czZoijzTwPfWXnlHsOQnQc9q4kARkukw6UI5W
+	KXhmD1+VReP+iQqI7XjwaVDj/LOSH7+BcNehAn4lJN8dc0qSvEl1s5ocBLJcZ7SNmY/Is+
+	M/PGf+2CdiO6b/0/2LEXG+Q5ExVLPyM=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-33-2X8JtJWaPEGa2JnTPVgUKQ-1; Sun, 27 Feb 2022 11:17:55 -0500
-X-MC-Unique: 2X8JtJWaPEGa2JnTPVgUKQ-1
-Received: by mail-qv1-f72.google.com with SMTP id z3-20020a0cf003000000b004328f6a7131so9702851qvk.19
-        for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 08:17:53 -0800 (PST)
+ us-mta-251-4zOr6PAUMyq6yldQSrSVzw-1; Sun, 27 Feb 2022 11:44:03 -0500
+X-MC-Unique: 4zOr6PAUMyq6yldQSrSVzw-1
+Received: by mail-qk1-f199.google.com with SMTP id t10-20020a37aa0a000000b00605b9764f71so9444034qke.22
+        for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 08:44:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=UEEZb2DOh5vylG1x1VMy8AuvAs8IP8CoCmlX2Vt9jDU=;
-        b=rYh47fMJbru51Lt1ycSzeWPk0dAIod7s16xgE7gc4YcbDqo5iFLErwTJtN5iO68uku
-         17/pHJalmS17Br897MfujuKz6bi5jnu4tj8dstCgS6Nxssp2fEjwL/FXYN2ygYrRc8aw
-         67XH2U+epVAvjoJP4OJs0lOdJgBsQPeZx8bPXWm1D9Ilrqv4OfH1PDwJhVhk2udn2CkS
-         HZtXCncDCNfwubr4XBRpQavIyRCoREx6kE+YBTKQPrXw5feJ1vPk7ureMx+oBvNvy0Ox
-         a9pVhMZijWYUNducNj6PEv0NWfAmeQlQ+FllYID2JiMk6znGXoisZOswEsS0bbgQxiCv
-         aqZA==
-X-Gm-Message-State: AOAM531gAOjDHgcb0fSxL79AM1iPJ36GN6vcHvIaH8j69VtDUrN9PYIz
-	aXXv73tNeh0a1pzv8xTPh1ePSENM9tIRWMeBDU9SaB6z43bXkGE0NVQQJcOQoRKurtUP6UpaaKd
-	3Zdm0KPA6fqpfMA==
-X-Received: by 2002:a05:620a:576:b0:649:243f:752d with SMTP id p22-20020a05620a057600b00649243f752dmr9320430qkp.699.1645978671552;
-        Sun, 27 Feb 2022 08:17:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzsYFLTwjcspUwtB5uDZ6VD5JILqh8bnjJ0uyOIdm4mEt5/kyzeqiapVtIaaLGd4DnYIn9tgw==
-X-Received: by 2002:a05:620a:576:b0:649:243f:752d with SMTP id p22-20020a05620a057600b00649243f752dmr9320418qkp.699.1645978671320;
-        Sun, 27 Feb 2022 08:17:51 -0800 (PST)
+        bh=V5Y+mhXtEe4aHWk4DE77nNDoAlUo3znM4yBU3KLbx5o=;
+        b=y+Svwo1miHvbKzxYT84eHgbk4E5DwGw57roX3fKVuu3EIHu0WuCeEEcVUrUEdTMpZo
+         n8oJxMmpltQHkgmx6UKhmfYCQcPnQEluR12uJJWU6G4z4xvRBmORrGOD9HgAi41G9kYU
+         Hyv1RCVD1YjnD7+T27jv7eIX+d8SsAWLy+3tSijK3oABIbCr4PEH5bHtdLhPK6dzY7E7
+         FbvOLfZ/VwxFmrAVxhjlwKKOdk8bh0EiaXvkChVi4lSBq5B+EbkbaTslgPny2zP8Hf7Q
+         0rfUtRatBvmGRzHxnEezzon1zZonGfewo4uWZ7kZX92DEGdZLHPYPKgl32A/K39lqO+y
+         5n/g==
+X-Gm-Message-State: AOAM533o7hsp2Wa+PZoOZDxA6HSlDsQ7HX8PBCVobjtYZ1GtN6vcDzXh
+	s47yimYGAbJqnAXoRXNiaRMQte7q0rA1nTkmeIyvuf379nOX2Cpa6A6Y4UMLu0FyV5J6m8OGdh9
+	lGgMYsMi3H1fwTg==
+X-Received: by 2002:a05:620a:1fc:b0:60d:d438:d628 with SMTP id x28-20020a05620a01fc00b0060dd438d628mr9489736qkn.388.1645980242782;
+        Sun, 27 Feb 2022 08:44:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxmEEmzM5eDcwZIwdUdPIYKMl5r3tEeMsKZSwUZGmeUMBHmHQtSkJ2w3iQrxB7UtVNBvR5apQ==
+X-Received: by 2002:a05:620a:1fc:b0:60d:d438:d628 with SMTP id x28-20020a05620a01fc00b0060dd438d628mr9489721qkn.388.1645980242555;
+        Sun, 27 Feb 2022 08:44:02 -0800 (PST)
 Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id v26-20020a05620a0a9a00b00605c6dbe40asm3823172qkg.87.2022.02.27.08.17.49
+        by smtp.gmail.com with ESMTPSA id w140-20020a376292000000b00648e88c1f05sm4010675qkb.67.2022.02.27.08.44.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 08:17:50 -0800 (PST)
+        Sun, 27 Feb 2022 08:44:02 -0800 (PST)
 From: trix@redhat.com
-To: vilhelm.gray@gmail.com,
+To: jic23@kernel.org,
+	lars@metafoo.de,
+	matthias.bgg@gmail.com,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
-	Jonathan.Cameron@huawei.com
+	linus.walleij@linaro.org,
+	ardeleanalex@gmail.com
 Cc: linux-iio@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] counter: add defaults to switch-statements
-Date: Sun, 27 Feb 2022 08:17:46 -0800
-Message-Id: <20220227161746.82776-1-trix@redhat.com>
+Subject: [PATCH] iio: adc: mt6360: strengthen return check of mt6360_adc_read_channel
+Date: Sun, 27 Feb 2022 08:43:57 -0800
+Message-Id: <20220227164357.84742-1-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -70,44 +75,35 @@ Content-Type: text/plain; charset="US-ASCII"
 
 From: Tom Rix <trix@redhat.com>
 
-Clang static analysis reports this representative problem
-counter-chrdev.c:482:3: warning: Undefined or garbage value
-  returned to caller
-  return ret;
-  ^~~~~~~~~~
+Clang static analysis reports this issue
+mt6360-adc.c:277:20: warning: Assigned value is
+  garbage or undefined
+  data.values[i++] = val;
+                   ^ ~~~
 
-counter_get_data() has a multilevel switches, some without
-defaults, so ret is sometimes not set.
-Add returning -EINVAL similar to other defaults.
+val is set by a successful call to m6360_adc_read_channel().
+A negative return is checked but within m6360_adc_read_channel,
+a non zero check is done.
+Strengthen the check to non zero.
 
-Fixes: b6c50affda59 ("counter: Add character device interface")
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/counter/counter-chrdev.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/iio/adc/mt6360-adc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/counter/counter-chrdev.c b/drivers/counter/counter-chrdev.c
-index b7c62f957a6a8..69d340be9c93f 100644
---- a/drivers/counter/counter-chrdev.c
-+++ b/drivers/counter/counter-chrdev.c
-@@ -477,6 +477,8 @@ static int counter_get_data(struct counter_device *const counter,
- 		case COUNTER_SCOPE_COUNT:
- 			ret = comp->count_u8_read(counter, parent, &value_u8);
- 			break;
-+		default:
-+			return -EINVAL;
+diff --git a/drivers/iio/adc/mt6360-adc.c b/drivers/iio/adc/mt6360-adc.c
+index 07c0e67683910..9fb6dc305a392 100644
+--- a/drivers/iio/adc/mt6360-adc.c
++++ b/drivers/iio/adc/mt6360-adc.c
+@@ -269,7 +269,7 @@ static irqreturn_t mt6360_adc_trigger_handler(int irq, void *p)
+ 	memset(&data, 0, sizeof(data));
+ 	for_each_set_bit(bit, indio_dev->active_scan_mask, indio_dev->masklength) {
+ 		ret = mt6360_adc_read_channel(mad, bit, &val);
+-		if (ret < 0) {
++		if (ret) {
+ 			dev_warn(&indio_dev->dev, "Failed to get channel %d conversion val\n", bit);
+ 			goto out;
  		}
- 		*value = value_u8;
- 		return ret;
-@@ -496,6 +498,8 @@ static int counter_get_data(struct counter_device *const counter,
- 		case COUNTER_SCOPE_COUNT:
- 			ret = comp->count_u32_read(counter, parent, &value_u32);
- 			break;
-+		default:
-+			return -EINVAL;
- 		}
- 		*value = value_u32;
- 		return ret;
 -- 
 2.26.3
 
