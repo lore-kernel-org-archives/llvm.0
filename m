@@ -1,35 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187444A91
-	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 17:49:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B92D4C340EF;
-	Sun, 27 Feb 2022 17:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645984199;
-	bh=bqyY3XQdRlzIGOWzFJrkb/oKUh63XEB+VuO9HJ3geNk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Bu65S8Mdj6BE/d7Ux8sTDXYbJA3pBAHP/NTA8ktur3Dh2CZ6bJ0/8notLz7rKRLl9
-	 U5Z8jUXayPRS7V3IM2Rro+U1wlRp9Ao/J/b1cWghUyvF/qXsZzHjvXI58td34kNaw2
-	 GsgyAJNF/fS0X8UbYEUull970geXbaLOeqvrdSNLrb1vS9B7V2jT47A6UMmXDPit5D
-	 0vfwYauN6FHKvnp8LH/cXSofUnv69teeUAQtXgpBJoTF6SRaOiScLCH81qAwomAeYY
-	 h29MjzjtZ6ir1gsav7TNvNJS7FhwEFjyKvogxEInTf93L1oufN3WWfujToo4to9o4v
-	 3K6xp/Y5DGwGw==
-Date: Sun, 27 Feb 2022 17:57:01 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: lars@metafoo.de, matthias.bgg@gmail.com, nathan@kernel.org,
- ndesaulniers@google.com, linus.walleij@linaro.org, ardeleanalex@gmail.com,
- Tom Rix <trix@redhat.com>, linux-iio@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] iio: adc: mt6360: strengthen return check of
- mt6360_adc_read_channel
-Message-ID: <20220227175701.4cacbe3d@jic23-huawei>
-In-Reply-To: <5477fb05-d72f-ccc0-1c07-8f2f40d9dde0@wanadoo.fr>
-References: <20220227164357.84742-1-trix@redhat.com>
-	<5477fb05-d72f-ccc0-1c07-8f2f40d9dde0@wanadoo.fr>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA807A
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 18:45:22 +0000 (UTC)
+Received: by mail-pj1-f52.google.com with SMTP id b8so9210431pjb.4
+        for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 10:45:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z4qXA3qAOIxxv6eU3E6Ltva1sTSq91s873Aqz1SumJw=;
+        b=TPEEPFr+ElZw97J4S63RpaUWxPCpqUhGD4V/ibIonIS5ximIvfwgHdCFrqArJCmD1u
+         ANX3JLAg0nj/Hvaddv0Gga8APVwwJiTtr0qsTgKO+/FGmkaak4/lj5Y6dWJSstRJ3f+k
+         bisr8GfoavobbFdjWb7WFBkfU8QlUxrZEc+gc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z4qXA3qAOIxxv6eU3E6Ltva1sTSq91s873Aqz1SumJw=;
+        b=tGGsdzghX2v+UYzXU22zuL4BtwRjp7m+v5vc/8qrEYp0ae+u8Kys5nv6mZ8br9Xp+Q
+         uUaypooLVaYyRd0gb60pjgqUY7I/Oi1UcZ/XfEwN8HY356B6i54Svj+W93AueJbbKt6W
+         JsGrS/LDZtxCa17q8eHq/aJ549/clKt7wmp3TjVemNufY5xmxAAwnWabqCl13yiX4GAx
+         6MPMGB7TgmqJ1oYJ2DJPj8Gn8C2DPSD2fvjQ4wy5+E0iaol6O5uxb7wGVJHP2YyuOWxR
+         Wyanam/goFcqFZe8JIvI0my35uMwThvYMmqTSGb+emPrl6QjT99PbxpHgUsrbK4OmZqc
+         4ZBg==
+X-Gm-Message-State: AOAM530okFcLNBoMJSOFzOEatR7qxSDrkCnBHo99BaVWu/a/Jq+VenuF
+	UoqgPjAWyUmYWlcLCvNli0O/3w==
+X-Google-Smtp-Source: ABdhPJzIIRRbSJ21FELEpDpxMgc2ETCyQMr+Ty4K6o7rm/QyPHSr4FMBpDZYfTMMBKWbTkHi+/1gog==
+X-Received: by 2002:a17:90a:ee93:b0:1bc:3abc:91fd with SMTP id i19-20020a17090aee9300b001bc3abc91fdmr13050246pjz.92.1645987522015;
+        Sun, 27 Feb 2022 10:45:22 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s4-20020a056a00194400b004f0fbeb6006sm10390883pfk.88.2022.02.27.10.45.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 10:45:21 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Vitor Massaru Iha <vitor@massaru.org>,
+	Daniel Latypov <dlatypov@google.com>,
+	David Gow <davidgow@google.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Jeff Dike <jdike@addtoit.com>,
+	Richard Weinberger <richard@nod.at>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-kbuild@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	llvm@lists.linux.dev,
+	x86@kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v3 0/7] Convert overflow and stackinit to KUnit
+Date: Sun, 27 Feb 2022 10:45:10 -0800
+Message-Id: <20220227184517.504931-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,77 +65,48 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1554; h=from:subject; bh=K7cNIhWttE5J2hAwWOxDFld7SujXLeKgqWt+Szmsi/4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiG8a64weRf63QOmyPMpBVbd/L8Zu3PYukknitZ5WB 9wHC49CJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhvGugAKCRCJcvTf3G3AJjV8D/ wIIXLS3mfhRhgdUv4s2F/rwzN2/KW5PowNLr9aBWsGTeAQtrTxO3Op1YD3I0NbBIqi9Ltx9zDM4PhX 90FOdH7uu3ypv3mzoqcc/z+2mWMITMpkEedP+QimK8st2/tZlr8T2ugE4j+pWo3PUnx1N8bOquvzFg hBEtgklsG/8LoEh8TIPcxsbDqKG7FynORTY+5QWSIVklj65fwnCGeYeRdgvs7Zlq84qNalYOViX3py YfL50Ti7PspcNKWrbUwtOgHaqHZI+CkRC2zv7EPch1hSPTVvAWt78OLBMcY1VIEV3ewfZYzBbTEPfB H+6faH09gyz8rEJe5Bf81tUadWJNiKLvFu3/p6JZsFpnTSMxkIrpxGyHLinGZjwISPE7nFiXJ3SCmE Qf5A+55/wlySOECuzBSCk1YgVHYBPDjiqo7E1ShtVDAHOasY7V19duZDYSd0lDDZu/cQHFwMR5dy/c D7Ep8f2hJi2KafZBoFFStRhP6P2J9kAQtkFLsxhLQDssaaBsTQalI70pBSQcVyflRu5z38yLyQ/qNY 7NIXLP3G7VN9jHM/rZ9C6SQbOcsq3GoLgb4AZe7hmY1Y4DQ58g0ZFZYSmb0I1/VZlHaKVu2xkRHWQF hWL8U/PgSlKAspAfHJb9wYP6+4eFwL2isgFNCxfSSBzdQMeqgbccmXa3HQxg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Sun, 27 Feb 2022 18:01:47 +0100
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+Hi,
 
-> Le 27/02/2022 =C3=A0 17:43, trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org =
-a=20
-> =C3=A9crit=C2=A0:
-> > From: Tom Rix <trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-> >=20
-> > Clang static analysis reports this issue
-> > mt6360-adc.c:277:20: warning: Assigned value is
-> >    garbage or undefined
-> >    data.values[i++] =3D val;
-> >                     ^ ~~~
-> >=20
-> > val is set by a successful call to m6360_adc_read_channel().
-> > A negative return is checked but within m6360_adc_read_channel,
-> > a non zero check is done.
-> > Strengthen the check to non zero. =20
->=20
-> Hi, my understanding of m6360_adc_read_channel() is that on success, it=20
-> returns IIO_VAL_INT (i.e. 1).
->=20
-> So, I think that with your patch, we will now always fail because 'ret'=20
-> is never 0 at this point.
+These changes all build on each other, so I'm sending this as a series
+to hopefully reduce confusion. I chose "v3" because it seemed the least
+confusing of various options.
 
-Firstly I'm glad you were more awake than me Christophe as I missed that
-entirely. :(
+The um changes are needed to get Clang building with um to test the
+stackinit KUnit test more easily (i.e. needing neither GCC 12 nor QEMU).
 
-So two ways we could deal with the warning (which is valid given there
-is no way clang could sensibly tell that all those if (ret) actually
-mean if (ret < 0).
+-Kees
 
-I don't like changing them to if (ret < 0) inside _adc_read_channel()
-because generally it ends up cleaner to just do if (ret) based handling
-for regmap calls.  So we could just assign a default to val that is never
-used or we could change that function to return 0 on success and adjust
-the other call site to return IIO_VAL_INT if there isn't an error.
+David Gow (2):
+  um: Cleanup syscall_handler_t definition/cast, fix warning
+  um: Remove unused timeval_to_ns() function
 
-The second one would make the other caller rather messier so I'd suggest
-just giving val a default and adding a comment saying it's for warning
-suppression purposes...
+Kees Cook (5):
+  overflow: Provide constant expression struct_size
+  lib: overflow: Convert to Kunit
+  um: Allow builds with Clang
+  lib: stackinit: Convert to KUnit
+  UAPI: Introduce KUnit userspace compatibility
 
-Jonathan
+ arch/um/os-Linux/execvp.c                   |   1 +
+ arch/um/os-Linux/time.c                     |   6 -
+ arch/x86/um/shared/sysdep/syscalls_64.h     |   5 +-
+ arch/x86/um/user-offsets.c                  |   9 +-
+ include/linux/overflow.h                    |  10 +-
+ include/uapi/misc/kunit.h                   | 181 +++++++
+ lib/Kconfig.debug                           |  38 +-
+ lib/Makefile                                |   6 +-
+ lib/{test_overflow.c => overflow_kunit.c}   | 562 +++++++++-----------
+ lib/{test_stackinit.c => stackinit_kunit.c} | 268 ++++------
+ scripts/Makefile.clang                      |   1 +
+ 11 files changed, 593 insertions(+), 494 deletions(-)
+ create mode 100644 include/uapi/misc/kunit.h
+ rename lib/{test_overflow.c => overflow_kunit.c} (54%)
+ rename lib/{test_stackinit.c => stackinit_kunit.c} (67%)
 
-
->=20
-> CJ
->=20
-> >=20
-> > Signed-off-by: Tom Rix <trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-> > ---
-> >   drivers/iio/adc/mt6360-adc.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/iio/adc/mt6360-adc.c b/drivers/iio/adc/mt6360-adc.c
-> > index 07c0e67683910..9fb6dc305a392 100644
-> > --- a/drivers/iio/adc/mt6360-adc.c
-> > +++ b/drivers/iio/adc/mt6360-adc.c
-> > @@ -269,7 +269,7 @@ static irqreturn_t mt6360_adc_trigger_handler(int i=
-rq, void *p)
-> >   	memset(&data, 0, sizeof(data));
-> >   	for_each_set_bit(bit, indio_dev->active_scan_mask, indio_dev->maskle=
-ngth) {
-> >   		ret =3D mt6360_adc_read_channel(mad, bit, &val);
-> > -		if (ret < 0) {
-> > +		if (ret) {
-> >   			dev_warn(&indio_dev->dev, "Failed to get channel %d conversion val=
-\n", bit);
-> >   			goto out;
-> >   		} =20
->=20
+-- 
+2.32.0
 
