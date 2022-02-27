@@ -1,41 +1,49 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C602F29
-	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 08:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E8E7B
+	for <llvm@lists.linux.dev>; Sun, 27 Feb 2022 11:22:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645950628; x=1677486628;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=j10G1VcLXMBXLEFFIwFDntw3fr0Vz7dkZs8XQ0beStE=;
-  b=RE25MaJc0GD8OMrgjO97Rp10hBc8Or2AuaQ85JCBoXdisP8GJHeN4qjB
-   TmcAHBMJqjpVoyxhwR+n6T09dbTsSM9hF92yUHOL6G5NnU9F0ZYNdKEvN
-   kuVg4KY76dcO4cw6hZMYHPIZCGkYJ1qb62tVyYM2QVy+QDTDkJmwOylwV
-   0jIcdJOPjLO9k1AET0UkCRAMbvO4LDl+7TWM6V7ZURMQKX5r+UN/EBlLO
-   6Z50CU+LHIhGYof3uVtdjNGbeySEAIj65/WXOYNCLtBk2p/5mfINqS6s1
-   7CMNVz2uJsKyzxaG9J1rjHP4G1EmuBCfGqn8bENXQ0zOgScFJQcraVj08
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="339152396"
-X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="339152396"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 00:30:27 -0800
+  t=1645960955; x=1677496955;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OGhaOqvPUofWm5U4yDg+lfV9vWzMbT6HxcXvgL97aPQ=;
+  b=LY5uJ5O7keCe6wyp42k0a7hZra/wErCA972icxmQ4oXYkCIKRMApcApD
+   ScWOhHzDyHPL/TZE9dAaOpslE8PXShvW/4XsQumTDAnQsyP0VaRGHCaMz
+   T+4PT14MGEB9BY9xtFX0v6zvDfVtCYFQu+jtSbrS6ku9AvD37AVCv+Wug
+   RqNjsDrJeF428+eHM8aBWyGFPUbqjzBCZU+dz+JhLiyen+j38heF5FtCl
+   c2pt8yH29VPcy11yc4H7pF02DTCm0dZOZLbCTc4KNFZ1BpJSRtr9Adbda
+   9FHYwyiIsnw5afl5s2VTYJVylBv9X3q8LsCnnvYhT2cPc/psfA58aEaF2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="252455873"
+X-IronPort-AV: E=Sophos;i="5.90,141,1643702400"; 
+   d="scan'208";a="252455873"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 03:22:35 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="777796788"
+X-IronPort-AV: E=Sophos;i="5.90,141,1643702400"; 
+   d="scan'208";a="507136435"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Feb 2022 00:30:26 -0800
+  by orsmga002.jf.intel.com with ESMTP; 27 Feb 2022 03:22:32 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nOEwj-0006Nc-Bn; Sun, 27 Feb 2022 08:30:25 +0000
-Date: Sun, 27 Feb 2022 16:29:35 +0800
+	id 1nOHdH-0006TG-T3; Sun, 27 Feb 2022 11:22:31 +0000
+Date: Sun, 27 Feb 2022 19:22:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Atish Patra <atishp@rivosinc.com>
+To: Jordan Justen <jordan.l.justen@intel.com>,
+	intel-gfx <intel-gfx@lists.freedesktop.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org
-Subject: [atishp04:sstc_v1 14/14] arch/riscv/kvm/vcpu_timer.c:312:48:
- warning: shift count >= width of type
-Message-ID: <202202271658.AtS8XIAq-lkp@intel.com>
+	Matthew Brost <matthew.brost@intel.com>,
+	Jordan Justen <jordan.l.justen@intel.com>,
+	dri-devel <dri-devel@lists.freedesktop.org>,
+	Jon Bloomfield <jon.bloomfield@intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	John Harrison <John.C.Harrison@Intel.com>,
+	Michal Wajdeczko <michal.wajdeczko@intel.com>
+Subject: Re: [PATCH v6 1/4] drm/i915/guc: Add fetch of hwconfig table
+Message-ID: <202202271904.1Rr5ckwF-lkp@intel.com>
+References: <20220227081831.1089720-2-jordan.l.justen@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,73 +52,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220227081831.1089720-2-jordan.l.justen@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/atishp04/linux sstc_v1
-head:   8904ca0d06f70e6d150b60b72d5ce21044ac9208
-commit: 8904ca0d06f70e6d150b60b72d5ce21044ac9208 [14/14] RISC-V: KVM: Support sstc extension
-config: riscv-randconfig-c006-20220227 (https://download.01.org/0day-ci/archive/20220227/202202271658.AtS8XIAq-lkp@intel.com/config)
+Hi Jordan,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm-tip/drm-tip drm-exynos/exynos-drm-next drm/drm-next tegra-drm/drm/tegra/for-next v5.17-rc5 next-20220225]
+[cannot apply to airlied/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jordan-Justen/GuC-HWCONFIG-with-documentation/20220227-161945
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220227/202202271904.1Rr5ckwF-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/atishp04/linux/commit/8904ca0d06f70e6d150b60b72d5ce21044ac9208
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 sstc_v1
-        git checkout 8904ca0d06f70e6d150b60b72d5ce21044ac9208
+        # https://github.com/0day-ci/linux/commit/7a92eba9714ffe68202fee73b9916d35b0da2968
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jordan-Justen/GuC-HWCONFIG-with-documentation/20220227-161945
+        git checkout 7a92eba9714ffe68202fee73b9916d35b0da2968
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/riscv/kvm/vcpu_timer.c:312:48: warning: shift count >= width of type [-Wshift-count-overflow]
-           csr_write(CSR_VSTIMECMPH, (u32)csr->vstimecmp >> 32);
-                                                         ^  ~~
-   arch/riscv/include/asm/csr.h:283:38: note: expanded from macro 'csr_write'
-           unsigned long __v = (unsigned long)(val);               \
-                                               ^~~
-   arch/riscv/kvm/vcpu_timer.c:337:45: warning: shift count >= width of type [-Wshift-count-overflow]
-           csr->vstimecmp |= csr_read(CSR_VSTIMECMPH) >> 32;
-                                                      ^  ~~
-   2 warnings generated.
+   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning: Function parameter or member 'gt' not described in 'guc_hwconfig_init'
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning: expecting prototype for intel_guc_hwconfig_init(). Prototype was for guc_hwconfig_init() instead
+   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:143: warning: Function parameter or member 'gt' not described in 'intel_gt_init_hwconfig'
+   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:156: warning: Function parameter or member 'gt' not described in 'intel_gt_fini_hwconfig'
 
 
-vim +312 arch/riscv/kvm/vcpu_timer.c
+vim +110 drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c
 
-   295	
-   296	void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
-   297	{
-   298		struct kvm_vcpu_timer *vst;
-   299		struct kvm_vcpu_csr *csr;
-   300	
-   301		kvm_riscv_vcpu_update_timedelta(vcpu);
-   302	
-   303		if (!cpu_sstc_ext_available)
-   304			return;
-   305	
-   306		vst = &vcpu->arch.vstimer;
-   307		csr = &vcpu->arch.guest_csr;
-   308	#ifdef CONFIG_64BIT
-   309		csr_write(CSR_VSTIMECMP, csr->vstimecmp);
-   310	#else
-   311		csr_write(CSR_VSTIMECMP, (u32)csr->vstimecmp);
- > 312		csr_write(CSR_VSTIMECMPH, (u32)csr->vstimecmp >> 32);
-   313	#endif
-   314	
-   315		/* vstimer should be enabled for the remaining operations */
-   316		if (unlikely(!vst->init_done))
-   317			return;
-   318	
-   319		if (kvm_vcpu_is_blocking(vcpu))
-   320			kvm_riscv_vcpu_timer_blocking(vcpu);
-   321	}
-   322	
+   102	
+   103	/**
+   104	 * intel_guc_hwconfig_init - Initialize the HWConfig
+   105	 *
+   106	 * Retrieve the HWConfig table from the GuC and save it locally.
+   107	 * It can then be queried on demand by other users later on.
+   108	 */
+   109	static int guc_hwconfig_init(struct intel_gt *gt)
+ > 110	{
+   111		struct intel_hwconfig *hwconfig = &gt->info.hwconfig;
+   112		struct intel_guc *guc = &gt->uc.guc;
+   113		int ret;
+   114	
+   115		if (!has_table(gt->i915))
+   116			return 0;
+   117	
+   118		ret = guc_hwconfig_discover_size(guc, hwconfig);
+   119		if (ret)
+   120			return ret;
+   121	
+   122		hwconfig->ptr = kmalloc(hwconfig->size, GFP_KERNEL);
+   123		if (!hwconfig->ptr) {
+   124			hwconfig->size = 0;
+   125			return -ENOMEM;
+   126		}
+   127	
+   128		ret = guc_hwconfig_fill_buffer(guc, hwconfig);
+   129		if (ret < 0) {
+   130			intel_gt_fini_hwconfig(gt);
+   131			return ret;
+   132		}
+   133	
+   134		return 0;
+   135	}
+   136	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
