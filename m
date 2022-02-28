@@ -1,98 +1,81 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521007C
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 14:44:45 +0000 (UTC)
-Received: by mail-ot1-f44.google.com with SMTP id g6-20020a9d6486000000b005acf9a0b644so9634362otl.12
-        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 06:44:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062287C
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 14:48:57 +0000 (UTC)
+Received: by mail-oi1-f182.google.com with SMTP id x193so13464266oix.0
+        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 06:48:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OL1oYRALM1tU0+ck2GbF2CLS3TSRjG8HptZtWVZs1vg=;
-        b=qUiMNtZTCv5HCAIbbv5dCslfJj7CzJUzCym9vd2xSvDIK2mPdGfCHD1VWW7OtU2iZO
-         7H6qSBQZiK127V1YY/cud6IpFVtd0WwPOw6C8paop1IIydLVUCCvq5WbA5B3fx9RXP5K
-         1pYsDesBNlgbHF/Pw5Kmge9F/DChRYHQ+4A0mDTLGdHDx0C2UiF95nn2RIZjlvQSIvnv
-         kUHJlfcsEasPtCsFVIRz2BZKNeCo+8+RsLyag5G/RJ7C5CumX1qoZ6F8kZevJvFOS7Kg
-         HKHj0q+jvQ5QvifGZzrM0jKvMIh0qn6IFbv5uz2FlbmpbBi/bekw9gt5m4AT3ZI38d5+
-         KykQ==
+        bh=VlG4fI6bBYkPpFcbAcTm6hy8fXOzxdf1xdGq3BMqoYc=;
+        b=IW8WA+AHr1t9GtRiZH0kfoy7+BwA7nt0t5LtGYYh6UC7qVANOORD8+NYp2VDFEaLih
+         69yLwp5vFOImHYnnHKAJmqMXiOYpYu5K40FCN6EVsxs4NDhi/NAR/kMTupV72PHmZj8/
+         s27FvOXqNvosbqWAjlfjIbTZCj7XHNIYPS+keTAhKiZKucS6GFOq3Td2UarGICuQcZSE
+         vqSzUttCvRBlCk/2ueOnGTzX4Ij7/hC0cHKg2S1zkjYzwbz8VRaOZ+6asW17dU8XAoxZ
+         vE0GBKMiItHZd6MXyzf1WiDykJme8psjV0JdWoqGlPVDq4XSWEeLUmH3g6knc+e9oczC
+         JmzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OL1oYRALM1tU0+ck2GbF2CLS3TSRjG8HptZtWVZs1vg=;
-        b=EcSEtcfCj+WzyqJzq5fM/HeYDr0bNkz1D+oPQS1ORs+5C3Sa5z2UDMqMnd8XqGnBME
-         FMrNTraZKXYK1gdbKL1lz0zsLviR9VN/AgC60sF8J4SBGa4p51iz+VU6o5wU593I6DHV
-         LKICkDZw879yHOgH9082Q3ejiO9LJ38XHG852QsLQTLWc0Ztv+00QXKOwKIAM5CJS+ir
-         Z9+NgeMcJOzA9SgpYRxXYcrysI9r+tBVFIKePxeDQYXBlIN58gVT4zTd4AV3R49b54AS
-         GX7i1+CzYgT1jKAb+xbNcc8vbHPYSP1V10meMZfAhZNtZN73SXOOdMTjRULO8y1UZjdc
-         P5BQ==
-X-Gm-Message-State: AOAM533iBi1Njf7DS7i9vxHd5D4a310cxluchxWywlm28PB/IHz9XjkV
-	Z/+Eww70nRcchyj2MNBgrsywj1EWWqlQ0wdkzWBjVg==
-X-Google-Smtp-Source: ABdhPJwIxxGDlahWJ4MmXDsiIS/mYt9bXQiZeWXnDp2ulHdmvAk7LFambAI2X+SdjS9LhxVJh1gzw8xOxhBRfQzM9bg=
-X-Received: by 2002:a05:6830:55d:b0:5ac:ebf8:6d95 with SMTP id
- l29-20020a056830055d00b005acebf86d95mr9453248otb.162.1646059484269; Mon, 28
- Feb 2022 06:44:44 -0800 (PST)
+        bh=VlG4fI6bBYkPpFcbAcTm6hy8fXOzxdf1xdGq3BMqoYc=;
+        b=OQj+9GLrH4E4mpUPay4e+52+QnCcnJCKhbiEI5Nb5NNj/vqtykv1LVdxKzN+y+07IV
+         Erbys1R80zq/DNXsXMSpge3neryBcFvBkAu4Uvd8nd9CIg5xuKbtwoh2BJBswu+nfN2M
+         RhztApTrU/yfjUnUONGiVpth+gxYew1cxUcTgOqeA4UPDSb2FWalpefKYA+3nA3MdTca
+         98w9ckwE/LfcGgal8NZq5KvAdxdwUThfX9bcRBoJoFKdts76gPPT4B0ATmodiPYIRx+i
+         dAdK1wiXyO/wx7ojV1/ddwc6mdzsw+FfPjymN5uCz6RVauQKCion5VJN9TTY7oNPSDbm
+         99jA==
+X-Gm-Message-State: AOAM533knWsdgnSNo1gIw0NE2qehHrfB+EP4x+nkJAc8Q+ZnCNc8VrwJ
+	cW83w7gcnSySISNXhbL0fOAgFqXez9l6uRDIAeI=
+X-Google-Smtp-Source: ABdhPJxyeCNuUoc7Rc3If7ObB7hMpxFXHG9BXhesgjQMW03kyvafsvGo0AMIsg//K2PlG2nzgM4LsOSq+L/xbj8gEgI=
+X-Received: by 2002:a05:6808:124d:b0:2d7:f6e:74b0 with SMTP id
+ o13-20020a056808124d00b002d70f6e74b0mr10939977oiv.141.1646059737002; Mon, 28
+ Feb 2022 06:48:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220120082803.15535-1-bhupesh.sharma@linaro.org> <202201220442.bMRI74m1-lkp@intel.com>
-In-Reply-To: <202201220442.bMRI74m1-lkp@intel.com>
-From: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date: Mon, 28 Feb 2022 20:14:33 +0530
-Message-ID: <CAH=2Ntx1jcWQFKCjyEqipEzK-8C6AGb5gULjhBeMotmUpHSnyg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sm8150: Add ufs power-domain entries
-To: kernel test robot <lkp@intel.com>
-Cc: linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, bhupesh.linux@gmail.com, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org, 
-	bjorn.andersson@linaro.org, agross@kernel.org, Rob Herring <robh@kernel.org>
+References: <20220225221625.3531852-1-keescook@chromium.org> <CANpmjNOup5JCjRpRkhsF3Z+dPX6_MQE5u6WhnMit84c1TyRK+A@mail.gmail.com>
+In-Reply-To: <CANpmjNOup5JCjRpRkhsF3Z+dPX6_MQE5u6WhnMit84c1TyRK+A@mail.gmail.com>
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Mon, 28 Feb 2022 09:48:41 -0500
+Message-ID: <CA+DvKQ+PYtDyejaUoBj51D_Y7muYaR1_FhQGWGWvgQawCbp31Q@mail.gmail.com>
+Subject: Re: [PATCH] mm: Handle ksize() vs __alloc_size by forgetting size
+To: Marco Elver <elver@google.com>
+Cc: Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev, 
+	Pekka Enberg <penberg@kernel.org>, David Rientjes <rientjes@google.com>, 
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org, stable@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+There aren't many calls to ksize in the entire Linux kernel source
+tree. Most use cases are using the memory as some kind of (chunked)
+dynamic array, where they either need to realloc or kmalloc a new
+chunk when it runs out of space. Changing the approach to this API
+would be both more efficient and fully compatible with alloc_size
+since it would simply not be added to these functions:
 
-On Sat, 22 Jan 2022 at 02:13, kernel test robot <lkp@intel.com> wrote:
->
-> Hi Bhupesh,
->
-> Thank you for the patch! Yet something to improve:
->
-> [auto build test ERROR on robh/for-next]
-> [also build test ERROR on v5.16 next-20220121]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/0day-ci/linux/commits/Bhupesh-Sharma/arm64-dts-qcom-sm8150-Add-ufs-power-domain-entries/20220120-162925
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> config: arm64-randconfig-r011-20220120 (https://download.01.org/0day-ci/archive/20220122/202201220442.bMRI74m1-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://github.com/0day-ci/linux/commit/e9cea3a4d3c4706f9cef18f55b07d3bc389a051a
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Bhupesh-Sharma/arm64-dts-qcom-sm8150-Add-ufs-power-domain-entries/20220120-162925
->         git checkout e9cea3a4d3c4706f9cef18f55b07d3bc389a051a
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> Error: arch/arm64/boot/dts/qcom/sm8150.dtsi:1641.26-27 syntax error
->    FATAL ERROR: Unable to parse input tree
+    kmalloc_size(size, &result_size)
+    krealloc_size(p, new_size, &result_size)
 
-Ack.
-Sending out the v2 shortly - which fixes this issue.
+Nearly every use of ksize could be easily phased out this way. There
+are probably a few which are harder to remove. It can be gradually
+phased out by keeping around ksize temporarily but documenting that
+it's only correct to use it on memory allocated with
+kmalloc_size/krealloc_size. I think it can be phased out quite quickly
+though. Look at how many calls there are to it. It's really not a lot,
+especially if you filter out the uses of the identifier 'ksize' for
+variables rather than calls to that function.
 
-Regards,
-Bhupesh
+I brought this up when I originally submitted CONFIG_FORTIFY_SOURCE.
+It's the main reason that I didn't bother trying to submit the
+alloc_size attributes myself. The most important ones are for kmalloc
+and it isn't technically correct to use it.
