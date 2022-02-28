@@ -1,207 +1,132 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024314C63
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 21:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646082089; x=1677618089;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iQvL0ZuBaUBPEkeF0scPNzz3XMBs5b3VZM2NenECRzM=;
-  b=cUcEhIdBxkgvFvHAA1RGKkYqDk37z/nUbdCQX7rAzmJ9THf0syFsNPEd
-   d53pDJpOZrL/nqZh0QHeP2LFU17W7Oi8NSNp9dO/SBHhwvT2F4JQDYGWa
-   opaGcgwu3Pe2r+wqD2v6OGDZsdvaQsQk/a3qk1PR+sdWEYugXhKpbUteL
-   K8VE95lbJGxW+P1ArabuYgRbGYx4Kcjmj/loBvvzY9KJu+eNMuNQ2X73f
-   uygR985XFwEMueqwlGLRUwQJjcheEPhKkmFD1sXR2Qajc1pHdBMPdC8OR
-   wBiHtNXPWnuzVOeGX01gH6VZUNpB07Qn2zZjj3b/3HKO4uBjfNSNZRqsm
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="250570848"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="250570848"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 13:01:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="575458542"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 Feb 2022 13:01:24 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nOn92-0007mP-5s; Mon, 28 Feb 2022 21:01:24 +0000
-Date: Tue, 1 Mar 2022 05:00:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: wudaemon <wudaemon@163.com>, davem@davemloft.net, kuba@kernel.org,
-	m.grzeschik@pengutronix.de, chenhao288@hisilicon.com, arnd@arndb.de
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, wudaemon@163.com,
-	shenyang39@huawei.com, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: ksz884x: use time_before in netdev_open for
- compatibility and remove static variable
-Message-ID: <202203010451.ORtLeJ28-lkp@intel.com>
-References: <20220228162955.22819-1-wudaemon@163.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2754C63
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 21:03:58 +0000 (UTC)
+Received: by mail-lj1-f175.google.com with SMTP id u11so19178025lju.4
+        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 13:03:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iiqNCFc6U32ONzTNhKfvxI6B2p9x39AVrXt2rLta2M8=;
+        b=W1quCfVq9oQhkjVMSeWaW2Z55DxdyDGbetnmG15rPiQ3v4OpkSJBRZVXEMnaa2odqg
+         QOxU/DybvDsA1JnfyM0Ii4qw3F6xR+UbY0dAPPGiPqs4IHrP1aOpkQPW6UBPfhHTs8Tm
+         PR7CBwZgGDqGkw8bM51JgA90FDhHoPP/FDNizSDpxNc9PDO+WtRrOnLiA4YcU9jxsmrw
+         z0maaOELQKiR1hC/GWCjcXmHCEwCPjiDrVGmn41QSQ89BJlDlTrXtLJTHpab0xmVnH4M
+         sZrukyP266PjsJuciZ6D4hmibJchflD3xDwtX05kLpAsnblhXyGN7U6wiOr/bpk5iv1a
+         EfsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iiqNCFc6U32ONzTNhKfvxI6B2p9x39AVrXt2rLta2M8=;
+        b=NUt8yBWQPj/pznifhqkEJSN+yj9vzjRR3dY+hOSMXzzD4wpIc4QUxI/XpRqhV3caD5
+         XBvffpGtX5XUO6Vp1RDAbCq9xrd9cw/6InqvZdonKor3wp3YqqFZ0cBl3VPLwfcxgbxX
+         jYvJm4byU8KEk8jnP5qNWlnBtjAMkPgqUT88G06dzNfA/HYs/dEtzXrAzt0raqxaOl3n
+         yb8Z+6Pfqr9RxbBYm53RXlORQNMoCyNuUyYKzurQKdu2fs5AyHev8oujvlkBuaS2x3gi
+         O4rjYNkWYN2RdiE9azCd3LLNU+EVddbgRNNpDGwV/HnO+GuH2dSJ4lFaT8OpSFEAXToU
+         y8xg==
+X-Gm-Message-State: AOAM532TQQfnaLcMagWXjFqM/TIvtE6X74X9OPNxZCTh9tHUDp1QBSf4
+	zEjYUKuKvaBHqP88ZWZZB4nfgMFoxDl27oI+zw/76A==
+X-Google-Smtp-Source: ABdhPJzGFFfCBCn90UYvglywOrc8nxTF2i5r3/1lhRKGwuSQ5VMkWLmIJa+L1faEtfi148WU9C5GVQ0oji3KdUudozI=
+X-Received: by 2002:a2e:bf24:0:b0:246:801e:39d3 with SMTP id
+ c36-20020a2ebf24000000b00246801e39d3mr8506477ljr.472.1646082236647; Mon, 28
+ Feb 2022 13:03:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228162955.22819-1-wudaemon@163.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220228103142.3301082-1-arnd@kernel.org>
+In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 28 Feb 2022 13:03:45 -0800
+Message-ID: <CAKwvOdkLUx1td+qgUYy3w2ojtBG-mJTzpJg3BV8Xv56YHTxHCw@mail.gmail.com>
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>, 
+	Federico Vaga <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, 
+	Hu Haowen <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc-tw-discuss@lists.sourceforge.net, 
+	linux-arm-kernel@lists.infradead.org, intel-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, greybus-dev@lists.linaro.org, 
+	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi wudaemon,
+On Mon, Feb 28, 2022 at 2:32 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> During a patch discussion, Linus brought up the option of changing
+> the C standard version from gnu89 to gnu99, which allows using variable
+> declaration inside of a for() loop. While the C99, C11 and later standards
+> introduce many other features, most of these are already available in
+> gnu89 as GNU extensions as well.
+>
+> An earlier attempt to do this when gcc-5 started defaulting to
+> -std=gnu11 failed because at the time that caused warnings about
+> designated initializers with older compilers. Now that gcc-5.1 is the
+> minimum compiler version used for building kernels, that is no longer a
+> concern. Similarly, the behavior of 'inline' functions changes between
 
-Thank you for the patch! Yet something to improve:
+More precisely, the semantics of "extern inline" functions changed
+between ISO C90 and ISO C99.
 
-[auto build test ERROR on net-next/master]
-[also build test ERROR on net/master soc/for-next linus/master v5.17-rc6 next-20220228]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+That's the only concern I have, which I doubt is an issue. The kernel
+is already covered by the function attribute as you note.
 
-url:    https://github.com/0day-ci/linux/commits/wudaemon/net-ksz884x-use-time_before-in-netdev_open-for-compatibility-and-remove-static-variable/20220301-003151
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git b42a738e409b62f38a15ce7530e8290b00f823a4
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220301/202203010451.ORtLeJ28-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/5db9da911f33045f8dd202d40c20530211b48af0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review wudaemon/net-ksz884x-use-time_before-in-netdev_open-for-compatibility-and-remove-static-variable/20220301-003151
-        git checkout 5db9da911f33045f8dd202d40c20530211b48af0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/micrel/
+Just to have some measure:
+$ git grep -rn "extern inline" | wc -l
+116
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Most of those are in arch/alpha/ which is curious; I wonder if those
+were intentional.
 
-All errors (new ones prefixed by >>):
+(I do worry about Makefiles that completely reset KBUILD_CFLAGS
+though; the function attributes still take precedence).
 
-   drivers/net/ethernet/micrel/ksz884x.c:3216:6: warning: variable 'change' set but not used [-Wunused-but-set-variable]
-           int change = 0;
-               ^
-   drivers/net/ethernet/micrel/ksz884x.c:5363:16: warning: unused variable 'next_jiffies' [-Wunused-variable]
-           unsigned long next_jiffies = 0;
-                         ^
->> drivers/net/ethernet/micrel/ksz884x.c:5430:20: error: use of undeclared identifier 'next_jiffies'
-                           if (time_before(next_jiffies, jiffies))
-                                           ^
->> drivers/net/ethernet/micrel/ksz884x.c:5430:20: error: use of undeclared identifier 'next_jiffies'
-   drivers/net/ethernet/micrel/ksz884x.c:5431:5: error: use of undeclared identifier 'next_jiffies'
-                                   next_jiffies = jiffies + HZ * 2;
-                                   ^
-   drivers/net/ethernet/micrel/ksz884x.c:5433:5: error: use of undeclared identifier 'next_jiffies'
-                                   next_jiffies += HZ * 1;
-                                   ^
-   drivers/net/ethernet/micrel/ksz884x.c:5434:31: error: use of undeclared identifier 'next_jiffies'
-                           hw_priv->counter[i].time = next_jiffies;
-                                                      ^
-   2 warnings and 5 errors generated.
+> gnu89 and gnu11, but this was taken care of by defining 'inline' to
+> include __attribute__((gnu_inline)) in order to allow building with
+> clang a while ago.
+>
+> One minor issue that remains is an added gcc warning for shifts of
+> negative integers when building with -Werror, which happens with the
+> 'make W=1' option, as well as for three drivers in the kernel that always
+> enable -Werror, but it was only observed with the i915 driver so far.
+> To be on the safe side, add -Wno-shift-negative-value to any -Wextra
+> in a Makefile.
+>
+> Nathan Chancellor reported an additional -Wdeclaration-after-statement
+> warning that appears in a system header on arm, this still needs a
+> workaround.
 
+Ack; I think we can just fix this in clang.
 
-vim +/next_jiffies +5430 drivers/net/ethernet/micrel/ksz884x.c
+>
+> The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
+> minimal and mainly impact warnings at the -Wpedantic level that the
+> kernel never enables. Between these, gnu11 is the newest version
+> that is supported by all supported compiler versions, though it is
+> only the default on gcc-5, while all other supported versions of
+> gcc or clang default to gnu1x/gnu17.
 
-  5397	
-  5398	/**
-  5399	 * netdev_open - open network device
-  5400	 * @dev:	Network device.
-  5401	 *
-  5402	 * This function process the open operation of network device.  This is caused
-  5403	 * by the user command "ifconfig ethX up."
-  5404	 *
-  5405	 * Return 0 if successful; otherwise an error code indicating failure.
-  5406	 */
-  5407	static int netdev_open(struct net_device *dev)
-  5408	{
-  5409		struct dev_priv *priv = netdev_priv(dev);
-  5410		struct dev_info *hw_priv = priv->adapter;
-  5411		struct ksz_hw *hw = &hw_priv->hw;
-  5412		struct ksz_port *port = &priv->port;
-  5413		int i;
-  5414		int p;
-  5415		int rc = 0;
-  5416	
-  5417		priv->multicast = 0;
-  5418		priv->promiscuous = 0;
-  5419	
-  5420		/* Reset device statistics. */
-  5421		memset(&dev->stats, 0, sizeof(struct net_device_stats));
-  5422		memset((void *) port->counter, 0,
-  5423			(sizeof(u64) * OID_COUNTER_LAST));
-  5424	
-  5425		if (!(hw_priv->opened)) {
-  5426			rc = prepare_hardware(dev);
-  5427			if (rc)
-  5428				return rc;
-  5429			for (i = 0; i < hw->mib_port_cnt; i++) {
-> 5430				if (time_before(next_jiffies, jiffies))
-  5431					next_jiffies = jiffies + HZ * 2;
-  5432				else
-  5433					next_jiffies += HZ * 1;
-  5434				hw_priv->counter[i].time = next_jiffies;
-  5435				hw->port_mib[i].state = media_disconnected;
-  5436				port_init_cnt(hw, i);
-  5437			}
-  5438			if (hw->ksz_switch)
-  5439				hw->port_mib[HOST_PORT].state = media_connected;
-  5440			else {
-  5441				hw_add_wol_bcast(hw);
-  5442				hw_cfg_wol_pme(hw, 0);
-  5443				hw_clr_wol_pme_status(&hw_priv->hw);
-  5444			}
-  5445		}
-  5446		port_set_power_saving(port, false);
-  5447	
-  5448		for (i = 0, p = port->first_port; i < port->port_cnt; i++, p++) {
-  5449			/*
-  5450			 * Initialize to invalid value so that link detection
-  5451			 * is done.
-  5452			 */
-  5453			hw->port_info[p].partner = 0xFF;
-  5454			hw->port_info[p].state = media_disconnected;
-  5455		}
-  5456	
-  5457		/* Need to open the port in multiple device interfaces mode. */
-  5458		if (hw->dev_count > 1) {
-  5459			port_set_stp_state(hw, port->first_port, STP_STATE_SIMPLE);
-  5460			if (port->first_port > 0)
-  5461				hw_add_addr(hw, dev->dev_addr);
-  5462		}
-  5463	
-  5464		port_get_link_speed(port);
-  5465		if (port->force_link)
-  5466			port_force_link_speed(port);
-  5467		else
-  5468			port_set_link_speed(port);
-  5469	
-  5470		if (!(hw_priv->opened)) {
-  5471			hw_setup_intr(hw);
-  5472			hw_enable(hw);
-  5473			hw_ena_intr(hw);
-  5474	
-  5475			if (hw->mib_port_cnt)
-  5476				ksz_start_timer(&hw_priv->mib_timer_info,
-  5477					hw_priv->mib_timer_info.period);
-  5478		}
-  5479	
-  5480		hw_priv->opened++;
-  5481	
-  5482		ksz_start_timer(&priv->monitor_timer_info,
-  5483			priv->monitor_timer_info.period);
-  5484	
-  5485		priv->media_state = port->linked->state;
-  5486	
-  5487		set_media_state(dev, media_connected);
-  5488		netif_start_queue(dev);
-  5489	
-  5490		return 0;
-  5491	}
-  5492	
+I agree. With the fixup to s/Werror/Wextra.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+-- 
+Thanks,
+~Nick Desaulniers
