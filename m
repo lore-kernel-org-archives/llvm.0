@@ -1,58 +1,42 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF3D7C
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 23:16:46 +0000 (UTC)
-Received: by mail-pj1-f45.google.com with SMTP id j10-20020a17090a94ca00b001bc2a9596f6so576543pjw.5
-        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 15:16:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qcyuF/rJ3v9adXS1wD5x79Nrhi3MVFgnMBiDVeVK628=;
-        b=H84ukViLP1I1WQwJ555fTIX5iY07fF8mJhYhLLqFrxRU/v/5c13BT2oHieKtQ28QtB
-         vTu/WJ1QzVGt7t0JrWP9EZxzFSuISG7rgQ18dkd1w1PdOvc/6kHgHln31L/hqrFgSqbN
-         iT+TUK5ORx7x3+XzVmrBCQtrgm3FCzB0zo30Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qcyuF/rJ3v9adXS1wD5x79Nrhi3MVFgnMBiDVeVK628=;
-        b=TaC1uby8gQTyIJlm3nXEO0+b5TQ+Mqw4oO5R6Xxnpf2H+7WFvx5a3rZdSFmS4T6/03
-         bI7qXfdT9lZWJuJVKWrqZE4KtDGYFkcvIyA8+zTS6tRyoaERJ/Bo+2nT5XU1CYpxEbaC
-         izuLhXC+qMbGLsNuTM3R01x5ISe6K67ks2dG7++WJfpEA4bUIsSp19iP0y758gqwNpH3
-         jJErMyZ7ofyEuFNwoyuGpfrI+sPyC0ZH5oJvGPboTyAqait/yJyRv7ZR7c3gznGjdH0b
-         a+mkZ7q4NO2yaPLEucl8Ib3hASlkUNKrcTVUIHkJs83EnSgcI3rZal0FbfBjLc9SxWI1
-         ST+Q==
-X-Gm-Message-State: AOAM532xQFLzf7YrGYFUW4xHeFiIFAq+OWrp3zCK3t0wXl3vRfD9l4ge
-	xuDzVCDbINGNPvOrVThiIcbP1Q==
-X-Google-Smtp-Source: ABdhPJyUO4WdPD4D+EwN7uSB3399f8EhL9c8HcIjeCpMcQrsQdmLfXFfXqDsDs2KAc/EYgd95j5zzQ==
-X-Received: by 2002:a17:90a:6542:b0:1bd:149f:1c29 with SMTP id f2-20020a17090a654200b001bd149f1c29mr13946279pjs.240.1646090206307;
-        Mon, 28 Feb 2022 15:16:46 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id np11-20020a17090b4c4b00b001bd4aa67bafsm774491pjb.3.2022.02.28.15.16.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 15:16:45 -0800 (PST)
-Date: Mon, 28 Feb 2022 15:16:45 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-	stable@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Daniel Micay <danielmicay@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] mm: Handle ksize() vs __alloc_size by forgetting size
-Message-ID: <202202251823.45E09CF@keescook>
-References: <20220225221625.3531852-1-keescook@chromium.org>
- <20220225154518.0d1159fdc6f37ee38e39e90c@linux-foundation.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AD97C
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 23:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646091275; x=1677627275;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kLCBLjBJ0diTVlQP75gxJ3UTjHif6nxLgY9/z1qdEiI=;
+  b=avehZqzswrA7vtTFaVHAUEAM2h8rnEwlcUSjk/qc8ONVeg/g93gQwkzM
+   S/viRwedNBkIbnZal+/EceV2gzYxRZhyAJ4r6nZWySCHJkC8BY1UTF7iW
+   BADiSzqBTbRhSOTo08b6uQeWQONUy1H/nRKuBLfO/0ceir8Sz9oRlhD1S
+   LNiG/BmXFOK5XHmty1uzd3jK/GB5nNQ1vwm96nirdjJ13cRT3Eq9a2rOg
+   iUcTyyNJFj/AYE47CCnPP+JLk/wMCe1iR2Ul5dbHKUihuSd2QWGgGt14U
+   BRho1vEokuND1LRRr4GclifkQBNrlXjcIPe92Xz72JsxyivXToSnDpQ7b
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="316227868"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="316227868"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 15:34:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="708842731"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Feb 2022 15:34:32 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nOpXD-0007tj-WE; Mon, 28 Feb 2022 23:34:32 +0000
+Date: Tue, 1 Mar 2022 07:33:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org, arm@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [soc:arm/soc 6/8] arch/arm/mach-pxa/include/mach/uncompress.h:62:6:
+ error: expected expression
+Message-ID: <202203010702.6TRDNN1H-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,35 +45,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220225154518.0d1159fdc6f37ee38e39e90c@linux-foundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Feb 25, 2022 at 03:45:18PM -0800, Andrew Morton wrote:
-> On Fri, 25 Feb 2022 14:16:25 -0800 Kees Cook <keescook@chromium.org> wrote:
-> 
-> > If ksize() is used on an allocation, the compiler cannot make any
-> > assumptions about its size any more (as hinted by __alloc_size). Force
-> > it to forget.
-> > 
-> > One caller was using a container_of() construction that needed to be
-> > worked around.
-> 
-> Please, when fixing something do fully explain what that thing is.  I,
-> for one, simply cannot understand why this change is being proposed.
-> 
-> Especially when proposing a -stable backport!  Tell readers what was
-> the end-user impact of the bug.
-> 
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1599
-> 
-> Even that didn't tell me.  Is it just a clang warning?  Does the kernel
-> post your private keys on reddit then scribble all over your disk
-> drive?  I dunno.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git arm/soc
+head:   e6e6479c27aa22d11ff7109125dd5ec9ef276de8
+commit: 28f74201e37ccf3063e359bfe346b09400af9bab [6/8] ARM: pxa: remove Intel Imote2 and Stargate 2 boards
+config: arm-colibri_pxa300_defconfig (https://download.01.org/0day-ci/archive/20220301/202203010702.6TRDNN1H-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=28f74201e37ccf3063e359bfe346b09400af9bab
+        git remote add soc https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+        git fetch --no-tags soc arm/soc
+        git checkout 28f74201e37ccf3063e359bfe346b09400af9bab
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Yup, sorry. I tend to get so deep changes like this that I forget to
-give an appropriately detailed summary. As others have mentioned, this
-is trying to fix a miscompilation issue, triggered by what can be
-considered either a mis-application of __alloc_size, or a failure to
-correctly disable compiler optimizations in the face of ksize().
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-Kees Cook
+All errors (new ones prefixed by >>):
+
+   In file included from arch/arm/boot/compressed/misc.c:29:
+>> arch/arm/mach-pxa/include/mach/uncompress.h:62:6: error: expected expression
+               || machine_is_cm_x300() || machine_is_balloon3())
+               ^
+   arch/arm/boot/compressed/misc.c:126:17: warning: no previous prototype for function '__div0' [-Wmissing-prototypes]
+   asmlinkage void __div0(void)
+                   ^
+   arch/arm/boot/compressed/misc.c:126:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void __div0(void)
+              ^
+              static 
+   arch/arm/boot/compressed/misc.c:133:6: warning: no previous prototype for function '__stack_chk_fail' [-Wmissing-prototypes]
+   void __stack_chk_fail(void)
+        ^
+   arch/arm/boot/compressed/misc.c:133:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __stack_chk_fail(void)
+   ^
+   static 
+   arch/arm/boot/compressed/misc.c:142:1: warning: no previous prototype for function 'decompress_kernel' [-Wmissing-prototypes]
+   decompress_kernel(unsigned long output_start, unsigned long free_mem_ptr_p,
+   ^
+   arch/arm/boot/compressed/misc.c:141:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   arch/arm/boot/compressed/misc.c:164:6: warning: no previous prototype for function 'fortify_panic' [-Wmissing-prototypes]
+   void fortify_panic(const char *name)
+        ^
+   arch/arm/boot/compressed/misc.c:164:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void fortify_panic(const char *name)
+   ^
+   static 
+   4 warnings and 1 error generated.
+
+
+vim +62 arch/arm/mach-pxa/include/mach/uncompress.h
+
+^1da177e4c3f41 include/asm-arm/arch-pxa/uncompress.h       Linus Torvalds    2005-04-16  53  
+6d3dfe4a314147 include/asm-arm/arch-pxa/uncompress.h       Eric Miao         2008-06-02  54  static inline void arch_decomp_setup(void)
+6d3dfe4a314147 include/asm-arm/arch-pxa/uncompress.h       Eric Miao         2008-06-02  55  {
+2a8ac187e03027 arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2010-03-08  56  	/* initialize to default */
+2a8ac187e03027 arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2010-03-08  57  	uart_base = FFUART_BASE;
+2a8ac187e03027 arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2010-03-08  58  	uart_shift = 2;
+2a8ac187e03027 arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2010-03-08  59  	uart_is_pxa = 1;
+2a8ac187e03027 arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2010-03-08  60  
+28f74201e37ccf arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2022-02-27  61  	if (machine_is_littleton() ||  machine_is_csb726() ||
+2a23ec3679d84a arch/arm/mach-pxa/include/mach/uncompress.h Jonathan McDowell 2009-07-04 @62  	    || machine_is_cm_x300() || machine_is_balloon3())
+
+:::::: The code at line 62 was first introduced by commit
+:::::: 2a23ec3679d84ac243add761fa3d3872cf6dcb11 [ARM] pxa: balloon3 (http://balloonboard.org/) base machine support
+
+:::::: TO: Jonathan McDowell <noodles@earth.li>
+:::::: CC: Eric Miao <eric.y.miao@gmail.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
