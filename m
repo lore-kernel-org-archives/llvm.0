@@ -1,63 +1,73 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171313FDC;
-	Mon, 28 Feb 2022 12:37:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646051831; x=1677587831;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=7B5xXQQ6ggh1HFTcP+YadDpRzLVifOjGsC04RK4u89s=;
-  b=Rv4B1xk/0mWRnP00txyeX7RWkosEO5ChqLDiVf/v9ZOaahuRGjHRYAiM
-   F2Z6kMfIZdbxJ2BBunNxr+2UhD1fI8mQpm1ZmR3lPAe2u0AWntNO2XPDN
-   uyoUD81ivY0y4TZsP8jSCdGkos6tp1ujaIlIrWKkvyVBRaC+m8bJq4mNx
-   XpiWod4qKRpVquIPmHZFlzjqoAsgWI9dttpW/nJV64MRsWd14vgWWn0Jc
-   IJa181IPvDZMqU6Mw28+Y/9Y94Ruu628xz7d1mnq2x8VBagEHfrR9O8Q+
-   0jVTfm5w5OfXwI1I5ywQseUq8IKD0EJLGOaT1tOBZtELX7W0BDkBDb1nA
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="232843214"
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="232843214"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 04:37:10 -0800
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="550218755"
-Received: from gkapusti-mobl.ccr.corp.intel.com (HELO localhost) ([10.252.51.8])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 04:37:04 -0800
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Arnd Bergmann <arnd@kernel.org>, linux-kbuild@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Linus Torvalds
- <torvalds@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>,
- llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>, Federico Vaga
- <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, Hu Haowen
- <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, Nick
- Desaulniers <ndesaulniers@google.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc-tw-discuss@lists.sourceforge.net,
- linux-arm-kernel@lists.infradead.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, greybus-dev@lists.linaro.org,
- linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220228103142.3301082-1-arnd@kernel.org>
-Date: Mon, 28 Feb 2022 14:36:52 +0200
-Message-ID: <87v8wz5frv.fsf@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8967B7B;
+	Mon, 28 Feb 2022 12:49:04 +0000 (UTC)
+Received: by mail-io1-f44.google.com with SMTP id f14so14535738ioz.1;
+        Mon, 28 Feb 2022 04:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mOwbZLEZAA7CbHC+ZGRfJecP9SUyALH4CUgSrWMoe2Y=;
+        b=MoRqzkxl3y5bj6ZSvrlCkhi2eyhrKfbhvB8EI57ZXGiPyLp+PHJZj+m6chb0C6fDg+
+         djOViiwLzv9MFpsrxG2ocg2vE77iNztXu6hIk49ZVn01C9/E7TzhSRsZrkAmglSsv1P0
+         O8r143/OuUhcoCPa0Miggp3nc1mD8UveBAxgUHM43Jaabl7pWw5GUu6iPUMhTTDdTm58
+         OCefXbhIQ+lMMN0Zz6j3r6ZdLH+YJA+kaDIscqG3S4AdZbKqUa4EyRU1DI+O2tsiAtLa
+         oDS98C0nK6Ll/C9g+hmM3g/Q+gJZoZjbPTjAeNV3AtyrmbCyt9gsn12+nKbe4Q65iE0m
+         C1DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mOwbZLEZAA7CbHC+ZGRfJecP9SUyALH4CUgSrWMoe2Y=;
+        b=gTPXNi/oGT1RazK2lem9Wn5DdbGPT8bwOfNWhQpvYs8zIl99ezZOJSHIfoyM6Q7+dT
+         LuX9L7YfVU5oFeBbz/QPcV5RH5KEBRuh8V9KePciLgvvaNAfAJb7D+C652jlniJ5TflR
+         wyTyWuPbh+1wkSOJYYCLwhVs5mUnYpuYaizmCffPhOK51qCS/f8WKST0pIM4+ICNNipi
+         t2VKtnUH2uUqqrrv0eUlIYRgSW5MDfXfM/T9shZw/X3JN84aGOvnaKYKy1LqIyDw/TKc
+         tQKlWuLJte/aZ4zNKMP7u3mbJpJaCQmq3RnXw7cF8wpObnLh1X+cRBVFka3wkK1XsFzq
+         iHfQ==
+X-Gm-Message-State: AOAM5325kP6JZ7NRS3YqyaPBhmOxre+oos/8GkRUEQRfh8JfFHLx3L6I
+	/Ct2ZBHJsSrL4a4U0uCST58vFDk7j9UV+Lm360w=
+X-Google-Smtp-Source: ABdhPJz3q8cRMHd/oy9ZoQDTB815Cb8Pu3kGKWD99P8CNfxxFeh2KSEcEd4cG9pFBH7WrrbY5kthiPuHNKK+V71otSM=
+X-Received: by 2002:a02:c6c1:0:b0:314:b699:b8bd with SMTP id
+ r1-20020a02c6c1000000b00314b699b8bdmr17570856jan.40.1646052543613; Mon, 28
+ Feb 2022 04:49:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20220228103142.3301082-1-arnd@kernel.org>
+In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
+From: Alex Shi <seakeel@gmail.com>
+Date: Mon, 28 Feb 2022 20:48:27 +0800
+Message-ID: <CAJy-AmkX+3qFLUvSkWK6bBjMF_pQ5mEFWUBaO0H6D0mxmhj5Lg@mail.gmail.com>
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>, 
+	Federico Vaga <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, 
+	Hu Haowen <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, 
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-doc-tw-discuss@lists.sourceforge.net, 
+	linux-arm-kernel@lists.infradead.org, intel-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, greybus-dev@lists.linaro.org, 
+	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 28 Feb 2022, Arnd Bergmann <arnd@kernel.org> wrote:
+On Mon, Feb 28, 2022 at 6:32 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
 > From: Arnd Bergmann <arnd@arndb.de>
 >
 > During a patch discussion, Linus brought up the option of changing
 > the C standard version from gnu89 to gnu99, which allows using variable
-> declaration inside of a for() loop. While the C99, C11 and later standards
+> declaration inside of a for() loop. While the C99, C11 and later standard=
+s
 > introduce many other features, most of these are already available in
 > gnu89 as GNU extensions as well.
 >
@@ -77,21 +87,6 @@ ys
 > enable -Werror, but it was only observed with the i915 driver so far.
 > To be on the safe side, add -Wno-shift-negative-value to any -Wextra
 > in a Makefile.
-
-Do you mean always enable -Wall and/or -Wextra instead of -Werror?
-
-We do use -Werror for our CI and development too, but it's hidden behind
-a config option that depends on COMPILE_TEST=3Dn to avoid any problems
-with allmodconfig/allyesconfig.
-
-For the future, makes me wonder if we couldn't have a way for drivers to
-locally enable -Wall/-Wextra in a way that incorporates the exceptions
-from kbuild instead of having to duplicate them.
-
-Anyway, for the i915 changes,
-
-Acked-by: Jani Nikula <jani.nikula@intel.com>
-
 >
 > Nathan Chancellor reported an additional -Wdeclaration-after-statement
 > warning that appears in a system header on arm, this still needs a
@@ -112,6 +107,10 @@ pcovt8fYbVFW3TA@mail.gmail.com/
 > Cc: linux-kbuild@vger.kernel.org
 > Cc: llvm@lists.linux.dev
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+For document part,
+Reviewed-by: Alex Shi <alexs@kernel.org>
+
 > ---
 > [v2]
 >  - added -std=3Dgnu11 back, rather than just relying on the default
@@ -135,7 +134,7 @@ on/process/programming-language.rst
 > --- a/Documentation/process/programming-language.rst
 > +++ b/Documentation/process/programming-language.rst
 > @@ -5,8 +5,8 @@ Programming Language
->=20=20
+>
 >  The kernel is written in the C programming language [c-language]_.
 >  More precisely, the kernel is typically compiled with ``gcc`` [gcc]_
 > -under ``-std=3Dgnu89`` [gcc-c-dialect-options]_: the GNU dialect of ISO =
@@ -145,7 +144,7 @@ C90
 C11
 > +(including some C17 features). ``clang`` [clang]_ is also supported, see
 >  docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
->=20=20
+>
 >  This dialect contains many extensions to the language [gnu-extensions]_,
 > diff --git a/Documentation/translations/it_IT/process/programming-languag=
 e.rst b/Documentation/translations/it_IT/process/programming-language.rst
@@ -153,7 +152,7 @@ e.rst b/Documentation/translations/it_IT/process/programming-language.rst
 > --- a/Documentation/translations/it_IT/process/programming-language.rst
 > +++ b/Documentation/translations/it_IT/process/programming-language.rst
 > @@ -10,8 +10,8 @@ Linguaggio di programmazione
->=20=20
+>
 >  Il kernel =C3=A8 scritto nel linguaggio di programmazione C [it-c-langua=
 ge]_.
 >  Pi=C3=B9 precisamente, il kernel viene compilato con ``gcc`` [it-gcc]_ u=
@@ -166,7 +165,7 @@ sando
 7).
 >  Linux supporta anche ``clang`` [it-clang]_, leggete la documentazione
 >  :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
->=20=20
+>
 > diff --git a/Documentation/translations/zh_CN/process/programming-languag=
 e.rst b/Documentation/translations/zh_CN/process/programming-language.rst
 > index 2a47a1d2ec20..58d2b3bd2d85 100644
@@ -174,7 +173,7 @@ e.rst b/Documentation/translations/zh_CN/process/programming-language.rst
 > +++ b/Documentation/translations/zh_CN/process/programming-language.rst
 > @@ -9,8 +9,8 @@
 >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=20=20
+>
 >  =E5=86=85=E6=A0=B8=E6=98=AF=E7=94=A8C=E8=AF=AD=E8=A8=80 :ref:`c-language=
  <cn_c-language>` =E7=BC=96=E5=86=99=E7=9A=84=E3=80=82=E6=9B=B4=E5=87=86=E7=
 =A1=AE=E5=9C=B0=E8=AF=B4=EF=BC=8C=E5=86=85=E6=A0=B8=E9=80=9A=E5=B8=B8=E6=98=
@@ -187,13 +186,13 @@ U =E6=96=B9=E8=A8=80=EF=BC=88
 -options>` =E4=B8=8B=E7=BC=96=E8=AF=91=E7=9A=84=EF=BC=9AISO C11=E7=9A=84 GN=
 U =E6=96=B9=E8=A8=80=EF=BC=88
 > +=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC17=E7=89=B9=E6=80=A7=EF=BC=89
->=20=20
+>
 >  =E8=BF=99=E7=A7=8D=E6=96=B9=E8=A8=80=E5=8C=85=E5=90=AB=E5=AF=B9=E8=AF=AD=
 =E8=A8=80 :ref:`gnu-extensions <cn_gnu-extensions>` =E7=9A=84=E8=AE=B8=E5=
 =A4=9A=E6=89=A9=E5=B1=95=EF=BC=8C=E5=BD=93=E7=84=B6=EF=BC=8C=E5=AE=83=E4=BB=
 =AC=E8=AE=B8=E5=A4=9A=E9=83=BD=E5=9C=A8=E5=86=85=E6=A0=B8=E4=B8=AD=E4=BD=BF=
 =E7=94=A8=E3=80=82
->=20=20
+>
 > diff --git a/Documentation/translations/zh_TW/process/programming-languag=
 e.rst b/Documentation/translations/zh_TW/process/programming-language.rst
 > index 54e3699eadf8..235de05f7e2c 100644
@@ -201,7 +200,7 @@ e.rst b/Documentation/translations/zh_TW/process/programming-language.rst
 > +++ b/Documentation/translations/zh_TW/process/programming-language.rst
 > @@ -12,8 +12,8 @@
 >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=20=20
+>
 >  =E5=85=A7=E6=A0=B8=E6=98=AF=E7=94=A8C=E8=AA=9E=E8=A8=80 :ref:`c-language=
  <tw_c-language>` =E7=B7=A8=E5=AF=AB=E7=9A=84=E3=80=82=E6=9B=B4=E6=BA=96=E7=
 =A2=BA=E5=9C=B0=E8=AA=AA=EF=BC=8C=E5=85=A7=E6=A0=B8=E9=80=9A=E5=B8=B8=E6=98=
@@ -214,41 +213,43 @@ U =E6=96=B9=E8=A8=80=EF=BC=88
 -options>` =E4=B8=8B=E7=B7=A8=E8=AD=AF=E7=9A=84=EF=BC=9AISO C11=E7=9A=84 GN=
 U =E6=96=B9=E8=A8=80=EF=BC=88
 > +=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC17=E7=89=B9=E6=80=A7=EF=BC=89
->=20=20
+>
 >  =E9=80=99=E7=A8=AE=E6=96=B9=E8=A8=80=E5=8C=85=E5=90=AB=E5=B0=8D=E8=AA=9E=
 =E8=A8=80 :ref:`gnu-extensions <tw_gnu-extensions>` =E7=9A=84=E8=A8=B1=E5=
 =A4=9A=E6=93=B4=E5=B1=95=EF=BC=8C=E7=95=B6=E7=84=B6=EF=BC=8C=E5=AE=83=E5=80=
 =91=E8=A8=B1=E5=A4=9A=E9=83=BD=E5=9C=A8=E5=85=A7=E6=A0=B8=E4=B8=AD=E4=BD=BF=
 =E7=94=A8=E3=80=82
->=20=20
+>
 > diff --git a/Makefile b/Makefile
 > index 289ce2be8032..66496eaeb9ec 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -432,7 +432,7 @@ HOSTCXX	=3D g++
+> @@ -432,7 +432,7 @@ HOSTCXX     =3D g++
 >  endif
->=20=20
+>
 >  export KBUILD_USERCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-protot=
 ypes \
-> -			      -O2 -fomit-frame-pointer -std=3Dgnu89
-> +			      -O2 -fomit-frame-pointer -std=3Dgnu11
+> -                             -O2 -fomit-frame-pointer -std=3Dgnu89
+> +                             -O2 -fomit-frame-pointer -std=3Dgnu11
 >  export KBUILD_USERLDFLAGS :=3D
->=20=20
+>
 >  KBUILD_HOSTCFLAGS   :=3D $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTC=
 FLAGS)
 > @@ -515,7 +515,7 @@ KBUILD_CFLAGS   :=3D -Wall -Wundef -Werror=3Dstrict-p=
 rototypes -Wno-trigraphs \
->  		   -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE \
->  		   -Werror=3Dimplicit-function-declaration -Werror=3Dimplicit-int \
->  		   -Werror=3Dreturn-type -Wno-format-security \
-> -		   -std=3Dgnu89
-> +		   -std=3Dgnu11
+>                    -fno-strict-aliasing -fno-common -fshort-wchar -fno-PI=
+E \
+>                    -Werror=3Dimplicit-function-declaration -Werror=3Dimpl=
+icit-int \
+>                    -Werror=3Dreturn-type -Wno-format-security \
+> -                  -std=3Dgnu89
+> +                  -std=3Dgnu11
 >  KBUILD_CPPFLAGS :=3D -D__KERNEL__
 >  KBUILD_AFLAGS_KERNEL :=3D
 >  KBUILD_CFLAGS_KERNEL :=3D
 > @@ -782,7 +782,7 @@ KBUILD_CFLAGS +=3D $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMP=
 LICIT_FALLTHROUGH)
->=20=20
+>
 >  ifdef CONFIG_CC_IS_CLANG
 >  KBUILD_CPPFLAGS +=3D -Qunused-arguments
 > -# The kernel builds with '-std=3Dgnu89' so use of GNU extensions is acce=
@@ -275,7 +276,8 @@ sted names.
 >  VDSO_CFLAGS  +=3D -O2
 >  # Some useful compiler-dependent flags from top-level Makefile
 >  VDSO_CFLAGS +=3D $(call cc32-option,-Wdeclaration-after-statement,)
-> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
+> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefil=
+e
 > index 1b62b9f65196..1618a6e0af4e 100644
 > --- a/drivers/gpu/drm/i915/Makefile
 > +++ b/drivers/gpu/drm/i915/Makefile
@@ -284,7 +286,8 @@ sted names.
 >  subdir-ccflags-y +=3D -Wno-missing-field-initializers
 >  subdir-ccflags-y +=3D -Wno-sign-compare
 > +subdir-ccflags-y +=3D -Wno-shift-negative-value
->  subdir-ccflags-y +=3D $(call cc-disable-warning, unused-but-set-variable)
+>  subdir-ccflags-y +=3D $(call cc-disable-warning, unused-but-set-variable=
+)
 >  subdir-ccflags-y +=3D $(call cc-disable-warning, frame-address)
 >  subdir-ccflags-$(CONFIG_DRM_I915_WERROR) +=3D -Werror
 > diff --git a/drivers/staging/greybus/tools/Makefile b/drivers/staging/gre=
@@ -292,16 +295,16 @@ ybus/tools/Makefile
 > index ad0ae8053b79..a3bbd73171f2 100644
 > --- a/drivers/staging/greybus/tools/Makefile
 > +++ b/drivers/staging/greybus/tools/Makefile
-> @@ -12,7 +12,8 @@ CFLAGS	+=3D -std=3Dgnu99 -Wall -Wextra -g \
->  	    -Wredundant-decls \
->  	    -Wcast-align \
->  	    -Wsign-compare \
-> -	    -Wno-missing-field-initializers
-> +	    -Wno-missing-field-initializers \
-> +	    -Wno-shift-negative-value
->=20=20
->  CC	:=3D $(CROSS_COMPILE)gcc
->=20=20
+> @@ -12,7 +12,8 @@ CFLAGS        +=3D -std=3Dgnu99 -Wall -Wextra -g \
+>             -Wredundant-decls \
+>             -Wcast-align \
+>             -Wsign-compare \
+> -           -Wno-missing-field-initializers
+> +           -Wno-missing-field-initializers \
+> +           -Wno-shift-negative-value
+>
+>  CC     :=3D $(CROSS_COMPILE)gcc
+>
 > diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
 > index 4188ba3fd8c3..99f9995670ea 100644
 > --- a/fs/btrfs/Makefile
@@ -311,9 +314,9 @@ ybus/tools/Makefile
 >  subdir-ccflags-y +=3D -Wno-sign-compare
 >  subdir-ccflags-y +=3D -Wno-type-limits
 > +subdir-ccflags-y +=3D -Wno-shift-negative-value
->=20=20
+>
 >  obj-$(CONFIG_BTRFS_FS) :=3D btrfs.o
->=20=20
+>
 > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
 > index 8be892887d71..650d0b8ceec3 100644
 > --- a/scripts/Makefile.extrawarn
@@ -324,8 +327,9 @@ ion)
 >  KBUILD_CFLAGS +=3D -Wno-sign-compare
 >  KBUILD_CFLAGS +=3D -Wno-type-limits
 > +KBUILD_CFLAGS +=3D -Wno-shift-negative-value
->=20=20
+>
 >  KBUILD_CPPFLAGS +=3D -DKBUILD_EXTRA_WARN1
-
---=20
-Jani Nikula, Intel Open Source Graphics Center
+>
+> --
+> 2.29.2
+>
