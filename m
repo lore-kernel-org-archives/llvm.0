@@ -1,133 +1,174 @@
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E50C7C
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 22:30:53 +0000 (UTC)
-Received: by mail-oo1-f52.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so4997411ooa.10
-        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 14:30:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=oWJNEF23gYsaQqgLAEVbye1HfW5HTbmGgJBkQBp8gGE=;
-        b=ElcKOruAXbvxWDYvNPelX7nfkbvr5prW+ZUpyWp0zCYNtIH5cQ8kTumGYq2SGYmvfj
-         AJKxZoUqAvpDu/F+a9neQDo4u2Q3DRo/prSmpCma1dNvWzvYefscyrCfuWMkfy7OUIod
-         6l3ayoWRsPfzOkVxlv+RLKinqiuEm6QmxtzNQ5J7DlQGNIuh+AQVJJbxiElRc3xJ3cPD
-         j+qXxPn66/JY8QsJLkAjIA8jT5SAlJ4dMp395XvWBql5ysTpokA6aEtrtVHSbRF6PInM
-         QN0TE5o1GNg6ITeSPFcewR5FtJDrum+tKnxlobePfkRCga9ukeWGCFOly485J1vwOq2m
-         /Xlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oWJNEF23gYsaQqgLAEVbye1HfW5HTbmGgJBkQBp8gGE=;
-        b=5LcjK+H880Pl3xqucTrrykYz+oFag1QgWvdd8YjuSYZOg8Cz4EpSmqaRF6JrG1ZgDD
-         RnQlWIKALBo9/IkAo6GLapGCLXlY2NVq7JgGnR1lbmG/mY7uYvnjt2wpQ9Pt+O7jLl5X
-         GzOv25QRJbpB671XpF7tXAzKX0LMFifn0JjUtq55mIroPB0jCgpUX6i1VY+1gvRhD5cy
-         gFgcfhfMeloUqoo5VAch0r+LKE1ER5t6degIZ7GvhqiHtHds0t7NJDW8+4Pvsohhlqx1
-         3BNTUdvIRHYVj2l03G1mh8o0PElolSIndqQlR3otRaiwI71pNF7R3DFlp9AEWWTe0qiF
-         MxPA==
-X-Gm-Message-State: AOAM5312md/I8mGVRFCC/m5n+bR1nsY4NyvOALWrLwCRE8fUrz+PQWc8
-	ibH1m9fpdsVpMImP1pohjWZsbrYzBeTZuTfmJdg=
-X-Google-Smtp-Source: ABdhPJxJw4j6RbUKEuCCao9TFapxCXxTwduA5GmufbYLkRtVhOI3ahGDwGCTJQXixtkIAkJPLilFPdDIBO2YtqM9oeE=
-X-Received: by 2002:a05:6870:1b85:b0:d6:feda:913f with SMTP id
- hm5-20020a0568701b8500b000d6feda913fmr2039667oab.123.1646087452697; Mon, 28
- Feb 2022 14:30:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568D17C
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 22:33:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646087611; x=1677623611;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Bn9izpqKBs56oc43rnakzO6sXTOcc68e/qndE3+SDl8=;
+  b=dVids3Xr1BD2vU6D5/e0sGNyLs8YrZtErpnEZbyE41ttRQIDH1UNvAgl
+   paCKo2wxdU+rn+67GphaF1ClIbQbWu62iNuHXP2LOn+tD3X+Do9lZo+WE
+   i8Rl8NmM34hwBODj2vDIPoyC4J48yCHwYGWEGrSnthBJx3Fre3j2FTwgA
+   +zhEOX6jZ//RO95OZzaqnK2ib+NCCi+qYJKj3VPf80izS9/OMDCX64KNo
+   Sj90dba0GAsRu82LrlaKV0JA4GoK9nhra0nw2rKyzMpEYSbbmwAkmqszc
+   o8fXqUtAbBGZXj70+G8s4UVuap8ky+TexTq6gLGmrp4GrfMFBilrB6CrI
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251835162"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="251835162"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 14:33:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="708826716"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Feb 2022 14:33:26 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nOoa5-0007q1-Me; Mon, 28 Feb 2022 22:33:25 +0000
+Date: Tue, 1 Mar 2022 06:32:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alan Previn <alan.previn.teres.alexis@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Alan Previn <alan.previn.teres.alexis@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v7 09/13] drm/i915/guc: Check sizing of
+ guc_capture output
+Message-ID: <202203010622.2JyDEoHX-lkp@intel.com>
+References: <20220226095541.1010534-10-alan.previn.teres.alexis@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220227153342.79546-1-trix@redhat.com> <58ae0ccc-e964-69a3-b40b-3262fd24af9b@amd.com>
-In-Reply-To: <58ae0ccc-e964-69a3-b40b-3262fd24af9b@amd.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Mon, 28 Feb 2022 17:30:41 -0500
-Message-ID: <CADnq5_Oc2mUfv41gOxrdeHjKDQ4W+S1+wiX6v_7SE6bEH-9xSA@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/amdgpu: Fix realloc of ptr
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: Tom Rix <trix@redhat.com>, "Deucher, Alexander" <alexander.deucher@amd.com>, 
-	xinhui pan <Xinhui.Pan@amd.com>, Dave Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"Lazar, Lijo" <lijo.lazar@amd.com>, Nirmoy Das <nirmoy.das@amd.com>, 
-	Kevin Wang <kevin1.wang@amd.com>, Tom St Denis <tom.stdenis@amd.com>, 
-	"Quan, Evan" <evan.quan@amd.com>, Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>, llvm@lists.linux.dev, 
-	Maling list - DRI developers <dri-devel@lists.freedesktop.org>, 
-	amd-gfx list <amd-gfx@lists.freedesktop.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220226095541.1010534-10-alan.previn.teres.alexis@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Applied.  Thanks!
+Hi Alan,
 
-Alex
+Thank you for the patch! Yet something to improve:
 
-On Mon, Feb 28, 2022 at 5:55 AM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 27.02.22 um 16:33 schrieb trix@redhat.com:
-> > From: Tom Rix <trix@redhat.com>
-> >
-> > Clang static analysis reports this error
-> > amdgpu_debugfs.c:1690:9: warning: 1st function call
-> >    argument is an uninitialized value
-> >    tmp =3D krealloc_array(tmp, i + 1,
-> >          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > realloc uses tmp, so tmp can not be garbage.
-> > And the return needs to be checked.
-> >
-> > Fixes: 5ce5a584cb82 ("drm/amdgpu: add debugfs for reset registers list"=
-)
-> > Signed-off-by: Tom Rix <trix@redhat.com>
->
-> Yeah, stuff I missed because of the long review. I was already wondering
-> what semantics krealloc_array is following for freeing up the pointer on
-> error.
->
-> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
->
-> Thanks,
-> Christian.
->
-> > ---
-> > v2:
-> >    use 'new' to hold/check the ralloc return
-> >    fix commit log mistake on ralloc freeing to using input ptr
-> >
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 9 +++++++--
-> >   1 file changed, 7 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/=
-drm/amd/amdgpu/amdgpu_debugfs.c
-> > index 9eb9b440bd438..2f4f8c5618d81 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> > @@ -1676,7 +1676,7 @@ static ssize_t amdgpu_reset_dump_register_list_wr=
-ite(struct file *f,
-> >   {
-> >       struct amdgpu_device *adev =3D (struct amdgpu_device *)file_inode=
-(f)->i_private;
-> >       char reg_offset[11];
-> > -     uint32_t *tmp;
-> > +     uint32_t *new, *tmp =3D NULL;
-> >       int ret, i =3D 0, len =3D 0;
-> >
-> >       do {
-> > @@ -1687,7 +1687,12 @@ static ssize_t amdgpu_reset_dump_register_list_w=
-rite(struct file *f,
-> >                       goto error_free;
-> >               }
-> >
-> > -             tmp =3D krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_=
-KERNEL);
-> > +             new =3D krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_=
-KERNEL);
-> > +             if (!new) {
-> > +                     ret =3D -ENOMEM;
-> > +                     goto error_free;
-> > +             }
-> > +             tmp =3D new;
-> >               if (sscanf(reg_offset, "%X %n", &tmp[i], &ret) !=3D 1) {
-> >                       ret =3D -EINVAL;
-> >                       goto error_free;
->
+[auto build test ERROR on drm-tip/drm-tip]
+[cannot apply to drm-intel/for-linux-next drm-exynos/exynos-drm-next drm/drm-next tegra-drm/drm/tegra/for-next airlied/drm-next v5.17-rc6 next-20220228]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Alan-Previn/Add-GuC-Error-Capture-Support/20220226-175600
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220301/202203010622.2JyDEoHX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/4c41838b35d9a5c0bcb4380e0064cb2d5d33661f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Alan-Previn/Add-GuC-Error-Capture-Support/20220226-175600
+        git checkout 4c41838b35d9a5c0bcb4380e0064cb2d5d33661f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:555:1: error: no previous prototype for function 'intel_guc_capture_getlistsize' [-Werror,-Wmissing-prototypes]
+   intel_guc_capture_getlistsize(struct intel_guc *guc, u32 owner, u32 type, u32 classid,
+   ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:554:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:585:1: error: no previous prototype for function 'intel_guc_capture_getlist' [-Werror,-Wmissing-prototypes]
+   intel_guc_capture_getlist(struct intel_guc *guc, u32 owner, u32 type, u32 classid,
+   ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:584:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:648:5: error: no previous prototype for function 'intel_guc_capture_output_min_size_est' [-Werror,-Wmissing-prototypes]
+   int intel_guc_capture_output_min_size_est(struct intel_guc *guc)
+       ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:648:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int intel_guc_capture_output_min_size_est(struct intel_guc *guc)
+   ^
+   static 
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:711:6: error: no previous prototype for function 'intel_guc_capture_destroy' [-Werror,-Wmissing-prototypes]
+   void intel_guc_capture_destroy(struct intel_guc *guc)
+        ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:711:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void intel_guc_capture_destroy(struct intel_guc *guc)
+   ^
+   static 
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:727:5: error: no previous prototype for function 'intel_guc_capture_init' [-Werror,-Wmissing-prototypes]
+   int intel_guc_capture_init(struct intel_guc *guc)
+       ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:727:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int intel_guc_capture_init(struct intel_guc *guc)
+   ^
+   static 
+   5 errors generated.
+
+
+vim +/intel_guc_capture_output_min_size_est +648 drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c
+
+   646	
+   647	#define GUC_CAPTURE_OVERBUFFER_MULTIPLIER 3
+ > 648	int intel_guc_capture_output_min_size_est(struct intel_guc *guc)
+   649	{
+   650		struct intel_gt *gt = guc_to_gt(guc);
+   651		struct intel_engine_cs *engine;
+   652		enum intel_engine_id id;
+   653		int worst_min_size = 0, num_regs = 0;
+   654		size_t tmp = 0;
+   655	
+   656		/*
+   657		 * If every single engine-instance suffered a failure in quick succession but
+   658		 * were all unrelated, then a burst of multiple error-capture events would dump
+   659		 * registers for every one engine instance, one at a time. In this case, GuC
+   660		 * would even dump the global-registers repeatedly.
+   661		 *
+   662		 * For each engine instance, there would be 1 x guc_state_capture_group_t output
+   663		 * followed by 3 x guc_state_capture_t lists. The latter is how the register
+   664		 * dumps are split across different register types (where the '3' are global vs class
+   665		 * vs instance). Finally, let's multiply the whole thing by 3x (just so we are
+   666		 * not limited to just 1 round of data in a worst case full register dump log)
+   667		 *
+   668		 * NOTE: intel_guc_log that allocates the log buffer would round this size up to
+   669		 * a power of two.
+   670		 */
+   671	
+   672		for_each_engine(engine, gt, id) {
+   673			worst_min_size += sizeof(struct guc_state_capture_group_header_t) +
+   674					  (3 * sizeof(struct guc_state_capture_header_t));
+   675	
+   676			if (!intel_guc_capture_getlistsize(guc, 0, GUC_CAPTURE_LIST_TYPE_GLOBAL, 0, &tmp))
+   677				num_regs += tmp;
+   678	
+   679			if (!intel_guc_capture_getlistsize(guc, 0, GUC_CAPTURE_LIST_TYPE_ENGINE_CLASS,
+   680							   engine->class, &tmp)) {
+   681				num_regs += tmp;
+   682			}
+   683			if (!intel_guc_capture_getlistsize(guc, 0, GUC_CAPTURE_LIST_TYPE_ENGINE_INSTANCE,
+   684							   engine->class, &tmp)) {
+   685				num_regs += tmp;
+   686			}
+   687		}
+   688	
+   689		worst_min_size += (num_regs * sizeof(struct guc_mmio_reg));
+   690	
+   691		return (worst_min_size * GUC_CAPTURE_OVERBUFFER_MULTIPLIER);
+   692	}
+   693	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
