@@ -1,121 +1,93 @@
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDBC320F
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 07:56:24 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V5gZjsZ_1646034657;
-Received: from 192.168.193.153(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V5gZjsZ_1646034657)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 28 Feb 2022 15:50:58 +0800
-Message-ID: <3389ef12-81c7-6aba-6c58-63e34008af0c@linux.alibaba.com>
-Date: Sun, 27 Feb 2022 23:50:57 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B542F320F;
+	Mon, 28 Feb 2022 08:07:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C19C340F1;
+	Mon, 28 Feb 2022 08:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646035641;
+	bh=ZIThCTjaypYDGsg6PqLBGFPVK72nb1FskfDKUMQoQFo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=aD1Bq94lyoSrU2rCMMALEIwxpVEUCGPfDF3dSAY04qYShfUHRGnHnfOLK00oUyW0n
+	 ZqsMF2iFDnWnNQU4y+SGtYOAu5Ni1fTK3qmdoXezKrSqgWCYwRDMEoKeNDdb+Nkuz3
+	 qCcOiJz8mrsH9PbnU9Uy6ClGyXORbh7pBctQV46m71jB+a9PCxnWvZ62vTMJBnf1Xx
+	 q8KNT0ei+VPVQMCRbzemricf9saJwYLDd4YpN1D4EvBQKNGAbl0BWqTlhRM3X0vYXD
+	 MHWCP9V/paczpqcSPuXqjoBZyne5r0/hJDs5BnKQTtpBr0XDpT3ldBKKSTwvH5O2Xk
+	 UqCo5U8NmR1hw==
+Received: by mail-wm1-f52.google.com with SMTP id o62-20020a1ca541000000b00380e3cc26b7so5499799wme.0;
+        Mon, 28 Feb 2022 00:07:21 -0800 (PST)
+X-Gm-Message-State: AOAM5328iderCE26T1ta0GhQtkLo+h//98CVV0BZtvvN2IsrKD7LsrMr
+	3uhFaYIcFzJWjelveTxs7Gc5UTAaoGrtfBBDj3w=
+X-Google-Smtp-Source: ABdhPJzpcZ5s+5KOBMUi70sNCMSXIqY3vXEepsFRSDE8fekaJ/SUkhm+3dpDI9J9lgxQZ0OAu6bPJpVx/Y8rip86Cms=
+X-Received: by 2002:a05:600c:4f8e:b0:381:6de4:fccc with SMTP id
+ n14-20020a05600c4f8e00b003816de4fcccmr1697739wmq.82.1646035639695; Mon, 28
+ Feb 2022 00:07:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] [PATCH v2] AARCH64: Add gcc Shadow Call Stack support
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>
-Cc: catalin.marinas@arm.com, will@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, masahiroy@kernel.org, tglx@linutronix.de,
- akpm@linux-foundation.org, mark.rutland@arm.com, samitolvanen@google.com,
- npiggin@gmail.com, linux@roeck-us.net, mhiramat@kernel.org,
- ojeda@kernel.org, luc.vanoostenryck@gmail.com, elver@google.com,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20220225032410.25622-1-ashimida@linux.alibaba.com>
- <202202251243.1E38256F9@keescook>
-From: Dan Li <ashimida@linux.alibaba.com>
-In-Reply-To: <202202251243.1E38256F9@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220227215408.3180023-1-arnd@kernel.org> <CAHk-=whWbENRz-vLY6vpESDLj6kGUTKO3khGtVfipHqwewh2HQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whWbENRz-vLY6vpESDLj6kGUTKO3khGtVfipHqwewh2HQ@mail.gmail.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Mon, 28 Feb 2022 09:07:03 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3Lv_uSXt9yf-9iOV3hZgV7KvwZjL-gbLTLRgo0UOQguw@mail.gmail.com>
+Message-ID: <CAK8P3a3Lv_uSXt9yf-9iOV3hZgV7KvwZjL-gbLTLRgo0UOQguw@mail.gmail.com>
+Subject: Re: [PATCH] Kbuild: remove -std=gnu89 from compiler arguments
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev, 
+	Jonathan Corbet <corbet@lwn.net>, Federico Vaga <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, 
+	Hu Haowen <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-doc-tw-discuss@lists.sourceforge.net, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	intel-gfx <intel-gfx@lists.freedesktop.org>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, greybus-dev@lists.linaro.org, 
+	linux-staging@lists.linux.dev, linux-btrfs <linux-btrfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
+On Sun, Feb 27, 2022 at 11:36 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> And I don't want somebody with a newer compiler version to not notice
+> that he or she ended up using a c17 feature, just because _that_
+> compiler supported it, and then other people get build errors because
+> their compilers use gnu11 instead by default.
+>
+> Put another way: I see absolutely no upside to allowing different
+> users using higher/lower versions of the standard. There are only
+> downsides.
+>
+> If gnu11 is supported by gcc-5.1 and up, and all the relevant clang
+> versions, then let's just pick that.
 
+Ok, changed my patch to -gnu11 now.
 
-On 2/25/22 12:58, Kees Cook wrote:
-> On Thu, Feb 24, 2022 at 07:24:10PM -0800, Dan Li wrote:
->> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
-> 
-> Thanks for the tweaks!
-> 
->> ---
->> FYI:
->> This function can be used to test if the shadow call stack works:
->> //noinline void __noscs scs_test(void)
->> noinline void scs_test(void)
->> {
->>      unsigned long * lr = (unsigned long *)__builtin_frame_address(0) + 1;
->>
->>      asm volatile("str xzr, [%0]\n\t": : "r"(lr) : "x30");
->> }
-> 
-> Not a big deal, but just FYI, there's a lot of whitespace trailing the
-> "}" above...
-> 
+> And if there are any possible future advantages to gnu17 (or eventual
+> gnu2x versions), let's document those, so that we can say "once our
+> compiler version requirements go up sufficiently, we'll move to gnuXX
+> because we want to take advantage of YY".
+>
+> Please?
 
-Ah, sorry for the mistake.
->>
->> If SCS protection is enabled, this function will return normally.
->> If the function has __noscs attribute (scs disabled), it will crash due to 0
->> address access.
-> 
-> It would be cool to turn this into an LKDTM test... (see things like the
-> CFI_FORWARD_PROTO test). I imagine this should be CFI_BACKWARD_SHADOW or
-> something...
-> 
+I think all of the options here are equally bad: picking gnu11 means
+we use a non-standard default for anything other than gcc-5 and
+may get surprised again in the future when we want to change to
+a newer version; -std=gnu1x would work as an alias for gnu17 in
+all versions including gcc-5 but is already marked as 'deprecated'
+in the gcc documentation; and using -std=gnu17 for modern compilers
+requires a workaround for gcc-7 and earlier.
 
-OK, I'll add it in the next version.
+Regarding new features from gcc-2x, I think we already use
+most of what is listed in https://en.wikipedia.org/wiki/C2x, as
+those are all GNU extensions that are valid in modern gnu89 as
+well. Newly added features seem to only depend on the compiler
+version, e.g. #elifdef works in both clang-13 and gcc-12 with
+any -std=gnu?? argument, so picking an earlier standard won't
+stop people from breaking the build with older compilers.
 
-> Also, I assume you're using real hardware to test this? It'd be nice to
-> see if qemu can be convinced to run with the needed features. Whenever
-> I've tried this it becomes impossibly slow. :)
-> 
-
-I also use qemu to test the patch (qemu 6.1.0 with command "-cpu max"),
-and can feel the performance drop.
-
-Maybe because my test environment only has simple busybox and ltp,
-the feeling of a slow system running is not that strong for me :)
-
-For comparison, I simply tested the difference in kernel boot time
-in my test environment:
-//run qemu with "-cpu cortex-a57",
-[    1.254481] Run /linuxrc as init process
-//run qemu with "-cpu max"
-[    3.566091] Run /linuxrc as init process
-
->> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
->> index ccbbd31b3aae..deff5b308470 100644
->> --- a/include/linux/compiler-gcc.h
->> +++ b/include/linux/compiler-gcc.h
->> @@ -97,6 +97,10 @@
->>   #define KASAN_ABI_VERSION 4
->>   #endif
->>   
->> +#ifdef CONFIG_SHADOW_CALL_STACK
->> +#define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
->> +#endif
-> 
-> I initially wondered if we need a separate __no_sanitize(STUFF) patch to
-> make the compiler-clang.h macros easier, but I see there are places
-> where we do multiple ("address", "hwaddress") and have specialized
-> macros, so I think this is fine. And since GCC doesn't support
-> "__has_feature", I think this is the correct location for this.
-> 
-
-As in:
-https://lore.kernel.org/all/26a0a816-bc3e-2ac0-d773-0819d9f225af@linux.alibaba.com/
-
-I think maybe we could use "#ifdef CONFIG_SHADOW_CALL_STACK"
-instead of "#if __has_attribute(__no_sanitize_address__)" here,
-then move it to `compiler_types.h`.
-
- From my current test results, __noscs seems to work fine in
-clang compilation.
-
-Thanks,
-Dan.
+         Arnd
