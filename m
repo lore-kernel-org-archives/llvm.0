@@ -1,86 +1,138 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23E17C
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 16:11:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646064676; x=1677600676;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qQF75t3gcJ8otswdA/PKU2/l+dYNyJI3cyfi3dETkyM=;
-  b=dIYKdXYlcimnxYG8aSY/vXDA/0vuL+w0T8JaN6UDxh3DRP1oQgsECdv7
-   9dzbR7e6BMbk/IQVd7X8AJNw7yLW7zzOKPZGDjmYBaEOgIGudNN30nBhC
-   HwDXc8F4+G5lbSxDBZs7iLxS6S3E79akhsSO00I+gLHjS6C/051MlThHl
-   0teYpDG/hEBuR10tlcnuLdtkgSQ7qZaEPPBhl35SM2kHsb/tgPooD7WVZ
-   Y0gjQDQuRSOdmLmUIcFPLCC1T/a0K1/bL9atlSSaZpRM43pyL9cP7pIs/
-   G2AjB3qqv7yn7ZaRsDiurwSP1Z7bJCE0pXugK1MlgxQAc0pZqjdrnecpy
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643698800"; 
-   d="scan'208";a="147518055"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 09:09:54 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 28 Feb 2022 09:09:53 -0700
-Received: from [10.12.72.64] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 28 Feb 2022 09:09:50 -0700
-Message-ID: <3fedb4c6-baa5-2107-934d-31f8205176b4@microchip.com>
-Date: Mon, 28 Feb 2022 17:09:50 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31ABC7A;
+	Mon, 28 Feb 2022 16:56:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A46A1C340E7;
+	Mon, 28 Feb 2022 16:56:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646067380;
+	bh=523gBdVPJChXozDXmy5Cb2pK2i/xRfAcGRZVUQAHjNc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LgVJuH4da0tpuW1nX+TSzWKpqT1/5OI3uq9Url+IKydIaNvJrwxxCJ02pDsUamp0J
+	 BXgyENWeP0ucoramTVXNaT23Z6w+IPOpRsVnisqnZwdBL4ARuBusSY6JLdz3305OfE
+	 YtZvql2BfkwdTq2LxRIJRizjGmx3hngX5RBUDcSxgf2mLkssqkaZFIqarTisHboNdy
+	 Xy986yF0zeYZbw6HX61O+ecCg/MIlsoP4bKonolKYJ+91DSdYuEy6Ckl7v583fSXhJ
+	 fxInQ5iK44jGAKr2Pvl9ywk4psfT+Vv0H/AbdegLc3kV5x8iLrYBvahTmACsIjfZ5u
+	 Ol9BFIfpBb+FA==
+Date: Mon, 28 Feb 2022 09:56:13 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Marco Elver <elver@google.com>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
+	Jonathan Corbet <corbet@lwn.net>,
+	Federico Vaga <federico.vaga@vaga.pv.it>,
+	Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-doc-tw-discuss@lists.sourceforge.net,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Intel Graphics <intel-gfx@lists.freedesktop.org>,
+	dri-devel <dri-devel@lists.freedesktop.org>,
+	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+	linux-btrfs <linux-btrfs@vger.kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+Message-ID: <Yhz+rfcdp9jxgr+P@archlinux-ax161>
+References: <20220228103142.3301082-1-arnd@kernel.org>
+ <CANpmjNP6VE9G8Yng4W7Mayk-0QsqUtAXkrMUSvL5pAP5DpXSmA@mail.gmail.com>
+ <CAK8P3a3cRa1piP2BSmN2dTW4QErhSP7AMO9xqAm=_FFYprAkOA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] SoC: polarfire: fix build warning
-Content-Language: en-US
-To: Arnd Bergmann <arnd@kernel.org>, Conor Dooley <mail@conchuod.ie>
-CC: Lewis Hanly <lewis.hanly@microchip.com>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Conor Dooley
-	<conor.dooley@microchip.com>, Arnd Bergmann <arnd@arndb.de>, "kernel test
- robot" <lkp@intel.com>, Jassi Brar <jaswinder.singh@linaro.org>, linux-riscv
-	<linux-riscv@lists.infradead.org>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <20220228152658.3367506-1-arnd@kernel.org>
- <b8eb2e55-b5a8-4a39-86cb-93cadbd67922@conchuod.ie>
- <CAK8P3a1NWuoHVWXVZUGJxSg=D0d3umrMzWqZ75devfOwO-JhuQ@mail.gmail.com>
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <CAK8P3a1NWuoHVWXVZUGJxSg=D0d3umrMzWqZ75devfOwO-JhuQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a3cRa1piP2BSmN2dTW4QErhSP7AMO9xqAm=_FFYprAkOA@mail.gmail.com>
 
-On 28/02/2022 at 16:41, Arnd Bergmann wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+On Mon, Feb 28, 2022 at 12:57:55PM +0100, Arnd Bergmann wrote:
+> On Mon, Feb 28, 2022 at 12:47 PM Marco Elver <elver@google.com> wrote:
+> > On Mon, 28 Feb 2022 at 11:32, Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > > Nathan Chancellor reported an additional -Wdeclaration-after-statement
+> > > warning that appears in a system header on arm, this still needs a
+> > > workaround.
+> >
+> > On the topic of Wdeclaration-after-statement, Clang only respects this
+> > warning with C99 and later starting with Clang 14:
+> > https://github.com/llvm/llvm-project/commit/c65186c89f35#diff-ec770381d76c859f5f572db789175fe44410a72608f58ad5dbb14335ba56eb97R61
+> >
+> > Until Clang 14, -Wdeclaration-after-statement is ignored by Clang in
+> > newer standards. If this is a big problem, we can probably convince
+> > the Clang stable folks to backport the fixes. However, the build won't
+> > fail, folks might just miss the warning if they don't also test with
+> > GCC.
+
+Unfortunately, none of the branches prior to release/14.x are going to
+see any more updates (at least as far as I am aware, as the LLVM
+community only supports one release branch at a time) but as Arnd
+mentioned below, I do not really see that as a problem, as newer
+versions of clang and GCC will catch these warnings.
+
+> I don't expect this is to be a big issue, as long as the latest clang behaves
+> as expected. There are many warnings that are only produced by one of the
+> two compilers, so this is something we already deal with.
 > 
-> On Mon, Feb 28, 2022 at 4:35 PM Conor Dooley <mail@conchuod.ie> wrote:
->>
->> I had sent a fix for the build warning on saturday morning - but I guess
->> you missed it.
->>
->> Thanks for fixing it anyway :)
-> 
-> Thank you for your quick reply. I had indeed missed that fix. You did the
-> right thing here by sending it to Nicolas, but he hasn't had a chance to forward
-> it to soc@kernel.org yet, so it was not visible in patchwork.
-> 
-> As it turns out, your patch is correct and mine was wrong anyway, so I
-> have now replaced my patch with yours.
-> 
-> Nicolas, I hope that doesn't cause you extra work. If you have picked it
-> up into your tree, you can drop it again from there.
+> I think it's more important to address the extra warning that Nathan
+> reported, where clang now complains about the intermingled declaration
+> in a system header when previously neither gcc nor clang noticed this.
 
-No problem on my side: I was planning to add it to another PR to you but 
-it's far easier if you already took it directly.
+Right. Based on the upstream LLVM bug, I think we should just fix
+arm_neon.h to avoid triggering -Wdeclaration-after-statement to have
+something that is (hopefully) relatively low risk for a clang-14
+backport, rather than addressing the root cause of clang warning in
+system macros, as it sounds like fixing that has some risks that are not
+fully understood at this point. The kernel only uses very specific
+system headers after commit 04e85bbf71c9 ("isystem: delete global
+-isystem compile option"), so I don't think that my suggested approach
+will have many downsides.
 
-Thanks Arnd, best regards,
-   Nicolas
+I think I see how to potentially fix arm_neon.h in
+clang/utils/TableGen/NeonEmitter.cpp, I just have to think about it a
+little more.
 
+Realistically, I don't think special casing this in lib/raid6 is the end
+of the world:
 
--- 
-Nicolas Ferre
+diff --git a/lib/raid6/Makefile b/lib/raid6/Makefile
+index 45e17619422b..a41ff71b90af 100644
+--- a/lib/raid6/Makefile
++++ b/lib/raid6/Makefile
+@@ -38,6 +38,10 @@ ifeq ($(CONFIG_KERNEL_MODE_NEON),y)
+ NEON_FLAGS := -ffreestanding
+ # Enable <arm_neon.h>
+ NEON_FLAGS += -isystem $(shell $(CC) -print-file-name=include)
++# https://github.com/ClangBuiltLinux/linux/issues/1603
++ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_CPU_BIG_ENDIAN),yy)
++NEON_FLAGS += -Wno-declaration-after-statement
++endif
+ ifeq ($(ARCH),arm)
+ NEON_FLAGS += -march=armv7-a -mfloat-abi=softfp -mfpu=neon
+ endif
+
+> > > The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
+> > > minimal and mainly impact warnings at the -Wpedantic level that the
+> > > kernel never enables. Between these, gnu11 is the newest version
+> > > that is supported by all supported compiler versions, though it is
+> > > only the default on gcc-5, while all other supported versions of
+> > > gcc or clang default to gnu1x/gnu17.
+> > >
+> > > Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+> > > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > > Cc: linux-kbuild@vger.kernel.org
+> > > Cc: llvm@lists.linux.dev
+> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> >
+> > Acked-by: Marco Elver <elver@google.com>
+
+Cheers,
+Nathan
