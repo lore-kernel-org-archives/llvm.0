@@ -1,102 +1,114 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB3315C1
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 18:41:00 +0000 (UTC)
-Received: by mail-lj1-f174.google.com with SMTP id 29so18646103ljv.10
-        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 10:41:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B+acwbp8IAqy4EQhdzrRR6UrvnBSYJWdfAOCkLBEf6s=;
-        b=LvJ51tK8OGXmUdrq1FTGfGhAU7kyWg6aDacet+/T6m1xcdm96SFLNin6cqkfGY+rbg
-         A+4gdF9QL3th8X1CIPS6F2KrwGpjUcAkZFh2wMRAAEhyIS9gK5hzhXTjv7RRLGY5VhDN
-         /ORnVKar4p0KNDioI7O/8vsyY3PJ0BwGF0c/w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B+acwbp8IAqy4EQhdzrRR6UrvnBSYJWdfAOCkLBEf6s=;
-        b=xy3U3z7TdBQ9QPbQj4QynQrOe60jCAipCzrvSo2msmGnLAPmhZkRqdyEdidaeGY2Ay
-         gIvokRfJiPVnC20sfnXcvjc5gUHlXN/Q3uqbw5W9lO74FFj+BiCEqFG6DjRrHDMaRkmc
-         bqWJbNV64mjomKGs3QPt4EIO/SukmTeHRnfd8MwR63ytuWWpcMje9qj/3h1KpNS8Z3LC
-         MpCEdgG1gXIYDbTr6pTnvOI4xepFsw+Yx0EG1KiZJJS/LadkbhQjzhjQfSi6ecnReqPQ
-         0d5wSl+zXVjQ7UyrDxY+o1kPsDfNHqyXoLUCDBdK4I9Un/BVkq0PYoZnRnRGHgmVpBrL
-         H/6w==
-X-Gm-Message-State: AOAM533jA5dqUNM0uXzX9saFeoMNydYIN6qn8Plh3LNvP7fnNuElUyjn
-	iSejTOrCKYNBMLg8ln7IERtPVWaYQ5hf3TRlM/c=
-X-Google-Smtp-Source: ABdhPJwW6cOsx6r0J/sX5abrQXwpBlwdAoxjmr8SyLl4xrFEUavVtYuLx09PsRlx4YBURcij0+T6JQ==
-X-Received: by 2002:a2e:9d89:0:b0:244:1ed:1960 with SMTP id c9-20020a2e9d89000000b0024401ed1960mr15455623ljj.413.1646073658219;
-        Mon, 28 Feb 2022 10:40:58 -0800 (PST)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id m27-20020ac24adb000000b004433bbaa3fdsm1080496lfp.174.2022.02.28.10.40.55
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 10:40:56 -0800 (PST)
-Received: by mail-lf1-f53.google.com with SMTP id b11so22907387lfb.12
-        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 10:40:55 -0800 (PST)
-X-Received: by 2002:ac2:4c8c:0:b0:445:6c26:3cff with SMTP id
- d12-20020ac24c8c000000b004456c263cffmr13670491lfl.435.1646073655129; Mon, 28
- Feb 2022 10:40:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5BF15C1
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 19:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646077825; x=1677613825;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fyMzmzWob5BwLEcRZwKRCLnS0Nzkv/dRn06vcSYOlQM=;
+  b=M7IDw3NtWACOOjueSxyRs5B96Kf9G36pZvHxdwE8fEcssKA5npZmtZ1L
+   TRcFs8hG66xODHbrj8esXH24KNMt8Ias4IwLqmeN1gxPzKZvCHa88M/v6
+   +y6nNyhRHmVGSZO8Sf3u+nYEGcBizdTVp2VeQiCJqJ6glPVW2EXHgelmT
+   x6KrsadoOXSmM7v8iMnnXCXSS9gudvcSDxxKBp16lQe1ngTO83F65Nolt
+   I4ujRf3Gccea2XF8cqZ9jrTLLWC04vAdfpeNsiuxmerc9GGTW5x/jLg8O
+   lZs8ZI5oEzeCJfle32EJmgLXA1omSB6cscn2qwQyCrHs4DOrOfDKfi5/U
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277633417"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="277633417"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 11:50:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="492838943"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 28 Feb 2022 11:50:19 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nOm2E-0007kJ-LB; Mon, 28 Feb 2022 19:50:18 +0000
+Date: Tue, 1 Mar 2022 03:49:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nicolas Saenz Julienne <nsaenzju@redhat.com>, mingo@redhat.com,
+	peterz@infradead.org, frederic@kernel.org, rostedt@goodmis.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, tglx@linutronix.de,
+	mtosatti@redhat.com, bristot@redhat.com,
+	linux-kernel@vger.kernel.org,
+	Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Subject: Re: [RESEND PATCH 2/2] tracing: Avoid isolated CPUs when queueing
+ fsnotify irqwork
+Message-ID: <202203010318.S1y5cIXE-lkp@intel.com>
+References: <20220228141550.260119-2-nsaenzju@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220228103142.3301082-1-arnd@kernel.org> <YhyxML05rjJ/57Vk@FVFF77S0Q05N>
- <CAK8P3a0CTmtUq+Uba2S3D7wjSstew2M+LfzZoOcKdKK9cfXO9A@mail.gmail.com>
-In-Reply-To: <CAK8P3a0CTmtUq+Uba2S3D7wjSstew2M+LfzZoOcKdKK9cfXO9A@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 28 Feb 2022 10:40:38 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjU+DCbFG4nd3Wne-KbQ1n5=BHynv3xEmRYTaayBj-EfQ@mail.gmail.com>
-Message-ID: <CAHk-=wjU+DCbFG4nd3Wne-KbQ1n5=BHynv3xEmRYTaayBj-EfQ@mail.gmail.com>
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev, 
-	Jonathan Corbet <corbet@lwn.net>, Federico Vaga <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, 
-	Hu Haowen <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, 
-	Nick Desaulniers <ndesaulniers@google.com>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-doc-tw-discuss@lists.sourceforge.net, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Intel Graphics <intel-gfx@lists.freedesktop.org>, 
-	dri-devel <dri-devel@lists.freedesktop.org>, greybus-dev@lists.linaro.org, 
-	linux-staging@lists.linux.dev, linux-btrfs <linux-btrfs@vger.kernel.org>, 
-	Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228141550.260119-2-nsaenzju@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Feb 28, 2022 at 3:37 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> I think the KBUILD_USERCFLAGS portion and the modpost.c fix for it
-> make sense regardless of the -std=gnu11 change
+Hi Nicolas,
 
-I do think they make sense, but I want to note again that people doing
-cross builds obviously use different tools for user builds than for
-the kernel. In fact, even not cross-building, we've had situations
-where the "kbuild" compiler is different from the host compiler,
-because people have upgraded one but not the other (upgrading the
-kernel build environment is actually much easier than upgrading the
-host build environment, because you don't need all the random
-libraries etc, and you can literally _just_ build your own gcc and
-binutils)
+I love your patch! Yet something to improve:
 
-And we have *not* necessarily required that the host tools match the
-kernel tools.
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on next-20220228]
+[cannot apply to rostedt-trace/for-next linus/master v5.17-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-So I could well imagine that there are people who build their kernels,
-but their host build environment might be old enough that -std=gnu11
-is problematic for that part.
+url:    https://github.com/0day-ci/linux/commits/Nicolas-Saenz-Julienne/sched-isolation-Use-raw_smp_processor_id-in-housekeeping_any_cpu/20220228-221742
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 6255b48aebfd4dff375e97fc8b075a235848db0b
+config: i386-randconfig-a002-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010318.S1y5cIXE-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/e3ec0b4adfed05db0d559d2d5234d6d8f1034985
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Nicolas-Saenz-Julienne/sched-isolation-Use-raw_smp_processor_id-in-housekeeping_any_cpu/20220228-221742
+        git checkout e3ec0b4adfed05db0d559d2d5234d6d8f1034985
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-And note how any change to  KBUILD_USERCFLAGS is reflected in KBUILD_HOSTCFLAGS.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So I would suggest that the KBUILD_USERCFLAGS part of the patch (and
-the modpost.c change that goes with it) be done as a separate commit.
-Because we might end up reverting that part.
+All errors (new ones prefixed by >>):
 
-Hmm?
+>> kernel/trace/trace.c:1728:64: error: use of undeclared identifier 'HK_FLAG_MISC'; did you mean 'HK_TYPE_MISC'?
+           irq_work_queue_on(&tr->fsnotify_irqwork, housekeeping_any_cpu(HK_FLAG_MISC));
+                                                                         ^~~~~~~~~~~~
+                                                                         HK_TYPE_MISC
+   include/linux/sched/isolation.h:11:2: note: 'HK_TYPE_MISC' declared here
+           HK_TYPE_MISC,
+           ^
+   1 error generated.
 
-           Linus
+
+vim +1728 kernel/trace/trace.c
+
+  1718	
+  1719	void latency_fsnotify(struct trace_array *tr)
+  1720	{
+  1721		if (!fsnotify_wq)
+  1722			return;
+  1723		/*
+  1724		 * We cannot call queue_work(&tr->fsnotify_work) from here because it's
+  1725		 * possible that we are called from __schedule() or do_idle(), which
+  1726		 * could cause a deadlock.
+  1727		 */
+> 1728		irq_work_queue_on(&tr->fsnotify_irqwork, housekeeping_any_cpu(HK_FLAG_MISC));
+  1729	}
+  1730	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
