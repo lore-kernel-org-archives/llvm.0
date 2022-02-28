@@ -1,112 +1,95 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B367A
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 17:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646071172; x=1677607172;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7NBJjuEjWCCHJ62pzBKGkvafYbZAfTVrb4v4jYDW/1s=;
-  b=Nv7vDo4TLsmxcgVHAkBBotsLyLDf4RQbWZ6M8/DWHOrE6u27fDrFDi5n
-   NUkgkLNdqMKN7tP5MWXyr5U5pYd95rHgYYkQzLEKFbZHAzFbCBm3vS/UI
-   LwyWWDG06SK/oyok87K75Tff2cJdMgtsXvTy6kdplV3fR/OxqtIvIEnEf
-   z1MiRBMtK8ROEmZDMGxt3wqFg99K1tah3feAQ9+AY8dGIEHjj4Rj60VK0
-   jwUp/Y4AZTxiPwIh3PXOnZxbQonAJ3Qgmpj1hRzOc2m5Clwxdj0k8QT/B
-   bJ0JSp9+IxzrVFNo3rTzxjlX9mpQ/KpOgWrO+WFs4BqBFmdoO3IyUvDSS
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251778084"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="251778084"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:58:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="534545174"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Feb 2022 09:58:16 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nOkHn-0007eo-FW; Mon, 28 Feb 2022 17:58:15 +0000
-Date: Tue, 1 Mar 2022 01:57:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-block@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
-	Ming Lei <ming.lei@redhat.com>
-Subject: Re: [PATCH 6/6] blk-mq: manage hctx map via xarray
-Message-ID: <202203010133.JIpKpP2Z-lkp@intel.com>
-References: <20220228090430.1064267-7-ming.lei@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02F87A;
+	Mon, 28 Feb 2022 18:25:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FCE5C340FC;
+	Mon, 28 Feb 2022 18:25:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646072712;
+	bh=W7p79vSB6J1+jxnozFyNib9GmWcAolUohfmSDG//bFo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=bW1ZFMo50q0kPFmsangI6ntG68WPn+8ztd5psh0iHHbmPXGd2Do9g5exX/orPNmoF
+	 TbileAdECwDuGZ3+humcDGlnOjlNYxeI3qAjbFLAsFhTc2LHic+YIf2ERa75osRNhn
+	 Kqq71bFPRaIovWhnQvFqOiR1ebj4qUhN855gks3wvS+rvdXKdGJUNfOOen3tcmT4S7
+	 zpLTE7SvQlwyFubmoSBvPJGw1f5VxlcwUT5kGQbM5VRWy3yFRzf9kbennsbklNWQnr
+	 VImWf5/+PDhsYj8Ik1QLewhHGzp4RLahjjkzTll08wtY5vt0rMq16dXAFWp3Qw6QCA
+	 7XcyjSwBnCISg==
+Received: by mail-wr1-f50.google.com with SMTP id v21so16823126wrv.5;
+        Mon, 28 Feb 2022 10:25:12 -0800 (PST)
+X-Gm-Message-State: AOAM531F/wu3CGEH7YVA3mpOKBo/+9WEcXbtwHa6kEcqJxiKId7cNEjo
+	RyLGEzvs+qYN330Wqn21wjl72BAYMBcG1iwoxqg=
+X-Google-Smtp-Source: ABdhPJz4fZLcu78yhCIhmUlg8wcyJThC/WAQ6UaeDqjOpOcx7YS8Qt8gbRJs54Y1simdrFMDrQr0lGIp9e5ElXVyTL0=
+X-Received: by 2002:adf:edc3:0:b0:1ec:5f11:5415 with SMTP id
+ v3-20020adfedc3000000b001ec5f115415mr14857770wro.317.1646072710661; Mon, 28
+ Feb 2022 10:25:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228090430.1064267-7-ming.lei@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220228103142.3301082-1-arnd@kernel.org> <CAK7LNATVs-yRX4PnURkLv3fz3gAnuzG2GxZ2gdvmJX2g+0P-_w@mail.gmail.com>
+In-Reply-To: <CAK7LNATVs-yRX4PnURkLv3fz3gAnuzG2GxZ2gdvmJX2g+0P-_w@mail.gmail.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Mon, 28 Feb 2022 19:24:54 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2To9St5=v6EHtJ-LBEp4-NOThPmO+qYeAfnxQPm2_Keg@mail.gmail.com>
+Message-ID: <CAK8P3a2To9St5=v6EHtJ-LBEp4-NOThPmO+qYeAfnxQPm2_Keg@mail.gmail.com>
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+To: Masahiro Yamada <masahiroy@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, llvm@lists.linux.dev, 
+	Jonathan Corbet <corbet@lwn.net>, Federico Vaga <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, 
+	Hu Haowen <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-doc-tw-discuss@lists.sourceforge.net, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	intel-gfx <intel-gfx@lists.freedesktop.org>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, greybus-dev@lists.linaro.org, 
+	linux-staging@lists.linux.dev, linux-btrfs <linux-btrfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Ming,
+On Mon, Feb 28, 2022 at 6:02 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Mon, Feb 28, 2022 at 7:32 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > During a patch discussion, Linus brought up the option of changing
+> > the C standard version from gnu89 to gnu99, which allows using variable
+> > declaration inside of a for() loop. While the C99, C11 and later standards
+> > introduce many other features, most of these are already available in
+> > gnu89 as GNU extensions as well.
+> >
+> > An earlier attempt to do this when gcc-5 started defaulting to
+> > -std=gnu11 failed because at the time that caused warnings about
+> > designated initializers with older compilers. Now that gcc-5.1 is the
+> > minimum compiler version used for building kernels, that is no longer a
+> > concern. Similarly, the behavior of 'inline' functions changes between
+> > gnu89 and gnu11, but this was taken care of by defining 'inline' to
+> > include __attribute__((gnu_inline)) in order to allow building with
+> > clang a while ago.
+> >
+> > One minor issue that remains is an added gcc warning for shifts of
+> > negative integers when building with -Werror, which happens with the
+>
+> Is this a typo?
+>
+>    building with -Werror, ...
+> ->
+>    building with -Wextra, ...
+>
 
-Thank you for the patch! Perhaps something to improve:
+I'm being slow today, Jani actually pointed out the same thing and I
+misunderstood him. Fixed it now, thanks!
 
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on v5.17-rc6 next-20220225]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> Acked-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+>
+> Please let me know if you want me to pick up this.
 
-url:    https://github.com/0day-ci/linux/commits/Ming-Lei/blk-mq-update_nr_hw_queues-related-improvement-bugfix/20220228-170706
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: i386-randconfig-a002-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010133.JIpKpP2Z-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/176e39bc0acb20f8fd869d170b429b7253b089c4
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Ming-Lei/blk-mq-update_nr_hw_queues-related-improvement-bugfix/20220228-170706
-        git checkout 176e39bc0acb20f8fd869d170b429b7253b089c4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Yes, that would be great. I'll send a v3 with the updated changelog,
+but will drop most of the Cc list as there are no functional changes.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from block/blk-mq-debugfs-zoned.c:7:
->> block/blk-mq-debugfs.h:24:14: warning: declaration of 'struct blk_mq_hw_ctx' will not be visible outside of this function [-Wvisibility]
-                                     struct blk_mq_hw_ctx *hctx);
-                                            ^
-   block/blk-mq-debugfs.h:25:44: warning: declaration of 'struct blk_mq_hw_ctx' will not be visible outside of this function [-Wvisibility]
-   void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx *hctx);
-                                              ^
-   block/blk-mq-debugfs.h:32:19: warning: declaration of 'struct blk_mq_hw_ctx' will not be visible outside of this function [-Wvisibility]
-                                          struct blk_mq_hw_ctx *hctx);
-                                                 ^
-   block/blk-mq-debugfs.h:33:50: warning: declaration of 'struct blk_mq_hw_ctx' will not be visible outside of this function [-Wvisibility]
-   void blk_mq_debugfs_unregister_sched_hctx(struct blk_mq_hw_ctx *hctx);
-                                                    ^
-   4 warnings generated.
-
-
-vim +24 block/blk-mq-debugfs.h
-
-16b738f651c83a Omar Sandoval      2017-05-04  20  
-6cfc0081b046eb Greg Kroah-Hartman 2019-06-12  21  void blk_mq_debugfs_register(struct request_queue *q);
-d173a25165c124 Omar Sandoval      2017-05-04  22  void blk_mq_debugfs_unregister(struct request_queue *q);
-6cfc0081b046eb Greg Kroah-Hartman 2019-06-12  23  void blk_mq_debugfs_register_hctx(struct request_queue *q,
-9c1051aacde828 Omar Sandoval      2017-05-04 @24  				  struct blk_mq_hw_ctx *hctx);
-9c1051aacde828 Omar Sandoval      2017-05-04  25  void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx *hctx);
-6cfc0081b046eb Greg Kroah-Hartman 2019-06-12  26  void blk_mq_debugfs_register_hctxs(struct request_queue *q);
-9c1051aacde828 Omar Sandoval      2017-05-04  27  void blk_mq_debugfs_unregister_hctxs(struct request_queue *q);
-d332ce091813d1 Omar Sandoval      2017-05-04  28  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+        Arnd
