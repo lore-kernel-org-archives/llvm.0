@@ -1,45 +1,48 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1F115AF
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 17:37:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318617A
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 17:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646069843; x=1677605843;
+  t=1646069857; x=1677605857;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=SiZFexYAsMbDBWKC0i6qZTmB2eWvi9q/m/x6dShxuvo=;
-  b=h5hGvGPUzVn5Gia1uS81/ml86BCGIUBQW4LEDbxQqf829tClBAM8so7o
-   XKanEXhJmFr1YCNOcbfSxZrcCKlgwElyJwmpXE2o/7BEi6QxWctYq8uYp
-   5eutdKE8n8727MISlR1184qXdphCySj2yp5ivgJW4dOqZZ8KUnBPfbOnF
-   E5xCeFpIhc/ytBOtjWrvfEPYwpq5Z2I9tDEQWWE2Vyw458kOxeQz0aW/P
-   FLMLTLNVoH3eAY1Y2bUtG8II4sLBFfx9gb6q959WkRJZKxm3l1CIP6EGA
-   EhVn9ri4p2ixrwM/qvfsH7uJyMtgXxEW/hHD+DoB9LPSVeLM8EhUZyZuX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="339374334"
+  bh=vXTL8dLX7viXJuGg2oI1j6Lgyk1Ewv5xNOTP7Tgfu/4=;
+  b=lxAGPRr+T6dE6FRG1JXxNhF4CcYO1kH8SDUI/kXnUk2n2ZjDRlObJYQm
+   VZ+7tVBTb1juAD368nv6COZ3uLr8qalFBIEsg+6lr/HlgIqi/g/ibCmEH
+   VPTFilOQJ/YJVW1i0ClIDigDwlDZfEIK5LfsS6mdPV2BpQXwmp7yHEBvK
+   878PaD5UmscgAGqAem5JVC1YAT4sqWJ4FbbcYMFQ546zLdbC0z42EyPT0
+   mKydBrT0xPEMCBKYZaKt6aosmSWggkhrZH9ula5obPRrhpPjStX3aYrdT
+   78byqqvoD3nc5HhZYeT5LuEqjwsDMnL5hD0Yxkn07QZ/yxs4yKRMkn3Fb
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251772414"
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="339374334"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:37:22 -0800
+   d="scan'208";a="251772414"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:37:18 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="544807684"
+   d="scan'208";a="708726454"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Feb 2022 09:37:20 -0800
+  by orsmga005.jf.intel.com with ESMTP; 28 Feb 2022 09:37:15 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nOjxS-0007cW-MA; Mon, 28 Feb 2022 17:37:14 +0000
-Date: Tue, 1 Mar 2022 01:37:06 +0800
+	id 1nOjxS-0007cT-Lj; Mon, 28 Feb 2022 17:37:14 +0000
+Date: Tue, 1 Mar 2022 01:36:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Claudiu Beznea <claudiu.beznea@microchip.com>,
-	daniel.lezcano@linaro.org, tglx@linutronix.de
+To: Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH 7/7] clocksource/drivers/timer-microchip-pit64b: use
- mchp_pit64b_{suspend, resume}
-Message-ID: <202203010158.D812WMzG-lkp@intel.com>
-References: <20220228111923.1400049-8-claudiu.beznea@microchip.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] MIPS: Refactor early_parse_memmap() to fix
+ memmap= parameter
+Message-ID: <202203010025.PU3GDSWx-lkp@intel.com>
+References: <1646054617-16799-4-git-send-email-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,139 +51,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220228111923.1400049-8-claudiu.beznea@microchip.com>
+In-Reply-To: <1646054617-16799-4-git-send-email-yangtiezhu@loongson.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Claudiu,
+Hi Tiezhu,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on tip/timers/core]
-[also build test WARNING on soc/for-next linus/master v5.17-rc6 next-20220225]
-[cannot apply to daniel-lezcano/clockevents/next]
+[auto build test WARNING on hnaz-mm/master]
+[also build test WARNING on linus/master v5.17-rc6 next-20220225]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Claudiu-Beznea/clocksource-drivers-timer-microchip-pit64b-fixes-and-improvements/20220228-191933
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: i386-randconfig-a002-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010158.D812WMzG-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Tiezhu-Yang/MIPS-Modify-mem-and-memmap-parameter/20220228-212554
+base:   https://github.com/hnaz/linux-mm master
+config: mips-randconfig-r025-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010025.PU3GDSWx-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/a354e98d1b37361a46d6272ffccc149e3b8bbbca
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/ab143b3c599254c414419565480fc01acb23452a
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Claudiu-Beznea/clocksource-drivers-timer-microchip-pit64b-fixes-and-improvements/20220228-191933
-        git checkout a354e98d1b37361a46d6272ffccc149e3b8bbbca
+        git fetch --no-tags linux-review Tiezhu-Yang/MIPS-Modify-mem-and-memmap-parameter/20220228-212554
+        git checkout ab143b3c599254c414419565480fc01acb23452a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/clocksource/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/clocksource/timer-microchip-pit64b.c:97:27: warning: tentative definition of variable with internal linkage has incomplete non-array type 'struct delay_timer' [-Wtentative-definition-incomplete-type]
-   static struct delay_timer mchp_pit64b_dt;
-                             ^
-   drivers/clocksource/timer-microchip-pit64b.c:97:15: note: forward declaration of 'struct delay_timer'
-   static struct delay_timer mchp_pit64b_dt;
-                 ^
-   drivers/clocksource/timer-microchip-pit64b.c:385:16: error: incomplete definition of type 'struct delay_timer'
-           mchp_pit64b_dt.read_current_timer = mchp_pit64b_dt_read;
-           ~~~~~~~~~~~~~~^
-   drivers/clocksource/timer-microchip-pit64b.c:97:15: note: forward declaration of 'struct delay_timer'
-   static struct delay_timer mchp_pit64b_dt;
-                 ^
-   drivers/clocksource/timer-microchip-pit64b.c:386:16: error: incomplete definition of type 'struct delay_timer'
-           mchp_pit64b_dt.freq = clk_rate;
-           ~~~~~~~~~~~~~~^
-   drivers/clocksource/timer-microchip-pit64b.c:97:15: note: forward declaration of 'struct delay_timer'
-   static struct delay_timer mchp_pit64b_dt;
-                 ^
-   drivers/clocksource/timer-microchip-pit64b.c:387:2: error: implicit declaration of function 'register_current_timer_delay' [-Werror,-Wimplicit-function-declaration]
-           register_current_timer_delay(&mchp_pit64b_dt);
-           ^
->> drivers/clocksource/timer-microchip-pit64b.c:484:1: warning: unused label 'pclk_unprepare' [-Wunused-label]
-   pclk_unprepare:
-   ^~~~~~~~~~~~~~~
-   drivers/clocksource/timer-microchip-pit64b.c:97:27: error: tentative definition has type 'struct delay_timer' that is never completed
-   static struct delay_timer mchp_pit64b_dt;
-                             ^
-   drivers/clocksource/timer-microchip-pit64b.c:97:15: note: forward declaration of 'struct delay_timer'
-   static struct delay_timer mchp_pit64b_dt;
-                 ^
-   2 warnings and 4 errors generated.
+   arch/mips/kernel/setup.c:351:42: warning: format specifies type 'long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+           pr_notice("Memory limited to %lldMB\n", memory_limit >> 20);
+                                        ~~~~       ^~~~~~~~~~~~~~~~~~
+                                        %u
+   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
+           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   arch/mips/kernel/setup.c:380:6: warning: format specifies type 'long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                             memory_base >> 20, (memory_base + memory_limit) >> 20);
+                             ^~~~~~~~~~~~~~~~~
+   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
+           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+>> arch/mips/kernel/setup.c:380:25: warning: format specifies type 'long long' but the argument has type 'unsigned int' [-Wformat]
+                             memory_base >> 20, (memory_base + memory_limit) >> 20);
+                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
+           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   arch/mips/kernel/setup.c:399:5: warning: format specifies type 'long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                     memory_base >> 20, (memory_base + memory_limit) >> 20);
+                     ^~~~~~~~~~~~~~~~~
+   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
+           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   arch/mips/kernel/setup.c:399:24: warning: format specifies type 'long long' but the argument has type 'unsigned int' [-Wformat]
+                     memory_base >> 20, (memory_base + memory_limit) >> 20);
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
+           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   5 warnings generated.
 
 
-vim +/pclk_unprepare +484 drivers/clocksource/timer-microchip-pit64b.c
+vim +380 arch/mips/kernel/setup.c
 
-625022a5f16061 Claudiu Beznea 2019-12-13  430  
-625022a5f16061 Claudiu Beznea 2019-12-13  431  static int __init mchp_pit64b_dt_init_timer(struct device_node *node,
-625022a5f16061 Claudiu Beznea 2019-12-13  432  					    bool clkevt)
-625022a5f16061 Claudiu Beznea 2019-12-13  433  {
-b9c60a741f06ed Claudiu Beznea 2020-01-06  434  	struct mchp_pit64b_timer timer;
-625022a5f16061 Claudiu Beznea 2019-12-13  435  	unsigned long clk_rate;
-625022a5f16061 Claudiu Beznea 2019-12-13  436  	u32 irq = 0;
-625022a5f16061 Claudiu Beznea 2019-12-13  437  	int ret;
-625022a5f16061 Claudiu Beznea 2019-12-13  438  
-625022a5f16061 Claudiu Beznea 2019-12-13  439  	/* Parse DT node. */
-625022a5f16061 Claudiu Beznea 2019-12-13  440  	timer.pclk = of_clk_get_by_name(node, "pclk");
-625022a5f16061 Claudiu Beznea 2019-12-13  441  	if (IS_ERR(timer.pclk))
-625022a5f16061 Claudiu Beznea 2019-12-13  442  		return PTR_ERR(timer.pclk);
-625022a5f16061 Claudiu Beznea 2019-12-13  443  
-625022a5f16061 Claudiu Beznea 2019-12-13  444  	timer.gclk = of_clk_get_by_name(node, "gclk");
-625022a5f16061 Claudiu Beznea 2019-12-13  445  	if (IS_ERR(timer.gclk))
-625022a5f16061 Claudiu Beznea 2019-12-13  446  		return PTR_ERR(timer.gclk);
-625022a5f16061 Claudiu Beznea 2019-12-13  447  
-625022a5f16061 Claudiu Beznea 2019-12-13  448  	timer.base = of_iomap(node, 0);
-625022a5f16061 Claudiu Beznea 2019-12-13  449  	if (!timer.base)
-625022a5f16061 Claudiu Beznea 2019-12-13  450  		return -ENXIO;
-625022a5f16061 Claudiu Beznea 2019-12-13  451  
-625022a5f16061 Claudiu Beznea 2019-12-13  452  	if (clkevt) {
-625022a5f16061 Claudiu Beznea 2019-12-13  453  		irq = irq_of_parse_and_map(node, 0);
-625022a5f16061 Claudiu Beznea 2019-12-13  454  		if (!irq) {
-625022a5f16061 Claudiu Beznea 2019-12-13  455  			ret = -ENODEV;
-625022a5f16061 Claudiu Beznea 2019-12-13  456  			goto io_unmap;
-625022a5f16061 Claudiu Beznea 2019-12-13  457  		}
-625022a5f16061 Claudiu Beznea 2019-12-13  458  	}
-625022a5f16061 Claudiu Beznea 2019-12-13  459  
-625022a5f16061 Claudiu Beznea 2019-12-13  460  	/* Initialize mode (prescaler + SGCK bit). To be used at runtime. */
-0faff1ca60d69f Claudiu Beznea 2022-02-28  461  	ret = mchp_pit64b_init_mode(&timer, MCHP_PIT64B_DEF_FREQ);
-625022a5f16061 Claudiu Beznea 2019-12-13  462  	if (ret)
-625022a5f16061 Claudiu Beznea 2019-12-13  463  		goto irq_unmap;
-625022a5f16061 Claudiu Beznea 2019-12-13  464  
-a354e98d1b3736 Claudiu Beznea 2022-02-28  465  	if (timer.mode & MCHP_PIT64B_MR_SGCLK)
-625022a5f16061 Claudiu Beznea 2019-12-13  466  		clk_rate = clk_get_rate(timer.gclk);
-a354e98d1b3736 Claudiu Beznea 2022-02-28  467  	else
-625022a5f16061 Claudiu Beznea 2019-12-13  468  		clk_rate = clk_get_rate(timer.pclk);
-625022a5f16061 Claudiu Beznea 2019-12-13  469  	clk_rate = clk_rate / (MCHP_PIT64B_MODE_TO_PRES(timer.mode) + 1);
-625022a5f16061 Claudiu Beznea 2019-12-13  470  
-625022a5f16061 Claudiu Beznea 2019-12-13  471  	if (clkevt)
-625022a5f16061 Claudiu Beznea 2019-12-13  472  		ret = mchp_pit64b_init_clkevt(&timer, clk_rate, irq);
-625022a5f16061 Claudiu Beznea 2019-12-13  473  	else
-625022a5f16061 Claudiu Beznea 2019-12-13  474  		ret = mchp_pit64b_init_clksrc(&timer, clk_rate);
-625022a5f16061 Claudiu Beznea 2019-12-13  475  
-625022a5f16061 Claudiu Beznea 2019-12-13  476  	if (ret)
-625022a5f16061 Claudiu Beznea 2019-12-13  477  		goto gclk_unprepare;
-625022a5f16061 Claudiu Beznea 2019-12-13  478  
-625022a5f16061 Claudiu Beznea 2019-12-13  479  	return 0;
-625022a5f16061 Claudiu Beznea 2019-12-13  480  
-625022a5f16061 Claudiu Beznea 2019-12-13  481  gclk_unprepare:
-625022a5f16061 Claudiu Beznea 2019-12-13  482  	if (timer.mode & MCHP_PIT64B_MR_SGCLK)
-625022a5f16061 Claudiu Beznea 2019-12-13  483  		clk_disable_unprepare(timer.gclk);
-625022a5f16061 Claudiu Beznea 2019-12-13 @484  pclk_unprepare:
-625022a5f16061 Claudiu Beznea 2019-12-13  485  	clk_disable_unprepare(timer.pclk);
-625022a5f16061 Claudiu Beznea 2019-12-13  486  irq_unmap:
-625022a5f16061 Claudiu Beznea 2019-12-13  487  	irq_dispose_mapping(irq);
-625022a5f16061 Claudiu Beznea 2019-12-13  488  io_unmap:
-625022a5f16061 Claudiu Beznea 2019-12-13  489  	iounmap(timer.base);
-625022a5f16061 Claudiu Beznea 2019-12-13  490  
-625022a5f16061 Claudiu Beznea 2019-12-13  491  	return ret;
-625022a5f16061 Claudiu Beznea 2019-12-13  492  }
-625022a5f16061 Claudiu Beznea 2019-12-13  493  
+   356	
+   357	static int __init early_parse_memmap(char *p)
+   358	{
+   359		char *oldp;
+   360	
+   361		if (!p)
+   362			return -EINVAL;
+   363	
+   364		if (!strncmp(p, "exactmap", 8)) {
+   365			pr_err("\"memmap=exactmap\" invalid on MIPS\n");
+   366			return 0;
+   367		}
+   368	
+   369		oldp = p;
+   370		memory_limit = memparse(p, &p) & PAGE_MASK;
+   371		if (p == oldp)
+   372			return -EINVAL;
+   373	
+   374		if (*p == '@') {
+   375			memory_base = memparse(p + 1, &p) & PAGE_MASK;
+   376		} else if (*p == '$') {
+   377			memory_base = memparse(p+1, &p) & PAGE_MASK;
+   378			memblock_reserve(memory_base, memory_limit);
+   379			pr_notice("Memory reserved to %lldMB-%lldMB\n",
+ > 380				  memory_base >> 20, (memory_base + memory_limit) >> 20);
+   381			memory_base = 0;
+   382			memory_limit = 0;
+   383			return 0;
+   384		} else if (*p == '#') {
+   385			pr_err("\"memmap=nn#ss\" invalid on MIPS\n");
+   386			memory_limit = 0;
+   387			return -EINVAL;
+   388		} else if (*p == '!') {
+   389			pr_err("\"memmap=nn!ss\" invalid on MIPS\n");
+   390			memory_limit = 0;
+   391			return -EINVAL;
+   392		} else {
+   393			pr_err("Unrecognized memmap syntax: %s\n", p);
+   394			memory_limit = 0;
+   395			return -EINVAL;
+   396		}
+   397	
+   398		pr_notice("Memory limited to %lldMB-%lldMB\n",
+   399			  memory_base >> 20, (memory_base + memory_limit) >> 20);
+   400	
+   401		return *p == '\0' ? 0 : -EINVAL;
+   402	}
+   403	early_param("memmap", early_parse_memmap);
+   404	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
