@@ -1,158 +1,133 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464EC55B5
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 21:41:51 +0000 (UTC)
-Received: by mail-pf1-f170.google.com with SMTP id d17so12295001pfl.0
-        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 13:41:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E50C7C
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 22:30:53 +0000 (UTC)
+Received: by mail-oo1-f52.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so4997411ooa.10
+        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 14:30:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SDEQwyNhO1YP2PlPCVZv2QT+trnELH3tuuISdUJhH/A=;
-        b=d9xMn/X4LpBqF7CCmU2zh6/QLyVNBTRuNZU+e7jV9ejFO0/bkIPnXV0yhaKjw6dJm8
-         FJS3J2mi6lbO85oN/dNF+rqWxtAJUijNlNeALlXJL+eaCxB0tcq950US1kKVvr8mqukF
-         e0ToSOH4Si3JfzpFzCogjXNl1DMde6d8MLn9SuHccOTRwzid1E81/cSQ/4tTUtiOrMCh
-         9TojhlCRrVYJxHlgtGOmRoGhypN9RiWcKC8aFAkMrBK4RGw8XoilLoTMd70dGA9hdZYh
-         n+kv4MVL49Db4WfNBmaeThQEFLAURei7cyQEoj8G+S/4PT3zkCcTFjR/aTe5mw8oJWud
-         4tvQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oWJNEF23gYsaQqgLAEVbye1HfW5HTbmGgJBkQBp8gGE=;
+        b=ElcKOruAXbvxWDYvNPelX7nfkbvr5prW+ZUpyWp0zCYNtIH5cQ8kTumGYq2SGYmvfj
+         AJKxZoUqAvpDu/F+a9neQDo4u2Q3DRo/prSmpCma1dNvWzvYefscyrCfuWMkfy7OUIod
+         6l3ayoWRsPfzOkVxlv+RLKinqiuEm6QmxtzNQ5J7DlQGNIuh+AQVJJbxiElRc3xJ3cPD
+         j+qXxPn66/JY8QsJLkAjIA8jT5SAlJ4dMp395XvWBql5ysTpokA6aEtrtVHSbRF6PInM
+         QN0TE5o1GNg6ITeSPFcewR5FtJDrum+tKnxlobePfkRCga9ukeWGCFOly485J1vwOq2m
+         /Xlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SDEQwyNhO1YP2PlPCVZv2QT+trnELH3tuuISdUJhH/A=;
-        b=1r6/sg/TNOdYK/n00oAdgAGFIf7muyno73O+xRXoqd9qPYvWykz0NwPYKvOSFl4ChW
-         7X/4QUhacvtNDREOvawuJEP34k5PzpfBei+NBDMJq2L6x7CFXrqGIyJLwNOEDgCHGqSP
-         XF1HgMsziTvu1LcwCTKWFJ4I7KlR7Uk+nW6zKWxjgLCFW87y6qhyC5KfdvraT4cYuTKO
-         kdj+fFFkucSXyIvhM3TTAL7Bj+bqQIqa41ZNcaVhwShRZISU54UQk0cRk6FluHUqV9Ix
-         iUh76lEASAIZ1GtBgjfxSrLN/HBMOXAexLERHkgc8QuGYKck+qCOlHbo8HHonH7+NNd/
-         ZxTA==
-X-Gm-Message-State: AOAM532/UiUmY1tVeh8z4AV4Im4ZHEs50KbxzRrL+dmA/7VQhyFrOonm
-	liPrydp8W0YADWpUOsr8gjb6sg==
-X-Google-Smtp-Source: ABdhPJysQYIb7FAhRgqLT3HifNDIOw9MY3JP0SvCbCIF1CiA1nyX5JMrxTKRUKNjLMnj4tBxx48g9A==
-X-Received: by 2002:a05:6a00:26e0:b0:4e1:7131:de2b with SMTP id p32-20020a056a0026e000b004e17131de2bmr23819114pfw.20.1646084510471;
-        Mon, 28 Feb 2022 13:41:50 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:200:777f:ae46:e31e:b07e])
-        by smtp.gmail.com with ESMTPSA id 23-20020a17090a0b9700b001b8f602eaeasm259006pjr.53.2022.02.28.13.41.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 13:41:50 -0800 (PST)
-Date: Mon, 28 Feb 2022 13:41:45 -0800
-From: Fangrui Song <maskray@google.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, linux-kbuild@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	Federico Vaga <federico.vaga@vaga.pv.it>,
-	Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-	Michal Marek <michal.lkml@markovi.net>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc-tw-discuss@lists.sourceforge.net,
-	linux-arm-kernel@lists.infradead.org,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-	linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-Message-ID: <20220228214145.o37bgp3zl3rxpeo4@google.com>
-References: <20220228103142.3301082-1-arnd@kernel.org>
- <CAKwvOdkLUx1td+qgUYy3w2ojtBG-mJTzpJg3BV8Xv56YHTxHCw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oWJNEF23gYsaQqgLAEVbye1HfW5HTbmGgJBkQBp8gGE=;
+        b=5LcjK+H880Pl3xqucTrrykYz+oFag1QgWvdd8YjuSYZOg8Cz4EpSmqaRF6JrG1ZgDD
+         RnQlWIKALBo9/IkAo6GLapGCLXlY2NVq7JgGnR1lbmG/mY7uYvnjt2wpQ9Pt+O7jLl5X
+         GzOv25QRJbpB671XpF7tXAzKX0LMFifn0JjUtq55mIroPB0jCgpUX6i1VY+1gvRhD5cy
+         gFgcfhfMeloUqoo5VAch0r+LKE1ER5t6degIZ7GvhqiHtHds0t7NJDW8+4Pvsohhlqx1
+         3BNTUdvIRHYVj2l03G1mh8o0PElolSIndqQlR3otRaiwI71pNF7R3DFlp9AEWWTe0qiF
+         MxPA==
+X-Gm-Message-State: AOAM5312md/I8mGVRFCC/m5n+bR1nsY4NyvOALWrLwCRE8fUrz+PQWc8
+	ibH1m9fpdsVpMImP1pohjWZsbrYzBeTZuTfmJdg=
+X-Google-Smtp-Source: ABdhPJxJw4j6RbUKEuCCao9TFapxCXxTwduA5GmufbYLkRtVhOI3ahGDwGCTJQXixtkIAkJPLilFPdDIBO2YtqM9oeE=
+X-Received: by 2002:a05:6870:1b85:b0:d6:feda:913f with SMTP id
+ hm5-20020a0568701b8500b000d6feda913fmr2039667oab.123.1646087452697; Mon, 28
+ Feb 2022 14:30:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdkLUx1td+qgUYy3w2ojtBG-mJTzpJg3BV8Xv56YHTxHCw@mail.gmail.com>
+References: <20220227153342.79546-1-trix@redhat.com> <58ae0ccc-e964-69a3-b40b-3262fd24af9b@amd.com>
+In-Reply-To: <58ae0ccc-e964-69a3-b40b-3262fd24af9b@amd.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Mon, 28 Feb 2022 17:30:41 -0500
+Message-ID: <CADnq5_Oc2mUfv41gOxrdeHjKDQ4W+S1+wiX6v_7SE6bEH-9xSA@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/amdgpu: Fix realloc of ptr
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Tom Rix <trix@redhat.com>, "Deucher, Alexander" <alexander.deucher@amd.com>, 
+	xinhui pan <Xinhui.Pan@amd.com>, Dave Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	"Lazar, Lijo" <lijo.lazar@amd.com>, Nirmoy Das <nirmoy.das@amd.com>, 
+	Kevin Wang <kevin1.wang@amd.com>, Tom St Denis <tom.stdenis@amd.com>, 
+	"Quan, Evan" <evan.quan@amd.com>, Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>, llvm@lists.linux.dev, 
+	Maling list - DRI developers <dri-devel@lists.freedesktop.org>, 
+	amd-gfx list <amd-gfx@lists.freedesktop.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the patch!
+Applied.  Thanks!
 
-(Was always wondering which of binutils and kernel would migrate to C99+
-earlier... binutils won)
+Alex
 
-On 2022-02-28, Nick Desaulniers wrote:
->On Mon, Feb 28, 2022 at 2:32 AM Arnd Bergmann <arnd@kernel.org> wrote:
->>
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> During a patch discussion, Linus brought up the option of changing
->> the C standard version from gnu89 to gnu99, which allows using variable
->> declaration inside of a for() loop. While the C99, C11 and later standards
->> introduce many other features, most of these are already available in
->> gnu89 as GNU extensions as well.
->>
->> An earlier attempt to do this when gcc-5 started defaulting to
->> -std=gnu11 failed because at the time that caused warnings about
->> designated initializers with older compilers. Now that gcc-5.1 is the
->> minimum compiler version used for building kernels, that is no longer a
->> concern. Similarly, the behavior of 'inline' functions changes between
+On Mon, Feb 28, 2022 at 5:55 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
 >
->More precisely, the semantics of "extern inline" functions changed
->between ISO C90 and ISO C99.
-
-Perhaps a clearer explanation to readers is: "extern inline" and "inline" swap
-semantics with gnu_inline (-fgnu89-inline or __attribute__((__gnu_inline__))).
-
->That's the only concern I have, which I doubt is an issue. The kernel
->is already covered by the function attribute as you note.
+> Am 27.02.22 um 16:33 schrieb trix@redhat.com:
+> > From: Tom Rix <trix@redhat.com>
+> >
+> > Clang static analysis reports this error
+> > amdgpu_debugfs.c:1690:9: warning: 1st function call
+> >    argument is an uninitialized value
+> >    tmp =3D krealloc_array(tmp, i + 1,
+> >          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > realloc uses tmp, so tmp can not be garbage.
+> > And the return needs to be checked.
+> >
+> > Fixes: 5ce5a584cb82 ("drm/amdgpu: add debugfs for reset registers list"=
+)
+> > Signed-off-by: Tom Rix <trix@redhat.com>
 >
->Just to have some measure:
->$ git grep -rn "extern inline" | wc -l
->116
-
-"^inline" behaves like C99+ "extern inline"
-
-Agree this is handled by
-
-     #define inline inline __gnu_inline __inline_maybe_unused notrace
-
->Most of those are in arch/alpha/ which is curious; I wonder if those
->were intentional.
+> Yeah, stuff I missed because of the long review. I was already wondering
+> what semantics krealloc_array is following for freeing up the pointer on
+> error.
 >
->(I do worry about Makefiles that completely reset KBUILD_CFLAGS
->though; the function attributes still take precedence).
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
 >
->> gnu89 and gnu11, but this was taken care of by defining 'inline' to
->> include __attribute__((gnu_inline)) in order to allow building with
->> clang a while ago.
->>
->> One minor issue that remains is an added gcc warning for shifts of
->> negative integers when building with -Werror, which happens with the
->> 'make W=1' option, as well as for three drivers in the kernel that always
->> enable -Werror, but it was only observed with the i915 driver so far.
->> To be on the safe side, add -Wno-shift-negative-value to any -Wextra
->> in a Makefile.
->>
->> Nathan Chancellor reported an additional -Wdeclaration-after-statement
->> warning that appears in a system header on arm, this still needs a
->> workaround.
+> Thanks,
+> Christian.
 >
->Ack; I think we can just fix this in clang.
->
->>
->> The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
->> minimal and mainly impact warnings at the -Wpedantic level that the
->> kernel never enables. Between these, gnu11 is the newest version
->> that is supported by all supported compiler versions, though it is
->> only the default on gcc-5, while all other supported versions of
->> gcc or clang default to gnu1x/gnu17.
->
->I agree. With the fixup to s/Werror/Wextra.
->
->Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
->>
->> Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
->> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
->> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
->> Cc: Masahiro Yamada <masahiroy@kernel.org>
->> Cc: linux-kbuild@vger.kernel.org
->> Cc: llvm@lists.linux.dev
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
->-- 
->Thanks,
->~Nick Desaulniers
+> > ---
+> > v2:
+> >    use 'new' to hold/check the ralloc return
+> >    fix commit log mistake on ralloc freeing to using input ptr
+> >
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 9 +++++++--
+> >   1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/=
+drm/amd/amdgpu/amdgpu_debugfs.c
+> > index 9eb9b440bd438..2f4f8c5618d81 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> > @@ -1676,7 +1676,7 @@ static ssize_t amdgpu_reset_dump_register_list_wr=
+ite(struct file *f,
+> >   {
+> >       struct amdgpu_device *adev =3D (struct amdgpu_device *)file_inode=
+(f)->i_private;
+> >       char reg_offset[11];
+> > -     uint32_t *tmp;
+> > +     uint32_t *new, *tmp =3D NULL;
+> >       int ret, i =3D 0, len =3D 0;
+> >
+> >       do {
+> > @@ -1687,7 +1687,12 @@ static ssize_t amdgpu_reset_dump_register_list_w=
+rite(struct file *f,
+> >                       goto error_free;
+> >               }
+> >
+> > -             tmp =3D krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_=
+KERNEL);
+> > +             new =3D krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_=
+KERNEL);
+> > +             if (!new) {
+> > +                     ret =3D -ENOMEM;
+> > +                     goto error_free;
+> > +             }
+> > +             tmp =3D new;
+> >               if (sscanf(reg_offset, "%X %n", &tmp[i], &ret) !=3D 1) {
+> >                       ret =3D -EINVAL;
+> >                       goto error_free;
 >
