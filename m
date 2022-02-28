@@ -1,100 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B1A7A
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 17:43:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5C6C340E7;
-	Mon, 28 Feb 2022 17:43:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1646070199;
-	bh=LooQy0wNydj8kHhRYE5mtQl6DAH/C3OhSN4ERmFREeI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KUrWy9kIB70MvQA+1IiCdCBYwKHBPsCJ04wJqZLDl2S/5Ib2T1llGH6BvVnvVDhLz
-	 37WTBdnMAdZ5NsWehc6aHCFy6Ik9WrqNxrdeJjJsszsWGC/kOSAQ5SBiV2D3YzSCYo
-	 d/jCwDtLBkzKQ2NmwAKy3lVdAOHEmAxo3MCxLMWk=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Micay <danielmicay@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Christoph Lameter <cl@linux.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-mm@kvack.org,
-	llvm@lists.linux.dev,
-	David Rientjes <rientjes@google.com>
-Subject: [PATCH 5.16 006/164] slab: remove __alloc_size attribute from __kmalloc_track_caller
-Date: Mon, 28 Feb 2022 18:22:48 +0100
-Message-Id: <20220228172400.279076305@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
-User-Agent: quilt/0.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B367A
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 17:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646071172; x=1677607172;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7NBJjuEjWCCHJ62pzBKGkvafYbZAfTVrb4v4jYDW/1s=;
+  b=Nv7vDo4TLsmxcgVHAkBBotsLyLDf4RQbWZ6M8/DWHOrE6u27fDrFDi5n
+   NUkgkLNdqMKN7tP5MWXyr5U5pYd95rHgYYkQzLEKFbZHAzFbCBm3vS/UI
+   LwyWWDG06SK/oyok87K75Tff2cJdMgtsXvTy6kdplV3fR/OxqtIvIEnEf
+   z1MiRBMtK8ROEmZDMGxt3wqFg99K1tah3feAQ9+AY8dGIEHjj4Rj60VK0
+   jwUp/Y4AZTxiPwIh3PXOnZxbQonAJ3Qgmpj1hRzOc2m5Clwxdj0k8QT/B
+   bJ0JSp9+IxzrVFNo3rTzxjlX9mpQ/KpOgWrO+WFs4BqBFmdoO3IyUvDSS
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251778084"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="251778084"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:58:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="534545174"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Feb 2022 09:58:16 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nOkHn-0007eo-FW; Mon, 28 Feb 2022 17:58:15 +0000
+Date: Tue, 1 Mar 2022 01:57:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-block@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
+	Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH 6/6] blk-mq: manage hctx map via xarray
+Message-ID: <202203010133.JIpKpP2Z-lkp@intel.com>
+References: <20220228090430.1064267-7-ming.lei@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228090430.1064267-7-ming.lei@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi Ming,
 
-commit 93dd04ab0b2b32ae6e70284afc764c577156658e upstream.
+Thank you for the patch! Perhaps something to improve:
 
-Commit c37495d6254c ("slab: add __alloc_size attributes for better
-bounds checking") added __alloc_size attributes to a bunch of kmalloc
-function prototypes.  Unfortunately the change to __kmalloc_track_caller
-seems to cause clang to generate broken code and the first time this is
-called when booting, the box will crash.
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on v5.17-rc6 next-20220225]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-While the compiler problems are being reworked and attempted to be
-solved [1], let's just drop the attribute to solve the issue now.  Once
-it is resolved it can be added back.
+url:    https://github.com/0day-ci/linux/commits/Ming-Lei/blk-mq-update_nr_hw_queues-related-improvement-bugfix/20220228-170706
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: i386-randconfig-a002-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010133.JIpKpP2Z-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/176e39bc0acb20f8fd869d170b429b7253b089c4
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Ming-Lei/blk-mq-update_nr_hw_queues-related-improvement-bugfix/20220228-170706
+        git checkout 176e39bc0acb20f8fd869d170b429b7253b089c4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-[1] https://github.com/ClangBuiltLinux/linux/issues/1599
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
-Cc: stable <stable@vger.kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Daniel Micay <danielmicay@gmail.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-Acked-by: David Rientjes <rientjes@google.com>
-Acked-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-Link: https://lore.kernel.org/r/20220218131358.3032912-1-gregkh@linuxfoundation.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+All warnings (new ones prefixed by >>):
+
+   In file included from block/blk-mq-debugfs-zoned.c:7:
+>> block/blk-mq-debugfs.h:24:14: warning: declaration of 'struct blk_mq_hw_ctx' will not be visible outside of this function [-Wvisibility]
+                                     struct blk_mq_hw_ctx *hctx);
+                                            ^
+   block/blk-mq-debugfs.h:25:44: warning: declaration of 'struct blk_mq_hw_ctx' will not be visible outside of this function [-Wvisibility]
+   void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx *hctx);
+                                              ^
+   block/blk-mq-debugfs.h:32:19: warning: declaration of 'struct blk_mq_hw_ctx' will not be visible outside of this function [-Wvisibility]
+                                          struct blk_mq_hw_ctx *hctx);
+                                                 ^
+   block/blk-mq-debugfs.h:33:50: warning: declaration of 'struct blk_mq_hw_ctx' will not be visible outside of this function [-Wvisibility]
+   void blk_mq_debugfs_unregister_sched_hctx(struct blk_mq_hw_ctx *hctx);
+                                                    ^
+   4 warnings generated.
+
+
+vim +24 block/blk-mq-debugfs.h
+
+16b738f651c83a Omar Sandoval      2017-05-04  20  
+6cfc0081b046eb Greg Kroah-Hartman 2019-06-12  21  void blk_mq_debugfs_register(struct request_queue *q);
+d173a25165c124 Omar Sandoval      2017-05-04  22  void blk_mq_debugfs_unregister(struct request_queue *q);
+6cfc0081b046eb Greg Kroah-Hartman 2019-06-12  23  void blk_mq_debugfs_register_hctx(struct request_queue *q,
+9c1051aacde828 Omar Sandoval      2017-05-04 @24  				  struct blk_mq_hw_ctx *hctx);
+9c1051aacde828 Omar Sandoval      2017-05-04  25  void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx *hctx);
+6cfc0081b046eb Greg Kroah-Hartman 2019-06-12  26  void blk_mq_debugfs_register_hctxs(struct request_queue *q);
+9c1051aacde828 Omar Sandoval      2017-05-04  27  void blk_mq_debugfs_unregister_hctxs(struct request_queue *q);
+d332ce091813d1 Omar Sandoval      2017-05-04  28  
+
 ---
- include/linux/slab.h |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -669,8 +669,7 @@ static inline __alloc_size(1, 2) void *k
-  * allocator where we care about the real place the memory allocation
-  * request comes from.
-  */
--extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller)
--				   __alloc_size(1);
-+extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller);
- #define kmalloc_track_caller(size, flags) \
- 	__kmalloc_track_caller(size, flags, _RET_IP_)
- 
-
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
