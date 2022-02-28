@@ -1,196 +1,102 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3431C7A
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 18:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646072960; x=1677608960;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DG0iph9aIuoUSLMv9ZA0QMn6ZepGeNmJgoaLALZu/EQ=;
-  b=TZ80WFMJSKlPGGT1DwMlAlaxdBgrpqJNvkDF1Zq8/cBmCPOlWuXUqFI4
-   M5FmPVBjETIPvexMdtTk+RwlBPaBm5tewHNBYCMm1Uw8c/dHUwqP2nXey
-   Fa8UvMmdV9k/11++A7dgZa8UuFLrj/iT4RS4/XUTVPSyADa5dL77jFngx
-   lwUDQj0MJkhmLes1cQAkLFkS+Hbv6eIFVb/Yw1s1ZAD9F1h8EiGULVFOd
-   7pg5gjineL9Z6aLoIQGzn1lIORaXBjGBvjYny1iPMMFpLGoX8PAl3R44L
-   gf+aT/c+42keS1MYqMwXr4OhsOlYZSxrWIuUfRiguDXvPYza3UknQr1Wd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="250538682"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="250538682"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 10:29:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="640978446"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Feb 2022 10:29:16 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nOklo-0007gW-0K; Mon, 28 Feb 2022 18:29:16 +0000
-Date: Tue, 1 Mar 2022 02:28:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Pratyush Yadav <p.yadav@ti.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] spi: fsl-spi: Implement trailing bits
-Message-ID: <202203010254.tIHIltE2-lkp@intel.com>
-References: <fe4a3946a66ede73f6d6871700f2aaf0171372a1.1646060734.git.christophe.leroy@csgroup.eu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB3315C1
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 18:41:00 +0000 (UTC)
+Received: by mail-lj1-f174.google.com with SMTP id 29so18646103ljv.10
+        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 10:41:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=B+acwbp8IAqy4EQhdzrRR6UrvnBSYJWdfAOCkLBEf6s=;
+        b=LvJ51tK8OGXmUdrq1FTGfGhAU7kyWg6aDacet+/T6m1xcdm96SFLNin6cqkfGY+rbg
+         A+4gdF9QL3th8X1CIPS6F2KrwGpjUcAkZFh2wMRAAEhyIS9gK5hzhXTjv7RRLGY5VhDN
+         /ORnVKar4p0KNDioI7O/8vsyY3PJ0BwGF0c/w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B+acwbp8IAqy4EQhdzrRR6UrvnBSYJWdfAOCkLBEf6s=;
+        b=xy3U3z7TdBQ9QPbQj4QynQrOe60jCAipCzrvSo2msmGnLAPmhZkRqdyEdidaeGY2Ay
+         gIvokRfJiPVnC20sfnXcvjc5gUHlXN/Q3uqbw5W9lO74FFj+BiCEqFG6DjRrHDMaRkmc
+         bqWJbNV64mjomKGs3QPt4EIO/SukmTeHRnfd8MwR63ytuWWpcMje9qj/3h1KpNS8Z3LC
+         MpCEdgG1gXIYDbTr6pTnvOI4xepFsw+Yx0EG1KiZJJS/LadkbhQjzhjQfSi6ecnReqPQ
+         0d5wSl+zXVjQ7UyrDxY+o1kPsDfNHqyXoLUCDBdK4I9Un/BVkq0PYoZnRnRGHgmVpBrL
+         H/6w==
+X-Gm-Message-State: AOAM533jA5dqUNM0uXzX9saFeoMNydYIN6qn8Plh3LNvP7fnNuElUyjn
+	iSejTOrCKYNBMLg8ln7IERtPVWaYQ5hf3TRlM/c=
+X-Google-Smtp-Source: ABdhPJwW6cOsx6r0J/sX5abrQXwpBlwdAoxjmr8SyLl4xrFEUavVtYuLx09PsRlx4YBURcij0+T6JQ==
+X-Received: by 2002:a2e:9d89:0:b0:244:1ed:1960 with SMTP id c9-20020a2e9d89000000b0024401ed1960mr15455623ljj.413.1646073658219;
+        Mon, 28 Feb 2022 10:40:58 -0800 (PST)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id m27-20020ac24adb000000b004433bbaa3fdsm1080496lfp.174.2022.02.28.10.40.55
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 10:40:56 -0800 (PST)
+Received: by mail-lf1-f53.google.com with SMTP id b11so22907387lfb.12
+        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 10:40:55 -0800 (PST)
+X-Received: by 2002:ac2:4c8c:0:b0:445:6c26:3cff with SMTP id
+ d12-20020ac24c8c000000b004456c263cffmr13670491lfl.435.1646073655129; Mon, 28
+ Feb 2022 10:40:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe4a3946a66ede73f6d6871700f2aaf0171372a1.1646060734.git.christophe.leroy@csgroup.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220228103142.3301082-1-arnd@kernel.org> <YhyxML05rjJ/57Vk@FVFF77S0Q05N>
+ <CAK8P3a0CTmtUq+Uba2S3D7wjSstew2M+LfzZoOcKdKK9cfXO9A@mail.gmail.com>
+In-Reply-To: <CAK8P3a0CTmtUq+Uba2S3D7wjSstew2M+LfzZoOcKdKK9cfXO9A@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 28 Feb 2022 10:40:38 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjU+DCbFG4nd3Wne-KbQ1n5=BHynv3xEmRYTaayBj-EfQ@mail.gmail.com>
+Message-ID: <CAHk-=wjU+DCbFG4nd3Wne-KbQ1n5=BHynv3xEmRYTaayBj-EfQ@mail.gmail.com>
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev, 
+	Jonathan Corbet <corbet@lwn.net>, Federico Vaga <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, 
+	Hu Haowen <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-doc-tw-discuss@lists.sourceforge.net, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Intel Graphics <intel-gfx@lists.freedesktop.org>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, greybus-dev@lists.linaro.org, 
+	linux-staging@lists.linux.dev, linux-btrfs <linux-btrfs@vger.kernel.org>, 
+	Marco Elver <elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Christophe,
+On Mon, Feb 28, 2022 at 3:37 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> I think the KBUILD_USERCFLAGS portion and the modpost.c fix for it
+> make sense regardless of the -std=gnu11 change
 
-I love your patch! Perhaps something to improve:
+I do think they make sense, but I want to note again that people doing
+cross builds obviously use different tools for user builds than for
+the kernel. In fact, even not cross-building, we've had situations
+where the "kbuild" compiler is different from the host compiler,
+because people have upgraded one but not the other (upgrading the
+kernel build environment is actually much easier than upgrading the
+host build environment, because you don't need all the random
+libraries etc, and you can literally _just_ build your own gcc and
+binutils)
 
-[auto build test WARNING on v5.17-rc6]
-[cannot apply to broonie-spi/for-next next-20220228]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+And we have *not* necessarily required that the host tools match the
+kernel tools.
 
-url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/Add-support-for-components-requiring-trailing-clock-after-transfer/20220228-231740
-base:    7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
-config: hexagon-buildonly-randconfig-r004-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010254.tIHIltE2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/7eb07c4d26401389204fcc6cf685c18c89b64ef8
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Christophe-Leroy/Add-support-for-components-requiring-trailing-clock-after-transfer/20220228-231740
-        git checkout 7eb07c4d26401389204fcc6cf685c18c89b64ef8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/spi/
+So I could well imagine that there are people who build their kernels,
+but their host build environment might be old enough that -std=gnu11
+is problematic for that part.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+And note how any change to  KBUILD_USERCFLAGS is reflected in KBUILD_HOSTCFLAGS.
 
-All warnings (new ones prefixed by >>):
+So I would suggest that the KBUILD_USERCFLAGS part of the patch (and
+the modpost.c change that goes with it) be done as a separate commit.
+Because we might end up reverting that part.
 
->> drivers/spi/spi-fsl-spi.c:435:14: warning: incompatible integer to pointer conversion initializing 'const void *' with an expression of type 'unsigned long' [-Wint-conversion]
-                           .tx_buf = empty_zero_page,
-                                     ^~~~~~~~~~~~~~~
-   1 warning generated.
+Hmm?
 
-
-vim +435 drivers/spi/spi-fsl-spi.c
-
-   356	
-   357	static int fsl_spi_do_one_msg(struct spi_master *master,
-   358				      struct spi_message *m)
-   359	{
-   360		struct mpc8xxx_spi *mpc8xxx_spi = spi_master_get_devdata(master);
-   361		struct spi_device *spi = m->spi;
-   362		struct spi_transfer *t, *first;
-   363		unsigned int cs_change;
-   364		const int nsecs = 50;
-   365		int status, last_bpw;
-   366	
-   367		/*
-   368		 * In CPU mode, optimize large byte transfers to use larger
-   369		 * bits_per_word values to reduce number of interrupts taken.
-   370		 */
-   371		if (!(mpc8xxx_spi->flags & SPI_CPM_MODE)) {
-   372			list_for_each_entry(t, &m->transfers, transfer_list) {
-   373				if (t->len < 256 || t->bits_per_word != 8)
-   374					continue;
-   375				if ((t->len & 3) == 0)
-   376					t->bits_per_word = 32;
-   377				else if ((t->len & 1) == 0)
-   378					t->bits_per_word = 16;
-   379			}
-   380		}
-   381	
-   382		/* Don't allow changes if CS is active */
-   383		cs_change = 1;
-   384		list_for_each_entry(t, &m->transfers, transfer_list) {
-   385			if (cs_change)
-   386				first = t;
-   387			cs_change = t->cs_change;
-   388			if (first->speed_hz != t->speed_hz) {
-   389				dev_err(&spi->dev,
-   390					"speed_hz cannot change while CS is active\n");
-   391				return -EINVAL;
-   392			}
-   393		}
-   394	
-   395		last_bpw = -1;
-   396		cs_change = 1;
-   397		status = -EINVAL;
-   398		list_for_each_entry(t, &m->transfers, transfer_list) {
-   399			if (cs_change || last_bpw != t->bits_per_word)
-   400				status = fsl_spi_setup_transfer(spi, t);
-   401			if (status < 0)
-   402				break;
-   403			last_bpw = t->bits_per_word;
-   404	
-   405			if (cs_change) {
-   406				fsl_spi_chipselect(spi, BITBANG_CS_ACTIVE);
-   407				ndelay(nsecs);
-   408			}
-   409			cs_change = t->cs_change;
-   410			if (t->len)
-   411				status = fsl_spi_bufs(spi, t, m->is_dma_mapped);
-   412			if (status) {
-   413				status = -EMSGSIZE;
-   414				break;
-   415			}
-   416			m->actual_length += t->len;
-   417	
-   418			spi_transfer_delay_exec(t);
-   419	
-   420			if (cs_change) {
-   421				ndelay(nsecs);
-   422				fsl_spi_chipselect(spi, BITBANG_CS_INACTIVE);
-   423				ndelay(nsecs);
-   424			}
-   425		}
-   426	
-   427		if (status || !cs_change) {
-   428			ndelay(nsecs);
-   429			fsl_spi_chipselect(spi, BITBANG_CS_INACTIVE);
-   430		}
-   431	
-   432		if (!status && spi->trailing_bits) {
-   433			struct spi_transfer t = {
-   434				.len = 1,
- > 435				.tx_buf = empty_zero_page,
-   436			};
-   437	
-   438			if (spi->trailing_bits < 4)
-   439				t.bits_per_word = 4;
-   440			else if (spi->trailing_bits > 8)
-   441				t.bits_per_word = 16;
-   442			else
-   443				t.bits_per_word = spi->trailing_bits;
-   444	
-   445			status = fsl_spi_setup_transfer(spi, &t);
-   446			if (!status)
-   447				status = fsl_spi_bufs(spi, &t, 0);
-   448		}
-   449		m->status = status;
-   450	
-   451		fsl_spi_setup_transfer(spi, NULL);
-   452		spi_finalize_current_message(master);
-   453		return 0;
-   454	}
-   455	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+           Linus
