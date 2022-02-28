@@ -1,49 +1,58 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99F27C
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 22:53:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646088814; x=1677624814;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3yIm7V15EpTQEteU1KS+l9s/+KA1nJQQU0c8OZGB6jE=;
-  b=E/xTgLexv9H32ir7n2YEtCZhVkPPkwIJeLh0yC7p/A97MVuF4CM/bQMq
-   u/p20IkJRnViF9arsC7dvXd7HLVUcmLeat+m9L6axpo3unY3hDhIapRkD
-   sqUYVf8IcgpiwsJHD5MW4qKyRJwkDLCVO+73/KMMPuAcJvIzpUCyZ+FCR
-   uKsUecWwNDRFHyKtuzIOdgnhnJrG0/WbWmrG/os2EMmaa0479TTxxHYNY
-   ljGI1RENCMWae7Bm/NtDxZy7h7oWExR/l1WKZWItKEgwbPiat+ihnnZKQ
-   qLXsC4xJjlXpUQ307QPmlCSOP7V2eVRDORjxRqiZ0sQjfQNvEO6xhYTUl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="253197640"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="253197640"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 14:53:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="803506507"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Feb 2022 14:53:31 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nOotW-0007rm-RC; Mon, 28 Feb 2022 22:53:30 +0000
-Date: Tue, 1 Mar 2022 06:52:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Won Chung <wonchung@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF3D7C
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 23:16:46 +0000 (UTC)
+Received: by mail-pj1-f45.google.com with SMTP id j10-20020a17090a94ca00b001bc2a9596f6so576543pjw.5
+        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 15:16:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qcyuF/rJ3v9adXS1wD5x79Nrhi3MVFgnMBiDVeVK628=;
+        b=H84ukViLP1I1WQwJ555fTIX5iY07fF8mJhYhLLqFrxRU/v/5c13BT2oHieKtQ28QtB
+         vTu/WJ1QzVGt7t0JrWP9EZxzFSuISG7rgQ18dkd1w1PdOvc/6kHgHln31L/hqrFgSqbN
+         iT+TUK5ORx7x3+XzVmrBCQtrgm3FCzB0zo30Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qcyuF/rJ3v9adXS1wD5x79Nrhi3MVFgnMBiDVeVK628=;
+        b=TaC1uby8gQTyIJlm3nXEO0+b5TQ+Mqw4oO5R6Xxnpf2H+7WFvx5a3rZdSFmS4T6/03
+         bI7qXfdT9lZWJuJVKWrqZE4KtDGYFkcvIyA8+zTS6tRyoaERJ/Bo+2nT5XU1CYpxEbaC
+         izuLhXC+qMbGLsNuTM3R01x5ISe6K67ks2dG7++WJfpEA4bUIsSp19iP0y758gqwNpH3
+         jJErMyZ7ofyEuFNwoyuGpfrI+sPyC0ZH5oJvGPboTyAqait/yJyRv7ZR7c3gznGjdH0b
+         a+mkZ7q4NO2yaPLEucl8Ib3hASlkUNKrcTVUIHkJs83EnSgcI3rZal0FbfBjLc9SxWI1
+         ST+Q==
+X-Gm-Message-State: AOAM532xQFLzf7YrGYFUW4xHeFiIFAq+OWrp3zCK3t0wXl3vRfD9l4ge
+	xuDzVCDbINGNPvOrVThiIcbP1Q==
+X-Google-Smtp-Source: ABdhPJyUO4WdPD4D+EwN7uSB3399f8EhL9c8HcIjeCpMcQrsQdmLfXFfXqDsDs2KAc/EYgd95j5zzQ==
+X-Received: by 2002:a17:90a:6542:b0:1bd:149f:1c29 with SMTP id f2-20020a17090a654200b001bd149f1c29mr13946279pjs.240.1646090206307;
+        Mon, 28 Feb 2022 15:16:46 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id np11-20020a17090b4c4b00b001bd4aa67bafsm774491pjb.3.2022.02.28.15.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 15:16:45 -0800 (PST)
+Date: Mon, 28 Feb 2022 15:16:45 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+	stable@vger.kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Benson Leung <bleung@chromium.org>,
-	Prashant Malani <pmalani@chromium.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Won Chung <wonchung@google.com>
-Subject: Re: [PATCH] usb:typec: Add sysfs support for Type C connector's
- physical location
-Message-ID: <202203010628.Aac5rBDB-lkp@intel.com>
-References: <20220228190649.362070-1-wonchung@google.com>
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Christoph Lameter <cl@linux.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Daniel Micay <danielmicay@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] mm: Handle ksize() vs __alloc_size by forgetting size
+Message-ID: <202202251823.45E09CF@keescook>
+References: <20220225221625.3531852-1-keescook@chromium.org>
+ <20220225154518.0d1159fdc6f37ee38e39e90c@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,71 +61,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220228190649.362070-1-wonchung@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220225154518.0d1159fdc6f37ee38e39e90c@linux-foundation.org>
 
-Hi Won,
+On Fri, Feb 25, 2022 at 03:45:18PM -0800, Andrew Morton wrote:
+> On Fri, 25 Feb 2022 14:16:25 -0800 Kees Cook <keescook@chromium.org> wrote:
+> 
+> > If ksize() is used on an allocation, the compiler cannot make any
+> > assumptions about its size any more (as hinted by __alloc_size). Force
+> > it to forget.
+> > 
+> > One caller was using a container_of() construction that needed to be
+> > worked around.
+> 
+> Please, when fixing something do fully explain what that thing is.  I,
+> for one, simply cannot understand why this change is being proposed.
+> 
+> Especially when proposing a -stable backport!  Tell readers what was
+> the end-user impact of the bug.
+> 
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1599
+> 
+> Even that didn't tell me.  Is it just a clang warning?  Does the kernel
+> post your private keys on reddit then scribble all over your disk
+> drive?  I dunno.
 
-Thank you for the patch! Perhaps something to improve:
+Yup, sorry. I tend to get so deep changes like this that I forget to
+give an appropriately detailed summary. As others have mentioned, this
+is trying to fix a miscompilation issue, triggered by what can be
+considered either a mis-application of __alloc_size, or a failure to
+correctly disable compiler optimizations in the face of ksize().
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on chrome-platform/for-next linus/master v5.17-rc6 next-20220228]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Won-Chung/usb-typec-Add-sysfs-support-for-Type-C-connector-s-physical-location/20220301-030738
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: hexagon-randconfig-r041-20220227 (https://download.01.org/0day-ci/archive/20220301/202203010628.Aac5rBDB-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/93d7a0fa1ed009ae6cc98fe5039cec8c9c77609f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Won-Chung/usb-typec-Add-sysfs-support-for-Type-C-connector-s-physical-location/20220301-030738
-        git checkout 93d7a0fa1ed009ae6cc98fe5039cec8c9c77609f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/typec/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/typec/class.c:1649:7: warning: no previous prototype for function 'get_pld' [-Wmissing-prototypes]
-   void *get_pld(struct device *dev)
-         ^
-   drivers/usb/typec/class.c:1649:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *get_pld(struct device *dev)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/get_pld +1649 drivers/usb/typec/class.c
-
-  1648	
-> 1649	void *get_pld(struct device *dev)
-  1650	{
-  1651	#ifdef CONFIG_ACPI
-  1652		struct acpi_pld_info *pld;
-  1653		acpi_status status;
-  1654	
-  1655		if (!has_acpi_companion(dev))
-  1656			return NULL;
-  1657	
-  1658		status = acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
-  1659		if (ACPI_FAILURE(status))
-  1660			return NULL;
-  1661		return pld;
-  1662	#else
-  1663		return NULL;
-  1664	#endif
-  1665	}
-  1666	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook
