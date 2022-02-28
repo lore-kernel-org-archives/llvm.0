@@ -1,207 +1,100 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318617A
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 17:37:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646069857; x=1677605857;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vXTL8dLX7viXJuGg2oI1j6Lgyk1Ewv5xNOTP7Tgfu/4=;
-  b=lxAGPRr+T6dE6FRG1JXxNhF4CcYO1kH8SDUI/kXnUk2n2ZjDRlObJYQm
-   VZ+7tVBTb1juAD368nv6COZ3uLr8qalFBIEsg+6lr/HlgIqi/g/ibCmEH
-   VPTFilOQJ/YJVW1i0ClIDigDwlDZfEIK5LfsS6mdPV2BpQXwmp7yHEBvK
-   878PaD5UmscgAGqAem5JVC1YAT4sqWJ4FbbcYMFQ546zLdbC0z42EyPT0
-   mKydBrT0xPEMCBKYZaKt6aosmSWggkhrZH9ula5obPRrhpPjStX3aYrdT
-   78byqqvoD3nc5HhZYeT5LuEqjwsDMnL5hD0Yxkn07QZ/yxs4yKRMkn3Fb
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251772414"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="251772414"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:37:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="708726454"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 28 Feb 2022 09:37:15 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nOjxS-0007cT-Lj; Mon, 28 Feb 2022 17:37:14 +0000
-Date: Tue, 1 Mar 2022 01:36:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Mike Rapoport <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] MIPS: Refactor early_parse_memmap() to fix
- memmap= parameter
-Message-ID: <202203010025.PU3GDSWx-lkp@intel.com>
-References: <1646054617-16799-4-git-send-email-yangtiezhu@loongson.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B1A7A
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 17:43:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5C6C340E7;
+	Mon, 28 Feb 2022 17:43:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1646070199;
+	bh=LooQy0wNydj8kHhRYE5mtQl6DAH/C3OhSN4ERmFREeI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=KUrWy9kIB70MvQA+1IiCdCBYwKHBPsCJ04wJqZLDl2S/5Ib2T1llGH6BvVnvVDhLz
+	 37WTBdnMAdZ5NsWehc6aHCFy6Ik9WrqNxrdeJjJsszsWGC/kOSAQ5SBiV2D3YzSCYo
+	 d/jCwDtLBkzKQ2NmwAKy3lVdAOHEmAxo3MCxLMWk=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-kernel@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	stable@vger.kernel.org,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Micay <danielmicay@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Christoph Lameter <cl@linux.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev,
+	David Rientjes <rientjes@google.com>
+Subject: [PATCH 5.16 006/164] slab: remove __alloc_size attribute from __kmalloc_track_caller
+Date: Mon, 28 Feb 2022 18:22:48 +0100
+Message-Id: <20220228172400.279076305@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
+User-Agent: quilt/0.66
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646054617-16799-4-git-send-email-yangtiezhu@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Tiezhu,
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Thank you for the patch! Perhaps something to improve:
+commit 93dd04ab0b2b32ae6e70284afc764c577156658e upstream.
 
-[auto build test WARNING on hnaz-mm/master]
-[also build test WARNING on linus/master v5.17-rc6 next-20220225]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Commit c37495d6254c ("slab: add __alloc_size attributes for better
+bounds checking") added __alloc_size attributes to a bunch of kmalloc
+function prototypes.  Unfortunately the change to __kmalloc_track_caller
+seems to cause clang to generate broken code and the first time this is
+called when booting, the box will crash.
 
-url:    https://github.com/0day-ci/linux/commits/Tiezhu-Yang/MIPS-Modify-mem-and-memmap-parameter/20220228-212554
-base:   https://github.com/hnaz/linux-mm master
-config: mips-randconfig-r025-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010025.PU3GDSWx-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/ab143b3c599254c414419565480fc01acb23452a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tiezhu-Yang/MIPS-Modify-mem-and-memmap-parameter/20220228-212554
-        git checkout ab143b3c599254c414419565480fc01acb23452a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
+While the compiler problems are being reworked and attempted to be
+solved [1], let's just drop the attribute to solve the issue now.  Once
+it is resolved it can be added back.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[1] https://github.com/ClangBuiltLinux/linux/issues/1599
 
-All warnings (new ones prefixed by >>):
-
-   arch/mips/kernel/setup.c:351:42: warning: format specifies type 'long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
-           pr_notice("Memory limited to %lldMB\n", memory_limit >> 20);
-                                        ~~~~       ^~~~~~~~~~~~~~~~~~
-                                        %u
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   arch/mips/kernel/setup.c:380:6: warning: format specifies type 'long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
-                             memory_base >> 20, (memory_base + memory_limit) >> 20);
-                             ^~~~~~~~~~~~~~~~~
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
->> arch/mips/kernel/setup.c:380:25: warning: format specifies type 'long long' but the argument has type 'unsigned int' [-Wformat]
-                             memory_base >> 20, (memory_base + memory_limit) >> 20);
-                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   arch/mips/kernel/setup.c:399:5: warning: format specifies type 'long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
-                     memory_base >> 20, (memory_base + memory_limit) >> 20);
-                     ^~~~~~~~~~~~~~~~~
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   arch/mips/kernel/setup.c:399:24: warning: format specifies type 'long long' but the argument has type 'unsigned int' [-Wformat]
-                     memory_base >> 20, (memory_base + memory_limit) >> 20);
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   5 warnings generated.
-
-
-vim +380 arch/mips/kernel/setup.c
-
-   356	
-   357	static int __init early_parse_memmap(char *p)
-   358	{
-   359		char *oldp;
-   360	
-   361		if (!p)
-   362			return -EINVAL;
-   363	
-   364		if (!strncmp(p, "exactmap", 8)) {
-   365			pr_err("\"memmap=exactmap\" invalid on MIPS\n");
-   366			return 0;
-   367		}
-   368	
-   369		oldp = p;
-   370		memory_limit = memparse(p, &p) & PAGE_MASK;
-   371		if (p == oldp)
-   372			return -EINVAL;
-   373	
-   374		if (*p == '@') {
-   375			memory_base = memparse(p + 1, &p) & PAGE_MASK;
-   376		} else if (*p == '$') {
-   377			memory_base = memparse(p+1, &p) & PAGE_MASK;
-   378			memblock_reserve(memory_base, memory_limit);
-   379			pr_notice("Memory reserved to %lldMB-%lldMB\n",
- > 380				  memory_base >> 20, (memory_base + memory_limit) >> 20);
-   381			memory_base = 0;
-   382			memory_limit = 0;
-   383			return 0;
-   384		} else if (*p == '#') {
-   385			pr_err("\"memmap=nn#ss\" invalid on MIPS\n");
-   386			memory_limit = 0;
-   387			return -EINVAL;
-   388		} else if (*p == '!') {
-   389			pr_err("\"memmap=nn!ss\" invalid on MIPS\n");
-   390			memory_limit = 0;
-   391			return -EINVAL;
-   392		} else {
-   393			pr_err("Unrecognized memmap syntax: %s\n", p);
-   394			memory_limit = 0;
-   395			return -EINVAL;
-   396		}
-   397	
-   398		pr_notice("Memory limited to %lldMB-%lldMB\n",
-   399			  memory_base >> 20, (memory_base + memory_limit) >> 20);
-   400	
-   401		return *p == '\0' ? 0 : -EINVAL;
-   402	}
-   403	early_param("memmap", early_parse_memmap);
-   404	
-
+Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
+Cc: stable <stable@vger.kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Daniel Micay <danielmicay@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Pekka Enberg <penberg@kernel.org>
+Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+Acked-by: David Rientjes <rientjes@google.com>
+Acked-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Link: https://lore.kernel.org/r/20220218131358.3032912-1-gregkh@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ include/linux/slab.h |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -669,8 +669,7 @@ static inline __alloc_size(1, 2) void *k
+  * allocator where we care about the real place the memory allocation
+  * request comes from.
+  */
+-extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller)
+-				   __alloc_size(1);
++extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller);
+ #define kmalloc_track_caller(size, flags) \
+ 	__kmalloc_track_caller(size, flags, _RET_IP_)
+ 
+
+
