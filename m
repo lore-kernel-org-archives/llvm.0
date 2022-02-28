@@ -1,181 +1,188 @@
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2069.outbound.protection.outlook.com [40.107.96.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E953C53A4
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 10:55:53 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YaGI/B5eUJJC8BQuSqrEUEqniL6MG2404leqzYkuitUd0pAn4buqBksmanXMFGjwFVjcN3BzNE1Cf84hAG+nmlD3fcWa8/gm1/TWFFb1pjwqkK1JcH7UDJWyDgGi70BYaXz4g3xawu8tjZcTjpLwRO3TW6L3tzmMg+ycrMb0Nu9UFAG3+KeTBWUvDBpeM7adk2YRFhA7R6kkw0obfpRBsC83V1GQNKryGuo1q0GUV+9TJFmpmUr4aCtNCRFk/dnXG3I8kPGV+QuJK0+eUQ9G4Do7iA/H9P9OQgXR+h8ypERAKFAgWS7pga2UQcKwIc+hnCJzMT9/Ub3PEYVG2jPb8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WBLTjUcGvsWQrir4hxk9/F84FqWFfT8saPJEfggKr1Y=;
- b=jvL5Xf3oNs+bUI0G9b1IEej85qH9u+2CYc2Ebg/1CQzcDHlTxEbkqBx8A2icV5tx5Xw829+WC2FGYHracACv+mHQzOUm+UWxRIM2lJRMSwW+VGOr52vG8d/5dRBP92g+q6JgbrY43tuVyDCyXEhc8mDm+vGWmosqfk6HdRZst5lXtwxyZali/PbyjAyEKPtYtgYK75pvgc/Bn7REWZqXK3y9BGJDZYVo+v1U0G7x3G9X2diIT5bO03Se3Ih6qFOSj0t0nX2MGg7uoe7WixZNrxret62PrQRDpI5wWGpTPCFLefoRV92+s9gaZBR8zn0NT2s4bXM3j8EdtMpDQtTbcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WBLTjUcGvsWQrir4hxk9/F84FqWFfT8saPJEfggKr1Y=;
- b=BgmlaytHt/AdUV1i5w23si39UFK4r7+MuCbP3TP/cHpx4nXqJdhtdPrWWOqbyLviJAmgTqSvlXpmaCy8zaDqawTyrqNCh7nXNOcyRvE4thHBW2uVbmlnXQDpUqPCmE7vGMzw6M8f9ryb7x7eHUcz1iZ9pEHTir+ewxiIqhGnGvY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MW2PR12MB2508.namprd12.prod.outlook.com (2603:10b6:907:9::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Mon, 28 Feb
- 2022 10:55:45 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.5017.027; Mon, 28 Feb 2022
- 10:55:45 +0000
-Message-ID: <58ae0ccc-e964-69a3-b40b-3262fd24af9b@amd.com>
-Date: Mon, 28 Feb 2022 11:55:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] drm/amdgpu: Fix realloc of ptr
-Content-Language: en-US
-To: trix@redhat.com, alexander.deucher@amd.com, Xinhui.Pan@amd.com,
- airlied@linux.ie, daniel@ffwll.ch, nathan@kernel.org,
- ndesaulniers@google.com, lijo.lazar@amd.com, nirmoy.das@amd.com,
- kevin1.wang@amd.com, tom.stdenis@amd.com, evan.quan@amd.com,
- Amaranath.Somalapuram@amd.com
-Cc: amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220227153342.79546-1-trix@redhat.com>
-From: =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220227153342.79546-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM6PR04CA0068.eurprd04.prod.outlook.com
- (2603:10a6:20b:f0::45) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA1253A4
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 11:25:29 +0000 (UTC)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2d646fffcc2so104221837b3.4
+        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 03:25:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p96IvP9fUv4h1PakADfoqUYPHYxVnqzVwq2/kj5L+eU=;
+        b=KeqMjQGcDStWNcUS49dVbtvAJpxlSiOVErm61ZtH3VI5hAlAj0vQ1zcHquzneX3cK7
+         neNjKRdIJoiS6BtbKzb2YPS5nMEe8m5YxMTC5lR8kyZFI3AO2veXAPK8lwntA20ztYMd
+         KwUOA9e03fmOZ7HBoLWjb7t05sZeU/W4/KDzfTVTyKgA+MnDe1LSwmaphusTfs1ef6fK
+         of3KNhlrrVLJq9O7wpEVW9QSv8MmTwUXBvSrPyyIb375h4xyL7mvnPWA5QyNw68S+Ep9
+         h8+rf2NLd5Ip6RKVm7BOKl3zCDQHJWQQ+5s3ZGb3VbTOTSOB/sLncqcMr94bCvJDt0gD
+         xv+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p96IvP9fUv4h1PakADfoqUYPHYxVnqzVwq2/kj5L+eU=;
+        b=P4TA109yJowBY/Lrg1Jp9S+vLNygyE9c2CdAkMal0KyaoYJpiIeUiKV5rxpKFiDEYT
+         reFiutOVZZHpt61Ea21cckqyzkaspQ/ND+0d6RHwVqOlkRo6sTTmMbAV/N4SFd/p84Uw
+         jvMgsM9vd7zunF3ZR2VloF3HXcSij/jotc0BHddGk9NT+QN0ydwrA4Js+HkEGcttDC58
+         uWKyK5QuYrtu5R5ocVzXl1es7/OZHCsFmanjodg/K7Xv3e0858ZEH8LesJNxJ+x9g+X4
+         lEUvfcgp/HBZKma6nrhbemzlp6xQaD8ajv3xUrv/3vHeF9KN6z+OnW+wkYJhO/epMbXA
+         Sh5Q==
+X-Gm-Message-State: AOAM5331tf+zVHrdfRNBTj+KlhXea4Bb00DZ69/enIfP1TAkfnrq7YYq
+	QlsnnXvGXwzk9lw8kYoDkP+KwUytqYuzTOkXWIwOVw==
+X-Google-Smtp-Source: ABdhPJz54dXk6AW8cnKh1rdgLlHMk+YG/fbrfpJzpZACyNSQ2YmjarYCbN3mfTc15EcGKVu9pa7aHfMqg5A3HN7vpFE=
+X-Received: by 2002:a81:7943:0:b0:2d0:c8bb:a45d with SMTP id
+ u64-20020a817943000000b002d0c8bba45dmr18980716ywc.264.1646047527866; Mon, 28
+ Feb 2022 03:25:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a1f0403b-31e2-46e7-7830-08d9faa8deff
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2508:EE_
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-Microsoft-Antispam-PRVS:
-	<MW2PR12MB2508655389F885BC9FA6214C83019@MW2PR12MB2508.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	j7FaMSpI/F2VJ1tJGPOWCLAZmtvE9bvu2u1atORSjePyCrzw05icfDOh+ih5fBQokXtxtVbJJz15HR3jKhFWRuLdSw7AwgVl9JklEHv26EWQkiqd9aw3o/MvWs/AH3XoeGB+WDVIi0DToxtlZYSWwMBQKgfoog2ZiMOEr6WlIk2WGNqE6JPxn7dBLpzSwM2V/CjTBymFc1nWVbdKHq4uVAicuGASEQZlf0OdDOCMrzIolq8w6EUko6gUkYmFpRiHqdVKV/e6vENnWqp3xGZRKq1P8RDNaGxwMBDAS2whauxZgJNnlGdGZiuS4VbXIcCqqTF5bZ7dpQt8d0TYZtYbnS78scTyWaL9Fnf1/s1MaGTbDURnpNO6v/xVqNXX6vlE5DVGMLdoq6yIKc8VANejE5rD/2car7rLTaB3x824yWxw+ABeiK6/BH30yG9T7fnnvL0doNfla6WBSQ4vVUuy8i922YQbv5BpC2aPOzb/ErOEZzLwDRl+xZ2+5GM17cAcY/1M7PRNdRXKdlv4yrG8hU+EjrMOnozcDmJsiK8v56fj7WGiW7U2saOHMrgPsnF9XtuOAob9ymDIgZvdfiARxo5RphLknkUXPfXgyN+fpq7zcE5zxBH9cTXTgW0rW3alrSAtQ9Zsi1JvitncgUTInC/XTWw3N7G6aa3HfTWjNV5QPKJPKVgs/LVN9WuY2bKj509MBvy3f2PtkqMabjDBxiJYMn/Wx/yAs/X7YsjDXQrDul+wzVWYsflseCAp2GSfOADCla9fbwv+VKy7mnEn9Q==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(921005)(6486002)(6666004)(38100700002)(6506007)(66574015)(36756003)(6512007)(6636002)(31686004)(508600001)(83380400001)(4326008)(31696002)(8936002)(316002)(86362001)(2616005)(5660300002)(2906002)(186003)(66476007)(66946007)(66556008)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bXpQWDNwWUhYTzRXQ25VbGNiOW1mK0M0SjNGMEtkQ1QxazlZZ2ZzK0Z2NlFl?=
- =?utf-8?B?SlJ3OFQ1cWlLTW1Vb3NzaG1TQWEyZkd5MmpwQnVLY3ZjWlJkVXJYdmhRcktw?=
- =?utf-8?B?MUlvSVFrOEtSY01lUFVDeE1oaUJZOFBJMUIydU1wV2NTLzJTK0diRzVCWS9z?=
- =?utf-8?B?SEFvNHFZYllUV3ZDOUl5ZkhWZlRXalhqVU8wY1FOYnVFTXA0QWdoT1kvQ1c3?=
- =?utf-8?B?UEFnQWh0em5iU3VQUGFFQmk5VGFweXo2RGpMdmFHY0xyVG5XcHR1NnI4Q1dj?=
- =?utf-8?B?cnZqeHpVVVAybVFCYWVTWW02K1VtNU5DK2Z6UzFySVRxUWxTMitUdXRmeUIw?=
- =?utf-8?B?T0k0czJRN3RZbml5U0FTaUIyZkpkbEhIUHo4TkUyL1N5NWVubURTSTR0Y1pR?=
- =?utf-8?B?Q1JrRUEyd3ZVQlBLMW9xMUhDcTNTaXdyTmRBTzkxeHVDMDUvSml1WWVNSDdI?=
- =?utf-8?B?Y2hZNlJWRlhnRUZsK3FLeGNtSXlaTm9ZanVoczhRSHZVY0t6clI1RnVEZW4w?=
- =?utf-8?B?bnVsWDl0VEZDNWYrSmN6S1hNRXEzODBCZ3NITkRzMXRkbXpkMkw0WC9qT0k2?=
- =?utf-8?B?Vm8wbUJrNVJUQ2VUUlJGWkV3eHZ5ajBiL0hWdmd4QjVQS3dxOUJ5LzhRVG1k?=
- =?utf-8?B?T3ZqRGc1UUJjVk9vQjE5SnRIc3VoNWlPQVBXMmFwelM4VVFpazBPNitmdWV6?=
- =?utf-8?B?VTZpaXZSY3lQcVRyUlZ4WVV2aGIrQmpqWkNzNHNZUzJ0MzlvL09aSVcvWkNY?=
- =?utf-8?B?QUQzcUZwTDViR0llQWg5bU1Xc2JocmM0VkpwQTBxd09YdWNxTVVNcUlQUU5t?=
- =?utf-8?B?a3B2RjU0QUZWZTFGdGoxNVFyNmZscWtiTkZZRzVzVGRka2JwNTVwT0FKUmhn?=
- =?utf-8?B?d1hacTJkVW9GMllsN2MrbVBBL0x2UmFMeERjOVlwUlhBN1VnNERWT2NaRnI5?=
- =?utf-8?B?STcrK3czamE0SCs5QVVNd1NXRlJxeVZ2SjBwVGlMOW1jOEtVc2xyTkxpSWZq?=
- =?utf-8?B?RzdSeVlYdHVQUTE3aU9xTzBhZDdwU3lZZ2tHMCtpSnNiTzV3LzhkMUFGeFVk?=
- =?utf-8?B?YzdJMUFHYmtxS2psY2g0ZUxER0RmWE05MW5ySkViZ0d4YWpiOFRoL25SUmUx?=
- =?utf-8?B?ZS9ETVY5c2NmUVdUd1IwdkNZQTRvRC9acnFWbFNaYklINHpqVnhBWUR1eXM0?=
- =?utf-8?B?cjJPSWZEZ3RTSXBoZnl4OGZyMjNhTE5DQkU3ZUx0S21zRFJWTGxmYXIzZGhw?=
- =?utf-8?B?N2svbVBSRE5NZE14dFd4THJNQmZadGNhSkt2aDZlZFFCNjRhZDhuYlpsTSs0?=
- =?utf-8?B?MUM5Z1pMbVBvcHdhTXVid3RsTzV4SkxjeWVWMXRETXJWN3oxRFltcGcxeGMw?=
- =?utf-8?B?V1doNDh3ZVhlOW5TTHh3WHNjampLRXZHVFdPbDZaRFpoREd4NnoxTkJzWHVv?=
- =?utf-8?B?SHR4NmJNWUpYWHNwcHBpVzExTitKQlRORURvLy9rQllxaFdteW9CZnBOTGxC?=
- =?utf-8?B?eXVpSnJoYUZCKzc0T0xZNjkzYmtCaGorZG9xZEVsUndrVXA2VWZpR2xvamxn?=
- =?utf-8?B?VE9YdWtDeUNhVUwrY3FuOVlibGtaYW8xNzlVTzl0VEJ0MEQwV2d1TmdPQjBh?=
- =?utf-8?B?RzIzZWpwaGNjMkJEYytHU2V1T0Zkd282Y0tXbEhPVFgyeHNKNGp5WEJoL2VB?=
- =?utf-8?B?UEJFU0o3YzAvdkg1cWZQcFhJeVU4d1dlakZqdUxONG4ycithNEFUSkcydFVN?=
- =?utf-8?B?TzhXUU82SEdHbS9OMCtUblI1RVM0aTU1R3J4SzVaNWpoOVUvOGxTcVo3SHl5?=
- =?utf-8?B?WVdHYWFxRnN3VUxrSVVCWVpXWmZVNE8zWmhHUmJsb2E3VUxOMmZ6My9xQkIw?=
- =?utf-8?B?dFJQTE1sdmhTam94Mmp4V29qdXRJRkNtSWRUaFEyeDdXOWhnQU9sMGtzWlcx?=
- =?utf-8?B?SmlTSnNxWjFOWmpZTnlIZUk0d2N0ZnQrUXV3ZnREVHo5cXFzOXhCSjhKbWd6?=
- =?utf-8?B?a0xONzRQU0tGeGdlYlBrN0V6UkwwZFVvRWxxa28zaUd5TDAvT1padUFDSHVP?=
- =?utf-8?B?cUZVTllXTnlhcWxGc05SQk5JMGZYTkt5bC9IMmlWTG9TRThyRHlVSUhTZmtn?=
- =?utf-8?B?cjlQOHVLZEVOMDdzVWFhTmdmMG9uUHFKRHpaRzY3SDN5OEJLWlJLa2ZFWnFs?=
- =?utf-8?Q?2kWkeGlnUMyQZ5RDze9QIWA=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1f0403b-31e2-46e7-7830-08d9faa8deff
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 10:55:45.4088
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tXl0fE1fVcT4RFdAaDqBqHlAfgZuAK5iodxDitHZB0VWe0AYFl9nkp8SWr3JxuLz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2508
+References: <20220225221625.3531852-1-keescook@chromium.org>
+In-Reply-To: <20220225221625.3531852-1-keescook@chromium.org>
+From: Marco Elver <elver@google.com>
+Date: Mon, 28 Feb 2022 12:24:51 +0100
+Message-ID: <CANpmjNOup5JCjRpRkhsF3Z+dPX6_MQE5u6WhnMit84c1TyRK+A@mail.gmail.com>
+Subject: Re: [PATCH] mm: Handle ksize() vs __alloc_size by forgetting size
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, Pekka Enberg <penberg@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org, 
+	stable@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Christoph Lameter <cl@linux.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Daniel Micay <danielmicay@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Am 27.02.22 um 16:33 schrieb trix@redhat.com:
-> From: Tom Rix <trix@redhat.com>
+On Fri, 25 Feb 2022 at 23:16, Kees Cook <keescook@chromium.org> wrote:
 >
-> Clang static analysis reports this error
-> amdgpu_debugfs.c:1690:9: warning: 1st function call
->    argument is an uninitialized value
->    tmp = krealloc_array(tmp, i + 1,
->          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> If ksize() is used on an allocation, the compiler cannot make any
+> assumptions about its size any more (as hinted by __alloc_size). Force
+> it to forget.
 >
-> realloc uses tmp, so tmp can not be garbage.
-> And the return needs to be checked.
+> One caller was using a container_of() construction that needed to be
+> worked around.
 >
-> Fixes: 5ce5a584cb82 ("drm/amdgpu: add debugfs for reset registers list")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Pekka Enberg <penberg@kernel.org>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: linux-mm@kvack.org
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1599
+> Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> This appears to work for me, but I'm waiting for more feedback on
+> the specific instance got tripped over in Android.
+> ---
+>  drivers/base/devres.c |  4 +++-
+>  include/linux/slab.h  | 26 +++++++++++++++++++++++++-
+>  mm/slab_common.c      | 19 +++----------------
+>  3 files changed, 31 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/base/devres.c b/drivers/base/devres.c
+> index eaa9a5cd1db9..1a2645bd7234 100644
+> --- a/drivers/base/devres.c
+> +++ b/drivers/base/devres.c
+> @@ -855,6 +855,7 @@ void *devm_krealloc(struct device *dev, void *ptr, size_t new_size, gfp_t gfp)
+>         size_t total_new_size, total_old_size;
+>         struct devres *old_dr, *new_dr;
+>         unsigned long flags;
+> +       void *allocation;
+>
+>         if (unlikely(!new_size)) {
+>                 devm_kfree(dev, ptr);
+> @@ -874,7 +875,8 @@ void *devm_krealloc(struct device *dev, void *ptr, size_t new_size, gfp_t gfp)
+>         if (!check_dr_size(new_size, &total_new_size))
+>                 return NULL;
+>
+> -       total_old_size = ksize(container_of(ptr, struct devres, data));
+> +       allocation = container_of(ptr, struct devres, data);
+> +       total_old_size = ksize(allocation);
+>         if (total_old_size == 0) {
+>                 WARN(1, "Pointer doesn't point to dynamically allocated memory.");
+>                 return NULL;
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 37bde99b74af..a14f3bfa2f44 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -182,8 +182,32 @@ int kmem_cache_shrink(struct kmem_cache *s);
+>  void * __must_check krealloc(const void *objp, size_t new_size, gfp_t flags) __alloc_size(2);
+>  void kfree(const void *objp);
+>  void kfree_sensitive(const void *objp);
+> +
+> +/**
+> + * ksize - get the actual amount of memory allocated for a given object
+> + * @objp: Pointer to the object
+> + *
+> + * kmalloc may internally round up allocations and return more memory
+> + * than requested. ksize() can be used to determine the actual amount of
+> + * memory allocated. The caller may use this additional memory, even though
+> + * a smaller amount of memory was initially specified with the kmalloc call.
+> + * The caller must guarantee that objp points to a valid object previously
+> + * allocated with either kmalloc() or kmem_cache_alloc(). The object
+> + * must not be freed during the duration of the call.
+> + *
+> + * Return: size of the actual memory used by @objp in bytes
+> + */
+> +#define ksize(objp) ({                                                 \
+> +       /*                                                              \
+> +        * Getting the actual allocation size means the __alloc_size    \
+> +        * hints are no longer valid, and the compiler needs to         \
+> +        * forget about them.                                           \
+> +        */                                                             \
+> +       OPTIMIZER_HIDE_VAR(objp);                                       \
+> +       _ksize(objp);                                                   \
+> +})
 
-Yeah, stuff I missed because of the long review. I was already wondering 
-what semantics krealloc_array is following for freeing up the pointer on 
-error.
+So per that ClangBuiltLinux issue I'm gleaning that the __alloc_size
+annotations are actually causing the compiler to generate wrong code?
+Possibly due to the compiler thinking that the accesses must stay
+within some bound, and anything beyond that will be "undefined
+behaviour"? Clearly, per the slab APIs, in particular with the
+provision of ksize(), the compiler is wrong.
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+At first I thought this was only related to UBSAN bounds checking
+generating false positives, in which case a simple workaround as you
+present above would probably take care of most cases.
+
+But if the real issue is the compiler suddenly doing more aggressive
+compiler optimizations because it thinks accesses beyond the object
+size (per __alloc_size) is UB, but UB can never happen, and thus does
+crazy things [1], I think the answer (at least with what we have right
+now) should be to find a different solution that is more reliable.
+
+[1] https://lore.kernel.org/all/20220218131358.3032912-1-gregkh@linuxfoundation.org/
+
+Because who's to say that there's not some code that does:
+
+   foo = kmalloc(...);
+   ...
+   bar = foo;
+   s = ksize(bar);
+   ... makes access address-dependent on 's' and 'foo' (but not 'bar') ...
+
+This doesn't look like code anyone would write, but I fear with enough
+macro and inline function magic, it's not too unlikely.
+
+I can see a few options:
+
+1. Dropping __alloc_size.
+2. Somehow statically computing the size-class's size (kmalloc_index()
+might help here), removing __alloc_size from allocation functions and
+instead use some wrapper.
+3. Teaching the compiler to drop *all* object sizes upon encountering a ksize().
+
+So I think #1 is probably not what you want. #2 seems quite
+complicated, and in many cases likely too relaxed and would miss bugs,
+so also not ideal. #3 would be the most reliable, but
+OPTIMIZER_HIDE_VAR() doesn't cut it, and we need something stronger.
+The downside of #3 is that it might pessimize code generation, but
+given ksize() is used sparingly, might be ok.
 
 Thanks,
-Christian.
-
-> ---
-> v2:
->    use 'new' to hold/check the ralloc return
->    fix commit log mistake on ralloc freeing to using input ptr
->    
->   drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 9 +++++++--
->   1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> index 9eb9b440bd438..2f4f8c5618d81 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> @@ -1676,7 +1676,7 @@ static ssize_t amdgpu_reset_dump_register_list_write(struct file *f,
->   {
->   	struct amdgpu_device *adev = (struct amdgpu_device *)file_inode(f)->i_private;
->   	char reg_offset[11];
-> -	uint32_t *tmp;
-> +	uint32_t *new, *tmp = NULL;
->   	int ret, i = 0, len = 0;
->   
->   	do {
-> @@ -1687,7 +1687,12 @@ static ssize_t amdgpu_reset_dump_register_list_write(struct file *f,
->   			goto error_free;
->   		}
->   
-> -		tmp = krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_KERNEL);
-> +		new = krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_KERNEL);
-> +		if (!new) {
-> +			ret = -ENOMEM;
-> +			goto error_free;
-> +		}
-> +		tmp = new;
->   		if (sscanf(reg_offset, "%X %n", &tmp[i], &ret) != 1) {
->   			ret = -EINVAL;
->   			goto error_free;
-
+-- Marco
