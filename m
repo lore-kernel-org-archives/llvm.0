@@ -1,66 +1,74 @@
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1097C
-	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 15:16:16 +0000 (UTC)
-Received: by mail-ot1-f52.google.com with SMTP id l21-20020a056830239500b005afd2a7eaa2so6891574ots.9
-        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 07:16:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3erX1W/V8eKoqrAyYmfugbwLeZekQvkkVtHUA9NIwMk=;
-        b=drpj1huI2zUtT9Wxsj1mWTLeR7td9jWzGtULueocDG5ZY8vkEnbQe+F9SxynenJPt9
-         1YQxDabJkCDr9VRQRt+LIJ+ge7VwvhZRjkVtgccg8gg1LRTeEDZgCj/PK6o3zVxFqXSR
-         IBubXJps1jrO7uwOlTm8tEda55t/VFR/omtiacO+Guj67wxrRfLIWSQuLJpafmaQRxM1
-         MAAXm47q36VY3tKbW3bqVQY7pd89RN4ie8+Uw2s8ANxcipLCuNiptwD/uNMZZn2VwtpJ
-         LM8YL9V9dzV97ahyiSPKTl6/TaeCbzxCj3cixXfjOrquBp3Q07y1oWvU/vmxBJg/U9Dg
-         5QtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3erX1W/V8eKoqrAyYmfugbwLeZekQvkkVtHUA9NIwMk=;
-        b=22HppmGRVbSIsX7a+BlCHmwkFULGWxWFBkmP/2qF2sODVHb4/Fp9+avWcZqSzDzqDa
-         I273jgIlUmBqRmBBOg0OKqV00HlQxBWJw+JGrGivo6MOC4T0yoDC0q1VCgi4g+FlSl9S
-         Ite0+BE5EY18sQrOdUzOtKTywVP/ZzawIOREeTLndWyK8vb9nm+M16VZI4CKWqVLCKo6
-         Vngo2NAw+UWhLBR0WpsPCzmDWjJ9m1WQgwbCTaV7tqeAlalmlFzcPovC14staGsKuePa
-         mANoEOUgQkd1PWpbokXfUES+/1QPDPTljBgDtAHPzR5PcFTbfzexIWAVAJNEQHspl8eX
-         WTHw==
-X-Gm-Message-State: AOAM5303AVzuZil4AhwLvr7MNs2mPawnG44NqbLdpeSdEufdaS+GYYPO
-	3t7+mGsheZJWK75Q7X1QXMfbmVp9ChS5tYm2lWE=
-X-Google-Smtp-Source: ABdhPJx9TTxxLNEwF+4nqK17T9MfrZryYcQnu8nF9wuFdmJwPKwtyAsHwaCtK/g+ns54aBxeRErB7ut9nPOPqMIGnK0=
-X-Received: by 2002:a9d:7096:0:b0:5ad:ebf7:a225 with SMTP id
- l22-20020a9d7096000000b005adebf7a225mr9336023otj.370.1646061375645; Mon, 28
- Feb 2022 07:16:15 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02D57C
+	for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 15:27:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE0D7C340E7;
+	Mon, 28 Feb 2022 15:27:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646062024;
+	bh=kFhWjGGPF0HOMSD41o5huv2osoCwgvTkZ3Q334nGLzY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gn3F5ZL+dou8lTgfyLNm181boVHfFi+CTyIt/fDJtEMsk00674yLi6uEWrBRqz2EC
+	 rWdAi7n5FTg5oOA/k3VIZ/FlW7A9FsC0Hf99O+46B82BI5g4xxsoSl6nSB3UL+Q7ia
+	 TkoyE+Ne4nSdi+OzagxH6CAJ3cSXWx9Ug3cX5aZJhEjH1ygv6VyHlWzW/msM5wEkAt
+	 sn8nU/Qo2ndeTO79tMwOXgX0+xOfNWSK0B+Arpx15XZEebqLlXuVVekSt4AmbqipmY
+	 4kSMGfpqhTyXW/rrhhsI4eJ02lyEfBPwO+k1gty5GZx8XHK3aCBpwaRhrAIkJLu5Qv
+	 386CwB06NKMfQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Lewis Hanly <lewis.hanly@microchip.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	kernel test robot <lkp@intel.com>,
+	Jassi Brar <jaswinder.singh@linaro.org>,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] SoC: polarfire: fix build warning
+Date: Mon, 28 Feb 2022 16:26:52 +0100
+Message-Id: <20220228152658.3367506-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220225221625.3531852-1-keescook@chromium.org>
- <CANpmjNOup5JCjRpRkhsF3Z+dPX6_MQE5u6WhnMit84c1TyRK+A@mail.gmail.com> <CA+DvKQ+PYtDyejaUoBj51D_Y7muYaR1_FhQGWGWvgQawCbp31Q@mail.gmail.com>
-In-Reply-To: <CA+DvKQ+PYtDyejaUoBj51D_Y7muYaR1_FhQGWGWvgQawCbp31Q@mail.gmail.com>
-From: Daniel Micay <danielmicay@gmail.com>
-Date: Mon, 28 Feb 2022 10:15:59 -0500
-Message-ID: <CA+DvKQ+bp7Y7gmaVhacjv9uF6Ar-o4tet872h4Q8RPYPJjcJQA@mail.gmail.com>
-Subject: Re: [PATCH] mm: Handle ksize() vs __alloc_size by forgetting size
-To: Marco Elver <elver@google.com>
-Cc: Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev, 
-	Pekka Enberg <penberg@kernel.org>, David Rientjes <rientjes@google.com>, 
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org, stable@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Looked through them and nearly all seem easy to replace.
+From: Arnd Bergmann <arnd@arndb.de>
 
-By the way, the call to ksize in arch/x86/kernel/cpu/microcode/amd.c
-doesn't look right. It allocates the memory with kmemdup. I don't see
-how it can assume that the padding is zero, and that seems to be a
-requirement since it zeroes the destination before copying to it.
-Seems far more reasonable to add a field with the size.
+The newly added driver causes a build warning because of a missing
+prototype:
+
+drivers/soc/microchip/mpfs-sys-controller.c:76:6: warning: no previous prototype for function 'mpfs_sys_controller_put' [-Wmissing-prototypes]
+
+Link: https://lore.kernel.org/llvm/202202260947.F5T1YNao-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: d0054a470c33 ("soc: add microchip polarfire soc system controller")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+I've applied this to the arm/drivers branch as a fixup
+
+ include/soc/microchip/mpfs.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/soc/microchip/mpfs.h b/include/soc/microchip/mpfs.h
+index 6466515262bd..969b5239521e 100644
+--- a/include/soc/microchip/mpfs.h
++++ b/include/soc/microchip/mpfs.h
+@@ -38,6 +38,8 @@ int mpfs_blocking_transaction(struct mpfs_sys_controller *mpfs_client, struct mp
+ 
+ struct mpfs_sys_controller *mpfs_sys_controller_get(struct device *dev);
+ 
++void mpfs_sys_controller_put(void *data);
++
+ #endif /* if IS_ENABLED(CONFIG_POLARFIRE_SOC_SYS_CTRL) */
+ 
+ #endif /* __SOC_MPFS_H__ */
+-- 
+2.29.2
+
