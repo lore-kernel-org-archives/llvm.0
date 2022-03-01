@@ -1,41 +1,46 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC24E5CAB
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 16:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C775CAB
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 16:07:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646150833; x=1677686833;
+  t=1646150844; x=1677686844;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5kg3KWMKuLiwWLgwdzI8SfRtxCQr6NA+ACkIohhgeRk=;
-  b=MUn4vXIdCxzEWAAXXQ7NFBemL0tCsi00UEL2GorqkP4wshNBM/FIbnYu
-   PpcsPwEP/J2Zc3L9e+1K76YBV1wEprKu3oi0n2syXqNNJrtx3mq6tvAlb
-   tpkFbdMBBPIpXVq5XK0tjbuqMcgcVpjENZT3VVHk0BrX8KDE3e86hIA0Z
-   +mephpDCfXwWBJHbaTDtZi8wUaAcMqHKdNoeri7DfqCNdmigTws/sdoKz
-   CsTjlJrbuK9Yt3ar8HPPo9cKYZbfnprPGrA3aHbbh4aTafq9G2nRss19V
-   kGEPNhaASBh6fDUcfqgRjEcFFrUB4Kv2dg1smEyDEv0Dw6zgedzi/HV1o
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277831675"
+  bh=j7+mghICr3KLO5uiQDA8PUTR39Oz0pF35skb9c2hCA0=;
+  b=Q3T3ZBNPgNoGUHVtT3QHhS/i5dNndO9gKV9xDZV/36lMHv3ELJKPvjl7
+   lvWIZRBzE8pZud0NHz+yV4oEMliWlPsdZaQY0nLaZ3brgroy2XaVIPw0r
+   LdH38C1s+GPUxEwtDCRl9WUrLw5ZFg+cH983xjcc1Lqk4g/yYKvlBAW9K
+   6AErPH4BpVj8hUSsokyNJGlhPtIvuZmKBaG68LB/YgpLyvOZjz98mRekK
+   UAjAemn5UUpuxV24cFKkiszPelvSh6xZyLVLyz9k65z6G4ArsEkZCmRAM
+   K3bCUioP9rcKxV31urSp83jfJoqvBWedve8dkVRhJ/QEiHhmprkmMGSd3
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251993874"
 X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="277831675"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:06:33 -0800
+   d="scan'208";a="251993874"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:06:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="685769017"
+   d="scan'208";a="630063751"
 Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Mar 2022 08:06:31 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Mar 2022 08:06:32 -0800
 Received: from kbuild by 2146afe809fb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nP51D-0000fd-73; Tue, 01 Mar 2022 16:06:31 +0000
-Date: Wed, 2 Mar 2022 00:06:03 +0800
+	id 1nP51D-0000fk-8r; Tue, 01 Mar 2022 16:06:31 +0000
+Date: Wed, 2 Mar 2022 00:06:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dust Li <dust.li@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH net-next 1/7] net/smc: add sysctl interface for SMC
-Message-ID: <202203012329.Hks6HNdS-lkp@intel.com>
-References: <20220301094402.14992-2-dust.li@linux.alibaba.com>
+To: Meng Tang <tangmeng@uniontech.com>, mcgrof@kernel.org,
+	keescook@chromium.org, yzaikin@google.com, ebiederm@xmission.com,
+	willy@infradead.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, nixiaoming@huawei.com,
+	nizhen@uniontech.com, zhanglianjie@uniontech.com,
+	sujiaxun@uniontech.com, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>
+Subject: Re: [PATCH v2 1/2] fs/proc: optimize exactly register one ctl_table
+Message-ID: <202203012340.8d5kZylK-lkp@intel.com>
+References: <20220301115341.30101-1-tangmeng@uniontech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,177 +49,139 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220301094402.14992-2-dust.li@linux.alibaba.com>
+In-Reply-To: <20220301115341.30101-1-tangmeng@uniontech.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Dust,
+Hi Meng,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on net-next/master]
+[auto build test WARNING on mcgrof/sysctl-next]
+[also build test WARNING on jack-fs/fsnotify rostedt-trace/for-next linus/master v5.17-rc6 next-20220301]
+[cannot apply to kees/for-next/pstore]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Dust-Li/net-smc-some-datapath-performance-optimizations/20220301-174523
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git f2b77012ddd5b2532d262f100be3394ceae3ea59
-config: riscv-randconfig-r042-20220301 (https://download.01.org/0day-ci/archive/20220301/202203012329.Hks6HNdS-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Meng-Tang/fs-proc-optimize-exactly-register-one-ctl_table/20220301-195515
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-next
+config: hexagon-randconfig-r045-20220301 (https://download.01.org/0day-ci/archive/20220301/202203012340.8d5kZylK-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/884ea36cd0b9e8ff0290ffc4628736caa5eeac4e
+        # https://github.com/0day-ci/linux/commit/d9e9a410cf46b383390d668770fff70540e27528
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Dust-Li/net-smc-some-datapath-performance-optimizations/20220301-174523
-        git checkout 884ea36cd0b9e8ff0290ffc4628736caa5eeac4e
+        git fetch --no-tags linux-review Meng-Tang/fs-proc-optimize-exactly-register-one-ctl_table/20220301-195515
+        git checkout d9e9a410cf46b383390d668770fff70540e27528
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/proc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from net/smc/smc_sysctl.c:17:
->> net/smc/smc_sysctl.h:23:5: warning: no previous prototype for function 'smc_sysctl_init' [-Wmissing-prototypes]
-   int smc_sysctl_init(void)
-       ^
-   net/smc/smc_sysctl.h:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int smc_sysctl_init(void)
+>> fs/proc/proc_sysctl.c:1281:6: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
+           int len = strlen(table->procname) + 1;
+               ^
+   fs/proc/proc_sysctl.c:1638:26: warning: no previous prototype for function '__register_sysctl_table_single' [-Wmissing-prototypes]
+   struct ctl_table_header *__register_sysctl_table_single(
+                            ^
+   fs/proc/proc_sysctl.c:1638:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct ctl_table_header *__register_sysctl_table_single(
    ^
    static 
->> net/smc/smc_sysctl.h:28:6: warning: no previous prototype for function 'smc_sysctl_exit' [-Wmissing-prototypes]
-   void smc_sysctl_exit(void) { }
-        ^
-   net/smc/smc_sysctl.h:28:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void smc_sysctl_exit(void) { }
-   ^
-   static 
->> net/smc/smc_sysctl.c:39:11: error: no member named 'smc_hdr' in 'struct netns_smc'
-           net->smc.smc_hdr = register_net_sysctl(net, "net/smc", table);
-           ~~~~~~~~ ^
-   net/smc/smc_sysctl.c:40:16: error: no member named 'smc_hdr' in 'struct netns_smc'
-           if (!net->smc.smc_hdr)
-                ~~~~~~~~ ^
-   net/smc/smc_sysctl.c:54:39: error: no member named 'smc_hdr' in 'struct netns_smc'
-           unregister_net_sysctl_table(net->smc.smc_hdr);
-                                       ~~~~~~~~ ^
->> net/smc/smc_sysctl.c:62:5: warning: attribute declaration must precede definition [-Wignored-attributes]
-   int __init smc_sysctl_init(void)
-       ^
-   include/linux/init.h:50:17: note: expanded from macro '__init'
-   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline __nocfi
-                           ^
-   include/linux/compiler_attributes.h:276:56: note: expanded from macro '__section'
-   #define __section(section)              __attribute__((__section__(section)))
-                                                          ^
-   net/smc/smc_sysctl.h:23:5: note: previous definition is here
-   int smc_sysctl_init(void)
-       ^
->> net/smc/smc_sysctl.c:62:5: warning: attribute declaration must precede definition [-Wignored-attributes]
-   int __init smc_sysctl_init(void)
-       ^
-   include/linux/init.h:50:41: note: expanded from macro '__init'
-   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline __nocfi
-                                                   ^
-   include/linux/compiler_attributes.h:81:56: note: expanded from macro '__cold'
-   #define __cold                          __attribute__((__cold__))
-                                                          ^
-   net/smc/smc_sysctl.h:23:5: note: previous definition is here
-   int smc_sysctl_init(void)
-       ^
->> net/smc/smc_sysctl.c:62:5: warning: attribute declaration must precede definition [-Wignored-attributes]
-   int __init smc_sysctl_init(void)
-       ^
-   include/linux/init.h:50:84: note: expanded from macro '__init'
-   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline __nocfi
-                                                                                              ^
-   include/linux/compiler-clang.h:69:33: note: expanded from macro '__nocfi'
-   #define __nocfi         __attribute__((__no_sanitize__("cfi")))
-                                          ^
-   net/smc/smc_sysctl.h:23:5: note: previous definition is here
-   int smc_sysctl_init(void)
-       ^
->> net/smc/smc_sysctl.c:62:12: error: redefinition of 'smc_sysctl_init'
-   int __init smc_sysctl_init(void)
-              ^
-   net/smc/smc_sysctl.h:23:5: note: previous definition is here
-   int smc_sysctl_init(void)
-       ^
->> net/smc/smc_sysctl.c:67:6: error: redefinition of 'smc_sysctl_exit'
-   void smc_sysctl_exit(void)
-        ^
-   net/smc/smc_sysctl.h:28:6: note: previous definition is here
-   void smc_sysctl_exit(void) { }
-        ^
-   5 warnings and 5 errors generated.
---
-   In file included from net/smc/af_smc.c:54:
->> net/smc/smc_sysctl.h:23:5: warning: no previous prototype for function 'smc_sysctl_init' [-Wmissing-prototypes]
-   int smc_sysctl_init(void)
-       ^
-   net/smc/smc_sysctl.h:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int smc_sysctl_init(void)
-   ^
-   static 
->> net/smc/smc_sysctl.h:28:6: warning: no previous prototype for function 'smc_sysctl_exit' [-Wmissing-prototypes]
-   void smc_sysctl_exit(void) { }
-        ^
-   net/smc/smc_sysctl.h:28:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void smc_sysctl_exit(void) { }
-   ^
-   static 
-   2 warnings generated.
+   fs/proc/proc_sysctl.c:1988:27: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
+           struct ctl_table_header *link_head;
+                                    ^
+   3 warnings generated.
 
 
-vim +39 net/smc/smc_sysctl.c
+vim +1281 fs/proc/proc_sysctl.c
 
-    22	
-    23	static __net_init int smc_sysctl_init_net(struct net *net)
-    24	{
-    25		struct ctl_table *table;
-    26	
-    27		table = smc_table;
-    28		if (!net_eq(net, &init_net)) {
-    29			int i;
-    30	
-    31			table = kmemdup(table, sizeof(smc_table), GFP_KERNEL);
-    32			if (!table)
-    33				goto err_alloc;
-    34	
-    35			for (i = 0; i < ARRAY_SIZE(smc_table) - 1; i++)
-    36				table[i].data += (void *)net - (void *)&init_net;
-    37		}
-    38	
-  > 39		net->smc.smc_hdr = register_net_sysctl(net, "net/smc", table);
-    40		if (!net->smc.smc_hdr)
-    41			goto err_reg;
-    42	
-    43		return 0;
-    44	
-    45	err_reg:
-    46		if (!net_eq(net, &init_net))
-    47			kfree(table);
-    48	err_alloc:
-    49		return -ENOMEM;
-    50	}
-    51	
-    52	static __net_exit void smc_sysctl_exit_net(struct net *net)
-    53	{
-    54		unregister_net_sysctl_table(net->smc.smc_hdr);
-    55	}
-    56	
-    57	static struct pernet_operations smc_sysctl_ops __net_initdata = {
-    58		.init = smc_sysctl_init_net,
-    59		.exit = smc_sysctl_exit_net,
-    60	};
-    61	
-  > 62	int __init smc_sysctl_init(void)
-    63	{
-    64		return register_pernet_subsys(&smc_sysctl_ops);
-    65	}
-    66	
-  > 67	void smc_sysctl_exit(void)
+  1256	
+  1257	static struct ctl_table_header *new_links_single(struct ctl_dir *dir, struct ctl_table *table,
+  1258		struct ctl_table_root *link_root)
+  1259	{
+  1260		struct ctl_table *link_table;
+  1261		struct ctl_table_header *links;
+  1262		struct ctl_node *node;
+  1263		char *link_name;
+  1264		int name_bytes = 0;
+  1265	
+  1266		name_bytes += strlen(table->procname) + 1;
+  1267	
+  1268		links = kzalloc(sizeof(struct ctl_table_header) +
+  1269				sizeof(struct ctl_node) +
+  1270				sizeof(struct ctl_table)*2 +
+  1271				name_bytes,
+  1272				GFP_KERNEL);
+  1273	
+  1274		if (!links)
+  1275			return NULL;
+  1276	
+  1277		node = (struct ctl_node *)(links + 1);
+  1278		link_table = (struct ctl_table *)(node + 1);
+  1279		link_name = (char *)&link_table[2];
+  1280	
+> 1281		int len = strlen(table->procname) + 1;
+  1282	
+  1283		memcpy(link_name, table->procname, len);
+  1284		link_table->procname = link_name;
+  1285		link_table->mode = S_IFLNK|S_IRWXUGO;
+  1286		link_table->data = link_root;
+  1287		link_name += len;
+  1288	
+  1289		init_header_single(links, dir->header.root, dir->header.set, node, link_table);
+  1290		links->nreg = 1;
+  1291	
+  1292		return links;
+  1293	}
+  1294	static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table *table,
+  1295		struct ctl_table_root *link_root)
+  1296	{
+  1297		struct ctl_table *link_table, *entry, *link;
+  1298		struct ctl_table_header *links;
+  1299		struct ctl_node *node;
+  1300		char *link_name;
+  1301		int nr_entries, name_bytes;
+  1302	
+  1303		name_bytes = 0;
+  1304		nr_entries = 0;
+  1305		for (entry = table; entry->procname; entry++) {
+  1306			nr_entries++;
+  1307			name_bytes += strlen(entry->procname) + 1;
+  1308		}
+  1309	
+  1310		links = kzalloc(sizeof(struct ctl_table_header) +
+  1311				sizeof(struct ctl_node)*nr_entries +
+  1312				sizeof(struct ctl_table)*(nr_entries + 1) +
+  1313				name_bytes,
+  1314				GFP_KERNEL);
+  1315	
+  1316		if (!links)
+  1317			return NULL;
+  1318	
+  1319		node = (struct ctl_node *)(links + 1);
+  1320		link_table = (struct ctl_table *)(node + nr_entries);
+  1321		link_name = (char *)&link_table[nr_entries + 1];
+  1322	
+  1323		for (link = link_table, entry = table; entry->procname; link++, entry++) {
+  1324			int len = strlen(entry->procname) + 1;
+  1325			memcpy(link_name, entry->procname, len);
+  1326			link->procname = link_name;
+  1327			link->mode = S_IFLNK|S_IRWXUGO;
+  1328			link->data = link_root;
+  1329			link_name += len;
+  1330		}
+  1331		init_header(links, dir->header.root, dir->header.set, node, link_table);
+  1332		links->nreg = nr_entries;
+  1333	
+  1334		return links;
+  1335	}
+  1336	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
