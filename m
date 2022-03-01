@@ -1,100 +1,84 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304277C
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 20:12:13 +0000 (UTC)
-Received: by mail-lj1-f176.google.com with SMTP id bn33so23407296ljb.6
-        for <llvm@lists.linux.dev>; Tue, 01 Mar 2022 12:12:12 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1177C
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 20:15:05 +0000 (UTC)
+Received: by mail-lj1-f174.google.com with SMTP id v28so23365534ljv.9
+        for <llvm@lists.linux.dev>; Tue, 01 Mar 2022 12:15:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uNDp5KXCKeop2yOo8l/8mrZzIPAvGyioW/V2tn2igq8=;
-        b=EO9u4Ku7uUzMJhGxZnToQLWVHSB4bnEI2drfTxCzPLe+5ic0u1rMguA3h3bRxU3eoh
-         cReVFeLfqv41v3lc3J6nFr4/J+1SwXrqJO18UMmVGOpbxSQmHTbbCyTGYJZ4YXf3+CHs
-         6Q7ScdzXZfZmWBKeHWAN1Zbjq5xv2bsu4AH5cQ4cimtfCgojo1pUQQ5M7SgiGwsBydVB
-         htmv4EdHl2zD6o3DLHcOUsoVrhimoKH+6sblZoGinbMC61wo3YF6n7Wl94kvm2SRe+Ri
-         UwehA2XtceHZx+OtpmA9bfvtnAah569VEqFNIO9b8S3mNUPxDnikkXHpSJk+jSXWArcZ
-         +FNw==
+        bh=4eHzcr1YBGh9o3F4BfOGRvjDUMT5g6q2aQ+3yXHWlOo=;
+        b=IZ7/AMI7eJ+ZC/a6fwyXrw1yeswUH52MRpfmJL+44Eql30HG9WzC+yjvRBlCihk6qS
+         EvBYRMpstobbwMQtFKPVT7whOd7g6EVNZ9/wh7HN9tT37SQk/kV5yveCnI1WKJxZgJfl
+         u5hnXn2wSwbpo9fmHyh7tnjuQRET8kflkToPHzIjsE09X8R0kVDj2vdGuFiwf8ERMe6P
+         ZUYFx2H+eXSISc3wqYR+rj1jGJiYrqhXhAk2plKyJAwvUaqs44FoSzMAFM70O9Zf7sm+
+         roIZG0kJTwRPMpvGKMjoahCaVCHPIeV7xANIw5S+Q6dN5bwJxAjfKupRq3TdUUvC7rAX
+         ewCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uNDp5KXCKeop2yOo8l/8mrZzIPAvGyioW/V2tn2igq8=;
-        b=jW/Wae5WMCAAveOZ9tLQ5/549C76NbdrQhHKeFjGBXE7tHC7mXnZB1Hod1LoVMhzkS
-         +kJQUGpzDxRUVx02dCv66EDXCWoLWHUdmiBGYPfrx/WaFeUOYIvwp/Vionk44oYDr8+h
-         z9Bri2j5+VmqDgxAMzC3MzaFFoeB1mEGfgD97ZcPKsu6T6JMeP96iJPTSQqPXHupfFgW
-         IlYAEEybNEH2ANUzcx3X0tC93ayvC+Yl3HrqbOVvRwIU7EQku6U00fE3fJI6hyxqUueT
-         U0d0RH3FRUHSuVM9G/PR/vUod9wozqeiNVSJY0V58cflO3X1shceDjU/p71P9e02B37a
-         ETmw==
-X-Gm-Message-State: AOAM531ENjH0dlr0isvDhQsuVE7cTAzQPtiTxyYyi4FOcagOzgnQY1kE
-	oEilhK9DCi1UZnQr6fi2CoHGqtCZ3J0YUodN6l3xJQ==
-X-Google-Smtp-Source: ABdhPJxFT25RN4upV+eC9mqObTsE3rwkSU3a9SxEuU0pbBYsUXuPSAtJL86l5x1ByKd9eTwBOET3LqI2vtpo2CE6jm8=
-X-Received: by 2002:a05:651c:1791:b0:243:94bd:d94c with SMTP id
- bn17-20020a05651c179100b0024394bdd94cmr17832518ljb.468.1646165531034; Tue, 01
- Mar 2022 12:12:11 -0800 (PST)
+        bh=4eHzcr1YBGh9o3F4BfOGRvjDUMT5g6q2aQ+3yXHWlOo=;
+        b=LmXGPwufHCzDazaiOwcbwXW2fqeU3bisQoTlvsJFVqj5DO085pEXaWaxgsZ3ohEL9h
+         WouJMeWn1aZdh1ZINBVeLiMPerdx+tGUq3jAiQbpNfIsZjEUgjqlV/qP4X/iJCau/V69
+         6FkeEQXoOGF8muqJKsULWgTxH3U4QJTMj169PY9w3UA26dV9S8SmaLrAOeKc3kRIZxUR
+         RYc2MzDIoYjqMs4e45nCihk8AWvAb+6leN4mnJyyrJkjzfXbkPAFjmJaOzi3Lr4MijoX
+         q1sBhoxrp6dNFov32UdYHaGf9RQI9VxaDnm+tMRrcemLXxd7kEAasiEabRN3Ga8nlM3V
+         2PXg==
+X-Gm-Message-State: AOAM532i2EOKU/wTC2mIPZRLeWZFPvHj/cBJa6YvTRuTrhxhob9AANkb
+	Zt6qhO8w8gjOjWjbZNkLvXR5kufyS/yaH0N7GX57fQ==
+X-Google-Smtp-Source: ABdhPJzNPHP87nTATQhKnvYuvIArBZyNmAuESqaseKTw/6hflPbUYbtD2HuT0mMBWgoGoh8R52W1FO0GY7/eOoWfE0w=
+X-Received: by 2002:a2e:3004:0:b0:223:c126:5d1a with SMTP id
+ w4-20020a2e3004000000b00223c1265d1amr18945849ljw.408.1646165703196; Tue, 01
+ Mar 2022 12:15:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220225032410.25622-1-ashimida@linux.alibaba.com>
- <CANiq72kXoonDYk095XvBwEtRCRNECd1iQOqJHE2cNcgLyUMfcQ@mail.gmail.com>
- <26a0a816-bc3e-2ac0-d773-0819d9f225af@linux.alibaba.com> <CAKwvOdkykPtGTL6ud8qJZHSHKV2eSbpnZE-G4oyymD9BiQKHdg@mail.gmail.com>
- <bf34b523-8477-c18c-e076-e120051cb6a1@linux.alibaba.com>
-In-Reply-To: <bf34b523-8477-c18c-e076-e120051cb6a1@linux.alibaba.com>
+References: <20220217153842.3252424-1-trix@redhat.com> <51018469-3bab-e56d-7407-b16170b5d74c@amd.com>
+ <CADnq5_OGEURo76mzc4Sb2Jar465Xt4vkSMECDi5jCMH332zUAg@mail.gmail.com>
+ <CAKwvOdnYTC7mku1=eVaDLGQFHdoN3u8Afoo582OAQ+ApJmfhQQ@mail.gmail.com>
+ <CADnq5_PniW+-8G5AhOSwuovESpfeMxL4r6P30b3F1coa_NmMEQ@mail.gmail.com> <CAOWid-cXYze56YmUACWP4emNeGHXMFf4q5aZfFGUwVXWNFAvSg@mail.gmail.com>
+In-Reply-To: <CAOWid-cXYze56YmUACWP4emNeGHXMFf4q5aZfFGUwVXWNFAvSg@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 1 Mar 2022 12:11:59 -0800
-Message-ID: <CAKwvOd=6atvH9fJk0jJcqksSQXZ6wFyAvZ1wsZ7UWsEN-soOTg@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH v2] AARCH64: Add gcc Shadow Call Stack support
-To: Dan Li <ashimida@linux.alibaba.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Nicholas Piggin <npiggin@gmail.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
-	Marco Elver <elver@google.com>, linux-kernel <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org
+Date: Tue, 1 Mar 2022 12:14:51 -0800
+Message-ID: <CAKwvOdn52Kn1dnmp9cCwJtv5kPwZfHgApzhzajsdkjOwF8XqVA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: fix amdgpu_ras_block_late_init error handler
+To: Kenny Ho <y2kenny@gmail.com>
+Cc: Alex Deucher <alexdeucher@gmail.com>, "Joshi, Mukul" <mukul.joshi@amd.com>, 
+	Tao Zhou <tao.zhou1@amd.com>, llvm@lists.linux.dev, Dave Airlie <airlied@linux.ie>, 
+	Tom Rix <trix@redhat.com>, xinhui pan <Xinhui.Pan@amd.com>, Nirmoy Das <nirmoy.das@amd.com>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	Maling list - DRI developers <dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Luben Tuikov <luben.tuikov@amd.com>, "Stanley.Yang" <Stanley.Yang@amd.com>, 
+	amd-gfx list <amd-gfx@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>, 
+	"Deucher, Alexander" <alexander.deucher@amd.com>, "Chai, Thomas" <YiPeng.Chai@amd.com>, 
+	John Clements <john.clements@amd.com>, Christian Koenig <christian.koenig@amd.com>, 
+	Dennis Li <Dennis.Li@amd.com>, Hawking Zhang <Hawking.Zhang@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 28, 2022 at 4:32 PM Dan Li <ashimida@linux.alibaba.com> wrote:
+On Tue, Feb 22, 2022 at 11:12 AM Kenny Ho <y2kenny@gmail.com> wrote:
 >
->
->
-> On 2/28/22 14:35, Nick Desaulniers wrote:
-> > On Sun, Feb 27, 2022 at 11:37 PM Dan Li <ashimida@linux.alibaba.com> wrote:
-> >>>> +#ifdef CONFIG_SHADOW_CALL_STACK
-> >>>> +#define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
-> >>>> +#endif
-> >>>
-> >>> Since both compilers have it, and I guess the `#ifdef` condition would
-> >>> work for both, could this be moved into `compiler_types.h` where the
-> >>> empty `__noscs` definition is, and remove the one from
-> >>> `compiler-clang.h`?
-> >>>
-> >> In the clang documentation I see __has_feature(shadow_call_stack) is
-> >> used to check if -fsanitize=shadow-call-stack is enabled, so I think
-> >> maybe it's fine to use "#ifdef CONFIG_SHADOW_CALL_STACK"
-> >> instead of "#if __has_attribute(__no_sanitize_address__)" here, then
-> >> move it to `compiler_types.h`.
+> On Thu, Feb 17, 2022 at 2:06 PM Alex Deucher <alexdeucher@gmail.com> wrote:
 > >
-> > Or simply add a #define for __noscs to include/linux/compiler-gcc.h
-> > with appropriate guard and leave the existing #ifndef in
-> > include/linux/compiler_types.h as is.  I'd prefer that when the
-> > compilers differ in terms of feature detection since it's as explicit
-> > as possible.
+> > On Thu, Feb 17, 2022 at 2:04 PM Nick Desaulniers
+> > <ndesaulniers@google.com> wrote:
+> > >
+> > >
+> > > Alex,
+> > > Has AMD been able to set up clang builds, yet?
 > >
+> > No.  I think some individual teams do, but it's never been integrated
+> > into our larger CI systems as of yet as far as I know.
 >
-> To make sure I understand correctly, that means I should keep
-> the current patch unchanged right?
+> I have just added clang build to our CI last night so hopefully we
+> should be catching these now.
 
-Yes.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Wonderful! ++beers_owed;
 -- 
 Thanks,
 ~Nick Desaulniers
