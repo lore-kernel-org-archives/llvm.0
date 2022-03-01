@@ -1,41 +1,47 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9D117F7
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 04:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8177717F8
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 04:19:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646108389; x=1677644389;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Wazi11WfZT2uqM2yxa+sX0dRMhOL20+FTicJ5DynnMg=;
-  b=QNMwiM01G6TVNWxRg9cBsnru+T1942m6y4PRCGtK1AR86zh7uPH5bQND
-   LLAhYJC6IpUWm8iCZYNJv74GWWJzFHLg1UkWLKmtP8IBrQ78B8aGGRw0g
-   CVEI8BWWj9rCKgf+dOWTQWF5hmZvPc9ag2XUy8p6xdPbKn0erhzL+xySV
-   aDQw5jWfSMf+YZYNVrvyccKHKY0Ylp4EsmLF6flWSoeK7xFa/+yetJx3o
-   1izcISfjN/xXX1mGzNJLqIV5miWwMeHJYrPU8L9p3GdlF1OkXbrjrxllD
-   AS+7HjCp17FzxYceEl4V5OVVq9CuynsgF2/z1cHx02ZMuykyefgZf+jR3
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="252784763"
+  t=1646108390; x=1677644390;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OdBHJiSxsaP3KdGJd9Gtst2fhK8G33ye+cSYy98JHtg=;
+  b=FTRnGuspVaff1/27JEGaz5kLs6nd/lo8UpraEEX1pSHqZz8Tk7UhOcSp
+   IFe4fTHfEwgmz6QqedC+/ESc6yg0a3eni4J+mKU0uRMdbSFRnt+eF43FC
+   95RlqQVQQ/M9ww/ubbSIalG0Ri1A1DBgD7nw0VmNqG180v9bWKzTj3fl6
+   WIDmotdT+gdQZwsj1ykTjjmcU8LtmRGhU1xKwwwxabLaO3eufPcRHrswU
+   aV523qGH9n2wesadP0QP2DBlW2u5X1xIKx51yoERLHP46AfqG8XZeUNZj
+   MAWKcNF7O00oxh3vM8whLRygoKYKjxdEThqZP9V8zTsCy7XaYfGciiRSa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277715192"
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="252784763"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 20:19:48 -0800
+   d="scan'208";a="277715192"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 20:19:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="639231798"
+   d="scan'208";a="593466286"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Feb 2022 20:19:47 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 28 Feb 2022 20:19:47 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nOtzG-00086d-Md; Tue, 01 Mar 2022 04:19:46 +0000
-Date: Tue, 1 Mar 2022 12:19:05 +0800
+	id 1nOtzG-00086a-M5; Tue, 01 Mar 2022 04:19:46 +0000
+Date: Tue, 1 Mar 2022 12:18:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Amir Goldstein <amir73il@gmail.com>
+To: Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
+	herbert@gondor.apana.org.au, krzysztof.kozlowski@canonical.com,
+	robh+dt@kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [amir73il:sb_iostats 3/8] fs/nfsd/export.c:337:9: error: implicit
- declaration of function 'percpu_counters_init'
-Message-ID: <202203011147.TpujEh2h-lkp@intel.com>
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	Corentin Labbe <clabbe@baylibre.com>
+Subject: Re: [PATCH 13/16] crypto: rockchip: rewrite type
+Message-ID: <202203011017.qqb0tTar-lkp@intel.com>
+References: <20220228194037.1600509-14-clabbe@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,110 +50,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220228194037.1600509-14-clabbe@baylibre.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/amir73il/linux sb_iostats
-head:   ecfdb413f2105083296e9cb45290eb1f01b0ef5c
-commit: ec86002f8d5abb285345a931587f2f554d995825 [3/8] lib/percpu_counter: add helpers for arrays of counters
-config: arm-versatile_defconfig (https://download.01.org/0day-ci/archive/20220301/202203011147.TpujEh2h-lkp@intel.com/config)
+Hi Corentin,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on rockchip/for-next]
+[also build test WARNING on herbert-cryptodev-2.6/master herbert-crypto-2.6/master v5.17-rc6 next-20220228]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220301-035430
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+config: arm64-randconfig-r006-20220228 (https://download.01.org/0day-ci/archive/20220301/202203011017.qqb0tTar-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/amir73il/linux/commit/ec86002f8d5abb285345a931587f2f554d995825
-        git remote add amir73il https://github.com/amir73il/linux
-        git fetch --no-tags amir73il sb_iostats
-        git checkout ec86002f8d5abb285345a931587f2f554d995825
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/03fb353165f76dc7c5ed7c27401537552070406b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220301-035430
+        git checkout 03fb353165f76dc7c5ed7c27401537552070406b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/crypto/rockchip/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/nfsd/export.c:337:9: error: implicit declaration of function 'percpu_counters_init' [-Werror,-Wimplicit-function-declaration]
-           return percpu_counters_init(stats->counter, EXP_STATS_COUNTERS_NUM, 0,
-                  ^
-   fs/nfsd/export.c:337:9: note: did you mean 'percpu_counter_init'?
-   include/linux/percpu_counter.h:106:19: note: 'percpu_counter_init' declared here
-   static inline int percpu_counter_init(struct percpu_counter *fbc, s64 amount,
-                     ^
->> fs/nfsd/export.c:343:2: error: implicit declaration of function 'percpu_counters_set' [-Werror,-Wimplicit-function-declaration]
-           percpu_counters_set(stats->counter, EXP_STATS_COUNTERS_NUM, 0);
-           ^
-   fs/nfsd/export.c:343:2: note: did you mean 'percpu_counter_set'?
-   include/linux/percpu_counter.h:117:20: note: 'percpu_counter_set' declared here
-   static inline void percpu_counter_set(struct percpu_counter *fbc, s64 amount)
-                      ^
->> fs/nfsd/export.c:348:2: error: implicit declaration of function 'percpu_counters_destroy' [-Werror,-Wimplicit-function-declaration]
-           percpu_counters_destroy(stats->counter, EXP_STATS_COUNTERS_NUM);
-           ^
-   fs/nfsd/export.c:348:2: note: did you mean 'percpu_counter_destroy'?
-   include/linux/percpu_counter.h:113:20: note: 'percpu_counter_destroy' declared here
-   static inline void percpu_counter_destroy(struct percpu_counter *fbc)
-                      ^
-   fs/nfsd/export.c:980:17: warning: variable 'inode' set but not used [-Wunused-but-set-variable]
-           struct inode            *inode;
+>> drivers/crypto/rockchip/rk3288_crypto.c:101:6: warning: data argument not used by format string [-Wformat-extra-args]
+                                    rk_cipher_algs[i]->alg.skcipher.base.cra_driver_name);
                                     ^
-   1 warning and 3 errors generated.
---
->> fs/nfsd/nfscache.c:159:9: error: implicit declaration of function 'nfsd_percpu_counters_init' [-Werror,-Wimplicit-function-declaration]
-           return nfsd_percpu_counters_init(nn->counter, NFSD_NET_COUNTERS_NUM);
-                  ^
-   fs/nfsd/nfscache.c:159:9: note: did you mean 'percpu_counter_init'?
-   include/linux/percpu_counter.h:106:19: note: 'percpu_counter_init' declared here
-   static inline int percpu_counter_init(struct percpu_counter *fbc, s64 amount,
-                     ^
->> fs/nfsd/nfscache.c:164:2: error: implicit declaration of function 'nfsd_percpu_counters_destroy' [-Werror,-Wimplicit-function-declaration]
-           nfsd_percpu_counters_destroy(nn->counter, NFSD_NET_COUNTERS_NUM);
-           ^
-   fs/nfsd/nfscache.c:164:2: note: did you mean 'percpu_counter_destroy'?
-   include/linux/percpu_counter.h:113:20: note: 'percpu_counter_destroy' declared here
-   static inline void percpu_counter_destroy(struct percpu_counter *fbc)
-                      ^
-   2 errors generated.
---
->> fs/nfsd/stats.c:89:9: error: implicit declaration of function 'percpu_counters_init' [-Werror,-Wimplicit-function-declaration]
-           return percpu_counters_init(nfsdstats.counter, NFSD_STATS_COUNTERS_NUM,
-                  ^
-   fs/nfsd/stats.c:89:9: note: did you mean 'percpu_counter_init'?
-   include/linux/percpu_counter.h:106:19: note: 'percpu_counter_init' declared here
-   static inline int percpu_counter_init(struct percpu_counter *fbc, s64 amount,
-                     ^
->> fs/nfsd/stats.c:95:2: error: implicit declaration of function 'percpu_counters_destroy' [-Werror,-Wimplicit-function-declaration]
-           percpu_counters_destroy(nfsdstats.counter, NFSD_STATS_COUNTERS_NUM);
-           ^
-   fs/nfsd/stats.c:95:2: note: did you mean 'percpu_counter_destroy'?
-   include/linux/percpu_counter.h:113:20: note: 'percpu_counter_destroy' declared here
-   static inline void percpu_counter_destroy(struct percpu_counter *fbc)
-                      ^
-   2 errors generated.
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^
+   1 warning generated.
 
 
-vim +/percpu_counters_init +337 fs/nfsd/export.c
+vim +101 drivers/crypto/rockchip/rk3288_crypto.c
 
-   333	
-   334	static int export_stats_init(struct export_stats *stats)
-   335	{
-   336		stats->start_time = ktime_get_seconds();
- > 337		return percpu_counters_init(stats->counter, EXP_STATS_COUNTERS_NUM, 0,
-   338					    GFP_KERNEL);
-   339	}
-   340	
-   341	static void export_stats_reset(struct export_stats *stats)
-   342	{
- > 343		percpu_counters_set(stats->counter, EXP_STATS_COUNTERS_NUM, 0);
-   344	}
-   345	
-   346	static void export_stats_destroy(struct export_stats *stats)
-   347	{
- > 348		percpu_counters_destroy(stats->counter, EXP_STATS_COUNTERS_NUM);
-   349	}
-   350	
+    89	
+    90	static int rk_crypto_register(struct rk_crypto_info *crypto_info)
+    91	{
+    92		unsigned int i, k;
+    93		int err = 0;
+    94	
+    95		for (i = 0; i < ARRAY_SIZE(rk_cipher_algs); i++) {
+    96			rk_cipher_algs[i]->dev = crypto_info;
+    97			switch (rk_cipher_algs[i]->type) {
+    98			case CRYPTO_ALG_TYPE_SKCIPHER:
+    99				dev_info(crypto_info->dev, "Register %s as\n",
+   100					 rk_cipher_algs[i]->alg.skcipher.base.cra_name,
+ > 101					 rk_cipher_algs[i]->alg.skcipher.base.cra_driver_name);
+   102				err = crypto_register_skcipher(&rk_cipher_algs[i]->alg.skcipher);
+   103				break;
+   104			case CRYPTO_ALG_TYPE_AHASH:
+   105				dev_info(crypto_info->dev, "Register %s as %s\n",
+   106					 rk_cipher_algs[i]->alg.hash.halg.base.cra_name,
+   107					 rk_cipher_algs[i]->alg.hash.halg.base.cra_driver_name);
+   108				err = crypto_register_ahash(&rk_cipher_algs[i]->alg.hash);
+   109				break;
+   110			default:
+   111				dev_err(crypto_info->dev, "unknown algorithm\n");
+   112			}
+   113			if (err)
+   114				goto err_cipher_algs;
+   115		}
+   116		return 0;
+   117	
+   118	err_cipher_algs:
+   119		for (k = 0; k < i; k++) {
+   120			if (rk_cipher_algs[i]->type == CRYPTO_ALG_TYPE_SKCIPHER)
+   121				crypto_unregister_skcipher(&rk_cipher_algs[k]->alg.skcipher);
+   122			else
+   123				crypto_unregister_ahash(&rk_cipher_algs[i]->alg.hash);
+   124		}
+   125		return err;
+   126	}
+   127	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
