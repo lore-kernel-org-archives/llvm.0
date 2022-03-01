@@ -1,42 +1,36 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63863161
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 17:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646154025; x=1677690025;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qFx2K2BkSCOgXk2XRt2r5V5uRFSKNupKTOGKHA8XF+M=;
-  b=g4Rw/nn3S6NjCfbjcrakPi35JV/J76bXIMw5FLk8StssIqvbDq+JfkD6
-   GSEL2HZAN5BS3/x7fWFLSZKGNq6BgPS4acX49/Lr2pnyrrN5a2+AYa8sD
-   wFhIpU0PUcNooPajWwRnwYg//+2t1Yk4fE9spHt/3aWyVyKUqZSBdgdBM
-   MIkdyaAfN3kiNZ3h6GhkegA/CT72bjt71zSfBPo2mEHfFL3o23sZCi7SV
-   8BP1xIMZQFm67mqpCHMHbpzshURIqPVn8VP1McjKRGzdSktLpHmCSAzu3
-   YuKGQkMojJemiNLkJY52FwhmQi9CzsK6HzqjhsyMRdh+UWGJNfj9QLjwD
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="233800192"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="233800192"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:58:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="608868643"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 01 Mar 2022 08:58:45 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nP5pk-0000m5-RU; Tue, 01 Mar 2022 16:58:44 +0000
-Date: Wed, 2 Mar 2022 00:58:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Liu Yi L <yi.l.liu@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E567161
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 17:00:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A3DC340EE;
+	Tue,  1 Mar 2022 17:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646154051;
+	bh=h907ipPkeeK8P2nHj6SjBPg75fPHts99jpm7hU3oTe4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uejxuz68JNN+P/Ws/LbTy+IcncnwZTwo3NQso7ZdH7w978wfAVW3186wDBd9SzsvQ
+	 kNm3lkRQv5WwuJB/zW5sCTRZw66PNcdHW0Y8xqQzw6dI5HVsJZofimyKsKGnA23U26
+	 pm1v1ubbzy45uxc1q1rpOavS/mjiXtwgBo5eyrEsQLMhAHhiNWjvnMUZHulkbiDtey
+	 zoovisI+XRC+c3rMe9bDqCkk4dhfLZA9Sz+xxGcMKgexowZ1PBAjwmUFgxDEf7BIU3
+	 +QI1xlshWc56KtdACRoQy2cp54d1DnemenhEjTrXbUzW6dj/1IqTUJWR7wl21ymGDK
+	 /6i415XEZ/Tqg==
+Date: Tue, 1 Mar 2022 10:00:45 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Marco Elver <elver@google.com>, Jani Nikula <jani.nikula@intel.com>,
+	David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 29/30]
- drivers/vfio/vfio.c:1800:10: error: implicit declaration of function
- 'iommufd_vfio_set_iommu'
-Message-ID: <202203020051.lJg5pB22-lkp@intel.com>
+Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
+Message-ID: <Yh5RPeqikTtoUS80@dev-arch.archlinux-ax161>
+References: <20220301145233.3689119-1-arnd@kernel.org>
+ <20220301145233.3689119-3-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,60 +39,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220301145233.3689119-3-arnd@kernel.org>
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
-head:   2bca5fa75dad57f41002a93861a950d35d55e568
-commit: f8fb748995b4e1156fd76a3860da5ea897536a3c [29/30] vfio: Fix kernel panic in vfio_ioctl_check_extension()
-config: hexagon-randconfig-r041-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020051.lJg5pB22-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/luxis1999/iommufd/commit/f8fb748995b4e1156fd76a3860da5ea897536a3c
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
-        git checkout f8fb748995b4e1156fd76a3860da5ea897536a3c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/vfio/
+On Tue, Mar 01, 2022 at 03:52:33PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> As we change the C language standard for the kernel from gnu89 to
+> gnu11, it makes sense to also update the version for user space
+> compilation.
+> 
+> Some users have older native compilers than what they use for
+> kernel builds, so I considered using gnu99 as the default version
+> for wider compatibility with gcc-4.6 and earlier.
+> 
+> However, testing with older compilers showed that we already require
+> HOSTCC version 5.1 as well because a lot of host tools include
+> linux/compiler.h that uses __has_attribute():
+> 
+>   CC      tools/objtool/exec-cmd.o
+> In file included from tools/include/linux/compiler_types.h:36:0,
+>                  from tools/include/linux/compiler.h:5,
+>                  from exec-cmd.c:2:
+> tools/include/linux/compiler-gcc.h:19:5: error: "__has_attribute" is not defined [-Werror=undef]
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+For what it's worth, I think this is a bug:
 
-All errors (new ones prefixed by >>):
+https://lore.kernel.org/r/c1b1a299-c60d-28a4-07ab-1ecd211d6da9@i-love.sakura.ne.jp/
+https://lore.kernel.org/r/20220102120201.594408-1-xu.xin16@zte.com.cn/
 
-   drivers/vfio/vfio.c:1088:44: error: too many arguments to function call, expected single argument 'iommufd', have 2 arguments
-                   vfio_group_unset_iommufd(group->iommufd, &group->device_list);
-                   ~~~~~~~~~~~~~~~~~~~~~~~~                 ^~~~~~~~~~~~~~~~~~~
-   include/linux/iommufd.h:57:20: note: 'vfio_group_unset_iommufd' declared here
-   static inline void vfio_group_unset_iommufd(void *iommufd)
-                      ^
-   drivers/vfio/vfio.c:1166:26: error: too few arguments to function call, expected 3, have 2
-                                                   &group->device_list);
-                                                                      ^
-   include/linux/iommufd.h:51:19: note: 'vfio_group_set_iommufd' declared here
-   static inline int vfio_group_set_iommufd(int fd, struct iommu_group *group,
-                     ^
->> drivers/vfio/vfio.c:1800:10: error: implicit declaration of function 'iommufd_vfio_set_iommu' [-Werror,-Wimplicit-function-declaration]
-                   return iommufd_vfio_set_iommu(group->iommufd, arg);
-                          ^
-   3 errors generated.
+I never got clear feedback on resolving it from the first thread and
+nobody bothered to pick up the second patch.
 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-vim +/iommufd_vfio_set_iommu +1800 drivers/vfio/vfio.c
+Nobody has yelled that loud though, so this is probably fine.
 
-  1796	
-  1797	long vfio_external_check_extension(struct vfio_group *group, unsigned long arg)
-  1798	{
-  1799		if (group->iommufd)
-> 1800			return iommufd_vfio_set_iommu(group->iommufd, arg);
-  1801	
-  1802		return vfio_ioctl_check_extension(group->container, arg);
-  1803	}
-  1804	EXPORT_SYMBOL_GPL(vfio_external_check_extension);
-  1805	
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 37ef6a555dcd..7c9be7f1ccd4 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -432,7 +432,7 @@ HOSTCXX	= g++
+>  endif
+>  
+>  export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+> -			    -O2 -fomit-frame-pointer -std=gnu89 \
+> +			    -O2 -fomit-frame-pointer -std=gnu11 \
+>  			    -Wdeclaration-after-statement
+>  export KBUILD_USERLDFLAGS :=
+>  
+> -- 
+> 2.29.2
+> 
+> 
