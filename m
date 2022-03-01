@@ -1,144 +1,95 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8177717F8
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 04:19:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646108390; x=1677644390;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OdBHJiSxsaP3KdGJd9Gtst2fhK8G33ye+cSYy98JHtg=;
-  b=FTRnGuspVaff1/27JEGaz5kLs6nd/lo8UpraEEX1pSHqZz8Tk7UhOcSp
-   IFe4fTHfEwgmz6QqedC+/ESc6yg0a3eni4J+mKU0uRMdbSFRnt+eF43FC
-   95RlqQVQQ/M9ww/ubbSIalG0Ri1A1DBgD7nw0VmNqG180v9bWKzTj3fl6
-   WIDmotdT+gdQZwsj1ykTjjmcU8LtmRGhU1xKwwwxabLaO3eufPcRHrswU
-   aV523qGH9n2wesadP0QP2DBlW2u5X1xIKx51yoERLHP46AfqG8XZeUNZj
-   MAWKcNF7O00oxh3vM8whLRygoKYKjxdEThqZP9V8zTsCy7XaYfGciiRSa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277715192"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="277715192"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 20:19:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="593466286"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Feb 2022 20:19:47 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nOtzG-00086a-M5; Tue, 01 Mar 2022 04:19:46 +0000
-Date: Tue, 1 Mar 2022 12:18:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
-	herbert@gondor.apana.org.au, krzysztof.kozlowski@canonical.com,
-	robh+dt@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	Corentin Labbe <clabbe@baylibre.com>
-Subject: Re: [PATCH 13/16] crypto: rockchip: rewrite type
-Message-ID: <202203011017.qqb0tTar-lkp@intel.com>
-References: <20220228194037.1600509-14-clabbe@baylibre.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66AF9181
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 06:05:45 +0000 (UTC)
+Received: by mail-pf1-f182.google.com with SMTP id p8so13244412pfh.8
+        for <llvm@lists.linux.dev>; Mon, 28 Feb 2022 22:05:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jUjj6TEe+83dCjS8RX0jAf7rSkzSpvGOk1hJbgvtBtY=;
+        b=DxYpK0jV+QEPd20yIaRaBcP5pT5xy0FoABCkWe/WDEq9qlcMIEEXZ4iXcH8x6a/Id2
+         jTfA4jsZbhVee4h+e8jUxmnWz+ym+UxXVqf9Yj+jyvwuIw4bMZKBh++iMgugY7fYOYMl
+         iwSqicVK/G4VW5MPP+qDa1NQKl90Ma48qf+2C+U4DdOyd2eKNmQIuqv7o/2YTt2IJJHz
+         f44wFrtst1fNuaoRayEdYpugwSlizSOGojTgzvynk5FxlI/bA5WOpUG4EaygL//GwthA
+         Oeur+PFX4AWmZPyYbwYyc34SRsvWLnqwE4/NqhV6zeSxgH5Zazl8wkBI6isQfjfeucoR
+         mc2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jUjj6TEe+83dCjS8RX0jAf7rSkzSpvGOk1hJbgvtBtY=;
+        b=y7zOomSGHHYRXW48zEjv6S4CRjjYVaTl7kMZAaWHXBvaSSidalmrK/kZoyPVfqf+uY
+         dG1oQ0GNkUGDNWgxbTDhg0AEc23CxS+fOoH6kFmUVcYki04Jqt+O1oqqgeClLWiGEByd
+         MwhhaqqQOVmrCtbSO/3qx/uWWKS83fwon+UbD+ez6RZF4DmRTLY8D/GUaiBHmhGESF+E
+         ulPFDLVSqQr86RxpNI7ntlOzehmgFRSdQEELwOJ9/0wn/auaKfzuW/nnbHz7EqczMtSO
+         vgUFOS3FDpeXXUhGTIJEY3wavYTZo93bxUR/4pgJxmsNq/XQ0QBHdDOqCEhe8rARMRyG
+         D3rQ==
+X-Gm-Message-State: AOAM530TSuuEBfoytfK+z+JL/JbI/4BSdKbntWBLdXpkABDcI17Cdz/e
+	qSR/nPFxxXmkJxcPXcr8ooU=
+X-Google-Smtp-Source: ABdhPJzoM5r6A72aCOV8FF/+Op4ZDplQaiVIBtr2PnIg7IFjdp32qTPOMs+QHihMavXo6ljYJ/wkmw==
+X-Received: by 2002:a63:921a:0:b0:373:df77:ee5d with SMTP id o26-20020a63921a000000b00373df77ee5dmr20027488pgd.90.1646114744736;
+        Mon, 28 Feb 2022 22:05:44 -0800 (PST)
+Received: from localhost.localdomain ([2405:201:9005:88cd:3423:e74e:cf1d:8494])
+        by smtp.gmail.com with ESMTPSA id q14-20020a056a00150e00b004f1252a21casm15567872pfu.161.2022.02.28.22.05.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 22:05:44 -0800 (PST)
+From: Souptick Joarder <jrdr.linux@gmail.com>
+To: robert.foss@linaro.org,
+	todor.too@gmail.com,
+	agross@kernel.org,
+	bjorn.andersson@linaro.org,
+	mchehab@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-media@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	"Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] media: camss: Replace hard coded value with parameter
+Date: Tue,  1 Mar 2022 11:35:30 +0530
+Message-Id: <20220301060530.5870-1-jrdr.linux@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228194037.1600509-14-clabbe@baylibre.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Corentin,
+From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
 
-I love your patch! Perhaps something to improve:
+Kernel test robot reported below warning ->
+drivers/media/platform/qcom/camss/camss-csid-gen2.c:407:3:
+warning: Value stored to 'val' is never read
+[clang-analyzer-deadcode.DeadStores]
 
-[auto build test WARNING on rockchip/for-next]
-[also build test WARNING on herbert-cryptodev-2.6/master herbert-crypto-2.6/master v5.17-rc6 next-20220228]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Replace hard coded value with val.
 
-url:    https://github.com/0day-ci/linux/commits/Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220301-035430
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
-config: arm64-randconfig-r006-20220228 (https://download.01.org/0day-ci/archive/20220301/202203011017.qqb0tTar-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/03fb353165f76dc7c5ed7c27401537552070406b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220301-035430
-        git checkout 03fb353165f76dc7c5ed7c27401537552070406b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/crypto/rockchip/
-
-If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/crypto/rockchip/rk3288_crypto.c:101:6: warning: data argument not used by format string [-Wformat-extra-args]
-                                    rk_cipher_algs[i]->alg.skcipher.base.cra_driver_name);
-                                    ^
-   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
-           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                    ~~~     ^
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^
-   1 warning generated.
-
-
-vim +101 drivers/crypto/rockchip/rk3288_crypto.c
-
-    89	
-    90	static int rk_crypto_register(struct rk_crypto_info *crypto_info)
-    91	{
-    92		unsigned int i, k;
-    93		int err = 0;
-    94	
-    95		for (i = 0; i < ARRAY_SIZE(rk_cipher_algs); i++) {
-    96			rk_cipher_algs[i]->dev = crypto_info;
-    97			switch (rk_cipher_algs[i]->type) {
-    98			case CRYPTO_ALG_TYPE_SKCIPHER:
-    99				dev_info(crypto_info->dev, "Register %s as\n",
-   100					 rk_cipher_algs[i]->alg.skcipher.base.cra_name,
- > 101					 rk_cipher_algs[i]->alg.skcipher.base.cra_driver_name);
-   102				err = crypto_register_skcipher(&rk_cipher_algs[i]->alg.skcipher);
-   103				break;
-   104			case CRYPTO_ALG_TYPE_AHASH:
-   105				dev_info(crypto_info->dev, "Register %s as %s\n",
-   106					 rk_cipher_algs[i]->alg.hash.halg.base.cra_name,
-   107					 rk_cipher_algs[i]->alg.hash.halg.base.cra_driver_name);
-   108				err = crypto_register_ahash(&rk_cipher_algs[i]->alg.hash);
-   109				break;
-   110			default:
-   111				dev_err(crypto_info->dev, "unknown algorithm\n");
-   112			}
-   113			if (err)
-   114				goto err_cipher_algs;
-   115		}
-   116		return 0;
-   117	
-   118	err_cipher_algs:
-   119		for (k = 0; k < i; k++) {
-   120			if (rk_cipher_algs[i]->type == CRYPTO_ALG_TYPE_SKCIPHER)
-   121				crypto_unregister_skcipher(&rk_cipher_algs[k]->alg.skcipher);
-   122			else
-   123				crypto_unregister_ahash(&rk_cipher_algs[i]->alg.hash);
-   124		}
-   125		return err;
-   126	}
-   127	
-
+Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/media/platform/qcom/camss/camss-csid-gen2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+index abbfbf448893..2031bde13a93 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+@@ -405,7 +405,7 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ 		writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PERIOD(0));
+ 
+ 		val = 0;
+-		writel_relaxed(0, csid->base + CSID_RDI_FRM_DROP_PATTERN(0));
++		writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PATTERN(0));
+ 
+ 		val = 1;
+ 		writel_relaxed(val, csid->base + CSID_RDI_IRQ_SUBSAMPLE_PERIOD(0));
+-- 
+2.25.1
+
