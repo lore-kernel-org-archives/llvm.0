@@ -1,135 +1,84 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFEC17D1
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 10:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646130619; x=1677666619;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qjMQe44OgAQj153g2DNzxJPxNFnNII9PaZptrJHxDWo=;
-  b=XNYmu1NVTGXXcPJ2XWKCF3oF5I1wGDyW1e7/tWfpBJh2qhbxq30k1Jd/
-   km6E8n6H5IOykWIqPuLkPcXQx3AOKrilgTytrBWz9kn7vnWYGI617YMd0
-   Z+rdSGFEYyDggFGrLCa3Uo9SJJGwMX3oq7a+GmDd0fl/t5wVFUJnEkFS+
-   9PPzmjFXCT+R8zW6Tym/ePdGrQLaeHaRUeaJ3yaGxK/j93INGZmnmjpzq
-   IarzHPrjDGVZnP/IalwqNBIxfL3XT5khlWB6iXdA6J+mnHqQKVqODdyVc
-   kIqkP0QIp33b4SlF93ol5j+OVtoli9hAC5SdC/M+wPxOH+ZAj5a64G6Tl
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251936518"
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="251936518"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 02:30:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="709002733"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Mar 2022 02:30:16 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nOzln-0000IJ-Ag; Tue, 01 Mar 2022 10:30:15 +0000
-Date: Tue, 1 Mar 2022 18:29:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Haowen Bai <baihaowen88@gmail.com>, sebastian.hesselbarth@gmail.com,
-	davem@davemloft.net, kuba@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Haowen Bai <baihaowen88@gmail.com>
-Subject: Re: [PATCH] net: marvell: Use min() instead of doing it manually
-Message-ID: <202203011855.FRrOViok-lkp@intel.com>
-References: <1646115417-24639-1-git-send-email-baihaowen88@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E554D17D1;
+	Tue,  1 Mar 2022 10:44:05 +0000 (UTC)
+Received: by mail-io1-f42.google.com with SMTP id m185so17934778iof.10;
+        Tue, 01 Mar 2022 02:44:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dohQLzfhr7wZu6SxVtIw3CHG42SObGN2SXyswtlVBsg=;
+        b=WrUDonvN2fO25UTk5VNVhFhd8gruRaN5xzDoP4JD0Sakac0hlwGn0vLFs4yYd4XAFv
+         uZKJIKn4j7cuELvqeeSDPXMNu2C1n0MsJpfl9rt1CcXMWz8ysAwYiWu0FU5ssFw8GnBu
+         KImb7bl4uZxpEQ889GR2FwiQtAowT5cOncwrkuheaR+UErGWa6dJdP5knzUj9ZNji+C6
+         SaCIGAmJwbqyXPo1H+nGW/xKoV4Sv5xxMQcmeQv2UvCQ1LPx9cytIPoPatO3xtpXO37Q
+         QL3drAKRoTDr8u6LO2OfPrWDqwyTUyYOMOn4N3XOwbIN3FW3QG+ijjXJMFfWWnQ72HyS
+         YuTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dohQLzfhr7wZu6SxVtIw3CHG42SObGN2SXyswtlVBsg=;
+        b=vfOPM8eOGI4HYZ6fq66ilEumZWClHSPvV2Rc9k16wBI9fGlp+hW2JkPCSxt9Jm52Ns
+         WKtbKbJ6DE2EvWVKWCzRz0i0Ydy3GMK3n35S3Ctt8gnYdJ2E7BMNctILqiCgA2ECZzP7
+         2p9L01J7p8vQIf4et3EP6tcErgtrKv6x08c8rhZQ0K/7ATJMplgysfvYuUwMop7qp4MN
+         WiXnHN6qiKtnhX62CA9bVSxFRf3QSbFAs4qnBH4CdzyxqezOpMAt/B5G0YGJU/BUIv1Y
+         UAZv9ixlqbpHvdbcBm8HIbj/iUb4sZ/Yu4pCCwmxAZCsUAiAZOPX9sDieeXLZhmNxlmZ
+         tA6A==
+X-Gm-Message-State: AOAM530bShUWimLF9ENYSzynGiFLTiX/KAan3quOBbdLmkiAcEbTdwPG
+	5v5nQoSjAJFETLnHyHzXPfEvqE7RTc/YpSRKAJg=
+X-Google-Smtp-Source: ABdhPJw1aZ/CGkeAZM6RKVYVHBay0f9lMjJdsMqyLhdijbZf60uaKu7bggqdaHiabrS+XPZY5qiqhEF5Hass1iDJqZk=
+X-Received: by 2002:a6b:661a:0:b0:640:dd42:58ff with SMTP id
+ a26-20020a6b661a000000b00640dd4258ffmr18921633ioc.64.1646131444958; Tue, 01
+ Mar 2022 02:44:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646115417-24639-1-git-send-email-baihaowen88@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220228103142.3301082-1-arnd@kernel.org>
+In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 1 Mar 2022 11:43:53 +0100
+Message-ID: <CANiq72=wmYeBcJvRbBgRj1q_cHjZBVjxStXSu-8Ogv5bJhCqpA@mail.gmail.com>
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>, 
+	Federico Vaga <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, 
+	Hu Haowen <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, 
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-doc-tw-discuss@lists.sourceforge.net, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Intel Graphics Development <intel-gfx@lists.freedesktop.org>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, greybus-dev@lists.linaro.org, 
+	linux-staging@lists.linux.dev, Linux Btrfs <linux-btrfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Haowen,
+On Mon, Feb 28, 2022 at 11:32 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> -under ``-std=gnu89`` [gcc-c-dialect-options]_: the GNU dialect of ISO C90
+> -(including some C99 features). ``clang`` [clang]_ is also supported, see
+> +under ``-std=gnu11`` [gcc-c-dialect-options]_: the GNU dialect of ISO C11
+> +(including some C17 features). ``clang`` [clang]_ is also supported, see
 
-Thank you for the patch! Perhaps something to improve:
+I think the "(including some C17)" bit would not make much sense
+anymore. There were no major changes in C17 and GCC implements
+`-std=c11` and `-std=c17` as basically the same thing according to the
+docs (and GNU extensions apply equally to both, I would assume).
 
-[auto build test WARNING on net-next/master]
-[also build test WARNING on net/master horms-ipvs/master linus/master v5.17-rc6 next-20220228]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+When I wrote the "(including some C99 features)" I meant that GCC
+implemented some C99 features as extensions in C90 mode, and the
+kernel used some of those (e.g. the now gone VLAs).
 
-url:    https://github.com/0day-ci/linux/commits/Haowen-Bai/net-marvell-Use-min-instead-of-doing-it-manually/20220301-141800
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git f2b77012ddd5b2532d262f100be3394ceae3ea59
-config: hexagon-randconfig-r041-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011855.FRrOViok-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/55e43d9d6e3e0a8774e6a5e3976808e5736f6c9f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Haowen-Bai/net-marvell-Use-min-instead-of-doing-it-manually/20220301-141800
-        git checkout 55e43d9d6e3e0a8774e6a5e3976808e5736f6c9f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ethernet/marvell/
+With that changed, for `programming-language.rst`:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/marvell/mv643xx_eth.c:1664:21: warning: comparison of distinct pointer types ('typeof (er->rx_pending) *' (aka 'unsigned int *') and 'typeof (4096) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
-           mp->rx_ring_size = min(er->rx_pending, 4096);
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +1664 drivers/net/ethernet/marvell/mv643xx_eth.c
-
-  1653	
-  1654	static int
-  1655	mv643xx_eth_set_ringparam(struct net_device *dev, struct ethtool_ringparam *er,
-  1656				  struct kernel_ethtool_ringparam *kernel_er,
-  1657				  struct netlink_ext_ack *extack)
-  1658	{
-  1659		struct mv643xx_eth_private *mp = netdev_priv(dev);
-  1660	
-  1661		if (er->rx_mini_pending || er->rx_jumbo_pending)
-  1662			return -EINVAL;
-  1663	
-> 1664		mp->rx_ring_size = min(er->rx_pending, 4096);
-  1665		mp->tx_ring_size = clamp_t(unsigned int, er->tx_pending,
-  1666					   MV643XX_MAX_SKB_DESCS * 2, 4096);
-  1667		if (mp->tx_ring_size != er->tx_pending)
-  1668			netdev_warn(dev, "TX queue size set to %u (requested %u)\n",
-  1669				    mp->tx_ring_size, er->tx_pending);
-  1670	
-  1671		if (netif_running(dev)) {
-  1672			mv643xx_eth_stop(dev);
-  1673			if (mv643xx_eth_open(dev)) {
-  1674				netdev_err(dev,
-  1675					   "fatal error on re-opening device after ring param change\n");
-  1676				return -ENOMEM;
-  1677			}
-  1678		}
-  1679	
-  1680		return 0;
-  1681	}
-  1682	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Miguel
