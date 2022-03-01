@@ -1,86 +1,139 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 900535A12
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 12:16:47 +0000 (UTC)
-Received: by mail-wm1-f43.google.com with SMTP id c192so7416864wma.4
-        for <llvm@lists.linux.dev>; Tue, 01 Mar 2022 04:16:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ntCFAlEG4RaBUbthb67COp2chYLeXJlzz0H3UgSJ+AM=;
-        b=KcYzYyDqMO1QxjulQ3f7+DlAxeuh4ROCXjWrlw1dhlzpEsk2FlP+AQkW2NmZFH2I+B
-         5Gg606bim3Z5sC2PnglpawRbDNvOQXcZjT9mCp59aNR+1HIQzE6iw/vm9ArjB4HhFvlt
-         JPebVG09sopBNZvWG8fnRZqFSeMNaTFdV22XiyzeCTiVWDfuof03iQCdi32R69wzc61j
-         ur0ApquHv84sLX9BkaLWCrm/5yZq/kEZJfpItx9NIOZIxO4+VyWkwASdLTmE3oZ0GJGe
-         CnTvw3k0ZY0vMLM9TdjDplbKhn9LkJ+sZgzkKYgQ4/LxyybfWXaTdcyr7D1CAytYNKz0
-         xQwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ntCFAlEG4RaBUbthb67COp2chYLeXJlzz0H3UgSJ+AM=;
-        b=uqx7qXG/TQZNY2KVE9KnBXKZ2YAbmD+DNcLs5bmNvzqb2/FYN3QlT7jNwRTHHxmfZG
-         EkLt1dxoBNN1o01BfrERnASlun6lK4arJzcv2FaeeJksJG8V+B5TrvQ/3auZsvPat5+Z
-         b52TI6IDMWeVuqQLa4Qrb845km2/UsLYpylfNsAoHd0U82fWrodllbE+bvMlxHisrrsh
-         hb5Yl1zkZcX5aUBYtiu3M7h+5Y+tCeJcOB6KrV1rdEpZJW6XMO9u0V4hkQUg3bF6++e4
-         7oI7jv2fNMHel/qde+xQPNxPdFvu35bsfz3BUVpZz5S9Nn40MGo2BkQbWkmP+fJZ0mKQ
-         iSNA==
-X-Gm-Message-State: AOAM531yzHFXiwiHKhsE9KkHrSsQ/a9vIVFs020FbGc4hCe/BIwc4e5f
-	cgjILimMB9Kh6afM60mInxE=
-X-Google-Smtp-Source: ABdhPJyB2mh3Tl8wcItdVynl95uixjQ5gSbloQJscKVVCDQHi1TWabcRSPzxJFa4VifIWuIbrMF/yw==
-X-Received: by 2002:a05:600c:3d13:b0:37b:b8e5:ed80 with SMTP id bh19-20020a05600c3d1300b0037bb8e5ed80mr16672940wmb.183.1646137005817;
-        Tue, 01 Mar 2022 04:16:45 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id g6-20020a05600c4ec600b0037bf934bca3sm2929921wmq.17.2022.03.01.04.16.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 04:16:45 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Theodore Ts'o <tytso@mit.edu>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	linux-ext4@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] ext4: remove redundant assignment to variable split_flag1
-Date: Tue,  1 Mar 2022 12:16:44 +0000
-Message-Id: <20220301121644.997833-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DFF4179
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 12:32:45 +0000 (UTC)
+Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.226])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K7GP72Cv4z67nSs;
+	Tue,  1 Mar 2022 20:13:31 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 1 Mar 2022 13:14:36 +0100
+Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 1 Mar
+ 2022 12:14:35 +0000
+Date: Tue, 1 Mar 2022 12:14:34 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: kernel test robot <lkp@intel.com>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+	<linux-arm-kernel@lists.infradead.org>, <arm@kernel.org>, Arnd Bergmann
+	<arnd@arndb.de>
+Subject: Re: [soc:arm/soc 6/8]
+ arch/arm/mach-pxa/include/mach/uncompress.h:62:6: error: expected
+ expression
+Message-ID: <20220301121434.00003287@Huawei.com>
+In-Reply-To: <202203010702.6TRDNN1H-lkp@intel.com>
+References: <202203010702.6TRDNN1H-lkp@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.41]
+X-ClientProxiedBy: lhreml711-chm.china.huawei.com (10.201.108.62) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 
-Variable split_flag1 is being assigned a value that is never read,
-it is being re-assigned a new value in the following code block.
-The assignment is redundant and can be removed.
+On Tue, 1 Mar 2022 07:33:39 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-Cleans up clang scan build warning:
-fs/ext4/extents.c:3371:2: warning: Value stored to 'split_flag1' is
-never read [deadcode.DeadStores]
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git arm/soc
+> head:   e6e6479c27aa22d11ff7109125dd5ec9ef276de8
+> commit: 28f74201e37ccf3063e359bfe346b09400af9bab [6/8] ARM: pxa: remove Intel Imote2 and Stargate 2 boards
+> config: arm-colibri_pxa300_defconfig (https://download.01.org/0day-ci/archive/20220301/202203010702.6TRDNN1H-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=28f74201e37ccf3063e359bfe346b09400af9bab
+>         git remote add soc https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+>         git fetch --no-tags soc arm/soc
+>         git checkout 28f74201e37ccf3063e359bfe346b09400af9bab
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/ext4/extents.c | 1 -
- 1 file changed, 1 deletion(-)
+Sorry!
 
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index c0f3f83e0c1b..0d98cf402282 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -3368,7 +3368,6 @@ static int ext4_split_extent(handle_t *handle,
- 		return -EFSCORRUPTED;
- 	}
- 	unwritten = ext4_ext_is_unwritten(ex);
--	split_flag1 = 0;
- 
- 	if (map->m_lblk >= ee_block) {
- 		split_flag1 = split_flag & EXT4_EXT_DATA_VALID2;
--- 
-2.34.1
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from arch/arm/boot/compressed/misc.c:29:
+> >> arch/arm/mach-pxa/include/mach/uncompress.h:62:6: error: expected expression  
+>                || machine_is_cm_x300() || machine_is_balloon3())
+
+I messed up a rebase so there is a stray || on the line above this
+
+Arnd, new version or are you fine to tidy that up?
+
+Thanks,
+
+Jonathan
+
+>                ^
+>    arch/arm/boot/compressed/misc.c:126:17: warning: no previous prototype for function '__div0' [-Wmissing-prototypes]
+>    asmlinkage void __div0(void)
+>                    ^
+>    arch/arm/boot/compressed/misc.c:126:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    asmlinkage void __div0(void)
+>               ^
+>               static 
+>    arch/arm/boot/compressed/misc.c:133:6: warning: no previous prototype for function '__stack_chk_fail' [-Wmissing-prototypes]
+>    void __stack_chk_fail(void)
+>         ^
+>    arch/arm/boot/compressed/misc.c:133:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void __stack_chk_fail(void)
+>    ^
+>    static 
+>    arch/arm/boot/compressed/misc.c:142:1: warning: no previous prototype for function 'decompress_kernel' [-Wmissing-prototypes]
+>    decompress_kernel(unsigned long output_start, unsigned long free_mem_ptr_p,
+>    ^
+>    arch/arm/boot/compressed/misc.c:141:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void
+>    ^
+>    static 
+>    arch/arm/boot/compressed/misc.c:164:6: warning: no previous prototype for function 'fortify_panic' [-Wmissing-prototypes]
+>    void fortify_panic(const char *name)
+>         ^
+>    arch/arm/boot/compressed/misc.c:164:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void fortify_panic(const char *name)
+>    ^
+>    static 
+>    4 warnings and 1 error generated.
+> 
+> 
+> vim +62 arch/arm/mach-pxa/include/mach/uncompress.h
+> 
+> ^1da177e4c3f41 include/asm-arm/arch-pxa/uncompress.h       Linus Torvalds    2005-04-16  53  
+> 6d3dfe4a314147 include/asm-arm/arch-pxa/uncompress.h       Eric Miao         2008-06-02  54  static inline void arch_decomp_setup(void)
+> 6d3dfe4a314147 include/asm-arm/arch-pxa/uncompress.h       Eric Miao         2008-06-02  55  {
+> 2a8ac187e03027 arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2010-03-08  56  	/* initialize to default */
+> 2a8ac187e03027 arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2010-03-08  57  	uart_base = FFUART_BASE;
+> 2a8ac187e03027 arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2010-03-08  58  	uart_shift = 2;
+> 2a8ac187e03027 arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2010-03-08  59  	uart_is_pxa = 1;
+> 2a8ac187e03027 arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2010-03-08  60  
+> 28f74201e37ccf arch/arm/mach-pxa/include/mach/uncompress.h Jonathan Cameron  2022-02-27  61  	if (machine_is_littleton() ||  machine_is_csb726() ||
+> 2a23ec3679d84a arch/arm/mach-pxa/include/mach/uncompress.h Jonathan McDowell 2009-07-04 @62  	    || machine_is_cm_x300() || machine_is_balloon3())
+> 
+> :::::: The code at line 62 was first introduced by commit
+> :::::: 2a23ec3679d84ac243add761fa3d3872cf6dcb11 [ARM] pxa: balloon3 (http://balloonboard.org/) base machine support
+> 
+> :::::: TO: Jonathan McDowell <noodles@earth.li>
+> :::::: CC: Eric Miao <eric.y.miao@gmail.com>
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
