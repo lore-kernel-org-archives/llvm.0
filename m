@@ -1,90 +1,94 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F45179
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 13:10:56 +0000 (UTC)
-Received: by mail-pj1-f47.google.com with SMTP id q8-20020a17090a178800b001bc299b8de1so2148643pja.1
-        for <llvm@lists.linux.dev>; Tue, 01 Mar 2022 05:10:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DV6f3J2QIRehyEDByQEpoJ2xwDbM5hUK+3WRGSJAWlw=;
-        b=YbuwEXN/UFumml2CqM42Aahs6NNSgs9Fax2qrLKsWK3mw8JfHkq7DpjMyrbU0N1Usx
-         bmHQu6FoE6V/joJwRIjThReEFs/kkPktEhABl7uNtKNe1ufj8eTNvGoE/AsPxa9tN0MH
-         YD2Vl0UrWh2AjVEa4A9t8oUMSSxRRk0ZSqcVsJea+OVqKXhqaDB7GRkUSKj/Nz/SRAAw
-         VdmyNV4CpfsY3QB28aRqjKtc+LtehkS1v37iQzSUSkodUzze9ZLvTqTekeE7yyzHrLvr
-         rDRrBC5VxnEFbnwtevr9seYx/NO/F3H4YESG9A5RcOi0srsUnLX2JDcq7Iij3SDDxdVy
-         u9ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DV6f3J2QIRehyEDByQEpoJ2xwDbM5hUK+3WRGSJAWlw=;
-        b=O5mOKAMFE+F0QOKMniStj7R8GSANyGoO5rsOnW2N7zVKJf65X73pXyxqjP22ARI4d3
-         6armm/h5mKiFnfuxbqj7Gi4IsWdmkolR8wrBNCA2UBP3nu8ClsuNcRjERumLLrqD8lrG
-         JRiA720EQyPUMpKzgHGfQWoWaciITDNiB8TAdDPzD6HOZOwqUK0x7BPTFwgYsuvEGO44
-         VHA3RJU9jo7Kcd/FsgjnP4Lag+z0G+DyA2M8Xy2Kwac+gjTZRMXH6a55ZNE7w5kU0WFf
-         0KryC6k7d9CsnBNNvFWsnGwyM0MNNIEgUcrArzb4KUJz9cfbmiaKvScWtDryibe/fX29
-         LREg==
-X-Gm-Message-State: AOAM531WXneMo1fXJgLCcf2y2FDAk61ndWkrasbE0W7e0DJovoTFMIAz
-	AZglGCD2vnNdbmve5b5Iu3FDzMrNeL1vQUO+1nTQ8A==
-X-Google-Smtp-Source: ABdhPJyUTJreTDgP0C9OseilZ4NmT99vFUTYPcMXphbUrL9wNDsClw+KYh7/yJsMqqSZ7ZrQKj8DidkIMvcpRyd1WSY=
-X-Received: by 2002:a17:902:c94f:b0:151:3cd8:efe3 with SMTP id
- i15-20020a170902c94f00b001513cd8efe3mr18961096pla.117.1646140255853; Tue, 01
- Mar 2022 05:10:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C815E179
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 13:43:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646142190; x=1677678190;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xQXC5Q6QovMBIcAZOvRgYjMGiuNQt1UM+vNXcUeEu7E=;
+  b=GKrxdx00IfzxSL2X8XCljfQfTCTP4xQeepJ3rHgVQuU/M23UOv9D9Rn4
+   QHeeDLwMN4uRnsn2eiNqjwYbNHg9KQemsNhZkUE3C63D/DvTuc2J55yM4
+   Znx/0bI8C1iOq0Lhkqc68BQcmMWv+BV5I0KDjvTHnkBUV/6JTeXw4xvs3
+   Fg7v1+KHLu+X1MTn5kCXY0k6yx4TfmxTUAF3Au1RKQ5LTrgV9SOIol25j
+   Qj6izJpIKg008lzUaFBDAsTM/BgLEGNMMnvw2PJxWqLXl//Lix20G2kmE
+   DGStdqp88Sugw9GB0/kljVyUEx641WZmRWEJJSmMySvbP8X3x91hUFZ7+
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="233101842"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="233101842"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 05:43:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="507804617"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 01 Mar 2022 05:43:08 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nP2mR-0000Vr-K8; Tue, 01 Mar 2022 13:43:07 +0000
+Date: Tue, 1 Mar 2022 21:42:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [matthias-bgg:v5.17-next/soc 11/14]
+ drivers/soc/mediatek/mtk-mmsys.c:64:3: error: field designator
+ 'sw0_rst_offset' does not refer to any field in type 'const struct
+ mtk_mmsys_driver_data'
+Message-ID: <202203012101.qgsgTBcz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220301060530.5870-1-jrdr.linux@gmail.com>
-In-Reply-To: <20220301060530.5870-1-jrdr.linux@gmail.com>
-From: Robert Foss <robert.foss@linaro.org>
-Date: Tue, 1 Mar 2022 14:10:44 +0100
-Message-ID: <CAG3jFyugksy60Sgjg5U+E4ZGEH3mNpZmLJB_aZ=uncb7kg7zAA@mail.gmail.com>
-Subject: Re: [PATCH] media: camss: Replace hard coded value with parameter
-To: Souptick Joarder <jrdr.linux@gmail.com>
-Cc: todor.too@gmail.com, agross@kernel.org, bjorn.andersson@linaro.org, 
-	mchehab@kernel.org, nathan@kernel.org, ndesaulniers@google.com, 
-	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, 1 Mar 2022 at 07:05, Souptick Joarder <jrdr.linux@gmail.com> wrote:
->
-> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
->
-> Kernel test robot reported below warning ->
-> drivers/media/platform/qcom/camss/camss-csid-gen2.c:407:3:
-> warning: Value stored to 'val' is never read
-> [clang-analyzer-deadcode.DeadStores]
->
-> Replace hard coded value with val.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-> ---
->  drivers/media/platform/qcom/camss/camss-csid-gen2.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-> index abbfbf448893..2031bde13a93 100644
-> --- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-> +++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-> @@ -405,7 +405,7 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
->                 writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PERIOD(0));
->
->                 val = 0;
-> -               writel_relaxed(0, csid->base + CSID_RDI_FRM_DROP_PATTERN(0));
-> +               writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PATTERN(0));
->
->                 val = 1;
->                 writel_relaxed(val, csid->base + CSID_RDI_IRQ_SUBSAMPLE_PERIOD(0));
-> --
-> 2.25.1
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git v5.17-next/soc
+head:   eb1b02bef52ae545d5eb24116d5c099f738d39d5
+commit: 831785f0e5b919c29e1bc5f9a74e9ebd38289e24 [11/14] soc: mediatek: mmsys: add mmsys reset control for MT8186
+config: mips-randconfig-r004-20220301 (https://download.01.org/0day-ci/archive/20220301/202203012101.qgsgTBcz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?id=831785f0e5b919c29e1bc5f9a74e9ebd38289e24
+        git remote add matthias-bgg https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git
+        git fetch --no-tags matthias-bgg v5.17-next/soc
+        git checkout 831785f0e5b919c29e1bc5f9a74e9ebd38289e24
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/soc/mediatek/
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/soc/mediatek/mtk-mmsys.c:64:3: error: field designator 'sw0_rst_offset' does not refer to any field in type 'const struct mtk_mmsys_driver_data'
+           .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+            ^
+   1 error generated.
+
+
+vim +64 drivers/soc/mediatek/mtk-mmsys.c
+
+    59	
+    60	static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
+    61		.clk_driver = "clk-mt8186-mm",
+    62		.routes = mmsys_mt8186_routing_table,
+    63		.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
+  > 64		.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+    65	};
+    66	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
