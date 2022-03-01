@@ -1,78 +1,310 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5014017CC
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 21:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646168672; x=1677704672;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JkBpiGS9qT2A5/AO8ZoQHW0JjgI9k0Vg9Eiwm+kBaEU=;
-  b=SY4ek9+JRur4h3XGkc9TN6WBvxMlOkPoo8+QJXsAjl16jaFkMjJS3Gm4
-   xiTY1pbvxVwjy2LmlgtN8EfgJfydVJzZR9IjVoc2m9LRIfbsvXzVrXbMy
-   Glwa1li2bzjkeFe6kv8vqSJhl7HVJODw+wkv82QO2bfhswQcTs5DsyVO2
-   0SJp86OwsYtSREcchon78St35c3xQ/lvLQ22AcsJk23zHlP1JU/qbeEOq
-   MCAUM7jLr1IQJn5epKd56aUJFlkq/MHo+/o1b0wDhbilYFLP6p30abe94
-   4cfGllMW5MxYcbWZgXxW6/2HivrYJASg2s34QjPfno84kB0/EtmpM9k4E
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="236750451"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="236750451"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 13:04:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="641421998"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2022 13:04:30 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nP9fZ-00011o-8l; Tue, 01 Mar 2022 21:04:29 +0000
-Date: Wed, 2 Mar 2022 05:03:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Palmer <daniel@0x0f.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 80/96] Error:
- arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9
- Label or path pm_uart not found
-Message-ID: <202203020419.Kj7avg87-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D61B17CC
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 21:16:19 +0000 (UTC)
+Received: by mail-lj1-f177.google.com with SMTP id s25so23587416lji.5
+        for <llvm@lists.linux.dev>; Tue, 01 Mar 2022 13:16:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/dBpMcOCVV5he/0EMVbMC9YSaBhV8xepMwiscE4fAzc=;
+        b=ptYKFLmwuYKLggkRzDBkp/DIYZrcQ/pqxsLwc7rEXKN34okqfMi0cOHOgU34X9ijtX
+         VUCTukVzZqi56OJ6nP2Gg2M9//9ZLBqWNx0gWzFxmpaqHCQm2OGEowAuEVXymRorBejr
+         4JChNI8fYY3lsF9SLkcHD1vjFl9NYlI99ZzvLjiDloBHgqN6bU7gVjx6XU+HlKm/EUTG
+         k3AQjTzKAFH3UyMS6uzEbRIBFfH1OP4lYJmNh5IgkE6oqU90dXqmho1ss5egvro6eV66
+         ks89Fm4eRG1hfMOTJU2+PwEP4qiNcn8cPZmJ1Lq7bMXH15NmIwUiFZjTa3Jxt8l/2LJJ
+         nXig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/dBpMcOCVV5he/0EMVbMC9YSaBhV8xepMwiscE4fAzc=;
+        b=zYFBLkbL1RS1S1eIjcqkF7pWnYVwqfCdS7IdaVo1rdrfmxGi4ajCIjggZfLbZsoxos
+         vvGc0R1CUVj8THSvhJZ30o19jglYI3oV5ndOmsGymj6nvCSYEKn1EAMFJtuWA78TfRoa
+         xWo+IeVBDNiuVw9RT/DbgxZfayf3arQfk8EdehT0BwHFpUHt67Od8JlIJ4Jpmy1SNxAs
+         8go8CF9DQmI34hwdcxJRWF5JvqM7ovORrJVyxHMhYOYDoE0R4VuX5iAUpBbk39pLnTCY
+         HfbiuPdZuPNv5jEMUskpelPxD/d5sJgkDSfOZZmEvzYPiBJc7znCF1xL9oQ0jp/CIr1A
+         1p2A==
+X-Gm-Message-State: AOAM530RqcdwoWHyzfbFGSQS37hBtDczoX9fBWZXOljYXNiI+AP/St5S
+	JLy9ZjbT+4BhcJRYUFYcP3M4AzVgHIbK43xdUxmwdg==
+X-Google-Smtp-Source: ABdhPJw7cIOlzXgz1J/YFnmXwlsnIAaUF+DK/pxxUuMfDeoNgehPmJyarbJf726dX2JI7grFZwcXfN53qHTGG+9+Gis=
+X-Received: by 2002:a2e:871a:0:b0:246:ee2:1109 with SMTP id
+ m26-20020a2e871a000000b002460ee21109mr18069492lji.165.1646169376960; Tue, 01
+ Mar 2022 13:16:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220224145138.952963315@infradead.org> <20220224151322.072632223@infradead.org>
+In-Reply-To: <20220224151322.072632223@infradead.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 1 Mar 2022 13:16:04 -0800
+Message-ID: <CAKwvOdkD2WY=hEHy8_0zs70AGx6LRQwxL5mEZyB30uqpruYJyA@mail.gmail.com>
+Subject: Re: [PATCH v2 01/39] kbuild: Fix clang build
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com, 
+	jpoimboe@redhat.com, andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org, 
+	keescook@chromium.org, samitolvanen@google.com, mark.rutland@arm.com, 
+	alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org, 
+	mhiramat@kernel.org, alexei.starovoitov@gmail.com, 
+	Masahiro Yamada <masahiroy@kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   8ac61fd8fe35232e1061ab5e3e7b665cac918068
-commit: a129af18616a3b5ad4c4af70458703a052da2d63 [80/96] ARM: dts: mstar: Add top level dts for ssd201-som2d01
-config: arm-randconfig-r006-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020419.Kj7avg87-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/linux-chenxing/linux/commit/a129af18616a3b5ad4c4af70458703a052da2d63
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout a129af18616a3b5ad4c4af70458703a052da2d63
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Thu, Feb 24, 2022 at 7:17 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Debian (and derived) distros ship their compilers as -$ver suffixed
+> binaries. For gcc it is sufficent to use:
+>
+>  $ make CC=gcc-12
+>
+> However, clang builds (esp. clang-lto) need a whole array of tools to be
+> exactly right, leading to unweildy stuff like:
+>
+>  $ make CC=clang-13 LD=ld.lld-13 AR=llvm-ar-13 NM=llvm-nm-13 OBJCOPY=llvm-objcopy-13 OBJDUMP=llvm-objdump-13 READELF=llvm-readelf-13 STRIP=llvm-strip-13 LLVM=1
+>
+> which is, quite franktly, totally insane and unusable. Instead make
+> the CC variable DTRT, enabling one such as myself to use:
+>
+>  $ make CC=clang-13
+>
+> This also lets one quickly test different clang versions.
+> Additionally, also support path based LLVM suites like:
+>
+>  $ make CC=/opt/llvm/bin/clang
+>
+> This changes the default to LLVM=1 when CC is clang, mixing toolchains
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No, nack, we definitely do not want CC=clang to set LLVM=1. Those are
+distinctly two different things for testing JUST the compiler
+(CC=clang) vs the whole toolchain suite (LLVM=1). I do not wish to
+change the semantics of those, and only for LLVM.
 
-All errors (new ones prefixed by >>):
+LLVM=1 means test clang, lld, llvm-objcopy, etc..
+CC=clang means test clang, bfd, GNU objcopy, etc..
+https://docs.kernel.org/kbuild/llvm.html#llvm-utilities
 
->> Error: arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9 Label or path pm_uart not found
->> FATAL ERROR: Syntax error parsing input tree
+I don't wish to see the behavior of CC=clang change based on LLVM=0 being set.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> is still possible by explicitly adding LLVM=0.
+
+Thanks for testing with LLVM, and even multiple versions of LLVM.
+
+I'm still sympathetic, but only up to a point. A change like this MUST
+CC the kbuild AND LLVM maintainers AND respective lists though.  It
+also has little to do with the rest of the series.
+
+As per our previous discussion
+https://lore.kernel.org/linux-kbuild/CAKwvOd=x9E=7WcCiieso-CDiiU-wMFcXL4W3V5j8dq7BL5QT+w@mail.gmail.com/
+I'm still of the opionion that this should be solved by modifications
+(permanent or one off) to one's $PATH.
+
+To see what that would look like, let's test that out:
+
+$ sudo apt install clang-11 lld-11
+
+$ cd linux
+$ dirname $(readlink -f $(which clang-11))
+$ PATH=$(dirname $(readlink -f $(which clang-11))):$PATH make LLVM=1
+-j72 -s allnoconfig all
+$ llvm-readelf -p .comment vmlinux
+String dump of section '.comment':
+[     0] Linker: LLD 11.1.0
+[    14] Debian clang version 11.1.0-4+build3
+
+
+If that's too much for the command line, then add a shell function to
+your shell's .rc file:
+
+$ which make_clang
+make_clang () {
+  ver=$1
+  shift
+  if ! [[ -n $(command -v clang-$ver) ]]
+  then
+    echo "clang-$ver not installed"
+    return 1
+  fi
+  PATH=$(dirname $(readlink -f $(which clang-$ver))):$PATH make CC=clang $@
+}
+
+$ make_clang 11 -j72 -s clean allnoconfig all
+$ llvm-readelf -p .comment vmlinux
+String dump of section '.comment':
+[     0] Debian clang version 11.1.0-4+build3
+
+
+Even stuffing the dirname+readlink+which in a short helper fn would let you do:
+
+$ make CC=$(helper clang-11)
+
+Also, Kees mentions this is an issue for testing multiple different
+versions of gcc, too.  There perhaps is a way to simplify the builds
+for BOTH toolchains; i.e. a yet-to-be-created shared variable denoting
+the suffix for binaries?  The primary pain point seems to be Debian's
+suffixing scheme; it will suffix GCC, clang, and lld, but not GNU
+binutils IIUC.
+
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  Makefile                       |   45 +++++++++++++++++++++++++++---------
+>  tools/scripts/Makefile.include |   50 ++++++++++++++++++++++++++++-------------
+>  2 files changed, 68 insertions(+), 27 deletions(-)
+>
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -423,9 +423,29 @@ HOST_LFS_CFLAGS := $(shell getconf LFS_C
+>  HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
+>  HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
+>
+> -ifneq ($(LLVM),)
+> -HOSTCC = clang
+> -HOSTCXX        = clang++
+> +# powerpc and s390 don't yet work with LLVM as a whole
+> +ifeq ($(ARCH),powerpc)
+> +LLVM = 0
+> +endif
+> +ifeq ($(ARCH),s390)
+> +LLVM = 0
+> +endif
+> +
+> +# otherwise, if CC=clang, default to using LLVM to enable LTO
+> +CC_BASE := $(shell echo $(CC) | sed 's/.*\///')
+> +CC_NAME := $(shell echo $(CC_BASE) | cut -b "1-5")
+> +ifeq ($(shell test "$(CC_NAME)" = "clang"; echo $$?),0)
+> +LLVM ?= 1
+> +LLVM_PFX := $(shell echo $(CC) | sed 's/\(.*\/\)\?.*/\1/')
+
+Just curious, what prefixes have you observed in the wild?
+
+> +LLVM_SFX := $(shell echo $(CC_BASE) | cut -b "6-")
+> +endif
+> +
+> +# if not set by now, do not use LLVM
+> +LLVM ?= 0
+> +
+> +ifneq ($(LLVM),0)
+> +HOSTCC = $(LLVM_PFX)clang$(LLVM_SFX)
+> +HOSTCXX        = $(LLVM_PFX)clang++$(LLVM_SFX)
+>  else
+>  HOSTCC = gcc
+>  HOSTCXX        = g++
+> @@ -442,15 +462,15 @@ KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS)
+>
+>  # Make variables (CC, etc...)
+>  CPP            = $(CC) -E
+> -ifneq ($(LLVM),)
+> -CC             = clang
+> -LD             = ld.lld
+> -AR             = llvm-ar
+> -NM             = llvm-nm
+> -OBJCOPY                = llvm-objcopy
+> -OBJDUMP                = llvm-objdump
+> -READELF                = llvm-readelf
+> -STRIP          = llvm-strip
+> +ifneq ($(LLVM),0)
+> +CC             = $(LLVM_PFX)clang$(LLVM_SFX)
+> +LD             = $(LLVM_PFX)ld.lld$(LLVM_SFX)
+> +AR             = $(LLVM_PFX)llvm-ar$(LLVM_SFX)
+> +NM             = $(LLVM_PFX)llvm-nm$(LLVM_SFX)
+> +OBJCOPY                = $(LLVM_PFX)llvm-objcopy$(LLVM_SFX)
+> +OBJDUMP                = $(LLVM_PFX)llvm-objdump$(LLVM_SFX)
+> +READELF                = $(LLVM_PFX)llvm-readelf$(LLVM_SFX)
+> +STRIP          = $(LLVM_PFX)llvm-strip$(LLVM_SFX)
+>  else
+>  CC             = $(CROSS_COMPILE)gcc
+>  LD             = $(CROSS_COMPILE)ld
+> @@ -461,6 +481,7 @@ OBJDUMP             = $(CROSS_COMPILE)objdump
+>  READELF                = $(CROSS_COMPILE)readelf
+>  STRIP          = $(CROSS_COMPILE)strip
+>  endif
+> +
+>  PAHOLE         = pahole
+>  RESOLVE_BTFIDS = $(objtree)/tools/bpf/resolve_btfids/resolve_btfids
+>  LEX            = flex
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -51,12 +51,32 @@ define allow-override
+>      $(eval $(1) = $(2)))
+>  endef
+>
+> -ifneq ($(LLVM),)
+> -$(call allow-override,CC,clang)
+> -$(call allow-override,AR,llvm-ar)
+> -$(call allow-override,LD,ld.lld)
+> -$(call allow-override,CXX,clang++)
+> -$(call allow-override,STRIP,llvm-strip)
+> +# powerpc and s390 don't yet work with LLVM as a whole
+> +ifeq ($(ARCH),powerpc)
+> +LLVM = 0
+> +endif
+> +ifeq ($(ARCH),s390)
+> +LLVM = 0
+> +endif
+> +
+> +# otherwise, if CC=clang, default to using LLVM to enable LTO
+> +CC_BASE := $(shell echo $(CC) | sed 's/.*\///')
+> +CC_NAME := $(shell echo $(CC_BASE) | cut -b "1-5")
+> +ifeq ($(shell test "$(CC_NAME)" = "clang"; echo $$?),0)
+> +LLVM ?= 1
+> +LLVM_PFX := $(shell echo $(CC) | sed 's/\(.*\/\)\?.*/\1/')
+> +LLVM_SFX := $(shell echo $(CC_BASE) | cut -b "6-")
+> +endif
+> +
+> +# if not set by now, do not use LLVM
+> +LLVM ?= 0
+> +
+> +ifneq ($(LLVM),0)
+> +$(call allow-override,CC,$(LLVM_PFX)clang$(LLVM_SFX))
+> +$(call allow-override,AR,$(LLVM_PFX)llvm-ar$(LLVM_SFX))
+> +$(call allow-override,LD,$(LLVM_PFX)ld.lld$(LLVM_SFX))
+> +$(call allow-override,CXX,$(LLVM_PFX)clang++$(LLVM_SFX))
+> +$(call allow-override,STRIP,$(LLVM_PFX)llvm-strip$(LLVM_SFX))
+>  else
+>  # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
+>  $(call allow-override,CC,$(CROSS_COMPILE)gcc)
+> @@ -68,10 +88,10 @@ endif
+>
+>  CC_NO_CLANG := $(shell $(CC) -dM -E -x c /dev/null | grep -Fq "__clang__"; echo $$?)
+>
+> -ifneq ($(LLVM),)
+> -HOSTAR  ?= llvm-ar
+> -HOSTCC  ?= clang
+> -HOSTLD  ?= ld.lld
+> +ifneq ($(LLVM),0)
+> +HOSTAR  ?= $(LLVM_PFX)llvm-ar$(LLVM_SFX)
+> +HOSTCC  ?= $(LLVM_PFX)clang$(LLVM_SFX)
+> +HOSTLD  ?= $(LLVM_PFX)ld.lld$(LLVM_SFX)
+>  else
+>  HOSTAR  ?= ar
+>  HOSTCC  ?= gcc
+> @@ -79,11 +99,11 @@ HOSTLD  ?= ld
+>  endif
+>
+>  # Some tools require Clang, LLC and/or LLVM utils
+> -CLANG          ?= clang
+> -LLC            ?= llc
+> -LLVM_CONFIG    ?= llvm-config
+> -LLVM_OBJCOPY   ?= llvm-objcopy
+> -LLVM_STRIP     ?= llvm-strip
+> +CLANG          ?= $(LLVM_PFX)clang$(LLVM_SFX)
+> +LLC            ?= $(LLVM_PFX)llc$(LLVM_SFX)
+> +LLVM_CONFIG    ?= $(LLVM_PFX)llvm-config$(LLVM_SFX)
+> +LLVM_OBJCOPY   ?= $(LLVM_PFX)llvm-objcopy$(LLVM_SFX)
+> +LLVM_STRIP     ?= $(LLVM_PFX)llvm-strip$(LLVM_SFX)
+>
+>  ifeq ($(CC_NO_CLANG), 1)
+>  EXTRA_WARNINGS += -Wstrict-aliasing=3
+>
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
