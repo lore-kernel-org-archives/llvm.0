@@ -1,41 +1,46 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566ED5CA0
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 15:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6185CAB
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 15:56:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646149532; x=1677685532;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yJOQ+UHnY8shUf635+u1oWoprslEA6t4CJY7JJ4XETA=;
-  b=PfDFKeHYxnXATlMKadKJtcacaUElWm2244G4cqLJCi2WhS9sG7GsPYjs
-   ZjkN8RE8lJif8FVx8heT/2MgJGI7gi/TMSI+enZArF1QTtRf0zqVtGNbG
-   2+s3NGgIufNEFxWoHsnHPwCaPPd5yEPMcggpS9upoNDver3X71ETYYTl0
-   pb8FplvOemd+dQdWzA9d9Pf0KKs/LLvnrCF5MItIeCTx2PHbhwz/A77ez
-   hwLAjkckF86OPijP/wHusZDzNRfr6ybUXIY59SD0i3Gw0v1lxMUkCz8al
-   h+aEkw0dm0zFj7YgMm6GtVW6WRmH/8t6PgLQJ78PYbRO2pnFyS0YB0BYe
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="236665844"
+  t=1646150193; x=1677686193;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Dbno6f2IDbHjP13l+blnOurXonIAQbpx6n0jL1TaOYY=;
+  b=GxaRqeUZeK37W7JpFcxBIx8UFGWEH3drsyIi9iz3C27MG/HK4lM/ADnI
+   DUBSRs3o44W2nHoM/1IaF5/Zo8/sy8j0N6lac7xqAnAbV6Gez2fyzUsn6
+   fjSDI9ADZxRW+rJx+SopOzyuWI0ZyjDm5NoRmDWdIwju2Qc4U6xuxSSkG
+   5rPuoUDwsgXLwM1bFVz1pfEAYqDf0hFig1WdVIzh6Qi4jExLzVp5QuOJi
+   NIzo5OPhSpKFKDEeFm+AyV3mE6krk6q2j9ZrkD3z1ebc6p95D8OK3TYXZ
+   zoaDUZSbJvcyQW5EWalpK92v/zEAQQwfj1J6YExO5Ay6VT2okePSXQ63H
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="233777441"
 X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="236665844"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 07:45:31 -0800
+   d="scan'208";a="233777441"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 07:56:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="641305656"
+   d="scan'208";a="575741547"
 Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2022 07:45:30 -0800
+  by orsmga001.jf.intel.com with ESMTP; 01 Mar 2022 07:56:30 -0800
 Received: from kbuild by 2146afe809fb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nP4gr-0000e0-I1; Tue, 01 Mar 2022 15:45:29 +0000
-Date: Tue, 1 Mar 2022 23:45:19 +0800
+	id 1nP4rW-0000ew-24; Tue, 01 Mar 2022 15:56:30 +0000
+Date: Tue, 1 Mar 2022 23:55:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Liu Yi L <yi.l.liu@intel.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 21/30] ERROR: modpost:
- "interval_tree_iter_next" [drivers/iommu/iommufd/iommufd.ko] undefined!
-Message-ID: <202203012312.livRTcyQ-lkp@intel.com>
+	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: Re: [PATCH] mmc: rtsx: Fix build errors/warnings for unused variable
+Message-ID: <202203012329.tsb96XPG-lkp@intel.com>
+References: <20220301115300.64332-1-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,43 +49,179 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220301115300.64332-1-ulf.hansson@linaro.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
-head:   2bca5fa75dad57f41002a93861a950d35d55e568
-commit: e5b0b18da497e526cec5aad8c987ab9fd704adcd [21/30] vfio/pci: Add bind_iommufd() support
-config: riscv-randconfig-r042-20220301 (https://download.01.org/0day-ci/archive/20220301/202203012312.livRTcyQ-lkp@intel.com/config)
+Hi Ulf,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on next-20220228]
+[cannot apply to soc/for-next linux/master linus/master v5.17-rc6 v5.17-rc5 v5.17-rc4 v5.17-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Ulf-Hansson/mmc-rtsx-Fix-build-errors-warnings-for-unused-variable/20220301-195325
+base:    6705cd745adbbeac6b13002c7a30060f7b2568a5
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220301/202203012329.tsb96XPG-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/luxis1999/iommufd/commit/e5b0b18da497e526cec5aad8c987ab9fd704adcd
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
-        git checkout e5b0b18da497e526cec5aad8c987ab9fd704adcd
+        # https://github.com/0day-ci/linux/commit/392366d45e7f16e01727e7e82a08085301ca3de8
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Ulf-Hansson/mmc-rtsx-Fix-build-errors-warnings-for-unused-variable/20220301-195325
+        git checkout 392366d45e7f16e01727e7e82a08085301ca3de8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mmc/host/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "interval_tree_iter_next" [drivers/iommu/iommufd/iommufd.ko] undefined!
->> ERROR: modpost: "interval_tree_remove" [drivers/iommu/iommufd/iommufd.ko] undefined!
->> ERROR: modpost: "interval_tree_insert" [drivers/iommu/iommufd/iommufd.ko] undefined!
->> ERROR: modpost: "interval_tree_span_iter_next" [drivers/iommu/iommufd/iommufd.ko] undefined!
->> ERROR: modpost: "interval_tree_span_iter_first" [drivers/iommu/iommufd/iommufd.ko] undefined!
->> ERROR: modpost: "interval_tree_iter_first" [drivers/iommu/iommufd/iommufd.ko] undefined!
+>> drivers/mmc/host/rtsx_pci_sdmmc.c:825:22: error: use of undeclared identifier 'dev'
+           pm_runtime_get_sync(dev);
+                               ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:862:28: error: use of undeclared identifier 'dev'
+           pm_runtime_mark_last_busy(dev);
+                                     ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:863:29: error: use of undeclared identifier 'dev'
+           pm_runtime_put_autosuspend(dev);
+                                      ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1094:22: error: use of undeclared identifier 'dev'
+           pm_runtime_get_sync(dev);
+                               ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1128:28: error: use of undeclared identifier 'dev'
+           pm_runtime_mark_last_busy(dev);
+                                     ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1129:29: error: use of undeclared identifier 'dev'
+           pm_runtime_put_autosuspend(dev);
+                                      ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1144:22: error: use of undeclared identifier 'dev'
+           pm_runtime_get_sync(dev);
+                               ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1154:28: error: use of undeclared identifier 'dev'
+           pm_runtime_mark_last_busy(dev);
+                                     ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1155:29: error: use of undeclared identifier 'dev'
+           pm_runtime_put_autosuspend(dev);
+                                      ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1172:22: error: use of undeclared identifier 'dev'
+           pm_runtime_get_sync(dev);
+                               ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1182:28: error: use of undeclared identifier 'dev'
+           pm_runtime_mark_last_busy(dev);
+                                     ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1183:29: error: use of undeclared identifier 'dev'
+           pm_runtime_put_autosuspend(dev);
+                                      ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1280:22: error: use of undeclared identifier 'dev'
+           pm_runtime_get_sync(dev);
+                               ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1310:28: error: use of undeclared identifier 'dev'
+           pm_runtime_mark_last_busy(dev);
+                                     ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1311:29: error: use of undeclared identifier 'dev'
+           pm_runtime_put_autosuspend(dev);
+                                      ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1331:22: error: use of undeclared identifier 'dev'
+           pm_runtime_get_sync(dev);
+                               ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1364:28: error: use of undeclared identifier 'dev'
+           pm_runtime_mark_last_busy(dev);
+                                     ^
+   drivers/mmc/host/rtsx_pci_sdmmc.c:1365:29: error: use of undeclared identifier 'dev'
+           pm_runtime_put_autosuspend(dev);
+                                      ^
+   18 errors generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for IOMMUFD
-   Depends on IOMMU_SUPPORT
-   Selected by
-   - VFIO_PCI_CORE && VFIO && PCI && MMU
+
+vim +/dev +825 drivers/mmc/host/rtsx_pci_sdmmc.c
+
+6291e7153a173f Micky Ching   2014-06-06  798  
+6291e7153a173f Micky Ching   2014-06-06  799  static void sd_request(struct work_struct *work)
+6291e7153a173f Micky Ching   2014-06-06  800  {
+6291e7153a173f Micky Ching   2014-06-06  801  	struct realtek_pci_sdmmc *host = container_of(work,
+6291e7153a173f Micky Ching   2014-06-06  802  			struct realtek_pci_sdmmc, work);
+ff984e57d36e8a Wei WANG      2012-10-29  803  	struct rtsx_pcr *pcr = host->pcr;
+6291e7153a173f Micky Ching   2014-06-06  804  
+6291e7153a173f Micky Ching   2014-06-06  805  	struct mmc_host *mmc = host->mmc;
+6291e7153a173f Micky Ching   2014-06-06  806  	struct mmc_request *mrq = host->mrq;
+ff984e57d36e8a Wei WANG      2012-10-29  807  	struct mmc_command *cmd = mrq->cmd;
+ff984e57d36e8a Wei WANG      2012-10-29  808  	struct mmc_data *data = mrq->data;
+6291e7153a173f Micky Ching   2014-06-06  809  
+ff984e57d36e8a Wei WANG      2012-10-29  810  	unsigned int data_size = 0;
+c3481955f6c78c Wei WANG      2013-02-08  811  	int err;
+ff984e57d36e8a Wei WANG      2012-10-29  812  
+b22217f966f585 Micky Ching   2015-01-14  813  	if (host->eject || !sd_get_cd_int(host)) {
+ff984e57d36e8a Wei WANG      2012-10-29  814  		cmd->error = -ENOMEDIUM;
+ff984e57d36e8a Wei WANG      2012-10-29  815  		goto finish;
+ff984e57d36e8a Wei WANG      2012-10-29  816  	}
+ff984e57d36e8a Wei WANG      2012-10-29  817  
+c3481955f6c78c Wei WANG      2013-02-08  818  	err = rtsx_pci_card_exclusive_check(host->pcr, RTSX_SD_CARD);
+c3481955f6c78c Wei WANG      2013-02-08  819  	if (err) {
+c3481955f6c78c Wei WANG      2013-02-08  820  		cmd->error = err;
+c3481955f6c78c Wei WANG      2013-02-08  821  		goto finish;
+c3481955f6c78c Wei WANG      2013-02-08  822  	}
+c3481955f6c78c Wei WANG      2013-02-08  823  
+98fcc5762dcecb Micky Ching   2014-04-29  824  	mutex_lock(&pcr->pcr_mutex);
+7499b529d97f75 Kai-Heng Feng 2022-01-25 @825  	pm_runtime_get_sync(dev);
+98fcc5762dcecb Micky Ching   2014-04-29  826  
+ff984e57d36e8a Wei WANG      2012-10-29  827  	rtsx_pci_start_run(pcr);
+ff984e57d36e8a Wei WANG      2012-10-29  828  
+ff984e57d36e8a Wei WANG      2012-10-29  829  	rtsx_pci_switch_clock(pcr, host->clock, host->ssc_depth,
+ff984e57d36e8a Wei WANG      2012-10-29  830  			host->initial_mode, host->double_clk, host->vpclk);
+ff984e57d36e8a Wei WANG      2012-10-29  831  	rtsx_pci_write_register(pcr, CARD_SELECT, 0x07, SD_MOD_SEL);
+ff984e57d36e8a Wei WANG      2012-10-29  832  	rtsx_pci_write_register(pcr, CARD_SHARE_MODE,
+ff984e57d36e8a Wei WANG      2012-10-29  833  			CARD_SHARE_MASK, CARD_SHARE_48_SD);
+ff984e57d36e8a Wei WANG      2012-10-29  834  
+98fcc5762dcecb Micky Ching   2014-04-29  835  	mutex_lock(&host->host_mutex);
+98fcc5762dcecb Micky Ching   2014-04-29  836  	host->mrq = mrq;
+98fcc5762dcecb Micky Ching   2014-04-29  837  	mutex_unlock(&host->host_mutex);
+98fcc5762dcecb Micky Ching   2014-04-29  838  
+ff984e57d36e8a Wei WANG      2012-10-29  839  	if (mrq->data)
+ff984e57d36e8a Wei WANG      2012-10-29  840  		data_size = data->blocks * data->blksz;
+ff984e57d36e8a Wei WANG      2012-10-29  841  
+1dcb35799e8fb5 Micky Ching   2014-12-23  842  	if (!data_size) {
+98fcc5762dcecb Micky Ching   2014-04-29  843  		sd_send_cmd_get_rsp(host, cmd);
+1dcb35799e8fb5 Micky Ching   2014-12-23  844  	} else if (sd_rw_cmd(cmd) || sdio_extblock_cmd(cmd, data)) {
+1dcb35799e8fb5 Micky Ching   2014-12-23  845  		cmd->error = sd_rw_multi(host, mrq);
+6291e7153a173f Micky Ching   2014-06-06  846  		if (!host->using_cookie)
+6291e7153a173f Micky Ching   2014-06-06  847  			sdmmc_post_req(host->mmc, host->mrq, 0);
+98fcc5762dcecb Micky Ching   2014-04-29  848  
+98fcc5762dcecb Micky Ching   2014-04-29  849  		if (mmc_op_multi(cmd->opcode) && mrq->stop)
+98fcc5762dcecb Micky Ching   2014-04-29  850  			sd_send_cmd_get_rsp(host, mrq->stop);
+ff984e57d36e8a Wei WANG      2012-10-29  851  	} else {
+ff984e57d36e8a Wei WANG      2012-10-29  852  		sd_normal_rw(host, mrq);
+ff984e57d36e8a Wei WANG      2012-10-29  853  	}
+98fcc5762dcecb Micky Ching   2014-04-29  854  
+98fcc5762dcecb Micky Ching   2014-04-29  855  	if (mrq->data) {
+98fcc5762dcecb Micky Ching   2014-04-29  856  		if (cmd->error || data->error)
+98fcc5762dcecb Micky Ching   2014-04-29  857  			data->bytes_xfered = 0;
+98fcc5762dcecb Micky Ching   2014-04-29  858  		else
+98fcc5762dcecb Micky Ching   2014-04-29  859  			data->bytes_xfered = data->blocks * data->blksz;
+98fcc5762dcecb Micky Ching   2014-04-29  860  	}
+98fcc5762dcecb Micky Ching   2014-04-29  861  
+7499b529d97f75 Kai-Heng Feng 2022-01-25  862  	pm_runtime_mark_last_busy(dev);
+7499b529d97f75 Kai-Heng Feng 2022-01-25  863  	pm_runtime_put_autosuspend(dev);
+98fcc5762dcecb Micky Ching   2014-04-29  864  	mutex_unlock(&pcr->pcr_mutex);
+ff984e57d36e8a Wei WANG      2012-10-29  865  
+ff984e57d36e8a Wei WANG      2012-10-29  866  finish:
+1dcb35799e8fb5 Micky Ching   2014-12-23  867  	if (cmd->error) {
+1dcb35799e8fb5 Micky Ching   2014-12-23  868  		dev_dbg(sdmmc_dev(host), "CMD %d 0x%08x error(%d)\n",
+1dcb35799e8fb5 Micky Ching   2014-12-23  869  			cmd->opcode, cmd->arg, cmd->error);
+1dcb35799e8fb5 Micky Ching   2014-12-23  870  	}
+98fcc5762dcecb Micky Ching   2014-04-29  871  
+98fcc5762dcecb Micky Ching   2014-04-29  872  	mutex_lock(&host->host_mutex);
+98fcc5762dcecb Micky Ching   2014-04-29  873  	host->mrq = NULL;
+98fcc5762dcecb Micky Ching   2014-04-29  874  	mutex_unlock(&host->host_mutex);
+98fcc5762dcecb Micky Ching   2014-04-29  875  
+98fcc5762dcecb Micky Ching   2014-04-29  876  	mmc_request_done(mmc, mrq);
+ff984e57d36e8a Wei WANG      2012-10-29  877  }
+ff984e57d36e8a Wei WANG      2012-10-29  878  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
