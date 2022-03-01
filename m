@@ -1,82 +1,235 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D538B5CA0
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 15:16:26 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-318-Vr7v5iKRMIKftw0gpJuxvQ-1; Tue, 01 Mar 2022 15:16:24 +0000
-X-MC-Unique: Vr7v5iKRMIKftw0gpJuxvQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 1 Mar 2022 15:16:22 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 1 Mar 2022 15:16:22 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Miguel Ojeda' <miguel.ojeda.sandonis@gmail.com>, Nick Desaulniers
-	<ndesaulniers@google.com>
-CC: Dan Li <ashimida@linux.alibaba.com>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Nathan Chancellor
-	<nathan@kernel.org>, Kees Cook <keescook@chromium.org>, Masahiro Yamada
-	<masahiroy@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Andrew Morton
-	<akpm@linux-foundation.org>, Mark Rutland <mark.rutland@arm.com>, "Sami
- Tolvanen" <samitolvanen@google.com>, Nicholas Piggin <npiggin@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Luc Van Oostenryck
-	<luc.vanoostenryck@gmail.com>, Marco Elver <elver@google.com>, linux-kernel
-	<linux-kernel@vger.kernel.org>, Linux ARM
-	<linux-arm-kernel@lists.infradead.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, "linux-hardening@vger.kernel.org"
-	<linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH] [PATCH v2] AARCH64: Add gcc Shadow Call Stack support
-Thread-Topic: [PATCH] [PATCH v2] AARCH64: Add gcc Shadow Call Stack support
-Thread-Index: AQHYLU7BTsy+Ydg2gUOh1XD7Md8Cb6yqo40Q
-Date: Tue, 1 Mar 2022 15:16:22 +0000
-Message-ID: <4b7a3af66c54458681f00a55a84752ab@AcuMS.aculab.com>
-References: <20220225032410.25622-1-ashimida@linux.alibaba.com>
- <CANiq72kXoonDYk095XvBwEtRCRNECd1iQOqJHE2cNcgLyUMfcQ@mail.gmail.com>
- <26a0a816-bc3e-2ac0-d773-0819d9f225af@linux.alibaba.com>
- <CAKwvOdkykPtGTL6ud8qJZHSHKV2eSbpnZE-G4oyymD9BiQKHdg@mail.gmail.com>
- <CANiq72m0O7ua3F3eqcEru9RuEWHQbG4SumRSoKCi50A8d-+HtA@mail.gmail.com>
-In-Reply-To: <CANiq72m0O7ua3F3eqcEru9RuEWHQbG4SumRSoKCi50A8d-+HtA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327805CA0
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 15:25:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646148333; x=1677684333;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=klTCVBVGy06UAMHf+o7bameRO0pCmjZQTHig6awHZVU=;
+  b=fjmUbsWa5eLHxX3ZKixyMGtWjODZISAl6Z5HQKkR8RonCNvtWw+uWO2O
+   cwoylhXyD7pyAvBQk+IYXZV8K8iILMwHBON1386xHDfBMjUYKUsR3KPlf
+   5DdfNIY4CskMXFTsx0DvAnd0nX9Zmg6OjXKLfbjIA7TcwvZCkdLqG9lmi
+   rtCDpUh8wSmneZCxMyz+CtJYzTv4FhFyu5U4mE1Xel1rFQZaZTDZ/hHeS
+   8ynnAh/UNtQFSysfNXL+uh/In6U6a+yI8/auhfMdoS73c8PMjFm9HaKYp
+   wZQXe39ug88NhxvX5iIBabfgjqNGqul1ALXcPlILPL5f8mMvlaPnEbYv0
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="313872267"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="313872267"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 07:25:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="630045648"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Mar 2022 07:25:24 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nP4NQ-0000cC-76; Tue, 01 Mar 2022 15:25:24 +0000
+Date: Tue, 1 Mar 2022 23:24:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Liu Yi L <yi.l.liu@intel.com>
+Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 25/30]
+ drivers/vfio/vfio.c:1084:44: error: too many arguments to function call,
+ expected single argument 'iommufd', have 2 arguments
+Message-ID: <202203012325.0uoOqdIP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-RnJvbTogTWlndWVsIE9qZWRhDQo+IFNlbnQ6IDAxIE1hcmNoIDIwMjIgMDk6MjkNCj4gDQo+IE9u
-IE1vbiwgRmViIDI4LCAyMDIyIGF0IDExOjM1IFBNIE5pY2sgRGVzYXVsbmllcnMNCj4gPG5kZXNh
-dWxuaWVyc0Bnb29nbGUuY29tPiB3cm90ZToNCj4gPg0KPiA+IE9yIHNpbXBseSBhZGQgYSAjZGVm
-aW5lIGZvciBfX25vc2NzIHRvIGluY2x1ZGUvbGludXgvY29tcGlsZXItZ2NjLmgNCj4gPiB3aXRo
-IGFwcHJvcHJpYXRlIGd1YXJkIGFuZCBsZWF2ZSB0aGUgZXhpc3RpbmcgI2lmbmRlZiBpbg0KPiA+
-IGluY2x1ZGUvbGludXgvY29tcGlsZXJfdHlwZXMuaCBhcyBpcy4gIEknZCBwcmVmZXIgdGhhdCB3
-aGVuIHRoZQ0KPiA+IGNvbXBpbGVycyBkaWZmZXIgaW4gdGVybXMgb2YgZmVhdHVyZSBkZXRlY3Rp
-b24gc2luY2UgaXQncyBhcyBleHBsaWNpdA0KPiA+IGFzIHBvc3NpYmxlLg0KPiANCj4gVGhlIGlk
-ZWEgaXMgdG8gYXZvaWQgZGlmZmVyaW5nIGhlcmUgdG8gYmVnaW4gd2l0aCwgaS5lLiB0byB1c2Ug
-dGhlDQo+IHNhbWUgY29kZSBmb3IgYm90aCBjb21waWxlcnMgKG9ubHkgd2hlbmV2ZXIgdGhhdCBp
-cyBwb3NzaWJsZSwgb2YNCj4gY291cnNlKSwgdGh1cyBoYXZpbmcgYSBzaW5nbGUgYCNkZWZpbmVg
-IGluIGEgc2luZ2xlIGZpbGUuDQo+IA0KPiBEbyB5b3UgdGhpbmsgd2Ugd2lsbCBoYXZlIHRvIGNo
-YW5nZSBpbiB0aGUgZnV0dXJlIGZvciBzb21lIHJlYXNvbiwNCj4gdGh1cyBuZWVkaW5nIHRvIHNw
-bGl0IGl0IGFnYWluPw0KDQpXaGF0IGhhcHBlbnMgaWYgYW4gb3V0IG9mIHRyZWUgbW9kdWxlIGlz
-IGNvbXBpbGVkIHdpdGggdGhlIG90aGVyIGNvbXBpbGVyPw0KU3VyZWx5IHRoaXMgaXMgcGFydCBv
-ZiB0aGUgQUJJIGFuZCBzaG91bGQgYmUgZGVmaW5lZCBmb3IgdGhlIGFyY2hpdGVjdHVyZT8NCg0K
-CURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBN
-b3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAx
-Mzk3Mzg2IChXYWxlcykNCg==
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
+head:   2bca5fa75dad57f41002a93861a950d35d55e568
+commit: 4bc299c908a9e789a2514db95519046d795d1303 [25/30] vfio: Add iommufd VFIO compat support to group_fd
+config: hexagon-randconfig-r041-20220301 (https://download.01.org/0day-ci/archive/20220301/202203012325.0uoOqdIP-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/luxis1999/iommufd/commit/4bc299c908a9e789a2514db95519046d795d1303
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
+        git checkout 4bc299c908a9e789a2514db95519046d795d1303
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/vfio/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/vfio/vfio.c:1084:44: error: too many arguments to function call, expected single argument 'iommufd', have 2 arguments
+                   vfio_group_unset_iommufd(group->iommufd, &group->device_list);
+                   ~~~~~~~~~~~~~~~~~~~~~~~~                 ^~~~~~~~~~~~~~~~~~~
+   include/linux/iommufd.h:56:20: note: 'vfio_group_unset_iommufd' declared here
+   static inline void vfio_group_unset_iommufd(void *iommufd)
+                      ^
+>> drivers/vfio/vfio.c:1161:26: error: too few arguments to function call, expected 3, have 2
+                                                   &group->device_list);
+                                                                      ^
+   include/linux/iommufd.h:50:19: note: 'vfio_group_set_iommufd' declared here
+   static inline int vfio_group_set_iommufd(int fd, struct iommu_group *group,
+                     ^
+   2 errors generated.
+
+
+vim +/iommufd +1084 drivers/vfio/vfio.c
+
+  1074	
+  1075	/*
+  1076	 * VFIO Group fd, /dev/vfio/$GROUP
+  1077	 */
+  1078	static void __vfio_group_unset_container(struct vfio_group *group)
+  1079	{
+  1080		struct vfio_container *container = group->container;
+  1081		struct vfio_iommu_driver *driver;
+  1082	
+  1083		if (group->iommufd) {
+> 1084			vfio_group_unset_iommufd(group->iommufd, &group->device_list);
+  1085			group->iommufd = NULL;
+  1086			return;
+  1087		}
+  1088	
+  1089		down_write(&container->group_lock);
+  1090	
+  1091		driver = container->iommu_driver;
+  1092		if (driver)
+  1093			driver->ops->detach_group(container->iommu_data,
+  1094						  group->iommu_group);
+  1095	
+  1096		iommu_group_release_dma_owner(group->iommu_group);
+  1097	
+  1098		group->container = NULL;
+  1099		wake_up(&group->container_q);
+  1100		list_del(&group->container_next);
+  1101	
+  1102		/* Detaching the last group deprivileges a container, remove iommu */
+  1103		if (driver && list_empty(&container->group_list)) {
+  1104			driver->ops->release(container->iommu_data);
+  1105			module_put(driver->ops->owner);
+  1106			container->iommu_driver = NULL;
+  1107			container->iommu_data = NULL;
+  1108		}
+  1109	
+  1110		up_write(&container->group_lock);
+  1111	
+  1112		vfio_container_put(container);
+  1113	}
+  1114	
+  1115	/*
+  1116	 * VFIO_GROUP_UNSET_CONTAINER should fail if there are other users or
+  1117	 * if there was no container to unset.  Since the ioctl is called on
+  1118	 * the group, we know that still exists, therefore the only valid
+  1119	 * transition here is 1->0.
+  1120	 */
+  1121	static int vfio_group_unset_container(struct vfio_group *group)
+  1122	{
+  1123		int users = atomic_cmpxchg(&group->container_users, 1, 0);
+  1124	
+  1125		if (!users)
+  1126			return -EINVAL;
+  1127		if (users != 1)
+  1128			return -EBUSY;
+  1129	
+  1130		__vfio_group_unset_container(group);
+  1131	
+  1132		return 0;
+  1133	}
+  1134	
+  1135	/*
+  1136	 * When removing container users, anything that removes the last user
+  1137	 * implicitly removes the group from the container.  That is, if the
+  1138	 * group file descriptor is closed, as well as any device file descriptors,
+  1139	 * the group is free.
+  1140	 */
+  1141	static void vfio_group_try_dissolve_container(struct vfio_group *group)
+  1142	{
+  1143		if (0 == atomic_dec_if_positive(&group->container_users))
+  1144			__vfio_group_unset_container(group);
+  1145	}
+  1146	
+  1147	static int vfio_group_set_container(struct vfio_group *group, int container_fd)
+  1148	{
+  1149		struct fd f;
+  1150		struct vfio_container *container;
+  1151		struct vfio_iommu_driver *driver;
+  1152		int ret = 0;
+  1153	
+  1154		if (atomic_read(&group->container_users))
+  1155			return -EINVAL;
+  1156	
+  1157		if (group->type == VFIO_NO_IOMMU && !capable(CAP_SYS_RAWIO))
+  1158			return -EPERM;
+  1159	
+  1160		group->iommufd = vfio_group_set_iommufd(container_fd,
+> 1161							&group->device_list);
+  1162		if (group->iommufd) {
+  1163			atomic_inc(&group->container_users);
+  1164			return ret;
+  1165		}
+  1166	
+  1167		f = fdget(container_fd);
+  1168		if (!f.file)
+  1169			return -EBADF;
+  1170	
+  1171		/* Sanity check, is this really our fd? */
+  1172		if (f.file->f_op != &vfio_fops) {
+  1173			fdput(f);
+  1174			return -EINVAL;
+  1175		}
+  1176	
+  1177		container = f.file->private_data;
+  1178		WARN_ON(!container); /* fget ensures we don't race vfio_release */
+  1179	
+  1180		down_write(&container->group_lock);
+  1181	
+  1182		/* Real groups and fake groups cannot mix */
+  1183		if (!list_empty(&container->group_list) &&
+  1184		    container->noiommu != (group->type == VFIO_NO_IOMMU)) {
+  1185			ret = -EPERM;
+  1186			goto unlock_out;
+  1187		}
+  1188	
+  1189		ret = iommu_group_claim_dma_owner(group->iommu_group, f.file);
+  1190		if (ret)
+  1191			goto unlock_out;
+  1192	
+  1193		driver = container->iommu_driver;
+  1194		if (driver) {
+  1195			ret = driver->ops->attach_group(container->iommu_data,
+  1196							group->iommu_group,
+  1197							group->type);
+  1198			if (ret) {
+  1199				iommu_group_release_dma_owner(group->iommu_group);
+  1200				goto unlock_out;
+  1201			}
+  1202		}
+  1203	
+  1204		group->container = container;
+  1205		container->noiommu = (group->type == VFIO_NO_IOMMU);
+  1206		list_add(&group->container_next, &container->group_list);
+  1207	
+  1208		/* Get a reference on the container and mark a user within the group */
+  1209		vfio_container_get(container);
+  1210		atomic_inc(&group->container_users);
+  1211	
+  1212	unlock_out:
+  1213		up_write(&container->group_lock);
+  1214		fdput(f);
+  1215		return ret;
+  1216	}
+  1217	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
