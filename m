@@ -1,239 +1,188 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E2E7A
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 01:16:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D727A
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 01:55:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646097403; x=1677633403;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=knh6elYpo4tr7YruYbGImvkmUVglx7N+wZIyoY+SQmA=;
-  b=YvTD9t0kEbS49lE8zPxuc1OM4NXFYyjmnbXuHPApQhaEyNaUMjmsCYkD
-   iP6RjZT8X1p25prUdpJFxM+4rdagioc5o/b6eQ6wdBRVi1jJlahmnGa8L
-   S9WsWybDg4KKZCyRDUT0ZPG59tXYkYHMF2qBAyvzi27MnW1e8YiynsRiZ
-   YbWoqnSHos9DpJ5GLXjijYr4veSKNKHy5KpVo6/f/9QyuvRyf+rP5IHBb
-   nBjV9TeXBeo15fcSE/Cs6jrX0a23qEhtC4RfzYVD1ruStMmfwooBBA1gL
-   rxdBOP+SlWfu/n1GwaAw077RhnVep7F5pcNkY5yMJyWGxsKWprCYXA8AA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277691253"
+  t=1646099723; x=1677635723;
+  h=message-id:date:subject:from:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=QCgaYV3BElPL2ZrwLtvXSdO0Vu/pOnA41/FcfPv3cew=;
+  b=NT8clk2Zz/SEL4ee5Jkcvxavn8ExEApNGP2sfCRR0NiO/5PTICLEOvII
+   Gc4LhYXkK/z+rusPanMkCkcx6j7yjLw7gSV1bbWpZpMqPOCh8OOJetGcU
+   +7W3hEVz9V0yKHh3MVXbAZz/RFI45DP0hL2dNgYZ+rcx35VGcYORyLeYv
+   PRmjU2Av623KcX8y0+XlNfa7cwf0nu4+YyeMrp8KNITTy1UnOTYoIB/Y7
+   uX1X+uoAQKyHTwnZFqjcbNACvl/4AQ+cM9J3E2dxBtWP3KAOrOaReMbax
+   oGdH0lHn3NS5+iZEAGMmaRbNPPympjdQlg2DExGFnFFHDd7mv563gNg0M
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251864848"
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="277691253"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 17:16:43 -0800
+   d="scan'208";a="251864848"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 17:55:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="641086490"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Feb 2022 17:16:40 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nOr83-0007y4-9f; Tue, 01 Mar 2022 01:16:39 +0000
-Date: Tue, 1 Mar 2022 09:15:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
-	herbert@gondor.apana.org.au, krzysztof.kozlowski@canonical.com,
-	robh+dt@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	Corentin Labbe <clabbe@baylibre.com>
-Subject: Re: [PATCH 10/16] crypto: rockchip: rework by using crypto_engine
-Message-ID: <202203010936.rO3B1boq-lkp@intel.com>
-References: <20220228194037.1600509-11-clabbe@baylibre.com>
+   d="scan'208";a="629849961"
+Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Feb 2022 17:55:22 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 17:55:21 -0800
+Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 17:55:21 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21 via Frontend Transport; Mon, 28 Feb 2022 17:55:21 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 28 Feb 2022 17:55:21 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H/KJxLtbv7eaVpehDQREQkAud1KW+BJF6i9Qf7yHw8QAxDTq5fRG2MPtyshBP/EhbSO1D8vm+KedX9yYk2LVybzocYsDjXg1zCBt4ryJtZ5xL6ax9CcLj6Kqs4pOpO2CtrQ0CbthG1ZtlDTWy0xDPwiUG2Sgl4VcJ6IURsUG3t2+YNoa7R+1YSHk89ZXaBLYvtcK+DImluvEkIF3HcKE/KqAYgB2bhm0dHZh0J2DOst2suzvu8+pSx8w+jXaCp5vMH3UDA9nXepm5vKgDUjibNAGCbpsSOTsVpCUcLiiSXQGflID+4UzJICKBPV5Hkvlz38aJntDsvpWjHCNhVDV7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e1RIIExXLOmy2s/9ioXPQL6nO84DM7OGNQgkOaWuoSw=;
+ b=IQC9uG32YVdkWGNFKGn8b5dTDSYKDBAOTFZiMoCefzml9KZxoZ8UhfQmnhD8TeyHsIVXeSfzYTAj12VmwfRNqTnWwHxtoeqpK1x1OmxOJzdMlh2png06lEx+QQBgQfCtxPMFFISI5nbrL4qpv0kwGPD3ZULNTRkwolDEg5HABxF4CliEzfa3tuj7mW83rWLyTAWF+ahgfugJQOGwnjLDg8tIv1g1ELY0S6yc6dJ9WxUObpIr0Xa0Y2GeFrdR7b3bOxE3oAEE2wDVaFeEfbVh749JVZyVG2AvWA/5Ih08hb4HaeCi/C2lK2Zf+oqzMWa/sV20HmEJQQ1h4Ciz5BYppA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ0PR11MB5598.namprd11.prod.outlook.com (2603:10b6:a03:304::12)
+ by SA2PR11MB4876.namprd11.prod.outlook.com (2603:10b6:806:119::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Tue, 1 Mar
+ 2022 01:55:14 +0000
+Received: from SJ0PR11MB5598.namprd11.prod.outlook.com
+ ([fe80::c4a2:d11d:cb7b:dc8d]) by SJ0PR11MB5598.namprd11.prod.outlook.com
+ ([fe80::c4a2:d11d:cb7b:dc8d%9]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
+ 01:55:14 +0000
+Message-ID: <1ebaefbc-ef9e-3060-3572-5ee560b7c4de@intel.com>
+Date: Tue, 1 Mar 2022 09:55:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.6.1
+Subject: Re: [PATCH] btrfs: Initialize ret to 0 in scrub_simple_mirror()
+Content-Language: en-US
+From: Yujie Liu <yujie.liu@intel.com>
+To: Souptick Joarder <jrdr.linux@gmail.com>
+CC: Qu Wenruo <wqu@suse.com>, Chris Mason <clm@fb.com>, Josef Bacik
+	<josef@toxicpanda.com>, <dsterba@suse.com>, <nathan@kernel.org>, "Nick
+ Desaulniers" <ndesaulniers@google.com>, <linux-btrfs@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, kernel test robot
+	<lkp@intel.com>
+References: <20220220144606.5695-1-jrdr.linux@gmail.com>
+ <0a2e57ad-2973-ea01-ceda-3262cde1f5aa@gmx.com>
+ <CAFqt6zZsv+bMwbdqrcOMCZE08O_q7DGa0ejVAbokLybsSch5fw@mail.gmail.com>
+ <a1d126df-a5ee-d47d-bfaa-95b3b221e41a@suse.com>
+ <b2536c4b-bf0f-a2ff-58cf-ef7d17acaf48@intel.com>
+ <CAFqt6zbCootaOTU3hGXZ0cBcMHoiNtXynzzG8oGw8R6fO4muhg@mail.gmail.com>
+ <e94b337b-38ea-8705-4dd7-c09ac6b98ec0@intel.com>
+In-Reply-To: <e94b337b-38ea-8705-4dd7-c09ac6b98ec0@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HKAPR04CA0014.apcprd04.prod.outlook.com
+ (2603:1096:203:d0::24) To SJ0PR11MB5598.namprd11.prod.outlook.com
+ (2603:10b6:a03:304::12)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228194037.1600509-11-clabbe@baylibre.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e462a0f5-0154-48de-1af0-08d9fb2686b9
+X-MS-TrafficTypeDiagnostic: SA2PR11MB4876:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <SA2PR11MB487658BB0B3AE4FA0D617BD5FB029@SA2PR11MB4876.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /fyhmbGaXeyCmZ8VwZIgktw3NNod5isV5ldC0AxHGqNmPv+wtpVqsO4eQIMEv4eyClx6NSxr/pYM94D7JlVC2FFHeFlQZD8DtM/zlluO9bxEigIlayUtKX4cpInsopE3nbFBGGzyD+rHS25pB8JkKyVzCmCWxGSbQCWWbPvc9OdOOLEnwN1nEV7HD1eEpGdIWdLY6UOWfBInfIBM9NFawlg6YH3kc48qPDoi621W/NfcqI2K4EB6sPX+XPXe84GvZduem8DnWTjjom5F6SeAOpIDlcGc+hSCC2K0+8LGl7SoHlZEiUHwF1SdyAnEYYXj6sxu5s6HAUDNp/8YTMnXA6qJEfsMFvetWppcKQo4Bz9RiPO3QvNRA2itP0QSyDOKS4hPd1hGBaftKiyid/XSsRdQ8zRnhxtaOOvada866qLXdiSfZOF23VtL3JQ52IbPImMEGOTxXRrj4qsxK5dS2s8F+uGHmcVhA/N7Qkk471dn6nGEZjHkCs/cVm2SQqr23X+gur1xlqMl13w4dlK3ePcJxKl/0qMxAgFXwTm8sNoWaT5K3VbTN3Iza0gXgU8SUkxpiwE6tLfj8cxgcYnY7DRrzYOumjD7KLDU6dju7VG45OddHYDPsACz/IW/Uvc5v4ZzHaqmoCtuh0MYJDpY/gt9oZHAKsoTKIkbgwGQd8AiAAdwQauXKbYSiH95ImVHvu0EzBsmLlqllkXmbnbMyoIF81XfZGZvdtQ+EgR2AKsiB/IxUAt4kM7YeQvMB7oQMr6K7PvDF8cZhPD4yhiMt4hyUcA2VP6ZCDlRtniOYNDIvvR86d/UQZ7NbQ+kIdN+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5598.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(2906002)(7416002)(5660300002)(4744005)(44832011)(82960400001)(86362001)(31696002)(66556008)(38100700002)(6666004)(6506007)(508600001)(8676002)(4326008)(2616005)(6512007)(53546011)(66476007)(316002)(66946007)(31686004)(6486002)(966005)(6916009)(54906003)(83380400001)(107886003)(26005)(186003)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TURYT1h1a2NBU2IzZ1RlRVRkbkJueFFiY2tDbjBzQS9rMGJQZ0xWcHZBOTFR?=
+ =?utf-8?B?dkhOaTVJdFVOdWk5emJyK1dyb1Z3dCtxME5Wc0h1NHpxdFkyRnoraHRPb1Qy?=
+ =?utf-8?B?Wm5EQ1BjdHJGYzFlNW8xdUw0NllGNVJnQUlSWHVTNlRMTXpyc3lvcHJoS0Vn?=
+ =?utf-8?B?Y0xaSjB4czQ5cUJ3SCtUSTNncFU2cDM4bjNtY1hDUG1sZTFHYUp3RkpNYllh?=
+ =?utf-8?B?OURZRkllekV3eFBlOUpabXVsWU5kL0VsMXlYMkU3RXJ3bkdOQnNFNkJYMTR0?=
+ =?utf-8?B?ZDY0OGNCaEpCbGFkR3hrbzBabW0yb2lvdk9WT0NyQUxTdHdEK2NnOEpScExz?=
+ =?utf-8?B?YjNGaTkzQmFHajg5UGJCM3NkOVpRWDZSd3UrdWlpa0QxNUdQVWdOSHlYRDk1?=
+ =?utf-8?B?TXljUjR6aElteGhPUFBSWUx5K1pjNHM5KzRyWjk2cjI3Ry96RGkyVFZzVk1h?=
+ =?utf-8?B?YXUrM3FLVmYzK3RJTEJkeEVLMzBBN1poK2czY3ZXdE1ibmlZZmdXU0k2YUt0?=
+ =?utf-8?B?SkZodVMvRGlYeDByOXFmVUpScStYN2ltNnZTeVB3azh3Sk5Jdk5HbzRwaDNE?=
+ =?utf-8?B?bHBHeG4xaDVtZ054SzRqa0xFU1EwNTdZMjUyVXNPRmRJTWc2M3FnRWcxazZ6?=
+ =?utf-8?B?WkEzd1NRNk1lT3M1S253QWMzWkVoTHRncEIrNnJtNnhndCs5Q1drY0VEck9L?=
+ =?utf-8?B?OFl5K3VUN2MyL3hnZzY5SmtXb08wWldwUEZWbForSnRDQkpqY1JuSzA2Z25p?=
+ =?utf-8?B?Qk95TDBOZk1tWW5QdGU5QXlGYzFsa0J2ek4rc0tFa3dCZGxvSWsvWTlSMUlH?=
+ =?utf-8?B?ZDVGcWdWYWpPOG13dUs4V2ZFWWlWNkc3RENyYWpCYjBMT2ZzZWZOV0o2Y3pW?=
+ =?utf-8?B?VUJiRG9Jc3VLcXhiU1Z3TEZJNTl1aFFVZnlaM2JhWUowa1IxT0tGL1dkeW1m?=
+ =?utf-8?B?NjRQSXh6bUozaEE3RkhkQnJVZDlwLytKWkJrU0NPMDBpMnNnUGJoVTRFS2Fx?=
+ =?utf-8?B?bzY0bVlJN1FHNFVwTzZvb0ZwWFYyem9XNkljb21teXIzSHpZT1lrekplT2dr?=
+ =?utf-8?B?dzdFTVJITEluWFMyNGJFdlIxc3hkMDJwMDJvbDFUMitGdHRNc1JjSzlmQlpM?=
+ =?utf-8?B?aTYyTUlXTWJyUlpQWEVkeHVJSjlVNzJTOTB3NkdqVFVJOXIxSHFCWHpzZHgv?=
+ =?utf-8?B?RFFZVzViZXg0bmZrVldHV3hKMU9xVXkvelpGUFM2NkxoaDB6MjVEMTlPelVH?=
+ =?utf-8?B?MUlPMXJtUmZhUmsxeHVFc3VjLy9CMUd0bm9wY1RvUENQSjNBaEpzeHJTU3Jn?=
+ =?utf-8?B?MFNIZ1huR1o3NDh3ckMwTXlhNFR6bDJiMVhzYm1pdXorTEhZL2JETVh2cHNh?=
+ =?utf-8?B?VUpHZjBjN2lPOWFQYnBOZnZwK1czci9UM1MrWU9QWHBZMlN4alpkcXovQk9o?=
+ =?utf-8?B?dTc4dTNSajdQSTQ5a0ZuazRXUWVzdFc5L0pRUWZPYjZVQTdDam80SXpibDM1?=
+ =?utf-8?B?QmJMR1RwU1RRcXRWakg3SHpSTS9HOE1oYUNJN250T0MyU2JlR29tYkxUb0lw?=
+ =?utf-8?B?Y1A1N25QR2luRThRMGo5WE9yZkhHMDJIdExzeHQ5MVZVdmJGMWpQczY1b0pJ?=
+ =?utf-8?B?bWF4TzhxZElheW00R2k5enFHQlRZMTNyMERuSCsxMlVJNU9XV0Y5NHI5NFcx?=
+ =?utf-8?B?WW9EMEJZZU1MMkxuaWUxWjRCNmFkcmFkUDVDemZrTjZXMWtDT28waDNaOGJQ?=
+ =?utf-8?B?VG56R21pdnBXQTJFV2YvbVE0ZkNtZU1CcW50a2JlMFhxMXhxWHg4RmpyWCtx?=
+ =?utf-8?B?d0JQRGp1NE5Ra1RTWGM1citSZWo3ZWtwWHpTQnNaZlpIWEFZcXBtZlNYNTll?=
+ =?utf-8?B?RFY5OFlQTVlTYmkyQ0dhZVNUVTZESWhSNnkrejFod1pSNE9pYm82am1qRTU5?=
+ =?utf-8?B?RUdmVDRvOXpBeFNONUFnaFZEaklZcDVUUTBRckF1ZFM3amJIb2NURjZmY3pT?=
+ =?utf-8?B?Wm0venZTRWVQSCs3RzFQUklFSUhPdjlCQXRrM2NGZVRaN0l0WWUwUXBHbkhs?=
+ =?utf-8?B?amxpbGxVb2ZvRW5HVjFXWlFFWHcvRkYwRVd3OWhycWRmREhNcWpFQThVT21U?=
+ =?utf-8?B?bGlMMWdvRjlGTXhpdndGRGxYeDVTMlFKdjBRSTcrcGQwVWh3KzRnekViRWox?=
+ =?utf-8?Q?7Mmz6Zrq6kXDxmBgodlERdw=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e462a0f5-0154-48de-1af0-08d9fb2686b9
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5598.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2022 01:55:14.1147
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +EaUtmXFgU6u/WiyfLhy2Im6NSYxQLipo9I2TxmM+QICmd0NRRA226+7KA3s2cz6aTB7B8SguIcx7RdZmfpEEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4876
+X-OriginatorOrg: intel.com
 
-Hi Corentin,
+Hi Souptick,
 
-I love your patch! Perhaps something to improve:
+On 2/25/2022 18:02, Yujie Liu wrote:
+> Hi Souptick,
+> 
+> On 2/25/2022 13:16, Souptick Joarder wrote:
+>> On Thu, Feb 24, 2022 at 3:18 PM Yujie Liu <yujie.liu@intel.com> wrote:
+>>>
+>>> Souptick, could you help to provide the original report by link or attachment?
+>>
+>> https://marc.info/?l=linux-mm&m=164487037605771&w=2
+>>
+> 
+> this link is a notification mail of build status, but not a formal report,
+> so there may be many false alerts in this mail, please ignore them.
+> 
 
-[auto build test WARNING on rockchip/for-next]
-[also build test WARNING on herbert-cryptodev-2.6/master herbert-crypto-2.6/master v5.17-rc6 next-20220228]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Sorry, previous info was not accurate, here are some updates:
 
-url:    https://github.com/0day-ci/linux/commits/Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220301-035430
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
-config: arm64-randconfig-r006-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010936.rO3B1boq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/7e5f8e4a5f09473643937e0ecff342bf336793fb
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220301-035430
-        git checkout 7e5f8e4a5f09473643937e0ecff342bf336793fb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/crypto/rockchip/
+In a build notification mail(such as above link https://marc.info/?l=linux-mm&m=164487037605771&w=2),
+there is a hint line like:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+   possible Error/Warning in current branch (please contact us if interested):
 
-All warnings (new ones prefixed by >>):
+the errors/warnings in this section are not fully verified like the ones generated
+by static analysis tools.
 
->> drivers/crypto/rockchip/rk3288_crypto_skcipher.c:386:10: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
-                           todo, rctx->mode & RK_CRYPTO_DEC);
-                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
-   drivers/crypto/rockchip/rk3288_crypto_skcipher.c:474:24: warning: unused variable 'ctx' [-Wunused-variable]
-           struct rk_cipher_ctx *ctx = crypto_skcipher_ctx(tfm);
-                                 ^
-   2 warnings generated.
+We will make this line clearer to mention that they could be false positives.
 
-
-vim +386 drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-
-   311	
-   312	static int rk_cipher_run(struct crypto_engine *engine, void *async_req)
-   313	{
-   314		struct skcipher_request *areq = container_of(async_req, struct skcipher_request, base);
-   315		struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(areq);
-   316		struct rk_cipher_ctx *ctx = crypto_skcipher_ctx(tfm);
-   317		struct rk_cipher_rctx *rctx = skcipher_request_ctx(areq);
-   318		struct scatterlist *sgs, *sgd;
-   319		int err = 0;
-   320		int n = 0;
-   321		int ivsize = crypto_skcipher_ivsize(tfm);
-   322		int offset;
-   323		u8 iv[AES_BLOCK_SIZE];
-   324		u8 biv[AES_BLOCK_SIZE];
-   325		u8 *ivtouse = areq->iv;
-   326		unsigned int len = areq->cryptlen;
-   327		unsigned int todo;
-   328	
-   329		ivsize = crypto_skcipher_ivsize(tfm);
-   330		if (areq->iv && crypto_skcipher_ivsize(tfm) > 0) {
-   331			if (rctx->mode & RK_CRYPTO_DEC) {
-   332				offset = areq->cryptlen - ivsize;
-   333				scatterwalk_map_and_copy(rctx->backup_iv, areq->src,
-   334							 offset, ivsize, 0);
-   335			}
-   336		}
-   337	
-   338		sgs = areq->src;
-   339		sgd = areq->dst;
-   340	
-   341		while (sgs && sgd && len) {
-   342			if (!sgs->length) {
-   343				sgs = sg_next(sgs);
-   344				sgd = sg_next(sgd);
-   345				continue;
-   346			}
-   347			if (rctx->mode & RK_CRYPTO_DEC) {
-   348				/* we backup last block of source to be used as IV at next step */
-   349				offset = sgs->length - ivsize;
-   350				scatterwalk_map_and_copy(biv, sgs, offset, ivsize, 0);
-   351			}
-   352			if (sgs == sgd) {
-   353				err = dma_map_sg(ctx->dev->dev, sgs, 1, DMA_BIDIRECTIONAL);
-   354				if (err <= 0) {
-   355					err = -EINVAL;
-   356					goto theend_iv;
-   357				}
-   358			} else {
-   359				err = dma_map_sg(ctx->dev->dev, sgs, 1, DMA_TO_DEVICE);
-   360				if (err <= 0) {
-   361					err = -EINVAL;
-   362					goto theend_iv;
-   363				}
-   364				err = dma_map_sg(ctx->dev->dev, sgd, 1, DMA_FROM_DEVICE);
-   365				if (err <= 0) {
-   366					err = -EINVAL;
-   367					goto theend_sgs;
-   368				}
-   369			}
-   370			err = 0;
-   371			rk_ablk_hw_init(ctx->dev, areq);
-   372			if (ivsize) {
-   373				if (ivsize == DES_BLOCK_SIZE)
-   374					memcpy_toio(ctx->dev->reg + RK_CRYPTO_TDES_IV_0, ivtouse, ivsize);
-   375				else
-   376					memcpy_toio(ctx->dev->reg + RK_CRYPTO_AES_IV_0, ivtouse, ivsize);
-   377			}
-   378			reinit_completion(&ctx->dev->complete);
-   379			ctx->dev->status = 0;
-   380	
-   381			todo = min(sg_dma_len(sgs), len);
-   382			len -= todo;
-   383			dev_dbg(ctx->dev->dev, "LEN=%d/%d/%u ivsize=%d mode=%x n=%d BI=%d todo=%u way=%x\n",
-   384				sg_dma_len(sgs), sg_dma_len(sgd), areq->cryptlen,
-   385				ivsize, rctx->mode, n, sgs == sgd,
- > 386				todo, rctx->mode & RK_CRYPTO_DEC);
-   387			crypto_dma_start(ctx->dev, sgs, sgd, todo / 4);
-   388			wait_for_completion_interruptible_timeout(&ctx->dev->complete,
-   389								  msecs_to_jiffies(2000));
-   390			if (!ctx->dev->status) {
-   391				dev_err(ctx->dev->dev, "DMA timeout\n");
-   392				err = -EFAULT;
-   393				goto theend;
-   394			}
-   395			if (sgs == sgd) {
-   396				dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_BIDIRECTIONAL);
-   397			} else {
-   398				dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_TO_DEVICE);
-   399				dma_unmap_sg(ctx->dev->dev, sgd, 1, DMA_FROM_DEVICE);
-   400			}
-   401			if (rctx->mode & RK_CRYPTO_DEC) {
-   402				memcpy(iv, biv, ivsize);
-   403				ivtouse = iv;
-   404			} else {
-   405				offset = sgd->length - ivsize;
-   406				scatterwalk_map_and_copy(iv, sgd, offset, ivsize, 0);
-   407				ivtouse = iv;
-   408			}
-   409			sgs = sg_next(sgs);
-   410			sgd = sg_next(sgd);
-   411			n++;
-   412		}
-   413	
-   414		if (areq->iv && ivsize > 0) {
-   415			offset = areq->cryptlen - ivsize;
-   416			if (rctx->mode & RK_CRYPTO_DEC) {
-   417				memcpy(areq->iv, rctx->backup_iv, ivsize);
-   418				memzero_explicit(rctx->backup_iv, ivsize);
-   419			} else {
-   420				scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
-   421							 ivsize, 0);
-   422			}
-   423		}
-   424	
-   425	theend:
-   426		local_bh_disable();
-   427		crypto_finalize_skcipher_request(engine, areq, err);
-   428		local_bh_enable();
-   429		return 0;
-   430	
-   431	theend_sgs:
-   432		if (sgs == sgd) {
-   433			dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_BIDIRECTIONAL);
-   434		} else {
-   435			dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_TO_DEVICE);
-   436			dma_unmap_sg(ctx->dev->dev, sgd, 1, DMA_FROM_DEVICE);
-   437		}
-   438	theend_iv:
-   439		return err;
-   440	}
-   441	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Yujie
