@@ -1,46 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C775CAB
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 16:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5055CAB
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 16:18:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646150844; x=1677686844;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j7+mghICr3KLO5uiQDA8PUTR39Oz0pF35skb9c2hCA0=;
-  b=Q3T3ZBNPgNoGUHVtT3QHhS/i5dNndO9gKV9xDZV/36lMHv3ELJKPvjl7
-   lvWIZRBzE8pZud0NHz+yV4oEMliWlPsdZaQY0nLaZ3brgroy2XaVIPw0r
-   LdH38C1s+GPUxEwtDCRl9WUrLw5ZFg+cH983xjcc1Lqk4g/yYKvlBAW9K
-   6AErPH4BpVj8hUSsokyNJGlhPtIvuZmKBaG68LB/YgpLyvOZjz98mRekK
-   UAjAemn5UUpuxV24cFKkiszPelvSh6xZyLVLyz9k65z6G4ArsEkZCmRAM
-   K3bCUioP9rcKxV31urSp83jfJoqvBWedve8dkVRhJ/QEiHhmprkmMGSd3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251993874"
+  t=1646151497; x=1677687497;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=99PDWrnZC+94sUm2Of52rgGL0LZDuPgk1v8mjahoKLg=;
+  b=VC+/FWzDcRX23f2yaL0kMHWPJR7eyVx/evQyA8tri+Ze+fKrqDhO85t3
+   UB4VmxWx4qiPkFjaFhsURREcyV4RlbCoSfmLhWnLWQ0lqz/KWckvizLix
+   rX6WH8R06TOsgro4AvEJhP7MxXqt7C+fKCXd9kW8z/aDtfoK3bsHwO8ft
+   Z2DFE7KiSeCfvPSgl3xvb28had6qEBrS13Owj365lbzdc2sEuWDWrRIX/
+   UMP3Wq8yar0Zkixz93ZcMb8OcwF9nj/+1jNokfr2a3TofH7G7Z/1X2ZrW
+   0X+x8r6MDBo88SD1096xCaVrwKMcMbH/rPe8sXjP4BWqb5Xg94vC/16NT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="316381392"
 X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="251993874"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:06:35 -0800
+   d="scan'208";a="316381392"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:17:44 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="630063751"
+   d="scan'208";a="493160719"
 Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Mar 2022 08:06:32 -0800
+  by orsmga003.jf.intel.com with ESMTP; 01 Mar 2022 08:17:42 -0800
 Received: from kbuild by 2146afe809fb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nP51D-0000fk-8r; Tue, 01 Mar 2022 16:06:31 +0000
-Date: Wed, 2 Mar 2022 00:06:12 +0800
+	id 1nP5C1-0000h9-Ub; Tue, 01 Mar 2022 16:17:41 +0000
+Date: Wed, 2 Mar 2022 00:16:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Meng Tang <tangmeng@uniontech.com>, mcgrof@kernel.org,
-	keescook@chromium.org, yzaikin@google.com, ebiederm@xmission.com,
-	willy@infradead.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, nixiaoming@huawei.com,
-	nizhen@uniontech.com, zhanglianjie@uniontech.com,
-	sujiaxun@uniontech.com, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>
-Subject: Re: [PATCH v2 1/2] fs/proc: optimize exactly register one ctl_table
-Message-ID: <202203012340.8d5kZylK-lkp@intel.com>
-References: <20220301115341.30101-1-tangmeng@uniontech.com>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Hemant Kumar <hemantk@codeaurora.org>,
+	Alex Elder <elder@linaro.org>
+Subject: [mani-mhi:mhi-next 12/30] drivers/bus/mhi/host/../common.h:278:28:
+ warning: 'const' type qualifier on return type has no effect
+Message-ID: <202203020002.8Of9vVDg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,139 +45,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220301115341.30101-1-tangmeng@uniontech.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Meng,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on mcgrof/sysctl-next]
-[also build test WARNING on jack-fs/fsnotify rostedt-trace/for-next linus/master v5.17-rc6 next-20220301]
-[cannot apply to kees/for-next/pstore]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Meng-Tang/fs-proc-optimize-exactly-register-one-ctl_table/20220301-195515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-next
-config: hexagon-randconfig-r045-20220301 (https://download.01.org/0day-ci/archive/20220301/202203012340.8d5kZylK-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git mhi-next
+head:   b85d0d28ed263a5421f698d5c7bd513c7b6d8b97
+commit: ed97144182117586712c8036ded0bab36898eae0 [12/30] bus: mhi: Make mhi_state_str[] array static inline and move to common.h
+config: hexagon-randconfig-r036-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020002.8Of9vVDg-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d9e9a410cf46b383390d668770fff70540e27528
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Meng-Tang/fs-proc-optimize-exactly-register-one-ctl_table/20220301-195515
-        git checkout d9e9a410cf46b383390d668770fff70540e27528
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git/commit/?id=ed97144182117586712c8036ded0bab36898eae0
+        git remote add mani-mhi https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git
+        git fetch --no-tags mani-mhi mhi-next
+        git checkout ed97144182117586712c8036ded0bab36898eae0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/proc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bus/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/proc/proc_sysctl.c:1281:6: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
-           int len = strlen(table->procname) + 1;
-               ^
-   fs/proc/proc_sysctl.c:1638:26: warning: no previous prototype for function '__register_sysctl_table_single' [-Wmissing-prototypes]
-   struct ctl_table_header *__register_sysctl_table_single(
-                            ^
-   fs/proc/proc_sysctl.c:1638:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct ctl_table_header *__register_sysctl_table_single(
-   ^
-   static 
-   fs/proc/proc_sysctl.c:1988:27: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
-           struct ctl_table_header *link_head;
-                                    ^
-   3 warnings generated.
+   In file included from drivers/bus/mhi/host/init.c:21:
+   In file included from drivers/bus/mhi/host/internal.h:10:
+>> drivers/bus/mhi/host/../common.h:278:28: warning: 'const' type qualifier on return type has no effect [-Wignored-qualifiers]
+   static inline const char * const mhi_state_str(enum mhi_state state)
+                              ^~~~~~
+   1 warning generated.
 
 
-vim +1281 fs/proc/proc_sysctl.c
+vim +/const +278 drivers/bus/mhi/host/../common.h
 
-  1256	
-  1257	static struct ctl_table_header *new_links_single(struct ctl_dir *dir, struct ctl_table *table,
-  1258		struct ctl_table_root *link_root)
-  1259	{
-  1260		struct ctl_table *link_table;
-  1261		struct ctl_table_header *links;
-  1262		struct ctl_node *node;
-  1263		char *link_name;
-  1264		int name_bytes = 0;
-  1265	
-  1266		name_bytes += strlen(table->procname) + 1;
-  1267	
-  1268		links = kzalloc(sizeof(struct ctl_table_header) +
-  1269				sizeof(struct ctl_node) +
-  1270				sizeof(struct ctl_table)*2 +
-  1271				name_bytes,
-  1272				GFP_KERNEL);
-  1273	
-  1274		if (!links)
-  1275			return NULL;
-  1276	
-  1277		node = (struct ctl_node *)(links + 1);
-  1278		link_table = (struct ctl_table *)(node + 1);
-  1279		link_name = (char *)&link_table[2];
-  1280	
-> 1281		int len = strlen(table->procname) + 1;
-  1282	
-  1283		memcpy(link_name, table->procname, len);
-  1284		link_table->procname = link_name;
-  1285		link_table->mode = S_IFLNK|S_IRWXUGO;
-  1286		link_table->data = link_root;
-  1287		link_name += len;
-  1288	
-  1289		init_header_single(links, dir->header.root, dir->header.set, node, link_table);
-  1290		links->nreg = 1;
-  1291	
-  1292		return links;
-  1293	}
-  1294	static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table *table,
-  1295		struct ctl_table_root *link_root)
-  1296	{
-  1297		struct ctl_table *link_table, *entry, *link;
-  1298		struct ctl_table_header *links;
-  1299		struct ctl_node *node;
-  1300		char *link_name;
-  1301		int nr_entries, name_bytes;
-  1302	
-  1303		name_bytes = 0;
-  1304		nr_entries = 0;
-  1305		for (entry = table; entry->procname; entry++) {
-  1306			nr_entries++;
-  1307			name_bytes += strlen(entry->procname) + 1;
-  1308		}
-  1309	
-  1310		links = kzalloc(sizeof(struct ctl_table_header) +
-  1311				sizeof(struct ctl_node)*nr_entries +
-  1312				sizeof(struct ctl_table)*(nr_entries + 1) +
-  1313				name_bytes,
-  1314				GFP_KERNEL);
-  1315	
-  1316		if (!links)
-  1317			return NULL;
-  1318	
-  1319		node = (struct ctl_node *)(links + 1);
-  1320		link_table = (struct ctl_table *)(node + nr_entries);
-  1321		link_name = (char *)&link_table[nr_entries + 1];
-  1322	
-  1323		for (link = link_table, entry = table; entry->procname; link++, entry++) {
-  1324			int len = strlen(entry->procname) + 1;
-  1325			memcpy(link_name, entry->procname, len);
-  1326			link->procname = link_name;
-  1327			link->mode = S_IFLNK|S_IRWXUGO;
-  1328			link->data = link_root;
-  1329			link_name += len;
-  1330		}
-  1331		init_header(links, dir->header.root, dir->header.set, node, link_table);
-  1332		links->nreg = nr_entries;
-  1333	
-  1334		return links;
-  1335	}
-  1336	
+   277	
+ > 278	static inline const char * const mhi_state_str(enum mhi_state state)
+   279	{
+   280		switch (state) {
+   281		case MHI_STATE_RESET:
+   282			return "RESET";
+   283		case MHI_STATE_READY:
+   284			return "READY";
+   285		case MHI_STATE_M0:
+   286			return "M0";
+   287		case MHI_STATE_M1:
+   288			return "M1";
+   289		case MHI_STATE_M2:
+   290			return "M2";
+   291		case MHI_STATE_M3:
+   292			return "M3";
+   293		case MHI_STATE_M3_FAST:
+   294			return "M3 FAST";
+   295		case MHI_STATE_BHI:
+   296			return "BHI";
+   297		case MHI_STATE_SYS_ERR:
+   298			return "SYS ERROR";
+   299		default:
+   300			return "Unknown state";
+   301		}
+   302	};
+   303	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
