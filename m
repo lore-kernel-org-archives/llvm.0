@@ -1,125 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9628F161
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 16:54:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 740C1C340EE;
-	Tue,  1 Mar 2022 16:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646153672;
-	bh=9NZHNm5f//UknLBQJi8aC7uw9czFahxKr+dcDCmFUCE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DAkNpCOltDdkG4CouhQG0dgkdaSG+j0l1C23qUMaLCvWXveml1Bg7Um3AS0uTmR33
-	 Z6yOKIMrLwUHhvy7GfU7WOAEAtARrMJKtdVhHwmHcp7horUQosHtlsFQg5gqUan1XR
-	 d0UrTqoxcw3w/XKYLhEEWVhXQ7H8JYmTb7SDLzdNRBXWyJxPAlb+dnJgJnWL5npNeW
-	 63xbWytUOsFzaJrkFx9qyR2Ew31u64F7qX9wHQeu3E2JtobC2y8ZxWIiMP3vYgRqh9
-	 YRCHyXZxC8WdH460sGtTP9MnHQr6LhQQVgrUVnzWBfQKx4zeBp6yrIhS3qsDwpWV90
-	 YFYdZxrdVrO4w==
-Date: Tue, 1 Mar 2022 09:54:26 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Marco Elver <elver@google.com>, Jani Nikula <jani.nikula@intel.com>,
-	David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63863161
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 17:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646154025; x=1677690025;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qFx2K2BkSCOgXk2XRt2r5V5uRFSKNupKTOGKHA8XF+M=;
+  b=g4Rw/nn3S6NjCfbjcrakPi35JV/J76bXIMw5FLk8StssIqvbDq+JfkD6
+   GSEL2HZAN5BS3/x7fWFLSZKGNq6BgPS4acX49/Lr2pnyrrN5a2+AYa8sD
+   wFhIpU0PUcNooPajWwRnwYg//+2t1Yk4fE9spHt/3aWyVyKUqZSBdgdBM
+   MIkdyaAfN3kiNZ3h6GhkegA/CT72bjt71zSfBPo2mEHfFL3o23sZCi7SV
+   8BP1xIMZQFm67mqpCHMHbpzshURIqPVn8VP1McjKRGzdSktLpHmCSAzu3
+   YuKGQkMojJemiNLkJY52FwhmQi9CzsK6HzqjhsyMRdh+UWGJNfj9QLjwD
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="233800192"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="233800192"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:58:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="608868643"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 01 Mar 2022 08:58:45 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nP5pk-0000m5-RU; Tue, 01 Mar 2022 16:58:44 +0000
+Date: Wed, 2 Mar 2022 00:58:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liu Yi L <yi.l.liu@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] treewide: use -Wdeclaration-after-statement
-Message-ID: <Yh5PwhYav2OOxnZV@dev-arch.archlinux-ax161>
-References: <20220301145233.3689119-1-arnd@kernel.org>
- <20220301145233.3689119-2-arnd@kernel.org>
+Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 29/30]
+ drivers/vfio/vfio.c:1800:10: error: implicit declaration of function
+ 'iommufd_vfio_set_iommu'
+Message-ID: <202203020051.lJg5pB22-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220301145233.3689119-2-arnd@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Mar 01, 2022 at 03:52:32PM +0100, Arnd Bergmann wrote:
-> From: Mark Rutland <mark.rutland@arm.com>
-> 
-> In a subsequent patch we'll move the kernel from using `-std=gnu89` to
-> `-std=gnu11`, permitting the use of additional C11 features such as
-> for-loop initial declarations.
-> 
-> One contentious aspect of C99 is that it permits mixed declarations and
-> code, and for now at least, it seems preferable to enforce that
-> declarations must come first.
-> 
-> These warnings were already disabled in the kernel itself, but not
-> for KBUILD_USERCFLAGS or the compat VDSO on arch/arm64, which uses
-> a separate set of CFLAGS.
-> 
-> This patch fixes an existing violation in modpost.c, which is not
-> reported because of the missing flag in KBUILD_USERCFLAGS:
-> 
-> | scripts/mod/modpost.c: In function ‘match’:
-> | scripts/mod/modpost.c:837:3: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-> |   837 |   const char *endp = p + strlen(p) - 1;
-> |       |   ^~~~~
-> 
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> [arnd: don't add a duplicate flag to the default set, update changelog]
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
+head:   2bca5fa75dad57f41002a93861a950d35d55e568
+commit: f8fb748995b4e1156fd76a3860da5ea897536a3c [29/30] vfio: Fix kernel panic in vfio_ioctl_check_extension()
+config: hexagon-randconfig-r041-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020051.lJg5pB22-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/luxis1999/iommufd/commit/f8fb748995b4e1156fd76a3860da5ea897536a3c
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
+        git checkout f8fb748995b4e1156fd76a3860da5ea897536a3c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/vfio/
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  Makefile                          | 3 ++-
->  arch/arm64/kernel/vdso32/Makefile | 1 +
->  scripts/mod/modpost.c             | 4 +++-
->  3 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 94fa9a849a7a..37ef6a555dcd 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -432,7 +432,8 @@ HOSTCXX	= g++
->  endif
->  
->  export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
-> -			      -O2 -fomit-frame-pointer -std=gnu89
-> +			    -O2 -fomit-frame-pointer -std=gnu89 \
-> +			    -Wdeclaration-after-statement
->  export KBUILD_USERLDFLAGS :=
->  
->  KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
-> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
-> index 9378ea055bf2..ed181bedbffc 100644
-> --- a/arch/arm64/kernel/vdso32/Makefile
-> +++ b/arch/arm64/kernel/vdso32/Makefile
-> @@ -68,6 +68,7 @@ VDSO_CFLAGS += -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
->                 -fno-strict-aliasing -fno-common \
->                 -Werror-implicit-function-declaration \
->                 -Wno-format-security \
-> +               -Wdeclaration-after-statement \
->                 -std=gnu11
->  VDSO_CFLAGS  += -O2
->  # Some useful compiler-dependent flags from top-level Makefile
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 6bfa33217914..fe693304b120 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -833,8 +833,10 @@ static int match(const char *sym, const char * const pat[])
->  {
->  	const char *p;
->  	while (*pat) {
-> +		const char *endp;
-> +
->  		p = *pat++;
-> -		const char *endp = p + strlen(p) - 1;
-> +		endp = p + strlen(p) - 1;
->  
->  		/* "*foo*" */
->  		if (*p == '*' && *endp == '*') {
-> -- 
-> 2.29.2
-> 
-> 
+All errors (new ones prefixed by >>):
+
+   drivers/vfio/vfio.c:1088:44: error: too many arguments to function call, expected single argument 'iommufd', have 2 arguments
+                   vfio_group_unset_iommufd(group->iommufd, &group->device_list);
+                   ~~~~~~~~~~~~~~~~~~~~~~~~                 ^~~~~~~~~~~~~~~~~~~
+   include/linux/iommufd.h:57:20: note: 'vfio_group_unset_iommufd' declared here
+   static inline void vfio_group_unset_iommufd(void *iommufd)
+                      ^
+   drivers/vfio/vfio.c:1166:26: error: too few arguments to function call, expected 3, have 2
+                                                   &group->device_list);
+                                                                      ^
+   include/linux/iommufd.h:51:19: note: 'vfio_group_set_iommufd' declared here
+   static inline int vfio_group_set_iommufd(int fd, struct iommu_group *group,
+                     ^
+>> drivers/vfio/vfio.c:1800:10: error: implicit declaration of function 'iommufd_vfio_set_iommu' [-Werror,-Wimplicit-function-declaration]
+                   return iommufd_vfio_set_iommu(group->iommufd, arg);
+                          ^
+   3 errors generated.
+
+
+vim +/iommufd_vfio_set_iommu +1800 drivers/vfio/vfio.c
+
+  1796	
+  1797	long vfio_external_check_extension(struct vfio_group *group, unsigned long arg)
+  1798	{
+  1799		if (group->iommufd)
+> 1800			return iommufd_vfio_set_iommu(group->iommufd, arg);
+  1801	
+  1802		return vfio_ioctl_check_extension(group->container, arg);
+  1803	}
+  1804	EXPORT_SYMBOL_GPL(vfio_external_check_extension);
+  1805	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
