@@ -1,84 +1,265 @@
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E554D17D1;
-	Tue,  1 Mar 2022 10:44:05 +0000 (UTC)
-Received: by mail-io1-f42.google.com with SMTP id m185so17934778iof.10;
-        Tue, 01 Mar 2022 02:44:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dohQLzfhr7wZu6SxVtIw3CHG42SObGN2SXyswtlVBsg=;
-        b=WrUDonvN2fO25UTk5VNVhFhd8gruRaN5xzDoP4JD0Sakac0hlwGn0vLFs4yYd4XAFv
-         uZKJIKn4j7cuELvqeeSDPXMNu2C1n0MsJpfl9rt1CcXMWz8ysAwYiWu0FU5ssFw8GnBu
-         KImb7bl4uZxpEQ889GR2FwiQtAowT5cOncwrkuheaR+UErGWa6dJdP5knzUj9ZNji+C6
-         SaCIGAmJwbqyXPo1H+nGW/xKoV4Sv5xxMQcmeQv2UvCQ1LPx9cytIPoPatO3xtpXO37Q
-         QL3drAKRoTDr8u6LO2OfPrWDqwyTUyYOMOn4N3XOwbIN3FW3QG+ijjXJMFfWWnQ72HyS
-         YuTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dohQLzfhr7wZu6SxVtIw3CHG42SObGN2SXyswtlVBsg=;
-        b=vfOPM8eOGI4HYZ6fq66ilEumZWClHSPvV2Rc9k16wBI9fGlp+hW2JkPCSxt9Jm52Ns
-         WKtbKbJ6DE2EvWVKWCzRz0i0Ydy3GMK3n35S3Ctt8gnYdJ2E7BMNctILqiCgA2ECZzP7
-         2p9L01J7p8vQIf4et3EP6tcErgtrKv6x08c8rhZQ0K/7ATJMplgysfvYuUwMop7qp4MN
-         WiXnHN6qiKtnhX62CA9bVSxFRf3QSbFAs4qnBH4CdzyxqezOpMAt/B5G0YGJU/BUIv1Y
-         UAZv9ixlqbpHvdbcBm8HIbj/iUb4sZ/Yu4pCCwmxAZCsUAiAZOPX9sDieeXLZhmNxlmZ
-         tA6A==
-X-Gm-Message-State: AOAM530bShUWimLF9ENYSzynGiFLTiX/KAan3quOBbdLmkiAcEbTdwPG
-	5v5nQoSjAJFETLnHyHzXPfEvqE7RTc/YpSRKAJg=
-X-Google-Smtp-Source: ABdhPJw1aZ/CGkeAZM6RKVYVHBay0f9lMjJdsMqyLhdijbZf60uaKu7bggqdaHiabrS+XPZY5qiqhEF5Hass1iDJqZk=
-X-Received: by 2002:a6b:661a:0:b0:640:dd42:58ff with SMTP id
- a26-20020a6b661a000000b00640dd4258ffmr18921633ioc.64.1646131444958; Tue, 01
- Mar 2022 02:44:04 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A6525A12
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 11:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646134886; x=1677670886;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bKQlIa9uXc/OOviJ8WIly+xFX9eD8z4gW619aDurWLY=;
+  b=fJX2nfs/UThJINWRZWtz4Uixj/N83fTYo8f8CPyXNe5T+HJIoXbuqUZY
+   WgB5jKahWywqKPxDCBsocAv/ikCddSbebqigQpq3r7BbzltPzLIWGgvc7
+   1pPbTPTjDAfJwTsEO4A9wxq0xPMEAA+KEZwJB6xcEpxoAg12zo0P28EcH
+   UGV5jkaOlPk2q9rrgZLZ/75FQ2OVEwTnvdXD2lb/UOMqjzjb7clcN09or
+   diduSLHXyL5e2Yq7JCw2MxLQ9Ibksu5dKbTKBt2vJrlW4+yVFhiAcOe3Z
+   vEEs2NH6e6mTkWT/eSrV3X8Rq+bTnfTEDQg2REeZVkYsxyxiLAWxOOXZv
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="313834899"
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="313834899"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 03:41:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="575671548"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 01 Mar 2022 03:41:23 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nP0sd-0000ML-69; Tue, 01 Mar 2022 11:41:23 +0000
+Date: Tue, 1 Mar 2022 19:40:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH bpf-next v1 6/6] selftests/bpf: Add tests for kfunc
+ register offset checks
+Message-ID: <202203011937.wMLpkfU3-lkp@intel.com>
+References: <20220301065745.1634848-7-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220228103142.3301082-1-arnd@kernel.org>
-In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 1 Mar 2022 11:43:53 +0100
-Message-ID: <CANiq72=wmYeBcJvRbBgRj1q_cHjZBVjxStXSu-8Ogv5bJhCqpA@mail.gmail.com>
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>, 
-	Federico Vaga <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, 
-	Hu Haowen <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, 
-	Nick Desaulniers <ndesaulniers@google.com>, 
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-doc-tw-discuss@lists.sourceforge.net, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Intel Graphics Development <intel-gfx@lists.freedesktop.org>, 
-	dri-devel <dri-devel@lists.freedesktop.org>, greybus-dev@lists.linaro.org, 
-	linux-staging@lists.linux.dev, Linux Btrfs <linux-btrfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301065745.1634848-7-memxor@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Feb 28, 2022 at 11:32 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> -under ``-std=gnu89`` [gcc-c-dialect-options]_: the GNU dialect of ISO C90
-> -(including some C99 features). ``clang`` [clang]_ is also supported, see
-> +under ``-std=gnu11`` [gcc-c-dialect-options]_: the GNU dialect of ISO C11
-> +(including some C17 features). ``clang`` [clang]_ is also supported, see
+Hi Kumar,
 
-I think the "(including some C17)" bit would not make much sense
-anymore. There were no major changes in C17 and GCC implements
-`-std=c11` and `-std=c17` as basically the same thing according to the
-docs (and GNU extensions apply equally to both, I would assume).
+Thank you for the patch! Perhaps something to improve:
 
-When I wrote the "(including some C99 features)" I meant that GCC
-implemented some C99 features as extensions in C90 mode, and the
-kernel used some of those (e.g. the now gone VLAs).
+[auto build test WARNING on bpf-next/master]
 
-With that changed, for `programming-language.rst`:
+url:    https://github.com/0day-ci/linux/commits/Kumar-Kartikeya-Dwivedi/Fixes-for-bad-PTR_TO_BTF_ID-offset/20220301-150010
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: s390-randconfig-r021-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011937.wMLpkfU3-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/37a0d686bce3b71b14a17ae57364ec45d1405b9e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Kumar-Kartikeya-Dwivedi/Fixes-for-bad-PTR_TO_BTF_ID-offset/20220301-150010
+        git checkout 37a0d686bce3b71b14a17ae57364ec45d1405b9e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash net/bpf/
 
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Cheers,
-Miguel
+All warnings (new ones prefixed by >>):
+
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   net/bpf/test_run.c:201:14: warning: no previous prototype for function 'bpf_fentry_test1' [-Wmissing-prototypes]
+   int noinline bpf_fentry_test1(int a)
+                ^
+   net/bpf/test_run.c:201:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int noinline bpf_fentry_test1(int a)
+   ^
+   static 
+   net/bpf/test_run.c:208:14: warning: no previous prototype for function 'bpf_fentry_test2' [-Wmissing-prototypes]
+   int noinline bpf_fentry_test2(int a, u64 b)
+                ^
+   net/bpf/test_run.c:208:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int noinline bpf_fentry_test2(int a, u64 b)
+   ^
+   static 
+   net/bpf/test_run.c:213:14: warning: no previous prototype for function 'bpf_fentry_test3' [-Wmissing-prototypes]
+   int noinline bpf_fentry_test3(char a, int b, u64 c)
+                ^
+   net/bpf/test_run.c:213:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int noinline bpf_fentry_test3(char a, int b, u64 c)
+   ^
+   static 
+   net/bpf/test_run.c:218:14: warning: no previous prototype for function 'bpf_fentry_test4' [-Wmissing-prototypes]
+   int noinline bpf_fentry_test4(void *a, char b, int c, u64 d)
+                ^
+   net/bpf/test_run.c:218:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int noinline bpf_fentry_test4(void *a, char b, int c, u64 d)
+   ^
+   static 
+   net/bpf/test_run.c:223:14: warning: no previous prototype for function 'bpf_fentry_test5' [-Wmissing-prototypes]
+   int noinline bpf_fentry_test5(u64 a, void *b, short c, int d, u64 e)
+                ^
+   net/bpf/test_run.c:223:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int noinline bpf_fentry_test5(u64 a, void *b, short c, int d, u64 e)
+   ^
+   static 
+   net/bpf/test_run.c:228:14: warning: no previous prototype for function 'bpf_fentry_test6' [-Wmissing-prototypes]
+   int noinline bpf_fentry_test6(u64 a, void *b, short c, int d, void *e, u64 f)
+                ^
+   net/bpf/test_run.c:228:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int noinline bpf_fentry_test6(u64 a, void *b, short c, int d, void *e, u64 f)
+   ^
+   static 
+   net/bpf/test_run.c:237:14: warning: no previous prototype for function 'bpf_fentry_test7' [-Wmissing-prototypes]
+   int noinline bpf_fentry_test7(struct bpf_fentry_test_t *arg)
+                ^
+   net/bpf/test_run.c:237:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int noinline bpf_fentry_test7(struct bpf_fentry_test_t *arg)
+   ^
+   static 
+   net/bpf/test_run.c:242:14: warning: no previous prototype for function 'bpf_fentry_test8' [-Wmissing-prototypes]
+   int noinline bpf_fentry_test8(struct bpf_fentry_test_t *arg)
+                ^
+   net/bpf/test_run.c:242:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int noinline bpf_fentry_test8(struct bpf_fentry_test_t *arg)
+   ^
+   static 
+   net/bpf/test_run.c:247:14: warning: no previous prototype for function 'bpf_modify_return_test' [-Wmissing-prototypes]
+   int noinline bpf_modify_return_test(int a, int *b)
+                ^
+   net/bpf/test_run.c:247:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int noinline bpf_modify_return_test(int a, int *b)
+   ^
+   static 
+   net/bpf/test_run.c:253:14: warning: no previous prototype for function 'bpf_kfunc_call_test1' [-Wmissing-prototypes]
+   u64 noinline bpf_kfunc_call_test1(struct sock *sk, u32 a, u64 b, u32 c, u64 d)
+                ^
+   net/bpf/test_run.c:253:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u64 noinline bpf_kfunc_call_test1(struct sock *sk, u32 a, u64 b, u32 c, u64 d)
+   ^
+   static 
+   net/bpf/test_run.c:258:14: warning: no previous prototype for function 'bpf_kfunc_call_test2' [-Wmissing-prototypes]
+   int noinline bpf_kfunc_call_test2(struct sock *sk, u32 a, u32 b)
+                ^
+   net/bpf/test_run.c:258:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int noinline bpf_kfunc_call_test2(struct sock *sk, u32 a, u32 b)
+   ^
+   static 
+   net/bpf/test_run.c:263:24: warning: no previous prototype for function 'bpf_kfunc_call_test3' [-Wmissing-prototypes]
+   struct sock * noinline bpf_kfunc_call_test3(struct sock *sk)
+                          ^
+   net/bpf/test_run.c:263:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct sock * noinline bpf_kfunc_call_test3(struct sock *sk)
+   ^
+   static 
+   net/bpf/test_run.c:286:1: warning: no previous prototype for function 'bpf_kfunc_call_test_acquire' [-Wmissing-prototypes]
+   bpf_kfunc_call_test_acquire(unsigned long *scalar_ptr)
+   ^
+   net/bpf/test_run.c:285:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline struct prog_test_ref_kfunc *
+            ^
+            static 
+   net/bpf/test_run.c:294:15: warning: no previous prototype for function 'bpf_kfunc_call_test_release' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p)
+                 ^
+   net/bpf/test_run.c:294:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p)
+            ^
+            static 
+>> net/bpf/test_run.c:298:15: warning: no previous prototype for function 'bpf_kfunc_call_memb_release' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_memb_release(struct prog_test_member *p)
+                 ^
+   net/bpf/test_run.c:298:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_memb_release(struct prog_test_member *p)
+            ^
+            static 
+   net/bpf/test_run.c:340:15: warning: no previous prototype for function 'bpf_kfunc_call_test_pass_ctx' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb)
+                 ^
+   net/bpf/test_run.c:340:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb)
+            ^
+            static 
+   net/bpf/test_run.c:344:15: warning: no previous prototype for function 'bpf_kfunc_call_test_pass1' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p)
+                 ^
+   net/bpf/test_run.c:344:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p)
+            ^
+            static 
+   net/bpf/test_run.c:348:15: warning: no previous prototype for function 'bpf_kfunc_call_test_pass2' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p)
+                 ^
+   net/bpf/test_run.c:348:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p)
+            ^
+            static 
+   net/bpf/test_run.c:352:15: warning: no previous prototype for function 'bpf_kfunc_call_test_fail1' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_test_fail1(struct prog_test_fail1 *p)
+                 ^
+   net/bpf/test_run.c:352:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_test_fail1(struct prog_test_fail1 *p)
+            ^
+            static 
+   net/bpf/test_run.c:356:15: warning: no previous prototype for function 'bpf_kfunc_call_test_fail2' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_test_fail2(struct prog_test_fail2 *p)
+                 ^
+   net/bpf/test_run.c:356:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_test_fail2(struct prog_test_fail2 *p)
+            ^
+            static 
+   net/bpf/test_run.c:360:15: warning: no previous prototype for function 'bpf_kfunc_call_test_fail3' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_test_fail3(struct prog_test_fail3 *p)
+                 ^
+   net/bpf/test_run.c:360:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_test_fail3(struct prog_test_fail3 *p)
+            ^
+            static 
+   net/bpf/test_run.c:364:15: warning: no previous prototype for function 'bpf_kfunc_call_test_mem_len_pass1' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_test_mem_len_pass1(void *mem, int mem__sz)
+                 ^
+   net/bpf/test_run.c:364:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_test_mem_len_pass1(void *mem, int mem__sz)
+            ^
+            static 
+   net/bpf/test_run.c:368:15: warning: no previous prototype for function 'bpf_kfunc_call_test_mem_len_fail1' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_test_mem_len_fail1(void *mem, int len)
+                 ^
+   net/bpf/test_run.c:368:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_test_mem_len_fail1(void *mem, int len)
+            ^
+            static 
+   net/bpf/test_run.c:372:15: warning: no previous prototype for function 'bpf_kfunc_call_test_mem_len_fail2' [-Wmissing-prototypes]
+   noinline void bpf_kfunc_call_test_mem_len_fail2(u64 *mem, int len)
+                 ^
+   net/bpf/test_run.c:372:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline void bpf_kfunc_call_test_mem_len_fail2(u64 *mem, int len)
+            ^
+            static 
+   36 warnings generated.
+
+
+vim +/bpf_kfunc_call_memb_release +298 net/bpf/test_run.c
+
+   297	
+ > 298	noinline void bpf_kfunc_call_memb_release(struct prog_test_member *p)
+   299	{
+   300	}
+   301	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
