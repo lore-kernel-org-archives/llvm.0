@@ -1,87 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D66E5A0A
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 14:52:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC19EC340F2;
-	Tue,  1 Mar 2022 14:52:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646146371;
-	bh=LfiWmfs6qErICD+TfIJqX84uNv2I/FQMxqCURJD4QRk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oj5yynkamny/AtSQRD5xLhnAE4W3TodX8euUSgx+w4IDEx9hwirHYK/YzcWwlAiKe
-	 Mg3CZZjAlee0DdCyh69ulex4StSRHfMowWaXSiygI/D7T3pAtRjY/7TduakOK2tRp0
-	 ruh5tHf11STcPDIDu7/jTpRxTT5Ep9eXIh3KpArhOdIc5KNHgjEgBMUVOZccPOHz8d
-	 SKWzudpfx2tkaCKiX3qXiLE+5BEHg+bZoUdHwM9tmQhSEHDsr0peusS2SV76uDkNwp
-	 mOBX1cTcDDulQKZqtFCr+w47Nq6KtbMZwHVWg9lzZJrJ/gDP0JG4lL2HDvHsc8Pxnx
-	 14M0Azozwf7pw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Marco Elver <elver@google.com>,
-	Jani Nikula <jani.nikula@intel.com>,
-	David Sterba <dsterba@suse.com>,
-	Alex Shi <alexs@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
-Date: Tue,  1 Mar 2022 15:52:33 +0100
-Message-Id: <20220301145233.3689119-3-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220301145233.3689119-1-arnd@kernel.org>
-References: <20220301145233.3689119-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D538B5CA0
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 15:16:26 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-318-Vr7v5iKRMIKftw0gpJuxvQ-1; Tue, 01 Mar 2022 15:16:24 +0000
+X-MC-Unique: Vr7v5iKRMIKftw0gpJuxvQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 1 Mar 2022 15:16:22 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 1 Mar 2022 15:16:22 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Miguel Ojeda' <miguel.ojeda.sandonis@gmail.com>, Nick Desaulniers
+	<ndesaulniers@google.com>
+CC: Dan Li <ashimida@linux.alibaba.com>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Nathan Chancellor
+	<nathan@kernel.org>, Kees Cook <keescook@chromium.org>, Masahiro Yamada
+	<masahiroy@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Andrew Morton
+	<akpm@linux-foundation.org>, Mark Rutland <mark.rutland@arm.com>, "Sami
+ Tolvanen" <samitolvanen@google.com>, Nicholas Piggin <npiggin@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Luc Van Oostenryck
+	<luc.vanoostenryck@gmail.com>, Marco Elver <elver@google.com>, linux-kernel
+	<linux-kernel@vger.kernel.org>, Linux ARM
+	<linux-arm-kernel@lists.infradead.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>
+Subject: RE: [PATCH] [PATCH v2] AARCH64: Add gcc Shadow Call Stack support
+Thread-Topic: [PATCH] [PATCH v2] AARCH64: Add gcc Shadow Call Stack support
+Thread-Index: AQHYLU7BTsy+Ydg2gUOh1XD7Md8Cb6yqo40Q
+Date: Tue, 1 Mar 2022 15:16:22 +0000
+Message-ID: <4b7a3af66c54458681f00a55a84752ab@AcuMS.aculab.com>
+References: <20220225032410.25622-1-ashimida@linux.alibaba.com>
+ <CANiq72kXoonDYk095XvBwEtRCRNECd1iQOqJHE2cNcgLyUMfcQ@mail.gmail.com>
+ <26a0a816-bc3e-2ac0-d773-0819d9f225af@linux.alibaba.com>
+ <CAKwvOdkykPtGTL6ud8qJZHSHKV2eSbpnZE-G4oyymD9BiQKHdg@mail.gmail.com>
+ <CANiq72m0O7ua3F3eqcEru9RuEWHQbG4SumRSoKCi50A8d-+HtA@mail.gmail.com>
+In-Reply-To: <CANiq72m0O7ua3F3eqcEru9RuEWHQbG4SumRSoKCi50A8d-+HtA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-From: Arnd Bergmann <arnd@arndb.de>
-
-As we change the C language standard for the kernel from gnu89 to
-gnu11, it makes sense to also update the version for user space
-compilation.
-
-Some users have older native compilers than what they use for
-kernel builds, so I considered using gnu99 as the default version
-for wider compatibility with gcc-4.6 and earlier.
-
-However, testing with older compilers showed that we already require
-HOSTCC version 5.1 as well because a lot of host tools include
-linux/compiler.h that uses __has_attribute():
-
-  CC      tools/objtool/exec-cmd.o
-In file included from tools/include/linux/compiler_types.h:36:0,
-                 from tools/include/linux/compiler.h:5,
-                 from exec-cmd.c:2:
-tools/include/linux/compiler-gcc.h:19:5: error: "__has_attribute" is not defined [-Werror=undef]
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index 37ef6a555dcd..7c9be7f1ccd4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -432,7 +432,7 @@ HOSTCXX	= g++
- endif
- 
- export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
--			    -O2 -fomit-frame-pointer -std=gnu89 \
-+			    -O2 -fomit-frame-pointer -std=gnu11 \
- 			    -Wdeclaration-after-statement
- export KBUILD_USERLDFLAGS :=
- 
--- 
-2.29.2
+RnJvbTogTWlndWVsIE9qZWRhDQo+IFNlbnQ6IDAxIE1hcmNoIDIwMjIgMDk6MjkNCj4gDQo+IE9u
+IE1vbiwgRmViIDI4LCAyMDIyIGF0IDExOjM1IFBNIE5pY2sgRGVzYXVsbmllcnMNCj4gPG5kZXNh
+dWxuaWVyc0Bnb29nbGUuY29tPiB3cm90ZToNCj4gPg0KPiA+IE9yIHNpbXBseSBhZGQgYSAjZGVm
+aW5lIGZvciBfX25vc2NzIHRvIGluY2x1ZGUvbGludXgvY29tcGlsZXItZ2NjLmgNCj4gPiB3aXRo
+IGFwcHJvcHJpYXRlIGd1YXJkIGFuZCBsZWF2ZSB0aGUgZXhpc3RpbmcgI2lmbmRlZiBpbg0KPiA+
+IGluY2x1ZGUvbGludXgvY29tcGlsZXJfdHlwZXMuaCBhcyBpcy4gIEknZCBwcmVmZXIgdGhhdCB3
+aGVuIHRoZQ0KPiA+IGNvbXBpbGVycyBkaWZmZXIgaW4gdGVybXMgb2YgZmVhdHVyZSBkZXRlY3Rp
+b24gc2luY2UgaXQncyBhcyBleHBsaWNpdA0KPiA+IGFzIHBvc3NpYmxlLg0KPiANCj4gVGhlIGlk
+ZWEgaXMgdG8gYXZvaWQgZGlmZmVyaW5nIGhlcmUgdG8gYmVnaW4gd2l0aCwgaS5lLiB0byB1c2Ug
+dGhlDQo+IHNhbWUgY29kZSBmb3IgYm90aCBjb21waWxlcnMgKG9ubHkgd2hlbmV2ZXIgdGhhdCBp
+cyBwb3NzaWJsZSwgb2YNCj4gY291cnNlKSwgdGh1cyBoYXZpbmcgYSBzaW5nbGUgYCNkZWZpbmVg
+IGluIGEgc2luZ2xlIGZpbGUuDQo+IA0KPiBEbyB5b3UgdGhpbmsgd2Ugd2lsbCBoYXZlIHRvIGNo
+YW5nZSBpbiB0aGUgZnV0dXJlIGZvciBzb21lIHJlYXNvbiwNCj4gdGh1cyBuZWVkaW5nIHRvIHNw
+bGl0IGl0IGFnYWluPw0KDQpXaGF0IGhhcHBlbnMgaWYgYW4gb3V0IG9mIHRyZWUgbW9kdWxlIGlz
+IGNvbXBpbGVkIHdpdGggdGhlIG90aGVyIGNvbXBpbGVyPw0KU3VyZWx5IHRoaXMgaXMgcGFydCBv
+ZiB0aGUgQUJJIGFuZCBzaG91bGQgYmUgZGVmaW5lZCBmb3IgdGhlIGFyY2hpdGVjdHVyZT8NCg0K
+CURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBN
+b3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAx
+Mzk3Mzg2IChXYWxlcykNCg==
 
