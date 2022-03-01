@@ -1,127 +1,277 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CCE8161
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 16:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646153266; x=1677689266;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mWGDaSPA92rhBEpQPnffC+57LyaI/PppXkHm7qxQG/Y=;
-  b=HBQO2Fjk0VGV+wYyD5WxvmCD9HJnV22ygIHSaIxPVWyLVXtYEaQACThz
-   QMf3nC3DQ/jT4DH9fgQRltSWFn4SX58ZLTbNzmjSOpGefDD/ZOkSfrQXm
-   TaW+v91A4T1pv4lg/rwB+xaeJsDNtdF6y9DRPi+RsjCBV2vfuaBLPLH+s
-   9H++ygLKAaQf5AQMh7V5qUQuzBQe73/Hzqd+1HdRIHMOrB10ahnaGyysA
-   bbN2knln7PBCkrUIy/qDAjk8lKMj5W8uhPWmpWUXtGIU5c9GWxQS155Xp
-   o283b/6jzz4UKcOdnS99iK7Q8KciR42lE1r0Yvkevv5WGptEIyVsejeAI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="252008691"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="252008691"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:47:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="510580406"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 01 Mar 2022 08:47:44 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nP5f5-0000ja-Im; Tue, 01 Mar 2022 16:47:43 +0000
-Date: Wed, 2 Mar 2022 00:47:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dust Li <dust.li@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH net-next 3/7] net/smc: add sysctl for autocorking
-Message-ID: <202203020056.6G9pXJjO-lkp@intel.com>
-References: <20220301094402.14992-4-dust.li@linux.alibaba.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E77161
+	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 16:53:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 810CCC340EE;
+	Tue,  1 Mar 2022 16:53:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646153610;
+	bh=cI1CYtzJ/MnoV5jG2+juU8/gNOac+ShZTrIAIG4vFxI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gnxUHAezA78oeX6HwjenlifSaraN+IDUoXXUY/5yEMvlgn+5GE6R+XLSGlfGGbGBH
+	 oe36QWh/vZHKkr5bdj7o0P742LBNaMMZdzDXTN1HhCn81o+g5EdCU++QeYJfRuo4J/
+	 I2XV+VWZI2Z0vA19ZmMUoLedUz0C6oagAKLD+5JuFTs0/FxbSwlJqHsL7YGNMn0SVy
+	 /5ivk14Eoi+IMULmif2aOzIO2rW2MrtJ3G68MjXWFtJOPh5mmFIGuAQRF4aUTbh+Ea
+	 sSOIa4efVh8X6+FKYPTocH/zTqebMaACUC+xrUKK0GhIm/aNfbaXubfrdh8IQ3EV/P
+	 0FX1xl+12tIXQ==
+Date: Tue, 1 Mar 2022 09:53:24 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Marco Elver <elver@google.com>, Jani Nikula <jani.nikula@intel.com>,
+	David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] [v3] Kbuild: move to -std=gnu11
+Message-ID: <Yh5PhDDLcVe4kSqk@dev-arch.archlinux-ax161>
+References: <20220301145233.3689119-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220301094402.14992-4-dust.li@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220301145233.3689119-1-arnd@kernel.org>
 
-Hi Dust,
+On Tue, Mar 01, 2022 at 03:52:31PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> During a patch discussion, Linus brought up the option of changing
+> the C standard version from gnu89 to gnu99, which allows using variable
+> declaration inside of a for() loop. While the C99, C11 and later standards
+> introduce many other features, most of these are already available in
+> gnu89 as GNU extensions as well.
+> 
+> An earlier attempt to do this when gcc-5 started defaulting to
+> -std=gnu11 failed because at the time that caused warnings about
+> designated initializers with older compilers. Now that gcc-5.1 is
+> the minimum compiler version used for building kernels, that is no
+> longer a concern. Similarly, the behavior of 'inline' functions changes
+> between gnu89 using gnu_inline behavior and gnu11 using standard c99+
+> behavior, but this was taken care of by defining 'inline' to include
+> __attribute__((gnu_inline)) in order to allow building with clang a
+> while ago.
+> 
+> One minor issue that remains is an added gcc warning for shifts of
+> negative integers when building with -Wextra, which happens with the
+> 'make W=1' option, as well as for three drivers in the kernel that always
+> enable -Wextra, but it was only observed with the i915 driver so far.
+> To be on the safe side, add -Wno-shift-negative-value to any -Wextra
+> in a Makefile.
+> 
+> Nathan Chancellor reported an additional -Wdeclaration-after-statement
+> warning that appears in a system header on arm, this still needs a
+> workaround.
+> 
+> The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
+> minimal and mainly impact warnings at the -Wpedantic level that the
+> kernel never enables. Between these, gnu11 is the newest version
+> that is supported by all supported compiler versions, though it is
+> only the default on gcc-5, while all other supported versions of
+> gcc or clang default to gnu1x/gnu17.
+> 
+> Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Acked-by: Marco Elver <elver@google.com>
+> Acked-by: Jani Nikula <jani.nikula@intel.com>
+> Acked-by: David Sterba <dsterba@suse.com>
+> Reviewed-by: Alex Shi <alexs@kernel.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thank you for the patch! Perhaps something to improve:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-[auto build test WARNING on net-next/master]
+One comment below.
 
-url:    https://github.com/0day-ci/linux/commits/Dust-Li/net-smc-some-datapath-performance-optimizations/20220301-174523
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git f2b77012ddd5b2532d262f100be3394ceae3ea59
-config: riscv-randconfig-r042-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020056.6G9pXJjO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/e00cb05a2efd7fc375686974d9b3190379a34c31
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Dust-Li/net-smc-some-datapath-performance-optimizations/20220301-174523
-        git checkout e00cb05a2efd7fc375686974d9b3190379a34c31
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/smc/
+> ---
+> [v3]
+>  - split out USERCFLAGS to a separate patch
+>  - add -Wdeclaration-after-statement patch from Mark Rutland
+>  - leave out C17 reference
+>  - more rewording the descrption
+> 
+> [v2]
+>  - added -std=gnu11 back, rather than just relying on the default
+>  - minor changes to changelog text
+> ---
+>  Documentation/process/programming-language.rst              | 6 +++---
+>  .../translations/it_IT/process/programming-language.rst     | 4 ++--
+>  .../translations/zh_CN/process/programming-language.rst     | 3 +--
+>  .../translations/zh_TW/process/programming-language.rst     | 3 +--
+>  Makefile                                                    | 4 ++--
+>  arch/arm64/kernel/vdso32/Makefile                           | 2 +-
+>  drivers/gpu/drm/i915/Makefile                               | 1 +
+>  drivers/staging/greybus/tools/Makefile                      | 3 ++-
+>  fs/btrfs/Makefile                                           | 1 +
+>  scripts/Makefile.extrawarn                                  | 1 +
+>  10 files changed, 15 insertions(+), 13 deletions(-)
+> 
+> diff --git a/Documentation/process/programming-language.rst b/Documentation/process/programming-language.rst
+> index ec474a70a02f..5fc9160ca1fa 100644
+> --- a/Documentation/process/programming-language.rst
+> +++ b/Documentation/process/programming-language.rst
+> @@ -5,9 +5,9 @@ Programming Language
+>  
+>  The kernel is written in the C programming language [c-language]_.
+>  More precisely, the kernel is typically compiled with ``gcc`` [gcc]_
+> -under ``-std=gnu89`` [gcc-c-dialect-options]_: the GNU dialect of ISO C90
+> -(including some C99 features). ``clang`` [clang]_ is also supported, see
+> -docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+> +under ``-std=gnu11`` [gcc-c-dialect-options]_: the GNU dialect of ISO C11.
+> +``clang`` [clang]_ is also supported, see docs on
+> +:ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+>  
+>  This dialect contains many extensions to the language [gnu-extensions]_,
+>  and many of them are used within the kernel as a matter of course.
+> diff --git a/Documentation/translations/it_IT/process/programming-language.rst b/Documentation/translations/it_IT/process/programming-language.rst
+> index 41db2598ce11..c1a9b481a6f9 100644
+> --- a/Documentation/translations/it_IT/process/programming-language.rst
+> +++ b/Documentation/translations/it_IT/process/programming-language.rst
+> @@ -10,8 +10,8 @@ Linguaggio di programmazione
+>  
+>  Il kernel è scritto nel linguaggio di programmazione C [it-c-language]_.
+>  Più precisamente, il kernel viene compilato con ``gcc`` [it-gcc]_ usando
+> -l'opzione ``-std=gnu89`` [it-gcc-c-dialect-options]_: il dialetto GNU
+> -dello standard ISO C90 (con l'aggiunta di alcune funzionalità da C99).
+> +l'opzione ``-std=gnu11`` [it-gcc-c-dialect-options]_: il dialetto GNU
+> +dello standard ISO C11.
+>  Linux supporta anche ``clang`` [it-clang]_, leggete la documentazione
+>  :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+>  
+> diff --git a/Documentation/translations/zh_CN/process/programming-language.rst b/Documentation/translations/zh_CN/process/programming-language.rst
+> index 2a47a1d2ec20..fabdc338dbfb 100644
+> --- a/Documentation/translations/zh_CN/process/programming-language.rst
+> +++ b/Documentation/translations/zh_CN/process/programming-language.rst
+> @@ -9,8 +9,7 @@
+>  ============
+>  
+>  内核是用C语言 :ref:`c-language <cn_c-language>` 编写的。更准确地说，内核通常是用 :ref:`gcc <cn_gcc>`
+> -在 ``-std=gnu89`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C90的 GNU 方言（
+> -包括一些C99特性）
+> +在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C11的 GNU 方言
+>  
+>  这种方言包含对语言 :ref:`gnu-extensions <cn_gnu-extensions>` 的许多扩展，当然，它们许多都在内核中使用。
+>  
+> diff --git a/Documentation/translations/zh_TW/process/programming-language.rst b/Documentation/translations/zh_TW/process/programming-language.rst
+> index 54e3699eadf8..144bdaf81a41 100644
+> --- a/Documentation/translations/zh_TW/process/programming-language.rst
+> +++ b/Documentation/translations/zh_TW/process/programming-language.rst
+> @@ -12,8 +12,7 @@
+>  ============
+>  
+>  內核是用C語言 :ref:`c-language <tw_c-language>` 編寫的。更準確地說，內核通常是用 :ref:`gcc <tw_gcc>`
+> -在 ``-std=gnu89`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect-options>` 下編譯的：ISO C90的 GNU 方言（
+> -包括一些C99特性）
+> +在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect-options>` 下編譯的：ISO C11的 GNU 方言
+>  
+>  這種方言包含對語言 :ref:`gnu-extensions <tw_gnu-extensions>` 的許多擴展，當然，它們許多都在內核中使用。
+>  
+> diff --git a/Makefile b/Makefile
+> index 289ce2be8032..94fa9a849a7a 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -515,7 +515,7 @@ KBUILD_CFLAGS   := -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs \
+>  		   -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE \
+>  		   -Werror=implicit-function-declaration -Werror=implicit-int \
+>  		   -Werror=return-type -Wno-format-security \
+> -		   -std=gnu89
+> +		   -std=gnu11
+>  KBUILD_CPPFLAGS := -D__KERNEL__
+>  KBUILD_AFLAGS_KERNEL :=
+>  KBUILD_CFLAGS_KERNEL :=
+> @@ -782,7 +782,7 @@ KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>  
+>  ifdef CONFIG_CC_IS_CLANG
+>  KBUILD_CPPFLAGS += -Qunused-arguments
+> -# The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
+> +# The kernel builds with '-std=gnu11' so use of GNU extensions is acceptable.
+>  KBUILD_CFLAGS += -Wno-gnu
+>  # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
+>  # source of a reference will be _MergedGlobals and not on of the whitelisted names.
+> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+> index 6c01b63ff56d..9378ea055bf2 100644
+> --- a/arch/arm64/kernel/vdso32/Makefile
+> +++ b/arch/arm64/kernel/vdso32/Makefile
+> @@ -68,7 +68,7 @@ VDSO_CFLAGS += -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+>                 -fno-strict-aliasing -fno-common \
+>                 -Werror-implicit-function-declaration \
+>                 -Wno-format-security \
+> -               -std=gnu89
+> +               -std=gnu11
+>  VDSO_CFLAGS  += -O2
+>  # Some useful compiler-dependent flags from top-level Makefile
+>  VDSO_CFLAGS += $(call cc32-option,-Wdeclaration-after-statement,)
+> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
+> index 1b62b9f65196..1618a6e0af4e 100644
+> --- a/drivers/gpu/drm/i915/Makefile
+> +++ b/drivers/gpu/drm/i915/Makefile
+> @@ -17,6 +17,7 @@ subdir-ccflags-y += -Wno-unused-parameter
+>  subdir-ccflags-y += -Wno-type-limits
+>  subdir-ccflags-y += -Wno-missing-field-initializers
+>  subdir-ccflags-y += -Wno-sign-compare
+> +subdir-ccflags-y += -Wno-shift-negative-value
+>  subdir-ccflags-y += $(call cc-disable-warning, unused-but-set-variable)
+>  subdir-ccflags-y += $(call cc-disable-warning, frame-address)
+>  subdir-ccflags-$(CONFIG_DRM_I915_WERROR) += -Werror
+> diff --git a/drivers/staging/greybus/tools/Makefile b/drivers/staging/greybus/tools/Makefile
+> index ad0ae8053b79..a3bbd73171f2 100644
+> --- a/drivers/staging/greybus/tools/Makefile
+> +++ b/drivers/staging/greybus/tools/Makefile
+> @@ -12,7 +12,8 @@ CFLAGS	+= -std=gnu99 -Wall -Wextra -g \
+>  	    -Wredundant-decls \
+>  	    -Wcast-align \
+>  	    -Wsign-compare \
+> -	    -Wno-missing-field-initializers
+> +	    -Wno-missing-field-initializers \
+> +	    -Wno-shift-negative-value
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This Makefile uses its own -std= option because it is a userland tool.
+Seems like this hunk could just be dropped or the -std= argument could
+be bumped here too?
 
-All warnings (new ones prefixed by >>):
-
->> net/smc/smc_tx.c:150:17: warning: comparison of distinct pointer types ('typeof (sock_net(&smc->sk)->smc.sysctl_autocorking_size) *' (aka 'unsigned int *') and 'typeof (conn->sndbuf_desc->len >> 1) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
-           corking_size = min(sock_net(&smc->sk)->smc.sysctl_autocorking_size,
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +150 net/smc/smc_tx.c
-
-   133	
-   134	/* If we have pending CDC messages, do not send:
-   135	 * Because CQE of this CDC message will happen shortly, it gives
-   136	 * a chance to coalesce future sendmsg() payload in to one RDMA Write,
-   137	 * without need for a timer, and with no latency trade off.
-   138	 * Algorithm here:
-   139	 *  1. First message should never cork
-   140	 *  2. If we have pending Tx CDC messages, wait for the first CDC
-   141	 *     message's completion
-   142	 *  3. Don't cork to much data in a single RDMA Write to prevent burst
-   143	 *     traffic, total corked message should not exceed sendbuf/2
-   144	 */
-   145	static bool smc_should_autocork(struct smc_sock *smc)
-   146	{
-   147		struct smc_connection *conn = &smc->conn;
-   148		int corking_size;
-   149	
- > 150		corking_size = min(sock_net(&smc->sk)->smc.sysctl_autocorking_size,
-   151				   conn->sndbuf_desc->len >> 1);
-   152	
-   153		if (atomic_read(&conn->cdc_pend_tx_wr) == 0 ||
-   154		    smc_tx_prepared_sends(conn) > corking_size)
-   155			return false;
-   156		return true;
-   157	}
-   158	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  CC	:= $(CROSS_COMPILE)gcc
+>  
+> diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
+> index 4188ba3fd8c3..99f9995670ea 100644
+> --- a/fs/btrfs/Makefile
+> +++ b/fs/btrfs/Makefile
+> @@ -17,6 +17,7 @@ subdir-ccflags-y += $(condflags)
+>  subdir-ccflags-y += -Wno-missing-field-initializers
+>  subdir-ccflags-y += -Wno-sign-compare
+>  subdir-ccflags-y += -Wno-type-limits
+> +subdir-ccflags-y += -Wno-shift-negative-value
+>  
+>  obj-$(CONFIG_BTRFS_FS) := btrfs.o
+>  
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 8be892887d71..650d0b8ceec3 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -36,6 +36,7 @@ KBUILD_CFLAGS += $(call cc-option, -Wstringop-truncation)
+>  KBUILD_CFLAGS += -Wno-missing-field-initializers
+>  KBUILD_CFLAGS += -Wno-sign-compare
+>  KBUILD_CFLAGS += -Wno-type-limits
+> +KBUILD_CFLAGS += -Wno-shift-negative-value
+>  
+>  KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN1
+>  
+> -- 
+> 2.29.2
+> 
+> 
