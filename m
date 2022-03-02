@@ -1,117 +1,192 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F8D6136
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 22:14:47 +0000 (UTC)
-Received: by mail-il1-f170.google.com with SMTP id f2so2581963ilq.1
-        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 14:14:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=9ub8TndGmTDnXv5II0vAs1rwRRkggXTkQUEfUiR0zUM=;
-        b=O+XP97fQEzccgNOmdZKRo9ExVQ6aP9qNniiLwYD8WAvJPbeMRPKx6qhcYfeOpm0jG7
-         2kfV6H5Avz5r9Z+Iou+NSRVgPwPyPX0cX1Yh74n49X9gYvVvK66tIN+4U3E4EnQJ7Ix5
-         jWPLTXBBZ1pMEyhmLG+OdDJy0s4gHZNgvKCPey2ibIH/50zY0fZTcgWDcXiT/E4pH84j
-         iknTD0iNaiGnirSwb0OoN8BZ8zcRCWoy9dxo2ZqVN6lTbZAPMXrIjBLpM0CvkhUeOKTI
-         eTrWkYr2nJjuReRc1dWQ2pdcjso9mx/Gr3a8IU2YoBpTYfhgTJJT9fYYzl2YzeKBpMzH
-         llaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=9ub8TndGmTDnXv5II0vAs1rwRRkggXTkQUEfUiR0zUM=;
-        b=bQgxyRF9KsZyFUk/95LZK8hDq4uiaDN6wxt7E2ddWG0xmFTHl+dD0rpKPkPNxugbga
-         5hyNm7O8t09DB6BSGkd1GHMYWj+BH2QHYlXJV3u7Wmjxe71+KrXHrii7l4L1vUCgYLUv
-         EPIcSJSkQd1rVEdsGObF1D3nsrxdq9HQmUUkAaRLw4WVE89CK4aKZmeQ/6gg5qWwfrXc
-         aKXXGO1V5EE538flVGxxw0wGD3g2OCriioCDXttT6RByLlATKrcBqTMKPahVnldGQQGv
-         rqqlgzz6rczo1gEaS8BLMCOwdb9ojk0Te66nbvFALBgC+stG4zBlasvIfnp5RBdw3StD
-         DJBg==
-X-Gm-Message-State: AOAM531dyRtNTE4Dc7NN5DyVifrUdIf3ar5vjVIBLWOl/xCzLbSI8Okq
-	Ken6KnicOcjGdg6S/LgLZMzQs/2th64bZx6MLDE=
-X-Google-Smtp-Source: ABdhPJzli2sDxakapKJWnAyE4Ias/tvbMiWhQHQ+dnKForLGnwLdQ++qGFoPyE7z1ZhQJ/yaEqdh8N2Jt0Lib+cjkjw=
-X-Received: by 2002:a05:6e02:1c04:b0:2be:4c61:20f4 with SMTP id
- l4-20020a056e021c0400b002be4c6120f4mr29224878ilh.245.1646259286229; Wed, 02
- Mar 2022 14:14:46 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992B433CA
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 22:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646260858; x=1677796858;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9FIYzNkONGxijq/XPlpQ6HzZY+AIuiBe0UaM+u8WmAU=;
+  b=fr84AEbOLkvyD/KOmyKDfDkjCf8dOK09JVcRLw+nU6gHEQj7D9/K8oxH
+   2cngaAtgZrK9kJYYyc16OaM34TqpnJa8p193cP9blxg9C7NbSD+a+a7c8
+   xuf7hzGoeamVhD+xbVc5EPk9VZegwvGdWQ6oXzQ7aJHoBlVzE1CB+5jWh
+   SmGqJDbTg8VC/zqXC0Kbo6bRyFKXprgtDXzABOHEZAZzdsdJ3vULLH7bH
+   bTRWegp7HYjfQ90FWKXInsvnLe1wyLjkO1yzui/zGeFLNeyhearejVFkI
+   k0WJwl9CPdvd8JORz7h6TuJRQyu9j5/NoYXpRAMqmgelMQijx91iG7Hia
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="314240433"
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="314240433"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 14:40:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="641870535"
+Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 02 Mar 2022 14:40:56 -0800
+Received: from kbuild by e9605edfa585 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nPXeR-00021A-Rh; Wed, 02 Mar 2022 22:40:55 +0000
+Date: Thu, 3 Mar 2022 06:40:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [frederic-dynticks:rcu/context-tracking 14/19]
+ kernel/rcu/tree.c:634:6: error: redefinition of '__rcu_irq_enter_check_tick'
+Message-ID: <202203030604.SXPvt45B-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
-In-Reply-To: <20220301145233.3689119-3-arnd@kernel.org>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Wed, 2 Mar 2022 23:14:10 +0100
-Message-ID: <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Marco Elver <elver@google.com>, 
-	Jani Nikula <jani.nikula@intel.com>, David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Mar 2, 2022 at 10:47 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> As we change the C language standard for the kernel from gnu89 to
-> gnu11, it makes sense to also update the version for user space
-> compilation.
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/context-tracking
+head:   e4eaff86ec91c1cbde9a113cf5232dac9f897337
+commit: 5a91f02835a27bd066154ab87408505806710e19 [14/19] rcu/context-tracking: Move RCU-dynticks internal functions to context_tracking
+config: hexagon-randconfig-r001-20220302 (https://download.01.org/0day-ci/archive/20220303/202203030604.SXPvt45B-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=5a91f02835a27bd066154ab87408505806710e19
+        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+        git fetch --no-tags frederic-dynticks rcu/context-tracking
+        git checkout 5a91f02835a27bd066154ab87408505806710e19
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/
 
-Overdue.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Can you point me to a lore link where I can easily fetch the full 3/3
-v3 patchset?
+All errors (new ones prefixed by >>):
 
-I would like to give this a try on x86-64 with my latest kernel-config
-(based on the latest kernel-config v5.17-rc5 from Debian/unstable).
+   In file included from kernel/rcu/tree.c:65:
+   include/linux/context_tracking.h:106:30: error: incomplete result type 'enum ctx_state' in function definition
+   static inline enum ctx_state exception_enter(void) { return 0; }
+                                ^
+   include/linux/context_tracking.h:106:20: note: forward declaration of 'enum ctx_state'
+   static inline enum ctx_state exception_enter(void) { return 0; }
+                      ^
+   include/linux/context_tracking.h:106:61: error: returning 'int' from a function with incompatible result type 'enum ctx_state'
+   static inline enum ctx_state exception_enter(void) { return 0; }
+                                                               ^
+   include/linux/context_tracking.h:107:50: error: variable has incomplete type 'enum ctx_state'
+   static inline void exception_exit(enum ctx_state prev_ctx) { }
+                                                    ^
+   include/linux/context_tracking.h:106:20: note: forward declaration of 'enum ctx_state'
+   static inline enum ctx_state exception_enter(void) { return 0; }
+                      ^
+   include/linux/context_tracking.h:108:30: error: incomplete result type 'enum ctx_state' in function definition
+   static inline enum ctx_state ct_state(void) { return CONTEXT_DISABLED; }
+                                ^
+   include/linux/context_tracking.h:106:20: note: forward declaration of 'enum ctx_state'
+   static inline enum ctx_state exception_enter(void) { return 0; }
+                      ^
+   include/linux/context_tracking.h:108:54: error: use of undeclared identifier 'CONTEXT_DISABLED'; did you mean 'CPU_SMT_DISABLED'?
+   static inline enum ctx_state ct_state(void) { return CONTEXT_DISABLED; }
+                                                        ^~~~~~~~~~~~~~~~
+                                                        CPU_SMT_DISABLED
+   include/linux/cpu.h:205:2: note: 'CPU_SMT_DISABLED' declared here
+           CPU_SMT_DISABLED,
+           ^
+   In file included from kernel/rcu/tree.c:65:
+   include/linux/context_tracking.h:108:54: error: returning 'int' from a function with incompatible result type 'enum ctx_state'
+   static inline enum ctx_state ct_state(void) { return CONTEXT_DISABLED; }
+                                                        ^~~~~~~~~~~~~~~~
+>> kernel/rcu/tree.c:634:6: error: redefinition of '__rcu_irq_enter_check_tick'
+   void __rcu_irq_enter_check_tick(void)
+        ^
+   include/linux/hardirq.h:19:20: note: previous definition is here
+   static inline void __rcu_irq_enter_check_tick(void) { }
+                      ^
+   In file included from kernel/rcu/tree.c:4457:
+>> kernel/rcu/tree_plugin.h:932:13: error: static declaration of 'rcu_preempt_deferred_qs' follows non-static declaration
+   static void rcu_preempt_deferred_qs(struct task_struct *t)
+               ^
+   include/linux/rcutree.h:63:6: note: previous declaration is here
+   void rcu_preempt_deferred_qs(struct task_struct *t);
+        ^
+   8 errors generated.
 
-What Linux source base do I need?
-Is Linux v5.17-rc6 good enough (patchset applicable) for testing?
 
-Thanks, Arnd.
+vim +/__rcu_irq_enter_check_tick +634 kernel/rcu/tree.c
 
-Regards,
-- Sedat -
+07325d4a90d2d8 kernel/rcu/tree.c Thomas Gleixner  2020-05-21  607  
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  608  /**
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  609   * __rcu_irq_enter_check_tick - Enable scheduler tick on CPU if RCU needs it.
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  610   *
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  611   * The scheduler tick is not normally enabled when CPUs enter the kernel
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  612   * from nohz_full userspace execution.  After all, nohz_full userspace
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  613   * execution is an RCU quiescent state and the time executing in the kernel
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  614   * is quite short.  Except of course when it isn't.  And it is not hard to
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  615   * cause a large system to spend tens of seconds or even minutes looping
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  616   * in the kernel, which can cause a number of problems, include RCU CPU
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  617   * stall warnings.
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  618   *
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  619   * Therefore, if a nohz_full CPU fails to report a quiescent state
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  620   * in a timely manner, the RCU grace-period kthread sets that CPU's
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  621   * ->rcu_urgent_qs flag with the expectation that the next interrupt or
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  622   * exception will invoke this function, which will turn on the scheduler
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  623   * tick, which will enable RCU to detect that CPU's quiescent states,
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  624   * for example, due to cond_resched() calls in CONFIG_PREEMPT=n kernels.
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  625   * The tick will be disabled once a quiescent state is reported for
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  626   * this CPU.
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  627   *
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  628   * Of course, in carefully tuned systems, there might never be an
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  629   * interrupt or exception.  In that case, the RCU grace-period kthread
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  630   * will eventually cause one to happen.  However, in less carefully
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  631   * controlled environments, this function allows RCU to get what it
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  632   * needs without creating otherwise useless interruptions.
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  633   */
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21 @634  void __rcu_irq_enter_check_tick(void)
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  635  {
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  636  	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  637  
+6dbce04d8417ae kernel/rcu/tree.c Peter Zijlstra   2020-11-16  638  	// If we're here from NMI there's nothing to do.
+6dbce04d8417ae kernel/rcu/tree.c Peter Zijlstra   2020-11-16  639  	if (in_nmi())
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  640  		return;
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  641  
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  642  	RCU_LOCKDEP_WARN(rcu_dynticks_curr_cpu_in_eqs(),
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  643  			 "Illegal rcu_irq_enter_check_tick() from extended quiescent state");
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  644  
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  645  	if (!tick_nohz_full_cpu(rdp->cpu) ||
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  646  	    !READ_ONCE(rdp->rcu_urgent_qs) ||
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  647  	    READ_ONCE(rdp->rcu_forced_tick)) {
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  648  		// RCU doesn't need nohz_full help from this CPU, or it is
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  649  		// already getting that help.
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  650  		return;
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  651  	}
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  652  
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  653  	// We get here only when not in an extended quiescent state and
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  654  	// from interrupts (as opposed to NMIs).  Therefore, (1) RCU is
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  655  	// already watching and (2) The fact that we are in an interrupt
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  656  	// handler and that the rcu_node lock is an irq-disabled lock
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  657  	// prevents self-deadlock.  So we can safely recheck under the lock.
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  658  	// Note that the nohz_full state currently cannot change.
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  659  	raw_spin_lock_rcu_node(rdp->mynode);
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  660  	if (rdp->rcu_urgent_qs && !rdp->rcu_forced_tick) {
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  661  		// A nohz_full CPU is in the kernel and RCU needs a
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  662  		// quiescent state.  Turn on the tick!
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  663  		WRITE_ONCE(rdp->rcu_forced_tick, true);
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  664  		tick_dep_set_cpu(rdp->cpu, TICK_DEP_BIT_RCU);
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  665  	}
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  666  	raw_spin_unlock_rcu_node(rdp->mynode);
+aaf2bc50df1f4b kernel/rcu/tree.c Paul E. McKenney 2020-05-21  667  }
+64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney 2008-12-18  668  
 
-> Some users have older native compilers than what they use for
-> kernel builds, so I considered using gnu99 as the default version
-> for wider compatibility with gcc-4.6 and earlier.
->
-> However, testing with older compilers showed that we already require
-> HOSTCC version 5.1 as well because a lot of host tools include
-> linux/compiler.h that uses __has_attribute():
->
->   CC      tools/objtool/exec-cmd.o
-> In file included from tools/include/linux/compiler_types.h:36:0,
->                  from tools/include/linux/compiler.h:5,
->                  from exec-cmd.c:2:
-> tools/include/linux/compiler-gcc.h:19:5: error: "__has_attribute" is not defined [-Werror=undef]
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index 37ef6a555dcd..7c9be7f1ccd4 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -432,7 +432,7 @@ HOSTCXX     = g++
->  endif
->
->  export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
-> -                           -O2 -fomit-frame-pointer -std=gnu89 \
-> +                           -O2 -fomit-frame-pointer -std=gnu11 \
->                             -Wdeclaration-after-statement
->  export KBUILD_USERLDFLAGS :=
->
-> --
-> 2.29.2
->
+:::::: The code at line 634 was first introduced by commit
+:::::: aaf2bc50df1f4bfc6857fc601fc7b21d5a18c6a1 rcu: Abstract out rcu_irq_enter_check_tick() from rcu_nmi_enter()
+
+:::::: TO: Paul E. McKenney <paulmck@kernel.org>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
