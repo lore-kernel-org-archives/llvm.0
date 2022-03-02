@@ -1,43 +1,55 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65FEC17CC
-	for <llvm@lists.linux.dev>; Tue,  1 Mar 2022 21:24:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646169876; x=1677705876;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JZLioDVKS6LuehJBIZDO24RmEJXeYF9yp3vaFn2IdAs=;
-  b=HU1Sud7/z4HP0hKM61lAJjcB09uRYHN0++kJAABjdAXKV67xjeTa5EsA
-   qxN1bMaXaG3peqAIDE2GRrEApoP6WAeFe1zyO8A4QAukXgncvaa5NpotR
-   7uMvLH9r2Z0ONFbOcTJ099U8Ip10S6u9NImF9vipnp92jUG/aXKW00Dpj
-   HyyvLVpJAPEyOXD9ur5jh/rH+69YJ7Pe1+X/6wwEHK9jC7eSEZTR/faHr
-   m8JA36qZDxNK+hW1RKdoEh+dsW3XJW887nJ4Xry8oRENwC41zZ9ByHpgj
-   982AEE2OSQqIr4K4NUzmoCaJ4CfzTtl/HYU5PyhkVjgukMqo28xdKKwXl
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="250825818"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="250825818"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 13:24:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="778602654"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Mar 2022 13:24:33 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nP9yz-00013P-7k; Tue, 01 Mar 2022 21:24:33 +0000
-Date: Wed, 2 Mar 2022 05:24:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Osipenko <digetx@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: [ammarfaizi2-block:axboe/linux-block/m1/2022-03-01 322/355]
- drivers/regulator/pfuze100-regulator.c:619:6: error: use of undeclared
- identifier 'pm_power_off_prepare'; did you mean 'pfuze_power_off_prepare'?
-Message-ID: <202203020538.0AuLqib9-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC64820E9
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 00:47:37 +0000 (UTC)
+Received: by mail-pj1-f42.google.com with SMTP id v5-20020a17090ac90500b001bc40b548f9so3389228pjt.0
+        for <llvm@lists.linux.dev>; Tue, 01 Mar 2022 16:47:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=x9QK2yVKnHXX9jQ390KTQ2jtnuQQLQpf+Jo2tSG+1rU=;
+        b=K0w3rmENKCFKu/kVw1y4oxTkcApN/P/9sr5+yrue16Serc2l/M80n7D1Ab67znYt03
+         evBC76oc18NVyOSdwcqBLbwG8MIcA49FhAkY1cr5vkoyIc/7/XaVuMu3KzGBBEoYUeb+
+         ujGaHlK3mH3whXfpwJK0gpohpnNNHsZi0afT8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x9QK2yVKnHXX9jQ390KTQ2jtnuQQLQpf+Jo2tSG+1rU=;
+        b=5aPqkj/QnXsz5n/hNBDKbT++Qt0Aehwn7dCxQ5qohB9megc6UpGlcBzrwunl18dEIw
+         IeZ037WxJ+QswemjMaC+qpSjUxY5BkRRYZAB6bJETwvAbNib8FdtDNc43eUEaMFnFDwc
+         c/5hB2xDXu1JlbgA0CV+lcEMgyEc4tBM9k6ZfGibjzDM8syVGoAKTUpBiEYgmoijgkm0
+         yOdoTJo2MRlw6dSo5cs4iCmDyT4V29IJ89oAngwY3xlNHKmGMfFdx98Q0n3h80TjvT/A
+         UJh0+b21i+1mWPpznmq5bO9Ro91XpT3A7WQh0jUT0qEJnkEJ68PnzwBewHbKNYqgZXcl
+         /uZA==
+X-Gm-Message-State: AOAM530B9nBSA9za1Bc5UEArHcRxv6o/7pRPDP6K2ml/ADxqWlzJOIay
+	pO1ZvmRTU2GZE7DpLHGF92Qwag==
+X-Google-Smtp-Source: ABdhPJxN9OybXwbR6J2xnYQbzU8Z7LLJ9f6kivzrXjabM59c+Pu/2v40Zu70D1kM9yKuB6f+pyWVPQ==
+X-Received: by 2002:a17:903:1c1:b0:14f:dad3:e7dd with SMTP id e1-20020a17090301c100b0014fdad3e7ddmr27754507plh.130.1646182057252;
+        Tue, 01 Mar 2022 16:47:37 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h12-20020a056a00218c00b004c3a2450acasm19634414pfi.147.2022.03.01.16.47.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 16:47:36 -0800 (PST)
+Date: Tue, 1 Mar 2022 16:47:36 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+	joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
+	andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+	samitolvanen@google.com, mark.rutland@arm.com,
+	alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+	mhiramat@kernel.org, alexei.starovoitov@gmail.com,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH v2 01/39] kbuild: Fix clang build
+Message-ID: <202203011636.40D2F83@keescook>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.072632223@infradead.org>
+ <CAKwvOdkD2WY=hEHy8_0zs70AGx6LRQwxL5mEZyB30uqpruYJyA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,78 +58,28 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOdkD2WY=hEHy8_0zs70AGx6LRQwxL5mEZyB30uqpruYJyA@mail.gmail.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/m1/2022-03-01
-head:   d7cc9472c1c5430d7caa806e8180d2359ea46266
-commit: 4d1ed10a5e4b5553438f02ca438904fc8c2dcccf [322/355] reboot: Remove pm_power_off_prepare()
-config: hexagon-randconfig-r045-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020538.0AuLqib9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/4d1ed10a5e4b5553438f02ca438904fc8c2dcccf
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block axboe/linux-block/m1/2022-03-01
-        git checkout 4d1ed10a5e4b5553438f02ca438904fc8c2dcccf
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/regulator/
+On Tue, Mar 01, 2022 at 01:16:04PM -0800, Nick Desaulniers wrote:
+> Also, Kees mentions this is an issue for testing multiple different
+> versions of gcc, too.  There perhaps is a way to simplify the builds
+> for BOTH toolchains; i.e. a yet-to-be-created shared variable denoting
+> the suffix for binaries?  The primary pain point seems to be Debian's
+> suffixing scheme; it will suffix GCC, clang, and lld, but not GNU
+> binutils IIUC.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Right. Though I think auto-detection still makes sense.
 
-All errors (new ones prefixed by >>):
+If I do:
 
->> drivers/regulator/pfuze100-regulator.c:619:6: error: use of undeclared identifier 'pm_power_off_prepare'; did you mean 'pfuze_power_off_prepare'?
-           if (pm_power_off_prepare) {
-               ^~~~~~~~~~~~~~~~~~~~
-               pfuze_power_off_prepare
-   drivers/regulator/pfuze100-regulator.c:574:13: note: 'pfuze_power_off_prepare' declared here
-   static void pfuze_power_off_prepare(void)
-               ^
-   drivers/regulator/pfuze100-regulator.c:630:2: error: use of undeclared identifier 'pm_power_off_prepare'
-           pm_power_off_prepare = pfuze_power_off_prepare;
-           ^
-   drivers/regulator/pfuze100-regulator.c:844:3: error: use of undeclared identifier 'pm_power_off_prepare'
-                   pm_power_off_prepare = NULL;
-                   ^
-   3 errors generated.
+	make CC=clang-12 LLVM=1
 
+it'd be nice if it also used ld.lld-12.
 
-vim +619 drivers/regulator/pfuze100-regulator.c
+> [...]
+> Just curious, what prefixes have you observed in the wild?
 
-c29daffa322ad3 Oleksij Rempel 2018-08-02  611  
-c29daffa322ad3 Oleksij Rempel 2018-08-02  612  static int pfuze_power_off_prepare_init(struct pfuze_chip *pfuze_chip)
-c29daffa322ad3 Oleksij Rempel 2018-08-02  613  {
-c29daffa322ad3 Oleksij Rempel 2018-08-02  614  	if (pfuze_chip->chip_id != PFUZE100) {
-c29daffa322ad3 Oleksij Rempel 2018-08-02  615  		dev_warn(pfuze_chip->dev, "Requested pm_power_off_prepare handler for not supported chip\n");
-c29daffa322ad3 Oleksij Rempel 2018-08-02  616  		return -ENODEV;
-c29daffa322ad3 Oleksij Rempel 2018-08-02  617  	}
-c29daffa322ad3 Oleksij Rempel 2018-08-02  618  
-c29daffa322ad3 Oleksij Rempel 2018-08-02 @619  	if (pm_power_off_prepare) {
-c29daffa322ad3 Oleksij Rempel 2018-08-02  620  		dev_warn(pfuze_chip->dev, "pm_power_off_prepare is already registered.\n");
-c29daffa322ad3 Oleksij Rempel 2018-08-02  621  		return -EBUSY;
-c29daffa322ad3 Oleksij Rempel 2018-08-02  622  	}
-c29daffa322ad3 Oleksij Rempel 2018-08-02  623  
-c29daffa322ad3 Oleksij Rempel 2018-08-02  624  	if (syspm_pfuze_chip) {
-c29daffa322ad3 Oleksij Rempel 2018-08-02  625  		dev_warn(pfuze_chip->dev, "syspm_pfuze_chip is already set.\n");
-c29daffa322ad3 Oleksij Rempel 2018-08-02  626  		return -EBUSY;
-c29daffa322ad3 Oleksij Rempel 2018-08-02  627  	}
-c29daffa322ad3 Oleksij Rempel 2018-08-02  628  
-c29daffa322ad3 Oleksij Rempel 2018-08-02  629  	syspm_pfuze_chip = pfuze_chip;
-c29daffa322ad3 Oleksij Rempel 2018-08-02  630  	pm_power_off_prepare = pfuze_power_off_prepare;
-c29daffa322ad3 Oleksij Rempel 2018-08-02  631  
-c29daffa322ad3 Oleksij Rempel 2018-08-02  632  	return 0;
-c29daffa322ad3 Oleksij Rempel 2018-08-02  633  }
-c29daffa322ad3 Oleksij Rempel 2018-08-02  634  
+For me, where ever I built clang, and "/usr/bin"
 
-:::::: The code at line 619 was first introduced by commit
-:::::: c29daffa322ad36978cbce487f8ebcd9c3c3f7c0 regulator: pfuze100-regulator: provide pm_power_off_prepare handler
-
-:::::: TO: Oleksij Rempel <o.rempel@pengutronix.de>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook
