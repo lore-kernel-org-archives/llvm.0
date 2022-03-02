@@ -1,23 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A57E6153
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 23:26:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFCBC340E9;
-	Wed,  2 Mar 2022 23:26:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646263605;
-	bh=TLcvoWQtdtysbTxCfNelk4ZWdU1R8dneA5RI6VnKf3I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IxTQQ+8m0ZTa2bMU3evAo+eXjcpRe8ZvOjUXx1pWyjCCCnuOH5j4O9lpcdSQlzpGc
-	 PXgL4QGaJ9i3aDdy4zxNI0SFMtFwKl6He9iGhr7YnPGN6pCaKYmhXM8OyHtz4ma6uX
-	 y7hVospFUZuBQ1CZ3pP5/uOw/HC2SE4w+lzjIJ4Y3fjRSHtppU4vyHx31hHpDWkx7f
-	 uTabSE3McPiaDKnHvnBFnwGlKgBcP92IcwXl6uwa3M01qO5DVwCFdC8nFgy8WF/dvc
-	 Te1uP3s8vecr5eOtC+N+A01oKhjgJ/EeS1BuGdvSiV5Omc/KzSDT39McOeof4IP6HL
-	 A1pYBpA4elqKw==
-Date: Wed, 2 Mar 2022 16:26:37 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B6C6153
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 23:38:00 +0000 (UTC)
+Received: by mail-pl1-f195.google.com with SMTP id z11so2946984pla.7
+        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 15:38:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=H/ld2l1QfhZw5fycHIZhicQmUAincS/ed7DfQS4GrJo=;
+        b=ViefEvfMbLhz6Ctu96GokkwMfCpWEne+ktDvFtkT3qkLrh7gfDs9PfaXYkJDEYrtui
+         49WDWIvwvvM6gXpGSZsTB/qPnuPrCIRuQy/XCvrR9PmShSwCO13rPkuZAXJUbvumZUnB
+         AMYP1KPCsbk/ve2rSrCawBXNkTTeUJUizFoGHdL2cdPqwBW37AwuNDjENUvqaQu+AhUl
+         LlPEarJcQ0aawr+1TgicF+xm1Dl3GILQ5WUlRoilbnNUUG2EQIntvKG/NSHEEW8KEOwU
+         MFHmF8y8gkT0DwbMtzKUHTohkZSJ6sIZOd2feeMygKXKIxhVJlI5kFwUybtmuaDB2UEt
+         9eJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H/ld2l1QfhZw5fycHIZhicQmUAincS/ed7DfQS4GrJo=;
+        b=uYU/RwKzkh07HzPJ2o4Qz730IjyaSj4bUECL3vy2Q2REwlqQyDT45m2kYTsBxDM8rH
+         lBof7ThbzuvN52O6xm/CSPcmGnEANOJHyFNb2YRPKFwT+KoMpv5B2iRSrilialcqUiGP
+         WxuqdnapuUXhkfFxG0nhg10ay33Yi/aOJR8X5Sy3U8b46DkbOlO/f2vSpcMaL8RDdxdk
+         pBXiHwZ9agEN/D/BzNe5ytQXtYPOdU0UHc5bW4SfzWxlDBvw6OBnp3sNSD+FPpEBNJRH
+         W/WtNt77OuM1281J9sepmIKYkuuogFzljJr103ojVwlKndzFS4s9yOA8vNAHdtxgXuOr
+         I8Qw==
+X-Gm-Message-State: AOAM533zh4iw1WE4LAxH/5IQCQa52oHiDAnumXYozPWOsvkPKkZTSo4l
+	Cldw0y90knIC+T+/zIoBl2U=
+X-Google-Smtp-Source: ABdhPJzB/6ywPQ1g5j9dJIjdvx9LpP29jILx7t9+/tzYvRREY7LhT7NAaRPZxLwQNGC4YnwLN9MDHA==
+X-Received: by 2002:a17:90a:6404:b0:1b9:28a8:935f with SMTP id g4-20020a17090a640400b001b928a8935fmr2231073pjj.197.1646264280108;
+        Wed, 02 Mar 2022 15:38:00 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id nk5-20020a17090b194500b001bf01e6e558sm152612pjb.29.2022.03.02.15.37.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 15:37:59 -0800 (PST)
+Date: Thu, 3 Mar 2022 05:07:57 +0530
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>
 Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>,
 	llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -26,12 +47,13 @@ Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>
 Subject: Re: [PATCH bpf-next v1 6/6] selftests/bpf: Add tests for kfunc
  register offset checks
-Message-ID: <Yh/9LS7zc3nhTjsR@thelio-3990X>
+Message-ID: <20220302233757.plavf56gm2uhhneu@apollo.legion>
 References: <20220301065745.1634848-7-memxor@gmail.com>
  <202203011937.wMLpkfU3-lkp@intel.com>
  <20220301115722.jjklznmjsbnkdsf2@apollo.legion>
  <CAADnVQL-sSMacA8S-gvKTAz-CAdTaDgX=4ZZrwFL=zZKYC0-Aw@mail.gmail.com>
  <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
+ <Yh/9LS7zc3nhTjsR@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,42 +62,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
+In-Reply-To: <Yh/9LS7zc3nhTjsR@thelio-3990X>
 
-On Thu, Mar 03, 2022 at 04:44:01AM +0530, Kumar Kartikeya Dwivedi wrote:
-> On Thu, Mar 03, 2022 at 04:17:25AM IST, Alexei Starovoitov wrote:
-> > On Tue, Mar 1, 2022 at 3:57 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+On Thu, Mar 03, 2022 at 04:56:37AM IST, Nathan Chancellor wrote:
+> On Thu, Mar 03, 2022 at 04:44:01AM +0530, Kumar Kartikeya Dwivedi wrote:
+> > On Thu, Mar 03, 2022 at 04:17:25AM IST, Alexei Starovoitov wrote:
+> > > On Tue, Mar 1, 2022 at 3:57 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> > > >
+> > > > On Tue, Mar 01, 2022 at 05:10:31PM IST, kernel test robot wrote:
+> > > > > Hi Kumar,
+> > > > >
+> > > > > Thank you for the patch! Perhaps something to improve:
+> > > > >
+> > > > > [auto build test WARNING on bpf-next/master]
+> > > > >
+> > > > > url:    https://github.com/0day-ci/linux/commits/Kumar-Kartikeya-Dwivedi/Fixes-for-bad-PTR_TO_BTF_ID-offset/20220301-150010
+> > > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> > > > > config: s390-randconfig-r021-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011937.wMLpkfU3-lkp@intel.com/config)
+> > > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> > > >
+> > > > The same warning is emitted on clang for all existing definitions, so I can
+> > > > respin with a fix for the warning like we do for GCC, otherwise it can also
+> > > > be a follow up patch.
 > > >
-> > > On Tue, Mar 01, 2022 at 05:10:31PM IST, kernel test robot wrote:
-> > > > Hi Kumar,
-> > > >
-> > > > Thank you for the patch! Perhaps something to improve:
-> > > >
-> > > > [auto build test WARNING on bpf-next/master]
-> > > >
-> > > > url:    https://github.com/0day-ci/linux/commits/Kumar-Kartikeya-Dwivedi/Fixes-for-bad-PTR_TO_BTF_ID-offset/20220301-150010
-> > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> > > > config: s390-randconfig-r021-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011937.wMLpkfU3-lkp@intel.com/config)
-> > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> > >
-> > > The same warning is emitted on clang for all existing definitions, so I can
-> > > respin with a fix for the warning like we do for GCC, otherwise it can also
-> > > be a follow up patch.
+> > > Separate patch is fine.
+> > > How do you plan on fixing it?
+> > > What is __diag_ignore equivalent for clang?
 > >
-> > Separate patch is fine.
-> > How do you plan on fixing it?
-> > What is __diag_ignore equivalent for clang?
-> 
-> Hmm, looks like I'll have to add those in include/linux/compiler-clang.h. Quick
-> local testing suggests it will work with _Pragma("clang diagnostic ignored ...").
+> > Hmm, looks like I'll have to add those in include/linux/compiler-clang.h. Quick
+> > local testing suggests it will work with _Pragma("clang diagnostic ignored ...").
+>
+> I have a diff that mirrors the GCC infrastructure, which should work for
+> this, feel free to copy it:
+>
+> https://lore.kernel.org/r/20210310225240.4epj2mdmzt4vurr3@archlinux-ax161/
+>
+> If you want to shut up the warning for all supported versions of clang,
+> switch 130000 for 110000 and __diag_clang_11() for __diag_clang_13().
+>
 
-I have a diff that mirrors the GCC infrastructure, which should work for
-this, feel free to copy it:
+That's great, Nathan! I'll add your Signed-off-by to it.
 
-https://lore.kernel.org/r/20210310225240.4epj2mdmzt4vurr3@archlinux-ax161/
+> Cheers,
+> Nathan
 
-If you want to shut up the warning for all supported versions of clang,
-switch 130000 for 110000 and __diag_clang_11() for __diag_clang_13().
-
-Cheers,
-Nathan
+--
+Kartikeya
