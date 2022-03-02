@@ -1,76 +1,90 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F8033CA
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 22:47:37 +0000 (UTC)
-Received: by mail-pj1-f48.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso2724730pjb.0
-        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 14:47:37 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36E333CA
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 22:54:48 +0000 (UTC)
+Received: by mail-lf1-f45.google.com with SMTP id d23so5299700lfv.13
+        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 14:54:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MXwMgtp7aGEPftELBgU0R9BW5PS1bdwaZuOl3PeKffE=;
-        b=AzeIDbYGU2d70QwtB9OxBXk29BbHNhJ18jUJKXFdS0hEXmD69ERbiMhaiwtqluqy4T
-         kvB6opMLayDp0v5Fldmk5ZH7RpfoKR0TrWDQZeZ5ReuwuRDUG8XodbS0jK/g7KMtKYK+
-         GWYxNKVggS5rYXrLuFnA0CeqiT20AMkbelfsCybd4WEDgBvRPUjpC0lk/1ich5HwoaAk
-         xn+VhJio0M+ZoNi+izLxM28d54rIAkxMoiUehJWQCcmPMF0W1IMD8C/MNY2POSlrHNoo
-         6qdxJfhhdu1Std0lzRjosLurnUpZn1ThPWJ4dcbtJcqb6AitglZl5QXHd9DSa5VT4cXU
-         Jf0w==
+        bh=npju3rHc3mRSfcSts2+QJjEKDIhH7Izt6iSeFW3/QF8=;
+        b=EGUemDJqLPj5B1hkkSx83siUMy1VVgYpLmLW+ISOhNuoXtHKsSw2hUGh04Nr1SSJBa
+         r1zlSLuTwOVX4majvP3P2eRAehp5T6N3EhkQMRRzPZTVKm7dG9AMpyQkHmmlptVAkH1M
+         9qJqcvZhIGwX2krc9gtYqqgwwQlmQpMuIj2tBVKllvQa6ewTZR3bIzSlOMcvz81A9HgK
+         U6a1Rlq0X8a/j+BcebndmqCX94BKI7/Pk6tA767h9fKeB1KajrFXzeZtGEtmtGtKzQ82
+         MRbBDpAmm2KjoZQU/U/PLkzR0auLS/dAQCdKPVFuvLwFIJNhxluwc4Nr3f7cAO8VDXZ4
+         jz0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MXwMgtp7aGEPftELBgU0R9BW5PS1bdwaZuOl3PeKffE=;
-        b=exhVEZPiwnSxMIxrzZOMDJnp80pmydehA4UIPqmJOJDH1pCYp5u5aF/K+jLGH0OYye
-         tP+BFl2fU3HSZHlOItjqxsB4q4fLt3Y6GNNan5GmGWJdLv3XjdRbEsJcKpqzTPahXpV+
-         L0Qg0Onrf35MzgQb1Z5wR3tpYNeJiabVq9tiz50WADsBQ0pEuQK+2uYzKfG3sDswrN4n
-         Sx767b7ygs1NLJUo7FDtX9IcClWVkB/GO7o0jcRAebo7Iy02x5H9+ZyYn9KlwFqPwo/L
-         advhgjDQ44xVp5YWAvvUPkVUAroXIM+RNXJ07GuIw7v2anx1bKDvp3nyWTksgmwBE64q
-         ZKwg==
-X-Gm-Message-State: AOAM5339bgKQsL1trHrd/JrfOR7SLsIwBhcPoUb030y1d2VO4RfoUI3Z
-	wtNAOZeLD5uqPEYM3WrBMKE+bp20pSCHlIIPWKQ=
-X-Google-Smtp-Source: ABdhPJyOepaybsFAjIqZBxBAS7LOzKn/LEr98q2LFGXsGjk+ATwurexPlAX6WWWEw4pqyyPpBhxOlZ5fxOKG5yZB2/o=
-X-Received: by 2002:a17:90b:1a81:b0:1bc:c3e5:27b2 with SMTP id
- ng1-20020a17090b1a8100b001bcc3e527b2mr2146407pjb.20.1646261257086; Wed, 02
- Mar 2022 14:47:37 -0800 (PST)
+        bh=npju3rHc3mRSfcSts2+QJjEKDIhH7Izt6iSeFW3/QF8=;
+        b=TCNIhKQYTQD+AYh9tzk7IsXwT8vr4ALvvLZRr8YCoBUdseaGJNsVgbs46GDxTXgCnw
+         vgyEQRbXD+vL92OZu+g1UedAVR8HKV6GHgXrWbBPBxC5cBtL0B2yy+IXuDpAk7/ijk86
+         wQXc9hZWH5QO2vbTGrmA1QcUHmQc2l3oa26QBlKprULkx9swkLswY09Wn0ffOec9gAaf
+         Xq5LyNGi2v7UUtflgeKBp8mKgNH3SbaNQF91L3p2IJZ/Lblylo8kcq9uqzNVE1OFg/lz
+         1RkPFntGxLRDAkSb7MfDTSZViAAcYYybwJ9fRpUoDxZptRIdAIeiskmE4fl3eLWAIuwW
+         TUTg==
+X-Gm-Message-State: AOAM5337Rj4mYLusZg3AhxgAPUei6RynW18a1xpF1rvrPnHcIj0B34NC
+	Ly+gvjYp84icmlpRpV1HSqpJz2wIPHDDT77//VPEkg==
+X-Google-Smtp-Source: ABdhPJwNGg4cChj44h6sHunDdkaG9C78703PQ9UZNkp6xZHGYO9BRG6dBg6H3kef6ltm6p6P5d5rhHI0dHWUyV3MtyU=
+X-Received: by 2002:ac2:46ef:0:b0:443:3c30:a372 with SMTP id
+ q15-20020ac246ef000000b004433c30a372mr19890713lfo.626.1646261686698; Wed, 02
+ Mar 2022 14:54:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220301065745.1634848-7-memxor@gmail.com> <202203011937.wMLpkfU3-lkp@intel.com>
- <20220301115722.jjklznmjsbnkdsf2@apollo.legion>
-In-Reply-To: <20220301115722.jjklznmjsbnkdsf2@apollo.legion>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 2 Mar 2022 14:47:25 -0800
-Message-ID: <CAADnVQL-sSMacA8S-gvKTAz-CAdTaDgX=4ZZrwFL=zZKYC0-Aw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 6/6] selftests/bpf: Add tests for kfunc
- register offset checks
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
+ <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
+In-Reply-To: <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 2 Mar 2022 14:54:35 -0800
+Message-ID: <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
+To: sedat.dilek@gmail.com
+Cc: Arnd Bergmann <arnd@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Marco Elver <elver@google.com>, 
+	Jani Nikula <jani.nikula@intel.com>, David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 1, 2022 at 3:57 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+On Wed, Mar 2, 2022 at 2:14 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 >
-> On Tue, Mar 01, 2022 at 05:10:31PM IST, kernel test robot wrote:
-> > Hi Kumar,
+> On Wed, Mar 2, 2022 at 10:47 AM Arnd Bergmann <arnd@kernel.org> wrote:
 > >
-> > Thank you for the patch! Perhaps something to improve:
+> > From: Arnd Bergmann <arnd@arndb.de>
 > >
-> > [auto build test WARNING on bpf-next/master]
+> > As we change the C language standard for the kernel from gnu89 to
+> > gnu11, it makes sense to also update the version for user space
+> > compilation.
 > >
-> > url:    https://github.com/0day-ci/linux/commits/Kumar-Kartikeya-Dwivedi/Fixes-for-bad-PTR_TO_BTF_ID-offset/20220301-150010
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> > config: s390-randconfig-r021-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011937.wMLpkfU3-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 >
-> The same warning is emitted on clang for all existing definitions, so I can
-> respin with a fix for the warning like we do for GCC, otherwise it can also
-> be a follow up patch.
+> Overdue.
+>
+> Can you point me to a lore link where I can easily fetch the full 3/3
+> v3 patchset?
 
-Separate patch is fine.
-How do you plan on fixing it?
-What is __diag_ignore equivalent for clang?
+Hey Sedat!
+
+$ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arnd@kernel.org/
+-o - | git am -3
+
+https://people.kernel.org/monsieuricon/introducing-b4-and-patch-attestation
+
+>
+> I would like to give this a try on x86-64 with my latest kernel-config
+> (based on the latest kernel-config v5.17-rc5 from Debian/unstable).
+>
+> What Linux source base do I need?
+> Is Linux v5.17-rc6 good enough (patchset applicable) for testing?
+
+I suspect so.
+-- 
+Thanks,
+~Nick Desaulniers
