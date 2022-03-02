@@ -1,43 +1,44 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC062108
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 02:51:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65492104
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 02:51:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646189496; x=1677725496;
+  t=1646189497; x=1677725497;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iKL8VzAcdqc8mQmAFMZqc0dAz64uVOQbPqx2+7Bctbw=;
-  b=j/gfnTrEHGLEznozfPEq/onxe+9JTLwEd+2H5qemFJ8zoVl+CTW3qQeC
-   KLxdKiE4s2rn/gS9BLr3OakaxyrZylSCsnR7QTvzUGGxkZJovhcpHl4yJ
-   PI9Rybb7fBjyKP3U1sVlu6I52xSI8wzWVFOajQEWrtjTnUX/7I4tsxdPG
-   ugiKEglQfJm/rTp/VuRQRi0E3VI9iA8YCc4hClAviqSV9AUYU3GbzoLrd
-   7wjZYPcXcgYP6n2NolgPMalaekmOSnQPlNA6mtluJHKgHAtdTCeBi0XUD
-   1qTelInMhhO/NoAuhQYodYF5ZbACT4EdjSeAZWGZCl6s+SmhVek9nuCeA
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="316509668"
+  bh=4TVRDlGuWG1v9pJVrGckNUyb52RV2GcXzSymg9LWOg8=;
+  b=R1WNxkOwdamVj1HVIy8cll0erSzBYqlgTqRRvMl/7RRRt60008q1E1Hw
+   /1zE3q1dXQbYJJK4KNELV6JOq/gZCpyzjrt7cfLe6HsV3Q2Tl+O2Jf0o5
+   79qEIud3JVFogaJ87+eUMqonWjZ0Yis4ERgRZQzosR2irX3M+35ZY2QQm
+   l4L3OcprnfiYcVLFIjke3DjJVKEbM8Uc0hZBXdo/yCnS8nrqSek8HHhQ4
+   Vuop6fIEbt6B/WyjBQO93iuzK102GWou8RLnPYQWXg2ewqnIuq/MFJY0Z
+   rFTOJtodWRrb7Jao5Kw/CKD8GS1z73WSAdkLM6Z926fYBEbdJj5nQAs2N
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="250872246"
 X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="316509668"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 18:51:36 -0800
+   d="scan'208";a="250872246"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 18:51:36 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="551041637"
+   d="scan'208";a="508043161"
 Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 01 Mar 2022 18:51:34 -0800
+  by orsmga002.jf.intel.com with ESMTP; 01 Mar 2022 18:51:34 -0800
 Received: from kbuild by e9605edfa585 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nPF5R-0000wV-K8; Wed, 02 Mar 2022 02:51:33 +0000
-Date: Wed, 2 Mar 2022 10:51:25 +0800
+	id 1nPF5R-0000wY-KS; Wed, 02 Mar 2022 02:51:33 +0000
+Date: Wed, 2 Mar 2022 10:51:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+To: Mark Cilissen <mark@yotsuba.nl>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:crng/random/jd/notifier 54/55]
- include/linux/notifier.h:75:15: error: field has incomplete type 'struct
- mutex'
-Message-ID: <202203020718.3ho17ASv-lkp@intel.com>
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Hans de Goede <hdegoede@redhat.com>
+Subject: [rafael-pm:bleeding-edge 113/118]
+ arch/x86/kernel/acpi/boot.c:1476:8: warning: excess elements in array
+ initializer
+Message-ID: <202203020737.wa9uc4gW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,107 +49,131 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/notifier
-head:   3c87f9e874ba4807cbb5473bab3eb5c2f5d716db
-commit: d8ac9430b0435d0f09b5c909f80f8980183c93d1 [54/55] random: replace custom notifier chain with standard one
-config: arm64-randconfig-r022-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020718.3ho17ASv-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   f7307721a01f4f14d21c699b270a870370cf34b9
+commit: ed00b2b8d737f87a2437d7bd7c7f90124b50da05 [113/118] x86 / ACPI: Work around broken XSDT on SEGA AALE board
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220302/202203020737.wa9uc4gW-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/d8ac9430b0435d0f09b5c909f80f8980183c93d1
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block crng/random/jd/notifier
-        git checkout d8ac9430b0435d0f09b5c909f80f8980183c93d1
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=ed00b2b8d737f87a2437d7bd7c7f90124b50da05
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout ed00b2b8d737f87a2437d7bd7c7f90124b50da05
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/acpi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:13:
-   In file included from include/linux/irqdomain.h:35:
-   In file included from include/linux/of.h:17:
-   In file included from include/linux/kobject.h:20:
-   In file included from include/linux/sysfs.h:16:
-   In file included from include/linux/kernfs.h:11:
-   In file included from include/linux/mutex.h:19:
-   In file included from arch/arm64/include/asm/processor.h:42:
-   In file included from arch/arm64/include/asm/pointer_auth.h:7:
-   In file included from include/linux/random.h:10:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:49:
->> include/linux/srcutree.h:68:15: error: field has incomplete type 'struct mutex'
-           struct mutex srcu_cb_mutex;             /* Serialize CB preparation. */
-                        ^
-   include/linux/srcutree.h:68:9: note: forward declaration of 'struct mutex'
-           struct mutex srcu_cb_mutex;             /* Serialize CB preparation. */
-                  ^
-   include/linux/srcutree.h:70:15: error: field has incomplete type 'struct mutex'
-           struct mutex srcu_gp_mutex;             /* Serialize GP work. */
-                        ^
-   include/linux/srcutree.h:68:9: note: forward declaration of 'struct mutex'
-           struct mutex srcu_cb_mutex;             /* Serialize CB preparation. */
-                  ^
-   include/linux/srcutree.h:78:15: error: field has incomplete type 'struct mutex'
-           struct mutex srcu_barrier_mutex;        /* Serialize barrier ops. */
-                        ^
-   include/linux/srcutree.h:68:9: note: forward declaration of 'struct mutex'
-           struct mutex srcu_cb_mutex;             /* Serialize CB preparation. */
-                  ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:13:
-   In file included from include/linux/irqdomain.h:35:
-   In file included from include/linux/of.h:17:
-   In file included from include/linux/kobject.h:20:
-   In file included from include/linux/sysfs.h:16:
-   In file included from include/linux/kernfs.h:11:
-   In file included from include/linux/mutex.h:19:
-   In file included from arch/arm64/include/asm/processor.h:42:
-   In file included from arch/arm64/include/asm/pointer_auth.h:7:
-   In file included from include/linux/random.h:10:
->> include/linux/notifier.h:75:15: error: field has incomplete type 'struct mutex'
-           struct mutex mutex;
-                        ^
-   include/linux/srcutree.h:68:9: note: forward declaration of 'struct mutex'
-           struct mutex srcu_cb_mutex;             /* Serialize CB preparation. */
-                  ^
-   4 errors generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> arch/x86/kernel/acpi/boot.c:1476:8: warning: excess elements in array initializer [-Wexcess-initializers]
+                        DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mod_devicetable.h:587:25: note: expanded from macro 'DMI_MATCH'
+   #define DMI_MATCH(a, b) { .slot = a, .substr = b }
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +75 include/linux/notifier.h
+vim +1476 arch/x86/kernel/acpi/boot.c
 
-e041c683412d5b Alan Stern    2006-03-27  73  
-eabc069401bcf4 Alan Stern    2006-10-04  74  struct srcu_notifier_head {
-eabc069401bcf4 Alan Stern    2006-10-04 @75  	struct mutex mutex;
-eabc069401bcf4 Alan Stern    2006-10-04  76  	struct srcu_struct srcu;
-374a8e0dc33c98 Arnd Bergmann 2010-02-24  77  	struct notifier_block __rcu *head;
-eabc069401bcf4 Alan Stern    2006-10-04  78  };
-eabc069401bcf4 Alan Stern    2006-10-04  79  
-
-:::::: The code at line 75 was first introduced by commit
-:::::: eabc069401bcf45bcc3f19e643017bf761780aa8 [PATCH] Add SRCU-based notifier chains
-
-:::::: TO: Alan Stern <stern@rowland.harvard.edu>
-:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
+  1389	
+  1390	/*
+  1391	 * If your system is blacklisted here, but you find that acpi=force
+  1392	 * works for you, please contact linux-acpi@vger.kernel.org
+  1393	 */
+  1394	static const struct dmi_system_id acpi_dmi_table[] __initconst = {
+  1395		/*
+  1396		 * Boxes that need ACPI disabled
+  1397		 */
+  1398		{
+  1399		 .callback = dmi_disable_acpi,
+  1400		 .ident = "IBM Thinkpad",
+  1401		 .matches = {
+  1402			     DMI_MATCH(DMI_BOARD_VENDOR, "IBM"),
+  1403			     DMI_MATCH(DMI_BOARD_NAME, "2629H1G"),
+  1404			     },
+  1405		 },
+  1406	
+  1407		/*
+  1408		 * Boxes that need ACPI PCI IRQ routing disabled
+  1409		 */
+  1410		{
+  1411		 .callback = disable_acpi_irq,
+  1412		 .ident = "ASUS A7V",
+  1413		 .matches = {
+  1414			     DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer INC"),
+  1415			     DMI_MATCH(DMI_BOARD_NAME, "<A7V>"),
+  1416			     /* newer BIOS, Revision 1011, does work */
+  1417			     DMI_MATCH(DMI_BIOS_VERSION,
+  1418				       "ASUS A7V ACPI BIOS Revision 1007"),
+  1419			     },
+  1420		 },
+  1421		{
+  1422			/*
+  1423			 * Latest BIOS for IBM 600E (1.16) has bad pcinum
+  1424			 * for LPC bridge, which is needed for the PCI
+  1425			 * interrupt links to work. DSDT fix is in bug 5966.
+  1426			 * 2645, 2646 model numbers are shared with 600/600E/600X
+  1427			 */
+  1428		 .callback = disable_acpi_irq,
+  1429		 .ident = "IBM Thinkpad 600 Series 2645",
+  1430		 .matches = {
+  1431			     DMI_MATCH(DMI_BOARD_VENDOR, "IBM"),
+  1432			     DMI_MATCH(DMI_BOARD_NAME, "2645"),
+  1433			     },
+  1434		 },
+  1435		{
+  1436		 .callback = disable_acpi_irq,
+  1437		 .ident = "IBM Thinkpad 600 Series 2646",
+  1438		 .matches = {
+  1439			     DMI_MATCH(DMI_BOARD_VENDOR, "IBM"),
+  1440			     DMI_MATCH(DMI_BOARD_NAME, "2646"),
+  1441			     },
+  1442		 },
+  1443		/*
+  1444		 * Boxes that need ACPI PCI IRQ routing and PCI scan disabled
+  1445		 */
+  1446		{			/* _BBN 0 bug */
+  1447		 .callback = disable_acpi_pci,
+  1448		 .ident = "ASUS PR-DLS",
+  1449		 .matches = {
+  1450			     DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer INC."),
+  1451			     DMI_MATCH(DMI_BOARD_NAME, "PR-DLS"),
+  1452			     DMI_MATCH(DMI_BIOS_VERSION,
+  1453				       "ASUS PR-DLS ACPI BIOS Revision 1010"),
+  1454			     DMI_MATCH(DMI_BIOS_DATE, "03/21/2003")
+  1455			     },
+  1456		 },
+  1457		{
+  1458		 .callback = disable_acpi_pci,
+  1459		 .ident = "Acer TravelMate 36x Laptop",
+  1460		 .matches = {
+  1461			     DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
+  1462			     DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 360"),
+  1463			     },
+  1464		 },
+  1465		/*
+  1466		 * Boxes that need ACPI XSDT use disabled due to corrupted tables
+  1467		 */
+  1468		{
+  1469		 .callback = disable_acpi_xsdt,
+  1470		 .ident = "SEGA AALE",
+  1471		 .matches = {
+  1472			     DMI_MATCH(DMI_SYS_VENDOR, "NEC"),
+  1473			     DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board"),
+  1474			     DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies LTD"),
+  1475			     DMI_MATCH(DMI_BIOS_VERSION, "V1.12"),
+> 1476			     DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
+  1477			     },
+  1478		},
+  1479		{}
+  1480	};
+  1481	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
