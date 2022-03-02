@@ -1,110 +1,217 @@
-Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B6C6153
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 23:38:00 +0000 (UTC)
-Received: by mail-pl1-f195.google.com with SMTP id z11so2946984pla.7
-        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 15:38:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=H/ld2l1QfhZw5fycHIZhicQmUAincS/ed7DfQS4GrJo=;
-        b=ViefEvfMbLhz6Ctu96GokkwMfCpWEne+ktDvFtkT3qkLrh7gfDs9PfaXYkJDEYrtui
-         49WDWIvwvvM6gXpGSZsTB/qPnuPrCIRuQy/XCvrR9PmShSwCO13rPkuZAXJUbvumZUnB
-         AMYP1KPCsbk/ve2rSrCawBXNkTTeUJUizFoGHdL2cdPqwBW37AwuNDjENUvqaQu+AhUl
-         LlPEarJcQ0aawr+1TgicF+xm1Dl3GILQ5WUlRoilbnNUUG2EQIntvKG/NSHEEW8KEOwU
-         MFHmF8y8gkT0DwbMtzKUHTohkZSJ6sIZOd2feeMygKXKIxhVJlI5kFwUybtmuaDB2UEt
-         9eJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H/ld2l1QfhZw5fycHIZhicQmUAincS/ed7DfQS4GrJo=;
-        b=uYU/RwKzkh07HzPJ2o4Qz730IjyaSj4bUECL3vy2Q2REwlqQyDT45m2kYTsBxDM8rH
-         lBof7ThbzuvN52O6xm/CSPcmGnEANOJHyFNb2YRPKFwT+KoMpv5B2iRSrilialcqUiGP
-         WxuqdnapuUXhkfFxG0nhg10ay33Yi/aOJR8X5Sy3U8b46DkbOlO/f2vSpcMaL8RDdxdk
-         pBXiHwZ9agEN/D/BzNe5ytQXtYPOdU0UHc5bW4SfzWxlDBvw6OBnp3sNSD+FPpEBNJRH
-         W/WtNt77OuM1281J9sepmIKYkuuogFzljJr103ojVwlKndzFS4s9yOA8vNAHdtxgXuOr
-         I8Qw==
-X-Gm-Message-State: AOAM533zh4iw1WE4LAxH/5IQCQa52oHiDAnumXYozPWOsvkPKkZTSo4l
-	Cldw0y90knIC+T+/zIoBl2U=
-X-Google-Smtp-Source: ABdhPJzB/6ywPQ1g5j9dJIjdvx9LpP29jILx7t9+/tzYvRREY7LhT7NAaRPZxLwQNGC4YnwLN9MDHA==
-X-Received: by 2002:a17:90a:6404:b0:1b9:28a8:935f with SMTP id g4-20020a17090a640400b001b928a8935fmr2231073pjj.197.1646264280108;
-        Wed, 02 Mar 2022 15:38:00 -0800 (PST)
-Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
-        by smtp.gmail.com with ESMTPSA id nk5-20020a17090b194500b001bf01e6e558sm152612pjb.29.2022.03.02.15.37.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 15:37:59 -0800 (PST)
-Date: Thu, 3 Mar 2022 05:07:57 +0530
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH bpf-next v1 6/6] selftests/bpf: Add tests for kfunc
- register offset checks
-Message-ID: <20220302233757.plavf56gm2uhhneu@apollo.legion>
-References: <20220301065745.1634848-7-memxor@gmail.com>
- <202203011937.wMLpkfU3-lkp@intel.com>
- <20220301115722.jjklznmjsbnkdsf2@apollo.legion>
- <CAADnVQL-sSMacA8S-gvKTAz-CAdTaDgX=4ZZrwFL=zZKYC0-Aw@mail.gmail.com>
- <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
- <Yh/9LS7zc3nhTjsR@thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E156153
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 23:47:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1D5C004E1;
+	Wed,  2 Mar 2022 23:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646264823;
+	bh=iNqELq+lX+h6oGIXCLQayAVdk7lzG1NGvnedGOzYkkM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RTYDe4ktdxhZsPRhExKj5tzN1nAbRVZrUpiXPL2JtIpf2z/I5dM3rN/1hplrrHVs/
+	 AUUE+VpS6cjgBRyL66ETXfgZwMZAYlZPgDbdWIDa65uq/AxQlf6oG9J9RWutENDa0o
+	 JHHftuSm5ZOPYgoGkP591g+wjyXgKK4yZnaK9ZJHlbBAiVQE63iEGuokIK6nUFN1bo
+	 RG3Yiz6cY6KfcrZwCa2dsWYIkiI1oEgeaUI1Fn4LFh3SGmg1IkY7WRVNAVZ/j7wXGM
+	 Ri3ihv+umpKM4bgUArI+aDAWp5qB1oWbM1js+cB/KBgtkh2ZZh7Q4NtKvdNxLpbAff
+	 socg10N3TsW5Q==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Kees Cook <keescook@chromium.org>
+Subject: [PATCH] kbuild: Allow a suffix with $(LLVM)
+Date: Wed,  2 Mar 2022 16:44:01 -0700
+Message-Id: <20220302234400.782002-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh/9LS7zc3nhTjsR@thelio-3990X>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 03, 2022 at 04:56:37AM IST, Nathan Chancellor wrote:
-> On Thu, Mar 03, 2022 at 04:44:01AM +0530, Kumar Kartikeya Dwivedi wrote:
-> > On Thu, Mar 03, 2022 at 04:17:25AM IST, Alexei Starovoitov wrote:
-> > > On Tue, Mar 1, 2022 at 3:57 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> > > >
-> > > > On Tue, Mar 01, 2022 at 05:10:31PM IST, kernel test robot wrote:
-> > > > > Hi Kumar,
-> > > > >
-> > > > > Thank you for the patch! Perhaps something to improve:
-> > > > >
-> > > > > [auto build test WARNING on bpf-next/master]
-> > > > >
-> > > > > url:    https://github.com/0day-ci/linux/commits/Kumar-Kartikeya-Dwivedi/Fixes-for-bad-PTR_TO_BTF_ID-offset/20220301-150010
-> > > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> > > > > config: s390-randconfig-r021-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011937.wMLpkfU3-lkp@intel.com/config)
-> > > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> > > >
-> > > > The same warning is emitted on clang for all existing definitions, so I can
-> > > > respin with a fix for the warning like we do for GCC, otherwise it can also
-> > > > be a follow up patch.
-> > >
-> > > Separate patch is fine.
-> > > How do you plan on fixing it?
-> > > What is __diag_ignore equivalent for clang?
-> >
-> > Hmm, looks like I'll have to add those in include/linux/compiler-clang.h. Quick
-> > local testing suggests it will work with _Pragma("clang diagnostic ignored ...").
->
-> I have a diff that mirrors the GCC infrastructure, which should work for
-> this, feel free to copy it:
->
-> https://lore.kernel.org/r/20210310225240.4epj2mdmzt4vurr3@archlinux-ax161/
->
-> If you want to shut up the warning for all supported versions of clang,
-> switch 130000 for 110000 and __diag_clang_11() for __diag_clang_13().
->
+The LLVM make variable allows a developer to quickly switch between the
+GNU and LLVM tools. However, it does not handle versioned binaries, such
+as the ones shipped by Debian, as LLVM=1 just defines the tool variables
+with the unversioned binaries.
 
-That's great, Nathan! I'll add your Signed-off-by to it.
+There was some discussion during the review of the patch that introduces
+LLVM=1 around versioned binaries, ultimately coming to the conclusion
+that developers can just add the folder that contains the unversioned
+binaries to their PATH, as Debian's versioned suffixed binaries are
+really just symlinks to the unversioned binaries in /usr/lib/llvm-#/bin:
 
-> Cheers,
-> Nathan
+$ realpath /usr/bin/clang-14
+/usr/lib/llvm-14/bin/clang
 
---
-Kartikeya
+$ PATH=/usr/lib/llvm-14/bin:$PATH make ... LLVM=1
+
+However, that can be cumbersome to developers who are constantly testing
+series with different toolchains and versions. It is simple enough to
+support these versioned binaries directly in the Kbuild system by
+allowing the developer to specify the version suffix with LLVM=, which
+is shorter than the above suggestion:
+
+$ make ... LLVM=-14
+
+It does not change the meaning of LLVM=1 (which will continue to use
+unversioned binaries) and it does not add too much additional complexity
+to the existing $(LLVM) code, while allowing developers to quickly test
+their series with different versions of the whole LLVM suite of tools.
+
+Link: https://lore.kernel.org/r/20200317215515.226917-1-ndesaulniers@google.com/
+Link: https://lore.kernel.org/r/20220224151322.072632223@infradead.org/
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+
+RFC -> v1: https://lore.kernel.org/r/Yh%2FegU1LZudfrgVy@dev-arch.thelio-3990X/
+
+* Tidy up commit message slightly.
+
+* Add tags.
+
+* Add links to prior discussions for context.
+
+* Add change to tools/testing/selftests/lib.mk.
+
+I would like for this to go through the Kbuild tree, please ack as
+necessary.
+
+ Documentation/kbuild/llvm.rst  |  7 +++++++
+ Makefile                       | 24 ++++++++++++++----------
+ tools/scripts/Makefile.include | 20 ++++++++++++--------
+ tools/testing/selftests/lib.mk |  6 +++++-
+ 4 files changed, 38 insertions(+), 19 deletions(-)
+
+diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+index d32616891dcf..5805a8473a36 100644
+--- a/Documentation/kbuild/llvm.rst
++++ b/Documentation/kbuild/llvm.rst
+@@ -60,6 +60,13 @@ They can be enabled individually. The full list of the parameters: ::
+ 	  OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
+ 	  HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
+ 
++If your LLVM tools have a suffix and you prefer to test an explicit version rather
++than the unsuffixed executables, use ``LLVM=<suffix>``. For example: ::
++
++	make LLVM=-14
++
++will use ``clang-14``, ``ld.lld-14``, etc.
++
+ The integrated assembler is enabled by default. You can pass ``LLVM_IAS=0`` to
+ disable it.
+ 
+diff --git a/Makefile b/Makefile
+index a82095c69fdd..963840c00eae 100644
+--- a/Makefile
++++ b/Makefile
+@@ -424,8 +424,12 @@ HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
+ HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
+ 
+ ifneq ($(LLVM),)
+-HOSTCC	= clang
+-HOSTCXX	= clang++
++ifneq ($(LLVM),1)
++LLVM_SFX := $(LLVM)
++endif
++
++HOSTCC	= clang$(LLVM_SFX)
++HOSTCXX	= clang++$(LLVM_SFX)
+ else
+ HOSTCC	= gcc
+ HOSTCXX	= g++
+@@ -444,14 +448,14 @@ KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
+ # Make variables (CC, etc...)
+ CPP		= $(CC) -E
+ ifneq ($(LLVM),)
+-CC		= clang
+-LD		= ld.lld
+-AR		= llvm-ar
+-NM		= llvm-nm
+-OBJCOPY		= llvm-objcopy
+-OBJDUMP		= llvm-objdump
+-READELF		= llvm-readelf
+-STRIP		= llvm-strip
++CC		= clang$(LLVM_SFX)
++LD		= ld.lld$(LLVM_SFX)
++AR		= llvm-ar$(LLVM_SFX)
++NM		= llvm-nm$(LLVM_SFX)
++OBJCOPY		= llvm-objcopy$(LLVM_SFX)
++OBJDUMP		= llvm-objdump$(LLVM_SFX)
++READELF		= llvm-readelf$(LLVM_SFX)
++STRIP		= llvm-strip$(LLVM_SFX)
+ else
+ CC		= $(CROSS_COMPILE)gcc
+ LD		= $(CROSS_COMPILE)ld
+diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+index 79d102304470..ab3b2a7dcc94 100644
+--- a/tools/scripts/Makefile.include
++++ b/tools/scripts/Makefile.include
+@@ -52,11 +52,15 @@ define allow-override
+ endef
+ 
+ ifneq ($(LLVM),)
+-$(call allow-override,CC,clang)
+-$(call allow-override,AR,llvm-ar)
+-$(call allow-override,LD,ld.lld)
+-$(call allow-override,CXX,clang++)
+-$(call allow-override,STRIP,llvm-strip)
++ifneq ($(LLVM),1)
++LLVM_SFX := $(LLVM)
++endif
++
++$(call allow-override,CC,clang$(LLVM_SFX))
++$(call allow-override,AR,llvm-ar$(LLVM_SFX))
++$(call allow-override,LD,ld.lld$(LLVM_SFX))
++$(call allow-override,CXX,clang++$(LLVM_SFX))
++$(call allow-override,STRIP,llvm-strip$(LLVM_SFX))
+ else
+ # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
+ $(call allow-override,CC,$(CROSS_COMPILE)gcc)
+@@ -69,9 +73,9 @@ endif
+ CC_NO_CLANG := $(shell $(CC) -dM -E -x c /dev/null | grep -Fq "__clang__"; echo $$?)
+ 
+ ifneq ($(LLVM),)
+-HOSTAR  ?= llvm-ar
+-HOSTCC  ?= clang
+-HOSTLD  ?= ld.lld
++HOSTAR  ?= llvm-ar$(LLVM_SFX)
++HOSTCC  ?= clang$(LLVM_SFX)
++HOSTLD  ?= ld.lld$(LLVM_SFX)
+ else
+ HOSTAR  ?= ar
+ HOSTCC  ?= gcc
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index a40add31a2e3..b3ab713537c6 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -1,7 +1,11 @@
+ # This mimics the top-level Makefile. We do it explicitly here so that this
+ # Makefile can operate with or without the kbuild infrastructure.
+ ifneq ($(LLVM),)
+-CC := clang
++ifneq ($(LLVM),1)
++LLVM_SFX := $(LLVM)
++endif
++
++CC := clang$(LLVM_SFX)
+ else
+ CC := $(CROSS_COMPILE)gcc
+ endif
+
+base-commit: 55de8686df7ed2b5237867b130e30c728bbd9db4
+-- 
+2.35.1
+
