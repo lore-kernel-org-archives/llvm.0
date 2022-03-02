@@ -1,42 +1,42 @@
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522F833D1
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 13:11:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AB97A
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 16:04:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646226665; x=1677762665;
+  t=1646237055; x=1677773055;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mYOrgzlN6n/mT3toec7HXRWdghg+WF25tI0TOlVE5yM=;
-  b=TdfbuBhP9LGNxJa+N5wyqXEJ9Fm/xqyvdn36/TdLCK2BbmV0dQQgwinH
-   fplnrnb6CBHgz9qSdAGJaXIoG7HRzsCGDHbcMfUn+adVCjf/W1gLgWAX0
-   8FI3lTvG5nbYPy3Fj0r0i6h+yaZeYPHJjoVDKhdtCbR0LWdS33bJx48cN
-   9cqKLm8FrAW0BjWTb3iGqxd9cqmK5V3XRaah7sj4JrIOQ3qFcU1IBd2fC
-   2RqKqxqFbX/R9uUH5f+/BreUivtOshJL3/+CJhV4MJqYR6fq5TTJLuVRQ
-   6yXaZtuIfpNFjsTEO/lK1bDn9TvQXw5TJl7bsQPy2lJA+8LVvnXA6SA5c
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="234011293"
+  bh=26NxKWXwuqD597/8BtfYtSDKtIxWP5CHP1tVb2le7Nk=;
+  b=GuNp22/EeKcTZXnMv3MTltXLa9TCz60QpGLxuG+hH4U6qMNro/vj7oqS
+   2iYF+wdVI2vsk2huPOIbJMq34So8+y//4sgqu6BuHL0jKp2IrV1cNd6bl
+   ngDeHQJsR9OXepKY8w40wvGlr3TXlFutfYBIkwuoCbPg8GL9TwrjyzV7E
+   tL4cv8R5j6Gm8DgjbOZJVW+boGcy1sxleIuQOwGOYd5VzIZV5/MVd51cK
+   ydFLbgjXfSFtOpD/9PqcOHBEHJ/cWEhfCxNjeEnAShN8BFhi6PtPlIiza
+   A2RULKFMr1KFn/CBYLTlNWWAWTp4MHS07ajClkHFqp7R05vQXSnuZ0p/k
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="234052581"
 X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="234011293"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 05:11:04 -0800
+   d="scan'208";a="234052581"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 08:04:14 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="493533189"
+   d="scan'208";a="508246111"
 Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 02 Mar 2022 05:11:02 -0800
+  by orsmga002.jf.intel.com with ESMTP; 02 Mar 2022 08:04:13 -0800
 Received: from kbuild by e9605edfa585 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nPOkw-0001Qo-0q; Wed, 02 Mar 2022 13:11:02 +0000
-Date: Wed, 2 Mar 2022 21:10:33 +0800
+	id 1nPRSW-0001ZU-EB; Wed, 02 Mar 2022 16:04:12 +0000
+Date: Thu, 3 Mar 2022 00:03:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
+To: Jiri Slaby <jslaby@suse.cz>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Liu Yi L <yi.l.liu@intel.com>
-Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 25/31]
- drivers/vfio/vfio.c:1160:17: warning: incompatible integer to pointer
- conversion assigning to 'void *' from 'int'
-Message-ID: <202203022116.URNbYC7D-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 1/26] drivers/tty/serial/sunplus-uart.c:526:7:
+ error: incompatible function pointer types passing 'void (struct uart_port
+ *, int)' to parameter of type 'void (*)(struct uart_port *, unsigned char)'
+Message-ID: <202203022325.0pJF6ttl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,107 +47,76 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
-head:   008e1a440da8ca4e1dae3dc1c210b46cb77ce01f
-commit: 6a340611dcaacc984fb82a265f0a53a28aed80e0 [25/31] vfio: Add iommufd VFIO compat support to group_fd
-config: hexagon-randconfig-r045-20220302 (https://download.01.org/0day-ci/archive/20220302/202203022116.URNbYC7D-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   7191d41e22ce0a4e950f14966bad50b609e1bae5
+commit: 5382fe2c6cd08c05c0def9d3bf422a2a454a5ff9 [1/26] serial: make uart_console_write->putchar()'s character an unsigned char
+config: hexagon-randconfig-r001-20220302 (https://download.01.org/0day-ci/archive/20220302/202203022325.0pJF6ttl-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/luxis1999/iommufd/commit/6a340611dcaacc984fb82a265f0a53a28aed80e0
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
-        git checkout 6a340611dcaacc984fb82a265f0a53a28aed80e0
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=5382fe2c6cd08c05c0def9d3bf422a2a454a5ff9
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout 5382fe2c6cd08c05c0def9d3bf422a2a454a5ff9
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/vfio/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/serial/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/vfio/vfio.c:1160:17: warning: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-           group->iommufd = vfio_group_set_iommufd(container_fd,
-                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/tty/serial/sunplus-uart.c:526:7: error: incompatible function pointer types passing 'void (struct uart_port *, int)' to parameter of type 'void (*)(struct uart_port *, unsigned char)' [-Werror,-Wincompatible-function-pointer-types]
+                              sunplus_uart_console_putchar);
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/serial_core.h:402:11: note: passing argument to parameter 'putchar' here
+                           void (*putchar)(struct uart_port *, unsigned char));
+                                  ^
+   drivers/tty/serial/sunplus-uart.c:752:39: error: incompatible function pointer types passing 'void (struct uart_port *, int)' to parameter of type 'void (*)(struct uart_port *, unsigned char)' [-Werror,-Wincompatible-function-pointer-types]
+           uart_console_write(&dev->port, s, n, sunplus_uart_putc);
+                                                ^~~~~~~~~~~~~~~~~
+   include/linux/serial_core.h:402:11: note: passing argument to parameter 'putchar' here
+                           void (*putchar)(struct uart_port *, unsigned char));
+                                  ^
+   2 errors generated.
 
 
-vim +1160 drivers/vfio/vfio.c
+vim +526 drivers/tty/serial/sunplus-uart.c
 
-  1146	
-  1147	static int vfio_group_set_container(struct vfio_group *group, int container_fd)
-  1148	{
-  1149		struct fd f;
-  1150		struct vfio_container *container;
-  1151		struct vfio_iommu_driver *driver;
-  1152		int ret = 0;
-  1153	
-  1154		if (atomic_read(&group->container_users))
-  1155			return -EINVAL;
-  1156	
-  1157		if (group->type == VFIO_NO_IOMMU && !capable(CAP_SYS_RAWIO))
-  1158			return -EPERM;
-  1159	
-> 1160		group->iommufd = vfio_group_set_iommufd(container_fd,
-  1161							&group->device_list);
-  1162		if (group->iommufd) {
-  1163			atomic_inc(&group->container_users);
-  1164			return ret;
-  1165		}
-  1166	
-  1167		f = fdget(container_fd);
-  1168		if (!f.file)
-  1169			return -EBADF;
-  1170	
-  1171		/* Sanity check, is this really our fd? */
-  1172		if (f.file->f_op != &vfio_fops) {
-  1173			fdput(f);
-  1174			return -EINVAL;
-  1175		}
-  1176	
-  1177		container = f.file->private_data;
-  1178		WARN_ON(!container); /* fget ensures we don't race vfio_release */
-  1179	
-  1180		down_write(&container->group_lock);
-  1181	
-  1182		/* Real groups and fake groups cannot mix */
-  1183		if (!list_empty(&container->group_list) &&
-  1184		    container->noiommu != (group->type == VFIO_NO_IOMMU)) {
-  1185			ret = -EPERM;
-  1186			goto unlock_out;
-  1187		}
-  1188	
-  1189		ret = iommu_group_claim_dma_owner(group->iommu_group, f.file);
-  1190		if (ret)
-  1191			goto unlock_out;
-  1192	
-  1193		driver = container->iommu_driver;
-  1194		if (driver) {
-  1195			ret = driver->ops->attach_group(container->iommu_data,
-  1196							group->iommu_group,
-  1197							group->type);
-  1198			if (ret) {
-  1199				iommu_group_release_dma_owner(group->iommu_group);
-  1200				goto unlock_out;
-  1201			}
-  1202		}
-  1203	
-  1204		group->container = container;
-  1205		container->noiommu = (group->type == VFIO_NO_IOMMU);
-  1206		list_add(&group->container_next, &container->group_list);
-  1207	
-  1208		/* Get a reference on the container and mark a user within the group */
-  1209		vfio_container_get(container);
-  1210		atomic_inc(&group->container_users);
-  1211	
-  1212	unlock_out:
-  1213		up_write(&container->group_lock);
-  1214		fdput(f);
-  1215		return ret;
-  1216	}
-  1217	
+9e8d5470325f25 Hammer Hsieh 2022-02-22  508  
+9e8d5470325f25 Hammer Hsieh 2022-02-22  509  static void sunplus_console_write(struct console *co,
+9e8d5470325f25 Hammer Hsieh 2022-02-22  510  				  const char *s,
+9e8d5470325f25 Hammer Hsieh 2022-02-22  511  				  unsigned int count)
+9e8d5470325f25 Hammer Hsieh 2022-02-22  512  {
+9e8d5470325f25 Hammer Hsieh 2022-02-22  513  	unsigned long flags;
+9e8d5470325f25 Hammer Hsieh 2022-02-22  514  	int locked = 1;
+9e8d5470325f25 Hammer Hsieh 2022-02-22  515  
+9e8d5470325f25 Hammer Hsieh 2022-02-22  516  	local_irq_save(flags);
+9e8d5470325f25 Hammer Hsieh 2022-02-22  517  
+9e8d5470325f25 Hammer Hsieh 2022-02-22  518  	if (sunplus_console_ports[co->index]->port.sysrq)
+9e8d5470325f25 Hammer Hsieh 2022-02-22  519  		locked = 0;
+9e8d5470325f25 Hammer Hsieh 2022-02-22  520  	else if (oops_in_progress)
+9e8d5470325f25 Hammer Hsieh 2022-02-22  521  		locked = spin_trylock(&sunplus_console_ports[co->index]->port.lock);
+9e8d5470325f25 Hammer Hsieh 2022-02-22  522  	else
+9e8d5470325f25 Hammer Hsieh 2022-02-22  523  		spin_lock(&sunplus_console_ports[co->index]->port.lock);
+9e8d5470325f25 Hammer Hsieh 2022-02-22  524  
+9e8d5470325f25 Hammer Hsieh 2022-02-22  525  	uart_console_write(&sunplus_console_ports[co->index]->port, s, count,
+9e8d5470325f25 Hammer Hsieh 2022-02-22 @526  			   sunplus_uart_console_putchar);
+9e8d5470325f25 Hammer Hsieh 2022-02-22  527  
+9e8d5470325f25 Hammer Hsieh 2022-02-22  528  	if (locked)
+9e8d5470325f25 Hammer Hsieh 2022-02-22  529  		spin_unlock(&sunplus_console_ports[co->index]->port.lock);
+9e8d5470325f25 Hammer Hsieh 2022-02-22  530  
+9e8d5470325f25 Hammer Hsieh 2022-02-22  531  	local_irq_restore(flags);
+9e8d5470325f25 Hammer Hsieh 2022-02-22  532  }
+9e8d5470325f25 Hammer Hsieh 2022-02-22  533  
+
+:::::: The code at line 526 was first introduced by commit
+:::::: 9e8d5470325f25bed7d33f9faaae6d5e4f313650 serial: sunplus-uart: Add Sunplus SoC UART Driver
+
+:::::: TO: Hammer Hsieh <hammerh0314@gmail.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
