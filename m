@@ -1,88 +1,82 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1165CAB
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 18:13:26 +0000 (UTC)
-Received: by mail-wr1-f46.google.com with SMTP id d3so4123275wrf.1
-        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 10:13:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5L8Hwj3FIl0Xgnzes+JlfSkI7X/LRJVH+HAy2sV4IVM=;
-        b=d5/4UL6UMw316oSWqEZCJq6fg77tBeU8ISJBAxeIFcSC3BBv2nxqdU3g/z4BTYns9l
-         GA3zbNzD/ILhdQimnFxGx7pwdKeZ0ONMAyv5RsoFU6FKgAycB0VA8N6wVJHZhCBFvzR4
-         fck4wJ6i3ALJGQfS4n858fp8cq2sKf26c4iki1R85ABS6N3VsPMYJUm0oGphl5Qk2HNA
-         emxtYBzW2ZG378Svaajz0q5MT4u/pywP8S8XZF3gnCkFQHTPYQmq4OuLPM0nXqtGugvD
-         qqPmQ0ERFoPbjtuURk2T4q9TeoPKFyJ9b9Lis8vR13B3Lz/eSYHThwm89hunzUzBp26M
-         PWmQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981BD5CAB
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 18:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1646245777;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mjxXLj8rr6mOagH85zE8xjeRN36BLXJyOv2Vow+3Iko=;
+	b=SOBLWlsFreRPM9eDqwcF4muymatDR8dAreRea7oVmdcOiR1GJrdqiSLmCKl0M+dz8WdhoR
+	7kN4NCR0FCL3Kcf4JwHjZi8yV4EGhDTccHYjgdD7Ik0aHkf3YkoefxXB67AL/V65ZbSSV8
+	Mj6+EH3wg3LO31QvJFu59lQUUKivTuY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-362-VvzbUPrvOheTGkAV6oHGJg-1; Wed, 02 Mar 2022 13:29:36 -0500
+X-MC-Unique: VvzbUPrvOheTGkAV6oHGJg-1
+Received: by mail-ed1-f70.google.com with SMTP id l24-20020a056402231800b00410f19a3103so1481247eda.5
+        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 10:29:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5L8Hwj3FIl0Xgnzes+JlfSkI7X/LRJVH+HAy2sV4IVM=;
-        b=emkt8sPX97g8KvFxUFPfft+FWvbwFgvmo+gX4y6DTvPdu137bFELx774wh5ExPu48a
-         ZFnATwzq6AZk20Kk+3yei/Q0hTV5Ny6kscIQAd3TBjEns8Y+UM1EfYEeiaA5awBPwPQC
-         sU7dkwss2S/2HfkeSvhhVcF1Vv/20HjqD7LDzGbckDsikE5NBUGrWviRT0km2tDnqZK9
-         qaZkWHUTWv943fuUQ2rFxs9ABztF3J+zUxidzV1um207z2ZteO3mvqtqME7lOU/jpeIR
-         dGHhs341PSdYKSpuUfyDPFJ1xJbe2bbuc8UnV3O2adhvSs87Nlo7eMCB3RppFUNOqq2V
-         j1rg==
-X-Gm-Message-State: AOAM530/W24zBN5hn+Ogxir+mEkH0TN96vGbxsGLzLsPtxobmGOhfPPw
-	wPKLUxGfdyoOGIoVFQE2B0w=
-X-Google-Smtp-Source: ABdhPJylJfs5FBTbZvwKyYefm3ujs/kNK9gAIiH6yzqV5F+X+vOMfFby1thaHMNqsJuWpe9CoEzDJw==
-X-Received: by 2002:adf:80a4:0:b0:1e6:db9f:a8c4 with SMTP id 33-20020adf80a4000000b001e6db9fa8c4mr23857226wrl.345.1646244805070;
-        Wed, 02 Mar 2022 10:13:25 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id 7-20020a05600c020700b003862bfb550fsm1225138wmi.46.2022.03.02.10.13.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 10:13:24 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	linux-input@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH][next] HID: core: Remove redundant assignment to pointer field
-Date: Wed,  2 Mar 2022 18:13:23 +0000
-Message-Id: <20220302181323.1100490-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mjxXLj8rr6mOagH85zE8xjeRN36BLXJyOv2Vow+3Iko=;
+        b=SD2RZeA1rPy6KYQ4A6thjuzEs67CXQWIKQSnG4n0CUrkDWTpxisewBIKDzj3moiCte
+         kOV25nXqvao2vqYvkl/mNqeVxeNUC28zWpsQqbSwK6HjzCtcpXAkszYG5Ud+RfmddRO0
+         wOpLfOU/5dH7nDkf47syxIozni5ZziM0JFugW9IZ5vz/rmAMJJP6cuqVGBCG0phbEviZ
+         QPqNP05XG8sIyUWYtieGa6oh9UEkHcdEBlCukZ8V+6hkCQkFrJPL796qhKrQC14wDC2h
+         bhBHBWNoNAFii4yzH6cvun0DETd8hcd0DMXMXlQK9qQAFo7IAJgWXY2WQFmPCmCjTz+g
+         ilIw==
+X-Gm-Message-State: AOAM531kHZ6f8r8AlgHsvm1WxDRsyWN7xAzvlUnUlcd4qHSbBEFzF5F6
+	6gYuN4qSGq0jvxyy5eFBN0sMSQiTnTsJVhjl+W1QhtEIvlPdi44xJ21R9kxhymm1jTR2BjnA72O
+	Jfp9sdAaOlIFX7MfnJGZpxCgQ9tKdKg==
+X-Received: by 2002:a17:906:434e:b0:6d0:ed9c:68bc with SMTP id z14-20020a170906434e00b006d0ed9c68bcmr23152255ejm.70.1646245775072;
+        Wed, 02 Mar 2022 10:29:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxHDUcMifYOCkwoFjllRL4kRy+OwEBd4SDygd8H9xrln/fRsbCeSVG7U4y0FcBBR2l+QPrmM5Lpj1qKYIEzkDQ=
+X-Received: by 2002:a17:906:434e:b0:6d0:ed9c:68bc with SMTP id
+ z14-20020a170906434e00b006d0ed9c68bcmr23152246ejm.70.1646245774790; Wed, 02
+ Mar 2022 10:29:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20220302175309.1098827-1-colin.i.king@gmail.com>
+In-Reply-To: <20220302175309.1098827-1-colin.i.king@gmail.com>
+From: Javier Martinez Canillas <javierm@redhat.com>
+Date: Wed, 2 Mar 2022 19:29:23 +0100
+Message-ID: <CAFOAJEfS9dMY5nudeFxtwchTtLnBCh7N4qKaCdqvaodnRUFKzA@mail.gmail.com>
+Subject: Re: [PATCH][next] drm: ssd130x: remove redundant initialization of
+ pointer mode
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, kernel-janitors@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=fmartine@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-The pointer fields is being assigned a value that is never read, the
-pointer is re-assigned a new value in for-loops that occur later on.
-The assignment is redundant and can be removed.
+Hello Colin,
 
-Clean up clang scan build warning:
-drivers/hid/hid-core.c:1665:30: warning: Although the value stored
-to 'field' is used in the enclosing expression, the value is never
-actually read from 'field' [deadcode.DeadStores]
+Thanks for the patch.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/hid/hid-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Mar 2, 2022 at 6:53 PM Colin Ian King <colin.i.king@gmail.com> wrote:
+>
+> Pointer mode is being assigned a value that is never read, it is
+> being re-assigned later with a new value. The initialization is
+> redundant and can be removed.
+>
 
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index db925794fbe6..6579f4724bbb 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -1662,7 +1662,7 @@ static void hid_process_report(struct hid_device *hid,
- 
- 	/* first retrieve all incoming values in data */
- 	for (a = 0; a < report->maxfield; a++)
--		hid_input_fetch_field(hid, field = report->field[a], data);
-+		hid_input_fetch_field(hid, report->field[a], data);
- 
- 	if (!list_empty(&report->field_entry_list)) {
- 		/* INPUT_REPORT, we have a priority list of fields */
--- 
-2.34.1
+Indeed.
+
+Acked-by: Javier Martinez Canillas <javierm@redhat.com>
+
+Best regards,
+Javier
 
