@@ -1,61 +1,48 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C756153
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 23:20:46 +0000 (UTC)
-Received: by mail-pg1-f180.google.com with SMTP id w37so2937597pga.7
-        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 15:20:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ko8Es7ZJtjVO3NP/5pMNlDyCEfQwQh9f4P4oN5F0HKc=;
-        b=SIwBw7VfRJCPINYHm+4ZQG49baQ2QQzZw/6oLDNyfJbsP9VSKSJOgcutBtl16/ONib
-         v9rVLRHi1UvEC36pENc5cBM3B7nY9MX4zH6RFSX3jC9SmRri966+OUPOmKZHarWV3Uw0
-         5M649Cn8MRv7IH2ezL4bOPwsoTljQ9kPDox+ra0Q7Fc26uWpFdqC6AzT2ff5Q94OzdD4
-         2WtpNX+5It8m70KrT/+9QeISFJMJhn5mNKT8SF7dZ59a1SOAQZFfbGuoTfiKkc8opyl8
-         2kztRDiMntQneVxCc7xuOBUohDiYmapFs85wlPgaCOFFz4Mn9mJ2I6Ti43JEgZjke2CW
-         ft2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ko8Es7ZJtjVO3NP/5pMNlDyCEfQwQh9f4P4oN5F0HKc=;
-        b=XoM+wWJ7YpXIbQ4OrzQtu8zQbe4GF9fgu3SlhYmCogmUOioa8B3k70UfqeJiRoDYX+
-         LMMd0AWZcx3cXEBVOguzDqbwGXNikBHh4BaaE5cNIIMYbziRsLfJDobwNXjT7GW7Oleh
-         jk4J99gALRaquR+OdLQvSGgBLfookZdra9kkD9ngYMbWxj+y/LtR1w7Jj1Ft5pmBcOCw
-         pYtkrNl1rdA8OXMyL6Phw1uTAKrhK4i6s3g92LaQJzOhFMrEI8LNrtU6pD4Yi+e0NY/M
-         ZFGpylSsmm+TuCfowTNpMplAVAZPLClqwG41943SYpZ+wSI0JFATmGuoT4rcgwsRJUoX
-         VbBw==
-X-Gm-Message-State: AOAM530biX0M3k+3OYdyNAbG2g74zuXyxdIxsogHtXdp8GTEqsiyKv18
-	TKs7Mq3FZP4SnmUe7J2ASC/G9m7zBYapbGLEhSU=
-X-Google-Smtp-Source: ABdhPJxkdMgxHAjuiogfMST1u3t0aIc/vYODaa/J5QdPoKTjpSqgeZq2FVS4GEx8TicBrzyXEefoxDhkr/5SN1LAYsk=
-X-Received: by 2002:a05:6a00:1146:b0:4c9:ede0:725a with SMTP id
- b6-20020a056a00114600b004c9ede0725amr35832067pfm.35.1646263246087; Wed, 02
- Mar 2022 15:20:46 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A57E6153
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 23:26:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFCBC340E9;
+	Wed,  2 Mar 2022 23:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646263605;
+	bh=TLcvoWQtdtysbTxCfNelk4ZWdU1R8dneA5RI6VnKf3I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IxTQQ+8m0ZTa2bMU3evAo+eXjcpRe8ZvOjUXx1pWyjCCCnuOH5j4O9lpcdSQlzpGc
+	 PXgL4QGaJ9i3aDdy4zxNI0SFMtFwKl6He9iGhr7YnPGN6pCaKYmhXM8OyHtz4ma6uX
+	 y7hVospFUZuBQ1CZ3pP5/uOw/HC2SE4w+lzjIJ4Y3fjRSHtppU4vyHx31hHpDWkx7f
+	 uTabSE3McPiaDKnHvnBFnwGlKgBcP92IcwXl6uwa3M01qO5DVwCFdC8nFgy8WF/dvc
+	 Te1uP3s8vecr5eOtC+N+A01oKhjgJ/EeS1BuGdvSiV5Omc/KzSDT39McOeof4IP6HL
+	 A1pYBpA4elqKw==
+Date: Wed, 2 Mar 2022 16:26:37 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH bpf-next v1 6/6] selftests/bpf: Add tests for kfunc
+ register offset checks
+Message-ID: <Yh/9LS7zc3nhTjsR@thelio-3990X>
+References: <20220301065745.1634848-7-memxor@gmail.com>
+ <202203011937.wMLpkfU3-lkp@intel.com>
+ <20220301115722.jjklznmjsbnkdsf2@apollo.legion>
+ <CAADnVQL-sSMacA8S-gvKTAz-CAdTaDgX=4ZZrwFL=zZKYC0-Aw@mail.gmail.com>
+ <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220301065745.1634848-7-memxor@gmail.com> <202203011937.wMLpkfU3-lkp@intel.com>
- <20220301115722.jjklznmjsbnkdsf2@apollo.legion> <CAADnVQL-sSMacA8S-gvKTAz-CAdTaDgX=4ZZrwFL=zZKYC0-Aw@mail.gmail.com>
- <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 2 Mar 2022 15:20:34 -0800
-Message-ID: <CAADnVQJucT4+Q7Yu=vcR0b+a1bkZv024UEm9Z=24gt_NrV1KVA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 6/6] selftests/bpf: Add tests for kfunc
- register offset checks
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Mar 2, 2022 at 3:14 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
->
+On Thu, Mar 03, 2022 at 04:44:01AM +0530, Kumar Kartikeya Dwivedi wrote:
 > On Thu, Mar 03, 2022 at 04:17:25AM IST, Alexei Starovoitov wrote:
 > > On Tue, Mar 1, 2022 at 3:57 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
 > > >
@@ -78,10 +65,17 @@ On Wed, Mar 2, 2022 at 3:14 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
 > > Separate patch is fine.
 > > How do you plan on fixing it?
 > > What is __diag_ignore equivalent for clang?
->
+> 
 > Hmm, looks like I'll have to add those in include/linux/compiler-clang.h. Quick
 > local testing suggests it will work with _Pragma("clang diagnostic ignored ...").
 
-Make a generic llvm/gcc #define for
-__diag_ignore(GCC, 8, "-Wmissing-prototypes" ?
-We need it in two places so far.
+I have a diff that mirrors the GCC infrastructure, which should work for
+this, feel free to copy it:
+
+https://lore.kernel.org/r/20210310225240.4epj2mdmzt4vurr3@archlinux-ax161/
+
+If you want to shut up the warning for all supported versions of clang,
+switch 130000 for 110000 and __diag_clang_11() for __diag_clang_13().
+
+Cheers,
+Nathan
