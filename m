@@ -1,41 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C2C2104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC062108
 	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 02:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1646189496; x=1677725496;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gSNkjkake7xD9VTOgxUuUJVMTiM0gzuhsnYwpkaAsMg=;
-  b=Q7IrzgyI6seT64Taz1dY9w/8T1XUyg9MiYqoebzi8SyVEjsvsOaRkukG
-   NXL/tbhHfDdmuR0GNfE9AHBVAZKC226RZoF03kg/vqs+o+HiCGy54xaUc
-   gL1fu9R0a8029U5/Us/2NKXfyMsiBOJ6t+G6fyOnKhcAH2E1sgBABZAxf
-   DXCj8TRbNt16rv9O2IZrUC4lxkkAI2riXP9wUoqLCIdvNIiNNY1sQGmXJ
-   C6sMlXPCDYy6CEL9aHNnFgKGbZ5Hm9B38LHOrZ6qaolBVcIs51qqXjqd8
-   Svp9A/COSediqkRkU8cZtkblck6G7JO1m5SFn6iH8hfsbEU7ZwYrKQ8p9
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iKL8VzAcdqc8mQmAFMZqc0dAz64uVOQbPqx2+7Bctbw=;
+  b=j/gfnTrEHGLEznozfPEq/onxe+9JTLwEd+2H5qemFJ8zoVl+CTW3qQeC
+   KLxdKiE4s2rn/gS9BLr3OakaxyrZylSCsnR7QTvzUGGxkZJovhcpHl4yJ
+   PI9Rybb7fBjyKP3U1sVlu6I52xSI8wzWVFOajQEWrtjTnUX/7I4tsxdPG
+   ugiKEglQfJm/rTp/VuRQRi0E3VI9iA8YCc4hClAviqSV9AUYU3GbzoLrd
+   7wjZYPcXcgYP6n2NolgPMalaekmOSnQPlNA6mtluJHKgHAtdTCeBi0XUD
+   1qTelInMhhO/NoAuhQYodYF5ZbACT4EdjSeAZWGZCl6s+SmhVek9nuCeA
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="253488433"
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="316509668"
 X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="253488433"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 18:51:35 -0800
+   d="scan'208";a="316509668"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 18:51:36 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="630261418"
+   d="scan'208";a="551041637"
 Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Mar 2022 18:51:34 -0800
+  by orsmga008.jf.intel.com with ESMTP; 01 Mar 2022 18:51:34 -0800
 Received: from kbuild by e9605edfa585 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nPF5R-0000wS-Jo; Wed, 02 Mar 2022 02:51:33 +0000
-Date: Wed, 2 Mar 2022 10:51:16 +0800
+	id 1nPF5R-0000wV-K8; Wed, 02 Mar 2022 02:51:33 +0000
+Date: Wed, 2 Mar 2022 10:51:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Huacai Chen <chenhuacai@loongson.cn>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH V9 05/10] irqchip/loongson-htvec: Add ACPI init support
-Message-ID: <202203020732.h6NYX90D-lkp@intel.com>
-References: <20220226105307.77053-6-chenhuacai@loongson.cn>
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/notifier 54/55]
+ include/linux/notifier.h:75:15: error: field has incomplete type 'struct
+ mutex'
+Message-ID: <202203020718.3ho17ASv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,81 +46,109 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220226105307.77053-6-chenhuacai@loongson.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Huacai,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on tip/irq/core]
-[also build test WARNING on linux/master linus/master v5.17-rc6 next-20220301]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Huacai-Chen/irqchip-Add-LoongArch-related-irqchip-drivers/20220226-190333
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git d2206fcabdfaff3958ab67cc5b8f63257e57b889
-config: mips-randconfig-r032-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020732.h6NYX90D-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/notifier
+head:   3c87f9e874ba4807cbb5473bab3eb5c2f5d716db
+commit: d8ac9430b0435d0f09b5c909f80f8980183c93d1 [54/55] random: replace custom notifier chain with standard one
+config: arm64-randconfig-r022-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020718.3ho17ASv-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/f4c826187ce407c49fdab5587194cf4e8eed5c33
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Huacai-Chen/irqchip-Add-LoongArch-related-irqchip-drivers/20220226-190333
-        git checkout f4c826187ce407c49fdab5587194cf4e8eed5c33
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/d8ac9430b0435d0f09b5c909f80f8980183c93d1
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/notifier
+        git checkout d8ac9430b0435d0f09b5c909f80f8980183c93d1
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/irqchip/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/irqchip/irq-loongson-htvec.c:221:3: warning: variable 'num_parents' is uninitialized when used here [-Wuninitialized]
-                   num_parents++;
-                   ^~~~~~~~~~~
-   drivers/irqchip/irq-loongson-htvec.c:209:17: note: initialize the variable 'num_parents' to silence this warning
-           int num_parents, parent_irq[8];
-                          ^
-                           = 0
-   1 warning generated.
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/irqdomain.h:35:
+   In file included from include/linux/of.h:17:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:11:
+   In file included from include/linux/mutex.h:19:
+   In file included from arch/arm64/include/asm/processor.h:42:
+   In file included from arch/arm64/include/asm/pointer_auth.h:7:
+   In file included from include/linux/random.h:10:
+   In file included from include/linux/notifier.h:16:
+   In file included from include/linux/srcu.h:49:
+>> include/linux/srcutree.h:68:15: error: field has incomplete type 'struct mutex'
+           struct mutex srcu_cb_mutex;             /* Serialize CB preparation. */
+                        ^
+   include/linux/srcutree.h:68:9: note: forward declaration of 'struct mutex'
+           struct mutex srcu_cb_mutex;             /* Serialize CB preparation. */
+                  ^
+   include/linux/srcutree.h:70:15: error: field has incomplete type 'struct mutex'
+           struct mutex srcu_gp_mutex;             /* Serialize GP work. */
+                        ^
+   include/linux/srcutree.h:68:9: note: forward declaration of 'struct mutex'
+           struct mutex srcu_cb_mutex;             /* Serialize CB preparation. */
+                  ^
+   include/linux/srcutree.h:78:15: error: field has incomplete type 'struct mutex'
+           struct mutex srcu_barrier_mutex;        /* Serialize barrier ops. */
+                        ^
+   include/linux/srcutree.h:68:9: note: forward declaration of 'struct mutex'
+           struct mutex srcu_cb_mutex;             /* Serialize CB preparation. */
+                  ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/irqdomain.h:35:
+   In file included from include/linux/of.h:17:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:11:
+   In file included from include/linux/mutex.h:19:
+   In file included from arch/arm64/include/asm/processor.h:42:
+   In file included from arch/arm64/include/asm/pointer_auth.h:7:
+   In file included from include/linux/random.h:10:
+>> include/linux/notifier.h:75:15: error: field has incomplete type 'struct mutex'
+           struct mutex mutex;
+                        ^
+   include/linux/srcutree.h:68:9: note: forward declaration of 'struct mutex'
+           struct mutex srcu_cb_mutex;             /* Serialize CB preparation. */
+                  ^
+   4 errors generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/num_parents +221 drivers/irqchip/irq-loongson-htvec.c
+vim +75 include/linux/notifier.h
 
-   204	
-   205	static int htvec_of_init(struct device_node *node,
-   206					struct device_node *parent)
-   207	{
-   208		int i, err;
-   209		int num_parents, parent_irq[8];
-   210		struct resource res;
-   211	
-   212		if (of_address_to_resource(node, 0, &res))
-   213			return -EINVAL;
-   214	
-   215		/* Interrupt may come from any of the 8 interrupt lines */
-   216		for (i = 0; i < HTVEC_MAX_PARENT_IRQ; i++) {
-   217			parent_irq[i] = irq_of_parse_and_map(node, i);
-   218			if (parent_irq[i] <= 0)
-   219				break;
-   220	
- > 221			num_parents++;
-   222		}
-   223	
-   224		err = htvec_init(res.start, resource_size(&res),
-   225				num_parents, parent_irq, of_node_to_fwnode(node));
-   226		if (err < 0)
-   227			return err;
-   228	
-   229		return 0;
-   230	}
-   231	
+e041c683412d5b Alan Stern    2006-03-27  73  
+eabc069401bcf4 Alan Stern    2006-10-04  74  struct srcu_notifier_head {
+eabc069401bcf4 Alan Stern    2006-10-04 @75  	struct mutex mutex;
+eabc069401bcf4 Alan Stern    2006-10-04  76  	struct srcu_struct srcu;
+374a8e0dc33c98 Arnd Bergmann 2010-02-24  77  	struct notifier_block __rcu *head;
+eabc069401bcf4 Alan Stern    2006-10-04  78  };
+eabc069401bcf4 Alan Stern    2006-10-04  79  
+
+:::::: The code at line 75 was first introduced by commit
+:::::: eabc069401bcf45bcc3f19e643017bf761780aa8 [PATCH] Add SRCU-based notifier chains
+
+:::::: TO: Alan Stern <stern@rowland.harvard.edu>
+:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
