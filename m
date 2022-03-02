@@ -1,90 +1,120 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36E333CA
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 22:54:48 +0000 (UTC)
-Received: by mail-lf1-f45.google.com with SMTP id d23so5299700lfv.13
-        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 14:54:48 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8D733CA
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 23:00:46 +0000 (UTC)
+Received: by mail-pg1-f178.google.com with SMTP id c1so2887737pgk.11
+        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 15:00:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=npju3rHc3mRSfcSts2+QJjEKDIhH7Izt6iSeFW3/QF8=;
-        b=EGUemDJqLPj5B1hkkSx83siUMy1VVgYpLmLW+ISOhNuoXtHKsSw2hUGh04Nr1SSJBa
-         r1zlSLuTwOVX4majvP3P2eRAehp5T6N3EhkQMRRzPZTVKm7dG9AMpyQkHmmlptVAkH1M
-         9qJqcvZhIGwX2krc9gtYqqgwwQlmQpMuIj2tBVKllvQa6ewTZR3bIzSlOMcvz81A9HgK
-         U6a1Rlq0X8a/j+BcebndmqCX94BKI7/Pk6tA767h9fKeB1KajrFXzeZtGEtmtGtKzQ82
-         MRbBDpAmm2KjoZQU/U/PLkzR0auLS/dAQCdKPVFuvLwFIJNhxluwc4Nr3f7cAO8VDXZ4
-         jz0A==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jiVdJeDoLwQpICgbJfPUxKiHkSDi4LNXBrJ/L+vsKOw=;
+        b=SSZjuQHCwyqlk9e6Fm/9hketAWCO5Am0rg1ge/DMoNXYSFjsC2IJ5GWXs8qQyjpN+R
+         ndZ+np9KbbpyYhUvKTeqHahIUuF30OUpsqa2LNF/+NTgaillMi+7v/rjr0oviRv0q3Br
+         uIXjMWADlr6xgzsKI7sBYja1dFSuzfCel0dEA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=npju3rHc3mRSfcSts2+QJjEKDIhH7Izt6iSeFW3/QF8=;
-        b=TCNIhKQYTQD+AYh9tzk7IsXwT8vr4ALvvLZRr8YCoBUdseaGJNsVgbs46GDxTXgCnw
-         vgyEQRbXD+vL92OZu+g1UedAVR8HKV6GHgXrWbBPBxC5cBtL0B2yy+IXuDpAk7/ijk86
-         wQXc9hZWH5QO2vbTGrmA1QcUHmQc2l3oa26QBlKprULkx9swkLswY09Wn0ffOec9gAaf
-         Xq5LyNGi2v7UUtflgeKBp8mKgNH3SbaNQF91L3p2IJZ/Lblylo8kcq9uqzNVE1OFg/lz
-         1RkPFntGxLRDAkSb7MfDTSZViAAcYYybwJ9fRpUoDxZptRIdAIeiskmE4fl3eLWAIuwW
-         TUTg==
-X-Gm-Message-State: AOAM5337Rj4mYLusZg3AhxgAPUei6RynW18a1xpF1rvrPnHcIj0B34NC
-	Ly+gvjYp84icmlpRpV1HSqpJz2wIPHDDT77//VPEkg==
-X-Google-Smtp-Source: ABdhPJwNGg4cChj44h6sHunDdkaG9C78703PQ9UZNkp6xZHGYO9BRG6dBg6H3kef6ltm6p6P5d5rhHI0dHWUyV3MtyU=
-X-Received: by 2002:ac2:46ef:0:b0:443:3c30:a372 with SMTP id
- q15-20020ac246ef000000b004433c30a372mr19890713lfo.626.1646261686698; Wed, 02
- Mar 2022 14:54:46 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jiVdJeDoLwQpICgbJfPUxKiHkSDi4LNXBrJ/L+vsKOw=;
+        b=G71zgx26E5BRXCG9XJQHuAOjAAm3euOdoKy0/HQm3kq8uJKyk9BQY+tUWQXi2tk6TU
+         JgVVCTNGEtxfzd4Jv686UpUbplEBVrOnJToaM/QRXDF8ddXBywLKVyQICx3iNkrf+ioQ
+         zxtxrEm499p+6R8jhVuMsEUcgDKX0u3CTeVVqScuNwpIwT9brg2jjs2BM49EJokt33gU
+         d3r1QqLhFIQgPcJ+BxkXxysMlBbInzVynEABrmRODOSA9tGuJePOZ6fvIOT0UsbKl1oC
+         rb5RbMlFkEDa8+x4hkd5r3SnyR8Yu1Y0HkeUGnackrvMs/KonChDaFKt+GnTMtVU+mjC
+         mYWQ==
+X-Gm-Message-State: AOAM530qCnp04I8ke+J03NFSu2RNkYMwLYxgkKIoR4sZhmpCX9jeRVGI
+	HdPntQnedTTGVxfzQ6H2+mNHbA==
+X-Google-Smtp-Source: ABdhPJxBjvI3yZjCw8B7OkUPODokVsRZvTy4HsVuuQWiFbeQFf4ytA91cVs/RVuc/nlND4+pBJM+EQ==
+X-Received: by 2002:a65:41c3:0:b0:363:5711:e234 with SMTP id b3-20020a6541c3000000b003635711e234mr27821213pgq.386.1646262046040;
+        Wed, 02 Mar 2022 15:00:46 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id lk9-20020a17090b33c900b001bc7c2dfcdbsm112754pjb.37.2022.03.02.15.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 15:00:45 -0800 (PST)
+Date: Wed, 2 Mar 2022 15:00:44 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+	joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
+	andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+	samitolvanen@google.com, mark.rutland@arm.com,
+	alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+	mhiramat@kernel.org, alexei.starovoitov@gmail.com,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 01/39] kbuild: Fix clang build
+Message-ID: <202203021459.55F4992@keescook>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.072632223@infradead.org>
+ <CAKwvOdkD2WY=hEHy8_0zs70AGx6LRQwxL5mEZyB30uqpruYJyA@mail.gmail.com>
+ <Yh+dMJsH+ZMPfqwD@thelio-3990X>
+ <CAKwvOdmouBTe5pH3JoP6EEfwNT5=6WvX3oCEZRxO0Dkf38S14w@mail.gmail.com>
+ <Yh/egU1LZudfrgVy@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
- <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
-In-Reply-To: <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 2 Mar 2022 14:54:35 -0800
-Message-ID: <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
-To: sedat.dilek@gmail.com
-Cc: Arnd Bergmann <arnd@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Marco Elver <elver@google.com>, 
-	Jani Nikula <jani.nikula@intel.com>, David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh/egU1LZudfrgVy@dev-arch.thelio-3990X>
 
-On Wed, Mar 2, 2022 at 2:14 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Wed, Mar 2, 2022 at 10:47 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > As we change the C language standard for the kernel from gnu89 to
-> > gnu11, it makes sense to also update the version for user space
-> > compilation.
-> >
->
-> Overdue.
->
-> Can you point me to a lore link where I can easily fetch the full 3/3
-> v3 patchset?
+On Wed, Mar 02, 2022 at 02:15:45PM -0700, Nathan Chancellor wrote:
+> Sounds good, tentative patch attached, it passes all of my testing.
+> There is an instance of $(LLVM) in tools/testing/selftests/lib.mk that I
+> did not touch, as that will presumably have to go through the selftests
+> tree. I can send a separate patch for that later.
 
-Hey Sedat!
+I think it's fine to include that here, just to keep the logic together.
 
-$ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arnd@kernel.org/
--o - | git am -3
+> Peter, is this approach okay with you? If so, would you like to be
+> co-author or should I use a suggested-by tag?
+> 
+> Cheers,
+> Nathan
 
-https://people.kernel.org/monsieuricon/introducing-b4-and-patch-attestation
+> From 83219caafbb7dbc2e41e3888ba5079d342aff633 Mon Sep 17 00:00:00 2001
+> From: Nathan Chancellor <nathan@kernel.org>
+> Date: Wed, 2 Mar 2022 13:28:14 -0700
+> Subject: [PATCH] kbuild: Allow a suffix with $(LLVM)
+> 
+> The LLVM variable allows a developer to quickly switch between the GNU
+> and LLVM tools. However, it does not handle versioned binaries, such as
+> the ones shipped by Debian, as LLVM=1 just defines the build variables
+> with the unversioned binaries.
+> 
+> There was some discussion during the review of the patch that introduces
+> LLVM=1 around this, ultimately coming to the conclusion that developers
+> can just add the folder that contains the unversioned binaries to their
+> PATH, as Debian's versioned suffixed binaries are really just symlinks
+> to the unversioned binaries in /usr/lib/llvm-#/bin:
+> 
+> $ realpath /usr/bin/clang-14
+> /usr/lib/llvm-14/bin/clang
+> 
+> $ PATH=/usr/lib/llvm-14/bin:$PATH make ... LLVM=1
+> 
+> However, it is simple enough to support this scheme directly in the
+> Kbuild system by allowing the developer to specify the version suffix
+> with LLVM=, which is shorter than the above suggestion:
+> 
+> $ make ... LLVM=-14
+> 
+> It does not change the meaning of LLVM=1 (which will continue to use
+> unversioned binaries) and it does not add too much additional complexity
+> to the existing $(LLVM) code, while allowing developers to quickly test
+> their series with different versions of the whole LLVM suite of tools.
+> 
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
->
-> I would like to give this a try on x86-64 with my latest kernel-config
-> (based on the latest kernel-config v5.17-rc5 from Debian/unstable).
->
-> What Linux source base do I need?
-> Is Linux v5.17-rc6 good enough (patchset applicable) for testing?
+I like it!
 
-I suspect so.
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
 -- 
-Thanks,
-~Nick Desaulniers
+Kees Cook
