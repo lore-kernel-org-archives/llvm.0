@@ -1,129 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184C23FDD
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 16:37:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB19FC004E1;
-	Wed,  2 Mar 2022 16:37:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646239031;
-	bh=fTcWHpOCu8RH+/HI9lSSjk0vIII7nNcazy/4c3rGrGc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qCH6dGs6eOpcHhbx9ETBTaXI08hkoMBQLrqcmi83FkP9n90nOq3JQs/8h48KDvjI6
-	 IneZqLNkx65xeVmwnOrf2AeV8gQ2yz0A6T/THILV8MCo9AjDpe9b+fihPYaVAJ5/KT
-	 zNiacZZMkxd6dqKJn3wmF8Rrk+7ntl/Brmyowa9fJ3Ndee84v8U4E082PFVKjhK+MD
-	 A8ENds6Yk+ik1aGiromU+CMf9Z12qC1kyAcBflecFGf3KLKiZ6lZYHL10FXbzvUZwc
-	 3DzWC181rbNtdQ6olMKZsKjTdtfB3qD5Od5RdRgy4h3LVXlCG9OuTgE7e6lK7WAOKs
-	 ir8gzdl+AcHfA==
-Date: Wed, 2 Mar 2022 09:37:04 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-	joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-	andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-	keescook@chromium.org, samitolvanen@google.com,
-	mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-	rostedt@goodmis.org, mhiramat@kernel.org,
-	alexei.starovoitov@gmail.com,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E233FE3
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 17:07:31 +0000 (UTC)
+Received: by mail-wr1-f45.google.com with SMTP id p9so3778806wra.12
+        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 09:07:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+FBEODWlEwE4ZBpRu4pszv+L75J4ftu6Yw0by+ZcvnE=;
+        b=hOrlpj9wIqQtiZ2iI5gabtXozHts++6EWfoyBCd9XE7smYEqH0D0OVdiWv1pcyWOmv
+         drF40iR0EnF9vCeXmIYqfPop33M7aHpNtmCzSt5le3/11zOqSeexGyBz8MgQ4WEPa5oI
+         IAkV+2cfB3IjRsBMxueIpgamXDtArN4GOSuNjFxfLz7eFSSMx7HDIJrnb/ZruGVPRQqm
+         JuXSGImYl/NJQlq9JmPQ6uAcc6mnjQS0l7Y1oTTVRL9RQWBTmnnBopCO4aH4quRq43/G
+         dc2kmxA0iGAwtQmMN6z3smEFOwKvl/1qLFFuPzojfYWvmcG8HPgoK2q2CCBdNQ2VmTBc
+         0fUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+FBEODWlEwE4ZBpRu4pszv+L75J4ftu6Yw0by+ZcvnE=;
+        b=HN0If/VG0rQ6gVbSNwmTA7r2+5j1jKAjaaeQCWeYV9n95Fk/+WRILs+DgyAYSsRIbx
+         cyWH0N3ozGRHBlfZJmyf7E7dCeF2K5Pqw09x4ZFf6GyLpwl98+64CHGihEC7bE6pv56U
+         jO4+u2mZms//hKDsyQKMc1+l8bvf3grc+O9o2sNWHuI9TwZOb3SjCDziD3bhieYVDLWK
+         t2wQRhFJ55frrRbNCjkZE+YkNc7+iNiC0u4pgUjKxIhZvOwqXfCte3ZkOziubxkH3/Ed
+         UN5/GVcstizZA7WFu2GWfiHfZNhS7HGjwMqT/JRWcsLnO6fVdI74+skbLEdjYXr+B5ya
+         f1bQ==
+X-Gm-Message-State: AOAM533LYlRj+6QMVqrbv+fOIc39snHxGQequSyZZvXcdVcXEeHN7mAH
+	TIOSkbgPlPfyr/6L4CL7mmo=
+X-Google-Smtp-Source: ABdhPJyDPnbwGRm/gHFADgHnG9mY1P7DvsXiSdJn8zqflakPBj5aWX46fD1EGCCM5wnDqY8YQSkV6A==
+X-Received: by 2002:adf:f201:0:b0:1ed:c254:c1a2 with SMTP id p1-20020adff201000000b001edc254c1a2mr23485713wro.106.1646240849938;
+        Wed, 02 Mar 2022 09:07:29 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l15-20020a05600c4f0f00b0037d62a899b1sm6651200wmq.6.2022.03.02.09.07.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 09:07:29 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	alsa-devel@alsa-project.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 01/39] kbuild: Fix clang build
-Message-ID: <Yh+dMJsH+ZMPfqwD@thelio-3990X>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.072632223@infradead.org>
- <CAKwvOdkD2WY=hEHy8_0zs70AGx6LRQwxL5mEZyB30uqpruYJyA@mail.gmail.com>
+Subject: [PATCH] ALSA: echoaudio: remove redundant assignment to variable bytes
+Date: Wed,  2 Mar 2022 17:07:28 +0000
+Message-Id: <20220302170728.1094633-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdkD2WY=hEHy8_0zs70AGx6LRQwxL5mEZyB30uqpruYJyA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 01, 2022 at 01:16:04PM -0800, Nick Desaulniers wrote:
-> On Thu, Feb 24, 2022 at 7:17 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > Debian (and derived) distros ship their compilers as -$ver suffixed
-> > binaries. For gcc it is sufficent to use:
-> >
-> >  $ make CC=gcc-12
-> >
-> > However, clang builds (esp. clang-lto) need a whole array of tools to be
-> > exactly right, leading to unweildy stuff like:
-> >
-> >  $ make CC=clang-13 LD=ld.lld-13 AR=llvm-ar-13 NM=llvm-nm-13 OBJCOPY=llvm-objcopy-13 OBJDUMP=llvm-objdump-13 READELF=llvm-readelf-13 STRIP=llvm-strip-13 LLVM=1
-> >
-> > which is, quite franktly, totally insane and unusable. Instead make
-> > the CC variable DTRT, enabling one such as myself to use:
-> >
-> >  $ make CC=clang-13
-> >
-> > This also lets one quickly test different clang versions.
-> > Additionally, also support path based LLVM suites like:
-> >
-> >  $ make CC=/opt/llvm/bin/clang
-> >
-> > This changes the default to LLVM=1 when CC is clang, mixing toolchains
-> 
-> No, nack, we definitely do not want CC=clang to set LLVM=1. Those are
-> distinctly two different things for testing JUST the compiler
-> (CC=clang) vs the whole toolchain suite (LLVM=1). I do not wish to
-> change the semantics of those, and only for LLVM.
+The variable bytes is being assigned a value that is never read, it
+is being re-assigned inside a following if block. The assignment is
+redundant and can be removed.
 
-I agree with this. CC is only changing the compiler, not any of the
-other build utilities. CC=gcc-12 works for GCC because you are only
-using a different compiler, not an entirely new toolchain (as binutils
-will be the same as just CC=gcc).
+Cleans up clang scan build warning:
+sound/pci/echoaudio/midi.c:211:9: warning: Although the value stored
+to 'bytes' is used in the enclosing expression, the value is never
+actually read from 'bytes' [deadcode.DeadStores]
 
-> LLVM=1 means test clang, lld, llvm-objcopy, etc..
-> CC=clang means test clang, bfd, GNU objcopy, etc..
-> https://docs.kernel.org/kbuild/llvm.html#llvm-utilities
-> 
-> I don't wish to see the behavior of CC=clang change based on LLVM=0 being set.
-> 
-> > is still possible by explicitly adding LLVM=0.
-> 
-> Thanks for testing with LLVM, and even multiple versions of LLVM.
-> 
-> I'm still sympathetic, but only up to a point. A change like this MUST
-> CC the kbuild AND LLVM maintainers AND respective lists though.  It
-> also has little to do with the rest of the series.
-> 
-> As per our previous discussion
-> https://lore.kernel.org/linux-kbuild/CAKwvOd=x9E=7WcCiieso-CDiiU-wMFcXL4W3V5j8dq7BL5QT+w@mail.gmail.com/
-> I'm still of the opionion that this should be solved by modifications
-> (permanent or one off) to one's $PATH.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ sound/pci/echoaudio/midi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-However, I think we could still address Peter's complaint of "there
-should be an easier way for me to use the tools that are already in my
-PATH" with his first iteration of this patch [1], which I feel is
-totally reasonable:
+diff --git a/sound/pci/echoaudio/midi.c b/sound/pci/echoaudio/midi.c
+index cb72d27e809e..7be5c3327b16 100644
+--- a/sound/pci/echoaudio/midi.c
++++ b/sound/pci/echoaudio/midi.c
+@@ -208,7 +208,7 @@ static void snd_echo_midi_output_write(struct timer_list *t)
+ 
+ 	/* No interrupts are involved: we have to check at regular intervals
+ 	if the card's output buffer has room for new data. */
+-	sent = bytes = 0;
++	sent = 0;
+ 	spin_lock_irqsave(&chip->lock, flags);
+ 	chip->midi_full = 0;
+ 	if (!snd_rawmidi_transmit_empty(chip->midi_out)) {
+-- 
+2.34.1
 
-$ make LLVM=-14
-
-It is still easy to use (in fact, it is shorter than 'CC=clang-14') and
-it does not change anything else about how we build with LLVM. We would
-just have to add something along the lines of
-
-"If your LLVM tools have a suffix like Debian's (clang-14, ld.lld-14,
-etc.), use LLVM=<suffix>.
-
-$ make LLVM=-14"
-
-to Documentation/kbuild/llvm.rst.
-
-I might change the patch not to be so clever though:
-
-ifneq ($(LLVM),)
-ifneq ($(LLVM),1)
-LLVM_SFX := $(LLVM)
-endif
-endif
-
-[1]: https://lore.kernel.org/r/YXqpFHeY26sEbort@hirez.programming.kicks-ass.net/
-
-Cheers,
-Nathan
