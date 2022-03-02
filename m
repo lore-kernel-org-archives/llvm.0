@@ -1,97 +1,165 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13EC120E9
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 00:53:37 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id p17so179677plo.9
-        for <llvm@lists.linux.dev>; Tue, 01 Mar 2022 16:53:37 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448F220E9
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 01:39:00 +0000 (UTC)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2d07ae0b1c0so1471997b3.2
+        for <llvm@lists.linux.dev>; Tue, 01 Mar 2022 17:39:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dEue/nkyyWORuSLNgZoXP119Ov1Eck1EH3kEX5AnUiQ=;
-        b=e/dx026Cg0MiSh1JiBi7JH1dij6bXr0QLUeRt/f9pRTDL/WU92xojPJYEtMGzU3X2c
-         l/sBdeLNdgDNP/9m/US1Z85emD+zb4VuhQQpzemiMYE4KaX5ZUjSASZp4PZItCrbsCfm
-         fG07nhuS4Fd2+nlAmoCR/QWkBxGQqRKwcvUtkeW/Wy/t7guG5QDr5QxZ0uflQzKnU2eJ
-         R65DqlAXbo1UOfrCjKDTOx5RUbKXW1oAEPP87jW8sC1K0+RjpKwKsIMfp3MW2D81URZH
-         Kx0UFb95ZlNg4ZJ7MPw6AEMOpqi8Zn6Mq4g/9DjZ4xwss2pOQwR4dLwI/n+ql12/jRTi
-         EV5A==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LLKlqKzUkpOU56hdk9SWA5R0Ik1JOWyqvR2LTFZ3yp4=;
+        b=Rnp5rAoNtu3gDH1vuFvkBJe4LMgnykbZ4gg68qOtydwwKjZBtqKFlwjwGO+pZuD60X
+         JaEQAxmYsbjLxavwgIp1IfqIpD+l3zczvOR4rkEWy7/zD+JnOopHsrnMbrANNvCH2AaZ
+         EZSZBPhe333sYrSAuMGE4LJ0ZExqIC3xVF7RfX982mJKqr3fZpoZsI37CQjjFNHfN+Nt
+         HO4vl0O73acYXD6d9OoE4N4wBougB0RPrpNQdBQq3gerBX2uWPB6DmkkZ7MSEPARfENP
+         IVXm4cvtgTCPQDXpCNPMfbzYlznJBrmHeC6z8j0kzBt5uFLSRpb+RSedGfJYapZVCNuE
+         SQPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dEue/nkyyWORuSLNgZoXP119Ov1Eck1EH3kEX5AnUiQ=;
-        b=IZrgXv66LkVaiPbRKx6P1jnHeix4pwkcu9jAFc19FvHuH7G15psRlN97ZC0LPohzST
-         E+yHqNSHBRt6YIIsSjeKTfUr4IkP5ZyLCBRVUXr5XzK4Ju48zKyy7Ov8gZMnwh0+zZkg
-         wTvcnyVpeu7CvxO5L0oWPgZqj3NUnyAizmpKNUij2vDKvZHsIyPRZKRJM5vR3JJz8ZNW
-         cHb3HEA1+zVFfBfgphCN2wfwcQLZ1Yh/GM8JLNYLIMezGtfyQNus88/FqeVwEbI6Lke/
-         5jCNaO9on2WwbON+3HVZVGTyKjmw75zrt/xAok3Yy/vfaoK3sL/Jasqkl444RBb7pof+
-         dK8w==
-X-Gm-Message-State: AOAM533qKJBbLQN4Sw6hLxzMfOKvg4Jf9KRR0orcYadH2oEkIEvzCpXX
-	mnwXCoBWpUsJNy9eoGW7iP5T7w==
-X-Google-Smtp-Source: ABdhPJws29wDvpjDSbr4HlPV5i3v65S9IX3guYbxnFEHwMBD0tegnlMOTSliyk6S1UMDbdumOJR0Sw==
-X-Received: by 2002:a17:90a:8689:b0:1bd:4c83:4c5c with SMTP id p9-20020a17090a868900b001bd4c834c5cmr13402382pjn.142.1646182417336;
-        Tue, 01 Mar 2022 16:53:37 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:200:88f6:4b70:bdc0:5a68])
-        by smtp.gmail.com with ESMTPSA id np11-20020a17090b4c4b00b001bd4aa67bafsm3538870pjb.3.2022.03.01.16.53.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 16:53:36 -0800 (PST)
-Date: Tue, 1 Mar 2022 16:53:32 -0800
-From: Fangrui Song <maskray@google.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-	joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-	andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-	samitolvanen@google.com, mark.rutland@arm.com,
-	alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-	mhiramat@kernel.org, alexei.starovoitov@gmail.com,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH v2 01/39] kbuild: Fix clang build
-Message-ID: <20220302005332.shcvokuyt4zz544d@google.com>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.072632223@infradead.org>
- <CAKwvOdkD2WY=hEHy8_0zs70AGx6LRQwxL5mEZyB30uqpruYJyA@mail.gmail.com>
- <202203011636.40D2F83@keescook>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LLKlqKzUkpOU56hdk9SWA5R0Ik1JOWyqvR2LTFZ3yp4=;
+        b=as8w6x6pl0EMAFpdvvr87b5zxt21aBS2v5EJzQgifYZ+CEZ6DuzDuDCuMevsvGITtu
+         qUcjZy6gFYtE0a+RbNx+LTjA7r13gMgJOYtQHroM7iVJUG2/tydLB9Bpu1Fj3qAFz+hQ
+         QFPVQ3Vp+TBmVTQ9xEHpArx4ehjIS1Kf3yPxXk/vkU8knB0HTNsuYLcYY2GqPqu0+rZm
+         saWIW/DzYOSp0c4v+KjPZ6S4ebtW2KM+dGfxe0GFO0kZEl7t2PSFzk6rHPfSK28TMz7F
+         qwDwH0GLdh2Y+53b+/ICEkkUZYb4Rapl3HXTirYZDhuHoOM4z33dRUswDN0MMWZKHI0X
+         d90g==
+X-Gm-Message-State: AOAM5339XOR2fvsEmtSwEAUcLskkMQ3R9LOY7ZgxTYyGhGFAlvFgCX7t
+	BBowtab6KpO83LJZUAl1SBSAk0QZ0Lk5oj06NlE=
+X-Google-Smtp-Source: ABdhPJziTwnIKRcvY5gcxujlb5q3AilceeEAXk/7Q9PmLTupqV6Wijp6ewP9aW2pqwztjVlZtI0xpRsOGqo3p2B+hjQ=
+X-Received: by 2002:a0d:c383:0:b0:2d0:f04e:7ada with SMTP id
+ f125-20020a0dc383000000b002d0f04e7adamr27474848ywd.229.1646185139206; Tue, 01
+ Mar 2022 17:38:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <202203011636.40D2F83@keescook>
+References: <1646115417-24639-1-git-send-email-baihaowen88@gmail.com> <202203011855.FRrOViok-lkp@intel.com>
+In-Reply-To: <202203011855.FRrOViok-lkp@intel.com>
+From: lotte bai <baihaowen88@gmail.com>
+Date: Wed, 2 Mar 2022 09:38:47 +0800
+Message-ID: <CAFo17PhmubhDXMh=pudoAmYVfDhgwxPLECfUkZMRQpuhvoFTbw@mail.gmail.com>
+Subject: Re: [PATCH] net: marvell: Use min() instead of doing it manually
+To: kernel test robot <lkp@intel.com>
+Cc: sebastian.hesselbarth@gmail.com, davem@davemloft.net, kuba@kernel.org, 
+	llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2022-03-01, Kees Cook wrote:
->On Tue, Mar 01, 2022 at 01:16:04PM -0800, Nick Desaulniers wrote:
->> Also, Kees mentions this is an issue for testing multiple different
->> versions of gcc, too.  There perhaps is a way to simplify the builds
->> for BOTH toolchains; i.e. a yet-to-be-created shared variable denoting
->> the suffix for binaries?  The primary pain point seems to be Debian's
->> suffixing scheme; it will suffix GCC, clang, and lld, but not GNU
->> binutils IIUC.
->
->Right. Though I think auto-detection still makes sense.
->
->If I do:
->
->	make CC=clang-12 LLVM=1
->
->it'd be nice if it also used ld.lld-12.
+@Heiner Kallweit
+Thank you for your kindly response.
 
-This transformation may be a bit magical.
+kernel test robot <lkp@intel.com> =E4=BA=8E2022=E5=B9=B43=E6=9C=881=E6=97=
+=A5=E5=91=A8=E4=BA=8C 18:30=E5=86=99=E9=81=93=EF=BC=9A
 
-On Debian, /usr/bin/clang-13 is a symlink to /usr/lib/llvm-13/bin/clang .
-Will it be fine for the user to provide correct feasible PATH?
-
->> [...]
->> Just curious, what prefixes have you observed in the wild?
 >
->For me, where ever I built clang, and "/usr/bin"
+> Hi Haowen,
 >
->-- 
->Kees Cook
+> Thank you for the patch! Perhaps something to improve:
 >
+> [auto build test WARNING on net-next/master]
+> [also build test WARNING on net/master horms-ipvs/master linus/master v5.=
+17-rc6 next-20220228]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>
+> url:    https://github.com/0day-ci/linux/commits/Haowen-Bai/net-marvell-U=
+se-min-instead-of-doing-it-manually/20220301-141800
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.gi=
+t f2b77012ddd5b2532d262f100be3394ceae3ea59
+> config: hexagon-randconfig-r041-20220301 (https://download.01.org/0day-ci=
+/archive/20220301/202203011855.FRrOViok-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271=
+fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/0day-ci/linux/commit/55e43d9d6e3e0a8774e6a5e=
+3976808e5736f6c9f
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Haowen-Bai/net-marvell-Use-min-i=
+nstead-of-doing-it-manually/20220301-141800
+>         git checkout 55e43d9d6e3e0a8774e6a5e3976808e5736f6c9f
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/net/ethernet/ma=
+rvell/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/net/ethernet/marvell/mv643xx_eth.c:1664:21: warning: compariso=
+n of distinct pointer types ('typeof (er->rx_pending) *' (aka 'unsigned int=
+ *') and 'typeof (4096) *' (aka 'int *')) [-Wcompare-distinct-pointer-types=
+]
+>            mp->rx_ring_size =3D min(er->rx_pending, 4096);
+>                               ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/minmax.h:45:19: note: expanded from macro 'min'
+>    #define min(x, y)       __careful_cmp(x, y, <)
+>                            ^~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp=
+'
+>            __builtin_choose_expr(__safe_cmp(x, y), \
+>                                  ^~~~~~~~~~~~~~~~
+>    include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+>                    (__typecheck(x, y) && __no_side_effects(x, y))
+>                     ^~~~~~~~~~~~~~~~~
+>    include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+>            (!!(sizeof((typeof(x) *)1 =3D=3D (typeof(y) *)1)))
+>                       ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>    1 warning generated.
+>
+>
+> vim +1664 drivers/net/ethernet/marvell/mv643xx_eth.c
+>
+>   1653
+>   1654  static int
+>   1655  mv643xx_eth_set_ringparam(struct net_device *dev, struct ethtool_=
+ringparam *er,
+>   1656                            struct kernel_ethtool_ringparam *kernel=
+_er,
+>   1657                            struct netlink_ext_ack *extack)
+>   1658  {
+>   1659          struct mv643xx_eth_private *mp =3D netdev_priv(dev);
+>   1660
+>   1661          if (er->rx_mini_pending || er->rx_jumbo_pending)
+>   1662                  return -EINVAL;
+>   1663
+> > 1664          mp->rx_ring_size =3D min(er->rx_pending, 4096);
+>   1665          mp->tx_ring_size =3D clamp_t(unsigned int, er->tx_pending=
+,
+>   1666                                     MV643XX_MAX_SKB_DESCS * 2, 409=
+6);
+>   1667          if (mp->tx_ring_size !=3D er->tx_pending)
+>   1668                  netdev_warn(dev, "TX queue size set to %u (reques=
+ted %u)\n",
+>   1669                              mp->tx_ring_size, er->tx_pending);
+>   1670
+>   1671          if (netif_running(dev)) {
+>   1672                  mv643xx_eth_stop(dev);
+>   1673                  if (mv643xx_eth_open(dev)) {
+>   1674                          netdev_err(dev,
+>   1675                                     "fatal error on re-opening dev=
+ice after ring param change\n");
+>   1676                          return -ENOMEM;
+>   1677                  }
+>   1678          }
+>   1679
+>   1680          return 0;
+>   1681  }
+>   1682
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
