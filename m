@@ -1,165 +1,125 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448F220E9
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 01:39:00 +0000 (UTC)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2d07ae0b1c0so1471997b3.2
-        for <llvm@lists.linux.dev>; Tue, 01 Mar 2022 17:39:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LLKlqKzUkpOU56hdk9SWA5R0Ik1JOWyqvR2LTFZ3yp4=;
-        b=Rnp5rAoNtu3gDH1vuFvkBJe4LMgnykbZ4gg68qOtydwwKjZBtqKFlwjwGO+pZuD60X
-         JaEQAxmYsbjLxavwgIp1IfqIpD+l3zczvOR4rkEWy7/zD+JnOopHsrnMbrANNvCH2AaZ
-         EZSZBPhe333sYrSAuMGE4LJ0ZExqIC3xVF7RfX982mJKqr3fZpoZsI37CQjjFNHfN+Nt
-         HO4vl0O73acYXD6d9OoE4N4wBougB0RPrpNQdBQq3gerBX2uWPB6DmkkZ7MSEPARfENP
-         IVXm4cvtgTCPQDXpCNPMfbzYlznJBrmHeC6z8j0kzBt5uFLSRpb+RSedGfJYapZVCNuE
-         SQPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LLKlqKzUkpOU56hdk9SWA5R0Ik1JOWyqvR2LTFZ3yp4=;
-        b=as8w6x6pl0EMAFpdvvr87b5zxt21aBS2v5EJzQgifYZ+CEZ6DuzDuDCuMevsvGITtu
-         qUcjZy6gFYtE0a+RbNx+LTjA7r13gMgJOYtQHroM7iVJUG2/tydLB9Bpu1Fj3qAFz+hQ
-         QFPVQ3Vp+TBmVTQ9xEHpArx4ehjIS1Kf3yPxXk/vkU8knB0HTNsuYLcYY2GqPqu0+rZm
-         saWIW/DzYOSp0c4v+KjPZ6S4ebtW2KM+dGfxe0GFO0kZEl7t2PSFzk6rHPfSK28TMz7F
-         qwDwH0GLdh2Y+53b+/ICEkkUZYb4Rapl3HXTirYZDhuHoOM4z33dRUswDN0MMWZKHI0X
-         d90g==
-X-Gm-Message-State: AOAM5339XOR2fvsEmtSwEAUcLskkMQ3R9LOY7ZgxTYyGhGFAlvFgCX7t
-	BBowtab6KpO83LJZUAl1SBSAk0QZ0Lk5oj06NlE=
-X-Google-Smtp-Source: ABdhPJziTwnIKRcvY5gcxujlb5q3AilceeEAXk/7Q9PmLTupqV6Wijp6ewP9aW2pqwztjVlZtI0xpRsOGqo3p2B+hjQ=
-X-Received: by 2002:a0d:c383:0:b0:2d0:f04e:7ada with SMTP id
- f125-20020a0dc383000000b002d0f04e7adamr27474848ywd.229.1646185139206; Tue, 01
- Mar 2022 17:38:59 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C2C2104
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 02:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646189496; x=1677725496;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gSNkjkake7xD9VTOgxUuUJVMTiM0gzuhsnYwpkaAsMg=;
+  b=Q7IrzgyI6seT64Taz1dY9w/8T1XUyg9MiYqoebzi8SyVEjsvsOaRkukG
+   NXL/tbhHfDdmuR0GNfE9AHBVAZKC226RZoF03kg/vqs+o+HiCGy54xaUc
+   gL1fu9R0a8029U5/Us/2NKXfyMsiBOJ6t+G6fyOnKhcAH2E1sgBABZAxf
+   DXCj8TRbNt16rv9O2IZrUC4lxkkAI2riXP9wUoqLCIdvNIiNNY1sQGmXJ
+   C6sMlXPCDYy6CEL9aHNnFgKGbZ5Hm9B38LHOrZ6qaolBVcIs51qqXjqd8
+   Svp9A/COSediqkRkU8cZtkblck6G7JO1m5SFn6iH8hfsbEU7ZwYrKQ8p9
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="253488433"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="253488433"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 18:51:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="630261418"
+Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Mar 2022 18:51:34 -0800
+Received: from kbuild by e9605edfa585 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nPF5R-0000wS-Jo; Wed, 02 Mar 2022 02:51:33 +0000
+Date: Wed, 2 Mar 2022 10:51:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Huacai Chen <chenhuacai@loongson.cn>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH V9 05/10] irqchip/loongson-htvec: Add ACPI init support
+Message-ID: <202203020732.h6NYX90D-lkp@intel.com>
+References: <20220226105307.77053-6-chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1646115417-24639-1-git-send-email-baihaowen88@gmail.com> <202203011855.FRrOViok-lkp@intel.com>
-In-Reply-To: <202203011855.FRrOViok-lkp@intel.com>
-From: lotte bai <baihaowen88@gmail.com>
-Date: Wed, 2 Mar 2022 09:38:47 +0800
-Message-ID: <CAFo17PhmubhDXMh=pudoAmYVfDhgwxPLECfUkZMRQpuhvoFTbw@mail.gmail.com>
-Subject: Re: [PATCH] net: marvell: Use min() instead of doing it manually
-To: kernel test robot <lkp@intel.com>
-Cc: sebastian.hesselbarth@gmail.com, davem@davemloft.net, kuba@kernel.org, 
-	llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220226105307.77053-6-chenhuacai@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-@Heiner Kallweit
-Thank you for your kindly response.
+Hi Huacai,
 
-kernel test robot <lkp@intel.com> =E4=BA=8E2022=E5=B9=B43=E6=9C=881=E6=97=
-=A5=E5=91=A8=E4=BA=8C 18:30=E5=86=99=E9=81=93=EF=BC=9A
+I love your patch! Perhaps something to improve:
 
->
-> Hi Haowen,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on net-next/master]
-> [also build test WARNING on net/master horms-ipvs/master linus/master v5.=
-17-rc6 next-20220228]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/0day-ci/linux/commits/Haowen-Bai/net-marvell-U=
-se-min-instead-of-doing-it-manually/20220301-141800
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.gi=
-t f2b77012ddd5b2532d262f100be3394ceae3ea59
-> config: hexagon-randconfig-r041-20220301 (https://download.01.org/0day-ci=
-/archive/20220301/202203011855.FRrOViok-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271=
-fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/55e43d9d6e3e0a8774e6a5e=
-3976808e5736f6c9f
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Haowen-Bai/net-marvell-Use-min-i=
-nstead-of-doing-it-manually/20220301-141800
->         git checkout 55e43d9d6e3e0a8774e6a5e3976808e5736f6c9f
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/net/ethernet/ma=
-rvell/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/net/ethernet/marvell/mv643xx_eth.c:1664:21: warning: compariso=
-n of distinct pointer types ('typeof (er->rx_pending) *' (aka 'unsigned int=
- *') and 'typeof (4096) *' (aka 'int *')) [-Wcompare-distinct-pointer-types=
-]
->            mp->rx_ring_size =3D min(er->rx_pending, 4096);
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/minmax.h:45:19: note: expanded from macro 'min'
->    #define min(x, y)       __careful_cmp(x, y, <)
->                            ^~~~~~~~~~~~~~~~~~~~~~
->    include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp=
-'
->            __builtin_choose_expr(__safe_cmp(x, y), \
->                                  ^~~~~~~~~~~~~~~~
->    include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
->                    (__typecheck(x, y) && __no_side_effects(x, y))
->                     ^~~~~~~~~~~~~~~~~
->    include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
->            (!!(sizeof((typeof(x) *)1 =3D=3D (typeof(y) *)1)))
->                       ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->    1 warning generated.
->
->
-> vim +1664 drivers/net/ethernet/marvell/mv643xx_eth.c
->
->   1653
->   1654  static int
->   1655  mv643xx_eth_set_ringparam(struct net_device *dev, struct ethtool_=
-ringparam *er,
->   1656                            struct kernel_ethtool_ringparam *kernel=
-_er,
->   1657                            struct netlink_ext_ack *extack)
->   1658  {
->   1659          struct mv643xx_eth_private *mp =3D netdev_priv(dev);
->   1660
->   1661          if (er->rx_mini_pending || er->rx_jumbo_pending)
->   1662                  return -EINVAL;
->   1663
-> > 1664          mp->rx_ring_size =3D min(er->rx_pending, 4096);
->   1665          mp->tx_ring_size =3D clamp_t(unsigned int, er->tx_pending=
-,
->   1666                                     MV643XX_MAX_SKB_DESCS * 2, 409=
-6);
->   1667          if (mp->tx_ring_size !=3D er->tx_pending)
->   1668                  netdev_warn(dev, "TX queue size set to %u (reques=
-ted %u)\n",
->   1669                              mp->tx_ring_size, er->tx_pending);
->   1670
->   1671          if (netif_running(dev)) {
->   1672                  mv643xx_eth_stop(dev);
->   1673                  if (mv643xx_eth_open(dev)) {
->   1674                          netdev_err(dev,
->   1675                                     "fatal error on re-opening dev=
-ice after ring param change\n");
->   1676                          return -ENOMEM;
->   1677                  }
->   1678          }
->   1679
->   1680          return 0;
->   1681  }
->   1682
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[auto build test WARNING on tip/irq/core]
+[also build test WARNING on linux/master linus/master v5.17-rc6 next-20220301]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Huacai-Chen/irqchip-Add-LoongArch-related-irqchip-drivers/20220226-190333
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git d2206fcabdfaff3958ab67cc5b8f63257e57b889
+config: mips-randconfig-r032-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020732.h6NYX90D-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/f4c826187ce407c49fdab5587194cf4e8eed5c33
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Huacai-Chen/irqchip-Add-LoongArch-related-irqchip-drivers/20220226-190333
+        git checkout f4c826187ce407c49fdab5587194cf4e8eed5c33
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/irqchip/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/irqchip/irq-loongson-htvec.c:221:3: warning: variable 'num_parents' is uninitialized when used here [-Wuninitialized]
+                   num_parents++;
+                   ^~~~~~~~~~~
+   drivers/irqchip/irq-loongson-htvec.c:209:17: note: initialize the variable 'num_parents' to silence this warning
+           int num_parents, parent_irq[8];
+                          ^
+                           = 0
+   1 warning generated.
+
+
+vim +/num_parents +221 drivers/irqchip/irq-loongson-htvec.c
+
+   204	
+   205	static int htvec_of_init(struct device_node *node,
+   206					struct device_node *parent)
+   207	{
+   208		int i, err;
+   209		int num_parents, parent_irq[8];
+   210		struct resource res;
+   211	
+   212		if (of_address_to_resource(node, 0, &res))
+   213			return -EINVAL;
+   214	
+   215		/* Interrupt may come from any of the 8 interrupt lines */
+   216		for (i = 0; i < HTVEC_MAX_PARENT_IRQ; i++) {
+   217			parent_irq[i] = irq_of_parse_and_map(node, i);
+   218			if (parent_irq[i] <= 0)
+   219				break;
+   220	
+ > 221			num_parents++;
+   222		}
+   223	
+   224		err = htvec_init(res.start, resource_size(&res),
+   225				num_parents, parent_irq, of_node_to_fwnode(node));
+   226		if (err < 0)
+   227			return err;
+   228	
+   229		return 0;
+   230	}
+   231	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
