@@ -1,88 +1,148 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E233FE3
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 17:07:31 +0000 (UTC)
-Received: by mail-wr1-f45.google.com with SMTP id p9so3778806wra.12
-        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 09:07:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+FBEODWlEwE4ZBpRu4pszv+L75J4ftu6Yw0by+ZcvnE=;
-        b=hOrlpj9wIqQtiZ2iI5gabtXozHts++6EWfoyBCd9XE7smYEqH0D0OVdiWv1pcyWOmv
-         drF40iR0EnF9vCeXmIYqfPop33M7aHpNtmCzSt5le3/11zOqSeexGyBz8MgQ4WEPa5oI
-         IAkV+2cfB3IjRsBMxueIpgamXDtArN4GOSuNjFxfLz7eFSSMx7HDIJrnb/ZruGVPRQqm
-         JuXSGImYl/NJQlq9JmPQ6uAcc6mnjQS0l7Y1oTTVRL9RQWBTmnnBopCO4aH4quRq43/G
-         dc2kmxA0iGAwtQmMN6z3smEFOwKvl/1qLFFuPzojfYWvmcG8HPgoK2q2CCBdNQ2VmTBc
-         0fUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+FBEODWlEwE4ZBpRu4pszv+L75J4ftu6Yw0by+ZcvnE=;
-        b=HN0If/VG0rQ6gVbSNwmTA7r2+5j1jKAjaaeQCWeYV9n95Fk/+WRILs+DgyAYSsRIbx
-         cyWH0N3ozGRHBlfZJmyf7E7dCeF2K5Pqw09x4ZFf6GyLpwl98+64CHGihEC7bE6pv56U
-         jO4+u2mZms//hKDsyQKMc1+l8bvf3grc+O9o2sNWHuI9TwZOb3SjCDziD3bhieYVDLWK
-         t2wQRhFJ55frrRbNCjkZE+YkNc7+iNiC0u4pgUjKxIhZvOwqXfCte3ZkOziubxkH3/Ed
-         UN5/GVcstizZA7WFu2GWfiHfZNhS7HGjwMqT/JRWcsLnO6fVdI74+skbLEdjYXr+B5ya
-         f1bQ==
-X-Gm-Message-State: AOAM533LYlRj+6QMVqrbv+fOIc39snHxGQequSyZZvXcdVcXEeHN7mAH
-	TIOSkbgPlPfyr/6L4CL7mmo=
-X-Google-Smtp-Source: ABdhPJyDPnbwGRm/gHFADgHnG9mY1P7DvsXiSdJn8zqflakPBj5aWX46fD1EGCCM5wnDqY8YQSkV6A==
-X-Received: by 2002:adf:f201:0:b0:1ed:c254:c1a2 with SMTP id p1-20020adff201000000b001edc254c1a2mr23485713wro.106.1646240849938;
-        Wed, 02 Mar 2022 09:07:29 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id l15-20020a05600c4f0f00b0037d62a899b1sm6651200wmq.6.2022.03.02.09.07.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 09:07:29 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	alsa-devel@alsa-project.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] ALSA: echoaudio: remove redundant assignment to variable bytes
-Date: Wed,  2 Mar 2022 17:07:28 +0000
-Message-Id: <20220302170728.1094633-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030F33FE3
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 17:15:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646241320; x=1677777320;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JPgNcN3yRPkWhdAdp6hz0bJtkS6p6GHR+izGPZ6HtW0=;
+  b=ADfg2RomPYJ6kZJljXJs7iV5tTxAhsgT7yq3Cw0dKp17/oje1jRdhWub
+   yFxZkvM0TLaxhUyhs6D8qwUD6Ksp89S1s1hd00oJvs2E/NEGHX4DadWjs
+   /bzRYfH2eVdrKl049O+LmKrW2ZeQ7sFpEU5QOxoWVf3TR3JZ10P/TxUmC
+   aVrZlPTaQqjRU45ZAx7QNCaSBMNYkDvqecU6YFmS50YgesR3HfRaB3SvC
+   nYn1AoHSqYtgd4lhaVC88eaV2otucwqEP4+KPPG2Yx9QeuQSgOyEA7qZc
+   4SJ90NN2eahOAI+H9VJA92DNu79y70N5VCSsn49Qs5MG2ZD3aqrcGk0R+
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233422287"
+X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
+   d="scan'208";a="233422287"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 09:15:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
+   d="scan'208";a="535466041"
+Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 02 Mar 2022 09:15:17 -0800
+Received: from kbuild by e9605edfa585 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nPSZI-0001dq-QF; Wed, 02 Mar 2022 17:15:16 +0000
+Date: Thu, 3 Mar 2022 01:14:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/fscache-next 36/39]
+ fs/netfs/io.c:630:2: warning: variable 'ret' is used uninitialized whenever
+ 'if' condition is false
+Message-ID: <202203030120.FpZOVtN6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-The variable bytes is being assigned a value that is never read, it
-is being re-assigned inside a following if block. The assignment is
-redundant and can be removed.
+Hi David,
 
-Cleans up clang scan build warning:
-sound/pci/echoaudio/midi.c:211:9: warning: Although the value stored
-to 'bytes' is used in the enclosing expression, the value is never
-actually read from 'bytes' [deadcode.DeadStores]
+First bad commit (maybe != root cause):
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/fscache-next
+head:   78e12b114b9c804d4b1eef16b6df1112cde6a960
+commit: ad9e5adb388f358027a51032b3944913d98f7866 [36/39] netfs: Rename rename read_helper.c to io.c
+config: hexagon-buildonly-randconfig-r006-20220302 (https://download.01.org/0day-ci/archive/20220303/202203030120.FpZOVtN6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/ad9e5adb388f358027a51032b3944913d98f7866
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/fscache-next
+        git checkout ad9e5adb388f358027a51032b3944913d98f7866
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/netfs/io.c:630:2: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (sync) {
+           ^~~~~~~~~
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/io.c:655:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   fs/netfs/io.c:630:2: note: remove the 'if' if its condition is always true
+           if (sync) {
+           ^~~~~~~~~~
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   fs/netfs/io.c:604:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +630 fs/netfs/io.c
+
+3d3c95046742e4 fs/netfs/read_helper.c David Howells 2020-05-13  595  
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  596  /*
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  597   * Begin the process of reading in a chunk of data, where that data may be
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  598   * stitched together from multiple sources, including multiple servers and the
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  599   * local cache.
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  600   */
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  601  int netfs_begin_read(struct netfs_io_request *rreq, bool sync)
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  602  {
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  603  	unsigned int debug_index = 0;
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  604  	int ret;
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  605  
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  606  	_enter("R=%x %llx-%llx",
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  607  	       rreq->debug_id, rreq->start, rreq->start + rreq->len - 1);
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  608  
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  609  	if (rreq->len == 0) {
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  610  		pr_err("Zero-sized read [R=%x]\n", rreq->debug_id);
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  611  		netfs_put_request(rreq, false, netfs_rreq_trace_put_zero_len);
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  612  		return -EIO;
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  613  	}
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  614  
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  615  	rreq->work.func = netfs_rreq_work;
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  616  
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  617  	if (sync)
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  618  		netfs_get_request(rreq, netfs_rreq_trace_get_hold);
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  619  
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  620  	/* Chop the read into slices according to what the cache and the netfs
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  621  	 * want and submit each one.
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  622  	 */
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  623  	atomic_set(&rreq->nr_outstanding, 1);
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  624  	do {
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  625  		if (!netfs_rreq_submit_slice(rreq, &debug_index))
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  626  			break;
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  627  
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  628  	} while (rreq->submitted < rreq->len);
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02  629  
+c19a5d31b470e0 fs/netfs/read_helper.c David Howells 2022-03-02 @630  	if (sync) {
+
+:::::: The code at line 630 was first introduced by commit
+:::::: c19a5d31b470e0a7dea07a71bb7b98a916b449e9 netfs: Add a function to consolidate beginning a read
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
+
 ---
- sound/pci/echoaudio/midi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/pci/echoaudio/midi.c b/sound/pci/echoaudio/midi.c
-index cb72d27e809e..7be5c3327b16 100644
---- a/sound/pci/echoaudio/midi.c
-+++ b/sound/pci/echoaudio/midi.c
-@@ -208,7 +208,7 @@ static void snd_echo_midi_output_write(struct timer_list *t)
- 
- 	/* No interrupts are involved: we have to check at regular intervals
- 	if the card's output buffer has room for new data. */
--	sent = bytes = 0;
-+	sent = 0;
- 	spin_lock_irqsave(&chip->lock, flags);
- 	chip->midi_full = 0;
- 	if (!snd_rawmidi_transmit_empty(chip->midi_out)) {
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
