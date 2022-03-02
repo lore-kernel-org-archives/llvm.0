@@ -1,231 +1,212 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957D22576
-	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 07:24:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646205889; x=1677741889;
-  h=message-id:date:from:subject:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=RdJ04ptl0N8QgdjwwyFkh9+lbN9DUZmBJpxPJxmQjqk=;
-  b=GmTQ05IL06Gr96udJl39XWFFOKIy4PKtVe8IfnN8oJCNuEu7SoTRfO5K
-   5j/qwVNIZo3EFPdGd7E6rgs/IRToB3P5jPKJ31jU0P9HdLWa3usLZKBDO
-   UhB8NfPedG+lecU3ya3hg31mRRmARnKON5EE1z/gjD7XLxquwzSFNHxmL
-   aRbDDQu7RIRfBHjCdutug7gE11ZtZzIUs+4JJPGBLQc4LG/InVlS8XLdg
-   vgXU0JS1EX1ghjdBcr7kYPQDHmtdZa76TszOX9APfytRcxFgWOx2W9wXs
-   LsjjeSoNnKB1VJVnH6KeQRuAvbJ8GL2ZRPNcrMcorR2HUYXIol9wRtAxu
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="316544797"
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="316544797"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 23:24:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="630318767"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Mar 2022 23:24:48 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 1 Mar 2022 23:24:44 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Tue, 1 Mar 2022 23:24:44 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Tue, 1 Mar 2022 23:24:43 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UmJYGtSb5NTSzkbBiS/fCQGM1gGd92zHy2Z7DcDM58OvmgkUejsRhAPRtcunGjEolQJfK3WZ3ftZjf2+hR3IpDA9uHUuHpmGl87rWx8toy1gaP9gLDm2E+SAuyXRS6fF5wDF/CcMB14Hp7q21OQEcwFqQuQfT784YHsg/Chh7tirASX/VqnT0QFe0G07ab5wI2U+1JLV86JxJkzO2AQSZs5jAVN9mVy2ZETIuWT8MPkvY65NEq+e3OCQbp/ShoWyt0Gs+hnBgtSwXEbzUBfxcEWClgF+NZAmd9waYO34GGDUc3K8/9Z3O628AgU6tLVI0z3CuOpLYhUNYDTxa0vzLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+SACXheq0vAchKySRstvafC9hCb8uWp6FtRNtxmnFOE=;
- b=Ntl3azkeylhTSjyucqOxuogY4Owrep4xzKeotM929+zUoatLM9SVu07JX/jA/9SllEJYQTPBh+OK3/c/59Rqw5lJm89W5ZN4+G7lAlcJU7ymkrE01/jJ3T7HyCHomdZoP5A7pfGLawdNj0wYNuZtz1qpB7+GechIE+Q3/ZIsdJmOWV3xa2P2yWuwlFUPv2Oe+V1BZjdeMQODiVbuDgbrIzJOK6IJCLdFG5vgojEymdj7tMp4R8rTsmwZVr03adCh/F8+5TRgKxrSo3T8G/g2RHNJLgn33Z3pQAwGQQ2R1qkRK3b7L8+wvtt3mus11x+VzDU9ibAhGkMJ/D9i90x0Sw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ0PR11MB5598.namprd11.prod.outlook.com (2603:10b6:a03:304::12)
- by BYAPR11MB2821.namprd11.prod.outlook.com (2603:10b6:a02:c9::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Wed, 2 Mar
- 2022 07:24:36 +0000
-Received: from SJ0PR11MB5598.namprd11.prod.outlook.com
- ([fe80::c4a2:d11d:cb7b:dc8d]) by SJ0PR11MB5598.namprd11.prod.outlook.com
- ([fe80::c4a2:d11d:cb7b:dc8d%9]) with mapi id 15.20.5038.014; Wed, 2 Mar 2022
- 07:24:36 +0000
-Message-ID: <a3c8f556-dc5c-7a16-27e0-d445d9c63486@intel.com>
-Date: Wed, 2 Mar 2022 15:24:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.1
-From: kernel test robot <yujie.liu@intel.com>
-Subject: Re: [PATCH 9/9] drm: mxsfb: Add support for i.MX8MP LCDIF variant
-To: Marek Vasut <marex@denx.de>, <dri-devel@lists.freedesktop.org>
-CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>, Marek Vasut
-	<marex@denx.de>, Peng Fan <peng.fan@nxp.com>, Alexander Stein
-	<alexander.stein@ew.tq-group.com>, Laurent Pinchart
-	<laurent.pinchart@ideasonboard.com>, Sam Ravnborg <sam@ravnborg.org>, "Robby
- Cai" <robby.cai@nxp.com>
-References: <202203010150.L57Eax3W-lkp@intel.com>
-Content-Language: en-US
-In-Reply-To: <202203010150.L57Eax3W-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HK2PR02CA0202.apcprd02.prod.outlook.com
- (2603:1096:201:20::14) To SJ0PR11MB5598.namprd11.prod.outlook.com
- (2603:10b6:a03:304::12)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3712590
+	for <llvm@lists.linux.dev>; Wed,  2 Mar 2022 09:00:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1646211639;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nglozkwZ9E5oM3xxjiOvdMHp+P3p2GEbi9ZIptGZfLU=;
+	b=i5QrjseCI8MwZsDVYKP7IX2cDAaasOEj2GKWEUYsWrabL+3rPDCmkWr6FG6y5Lj+Vq7RAk
+	WvJlpBo7N5GbquzGsRrIE54QSKemEIs3iqN5ZCu5QlfJen1Q2o+5GGanJktzBrH+FoyJPT
+	07s1qlbAVRvJ8W3TBm6hBerr+UVUPhM=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-505-0tw3L8o5PeCZEbZ1JOBOHw-1; Wed, 02 Mar 2022 04:00:36 -0500
+X-MC-Unique: 0tw3L8o5PeCZEbZ1JOBOHw-1
+Received: by mail-ed1-f71.google.com with SMTP id d11-20020a50c88b000000b00410ba7a14acso633110edh.6
+        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 01:00:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nglozkwZ9E5oM3xxjiOvdMHp+P3p2GEbi9ZIptGZfLU=;
+        b=UP+w89D6lwnobYtW3XuAVhlTaOMxGTIqSVqhRoU3kpFn/fuJVJQkopJsm7rMh1sgJW
+         9buS+iH4y4QbNZFJc3l6ywV3wA1X8ReC68ecP+X1BLxxgB9heuUbtjniR6yOyrhUgYcm
+         AAmjJ11u40AZ/QIHJe/DhCu3TZkXtxlP1Ja7rM8f9nKpWNH6i6U9bvFFmubTyYw+pjX6
+         p+TRQIlzJ3MTMKfSSAqrBlizffBoWandpCz50A94kMg9JPvJG2EpZSxC3suhYGDJclH/
+         X94a0jFC5uNpEr00YFJC55zms9xv3Dz3Iebv0tYA8oxH+aPNMRoE+XFcOx1rhMMfdLMM
+         o2zg==
+X-Gm-Message-State: AOAM531OC1mzimjnHy0bGoMlTmVzO/VuNfaoHBKL3pPXlBPlnyTJulBD
+	mGb4ze0OBFC1yYB1koKKj/fZlZsijylY3xoSTNT/cgQhQe8z7CBGHj8XI8hdMcP6zSgpYU280D0
+	NQwkgRJVhL6YSow==
+X-Received: by 2002:a17:907:8a25:b0:6d7:d59:6912 with SMTP id sc37-20020a1709078a2500b006d70d596912mr4089327ejc.259.1646211635239;
+        Wed, 02 Mar 2022 01:00:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw2PFOMyGct2RwZCRKJpVo0k7br2d4b17H/TgVXIFh2tZdS2AyukmH9dplP1caqs7n3pFiayw==
+X-Received: by 2002:a17:907:8a25:b0:6d7:d59:6912 with SMTP id sc37-20020a1709078a2500b006d70d596912mr4089310ejc.259.1646211634977;
+        Wed, 02 Mar 2022 01:00:34 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id d4-20020a1709067a0400b006d6e3ca9f71sm1609122ejo.198.2022.03.02.01.00.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 01:00:34 -0800 (PST)
+Message-ID: <a429c799-f293-89b5-417b-3aa9cfeef457@redhat.com>
+Date: Wed, 2 Mar 2022 10:00:33 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2ad06eec-5bb9-4298-6902-08d9fc1db4ab
-X-MS-TrafficTypeDiagnostic: BYAPR11MB2821:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <BYAPR11MB2821172D33E24B02FE961AE6FB039@BYAPR11MB2821.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QaIhOHHMmRRDNJ6yL72pxgwzVlvL1e9//VNYTTS7a0fYhMGLSZ8nnXWx7N45mRZv6MWSHKCmuk4nRYxCSv+8wE721sswOI183SZjz/BlwhoWShEkvAgUoP3YUaXdYWx99NgQ6cwLaIgj6PW+5nZQmUi8AHEVK4sbL7I/xKbelg6800lZJGTbCFCs3eLCrqLJuNiEYbQjbXFfjmtpb+V16t2c6p53ZfN7GCsRrbYMws6i0nvGGCQROdkaHM7KlKvL4+brHt8P+eBwuOwaquyePw96kVGGen1oJx/StrrvshVf9LAm67AUtcw9uExPXem7FfR6Y4cMtlVzkOCoDOEVcDRvB22xcmv1BraVJlzUpU71VaF/CeWMOOS6LDG8XWh/8EQmusX6R9bv7TdkEbQBvHq3AQ5PnQHNffspjkC7ktpWWdtXAfh++MS8lQ0W3dMRTXERVM/eBFstgULS2xqgdZDTl+6Qi/kwk3EyNifp/cOjtEv9uPi3nuwc3Zq8JY2VdWGrDSfWE/M9j3Pdni4+DEX+X3QAwfAlOOgnmduNiTy0sgHwEYXaGHirRaPQ77IZmpawvrtwi/GGKP8bWL4FqdeOtahsbhxD22uKQtZu3oFkKsd0g4YNChLCouNptpJmhLHr9Jxzmj7qzGYeobP1EOlPpjQv4DrpkDw2EAAAQ4B3svteLJUK3f6wBzlJdR/oM2j7/pkPcQKs1/k5Dv64BP7SEG2tLFHSgfEGativcLi8unz0gBUE9qRtQPEBsq1zZ/MdbGDMwPHF7xY4ZmKmNYBGq2z0PDAKK5dsKmZcpxqvncSf9W4MokKqCtDI8+1V/RPdhiQv4/9Gku/clifmtedCGokxPejdsAJAt9y9hHU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5598.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(38100700002)(8936002)(66476007)(6506007)(6512007)(4326008)(31696002)(83380400001)(5660300002)(8676002)(36756003)(31686004)(508600001)(66556008)(26005)(86362001)(186003)(2616005)(6486002)(6666004)(966005)(54906003)(66946007)(82960400001)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UmxxRDAza2huWjh2SDlEZ2g5RkZnY2NDa1BQcU9wVDZzV0xOSUVVVEc5WDBP?=
- =?utf-8?B?ZVdxazU4dW5iK2hQSUdGdUc2RVJZZGpHN1Ywc1FzZDhpbGtPczlhU3BxbEVm?=
- =?utf-8?B?c2NNT2daRFZabXNXSWhxZzR3ODdGOFFNU24xakJBNHkvQU5tUmFhWjJVVU1U?=
- =?utf-8?B?UnIyMmRDWGhWcGRnUWRncUtRQzlZOVVqM2lNNmY2WDFPOXNpdnhJOUZwNTdy?=
- =?utf-8?B?eTIrTkJPRlB6Tld6cnJrM3VSVEx1OTlkbW5jdit4RjRtbDVkNU1VQ0ZzSkNS?=
- =?utf-8?B?WXpUeGNBMzM5QXdPS3YweWRKMHFTR2NFOURZZXkybzlXa3ViTlY4b0VtRDZ2?=
- =?utf-8?B?eE9qaGt3WlNmVFRJY3RYeG1VQWttaElZNFVPd2U1ZDZLRys2aTFaS3dTOEFV?=
- =?utf-8?B?NjZabm5mUzdGM2N2RGtYVHZpL1E5L1BTUVNDaUNHTGw0eHVwaHdHT3FNaWsw?=
- =?utf-8?B?OHE2b3dLTFM2M28yaHFnTnlDZmhRLzRwWGdPMHQyaEFsOGZkdGUveE55UlBC?=
- =?utf-8?B?YzZ6cytwbXhOdVBVMFRGdXNyVmhGZENacDlOTkpnZlpnNHVOYWZHS1pZcnVD?=
- =?utf-8?B?VjF3bGhZT1V6SnUwWS9XM1JHUllIdmlidkZTN1UwV29CMFNuZ3hhdndBa3Av?=
- =?utf-8?B?M29qN2lCU1QzRGp1VmNmRUlGbkhydWhHeWg0M2NwWlUyNzdBUE1EUFpmcjlh?=
- =?utf-8?B?YXpETVV5U1VRS09YMDdaMnJpQW9uR05vQmtxeWQ0Tkl5YVcrekYwMkFRVnJS?=
- =?utf-8?B?eTQ5c0hJTTFLTGZyd2JsQldXbjFEM1AwZ01DdVBJVVl3Y01Ga2RXRitJdDFz?=
- =?utf-8?B?N3B2VE5ROE1qRThyTlRocTRIRDhPck13L2p3MlBqcFNpdlA3M3I4blRrLyti?=
- =?utf-8?B?Vi9BcUJNT1U3TndxbmFJbjNYc2grS0dQRlBOMThqa09hckQvQW5rRHJxbUFy?=
- =?utf-8?B?bk1yV0orSXhMN1VnMFdOTUpUS3haZEpVSTJ4cW42Y21Ba3h2d3UyVVcxdnF2?=
- =?utf-8?B?aXQxaUpTRTA1Z1VIQlExMFVCUEZ5bDhSQVA4TGpNSUNhckdMSDJ2RmFtR2JQ?=
- =?utf-8?B?dWRienpsUUYycWRsWXU1VkJjM1ZXYWFzTzE1TXJDR1FTYTdRTmxDMlBVbDQ0?=
- =?utf-8?B?L05HbVpjemFCYUFlakpqQW5iUElxTVRPUWJ5YmlnKzFGQlBieXJQRWdiazZ3?=
- =?utf-8?B?L1c4RVFRR2ZBU0pmTmlLeHl5clliVHUzTUF5a3hyQ2FEMzNjMzdFS2JXQW1j?=
- =?utf-8?B?VzlJb3ZaeXc0WmlKZ1NFYTQ5ZWVVUGZXSzVNOElHN0lLcms2UDlwRVpoZEVO?=
- =?utf-8?B?RmkzSFNTbjFlRjJNYzQ2RVhWWVd1TVVqWGF0cTJ3djBUQjFBZGhwdVB6OEJO?=
- =?utf-8?B?YXNWRVVHZEpON3dScytXVzlkUkt3am9JTzhhN01ESGhydzVEbXM1TU40aEJC?=
- =?utf-8?B?WUR3MGpaWXYwSHJGRk55WDlKSm9OMmVBemlSMVl0TzE1dDhIdlU0NjlVcTFx?=
- =?utf-8?B?RHpoSk5wMFMyTk9uYmpkMGhNWDFYYk95QkdQeEcyS0N1Nk1hR25ZZTAwWERS?=
- =?utf-8?B?ZFJkYm4yZmVjM1JRenBGS2w2TVhBQUttaTdVcWdKU2Q1VDBBalJOZG0zUzlh?=
- =?utf-8?B?cml4eXBUMFZyMnZTWFF3UkhKT0hqY29tQXkzVlI0U0t2d3F6cVFJN2N6TGN3?=
- =?utf-8?B?dFBwZmhUR1BWQ0ZWU3c5TjdZamt4WEx1b0wwd0hMWnpEL3h4SVIvdHZjWFhO?=
- =?utf-8?B?OXRWQ3pOaHdLNVhUK3RMUDhqWFREVlJSZk5mYmNZRFZPVm5KUnVNcDhQeHZP?=
- =?utf-8?B?NXVycEJtKzBlVkY2NHZUcHpncnhhZG1hTVlRWDdFSE1zWnZpUm90L2NhekMy?=
- =?utf-8?B?ZHZnaEdKVTh5RWV1bFlUUEl3TFg0cm4wbzAySkRlRXQwalMvSFJRcmZaQ0oy?=
- =?utf-8?B?Vlg2Sm96bGpjczhWVXJsZXEvNWdDeHY3Smk5Wm8xR3ZhWm4vQkRQb0s4b3pX?=
- =?utf-8?B?T1RoV09kOHkvVkc5TUNRYk9mK3NYeGN5QVdHYTRESDQwK21DbFdyV0JsQkFT?=
- =?utf-8?B?NDIrMW1UeW9wWU9pS3RaSUFXVHZBS0NyZEo0WmQxR2NHeWFXM2pVczBSZXFL?=
- =?utf-8?B?MlpXbzFMTHBPb1ZHamt2UDFtWHMyZk0xdERheU1tZnVYdjluaDloTnlna3h2?=
- =?utf-8?Q?eiF3VFCt0qQtXKzUz0LjlZ0=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ad06eec-5bb9-4298-6902-08d9fc1db4ab
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5598.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 07:24:36.8315
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tRTb6wkOX2CX3vGIX0MYNoZASve6j3ah1m7tS7fxUQrKE0UpNRgnsIVkZq7HOx9/ubCE5KeYwIvUhjd6MgeW/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2821
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [rafael-pm:bleeding-edge 113/118]
+ arch/x86/kernel/acpi/boot.c:1476:8: warning: excess elements in array
+ initializer
+To: kernel test robot <lkp@intel.com>, Mark Cilissen <mark@yotsuba.nl>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-acpi@vger.kernel.org, devel@acpica.org, linux-pm@vger.kernel.org,
+ "Rafael J. Wysocki" <rjw@rjwysocki.net>
+References: <202203020737.wa9uc4gW-lkp@intel.com>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <202203020737.wa9uc4gW-lkp@intel.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=hdegoede@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Marek,
+Hi,
 
-Thanks for your patch! Perhaps something to improve:
+On 3/2/22 03:51, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+> head:   f7307721a01f4f14d21c699b270a870370cf34b9
+> commit: ed00b2b8d737f87a2437d7bd7c7f90124b50da05 [113/118] x86 / ACPI: Work around broken XSDT on SEGA AALE board
+> config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220302/202203020737.wa9uc4gW-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=ed00b2b8d737f87a2437d7bd7c7f90124b50da05
+>         git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+>         git fetch --no-tags rafael-pm bleeding-edge
+>         git checkout ed00b2b8d737f87a2437d7bd7c7f90124b50da05
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/acpi/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> arch/x86/kernel/acpi/boot.c:1476:8: warning: excess elements in array initializer [-Wexcess-initializers]
+>                         DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
+>                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/mod_devicetable.h:587:25: note: expanded from macro 'DMI_MATCH'
+>    #define DMI_MATCH(a, b) { .slot = a, .substr = b }
+>                            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    1 warning generated.
+> 
+> 
+> vim +1476 arch/x86/kernel/acpi/boot.c
+> 
+>   1389	
+>   1390	/*
+>   1391	 * If your system is blacklisted here, but you find that acpi=force
+>   1392	 * works for you, please contact linux-acpi@vger.kernel.org
+>   1393	 */
+>   1394	static const struct dmi_system_id acpi_dmi_table[] __initconst = {
+>   1395		/*
+>   1396		 * Boxes that need ACPI disabled
+>   1397		 */
+>   1398		{
+>   1399		 .callback = dmi_disable_acpi,
+>   1400		 .ident = "IBM Thinkpad",
+>   1401		 .matches = {
+>   1402			     DMI_MATCH(DMI_BOARD_VENDOR, "IBM"),
+>   1403			     DMI_MATCH(DMI_BOARD_NAME, "2629H1G"),
+>   1404			     },
+>   1405		 },
+>   1406	
+>   1407		/*
+>   1408		 * Boxes that need ACPI PCI IRQ routing disabled
+>   1409		 */
+>   1410		{
+>   1411		 .callback = disable_acpi_irq,
+>   1412		 .ident = "ASUS A7V",
+>   1413		 .matches = {
+>   1414			     DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer INC"),
+>   1415			     DMI_MATCH(DMI_BOARD_NAME, "<A7V>"),
+>   1416			     /* newer BIOS, Revision 1011, does work */
+>   1417			     DMI_MATCH(DMI_BIOS_VERSION,
+>   1418				       "ASUS A7V ACPI BIOS Revision 1007"),
+>   1419			     },
+>   1420		 },
+>   1421		{
+>   1422			/*
+>   1423			 * Latest BIOS for IBM 600E (1.16) has bad pcinum
+>   1424			 * for LPC bridge, which is needed for the PCI
+>   1425			 * interrupt links to work. DSDT fix is in bug 5966.
+>   1426			 * 2645, 2646 model numbers are shared with 600/600E/600X
+>   1427			 */
+>   1428		 .callback = disable_acpi_irq,
+>   1429		 .ident = "IBM Thinkpad 600 Series 2645",
+>   1430		 .matches = {
+>   1431			     DMI_MATCH(DMI_BOARD_VENDOR, "IBM"),
+>   1432			     DMI_MATCH(DMI_BOARD_NAME, "2645"),
+>   1433			     },
+>   1434		 },
+>   1435		{
+>   1436		 .callback = disable_acpi_irq,
+>   1437		 .ident = "IBM Thinkpad 600 Series 2646",
+>   1438		 .matches = {
+>   1439			     DMI_MATCH(DMI_BOARD_VENDOR, "IBM"),
+>   1440			     DMI_MATCH(DMI_BOARD_NAME, "2646"),
+>   1441			     },
+>   1442		 },
+>   1443		/*
+>   1444		 * Boxes that need ACPI PCI IRQ routing and PCI scan disabled
+>   1445		 */
+>   1446		{			/* _BBN 0 bug */
+>   1447		 .callback = disable_acpi_pci,
+>   1448		 .ident = "ASUS PR-DLS",
+>   1449		 .matches = {
+>   1450			     DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer INC."),
+>   1451			     DMI_MATCH(DMI_BOARD_NAME, "PR-DLS"),
+>   1452			     DMI_MATCH(DMI_BIOS_VERSION,
+>   1453				       "ASUS PR-DLS ACPI BIOS Revision 1010"),
+>   1454			     DMI_MATCH(DMI_BIOS_DATE, "03/21/2003")
+>   1455			     },
+>   1456		 },
+>   1457		{
+>   1458		 .callback = disable_acpi_pci,
+>   1459		 .ident = "Acer TravelMate 36x Laptop",
+>   1460		 .matches = {
+>   1461			     DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
+>   1462			     DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 360"),
+>   1463			     },
+>   1464		 },
+>   1465		/*
+>   1466		 * Boxes that need ACPI XSDT use disabled due to corrupted tables
+>   1467		 */
+>   1468		{
+>   1469		 .callback = disable_acpi_xsdt,
+>   1470		 .ident = "SEGA AALE",
+>   1471		 .matches = {
+>   1472			     DMI_MATCH(DMI_SYS_VENDOR, "NEC"),
+>   1473			     DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board"),
+>   1474			     DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies LTD"),
+>   1475			     DMI_MATCH(DMI_BIOS_VERSION, "V1.12"),
+>> 1476			     DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
+>   1477			     },
 
-[auto build test WARNING on drm-intel/for-linux-next]
-[also build test WARNING on drm-exynos/exynos-drm-next next-20220225]
-[cannot apply to drm/drm-next drm-tip/drm-tip tegra-drm/drm/tegra/for-next v5.17-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Ah, right there can be max 4 matches for a single dmi_system_id table entry.
 
-url:    https://github.com/0day-ci/linux/commits/Marek-Vasut/dt-bindings-mxsfb-Add-compatible-for-i-MX8MP/20220228-084809
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-config: mips-randconfig-c004-20220227 (https://download.01.org/0day-ci/archive/20220301/202203010150.L57Eax3W-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-         chmod +x ~/bin/make.cross
-         # install mips cross compiling tool for clang build
-         # apt-get install binutils-mips-linux-gnu
-         # https://github.com/0day-ci/linux/commit/d6832d6fb879aabce18d9b451ed1ead1da38c333
-         git remote add linux-review https://github.com/0day-ci/linux
-         git fetch --no-tags linux-review Marek-Vasut/dt-bindings-mxsfb-Add-compatible-for-i-MX8MP/20220228-084809
-         git checkout d6832d6fb879aabce18d9b451ed1ead1da38c333
-         # save the config file to linux build tree
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=mips clang-analyzer
+Mark, I think the BIOS-vendor match has little value, so that can be dropped, do you
+agree?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <yujie.liu@intel.com>
+Regards,
 
-clang-analyzer warnings: (new ones prefixed by >>)
+Hans
 
->> drivers/gpu/drm/mxsfb/mxsfb_kms.c:258:8: warning: The left expression of the compound assignment is an uninitialized value. The computed value will also be garbage [clang-analyzer-core.uninitialized.Assign]
-                    ctrl |= CTRL_INV_HS;
-                         ^
 
-vim +258 drivers/gpu/drm/mxsfb/mxsfb_kms.c
 
-56c727244a47cf Marek Vasut 2022-02-28  251
-d6832d6fb879aa Marek Vasut 2022-02-28  252  static void mxsfb_v8_set_mode(struct mxsfb_drm_private *mxsfb, u32 bus_flags)
-d6832d6fb879aa Marek Vasut 2022-02-28  253  {
-d6832d6fb879aa Marek Vasut 2022-02-28  254  	struct drm_display_mode *m = &mxsfb->crtc.state->adjusted_mode;
-d6832d6fb879aa Marek Vasut 2022-02-28 @255  	u32 ctrl;
-d6832d6fb879aa Marek Vasut 2022-02-28  256
-d6832d6fb879aa Marek Vasut 2022-02-28  257  	if (m->flags & DRM_MODE_FLAG_PHSYNC)
-d6832d6fb879aa Marek Vasut 2022-02-28 @258  		ctrl |= CTRL_INV_HS;
-d6832d6fb879aa Marek Vasut 2022-02-28  259  	if (m->flags & DRM_MODE_FLAG_PVSYNC)
-d6832d6fb879aa Marek Vasut 2022-02-28  260  		ctrl |= CTRL_INV_VS;
-d6832d6fb879aa Marek Vasut 2022-02-28  261  	/* Make sure Data Enable is high active by default */
-d6832d6fb879aa Marek Vasut 2022-02-28  262  	if (!(bus_flags & DRM_BUS_FLAG_DE_LOW))
-d6832d6fb879aa Marek Vasut 2022-02-28  263  		ctrl |= CTRL_INV_DE;
-d6832d6fb879aa Marek Vasut 2022-02-28  264  	if (bus_flags & DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)
-d6832d6fb879aa Marek Vasut 2022-02-28  265  		ctrl |= CTRL_INV_PXCK;
-d6832d6fb879aa Marek Vasut 2022-02-28  266
-d6832d6fb879aa Marek Vasut 2022-02-28  267  	writel(ctrl, mxsfb->base + LCDC_CTRL);
-d6832d6fb879aa Marek Vasut 2022-02-28  268
-d6832d6fb879aa Marek Vasut 2022-02-28  269  	writel(DISP_SIZE_DELTA_Y(m->crtc_vdisplay) |
-d6832d6fb879aa Marek Vasut 2022-02-28  270  	       DISP_SIZE_DELTA_X(m->crtc_hdisplay),
-d6832d6fb879aa Marek Vasut 2022-02-28  271  	       mxsfb->base + LCDC_V8_DISP_SIZE);
-d6832d6fb879aa Marek Vasut 2022-02-28  272
-d6832d6fb879aa Marek Vasut 2022-02-28  273  	writel(HSYN_PARA_BP_H(m->htotal - m->hsync_end) |
-d6832d6fb879aa Marek Vasut 2022-02-28  274  	       HSYN_PARA_FP_H(m->hsync_start - m->hdisplay),
-d6832d6fb879aa Marek Vasut 2022-02-28  275  	       mxsfb->base + LCDC_V8_HSYN_PARA);
-d6832d6fb879aa Marek Vasut 2022-02-28  276
-d6832d6fb879aa Marek Vasut 2022-02-28  277  	writel(VSYN_PARA_BP_V(m->vtotal - m->vsync_end) |
-d6832d6fb879aa Marek Vasut 2022-02-28  278  	       VSYN_PARA_FP_V(m->vsync_start - m->vdisplay),
-d6832d6fb879aa Marek Vasut 2022-02-28  279  	       mxsfb->base + LCDC_V8_VSYN_PARA);
-d6832d6fb879aa Marek Vasut 2022-02-28  280
-d6832d6fb879aa Marek Vasut 2022-02-28  281  	writel(VSYN_HSYN_WIDTH_PW_V(m->vsync_end - m->vsync_start) |
-d6832d6fb879aa Marek Vasut 2022-02-28  282  	       VSYN_HSYN_WIDTH_PW_H(m->hsync_end - m->hsync_start),
-d6832d6fb879aa Marek Vasut 2022-02-28  283  	       mxsfb->base + LCDC_V8_VSYN_HSYN_WIDTH);
-d6832d6fb879aa Marek Vasut 2022-02-28  284
-d6832d6fb879aa Marek Vasut 2022-02-28  285  	writel(CTRLDESCL0_1_HEIGHT(m->crtc_vdisplay) |
-d6832d6fb879aa Marek Vasut 2022-02-28  286  	       CTRLDESCL0_1_WIDTH(m->crtc_hdisplay),
-d6832d6fb879aa Marek Vasut 2022-02-28  287  	       mxsfb->base + LCDC_V8_CTRLDESCL0_1);
-d6832d6fb879aa Marek Vasut 2022-02-28  288
-d6832d6fb879aa Marek Vasut 2022-02-28  289  	writel(CTRLDESCL0_3_PITCH(mxsfb->crtc.primary->state->fb->pitches[0]),
-d6832d6fb879aa Marek Vasut 2022-02-28  290  	       mxsfb->base + LCDC_V8_CTRLDESCL0_3);
-d6832d6fb879aa Marek Vasut 2022-02-28  291  }
-d6832d6fb879aa Marek Vasut 2022-02-28  292
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
