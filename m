@@ -1,125 +1,175 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F6836B
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 00:35:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646267705; x=1677803705;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4zSXdc7KAQv6ROJTapgLcs4iC6Ro436n8GV5J48iRho=;
-  b=ljmJdOq1o0Tu5Y+Cfxllg70PFai4jL8X/HFV80n2NkTRB5lDabMkE0Z1
-   TN3BYolbD7oTpjnjaFtq/ayO2bCaS+EctKE3fxTgnBkzAin13XJ1RzEm6
-   vOG9kueqR5E8PfL+DUvVwks5o15qV1LlhEyErQkGJB66jmhL2XlTyBhry
-   +Vmx3nt5TZ6tDXbI9fKwx7bofGI6E6UQW6IpagWlf6VSdmMqurJ9e59cR
-   1FEF8DGMNtI+Ov+91ZeF62OGwUc8pFJr4XAb3Kvj1eEBRiAaW39RatfyV
-   9wQve8c+EOZ+h6xSkRaps9CKR/H379Dsq4VG0vLe+cuk1Duu3Yl5PYzdy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253469205"
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="253469205"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 16:35:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="594197552"
-Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Mar 2022 16:35:03 -0800
-Received: from kbuild by e9605edfa585 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nPZQs-00029A-EQ; Thu, 03 Mar 2022 00:35:02 +0000
-Date: Thu, 3 Mar 2022 08:34:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zack Rusin <zack@kde.org>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, krastevm@vmware.com,
-	mombasawalam@vmware.com
-Subject: Re: [PATCH 7/8] drm/vmwgfx: Implement MSI/MSI-X support for IRQs
-Message-ID: <202203030802.itIYtJH1-lkp@intel.com>
-References: <20220302152426.885214-8-zack@kde.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4779136B
+	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 00:54:12 +0000 (UTC)
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-07.nifty.com with ESMTP id 2230j0qG029883
+	for <llvm@lists.linux.dev>; Thu, 3 Mar 2022 09:45:00 +0900
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178]) (authenticated)
+	by conssluserg-01.nifty.com with ESMTP id 2230ipu0014600
+	for <llvm@lists.linux.dev>; Thu, 3 Mar 2022 09:44:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2230ipu0014600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1646268291;
+	bh=qFJlBbOGHIjmGqrsHLgsSVnCFKYD56zFTMBoZ4bzgoI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=d+QqzInMPNKAtFKqHwSKLeqtPTZMXtp4QljZokz0tRh+GlX8mJPKdroYJxp+/+qXQ
+	 Iaqv/Yu6Tg6A0Dkt2XTm7Bh0H9n92eKjSuW7Qx6lhHkxguuCqBRBW7APC2GxA4BSyZ
+	 ZENOD4LuUhXWd+jLgGDEY/StHwUeGdJAvx4dgTV5JynbQ5fx14N9o9zJCEtpjrLTKo
+	 KF2Ul3a6+iisSvW9VA/umjTlM9b9jmZbDrI9DEiqNKRi7Hfhrj67HKJz1MXrGvabP6
+	 LIS7HU6TQC0/5uiwPf+m4vm8iGHn0GDaCC9KAv5ja41rneuHjcfpreWnfrJl+vKccs
+	 /l7vqgtT9K2nQ==
+X-Nifty-SrcIP: [209.85.210.178]
+Received: by mail-pf1-f178.google.com with SMTP id z15so3389710pfe.7
+        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 16:44:51 -0800 (PST)
+X-Gm-Message-State: AOAM532iipcCvnM62uZ66yBeUfgH3p/aG1Oms5YjZKjnyAsuXnocyzpk
+	qGlJjV/XL4KIvSjp9UUQo2bLbdyu0g2VS9qfpEA=
+X-Google-Smtp-Source: ABdhPJxJmpCr7cqZbg0899QCITX2rIIHdJURDFdP7XyJOclpsettcbZAqBuZIHSTaJ8scctyB/vsOG2d8BxfkFG7zqE=
+X-Received: by 2002:a05:6a00:24c7:b0:4e1:cb76:32d1 with SMTP id
+ d7-20020a056a0024c700b004e1cb7632d1mr35565422pfv.36.1646268290741; Wed, 02
+ Mar 2022 16:44:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302152426.885214-8-zack@kde.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-2-arnd@kernel.org>
+In-Reply-To: <20220301145233.3689119-2-arnd@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 3 Mar 2022 09:44:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQpmqncnnaO+NKEuDajx4G0=7eQ1s5e+o+fPyuxrkwncg@mail.gmail.com>
+Message-ID: <CAK7LNAQpmqncnnaO+NKEuDajx4G0=7eQ1s5e+o+fPyuxrkwncg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] treewide: use -Wdeclaration-after-statement
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Elver <elver@google.com>, Jani Nikula <jani.nikula@intel.com>,
+        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        llvm@lists.linux.dev,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Zack,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.17-rc6 next-20220302]
-[cannot apply to airlied/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Zack-Rusin/drm-vmwgfx-3D-on-arm64-and-large-cursor-support/20220302-232641
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220303/202203030802.itIYtJH1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/63d27e1cb11562966a6f07bf0e667b0a54dc2412
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Zack-Rusin/drm-vmwgfx-3D-on-arm64-and-large-cursor-support/20220302-232641
-        git checkout 63d27e1cb11562966a6f07bf0e667b0a54dc2412
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/vmwgfx/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/vmwgfx/vmwgfx_irq.c:340:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (nvec <= 0) {
-               ^~~~~~~~~
-   drivers/gpu/drm/vmwgfx/vmwgfx_irq.c:369:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/gpu/drm/vmwgfx/vmwgfx_irq.c:340:2: note: remove the 'if' if its condition is always false
-           if (nvec <= 0) {
-           ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/vmwgfx/vmwgfx_irq.c:330:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+On Tue, Mar 1, 2022 at 11:52 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Mark Rutland <mark.rutland@arm.com>
+>
+> In a subsequent patch we'll move the kernel from using `-std=3Dgnu89` to
 
 
-vim +340 drivers/gpu/drm/vmwgfx/vmwgfx_irq.c
+Precisely speaking,
+"In a subsequent patch we'll move the userspace tools ..."
 
-   319	
-   320	/**
-   321	 * vmw_irq_install - Install the irq handlers
-   322	 *
-   323	 * @dev_priv:  Pointer to the vmw_private device.
-   324	 * Return:  Zero if successful. Negative number otherwise.
-   325	 */
-   326	int vmw_irq_install(struct vmw_private *dev_priv)
-   327	{
-   328		struct pci_dev *pdev = to_pci_dev(dev_priv->drm.dev);
-   329		struct drm_device *dev = &dev_priv->drm;
-   330		int ret;
-   331		int nvec;
-   332		int i = 0;
-   333	
-   334		BUILD_BUG_ON((SVGA_IRQFLAG_MAX >> VMWGFX_MAX_NUM_IRQS) != 1);
-   335		BUG_ON(VMWGFX_MAX_NUM_IRQS != get_count_order(SVGA_IRQFLAG_MAX));
-   336	
-   337		nvec = pci_alloc_irq_vectors(pdev, 1, VMWGFX_MAX_NUM_IRQS,
-   338					     PCI_IRQ_ALL_TYPES);
-   339	
- > 340		if (nvec <= 0) {
+The kernel part was done by 1/3.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+> `-std=3Dgnu11`, permitting the use of additional C11 features such as
+> for-loop initial declarations.
+>
+> One contentious aspect of C99 is that it permits mixed declarations and
+> code, and for now at least, it seems preferable to enforce that
+> declarations must come first.
+>
+> These warnings were already disabled in the kernel itself, but not
+
+Is this the opposite?
+
+"These warnings were already _enabled_ in the kernel itself, ..."
+
+
+
+
+If you have a chance to resend this,
+can you please rebase on top of kbuild/for-next?
+
+This is not applicable due to the conflict with:
+https://patchwork.kernel.org/project/linux-kbuild/patch/20220201213542.2808=
+035-1-quic_eberman@quicinc.com/
+
+
+
+
+
+
+> for KBUILD_USERCFLAGS or the compat VDSO on arch/arm64, which uses
+> a separate set of CFLAGS.
+>
+> This patch fixes an existing violation in modpost.c, which is not
+> reported because of the missing flag in KBUILD_USERCFLAGS:
+>
+> | scripts/mod/modpost.c: In function =E2=80=98match=E2=80=99:
+> | scripts/mod/modpost.c:837:3: warning: ISO C90 forbids mixed declaration=
+s and code [-Wdeclaration-after-statement]
+> |   837 |   const char *endp =3D p + strlen(p) - 1;
+> |       |   ^~~~~
+>
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> [arnd: don't add a duplicate flag to the default set, update changelog]
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  Makefile                          | 3 ++-
+>  arch/arm64/kernel/vdso32/Makefile | 1 +
+>  scripts/mod/modpost.c             | 4 +++-
+>  3 files changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 94fa9a849a7a..37ef6a555dcd 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -432,7 +432,8 @@ HOSTCXX     =3D g++
+>  endif
+>
+>  export KBUILD_USERCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-protot=
+ypes \
+> -                             -O2 -fomit-frame-pointer -std=3Dgnu89
+> +                           -O2 -fomit-frame-pointer -std=3Dgnu89 \
+> +                           -Wdeclaration-after-statement
+>  export KBUILD_USERLDFLAGS :=3D
+>
+>  KBUILD_HOSTCFLAGS   :=3D $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTC=
+FLAGS)
+> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32=
+/Makefile
+> index 9378ea055bf2..ed181bedbffc 100644
+> --- a/arch/arm64/kernel/vdso32/Makefile
+> +++ b/arch/arm64/kernel/vdso32/Makefile
+> @@ -68,6 +68,7 @@ VDSO_CFLAGS +=3D -Wall -Wundef -Wstrict-prototypes -Wno=
+-trigraphs \
+>                 -fno-strict-aliasing -fno-common \
+>                 -Werror-implicit-function-declaration \
+>                 -Wno-format-security \
+> +               -Wdeclaration-after-statement \
+>                 -std=3Dgnu11
+>  VDSO_CFLAGS  +=3D -O2
+>  # Some useful compiler-dependent flags from top-level Makefile
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 6bfa33217914..fe693304b120 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -833,8 +833,10 @@ static int match(const char *sym, const char * const=
+ pat[])
+>  {
+>         const char *p;
+>         while (*pat) {
+> +               const char *endp;
+> +
+>                 p =3D *pat++;
+> -               const char *endp =3D p + strlen(p) - 1;
+> +               endp =3D p + strlen(p) - 1;
+>
+>                 /* "*foo*" */
+>                 if (*p =3D=3D '*' && *endp =3D=3D '*') {
+> --
+> 2.29.2
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
