@@ -1,103 +1,92 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6737A
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 08:38:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1646296686;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7VbL5lT53mUztHyArx9pP7wyihmJ4M3NPqTtcvOQ2VI=;
-	b=Q5nhq6/wzb7uVvj8eCG+9zk9HjP252gVR3JdSNtcyWnrF25FA2y++to3OYD2CCIK8scfo8
-	JOpG8jWSBqUAf00OqZw0U4O0iAGp9rkD+FlHUTWIQAqsoYCUbntSkAetf5vEFQHEjgqMgV
-	8KfiUbfgGbgUpwgzKoEymdJ/V2Eu3Ww=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-484-pM9p8JdsPW2XBj4nxH1r7g-1; Thu, 03 Mar 2022 03:38:05 -0500
-X-MC-Unique: pM9p8JdsPW2XBj4nxH1r7g-1
-Received: by mail-wr1-f71.google.com with SMTP id x15-20020a5d6b4f000000b001ee6c0aa287so1747315wrw.9
-        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 00:38:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1D17A
+	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 09:06:53 +0000 (UTC)
+Received: by mail-pg1-f201.google.com with SMTP id z10-20020a634c0a000000b0036c5eb39076so2467338pga.18
+        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 01:06:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=2bQdkuF0SOPnoGthP45kPV6bs5nvMHTPUBqrBi7KDmE=;
+        b=CwcLSYEWIYkwRIiSSoxKp+6DeCkwVywNCvkORnPKqsNTneqEIEtKoa1z3mwpqSO5W4
+         C4EHKgRYdUXjCIOSBiph61mK8NoMu3VVGZdQoh1vzbAAj6PmbcMhAyb+4ErMMn/svnDL
+         FP8rthWhTrzh2Va1j3Zfzp+FYQz4qCJD1gVJd7MbjNd/ghRt2JDE69B0eP4rYOZJWtNk
+         iy8+/9w5gmFETfLE9rVgJeZuSKmAoHiJKgxbZtHPkGMaD2ChCzD6jJS3mXJoVYXdg2Zb
+         Nn0/DhX7zv8c3bY7H6zzF0hk+Q/LD8THdUGTyGynCcth2eoJxJBm37j1FQ/tcNYb/tBi
+         a+Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=7VbL5lT53mUztHyArx9pP7wyihmJ4M3NPqTtcvOQ2VI=;
-        b=Af/8ovQR0QOuc6/ntiC4d6olcD2l9QSuOJKpLJp+etZbkzZ3A/heffsYxvmrifazkB
-         pnST+0h6D6fvr2YPjbah5+L6jGE9zQsi+Wlai+U0KDvhdHmg3Mk6u7wJUxELgUhu4t8N
-         DDURd6zey667FcGy6BhGwpYvSKGIPw2gq4ev5/bqpOGZ+SNdtfv5Y/4PvnYDBtaWxhv3
-         L2xHRZUvAYFem9SegTL/8h/JkILGLKx5iA7fcrP98UldJ44fYMPxFAIBesHp1dwdv01f
-         cfq3zCCuCLk1I6TG/Yfzg8v/Tj/Eyi7IR3C6XUe7t8c6qMiZCC0ZDqmscVLVxCbgdfWB
-         l7jg==
-X-Gm-Message-State: AOAM531uEzD+LHmGZ3IxuPFxu4Dmirt9dfb5bnXG413X2A5Pg5Lun6a9
-	cUC0mHTmMPOB+UHVSh4rTnrERiwFnLwTuQkCq5KNW0sa4gQGvaeZZdk2t2ENhD8ACX7PVCnDLLD
-	zcrsWwKVdcyTDwA==
-X-Received: by 2002:a5d:47a4:0:b0:1f0:46e4:19bc with SMTP id 4-20020a5d47a4000000b001f046e419bcmr4066494wrb.601.1646296684782;
-        Thu, 03 Mar 2022 00:38:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw/AOr9kcfSCL6dEmzp2KPAxB6X5N/u/fMMDoNJCyjfqcaaRT42zcBqSgBSliGMWF1kL7ADpA==
-X-Received: by 2002:a5d:47a4:0:b0:1f0:46e4:19bc with SMTP id 4-20020a5d47a4000000b001f046e419bcmr4066475wrb.601.1646296684567;
-        Thu, 03 Mar 2022 00:38:04 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id v15-20020a5d590f000000b001f04b96f9a9sm1338936wrd.42.2022.03.03.00.38.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 00:38:04 -0800 (PST)
-Message-ID: <8cef7451-ac6a-9ca5-b521-1eec53d30880@redhat.com>
-Date: Thu, 3 Mar 2022 09:38:03 +0100
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=2bQdkuF0SOPnoGthP45kPV6bs5nvMHTPUBqrBi7KDmE=;
+        b=ZT/DQ9Gm2ktWmlbegDeRRvU9LaYAPqFV/nAShpeQ0YqSIeVar90u8eziLsdNTLkJ7/
+         nSjPNw+mFi5LtANqlG7ownWDxAm041r/welmY91AI9jqttSp5aHkDLlXsxR2lI821cec
+         ItdN7V/R4ZFSNkYu2gon6i7zsPnNuJiq1lgKb8zGTGARCHgnWgIUF8sA9yYtU9ofDnlZ
+         T8w7b+BhPea/0qIZ2oGmb+itVAs9RWZ7JDZTTUVZmU58oGRonGyq5ZqVMWyaj0exl7M7
+         R1iA9qZQt7+KjfeFNH2glCVpEWVOYJVVNBHBA1rlzjHXhbdBLgAx5Q1brgfHwlN4xjaS
+         FVZQ==
+X-Gm-Message-State: AOAM530LMeIL5j/YF49gk+MMRe4BWLeYJhSSiwceMMIw3zLGW2ukhOgY
+	iLskiED7Xx8P8lWWXKo7F7qad0tm+7ne7g==
+X-Google-Smtp-Source: ABdhPJxF438b/WEu22WxHZgv3A03n8SRdHWfJx5cX+REUymSJzQW01Ac5BTggzKnp1cW4D9MmVLPr1IGpLealw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90b:4b52:b0:1bc:b208:dc5c with SMTP
+ id mi18-20020a17090b4b5200b001bcb208dc5cmr1023750pjb.1.1646298411425; Thu, 03
+ Mar 2022 01:06:51 -0800 (PST)
+Date: Thu,  3 Mar 2022 17:06:42 +0800
+Message-Id: <20220303090643.241747-1-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH][next] drm: ssd130x: remove redundant initialization of
- pointer mode
-From: Javier Martinez Canillas <javierm@redhat.com>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
- dri-devel <dri-devel@lists.freedesktop.org>,
- kernel-janitors@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- llvm@lists.linux.dev
-References: <20220302175309.1098827-1-colin.i.king@gmail.com>
- <CAFOAJEfS9dMY5nudeFxtwchTtLnBCh7N4qKaCdqvaodnRUFKzA@mail.gmail.com>
-In-Reply-To: <CAFOAJEfS9dMY5nudeFxtwchTtLnBCh7N4qKaCdqvaodnRUFKzA@mail.gmail.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=javierm@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
+From: David Gow <davidgow@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>, 
+	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, linux-um@lists.infradead.org, 
+	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 3/2/22 19:29, Javier Martinez Canillas wrote:
-> Hello Colin,
-> 
-> Thanks for the patch.
-> 
-> On Wed, Mar 2, 2022 at 6:53 PM Colin Ian King <colin.i.king@gmail.com> wrote:
->>
->> Pointer mode is being assigned a value that is never read, it is
->> being re-assigned later with a new value. The initialization is
->> redundant and can be removed.
->>
-> 
-> Indeed.
-> 
-> Acked-by: Javier Martinez Canillas <javierm@redhat.com>
->
+The things built with USER_CFLAGS don't seem to recognise it as a
+compiler option, and print a warning:
+clang: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
 
-Pushed to drm-misc-next (with fixed drm/ssd130x subject prefix).
+Fixes: 744814d2fa ("um: Allow builds with Clang")
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-Thanks!
- -- 
-Best regards,
+This warning shows up after merging:
+https://lore.kernel.org/lkml/20220227184517.504931-6-keescook@chromium.org/
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+I'm not 100% sure why this is necessary, but it does seem to work. All
+the attempts to get rid of -mno-global-merge entirely have been met with
+skepticism, but I'm guessing that it's not a problem for just the UML
+"user" files, as they shouldn't(?) interact too much with modules.
+
+ arch/um/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/um/Makefile b/arch/um/Makefile
+index f2fe63bfd819..320b09cd513c 100644
+--- a/arch/um/Makefile
++++ b/arch/um/Makefile
+@@ -75,6 +75,10 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
+ 		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
+ 		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
+ 
++ifdef CONFIG_CC_IS_CLANG
++USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
++endif
++
+ #This will adjust *FLAGS accordingly to the platform.
+ include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
+ 
+-- 
+2.35.1.616.g0bdcbb4464-goog
 
