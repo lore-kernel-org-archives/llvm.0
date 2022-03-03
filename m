@@ -1,32 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401CF2F21
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 18:14:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72267C004E1;
-	Thu,  3 Mar 2022 18:14:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF856931
+	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 18:26:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 167ABC004E1;
+	Thu,  3 Mar 2022 18:26:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646331251;
-	bh=LVSPewNmGhXRyzLyEm10SYfCvlpreycNSgNgIJS1/7Y=;
+	s=k20201202; t=1646331985;
+	bh=UyDeKHI7dMAM4zVTsiTp9XCr+V7GBwf1HouH+vGDAPk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RbS2Kbu1DpPOkrxl9uxTq8uJZ4POT6c3roRLNtoB7aJYNAaudVX1w84/Epu/fQBkb
-	 cvTKzG72mN/5LUWhMTaw3VYuTFIeZVJxdT1blsse0UZwGu9A1Qu6Q+OvleUULCrFP6
-	 sBqRLubxMSyQMeHjCZvMJHumKOK7s1lz/xQQZ6+M9/HZcAdDW/kF3rjy02WubZHArN
-	 SaL+efNtKATeAweYzaYHgiHuETkeqgB8919eV36nTpaVZ9aqZ8FrQNZOx5fvcCRoET
-	 J0aISwHFM+gXktb4IoUBb4aTjWxAL6LdASpHl/YQKLOdLCUi3+JNnO1jtuhbFUhiUM
-	 +mpxHGm5zUPBw==
-Date: Thu, 3 Mar 2022 11:14:04 -0700
+	b=i6IJzN2V+XixOYQh9aLhWcotiw7BnCmxO+Yq/CXWgTzonU9Jo7K37jtfRXYN7W9kZ
+	 cf6tulxMstjto8kNEYhLI4+V6xnpq7wKOnVSNOoqLGCphwdGvJ/6msFAUz/h0VK+nX
+	 2eCLxyHoZvYHWLSrWdM8yFgc/9A2tsAGqpZC4wLac1Y5yTt5Q/MaEFyCdYjQyOnaKE
+	 wf2nuoNU98I2wdLKs7Gr3/lHO5OHzKabZBwku9YjiTc/r5ulPmQHXmeNWzAg+2J2HZ
+	 9KNsSzhQccn38XIXCftVMa/2ss75Jt/bMZvoZVLeh+uec61Vt077T6evs8t9khD4h9
+	 02OqS7IjcFDDw==
+Date: Thu, 3 Mar 2022 11:26:18 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2 5/8] compiler-clang.h: Add __diag
- infrastructure for clang
-Message-ID: <YiEFbKk12F0UPfx5@thelio-3990X>
-References: <20220303045029.2645297-1-memxor@gmail.com>
- <20220303045029.2645297-6-memxor@gmail.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
+Message-ID: <YiEISsoS/XrbEtbm@thelio-3990X>
+References: <20220303090643.241747-1-davidgow@google.com>
+ <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
+ <202203030947.E2FA3D9@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,82 +40,155 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220303045029.2645297-6-memxor@gmail.com>
+In-Reply-To: <202203030947.E2FA3D9@keescook>
 
-Hi Kumar,
-
-Thanks for sending this along!
-
-On Thu, Mar 03, 2022 at 10:20:26AM +0530, Kumar Kartikeya Dwivedi wrote:
-> From: Nathan Chancellor <nathan@kernel.org>
+On Thu, Mar 03, 2022 at 10:04:28AM -0800, Kees Cook wrote:
+> On Thu, Mar 03, 2022 at 10:30:47AM -0700, Nathan Chancellor wrote:
+> > Hi David,
+> > 
+> > On Thu, Mar 03, 2022 at 05:06:42PM +0800, David Gow wrote:
+> > > The things built with USER_CFLAGS don't seem to recognise it as a
+> > > compiler option, and print a warning:
+> > > clang: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
+> > > 
+> > > Fixes: 744814d2fa ("um: Allow builds with Clang")
+> > > Signed-off-by: David Gow <davidgow@google.com>
+> > > ---
+> > > 
+> > > This warning shows up after merging:
+> > > https://lore.kernel.org/lkml/20220227184517.504931-6-keescook@chromium.org/
+> > > 
+> > > I'm not 100% sure why this is necessary, but it does seem to work. All
+> > > the attempts to get rid of -mno-global-merge entirely have been met with
+> > > skepticism, but I'm guessing that it's not a problem for just the UML
+> > > "user" files, as they shouldn't(?) interact too much with modules.
+> > 
+> > Thank you for the patch! I think it is correct, as this flag only works
+> > for AArch64 and ARM, as it is only used in Clang::AddAArch64TargetArgs()
+> > and Clang::AddARMTargetArgs() in clang/lib/Driver/ToolChains/Clang.cpp,
+> > which are obviously never called with UML. I am not sure why we do not
+> > see warning during regular kernel builds, maybe something about how UML
+> > objects are compiled exposes this?
 > 
-> Add __diag macros similar to those in compiler-gcc.h, so that warnings
-> that need to be adjusted for specific cases but not globally can be
-> ignored for LLVM compilation mode as well.
+> Yeah, I got really turned around when I tried to find this last week.
+> 
+> > 
+> > Regardless, I would definitely like to clean up this instance of the
+> > warning because I would like to make this warning a hard error so that
+> > we do not get cryptic cc-option failures:
+> > 
+> > https://github.com/ClangBuiltLinux/linux/issues/1587
+> > 
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > 
+> > One small comment below.
+> > 
+> > >  arch/um/Makefile | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > > 
+> > > diff --git a/arch/um/Makefile b/arch/um/Makefile
+> > > index f2fe63bfd819..320b09cd513c 100644
+> > > --- a/arch/um/Makefile
+> > > +++ b/arch/um/Makefile
+> > > @@ -75,6 +75,10 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
+> > >  		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
+> > >  		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
+> > >  
+> > > +ifdef CONFIG_CC_IS_CLANG
+> > 
+> > Is this ifdef needed?
+> > 
+> > > +USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
+> > > +endif
+> 
+> How does -mno-global-merge get KBUILD_CFLAGS in the first place? If it's
+> arm/arm64 only, shouldn't that get relocated to those architectures?
+> 
+> *time travel* found it:
+> 
+> 61163efae020 ("kbuild: LLVMLinux: Add Kbuild support for building kernel with Clang")
+> 
+> So I think this may have been universally true long ago, and now only
+> arm/arm64 need it?
 
-I would word this last sentence as:
+I don't think so. -mno-global-merge was introduced in [1], which only
+added the option handling in Clang::AddARMTargetArgs(). In fact, when
+-mglobal-merge was added, there was a test added that checked that
+-mglobal-merge/-mno-global-merge had no impact with an x86_64 triple [2].
 
-"ignored when building with clang."
+Perhaps at the time that 61163efae020 was written, they were testing
+against either ARCH=arm or ARCH=arm64, which would have shown the
+problem that they mentioned? There is no context in the commit message
+so *shrug*.
 
-Technically speaking, LLVM is not the one emitting the warnings, clang
-is :) this is useful with LLVM=1 or CC=clang.
+Regardless, I think your patch is equally viable, perhaps even better,
+as I am sure this is not the only area where this warning might show up.
 
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-You should add your signed-off-by here to notate that you have touched
-the patch per Documentation/process/submitting-patches.rst. It is also
-courteous to note that you wrote the commit message, something along the
-lines of:
-
-"[Kumar: Wrote commit message]
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>"
-
-Regardless, this looks good to me with the context of the other two
-patches:
-
-https://lore.kernel.org/r/20220303045029.2645297-7-memxor@gmail.com/
-https://lore.kernel.org/r/20220303045029.2645297-8-memxor@gmail.com/
+[1]: https://github.com/llvm/llvm-project/commit/ba3df1d3ca8569ff8f6e289594c53926e71e519a
+[2]: https://github.com/llvm/llvm-project/commit/256a869d312b37ed7b5d131329050fcdadb11148
 
 Cheers,
 Nathan
 
-> ---
->  include/linux/compiler-clang.h | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-> index 3c4de9b6c6e3..f1aa41d520bd 100644
-> --- a/include/linux/compiler-clang.h
-> +++ b/include/linux/compiler-clang.h
-> @@ -68,3 +68,25 @@
+> diff --git a/Makefile b/Makefile
+> index 2f6fbba88a0e..fbc42c3c389e 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -852,10 +852,6 @@ ifdef CONFIG_CC_IS_CLANG
+>  KBUILD_CPPFLAGS += -Qunused-arguments
+>  # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
+>  KBUILD_CFLAGS += -Wno-gnu
+> -# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
+> -# source of a reference will be _MergedGlobals and not on of the whitelisted names.
+> -# See modpost pattern 2
+> -KBUILD_CFLAGS += -mno-global-merge
+>  else
 >  
->  #define __nocfi		__attribute__((__no_sanitize__("cfi")))
->  #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
+>  # gcc inanely warns about local variables called 'main'
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index a2391b8de5a5..dcab28c44c26 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -48,6 +48,13 @@ CHECKFLAGS	+= -D__ARMEL__
+>  KBUILD_LDFLAGS	+= -EL
+>  endif
+>  
+> +ifdef CONFIG_CC_IS_CLANG
+> +# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
+> +# source of a reference will be _MergedGlobals and not on of the whitelisted names.
+> +# See modpost pattern 2
+> +KBUILD_CFLAGS	+= -mno-global-merge
+> +endif
 > +
-> +/*
-> + * Turn individual warnings and errors on and off locally, depending
-> + * on version.
-> + */
-> +#define __diag_clang(version, severity, s) \
-> +	__diag_clang_ ## version(__diag_clang_ ## severity s)
+>  #
+>  # The Scalar Replacement of Aggregates (SRA) optimization pass in GCC 4.9 and
+>  # later may result in code being generated that handles signed short and signed
+> diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+> index 2f1de88651e6..2d20fb2ea664 100644
+> --- a/arch/arm64/Makefile
+> +++ b/arch/arm64/Makefile
+> @@ -36,6 +36,13 @@ ifeq ($(CONFIG_BROKEN_GAS_INST),y)
+>  $(warning Detected assembler with broken .inst; disassembly will be unreliable)
+>  endif
+>  
+> +ifdef CONFIG_CC_IS_CLANG
+> +# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
+> +# source of a reference will be _MergedGlobals and not on of the whitelisted names.
+> +# See modpost pattern 2
+> +KBUILD_CFLAGS	+= -mno-global-merge
+> +endif
 > +
-> +/* Severity used in pragma directives */
-> +#define __diag_clang_ignore	ignored
-> +#define __diag_clang_warn	warning
-> +#define __diag_clang_error	error
-> +
-> +#define __diag_str1(s)		#s
-> +#define __diag_str(s)		__diag_str1(s)
-> +#define __diag(s)		_Pragma(__diag_str(clang diagnostic s))
-> +
-> +#if CONFIG_CLANG_VERSION >= 110000
-> +#define __diag_clang_11(s)	__diag(s)
-> +#else
-> +#define __diag_clang_11(s)
-> +#endif
-> -- 
-> 2.35.1
+>  KBUILD_CFLAGS	+= -mgeneral-regs-only	\
+>  		   $(compat_vdso) $(cc_has_k_constraint)
+>  KBUILD_CFLAGS	+= $(call cc-disable-warning, psabi)
 > 
+> > > +
+> > >  #This will adjust *FLAGS accordingly to the platform.
+> > >  include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
+> > >  
+> > > -- 
+> > > 2.35.1.616.g0bdcbb4464-goog
+> > > 
+> 
+> -- 
+> Kees Cook
