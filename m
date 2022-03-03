@@ -1,64 +1,35 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741F92F21
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 17:28:08 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id 9so5160506pll.6
-        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 09:28:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ucEA3J1ya4GRs+I0A0pxTRPbekYvscFzYo/razXDByg=;
-        b=Z0uYSem8nCEuzkLQw4trl/0KBRyeSAZdP+h9TK9qjKeFB7hJVjfN6qYzPVvZCWUsix
-         GMKeMh8GMvp1HIO4vK85RsmY2JcqYXSfEt2sL2d1pZ+tAnb+3/NLiEJKmLTsBn2QYk8M
-         UaCwZ/3Z1UXG/seNFK/fjDU0v04eieZak7kLA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ucEA3J1ya4GRs+I0A0pxTRPbekYvscFzYo/razXDByg=;
-        b=6luGqlqIqmGXa0hqVGQmH2QG4i/K97EZRoGdN7CihiLsZ+K8VJdmo7CaN59yvTxQAq
-         TFVgHe0HGjMvTOGopNPrXs2Wt2QPuWhBUSoBSJiqAl+00lMYb3kGsmvrBXKHnFoUkSTE
-         xqErFBUw8JCBOME8PmK8sjdrlav2LvamIcqDIar+GzlzRCGKhuuxPCbr3UL6cTkwHOzf
-         1xWwWt/QL0O/+B8hQWv/FtAzpObOYqADLpdSqRZ7xQ4mPSXMhtsrwjDzEcfztfKNcmMS
-         7z7tCk389CBFRKK5fxv5OvVNpm4/wWEfM2K2S8FtHD55ZuytGT5vx9Sb7V03FaOWovYR
-         QItA==
-X-Gm-Message-State: AOAM532W/n5+L4uxGRk52+iWQXS78+dbgTRziIdo6iQOHnHE3SCHu4k7
-	q7dNkM+XwpG2PFQYGFJQzuaySQ==
-X-Google-Smtp-Source: ABdhPJy2mzFw4jO2AzK0JYWGiB+koyjvh1Dy0wGqm4Vkn9fhv16PKbXZ5sesO86D7nyMcNXd9iCe1Q==
-X-Received: by 2002:a17:902:d4cc:b0:151:3857:817b with SMTP id o12-20020a170902d4cc00b001513857817bmr31774133plg.139.1646328487821;
-        Thu, 03 Mar 2022 09:28:07 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s9-20020a056a00194900b004e1583f88a2sm3050692pfk.0.2022.03.03.09.28.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 09:28:07 -0800 (PST)
-Date: Thu, 3 Mar 2022 09:28:04 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: David Gow <davidgow@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Vitor Massaru Iha <vitor@massaru.org>,
-	Daniel Latypov <dlatypov@google.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B092F21
+	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 17:30:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45241C340E9;
+	Thu,  3 Mar 2022 17:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646328655;
+	bh=GCDTpWwAdbUUe92yPSIjZBhj5yfaiPwzu66bwylkoac=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CLQazQPiBOZrP69PhmqDFy7s/3OGcDUji9CNq78GafEhJcptBOq9ejoyBYJ2f546B
+	 WTlZ8u1FFUpD/OSgSZY6He9snfv0gRmz7lyA01z+f8swbsuntwtgqOlSdC95A9rhzD
+	 4EHG/xJLnX+ThYlzbEB371mF/DWMhhm1qjhNHHYZhOO7+PHV6EBURX4/QlJg2a/04b
+	 cK6IxzhArX/HTp+RcLIdMrJ/+byFkhr/Hqjfdh68MR5K6wiC4kB9Fz3hjA/9cu5twz
+	 SOPBjB6KiiImIA7vzXX5v1kdIK7cVQWHqIsb9S4rGhtqXcJiLS7L+LsHATv9VdVI4o
+	 g0bbBtjD2FOMg==
+Date: Thu, 3 Mar 2022 10:30:47 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: David Gow <davidgow@google.com>
+Cc: Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
+	Richard Weinberger <richard@nod.at>,
 	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
 	Masahiro Yamada <masahiroy@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	linux-um <linux-um@lists.infradead.org>,
-	linux-kbuild@vger.kernel.org,
-	KUnit Development <kunit-dev@googlegroups.com>,
-	llvm@lists.linux.dev, x86@kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
 	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] UAPI: Introduce KUnit userspace compatibility
-Message-ID: <202203030927.2D794F4@keescook>
-References: <20220227184517.504931-1-keescook@chromium.org>
- <20220227184517.504931-8-keescook@chromium.org>
- <CABVgOSn6Oe8Ke=fnuVwgLh2r8HKjBW8pCe44Z35Qo1bVfz9A-A@mail.gmail.com>
- <YiC9NBjFgGv5T+gF@kroah.com>
+Subject: Re: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
+Message-ID: <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
+References: <20220303090643.241747-1-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,30 +38,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YiC9NBjFgGv5T+gF@kroah.com>
+In-Reply-To: <20220303090643.241747-1-davidgow@google.com>
 
-On Thu, Mar 03, 2022 at 02:05:56PM +0100, Greg KH wrote:
-> On Thu, Mar 03, 2022 at 04:27:13PM +0800, David Gow wrote:
-> > On Mon, Feb 28, 2022 at 2:45 AM Kees Cook <keescook@chromium.org> wrote:
-> > > diff --git a/include/uapi/misc/kunit.h b/include/uapi/misc/kunit.h
-> > > new file mode 100644
-> > > index 000000000000..afdffda583ae
-> > > --- /dev/null
-> > > +++ b/include/uapi/misc/kunit.h
-> > > @@ -0,0 +1,181 @@
-> > > +#ifndef __UAPI_MISC_KUNIT_H__
-> > > +#define __UAPI_MISC_KUNIT_H__
-> > > +/*
-> > > + * This is a light-weight userspace drop-in replacement for the in-kernel
+Hi David,
+
+On Thu, Mar 03, 2022 at 05:06:42PM +0800, David Gow wrote:
+> The things built with USER_CFLAGS don't seem to recognise it as a
+> compiler option, and print a warning:
+> clang: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
 > 
-> <snip>
+> Fixes: 744814d2fa ("um: Allow builds with Clang")
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
 > 
-> Someone forgot a SPDX license line for the new file.  Didn't checkpatch
-> complain about this?  :(
+> This warning shows up after merging:
+> https://lore.kernel.org/lkml/20220227184517.504931-6-keescook@chromium.org/
+> 
+> I'm not 100% sure why this is necessary, but it does seem to work. All
+> the attempts to get rid of -mno-global-merge entirely have been met with
+> skepticism, but I'm guessing that it's not a problem for just the UML
+> "user" files, as they shouldn't(?) interact too much with modules.
 
-Yeah, that file has a bunch of problems. ;) The UAPI header checking
-logic also freaks out, etc, etc. I'll being fixing that and the other
-issues.
+Thank you for the patch! I think it is correct, as this flag only works
+for AArch64 and ARM, as it is only used in Clang::AddAArch64TargetArgs()
+and Clang::AddARMTargetArgs() in clang/lib/Driver/ToolChains/Clang.cpp,
+which are obviously never called with UML. I am not sure why we do not
+see warning during regular kernel builds, maybe something about how UML
+objects are compiled exposes this?
 
--- 
-Kees Cook
+Regardless, I would definitely like to clean up this instance of the
+warning because I would like to make this warning a hard error so that
+we do not get cryptic cc-option failures:
+
+https://github.com/ClangBuiltLinux/linux/issues/1587
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+One small comment below.
+
+>  arch/um/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/um/Makefile b/arch/um/Makefile
+> index f2fe63bfd819..320b09cd513c 100644
+> --- a/arch/um/Makefile
+> +++ b/arch/um/Makefile
+> @@ -75,6 +75,10 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
+>  		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
+>  		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
+>  
+> +ifdef CONFIG_CC_IS_CLANG
+
+Is this ifdef needed?
+
+> +USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
+> +endif
+> +
+>  #This will adjust *FLAGS accordingly to the platform.
+>  include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
+>  
+> -- 
+> 2.35.1.616.g0bdcbb4464-goog
+> 
