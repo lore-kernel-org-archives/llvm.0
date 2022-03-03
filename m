@@ -1,175 +1,301 @@
-Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4779136B
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 00:54:12 +0000 (UTC)
-Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-07.nifty.com with ESMTP id 2230j0qG029883
-	for <llvm@lists.linux.dev>; Thu, 3 Mar 2022 09:45:00 +0900
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178]) (authenticated)
-	by conssluserg-01.nifty.com with ESMTP id 2230ipu0014600
-	for <llvm@lists.linux.dev>; Thu, 3 Mar 2022 09:44:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2230ipu0014600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1646268291;
-	bh=qFJlBbOGHIjmGqrsHLgsSVnCFKYD56zFTMBoZ4bzgoI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=d+QqzInMPNKAtFKqHwSKLeqtPTZMXtp4QljZokz0tRh+GlX8mJPKdroYJxp+/+qXQ
-	 Iaqv/Yu6Tg6A0Dkt2XTm7Bh0H9n92eKjSuW7Qx6lhHkxguuCqBRBW7APC2GxA4BSyZ
-	 ZENOD4LuUhXWd+jLgGDEY/StHwUeGdJAvx4dgTV5JynbQ5fx14N9o9zJCEtpjrLTKo
-	 KF2Ul3a6+iisSvW9VA/umjTlM9b9jmZbDrI9DEiqNKRi7Hfhrj67HKJz1MXrGvabP6
-	 LIS7HU6TQC0/5uiwPf+m4vm8iGHn0GDaCC9KAv5ja41rneuHjcfpreWnfrJl+vKccs
-	 /l7vqgtT9K2nQ==
-X-Nifty-SrcIP: [209.85.210.178]
-Received: by mail-pf1-f178.google.com with SMTP id z15so3389710pfe.7
-        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 16:44:51 -0800 (PST)
-X-Gm-Message-State: AOAM532iipcCvnM62uZ66yBeUfgH3p/aG1Oms5YjZKjnyAsuXnocyzpk
-	qGlJjV/XL4KIvSjp9UUQo2bLbdyu0g2VS9qfpEA=
-X-Google-Smtp-Source: ABdhPJxJmpCr7cqZbg0899QCITX2rIIHdJURDFdP7XyJOclpsettcbZAqBuZIHSTaJ8scctyB/vsOG2d8BxfkFG7zqE=
-X-Received: by 2002:a05:6a00:24c7:b0:4e1:cb76:32d1 with SMTP id
- d7-20020a056a0024c700b004e1cb7632d1mr35565422pfv.36.1646268290741; Wed, 02
- Mar 2022 16:44:50 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C394D36A
+	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 03:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646277241; x=1677813241;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PcW5mhv9wmUYGtSMoZe8lCT1aJnBZbVQ8r33s+4V3Qk=;
+  b=H+SnuP4Sv6wMh+K0aJNGJ69kyFbXaV6xob7v8nt6Ymqckub/USXvzj70
+   aUSNzbjCCq9fENFPhKTqX6Z63IGIKGwGlwvzxwt3axk0QFxFZkGTB49r+
+   lSTpsIEkPtLUYoMIXVpvFOhg2MqkcSUT3EmmbfiKdk1AvkYgIMp6P5NV6
+   LTTvKNA4+MrtBq+WaZo+8Klwz5vgIglfhfZL3dBZNXrigC7SNNKSARPUl
+   WP4OqvaW5fcC+3OHXB1OGDZj4s1OUwlALo4wEbzDpgPDno8q2zDicje48
+   wz4bAE4rg8zseT7jdLHJuVeehU5dDu3KqgXyAHHd3gZ9SJdQJl+DSmUof
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="251141395"
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="251141395"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 19:13:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="709755188"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 02 Mar 2022 19:13:42 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nPbuQ-00005I-8K; Thu, 03 Mar 2022 03:13:42 +0000
+Date: Thu, 3 Mar 2022 11:12:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, borntraeger@de.ibm.com,
+	frankja@linux.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
+	david@redhat.com, linux-s390@vger.kernel.org,
+	linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+	mimu@linux.ibm.com, nrb@linux.ibm.com
+Subject: Re: [PATCH v8 10/17] KVM: s390: pv: add mmu_notifier
+Message-ID: <202203031008.y7TlswqY-lkp@intel.com>
+References: <20220302181143.188283-11-imbrenda@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-2-arnd@kernel.org>
-In-Reply-To: <20220301145233.3689119-2-arnd@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 3 Mar 2022 09:44:08 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQpmqncnnaO+NKEuDajx4G0=7eQ1s5e+o+fPyuxrkwncg@mail.gmail.com>
-Message-ID: <CAK7LNAQpmqncnnaO+NKEuDajx4G0=7eQ1s5e+o+fPyuxrkwncg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] treewide: use -Wdeclaration-after-statement
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marco Elver <elver@google.com>, Jani Nikula <jani.nikula@intel.com>,
-        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        llvm@lists.linux.dev,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302181143.188283-11-imbrenda@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Mar 1, 2022 at 11:52 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Mark Rutland <mark.rutland@arm.com>
->
-> In a subsequent patch we'll move the kernel from using `-std=3Dgnu89` to
+Hi Claudio,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on kvm/master]
+[also build test ERROR on v5.17-rc6 next-20220302]
+[cannot apply to kvms390/next s390/features]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Claudio-Imbrenda/KVM-s390-pv-implement-lazy-destroy-for-reboot/20220303-021407
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git master
+config: s390-randconfig-r001-20220302 (https://download.01.org/0day-ci/archive/20220303/202203031008.y7TlswqY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/bbf278ea47b7bdfb3c72e24faffedbb8a3a5b9f9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Claudio-Imbrenda/KVM-s390-pv-implement-lazy-destroy-for-reboot/20220303-021407
+        git checkout bbf278ea47b7bdfb3c72e24faffedbb8a3a5b9f9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kvm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/s390/kvm/kvm-s390.c:23:
+   In file included from include/linux/kvm_host.h:41:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from arch/s390/kvm/kvm-s390.c:23:
+   In file included from include/linux/kvm_host.h:41:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from arch/s390/kvm/kvm-s390.c:23:
+   In file included from include/linux/kvm_host.h:41:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> arch/s390/kvm/kvm-s390.c:2839:3: error: implicit declaration of function 'mmu_notifier_unregister' [-Werror,-Wimplicit-function-declaration]
+                   mmu_notifier_unregister(&kvm->arch.pv.mmu_notifier, kvm->mm);
+                   ^
+   arch/s390/kvm/kvm-s390.c:2839:3: note: did you mean 'preempt_notifier_unregister'?
+   include/linux/preempt.h:346:6: note: 'preempt_notifier_unregister' declared here
+   void preempt_notifier_unregister(struct preempt_notifier *notifier);
+        ^
+   12 warnings and 1 error generated.
+--
+   In file included from arch/s390/kvm/pv.c:9:
+   In file included from include/linux/kvm_host.h:41:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from arch/s390/kvm/pv.c:9:
+   In file included from include/linux/kvm_host.h:41:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from arch/s390/kvm/pv.c:9:
+   In file included from include/linux/kvm_host.h:41:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> arch/s390/kvm/pv.c:260:3: error: implicit declaration of function 'mmu_notifier_register' [-Werror,-Wimplicit-function-declaration]
+                   mmu_notifier_register(&kvm->arch.pv.mmu_notifier, kvm->mm);
+                   ^
+   arch/s390/kvm/pv.c:260:3: note: did you mean 'mmu_notifier_release'?
+   include/linux/mmu_notifier.h:679:20: note: 'mmu_notifier_release' declared here
+   static inline void mmu_notifier_release(struct mm_struct *mm)
+                      ^
+   12 warnings and 1 error generated.
 
 
-Precisely speaking,
-"In a subsequent patch we'll move the userspace tools ..."
+vim +/mmu_notifier_unregister +2839 arch/s390/kvm/kvm-s390.c
 
-The kernel part was done by 1/3.
+  2823	
+  2824	void kvm_arch_destroy_vm(struct kvm *kvm)
+  2825	{
+  2826		u16 rc, rrc;
+  2827	
+  2828		kvm_destroy_vcpus(kvm);
+  2829		sca_dispose(kvm);
+  2830		kvm_s390_gisa_destroy(kvm);
+  2831		/*
+  2832		 * We are already at the end of life and kvm->lock is not taken.
+  2833		 * This is ok as the file descriptor is closed by now and nobody
+  2834		 * can mess with the pv state. To avoid lockdep_assert_held from
+  2835		 * complaining we do not use kvm_s390_pv_is_protected.
+  2836		 */
+  2837		if (kvm_s390_pv_get_handle(kvm)) {
+  2838			kvm_s390_pv_deinit_vm(kvm, &rc, &rrc);
+> 2839			mmu_notifier_unregister(&kvm->arch.pv.mmu_notifier, kvm->mm);
+  2840		}
+  2841		debug_unregister(kvm->arch.dbf);
+  2842		free_page((unsigned long)kvm->arch.sie_page2);
+  2843		if (!kvm_is_ucontrol(kvm))
+  2844			gmap_remove(kvm->arch.gmap);
+  2845		kvm_s390_destroy_adapters(kvm);
+  2846		kvm_s390_clear_float_irqs(kvm);
+  2847		kvm_s390_vsie_destroy(kvm);
+  2848		KVM_EVENT(3, "vm 0x%pK destroyed", kvm);
+  2849	}
+  2850	
 
-
-
-> `-std=3Dgnu11`, permitting the use of additional C11 features such as
-> for-loop initial declarations.
->
-> One contentious aspect of C99 is that it permits mixed declarations and
-> code, and for now at least, it seems preferable to enforce that
-> declarations must come first.
->
-> These warnings were already disabled in the kernel itself, but not
-
-Is this the opposite?
-
-"These warnings were already _enabled_ in the kernel itself, ..."
-
-
-
-
-If you have a chance to resend this,
-can you please rebase on top of kbuild/for-next?
-
-This is not applicable due to the conflict with:
-https://patchwork.kernel.org/project/linux-kbuild/patch/20220201213542.2808=
-035-1-quic_eberman@quicinc.com/
-
-
-
-
-
-
-> for KBUILD_USERCFLAGS or the compat VDSO on arch/arm64, which uses
-> a separate set of CFLAGS.
->
-> This patch fixes an existing violation in modpost.c, which is not
-> reported because of the missing flag in KBUILD_USERCFLAGS:
->
-> | scripts/mod/modpost.c: In function =E2=80=98match=E2=80=99:
-> | scripts/mod/modpost.c:837:3: warning: ISO C90 forbids mixed declaration=
-s and code [-Wdeclaration-after-statement]
-> |   837 |   const char *endp =3D p + strlen(p) - 1;
-> |       |   ^~~~~
->
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> [arnd: don't add a duplicate flag to the default set, update changelog]
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  Makefile                          | 3 ++-
->  arch/arm64/kernel/vdso32/Makefile | 1 +
->  scripts/mod/modpost.c             | 4 +++-
->  3 files changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 94fa9a849a7a..37ef6a555dcd 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -432,7 +432,8 @@ HOSTCXX     =3D g++
->  endif
->
->  export KBUILD_USERCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-protot=
-ypes \
-> -                             -O2 -fomit-frame-pointer -std=3Dgnu89
-> +                           -O2 -fomit-frame-pointer -std=3Dgnu89 \
-> +                           -Wdeclaration-after-statement
->  export KBUILD_USERLDFLAGS :=3D
->
->  KBUILD_HOSTCFLAGS   :=3D $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTC=
-FLAGS)
-> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32=
-/Makefile
-> index 9378ea055bf2..ed181bedbffc 100644
-> --- a/arch/arm64/kernel/vdso32/Makefile
-> +++ b/arch/arm64/kernel/vdso32/Makefile
-> @@ -68,6 +68,7 @@ VDSO_CFLAGS +=3D -Wall -Wundef -Wstrict-prototypes -Wno=
--trigraphs \
->                 -fno-strict-aliasing -fno-common \
->                 -Werror-implicit-function-declaration \
->                 -Wno-format-security \
-> +               -Wdeclaration-after-statement \
->                 -std=3Dgnu11
->  VDSO_CFLAGS  +=3D -O2
->  # Some useful compiler-dependent flags from top-level Makefile
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 6bfa33217914..fe693304b120 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -833,8 +833,10 @@ static int match(const char *sym, const char * const=
- pat[])
->  {
->         const char *p;
->         while (*pat) {
-> +               const char *endp;
-> +
->                 p =3D *pat++;
-> -               const char *endp =3D p + strlen(p) - 1;
-> +               endp =3D p + strlen(p) - 1;
->
->                 /* "*foo*" */
->                 if (*p =3D=3D '*' && *endp =3D=3D '*') {
-> --
-> 2.29.2
->
-
-
---=20
-Best Regards
-Masahiro Yamada
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
