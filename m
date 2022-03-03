@@ -1,53 +1,74 @@
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805DC7E
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 15:18:15 +0000 (UTC)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 223FEGv9016300
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 3 Mar 2022 10:14:16 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-	id 0A9A315C0038; Thu,  3 Mar 2022 10:14:16 -0500 (EST)
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Colin Ian King <colin.i.king@gmail.com>
-Cc: "Theodore Ts'o" <tytso@mit.edu>, kernel-janitors@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] ext4: remove redundant assignment to variable split_flag1
-Date: Thu,  3 Mar 2022 10:14:09 -0500
-Message-Id: <164632037182.689479.9390107109546635119.b4-ty@mit.edu>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220301121644.997833-1-colin.i.king@gmail.com>
-References: <20220301121644.997833-1-colin.i.king@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F245C2F21
+	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 16:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A1FC004E1;
+	Thu,  3 Mar 2022 16:39:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646325541;
+	bh=lPZIdwsQWP4Ms3kPLc2NWlJMSgHkLZbSVVfg6uTj2t8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=vBlcTrMqwITgcgixFeKGIJVNd+QfBd+W+CMDcY3J823vCyevZdebMg/bP50+g8I2t
+	 l01BDFCW/1Im8tvI4jqM1CvBcz6v9kNkD/5I9wg1UfEc9koWzJs5AHmCewWrOPMz6a
+	 E5m06ezrjDfUMPwemnFZPZDPQGbD3vzNY7zFgzSgcIFJOu7JnFjZfX2lnzUykEdjL9
+	 MXBkzH7/d60evcn4ml0IqEMocABCOi4jSFPQShCWkRkx1QVbmQxZapQsCwI23WfrZC
+	 xRnf7Smp9Wqlp6+jTdHctWl7XSKqRubThHePVVSh4l7Zlm6AebmKjPHCtkv9UxbRnQ
+	 un+euIfN08gAg==
+From: Nathan Chancellor <nathan@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Tom Rix <trix@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] netfs: Ensure ret is always initialized in netfs_begin_read()
+Date: Thu,  3 Mar 2022 09:38:26 -0700
+Message-Id: <20220303163826.1120936-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Tue, 1 Mar 2022 12:16:44 +0000, Colin Ian King wrote:
-> Variable split_flag1 is being assigned a value that is never read,
-> it is being re-assigned a new value in the following code block.
-> The assignment is redundant and can be removed.
-> 
-> Cleans up clang scan build warning:
-> fs/ext4/extents.c:3371:2: warning: Value stored to 'split_flag1' is
-> never read [deadcode.DeadStores]
-> 
-> [...]
+Clang warns:
 
-Applied, thanks!
+  fs/netfs/io.c:630:6: error: variable 'ret' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+          if (sync) {
+              ^~~~
+  fs/netfs/io.c:655:9: note: uninitialized use occurs here
+          return ret;
+                 ^~~
 
-[1/1] ext4: remove redundant assignment to variable split_flag1
-      commit: 6b71b69dd98b197deea0806417e88308e0876a10
+There is only one instance of netfs_begin_read() where sync is false and
+its return value is not checked so just return 0 in this case, as there
+is no return code from another function call to propagate.
 
-Best regards,
+Fixes: 33e1e5d53058 ("netfs: Add a function to consolidate beginning a read")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1607
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ fs/netfs/io.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/netfs/io.c b/fs/netfs/io.c
+index 3db9356eb7c2..4a3b7989cd1c 100644
+--- a/fs/netfs/io.c
++++ b/fs/netfs/io.c
+@@ -651,6 +651,7 @@ int netfs_begin_read(struct netfs_io_request *rreq, bool sync)
+ 		/* If we decrement nr_outstanding to 0, the ref belongs to us. */
+ 		if (atomic_dec_and_test(&rreq->nr_outstanding))
+ 			netfs_rreq_assess(rreq, false);
++		ret = 0;
+ 	}
+ 	return ret;
+ }
+
+base-commit: 2522c1b16116325f69670076d0c82024fbcc4e8d
 -- 
-Theodore Ts'o <tytso@mit.edu>
+2.35.1
+
