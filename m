@@ -1,70 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5781A66A3
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 13:05:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8CCC004E1;
-	Thu,  3 Mar 2022 13:05:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1646312759;
-	bh=rH7GMRdryJ4vXOlSLW4fYujXOBHUP2yNPBkxdY3/pqc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XKjBjXMyfVBu2K3GUcQCQc1njLV/s3+M4ZWtxKF4NAU5NxrVy9KXWuvtqBcyWdtqV
-	 RezoeSmnvUU25H5afMgJ3RLNtTTER8TDPcItb9bade2MSwFELbeq4ZuW+iEsFBrFiZ
-	 LrlNMt5fsW8+bsUFCaAE9Am+UU/TJn5iQDJYZ+Ok=
-Date: Thu, 3 Mar 2022 14:05:56 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: David Gow <davidgow@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Vitor Massaru Iha <vitor@massaru.org>,
-	Daniel Latypov <dlatypov@google.com>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	linux-um <linux-um@lists.infradead.org>,
-	linux-kbuild@vger.kernel.org,
-	KUnit Development <kunit-dev@googlegroups.com>,
-	llvm@lists.linux.dev, x86@kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] UAPI: Introduce KUnit userspace compatibility
-Message-ID: <YiC9NBjFgGv5T+gF@kroah.com>
-References: <20220227184517.504931-1-keescook@chromium.org>
- <20220227184517.504931-8-keescook@chromium.org>
- <CABVgOSn6Oe8Ke=fnuVwgLh2r8HKjBW8pCe44Z35Qo1bVfz9A-A@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4162166A3
+	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 13:34:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646314497; x=1677850497;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zwRQbzHSEEhhJ1nxzqHcTOzK5LNfD2R6KQ7CwY8Nkuw=;
+  b=Cb9q+E9FizD55yg06Gg9srgwsGT9f42SQxMG78VgEqw97h9jZEEvIlGO
+   46MYebiXq66B20/SYKnmC14PaNG2b23ALuHukRYHL7Z1xKIJ5jzhjJcNd
+   S3TMpKjANokUF7KAAl72ofNxKWla+M+IFzNdouDhoP9A31hAvBNG+DCJK
+   8TcRNgd3rWnjbpX/VEl8GdyZiiz90R+4DpDl04uYziWMvjtAxdlSy6TA/
+   oFo861+ZFgY3IEHCO3qSxqtGMmOMIBJ43Y8f2wy/tSEA4lqXs/mv+7nQC
+   l8bAo7EGaXuJrq6mfSlYcbC25MSGGnzgYYpTF3lU77MrTuqdrcusK9Pna
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="340107003"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="340107003"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 05:34:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="630791640"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Mar 2022 05:34:55 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nPlba-0000aD-CE; Thu, 03 Mar 2022 13:34:54 +0000
+Date: Thu, 3 Mar 2022 21:34:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dongjin Kim <tobetter@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [tobetter:odroid-5.17.y 4/41] drivers/gpu/drm/drm_mipi_dbi.c:77:17:
+ warning: unused variable 'mipi_dbi_dcs_read_commands'
+Message-ID: <202203032157.rhC4yqLG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CABVgOSn6Oe8Ke=fnuVwgLh2r8HKjBW8pCe44Z35Qo1bVfz9A-A@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Mar 03, 2022 at 04:27:13PM +0800, David Gow wrote:
-> On Mon, Feb 28, 2022 at 2:45 AM Kees Cook <keescook@chromium.org> wrote:
-> > diff --git a/include/uapi/misc/kunit.h b/include/uapi/misc/kunit.h
-> > new file mode 100644
-> > index 000000000000..afdffda583ae
-> > --- /dev/null
-> > +++ b/include/uapi/misc/kunit.h
-> > @@ -0,0 +1,181 @@
-> > +#ifndef __UAPI_MISC_KUNIT_H__
-> > +#define __UAPI_MISC_KUNIT_H__
-> > +/*
-> > + * This is a light-weight userspace drop-in replacement for the in-kernel
+tree:   https://github.com/tobetter/linux odroid-5.17.y
+head:   e882d3aa45fcf49791433e9606016225df72a12e
+commit: cac3180b84c170a7d3e892f4c9058b58c19bbc94 [4/41] ODROID-COMMON: gpu/drm: Add new Tiny DRM driver with Ili9488
+config: hexagon-randconfig-r013-20220303 (https://download.01.org/0day-ci/archive/20220303/202203032157.rhC4yqLG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/tobetter/linux/commit/cac3180b84c170a7d3e892f4c9058b58c19bbc94
+        git remote add tobetter https://github.com/tobetter/linux
+        git fetch --no-tags tobetter odroid-5.17.y
+        git checkout cac3180b84c170a7d3e892f4c9058b58c19bbc94
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-<snip>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Someone forgot a SPDX license line for the new file.  Didn't checkpatch
-complain about this?  :(
+All warnings (new ones prefixed by >>):
 
-thanks,
+>> drivers/gpu/drm/drm_mipi_dbi.c:77:17: warning: unused variable 'mipi_dbi_dcs_read_commands' [-Wunused-const-variable]
+   static const u8 mipi_dbi_dcs_read_commands[] = {
+                   ^
+   1 warning generated.
 
-greg k-h
+
+vim +/mipi_dbi_dcs_read_commands +77 drivers/gpu/drm/drm_mipi_dbi.c
+
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   76  
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22  @77  static const u8 mipi_dbi_dcs_read_commands[] = {
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   78  	MIPI_DCS_GET_DISPLAY_ID,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   79  	MIPI_DCS_GET_RED_CHANNEL,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   80  	MIPI_DCS_GET_GREEN_CHANNEL,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   81  	MIPI_DCS_GET_BLUE_CHANNEL,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   82  	MIPI_DCS_GET_DISPLAY_STATUS,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   83  	MIPI_DCS_GET_POWER_MODE,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   84  	MIPI_DCS_GET_ADDRESS_MODE,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   85  	MIPI_DCS_GET_PIXEL_FORMAT,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   86  	MIPI_DCS_GET_DISPLAY_MODE,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   87  	MIPI_DCS_GET_SIGNAL_MODE,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   88  	MIPI_DCS_GET_DIAGNOSTIC_RESULT,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   89  	MIPI_DCS_READ_MEMORY_START,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   90  	MIPI_DCS_READ_MEMORY_CONTINUE,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   91  	MIPI_DCS_GET_SCANLINE,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   92  	MIPI_DCS_GET_DISPLAY_BRIGHTNESS,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   93  	MIPI_DCS_GET_CONTROL_DISPLAY,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   94  	MIPI_DCS_GET_POWER_SAVE,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   95  	MIPI_DCS_GET_CABC_MIN_BRIGHTNESS,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   96  	MIPI_DCS_READ_DDB_START,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   97  	MIPI_DCS_READ_DDB_CONTINUE,
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   98  	0, /* sentinel */
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   99  };
+02dd95fe316936 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22  100  
+
+:::::: The code at line 77 was first introduced by commit
+:::::: 02dd95fe316936269a52d6ccb971bb956412b40a drm/tinydrm: Add MIPI DBI support
+
+:::::: TO: Noralf Trønnes <noralf@tronnes.org>
+:::::: CC: Noralf Trønnes <noralf@tronnes.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
