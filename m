@@ -1,116 +1,118 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D4536B
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 19:38:10 +0000 (UTC)
-Received: by mail-lf1-f44.google.com with SMTP id i11so10338676lfu.3
-        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 11:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uZO68zBMcccw6v43cUgUIalax5HiUJc6qwLMgdpxolI=;
-        b=MKiL8WrqXiduCtzmEhl3iONkEd5jvUf4wnO4vk6bbOmFXcxFBxWAsM9fVZose9b7V4
-         CA7Ah2hxAGZ11jlsk/oTCQBdVNPUPnG/nTxSRctMcm4TA1h+ie+AVC60wcFckrQqhWYl
-         6CWo6sQuTPCOn9sGAPmmyCpaIdT16SVoPtEOQrO3stloP1MpKd8thkRGXu0i5P0xy9S9
-         0Hvns9FPKrCNDPN4LY9nKCFyQuY1oAZNvg5AHfGjjfNwBFHn+yRQcHZXa+TEdMbVamGS
-         4ARC23SdgaZxa1XjWb66VMEduWIXJ91u1pW3D2NqkLWsuSY2FkphJ7N9S15BXAYX2i1/
-         N68A==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F5136B
+	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 20:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1646338793;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=W+Yb3jSVbGXS2UsBEDl+Z51/w7cVcv7OgJoaeEwhScE=;
+	b=Q3Vu7866MDdY7xCJLeI1VGCExy3Ut+fs8dJZWMzJh9tsGFzYYkdqLn4DmIRT+3DlOty1B5
+	MK73fsmQ5ofG+iVsqpZODN+cHpMIW6TS96gugY+1raJD8oofN4BxBZKjQbSB4vRxUCnadg
+	v0ymSJ1LiCls/lg28H8Xy8yjbMG5lpI=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-TzJ-RfTqPb6asbSY_mHAvA-1; Thu, 03 Mar 2022 15:19:50 -0500
+X-MC-Unique: TzJ-RfTqPb6asbSY_mHAvA-1
+Received: by mail-oi1-f200.google.com with SMTP id o124-20020aca5a82000000b002d7585f6de6so3929571oib.3
+        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 12:19:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uZO68zBMcccw6v43cUgUIalax5HiUJc6qwLMgdpxolI=;
-        b=Z1mltEXT5EWVuoy70mpizDQr4ylybAQSbLifteNs++u4ATRexmH4AIuSWeBjL60SJE
-         9wBy+E/pSsMkeCezzoxf/6x7DtrlfKZXnEdWglWU2//RqCKynQWN3w+/SodPzautdzhV
-         oqAr0sNCJH3BXHtMLtIEV3c/8WCCdfOAKuleSZUpTRwh69rz10zm59fIJcBRHoQqLLFB
-         Cau8iQH4zAU6pqnyC+/NK0Al0ogNZo4D+VL1SLO70+J5SqhBtB11HKHLgegwebrf0OOS
-         9qluUcF2ASxzPPTehaa3SLx8vhnj2liDr+shrL7dp9RhLobiC6YE2cD4t2l3UC7X5r23
-         gq9g==
-X-Gm-Message-State: AOAM531W898gKXi2fTvv/3XjTgkCJP89rg75orzpOnSWmz/M22t9vr6g
-	FZ+BHeRdgRvikhSXbNVupJj32sYAbO0tM+swL4C1hA==
-X-Google-Smtp-Source: ABdhPJyRHrKwbNy2Xadnc8yan6MtVBpc1WVOSU1q4lnDO2kDzFB/HreVlM3td8SXfBUnAnDPlCTwVsaUH867jxVeYtY=
-X-Received: by 2002:ac2:41d2:0:b0:445:bba7:e789 with SMTP id
- d18-20020ac241d2000000b00445bba7e789mr5628645lfi.392.1646336288151; Thu, 03
- Mar 2022 11:38:08 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W+Yb3jSVbGXS2UsBEDl+Z51/w7cVcv7OgJoaeEwhScE=;
+        b=4IpU2u33bEYKk1CHmAMCRD6RiIWBfEEUZlBS5SayDfgsWY8pjY3m5sBJBQm/7qJbeB
+         IPj+J7cCATvCio0iJ1gh1/xTf6w3S0XFzwvsnL804SdMhPscbdEYtpxjFhv12HvlGXN+
+         auQ7WGzh0NOXtC6nAwaS57n2+4i/o7wtS4h3F704MVbaiPylwSk5fnh9v5yRxT2ix9BJ
+         woSZPPgWx8OsVRHN2gWRv8L1Hydl/EbBP3AVgY8bveCObHov/ZAyLCA7RFgPAYnbMsr5
+         s0JxEy8ZybguZTxgMjxZJGL59pk20bbtgoEMFJaVyh3fW2S8xWO4bu50G5Pl2wawEL5/
+         YuSw==
+X-Gm-Message-State: AOAM5339QN/7kLc3K1WVjZAPWw8UFZkMxHIDKCsZgW4hjFMQGH1khdw8
+	nRqHTTHU0cKqHPnWbtsOXp8RAb89ZADNl99CUz/zDgGmsMoXgPJxP6IIObH7ZMOm0lPj1qYT0x8
+	sDiGhFt9OEDR1hw==
+X-Received: by 2002:a05:6870:128c:b0:ce:c0c9:5ba with SMTP id 12-20020a056870128c00b000cec0c905bamr5481234oal.12.1646338789963;
+        Thu, 03 Mar 2022 12:19:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw9UL7z0i5c0I1zBYkPbE2sDhIbft3n5S0zsg8O5Iu/S8GWiXtXSO4aUx3Hz5c0J+4lOC6M2Q==
+X-Received: by 2002:a05:6870:128c:b0:ce:c0c9:5ba with SMTP id 12-20020a056870128c00b000cec0c905bamr5481217oal.12.1646338789724;
+        Thu, 03 Mar 2022 12:19:49 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id 52-20020a9d0bb7000000b005afa463d9f8sm1411532oth.19.2022.03.03.12.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 12:19:49 -0800 (PST)
+From: trix@redhat.com
+To: andrzej.hajda@intel.com,
+	narmstrong@baylibre.com,
+	robert.foss@linaro.org,
+	Laurent.pinchart@ideasonboard.com,
+	jonas@kwiboo.se,
+	jernej.skrabec@gmail.com,
+	airlied@linux.ie,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	xji@analogixsemi.com,
+	hsinyi@chromium.org,
+	sam@ravnborg.org,
+	tzungbi@google.com,
+	pihsun@chromium.org,
+	maxime@cerno.tech
+Cc: dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/bridge: anx7625: check the return on anx7625_aux_trans
+Date: Thu,  3 Mar 2022 12:19:43 -0800
+Message-Id: <20220303201943.501746-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYs3GavpYh6V_yTUGNbAU70mygVxBKvqoq=xh20pw1Wvow@mail.gmail.com>
- <YiD1UruDryIyZAJc@dev-arch.thelio-3990X> <202203030934.5CA7A132C0@keescook>
-In-Reply-To: <202203030934.5CA7A132C0@keescook>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 3 Mar 2022 11:37:56 -0800
-Message-ID: <CAKwvOdn1SM3F-5bMgHVTiBn+u22caWAf2Eh-Vfucvp+WXPJL=A@mail.gmail.com>
-Subject: Re: [next] mips: clang-14-defconfig build regression
-To: Kees Cook <keescook@chromium.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Naresh Kamboju <naresh.kamboju@linaro.org>, llvm@lists.linux.dev, 
-	lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-On Thu, Mar 3, 2022 at 9:36 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Mar 03, 2022 at 10:05:22AM -0700, Nathan Chancellor wrote:
-> > Hi Naresh,
-> >
-> > On Thu, Mar 03, 2022 at 09:09:56AM +0530, Naresh Kamboju wrote:
-> > > [Please ignore this email if it is already reported]
-> > >
-> > > Linux next-20220302 mips builds failed [1] & [2].
-> > >
-> > > Regressions found on mips:
-> > >
-> > >   - mips-clang-12-defconfig
-> > >   - mips-clang-13-allnoconfig
-> > >   - mips-clang-12-allnoconfig
-> > >   - mips-clang-12-tinyconfig
-> > >   - mips-clang-13-defconfig
-> > >   - mips-clang-11-tinyconfig
-> > >   - mips-clang-11-defconfig
-> > >   - mips-clang-nightly-allnoconfig
-> > >   - mips-clang-14-tinyconfig
-> > >   - mips-clang-14-defconfig
-> > >   - mips-clang-11-allnoconfig
-> > >   - mips-clang-nightly-tinyconfig
-> > >   - mips-clang-13-tinyconfig
-> > >   - mips-clang-nightly-defconfig
-> > >   - mips-clang-14-allnoconfig
-> > >
-> > > make --silent --keep-going --jobs=8
-> > > O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-> > > ARCH=mips CROSS_COMPILE=mips-linux-gnu- 'HOSTCC=sccache clang'
-> > > 'CC=sccache clang' defconfig
-> >
-> > <snip>
-> >
-> > > fatal error: error in backend: Invalid register name global variable
-> >
-> > Thanks a lot for the report! Our CI caught this as well, I have filed an
-> > issue on our tracker and the upstream LLVM one:
-> >
-> > https://github.com/ClangBuiltLinux/linux/issues/1608
-> > https://github.com/llvm/llvm-project/issues/54174
-> >
-> > CC Kees, just as an FYI because of commit 200ed341b864 ("mips: Implement
-> > "current_stack_pointer"").
->
-> Oh! That's surprising. Thanks for digging out the details. The comment
-> in the code is amusing:
->
-> Register
-> MipsTargetLowering::getRegisterByName(const char *RegName, LLT VT,
->                                       const MachineFunction &MF) const {
->   // Named registers is expected to be fairly rare. For now, just support $28
->   // since the linux kernel uses it.
->
->
-> Anyway, I guess I'll need to send a fix to make this compiler-version
-> dependent...
+From: Tom Rix <trix@redhat.com>
 
-https://reviews.llvm.org/D120926 for the toolchain side.
+Clang static analysis reports this issue
+anx7625.c:876:13: warning: The left operand of '&' is
+  a garbage value
+  if (!(bcap & 0xOA01)) {
+        ~~~~ ^
+
+bcap is only set by a successful call to
+anx7625_aux_trans().  So check.
+
+Fixes: cd1637c7e480 ("drm/bridge: anx7625: add HDCP support")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index 633618bafd75d..f02ac079ed2ec 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -872,7 +872,10 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
+ 	}
+ 
+ 	/* Read downstream capability */
+-	anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
++	ret = anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
++	if (ret < 0)
++		return ret;
++
+ 	if (!(bcap & 0x01)) {
+ 		pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
+ 		return 0;
 -- 
-Thanks,
-~Nick Desaulniers
+2.26.3
+
