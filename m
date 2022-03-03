@@ -1,172 +1,116 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F19536B
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 19:09:36 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id e2so5539834pls.10
-        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 11:09:36 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D4536B
+	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 19:38:10 +0000 (UTC)
+Received: by mail-lf1-f44.google.com with SMTP id i11so10338676lfu.3
+        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 11:38:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=j7TJLOnN6hgODDuo1callp0lhdyoclIZFm0WJljlY8s=;
-        b=fVnhMSDNmlqJL+mlE4nr2PgQuPT9LGKEI5pLg6UMKecnlAeYN/FVWHDwnXJhWjrE/n
-         DmINVFplNUArYTWf3s3r3hSQ8aSUka6JL/mICjXhADVYWnkAJ2AMABSG1FR+9aEbBXaQ
-         MW2bjvj5LntyCBXcjwdKceOmtzdFX2X3FBxps=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uZO68zBMcccw6v43cUgUIalax5HiUJc6qwLMgdpxolI=;
+        b=MKiL8WrqXiduCtzmEhl3iONkEd5jvUf4wnO4vk6bbOmFXcxFBxWAsM9fVZose9b7V4
+         CA7Ah2hxAGZ11jlsk/oTCQBdVNPUPnG/nTxSRctMcm4TA1h+ie+AVC60wcFckrQqhWYl
+         6CWo6sQuTPCOn9sGAPmmyCpaIdT16SVoPtEOQrO3stloP1MpKd8thkRGXu0i5P0xy9S9
+         0Hvns9FPKrCNDPN4LY9nKCFyQuY1oAZNvg5AHfGjjfNwBFHn+yRQcHZXa+TEdMbVamGS
+         4ARC23SdgaZxa1XjWb66VMEduWIXJ91u1pW3D2NqkLWsuSY2FkphJ7N9S15BXAYX2i1/
+         N68A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j7TJLOnN6hgODDuo1callp0lhdyoclIZFm0WJljlY8s=;
-        b=NufR/MTXehGgGw3hKYZEaFRm6VBGGaxz7kDE0t9+TlRUSntnjpXIiyVf2Aop24feTX
-         HRbMgGLrI5b09wWpm74VzG6myC8Uyd5sm2vy8mMyyjDt0PYyoPyhxCdLDfwwvv/VKlrB
-         7buTyzRN3IexfnMEBjdK/K42JEyGdtyPvqqjyWAGDBQRIuC1NhAkUq0rjGexIgW1tOB5
-         PBAo5FMCZWGbbCX812U7Yw0jX477rPEyK76r/xP3EqjXtaeQit98kOhSJbthjPbND2Wz
-         8Kn35ax7QBsdULxVaebVYKKWWpcZ7TRMsNZ5A4aqEEfNuJrfxr5V/5KBhlQYK6vXC9uE
-         Iqgg==
-X-Gm-Message-State: AOAM530dMU1zZT9WNeph00xvjPVBudeFArJCDHNf79tmCdYXbf4DNsvY
-	kOfrR1w8H7B4WUJynxU9mNfdYg==
-X-Google-Smtp-Source: ABdhPJyfvwYzCoBtdXSSCDsYpSdESFLlaFH3e43QTFvMWUmnNTc6eJPUCpEnqo8wvQrcrYNq7n2KPQ==
-X-Received: by 2002:a17:90b:1c11:b0:1bf:c13:e4a3 with SMTP id oc17-20020a17090b1c1100b001bf0c13e4a3mr5279740pjb.188.1646334575652;
-        Thu, 03 Mar 2022 11:09:35 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d3-20020a056a00244300b004bc9397d3d0sm3198347pfj.103.2022.03.03.11.09.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 11:09:35 -0800 (PST)
-Date: Thu, 3 Mar 2022 11:09:34 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Dan Li <ashimida@linux.alibaba.com>
-Cc: akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
-	gregkh@linuxfoundation.org, linux@roeck-us.net,
-	luc.vanoostenryck@gmail.com, elver@google.com, mark.rutland@arm.com,
-	masahiroy@kernel.org, ojeda@kernel.org, nathan@kernel.org,
-	npiggin@gmail.com, ndesaulniers@google.com, samitolvanen@google.com,
-	shuah@kernel.org, tglx@linutronix.de, will@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
-Message-ID: <202203031105.A1B4CAE6@keescook>
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
- <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <202203031010.0A492D114@keescook>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uZO68zBMcccw6v43cUgUIalax5HiUJc6qwLMgdpxolI=;
+        b=Z1mltEXT5EWVuoy70mpizDQr4ylybAQSbLifteNs++u4ATRexmH4AIuSWeBjL60SJE
+         9wBy+E/pSsMkeCezzoxf/6x7DtrlfKZXnEdWglWU2//RqCKynQWN3w+/SodPzautdzhV
+         oqAr0sNCJH3BXHtMLtIEV3c/8WCCdfOAKuleSZUpTRwh69rz10zm59fIJcBRHoQqLLFB
+         Cau8iQH4zAU6pqnyC+/NK0Al0ogNZo4D+VL1SLO70+J5SqhBtB11HKHLgegwebrf0OOS
+         9qluUcF2ASxzPPTehaa3SLx8vhnj2liDr+shrL7dp9RhLobiC6YE2cD4t2l3UC7X5r23
+         gq9g==
+X-Gm-Message-State: AOAM531W898gKXi2fTvv/3XjTgkCJP89rg75orzpOnSWmz/M22t9vr6g
+	FZ+BHeRdgRvikhSXbNVupJj32sYAbO0tM+swL4C1hA==
+X-Google-Smtp-Source: ABdhPJyRHrKwbNy2Xadnc8yan6MtVBpc1WVOSU1q4lnDO2kDzFB/HreVlM3td8SXfBUnAnDPlCTwVsaUH867jxVeYtY=
+X-Received: by 2002:ac2:41d2:0:b0:445:bba7:e789 with SMTP id
+ d18-20020ac241d2000000b00445bba7e789mr5628645lfi.392.1646336288151; Thu, 03
+ Mar 2022 11:38:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202203031010.0A492D114@keescook>
+References: <CA+G9fYs3GavpYh6V_yTUGNbAU70mygVxBKvqoq=xh20pw1Wvow@mail.gmail.com>
+ <YiD1UruDryIyZAJc@dev-arch.thelio-3990X> <202203030934.5CA7A132C0@keescook>
+In-Reply-To: <202203030934.5CA7A132C0@keescook>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 3 Mar 2022 11:37:56 -0800
+Message-ID: <CAKwvOdn1SM3F-5bMgHVTiBn+u22caWAf2Eh-Vfucvp+WXPJL=A@mail.gmail.com>
+Subject: Re: [next] mips: clang-14-defconfig build regression
+To: Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Naresh Kamboju <naresh.kamboju@linaro.org>, llvm@lists.linux.dev, 
+	lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Mar 03, 2022 at 10:42:45AM -0800, Kees Cook wrote:
-> Though, having the IS_ENABLED in there makes me wonder if this test
-> should instead be made _survivable_ on failure. Something like this,
-> completely untested:
-> 
-> 
-> #ifdef CONFIG_ARM64
-> static noinline void lkdtm_scs_set_lr(unsigned long *addr)
-> {
-> 	unsigned long **lr = (unsigned long **)__builtin_frame_address(0) + 1;
-> 	*lr = addr;
-> }
-> 
-> /* Function with __noscs attribute clears its return address. */
-> static noinline void __noscs lkdtm_noscs_set_lr(unsigned long *addr)
-> {
-> 	unsigned long **lr = (unsigned long **)__builtin_frame_address(0) + 1;
-> 	*lr = addr;
-> }
-> #endif
-> 
-> 
-> void lkdtm_CFI_BACKWARD_SHADOW(void)
-> {
-> #ifdef CONFIG_ARM64
-> 
-> 	/* Verify the "normal" condition of LR corruption working. */
-> 	do {
-> 		/* Keep label in scope to avoid compiler warning. */
-> 		if ((volatile int)0)
-> 			goto unexpected;
-> 
-> 		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
-> 		lkdtm_noscs_set_lr(&&expected);
-> 
-> unexpected:
-> 		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
-> 		break;
-> 
-> expected:
-> 		pr_err("ok: lr corruption redirected without scs.\n");
-> 	} while (0);
-> 
-> 
-> 	do {
-> 		/* Keep labe in scope to avoid compiler warning. */
-> 		if ((volatile int)0)
-> 			goto good_scs;
-> 
-> 		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-> 		lkdtm_scs_set_lr(&&bad_scs);
-> 
-> good_scs:
-> 		pr_info("ok: scs takes effect.\n");
-> 		break;
-> 
-> bad_scs:
-> 		pr_err("FAIL: return address rewritten!\n");
-> 		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
-> 	} while (0);
-> #else
-> 	pr_err("XFAIL: this test is arm64-only\n");
-> #endif
-> }
-> 
-> And we should, actually, be able to make the "set_lr" functions be
-> arch-specific, leaving the test itself arch-agnostic....
+On Thu, Mar 3, 2022 at 9:36 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Mar 03, 2022 at 10:05:22AM -0700, Nathan Chancellor wrote:
+> > Hi Naresh,
+> >
+> > On Thu, Mar 03, 2022 at 09:09:56AM +0530, Naresh Kamboju wrote:
+> > > [Please ignore this email if it is already reported]
+> > >
+> > > Linux next-20220302 mips builds failed [1] & [2].
+> > >
+> > > Regressions found on mips:
+> > >
+> > >   - mips-clang-12-defconfig
+> > >   - mips-clang-13-allnoconfig
+> > >   - mips-clang-12-allnoconfig
+> > >   - mips-clang-12-tinyconfig
+> > >   - mips-clang-13-defconfig
+> > >   - mips-clang-11-tinyconfig
+> > >   - mips-clang-11-defconfig
+> > >   - mips-clang-nightly-allnoconfig
+> > >   - mips-clang-14-tinyconfig
+> > >   - mips-clang-14-defconfig
+> > >   - mips-clang-11-allnoconfig
+> > >   - mips-clang-nightly-tinyconfig
+> > >   - mips-clang-13-tinyconfig
+> > >   - mips-clang-nightly-defconfig
+> > >   - mips-clang-14-allnoconfig
+> > >
+> > > make --silent --keep-going --jobs=8
+> > > O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+> > > ARCH=mips CROSS_COMPILE=mips-linux-gnu- 'HOSTCC=sccache clang'
+> > > 'CC=sccache clang' defconfig
+> >
+> > <snip>
+> >
+> > > fatal error: error in backend: Invalid register name global variable
+> >
+> > Thanks a lot for the report! Our CI caught this as well, I have filed an
+> > issue on our tracker and the upstream LLVM one:
+> >
+> > https://github.com/ClangBuiltLinux/linux/issues/1608
+> > https://github.com/llvm/llvm-project/issues/54174
+> >
+> > CC Kees, just as an FYI because of commit 200ed341b864 ("mips: Implement
+> > "current_stack_pointer"").
+>
+> Oh! That's surprising. Thanks for digging out the details. The comment
+> in the code is amusing:
+>
+> Register
+> MipsTargetLowering::getRegisterByName(const char *RegName, LLT VT,
+>                                       const MachineFunction &MF) const {
+>   // Named registers is expected to be fairly rare. For now, just support $28
+>   // since the linux kernel uses it.
+>
+>
+> Anyway, I guess I'll need to send a fix to make this compiler-version
+> dependent...
 
-Yeah, as a tested example, this works for x86_64, and based on what you
-had, I'd expect it to work on arm64 too:
-
-#include <stdio.h>
-
-static __attribute__((noinline))
-void set_return_addr(unsigned long *expected, unsigned long *addr)
-{
-    /* Use of volatile is to make sure final write isn't seen as a dead store. */
-    unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-
-    /* Make sure we've found the right place on the stack before writing it. */
-    if (*ret_addr == expected)
-        *ret_addr = addr;
-}
-
-volatile int force_label;
-int main(void)
-{
-    do {
-        /* Keep labels in scope. */
-        if (force_label)
-            goto normal;
-        if (force_label)
-            goto redirected;
-
-        set_return_addr(&&normal, &&redirected);
-normal:
-        printf("I should be skipped\n");
-        break;
-redirected:
-        printf("Redirected\n");
-    } while (0);
-
-    return 0;
-}
-
-
-It does _not_ work under Clang, though, which I'm still looking at.
-
+https://reviews.llvm.org/D120926 for the toolchain side.
 -- 
-Kees Cook
+Thanks,
+~Nick Desaulniers
