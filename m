@@ -1,131 +1,188 @@
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2B9621
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 06:26:42 +0000 (UTC)
-Received: by mail-il1-f180.google.com with SMTP id y5so3233466ill.13
-        for <llvm@lists.linux.dev>; Wed, 02 Mar 2022 22:26:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=6cIMVIL+CCfpPGGYjFcu/o0ZTv3OrIkZlvD7/pJ5jLE=;
-        b=qAPglD6WY9eqhPAwpMIjhiwYNT2dKn4CN38Zc82q2s1SK/f3Natf+VLErUyGTKjrWy
-         CRbOAq9HpURnNbnXCMUOr+t9a1Mn870/X6I7oaKHv1pzPlIbjauqddiERKoJBul3r10s
-         nCWQcGOmXStt50Ncw7yT0WSq1l1J//LuF6ExO0Rn6TUTaWT+RAhlPh71W9bEKT6SNXvG
-         H0szLTUbOPDyzykmzzajMj9cC+kp9+YVW/thD+dHHr6TDs9PFlk+GIUrSrwKCVqRkwMM
-         v8xPgMzjlEaISe+pvI16QKOSkVWMsrLAT0LzSwCDMWsXnMANbDx24bQ13bVNQLl/O3pI
-         +Dug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=6cIMVIL+CCfpPGGYjFcu/o0ZTv3OrIkZlvD7/pJ5jLE=;
-        b=wCe08tIrhpavSgDlcxRY7BG931h7gNtYMHEEeJnsUK3HWNAO0buR/BFSADgdkyodsJ
-         s75JZdZWH2R1yws9g2EQHmBhWyEgsjCFEW4Se01GroRY6r2Vq7OeoIetF6jEJJ5l4uOb
-         I58COpueLVRW8futKu5nwruxy2jya6OqjlMJwONByNN4IrBniT5sfJPL6ebz18mANuwm
-         U5lshDoZHwuPGlzO5B6Momwm2zPyZVOUtRowggBDymJE6p4mb9OdoegjIfTpGM4dKPxd
-         6seMNSfNp6tpyoaWoRcf4nCpeESUA2yZRR0zwon+7q6+z/VbhccrKwIpMLLTdoYoqAuu
-         emBQ==
-X-Gm-Message-State: AOAM533jWg7pe4ZO+6l1n5Ke98GesfYxA4vR45//LC6dP744VG3DHKSU
-	Dax9QJNEVRqDZsG5AtDUnx+Kw1xLJ7LDWlfPlg0=
-X-Google-Smtp-Source: ABdhPJxN4sEwUhUly0CT6JZ3A4I17A47qSawqzxX8rRhMHb82FN8jNix1RE7+RJJ1Gk2Z/4ey0Hz4TWtsMIElevu9YY=
-X-Received: by 2002:a05:6e02:1ba5:b0:2c2:b1a8:efcf with SMTP id
- n5-20020a056e021ba500b002c2b1a8efcfmr26236724ili.20.1646288801478; Wed, 02
- Mar 2022 22:26:41 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F3E7C
+	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 07:43:56 +0000 (UTC)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0V66qjBS_1646293420;
+Received: from localhost(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V66qjBS_1646293420)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 03 Mar 2022 15:43:46 +0800
+From: Dan Li <ashimida@linux.alibaba.com>
+To: akpm@linux-foundation.org,
+	arnd@arndb.de,
+	catalin.marinas@arm.com,
+	ashimida@linux.alibaba.com,
+	gregkh@linuxfoundation.org,
+	linux@roeck-us.net,
+	keescook@chromium.org,
+	luc.vanoostenryck@gmail.com,
+	elver@google.com,
+	mark.rutland@arm.com,
+	masahiroy@kernel.org,
+	ojeda@kernel.org,
+	nathan@kernel.org,
+	npiggin@gmail.com,
+	ndesaulniers@google.com,
+	samitolvanen@google.com,
+	shuah@kernel.org,
+	tglx@linutronix.de,
+	will@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
+Date: Wed,  2 Mar 2022 23:43:39 -0800
+Message-Id: <20220303074339.86337-1-ashimida@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
- <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com> <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
-In-Reply-To: <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Thu, 3 Mar 2022 07:26:05 +0100
-Message-ID: <CA+icZUWD_O1WTKNDTj7f+EUxx5Pf=zC53mfOBNgtj1JQwjZVAQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Marco Elver <elver@google.com>, 
-	Jani Nikula <jani.nikula@intel.com>, David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 2, 2022 at 11:54 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Wed, Mar 2, 2022 at 2:14 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Wed, Mar 2, 2022 at 10:47 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> > >
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > As we change the C language standard for the kernel from gnu89 to
-> > > gnu11, it makes sense to also update the version for user space
-> > > compilation.
-> > >
-> >
-> > Overdue.
-> >
-> > Can you point me to a lore link where I can easily fetch the full 3/3
-> > v3 patchset?
->
-> Hey Sedat!
->
-> $ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arnd@kernel=
-.org/
-> -o - | git am -3
->
+Add tests for SCS (Shadow Call Stack) based
+backward CFI (as implemented by Clang and GCC).
 
-Hey Nick!
-
-This only applies 1/3.
-
-$ b4 --version
-0.8.0
-
-$ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arnd@kernel.o=
-rg/
--o - | git am -3
-Analyzing 14 messages in the thread
-Will use the latest revision: v3
-You can pick other revisions using the -vN flag
-Checking attestation on all messages, may take a moment...
+Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
 ---
- =E2=9C=93 [PATCH v3 1/3] Kbuild: move to -std=3Dgnu11
-   =E2=9C=93 Signed: DKIM/kernel.org
-   + Reviewed-by: Nathan Chancellor <nathan@kernel.org> (=E2=9C=93 DKIM/ker=
-nel.org)
- ERROR: missing [2/3]!
- ERROR: missing [3/3]!
- ---
- NOTE: install patatt for end-to-end signature verification
----
-Total patches: 1
----
-WARNING: Thread incomplete!
-Link: https://lore.kernel.org/r/20220301145233.3689119-1-arnd@kernel.org
-Base: not specified
-Wende an: Kbuild: move to -std=3Dgnu11
+ drivers/misc/lkdtm/Makefile             |  1 +
+ drivers/misc/lkdtm/core.c               |  2 +
+ drivers/misc/lkdtm/lkdtm.h              |  4 ++
+ drivers/misc/lkdtm/scs.c                | 67 +++++++++++++++++++++++++
+ tools/testing/selftests/lkdtm/tests.txt |  2 +
+ 5 files changed, 76 insertions(+)
+ create mode 100644 drivers/misc/lkdtm/scs.c
 
-- Sedat -
+diff --git a/drivers/misc/lkdtm/Makefile b/drivers/misc/lkdtm/Makefile
+index 2e0aa74ac185..e2fb17868af2 100644
+--- a/drivers/misc/lkdtm/Makefile
++++ b/drivers/misc/lkdtm/Makefile
+@@ -10,6 +10,7 @@ lkdtm-$(CONFIG_LKDTM)		+= rodata_objcopy.o
+ lkdtm-$(CONFIG_LKDTM)		+= usercopy.o
+ lkdtm-$(CONFIG_LKDTM)		+= stackleak.o
+ lkdtm-$(CONFIG_LKDTM)		+= cfi.o
++lkdtm-$(CONFIG_LKDTM)		+= scs.o
+ lkdtm-$(CONFIG_LKDTM)		+= fortify.o
+ lkdtm-$(CONFIG_PPC_64S_HASH_MMU)	+= powerpc.o
+ 
+diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
+index f69b964b9952..d0ce0bec117c 100644
+--- a/drivers/misc/lkdtm/core.c
++++ b/drivers/misc/lkdtm/core.c
+@@ -178,6 +178,8 @@ static const struct crashtype crashtypes[] = {
+ 	CRASHTYPE(USERCOPY_KERNEL),
+ 	CRASHTYPE(STACKLEAK_ERASING),
+ 	CRASHTYPE(CFI_FORWARD_PROTO),
++	CRASHTYPE(CFI_BACKWARD_SHADOW),
++	CRASHTYPE(CFI_BACKWARD_SHADOW_WITH_NOSCS),
+ 	CRASHTYPE(FORTIFIED_OBJECT),
+ 	CRASHTYPE(FORTIFIED_SUBOBJECT),
+ 	CRASHTYPE(FORTIFIED_STRSCPY),
+diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
+index d6137c70ebbe..a23d32dfc10b 100644
+--- a/drivers/misc/lkdtm/lkdtm.h
++++ b/drivers/misc/lkdtm/lkdtm.h
+@@ -158,6 +158,10 @@ void lkdtm_STACKLEAK_ERASING(void);
+ /* cfi.c */
+ void lkdtm_CFI_FORWARD_PROTO(void);
+ 
++/* scs.c */
++void lkdtm_CFI_BACKWARD_SHADOW(void);
++void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void);
++
+ /* fortify.c */
+ void lkdtm_FORTIFIED_OBJECT(void);
+ void lkdtm_FORTIFIED_SUBOBJECT(void);
+diff --git a/drivers/misc/lkdtm/scs.c b/drivers/misc/lkdtm/scs.c
+new file mode 100644
+index 000000000000..5922a55a8844
+--- /dev/null
++++ b/drivers/misc/lkdtm/scs.c
+@@ -0,0 +1,67 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This is for all the tests relating directly to Shadow Call Stack.
++ */
++#include "lkdtm.h"
++
++#ifdef CONFIG_ARM64
++/* Function clears its return address. */
++static noinline void lkdtm_scs_clear_lr(void)
++{
++	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
++
++	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
++}
++
++/* Function with __noscs attribute clears its return address. */
++static noinline void __noscs lkdtm_noscs_clear_lr(void)
++{
++	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
++
++	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
++}
++#endif
++
++/*
++ * This tries to call a function protected by Shadow Call Stack,
++ * which corrupts its own return address during execution.
++ * Due to the protection, the corruption will not take effect
++ * when the function returns.
++ */
++void lkdtm_CFI_BACKWARD_SHADOW(void)
++{
++#ifdef CONFIG_ARM64
++	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
++		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
++		return;
++	}
++
++	pr_info("Trying to corrupt lr in a function with scs protection ...\n");
++	lkdtm_scs_clear_lr();
++
++	pr_err("ok: scs takes effect.\n");
++#else
++	pr_err("XFAIL: this test is arm64-only\n");
++#endif
++}
++
++/*
++ * This tries to call a function not protected by Shadow Call Stack,
++ * which corrupts its own return address during execution.
++ */
++void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void)
++{
++#ifdef CONFIG_ARM64
++	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
++		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
++		return;
++	}
++
++	pr_info("Trying to corrupt lr in a function with attribute __noscs ...\n");
++	lkdtm_noscs_clear_lr();
++
++	pr_err("FAIL: __noscs attribute does not take effect!\n");
++#else
++	pr_err("XFAIL: this test is arm64-only\n");
++#endif
++}
+diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+index 6b36b7f5dcf9..c849765c8dcc 100644
+--- a/tools/testing/selftests/lkdtm/tests.txt
++++ b/tools/testing/selftests/lkdtm/tests.txt
+@@ -73,6 +73,8 @@ USERCOPY_STACK_BEYOND
+ USERCOPY_KERNEL
+ STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
+ CFI_FORWARD_PROTO
++CFI_BACKWARD_SHADOW ok: scs takes effect
++CFI_BACKWARD_SHADOW_WITH_NOSCS
+ FORTIFIED_STRSCPY
+ FORTIFIED_OBJECT
+ FORTIFIED_SUBOBJECT
+-- 
+2.17.1
 
-> https://people.kernel.org/monsieuricon/introducing-b4-and-patch-attestati=
-on
->
-> >
-> > I would like to give this a try on x86-64 with my latest kernel-config
-> > (based on the latest kernel-config v5.17-rc5 from Debian/unstable).
-> >
-> > What Linux source base do I need?
-> > Is Linux v5.17-rc6 good enough (patchset applicable) for testing?
->
-> I suspect so.
-> --
-> Thanks,
-> ~Nick Desaulniers
