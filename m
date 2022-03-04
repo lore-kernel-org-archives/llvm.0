@@ -1,100 +1,137 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427E3365
-	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 00:06:53 +0000 (UTC)
-Received: by mail-pf1-f201.google.com with SMTP id x27-20020aa79a5b000000b004f3f7c2981eso4042300pfj.3
-        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 16:06:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=L2EqmECeGnDxBTpQsY7qBHnNCdpRu+0gpxLs2lR25VM=;
-        b=Od6sUIoBeI6YLIHz8dugjZNkV2e1G9ybEJ+EtPnZaPldHnMI495OSQXixpu5cD8MIL
-         LftkXHa1bDXNL/O7LVOgt6AQJJvJ0Z2+X/vMsRdavLJfC5JpSufc7XnPYGoIJYPFiMxt
-         SAHSYAxwfxCNp+0SYsc4xSvU7KTsOv2itMiPEVdMknFAsmNfYdZJ/rWBKFh0Bnhmv5ce
-         T7BDGlgmj141JJuCh9WvVnH0a0SXb+fEAuA4BXQieWuqf+pR/BtURhwmoeNU27CHClQb
-         kp55gbk1n8GvC5i6hbNFSqVC5JYHoxiOtNPthp61DnahHJj9bxhC570JzV2IIQQMnQY5
-         Co3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=L2EqmECeGnDxBTpQsY7qBHnNCdpRu+0gpxLs2lR25VM=;
-        b=LdL3PWEIU/18adSqEO/NNxRKAjaIeBazB+C6+IXV82RyBe+XUb3PfqbCz8QQnU4Vo7
-         GXynZn7j8+rQlDEgmk2HignZCdekZQsxFlgXliumV46cD2GCuAR4lWyHeC2FpywFea+Y
-         m8q6YAhxnpPAZUTnG4O1tbfcGAtp2YXDGRd6+1YbjP3+gqrfsRYuxJc6bSKzyaptujSr
-         SCTdOQyV3Kp3H2SDGR2DSuwrCQulRALEZt+Hs03VYVuoBDTz0gd4hgV9e2sibd+A6dGA
-         3+f7oGZMQm8CNus3FIfS6ZH1lp6YVkHitAzq1M6DN4szi6JbnDupoxT/+/eSOLI4MQz6
-         slMg==
-X-Gm-Message-State: AOAM530g5n90FS3iMlL9JgsDmRaPxiD83SUAu1S+bMvUsSRtvY7uHZoS
-	vbH8bIW9V0Cz6oQP39o3I/KwDkEgdugopeHH
-X-Google-Smtp-Source: ABdhPJwf+20lur8uv++KBdcOVEbgmjgiEAuuWAsUNu0PrpdZBGP1HHD9FdhGtIOfDG0Vu8bdNEN7h6tsuFuUnliQ
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a05:6a00:de:b0:4e0:ca1a:9f07 with SMTP
- id e30-20020a056a0000de00b004e0ca1a9f07mr41091497pfj.11.1646352412683; Thu,
- 03 Mar 2022 16:06:52 -0800 (PST)
-Date: Fri,  4 Mar 2022 00:06:45 +0000
-Message-Id: <20220304000645.1888133-1-yosryahmed@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED50A7C
+	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 02:47:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646362060; x=1677898060;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KPejFLhSLiRFwnBIsWVMsqywVX9c3siyTdMRHTdDKyg=;
+  b=GaunZZBQefRrjDwFBsIYa28IO+FtTJVoSngWQ8Lzwd3LAt0DR8NNbmkE
+   AD2+lcUbmvq9N98EzMt6BIk0tUmIW8+BgfHORUGvk6JL4C2f9fmzd5L88
+   y8vGWIJBMbtDhUsO5AlLmtu7GyzWUEe40/lWgyyk8b9maHJgIGnqVmCRG
+   VRAQLXFnuHU7Y++88qUQ8Fsxn53OOCAivZX1L8dTSpb05reeEo8Y8T4Bb
+   ensMkfjlNGanVq0u0YIgzY0+QMC5QZ3Eaj1ZEDFBkItPWo8kFHdohUzRD
+   kRA2PwwwC5ruw+n4WCHuUoOCYygvr1sQoLYaQQLHPvUj/hS59kzSyBfF1
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="317101661"
+X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
+   d="scan'208";a="317101661"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 18:47:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
+   d="scan'208";a="552042292"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 03 Mar 2022 18:47:38 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nPxyj-0001BT-TI; Fri, 04 Mar 2022 02:47:37 +0000
+Date: Fri, 4 Mar 2022 10:47:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Atish Patra <atishp@rivosinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org
+Subject: [atishp04:sstc_v2 11/14] arch/riscv/kvm/vcpu.c:98:73: error:
+ expected ')'
+Message-ID: <202203040424.EQFdRwqc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [PATCH] selftests: vm: fix clang build error multiple output files
-From: Yosry Ahmed <yosryahmed@google.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-When building the vm selftests using clang, some errors are seen due to
-having headers in the compilation command:
+tree:   https://github.com/atishp04/linux sstc_v2
+head:   6879757e47dea7a727848fd90ca30007dc5771fb
+commit: 0add5712857784b48861902daaf18870e6cd41e5 [11/14] RISC-V: KVM: Remove 's' & 'u' as valid ISA extension
+config: riscv-buildonly-randconfig-r001-20220303 (https://download.01.org/0day-ci/archive/20220304/202203040424.EQFdRwqc-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/atishp04/linux/commit/0add5712857784b48861902daaf18870e6cd41e5
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 sstc_v2
+        git checkout 0add5712857784b48861902daaf18870e6cd41e5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-clang -Wall -I ../../../../usr/include  -no-pie    gup_test.c ../../../../mm/gup_test.h -lrt -lpthread -o .../tools/testing/selftests/vm/gup_test
-clang: error: cannot specify -o when generating multiple output files
-make[1]: *** [../lib.mk:146: .../tools/testing/selftests/vm/gup_test] Error 1
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
-since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
-file lib.mk.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+>> arch/riscv/kvm/vcpu.c:98:73: error: expected ')'
+           vcpu->arch.isa = riscv_isa_extension_base(NULL) & KVM_RISCV_ISA_ALLOWED;
+                                                                                  ^
+   arch/riscv/kvm/vcpu.c:98:52: note: to match this '('
+           vcpu->arch.isa = riscv_isa_extension_base(NULL) & KVM_RISCV_ISA_ALLOWED;
+                                                             ^
+   arch/riscv/kvm/vcpu.c:41:31: note: expanded from macro 'KVM_RISCV_ISA_ALLOWED'
+   #define KVM_RISCV_ISA_ALLOWED   (riscv_isa_extension_mask(a) | \
+                                   ^
+   arch/riscv/kvm/vcpu.c:222:43: error: expected ')'
+                           vcpu->arch.isa &= KVM_RISCV_ISA_ALLOWED;
+                                                                  ^
+   arch/riscv/kvm/vcpu.c:222:22: note: to match this '('
+                           vcpu->arch.isa &= KVM_RISCV_ISA_ALLOWED;
+                                             ^
+   arch/riscv/kvm/vcpu.c:41:31: note: expanded from macro 'KVM_RISCV_ISA_ALLOWED'
+   #define KVM_RISCV_ISA_ALLOWED   (riscv_isa_extension_mask(a) | \
+                                   ^
+   2 errors generated.
+
+
+vim +98 arch/riscv/kvm/vcpu.c
+
+99cdc6c18c2d81 Anup Patel          2021-09-27   87  
+99cdc6c18c2d81 Anup Patel          2021-09-27   88  int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+99cdc6c18c2d81 Anup Patel          2021-09-27   89  {
+a33c72faf2d73a Anup Patel          2021-09-27   90  	struct kvm_cpu_context *cntx;
+de1d7b6a51dab5 Mayuresh Chitale    2022-01-31   91  	struct kvm_vcpu_csr *reset_csr = &vcpu->arch.guest_reset_csr;
+a33c72faf2d73a Anup Patel          2021-09-27   92  
+a33c72faf2d73a Anup Patel          2021-09-27   93  	/* Mark this VCPU never ran */
+a33c72faf2d73a Anup Patel          2021-09-27   94  	vcpu->arch.ran_atleast_once = false;
+cc4f602bc4365d Sean Christopherson 2021-11-04   95  	vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+a33c72faf2d73a Anup Patel          2021-09-27   96  
+a33c72faf2d73a Anup Patel          2021-09-27   97  	/* Setup ISA features available to VCPU */
+a33c72faf2d73a Anup Patel          2021-09-27  @98  	vcpu->arch.isa = riscv_isa_extension_base(NULL) & KVM_RISCV_ISA_ALLOWED;
+a33c72faf2d73a Anup Patel          2021-09-27   99  
+a33c72faf2d73a Anup Patel          2021-09-27  100  	/* Setup reset state of shadow SSTATUS and HSTATUS CSRs */
+a33c72faf2d73a Anup Patel          2021-09-27  101  	cntx = &vcpu->arch.guest_reset_context;
+a33c72faf2d73a Anup Patel          2021-09-27  102  	cntx->sstatus = SR_SPP | SR_SPIE;
+a33c72faf2d73a Anup Patel          2021-09-27  103  	cntx->hstatus = 0;
+a33c72faf2d73a Anup Patel          2021-09-27  104  	cntx->hstatus |= HSTATUS_VTW;
+a33c72faf2d73a Anup Patel          2021-09-27  105  	cntx->hstatus |= HSTATUS_SPVP;
+a33c72faf2d73a Anup Patel          2021-09-27  106  	cntx->hstatus |= HSTATUS_SPV;
+a33c72faf2d73a Anup Patel          2021-09-27  107  
+de1d7b6a51dab5 Mayuresh Chitale    2022-01-31  108  	/* By default, make CY, TM, and IR counters accessible in VU mode */
+de1d7b6a51dab5 Mayuresh Chitale    2022-01-31  109  	reset_csr->scounteren = 0x7;
+de1d7b6a51dab5 Mayuresh Chitale    2022-01-31  110  
+3a9f66cb25e18a Atish Patra         2021-09-27  111  	/* Setup VCPU timer */
+3a9f66cb25e18a Atish Patra         2021-09-27  112  	kvm_riscv_vcpu_timer_init(vcpu);
+3a9f66cb25e18a Atish Patra         2021-09-27  113  
+a33c72faf2d73a Anup Patel          2021-09-27  114  	/* Reset VCPU */
+a33c72faf2d73a Anup Patel          2021-09-27  115  	kvm_riscv_reset_vcpu(vcpu);
+a33c72faf2d73a Anup Patel          2021-09-27  116  
+99cdc6c18c2d81 Anup Patel          2021-09-27  117  	return 0;
+99cdc6c18c2d81 Anup Patel          2021-09-27  118  }
+99cdc6c18c2d81 Anup Patel          2021-09-27  119  
+
+:::::: The code at line 98 was first introduced by commit
+:::::: a33c72faf2d73a35d85c8da4b65402a50aa7647c RISC-V: KVM: Implement VCPU create, init and destroy functions
+
+:::::: TO: Anup Patel <anup.patel@wdc.com>
+:::::: CC: Anup Patel <anup@brainfault.org>
+
 ---
-This patch was inspired by:
-https://lore.kernel.org/lkml/20211105162530.3307666-1-anders.roxell@linaro.org/
-
-
----
- tools/testing/selftests/vm/Makefile | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 1607322a112c..a14b5b800897 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -1,6 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for vm selftests
- 
-+LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
-+
- include local_config.mk
- 
- uname_M := $(shell uname -m 2>/dev/null || echo not)
-@@ -140,10 +142,6 @@ endif
- 
- $(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
- 
--$(OUTPUT)/gup_test: ../../../../mm/gup_test.h
--
--$(OUTPUT)/hmm-tests: local_config.h
--
- # HMM_EXTRA_LIBS may get set in local_config.mk, or it may be left empty.
- $(OUTPUT)/hmm-tests: LDLIBS += $(HMM_EXTRA_LIBS)
- 
--- 
-2.35.1.616.g0bdcbb4464-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
