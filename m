@@ -1,178 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187D27C
-	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 21:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1646427850;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=aB6Kk4CiP7ma9Bi5vpnU1x/1xVJ2+zGmFV9PkjhVvyE=;
-	b=dB8AmjLbqsD2C0gDx/IC2EqzYkCOU0d2awYjnlTLcNFOST0j9J4tB62nOW7CcxVLQOUw4l
-	4j9LclIIfPOuP4IuFrorMvav5d3i/rq/qvF6+8mH5SXGbQkoG9Pg3Pv4Y4AcTrciv15+81
-	k9QkM/O96ND9ItA3Mt3BqstMVNWdZx4=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-348-U4QYS8-ENDu3miFEJoP4SA-1; Fri, 04 Mar 2022 16:04:06 -0500
-X-MC-Unique: U4QYS8-ENDu3miFEJoP4SA-1
-Received: by mail-qk1-f198.google.com with SMTP id 7-20020a05620a048700b00648b76040f6so6543253qkr.9
-        for <llvm@lists.linux.dev>; Fri, 04 Mar 2022 13:04:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9987C
+	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 21:04:43 +0000 (UTC)
+Received: by mail-io1-f47.google.com with SMTP id w7so10941661ioj.5
+        for <llvm@lists.linux.dev>; Fri, 04 Mar 2022 13:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U+E0PkkZm4GMMA/j/YXjv17yT9pu9dITlUBR8RUwlzY=;
+        b=VrJT2u3fwB1RZfA1ws8RJp7Ck2jXPGvKKEFOszNj0C57Etrv6+GbJbRAil6tagMQG0
+         RX638ubu19X/K9XkbONfcUGenCTxL+Mp2JMslcM/Z7c1FFlN/meurEeQGwvRmxbz03sI
+         chQIb7eanCgBVCCTosn72/gyywDMJSL+HYEQO4KQuVqYyJ9JuuDrCF5oo/WdMoLIlyr8
+         qZmDjKkWVwyAJG9yOWgVtwosFvs+wgStFxZtleQAG64SogpgNYvtXOar5n4/AzhRFmO8
+         rBybqYhr2meXAEyw5S6Knkxi1HuKl1xEFrKALABQ1DcHKabFDW7DjI81SLQlxXP3q0cY
+         mM4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aB6Kk4CiP7ma9Bi5vpnU1x/1xVJ2+zGmFV9PkjhVvyE=;
-        b=6abtWj0VEczRoqCbc5ihER1c43+964s1LhqT7T6kaX39rcJ2alOWe6df6lNy3neD60
-         L1N0fRB2c/KtthdstsQSXcoH1IpS6dj2bWpkEtlC5gju/3cmr4wZu77W0Y/b4OAyUgta
-         Hh96sUD1CVTXfcD7/H24VbJVrxCMmqUb2fExnsjeTj5fgG7UhnTtJt/vxBB593WGyF+H
-         naE/HndjUSv2fR4zaOrppzMtWhJCmSUAAQ79nh/3f2IugfNKyZGm7rRY+b5ckbb3UzSe
-         aC6Da2RFePLCidwpBfIvOM+o+L3Nngdutk2egiqBRp5LVahpMSIENvXzxPe/pEs+yj+b
-         4DFw==
-X-Gm-Message-State: AOAM532wkXOuGSJT7N3lNBWfz4ZJqIZ4HuxIIXGqU5SJSjKWcWg+QaSe
-	CLZg8D+OHO+eJwhHHLzty3h6efwmaj7/YhBf8V2DZPuTz3VhXAEbKMW+QbS9mEhkecmGuF5HY7X
-	LZ2rEiEnyFtWixQ==
-X-Received: by 2002:ac8:7d0d:0:b0:2e0:4e16:d3e3 with SMTP id g13-20020ac87d0d000000b002e04e16d3e3mr596092qtb.140.1646427845905;
-        Fri, 04 Mar 2022 13:04:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzl8+Ou2jNdvl2lw+bUe6/hKRdnkUMPqvw52WVW8CnKDZfAXFw9zzSyaFkAoX7LqTGuVUhhjg==
-X-Received: by 2002:ac8:7d0d:0:b0:2e0:4e16:d3e3 with SMTP id g13-20020ac87d0d000000b002e04e16d3e3mr596051qtb.140.1646427845459;
-        Fri, 04 Mar 2022 13:04:05 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id d15-20020a05622a15cf00b002de711a190bsm4066708qty.71.2022.03.04.13.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 13:04:05 -0800 (PST)
-From: trix@redhat.com
-To: jani.nikula@linux.intel.com,
-	joonas.lahtinen@linux.intel.com,
-	rodrigo.vivi@intel.com,
-	tvrtko.ursulin@linux.intel.com,
-	airlied@linux.ie,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	ville.syrjala@linux.intel.com,
-	matthew.d.roper@intel.com,
-	lucas.demarchi@intel.com,
-	airlied@redhat.com,
-	imre.deak@intel.com
-Cc: intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/i915: rework the error handling in *_dpll_params
-Date: Fri,  4 Mar 2022 13:03:55 -0800
-Message-Id: <20220304210355.608898-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U+E0PkkZm4GMMA/j/YXjv17yT9pu9dITlUBR8RUwlzY=;
+        b=xxllF6ggTVn22lk+T46qzGzV59XoY7TGAe4RzHKd2W+3z/9sg+lWCrKwQA+wodWG1j
+         L0FUg+r/AHxxXtIpaz/oURDFC/jMKaB4Lx04AukClYgm116qgAfIUMxU7rutGBh/wZ+c
+         4x+nYlg/H4GGLNNN8IcUQEuexpcLxrxyfoNBTxbTvJQFK9TTLuAUPGxpkqd1zUU/DJWp
+         Ty8d1xCWnWmqJXvSeVJffvtzgMoMCVbmGpvVFMzsC0dzIl9ESh6wMhh9dIxMAnYXYgfJ
+         HMWG4f4q32Aj3hqYbSl7m9Sn/uh+/mIRM70sBtD2XhFkn0ihgrGm3RGjEJs6cVhpbGUG
+         DPGw==
+X-Gm-Message-State: AOAM5328IcHFiDFp1r/WK9yLSGMiQNrdtzHKuTiyZavm/mBly7wVb2PM
+	5YPaB3JThEOfQK8rOAeEjef+8CsMjGTW3BWiOIw=
+X-Google-Smtp-Source: ABdhPJzDpEH6kq/lE/65CKhDbZk3TjAZz1VyHGBvt3NPi8FiQIqeIe5nu9xipcBZOr/YbiNPdFZDFKYgiwhLbpqzdHg=
+X-Received: by 2002:a6b:661a:0:b0:640:dd42:58ff with SMTP id
+ a26-20020a6b661a000000b00640dd4258ffmr420359ioc.64.1646427882556; Fri, 04 Mar
+ 2022 13:04:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+References: <20220127151945.1244439-1-trix@redhat.com> <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
+ <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com> <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
+ <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com> <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
+ <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org> <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
+ <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org> <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
+ <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
+ <9dc86e74-7741-bb8e-bbad-ae96cebaaebc@redhat.com> <CANiq72nsKijH4zgLoEpiiq4462r1zYmaiDs13SEHDYR3aQziUw@mail.gmail.com>
+ <ad3567301af7b1b24cf4ac447fec8d618231ea33.camel@perches.com>
+ <CANiq72kWJtOTmcXNO+t4NY22v6xM49Z-U2aSB4apNd96PYbD4Q@mail.gmail.com> <451bb2c394b05928c815f1eb349a1281a687a608.camel@perches.com>
+In-Reply-To: <451bb2c394b05928c815f1eb349a1281a687a608.camel@perches.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 4 Mar 2022 22:04:32 +0100
+Message-ID: <CANiq72kqpcs==-+FOqoRwxHQ0s9D=gf-QAM9UTm4rA=GwHWUVQ@mail.gmail.com>
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+To: Joe Perches <joe@perches.com>
+Cc: Tom Rix <trix@redhat.com>, Finn Thain <fthain@linux-m68k.org>, 
+	Konrad Wilhelm Kleine <kkleine@redhat.com>, Bart Van Assche <bvanassche@acm.org>, kashyap.desai@broadcom.com, 
+	sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com, 
+	jejb@linux.ibm.com, martin.petersen@oracle.com, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Tom Rix <trix@redhat.com>
+On Fri, Mar 4, 2022 at 8:28 PM Joe Perches <joe@perches.com> wrote:
+>
+> Is that statement really disputable?
 
-Clang static analysis reports this issue
-intel_dpll.c:472:31: warning: The left operand of '-'
-  is a garbage value [core.UndefinedBinaryOperatorResult]
-  this_err = abs(clock.dot - target);
-                 ~~~~~~~~~ ^
+By "Maybe", I only mean that you may be right (or not), i.e. we cannot
+really show one way or the other with data.
 
-In a loop clock.dot is set on successful call to
-i9xx_calc_dpll_params().  If the call fails, the later
-*is_valid() will use the previous loop's clock.dot.
+But note that many people (including projects, companies and even
+programming languages) prefer consistency and automated formatting vs.
+the alternative.
 
-The *_dpll_params functions return an arithmetic statement
-with the clock.dot as the variable.  Change the error handler
-to set clock.dot to 0 and jump to the return statement.
+> IYO.  I think using an SCCS with better language understanding rather
+> than a line oriented one could be an improvement.  Such a tool could
+> allow arbitrary style reformatting at check-in/check-out.
 
-Fixes: dccbea3b0704 ("drm/i915: calculate the port clock rate along with other PLL params")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/i915/display/intel_dpll.c | 32 ++++++++++++++---------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+clang-format is not line oriented. In fact, you may be able to get
+quite close to what you suggest with clang-format if you have a
+project that is automatically formatted.
 
-diff --git a/drivers/gpu/drm/i915/display/intel_dpll.c b/drivers/gpu/drm/i915/display/intel_dpll.c
-index 0ae37fdbf2a5b..ba7cada704288 100644
---- a/drivers/gpu/drm/i915/display/intel_dpll.c
-+++ b/drivers/gpu/drm/i915/display/intel_dpll.c
-@@ -309,11 +309,13 @@ int pnv_calc_dpll_params(int refclk, struct dpll *clock)
- {
- 	clock->m = clock->m2 + 2;
- 	clock->p = clock->p1 * clock->p2;
--	if (WARN_ON(clock->n == 0 || clock->p == 0))
--		return 0;
-+	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
-+		clock->dot = 0;
-+		goto end;
-+	}
- 	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n);
- 	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
--
-+end:
- 	return clock->dot;
- }
- 
-@@ -326,11 +328,13 @@ int i9xx_calc_dpll_params(int refclk, struct dpll *clock)
- {
- 	clock->m = i9xx_dpll_compute_m(clock);
- 	clock->p = clock->p1 * clock->p2;
--	if (WARN_ON(clock->n + 2 == 0 || clock->p == 0))
--		return 0;
-+	if (WARN_ON(clock->n + 2 == 0 || clock->p == 0)) {
-+		clock->dot = 0;
-+		goto end;
-+	}
- 	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n + 2);
- 	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
--
-+end:
- 	return clock->dot;
- }
- 
-@@ -338,11 +342,13 @@ int vlv_calc_dpll_params(int refclk, struct dpll *clock)
- {
- 	clock->m = clock->m1 * clock->m2;
- 	clock->p = clock->p1 * clock->p2;
--	if (WARN_ON(clock->n == 0 || clock->p == 0))
--		return 0;
-+	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
-+		clock->dot = 0;
-+		goto end;
-+	}
- 	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n);
- 	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
--
-+end:
- 	return clock->dot / 5;
- }
- 
-@@ -350,12 +356,14 @@ int chv_calc_dpll_params(int refclk, struct dpll *clock)
- {
- 	clock->m = clock->m1 * clock->m2;
- 	clock->p = clock->p1 * clock->p2;
--	if (WARN_ON(clock->n == 0 || clock->p == 0))
--		return 0;
-+	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
-+		clock->dot = 0;
-+		goto end;
-+	}
- 	clock->vco = DIV_ROUND_CLOSEST_ULL(mul_u32_u32(refclk, clock->m),
- 					   clock->n << 22);
- 	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
--
-+end:
- 	return clock->dot / 5;
- }
- 
--- 
-2.26.3
+> All of these existing code are more human readable than the code
+> reformatted using clang-format.
 
+That is subjective (for some it may be good enough), and anyway you
+compared it to the current config file (clang-format 4). The point I
+raised is that clang-format 13 and future versions should be closer to
+what you expect.
+
+And by saying "I rather doubt clang-format will ever be 'close
+enough'.", then there is little incentive for the clang-format team to
+actually add support the things we need...
+
+> I used whatever is the latest clang-format here with today's -next.
+> https://releases.llvm.org/download.html
+
+I think this may be the source of confusion -- even if you use
+clang-format 13, you need to edit the config file to use the new
+options.
+
+In other words, when I said something is supported since e.g.
+clang-format 9, one still needs to enable it in the config file.
+
+> Then perhaps you as the maintainer of the kernel's .clang-format file
+> could update the entries for those new options.
+
+No, I cannot, because that is an error, thus breaks users of old
+clang-format versions.
+
+That is why I suggested to track the minimum LLVM supported version in
+the kernel, i.e. go at least to LLVM 11. And then over time keep
+upgrading it and getting better output.
+
+> I believe the minimum clang version is already 11.  Maybe higher.
+> I don't track clang or use it very much.  The clang version I use
+> though is 13.
+
+Yes, I am aware, please see above. The issue and why I did not "just
+do it" is that people could have been using clang-format from e.g.
+their distro, but compiling with GCC.
+
+> But perhaps tweaking will just improve some cases and worsen others.
+
+Yes, of course.
+
+> I don't think so.
+
+Why?
+
+> There is no "one true editor".
+> There will not be "one true source code formatter" either.
+
+Not for every project, but for a single project, there can definitely
+be a "single formatter". In fact, that is what many other projects do
+in practice in order to reach a point where automatic formatting is
+done.
+
+Cheers,
+Miguel
