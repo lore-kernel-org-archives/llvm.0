@@ -1,81 +1,115 @@
-Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.38])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA7C7C
-	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 04:03:44 +0000 (UTC)
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 608BC60B54;
-	Fri,  4 Mar 2022 04:03:35 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id 478FA20033;
-	Fri,  4 Mar 2022 04:03:32 +0000 (UTC)
-Message-ID: <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-From: Joe Perches <joe@perches.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Finn Thain
-	 <fthain@linux-m68k.org>
-Cc: Konrad Wilhelm Kleine <kkleine@redhat.com>, Tom Rix <trix@redhat.com>, 
- Bart Van Assche <bvanassche@acm.org>, kashyap.desai@broadcom.com,
- sumit.saxena@broadcom.com,  shivasharan.srikanteshwara@broadcom.com,
- jejb@linux.ibm.com,  martin.petersen@oracle.com, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>, 
- linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-In-Reply-To: <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
-References: <20220127151945.1244439-1-trix@redhat.com>
-	 <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-	 <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
-	 <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
-	 <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com>
-	 <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
-	 <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>
-	 <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
-	 <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
-	 <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC8A7A
+	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 05:00:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646370043; x=1677906043;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uftcfHaCc9mV3BnvBIiFIMK1B9Kr8o+zKwYw3mfzutg=;
+  b=aAzP4HgDSPyzhFWF2DDZ5eb0ubcjbpWpu4wjX6Jj2uKZlg5PHenAvolj
+   DGxZZ8wwS4bV2AFMELu8NedTDHV8ZhryG56q6tKqM6houFks72LymHjXE
+   2wpGFFzfaZx4jYRAf+gVYfdFa4r7NZEcy04v6UTTMAvNQPsZ9G0MwNgTU
+   MOhiE89YEIfmAaXhdqD3eaSEC02c7iPhDdyfNfdryrVL8FCxpihS1wtvm
+   RYAaxlQ/eTl0pwJsLvt2pbWfKbyX4LO2lOOIUwXgY7E55UDzlY2QDLcx4
+   iU+CBa8SOqORHlDlKWUWcTGI1ilS0gUPXlWRmu+oOo15yn4MmIrgN3JoM
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="254087949"
+X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
+   d="scan'208";a="254087949"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 21:00:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
+   d="scan'208";a="576768479"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 03 Mar 2022 21:00:41 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nQ03U-0001HW-HE; Fri, 04 Mar 2022 05:00:40 +0000
+Date: Fri, 4 Mar 2022 13:00:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [andersson:tuxsuite 9/42]
+ drivers/gpu/drm/i915/display/intel_dp.c:4838:75: error: too many arguments
+ to function call, expected 2, have 3
+Message-ID: <202203041231.YHLqlCBb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Thu, 03 Mar 2022 15:38:27 -0800
-User-Agent: Evolution 3.40.4-1ubuntu2 
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 478FA20033
-X-Spam-Status: No, score=1.52
-X-Stat-Signature: yz18ifsua7kdmzp74w4prbz8mu3wc8q6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18oUcfg3lbyw2FPCUH8mnKyjJijBMjDisc=
-X-HE-Tag: 1646366612-611934
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, 2022-03-04 at 00:17 +0100, Miguel Ojeda wrote:
-> On Thu, Mar 3, 2022 at 11:44 PM Finn Thain <fthain@linux-m68k.org> wrote:
-> > 
-> > Others might argue that they should always be changed from,
-> > 
-> > /*
-> >  * this style
-> >  * of multiline comment
-> >  */
-> > 
-> > to
-> > 
-> > /* this style
-> >  * of multiline comment
-> >  */
-> 
-> In general, for things that the coding style guide talks about, we
-> should follow them, even if some subsystems do not (they can always
-> override in their folder if they really, really want it). So, here for
-> instance, the first one should be used.
+tree:   https://github.com/andersson/kernel tuxsuite
+head:   0fff1d7836dde54d8a7ce2f9010fd46a40f23aee
+commit: f5897d405897f092921dfbc5e00c4f3fb4172b01 [9/42] drm: Add HPD state to drm_connector_oob_hotplug_event()
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220304/202203041231.YHLqlCBb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/andersson/kernel/commit/f5897d405897f092921dfbc5e00c4f3fb4172b01
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson tuxsuite
+        git checkout f5897d405897f092921dfbc5e00c4f3fb4172b01
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-It's up to individual maintainers to each decide on what might be
-considered unnecessary churn for the subsystems they control.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-One argument is that churn leads to difficulty in backporting
-fixes to older 'stable' versions.
+All errors (new ones prefixed by >>):
 
-I think the churn argument is overstated.
+>> drivers/gpu/drm/i915/display/intel_dp.c:4838:75: error: too many arguments to function call, expected 2, have 3
+           if (hpd_high != test_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state, hpd_pin)) {
+                           ~~~~~~~~                                                 ^~~~~~~
+   include/asm-generic/bitops/instrumented-non-atomic.h:132:29: note: 'test_bit' declared here
+   static __always_inline bool test_bit(long nr, const volatile unsigned long *addr)
+                               ^
+>> drivers/gpu/drm/i915/display/intel_dp.c:4841:64: error: use of undeclared identifier 'hpg_high'; did you mean 'hpd_high'?
+                   __assign_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state, hpg_high);
+                                                                                ^~~~~~~~
+                                                                                hpd_high
+   drivers/gpu/drm/i915/display/intel_dp.c:4833:7: note: 'hpd_high' declared here
+           bool hpd_high = hpd_state == DRM_CONNECTOR_HPD_HIGH;
+                ^
+   2 errors generated.
 
 
+vim +4838 drivers/gpu/drm/i915/display/intel_dp.c
+
+  4827	
+  4828	static void intel_dp_oob_hotplug_event(struct drm_connector *connector,
+  4829					       enum drm_connector_hpd_state hpd_state)
+  4830	{
+  4831		struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
+  4832		struct drm_i915_private *i915 = to_i915(connector->dev);
+  4833		bool hpd_high = hpd_state == DRM_CONNECTOR_HPD_HIGH;
+  4834		unsigned int hpd_pin = encoder->hpd_pin;
+  4835		bool need_work = false;
+  4836	
+  4837		spin_lock_irq(&i915->irq_lock);
+> 4838		if (hpd_high != test_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state, hpd_pin)) {
+  4839			i915->hotplug.event_bits |= BIT(hpd_pin);
+  4840	
+> 4841			__assign_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state, hpg_high);
+  4842			need_work = true;
+  4843		}
+  4844		spin_unlock_irq(&i915->irq_lock);
+  4845	
+  4846		if (need_work)
+  4847			queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
+  4848	}
+  4849	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
