@@ -1,98 +1,83 @@
-Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.38])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73127E
-	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 18:13:06 +0000 (UTC)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay06.hostedemail.com (Postfix) with ESMTP id 0D6B625AC1;
-	Fri,  4 Mar 2022 17:37:11 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 8345420033;
-	Fri,  4 Mar 2022 17:36:54 +0000 (UTC)
-Message-ID: <ad3567301af7b1b24cf4ac447fec8d618231ea33.camel@perches.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-From: Joe Perches <joe@perches.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Tom Rix
- <trix@redhat.com>
-Cc: Finn Thain <fthain@linux-m68k.org>, Konrad Wilhelm Kleine
- <kkleine@redhat.com>, Bart Van Assche <bvanassche@acm.org>, 
- kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
- shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
- martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, megaraidlinux.pdl@broadcom.com, scsi
- <linux-scsi@vger.kernel.org>,  linux-kernel <linux-kernel@vger.kernel.org>,
- llvm@lists.linux.dev
-In-Reply-To: <CANiq72nsKijH4zgLoEpiiq4462r1zYmaiDs13SEHDYR3aQziUw@mail.gmail.com>
-References: <20220127151945.1244439-1-trix@redhat.com>
-	 <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-	 <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
-	 <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
-	 <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com>
-	 <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
-	 <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>
-	 <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
-	 <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
-	 <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
-	 <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
-	 <9dc86e74-7741-bb8e-bbad-ae96cebaaebc@redhat.com>
-	 <CANiq72nsKijH4zgLoEpiiq4462r1zYmaiDs13SEHDYR3aQziUw@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7B07E
+	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 18:15:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7260FC340E9;
+	Fri,  4 Mar 2022 18:15:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646417752;
+	bh=QtRmzYeZWWRMKtMgE76VEBJ3pSCoqPxHQCc/ttQXt6c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=B8Bflq7cMJLn6wmf19dyscS4sqFHhiYufUyprdS+TsUzI3ngHhc3Rh7Thmxnb7eoZ
+	 lC8OD2wLPU/7D0ZXaEdIqUlvV30ZRSd7BKc+mrBy9uE0piFjrTVy2jLDHfB6I6obkx
+	 6DhNuSNepAdIlfDxcrPyKlS///1uiSel/lgywiUWZOFBDHYlO4fCW3rok5Shg1Wczi
+	 ozb7JmHSG7xoac1m7x9m2ZsbDVYNi8Wk8fwmX1K4ECv2XTpL/X0J0CtZ6HvnSXbtCH
+	 EenfHfmM18uHNQlPF3BSJjJvAHcGXEAc+PyHrT7JVQXEDyaTOErKLPPmFXeJVMzqek
+	 UmmvWBNbAJWEg==
+Date: Fri, 4 Mar 2022 11:15:44 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
+Message-ID: <YiJXUL3zIik+4QDv@thelio-3990X>
+References: <20220304170813.1689186-1-nathan@kernel.org>
+ <202203041005.A3B985C@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Fri, 04 Mar 2022 09:36:47 -0800
-User-Agent: Evolution 3.40.4-1ubuntu2 
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 8345420033
-X-Spam-Status: No, score=-2.65
-X-Stat-Signature: 1c6ug8i9pqxuqjhad1yefjg3b57awop5
-X-Rspamd-Server: rspamout01
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18PthH+crZJzJrKjbbP7DvDY/cONgYvkvc=
-X-HE-Tag: 1646415414-943187
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202203041005.A3B985C@keescook>
 
-On Fri, 2022-03-04 at 15:02 +0100, Miguel Ojeda wrote:
-> On Fri, Mar 4, 2022 at 2:46 PM Tom Rix <trix@redhat.com> wrote:
+On Fri, Mar 04, 2022 at 10:09:03AM -0800, Kees Cook wrote:
+> On Fri, Mar 04, 2022 at 10:08:14AM -0700, Nathan Chancellor wrote:
+> > [...]
 > > 
-> > The churn level will be very high.
+> > Update and reorder the documentation to reflect these new additions.
+> > At the same time, notate that LLVM=0 is not the same as just omitting it
+> > altogether, which has confused people in the past.
 > 
-> Nobody is planning to reformat the entire kernel, at least not until
-> the tool is close enough to the kernel style, which will take a while.
+> Is it worth making LLVM=0 actually act the way it's expected to?
 
-I rather doubt clang-format will ever be 'close enough'.
+I don't really see the point, omitting $(LLVM) altogether is simpler.
+Why specify LLVM=0 if you want GNU tools, since it is the default?
+However, I can look into changing that in a new revision or a follow up
+if others disagree?
 
-A human's sense of 'taste' for reading code is very different than
-what an automated tool produces.
+> > Link: https://lore.kernel.org/r/20200317215515.226917-1-ndesaulniers@google.com/
+> > Link: https://lore.kernel.org/r/20220224151322.072632223@infradead.org/
+> > Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> Looks good; minor .rst nit below...
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> 
+> > [...]
+> > -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
+> > -to enable them. ::
+> > -
+> > -	make LLVM=1
+> > -
+> > -They can be enabled individually. The full list of the parameters: ::
+> > +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
+> > +The full list of supported make variables: ::
+> 
+> ": ::" and "::" yield the same result. I think the latter is more
+> readable in non-rendered form. *shrug*
 
-For instance, clang-format does a quite poor job when comments are
-intermixed with definitions.
+Ack, I'll wait for other feedback before sending v3, unless there is
+none and Masahiro does not mind fixing it up during application.
 
-Also, try looking at the changes clang-format does on a file chosen
-at random:
-
-$ clang-format -i drivers/hid/hid-sony.c
-$ git diff drivers/hid/hid-sony.c
-[...]
-
-o columnarized definitions -> not columnarized
-o odd line continuation placement using spaces and not tabs before \
-o odd array definition layouts
-o per line definitions with comments poorly laid out
-o individual line definitions rewrapped
-o enum definitions on multiple lines compressed to single lines
-o u8 array definition layouts where the first element has a separate
-  meaning than the subsequent elements are compressed and made
-  difficult to understand
-
-I think _some_ clang-format output is ok, but the concept of
-enabling/disabling specific reformatting bits would be quite useful.
-
-And sprinkling "clang-format on/off" lines in the code is not good.
-
-Any control codes that determine when source code layout might be
-immutable or allowed to be modified could be should be tool name
-agnostic.
-
-
+Thanks for the review!
+Nathan
