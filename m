@@ -1,344 +1,146 @@
-Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F657A
-	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 05:16:35 +0000 (UTC)
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-03.nifty.com with ESMTP id 22454nCi018370
-	for <llvm@lists.linux.dev>; Fri, 4 Mar 2022 14:04:49 +0900
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174]) (authenticated)
-	by conssluserg-05.nifty.com with ESMTP id 22454SwS007614
-	for <llvm@lists.linux.dev>; Fri, 4 Mar 2022 14:04:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 22454SwS007614
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1646370269;
-	bh=jTwouyxM3J2bGsjkif3hrT7Ur9j36OcaWK3XsK/Pf0g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ogcNbLugWaeRzb4ZhQhyOszybGeCwv/uk5e0iqi+WwqCgNyETqgsmtdBbmhBXUlDV
-	 mu77hIF+l2umhj4vjTw+7Qr2+VrPmyltCZ2mUDF1bS0AxyycVoYCGoetg3jSPPp5GB
-	 eS7PmWtpuYPCyETiL4FOJyAbWEuZW0s9335gDWaK741bDadv/2fRr3jt5594pjyB68
-	 1da0oesqktK0EMMnrGv//dwSrEgvhDj7adGqVnpVHcM1B4m4Ozd+GwvXu4A6Jc/dop
-	 CHD2OQDh262fFAon197KFLrLV/SkqhNQoG07pR2gPGjOo99f4kMQmAgz92Bi+Tar8B
-	 OwgdFFtm4uRZA==
-X-Nifty-SrcIP: [209.85.215.174]
-Received: by mail-pg1-f174.google.com with SMTP id o26so6545492pgb.8
-        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 21:04:28 -0800 (PST)
-X-Gm-Message-State: AOAM531x/Jj2aaUEQj5YFlnOqYrMQmRnNxxH2+6yFg9kWPq1YOmcC8LR
-	CcxEjo+qwJOFn7Rijx/o+8BxXT8wKN7spDQdzj4=
-X-Google-Smtp-Source: ABdhPJy7yEBFzg8WVxU6/sj/Ux+ZdTxFr+OJzk/reUK8ZrhDBHy/0ChWjVVKYQFgs5mGheJGY/lCU6ek25oVyKnWIys=
-X-Received: by 2002:a63:1d44:0:b0:373:5612:629b with SMTP id
- d4-20020a631d44000000b003735612629bmr33492754pgm.352.1646370267758; Thu, 03
- Mar 2022 21:04:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129697A
+	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 05:21:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646371307; x=1677907307;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WEO6uxzhlD/6xZlLbDAS3aVLXtQffiXdQWcpSwdf5GU=;
+  b=ATlXjFuJFv/qM5oAgcyWTE7FAoWDcVfbxaGAMUfsz4kgGHQjRO2PeMYI
+   iVw1ccQCrRp0ND+Jc87gQDqzhA1eq9dKjhx7xx/v5y+4PrFCwpGAzzqk6
+   WW/5nNr8h3yaHLtuagmRVFzfxf6xjUacr7sXOPUKS0kXTT0cRHfU6SfwT
+   YOREr50/hx0hDj25q1HToNUxcgpGVFJT1izGV0qWEQw328SmLoeEUZiCT
+   C0r/djCciWztOXNPDavcNEKLqPPVxd3vidualX33IjnXjQj7sqTaNerVJ
+   j3v9tZghY3T2VXzXFh6j0U3bQVrANZN7Q/c2X7uGIBv7Kc64tJwBsFKfT
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="241321051"
+X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
+   d="scan'208";a="241321051"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 21:21:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
+   d="scan'208";a="536148172"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 03 Mar 2022 21:21:42 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nQ0Np-0001JO-Cz; Fri, 04 Mar 2022 05:21:41 +0000
+Date: Fri, 4 Mar 2022 13:20:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Finn Behrens <me@kloenk.de>,
+	Adam Bratschi-Kaye <ark.email@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@google.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Sven Van Asbroeck <thesven73@gmail.com>,
+	Gary Guo <gary@garyguo.net>, Boris-Chengbiao Zhou <bobo1239@web.de>,
+	Boqun Feng <boqun.feng@gmail.com>, Douglas Su <d0u9.su@outlook.com>,
+	Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+	Antonio Terceiro <antonio.terceiro@linaro.org>,
+	Daniel Xu <dxu@dxuuu.xyz>, Miguel Cano <macanroj@gmail.com>
+Subject: [linux-next:master 4865/10468] include/asm-generic/io.h:464:31:
+ warning: performing pointer arithmetic on a null pointer has undefined
+ behavior err: false
+Message-ID: <202203041338.Bv4qJWdU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220301145233.3689119-1-arnd@kernel.org> <Yh5PhDDLcVe4kSqk@dev-arch.archlinux-ax161>
-In-Reply-To: <Yh5PhDDLcVe4kSqk@dev-arch.archlinux-ax161>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 4 Mar 2022 14:03:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQYdUEPiAsLp749u9NiVXkvZzasHjCjKR+HA81qUDB+yw@mail.gmail.com>
-Message-ID: <CAK7LNAQYdUEPiAsLp749u9NiVXkvZzasHjCjKR+HA81qUDB+yw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] [v3] Kbuild: move to -std=gnu11
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marco Elver <elver@google.com>, Jani Nikula <jani.nikula@intel.com>,
-        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        llvm@lists.linux.dev,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Mar 2, 2022 at 1:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Tue, Mar 01, 2022 at 03:52:31PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > During a patch discussion, Linus brought up the option of changing
-> > the C standard version from gnu89 to gnu99, which allows using variable
-> > declaration inside of a for() loop. While the C99, C11 and later standa=
-rds
-> > introduce many other features, most of these are already available in
-> > gnu89 as GNU extensions as well.
-> >
-> > An earlier attempt to do this when gcc-5 started defaulting to
-> > -std=3Dgnu11 failed because at the time that caused warnings about
-> > designated initializers with older compilers. Now that gcc-5.1 is
-> > the minimum compiler version used for building kernels, that is no
-> > longer a concern. Similarly, the behavior of 'inline' functions changes
-> > between gnu89 using gnu_inline behavior and gnu11 using standard c99+
-> > behavior, but this was taken care of by defining 'inline' to include
-> > __attribute__((gnu_inline)) in order to allow building with clang a
-> > while ago.
-> >
-> > One minor issue that remains is an added gcc warning for shifts of
-> > negative integers when building with -Wextra, which happens with the
-> > 'make W=3D1' option, as well as for three drivers in the kernel that al=
-ways
-> > enable -Wextra, but it was only observed with the i915 driver so far.
-> > To be on the safe side, add -Wno-shift-negative-value to any -Wextra
-> > in a Makefile.
-> >
-> > Nathan Chancellor reported an additional -Wdeclaration-after-statement
-> > warning that appears in a system header on arm, this still needs a
-> > workaround.
-> >
-> > The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
-> > minimal and mainly impact warnings at the -Wpedantic level that the
-> > kernel never enables. Between these, gnu11 is the newest version
-> > that is supported by all supported compiler versions, though it is
-> > only the default on gcc-5, while all other supported versions of
-> > gcc or clang default to gnu1x/gnu17.
-> >
-> > Link: https://lore.kernel.org/lkml/CAHk-=3DwiyCH7xeHcmiFJ-YgXUy2Jaj7pnk=
-dKpcovt8fYbVFW3TA@mail.gmail.com/
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1603
-> > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > Acked-by: Marco Elver <elver@google.com>
-> > Acked-by: Jani Nikula <jani.nikula@intel.com>
-> > Acked-by: David Sterba <dsterba@suse.com>
-> > Reviewed-by: Alex Shi <alexs@kernel.org>
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: linux-kbuild@vger.kernel.org
-> > Cc: llvm@lists.linux.dev
-> > Cc: linux-doc@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> One comment below.
->
-> > ---
-> > [v3]
-> >  - split out USERCFLAGS to a separate patch
-> >  - add -Wdeclaration-after-statement patch from Mark Rutland
-> >  - leave out C17 reference
-> >  - more rewording the descrption
-> >
-> > [v2]
-> >  - added -std=3Dgnu11 back, rather than just relying on the default
-> >  - minor changes to changelog text
-> > ---
-> >  Documentation/process/programming-language.rst              | 6 +++---
-> >  .../translations/it_IT/process/programming-language.rst     | 4 ++--
-> >  .../translations/zh_CN/process/programming-language.rst     | 3 +--
-> >  .../translations/zh_TW/process/programming-language.rst     | 3 +--
-> >  Makefile                                                    | 4 ++--
-> >  arch/arm64/kernel/vdso32/Makefile                           | 2 +-
-> >  drivers/gpu/drm/i915/Makefile                               | 1 +
-> >  drivers/staging/greybus/tools/Makefile                      | 3 ++-
-> >  fs/btrfs/Makefile                                           | 1 +
-> >  scripts/Makefile.extrawarn                                  | 1 +
-> >  10 files changed, 15 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/Documentation/process/programming-language.rst b/Documenta=
-tion/process/programming-language.rst
-> > index ec474a70a02f..5fc9160ca1fa 100644
-> > --- a/Documentation/process/programming-language.rst
-> > +++ b/Documentation/process/programming-language.rst
-> > @@ -5,9 +5,9 @@ Programming Language
-> >
-> >  The kernel is written in the C programming language [c-language]_.
-> >  More precisely, the kernel is typically compiled with ``gcc`` [gcc]_
-> > -under ``-std=3Dgnu89`` [gcc-c-dialect-options]_: the GNU dialect of IS=
-O C90
-> > -(including some C99 features). ``clang`` [clang]_ is also supported, s=
-ee
-> > -docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
-> > +under ``-std=3Dgnu11`` [gcc-c-dialect-options]_: the GNU dialect of IS=
-O C11.
-> > +``clang`` [clang]_ is also supported, see docs on
-> > +:ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
-> >
-> >  This dialect contains many extensions to the language [gnu-extensions]=
-_,
-> >  and many of them are used within the kernel as a matter of course.
-> > diff --git a/Documentation/translations/it_IT/process/programming-langu=
-age.rst b/Documentation/translations/it_IT/process/programming-language.rst
-> > index 41db2598ce11..c1a9b481a6f9 100644
-> > --- a/Documentation/translations/it_IT/process/programming-language.rst
-> > +++ b/Documentation/translations/it_IT/process/programming-language.rst
-> > @@ -10,8 +10,8 @@ Linguaggio di programmazione
-> >
-> >  Il kernel =C3=A8 scritto nel linguaggio di programmazione C [it-c-lang=
-uage]_.
-> >  Pi=C3=B9 precisamente, il kernel viene compilato con ``gcc`` [it-gcc]_=
- usando
-> > -l'opzione ``-std=3Dgnu89`` [it-gcc-c-dialect-options]_: il dialetto GN=
-U
-> > -dello standard ISO C90 (con l'aggiunta di alcune funzionalit=C3=A0 da =
-C99).
-> > +l'opzione ``-std=3Dgnu11`` [it-gcc-c-dialect-options]_: il dialetto GN=
-U
-> > +dello standard ISO C11.
-> >  Linux supporta anche ``clang`` [it-clang]_, leggete la documentazione
-> >  :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
-> >
-> > diff --git a/Documentation/translations/zh_CN/process/programming-langu=
-age.rst b/Documentation/translations/zh_CN/process/programming-language.rst
-> > index 2a47a1d2ec20..fabdc338dbfb 100644
-> > --- a/Documentation/translations/zh_CN/process/programming-language.rst
-> > +++ b/Documentation/translations/zh_CN/process/programming-language.rst
-> > @@ -9,8 +9,7 @@
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> >  =E5=86=85=E6=A0=B8=E6=98=AF=E7=94=A8C=E8=AF=AD=E8=A8=80 :ref:`c-langua=
-ge <cn_c-language>` =E7=BC=96=E5=86=99=E7=9A=84=E3=80=82=E6=9B=B4=E5=87=86=
-=E7=A1=AE=E5=9C=B0=E8=AF=B4=EF=BC=8C=E5=86=85=E6=A0=B8=E9=80=9A=E5=B8=B8=E6=
-=98=AF=E7=94=A8 :ref:`gcc <cn_gcc>`
-> > -=E5=9C=A8 ``-std=3Dgnu89`` :ref:`gcc-c-dialect-options <cn_gcc-c-diale=
-ct-options>` =E4=B8=8B=E7=BC=96=E8=AF=91=E7=9A=84=EF=BC=9AISO C90=E7=9A=84 =
-GNU =E6=96=B9=E8=A8=80=EF=BC=88
-> > -=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC99=E7=89=B9=E6=80=A7=EF=BC=89
-> > +=E5=9C=A8 ``-std=3Dgnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-diale=
-ct-options>` =E4=B8=8B=E7=BC=96=E8=AF=91=E7=9A=84=EF=BC=9AISO C11=E7=9A=84 =
-GNU =E6=96=B9=E8=A8=80
-> >
-> >  =E8=BF=99=E7=A7=8D=E6=96=B9=E8=A8=80=E5=8C=85=E5=90=AB=E5=AF=B9=E8=AF=
-=AD=E8=A8=80 :ref:`gnu-extensions <cn_gnu-extensions>` =E7=9A=84=E8=AE=B8=
-=E5=A4=9A=E6=89=A9=E5=B1=95=EF=BC=8C=E5=BD=93=E7=84=B6=EF=BC=8C=E5=AE=83=E4=
-=BB=AC=E8=AE=B8=E5=A4=9A=E9=83=BD=E5=9C=A8=E5=86=85=E6=A0=B8=E4=B8=AD=E4=BD=
-=BF=E7=94=A8=E3=80=82
-> >
-> > diff --git a/Documentation/translations/zh_TW/process/programming-langu=
-age.rst b/Documentation/translations/zh_TW/process/programming-language.rst
-> > index 54e3699eadf8..144bdaf81a41 100644
-> > --- a/Documentation/translations/zh_TW/process/programming-language.rst
-> > +++ b/Documentation/translations/zh_TW/process/programming-language.rst
-> > @@ -12,8 +12,7 @@
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> >  =E5=85=A7=E6=A0=B8=E6=98=AF=E7=94=A8C=E8=AA=9E=E8=A8=80 :ref:`c-langua=
-ge <tw_c-language>` =E7=B7=A8=E5=AF=AB=E7=9A=84=E3=80=82=E6=9B=B4=E6=BA=96=
-=E7=A2=BA=E5=9C=B0=E8=AA=AA=EF=BC=8C=E5=85=A7=E6=A0=B8=E9=80=9A=E5=B8=B8=E6=
-=98=AF=E7=94=A8 :ref:`gcc <tw_gcc>`
-> > -=E5=9C=A8 ``-std=3Dgnu89`` :ref:`gcc-c-dialect-options <tw_gcc-c-diale=
-ct-options>` =E4=B8=8B=E7=B7=A8=E8=AD=AF=E7=9A=84=EF=BC=9AISO C90=E7=9A=84 =
-GNU =E6=96=B9=E8=A8=80=EF=BC=88
-> > -=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC99=E7=89=B9=E6=80=A7=EF=BC=89
-> > +=E5=9C=A8 ``-std=3Dgnu11`` :ref:`gcc-c-dialect-options <tw_gcc-c-diale=
-ct-options>` =E4=B8=8B=E7=B7=A8=E8=AD=AF=E7=9A=84=EF=BC=9AISO C11=E7=9A=84 =
-GNU =E6=96=B9=E8=A8=80
-> >
-> >  =E9=80=99=E7=A8=AE=E6=96=B9=E8=A8=80=E5=8C=85=E5=90=AB=E5=B0=8D=E8=AA=
-=9E=E8=A8=80 :ref:`gnu-extensions <tw_gnu-extensions>` =E7=9A=84=E8=A8=B1=
-=E5=A4=9A=E6=93=B4=E5=B1=95=EF=BC=8C=E7=95=B6=E7=84=B6=EF=BC=8C=E5=AE=83=E5=
-=80=91=E8=A8=B1=E5=A4=9A=E9=83=BD=E5=9C=A8=E5=85=A7=E6=A0=B8=E4=B8=AD=E4=BD=
-=BF=E7=94=A8=E3=80=82
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 289ce2be8032..94fa9a849a7a 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -515,7 +515,7 @@ KBUILD_CFLAGS   :=3D -Wall -Wundef -Werror=3Dstrict=
--prototypes -Wno-trigraphs \
-> >                  -fno-strict-aliasing -fno-common -fshort-wchar -fno-PI=
-E \
-> >                  -Werror=3Dimplicit-function-declaration -Werror=3Dimpl=
-icit-int \
-> >                  -Werror=3Dreturn-type -Wno-format-security \
-> > -                -std=3Dgnu89
-> > +                -std=3Dgnu11
-> >  KBUILD_CPPFLAGS :=3D -D__KERNEL__
-> >  KBUILD_AFLAGS_KERNEL :=3D
-> >  KBUILD_CFLAGS_KERNEL :=3D
-> > @@ -782,7 +782,7 @@ KBUILD_CFLAGS +=3D $(KBUILD_CFLAGS-y) $(CONFIG_CC_I=
-MPLICIT_FALLTHROUGH)
-> >
-> >  ifdef CONFIG_CC_IS_CLANG
-> >  KBUILD_CPPFLAGS +=3D -Qunused-arguments
-> > -# The kernel builds with '-std=3Dgnu89' so use of GNU extensions is ac=
-ceptable.
-> > +# The kernel builds with '-std=3Dgnu11' so use of GNU extensions is ac=
-ceptable.
-> >  KBUILD_CFLAGS +=3D -Wno-gnu
-> >  # CLANG uses a _MergedGlobals as optimization, but this breaks modpost=
-, as the
-> >  # source of a reference will be _MergedGlobals and not on of the white=
-listed names.
-> > diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso=
-32/Makefile
-> > index 6c01b63ff56d..9378ea055bf2 100644
-> > --- a/arch/arm64/kernel/vdso32/Makefile
-> > +++ b/arch/arm64/kernel/vdso32/Makefile
-> > @@ -68,7 +68,7 @@ VDSO_CFLAGS +=3D -Wall -Wundef -Wstrict-prototypes -W=
-no-trigraphs \
-> >                 -fno-strict-aliasing -fno-common \
-> >                 -Werror-implicit-function-declaration \
-> >                 -Wno-format-security \
-> > -               -std=3Dgnu89
-> > +               -std=3Dgnu11
-> >  VDSO_CFLAGS  +=3D -O2
-> >  # Some useful compiler-dependent flags from top-level Makefile
-> >  VDSO_CFLAGS +=3D $(call cc32-option,-Wdeclaration-after-statement,)
-> > diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makef=
-ile
-> > index 1b62b9f65196..1618a6e0af4e 100644
-> > --- a/drivers/gpu/drm/i915/Makefile
-> > +++ b/drivers/gpu/drm/i915/Makefile
-> > @@ -17,6 +17,7 @@ subdir-ccflags-y +=3D -Wno-unused-parameter
-> >  subdir-ccflags-y +=3D -Wno-type-limits
-> >  subdir-ccflags-y +=3D -Wno-missing-field-initializers
-> >  subdir-ccflags-y +=3D -Wno-sign-compare
-> > +subdir-ccflags-y +=3D -Wno-shift-negative-value
-> >  subdir-ccflags-y +=3D $(call cc-disable-warning, unused-but-set-variab=
-le)
-> >  subdir-ccflags-y +=3D $(call cc-disable-warning, frame-address)
-> >  subdir-ccflags-$(CONFIG_DRM_I915_WERROR) +=3D -Werror
-> > diff --git a/drivers/staging/greybus/tools/Makefile b/drivers/staging/g=
-reybus/tools/Makefile
-> > index ad0ae8053b79..a3bbd73171f2 100644
-> > --- a/drivers/staging/greybus/tools/Makefile
-> > +++ b/drivers/staging/greybus/tools/Makefile
-> > @@ -12,7 +12,8 @@ CFLAGS      +=3D -std=3Dgnu99 -Wall -Wextra -g \
-> >           -Wredundant-decls \
-> >           -Wcast-align \
-> >           -Wsign-compare \
-> > -         -Wno-missing-field-initializers
-> > +         -Wno-missing-field-initializers \
-> > +         -Wno-shift-negative-value
->
-> This Makefile uses its own -std=3D option because it is a userland tool.
-> Seems like this hunk could just be dropped or the -std=3D argument could
-> be bumped here too?
->
+Hi Miguel,
 
-Right, this is a userland tool.
+FYI, the error/warning still remains.
 
-I do not mind either way.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   91265a6da44d13296bdb5b3fbafa19d06be462f2
+commit: 17295a6760d551958a773a8342cff03630f3bff8 [4865/10468] Kbuild: add Rust support
+config: riscv-randconfig-r006-20220304 (https://download.01.org/0day-ci/archive/20220304/202203041338.Bv4qJWdU-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=17295a6760d551958a773a8342cff03630f3bff8
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 17295a6760d551958a773a8342cff03630f3bff8
+        # save the config file to linux build tree
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
 
-BTW, this makefile is somewhat corrupted
-because ../greybus_protocols.h does not exist.
-(but it is working, relying on the built-in rules)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+>> include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   cannot find function `iounmap` in module `bindings`
+   --> rust/kernel/io_mem.rs:225:28
+   |
+   225 | unsafe { bindings::iounmap(self.ptr as _) };
+   | ^^^^^^^ help: a function with a similar name exists: `ioremap`
+   |
+   ::: rust/bindings_helpers_generated.rs:40:5
+   |
+   40 | / pub fn ioremap(
+   41 | | offset: resource_size_t,
+   42 | | size: c_types::c_ulong,
+   43 | | ) -> c_types::c_void;
+   | |______________________________- similarly named function `ioremap` defined here
 
 
+vim +464 include/asm-generic/io.h
 
-If Arnd does not mind sending v4, maybe we
-can split this into two paches:
+3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
+9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
+9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
+9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
+9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
+9216efafc52ff9 Thierry Reding 2014-10-01  455   */
+9216efafc52ff9 Thierry Reding 2014-10-01  456  
+f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
+f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
+214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
+9216efafc52ff9 Thierry Reding 2014-10-01  460  {
+87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
+87fe2d543f8173 Sinan Kaya     2018-04-05  462  
+87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
+87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
+abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
+87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
+9216efafc52ff9 Thierry Reding 2014-10-01  467  }
+9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
+9216efafc52ff9 Thierry Reding 2014-10-01  469  
 
-1/4 : add -Wno-shift-negative-value where -Wextra is used
-2/4 : Kbuild: move to -std=3Dgnu11
+:::::: The code at line 464 was first introduced by commit
+:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
 
+:::::: TO: Sinan Kaya <okaya@codeaurora.org>
+:::::: CC: Arnd Bergmann <arnd@arndb.de>
 
-
-
-1/4 adds -Wno-shift-negative-value
-whether it is the kernel space or user-land.
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
