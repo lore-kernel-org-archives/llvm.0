@@ -1,83 +1,111 @@
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD98E4297
-	for <llvm@lists.linux.dev>; Thu,  3 Mar 2022 23:17:37 +0000 (UTC)
-Received: by mail-il1-f171.google.com with SMTP id j5so5281961ila.2
-        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 15:17:37 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F846365
+	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 00:05:28 +0000 (UTC)
+Received: by mail-pg1-f193.google.com with SMTP id c1so6054126pgk.11
+        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 16:05:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IunjLamQyiN4ktCSVGqQoYbINqbAWtg7y28TD4hVajw=;
-        b=WdEq8Z/fW+RL+Ej4Z4MFuld6ZS/v8HLUbxQGRncbLZD49oQmlx/ygy9YpL76W4YMdG
-         dPTLPRcfVspo2oDtOcXWrBJGSLhVKZX4Tgv+EaQaDXxg8aILtMholWijNBkhpdkyukq9
-         /nmmMX4v5JORNe4LrGEY/f6RR4w0MsbZuj2V6VmtsZHrn8npzp4URUBhvys6mnUKUBn3
-         gQ5nCmY+DKZQm1yACzBkMPDp25V6e7YdkHZe/ebB9G0ktfy1tjmDfMkP9mslH4f36AOG
-         SmMICNRXWvf2YisP9UZx/ntekFAJBNN0LjJqH5dNr3jwP4+i4rqCC+vU28v9Ds5TS7Ad
-         /VfA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=az8r203Fs/HRQxJrdejXVpXcpsHcpsDGL1pvtC30g1s=;
+        b=GKwCaHCYdVrTz0URXS3gnBILCq7YOzQRYg8lCYsl9fXCt/5B7qobdzaSkAHk5sZlKh
+         YToSeDdIwL0Ddh3QxcM0k/XrxLGUacbhhc3dO6I0E34PwurRwaZD2w385oFnN5LdMDhf
+         QzRH24oGfJrRz/5QjN+3NGBNXwjsMPf9WM5ot+qNRfIi0JVB4N2FNEe/tGV70wFmQozG
+         oFSEa1btzMNGAdyIsl/Cy5TrgAZYXokNFUpTDFkkipXLISnaAgTixddhVpRWeyoYiFVX
+         2hSDNk0yx5GP0I/eFGEe+69kVN1ijG6BmoFbPeFU8zx9RGnqosGLe4fp5hwqtX00Da+s
+         RN2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IunjLamQyiN4ktCSVGqQoYbINqbAWtg7y28TD4hVajw=;
-        b=Wetbh/tNN2dr+DPjwQAA2gNFKwrzuK4jtJEaM9yjF9Qi8sc9meuGwBlzKD86/GHmsD
-         WIV60c3cjMykjJdv0bEuxNzTpOY8TQpAuiCd6qrUUHwzMkfm1dly8HsrKOLuygZtKSWq
-         74l5pdHk1qzUtRxkJfgwk3ixCIhD91RHEK0Q8jYRvovjhgQ4K4Mas2U0EhH2Q9Vjiu7W
-         a6ajOVzIW4Waga4eOVrFOKitXHG9HTgz07fJS1a4ktEP57ZuE2Bx+EVLr1JAejecxQms
-         tuODoKkrOdoLYcwDfC0yFBSPorrAMdaJ312wSC/VeOIgtApHRU98YCHvozdyXVgMiSN5
-         WYLg==
-X-Gm-Message-State: AOAM530Pw/dTWptn34CV3K9Mcl/y1mtIWjShqcJGtW9HlqYy5Ene4kkY
-	XRv6ig1JTcQS1blPwn+QBIZyl76+gg8rnu076zE=
-X-Google-Smtp-Source: ABdhPJxi8VypfVGr9Khjx8L28LU1hG/qzef02DaLMAkHfbs2sOCVurtw7fWFOlTYy2xjj36m0p2movbsKHKZ2XFic4Q=
-X-Received: by 2002:a92:c908:0:b0:2c1:a287:8868 with SMTP id
- t8-20020a92c908000000b002c1a2878868mr32170001ilp.321.1646349456482; Thu, 03
- Mar 2022 15:17:36 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=az8r203Fs/HRQxJrdejXVpXcpsHcpsDGL1pvtC30g1s=;
+        b=0iFZc+qwVv+tp3+ysxlVgVG1FMYsEXqbh1N11VVMBrfw7UqLPhhmr6lsE4+EtmlmKP
+         f8bCJ/EDqG4BCMB+2EJNcQlnfekKeeFeyxdFuTt1oHbw/Pjll59yRZV0EOWTOVa9BlVn
+         94LK8LraNBk3Q+9z1WDyrixa+CK0iitBjfBcO/tH/Q0UjpvgSfTdHSQIup9PVjmmBkv0
+         PRy0R7tjPnIaNQmCdMHqfQgcgtjPEJjEv7zEA+zy0FauXOGRJy07Hqas5GRtjsOJSJQS
+         kSLnEcGyotMYCh7elSQYOIOYZTMfxHusf2GbyJ330w0/0v+R7uNFm3lDyysYnq7fNgHH
+         V0hA==
+X-Gm-Message-State: AOAM532U6/h8UnJCCrHYAdJ7yRG3et7y6E0qOZpfFu/4g/ZSfIWBekVm
+	XSmWdwqzY3YL3y71wTr5rXD+oWODRKs=
+X-Google-Smtp-Source: ABdhPJzf8u5NUd7oAWioDY011K9dQ2ayE6+WlVSSxikHqmEbVMIRxSXGSmhukpukSE0FyRfkPifaNg==
+X-Received: by 2002:a05:6a02:18b:b0:362:c8e4:d8f4 with SMTP id bj11-20020a056a02018b00b00362c8e4d8f4mr32163376pgb.86.1646352327715;
+        Thu, 03 Mar 2022 16:05:27 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id l13-20020a056a00140d00b004e13da93eaasm3611338pfu.62.2022.03.03.16.05.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 16:05:27 -0800 (PST)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next v3 5/8] compiler-clang.h: Add __diag infrastructure for clang
+Date: Fri,  4 Mar 2022 05:35:05 +0530
+Message-Id: <20220304000508.2904128-6-memxor@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220304000508.2904128-1-memxor@gmail.com>
+References: <20220304000508.2904128-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220127151945.1244439-1-trix@redhat.com> <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
- <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com> <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
- <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com> <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
- <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org> <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
- <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
-In-Reply-To: <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 4 Mar 2022 00:17:25 +0100
-Message-ID: <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To: Finn Thain <fthain@linux-m68k.org>
-Cc: Konrad Wilhelm Kleine <kkleine@redhat.com>, Tom Rix <trix@redhat.com>, Joe Perches <joe@perches.com>, 
-	Bart Van Assche <bvanassche@acm.org>, kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
-	shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
-	martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, megaraidlinux.pdl@broadcom.com, 
-	scsi <linux-scsi@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1537; i=memxor@gmail.com; h=from:subject; bh=aH0ED4SzKuyH212aqcBoD3D1XZcCItBPNjdf9LMo6rc=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBiIVd/Hx0cZD3dUvc8pR06obNvztibdotsWFVvMITB JXAz2xSJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYiFXfwAKCRBM4MiGSL8RyuS8EA CxJccq2Fhmg2JeuMCkSplQ4QOqoXvCcNihFMnE+HCPDSrnDoDSP1eyzCK/GwXTKAkEYhkCQh8saVDA fo7SSbCRIUmOQBBUtfZB/1p6Z/1uo5v8D/pA9AdlZQE7QZJSpKD9IV/6BeOIetCvVxh1q2p5xdwFBB X8riUh2CkujnwYq/2zkhE+5VMHnUO5qIrzStmpwZHywT1aGWZFZb4WFcdls6qvRVxZv63Y/pOm/I4v JpvDcs8tWEiEB1CO/C2521iXuiTaPP83ImtegC6VGKShWbTVVgFiOP8yauTXQbjIK4vTWvIns26om/ Jw5cQzOB+5S7tZtNQzPVjha42+ztsXyFrmdv4k1wiVOfx3lfxTdi0kbm534o0dPaXN8l/8OHGRUrhw A2Xi5RsNUQcA27CoqRwivaBVVpwm0BQPEVEORO+tUu2643LVWMezf6Zdq9JdzNQFeFAk+US8LYG68M mAEQbYE53ZBpq3S3baA9sgeJrOY8d6k6s1DKREkCiutitIatYGRaHYBqp0LSDl6IiTG8CdkVMGO21B u49+RNBgwQtR2Razw+8uCG/o77E7YUmfARlHGgERgHzjbtONHM9b8VUC2S9lruySAm9v3UVCNAyqsP sCyVuvyU03JBYq98eo7dmW91tUu2XKkDyrTQmtMFa+IdlVft9369tVjDD99g==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 3, 2022 at 11:44 PM Finn Thain <fthain@linux-m68k.org> wrote:
->
-> Others might argue that they should always be changed from,
->
-> /*
->  * this style
->  * of multiline comment
->  */
->
-> to
->
-> /* this style
->  * of multiline comment
->  */
+From: Nathan Chancellor <nathan@kernel.org>
 
-In general, for things that the coding style guide talks about, we
-should follow them, even if some subsystems do not (they can always
-override in their folder if they really, really want it). So, here for
-instance, the first one should be used.
+Add __diag macros similar to those in compiler-gcc.h, so that warnings
+that need to be adjusted for specific cases but not globally can be
+ignored for LLVM compilation mode as well.
 
-Cheers,
-Miguel
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+[ Kartikeya: wrote commit message ]
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/compiler-clang.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+index 3c4de9b6c6e3..f1aa41d520bd 100644
+--- a/include/linux/compiler-clang.h
++++ b/include/linux/compiler-clang.h
+@@ -68,3 +68,25 @@
+ 
+ #define __nocfi		__attribute__((__no_sanitize__("cfi")))
+ #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
++
++/*
++ * Turn individual warnings and errors on and off locally, depending
++ * on version.
++ */
++#define __diag_clang(version, severity, s) \
++	__diag_clang_ ## version(__diag_clang_ ## severity s)
++
++/* Severity used in pragma directives */
++#define __diag_clang_ignore	ignored
++#define __diag_clang_warn	warning
++#define __diag_clang_error	error
++
++#define __diag_str1(s)		#s
++#define __diag_str(s)		__diag_str1(s)
++#define __diag(s)		_Pragma(__diag_str(clang diagnostic s))
++
++#if CONFIG_CLANG_VERSION >= 110000
++#define __diag_clang_11(s)	__diag(s)
++#else
++#define __diag_clang_11(s)
++#endif
+-- 
+2.35.1
+
