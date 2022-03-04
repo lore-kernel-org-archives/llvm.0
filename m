@@ -1,152 +1,106 @@
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A06815
-	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 07:18:53 +0000 (UTC)
-Received: by mail-il1-f178.google.com with SMTP id f2so5928352ilq.1
-        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 23:18:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=Em4vIFtbnAfHzqImau3wflNwYLrEwWXRRPlRb6fFAik=;
-        b=AQ+vItkCK/KQHEUSzHxM2ukwePVCTPXqZLpjiIIjLSzXBM/fx496O/ME8K9a7ToBPr
-         Zq/k+3ePgMPSe6/WF3bnzmmZU5Ug/g+LbCGqp5NhR3bRqIRxVh+Y8849i/zi+5H2xKa+
-         WvKzoo/YAHjnKJpu/mzRt1wMIvnb7xB16f6eaX/nkdpqFUQR3ARHHwvH4TNBStQ4qI7u
-         lyApT9q8gW3izpqDEn/R6+kyou2u7qEWkYx+SintwAhnrMjMom0UDKV/p3KqrFFl1kd2
-         rxrbIa3NgFagkcYzZik+r/acVk4SrJVa5BOMLQtPg5ZqGFw64XI63tPA+UOUQNwzvtqS
-         wwYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=Em4vIFtbnAfHzqImau3wflNwYLrEwWXRRPlRb6fFAik=;
-        b=DbPuWPsXESs5eTeTJK4dTjFqob7yjiWAhobHebPJ/drKXjPwp9Gf7gRVOPG9dhBe87
-         xQ+00J6JMsJewWV4DNoSul9ZGkXsBDvV1Qq1AdE0sm/E/9yFUP/63f/h/M53BKHkrkuo
-         06mReGB5rkxh/QDfZxjjqLycDu18LM4phsFIjHRKo4KwrlFoxzBoxM8A31V0OKZsvRu8
-         pnkXhWPUSo/LBwCVsa5y6Mkll6FLPvNPx+caZrTI31gWcDEIYJqFDU/w6/jWuyfGcjwg
-         lKlPU2+E9cWU3KbVOe1cK5tMHDquP/MH3r0M4q8/JT6SB5GzhSB4vj0MFCYu2n7KtK4I
-         e92A==
-X-Gm-Message-State: AOAM531iRANaISbIPKDYTVbFEBtQ9oCnc3Wf7A7thinipQQojGJw21dc
-	FOU/CuhtDJwgk+qtgWTzdUJGwjGj4/uGlGC4u9Q=
-X-Google-Smtp-Source: ABdhPJybQ6fYgvuM8D5CD0i1MixyIsqbUa6RJpl03+vMLWnwjvlqkhpRtmzXdXhlPEcIGQg643vX7Clekr+saOwTIKA=
-X-Received: by 2002:a05:6e02:de2:b0:2c6:f14:884a with SMTP id
- m2-20020a056e020de200b002c60f14884amr2995481ilj.100.1646378332178; Thu, 03
- Mar 2022 23:18:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670F1A22
+	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 07:47:15 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.west.internal (Postfix) with ESMTP id 0A3102B001D7;
+	Fri,  4 Mar 2022 02:47:12 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 04 Mar 2022 02:47:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=JFmveES9yGraX8tcj
+	DkZfjs9hZsHUkbzqHVDGYMDG+0=; b=bq8QbjhFSiTRXSpG6SIKROYvFt/3W6M4c
+	5CV3tDTrUoA1J482bDNdXZjDdwhc6f5h2ucr23D24AWw4Wp6pA6K9L/1lsUCbgth
+	DjcdNgcljNZGXMYFSM1E2Ta1KRe4gzsp5gN+IiU5RAomsF7LJmhMCIow5dAZI23J
+	TFEmp3vAD2NzP7qhkP+9wfRBx7Oo8T/GJGfP0NXqlOyzaBkIvr5YSBdybksEZSk8
+	lWHyTlH8+fSvcKGjq0NN1SofajUb6YXN7GLcpH7lOCmaRKRZSzw5DDkr5VOo/Npp
+	MnlAaLFYaQuQ9/8SHATYHt3EOXe++snxcUBTTJPVblxW1mJi5+FBA==
+X-ME-Sender: <xms:AMQhYqzEdc1-jX8s308ofiOWQM-0jSnh4VUhISpWPx9OOqlGeaoMfQ>
+    <xme:AMQhYmRhXQicOf3qF4LugcgXBJYsrNWpgSZ50hKUpDNOZ193VdRlcyJXP6w4dGBx-
+    Y9pKoOTsSQ6bm37YKI>
+X-ME-Received: <xmr:AMQhYsWn0uxdaPehSQ26qh5LBezBJw8SC9nKA3GH2wOTArUTTomrhN-dUUodh5dwvwVmUsQFcD-ktdOyLoizJzAl_OfCcwZ7HSg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtjedguddufecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcu
+    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeffudfhgeefvdeitedugfelueegheekkeefveffhfeiveetledvhfdtveff
+    teeuudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
+X-ME-Proxy: <xmx:AMQhYgjZ69wZsVi294Sc0s1Dd4NOZBq2AJueI-IpcFeNZTLabmVY4g>
+    <xmx:AMQhYsBcDDXE4HZvE0QkB_qV4TMRptBoM6Ct8vuOttXSZknYjSbgug>
+    <xmx:AMQhYhKafjOrhv9lEK06EGwKXTLyCfVgnLYvD9viD5UEflHrkTCkQw>
+    <xmx:AMQhYgwTuB5Fs3ylXV5myNO1XmcJ0VWzqO3Xyq04uzrAKdf_JWhE8iY2RGA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 4 Mar 2022 02:47:09 -0500 (EST)
+Date: Fri, 4 Mar 2022 18:47:06 +1100 (AEDT)
+From: Finn Thain <fthain@linux-m68k.org>
+To: Joe Perches <joe@perches.com>, 
+    Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+cc: Konrad Wilhelm Kleine <kkleine@redhat.com>, Tom Rix <trix@redhat.com>, 
+    Bart Van Assche <bvanassche@acm.org>, kashyap.desai@broadcom.com, 
+    sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com, 
+    jejb@linux.ibm.com, martin.petersen@oracle.com, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, megaraidlinux.pdl@broadcom.com, 
+    scsi <linux-scsi@vger.kernel.org>, 
+    linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+In-Reply-To: <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
+Message-ID: <1dccb035-5f85-d9fd-7c10-3f9cd395deeb@linux-m68k.org>
+References: <20220127151945.1244439-1-trix@redhat.com>  <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>  <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>  <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>  <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com>
+  <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>  <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>  <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>  <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org> 
+ <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com> <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
- <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
- <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
- <CA+icZUWD_O1WTKNDTj7f+EUxx5Pf=zC53mfOBNgtj1JQwjZVAQ@mail.gmail.com>
- <YiD86pay2ENCebkR@dev-arch.thelio-3990X> <CA+icZUXDBe5MF6G_2v4XoV0SFVkTZ96M5i-VGSvHsP1pFJ+nAg@mail.gmail.com>
-In-Reply-To: <CA+icZUXDBe5MF6G_2v4XoV0SFVkTZ96M5i-VGSvHsP1pFJ+nAg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Fri, 4 Mar 2022 08:18:15 +0100
-Message-ID: <CA+icZUXNtq3+cW6OBiO1TPhHT2xwXFe_D-Ja8HAO0XH2y6h=GA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Marco Elver <elver@google.com>, 
-	Jani Nikula <jani.nikula@intel.com>, David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 
-On Fri, Mar 4, 2022 at 7:47 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Thu, Mar 3, 2022 at 6:37 PM Nathan Chancellor <nathan@kernel.org> wrot=
-e:
-> >
-> > Hi Sedat,
-> >
-> > On Thu, Mar 03, 2022 at 07:26:05AM +0100, Sedat Dilek wrote:
-> > > Hey Nick!
-> > >
-> > > This only applies 1/3.
-> > >
-> > > $ b4 --version
-> > > 0.8.0
-> > >
-> > > $ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arnd@ke=
-rnel.org/
-> > > -o - | git am -3
-> > > Analyzing 14 messages in the thread
-> > > Will use the latest revision: v3
-> > > You can pick other revisions using the -vN flag
-> > > Checking attestation on all messages, may take a moment...
-> > > ---
-> > >  =E2=9C=93 [PATCH v3 1/3] Kbuild: move to -std=3Dgnu11
-> > >    =E2=9C=93 Signed: DKIM/kernel.org
-> > >    + Reviewed-by: Nathan Chancellor <nathan@kernel.org> (=E2=9C=93 DK=
-IM/kernel.org)
-> > >  ERROR: missing [2/3]!
-> > >  ERROR: missing [3/3]!
-> > >  ---
-> > >  NOTE: install patatt for end-to-end signature verification
-> > > ---
-> > > Total patches: 1
-> > > ---
-> > > WARNING: Thread incomplete!
-> > > Link: https://lore.kernel.org/r/20220301145233.3689119-1-arnd@kernel.=
-org
-> > > Base: not specified
-> > > Wende an: Kbuild: move to -std=3Dgnu11
-> >
-> > It looks like the threading somehow got broken, likely due to the [v3]
-> > on the first patch and not the second or third:
-> >
-> > This worked for me on v5.17-rc6:
-> >
-> > $ for i in $(seq 1 3); do b4 shazam -P _ 20220301145233.3689119-"$i"-ar=
-nd@kernel.org; done
-> >
-> > "b4 shazam" is the equivalent of "b4 am -o - ... | git am" and the
-> > "-P _" tells b4 to only fetch that exact message ID, not the whole
-> > thread.
-> >
->
-> Hmm, the universe is not good to me...
->
-> $ for i in $(seq 1 3); do b4 shazam -P _
-> 20220301145233.3689119-"$i"-arnd@kernel.org; done
-> usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
-> b4: error: argument subcmd: invalid choice: 'shazam' (choose from
-> 'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
-> usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
-> b4: error: argument subcmd: invalid choice: 'shazam' (choose from
-> 'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
-> usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
-> b4: error: argument subcmd: invalid choice: 'shazam' (choose from
-> 'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
->
-> Do I need a higher version of b4 (here: v0.8.0)?
->
-> Check myself... b4.git:
->
-> commit 7c1d044ff1d5235e598d4c777c4abfe60e0a09a8
-> ("shazam: change default behaviour to be "apply-here"")
->
-> ...is post-v0.8.0.
->
+On Thu, 3 Mar 2022, Joe Perches wrote:
 
-I brutally applied the post-v0.8.0 patches stolen from b4.git over my
-local distro b4 files.
+> On Fri, 2022-03-04 at 00:17 +0100, Miguel Ojeda wrote:
+> > On Thu, Mar 3, 2022 at 11:44 PM Finn Thain wrote:
+> > > 
+> > > Others might argue that they should always be changed from,
+> > > 
+> > > /*
+> > >  * this style
+> > >  * of multiline comment
+> > >  */
+> > > 
+> > > to
+> > > 
+> > > /* this style
+> > >  * of multiline comment
+> > >  */
+> > 
+> > In general, for things that the coding style guide talks about, we 
+> > should follow them, even if some subsystems do not (they can always 
+> > override in their folder if they really, really want it). So, here for 
+> > instance, the first one should be used.
+> 
+> It's up to individual maintainers to each decide on what might be 
+> considered unnecessary churn for the subsystems they control.
+> 
+> One argument is that churn leads to difficulty in backporting fixes to 
+> older 'stable' versions.
+> 
+> I think the churn argument is overstated.
+> 
 
-And was able to apply the triple:
+If you would have clang-format override the committer and retrospectively 
+apply subsystem style rules (rather than the rules used by a majority of 
+subsystems or those preferred by Linus for example) it would add friction 
+to code re-use, movement, comparison, any tree-wide program 
+transformation, and also subsystem boundary changes.
 
-$ git log --oneline --no-merges
-5.17.0-rc6-1-amd64-clang13-lto..5.17.0-rc6-2-amd64-clang13-lto
-96a4222bdd4c (for-5.17/kbuild-std_gnu11-arndb-20220301) Kbuild: use
--std=3Dgnu11 for KBUILD_USERCFLAGS
-c4e8cef401a8 treewide: use -Wdeclaration-after-statement
-6a7cc105b238 Kbuild: move to -std=3Dgnu11
-
-- sed@ -
+Per-subsystem style rules are inherently contentious and therefore good 
+candidates for the "leave alone" functionality discussed in the issue 
+tracker.
