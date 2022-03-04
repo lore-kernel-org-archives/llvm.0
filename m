@@ -1,71 +1,205 @@
-Received: from relay.hostedemail.com (relay.a.hostedemail.com [64.99.140.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2FFB7A
-	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 05:40:57 +0000 (UTC)
-Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay13.hostedemail.com (Postfix) with ESMTP id 0B31E60509;
-	Fri,  4 Mar 2022 05:40:50 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id C2D561B;
-	Fri,  4 Mar 2022 05:40:19 +0000 (UTC)
-Message-ID: <d2a50ca6452a13c94e94e839577b5914e96bacbb.camel@perches.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-From: Joe Perches <joe@perches.com>
-To: Bart Van Assche <bvanassche@acm.org>, Miguel Ojeda
-	 <miguel.ojeda.sandonis@gmail.com>, Finn Thain <fthain@linux-m68k.org>
-Cc: Konrad Wilhelm Kleine <kkleine@redhat.com>, Tom Rix <trix@redhat.com>, 
- kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
- shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
- martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, megaraidlinux.pdl@broadcom.com, scsi
- <linux-scsi@vger.kernel.org>,  linux-kernel <linux-kernel@vger.kernel.org>,
- llvm@lists.linux.dev
-Date: Thu, 03 Mar 2022 21:40:45 -0800
-In-Reply-To: <e7e99791-aade-55fd-ac75-71478699cbe0@acm.org>
-References: <20220127151945.1244439-1-trix@redhat.com>
-	 <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-	 <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
-	 <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
-	 <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com>
-	 <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
-	 <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>
-	 <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
-	 <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
-	 <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
-	 <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
-	 <e7e99791-aade-55fd-ac75-71478699cbe0@acm.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2A3815
+	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 06:47:52 +0000 (UTC)
+Received: by mail-io1-f43.google.com with SMTP id u2so6505878ioc.11
+        for <llvm@lists.linux.dev>; Thu, 03 Mar 2022 22:47:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=j23UEdgmoD3PT7cpFQAiB9cWyyGiVLaUvaBGU1GyBnM=;
+        b=O4anCBKrsFyHyGzL2RF8B7cVoEGN7VorjGDN2lWfWk7InIipFAsHECPDsdOCfaRbpB
+         2Kt82y1BnVO5YHOf3TxW7h/ybyzM3bT9MqjlwgrpF2WtQIymp3JrcV5QOJEJ8rNAIy4a
+         PLCK58ysJgdl6mAUW1D1vHWF/bPt2T/nCsKva5+pRKypjda9JkxpjO555iUWjqjtp6yX
+         zHOy96yoFqH9Ox7QiF69+hVa9y7GMf1LfN3bnbRccWkQk1lRwTQ5rw3V4NJLJHSc6e0c
+         VwIf3JuNMtpCudUkuFthPr30ar6Xx9zkMXFuboIjXHL3QE+cBaOVO72cXXKQ0MYLNUUC
+         qmAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=j23UEdgmoD3PT7cpFQAiB9cWyyGiVLaUvaBGU1GyBnM=;
+        b=rmETXQ3M5A+iPitSerY89u1DJrqlKfaFsEbEyCIylGODb8Ia02JdfPcTX5VgODXbw/
+         eZbxoJFk+4E21kFkFtbe/+EDC6un0Re9C8nzL5dD0p+ZPPsKiE6JoTyrDahPhTAV0EKu
+         JuSfQvaeBhYoCH39RMmxPioPEr6n3WHo8LOVrXzAiZSWTqLK1OltF2KkUn8pnfPH1hkF
+         UlEixnkx/gsmzWvO8KHK+7+PTr7UGrrsg9PG4eW85RIW9MXbx3tEqfPe5I7MgD9LqlYQ
+         lwK9L+Jt6iXG8Ute+OCQJL6wG1ioPse7BSwGjEitPS8zxGAYr9yAZ4ILBo/8sohyiQ2q
+         dMgQ==
+X-Gm-Message-State: AOAM532eAxz+yZ0P/7dkrgtznpvZg3yZORb6b5yeh4aDz1FSUAgj9ajF
+	fORkKEg4n6uvp+tJhH5P8L2I35HkfhQ8DEqKScc=
+X-Google-Smtp-Source: ABdhPJxjDfv6jFJYN4fxfZbOXWdF3sJLBJrEkBPrcaNpWv3Ngca5sjQyQ48mqksXjVECGHbzT/Tk6PN8pi5cV3tELNU=
+X-Received: by 2002:a05:6638:a9b:b0:317:12d1:5a46 with SMTP id
+ 27-20020a0566380a9b00b0031712d15a46mr15095078jas.306.1646376471271; Thu, 03
+ Mar 2022 22:47:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: C2D561B
-X-Spam-Status: No, score=1.57
-X-Stat-Signature: pfa1qqoto4gy63dmwcu3nhims99qie7z
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/+W/G5d1Zuz5xkbUKDfxKDyC4BrjmJ8jI=
-X-HE-Tag: 1646372419-180514
+References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
+ <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
+ <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
+ <CA+icZUWD_O1WTKNDTj7f+EUxx5Pf=zC53mfOBNgtj1JQwjZVAQ@mail.gmail.com> <YiD86pay2ENCebkR@dev-arch.thelio-3990X>
+In-Reply-To: <YiD86pay2ENCebkR@dev-arch.thelio-3990X>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Fri, 4 Mar 2022 07:47:14 +0100
+Message-ID: <CA+icZUXDBe5MF6G_2v4XoV0SFVkTZ96M5i-VGSvHsP1pFJ+nAg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Marco Elver <elver@google.com>, 
+	Jani Nikula <jani.nikula@intel.com>, David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2022-03-03 at 21:22 -0800, Bart Van Assche wrote:
-> On 3/3/22 15:38, Joe Perches wrote:
-> > One argument is that churn leads to difficulty in backporting
-> > fixes to older 'stable' versions.
-> > 
-> > I think the churn argument is overstated.
-> 
-> I'm often backporting patches to older kernels and I think the churn argument 
-> has not been emphasized enough. Backporting patches is a normal aspect of a 
-> product lifecycle since a kernel version is chosen when development of a 
-> product starts and bugfixes are cherry-picked from upstream selectively.
+On Thu, Mar 3, 2022 at 6:37 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Sedat,
+>
+> On Thu, Mar 03, 2022 at 07:26:05AM +0100, Sedat Dilek wrote:
+> > Hey Nick!
+> >
+> > This only applies 1/3.
+> >
+> > $ b4 --version
+> > 0.8.0
+> >
+> > $ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arnd@kern=
+el.org/
+> > -o - | git am -3
+> > Analyzing 14 messages in the thread
+> > Will use the latest revision: v3
+> > You can pick other revisions using the -vN flag
+> > Checking attestation on all messages, may take a moment...
+> > ---
+> >  =E2=9C=93 [PATCH v3 1/3] Kbuild: move to -std=3Dgnu11
+> >    =E2=9C=93 Signed: DKIM/kernel.org
+> >    + Reviewed-by: Nathan Chancellor <nathan@kernel.org> (=E2=9C=93 DKIM=
+/kernel.org)
+> >  ERROR: missing [2/3]!
+> >  ERROR: missing [3/3]!
+> >  ---
+> >  NOTE: install patatt for end-to-end signature verification
+> > ---
+> > Total patches: 1
+> > ---
+> > WARNING: Thread incomplete!
+> > Link: https://lore.kernel.org/r/20220301145233.3689119-1-arnd@kernel.or=
+g
+> > Base: not specified
+> > Wende an: Kbuild: move to -std=3Dgnu11
+>
+> It looks like the threading somehow got broken, likely due to the [v3]
+> on the first patch and not the second or third:
+>
+> This worked for me on v5.17-rc6:
+>
+> $ for i in $(seq 1 3); do b4 shazam -P _ 20220301145233.3689119-"$i"-arnd=
+@kernel.org; done
+>
+> "b4 shazam" is the equivalent of "b4 am -o - ... | git am" and the
+> "-P _" tells b4 to only fetch that exact message ID, not the whole
+> thread.
+>
 
-Stable backporting is almost certainly what people get _paid_ to do.
+Hmm, the universe is not good to me...
 
-IMO the most important tree is the current one not backports to stable.
+$ for i in $(seq 1 3); do b4 shazam -P _
+20220301145233.3689119-"$i"-arnd@kernel.org; done
+usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
+b4: error: argument subcmd: invalid choice: 'shazam' (choose from
+'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
+usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
+b4: error: argument subcmd: invalid choice: 'shazam' (choose from
+'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
+usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
+b4: error: argument subcmd: invalid choice: 'shazam' (choose from
+'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
 
+Do I need a higher version of b4 (here: v0.8.0)?
 
+Check myself... b4.git:
 
+commit 7c1d044ff1d5235e598d4c777c4abfe60e0a09a8
+("shazam: change default behaviour to be "apply-here"")
+
+...is post-v0.8.0.
+
+Lemme see if I can apply this patch...
+
+# cd /usr/lib/python3/dist-packages
+
+# LC_ALL=3DC git apply --check --verbose /root/b4-shazam.patch
+Checking patch b4/command.py...
+error: while searching for:
+   sp.add_argument('-M', '--save-as-maildir', dest=3D'maildir',
+action=3D'store_true', default=3DFalse,
+                   help=3D'Save as maildir (avoids mbox format ambiguities)=
+')
+
+def cmd_am_common_opts(sp):
+   sp.add_argument('-v', '--use-version', dest=3D'wantver', type=3Dint,
+default=3DNone,
+                   help=3D'Get a specific version of the patch/series')
+
+error: patch failed: b4/command.py:35
+error: b4/command.py: patch does not apply
+Checking patch b4/mbox.py...
+error: while searching for:
+       ifh =3D io.StringIO()
+       b4.save_git_am_mbox(am_msgs, ifh)
+       ambytes =3D ifh.getvalue().encode()
+       if cmdargs.applyhere:
+           amflags =3D config.get('git-am-flags', '')
+           sp =3D shlex.shlex(amflags, posix=3DTrue)
+           sp.whitespace_split =3D True
+
+error: patch failed: b4/mbox.py:262
+error: b4/mbox.py: patch does not apply
+
+Nope.
+Dunno if I am willing to do that manually or build-from-git.
+
+Anyway, can you add this b4 shazam tipp/trick to our wiki, please?
+
+Last question:
+
+LLVM/Clang-14...
+Do I need any patches to Linux v5.17-rc6 or upstream Git?
+Dependent/Independent of "std-gnu-11"?
+
+I can see on my Debian/unstable AMD64 system:
+
+# LC_ALL=3DC apt-cache policy clang-14
+clang-14:
+ Installed: (none)
+ Candidate: 1:14.0.0~++20220301114802+19149538e9a9-1~exp1~20220301234814.85
+ Version table:
+    1:14.0.0~++20220301114802+19149538e9a9-1~exp1~20220301234814.85 99
+        99 https://apt.llvm.org/unstable llvm-toolchain-14/main amd64 Packa=
+ges
+    1:14.0.0~+rc1-1 99
+        99 https://ftp.debian.org/debian unstable/main amd64 Packages
+        99 https://deb.debian.org/debian unstable/main amd64 Packages
+
+The one from apt.llvm.org I guess is LLVM/Clang v14.0.0-rc2?
+
+Maybe, I wait until Masahiroy has the triple in his kbuild Git tree...
+
+Thanks.
+
+Have a nice Friday,
+- sed@ -
+
+[1] https://git.kernel.org/pub/scm/utils/b4/b4.git/tag/?h=3Dv0.8.0
+[2] https://git.kernel.org/pub/scm/utils/b4/b4.git/commit/?id=3D7c1d044ff1d=
+5235e598d4c777c4abfe60e0a09a8
+[3] https://github.com/ClangBuiltLinux/linux/wiki/Command-line-tips-and-tri=
+cks
