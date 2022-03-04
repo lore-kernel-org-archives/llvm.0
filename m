@@ -1,115 +1,82 @@
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67514A4D
-	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 11:43:31 +0000 (UTC)
-Received: by mail-il1-f177.google.com with SMTP id k7so6315086ilo.8
-        for <llvm@lists.linux.dev>; Fri, 04 Mar 2022 03:43:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408D77A
+	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 12:32:00 +0000 (UTC)
+Received: by mail-io1-f49.google.com with SMTP id r7so9363922iot.3
+        for <llvm@lists.linux.dev>; Fri, 04 Mar 2022 04:32:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=4smpWMe7kSNBH0mRyoIMNTCTp8csrNBkurRrsmlpIPo=;
-        b=Ur9aq7eu3Eytryp1K22lJVyJFJLao0GT/R+/PN3J6sz5zlBiBu4s+f/HQFxo2H8Nm9
-         GP3Ros3dd5himrsMXzLzfpEiM9v8ea7hJpqgd6jOifMxgyXR/cpGRJCCY/OBlFApGf3A
-         RtfR0KBU/MgazXjpTwjeae0OQsTp3lUMJQgl27/xGVRRouUKBQxgb/Vfoe+BzyFyC3AK
-         /TlzntsQrj8hu0bsunpO1u2Q1NzK5ZUJEvuWr2NLFoGtiy9jwes569YIRxx+ZRLOZzcY
-         4Hxjl8pqBoOWxnLimr6+kOSjSGaQjskL7h1ahZxjTy+zFX1iNwqxmQHPz2XhtX7Gw/+/
-         dgKA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LD6gTN1e1zlXj/t0lCkcVAaZ8PXN0Am12ReQ8fAXUPs=;
+        b=e6PlMr+Ng2RXFkOsDTEEIhu/IDbXp+tbne53o6Az1rCcgVUCSmdAi5esbgyj5fhip0
+         OXaYzRHIvIYTVjmHTnfWM7nV0W8zBeFEt65eLj4HHQfbYLB6FkFGXxF1mmU/wIa9JKwx
+         vlqALBCvvLDGTcFP0GKIJWlAIqOSUUuJbCE57aiVO1cqEtXg6Lq9qXyVPpEC8yg8dDkk
+         uK7iIZckpbA/Sf0xniKEBDK3d4UVaDthvT6On4lTEV/Q+vlIGmp5kmqBYiGrB0On/mDN
+         36H+CTOHGEheF9h3F78UPrIVSks/dNl4rBMufzgNrbxLkc0zSKqLV5vif1SLMmJZIrcA
+         RhPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=4smpWMe7kSNBH0mRyoIMNTCTp8csrNBkurRrsmlpIPo=;
-        b=LZR7SS9sGxTshtYWXTomNcsoweMRlqxkfJfPRlghmGcce5z6c9Kaoe3rUKgdNGnILG
-         0nJ7UGkHXmjKItJ/Rg/18C4ZC/ytuuUfr5I9jW1PH5Lb/gpbAu9kPm+3o6zKJ9Ac+V7v
-         ttZktCAA6zGVrTr1JLVHHDcm9U9vtP/Tjs/1HK6P6/PUdxu0nKW5phxZnX6Fxlq7tIdE
-         ZW0j7p8ymgq9jF3AsV1KaaCMsWF7vQzKmIezI3nGOvLIfpFhLruAEQdP7lYZDaX8JJ7N
-         8T/45LkicvRzSoNnbhjoq7eZS/uiQQdhiyz/HpjcA91BGUu5dQ1y0ItP7eFxCwky1fqQ
-         de7w==
-X-Gm-Message-State: AOAM532MLzsCFJrHDHM7cz7zVKZsphfQLuPOLCT1r6hEYL35I0hrRSLi
-	jLnl+po656lEjs7Da2bWatgmZ7yZpPGasf6DeC4=
-X-Google-Smtp-Source: ABdhPJyBKRfl8PIOw+S6NEi0bCOL4PLN6OdToYMyK9eSpcrGOMTwep1WROvcrBL/LJenmf9yUE7+X4L3oo43anfTfUs=
-X-Received: by 2002:a05:6e02:164f:b0:2c6:1b85:b985 with SMTP id
- v15-20020a056e02164f00b002c61b85b985mr955047ilu.4.1646394210485; Fri, 04 Mar
- 2022 03:43:30 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LD6gTN1e1zlXj/t0lCkcVAaZ8PXN0Am12ReQ8fAXUPs=;
+        b=fMcoD6C0JuncmbtrnGDxFzvudejodIbpI4GNtFM17DuKHvpx7/rQf9vzncSQxobVqx
+         /C7arR2UQr6dFlKa88l9NdfgX8nE/K1/eYO8Yt4UrWGWYM/Qu87vzJyHOWu0nEmUSCqn
+         6rfSYwqIvOVBTMNICfkkKuHdY/KPZ24EXWzcl4LrbqyRl0fwPlTkRfQ0Wwk+QKe6wutS
+         6FhH8vCt2qPvdYdDAY09MxicSBXCZhxeAMPNSYEpwlfHlSxfqus56XOJ1b102iQjM0Nr
+         VY9QQSA3BeKrvP1UDssXhRaINNSje/zSBQ36OkOHeOycaiO+nW/cKPJDBnJJ3oNaB7pc
+         OW4w==
+X-Gm-Message-State: AOAM530Crmqu2mkyGdx9rDOvoQ2jJqlFnODISUQXPV/WIzkrVn2GuNwc
+	ZYFrIk1mZhOaU6ctHxkckyPZII+FA+GwlBmClFM=
+X-Google-Smtp-Source: ABdhPJzgoS8M3g05AsBUieLPYXmV+8l+IaUmXwXDcgNemeZDL75Od1vp3aFBe6iRKW58gyU5bLS4LMxRJNvrbH9wl30=
+X-Received: by 2002:a05:6638:168b:b0:314:7a8d:19d4 with SMTP id
+ f11-20020a056638168b00b003147a8d19d4mr33662849jat.199.1646397119277; Fri, 04
+ Mar 2022 04:31:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220303090643.241747-1-davidgow@google.com> <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
- <202203030947.E2FA3D9@keescook> <YiEISsoS/XrbEtbm@thelio-3990X> <CAKwvOdkA1c3U6+-6hB3Nj9m2Z8eYzsFWm5X4se2eq_cF3NB2jA@mail.gmail.com>
-In-Reply-To: <CAKwvOdkA1c3U6+-6hB3Nj9m2Z8eYzsFWm5X4se2eq_cF3NB2jA@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Fri, 4 Mar 2022 12:42:54 +0100
-Message-ID: <CA+icZUXf9m13GrqvCLkDRsnQt0X2VQ=yVrJRYz=6fhCJXR4-Xg@mail.gmail.com>
-Subject: Re: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-um@lists.infradead.org, 
-	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220127151945.1244439-1-trix@redhat.com> <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
+ <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com> <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
+ <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com> <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
+ <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org> <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
+ <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org> <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
+ <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
+In-Reply-To: <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 4 Mar 2022 13:31:48 +0100
+Message-ID: <CANiq72noan-b84yU370wVaRRu-GX=A5X0Ocfv4uJDk2nyeR0aw@mail.gmail.com>
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+To: Joe Perches <joe@perches.com>
+Cc: Finn Thain <fthain@linux-m68k.org>, Konrad Wilhelm Kleine <kkleine@redhat.com>, Tom Rix <trix@redhat.com>, 
+	Bart Van Assche <bvanassche@acm.org>, kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
+	shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
+	martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, megaraidlinux.pdl@broadcom.com, 
+	scsi <linux-scsi@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Mar 3, 2022 at 9:43 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+On Fri, Mar 4, 2022 at 5:03 AM Joe Perches <joe@perches.com> wrote:
 >
-> On Thu, Mar 3, 2022 at 10:26 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Thu, Mar 03, 2022 at 10:04:28AM -0800, Kees Cook wrote:
-> > > How does -mno-global-merge get KBUILD_CFLAGS in the first place? If it's
-> > > arm/arm64 only, shouldn't that get relocated to those architectures?
-> > >
-> > > *time travel* found it:
-> > >
-> > > 61163efae020 ("kbuild: LLVMLinux: Add Kbuild support for building kernel with Clang")
-> > >
-> > > So I think this may have been universally true long ago, and now only
-> > > arm/arm64 need it?
+> It's up to individual maintainers to each decide on what might be
+> considered unnecessary churn for the subsystems they control.
 >
-> Looks like that's the case from LLVM sources.
+> One argument is that churn leads to difficulty in backporting
+> fixes to older 'stable' versions.
 >
-> <snip>
->
-> > > diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-> > > index a2391b8de5a5..dcab28c44c26 100644
-> > > --- a/arch/arm/Makefile
-> > > +++ b/arch/arm/Makefile
-> > > @@ -48,6 +48,13 @@ CHECKFLAGS += -D__ARMEL__
-> > >  KBUILD_LDFLAGS       += -EL
-> > >  endif
-> > >
-> > > +ifdef CONFIG_CC_IS_CLANG
-> > > +# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
-> > > +# source of a reference will be _MergedGlobals and not on of the whitelisted names.
->
-> I think there's a typo in the original comment.
-> s/on of/one of/ ?
->
-> Also, I'm not sure what's meant by _MergedGlobals. Perhaps this is an
-> opportunity to make this clearer?
->
-> "Clang's "global-merge" pass (implemented only for arm and aarch64)
-> may break modpost Pattern 2 if symbols are renamed and thus don't
-> appear on modpost's allowlist.
->
-> > > +# See modpost pattern 2
-> > > +KBUILD_CFLAGS        += -mno-global-merge
-> > > +endif
-> > > +
->
+> I think the churn argument is overstated.
 
-I can remember on x86-64 I was able to build and boot by dropping it entirely.
+I was only pointing out that, for the global `.clang-format` file, the
+style in `coding-style.rst` should be followed. Then subsystem
+maintainers may override it if really needed.
 
-- Sedat -
+I definitely agree that we should aim to have a consistent style.
+However, by allowing a few exceptions, some major subsystems may start
+using `clang-format` sooner.
 
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+Cheers,
+Miguel
