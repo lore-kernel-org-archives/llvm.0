@@ -1,122 +1,112 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2442D6AAC
-	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 22:38:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1646433523;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pCMnoGKikt99i+bOvmFuu+myd6ACV9D1g1NEWSuvSEg=;
-	b=Ju81av7NAYGQnDByVpAudHCGDHWHeNUreSEwi3oTY0yNEGekhVQpC3ytSYFmG3iBPIidoj
-	8x7ul80uFpjjtKwP07rUOfk3+7v/vtJ7hj41G80fNMAxhgoYmJ75bs6U+p47unMIVVMoh9
-	P/0ryn9gGsW0oqSYysRZeqDvsnvIXa4=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-YwLM7f71OgqkFtuwvY1Uyw-1; Fri, 04 Mar 2022 17:38:42 -0500
-X-MC-Unique: YwLM7f71OgqkFtuwvY1Uyw-1
-Received: by mail-qv1-f70.google.com with SMTP id m19-20020a056214159300b004352bebfd8bso6964155qvw.6
-        for <llvm@lists.linux.dev>; Fri, 04 Mar 2022 14:38:42 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8E16AAC
+	for <llvm@lists.linux.dev>; Fri,  4 Mar 2022 22:47:04 +0000 (UTC)
+Received: by mail-pj1-f68.google.com with SMTP id v4so8485786pjh.2
+        for <llvm@lists.linux.dev>; Fri, 04 Mar 2022 14:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nqFnAABLSo4gfXyFqfRrTRulE33S0+Zc+dKAaTlLF8U=;
+        b=lLJjzv1+FYk1VdnbZKAIMIKB0cy6msdnIWuscqTuvOHV4PpX6zcqXxkTiKtRHMD4oj
+         s3cvLWeh4G3JElUPat3+xGuwZP4p7Q/cC9b5JWTB+D2Cr756tKVkN+ndNrCHcPP0zOtV
+         Fn/VBQhBVFBW8PQ1v26Ixy/1YYRM5z9PrpywHmPCfQAlC93OuAJUyocnPHq+ItFfkoSq
+         F8+0BUBoiP3r80HX0WSD0GYIhc5tmXuHVPx6f2vatj5PZOQJH7YDp2xwtsVpn0l8Qsrh
+         HNz6VxyQJPQ3gtletkVWJNwSb1sTwSAoxBrRD53hmNbxvvPkdnlanDME0I+IydMVhiJB
+         mzyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=pCMnoGKikt99i+bOvmFuu+myd6ACV9D1g1NEWSuvSEg=;
-        b=s6ISt5oY5TAyBDqazUHf3vkr1Sy5SUOVbDv13mWnWRmLh3j5c5Naw6iIrOA+13CTVI
-         IAxNoGBQY87i1HwIhps4a/i0NBtnYcdxbKT/ns+GpHma77ZNhyDCtSVD3/FSBW1176Ci
-         uYzii+t0VHo08KcQ2ntupsVzxRyTEHFmPxA/+jUjbjOpr92i9b+FEUi3pzFs1v/j7VY+
-         KtZJcEk7qqGL8EZQxJBb0gbI9Yw/D82jqMzYgWHINCTsF51GgYdbZ4Ior+7ggxjsDrSK
-         ySP3kunDvJEBN5AkeQR2saGVNyObC+yEXux4oPjSO3oVNqxgMWXbtTcrFjMC18rtwRC7
-         S/0w==
-X-Gm-Message-State: AOAM530DPyng8PTDcXjL98i5m1h62bKxjYj7PIE9Q4z/UZ0462pJ3oDz
-	tkopO7Bp0Go+bzfuuJHFGDxgEs93h+B5LvE4bkJ7QlRYVRALPskdH9l0seW6JppJGkBcuAvz4xn
-	4fOodHdBT05RaXYMU3WGsaSGWFayuk1ECuvPqavaILOCq8nErvs7StkTcPjNt
-X-Received: by 2002:a05:620a:372c:b0:67a:de08:875e with SMTP id de44-20020a05620a372c00b0067ade08875emr574251qkb.149.1646433521472;
-        Fri, 04 Mar 2022 14:38:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw1p6YxKKR4VWsIy4ZmjNNbsE6elG5BIMU9tJKjj/hlKR7R2HxTWr2egC175Bkb4O+EYPxtiA==
-X-Received: by 2002:a05:620a:372c:b0:67a:de08:875e with SMTP id de44-20020a05620a372c00b0067ade08875emr574221qkb.149.1646433521171;
-        Fri, 04 Mar 2022 14:38:41 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id d16-20020ac85ad0000000b002d71c463d9csm4117216qtd.24.2022.03.04.14.38.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 14:38:40 -0800 (PST)
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Joe Perches <joe@perches.com>, Finn Thain <fthain@linux-m68k.org>,
- Konrad Wilhelm Kleine <kkleine@redhat.com>,
- Bart Van Assche <bvanassche@acm.org>, kashyap.desai@broadcom.com,
- sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
- jejb@linux.ibm.com, martin.petersen@oracle.com,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, megaraidlinux.pdl@broadcom.com,
- scsi <linux-scsi@vger.kernel.org>,
- linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-References: <20220127151945.1244439-1-trix@redhat.com>
- <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
- <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
- <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
- <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com>
- <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
- <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>
- <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
- <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
- <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
- <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
- <9dc86e74-7741-bb8e-bbad-ae96cebaaebc@redhat.com>
- <CANiq72nsKijH4zgLoEpiiq4462r1zYmaiDs13SEHDYR3aQziUw@mail.gmail.com>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <4f535f31-b993-7365-4964-9f7549afc2a1@redhat.com>
-Date: Fri, 4 Mar 2022 14:38:37 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nqFnAABLSo4gfXyFqfRrTRulE33S0+Zc+dKAaTlLF8U=;
+        b=Qg2po9aNYNSf0tFpNv9KvlpZGkoVl+vGoImmympF+YGxHJb0patuMB84qvYLLHvvGD
+         VaFT2YcslpAM5M4AOlXHrfoh5tnycG1D0T6Gd89mjrNzok97i8bG1VndBBraSs28yc0C
+         QIJnozvtifVEbBE0h5vnTAKsjHU2KOfg8rw9ZOQnH1Ev4Hmqxll4i5TEZIfCby3meGBH
+         qFan7g1Qvte+cO8tbtQApQEDAz0babsYR1EEKGpxHrUsB+yRFI68j3lMMBFXdMiqMY6t
+         kuFfTB2/asoVOmET1neitkIVemGFlyyRYjQZDPanCoR41k+4Dun+iUE8Li7oM+/VcxTX
+         pKzw==
+X-Gm-Message-State: AOAM530hepITIoK95oo7Zl7G1nofbpKsLrrwRo58hzr8QUK6mb6QVz/i
+	dQNunM8ibnZ4aggErjBj1IM=
+X-Google-Smtp-Source: ABdhPJz73/WMy+zgwFJkLyyXwHF7E3bL+m2EKEqOQym28gfI3VcXrgLKnIWKGdN2GInyd92w2mjEGA==
+X-Received: by 2002:a17:90a:65c4:b0:1bd:2bcb:1f0c with SMTP id i4-20020a17090a65c400b001bd2bcb1f0cmr13045278pjs.114.1646434024417;
+        Fri, 04 Mar 2022 14:47:04 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id e11-20020a63e00b000000b0037341d979b8sm5244760pgh.94.2022.03.04.14.47.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 14:47:04 -0800 (PST)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <kafai@fb.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next v4 5/8] compiler-clang.h: Add __diag infrastructure for clang
+Date: Sat,  5 Mar 2022 04:16:42 +0530
+Message-Id: <20220304224645.3677453-6-memxor@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220304224645.3677453-1-memxor@gmail.com>
+References: <20220304224645.3677453-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CANiq72nsKijH4zgLoEpiiq4462r1zYmaiDs13SEHDYR3aQziUw@mail.gmail.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1528; i=memxor@gmail.com; h=from:subject; bh=7uwK8ABZKnWenzz92bkM96adqDWIRLPqA7+NX3fqr7c=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBiIpasJj2xD950UpEJLjfy1eC9EWgGn5mvhwnzWnX4 Ex0bGAOJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYiKWrAAKCRBM4MiGSL8RyjR5D/ 0SQSqGwX+xh6q4dgCpgzx8pkZO1uNRsbHpWc8D7crol/YKGU2E/Ya5swrFxD8vhTyChXWPomeoL0/u oGNhlB8RC7qK6rFaAyN4H7Le1B0Zhzo9+34QkK4E7cwlzWcS2qEs/iBNSWUIkErCak28pKgolBaug/ LDaumOcPt1njI3Iuv1v5g8gzRtFKVyZNrLvBQ17ONBu0L2DYbKStbgs99cIoco31i0ZbjXvffqEhj+ pBK0Y/RrnaNtWgmd6/mwtiqIP15joU7vQtc/dcdMt2t2H93ISLvQFSNmEyFrt55rZsvxEHE4ElMK+x lY7zlsXWNPAzNtl33RTS7WwYEjVJ87qYaOHYKKwzePF+nAwR+m2zv9dJUnC2Il2Uxw+D4QXqu9sX0X PyZl9ctpBOvMmFexp/aHlrJS5yDemqXKcXgdv4VJcoZBH1NlzLyVYsfiQYbi84FeMWM78mESeM4AwO L7mHR1YhY+AbmFZG9K0Nh+FGZFrlhS5fHdTPjI4qbem+yX4c0+8lS75M4PUogUwBqea5JlkgTu8un2 c0StSrwlhui4Z+dtI7PBPMGDzK9v9sxwQkAG0JB2BMKJRG+njkbm3Qtkzsc1UnWrLJv/7Npfi64tOm fNNhIKmuzHNqrVFq7tvhlxEoQq0pPVpROL+wJFY4RyOSc9MqNvn20Jh/t0Gw==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
 
+From: Nathan Chancellor <nathan@kernel.org>
 
-On 3/4/22 6:02 AM, Miguel Ojeda wrote:
-> On Fri, Mar 4, 2022 at 2:46 PM Tom Rix <trix@redhat.com> wrote:
->> The churn level will be very high.
-> Nobody is planning to reformat the entire kernel, at least not until
-> the tool is close enough to the kernel style, which will take a while.
+Add __diag macros similar to those in compiler-gcc.h, so that warnings
+that need to be adjusted for specific cases but not globally can be
+ignored when building with clang.
 
-The churn on a single file like this is high.
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+[ Kartikeya: wrote commit message ]
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/compiler-clang.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-There is no way to separate just one type of change, you get all the 
-changes.
-
-Not having an opt-in/out per type of change is a flaw that makes 
-clang-format not ready.
-
-Tom
-
->
->> Until clang-format has an opt-in mechanism, I do not think clang-format
->> should be used.
->>
->> .clang-format should be moved to staging/ to reflect its not being ready
->> status.
-> What is not ready about it?
->
-> It is a fairly useful tool that some people is already using, either
-> for full file formatting or for sections within their editor.
->
-> Cheers,
-> Miguel
->
+diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+index 3c4de9b6c6e3..f1aa41d520bd 100644
+--- a/include/linux/compiler-clang.h
++++ b/include/linux/compiler-clang.h
+@@ -68,3 +68,25 @@
+ 
+ #define __nocfi		__attribute__((__no_sanitize__("cfi")))
+ #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
++
++/*
++ * Turn individual warnings and errors on and off locally, depending
++ * on version.
++ */
++#define __diag_clang(version, severity, s) \
++	__diag_clang_ ## version(__diag_clang_ ## severity s)
++
++/* Severity used in pragma directives */
++#define __diag_clang_ignore	ignored
++#define __diag_clang_warn	warning
++#define __diag_clang_error	error
++
++#define __diag_str1(s)		#s
++#define __diag_str(s)		__diag_str1(s)
++#define __diag(s)		_Pragma(__diag_str(clang diagnostic s))
++
++#if CONFIG_CLANG_VERSION >= 110000
++#define __diag_clang_11(s)	__diag(s)
++#else
++#define __diag_clang_11(s)
++#endif
+-- 
+2.35.1
 
