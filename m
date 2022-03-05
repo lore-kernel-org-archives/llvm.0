@@ -1,150 +1,116 @@
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF0A1B76
-	for <llvm@lists.linux.dev>; Sat,  5 Mar 2022 15:30:47 +0000 (UTC)
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181]) (authenticated)
-	by conssluserg-05.nifty.com with ESMTP id 225FUbqp012843
-	for <llvm@lists.linux.dev>; Sun, 6 Mar 2022 00:30:38 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 225FUbqp012843
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1646494238;
-	bh=YsXmMDnzP2QV2OZWk2RMV7uW5hpJkgm10xK1lFneifg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=k+2MGq6eak/H4/O5haArec0peEc3O/L4BRi/GUHC4e/an+5GLBARhjuR16l4I/Z/f
-	 vB1F/tVPKaKtHYi5qxxgh3v4MrIc/8eFUo0LC1vUpapvj/Bu2hSxcAcnVP/k6O+Pc2
-	 oHVoD0Z8nny/xHcI8+TEZp1X1lDJvD7LjhQutCCUz1+3b6h0DvpZf2hpr/kHOW9pRA
-	 2iHZAok2P5LSShz/rw1wRf1O2tR02IOTY68qIucnJ1QWsU7wCdz8n6AimlxG21GB9l
-	 je1NG6uQWObcjioyJahwKFNdLrQlbC5/1+g6RIz+A0qVwmWRD8bbY83+zD1rRtN3QL
-	 vUD9/d9av/UqA==
-X-Nifty-SrcIP: [209.85.210.181]
-Received: by mail-pf1-f181.google.com with SMTP id d17so10136647pfl.0
-        for <llvm@lists.linux.dev>; Sat, 05 Mar 2022 07:30:38 -0800 (PST)
-X-Gm-Message-State: AOAM532y3ulbU5qfnZXz4ixwIn7j3aKRSXAykTJjafsa1kjahH+7RAmf
-	NfiG+Dfx3eVkpENUAyIOhZxAaKf+YjlyHzBQcuo=
-X-Google-Smtp-Source: ABdhPJx0u9LSOAf+oXrCA4QHWPtRWFjUN0G77UHdiuLqLXjiTzDlEl22WVJRIiGKDDsFe3MjYAOay8OUZpjtqjwfqMo=
-X-Received: by 2002:a05:6a00:c90:b0:4bd:22a:bb1d with SMTP id
- a16-20020a056a000c9000b004bd022abb1dmr4158681pfv.32.1646494237396; Sat, 05
- Mar 2022 07:30:37 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF047A
+	for <llvm@lists.linux.dev>; Sat,  5 Mar 2022 17:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1646500495;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0l403f5Mr+eL7bpML0lL2OSBYrG2pVDxEyNmYkFEjMU=;
+	b=bDg3gyK9C8jXolb5VSttxPGy3LsQ6OiRNXCWcRnONaWlqHY5e8IgUeyOXPIfPinYN//lUT
+	9d9uct3BR5faNMN4zexMsNOO88Qh0F9I4QbRE8PbQOG/qjPCQkh9bZ+xsD6tM0dgef87G/
+	AKWY7lwXJspBROaWwSRP3jOymKK3nto=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-397-xshh0PKxO-iBLQJi7QaoNg-1; Sat, 05 Mar 2022 12:14:54 -0500
+X-MC-Unique: xshh0PKxO-iBLQJi7QaoNg-1
+Received: by mail-qk1-f198.google.com with SMTP id s71-20020a37a94a000000b00648c7f2b289so8043963qke.12
+        for <llvm@lists.linux.dev>; Sat, 05 Mar 2022 09:14:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0l403f5Mr+eL7bpML0lL2OSBYrG2pVDxEyNmYkFEjMU=;
+        b=GSZDEpPVsBM9zy80rEdrJ82M3P7VQV0M3j3JZu4lt2QXEBve5tnYTqH5euG9ugf6pV
+         fVVQODgycxUJsxP7U+F+Zx+7T+JLAZYubdQtVr/Uz8Xw3Ru4wRX8FXtJcfF5CJ9pdwGf
+         pHsqeawAOq1SvEoQAdCA1V1sqeLWnu5l3dob1Dh1YJRIqr6hCUYJQKuMka9aNxTj78bO
+         uuvV4eEWgSKDe+I1Mvvc7SMHif37CZVGRaD/YIKycG2jaHKIt1iGA5/KiRRdC6MmBHee
+         kNBCI1xCjq6kXjjj0ggrRmJRimG4yHTq2kTKCZj3fXsVkFPGm22G4dwgTV1J5J671J7+
+         fsNg==
+X-Gm-Message-State: AOAM533Q3Dfym+KoCYiN+7rezJMDpGw7zlMfhkRRdJA8QEN25zwL9P7Y
+	IS609FbHznCC6WQKwlDWopybtV8lV4RLb+NoY59n/JtgJaprJtN2fuZIG1LVelEpIiely3hoJeL
+	rBErfQQm7rqhg9A==
+X-Received: by 2002:a05:620a:4006:b0:67a:f431:dbfb with SMTP id h6-20020a05620a400600b0067af431dbfbmr1687597qko.733.1646500494133;
+        Sat, 05 Mar 2022 09:14:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy/CSIyOclA3zgRSv8u7wpyWf8o7WbJ+0Kc40wi5YWUyKIdoknnxnBkCjzOU1XHq7D0/kOm0Q==
+X-Received: by 2002:a05:620a:4006:b0:67a:f431:dbfb with SMTP id h6-20020a05620a400600b0067af431dbfbmr1687578qko.733.1646500493882;
+        Sat, 05 Mar 2022 09:14:53 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id g7-20020a376b07000000b006492f19ae76sm3908647qkc.27.2022.03.05.09.14.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Mar 2022 09:14:53 -0800 (PST)
+From: trix@redhat.com
+To: andrew@lunn.ch,
+	vivien.didelot@gmail.com,
+	f.fainelli@gmail.com,
+	olteanv@gmail.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] net: dsa: return success if there was nothing to do
+Date: Sat,  5 Mar 2022 09:14:48 -0800
+Message-Id: <20220305171448.692839-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdkd3vHMRNAJABho7Ok9HOofBZKeXTzjW0ZZku_+5GvtYQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdkd3vHMRNAJABho7Ok9HOofBZKeXTzjW0ZZku_+5GvtYQ@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 6 Mar 2022 00:29:54 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARJcPLT-OW20OE4+-c_B3azQRWoPPApqXSpBH5Pjdhq6g@mail.gmail.com>
-Message-ID: <CAK7LNARJcPLT-OW20OE4+-c_B3azQRWoPPApqXSpBH5Pjdhq6g@mail.gmail.com>
-Subject: Re: UAPI_HEADER_TEST and CC_CAN_LINK dependency
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        llvm@lists.linux.dev, Elliot Berman <quic_eberman@quicinc.com>,
-        Elliot Berman <eberman@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>,
-        Nathan Chancellor <nathan@kernel.org>, Trilok Soni <tsoni@quicinc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-On Wed, Mar 2, 2022 at 4:49 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> Hello Masahiro,
->
-> We'd like to be able to better test UAPI headers via
-> CONFIG_UAPI_HEAD_TEST=y with clang builds during cross compiling.
+From: Tom Rix <trix@redhat.com>
 
-I missed to add the target triple to usr/include/Makefile.
-You might have thought you were cross-compiling the headers, but actually not.
+Clang static analysis reports this representative issue
+dsa.c:486:2: warning: Undefined or garbage value
+  returned to caller
+  return err;
+  ^~~~~~~~~~
 
+err is only set in the loop.  If the loop is empty,
+garbage will be returned.  So initialize err to 0
+to handle this noop case.
 
-Let me fix this first.
-https://patchwork.kernel.org/project/linux-kbuild/patch/20220305125605.149913-1-masahiroy@kernel.org/
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ net/dsa/dsa.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-
-
-> We're finding that CC_CAN_LINK=y is not enabled because clang (unlike
-> gcc) isn't configured with a cross libc in hand, and one may not be
-> available in the environment. This is a similar constraint to the
-> prebuilt GCC images distributed on kernel.org.
->
-> Looking at
-> commit d6fc9fcbaa65 ("kbuild: compile-test exported headers to ensure
-> they are self-contained")
->
-> Simply removing the dependency on CC_CAN_LINK=y allows us to run the
-> UAPI header tests, which pass on ARCH=arm64 and native x86_64 builds.
-> https://android-review.googlesource.com/c/kernel/common/+/1991156
-
-
-Is it the right thing to cross-compile "#include <stdio.h>"
-by using /usr/include/stdio.h ?
-
-
-[with libc6-dev-arm64-cross package]
-
-masahiro@grover:~/workspace$ clang --target=aarch64-linux-gnu  -c -o
-test.o -Wp,-MD,\tmp.mk  test.c && grep stdio.h tmp.mk
-  /usr/bin/../lib/gcc-cross/aarch64-linux-gnu/11/../../../../aarch64-linux-gnu/include/stdio.h
-\
-
-[without libc6-dev-arm64-cross package]
-
-masahiro@grover:~/workspace$ clang --target=aarch64-linux-gnu  -c -o
-test.o -Wp,-MD,\tmp.mk  test.c && grep stdio.h tmp.mk
-test.o: test.c /usr/include/stdio.h /usr/include/bits/libc-header-start.h \
-
-
-The header search path is like this:
- /usr/lib/llvm-13/lib/clang/13.0.0/include
- /usr/local/include
- /usr/bin/../lib/gcc-cross/aarch64-linux-gnu/11/../../../../aarch64-linux-gnu/include
- /usr/include
-
-
-Even if the aarch64 libc is not installed,
-you can cross-compile it because
-clang finds stdio.h in /usr/include/.
-
-Using the host's system headers for cross-compilation
-looks wrong to me.
-
-
-
-> I assume there may be some additional constraints perhaps for other
-> architectures or certain configs?
-
-No, I do not think so.
-This is common for all architectures.
-
-
-> Another suggestion from the bionic maintainer to ensure the tests are
-> more hermetic/self-contained would be to add -ffreestanding to the
-> compiler invocations of these tests.
-
-I do not think so.
-
-UAPI headers are part of hosted environments.
--ffreestanding does not make sense.
-
-
-
-> Do you have thoughts on how we might be able to eliminate the
-> dependency on CC_CAN_LINK for UAPI_HEADER_TEST? Otherwise, I suspect
-> we will have to use `USERCFLAGS=--sysroot=/path/to/sysroot` to make
-> CC_CAN_LINK work for clang cross compilation. See also:
-> commit f67695c9962e ("kbuild: Add environment variables for userprogs flags")
-
-
-If you want to use libc installed in a non-standard path,
-yes, you can use --sysroot.
-
-On debian or ubuntu for example, it is unneeded.
-With "sudo apt install gcc-aarch64-linux-gnu", you can
-enable CC_CAN_LINIK for clang without using --sysroot.
-
-
+diff --git a/net/dsa/dsa.c b/net/dsa/dsa.c
+index 06d5de28a43ea..fe971a2c15cd1 100644
+--- a/net/dsa/dsa.c
++++ b/net/dsa/dsa.c
+@@ -471,7 +471,7 @@ int dsa_port_walk_fdbs(struct dsa_switch *ds, int port, dsa_fdb_walk_cb_t cb)
+ {
+ 	struct dsa_port *dp = dsa_to_port(ds, port);
+ 	struct dsa_mac_addr *a;
+-	int err;
++	int err = 0;
+ 
+ 	mutex_lock(&dp->addr_lists_lock);
+ 
+@@ -491,7 +491,7 @@ int dsa_port_walk_mdbs(struct dsa_switch *ds, int port, dsa_fdb_walk_cb_t cb)
+ {
+ 	struct dsa_port *dp = dsa_to_port(ds, port);
+ 	struct dsa_mac_addr *a;
+-	int err;
++	int err = 0;
+ 
+ 	mutex_lock(&dp->addr_lists_lock);
+ 
 -- 
-Best Regards
-Masahiro Yamada
+2.26.3
+
