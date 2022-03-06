@@ -1,176 +1,88 @@
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65031FAD
-	for <llvm@lists.linux.dev>; Sun,  6 Mar 2022 10:05:00 +0000 (UTC)
-Received: by mail-il1-f171.google.com with SMTP id x14so9604082ill.12
-        for <llvm@lists.linux.dev>; Sun, 06 Mar 2022 02:05:00 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926CB23AB
+	for <llvm@lists.linux.dev>; Sun,  6 Mar 2022 15:32:01 +0000 (UTC)
+Received: by mail-io1-f41.google.com with SMTP id d19so14601489ioc.8
+        for <llvm@lists.linux.dev>; Sun, 06 Mar 2022 07:32:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=ESgklctOQqYlZPJTzsNo744f6q9u/AsDia/ttur2s+w=;
-        b=pQh3qKhO1pOKJYjjzWwQpHgD4Ss8VhwZQ7Xfse8+PNobDLoi3Kr5jbqXShtcAVBsTy
-         ++6Sd5HxdPMXOmA5lDBcAC+D57Yp1UFtRM293wvKUadPnrXk5t/6I3n5F4V9/4E5YcQH
-         PCztAeXKbhirRmdd+5f35kSrektLI+2ysQsHTgzayQfdkF9l2Iy0Vu80U4OACpHXK7+2
-         aaRQUKcqI5VNei+Qpw9+wWLWULavLr0iDz0/gTkhfuHkgKwsJd2QbNMvLxIthOfFSdRs
-         IIJ/03gccagXgb/k6MwQBpJ3qh1V8MfcL4KBmYKFqN5tuETuEoL/B4+WDPQYuKU/jgbI
-         Znog==
+         :subject:to:cc;
+        bh=lTxXsLQ3/sJFqkOXAUPDqcJOvuhEL+3+rvVpOV3yWgw=;
+        b=RnGMWIJ3X7XTQvdkajhB5xVRNavoMahZJLBD9vyo0KNzdbWHGQaNf6knBDBoQ55VKT
+         F1YZYuOBsKX7jyVBVwT6yyn6ij94uvyHV75j+fGsXYREYMcGkTcobcAkuRiSpWYhyHbj
+         4apRIQoLGDHinLIEd+yHG8G1ErdUdvduAtRLBoAmOf3DsWksKa8xDilKfoZNdqxC0urv
+         8sYOAwGPAjSknRcnPCgDWuzHcloa4RF3zBgQPUqtiLbF1xLpauScZEhOgHQJQUCzcu13
+         1g46ZyUKbOOCasFMGWhP2+Arb1JT/MrH66sT0nJia2yu+1W1ufX86S1zeHHIF+9e8M+O
+         HYnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=ESgklctOQqYlZPJTzsNo744f6q9u/AsDia/ttur2s+w=;
-        b=vxhQDEuzCZjyW78fROEFODPBHPYLNVYPQYTR1OqXqluTozHodCQqFXRKD/W4e8+3zW
-         f5+l8t14XYfR8YQUyiKRz60yvClm8BEo1dMOnSFk2CrPvBrskuqAv78SrM/O03WomEBf
-         7p0lYSsDec+gte0VQlGq0Y75XJXaqVvYlDPhahGqpS+ld1a7fhzSImEJBTb+UmoiAbfM
-         GQXPpcwDn9IJs/+PfDLJoc3VKW5z6KpqSPBqV8CVIXpgSbXSTvrSBis740prE8JMJ/Bc
-         E5DpfnsCaBbUY0JntWc4aCy/34EEOmymMMUZ7sF9d6wbVSVcPeympR/YzS6s9iTwgS5m
-         uV0w==
-X-Gm-Message-State: AOAM532OTWE/5rzJRBYA80B6zzKgd29qxvAPanXsWRA/Z66EGI4EqbTw
-	a1/vSn1QfkEJunTnwR8AWOEMnX9XAznHExAD5mM=
-X-Google-Smtp-Source: ABdhPJymFJmO/rbAm66B96DsYrx2cpCqzxWw/vrFMi8K7/qMhr34kerBlS9vq08LDBXOUTD+ju3bNAvRs4lnmd2mTNs=
-X-Received: by 2002:a05:6e02:de2:b0:2c6:f14:884a with SMTP id
- m2-20020a056e020de200b002c60f14884amr6916885ilj.100.1646561099918; Sun, 06
- Mar 2022 02:04:59 -0800 (PST)
+         :from:date:message-id:subject:to:cc;
+        bh=lTxXsLQ3/sJFqkOXAUPDqcJOvuhEL+3+rvVpOV3yWgw=;
+        b=1IlXRK/BFAJY4CiE7kVtIie1ZR2dGc70SCDL5fx14CZsmSf8vePWH8T4JG7YjOwc2E
+         0UeP3G4j4OBJcJ1GNAQ4NmT+g/RhJn5O2D1Mcj5DWaUM+DJj+2v5OEV2uzZcIZLqm3gS
+         Hx7sFOo4TkyCSkTKk5eLHDaEgMJKvXUQHg2wOA3u0JhrJdErMGtnu8+wNmCj6fkxD8dk
+         WjbitWDD6xJu4WIGBHFvIcq57WWY8gWJOn6I5xa/3rN64NbuARzo83IymmpkOBM1JoG+
+         2Tq0S23fZq0AYSPQLkDQ4jAdJjxgt1xe2maSTwMBPHCMhM4Z+73oJQw1Od/pdcCZj3Tc
+         WQ/A==
+X-Gm-Message-State: AOAM533ucpkcUBG7LRlo+/LzSJ8aN8pEgQGZ0BPgiPfe06YHtzIOeYY5
+	js9GD+AHhVfPc8Dx6YM4IVI2Sw6SSY8+J4p6Bbk=
+X-Google-Smtp-Source: ABdhPJyurIugi2NpH/AHJdPJSjrCSnkjk+CgFnV6VItjl+2OHue5fkK5G7G6tY9vo60gMRNBnEb4/q68ZQ/zEQ56f2o=
+X-Received: by 2002:a05:6638:168b:b0:314:7a8d:19d4 with SMTP id
+ f11-20020a056638168b00b003147a8d19d4mr7354926jat.199.1646580720634; Sun, 06
+ Mar 2022 07:32:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
- <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
- <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
- <CA+icZUWD_O1WTKNDTj7f+EUxx5Pf=zC53mfOBNgtj1JQwjZVAQ@mail.gmail.com>
- <YiD86pay2ENCebkR@dev-arch.thelio-3990X> <CA+icZUXDBe5MF6G_2v4XoV0SFVkTZ96M5i-VGSvHsP1pFJ+nAg@mail.gmail.com>
- <CA+icZUXNtq3+cW6OBiO1TPhHT2xwXFe_D-Ja8HAO0XH2y6h=GA@mail.gmail.com> <CA+icZUVKJdtCWhhwcY5UkWwFA4TQAn+MF2w1DeZistYmG_ZEuQ@mail.gmail.com>
-In-Reply-To: <CA+icZUVKJdtCWhhwcY5UkWwFA4TQAn+MF2w1DeZistYmG_ZEuQ@mail.gmail.com>
+References: <20220301145233.3689119-1-arnd@kernel.org> <CA+icZUW8N25F_9_DVhRiQoe6rnvARH2AhKJgjKeYyNmdz5t_Lw@mail.gmail.com>
+In-Reply-To: <CA+icZUW8N25F_9_DVhRiQoe6rnvARH2AhKJgjKeYyNmdz5t_Lw@mail.gmail.com>
 Reply-To: sedat.dilek@gmail.com
 From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sun, 6 Mar 2022 11:04:23 +0100
-Message-ID: <CA+icZUUp1xT-i9ewsOJ4Ckk59L=kjh93U+2nEN81jTMJ-aSy=A@mail.gmail.com>
-Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+Date: Sun, 6 Mar 2022 16:31:24 +0100
+Message-ID: <CA+icZUUM1v1FCaJDk1BaRN9+uOQD53r5Rwcv=ESQHhdN9QRedA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] [v3] Kbuild: move to -std=gnu11
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
 	Linus Torvalds <torvalds@linux-foundation.org>, Marco Elver <elver@google.com>, 
 	Jani Nikula <jani.nikula@intel.com>, David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+	Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 4, 2022 at 12:12 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Fri, Mar 4, 2022 at 8:18 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Fri, Mar 4, 2022 at 7:47 AM Sedat Dilek <sedat.dilek@gmail.com> wrot=
-e:
-> > >
-> > > On Thu, Mar 3, 2022 at 6:37 PM Nathan Chancellor <nathan@kernel.org> =
-wrote:
-> > > >
-> > > > Hi Sedat,
-> > > >
-> > > > On Thu, Mar 03, 2022 at 07:26:05AM +0100, Sedat Dilek wrote:
-> > > > > Hey Nick!
-> > > > >
-> > > > > This only applies 1/3.
-> > > > >
-> > > > > $ b4 --version
-> > > > > 0.8.0
-> > > > >
-> > > > > $ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arn=
-d@kernel.org/
-> > > > > -o - | git am -3
-> > > > > Analyzing 14 messages in the thread
-> > > > > Will use the latest revision: v3
-> > > > > You can pick other revisions using the -vN flag
-> > > > > Checking attestation on all messages, may take a moment...
-> > > > > ---
-> > > > >  =E2=9C=93 [PATCH v3 1/3] Kbuild: move to -std=3Dgnu11
-> > > > >    =E2=9C=93 Signed: DKIM/kernel.org
-> > > > >    + Reviewed-by: Nathan Chancellor <nathan@kernel.org> (=E2=9C=
-=93 DKIM/kernel.org)
-> > > > >  ERROR: missing [2/3]!
-> > > > >  ERROR: missing [3/3]!
-> > > > >  ---
-> > > > >  NOTE: install patatt for end-to-end signature verification
-> > > > > ---
-> > > > > Total patches: 1
-> > > > > ---
-> > > > > WARNING: Thread incomplete!
-> > > > > Link: https://lore.kernel.org/r/20220301145233.3689119-1-arnd@ker=
-nel.org
-> > > > > Base: not specified
-> > > > > Wende an: Kbuild: move to -std=3Dgnu11
-> > > >
-> > > > It looks like the threading somehow got broken, likely due to the [=
-v3]
-> > > > on the first patch and not the second or third:
-> > > >
-> > > > This worked for me on v5.17-rc6:
-> > > >
-> > > > $ for i in $(seq 1 3); do b4 shazam -P _ 20220301145233.3689119-"$i=
-"-arnd@kernel.org; done
-> > > >
-> > > > "b4 shazam" is the equivalent of "b4 am -o - ... | git am" and the
-> > > > "-P _" tells b4 to only fetch that exact message ID, not the whole
-> > > > thread.
-> > > >
-> > >
-> > > Hmm, the universe is not good to me...
-> > >
-> > > $ for i in $(seq 1 3); do b4 shazam -P _
-> > > 20220301145233.3689119-"$i"-arnd@kernel.org; done
-> > > usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} .=
-..
-> > > b4: error: argument subcmd: invalid choice: 'shazam' (choose from
-> > > 'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
-> > > usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} .=
-..
-> > > b4: error: argument subcmd: invalid choice: 'shazam' (choose from
-> > > 'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
-> > > usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} .=
-..
-> > > b4: error: argument subcmd: invalid choice: 'shazam' (choose from
-> > > 'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
-> > >
-> > > Do I need a higher version of b4 (here: v0.8.0)?
-> > >
-> > > Check myself... b4.git:
-> > >
-> > > commit 7c1d044ff1d5235e598d4c777c4abfe60e0a09a8
-> > > ("shazam: change default behaviour to be "apply-here"")
-> > >
-> > > ...is post-v0.8.0.
-> > >
-> >
-> > I brutally applied the post-v0.8.0 patches stolen from b4.git over my
-> > local distro b4 files.
-> >
-> > And was able to apply the triple:
-> >
-> > $ git log --oneline --no-merges
-> > 5.17.0-rc6-1-amd64-clang13-lto..5.17.0-rc6-2-amd64-clang13-lto
-> > 96a4222bdd4c (for-5.17/kbuild-std_gnu11-arndb-20220301) Kbuild: use
-> > -std=3Dgnu11 for KBUILD_USERCFLAGS
-> > c4e8cef401a8 treewide: use -Wdeclaration-after-statement
-> > 6a7cc105b238 Kbuild: move to -std=3Dgnu11
-> >
->
-> I was able to build and boot on bare metal.
->
-> No new warnings in my build-log here after switching to -std=3Dgnu11.
->
-> Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v13.0.0 x86-6=
-4
+On Fri, Mar 4, 2022 at 5:25 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+[ ... ]
+> When I saw the first patches in this area, I was thinking what about
+> the tools/ build-system?
+> This ECO system has its own rules.
 >
 
-I have re-tested with Debian's LLVM/Clang v14.0.0-rc2.
+My other goal was to build perf with my selfmade or distro LLVM/Clang
+and -std=gnu11.
 
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v14.0.0-rc2 (x8=
-6-64)
+I was able to do so:
 
-- sed@ -
+$ git log --oneline --no-merges v5.17-rc6..for-5.17/tools-std_gnu11-dileks-v2
+2d99b1cfa897 (for-5.17/tools-std_gnu11-dileks-v2) perf: Use -std=gnu11
+c345a183c4ef tools: libtraceevent: Use -std=gnu11
+26f77082f233 tools: libsubcmd: Use -std=gnu11
+aaba58ec81c8 tools: libbpf: Use -std=gnu11
+ffc800af3be4 tools: libapi: Use -std=gnu11
+
+For perf/libperl-support I needed an extra patch:
+
+$ git log --oneline --no-merges
+v5.17-rc6..for-5.17/perf-libperl_support-clang-dileks
+316a1917ec05 (for-5.17/perf-libperl_support-clang-dileks) perf: Fix
+libperl support with clang and perl v5.34
+
+For details see [1].
+
+I can send the patches if someone wants them.
+
+[1] https://marc.info/?t=164646683300002&r=1&w=2
