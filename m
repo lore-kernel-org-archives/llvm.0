@@ -1,145 +1,93 @@
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B643B53
-	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 15:18:01 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6XN-TY_1646666269;
-Received: from 192.168.193.155(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6XN-TY_1646666269)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 07 Mar 2022 23:17:51 +0800
-Message-ID: <92a767c4-09e1-8783-2581-9848bb72890d@linux.alibaba.com>
-Date: Mon, 7 Mar 2022 07:16:36 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB98E3B53
+	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 15:21:52 +0000 (UTC)
+Received: by mail-wm1-f41.google.com with SMTP id c192so9384135wma.4
+        for <llvm@lists.linux.dev>; Mon, 07 Mar 2022 07:21:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N3zVdZIdUp2SndvqCDVv0wLLG00x7X2w4FcjL+gKARY=;
+        b=nh76nqjdSWUzPHfeHac1Cemx0gt6iOLqZ7gUAYB9njkbJ5uIed+uFdnUtCgcEzkY2m
+         kk1f+n1i8/SDWaZ9GivaveBtcP92ZZ+moPcualmBFLCIbjjBUDN1lrYuKuzeZBdXIooj
+         dX39oEEXCFKREaU/e53HJK5Q8N1UNc4eZBIhq+cV2wEbIpejXycZ0spDbr1tGpowvwCr
+         CWwDB44Sd6+nOEY7gWsKNT7dRFWs65mJNWfbApoklXkDmtNDiGk2kgfh5QeXm7EaDyzV
+         /V+O6fE/c6JxjZKyNwI2OqRLyxymuLNljvcd1AFyoHiP8/Mz12C7gbfO1KIj998nsxxX
+         6gZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N3zVdZIdUp2SndvqCDVv0wLLG00x7X2w4FcjL+gKARY=;
+        b=AvN/L3gtgclHnw2h+FTpKndeU2iMMxkvFw2mnrJufIleWsRczIKwPwUZFBubUXeuS6
+         cHKpNDbOkaiytHT8zJvhxcS4h6AN1nvExa+8N2VW4SG5xeE77pEaXv7Kaoo3kHQeNpnz
+         rrbL5dV5MxrMvwS8zkvGHI8xCZEVsSf1NHCpaBzTaRZzHyWCuoqXDIw92WpjQwjVuPex
+         ebRcsFEWL6O9CVDmJaSZtKN/jqH01XP4NYDuS9bF/SqKlFlHrjyAQTit6cedW0HrpCWm
+         PhWcYuZoVmkLRm6zU2V3IBSxdvSdU4fGvsMRfsBB8LJ3faNanxHdGHaLA/xDP29J0Hiw
+         fx5Q==
+X-Gm-Message-State: AOAM53357AglouguPESBC6cVatxL2EP2egAG62MjXChrwzvTghONRwlw
+	odLAnBFOYNnDNtHbRqA1noM=
+X-Google-Smtp-Source: ABdhPJzoVbtWjie8oUL0KyAGWJ2UJtdQdOZdXjz6HbfRjjX7p2bvz5+ddajXPvHa+Ia+Gl7C0n4jag==
+X-Received: by 2002:a05:600c:2056:b0:389:736a:5631 with SMTP id p22-20020a05600c205600b00389736a5631mr15342323wmg.120.1646666511084;
+        Mon, 07 Mar 2022 07:21:51 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id p12-20020a056000018c00b001f079518150sm8403134wrx.93.2022.03.07.07.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 07:21:50 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Jan Kara <jack@suse.com>,
+	linux-kernel@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] udf: remove redundant assignment of variable etype
+Date: Mon,  7 Mar 2022 15:21:49 +0000
+Message-Id: <20220307152149.139045-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>
-Cc: akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
- gregkh@linuxfoundation.org, linux@roeck-us.net, luc.vanoostenryck@gmail.com,
- elver@google.com, mark.rutland@arm.com, masahiroy@kernel.org,
- ojeda@kernel.org, nathan@kernel.org, npiggin@gmail.com,
- ndesaulniers@google.com, samitolvanen@google.com, shuah@kernel.org,
- tglx@linutronix.de, will@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
- <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <202203031010.0A492D114@keescook> <202203031105.A1B4CAE6@keescook>
-From: Dan Li <ashimida@linux.alibaba.com>
-In-Reply-To: <202203031105.A1B4CAE6@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
+Variable etype is being assigned a value that is never read. The
+variable and assignment are redundant and can be removed.
 
+Cleans up clang scan build warning:
+fs/udf/super.c:2485:10: warning: Although the value stored to 'etype'
+is used in the enclosing expression, the value is never actually read
+from 'etype' [deadcode.DeadStores]
 
-On 3/3/22 11:09, Kees Cook wrote:
-> On Thu, Mar 03, 2022 at 10:42:45AM -0800, Kees Cook wrote:
->> And we should, actually, be able to make the "set_lr" functions be
->> arch-specific, leaving the test itself arch-agnostic....
-> 
-> Yeah, as a tested example, this works for x86_64, and based on what you
-> had, I'd expect it to work on arm64 too:
-> 
-> #include <stdio.h>
-> 
-> static __attribute__((noinline))
-> void set_return_addr(unsigned long *expected, unsigned long *addr)
-> {
->      /* Use of volatile is to make sure final write isn't seen as a dead store. */
->      unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> 
->      /* Make sure we've found the right place on the stack before writing it. */
->      if (*ret_addr == expected)
->          *ret_addr = addr;
-> }
-> 
-> volatile int force_label;
-> int main(void)
-> {
->      do {
->          /* Keep labels in scope. */
->          if (force_label)
->              goto normal;
->          if (force_label)
->              goto redirected;
-> 
->          set_return_addr(&&normal, &&redirected);
-> normal:
->          printf("I should be skipped\n");
->          break;
-> redirected:
->          printf("Redirected\n");
->      } while (0);
-> 
->      return 0;
-> }
-> 
-> 
-> It does _not_ work under Clang, though, which I'm still looking at.
-> 
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/udf/super.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-The following code seems to work fine under clang/gcc, x86_64/aarch64
-(also tested in lkdtm_CFI_BACKWARD_SHADOW):
+diff --git a/fs/udf/super.c b/fs/udf/super.c
+index 48871615e489..4042d9739fb7 100644
+--- a/fs/udf/super.c
++++ b/fs/udf/super.c
+@@ -2474,7 +2474,6 @@ static unsigned int udf_count_free_table(struct super_block *sb,
+ 	unsigned int accum = 0;
+ 	uint32_t elen;
+ 	struct kernel_lb_addr eloc;
+-	int8_t etype;
+ 	struct extent_position epos;
+ 
+ 	mutex_lock(&UDF_SB(sb)->s_alloc_mutex);
+@@ -2482,7 +2481,7 @@ static unsigned int udf_count_free_table(struct super_block *sb,
+ 	epos.offset = sizeof(struct unallocSpaceEntry);
+ 	epos.bh = NULL;
+ 
+-	while ((etype = udf_next_aext(table, &epos, &eloc, &elen, 1)) != -1)
++	while (udf_next_aext(table, &epos, &eloc, &elen, 1) != -1)
+ 		accum += (elen >> table->i_sb->s_blocksize_bits);
+ 
+ 	brelse(epos.bh);
+-- 
+2.35.1
 
-#include <stdio.h>
-
-static __attribute__((noinline))
-void set_return_addr(unsigned long *expected, unsigned long *addr)
-{
-     /* Use of volatile is to make sure final write isn't seen as a dead store. */
-     unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-
-     /* Make sure we've found the right place on the stack before writing it. */
-     if(*ret_addr == expected)
-         *ret_addr = (addr);
-}
-
-static volatile int force_label;
-
-int main(void)
-{
-     void *array[] = {0, &&normal, &&redirected};
-
-     if (force_label) {
-         /* Call it with a NULL to avoid parameters being treated as constants in -02. */
-         set_return_addr(NULL, NULL);
-         goto * array[force_label];
-     }
-
-     do {
-
-         set_return_addr(&&normal, &&redirected);
-
-normal:
-         printf("I should be skipped\n");
-         break;
-
-redirected:
-         printf("Redirected\n");
-
-     } while (0);
-
-     return 0;
-}
-
-But currently it still crashes when I try to enable
-"-mbranch-protection=pac-ret+leaf+bti".
-
-Because the address of "&&redirected" is not encrypted under pac,
-the autiasp check will fail when set_return_addr returns, and
-eventually cause the function to crash when it returns to "&&redirected"
-("&&redirected" as a reserved label always seems to start with a bti j
-insn).
-
-For lkdtm, if we're going to handle both cases in one function, maybe
-it would be better to turn off the -mbranch-protection=pac-ret+leaf+bti
-and maybe also turn off -O2 options for the function :)
-
-Thanks,
-Dan.
