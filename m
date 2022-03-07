@@ -1,67 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA8B7A
-	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 12:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8C9B5C340F4;
-	Mon,  7 Mar 2022 12:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646656811;
-	bh=PN/nEQ7czoCcNRM3+QJffb3c4Xa5AaMxJWXIngv9K8w=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=kDhk1t7u5xGZyAuX5FDKtbBwgq3MboggHhg5cuK0ryEj9J7v5xwfz7bHFrwph4ZVy
-	 KHhnrdii2TqOXKCSOKwHeDQUSje+xozy501rzQWX3OspTWq6mGegoa2DgDHwN5/hjd
-	 zVpChGKusm+eqKxOAWexPvvfIfLp0GwFtT+ft+2iZiu3ChLCfi+alXkAjt5dOUYNlV
-	 d/fCv3xGDMBMQao0Osop7KmisvPiSmMY+PcqLsWZvBz0Gfr+lyC8hUUJVRD4oaKEdb
-	 bQibGCtZIAdZPU4xTp8OmkC2mf3/ZEdKy7FT8u5a1j7SHcqnyfYufzAGQjbh3Ej+Ax
-	 J7BpMBl+FgTqA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 61ABEEAC081;
-	Mon,  7 Mar 2022 12:40:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B643B53
+	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 15:18:01 +0000 (UTC)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6XN-TY_1646666269;
+Received: from 192.168.193.155(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6XN-TY_1646666269)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 07 Mar 2022 23:17:51 +0800
+Message-ID: <92a767c4-09e1-8783-2581-9848bb72890d@linux.alibaba.com>
+Date: Mon, 7 Mar 2022 07:16:36 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] qed: return status of qed_iov_get_link
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <164665681139.14619.5267479786896733708.git-patchwork-notify@kernel.org>
-Date: Mon, 07 Mar 2022 12:40:11 +0000
-References: <20220305150642.684247-1-trix@redhat.com>
-In-Reply-To: <20220305150642.684247-1-trix@redhat.com>
-To: Tom Rix <trix@redhat.com>
-Cc: aelior@marvell.com, manishc@marvell.com, davem@davemloft.net,
- kuba@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
- Yuval.Mintz@qlogic.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>
+Cc: akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
+ gregkh@linuxfoundation.org, linux@roeck-us.net, luc.vanoostenryck@gmail.com,
+ elver@google.com, mark.rutland@arm.com, masahiroy@kernel.org,
+ ojeda@kernel.org, nathan@kernel.org, npiggin@gmail.com,
+ ndesaulniers@google.com, samitolvanen@google.com, shuah@kernel.org,
+ tglx@linutronix.de, will@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+ <20220303074339.86337-1-ashimida@linux.alibaba.com>
+ <202203031010.0A492D114@keescook> <202203031105.A1B4CAE6@keescook>
+From: Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <202203031105.A1B4CAE6@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
 
-On Sat,  5 Mar 2022 07:06:42 -0800 you wrote:
-> From: Tom Rix <trix@redhat.com>
+On 3/3/22 11:09, Kees Cook wrote:
+> On Thu, Mar 03, 2022 at 10:42:45AM -0800, Kees Cook wrote:
+>> And we should, actually, be able to make the "set_lr" functions be
+>> arch-specific, leaving the test itself arch-agnostic....
 > 
-> Clang static analysis reports this issue
-> qed_sriov.c:4727:19: warning: Assigned value is
->   garbage or undefined
->   ivi->max_tx_rate = tx_rate ? tx_rate : link.speed;
->                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Yeah, as a tested example, this works for x86_64, and based on what you
+> had, I'd expect it to work on arm64 too:
 > 
-> [...]
+> #include <stdio.h>
+> 
+> static __attribute__((noinline))
+> void set_return_addr(unsigned long *expected, unsigned long *addr)
+> {
+>      /* Use of volatile is to make sure final write isn't seen as a dead store. */
+>      unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> 
+>      /* Make sure we've found the right place on the stack before writing it. */
+>      if (*ret_addr == expected)
+>          *ret_addr = addr;
+> }
+> 
+> volatile int force_label;
+> int main(void)
+> {
+>      do {
+>          /* Keep labels in scope. */
+>          if (force_label)
+>              goto normal;
+>          if (force_label)
+>              goto redirected;
+> 
+>          set_return_addr(&&normal, &&redirected);
+> normal:
+>          printf("I should be skipped\n");
+>          break;
+> redirected:
+>          printf("Redirected\n");
+>      } while (0);
+> 
+>      return 0;
+> }
+> 
+> 
+> It does _not_ work under Clang, though, which I'm still looking at.
+> 
 
-Here is the summary with links:
-  - qed: return status of qed_iov_get_link
-    https://git.kernel.org/netdev/net/c/d9dc0c84ad2d
+The following code seems to work fine under clang/gcc, x86_64/aarch64
+(also tested in lkdtm_CFI_BACKWARD_SHADOW):
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+#include <stdio.h>
 
+static __attribute__((noinline))
+void set_return_addr(unsigned long *expected, unsigned long *addr)
+{
+     /* Use of volatile is to make sure final write isn't seen as a dead store. */
+     unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
 
+     /* Make sure we've found the right place on the stack before writing it. */
+     if(*ret_addr == expected)
+         *ret_addr = (addr);
+}
+
+static volatile int force_label;
+
+int main(void)
+{
+     void *array[] = {0, &&normal, &&redirected};
+
+     if (force_label) {
+         /* Call it with a NULL to avoid parameters being treated as constants in -02. */
+         set_return_addr(NULL, NULL);
+         goto * array[force_label];
+     }
+
+     do {
+
+         set_return_addr(&&normal, &&redirected);
+
+normal:
+         printf("I should be skipped\n");
+         break;
+
+redirected:
+         printf("Redirected\n");
+
+     } while (0);
+
+     return 0;
+}
+
+But currently it still crashes when I try to enable
+"-mbranch-protection=pac-ret+leaf+bti".
+
+Because the address of "&&redirected" is not encrypted under pac,
+the autiasp check will fail when set_return_addr returns, and
+eventually cause the function to crash when it returns to "&&redirected"
+("&&redirected" as a reserved label always seems to start with a bti j
+insn).
+
+For lkdtm, if we're going to handle both cases in one function, maybe
+it would be better to turn off the -mbranch-protection=pac-ret+leaf+bti
+and maybe also turn off -O2 options for the function :)
+
+Thanks,
+Dan.
