@@ -1,115 +1,126 @@
 Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB497C
-	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 19:08:43 +0000 (UTC)
-Received: by mail-lj1-f180.google.com with SMTP id u7so21858138ljk.13
-        for <llvm@lists.linux.dev>; Mon, 07 Mar 2022 11:08:43 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373477C
+	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 19:25:29 +0000 (UTC)
+Received: by mail-lj1-f180.google.com with SMTP id e8so21988987ljj.2
+        for <llvm@lists.linux.dev>; Mon, 07 Mar 2022 11:25:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lqdFcj/W3ROtaaLGNZJbzsf9vyM2NVPkSBm3INx+BLs=;
-        b=rfR0JcG6nuRaVIkXXgGAegektp5HSFDVUF91VlM0HcyOauIq6tLbs7wauxENXC0btb
-         p8y1dXe10FP3m4bn7GIwnpvC6FX6LCWi8n0s3OsVBh5zR2vtqauwBqooPEyXFXPwsIXI
-         62bdrmK25fNTgDZg8wJzs40LnOGNLG1en3+O2YHwTaLzbIVSg/0cJQFsDDU6mwqDgdRq
-         8VIfwpxBj8u6NEY7gT9YpRSH4XlxawGUuOk2T4WsVMqRa405CTVD4rzPmUfb9jJIWnOH
-         v5czkolhWUGk6Kk7sv9Vye1CuebzWG4LHHYshIxfssyFSMc2MP+BlO+5ww1BiNEr34zx
-         gkKA==
+        bh=Zde+bArhl6iHnfeDcrHDIvktUnraUGyUCuxigU/BOkY=;
+        b=KhRk/1V7uwjfSpHh19Rrs/JpqMPgVDx+fFU9lWjxPiYuzbX/u4MIPZigCcKkR1w/Fi
+         OkkTbXKKY+Wx/7SApjnQ59ozRVWfXnYGQXwuJN4mx22VG83lFlUNPxQXTZkMY3PbMjk6
+         uSqe2Jm0pS2Qd6/sCTdLQLOxKcBqeGyA11xvCbmB7EmfWUXR3TbIzBcWxB2baiQJ3nye
+         MjQGpqxjvGM8ThoYzduO3f/qsZ1DmcDQi5tbsvtYsPZsXiIt3Gq2yCnYzPFgySyIghbR
+         MPIFy4hOZ/qulEQcCjpRD//grvSJDtA8JmwssrL5h1qYrwK61j4vYSTWXT4009RI9grG
+         9laA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lqdFcj/W3ROtaaLGNZJbzsf9vyM2NVPkSBm3INx+BLs=;
-        b=qpkF696ppZ5BbI1KQSDDot7rnG6/yx17DwtnuIwUvHO/S6GlcSMexb9Gy0f118f+DF
-         6ux8It0Ga5c0hB9HwWC+Fzs99lmXWzpiOsf9//dek1Uejz9LUI0qJp/rSHtU5N1eqbbm
-         Q7gTjZhDUsdpYZj1UpOMSMq6B4vSshrTOj81SQFldm9RkZ152LedxFQ4PpNriplwQpkS
-         TVK4l7Vd7KrIBcYL7n1bt5aSZnxw2m0/kYB6vHSRpEoUdNZqQGrMCItL0ViiRQ1yIZRj
-         uHDuntWEL9rfwM5cEVW+igYyTodr8fJStcRZCg1Qi8S3SfhhD3ucZ31Xvt0r4iVaUGGZ
-         UfuA==
-X-Gm-Message-State: AOAM532xfCI0lBN0uDHqLTc1QAI+JPwempeQsoFWTtdGZ7mS7wlTjG04
-	Hvnu/JVbCGCVyUc/3+iG2TI2+QGqyQSBI6JTdr/G+w==
-X-Google-Smtp-Source: ABdhPJxUEH+WXE4ZEDL3yAUMLDOBvQpg4ljCyCYbedmFgU3xFcH283DgaImI8yUXP7kHpdQV2ZWAnn0IBgfQDPiwNxM=
-X-Received: by 2002:a05:651c:1542:b0:233:8ff5:eb80 with SMTP id
- y2-20020a05651c154200b002338ff5eb80mr8416360ljp.352.1646680120998; Mon, 07
- Mar 2022 11:08:40 -0800 (PST)
+        bh=Zde+bArhl6iHnfeDcrHDIvktUnraUGyUCuxigU/BOkY=;
+        b=59ZoP4L7bX4i0HwOrn9JN3fyX5VvIdHmmZlE805GSF4fPKsS7Q403x+jUR4vk9g1Vr
+         /7yiUL2jaoMXmyK5mBs0nxpYYvdXhHmKpmHWNb0+MeFkePccppfDxwe+eR0BiC6ai/lM
+         urwt9AnlgEg6kHcYDLaW7WHgPsm40MQeSTIOU37cEuECDBI3PZoaqENDmhDj9fIz05f+
+         aZD1hBQbK6fKo9e5dTbTRfkwzl2NAdFNA3OFdFzf+y/k3fOB4oj/68FflKIGw0QEZEA2
+         UPaHzFg3evyqAIUKCpL0FLTBU4PjHfzU5mPdJkVngaGAsP51LSNwvnf2IMxDojj/zCsT
+         8dfQ==
+X-Gm-Message-State: AOAM532nbXlJNyeqFAXGpqeDJJBTPl1knBMnMhKDHvU9d7S5WC6co3sy
+	rniVh8Nj+Oj9Cegoch8atSNfbQrAEuazfUypOHdmCw==
+X-Google-Smtp-Source: ABdhPJwNfCjyiif9DMrdPtATO6xJkrKid3s/RoxeqvVrxuHQFLXwY58EUFhAM8dhqrn7AT08/Q6wAXy+HzCq3lENTVI=
+X-Received: by 2002:a2e:bf24:0:b0:246:801e:39d3 with SMTP id
+ c36-20020a2ebf24000000b00246801e39d3mr8338955ljr.472.1646681127052; Mon, 07
+ Mar 2022 11:25:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220304170813.1689186-1-nathan@kernel.org>
-In-Reply-To: <20220304170813.1689186-1-nathan@kernel.org>
+References: <20220304224645.3677453-1-memxor@gmail.com> <20220304224645.3677453-6-memxor@gmail.com>
+In-Reply-To: <20220304224645.3677453-6-memxor@gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 7 Mar 2022 11:08:29 -0800
-Message-ID: <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
-To: Nathan Chancellor <nathan@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>
+Date: Mon, 7 Mar 2022 11:25:15 -0800
+Message-ID: <CAKwvOdnEyvjZn14WAPyL1O=S9C-LGx7aB3fYc7TAbgngfcXM5A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 5/8] compiler-clang.h: Add __diag
+ infrastructure for clang
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Arnd Bergmann <arnd@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <kafai@fb.com>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Fri, Mar 4, 2022 at 2:47 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
 >
-> diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> index d32616891dcf..68b74416ec48 100644
-> --- a/Documentation/kbuild/llvm.rst
-> +++ b/Documentation/kbuild/llvm.rst
-> @@ -49,17 +49,36 @@ example: ::
->  LLVM Utilities
->  --------------
+> From: Nathan Chancellor <nathan@kernel.org>
 >
-> -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
-> -to enable them. ::
-> -
-> -       make LLVM=1
-> -
-> -They can be enabled individually. The full list of the parameters: ::
-> +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
-> +The full list of supported make variables: ::
+> Add __diag macros similar to those in compiler-gcc.h, so that warnings
+> that need to be adjusted for specific cases but not globally can be
+> ignored when building with clang.
 >
->         make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
->           OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
->           HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> [ Kartikeya: wrote commit message ]
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  include/linux/compiler-clang.h | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 >
-> +To simplify the above command, Kbuild supports the ``LLVM`` variable: ::
-> +
-> +       make LLVM=1
-> +
-> +If your LLVM tools are not available in your PATH, you can supply their
-> +location using the LLVM variable with a trailing slash: ::
-> +
-> +       make LLVM=/path/to/llvm/
-> +
-> +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
+> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+> index 3c4de9b6c6e3..f1aa41d520bd 100644
+> --- a/include/linux/compiler-clang.h
+> +++ b/include/linux/compiler-clang.h
 
-I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
-works and (my interpretation of what) Masahiro said "if anyone asks
-for this, here's how we could do that."  I don't think I've seen an
-explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
-won't hold this patch up over that.  Either way:
+The equivalent functionality for GCC has
+357 #ifndef __diag_GCC
+358 #define __diag_GCC(version, severity, string)
+359 #endif
+in include/linux/compiler_types.h. Should this patch as well? (at
+least #define __diag_clang`)?
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> @@ -68,3 +68,25 @@
+>
+>  #define __nocfi                __attribute__((__no_sanitize__("cfi")))
+>  #define __cficanonical __attribute__((__cfi_canonical_jump_table__))
+> +
+> +/*
+> + * Turn individual warnings and errors on and off locally, depending
+> + * on version.
+> + */
+> +#define __diag_clang(version, severity, s) \
+> +       __diag_clang_ ## version(__diag_clang_ ## severity s)
+> +
+> +/* Severity used in pragma directives */
+> +#define __diag_clang_ignore    ignored
+> +#define __diag_clang_warn      warning
+> +#define __diag_clang_error     error
+
+These severities match GCC. I wonder if rather than copy+pasting these
+over, we could rework __diag_ignore, __diag_warn, and __diag_error to
+not invoke a compiler-suffixed macro and rather pass the compiler
+along (or make it implicit since we know CONFIG_CC_IS_CLANG vs
+CONFIG_CC_IS_GCC)?  We can probably land this than follow up on better
+code-reuse between compilers for diagnostics.
 
 > +
-> +If your LLVM tools have a version suffix and you want to test with that
-> +explicit version rather than the unsuffixed executables like ``LLVM=1``, you
-> +can pass the suffix using the ``LLVM`` variable: ::
+> +#define __diag_str1(s)         #s
+> +#define __diag_str(s)          __diag_str1(s)
+> +#define __diag(s)              _Pragma(__diag_str(clang diagnostic s))
 > +
-> +       make LLVM=-14
-> +
-> +which will use ``clang-14``, ``ld.lld-14``, etc.
-> +
-> +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
-> +``LLVM=1``.
+> +#if CONFIG_CLANG_VERSION >= 110000
+> +#define __diag_clang_11(s)     __diag(s)
+> +#else
+> +#define __diag_clang_11(s)
+> +#endif
+> --
+> 2.35.1
+>
 
-Hmm... I can see someone's build wrappers setting LLVM=1, then them
-being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
-might expect.  But Masahiro says let's fix this later which is fine.
 
---
+-- 
 Thanks,
 ~Nick Desaulniers
