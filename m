@@ -1,75 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A87C7E
-	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 17:54:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C82ECC340F6;
-	Mon,  7 Mar 2022 17:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646675671;
-	bh=skJXL8/N2xCsgKAp+CXm32RgRJoIRM8CbDaIsqyS5+A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mVFXmd5iXoXH64fcOXo1x8kyRaopJJw7P0/ydyBOtJiC4KItvqq3AicpSs44vn1R1
-	 0hM+MVkZk3BWyZIrzK0QLlWxeI6+8y27fhD63zmOfJk2Z8yrsXoEAm2W53wQmoteGE
-	 e20cUSpUPPMvyySRtwRZS2NoBcxsIJbPB8G6IY2NNe6VW4rtq5SrVSoarx0Fy3W3LP
-	 YGMaVIkxneeBXxN+M3tq+/BsAanyhmbsfaxP2a9xw2+bX7YhTQVIy9CyDsiPfJh1Cr
-	 CUzPiFXLrPGY+blvo1zyWmq4IumfSEMLfUB4f69QbIqyUeRyLkNd8g8HBCmIta1EwG
-	 Y96HaS1kd3SMg==
-Date: Mon, 7 Mar 2022 10:54:24 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: trix@redhat.com
-Cc: mst@redhat.com, jasowang@redhat.com, ndesaulniers@google.com,
-	virtualization@lists.linux-foundation.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] virtio_ring: Initialize vring_size_in_bytes
-Message-ID: <YiZG0Nx9j++bJaA4@dev-arch.thelio-3990X>
-References: <20220307174916.892433-1-trix@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269D27E
+	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 18:17:07 +0000 (UTC)
+Received: by mail-wm1-f51.google.com with SMTP id l10so5881560wmb.0
+        for <llvm@lists.linux.dev>; Mon, 07 Mar 2022 10:17:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sayrSIk+NDM65AKvFJGH6QJQ+sc3l62Epi/p4rWp0co=;
+        b=oax+5ZR4uPTHvguofbQbtcUO/6gTvB/BultTtgRVppN+Esz2DDuKovZi47mRi4VUab
+         voCR7Gz7m8k+D6WiKFDW3fubOt1z2EDvArL67+T8JgyD66xpEXqa/Toqn6f/pbrOJrcF
+         ETUjSWPZgFa4LgVcFGzB51T78/WUfxACryDkxzAEaDnCyAh+gQU9Nww5E78NzHrPbPx7
+         BWxccytxW3SW0v5bf85gZrIkwmECGTbOepkjvCgh7A7f9x46chlArdPVMQfq7+55wTtk
+         xW18sa01nWH81gCf828GYjkClQEkYyP0WHjSMrXK60GYrwDbNx8GqV65ygerkdG0lx0C
+         KGyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sayrSIk+NDM65AKvFJGH6QJQ+sc3l62Epi/p4rWp0co=;
+        b=4uy5X5QVIW8Q6yXyAlkSVldfYd4qewYD+5x3DKoFk/6LJeIy6yI8ISb1jqehZ0beLR
+         TZBzipTDLcwPOhQIueL6O/bZoJQdTIuCLNSH7Nt8KMlCBXLGfV8TVTuPfTWsaeANhaju
+         eOchweA5sgsev6IXqvEcJ3sPEg+64Fk31akFjd/vHXOZ0923CuBcmjx++P80g7RT8G6U
+         SDv4JZIiGrgFhchLH7JRWTW7JQ2Y9FpmtceA9Dn+gm4V4FfD5Swd6BI+Dt/02+xYrpkJ
+         bG+s1g77M2+GXqmWM5ZGmP9lGAEdx4vPVoIVdAHIOxLWTYw3vM5LGpM2qOsQgT7leiGJ
+         MbHw==
+X-Gm-Message-State: AOAM532G/mKnAJ0/hhGFQ1W/r1sr2nNomOCxUld9n8hwUSyRtTKRlszA
+	ML7YJwl5DyqOURDgXZqNbKQ=
+X-Google-Smtp-Source: ABdhPJxdUz78okhuvUq7H9aHqcb9xUZ5Eomn4OM9KtxAU3Wo+/Qd9m5moXVVdWEcWCu0X3A31wQ3Ow==
+X-Received: by 2002:a7b:c8cf:0:b0:389:a5f5:5b0 with SMTP id f15-20020a7bc8cf000000b00389a5f505b0mr145235wml.37.1646677025308;
+        Mon, 07 Mar 2022 10:17:05 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id a10-20020a7bc1ca000000b00389bc87db45sm66515wmj.7.2022.03.07.10.17.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 10:17:04 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Sandy Huang <hjc@rock-chips.com>,
+	David Airlie <airlied@linux.ie>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	dri-devel@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] drm/rockchip: remove redundant assignment to pointer connector
+Date: Mon,  7 Mar 2022 18:17:04 +0000
+Message-Id: <20220307181704.149076-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307174916.892433-1-trix@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 07, 2022 at 09:49:16AM -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> On the clang build, there is this error
-> virtio_ring.c:1772:26: error: variable 'ring_size_in_bytes'
->   is uninitialized when used here
->   vring_free_queue(vdev, ring_size_in_bytes,
->                          ^~~~~~~~~~~~~~~~~~
-> 
-> ring_dma_addr was intialized twice, once with the ring_size_in_bytes.
-> value.  So fix typo.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+The pointer connector is being assigned a value that is never read,
+it is being re-assigned in the following statement. The assignment
+is redundant and can be removed.
 
-I was getting ready to send the same patch.
+Cleans up clang scan build warning:
+drivers/gpu/drm/rockchip/rockchip_rgb.c:153:2: warning: Value stored
+to 'connector' is never read [deadcode.DeadStores]
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/gpu/drm/rockchip/rockchip_rgb.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> ---
->  drivers/virtio/virtio_ring.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 905c882600618..b2b567ebb9120 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -1756,7 +1756,7 @@ static void vring_free_vring_packed(struct vring_packed *vring,
->  	ring                  = vring->ring;
->  	driver                = vring->driver;
->  	device                = vring->device;
-> -	ring_dma_addr         = vring->ring_size_in_bytes;
-> +	ring_size_in_bytes    = vring->ring_size_in_bytes;
->  	event_size_in_bytes   = vring->event_size_in_bytes;
->  	ring_dma_addr         = vring->ring_dma_addr;
->  	driver_event_dma_addr = vring->driver_event_dma_addr;
-> -- 
-> 2.26.3
-> 
-> 
+diff --git a/drivers/gpu/drm/rockchip/rockchip_rgb.c b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+index 2494b079489d..92a727931a49 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_rgb.c
++++ b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+@@ -150,7 +150,6 @@ struct rockchip_rgb *rockchip_rgb_init(struct device *dev,
+ 	if (ret)
+ 		goto err_free_encoder;
+ 
+-	connector = &rgb->connector;
+ 	connector = drm_bridge_connector_init(rgb->drm_dev, encoder);
+ 	if (IS_ERR(connector)) {
+ 		DRM_DEV_ERROR(drm_dev->dev,
+-- 
+2.35.1
+
