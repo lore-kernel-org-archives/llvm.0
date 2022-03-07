@@ -1,51 +1,55 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622A63B53
-	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 15:30:50 +0000 (UTC)
-Received: by mail-wr1-f46.google.com with SMTP id p9so23892303wra.12
-        for <llvm@lists.linux.dev>; Mon, 07 Mar 2022 07:30:50 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17FDE3B53
+	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 15:53:40 +0000 (UTC)
+Received: by mail-wr1-f51.google.com with SMTP id t11so24037827wrm.5
+        for <llvm@lists.linux.dev>; Mon, 07 Mar 2022 07:53:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VEUtjRWw8hcXPx8ISHtvMs+ktqj0awQxQ1FmrJuTsp0=;
-        b=MNpHF7Pxg9BKJiM7fXtwr+H0qiQHTO5YaiWRpoj8JeGPvWbNy27/PM68jvK4QSBRoS
-         eJV84YLL7LY0Kx+2dttq4o8BSGVJnTkTkSVrSQ6jqym1hnTU/KN1tiaQ4HT3YxHnGaep
-         l/BgDYpY9h1dRuCJcH3/sPXiySIO+U6vefOR+F4+6/wYeky7WPYEoZhJjDMIx0OvJUnr
-         rJpIGYuHLOeHT93rWf+ikiIQTOzZMcEJeJjTV+qPGfz/r4iAqH5VCVB98b/FMsXQJZQT
-         bPAklAmCoO81z7iPKi3IVku0QUFChskh487B2KlaehvDU0EI0uy5Gq33vkGC5FnOYU2C
-         YW9A==
+        bh=VCMF7JOePAGAD2TRuJoonUYYB1mQc1S3qSAF6RtOJWY=;
+        b=mqvy472H4fpcBOM1bST+j5DbuOBj4z4Zd8s+2YSbdcQo6ChrFa6JapwmdFDuwZtvnd
+         IMXCTSOD3UH8W3dh4affMWFJeG9t7zLBnzCseOxGwss+RhRaTMPJi9+Gh/LG+7NLJGwz
+         09JtCCYz55HcoePAc8CIjItO5FFk01yWi1dhcVUJ6AVHygAdvQvYB4p1ugGTP4w3MwTb
+         uaIOxR6/gl74GqxZlO3G2wzbCZNNDD641IE/0tc61jLvsgDmPQ3grbRpXBOgemIw45iZ
+         p7rSjpQctaEvD9aDhcAvIOZS6aSSsxsjQcgomCvaIa8xTfhX6dc2wsFEEMmI+tYTrjEf
+         r31w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VEUtjRWw8hcXPx8ISHtvMs+ktqj0awQxQ1FmrJuTsp0=;
-        b=44LYdlNAVqZ6IG1dIlU/2zCo7SMBiZ84tnjHht7YY2/IPbzuPh0j4Wf4XlLVlfQRKr
-         sdV5gl0lJb6vJFaojBvRXbtVfuw02PRF/fFxBcy/lHommv48CxL0lzZlH4On4sNFr0tk
-         pCfAn+EC0H3ELTuYevlT7C29zTGrTtrBgupSY7HwkdKhZdejW9aolDukoeKLO329mAWp
-         Uj16YdtgJD6KRq1GR/D3qgPmSI1CmbXEfyR5ObNrY5eCqHOFOWh+WwcK9WcAI8bnNrbG
-         cChipfVUqhzPhWvTY0EZMkFuLumNZSnDHi/PjmbJaVziUpkfV8AAOmnqrHUEimCIXlmi
-         sLEg==
-X-Gm-Message-State: AOAM531uO3v3j2O3EaNbIDiR8WqKRfLzLIjO1yW0BKgKCBbtpuHF5UqK
-	azGxMCfCTr+kZkT3tKOB1As=
-X-Google-Smtp-Source: ABdhPJybfHSo0eCkjaEOHXAgaY8b9TUr8U9Fg4tG5GiMhl+kF2PHHrRNJApWZg0ccl+N6LMTkzuvSA==
-X-Received: by 2002:a5d:64ac:0:b0:1e7:1415:2548 with SMTP id m12-20020a5d64ac000000b001e714152548mr8834834wrp.267.1646667048657;
-        Mon, 07 Mar 2022 07:30:48 -0800 (PST)
+        bh=VCMF7JOePAGAD2TRuJoonUYYB1mQc1S3qSAF6RtOJWY=;
+        b=VRsNO+2rckSapqQ5dxYB3qh8eU8y6CGRLf1SjyvH2kAZqb/kUlHBxkhveHrBkPFVQ2
+         1KjLwdxl3e0PDBPk4o7383Sc/I+hMPx7+IMfRLfOEOWfWSXWinJQSUrzb+TncJH105vu
+         eT+8h18pAH/z56OfE/X7vozcfo6H4oKWO/h81JSA79p4MYUN8kjBcmPQZd7x5kZu22Iy
+         Z7RjfAMVoDO2TxAzbhjlYZqfl5ZtGW0ekTz9Mx596CNV74N+JmXFI7P9Oq2EggPbBW2X
+         vHMPi15sU80rb2gVA83eN0FXy9FJCYsgLbhyF0Qkou36f1mqMdyqa2cf2n6gdmtqGBsV
+         0b6A==
+X-Gm-Message-State: AOAM531cgpskXkphY4RwU+vjEGhcnrNLFGmypy0haRfEQHUEZFu/ZxrR
+	IKxU7vu5v77OEn9abyY6D4M=
+X-Google-Smtp-Source: ABdhPJx9tp6UqpNijYut2CQMscnG37GHYd0RtPgRD/hiGSg3Txqamr2jn3+qrxh5a0lI0idxw+ZDGg==
+X-Received: by 2002:a5d:6a47:0:b0:1f1:e562:bef9 with SMTP id t7-20020a5d6a47000000b001f1e562bef9mr7183983wrw.445.1646668419347;
+        Mon, 07 Mar 2022 07:53:39 -0800 (PST)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id m13-20020a05600c4f4d00b00386744cb31bsm15673525wmq.35.2022.03.07.07.30.48
+        by smtp.gmail.com with ESMTPSA id g17-20020adff411000000b001f03426827csm11727167wro.71.2022.03.07.07.53.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 07:30:48 -0800 (PST)
+        Mon, 07 Mar 2022 07:53:39 -0800 (PST)
 From: Colin Ian King <colin.i.king@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	linux-serial@vger.kernel.org
+To: Marcel Holtmann <marcel@holtmann.org>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	linux-bluetooth@vger.kernel.org,
+	netdev@vger.kernel.org
 Cc: kernel-janitors@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] tty: serial: jsm: remove redundant assignments to variable linestatus
-Date: Mon,  7 Mar 2022 15:30:47 +0000
-Message-Id: <20220307153047.139639-1-colin.i.king@gmail.com>
+Subject: [PATCH] Bluetooth: mgmt: remove redundant assignment to variable cur_len
+Date: Mon,  7 Mar 2022 15:53:38 +0000
+Message-Id: <20220307155338.140860-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -56,42 +60,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Variable linestatus is being assigned values that are never read, the
-assignments are redundant and can be removed.
+Variable cur_len is being ininitialized with a value in the start of
+a for-loop but this is never read, it is being re-assigned a new value
+on the first statement in the for-loop.  The initialization is redundant
+and can be removed.
 
-Cleans up clang scan warnings:
-drivers/tty/serial/jsm/jsm_cls.c:369:2: warning: Value stored to
-'linestatus' is never read [deadcode.DeadStores]
-drivers/tty/serial/jsm/jsm_cls.c:400:4: warning: Value stored to
-'linestatus' is never read [deadcode.DeadStores]
+Cleans up clang scan build warning:
+net/bluetooth/mgmt.c:7958:14: warning: Although the value stored to 'cur_len'
+is used in the enclosing expression, the value is never actually read
+from 'cur_len' [deadcode.DeadStores]
 
 Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/tty/serial/jsm/jsm_cls.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ net/bluetooth/mgmt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/jsm/jsm_cls.c b/drivers/tty/serial/jsm/jsm_cls.c
-index b280da50290c..444f233ebd1f 100644
---- a/drivers/tty/serial/jsm/jsm_cls.c
-+++ b/drivers/tty/serial/jsm/jsm_cls.c
-@@ -350,7 +350,7 @@ static void cls_assert_modem_signals(struct jsm_channel *ch)
- static void cls_copy_data_from_uart_to_queue(struct jsm_channel *ch)
- {
- 	int qleft = 0;
--	u8 linestatus = 0;
-+	u8 linestatus;
- 	u8 error_mask = 0;
- 	u16 head;
- 	u16 tail;
-@@ -365,8 +365,6 @@ static void cls_copy_data_from_uart_to_queue(struct jsm_channel *ch)
- 	head = ch->ch_r_head & RQUEUEMASK;
- 	tail = ch->ch_r_tail & RQUEUEMASK;
+diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+index 8101a6a31841..e0137bc1080e 100644
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
+@@ -7955,7 +7955,7 @@ static bool tlv_data_is_valid(struct hci_dev *hdev, u32 adv_flags, u8 *data,
+ 		return false;
  
--	/* Get our cached LSR */
--	linestatus = ch->ch_cached_lsr;
- 	ch->ch_cached_lsr = 0;
+ 	/* Make sure that the data is correctly formatted. */
+-	for (i = 0, cur_len = 0; i < len; i += (cur_len + 1)) {
++	for (i = 0; i < len; i += (cur_len + 1)) {
+ 		cur_len = data[i];
  
- 	/* Store how much space we have left in the queue */
+ 		if (!cur_len)
 -- 
 2.35.1
 
