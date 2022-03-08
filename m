@@ -1,41 +1,42 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0ECC4C88
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 21:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22C24C88
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 21:17:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646773660; x=1678309660;
+  t=1646774260; x=1678310260;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GnMW+vZ9HVxe/HmNFuE/y1U+U+G1TdLCAHPjIqy2Z2o=;
-  b=nVhozu+Ei0wDoEJ6av+cN5E4nrKeWihf/kdKlcXUcud716XPj5CFj1Mo
-   E4q22WqZVVsEKvgq57zSYgkvxBEsFX2G5/haMK9GpxSNIz8mil/NxeHzk
-   ZyYMuFmft3JFahsWbo7kU/mxHKrPkNLPPvwaI7UE0fQNVisYeQ/LMWX78
-   BpBqlJH0bN/MYNAivJdFdTDyKGhonLkeUGeNdiLOhRSkwQBtCChLjqVHQ
-   DeIN8E0eKTgVWZurYaiso/ZCmoZoAaiH6v+m9aiBSencPGae+B4//QkH/
-   BS6cc4PeKyBFqZPskuj4ArkSe4uWqyNRJ50BkN7AvIbIDYaHLFZM4D820
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="252387682"
+  bh=hSVbu2R7beghB63RuJi9OaaNlDSwndeabNpK/MMXVmM=;
+  b=g1jaWrzDR/PjoXa4FD0aeQ7zqs42FbT3Rh36aIEKRbRea5hpxOrRa33V
+   BVEmm1oSKjtkXO1qGyHK3kdklWVqY6XSJH3xQgp7aCG6qqfp63ThMW+Av
+   ffzVO3oFtiEZIE4pMH/c4FobL6Ar272EHnPqsTjvC8kJYAs9IJuSROJbw
+   YyRZZqRKEi49B9O13GXerlG41+tHROfx3P7tdjYuuPfE23P9Z7CJt6iOD
+   H9eLpW3+Y/wSucysMbkxEdIsWNGwrWBmpRq8aTBlfjJrxlViv8iceC0lj
+   mYb8A6sGXrmFhX98TtcTHU7Vm9SgPWQSAucEwEI74K3yrLgGBkPWTD1z1
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254758004"
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="252387682"
+   d="scan'208";a="254758004"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:07:40 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:17:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="495602818"
+   d="scan'208";a="495605783"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 13:07:38 -0800
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 13:17:38 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nRh3R-0001xQ-Ko; Tue, 08 Mar 2022 21:07:37 +0000
-Date: Wed, 9 Mar 2022 05:07:01 +0800
+	id 1nRhD7-0001yQ-UN; Tue, 08 Mar 2022 21:17:37 +0000
+Date: Wed, 9 Mar 2022 05:17:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:15:
- warning: no previous prototype for function '__wrap_devm_ioremap'
-Message-ID: <202203090551.R89uT00F-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [linux-next:master 8195/11353] ld.lld: error: undefined symbol:
+ devm_clk_hw_register
+Message-ID: <202203090508.dI9OTyRb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,168 +47,50 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Christoph,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ea4424be16887a37735d6550cfd0611528dbe5d9
-commit: 4bdc0d676a643140bdf17dbf7eafedee3d496a3c remove ioremap_nocache and devm_ioremap_nocache
-date:   2 years, 2 months ago
-config: x86_64-buildonly-randconfig-r003-20220214 (https://download.01.org/0day-ci/archive/20220309/202203090551.R89uT00F-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   cb153b68ff91cbc434f3de70ac549e110543e1bb
+commit: 70a5e96bad592145ba25365689a2d7d8dedb3bd9 [8195/11353] ASoC: codecs: rx-macro: move clk provider to managed variants
+config: arm-randconfig-r022-20220308 (https://download.01.org/0day-ci/archive/20220309/202203090508.dI9OTyRb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4bdc0d676a643140bdf17dbf7eafedee3d496a3c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4bdc0d676a643140bdf17dbf7eafedee3d496a3c
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=70a5e96bad592145ba25365689a2d7d8dedb3bd9
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 70a5e96bad592145ba25365689a2d7d8dedb3bd9
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:65:15: warning: no previous prototype for function '__nfit_test_ioremap' [-Wmissing-prototypes]
-   void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:65:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
-   ^
-   static 
->> drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:15: warning: no previous prototype for function '__wrap_devm_ioremap' [-Wmissing-prototypes]
-   void __iomem *__wrap_devm_ioremap(struct device *dev,
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__wrap_devm_ioremap(struct device *dev,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:88:7: warning: no previous prototype for function '__wrap_devm_memremap' [-Wmissing-prototypes]
-   void *__wrap_devm_memremap(struct device *dev, resource_size_t offset,
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *__wrap_devm_memremap(struct device *dev, resource_size_t offset,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:126:7: warning: no previous prototype for function '__wrap_devm_memremap_pages' [-Wmissing-prototypes]
-   void *__wrap_devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap)
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:126:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *__wrap_devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:159:7: warning: no previous prototype for function '__wrap_phys_to_pfn_t' [-Wmissing-prototypes]
-   pfn_t __wrap_phys_to_pfn_t(phys_addr_t addr, unsigned long flags)
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   pfn_t __wrap_phys_to_pfn_t(phys_addr_t addr, unsigned long flags)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:169:7: warning: no previous prototype for function '__wrap_memremap' [-Wmissing-prototypes]
-   void *__wrap_memremap(resource_size_t offset, size_t size,
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *__wrap_memremap(resource_size_t offset, size_t size,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:180:6: warning: no previous prototype for function '__wrap_devm_memunmap' [-Wmissing-prototypes]
-   void __wrap_devm_memunmap(struct device *dev, void *addr)
-        ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:180:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __wrap_devm_memunmap(struct device *dev, void *addr)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:190:15: warning: no previous prototype for function '__wrap_ioremap' [-Wmissing-prototypes]
-   void __iomem *__wrap_ioremap(resource_size_t offset, unsigned long size)
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:190:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__wrap_ioremap(resource_size_t offset, unsigned long size)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:196:15: warning: no previous prototype for function '__wrap_ioremap_wc' [-Wmissing-prototypes]
-   void __iomem *__wrap_ioremap_wc(resource_size_t offset, unsigned long size)
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__wrap_ioremap_wc(resource_size_t offset, unsigned long size)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:211:6: warning: no previous prototype for function '__wrap_memunmap' [-Wmissing-prototypes]
-   void __wrap_memunmap(void *addr)
-        ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __wrap_memunmap(void *addr)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:347:18: warning: no previous prototype for function '__wrap___request_region' [-Wmissing-prototypes]
-   struct resource *__wrap___request_region(struct resource *parent,
-                    ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:347:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct resource *__wrap___request_region(struct resource *parent,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:355:5: warning: no previous prototype for function '__wrap_insert_resource' [-Wmissing-prototypes]
-   int __wrap_insert_resource(struct resource *parent, struct resource *res)
-       ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:355:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __wrap_insert_resource(struct resource *parent, struct resource *res)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:363:5: warning: no previous prototype for function '__wrap_remove_resource' [-Wmissing-prototypes]
-   int __wrap_remove_resource(struct resource *res)
-       ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:363:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __wrap_remove_resource(struct resource *res)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:371:18: warning: no previous prototype for function '__wrap___devm_request_region' [-Wmissing-prototypes]
-   struct resource *__wrap___devm_request_region(struct device *dev,
-                    ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:371:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct resource *__wrap___devm_request_region(struct device *dev,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:381:6: warning: no previous prototype for function '__wrap___release_region' [-Wmissing-prototypes]
-   void __wrap___release_region(struct resource *parent, resource_size_t start,
-        ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:381:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __wrap___release_region(struct resource *parent, resource_size_t start,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:389:6: warning: no previous prototype for function '__wrap___devm_release_region' [-Wmissing-prototypes]
-   void __wrap___devm_release_region(struct device *dev, struct resource *parent,
-        ^
+>> ld.lld: error: undefined symbol: devm_clk_hw_register
+   >>> referenced by lpass-rx-macro.c
+   >>> soc/codecs/lpass-rx-macro.o:(rx_macro_probe) in archive sound/built-in.a
+--
+>> ld.lld: error: undefined symbol: devm_of_clk_add_hw_provider
+   >>> referenced by lpass-rx-macro.c
+   >>> soc/codecs/lpass-rx-macro.o:(rx_macro_probe) in archive sound/built-in.a
+--
+>> ld.lld: error: undefined symbol: of_clk_hw_simple_get
+   >>> referenced by lpass-rx-macro.c
+   >>> soc/codecs/lpass-rx-macro.o:(rx_macro_probe) in archive sound/built-in.a
 
-
-vim +/__wrap_devm_ioremap +76 drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c
-
-    64	
-  > 65	void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
-    66			void __iomem *(*fallback_fn)(resource_size_t, unsigned long))
-    67	{
-    68		struct nfit_test_resource *nfit_res = get_nfit_res(offset);
-    69	
-    70		if (nfit_res)
-    71			return (void __iomem *) nfit_res->buf + offset
-    72				- nfit_res->res.start;
-    73		return fallback_fn(offset, size);
-    74	}
-    75	
-  > 76	void __iomem *__wrap_devm_ioremap(struct device *dev,
-    77			resource_size_t offset, unsigned long size)
-    78	{
-    79		struct nfit_test_resource *nfit_res = get_nfit_res(offset);
-    80	
-    81		if (nfit_res)
-    82			return (void __iomem *) nfit_res->buf + offset
-    83				- nfit_res->res.start;
-    84		return devm_ioremap(dev, offset, size);
-    85	}
-    86	EXPORT_SYMBOL(__wrap_devm_ioremap);
-    87	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SND_SOC_LPASS_RX_MACRO
+   Depends on SOUND && !UML && SND && SND_SOC && COMMON_CLK
+   Selected by
+   - SND_SOC_SC7280 && SOUND && !UML && SND && SND_SOC && SND_SOC_QCOM && I2C && SOUNDWIRE
+   WARNING: unmet direct dependencies detected for SND_SOC_LPASS_TX_MACRO
+   Depends on SOUND && !UML && SND && SND_SOC && COMMON_CLK
+   Selected by
+   - SND_SOC_SC7280 && SOUND && !UML && SND && SND_SOC && SND_SOC_QCOM && I2C && SOUNDWIRE
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
