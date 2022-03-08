@@ -1,70 +1,54 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D3B4AA8
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 17:42:11 +0000 (UTC)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92.3)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1nRdSz-0009WI-7E; Tue, 08 Mar 2022 18:17:45 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-	by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1nRdSy-000FXQ-Ux; Tue, 08 Mar 2022 18:17:44 +0100
-Subject: Re: [PATCH bpf v2] tools: fix unavoidable GCC call in Clang builds
-To: Adrian Ratiu <adrian.ratiu@collabora.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, kernel@collabora.com, linux-kernel@vger.kernel.org,
- Nick Desaulniers <ndesaulniers@google.com>,
- Manoj Gupta <manojgupta@chromium.com>, Nathan Chancellor
- <nathan@kernel.org>, bpf@vger.kernel.org
-References: <20220308121428.81735-1-adrian.ratiu@collabora.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <6e82ffbb-ebc8-30e8-2326-95712578ee07@iogearbox.net>
-Date: Tue, 8 Mar 2022 18:17:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295804AA8
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 17:53:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D49F7C340F4;
+	Tue,  8 Mar 2022 17:53:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646761998;
+	bh=qQ1IfZm1nAcpdIyRWU7BdrNKZacU5ouB40x5DtnLP6A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kJLIktdPxyfYCo6l/52ECC3cCKSIaBxIE+ehICq1BJir3dtPxXcYOhgmKMMaewZcp
+	 hK2n/GMaXK7GTImfE51ZzVnodt+C3ZE2veRFpkxxXkwKOqLqLMwDDlePqj731uktGH
+	 IQHFSOJhnboo1OcHg2h3DfL771HtqjCKQ7kHT1R3YjtU5mmVCaB8eOJ/uopKMcdVK8
+	 4fKLGUjw6yneE9fHnW3N72CkS2OyT5Veqvxvc6WIvmUW1r9tSFjQdouKLQIk19r/DC
+	 +vwMsyTTT6yb+Qwopze6UPxyJGa9uryJJuT4tTCmF7ipRdjh6sRhotB3mEYxkdOcHq
+	 25/Nsks5RvVpA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+	(envelope-from <johan@kernel.org>)
+	id 1nRe1H-0000OC-TD; Tue, 08 Mar 2022 18:53:12 +0100
+Date: Tue, 8 Mar 2022 18:53:11 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] USB: serial: usb_wwan: remove redundant assignment to
+ variable i
+Message-ID: <YieYB+D2aAGB7FHV@hovoldconsulting.com>
+References: <20220307183100.150082-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220308121428.81735-1-adrian.ratiu@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26475/Tue Mar  8 10:31:43 2022)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307183100.150082-1-colin.i.king@gmail.com>
 
-On 3/8/22 1:14 PM, Adrian Ratiu wrote:
-> In ChromeOS and Gentoo we catch any unwanted mixed Clang/LLVM
-> and GCC/binutils usage via toolchain wrappers which fail builds.
-> This has revealed that GCC is called unconditionally in Clang
-> configured builds to populate GCC_TOOLCHAIN_DIR.
+On Mon, Mar 07, 2022 at 06:31:00PM +0000, Colin Ian King wrote:
+> Variable i is being assigned a value that is never read, it is being
+> re-assigned two statements later in a for-loop. The assignment is
+> redundant and can be removed.
 > 
-> Allow the user to override CLANG_CROSS_FLAGS to avoid the GCC
-> call - in our case we set the var directly in the ebuild recipe.
+> Cleans up clang scan build warning:
+> drivers/usb/serial/usb_wwan.c:151:2: warning: Value stored to 'i'
+> is never read [deadcode.DeadStores]
 > 
-> In theory Clang could be able to autodetect these settings so
-> this logic could be removed entirely, but in practice as the
-> commit cebdb7374577 ("tools: Help cross-building with clang")
-> mentions, this does not always work, so giving distributions
-> more control to specify their flags & sysroot is beneficial.
-> 
-> Suggested-by: Manoj Gupta <manojgupta@chromium.com>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Acked-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
-> ---
-> Changes in v2:
->    * Replaced variable override GCC_TOOLCHAIN_DIR -> CLANG_CROSS_FLAGS
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-As I understand it from [0] and given we're late in the cycle, this is
-targeted for bpf-next not bpf, right?
+Applied, thanks.
 
-Thanks,
-Daniel
-
-   [0] https://lore.kernel.org/lkml/87czjk4osi.fsf@ryzen9.i-did-not-set--mail-host-address--so-tickle-me/
+Johan
