@@ -1,121 +1,106 @@
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A1D749C
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 22:47:47 +0000 (UTC)
-Received: by mail-lj1-f180.google.com with SMTP id r22so648217ljd.4
-        for <llvm@lists.linux.dev>; Tue, 08 Mar 2022 14:47:47 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E652F35
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 22:57:21 +0000 (UTC)
+Received: by mail-lf1-f51.google.com with SMTP id l20so587938lfg.12
+        for <llvm@lists.linux.dev>; Tue, 08 Mar 2022 14:57:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TcDMQ6nS/X1H1j7aeyleDEMXXGffGCszydA5VcjYqgg=;
-        b=mcIi5/LNOJSSSJDRimjIysrZdWErNM2fT0Mn788ztDzYtBr1Eq9gMtW0aFWEdbgizR
-         b6HjS6DSva7ctaBWgtPwYFxoZGo2OohKiNKldxcxKIP007B23tOFG3hDQgElt8QzAg4d
-         Bw/eNhTiphc4MnYNs+J5FyUu59cJmkR85gUmQhkYoQyybdgiT1LjR8igBzbrc13xqlRr
-         P2jgpaIxbhnYxn67onVUUux10T5Z2bJNtKXWsucAZCb3a6i8gNiRzpWZAXG+j/Ud3kIL
-         UgzgXGoYTJ6HMQ+fl2L93ws9j7gJoxkVWCo7gLm4BnwVRLokNwEJqylIyNxa3pF2J9w2
-         T77w==
+        bh=8MuVYFNOaR9sliTT6PtGIJ1tDZacg9KCLiOwg2Rb9wE=;
+        b=MXnPx5h0ijIvF7hzm97VrMTqvyic7sV48mwtFM03Cb2ZqYOIpnQ94270DTDJEPiPh9
+         5CjRWWSGQtAApqB9y0tEUktv0WoI/5rS06ibAZJRqy6wYLCJ39pyFCAQa5vhGbS7jpt+
+         RnHHXgNmhxv8e00HrU5+YGURkZWrbImCONWMl1DHCay8t/iiuqqtVW4ygi+TsCEAnnVe
+         skhfJqTsnhWQHOKbDk3yD8UnHCafjqI1RpmaAPDM06Opmlw5WycySR/878Mppq8I00B8
+         TSygBNI2YB8hFZCdpc9mwjDF1NaLFy4OrVQEjZ8wkBfIUT3UNgstcg7tJxHFRiikPcEM
+         KnHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TcDMQ6nS/X1H1j7aeyleDEMXXGffGCszydA5VcjYqgg=;
-        b=jXTiAhh7HZTo6AI1C1MR106coXmxZOrNKAavA1fJ0rTl/baZLzOas/cLvbMhfhVGfg
-         BF5GVZrmRCsqs7lYDAQUFvGT0RV/X9rDXooGje9bn2WChUpUKHBmmn6rhNl/2NvZPnAf
-         oUKniCkxLlSwgdpZnSdRelvlweo0MciDJplopcRlwcWphpi+hIg14RhWzNZF1De7ncpK
-         4aomRjODOo51EKmAeytSS92DckVNJ+lhkotO5Zn9sbTUcI95sV+Ug6T3pOZ7E5Fou2Bk
-         7uSI3UgIZwZu+CQmS1QnVRUYelU2hHZqSJYozYsV6WY7QDgL11dcVpIvYm6wc+JsLHY0
-         Rksw==
-X-Gm-Message-State: AOAM531ZpFdFYdnAxwjx5cxbGGracrunLpJIBeFvMgq52gtH5xnRS2ne
-	YEu1Qjr567So9pB1Bl3EO9I0PhmY2dE9kB9n1b2+Nf/Q7S5g1w==
-X-Google-Smtp-Source: ABdhPJzlxzIurB5HwPVFvPKrN6sox392JtzvHKNiMG1iJ5m52KHtMlH5aTxsK0urYbyIhWlEJGxod+fGDgevjQEk784=
-X-Received: by 2002:a2e:8942:0:b0:246:4536:cf22 with SMTP id
- b2-20020a2e8942000000b002464536cf22mr12164694ljk.235.1646779665519; Tue, 08
- Mar 2022 14:47:45 -0800 (PST)
+        bh=8MuVYFNOaR9sliTT6PtGIJ1tDZacg9KCLiOwg2Rb9wE=;
+        b=f7Fb3C/G+TIie3yyHzbbBF4z7YPLP23rreEij2xo13N22wjKVNghZw3CfYXyuLcp66
+         KqlOyeceUThE5e2FlRpAHsAJ1PmKUaN9rNjehezKPRVErh0/P0ohzv0MufAhL/b4NJgq
+         OPneceTInw9BEGL81KUqxWC80iQeQmFbevkUYmzMYKxFUBwbTVboRumBQIo6v/fSqWHd
+         mC+550EjbweiWMDGfkLodC24iqSQlK56DyVB6AMV9Ua1nO+V6d+NOeD999YSYahMZ9kg
+         L1/UT73sVajR5p/x0wI+QFSKk+YF7kQJa1OFbmrB4gwtPUlgxKYWyo0huQ8Ged/qGFhD
+         JQjg==
+X-Gm-Message-State: AOAM533+k30TWLFeFBbZ0fJXNK050Jull3fiidNS3vJ+u70JKZO7svUG
+	ZchzOBYjRxWdQViLCoTI6lOKmVzev6Haq+QSuVNa3g==
+X-Google-Smtp-Source: ABdhPJzdL2oC651g9gnqpZ43uG6CG69kcwxMsKSo599esFmsA3M5zPERun34wywdexJK6V1Ow3rB18oZvOBuem+8a1Q=
+X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id
+ i3-20020ac25223000000b004485100e427mr176322lfl.87.1646780239304; Tue, 08 Mar
+ 2022 14:57:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220302235909.784935-1-nathan@kernel.org>
-In-Reply-To: <20220302235909.784935-1-nathan@kernel.org>
+References: <20220303201943.501746-1-trix@redhat.com>
+In-Reply-To: <20220303201943.501746-1-trix@redhat.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 8 Mar 2022 14:47:34 -0800
-Message-ID: <CAKwvOdkT1Lz8RqKmR0efPzpHxFgp98bwepwHURTUckEFYe5zYg@mail.gmail.com>
-Subject: Re: [PATCH] drm/selftest: plane_helper: Put test structures in static storage
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Claudio Suarez <cssk@net-c.es>, 
-	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
+Date: Tue, 8 Mar 2022 14:57:07 -0800
+Message-ID: <CAKwvOdnoV_SsFuWWJd4nOOd1vGG6_-gg-KvdOg4_NHuRp7_WfA@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: anx7625: check the return on anx7625_aux_trans
+To: trix@redhat.com
+Cc: andrzej.hajda@intel.com, narmstrong@baylibre.com, robert.foss@linaro.org, 
+	laurent.pinchart@ideasonboard.com, jonas@kwiboo.se, jernej.skrabec@gmail.com, 
+	airlied@linux.ie, daniel@ffwll.ch, nathan@kernel.org, xji@analogixsemi.com, 
+	sam@ravnborg.org, tzungbi@google.com, pihsun@chromium.org, maxime@cerno.tech, 
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, hsinyi@chromium.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Mar 2, 2022 at 4:00 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On Thu, Mar 3, 2022 at 12:19 PM <trix@redhat.com> wrote:
 >
-> Clang warns on certain 32-bit architectures:
+> From: Tom Rix <trix@redhat.com>
 >
->   drivers/gpu/drm/selftests/test-drm_plane_helper.c:76:5: warning: stack frame size (1064) exceeds limit (1024) in 'igt_check_plane_state' [-Wframe-larger-than]
->   int igt_check_plane_state(void *ignored)
->       ^
->   1 warning generated.
+> Clang static analysis reports this issue
+> anx7625.c:876:13: warning: The left operand of '&' is
+>   a garbage value
+>   if (!(bcap & 0xOA01)) {
+>         ~~~~ ^
 >
-> The structures in igt_check_plane_state() total 1008 bytes, so any small
-> amount of inlining will cause the stack frame to exceed the 32-bit limit
-> of 1024, triggering the warning.
+> bcap is only set by a successful call to
+> anx7625_aux_trans().  So check.
 >
-> Move these structures to static storage, which dramatically reduces the
-> amount of stack space in igt_check_plane_state(). There is no testing
-> impact, as igt_check_plane_state() is only called once in the driver.
->
-> Fixes: 943e6a8beeac ("mock a drm_plane in igt_check_plane_state to make the test more robust")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1600
-> Reported-by: kernel test robot <lkp@intel.com>
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Fixes: cd1637c7e480 ("drm/bridge: anx7625: add HDCP support")
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Is this the correct Fixes tag?
 
+I think it should be
+
+Fixes: adca62ec370c ("drm/bridge: anx7625: Support reading edid
+through aux channel")
+
+instead.
+
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->  drivers/gpu/drm/selftests/test-drm_plane_helper.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/gpu/drm/selftests/test-drm_plane_helper.c b/drivers/gpu/drm/selftests/test-drm_plane_helper.c
-> index ceebeede55ea..b61273e9c403 100644
-> --- a/drivers/gpu/drm/selftests/test-drm_plane_helper.c
-> +++ b/drivers/gpu/drm/selftests/test-drm_plane_helper.c
-> @@ -77,7 +77,7 @@ int igt_check_plane_state(void *ignored)
->  {
->         int ret;
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index 633618bafd75d..f02ac079ed2ec 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -872,7 +872,10 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
+>         }
 >
-> -       const struct drm_crtc_state crtc_state = {
-> +       static const struct drm_crtc_state crtc_state = {
->                 .crtc = ZERO_SIZE_PTR,
->                 .enable = true,
->                 .active = true,
-> @@ -87,14 +87,14 @@ int igt_check_plane_state(void *ignored)
->                                 DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC)
->                 },
->         };
-> -       struct drm_plane plane = {
-> +       static struct drm_plane plane = {
->                 .dev = NULL
->         };
-> -       struct drm_framebuffer fb = {
-> +       static struct drm_framebuffer fb = {
->                 .width = 2048,
->                 .height = 2048
->         };
-> -       struct drm_plane_state plane_state = {
-> +       static struct drm_plane_state plane_state = {
->                 .plane = &plane,
->                 .crtc = ZERO_SIZE_PTR,
->                 .fb = &fb,
->
-> base-commit: 9ae2ac4d31a85ce59cc560d514a31b95f4ace154
+>         /* Read downstream capability */
+> -       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+> +       ret = anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+> +       if (ret < 0)
+> +               return ret;
+> +
+>         if (!(bcap & 0x01)) {
+>                 pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
+>                 return 0;
 > --
-> 2.35.1
+> 2.26.3
 >
 
 
