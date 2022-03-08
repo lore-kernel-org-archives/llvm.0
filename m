@@ -1,125 +1,198 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8474A8F
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 16:00:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646755245; x=1678291245;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aFTJDJ6yKoaxFI6g8sPE9CQvYWqYMdAKSLo3OBtYCBs=;
-  b=dwnYEkrFyPrhHXQ+kdoItp+h4t996CVJP/VmFxI6dgV74Ev0lQMQz6Im
-   SQCVyDLZVhZ/A1fI5HBpuKm1vfNaYr+X+G3ZzWFo0Zp6AtAoWnK6G4V1I
-   XBE/FCZ9Wg8CxZQyz10L194U4S/LfaCPwUFJqpqrVgGyhm7SUzr1Dh3m/
-   Jy5AtZ42TpQHxo1+QLT19aKHyinNadefZluKgo8exI9UFKqiB2P7vZKg0
-   ERJZV++FDlihj6CnRJ90BK4rGlBIXWyBISodapAgVLv+QpqmK+pVvTHEK
-   ifmYyxEBtaUW0IJGzE5O2b1Gv88OYPGvCvalHfTPEsPEWojAwDmQ9biCa
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="234673926"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="234673926"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 08:00:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="632273708"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2022 08:00:30 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nRcGD-0001eD-9O; Tue, 08 Mar 2022 16:00:29 +0000
-Date: Wed, 9 Mar 2022 00:00:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev 82/84]
- kernel/rcu/tree.c:2678:3: error: implicit declaration of function
- 'rcu_tasks_classic_qs'
-Message-ID: <202203082348.j9qeWzns-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8EBD4AA2
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 16:10:09 +0000 (UTC)
+Received: by mail-oi1-f174.google.com with SMTP id q189so3674980oia.9
+        for <llvm@lists.linux.dev>; Tue, 08 Mar 2022 08:10:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5O1imAWZVdMyV+q57qh16bTvNuecO9mwzzUYs+YBqWU=;
+        b=KO+bSPR1W20jFFXnZzcF2bPOkRsBW4DSjh8CdK39vyINQGS+JiT95bNA1wQfSZ31ZC
+         zu7HOoLYhOV9IM5sDyK8Gmlmlzja5bJorLjgPIXSyKSve3tIHt05JZ4ktW/6O68s8l1R
+         vFgYtFhSE55YvaHgm9NcSX9IvIFQRk0IDpjvMUPvulpb88mf3984D1nHV74ulK/MJlb9
+         O49V7ytXgR5QqgquHg0WiEf0J/oznALGr4iGMtmqEU8hqWzZh9+Cd8UVi3BzQrTtBrAR
+         5u90pWgLi/G31/6Y47UcOIbW/qIwRxrry2fNiLAxrAkB6pLqUDmGjKII2MpcDHyybndb
+         hM3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5O1imAWZVdMyV+q57qh16bTvNuecO9mwzzUYs+YBqWU=;
+        b=xl6ZqDKGUz1B9k6VjqgBjUeRnfWcZHW7qLQIMF4xAt/dFttocDqU38sdTQKnSLFsN1
+         2pGWriH4SEqr89CncCOF0w/mEAfr6bCp3BdA+0EVadWnTLwwW+ECLihy2NpjKEGgg+2v
+         JLr1vdqiPKY0nabLPhktvQDL8VqRQ90C5GsxVAqdD2l3EsKLqcAJ+g0Cr+rGR2V8zEvY
+         AF32WXuV0Byxxow1nvliMXRMPQxi5IzhhHUsPS4lbxjybtBGlMT+IQykiq75ArGbd9PF
+         0jV0AAObYqIqhnQcw83caIqojxwNFhnu0GYr41ixDLeJyNQhKsU9WDtplgEwjO0/zZtx
+         ZLBQ==
+X-Gm-Message-State: AOAM533jLJaUBUQu5HKNa/U20511HNGRy6JChTa9vwZ0mtIubYwtgsoR
+	utjH2/LsbvYsZogZ6CYtWqvbDXw9n+ZAQLCf+jo=
+X-Google-Smtp-Source: ABdhPJw3M9r/GuIu6pvif5A7WP40yGexb4Vwc2H2Qq4vIMCja1rYYA0sn1nHOxSb/sA1AhQERfyHmNbY50vYG3jomSA=
+X-Received: by 2002:a05:6808:11cc:b0:2d9:a01a:4ba6 with SMTP id
+ p12-20020a05680811cc00b002d9a01a4ba6mr3107703oiv.205.1646755808836; Tue, 08
+ Mar 2022 08:10:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220217142133.72205-1-cgzones@googlemail.com>
+ <20220217142133.72205-4-cgzones@googlemail.com> <CAKwvOdkNZ3W9amcQKHOEfQLbdWC=4VDtrBdbOVHtWruipQnyKg@mail.gmail.com>
+In-Reply-To: <CAKwvOdkNZ3W9amcQKHOEfQLbdWC=4VDtrBdbOVHtWruipQnyKg@mail.gmail.com>
+From: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Date: Tue, 8 Mar 2022 17:09:58 +0100
+Message-ID: <CAJ2a_DcY3=jz_zBQ7QZ_gycsvL1mn=TxKaWqWr3gGLhEAXTcQA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] selinux: drop unnecessary NULL check
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: SElinux list <selinux@vger.kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Ondrej Mosnacek <omosnace@redhat.com>, Serge Hallyn <serge@hallyn.com>, 
+	Austin Kim <austin.kim@lge.com>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Yang Li <yang.lee@linux.alibaba.com>, 
+	Linux kernel mailing list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-head:   fb8d1afe45bd6fcb50dff8bac4636725358fde94
-commit: c8c42c80febd4e6d346f7f62958300eb8205aa31 [82/84] rcu-tasks: Make Tasks RCU account for userspace execution
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220308/202203082348.j9qeWzns-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/c8c42c80febd4e6d346f7f62958300eb8205aa31
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
-        git checkout c8c42c80febd4e6d346f7f62958300eb8205aa31
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Fri, 18 Feb 2022 at 18:31, Nick Desaulniers <ndesaulniers@google.com> wr=
+ote:
+>
+> On Thu, Feb 17, 2022 at 6:22 AM Christian G=C3=B6ttsche
+> <cgzones@googlemail.com> wrote:
+> >
+> > Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
+> > introduced a NULL check on the context after a successful call to
+> > security_sid_to_context().  This is on the one hand redundant after
+> > checking for success and on the other hand insufficient on an actual
+> > NULL pointer, since the context is passed to seq_escape() leading to a
+> > call of strlen() on it.
+> >
+> > Reported by Clang analyzer:
+> >
+> >     In file included from security/selinux/hooks.c:28:
+> >     In file included from ./include/linux/tracehook.h:50:
+> >     In file included from ./include/linux/memcontrol.h:13:
+> >     In file included from ./include/linux/cgroup.h:18:
+> >     ./include/linux/seq_file.h:136:25: warning: Null pointer passed as =
+1st argument to string length function [unix.cstring.NullArg]
+> >             seq_escape_mem(m, src, strlen(src), flags, esc);
+> >                                    ^~~~~~~~~~~
+>
+> I'm guessing there was more to this trace for this instance of this warni=
+ng?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, complete output appended at the end.
 
-All errors (new ones prefixed by >>):
+>
+> >
+> > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > ---
+> >  security/selinux/hooks.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> > index 1e69f88eb326..ac802b99d36c 100644
+> > --- a/security/selinux/hooks.c
+> > +++ b/security/selinux/hooks.c
+> > @@ -1020,7 +1020,7 @@ static int show_sid(struct seq_file *m, u32 sid)
+> >         rc =3D security_sid_to_context(&selinux_state, sid,
+> >                                              &context, &len);
+> >         if (!rc) {
+>
+> ^ perhaps changing this condition to:
+>
+> if (!rc && context) {
+>
+> It might be nice to retain the null ptr check should the semantics of
+> security_sid_to_context ever change.
 
->> kernel/rcu/tree.c:2678:3: error: implicit declaration of function 'rcu_tasks_classic_qs' [-Werror,-Wimplicit-function-declaration]
-                   rcu_tasks_classic_qs(current, false);
-                   ^
-   1 error generated.
+If I read the implementation of security_sid_to_context() and its callees
+correctly it should never return 0 (success) and not have populated its 3
+argument, unless the passed pointer was zero, which by passing the address
+of a stack variable - &context - is not the case).
+
+>
+> > -               bool has_comma =3D context && strchr(context, ',');
+> > +               bool has_comma =3D strchr(context, ',');
+> >
+> >                 seq_putc(m, '=3D');
+> >                 if (has_comma)
+> > --
+> > 2.35.1
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
 
-vim +/rcu_tasks_classic_qs +2678 kernel/rcu/tree.c
+clang-tidy report:
 
-  2644	
-  2645	/*
-  2646	 * This function is invoked from each scheduling-clock interrupt,
-  2647	 * and checks to see if this CPU is in a non-context-switch quiescent
-  2648	 * state, for example, user mode or idle loop.  It also schedules RCU
-  2649	 * core processing.  If the current grace period has gone on too long,
-  2650	 * it will ask the scheduler to manufacture a context switch for the sole
-  2651	 * purpose of providing the needed quiescent state.
-  2652	 */
-  2653	void rcu_sched_clock_irq(int user)
-  2654	{
-  2655		unsigned long j;
-  2656	
-  2657		if (IS_ENABLED(CONFIG_PROVE_RCU)) {
-  2658			j = jiffies;
-  2659			WARN_ON_ONCE(time_before(j, __this_cpu_read(rcu_data.last_sched_clock)));
-  2660			__this_cpu_write(rcu_data.last_sched_clock, j);
-  2661		}
-  2662		trace_rcu_utilization(TPS("Start scheduler-tick"));
-  2663		lockdep_assert_irqs_disabled();
-  2664		raw_cpu_inc(rcu_data.ticks_this_gp);
-  2665		/* The load-acquire pairs with the store-release setting to true. */
-  2666		if (smp_load_acquire(this_cpu_ptr(&rcu_data.rcu_urgent_qs))) {
-  2667			/* Idle and userspace execution already are quiescent states. */
-  2668			if (!rcu_is_cpu_rrupt_from_idle() && !user) {
-  2669				set_tsk_need_resched(current);
-  2670				set_preempt_need_resched();
-  2671			}
-  2672			__this_cpu_write(rcu_data.rcu_urgent_qs, false);
-  2673		}
-  2674		rcu_flavor_sched_clock_irq(user);
-  2675		if (rcu_pending(user))
-  2676			invoke_rcu_core();
-  2677		if (user)
-> 2678			rcu_tasks_classic_qs(current, false);
-  2679		lockdep_assert_irqs_disabled();
-  2680	
-  2681		trace_rcu_utilization(TPS("End scheduler-tick"));
-  2682	}
-  2683	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+./include/linux/seq_file.h:136:25: warning: Null pointer passed as 1st
+argument to string length function
+[clang-analyzer-unix.cstring.NullArg]
+        seq_escape_mem(m, src, strlen(src), flags, esc);
+                               ^
+./security/selinux/hooks.c:1041:6: note: Assuming the condition is false
+        if (!(sbsec->flags & SE_SBINITIALIZED))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./security/selinux/hooks.c:1041:2: note: Taking false branch
+        if (!(sbsec->flags & SE_SBINITIALIZED))
+        ^
+./security/selinux/hooks.c:1044:6: note: Assuming the condition is false
+        if (!selinux_initialized(&selinux_state))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./security/selinux/hooks.c:1044:2: note: Taking false branch
+        if (!selinux_initialized(&selinux_state))
+        ^
+./security/selinux/hooks.c:1047:6: note: Assuming the condition is true
+        if (sbsec->flags & FSCONTEXT_MNT) {
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./security/selinux/hooks.c:1047:2: note: Taking true branch
+        if (sbsec->flags & FSCONTEXT_MNT) {
+        ^
+./security/selinux/hooks.c:1050:8: note: Calling 'show_sid'
+                rc =3D show_sid(m, sbsec->sid);
+                     ^~~~~~~~~~~~~~~~~~~~~~~
+./security/selinux/hooks.c:1020:7: note: Value assigned to 'context'
+        rc =3D security_sid_to_context(&selinux_state, sid,
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./security/selinux/hooks.c:1022:6: note: Assuming 'rc' is 0
+        if (!rc) {
+            ^~~
+./security/selinux/hooks.c:1022:2: note: Taking true branch
+        if (!rc) {
+        ^
+./security/selinux/hooks.c:1023:20: note: Assuming 'context' is null
+                bool has_comma =3D context && strchr(context, ',');
+                                 ^~~~~~~
+./security/selinux/hooks.c:1023:28: note: Left side of '&&' is false
+                bool has_comma =3D context && strchr(context, ',');
+                                         ^
+./security/selinux/hooks.c:1026:7: note: 'has_comma' is false
+                if (has_comma)
+                    ^~~~~~~~~
+./security/selinux/hooks.c:1026:3: note: Taking false branch
+                if (has_comma)
+                ^
+./security/selinux/hooks.c:1028:17: note: Passing null pointer value
+via 2nd parameter 's'
+                seq_escape(m, context, "\"\n\\");
+                              ^~~~~~~
+./security/selinux/hooks.c:1028:3: note: Calling 'seq_escape'
+                seq_escape(m, context, "\"\n\\");
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+././include/linux/seq_file.h:152:20: note: Passing null pointer value
+via 2nd parameter 'src'
+        seq_escape_str(m, s, ESCAPE_OCTAL, esc);
+                          ^
+././include/linux/seq_file.h:152:2: note: Calling 'seq_escape_str'
+        seq_escape_str(m, s, ESCAPE_OCTAL, esc);
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+././include/linux/seq_file.h:136:25: note: Null pointer passed as 1st
+argument to string length function
+        seq_escape_mem(m, src, strlen(src), flags, esc);
+                               ^      ~~~
