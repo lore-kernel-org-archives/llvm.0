@@ -1,57 +1,49 @@
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3621B38FE
-	for <llvm@lists.linux.dev>; Mon,  7 Mar 2022 20:50:19 +0000 (UTC)
-Received: by mail-pl1-f193.google.com with SMTP id e13so15124996plh.3
-        for <llvm@lists.linux.dev>; Mon, 07 Mar 2022 12:50:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dWRmhhoglB2pCubiBBDZCOAd3xguaQiXm0eJvJceo9Y=;
-        b=NeUTfA1NwSCzH0OnxniYQvdOELD6E8WL5FL3BmzSVRRcvlESQTVa97k4BV0DCOA8Gv
-         ntFpyRh5FjfYPP/8nVKSUf1uAZkavgLIOcRDDg6jH8NPjS0lZHNExysXy1NVATZRije/
-         CdR2T3nvqz+bTQedzWugnqEnkfw5qEShjI3f4ChVQOpjSDEX39CSzKNq1+tSg0Zt2dZb
-         OYkYMSXA0FhFvSPIDuVXwZ0qAWC1adny3Q3YtmI3PpRBUzuN1XWaeX6DtEayCmDmRYAD
-         cbSwoCXKFQ4mxPltu6wA79icRsw7kXJbh787j/Fspe6Ly1YyZHvQyfWMHNBdHTHIf2JN
-         IRuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dWRmhhoglB2pCubiBBDZCOAd3xguaQiXm0eJvJceo9Y=;
-        b=JdTzxgmE9e//9188DtHDUkSnlIlY8QFYwRjSZIUC9RUNVLeHbUKs0z28nDnslfsYtq
-         ondSgbcx3lEXaR9oMojV5kKU52mQXqXC5PBHkjWS4S+aKtxX823mjZ5N+A4JieUhVMFH
-         i7wcaqApTd8rZSHJ1WxL3KWM4NE3Qou8DvYBhaiec77hg9cfp0LGayWc24unf96Cch3R
-         EXMHkCsqgbU3tc3q/LWsKkXfOS0H5VPokinS3tJ0VNYy5FtRUaHdz1/32bz45SOreBR4
-         oV3Hhf5zJZTbRIYgvNp3UiPYieUoh6BT0WMyNQo41ilpx+sDj6PIYMxD3GMXh7mKnMwB
-         3kFw==
-X-Gm-Message-State: AOAM531ay9WAs/E3H0ci2piq42UqjO5ETvqgZnNABaYsR4mHpvKrnHHt
-	pEvWfjbA9e5Pmux77+JxK2w=
-X-Google-Smtp-Source: ABdhPJyscdJ6CmCTfDTugPDJoIUsTilwgRD+PAEsC4dX1ok9uTqbXgn3MM9SHTwq0RHK6GKRHLtMbg==
-X-Received: by 2002:a17:90a:6404:b0:1b9:28a8:935f with SMTP id g4-20020a17090a640400b001b928a8935fmr858046pjj.197.1646686218680;
-        Mon, 07 Mar 2022 12:50:18 -0800 (PST)
-Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
-        by smtp.gmail.com with ESMTPSA id y34-20020a056a00182200b004f71c56a7e8sm1886063pfa.213.2022.03.07.12.50.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 12:50:18 -0800 (PST)
-Date: Tue, 8 Mar 2022 02:20:16 +0530
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>,
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v4 5/8] compiler-clang.h: Add __diag
- infrastructure for clang
-Message-ID: <20220307205016.ljkpq4zv7wzwraxv@apollo.legion>
-References: <20220304224645.3677453-1-memxor@gmail.com>
- <20220304224645.3677453-6-memxor@gmail.com>
- <CAKwvOdnEyvjZn14WAPyL1O=S9C-LGx7aB3fYc7TAbgngfcXM5A@mail.gmail.com>
- <CAKwvOdnwiRdvTRA1Y30bzOsnwUyvSEbq+qT0tU4_vVHz=y_0Ng@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EAC2F31
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 05:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646717779; x=1678253779;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pWZXonTsyEiSwe+PW5QuCWU+vK6d4eB7VuGhemNmhOk=;
+  b=TWatKQNxKYG2XDsnycqGimccg/7YsuaBUn8KWZj1orEqIi8+u9DJRR6G
+   szae8ek7XkjfYH/b2vLDjsX56EUVoVZ8cOWtFf8xuKFa+rVlmVrMqz2MY
+   EaHCrpIsOKOC889uCXmFjpHqlyi5evEvYWBpzJAHn+tqEXSqwVNo2uMTL
+   CZqKP/IQcqirfPDXGOH+8S/TvoLFVx2KbrhFpA59QoTq84RLZ5wGfI7lh
+   dhoaY5uSCQklgw7rnf64RJjdA8sgEucUnvnGrGqGJGsESiMlPf+kkT68c
+   AqKy9IDQuZQ6mkdJoAuDsNiw+oyfeWlPgD3Y3u5xz5wAzsAqn+HnCafGo
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="235206176"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="235206176"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 21:36:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="509982471"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 07 Mar 2022 21:36:13 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nRSW5-0000z1-3r; Tue, 08 Mar 2022 05:36:13 +0000
+Date: Tue, 8 Mar 2022 13:35:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daehwan Jung <dh10.jung@samsung.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Howard Yen <howardyen@google.com>, Jack Pham <jackp@codeaurora.org>,
+	Puma Hsu <pumahsu@google.com>, "J . Avila" <elavila@google.com>,
+	"chihhao . chen" <chihhao.chen@mediatek.com>,
+	Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com,
+	cpgs@samsung.com, cpgsproxy5@samsung.com
+Subject: Re: [PATCH v1 1/4] usb: host: export symbols for xhci hooks usage
+Message-ID: <202203081332.nZHV3ZBo-lkp@intel.com>
+References: <252651381.41646375583002.JavaMail.epsvc@epcpadp4>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,106 +52,155 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdnwiRdvTRA1Y30bzOsnwUyvSEbq+qT0tU4_vVHz=y_0Ng@mail.gmail.com>
+In-Reply-To: <252651381.41646375583002.JavaMail.epsvc@epcpadp4>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Mar 08, 2022 at 12:57:20AM IST, Nick Desaulniers wrote:
-> Also, please cc me and the llvm mailing list on all changes to
-> include/linux/compiler-clang.h. I see now on lore there's further
-> patches here than just this single patch I was cc'ed on.
->
+Hi Daehwan,
 
-Mea culpa, sorry about that.
+Thank you for the patch! Perhaps something to improve:
 
-> On Mon, Mar 7, 2022 at 11:25 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Fri, Mar 4, 2022 at 2:47 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> > >
-> > > From: Nathan Chancellor <nathan@kernel.org>
-> > >
-> > > Add __diag macros similar to those in compiler-gcc.h, so that warnings
-> > > that need to be adjusted for specific cases but not globally can be
-> > > ignored when building with clang.
-> > >
-> > > Cc: Nathan Chancellor <nathan@kernel.org>
-> > > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > > Cc: llvm@lists.linux.dev
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > [ Kartikeya: wrote commit message ]
-> > > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > ---
-> > >  include/linux/compiler-clang.h | 22 ++++++++++++++++++++++
-> > >  1 file changed, 22 insertions(+)
-> > >
-> > > diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-> > > index 3c4de9b6c6e3..f1aa41d520bd 100644
-> > > --- a/include/linux/compiler-clang.h
-> > > +++ b/include/linux/compiler-clang.h
-> >
-> > The equivalent functionality for GCC has
-> > 357 #ifndef __diag_GCC
-> > 358 #define __diag_GCC(version, severity, string)
-> > 359 #endif
-> > in include/linux/compiler_types.h. Should this patch as well? (at
-> > least #define __diag_clang`)?
-> >
+[auto build test WARNING on krzk/for-next]
+[also build test WARNING on char-misc/char-misc-testing v5.17-rc7 next-20220307]
+[cannot apply to usb/usb-testing]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I left it out because there are no users for it, no code is doing
-__diag_ignore(clang, ...), all of the current ones are hardcoding e.g.
-__diag_ignore(GCC, 8, ...).
+url:    https://github.com/0day-ci/linux/commits/Daehwan-Jung/usb-host-export-symbols-for-xhci-hooks-usage/20220304-143406
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+config: hexagon-randconfig-r045-20220304 (https://download.01.org/0day-ci/archive/20220308/202203081332.nZHV3ZBo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/66bd02564cf7e666cf4c47f83965148fa5b90829
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Daehwan-Jung/usb-host-export-symbols-for-xhci-hooks-usage/20220304-143406
+        git checkout 66bd02564cf7e666cf4c47f83965148fa5b90829
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/host/
 
-> > > @@ -68,3 +68,25 @@
-> > >
-> > >  #define __nocfi                __attribute__((__no_sanitize__("cfi")))
-> > >  #define __cficanonical __attribute__((__cfi_canonical_jump_table__))
-> > > +
-> > > +/*
-> > > + * Turn individual warnings and errors on and off locally, depending
-> > > + * on version.
-> > > + */
-> > > +#define __diag_clang(version, severity, s) \
-> > > +       __diag_clang_ ## version(__diag_clang_ ## severity s)
-> > > +
-> > > +/* Severity used in pragma directives */
-> > > +#define __diag_clang_ignore    ignored
-> > > +#define __diag_clang_warn      warning
-> > > +#define __diag_clang_error     error
-> >
-> > These severities match GCC. I wonder if rather than copy+pasting these
-> > over, we could rework __diag_ignore, __diag_warn, and __diag_error to
-> > not invoke a compiler-suffixed macro and rather pass the compiler
-> > along (or make it implicit since we know CONFIG_CC_IS_CLANG vs
-> > CONFIG_CC_IS_GCC)?  We can probably land this than follow up on better
-> > code-reuse between compilers for diagnostics.
-> >
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-That was the idea with __diag_ignore_all in the next patch. FYI this series has
-already been applied.
+All warnings (new ones prefixed by >>):
 
-> > > +
-> > > +#define __diag_str1(s)         #s
-> > > +#define __diag_str(s)          __diag_str1(s)
-> > > +#define __diag(s)              _Pragma(__diag_str(clang diagnostic s))
-> > > +
-> > > +#if CONFIG_CLANG_VERSION >= 110000
-> > > +#define __diag_clang_11(s)     __diag(s)
-> > > +#else
-> > > +#define __diag_clang_11(s)
-> > > +#endif
-> > > --
-> > > 2.35.1
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+   drivers/usb/host/xhci-mem.c:68:6: warning: no previous prototype for function 'xhci_segment_free' [-Wmissing-prototypes]
+   void xhci_segment_free(struct xhci_hcd *xhci, struct xhci_segment *seg)
+        ^
+   drivers/usb/host/xhci-mem.c:68:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void xhci_segment_free(struct xhci_hcd *xhci, struct xhci_segment *seg)
+   ^
+   static 
+   drivers/usb/host/xhci-mem.c:79:6: warning: no previous prototype for function 'xhci_free_segments_for_ring' [-Wmissing-prototypes]
+   void xhci_free_segments_for_ring(struct xhci_hcd *xhci,
+        ^
+   drivers/usb/host/xhci-mem.c:79:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void xhci_free_segments_for_ring(struct xhci_hcd *xhci,
+   ^
+   static 
+   drivers/usb/host/xhci-mem.c:100:6: warning: no previous prototype for function 'xhci_link_segments' [-Wmissing-prototypes]
+   void xhci_link_segments(struct xhci_segment *prev,
+        ^
+   drivers/usb/host/xhci-mem.c:100:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void xhci_link_segments(struct xhci_segment *prev,
+   ^
+   static 
+>> drivers/usb/host/xhci-mem.c:211:6: warning: no previous prototype for function 'xhci_remove_segment_mapping' [-Wmissing-prototypes]
+   void xhci_remove_segment_mapping(struct radix_tree_root *trb_address_map,
+        ^
+   drivers/usb/host/xhci-mem.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void xhci_remove_segment_mapping(struct radix_tree_root *trb_address_map,
+   ^
+   static 
+>> drivers/usb/host/xhci-mem.c:262:6: warning: no previous prototype for function 'xhci_remove_stream_mapping' [-Wmissing-prototypes]
+   void xhci_remove_stream_mapping(struct xhci_ring *ring)
+        ^
+   drivers/usb/host/xhci-mem.c:262:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void xhci_remove_stream_mapping(struct xhci_ring *ring)
+   ^
+   static 
+   drivers/usb/host/xhci-mem.c:1984:5: warning: no previous prototype for function 'xhci_check_trb_in_td_math' [-Wmissing-prototypes]
+   int xhci_check_trb_in_td_math(struct xhci_hcd *xhci)
+       ^
+   drivers/usb/host/xhci-mem.c:1984:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int xhci_check_trb_in_td_math(struct xhci_hcd *xhci)
+   ^
+   static 
+   6 warnings generated.
 
---
-Kartikeya
+
+vim +/xhci_remove_segment_mapping +211 drivers/usb/host/xhci-mem.c
+
+   210	
+ > 211	void xhci_remove_segment_mapping(struct radix_tree_root *trb_address_map,
+   212			struct xhci_segment *seg)
+   213	{
+   214		unsigned long key;
+   215	
+   216		key = (unsigned long)(seg->dma >> TRB_SEGMENT_SHIFT);
+   217		if (radix_tree_lookup(trb_address_map, key))
+   218			radix_tree_delete(trb_address_map, key);
+   219	}
+   220	EXPORT_SYMBOL_GPL(xhci_remove_segment_mapping);
+   221	
+   222	static int xhci_update_stream_segment_mapping(
+   223			struct radix_tree_root *trb_address_map,
+   224			struct xhci_ring *ring,
+   225			struct xhci_segment *first_seg,
+   226			struct xhci_segment *last_seg,
+   227			gfp_t mem_flags)
+   228	{
+   229		struct xhci_segment *seg;
+   230		struct xhci_segment *failed_seg;
+   231		int ret;
+   232	
+   233		if (WARN_ON_ONCE(trb_address_map == NULL))
+   234			return 0;
+   235	
+   236		seg = first_seg;
+   237		do {
+   238			ret = xhci_insert_segment_mapping(trb_address_map,
+   239					ring, seg, mem_flags);
+   240			if (ret)
+   241				goto remove_streams;
+   242			if (seg == last_seg)
+   243				return 0;
+   244			seg = seg->next;
+   245		} while (seg != first_seg);
+   246	
+   247		return 0;
+   248	
+   249	remove_streams:
+   250		failed_seg = seg;
+   251		seg = first_seg;
+   252		do {
+   253			xhci_remove_segment_mapping(trb_address_map, seg);
+   254			if (seg == failed_seg)
+   255				return ret;
+   256			seg = seg->next;
+   257		} while (seg != first_seg);
+   258	
+   259		return ret;
+   260	}
+   261	
+ > 262	void xhci_remove_stream_mapping(struct xhci_ring *ring)
+   263	{
+   264		struct xhci_segment *seg;
+   265	
+   266		if (WARN_ON_ONCE(ring->trb_address_map == NULL))
+   267			return;
+   268	
+   269		seg = ring->first_seg;
+   270		do {
+   271			xhci_remove_segment_mapping(ring->trb_address_map, seg);
+   272			seg = seg->next;
+   273		} while (seg != ring->first_seg);
+   274	}
+   275	EXPORT_SYMBOL_GPL(xhci_remove_stream_mapping);
+   276	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
