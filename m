@@ -1,33 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383BA4A8F
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 15:47:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F88C340EB;
-	Tue,  8 Mar 2022 15:47:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646754432;
-	bh=hjytBpJQ0xnoMUqAjGmSb9r/ZsMqa6/UgXq1V1A9QvU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pPGYbmaIA9ekLDQdbgLxTcqCtCIXz2axNOqn9KVlS8R/djy3GqFJ+TDb8nEj7RDyd
-	 9QP6cvCYu8tYOYl3a6GQwNQFleS9HeoxNjP7ZsBYvvAJ3prvG68FTFqfL4j9OulDAM
-	 rHwfOxpzMVPJYDS+5bicHl4cqsuPnwIjmEaJl2dL6OXPIqDKWEG8Z2iE8CmSU1TFWl
-	 26ozMKH6GdqhTr8w8M2tqkLmqZt2K+iNx1FVO1GQuGuVmobehGgVkwiIi/g/IbyiNk
-	 QdKYa+Vxm2lfYsIxaVNL4ZjqPR2SIRDeS4Sgzmlj19y/ucckTQhZTZnbSEwvWBOpT5
-	 g+wV3ZUd1iVdQ==
-Date: Tue, 8 Mar 2022 08:47:05 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
-Message-ID: <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
-References: <20220304170813.1689186-1-nathan@kernel.org>
- <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8F14A8F
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 15:50:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646754643; x=1678290643;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=f/6ZT/vJ36tJzr67cTU8/8lEsC/01oXeKhewZy2idao=;
+  b=bAgv4aAM03Zl0O12rhu/8aUYNl0pDnlzlDt4PYLmY8eRt8OrdTC/O4bI
+   ijIASNAvlO5QHqbEL+tbw5vHrd1gf3slLo0rN/fap2OMYCjV3LPX5S96Q
+   rRy+/TwLM1Ifkkbinj826Fi4OHQHPfaB/A1z/3e8tSYvmXjZmtauQs7gq
+   YdMn/6VDrJMo4v0VJ/NBvYM677uEDIoZ5gM04fX0m4cpkuBV8hwilVDth
+   GYUUgPsbMcQUSfKKgs41ylLV5BumUw91WRWTQSsV2CiJBPaC4/XePK7Bn
+   CQkGQKp7LBLDSsc9Dv51Y5Y+yOmJFxEQWqb/wD/KzUExVNZgxRrUetEx8
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="341148249"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="341148249"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 07:50:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="643694865"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 07:50:29 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nRc6W-0001dI-9p; Tue, 08 Mar 2022 15:50:28 +0000
+Date: Tue, 8 Mar 2022 23:49:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guo Ren <guoren@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-compat 6/20]
+ arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'compat_statfs'
+Message-ID: <202203082334.6KUJa3iS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,106 +46,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
-> On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> > index d32616891dcf..68b74416ec48 100644
-> > --- a/Documentation/kbuild/llvm.rst
-> > +++ b/Documentation/kbuild/llvm.rst
-> > @@ -49,17 +49,36 @@ example: ::
-> >  LLVM Utilities
-> >  --------------
-> >
-> > -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
-> > -to enable them. ::
-> > -
-> > -       make LLVM=1
-> > -
-> > -They can be enabled individually. The full list of the parameters: ::
-> > +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
-> > +The full list of supported make variables: ::
-> >
-> >         make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
-> >           OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
-> >           HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
-> >
-> > +To simplify the above command, Kbuild supports the ``LLVM`` variable: ::
-> > +
-> > +       make LLVM=1
-> > +
-> > +If your LLVM tools are not available in your PATH, you can supply their
-> > +location using the LLVM variable with a trailing slash: ::
-> > +
-> > +       make LLVM=/path/to/llvm/
-> > +
-> > +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
-> 
-> I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
-> works and (my interpretation of what) Masahiro said "if anyone asks
-> for this, here's how we could do that."  I don't think I've seen an
-> explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
-> won't hold this patch up over that.  Either way:
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-compat
+head:   ab7e33a6b819f009c3c9ccf69b2f44c1ad84a5a0
+commit: edacaabe96fd3b87ddd5e9972ba89718af564124 [6/20] asm-generic: compat: Cleanup duplicate definitions
+config: arm64-randconfig-r035-20220308 (https://download.01.org/0day-ci/archive/20220308/202203082334.6KUJa3iS-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/edacaabe96fd3b87ddd5e9972ba89718af564124
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-compat
+        git checkout edacaabe96fd3b87ddd5e9972ba89718af564124
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
 
-Right, there has not been an explicit ask for the prefix support yet,
-although I know I personally would use it, but I think that it is worth
-doing now instead of later for a few reasons:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-1. It makes path goofs easier to spot. If you do
+All errors (new ones prefixed by >>):
 
-     $ PATH=/path/to/llvm:$PATH make LLVM=1 ...
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/irqdomain.h:35:
+   In file included from include/linux/of.h:17:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:22:
+   In file included from include/linux/stat.h:6:
+   In file included from arch/arm64/include/asm/stat.h:13:
+>> arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'compat_statfs'
+   struct compat_statfs {
+          ^
+   include/asm-generic/compat.h:80:8: note: previous definition is here
+   struct compat_statfs {
+          ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-   with a path to LLVM that does not exist (maybe you are bisecting an
-   issue and using a temporary build of LLVM and you forgot the path it
-   was in), you fall back to the LLVM tools that are in other places in
-   your PATH, which is not what the developer intended. I know that I
-   have messed up bisects that way. If you did
 
-     $ make LLVM=/path/to/llvm/
+vim +/compat_statfs +69 arch/arm64/include/asm/compat.h
 
-   with a path that does not exist, there will be an error much earlier:
+3dd681d944f6d86 Will Deacon 2012-03-05  68  
+3dd681d944f6d86 Will Deacon 2012-03-05 @69  struct compat_statfs {
+3dd681d944f6d86 Will Deacon 2012-03-05  70  	int		f_type;
+3dd681d944f6d86 Will Deacon 2012-03-05  71  	int		f_bsize;
+3dd681d944f6d86 Will Deacon 2012-03-05  72  	int		f_blocks;
+3dd681d944f6d86 Will Deacon 2012-03-05  73  	int		f_bfree;
+3dd681d944f6d86 Will Deacon 2012-03-05  74  	int		f_bavail;
+3dd681d944f6d86 Will Deacon 2012-03-05  75  	int		f_files;
+3dd681d944f6d86 Will Deacon 2012-03-05  76  	int		f_ffree;
+3dd681d944f6d86 Will Deacon 2012-03-05  77  	compat_fsid_t	f_fsid;
+3dd681d944f6d86 Will Deacon 2012-03-05  78  	int		f_namelen;	/* SunOS ignores this field. */
+3dd681d944f6d86 Will Deacon 2012-03-05  79  	int		f_frsize;
+3dd681d944f6d86 Will Deacon 2012-03-05  80  	int		f_flags;
+3dd681d944f6d86 Will Deacon 2012-03-05  81  	int		f_spare[4];
+3dd681d944f6d86 Will Deacon 2012-03-05  82  };
+3dd681d944f6d86 Will Deacon 2012-03-05  83  
 
-     $ make LLVM=/this/path/does/not/exist/ defconfig
-     /bin/sh: line 1: /this/path/does/not/exist/clang: No such file or directory
+:::::: The code at line 69 was first introduced by commit
+:::::: 3dd681d944f6d861f12ee03aff17a14342963330 arm64: 32-bit (compat) applications support
 
-2. It does not take that much more code or documentation to support. It
-   is the same amount of code as the suffix and the documentation is
-   roughly the same amount of lines as well.
+:::::: TO: Will Deacon <will.deacon@arm.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
 
-3. If we wait to implement the path-based use of $(LLVM), we have three
-   "sequence" points: the initial support of $(LLVM), the suffix
-   support, and the prefix support. As we are constantly working with
-   various trees, it would make it harder to know what to use when. If
-   we just do it in the same patch, we know 5.18+ can use both of these
-   methods.
-
-However, at the end of the day, we are a team and if you feel like we
-should only have suffix support, I am more than happy to push a v3 that
-does just that and we can revist prefix support in the future. Just let
-me know!
-
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> > +
-> > +If your LLVM tools have a version suffix and you want to test with that
-> > +explicit version rather than the unsuffixed executables like ``LLVM=1``, you
-> > +can pass the suffix using the ``LLVM`` variable: ::
-> > +
-> > +       make LLVM=-14
-> > +
-> > +which will use ``clang-14``, ``ld.lld-14``, etc.
-> > +
-> > +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
-> > +``LLVM=1``.
-> 
-> Hmm... I can see someone's build wrappers setting LLVM=1, then them
-> being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
-> might expect.  But Masahiro says let's fix this later which is fine.
-
-Sure, I guess that is a reasonable case to support. I'll see if I can
-come up with something that makes sense after this change lands.
-
-Cheers,
-Nathan
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
