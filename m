@@ -1,33 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78AE4C88
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 21:34:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D0DC340EB;
-	Tue,  8 Mar 2022 21:34:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646775251;
-	bh=7IIRlF+xZDsI23R5QSlPyFV9mzJNQRtaRJDooE6ATGc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CSW01JIzSWeneovsZAbjUGWOojs65aRPa9K80da79jozE3LE+NdwRKGVkzrsM7FIQ
-	 9Ur7mfuONJDFbBf9hMHEjtutYfCBBWxJwCuUmm25BTll7XitXVF9W/ysDezVHXt8RB
-	 8g5bvPdT3LtrBtSn6XoUr1Bw9JZUdJWvF67eBazA6wMcvqyq2zb5cnw0F+PjR9J1H4
-	 isjMZ6dfA6BHB9I83eX/6Ov3PVgLSdzVfuakCt7UYoT7ICJRiS2YvItMOA88F91gN7
-	 Ntp7TfykOROEBPCUD8INtR2Vi8i84omMucaOaqOYxfeWCvg1XuO/lUH4KjUFyw2pR8
-	 pikqIdlIMuKXw==
-Date: Tue, 8 Mar 2022 14:34:04 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	Fangrui Song <maskray@google.com>,
-	"Dmitry V. Levin" <ldv@altlinux.org>,
-	Elliot Berman <quic_eberman@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2] kbuild: add --target to correctly cross-compile UAPI
- headers with Clang
-Message-ID: <YifLzLl4IE/xFMdn@dev-arch.thelio-3990X>
-References: <20220305125605.149913-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD674C88
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 21:38:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646775522; x=1678311522;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bps0Wzx+o0VFkXOQE1cn0Ni6ez4+LJFfwJCJwrrXPso=;
+  b=aloQIAp/OnurH3rSACRumstSanVsd2LrFnIgIq+wWX9gV5xEbgg60EI+
+   S6P7JpF8m69eoZW5iV2hBjsKSU1V0B3ZDvKXhqZxViCcb8ze6f+Jj5bcL
+   EFTb2xhIYzm6e7t4DOVkXrqhYOU3TwlErjXjIfGXriq0y0SmREYZmLKAe
+   S7u5zbA5Qn+UTb3PxFOvwkHYSOf8ejmkUW2MwMquzfhfMlQRaW7vsCL0/
+   eCZep9aKaRByXUNqjcjH2ViMUeskncVcDXhp97847l0jS7kkw+V1MViwT
+   Cy5Gf4JUTKemdjQZdkRMU1DyfGGSuM41glc8MfyB7ZksXH9ycQSWDQatS
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="234774129"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="234774129"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:38:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="513274428"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 08 Mar 2022 13:38:39 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nRhXS-00020x-Sq; Tue, 08 Mar 2022 21:38:38 +0000
+Date: Wed, 9 Mar 2022 05:37:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [linux-next:master 123/11353] ld.lld: error: undefined symbol:
+ generic_handle_arch_irq
+Message-ID: <202203090525.Ks4Y4c8K-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,53 +46,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220305125605.149913-1-masahiroy@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, Mar 05, 2022 at 09:56:05PM +0900, Masahiro Yamada wrote:
-> When you compile-test UAPI headers (CONFIG_UAPI_HEADER_TEST=y) with
-> Clang, they are currently compiled for the host target (likely x86_64)
-> regardless of the given ARCH=.
-> 
-> In fact, some exported headers include libc headers. For example,
-> include/uapi/linux/agpgart.h includes <stdlib.h> after being exported.
-> The header search paths should match to the target we are compiling
-> them for.
-> 
-> Pick up the --target triple from KBUILD_CFLAGS in the same ways as
-> commit 7f58b487e9ff ("kbuild: make Clang build userprogs for target
-> architecture").
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Hi Arnd,
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+FYI, the error/warning still remains.
 
-I suspect that Android will still need to do something with USERCFLAGS
-in its build wrapper to pick up the correct libc (Bionic vs. glibc) but
-that is tangential to this patch, we should still do this change
-regardless.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   cb153b68ff91cbc434f3de70ac549e110543e1bb
+commit: 54f481a2308efab49d2b14c3f8263b34fdb1c65e [123/11353] ARM: remove old-style irq entry
+config: arm-buildonly-randconfig-r006-20220308 (https://download.01.org/0day-ci/archive/20220309/202203090525.Ks4Y4c8K-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0f90bc55ed536e1488648255278ce9029cfa59)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=54f481a2308efab49d2b14c3f8263b34fdb1c65e
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 54f481a2308efab49d2b14c3f8263b34fdb1c65e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-> ---
-> 
-> Changes in v2:
->   - Reword the commit description to mention agpgart.h instead of
->     asound.h because the latter is in the no-header-test list.
-> 
->  usr/include/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/usr/include/Makefile b/usr/include/Makefile
-> index ac206fb27c65..4215801e1110 100644
-> --- a/usr/include/Makefile
-> +++ b/usr/include/Makefile
-> @@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
->  
->  # In theory, we do not care -m32 or -m64 for header compile tests.
->  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
-> -UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
-> +UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
->  
->  # USERCFLAGS might contain sysroot location for CC.
->  UAPI_CFLAGS += $(USERCFLAGS)
-> -- 
-> 2.32.0
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+>> ld.lld: error: undefined symbol: generic_handle_arch_irq
+   >>> referenced by kernel/entry-armv.o:(__irq_svc) in archive arch/arm/built-in.a
+   >>> referenced by kernel/entry-armv.o:(__irq_usr) in archive arch/arm/built-in.a
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
