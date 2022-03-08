@@ -1,106 +1,82 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A7E48DE
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 13:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646746587; x=1678282587;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lTnzKDCiv9/QLJniNg9fgD9HRuvLFymb/UZZg28Wb6Y=;
-  b=KbNdooTfKpVmaype51+Y3owdmLClkP+4+d0C8BNVDpDSDHaMZWHgIggi
-   ZcNYd3/rKQpBoxwy34HhhEWTL0+S8rJoWoprTfR383nG55C2lzYSntXpd
-   pVBhhBmDjitFC28U+6M/fzupnfsJ5113rineW/bHNLznc8b1QBAyJfBCa
-   P74mdL5ytRaT9rssy5FEWmAZrUyQcUXyKgTgQKlWH4Zds2bu0d/B6r6Bs
-   eoZKVNFGmD2g0j/sGw8dCVomR93ziP6p+zyLbNYXdsMFyV1yseA6dSHFi
-   4Nj8ZE2qAIqmLadOSGyAsn5q+Muyp4+0IB6J80QKjV0PPpyhezmRBNVYE
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="253510846"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="253510846"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 05:36:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="537568182"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 08 Mar 2022 05:36:24 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nRa0m-0001T3-7d; Tue, 08 Mar 2022 13:36:24 +0000
-Date: Tue, 8 Mar 2022 21:36:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dust Li <dust.li@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:netdev/net-next/master 150/160]
- net/smc/smc_sysctl.h:23:16: warning: no previous prototype for function
- 'smc_sysctl_net_init'
-Message-ID: <202203082117.G0KHS6qO-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CEC48D0
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 13:42:04 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(Authenticated sender: kholk11)
+	with ESMTPSA id 81A161F433C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1646746922;
+	bh=AUBI82xQKetEKH7Mx6YE728kuNJKmLzt6+6XJDt5Mes=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=LazTXcR5ieNSLqwAi7CvqlhlkxdusS1kLqhWCbbWDNGvDtf73NxW2k32sig2YH7+4
+	 GLYm8HrYCD6x+iqYT5U9irK2VsD+Y2zqI+EeHsG+K+mnRmgtIxTqcITz/plNDMnKXu
+	 J0kKsWjXYi8Luy2djuEPVK0xZBMe5vq5Gu33jZZcXUPWLW690Gsfmw7CHvUeK+H81a
+	 9bkNClUh/ZOb+j4qw0FIjmkpLy8KDYMzznDGN6cbMuRziOyaABvtQHkj4eIo1mdLK+
+	 saSo8MTM+2oX2+3K0CsB3yB30X5KEolCGxlY0Vi19Jtz4n6BDQywKRgr6t0B4WGT4M
+	 r1X37uN96bv5Q==
+Message-ID: <d6fa28ef-fdbb-2b6c-acaa-4c35bb631ab4@collabora.com>
+Date: Tue, 8 Mar 2022 14:41:59 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [RESEND v13 07/22] soc: mediatek: mmsys: specify 64BIT dependency
+ for MTK_MMSYS
+Content-Language: en-US
+To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+ linux@roeck-us.net
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+ Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev, singo.chang@mediatek.com, srv_heupstream@mediatek.com,
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220308093018.24189-1-nancy.lin@mediatek.com>
+ <20220308093018.24189-8-nancy.lin@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220308093018.24189-8-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/ammarfaizi2/linux-block netdev/net-next/master
-head:   69adcb988a0675ce001dfc416d56fba2e8a85f48
-commit: 7de8eb0d9039f16e1122d7aa524a1502a160c4ff [150/160] net/smc: fix compile warning for smc_sysctl
-config: arm-randconfig-r024-20220308 (https://download.01.org/0day-ci/archive/20220308/202203082117.G0KHS6qO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/7de8eb0d9039f16e1122d7aa524a1502a160c4ff
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block netdev/net-next/master
-        git checkout 7de8eb0d9039f16e1122d7aa524a1502a160c4ff
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/
+Il 08/03/22 10:30, Nancy.Lin ha scritto:
+> Because mtk-mutex change to use unsigned long mutex module type,
+> it should depend 64BIT. This is a preparation for adding support for
+> mt8195 vdosys1 mutex.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> ---
+>   drivers/soc/mediatek/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
+> index fdd8bc08569e..24f792c46444 100644
+> --- a/drivers/soc/mediatek/Kconfig
+> +++ b/drivers/soc/mediatek/Kconfig
+> @@ -68,6 +68,7 @@ config MTK_SCPSYS_PM_DOMAINS
+>   config MTK_MMSYS
+>   	bool "MediaTek MMSYS Support"
+>   	default ARCH_MEDIATEK
+> +	depends on 64BIT
+>   	depends on HAS_IOMEM
+>   	help
+>   	  Say yes here to add support for the MediaTek Multimedia
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Breaking old platforms is forbidden.
 
-All warnings (new ones prefixed by >>):
+MT2701 and MT7623N are 32-bit ARM SoCs and:
+- mt2701 needs mmsys only; but
+- mt7623n needs mmsys and mutex.
 
-   In file included from net/smc/af_smc.c:54:
->> net/smc/smc_sysctl.h:23:16: warning: no previous prototype for function 'smc_sysctl_net_init' [-Wmissing-prototypes]
-   int __net_init smc_sysctl_net_init(struct net *net)
-                  ^
-   net/smc/smc_sysctl.h:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __net_init smc_sysctl_net_init(struct net *net)
-   ^
-   static 
->> net/smc/smc_sysctl.h:29:17: warning: no previous prototype for function 'smc_sysctl_net_exit' [-Wmissing-prototypes]
-   void __net_exit smc_sysctl_net_exit(struct net *net) { }
-                   ^
-   net/smc/smc_sysctl.h:29:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __net_exit smc_sysctl_net_exit(struct net *net) { }
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/smc_sysctl_net_init +23 net/smc/smc_sysctl.h
-
-    22	
-  > 23	int __net_init smc_sysctl_net_init(struct net *net)
-    24	{
-    25		net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
-    26		return 0;
-    27	}
-    28	
-  > 29	void __net_exit smc_sysctl_net_exit(struct net *net) { }
-    30	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Besides, this is an easy fix: just change your unsigned long to a fixed size u64.
