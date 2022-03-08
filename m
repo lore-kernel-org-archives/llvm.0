@@ -1,39 +1,33 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235034A8F
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 15:08:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646752111; x=1678288111;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=LxaFwgUl99VC24mjlSRBQXCnl8r0tXEHzjm9ThAqaG4=;
-  b=KgUDXtMIlW05O2r/W2zdY/iKMiOrJFkvmHd3XRCgN2UL8VEAvjBhjmhf
-   yor43qqqHV0/o/k2DuxvWcEFbX+YT1IEZHOMro4rARS/X7T969ecWy+39
-   LkwxShVf82x5OqQkDSCjQ5A9NNmOPDPxJE3xjfwIP7Kc2cc9M00dLj73j
-   ifntiiruDSDpLbz0S6A4TctWFLgrNfFsoN4exjU8iTy3WT6Mu3NZ6fGPg
-   pyFk4/Iwq5g3o89AeQxj1cfjUt84keX7AW24qh3n3nYZG3zrZ1LOjJp9G
-   eHhG6+RghyWVAdRWCnC9mCRwWQdw/bt6NjAA0tKvVLNXcq2wBh5Hzi/It
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="315419518"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="315419518"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 07:08:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="711560406"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2022 07:08:27 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nRbRr-0001aH-1T; Tue, 08 Mar 2022 15:08:27 +0000
-Date: Tue, 8 Mar 2022 23:08:16 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: exc_nmi()+0x8: call to
- sev_es_nmi_complete() leaves .noinstr.text section
-Message-ID: <202203082227.UceNCtHT-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383BA4A8F
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 15:47:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F88C340EB;
+	Tue,  8 Mar 2022 15:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646754432;
+	bh=hjytBpJQ0xnoMUqAjGmSb9r/ZsMqa6/UgXq1V1A9QvU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pPGYbmaIA9ekLDQdbgLxTcqCtCIXz2axNOqn9KVlS8R/djy3GqFJ+TDb8nEj7RDyd
+	 9QP6cvCYu8tYOYl3a6GQwNQFleS9HeoxNjP7ZsBYvvAJ3prvG68FTFqfL4j9OulDAM
+	 rHwfOxpzMVPJYDS+5bicHl4cqsuPnwIjmEaJl2dL6OXPIqDKWEG8Z2iE8CmSU1TFWl
+	 26ozMKH6GdqhTr8w8M2tqkLmqZt2K+iNx1FVO1GQuGuVmobehGgVkwiIi/g/IbyiNk
+	 QdKYa+Vxm2lfYsIxaVNL4ZjqPR2SIRDeS4Sgzmlj19y/ucckTQhZTZnbSEwvWBOpT5
+	 g+wV3ZUd1iVdQ==
+Date: Tue, 8 Mar 2022 08:47:05 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
+Message-ID: <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
+References: <20220304170813.1689186-1-nathan@kernel.org>
+ <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,65 +36,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Peter Zijlstra <peterz@infradead.org>
+On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
+> On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+> > index d32616891dcf..68b74416ec48 100644
+> > --- a/Documentation/kbuild/llvm.rst
+> > +++ b/Documentation/kbuild/llvm.rst
+> > @@ -49,17 +49,36 @@ example: ::
+> >  LLVM Utilities
+> >  --------------
+> >
+> > -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
+> > -to enable them. ::
+> > -
+> > -       make LLVM=1
+> > -
+> > -They can be enabled individually. The full list of the parameters: ::
+> > +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
+> > +The full list of supported make variables: ::
+> >
+> >         make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
+> >           OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
+> >           HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
+> >
+> > +To simplify the above command, Kbuild supports the ``LLVM`` variable: ::
+> > +
+> > +       make LLVM=1
+> > +
+> > +If your LLVM tools are not available in your PATH, you can supply their
+> > +location using the LLVM variable with a trailing slash: ::
+> > +
+> > +       make LLVM=/path/to/llvm/
+> > +
+> > +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
+> 
+> I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
+> works and (my interpretation of what) Masahiro said "if anyone asks
+> for this, here's how we could do that."  I don't think I've seen an
+> explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
+> won't hold this patch up over that.  Either way:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ea4424be16887a37735d6550cfd0611528dbe5d9
-commit: db2b0c5d7b6f19b3c2cab08c531b65342eb5252b objtool: Support pv_opsindirect calls for noinstr
-date:   6 months ago
-config: x86_64-randconfig-r013-20220307 (https://download.01.org/0day-ci/archive/20220308/202203082227.UceNCtHT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=db2b0c5d7b6f19b3c2cab08c531b65342eb5252b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout db2b0c5d7b6f19b3c2cab08c531b65342eb5252b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Right, there has not been an explicit ask for the prefix support yet,
+although I know I personally would use it, but I think that it is worth
+doing now instead of later for a few reasons:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+1. It makes path goofs easier to spot. If you do
 
-All warnings (new ones prefixed by >>):
+     $ PATH=/path/to/llvm:$PATH make LLVM=1 ...
 
-   vmlinux.o: warning: objtool: do_syscall_64()+0x4d: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_int80_syscall_32()+0x68: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x68: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: xen_irq_enable()+0x3c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __rdgsbase_inactive()+0x33: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive()+0x37: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: sync_regs()+0x1f: call to memcpy() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret()+0x21: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug()+0x74: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_task_stack()+0x13: call to task_stack_page() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_entry_stack()+0x9: call to cpu_entry_stack() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: exc_nmi()+0x8: call to sev_es_nmi_complete() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: default_do_nmi()+0x10: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler()+0x8f: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_setup()+0x19: call to memset() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: mce_rdmsrl()+0x3: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: mce_wrmsrl()+0x3: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check()+0xa9: call to mce_gather_info() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_machine_check()+0xa7: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_check_crashing_cpu()+0x17: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: kvm_read_and_reset_apf_flags()+0x1: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: lockdep_hardirqs_on()+0x90: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: lockdep_hardirqs_off()+0x91: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode()+0x8a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x8f: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x8a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x8a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit()+0x3c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter()+0x4e: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: irqentry_nmi_exit()+0x34: call to rcu_nmi_exit() leaves .noinstr.text section
+   with a path to LLVM that does not exist (maybe you are bisecting an
+   issue and using a temporary build of LLVM and you forgot the path it
+   was in), you fall back to the LLVM tools that are in other places in
+   your PATH, which is not what the developer intended. I know that I
+   have messed up bisects that way. If you did
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+     $ make LLVM=/path/to/llvm/
+
+   with a path that does not exist, there will be an error much earlier:
+
+     $ make LLVM=/this/path/does/not/exist/ defconfig
+     /bin/sh: line 1: /this/path/does/not/exist/clang: No such file or directory
+
+2. It does not take that much more code or documentation to support. It
+   is the same amount of code as the suffix and the documentation is
+   roughly the same amount of lines as well.
+
+3. If we wait to implement the path-based use of $(LLVM), we have three
+   "sequence" points: the initial support of $(LLVM), the suffix
+   support, and the prefix support. As we are constantly working with
+   various trees, it would make it harder to know what to use when. If
+   we just do it in the same patch, we know 5.18+ can use both of these
+   methods.
+
+However, at the end of the day, we are a team and if you feel like we
+should only have suffix support, I am more than happy to push a v3 that
+does just that and we can revist prefix support in the future. Just let
+me know!
+
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> 
+> > +
+> > +If your LLVM tools have a version suffix and you want to test with that
+> > +explicit version rather than the unsuffixed executables like ``LLVM=1``, you
+> > +can pass the suffix using the ``LLVM`` variable: ::
+> > +
+> > +       make LLVM=-14
+> > +
+> > +which will use ``clang-14``, ``ld.lld-14``, etc.
+> > +
+> > +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
+> > +``LLVM=1``.
+> 
+> Hmm... I can see someone's build wrappers setting LLVM=1, then them
+> being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
+> might expect.  But Masahiro says let's fix this later which is fine.
+
+Sure, I guess that is a reasonable case to support. I'll see if I can
+come up with something that makes sense after this change lands.
+
+Cheers,
+Nathan
