@@ -1,50 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75FE048D0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DD548DB
 	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 13:16:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646745388; x=1678281388;
+  t=1646745389; x=1678281389;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TmshGfoVA94eSIHIZl5LlloKGipSQcdVXDWPW170y9A=;
-  b=QMV0ZG/gyIai6ZZ82QsATScg+SX6g1x7O//7WezH+ryAgS5fFOx9RuMM
-   HGJRjps+gWDJ1pitJH0IYxY1DcEjH0lL6Jb7Yf2j6vmrqjfpw2Di0ufHj
-   DpheburZzdf0eFmL8mfj3suZosqaQ5dsNIlaWH3J7POKOWxzgU3but3Il
-   gWszWX2avEzJMj1LrsThOq0B2JYeJv4BVjxuHOWPbmbp+TLae3LljnI7m
-   TXcKoOd5FpVCXM4zuEOKRnVh3k7kzcb4Ehn4QzKAsbfS6oujb+3LLMY9A
-   8cas6tx+dkkcAp9PeZjhdDKHy3SyUzq7wqbZinwWHeYjLNlm9MQG86wuf
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="279392781"
+  bh=4EtijkSByfPN6vGzVZPpcUjpnUARU+7UdBKvz4mo6dk=;
+  b=AASTZBOQv0XI5tbhaL9BP+9t/mRJMneIAFL/qm/F6i3qQAV7IXo0lSCM
+   LgNryhk+T4DtOEeyW3Et/V/CHo3jnpSF7zwMseuXYrvvdDf2t5gGD7pwV
+   kT816us9JNIYGTpeVhMnTuMcYLxajfs5pa8oF7zC3Ze9Nm27DbNf6bLHL
+   QybbWI124lkQwcmjY9HJn9scRwbDh9xA6+lQdso4T+cGtHfb8Dqb2XKib
+   4p/WczcwIEeWV9khK7KkynJOFDJtBa0RsASjRtOiB1G08eywdqI3xTRvX
+   y6Pb/u/6i7pncdszV01CtjjVa8jpZGK31GfuOOLwwyCnNg79QsshtounH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="317907734"
 X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="279392781"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 05:16:27 -0800
+   d="scan'208";a="317907734"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 05:16:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="643653384"
+   d="scan'208";a="495447092"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 05:16:24 -0800
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 05:16:24 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nRZhP-0001R0-La; Tue, 08 Mar 2022 13:16:23 +0000
-Date: Tue, 8 Mar 2022 21:15:33 +0800
+	id 1nRZhP-0001R2-MO; Tue, 08 Mar 2022 13:16:23 +0000
+Date: Tue, 8 Mar 2022 21:15:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Quinn Tran <qutran@marvell.com>
+To: Jamie Iles <quic_jiles@quicinc.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Hannes Reinecke <hare@suse.de>,
-	Himanshu Madhani <himanshu.madhani@oracle.com>,
-	Larry Wisneski <Larry.Wisneski@marvell.com>,
-	Duane Grigsby <duane.grigsby@marvell.com>,
-	Rick Hicksted Jr <rhicksted@marvell.com>,
-	Nilesh Javali <njavali@marvell.com>
-Subject: drivers/scsi/qla2xxx/qla_edif_bsg.h:93:12: warning: field remote_pid
- within 'struct app_pinfo_req' is less aligned than 'port_id_t' and is
- usually due to 'struct app_pinfo_req' being packed, which can lead to
- unaligned accesses
-Message-ID: <202203082144.e6Hftzd0-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [linux-next:master 10020/11353] drivers/i3c/master.c:2200:3:
+ warning: variable 'i2cdev' is uninitialized when used here
+Message-ID: <202203082147.hks5e2ec-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,64 +47,70 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Quinn,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ea4424be16887a37735d6550cfd0611528dbe5d9
-commit: 7878f22a2e03b69baf792f74488962981a1c9547 scsi: qla2xxx: edif: Add getfcinfo and statistic bsgs
-date:   7 months ago
-config: arm-randconfig-c002-20220307 (https://download.01.org/0day-ci/archive/20220308/202203082144.e6Hftzd0-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   cb153b68ff91cbc434f3de70ac549e110543e1bb
+commit: 31b9887c7258ca47d9c665a80f19f006c86756b1 [10020/11353] i3c: remove i2c board info from i2c_dev_desc
+config: hexagon-randconfig-r041-20220307 (https://download.01.org/0day-ci/archive/20220308/202203082147.hks5e2ec-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7878f22a2e03b69baf792f74488962981a1c9547
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7878f22a2e03b69baf792f74488962981a1c9547
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=31b9887c7258ca47d9c665a80f19f006c86756b1
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 31b9887c7258ca47d9c665a80f19f006c86756b1
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-sa1100/ drivers/scsi/qla2xxx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/i3c/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/scsi/qla2xxx/qla_edif.c:6:
-   In file included from drivers/scsi/qla2xxx/qla_def.h:34:
-   include/uapi/scsi/scsi_bsg_fc.h:280:4: warning: field rqst_data within 'struct fc_bsg_request' is less aligned than 'union (unnamed union at include/uapi/scsi/scsi_bsg_fc.h:271:2)' and is usually due to 'struct fc_bsg_request' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rqst_data;
-             ^
-   In file included from drivers/scsi/qla2xxx/qla_edif.c:6:
-   In file included from drivers/scsi/qla2xxx/qla_def.h:74:
-   In file included from drivers/scsi/qla2xxx/qla_bsg.h:298:
->> drivers/scsi/qla2xxx/qla_edif_bsg.h:93:12: warning: field remote_pid within 'struct app_pinfo_req' is less aligned than 'port_id_t' and is usually due to 'struct app_pinfo_req' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           port_id_t remote_pid;
-                     ^
-   2 warnings generated.
+>> drivers/i3c/master.c:2200:3: warning: variable 'i2cdev' is uninitialized when used here [-Wuninitialized]
+                   i2cdev->dev = i2c_new_client_device(adap, &i2cboardinfo->base);
+                   ^~~~~~
+   drivers/i3c/master.c:2178:29: note: initialize the variable 'i2cdev' to silence this warning
+           struct i2c_dev_desc *i2cdev;
+                                      ^
+                                       = NULL
+   1 warning generated.
 
 
-vim +93 drivers/scsi/qla2xxx/qla_edif_bsg.h
+vim +/i2cdev +2200 drivers/i3c/master.c
 
-7ebb336e45ef1c Quinn Tran 2021-06-23  89  
-7ebb336e45ef1c Quinn Tran 2021-06-23  90  struct app_pinfo_req {
-7ebb336e45ef1c Quinn Tran 2021-06-23  91  	struct app_id app_info;
-7ebb336e45ef1c Quinn Tran 2021-06-23  92  	uint8_t	 num_ports;
-7ebb336e45ef1c Quinn Tran 2021-06-23 @93  	port_id_t remote_pid;
-7ebb336e45ef1c Quinn Tran 2021-06-23  94  	uint8_t	 reserved[VND_CMD_APP_RESERVED_SIZE];
-7ebb336e45ef1c Quinn Tran 2021-06-23  95  } __packed;
-7ebb336e45ef1c Quinn Tran 2021-06-23  96  
-
-:::::: The code at line 93 was first introduced by commit
-:::::: 7ebb336e45ef1ce23462c3bbd03779929008901f scsi: qla2xxx: edif: Add start + stop bsgs
-
-:::::: TO: Quinn Tran <qutran@marvell.com>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+  2174	
+  2175	static int i3c_master_i2c_adapter_init(struct i3c_master_controller *master)
+  2176	{
+  2177		struct i2c_adapter *adap = i3c_master_to_i2c_adapter(master);
+  2178		struct i2c_dev_desc *i2cdev;
+  2179		struct i2c_dev_boardinfo *i2cboardinfo;
+  2180		int ret;
+  2181	
+  2182		adap->dev.parent = master->dev.parent;
+  2183		adap->owner = master->dev.parent->driver->owner;
+  2184		adap->algo = &i3c_master_i2c_algo;
+  2185		strncpy(adap->name, dev_name(master->dev.parent), sizeof(adap->name));
+  2186	
+  2187		/* FIXME: Should we allow i3c masters to override these values? */
+  2188		adap->timeout = 1000;
+  2189		adap->retries = 3;
+  2190	
+  2191		ret = i2c_add_adapter(adap);
+  2192		if (ret)
+  2193			return ret;
+  2194	
+  2195		/*
+  2196		 * We silently ignore failures here. The bus should keep working
+  2197		 * correctly even if one or more i2c devices are not registered.
+  2198		 */
+  2199		list_for_each_entry(i2cboardinfo, &master->boardinfo.i2c, node)
+> 2200			i2cdev->dev = i2c_new_client_device(adap, &i2cboardinfo->base);
+  2201	
+  2202		return 0;
+  2203	}
+  2204	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
