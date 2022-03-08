@@ -1,119 +1,88 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AF948BE
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 12:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646741664; x=1678277664;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Zt3xKn+Klw2lmd6ejBz+st0wYaOLEooTRBK1yYCq3bY=;
-  b=gVkxNw9hM5YS2sjpRm0LyetLamDdk2YTaosMZFKX+wXqmkMDXNPduHnu
-   mWLIN+oKKnl3K0gvz83a83vq8Lm9B4Dem0TO6Egf5H0jv1HWX6sEOOHx0
-   +7fRVieE4zNq4HorBdd9CcuoLXtl+V2p0ERN3IdSrO8mcVWTK/AkU8J0F
-   JQcxtRA1K6EsJqwc0VkHZBjOKpvDK0MEFbiDaFNkJxpqUyspt4LUJ2yJB
-   NHcv/HPRy4rYLFHulgw7udPJaFozaP3eb4tleaXL3piuptDbwnx38jaKS
-   EyyuSASN1/AkQCO+XzCjrUh72lNRaGizHWTogWdKkuRf6tmXDLQMPKIJQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="315384781"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="315384781"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 04:14:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="513086205"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 08 Mar 2022 04:14:21 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nRYjM-0001ML-J2; Tue, 08 Mar 2022 12:14:20 +0000
-Date: Tue, 8 Mar 2022 20:13:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guo Ren <guoren@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [ammarfaizi2-block:palmer/linux/riscv-compat 13/20]
- arch/riscv/kernel/process.c:102:35: error: use of undeclared identifier
- 'SR_UXL'
-Message-ID: <202203082040.sCWBscgE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8964B48BE
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 12:15:00 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(Authenticated sender: aratiu)
+	with ESMTPSA id EC43A1F43C2C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1646741693;
+	bh=5+4CFM6veuq5rDnjMnbblwZsgeeLINo0x7U43XEkG9c=;
+	h=From:To:Cc:Subject:Date:From;
+	b=IuRYrUkUF0SCi0ER2nCHqEw02YkcL/vPTUhWSs79ZyitkMk0dynGcY39jBfxLIiaZ
+	 hmf9tTBEZf1t1e6xosUT5h1Su28aKNtYQeAP2kKvAAfO5dHgAslutstLuwA3QIQNUN
+	 zkRYUuUbl4pZTho63yPNAiMvo/5ikHBr/CvcBxefFVs2Jtj14kwJdWJwYO5WJxRZI/
+	 r6eHwi2RPudIMXeXHSAaMlntMUlBToduBaM0nYcDWprzdmx+9zp5m4QFPSnBZTqiyn
+	 uQvI+dkLx6F0gD6mHFxqn6mS0ilxypk2AS+BR1mtR2DAR1CtxcG1+bV5y+GHU3ltKx
+	 25knDK62+s5UQ==
+From: Adrian Ratiu <adrian.ratiu@collabora.com>
+To: netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev,
+	kernel@collabora.com,
+	linux-kernel@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Manoj Gupta <manojgupta@chromium.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH bpf v2] tools: fix unavoidable GCC call in Clang builds
+Date: Tue,  8 Mar 2022 14:14:28 +0200
+Message-Id: <20220308121428.81735-1-adrian.ratiu@collabora.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-compat
-head:   ab7e33a6b819f009c3c9ccf69b2f44c1ad84a5a0
-commit: d463ff83f0d26ce352a0969c86a9accf70d30977 [13/20] riscv: compat: process: Add UXL_32 support in start_thread
-config: riscv-randconfig-r005-20220308 (https://download.01.org/0day-ci/archive/20220308/202203082040.sCWBscgE-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/d463ff83f0d26ce352a0969c86a9accf70d30977
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-compat
-        git checkout d463ff83f0d26ce352a0969c86a9accf70d30977
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+In ChromeOS and Gentoo we catch any unwanted mixed Clang/LLVM
+and GCC/binutils usage via toolchain wrappers which fail builds.
+This has revealed that GCC is called unconditionally in Clang
+configured builds to populate GCC_TOOLCHAIN_DIR.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Allow the user to override CLANG_CROSS_FLAGS to avoid the GCC
+call - in our case we set the var directly in the ebuild recipe.
 
-All errors (new ones prefixed by >>):
+In theory Clang could be able to autodetect these settings so
+this logic could be removed entirely, but in practice as the
+commit cebdb7374577 ("tools: Help cross-building with clang")
+mentions, this does not always work, so giving distributions
+more control to specify their flags & sysroot is beneficial.
 
-   arch/riscv/kernel/process.c:101:6: error: implicit declaration of function 'is_compat_task' [-Werror,-Wimplicit-function-declaration]
-           if (is_compat_task())
-               ^
->> arch/riscv/kernel/process.c:102:35: error: use of undeclared identifier 'SR_UXL'
-                   regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
-                                                   ^
->> arch/riscv/kernel/process.c:102:45: error: use of undeclared identifier 'SR_UXL_32'
-                   regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
-                                                             ^
-   arch/riscv/kernel/process.c:104:35: error: use of undeclared identifier 'SR_UXL'
-                   regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
-                                                   ^
->> arch/riscv/kernel/process.c:104:45: error: use of undeclared identifier 'SR_UXL_64'
-                   regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
-                                                             ^
-   5 errors generated.
-
-
-vim +/SR_UXL +102 arch/riscv/kernel/process.c
-
-    85	
-    86	void start_thread(struct pt_regs *regs, unsigned long pc,
-    87		unsigned long sp)
-    88	{
-    89		regs->status = SR_PIE;
-    90		if (has_fpu()) {
-    91			regs->status |= SR_FS_INITIAL;
-    92			/*
-    93			 * Restore the initial value to the FP register
-    94			 * before starting the user program.
-    95			 */
-    96			fstate_restore(current, regs);
-    97		}
-    98		regs->epc = pc;
-    99		regs->sp = sp;
-   100	
-   101		if (is_compat_task())
- > 102			regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
-   103		else
- > 104			regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
-   105	}
-   106	
-
+Suggested-by: Manoj Gupta <manojgupta@chromium.com>
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes in v2:
+  * Replaced variable override GCC_TOOLCHAIN_DIR -> CLANG_CROSS_FLAGS
+---
+ tools/scripts/Makefile.include | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+index 79d102304470..b9b1deacc4eb 100644
+--- a/tools/scripts/Makefile.include
++++ b/tools/scripts/Makefile.include
+@@ -89,6 +89,9 @@ ifeq ($(CC_NO_CLANG), 1)
+ EXTRA_WARNINGS += -Wstrict-aliasing=3
+ 
+ else ifneq ($(CROSS_COMPILE),)
++# allow userspace to override CLANG_CROSS_FLAGS to specify their own
++# sysroots and flags or to avoid the GCC call in pure Clang builds
++ifeq ($(CLANG_CROSS_FLAGS),)
+ CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
+ GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc 2>/dev/null))
+ ifneq ($(GCC_TOOLCHAIN_DIR),)
+@@ -96,6 +99,7 @@ CLANG_CROSS_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
+ CLANG_CROSS_FLAGS += --sysroot=$(shell $(CROSS_COMPILE)gcc -print-sysroot)
+ CLANG_CROSS_FLAGS += --gcc-toolchain=$(realpath $(GCC_TOOLCHAIN_DIR)/..)
+ endif # GCC_TOOLCHAIN_DIR
++endif # CLANG_CROSS_FLAGS
+ CFLAGS += $(CLANG_CROSS_FLAGS)
+ AFLAGS += $(CLANG_CROSS_FLAGS)
+ endif # CROSS_COMPILE
+-- 
+2.35.1
+
