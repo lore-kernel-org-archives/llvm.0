@@ -1,42 +1,41 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168B97A
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 08:02:14 +0000 (UTC)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-	by smtp-out1.suse.de (Postfix) with ESMTP id EAF69210EF;
-	Tue,  8 Mar 2022 08:02:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1646726526; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DUnK/Mtz62xa6TVkJ64+VKjEHBAlCRROy3iWEztQcOQ=;
-	b=svAFWFtd7OsypoKWPEGMy7ZXq/a5EfYbCSFHsCxmCc48ybhPMOh4Wt1YKCNvERWR2dEo5J
-	HG1ZAG/mE3Tm8ijJhhu4hgxxBQwYDNY+7X1/bISr4HTSgls1UuNbS5OyAzzgUix+ILkEWV
-	5EI9EofKrpe8ihNbyIiCzVApiT/Czzw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1646726526;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DUnK/Mtz62xa6TVkJ64+VKjEHBAlCRROy3iWEztQcOQ=;
-	b=OtP8IJNPwHI6dsdwQl1Gta9gjdtrBu1CPTno/8PdfdvCIDYfqDJo8tfRssnNG/TywXGvRy
-	TEwgYT9cvswZN2Dw==
-Received: from quack3.suse.cz (jack.udp.ovpn1.prg.suse.de [10.100.224.230])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by relay2.suse.de (Postfix) with ESMTPS id DD739A3B95;
-	Tue,  8 Mar 2022 08:02:06 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 9EF6EA0609; Tue,  8 Mar 2022 09:02:06 +0100 (CET)
-Date: Tue, 8 Mar 2022 09:02:06 +0100
-From: Jan Kara <jack@suse.cz>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] udf: remove redundant assignment of variable etype
-Message-ID: <20220308080206.bumkpk2orl7m3cpt@quack3.lan>
-References: <20220307152149.139045-1-colin.i.king@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D627A
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 08:28:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646728100; x=1678264100;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/04Oyey+zXsXV5WWEAkTS8/1tqfuKIZP3r4RrEqe4OE=;
+  b=UU6E17X8Uiw/0eZeA2cijN9fnCtclgpTiFCw6UbbG11vTNIaRs5AU/o/
+   2gImdn4ujnag3o+gSHBmC2z4+JV8Ny5fEY/bAh5l8kvEC/fcU2I9f9/YK
+   b+eH6q+BewYVKkXwwedhwQfJWbc/JpCKWcPrTc56Wx3buteD2IGrwWasg
+   UxBXziJ9QfvOQFodTCUl4jVnAakiLuhXWEhJeZkd/vzxO7g/55F9jtUrs
+   3cRLN4m1Fq87VTHeXbNI76gOENMw5SdP/qNsN5Dr97RceDJXsCKTrdZXI
+   60uLImlJV/xLV87JCunOUS3DNewXebJBS43prCdoNT4QJ270aNcfZrPJA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="235237170"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="235237170"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 00:28:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="553531211"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 08 Mar 2022 00:28:16 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nRVCa-00019A-7y; Tue, 08 Mar 2022 08:28:16 +0000
+Date: Tue, 8 Mar 2022 16:28:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH RFC v2] mm: Add f_ops->populate()
+Message-ID: <202203081636.B87sz0BM-lkp@intel.com>
+References: <20220306032655.97863-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,51 +44,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220307152149.139045-1-colin.i.king@gmail.com>
+In-Reply-To: <20220306032655.97863-1-jarkko@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon 07-03-22 15:21:49, Colin Ian King wrote:
-> Variable etype is being assigned a value that is never read. The
-> variable and assignment are redundant and can be removed.
-> 
-> Cleans up clang scan build warning:
-> fs/udf/super.c:2485:10: warning: Although the value stored to 'etype'
-> is used in the enclosing expression, the value is never actually read
-> from 'etype' [deadcode.DeadStores]
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Hi Jarkko,
 
-Thanks! I've added the patch to my tree.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on hnaz-mm/master]
 
-								Honza
+url:    https://github.com/0day-ci/linux/commits/Jarkko-Sakkinen/mm-Add-f_ops-populate/20220307-150639
+base:   https://github.com/hnaz/linux-mm master
+config: riscv-randconfig-r042-20220307 (https://download.01.org/0day-ci/archive/20220308/202203081636.B87sz0BM-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/a051c250930ed53847224b09aaa43927a25e6c63
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jarkko-Sakkinen/mm-Add-f_ops-populate/20220307-150639
+        git checkout a051c250930ed53847224b09aaa43927a25e6c63
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-> ---
->  fs/udf/super.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/fs/udf/super.c b/fs/udf/super.c
-> index 48871615e489..4042d9739fb7 100644
-> --- a/fs/udf/super.c
-> +++ b/fs/udf/super.c
-> @@ -2474,7 +2474,6 @@ static unsigned int udf_count_free_table(struct super_block *sb,
->  	unsigned int accum = 0;
->  	uint32_t elen;
->  	struct kernel_lb_addr eloc;
-> -	int8_t etype;
->  	struct extent_position epos;
->  
->  	mutex_lock(&UDF_SB(sb)->s_alloc_mutex);
-> @@ -2482,7 +2481,7 @@ static unsigned int udf_count_free_table(struct super_block *sb,
->  	epos.offset = sizeof(struct unallocSpaceEntry);
->  	epos.bh = NULL;
->  
-> -	while ((etype = udf_next_aext(table, &epos, &eloc, &elen, 1)) != -1)
-> +	while (udf_next_aext(table, &epos, &eloc, &elen, 1) != -1)
->  		accum += (elen >> table->i_sb->s_blocksize_bits);
->  
->  	brelse(epos.bh);
-> -- 
-> 2.35.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> ipc/shm.c:590:34: error: use of undeclared identifier 'do_populate'; did you mean 'mm_populate'?
+           ret = call_mmap(sfd->file, vma, do_populate);
+                                           ^~~~~~~~~~~
+                                           mm_populate
+   include/linux/mm.h:2698:20: note: 'mm_populate' declared here
+   static inline void mm_populate(unsigned long addr, unsigned long len)
+                      ^
+>> ipc/shm.c:590:34: warning: address of function 'mm_populate' will always evaluate to 'true' [-Wpointer-bool-conversion]
+           ret = call_mmap(sfd->file, vma, do_populate);
+                 ~~~~~~~~~                 ^~~~~~~~~~~
+   ipc/shm.c:590:34: note: prefix with the address-of operator to silence this warning
+           ret = call_mmap(sfd->file, vma, do_populate);
+                                           ^
+                                           &
+   1 warning and 1 error generated.
+
+
+vim +590 ipc/shm.c
+
+   575	
+   576	static int shm_mmap(struct file *file, struct vm_area_struct *vma)
+   577	{
+   578		struct shm_file_data *sfd = shm_file_data(file);
+   579		int ret;
+   580	
+   581		/*
+   582		 * In case of remap_file_pages() emulation, the file can represent an
+   583		 * IPC ID that was removed, and possibly even reused by another shm
+   584		 * segment already.  Propagate this case as an error to caller.
+   585		 */
+   586		ret = __shm_open(vma);
+   587		if (ret)
+   588			return ret;
+   589	
+ > 590		ret = call_mmap(sfd->file, vma, do_populate);
+   591		if (ret) {
+   592			shm_close(vma);
+   593			return ret;
+   594		}
+   595		sfd->vm_ops = vma->vm_ops;
+   596	#ifdef CONFIG_MMU
+   597		WARN_ON(!sfd->vm_ops->fault);
+   598	#endif
+   599		vma->vm_ops = &shm_vm_ops;
+   600		return 0;
+   601	}
+   602	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
