@@ -1,117 +1,71 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF107491
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 22:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646777984; x=1678313984;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Cp8zGGLTLUHm8iCY4AoXsdfeinLenignQ5FmKmCOhbE=;
-  b=RlTrwxPuY+W9qovBrgAqPxoCNUlbKOh1qcFjD8UZl1f5ekxy/gbpmE9X
-   eHaChpEvMMCYMf3ybCAwpIU3jA3vUuhhWuUSqToAhVf8drysK9HQ3gA1O
-   rXE/dNX4eH2/N3+b6mgptObJ1vS+hgQMhQfJSkbiH54XF2GZPlVHF5XoE
-   kGUiOeTrK//0yJcby+iC97aY39UbDanz0djpSFiJOFRvWhi+i3ifyM51o
-   tt7MTMzFeRxIWPnSgRO56HnC6IjN1ogAWhmhWpU+GaUxjGhfZbVmkHn1Z
-   mppkBka9AR29f6IYYwQ4A7o9ea+6HKwJI4yHHVbCzMHvPqfcumkj4Ly2T
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="234781222"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="234781222"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 14:19:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="643816899"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 14:19:40 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nRiBA-00025r-61; Tue, 08 Mar 2022 22:19:40 +0000
-Date: Wed, 9 Mar 2022 06:18:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Li RongQing <lirongqing@baidu.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
-	Robert Hu <robert.hu@intel.com>,
-	Farrah Chen <farrah.chen@intel.com>,
-	Danmei Wei <danmei.wei@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Wang GuangJu <wangguangju@baidu.com>
-Subject: [kvm:queue 182/203] arch/x86/kernel/kvm.c:769:4: error: use of
- undeclared identifier '__raw_callee_save___kvm_vcpu_is_preempted'
-Message-ID: <202203090613.qYNxBFkZ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E492F35
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 22:38:54 +0000 (UTC)
+Received: by mail-lj1-f170.google.com with SMTP id q5so585214ljb.11
+        for <llvm@lists.linux.dev>; Tue, 08 Mar 2022 14:38:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=smV9KKIwtal78N+VJZFIhUWRO8IPPNUi5IDr0t+R4Ws=;
+        b=d7vkIVIst9qON4US7u/M+bn/C/BeUE6U9qwyhC9PV8E7Xetpk/M923PcFvBg18HAhu
+         BQwikQ1caXfO1kWZhaKKYcfUB0Wk1kTF9YHyw1o8SAGG+3zLJMYzKqUVzRgL31ahnaS5
+         +a3NaaZsU5xX2oqtPCO1AqgKdE4cJ0laGtRkRYiA3Faq1qNGgWjpO/49bTPNAifihSvH
+         3OmP9hmDuJwJEyH8yv3pnVGGMhDssfJ/DfHDMFK+0CiNXC2IXtXQRV6i4qKDCF1V8DZC
+         kadkd/hhJnPG++pAqbLcJq7k7+lRVNlLQN1QqQTFILJ6tqWb9rmzbxdy0Ke8+Wx7/yHa
+         5d5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=smV9KKIwtal78N+VJZFIhUWRO8IPPNUi5IDr0t+R4Ws=;
+        b=dzaiAARNOViNZ7RGj2OdId+MHgzMUqWGogR14bUAGoMNA4jNet3QyNS/Sho6q6SVN4
+         dPfQqEJPA3nFM5LZRVoImRM+MJHzPOTcxiErbfvFqIRYIS2zQLibc0heex2CLRI/Q2zv
+         bH+Pw0D9YQZ1TA6qK1rXPa11kLOA8oZDGPb240vE8ZbjOHAkfXBZFyX6Q93nXHf2Tmnb
+         ZWIKivzo5ckQX6OvZsLjl8p/EUTBzo29zGe/IYR8bmtZ5BM6w9jnPNH0JgyDSpn7+Xjh
+         TzsQlfKABdCBr9x9zZ1SKOlmPPsZt+13lQVotVTbhfxeIqdePcJ82YMoV+5LGUyjcH8D
+         u6Ww==
+X-Gm-Message-State: AOAM533dKZPIbhQHsn5WaQypoB43PRIwIZ5jhZATAKZNk/inBMFIBYZL
+	L5lw0F//KfywSGHza//3feeubT5xQ/ezzbZOutPmGg==
+X-Google-Smtp-Source: ABdhPJxN6GAvKr/FHemE3wibga1rWVqYX3/0uF9F+WUQsl0hJRH54Hys/fVjglz6Axqr0JadcVAj4Oi2AwcLXYREc5M=
+X-Received: by 2002:a05:651c:1791:b0:243:94bd:d94c with SMTP id
+ bn17-20020a05651c179100b0024394bdd94cmr11875831ljb.468.1646779132243; Tue, 08
+ Mar 2022 14:38:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 8 Mar 2022 14:38:40 -0800
+Message-ID: <CAKwvOd=iOS3HEUH1w-R4vYSNMwAzE7kr30FcXNZg0e1WBvpenQ@mail.gmail.com>
+Subject: arm64 memcpy+memove 5.10 patch
+To: Greg KH <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
+Cc: "# 3.4.x" <stable@vger.kernel.org>, Manoj Gupta <manojgupta@google.com>, 
+	Denis Nikitin <denik@google.com>, Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+	llvm@lists.linux.dev, Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-head:   00a2bd3464280ca1f08e2cbfab22b884ffb731d8
-commit: dc889a8974087aba3eb1cc6db2066fbbdb58922a [182/203] KVM: x86: Support the vCPU preemption check with nopvspin and realtime hint
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220309/202203090613.qYNxBFkZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0dc66b76fe4c33843755ade391b85ffda0742aeb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=dc889a8974087aba3eb1cc6db2066fbbdb58922a
-        git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
-        git fetch --no-tags kvm queue
-        git checkout dc889a8974087aba3eb1cc6db2066fbbdb58922a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Dear stable kernel maintainers,
+Please consider cherry-picking
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+commit 6c23d54f4cb8 ("arm64: Import latest memcpy()/memmove() implementation")
 
-All errors (new ones prefixed by >>):
+to v5.10.y.  It first landed in v5.14-rc1.
 
->> arch/x86/kernel/kvm.c:769:4: error: use of undeclared identifier '__raw_callee_save___kvm_vcpu_is_preempted'
-                           PV_CALLEE_SAVE(__kvm_vcpu_is_preempted);
-                           ^
-   arch/x86/include/asm/paravirt.h:683:35: note: expanded from macro 'PV_CALLEE_SAVE'
-           ((struct paravirt_callee_save) { __raw_callee_save_##func })
-                                            ^
-   <scratch space>:52:1: note: expanded from here
-   __raw_callee_save___kvm_vcpu_is_preempted
-   ^
-   1 error generated.
+It fixes a linkage failure observed when building kernels for ChromeOS
+under AutoFDO:
 
+ld.lld: error: arch/arm64/lib/lib.a(memmove.o):(function __memmove:
+.text+0x8): relocation R_AARCH64_CONDBR19 out of range: -6331272 is
+not in [-1048576, 1048575]; references __memcpy
+>>> defined in arch/arm64/lib/lib.a(memcpy.o)
 
-vim +/__raw_callee_save___kvm_vcpu_is_preempted +769 arch/x86/kernel/kvm.c
-
-   754	
-   755	static void __init kvm_guest_init(void)
-   756	{
-   757		int i;
-   758	
-   759		paravirt_ops_setup();
-   760		register_reboot_notifier(&kvm_pv_reboot_nb);
-   761		for (i = 0; i < KVM_TASK_SLEEP_HASHSIZE; i++)
-   762			raw_spin_lock_init(&async_pf_sleepers[i].lock);
-   763	
-   764		if (kvm_para_has_feature(KVM_FEATURE_STEAL_TIME)) {
-   765			has_steal_clock = 1;
-   766			static_call_update(pv_steal_clock, kvm_steal_clock);
-   767	
-   768			pv_ops.lock.vcpu_is_preempted =
- > 769				PV_CALLEE_SAVE(__kvm_vcpu_is_preempted);
-   770		}
-   771	
-   772		if (kvm_para_has_feature(KVM_FEATURE_PV_EOI))
-   773			apic_set_eoi_write(kvm_guest_apic_eoi_write);
-   774	
-   775		if (kvm_para_has_feature(KVM_FEATURE_ASYNC_PF_INT) && kvmapf) {
-   776			static_branch_enable(&kvm_async_pf_enabled);
-   777			alloc_intr_gate(HYPERVISOR_CALLBACK_VECTOR, asm_sysvec_kvm_asyncpf_interrupt);
-   778		}
-   779	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+(The prior version of memmove used assembler conditional branches to
+memcpy; under AutoFDO the linker will decide where best to place
+memmove; it may be > 1MB away from memcpy. After this patch, memcpy
+and memmove are the same function).
+-- 
+Thanks,
+~Nick Desaulniers
