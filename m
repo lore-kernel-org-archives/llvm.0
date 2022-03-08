@@ -1,42 +1,33 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22C24C88
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 21:17:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646774260; x=1678310260;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hSVbu2R7beghB63RuJi9OaaNlDSwndeabNpK/MMXVmM=;
-  b=g1jaWrzDR/PjoXa4FD0aeQ7zqs42FbT3Rh36aIEKRbRea5hpxOrRa33V
-   BVEmm1oSKjtkXO1qGyHK3kdklWVqY6XSJH3xQgp7aCG6qqfp63ThMW+Av
-   ffzVO3oFtiEZIE4pMH/c4FobL6Ar272EHnPqsTjvC8kJYAs9IJuSROJbw
-   YyRZZqRKEi49B9O13GXerlG41+tHROfx3P7tdjYuuPfE23P9Z7CJt6iOD
-   H9eLpW3+Y/wSucysMbkxEdIsWNGwrWBmpRq8aTBlfjJrxlViv8iceC0lj
-   mYb8A6sGXrmFhX98TtcTHU7Vm9SgPWQSAucEwEI74K3yrLgGBkPWTD1z1
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254758004"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="254758004"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:17:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="495605783"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 13:17:38 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nRhD7-0001yQ-UN; Tue, 08 Mar 2022 21:17:37 +0000
-Date: Wed, 9 Mar 2022 05:17:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Mark Brown <broonie@kernel.org>
-Subject: [linux-next:master 8195/11353] ld.lld: error: undefined symbol:
- devm_clk_hw_register
-Message-ID: <202203090508.dI9OTyRb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78AE4C88
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 21:34:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D0DC340EB;
+	Tue,  8 Mar 2022 21:34:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646775251;
+	bh=7IIRlF+xZDsI23R5QSlPyFV9mzJNQRtaRJDooE6ATGc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CSW01JIzSWeneovsZAbjUGWOojs65aRPa9K80da79jozE3LE+NdwRKGVkzrsM7FIQ
+	 9Ur7mfuONJDFbBf9hMHEjtutYfCBBWxJwCuUmm25BTll7XitXVF9W/ysDezVHXt8RB
+	 8g5bvPdT3LtrBtSn6XoUr1Bw9JZUdJWvF67eBazA6wMcvqyq2zb5cnw0F+PjR9J1H4
+	 isjMZ6dfA6BHB9I83eX/6Ov3PVgLSdzVfuakCt7UYoT7ICJRiS2YvItMOA88F91gN7
+	 Ntp7TfykOROEBPCUD8INtR2Vi8i84omMucaOaqOYxfeWCvg1XuO/lUH4KjUFyw2pR8
+	 pikqIdlIMuKXw==
+Date: Tue, 8 Mar 2022 14:34:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+	Fangrui Song <maskray@google.com>,
+	"Dmitry V. Levin" <ldv@altlinux.org>,
+	Elliot Berman <quic_eberman@quicinc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] kbuild: add --target to correctly cross-compile UAPI
+ headers with Clang
+Message-ID: <YifLzLl4IE/xFMdn@dev-arch.thelio-3990X>
+References: <20220305125605.149913-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,53 +36,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220305125605.149913-1-masahiroy@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   cb153b68ff91cbc434f3de70ac549e110543e1bb
-commit: 70a5e96bad592145ba25365689a2d7d8dedb3bd9 [8195/11353] ASoC: codecs: rx-macro: move clk provider to managed variants
-config: arm-randconfig-r022-20220308 (https://download.01.org/0day-ci/archive/20220309/202203090508.dI9OTyRb-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=70a5e96bad592145ba25365689a2d7d8dedb3bd9
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 70a5e96bad592145ba25365689a2d7d8dedb3bd9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Sat, Mar 05, 2022 at 09:56:05PM +0900, Masahiro Yamada wrote:
+> When you compile-test UAPI headers (CONFIG_UAPI_HEADER_TEST=y) with
+> Clang, they are currently compiled for the host target (likely x86_64)
+> regardless of the given ARCH=.
+> 
+> In fact, some exported headers include libc headers. For example,
+> include/uapi/linux/agpgart.h includes <stdlib.h> after being exported.
+> The header search paths should match to the target we are compiling
+> them for.
+> 
+> Pick up the --target triple from KBUILD_CFLAGS in the same ways as
+> commit 7f58b487e9ff ("kbuild: make Clang build userprogs for target
+> architecture").
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-All errors (new ones prefixed by >>):
+I suspect that Android will still need to do something with USERCFLAGS
+in its build wrapper to pick up the correct libc (Bionic vs. glibc) but
+that is tangential to this patch, we should still do this change
+regardless.
 
->> ld.lld: error: undefined symbol: devm_clk_hw_register
-   >>> referenced by lpass-rx-macro.c
-   >>> soc/codecs/lpass-rx-macro.o:(rx_macro_probe) in archive sound/built-in.a
---
->> ld.lld: error: undefined symbol: devm_of_clk_add_hw_provider
-   >>> referenced by lpass-rx-macro.c
-   >>> soc/codecs/lpass-rx-macro.o:(rx_macro_probe) in archive sound/built-in.a
---
->> ld.lld: error: undefined symbol: of_clk_hw_simple_get
-   >>> referenced by lpass-rx-macro.c
-   >>> soc/codecs/lpass-rx-macro.o:(rx_macro_probe) in archive sound/built-in.a
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SND_SOC_LPASS_RX_MACRO
-   Depends on SOUND && !UML && SND && SND_SOC && COMMON_CLK
-   Selected by
-   - SND_SOC_SC7280 && SOUND && !UML && SND && SND_SOC && SND_SOC_QCOM && I2C && SOUNDWIRE
-   WARNING: unmet direct dependencies detected for SND_SOC_LPASS_TX_MACRO
-   Depends on SOUND && !UML && SND && SND_SOC && COMMON_CLK
-   Selected by
-   - SND_SOC_SC7280 && SOUND && !UML && SND && SND_SOC && SND_SOC_QCOM && I2C && SOUNDWIRE
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+> 
+> Changes in v2:
+>   - Reword the commit description to mention agpgart.h instead of
+>     asound.h because the latter is in the no-header-test list.
+> 
+>  usr/include/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/usr/include/Makefile b/usr/include/Makefile
+> index ac206fb27c65..4215801e1110 100644
+> --- a/usr/include/Makefile
+> +++ b/usr/include/Makefile
+> @@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+>  
+>  # In theory, we do not care -m32 or -m64 for header compile tests.
+>  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+> -UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
+> +UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
+>  
+>  # USERCFLAGS might contain sysroot location for CC.
+>  UAPI_CFLAGS += $(USERCFLAGS)
+> -- 
+> 2.32.0
+> 
