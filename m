@@ -1,42 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DD548DB
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 13:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A7E48DE
+	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 13:36:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646745389; x=1678281389;
+  t=1646746587; x=1678282587;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4EtijkSByfPN6vGzVZPpcUjpnUARU+7UdBKvz4mo6dk=;
-  b=AASTZBOQv0XI5tbhaL9BP+9t/mRJMneIAFL/qm/F6i3qQAV7IXo0lSCM
-   LgNryhk+T4DtOEeyW3Et/V/CHo3jnpSF7zwMseuXYrvvdDf2t5gGD7pwV
-   kT816us9JNIYGTpeVhMnTuMcYLxajfs5pa8oF7zC3Ze9Nm27DbNf6bLHL
-   QybbWI124lkQwcmjY9HJn9scRwbDh9xA6+lQdso4T+cGtHfb8Dqb2XKib
-   4p/WczcwIEeWV9khK7KkynJOFDJtBa0RsASjRtOiB1G08eywdqI3xTRvX
-   y6Pb/u/6i7pncdszV01CtjjVa8jpZGK31GfuOOLwwyCnNg79QsshtounH
+  bh=lTnzKDCiv9/QLJniNg9fgD9HRuvLFymb/UZZg28Wb6Y=;
+  b=KbNdooTfKpVmaype51+Y3owdmLClkP+4+d0C8BNVDpDSDHaMZWHgIggi
+   ZcNYd3/rKQpBoxwy34HhhEWTL0+S8rJoWoprTfR383nG55C2lzYSntXpd
+   pVBhhBmDjitFC28U+6M/fzupnfsJ5113rineW/bHNLznc8b1QBAyJfBCa
+   P74mdL5ytRaT9rssy5FEWmAZrUyQcUXyKgTgQKlWH4Zds2bu0d/B6r6Bs
+   eoZKVNFGmD2g0j/sGw8dCVomR93ziP6p+zyLbNYXdsMFyV1yseA6dSHFi
+   4Nj8ZE2qAIqmLadOSGyAsn5q+Muyp4+0IB6J80QKjV0PPpyhezmRBNVYE
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="317907734"
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="253510846"
 X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="317907734"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 05:16:26 -0800
+   d="scan'208";a="253510846"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 05:36:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="495447092"
+   d="scan'208";a="537568182"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 05:16:24 -0800
+  by orsmga007.jf.intel.com with ESMTP; 08 Mar 2022 05:36:24 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nRZhP-0001R2-MO; Tue, 08 Mar 2022 13:16:23 +0000
-Date: Tue, 8 Mar 2022 21:15:38 +0800
+	id 1nRa0m-0001T3-7d; Tue, 08 Mar 2022 13:36:24 +0000
+Date: Tue, 8 Mar 2022 21:36:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jamie Iles <quic_jiles@quicinc.com>
+To: Dust Li <dust.li@linux.alibaba.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [linux-next:master 10020/11353] drivers/i3c/master.c:2200:3:
- warning: variable 'i2cdev' is uninitialized when used here
-Message-ID: <202203082147.hks5e2ec-lkp@intel.com>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:netdev/net-next/master 150/160]
+ net/smc/smc_sysctl.h:23:16: warning: no previous prototype for function
+ 'smc_sysctl_net_init'
+Message-ID: <202203082117.G0KHS6qO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,70 +48,58 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   cb153b68ff91cbc434f3de70ac549e110543e1bb
-commit: 31b9887c7258ca47d9c665a80f19f006c86756b1 [10020/11353] i3c: remove i2c board info from i2c_dev_desc
-config: hexagon-randconfig-r041-20220307 (https://download.01.org/0day-ci/archive/20220308/202203082147.hks5e2ec-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block netdev/net-next/master
+head:   69adcb988a0675ce001dfc416d56fba2e8a85f48
+commit: 7de8eb0d9039f16e1122d7aa524a1502a160c4ff [150/160] net/smc: fix compile warning for smc_sysctl
+config: arm-randconfig-r024-20220308 (https://download.01.org/0day-ci/archive/20220308/202203082117.G0KHS6qO-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=31b9887c7258ca47d9c665a80f19f006c86756b1
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 31b9887c7258ca47d9c665a80f19f006c86756b1
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/7de8eb0d9039f16e1122d7aa524a1502a160c4ff
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block netdev/net-next/master
+        git checkout 7de8eb0d9039f16e1122d7aa524a1502a160c4ff
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/i3c/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/i3c/master.c:2200:3: warning: variable 'i2cdev' is uninitialized when used here [-Wuninitialized]
-                   i2cdev->dev = i2c_new_client_device(adap, &i2cboardinfo->base);
-                   ^~~~~~
-   drivers/i3c/master.c:2178:29: note: initialize the variable 'i2cdev' to silence this warning
-           struct i2c_dev_desc *i2cdev;
-                                      ^
-                                       = NULL
-   1 warning generated.
+   In file included from net/smc/af_smc.c:54:
+>> net/smc/smc_sysctl.h:23:16: warning: no previous prototype for function 'smc_sysctl_net_init' [-Wmissing-prototypes]
+   int __net_init smc_sysctl_net_init(struct net *net)
+                  ^
+   net/smc/smc_sysctl.h:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __net_init smc_sysctl_net_init(struct net *net)
+   ^
+   static 
+>> net/smc/smc_sysctl.h:29:17: warning: no previous prototype for function 'smc_sysctl_net_exit' [-Wmissing-prototypes]
+   void __net_exit smc_sysctl_net_exit(struct net *net) { }
+                   ^
+   net/smc/smc_sysctl.h:29:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __net_exit smc_sysctl_net_exit(struct net *net) { }
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +/i2cdev +2200 drivers/i3c/master.c
+vim +/smc_sysctl_net_init +23 net/smc/smc_sysctl.h
 
-  2174	
-  2175	static int i3c_master_i2c_adapter_init(struct i3c_master_controller *master)
-  2176	{
-  2177		struct i2c_adapter *adap = i3c_master_to_i2c_adapter(master);
-  2178		struct i2c_dev_desc *i2cdev;
-  2179		struct i2c_dev_boardinfo *i2cboardinfo;
-  2180		int ret;
-  2181	
-  2182		adap->dev.parent = master->dev.parent;
-  2183		adap->owner = master->dev.parent->driver->owner;
-  2184		adap->algo = &i3c_master_i2c_algo;
-  2185		strncpy(adap->name, dev_name(master->dev.parent), sizeof(adap->name));
-  2186	
-  2187		/* FIXME: Should we allow i3c masters to override these values? */
-  2188		adap->timeout = 1000;
-  2189		adap->retries = 3;
-  2190	
-  2191		ret = i2c_add_adapter(adap);
-  2192		if (ret)
-  2193			return ret;
-  2194	
-  2195		/*
-  2196		 * We silently ignore failures here. The bus should keep working
-  2197		 * correctly even if one or more i2c devices are not registered.
-  2198		 */
-  2199		list_for_each_entry(i2cboardinfo, &master->boardinfo.i2c, node)
-> 2200			i2cdev->dev = i2c_new_client_device(adap, &i2cboardinfo->base);
-  2201	
-  2202		return 0;
-  2203	}
-  2204	
+    22	
+  > 23	int __net_init smc_sysctl_net_init(struct net *net)
+    24	{
+    25		net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
+    26		return 0;
+    27	}
+    28	
+  > 29	void __net_exit smc_sysctl_net_exit(struct net *net) { }
+    30	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
