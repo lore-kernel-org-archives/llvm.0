@@ -1,40 +1,41 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4EA7A
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 05:28:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777737A
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 05:49:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646803737; x=1678339737;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Nu2WxIggiNPVjjNfuM5deMMlqTtROYrGu670/znHKJ0=;
-  b=HH6e4iXsdt4Bak1fThYXqw1HUN595AGzZnbijrQ9KRet/LAPfOLBxMm9
-   WV30a3xYAxxrG1w4vHYTSxkhKuqFdiJjCJ/lko8XMmuT1vIHcqKdyNJ66
-   pdrwtDumgaBYj+pa9N/qBZln0MGGNbgSrTzkD/O7HHT+xBfwXk2fGGlqm
-   EzjFgUh7b8r9AcdIkzujdB1aiIzsWTxU85nZquQ8BC1lQpAcnkgf2dFsr
-   XTzTJeFpdnd+z3WrUQcDLvldAVPPg12cacLtAQMyOwvXRkpyAoLeEc5E8
-   xY80rHfC8b0y/mexNMNTgPbx9oRh+BVioh4r74rh+PFy7URoqa+zCPSEu
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253722627"
+  t=1646804996; x=1678340996;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zvQZ5nPQCTC5UYnCj2+lFrGh0evpkgZTD7/DaQxXUcs=;
+  b=DZZQ4y4nCKK9lPMo/ZaDlUfUThUYHBOOk8G99iQWaIhKOoE6j2J3w9kF
+   OD5YFMXVrKclq5Q738y98LOClIk7hG0W4tbcGxVNfR5BsifdDJM2Lcs7L
+   mYpIek3pdT3HZ9QuBN39XH/sSA0D4twe2OeZwFHIEtaS37zxZlkrGmbyn
+   cWoU7tL6mo2y2htyWMDB4Vvjqf4JsO8YA5PPElHY1hjM+AbBwa4GxGBPP
+   h6Hmwt8nqjYpmQ57TWGHmNVM15u8FfoUGmr9hYB14dZNPcMgney/WWkBB
+   echmY7mW/zX5yDhz43mQCMaedyDjCs8U/JfZzii119kxulb88cJvSdoBg
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="242338543"
 X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="253722627"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 21:28:53 -0800
+   d="scan'208";a="242338543"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 21:49:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="711810188"
+   d="scan'208";a="780976621"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2022 21:28:52 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 08 Mar 2022 21:49:54 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nRosW-0002ef-5j; Wed, 09 Mar 2022 05:28:52 +0000
-Date: Wed, 9 Mar 2022 13:28:14 +0800
+	id 1nRpCr-0002gL-UP; Wed, 09 Mar 2022 05:49:53 +0000
+Date: Wed, 9 Mar 2022 13:48:58 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-stable-rc:queue/5.4 1059/9999] arch/x86/xen/enlighten_pv.o:
- warning: objtool: xen_cpuid()+0x180: can't find jump dest instruction at
- .text+0x277
-Message-ID: <202203091306.V8INj4uJ-lkp@intel.com>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [andersson:tuxsuite 29/42] drivers/soc/qcom/pmic_glink.c:200:34:
+ warning: unused variable 'pmic_glink_of_match'
+Message-ID: <202203091303.wDvLl30f-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,35 +46,44 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Josh Poimboeuf <jpoimboe@redhat.com>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: Borislav Petkov <bp@suse.de>
-CC: Sasha Levin <sashal@kernel.org>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.4
-head:   e53e4ce486167f8081d88b2008748b6112170bd4
-commit: d85044145fdd791ea391fb0b09c9c036a7b02146 [1059/9999] objtool: Fix noreturn detection for ignored functions
-config: x86_64-randconfig-c007-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091306.V8INj4uJ-lkp@intel.com/config)
+tree:   https://github.com/andersson/kernel tuxsuite
+head:   d1c9502cfe160da3c09a0f379147f16d559e4ab7
+commit: eb61d6c02e912eee3c26927b311b643f262b4036 [29/42] soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
+config: arm64-randconfig-r016-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091303.wDvLl30f-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=d85044145fdd791ea391fb0b09c9c036a7b02146
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.4
-        git checkout d85044145fdd791ea391fb0b09c9c036a7b02146
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/andersson/kernel/commit/eb61d6c02e912eee3c26927b311b643f262b4036
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson tuxsuite
+        git checkout eb61d6c02e912eee3c26927b311b643f262b4036
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/qcom/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/xen/enlighten_pv.o: warning: objtool: xen_cpuid()+0x180: can't find jump dest instruction at .text+0x277
+>> drivers/soc/qcom/pmic_glink.c:200:34: warning: unused variable 'pmic_glink_of_match' [-Wunused-const-variable]
+   static const struct of_device_id pmic_glink_of_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/pmic_glink_of_match +200 drivers/soc/qcom/pmic_glink.c
+
+   199	
+ > 200	static const struct of_device_id pmic_glink_of_match[] = {
+   201		{ .compatible = "qcom,pmic-glink", },
+   202		{}
+   203	};
+   204	MODULE_DEVICE_TABLE(of, pmic_glink_of_match);
+   205	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
