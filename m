@@ -1,193 +1,99 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C090E7A
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 05:53:24 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id l16-20020a25bf90000000b00628c3a412cdso980855ybk.10
-        for <llvm@lists.linux.dev>; Tue, 08 Mar 2022 21:53:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=w+xH5zPzO9fzlPZhErbu5z29jcELWn+6P2g2NcadMFA=;
-        b=bM2zTSm8KeB90TkOWKQFIC/tP96YmuE33vq0ZZHg+gfP6vr07pc36lboEL6JZF5rR5
-         W75V9utE8zwUPnLZzjdnO/rnaptxeubHArLRUSokfgYnm10dvJ8q/Tdcpp0lrxJZeNyq
-         Gl+LV4FzMH/vIwBuNZEQvzimEn7Wj3yd7LiyPhj4y93RN3i8m6h44RvmxqzQAIchsiuy
-         1I6AcDPYrSTmC1iHGDXqd3mW1TKBH5gmvcKxYkg5Tvrb9RJq77WweysJBeRKImUZpUzz
-         2USDBl+/faFs+wkYCi4WjKFhXKwonyXvcHQ6HshEGLP7Z1mlSLGgD6446WhYeZzrjYvc
-         VWPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=w+xH5zPzO9fzlPZhErbu5z29jcELWn+6P2g2NcadMFA=;
-        b=6pNvpfTR5SpEb/gZnf+FHUtL0JJB7+QVLPei/F2pfZk9LTV2E8SmltXbZLrmoJ1QZU
-         RncR7Klr/3GCgSK/VltKI5Tl0/dXfXT10ZSGYVdmoAq9V582juPiVG0GIiG7nvQCBpcd
-         37Gue2wZdJIjCyPL/wr21e5k8TMJ0Q/nRrQ1s8TRQchv1hye1s9R44Y9D4VNe5aGFqbD
-         Hd2stpRJHJ6YXK5wDYY6Qi1VVlQ+SUOHndSPpj4XLsEgIYuSWdk7Pf/e6jLGN8TVvUnX
-         y8IsOXgnOVaAmWBFLwfVRS+zRONIBmAfOjOvvqkZRuFxkKPdh2583inJzY5ftCpkd4Ny
-         mXYQ==
-X-Gm-Message-State: AOAM531oSYT0PbMhJ6HDb3dx7U0o0IqG6q+tSNtjWoWNJhYHMYddQ3xC
-	K8qoI0B1HisEFY81606gC7ISkM4l6ngu
-X-Google-Smtp-Source: ABdhPJzJF+c+5wFkgHiaslh6V5+cpIWKEMcc6bLulAiUfvYLAQ7jF7pXtx1VkHg0a/2mozQgRdhqhoOqJMwN
-X-Received: from maskray1.svl.corp.google.com ([2620:15c:2ce:200:7036:807c:86c9:3f2e])
- (user=maskray job=sendgmr) by 2002:a81:15c9:0:b0:2dc:4bf9:41ea with SMTP id
- 192-20020a8115c9000000b002dc4bf941eamr15213633ywv.145.1646805203519; Tue, 08
- Mar 2022 21:53:23 -0800 (PST)
-Date: Tue,  8 Mar 2022 21:51:18 -0800
-Message-Id: <20220309055118.1551013-1-maskray@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DC37A
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 06:09:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646806197; x=1678342197;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BkddJwLaNHbRkIM03fEcB7GswNwAmU2E4YNG/vlpmOA=;
+  b=Esi1fiQgFr/Ni5rwKujTrIas43uu0W95kGG95BHA5bZUUW68Iob2fbd8
+   BIyNqkm6Hy5A0oPZ3v0fvhGO/iGSyfXrD9NqYiNa1sjiLgWL8NIrgzmsO
+   9sK8fQ0BceM0Gg6kkLHTaWRLJ45tmZp97nD9M62rCpqhvKrg0sRKF9Rsp
+   ATziQLWmZdJNc5oc0hU2tDORLBEeFBkvfp2IH2fhFCcWIuRmPO/nAskUp
+   DSKDdpwWe465URBoNLvUwJcbFKl6fT2kFjzdvhLjJuekDpDxDuL36DH40
+   xE0J7ruoP/TJmXe+hPWg08p+V/XqsQZSHRlDiy3ap4fI8SkKmvwKkgXxW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="318125257"
+X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
+   d="scan'208";a="318125257"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 22:09:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
+   d="scan'208";a="596161489"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Mar 2022 22:09:55 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nRpWE-0002i7-BG; Wed, 09 Mar 2022 06:09:54 +0000
+Date: Wed, 9 Mar 2022 14:09:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [andersson:tuxsuite 33/42]
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1405:37: warning: unused
+ variable 'sm8350_regdma'
+Message-ID: <202203091451.k8xPf3xI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Subject: [PATCH] powerpc: Replace ppc64 DT_RELACOUNT usage with DT_RELASZ/24
-From: Fangrui Song <maskray@google.com>
-To: Michael Ellerman <mpe@ellerman.id.au>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
-	Alexey Kardashevskiy <aik@ozlabs.ru>, linuxppc-dev@lists.ozlabs.org
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-DT_RELACOUNT is an ELF dynamic tag inherited from SunOS indicating the
-number of R_*_RELATIVE relocations. It is optional but {ld.lld,ld.lld}
--z combreloc always creates it (if non-zero) to slightly speed up glibc
-ld.so relocation resolving by avoiding R_*R_PPC64_RELATIVE type
-comparison. The tag is otherwise nearly unused in the wild and I'd
-recommend that software avoids using it.
+tree:   https://github.com/andersson/kernel tuxsuite
+head:   d1c9502cfe160da3c09a0f379147f16d559e4ab7
+commit: 263030b81c7535a746e774fd5fcba7b5e30b3180 [33/42] drm/msm/dpu: Fix typo in sm8350 hw_catalog
+config: riscv-randconfig-r042-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091451.k8xPf3xI-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/andersson/kernel/commit/263030b81c7535a746e774fd5fcba7b5e30b3180
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson tuxsuite
+        git checkout 263030b81c7535a746e774fd5fcba7b5e30b3180
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/ drivers/dma/ drivers/gpu/drm/msm/
 
-lld>=14.0.0 (since commit da0e5b885b25cf4ded0fa89b965dc6979ac02ca9)
-underestimates DT_RELACOUNT for ppc64 when position-independent long
-branch thunks are used. Correcting it needs non-trivial arch-specific
-complexity which I'd prefer to avoid. Since our code always compares the
-relocation type with R_PPC64_RELATIVE, replacing every occurrence of
-DT_RELACOUNT with DT_RELASZ/sizeof(Elf64_Rela)=DT_RELASZ/24 is a correct
-alternative.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-DT_RELASZ is in practice bounded by an uint32_t. Dividing x by 24 can be
-implemented as (uint32_t)(x*0xaaaaaaab) >> 4.
+All warnings (new ones prefixed by >>):
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1581
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Fangrui Song <maskray@google.com>
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1405:37: warning: unused variable 'sm8350_regdma' [-Wunused-const-variable]
+   static const struct dpu_reg_dma_cfg sm8350_regdma = {
+                                       ^
+   1 warning generated.
+
+
+vim +/sm8350_regdma +1405 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+
+af776a3e1c304bf Jonathan Marek 2020-07-10  1404  
+b3a92bed29f97a8 Robert Foss    2021-06-16 @1405  static const struct dpu_reg_dma_cfg sm8350_regdma = {
+b3a92bed29f97a8 Robert Foss    2021-06-16  1406  	.base = 0x0,
+b3a92bed29f97a8 Robert Foss    2021-06-16  1407  	.version = 0x00020000,
+b3a92bed29f97a8 Robert Foss    2021-06-16  1408  	.trigger_sel_off = 0x119c,
+b3a92bed29f97a8 Robert Foss    2021-06-16  1409  	.xin_id = 7,
+b3a92bed29f97a8 Robert Foss    2021-06-16  1410  	.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
+b3a92bed29f97a8 Robert Foss    2021-06-16  1411  };
+b3a92bed29f97a8 Robert Foss    2021-06-16  1412  
+
+:::::: The code at line 1405 was first introduced by commit
+:::::: b3a92bed29f97a812160786819bf18c2cc590cc9 drm/msm/dpu: Add SM8350 to hw catalog
+
+:::::: TO: Robert Foss <robert.foss@linaro.org>
+:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
+
 ---
- arch/powerpc/boot/crt0.S       | 28 +++++++++++++++++-----------
- arch/powerpc/kernel/reloc_64.S | 15 +++++++++------
- 2 files changed, 26 insertions(+), 17 deletions(-)
-
-diff --git a/arch/powerpc/boot/crt0.S b/arch/powerpc/boot/crt0.S
-index feadee18e271..1c96ebe7ef1a 100644
---- a/arch/powerpc/boot/crt0.S
-+++ b/arch/powerpc/boot/crt0.S
-@@ -8,7 +8,7 @@
- #include "ppc_asm.h"
- 
- RELA = 7
--RELACOUNT = 0x6ffffff9
-+RELASZ = 8
- 
- 	.data
- 	/* A procedure descriptor used when booting this as a COFF file.
-@@ -65,7 +65,7 @@ p_base:	mflr	r10		/* r10 now points to runtime addr of p_base */
- 	subf	r11,r11,r12	/* runtime - linktime offset */
- 
- 	/* The dynamic section contains a series of tagged entries.
--	 * We need the RELA and RELACOUNT entries. */
-+	 * We need the RELA and RELASZ entries. */
- 	li	r9,0
- 	li	r0,0
- 9:	lwz	r8,0(r12)	/* get tag */
-@@ -75,18 +75,21 @@ p_base:	mflr	r10		/* r10 now points to runtime addr of p_base */
- 	bne	11f
- 	lwz	r9,4(r12)	/* get RELA pointer in r9 */
- 	b	12f
--11:	addis	r8,r8,(-RELACOUNT)@ha
--	cmpwi	r8,RELACOUNT@l
-+11:	cmpwi	r8,RELASZ
- 	bne	12f
--	lwz	r0,4(r12)	/* get RELACOUNT value in r0 */
-+	lwz	r0,4(r12)	/* get RELASZ / 24 in r0 */
-+	lis     r8,0xaaaa
-+	ori     r8,r8,0xaaab
-+	mulhwu  r0,r0,r8
-+	srwi    r0,r0,4
- 12:	addi	r12,r12,8
- 	b	9b
- 
- 	/* The relocation section contains a list of relocations.
- 	 * We now do the R_PPC_RELATIVE ones, which point to words
- 	 * which need to be initialized with addend + offset.
--	 * The R_PPC_RELATIVE ones come first and there are RELACOUNT
--	 * of them. */
-+	 * The R_PPC_RELATIVE ones come first and there are at most
-+         * RELASZ/24 of them. */
- 10:	/* skip relocation if we don't have both */
- 	cmpwi	r0,0
- 	beq	3f
-@@ -160,14 +163,17 @@ p_base:	mflr	r10		/* r10 now points to runtime addr of p_base */
- 	bne	10f
- 	ld	r13,8(r11)       /* get RELA pointer in r13 */
- 	b	11f
--10:	addis	r12,r12,(-RELACOUNT)@ha
--	cmpdi	r12,RELACOUNT@l
-+10:	cmpdi	r12,RELASZ
- 	bne	11f
--	ld	r8,8(r11)       /* get RELACOUNT value in r8 */
-+	ld	r8,8(r11)       /* get RELASZ / 24 in r8 */
-+	lis     r0,0xaaaa
-+	ori     r0,r0,0xaaab
-+	mulhwu  r8,r8,r0
-+	srwi    r8,r8,4
- 11:	addi	r11,r11,16
- 	b	9b
- 12:
--	cmpdi	r13,0            /* check we have both RELA and RELACOUNT */
-+	cmpdi	r13,0            /* check we have both RELA and RELASZ */
- 	cmpdi	cr1,r8,0
- 	beq	3f
- 	beq	cr1,3f
-diff --git a/arch/powerpc/kernel/reloc_64.S b/arch/powerpc/kernel/reloc_64.S
-index 02d4719bf43a..362be759609f 100644
---- a/arch/powerpc/kernel/reloc_64.S
-+++ b/arch/powerpc/kernel/reloc_64.S
-@@ -8,7 +8,7 @@
- #include <asm/ppc_asm.h>
- 
- RELA = 7
--RELACOUNT = 0x6ffffff9
-+RELASZ = 8
- R_PPC64_RELATIVE = 22
- 
- /*
-@@ -27,7 +27,7 @@ _GLOBAL(relocate)
- 	add	r10,r10,r12	/* r10 has runtime addr of _stext */
- 
- 	/*
--	 * Scan the dynamic section for the RELA and RELACOUNT entries.
-+	 * Scan the dynamic section for the RELA and RELASZ entries.
- 	 */
- 	li	r7,0
- 	li	r8,0
-@@ -38,13 +38,16 @@ _GLOBAL(relocate)
- 	bne	2f
- 	ld	r7,8(r11)	/* get RELA pointer in r7 */
- 	b	3f
--2:	addis	r6,r6,(-RELACOUNT)@ha
--	cmpdi	r6,RELACOUNT@l
-+2:	cmpdi	r6,RELASZ
- 	bne	3f
--	ld	r8,8(r11)	/* get RELACOUNT value in r8 */
-+	ld	r8,8(r11)	/* get RELA / 24 in r8 */
-+	lis     r0,0xaaaa
-+	ori     r0,r0,0xaaab
-+	mulhwu  r8,r8,r0
-+	srwi    r8,r8,4
- 3:	addi	r11,r11,16
- 	b	1b
--4:	cmpdi	r7,0		/* check we have both RELA and RELACOUNT */
-+4:	cmpdi	r7,0		/* check we have both RELA and RELASZ */
- 	cmpdi	cr1,r8,0
- 	beq	6f
- 	beq	cr1,6f
--- 
-2.35.1.616.g0bdcbb4464-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
