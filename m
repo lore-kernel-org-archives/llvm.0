@@ -1,193 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1312F5107
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 19:02:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B078C340E8;
-	Wed,  9 Mar 2022 19:02:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F1D5107
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 19:19:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FE1C340E8;
+	Wed,  9 Mar 2022 19:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646852526;
-	bh=AcspJPuA9dNvJicZK/m3TDHAU3/5ThUWIdTSCDAT74c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=padBPJSwctZLSS5FlBkT17NAXaJT6Jme+aHd6O9qpHWjAaoXMOfsrF1s4MlXpCilJ
-	 g01VVX3j2ShVXz6lWLD+AdKeHafB58+XgrqzN/jFfLBO0N0Ve46+4FIlxlJ38xqe+X
-	 zPh7SlnB3e1bfqDey4YXVAUjy3VKs+NuMLQ/KNnE796RIY9oRhO19jL2d0oK2TxIAN
-	 bqOadgOZCAI0rIKOK4oVOyKjmXvvZTMFpSnmcNhguGyYA9zYB3zwAeTTRrqC97AgMm
-	 zN8iUX7QMCce5auwQTv8tu398rvPbjZftWkwj90zSuo6cGNMQ8/5Kf8MD4sh3ETXVQ
-	 mZDbmdqKFog6g==
-Date: Wed, 9 Mar 2022 12:01:59 -0700
+	s=k20201202; t=1646853551;
+	bh=mZ0YOFOw30QUQWww8HEgcbPZ7ISUs/jOLiEzn+8383E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jYYWjfr7qHblMTfR0x3UegRLIdjcsCfTQN4OejzagH6Yfbo3B3Zo2vNiDSO7dCFbh
+	 6eUgwXUcTXPWszRSF9FhQGqPRlOMms/v6yPVCxsOLOu5Mr4xYtNlnAXJC9TwfKjv8f
+	 HzDDXmaqMTPCW321oAC2T6cYAVTWoNY7fzDzRZZzgmvLKl9of+ODytuREB9LrYYoYr
+	 ADbd7m1FqnZKrRhoI3xudSm3bEkbpJRDQ2uJN9DjDgsrsMO46wxYdAl2Ye6xx+XWQY
+	 az03UbI6T6si1J8pHOKey6tnwq8clOy/pJcSU9dEY+grd7ROciynKK9h6gPAIE4IOb
+	 XIrTSJSKh9JRA==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Fangrui Song <maskray@google.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Alexey Kardashevskiy <aik@ozlabs.ru>, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] powerpc: Replace ppc64 DT_RELACOUNT usage with
- DT_RELASZ/24
-Message-ID: <Yij5p+TanPYnUM5V@dev-arch.thelio-3990X>
-References: <20220309055118.1551013-1-maskray@google.com>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	stable@vger.kernel.org,
+	Marc Zyngier <maz@kernel.org>,
+	James Morse <james.morse@arm.com>
+Subject: [PATCH] arm64: Do not include __READ_ONCE() block in assembly files
+Date: Wed,  9 Mar 2022 12:16:34 -0700
+Message-Id: <20220309191633.2307110-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309055118.1551013-1-maskray@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 08, 2022 at 09:51:18PM -0800, Fangrui Song wrote:
-> DT_RELACOUNT is an ELF dynamic tag inherited from SunOS indicating the
-> number of R_*_RELATIVE relocations. It is optional but {ld.lld,ld.lld}
+When building arm64 defconfig + CONFIG_LTO_CLANG_{FULL,THIN}=y after
+commit 558c303c9734 ("arm64: Mitigate spectre style branch history side
+channels"), the following error occurs:
 
-                                                         ^ ld.{bfd,lld} ?
+  <instantiation>:4:2: error: invalid fixup for movz/movk instruction
+   mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
+   ^
 
-> -z combreloc always creates it (if non-zero) to slightly speed up glibc
-> ld.so relocation resolving by avoiding R_*R_PPC64_RELATIVE type
-> comparison. The tag is otherwise nearly unused in the wild and I'd
-> recommend that software avoids using it.
-> 
-> lld>=14.0.0 (since commit da0e5b885b25cf4ded0fa89b965dc6979ac02ca9)
-> underestimates DT_RELACOUNT for ppc64 when position-independent long
-> branch thunks are used. Correcting it needs non-trivial arch-specific
-> complexity which I'd prefer to avoid. Since our code always compares the
-> relocation type with R_PPC64_RELATIVE, replacing every occurrence of
-> DT_RELACOUNT with DT_RELASZ/sizeof(Elf64_Rela)=DT_RELASZ/24 is a correct
-> alternative.
-> 
-> DT_RELASZ is in practice bounded by an uint32_t. Dividing x by 24 can be
-> implemented as (uint32_t)(x*0xaaaaaaab) >> 4.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1581
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Fangrui Song <maskray@google.com>
+Marc figured out that moving "#include <linux/init.h>" in
+include/linux/arm-smccc.h into a !__ASSEMBLY__ block resolves it. The
+full include chain with CONFIG_LTO=y from include/linux/arm-smccc.h:
 
-Thank you a lot for the fix! I tested this with several different
-configurations with tip of tree LLVM and they all booted in QEMU. I also
-tested one configuration with GCC 5.4 (we support GCC 5.x as a minimum)
-and it booted as well.
+include/linux/init.h
+include/linux/compiler.h
+arch/arm64/include/asm/rwonce.h
+arch/arm64/include/asm/alternative-macros.h
+arch/arm64/include/asm/assembler.h
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+The asm/alternative-macros.h include in asm/rwonce.h only happens when
+CONFIG_LTO is set, which ultimately casues asm/assembler.h to be
+included before the definition of ARM_SMCCC_ARCH_WORKAROUND_3. As a
+result, the preprocessor does not expand ARM_SMCCC_ARCH_WORKAROUND_3 in
+__mitigate_spectre_bhb_fw, which results in the error above.
 
-> ---
->  arch/powerpc/boot/crt0.S       | 28 +++++++++++++++++-----------
->  arch/powerpc/kernel/reloc_64.S | 15 +++++++++------
->  2 files changed, 26 insertions(+), 17 deletions(-)
-> 
-> diff --git a/arch/powerpc/boot/crt0.S b/arch/powerpc/boot/crt0.S
-> index feadee18e271..1c96ebe7ef1a 100644
-> --- a/arch/powerpc/boot/crt0.S
-> +++ b/arch/powerpc/boot/crt0.S
-> @@ -8,7 +8,7 @@
->  #include "ppc_asm.h"
->  
->  RELA = 7
-> -RELACOUNT = 0x6ffffff9
-> +RELASZ = 8
->  
->  	.data
->  	/* A procedure descriptor used when booting this as a COFF file.
-> @@ -65,7 +65,7 @@ p_base:	mflr	r10		/* r10 now points to runtime addr of p_base */
->  	subf	r11,r11,r12	/* runtime - linktime offset */
->  
->  	/* The dynamic section contains a series of tagged entries.
-> -	 * We need the RELA and RELACOUNT entries. */
-> +	 * We need the RELA and RELASZ entries. */
->  	li	r9,0
->  	li	r0,0
->  9:	lwz	r8,0(r12)	/* get tag */
-> @@ -75,18 +75,21 @@ p_base:	mflr	r10		/* r10 now points to runtime addr of p_base */
->  	bne	11f
->  	lwz	r9,4(r12)	/* get RELA pointer in r9 */
->  	b	12f
-> -11:	addis	r8,r8,(-RELACOUNT)@ha
-> -	cmpwi	r8,RELACOUNT@l
-> +11:	cmpwi	r8,RELASZ
->  	bne	12f
-> -	lwz	r0,4(r12)	/* get RELACOUNT value in r0 */
-> +	lwz	r0,4(r12)	/* get RELASZ / 24 in r0 */
-> +	lis     r8,0xaaaa
-> +	ori     r8,r8,0xaaab
-> +	mulhwu  r0,r0,r8
-> +	srwi    r0,r0,4
->  12:	addi	r12,r12,8
->  	b	9b
->  
->  	/* The relocation section contains a list of relocations.
->  	 * We now do the R_PPC_RELATIVE ones, which point to words
->  	 * which need to be initialized with addend + offset.
-> -	 * The R_PPC_RELATIVE ones come first and there are RELACOUNT
-> -	 * of them. */
-> +	 * The R_PPC_RELATIVE ones come first and there are at most
-> +         * RELASZ/24 of them. */
->  10:	/* skip relocation if we don't have both */
->  	cmpwi	r0,0
->  	beq	3f
-> @@ -160,14 +163,17 @@ p_base:	mflr	r10		/* r10 now points to runtime addr of p_base */
->  	bne	10f
->  	ld	r13,8(r11)       /* get RELA pointer in r13 */
->  	b	11f
-> -10:	addis	r12,r12,(-RELACOUNT)@ha
-> -	cmpdi	r12,RELACOUNT@l
-> +10:	cmpdi	r12,RELASZ
->  	bne	11f
-> -	ld	r8,8(r11)       /* get RELACOUNT value in r8 */
-> +	ld	r8,8(r11)       /* get RELASZ / 24 in r8 */
-> +	lis     r0,0xaaaa
-> +	ori     r0,r0,0xaaab
-> +	mulhwu  r8,r8,r0
-> +	srwi    r8,r8,4
->  11:	addi	r11,r11,16
->  	b	9b
->  12:
-> -	cmpdi	r13,0            /* check we have both RELA and RELACOUNT */
-> +	cmpdi	r13,0            /* check we have both RELA and RELASZ */
->  	cmpdi	cr1,r8,0
->  	beq	3f
->  	beq	cr1,3f
-> diff --git a/arch/powerpc/kernel/reloc_64.S b/arch/powerpc/kernel/reloc_64.S
-> index 02d4719bf43a..362be759609f 100644
-> --- a/arch/powerpc/kernel/reloc_64.S
-> +++ b/arch/powerpc/kernel/reloc_64.S
-> @@ -8,7 +8,7 @@
->  #include <asm/ppc_asm.h>
->  
->  RELA = 7
-> -RELACOUNT = 0x6ffffff9
-> +RELASZ = 8
->  R_PPC64_RELATIVE = 22
->  
->  /*
-> @@ -27,7 +27,7 @@ _GLOBAL(relocate)
->  	add	r10,r10,r12	/* r10 has runtime addr of _stext */
->  
->  	/*
-> -	 * Scan the dynamic section for the RELA and RELACOUNT entries.
-> +	 * Scan the dynamic section for the RELA and RELASZ entries.
->  	 */
->  	li	r7,0
->  	li	r8,0
-> @@ -38,13 +38,16 @@ _GLOBAL(relocate)
->  	bne	2f
->  	ld	r7,8(r11)	/* get RELA pointer in r7 */
->  	b	3f
-> -2:	addis	r6,r6,(-RELACOUNT)@ha
-> -	cmpdi	r6,RELACOUNT@l
-> +2:	cmpdi	r6,RELASZ
->  	bne	3f
-> -	ld	r8,8(r11)	/* get RELACOUNT value in r8 */
-> +	ld	r8,8(r11)	/* get RELA / 24 in r8 */
-> +	lis     r0,0xaaaa
-> +	ori     r0,r0,0xaaab
-> +	mulhwu  r8,r8,r0
-> +	srwi    r8,r8,4
->  3:	addi	r11,r11,16
->  	b	1b
-> -4:	cmpdi	r7,0		/* check we have both RELA and RELACOUNT */
-> +4:	cmpdi	r7,0		/* check we have both RELA and RELASZ */
->  	cmpdi	cr1,r8,0
->  	beq	6f
->  	beq	cr1,6f
-> -- 
-> 2.35.1.616.g0bdcbb4464-goog
-> 
+Avoid this problem by just avoiding the CONFIG_LTO=y __READ_ONCE() block
+in asm/rwonce.h with assembly files, as nothing in that block is useful
+to assembly files, which allows ARM_SMCCC_ARCH_WORKAROUND_3 to be
+properly expanded with CONFIG_LTO=y builds.
+
+Cc: stable@vger.kernel.org
+Fixes: e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when CONFIG_LTO=y")
+Link: https://lore.kernel.org/r/20220309155716.3988480-1-maz@kernel.org/
+Reported-by: Marc Zyngier <maz@kernel.org>
+Acked-by: James Morse <james.morse@arm.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+
+This is based on current mainline; if it should be based on a specific
+arm64 branch, please let me know.
+
+As 558c303c9734 is going to stable, I marked this for stable as well to
+avoid breaking Android. I used e35123d83ee3 for the fixes tag to make it
+clear to the stable team this should only go where that commit is
+present. If a different fixes tag should be used, please feel free to
+substitute.
+
+ arch/arm64/include/asm/rwonce.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+index 1bce62fa908a..56f7b1d4d54b 100644
+--- a/arch/arm64/include/asm/rwonce.h
++++ b/arch/arm64/include/asm/rwonce.h
+@@ -5,7 +5,7 @@
+ #ifndef __ASM_RWONCE_H
+ #define __ASM_RWONCE_H
+ 
+-#ifdef CONFIG_LTO
++#if defined(CONFIG_LTO) && !defined(__ASSEMBLY__)
+ 
+ #include <linux/compiler_types.h>
+ #include <asm/alternative-macros.h>
+@@ -66,7 +66,7 @@
+ })
+ 
+ #endif	/* !BUILD_VDSO */
+-#endif	/* CONFIG_LTO */
++#endif	/* CONFIG_LTO && !__ASSEMBLY__ */
+ 
+ #include <asm-generic/rwonce.h>
+ 
+
+base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
+-- 
+2.35.1
+
