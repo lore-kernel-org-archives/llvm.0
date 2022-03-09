@@ -1,107 +1,71 @@
 Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BBE17C0
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 09:19:06 +0000 (UTC)
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 2299J1lQ017089
-	for <llvm@lists.linux.dev>; Wed, 9 Mar 2022 18:19:02 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2299J1lQ017089
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C6F17C0
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 09:30:06 +0000 (UTC)
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48]) (authenticated)
+	by conssluserg-02.nifty.com with ESMTP id 2299Tv3R024964
+	for <llvm@lists.linux.dev>; Wed, 9 Mar 2022 18:29:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2299Tv3R024964
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1646817542;
-	bh=7ptQH0F5J9d2jeE9K6DKb/RLQ+CHx4kcW97GHNeRP3w=;
+	s=dec2015msa; t=1646818197;
+	bh=clWEPD6AdacDEOa6KCj1PoO9ewauxhdqGkF+hXLwHwk=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=T4cDgIb4RLnxUgURlNEoy0XiX1b5w5wP2ymh2l/tihLJRfcawn5UOwTbwaVfKs1yf
-	 aO99wh2upm1yiFpMTxZGcKNWgFABdA1wCh0JyKUAZb/PIr3+oGT0WiftG83z4HoPiI
-	 FGMn93hKKPNrbI/TqTrNaYBditOy1DVm+OePsWFHJMQPsXI62RVZDIlBdOEBxJYMYS
-	 NIWtDcZ48+ImDxwwS7Twmm3re4d81/zF+XFxhGFycArjgmFFOjEV5e+4z5lHawCVHm
-	 2x997056suRTIM1eJyIrFhucXQV4KLMY/SdNN0iETtyXXmbk/KC2hxnNa/adUWVqw1
-	 0m+Pp7O78Tdqw==
-X-Nifty-SrcIP: [209.85.215.176]
-Received: by mail-pg1-f176.google.com with SMTP id 27so1448018pgk.10
-        for <llvm@lists.linux.dev>; Wed, 09 Mar 2022 01:19:02 -0800 (PST)
-X-Gm-Message-State: AOAM533hmDQMnIMGU6zybZPZ552ANB89ei9uH0qbc3Lb1W1Nf3zM6tBp
-	zqXbrrQPGUMmQlcffPgAB5XlJKTd8FnBRbJww/U=
-X-Google-Smtp-Source: ABdhPJy5QRSZE5cwpNSu1+QJNGk0tz8koEoXrMBDbCx6hK3tNuVOPYULhzCSvBtKznnLBYsWpukwoAxtPjMqBOgCDqk=
-X-Received: by 2002:a63:1d44:0:b0:373:5612:629b with SMTP id
- d4-20020a631d44000000b003735612629bmr17462393pgm.352.1646817541465; Wed, 09
- Mar 2022 01:19:01 -0800 (PST)
+	b=2ZBjVKdPQdgv2Bf5DpuDj5qDdwZB+cQOy2j0ZK9KEuJ8nKf0zltZI2QKpVNNqI+c2
+	 9H6KpNZTD+L0I4dyEwZz2u3ARS8LJGcnlah2So+0nnWOFJAFVVhgfK5krPahB7fRlG
+	 YoBBWPI6/IFnZ49FivVSUifs4Uq9OnvURv5QFuGT8aa0UQpG/kSbruV5k+lmYTwnQt
+	 nK7IVR9NKZMnqiS/vJvMZk3YZQzXclhu2/7h54TQqnFFlC1buCF4W7ox3Bt/R0+g3V
+	 tPf1GjqDaeTAbnX1G0r4dNfYbAPot4bPrNrNsji9Huh0xrZ8kb9dpib6iUf0TiQHmK
+	 TQuRWnbOPnjLg==
+X-Nifty-SrcIP: [209.85.216.48]
+Received: by mail-pj1-f48.google.com with SMTP id b8so1795739pjb.4
+        for <llvm@lists.linux.dev>; Wed, 09 Mar 2022 01:29:57 -0800 (PST)
+X-Gm-Message-State: AOAM531ZScoIaFGJ7JnrOSl9HrXBbw9Wtk6tPwwPu1fgid1Nt/nFIsBX
+	oBGJm5n5pYf/HJ4h23HIE1keYvFrgLB2iObgJBo=
+X-Google-Smtp-Source: ABdhPJzc8aP7snE9Ier6y4JJAKFK3/PD64bYVfxzp+1b47gYUv+R/6gaz0BM5wKcDEzUg6jYau3NZwheI8vd7fEoeDA=
+X-Received: by 2002:a17:902:eb84:b0:151:f80e:e98b with SMTP id
+ q4-20020a170902eb8400b00151f80ee98bmr10526055plg.99.1646818196448; Wed, 09
+ Mar 2022 01:29:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220308215615.14183-1-arnd@kernel.org> <CAHk-=wjsCrVxToP0Zx+cUAVZmSKi=Y6NP1+VnBcoPyPPEBfonQ@mail.gmail.com>
- <CAK7LNAQoFFVLfkhA7FC9vDbvc4wdLginYeRHL0xHVAumu6p=uw@mail.gmail.com>
-In-Reply-To: <CAK7LNAQoFFVLfkhA7FC9vDbvc4wdLginYeRHL0xHVAumu6p=uw@mail.gmail.com>
+References: <20220304170813.1689186-1-nathan@kernel.org> <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
+ <YieGARVP2dhn8tbQ@casper.infradead.org>
+In-Reply-To: <YieGARVP2dhn8tbQ@casper.infradead.org>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 9 Mar 2022 18:18:18 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASuy5hSOU7Y7Tr8_6Ks1ZqEeUKv_-c6fDjMubq0_ENRaw@mail.gmail.com>
-Message-ID: <CAK7LNASuy5hSOU7Y7Tr8_6Ks1ZqEeUKv_-c6fDjMubq0_ENRaw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] [v4] Kbuild: std=gnu11 changes
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Alex Shi <alexs@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Marco Elver <elver@google.com>, Jani Nikula <jani.nikula@intel.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+Date: Wed, 9 Mar 2022 18:29:14 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQnAgOqd1Zr3R0KBuGJps8K+Z7PGH5av9nA-VpJwZ4MeQ@mail.gmail.com>
+Message-ID: <CAK7LNAQnAgOqd1Zr3R0KBuGJps8K+Z7PGH5av9nA-VpJwZ4MeQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        llvm@lists.linux.dev,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Mark Rutland <mark.rutland@arm.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Mar 9, 2022 at 11:16 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Wed, Mar 9, 2022 at 1:36 AM Matthew Wilcox <willy@infradead.org> wrote:
 >
-> On Wed, Mar 9, 2022 at 9:09 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
+> On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
+> > > +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
+> > > +``LLVM=1``.
 > >
-> > On Tue, Mar 8, 2022 at 1:56 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > >
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > I've incorporated the feedback from Masahiro Yamada in this
-> > > version, splitting out one more patch, rebasing on top of
-> > > the kbuild tree, and changing the order of the patches.
-> > >
-> > > Please apply to the kbuild tree.
-> >
-> > I'd actually like to see this as a separate branch, so that I can
-> > merge it early - or other peoples git branches end up depending on it.
+> > Hmm... I can see someone's build wrappers setting LLVM=1, then them
+> > being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
+> > might expect.  But Masahiro says let's fix this later which is fine.
 >
->
-> OK, I can apply this to a separate branch, kbuild-gnu11.
-> (and I will queue this up shortly because it is already -rc7)
->
-> Then, I will send two pull reqs in the next MW,
-> but please note they will conflict with each other,
-> between this gnu11 patch set and the following
-> one in my usual kbuild branch:
->
-> https://patchwork.kernel.org/project/linux-kbuild/patch/20220201213542.2808035-1-quic_eberman@quicinc.com/
->
->
-> I hope this is not a complex conflict, but please let me know
-> if you have any requests to me.
->
->
->
->
->
+> What happens if you say LLVM= instead of LLVM=0 ?  Would that "undo"
+> a prior LLVM=1 and use GCC instead?
 
-
-All, applied to linux-kbuild/kbuild-gnu11.
-
-If somebody wants to give Reviewed-by, Acked-by, Tested-by, please.
-
-I will append them later.
-
-
-
-
-
-
+I think so.
 
 
 -- 
