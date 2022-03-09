@@ -1,116 +1,139 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF64645A
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 01:13:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646788380; x=1678324380;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xtRs6oi+J5auIPKJEANNMf/Y0ox4XmKqILRhR300NLg=;
-  b=fTG84JLl4MoryJk8xgaJqrwYt1WL8wT3scRbWN8FDq+Ln8Di7PPOOGBw
-   lkInLPsd9nqO+z0s+vbXi0Nux4W2sVAYGAC3jRD3OnzJ7FfxhCSXOnvRK
-   bTQqbZiaGwIuehKVXwzKIy80059WCV+PY6ieQJEEsQ+4RSD4tMgPieExv
-   NUMBYNPfP4MXsncfpVSm4r6xop8SZy1XKsicO16X53dRDF3CLbP1EerwQ
-   9481OzgZL2LLxMW/NGYKqbUtFHpdIxNXu3WL+dNZ35ftQ32D7iKFA6pb1
-   VgnlLPJAmXuMe8zjJ/aAk1rsf081yQG+kr+chF+cGLLXrnV29MRCFOd1u
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254587464"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="254587464"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 17:12:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="495664617"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 17:12:45 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nRksf-0002Ic-1d; Wed, 09 Mar 2022 01:12:45 +0000
-Date: Wed, 9 Mar 2022 09:12:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [ebiederm-user-namespace:coredump-vma-snapshot-fix 1/5]
- fs/binfmt_flat.c:121:36: error: incomplete definition of type 'struct
- coredump_params'
-Message-ID: <202203090943.0a2uUHMd-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C400645B
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 01:45:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1646790346;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SoSjGNV88MG8vTOWxA+NDnTl5MshzRww6v3Ri4neFBo=;
+	b=Di/XAU/7UCbNx3IHpFCjVjoDoTmgv4dgHOUfxBXkuQjEwNKBd5NkYLGR4PrnhWop8XhDAI
+	/Z9PaRxAqQ0ebiqZxpNlPNUsocQpJSR37mDFt0shfWH1qrMZitfwRs5TRqT+b1dN3c8YhK
+	vkCVircHwImCb5g2Pm58fETWQTyihkw=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-610-bJ_eyD1pOX231fMvMruAWw-1; Tue, 08 Mar 2022 20:45:45 -0500
+X-MC-Unique: bJ_eyD1pOX231fMvMruAWw-1
+Received: by mail-il1-f200.google.com with SMTP id f18-20020a926a12000000b002be48b02bc6so437597ilc.17
+        for <llvm@lists.linux.dev>; Tue, 08 Mar 2022 17:45:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=SoSjGNV88MG8vTOWxA+NDnTl5MshzRww6v3Ri4neFBo=;
+        b=hXNi+v6+p5xFRRbgFMt7zkWaB+pNz+XKs7y7ldXyFOzECbcD25dSVmJH+8aOgXMzIG
+         i0FdpVqWpA/PTIP6ZpSL5ce7t2vHqwdJH8JEEQChSaujz7bIdOHUJ1eR3Z6SS/7yn8Pf
+         8mt6jCRz/YLLcTWK8IzJWyDXc1y3OHkC/BO74M+4W6Opce/8su8oIvp0wP4lngQTN/z6
+         VBu796ydbaH8de4hR/89VvFGNkrolwO7he/Sekj/pTzqIF4aYENf3fIZCRO/AGXm07xg
+         UsE6EpKLNVQS9V2rcnwMilwHERZMVpOHJgEobAT02tzLnkUfQFicM1kOIam43puP5wrS
+         eHtA==
+X-Gm-Message-State: AOAM531gii6F2lD7+LjWqG2KbTDI5WD5oH5NUw7YaginJSgIB2VWg+EQ
+	ZExTyx7V3MpA/K9G6V40zJi4tQZBTwEuvR6tAGXdBWFtT5wxZS5TmhGoLolH0Ri5dQSseNJsZ63
+	xllE1UBjW4uoGoA==
+X-Received: by 2002:a05:6638:408:b0:313:f2bd:2d2 with SMTP id q8-20020a056638040800b00313f2bd02d2mr18041838jap.110.1646790344953;
+        Tue, 08 Mar 2022 17:45:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzS8AzsMXjFYL+igfxZixZE0Qq62nR7+uTTQrLwMYMJvP3DkjKhEFaYhZPtj7W2LUu1X5ok/g==
+X-Received: by 2002:a05:6638:408:b0:313:f2bd:2d2 with SMTP id q8-20020a056638040800b00313f2bd02d2mr18041820jap.110.1646790344764;
+        Tue, 08 Mar 2022 17:45:44 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id p4-20020a92d284000000b002c64436fa71sm281578ilp.72.2022.03.08.17.45.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 17:45:44 -0800 (PST)
+Subject: Re: [PATCH] drm/bridge: anx7625: check the return on
+ anx7625_aux_trans
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: andrzej.hajda@intel.com, narmstrong@baylibre.com, robert.foss@linaro.org,
+ laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+ jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+ nathan@kernel.org, xji@analogixsemi.com, sam@ravnborg.org,
+ tzungbi@google.com, pihsun@chromium.org, maxime@cerno.tech,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, hsinyi@chromium.org
+References: <20220303201943.501746-1-trix@redhat.com>
+ <CAKwvOdnoV_SsFuWWJd4nOOd1vGG6_-gg-KvdOg4_NHuRp7_WfA@mail.gmail.com>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <5b6a10bd-5650-2924-d1cc-e4664a0e7255@redhat.com>
+Date: Tue, 8 Mar 2022 17:45:41 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git coredump-vma-snapshot-fix
-head:   390031c942116d4733310f0684beb8db19885fe6
-commit: a99a3e2efaf1f4454eb5c9176f47e66de075b134 [1/5] coredump: Move definition of struct coredump_params into coredump.h
-config: riscv-nommu_virt_defconfig (https://download.01.org/0day-ci/archive/20220309/202203090943.0a2uUHMd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a2e9c68fcd4425fbce7380746e916966f00a39a0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=a99a3e2efaf1f4454eb5c9176f47e66de075b134
-        git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
-        git fetch --no-tags ebiederm-user-namespace coredump-vma-snapshot-fix
-        git checkout a99a3e2efaf1f4454eb5c9176f47e66de075b134
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> fs/binfmt_flat.c:121:36: error: incomplete definition of type 'struct coredump_params'
-                   current->comm, current->pid, cprm->siginfo->si_signo);
-                                                ~~~~^
-   include/linux/printk.h:499:37: note: expanded from macro 'pr_warn'
-           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-                                              ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                              ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                                   ^~~~~~~~~~~
-   include/linux/binfmts.h:11:8: note: forward declaration of 'struct coredump_params'
-   struct coredump_params;
-          ^
-   1 error generated.
+In-Reply-To: <CAKwvOdnoV_SsFuWWJd4nOOd1vGG6_-gg-KvdOg4_NHuRp7_WfA@mail.gmail.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 
 
-vim +121 fs/binfmt_flat.c
+On 3/8/22 2:57 PM, Nick Desaulniers wrote:
+> On Thu, Mar 3, 2022 at 12:19 PM <trix@redhat.com> wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> Clang static analysis reports this issue
+>> anx7625.c:876:13: warning: The left operand of '&' is
+>>    a garbage value
+>>    if (!(bcap & 0xOA01)) {
+>>          ~~~~ ^
+>>
+>> bcap is only set by a successful call to
+>> anx7625_aux_trans().  So check.
+>>
+>> Fixes: cd1637c7e480 ("drm/bridge: anx7625: add HDCP support")
+> Is this the correct Fixes tag?
+yes
+> I think it should be
+>
+> Fixes: adca62ec370c ("drm/bridge: anx7625: Support reading edid
+> through aux channel")
 
-^1da177e4c3f415 Linus Torvalds   2005-04-16  111  
-^1da177e4c3f415 Linus Torvalds   2005-04-16  112  /****************************************************************************/
-^1da177e4c3f415 Linus Torvalds   2005-04-16  113  /*
-^1da177e4c3f415 Linus Torvalds   2005-04-16  114   * Routine writes a core dump image in the current directory.
-^1da177e4c3f415 Linus Torvalds   2005-04-16  115   * Currently only a stub-function.
-^1da177e4c3f415 Linus Torvalds   2005-04-16  116   */
-^1da177e4c3f415 Linus Torvalds   2005-04-16  117  
-f6151dfea21496d Masami Hiramatsu 2009-12-17  118  static int flat_core_dump(struct coredump_params *cprm)
-^1da177e4c3f415 Linus Torvalds   2005-04-16  119  {
-4adbb6ac4b807e2 Nicolas Pitre    2016-07-24  120  	pr_warn("Process %s:%d received signr %d and should have core dumped\n",
-13c3f50c914e6a5 Nicolas Pitre    2016-07-24 @121  		current->comm, current->pid, cprm->siginfo->si_signo);
-13c3f50c914e6a5 Nicolas Pitre    2016-07-24  122  	return 1;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  123  }
-^1da177e4c3f415 Linus Torvalds   2005-04-16  124  
+This one changes the name of the function
 
-:::::: The code at line 121 was first introduced by commit
-:::::: 13c3f50c914e6a51d11e1aba4a85c2223e197e13 binfmt_flat: assorted cleanups
+-       anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
++       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
 
-:::::: TO: Nicolas Pitre <nicolas.pitre@linaro.org>
-:::::: CC: Greg Ungerer <gerg@linux-m68k.org>
+A return check from the earlier commit, when this block of code came 
+into existence, is when it was first needed.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Tom
+
+>
+> instead.
+>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>   drivers/gpu/drm/bridge/analogix/anx7625.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+>> index 633618bafd75d..f02ac079ed2ec 100644
+>> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+>> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+>> @@ -872,7 +872,10 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
+>>          }
+>>
+>>          /* Read downstream capability */
+>> -       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+>> +       ret = anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>>          if (!(bcap & 0x01)) {
+>>                  pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
+>>                  return 0;
+>> --
+>> 2.26.3
+>>
+>
+
