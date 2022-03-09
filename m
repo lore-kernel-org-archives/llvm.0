@@ -1,143 +1,110 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06F85127
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 21:54:04 +0000 (UTC)
-Received: by mail-lf1-f41.google.com with SMTP id r4so6204215lfr.1
-        for <llvm@lists.linux.dev>; Wed, 09 Mar 2022 13:54:04 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C825127
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 22:06:36 +0000 (UTC)
+Received: by mail-pj1-f41.google.com with SMTP id c16-20020a17090aa61000b001befad2bfaaso3542645pjq.1
+        for <llvm@lists.linux.dev>; Wed, 09 Mar 2022 14:06:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CUMQksGgCdQmcHrJcF66PznC3AjKKF/X4cilDJy65/w=;
-        b=d+gHv8c+vxZcULWVQVZgmkK5hNAQs6Bxjw7N1RsVhrfDlZF7oSU2rRiN85oK+lQjVq
-         fJXUwTPySu5+R6mo42EroOgWo0BOK+OjTerHV+hSZr+8QBPhhaBXZcEbV967exOsMccX
-         WIwQIMmhgp/lyWPrq8NFTZFD209Xd+5mvSQlgunNCXwSuXDXYn84YVgNEZRAd4V2svWu
-         C7K2YASRRhkc4BMI4nqARSOhGX2SegCS0mu0VPIth78rpspBAqWnw+gVrvd3b9N2U/w9
-         TG5HXSdM9WG53grpcyEFaHmeC6aKnwg+sdOmBUOfgFfyH/jysQ7amBkGCxZgbjJalzFu
-         rUvg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4umDXsTj1CldyJcysNP+Nnq3pVu2iPQxmtjAZsmbWQc=;
+        b=fonhPV0Eq1KKbf2UvQA+KGAibGPw26KwBtm0dM70xCxj6ATohjtHnwM9d6UdiJ4pES
+         TtwRiVhwuqVmD1pMJN1AjZmG+ufDLj8RIalRJKwWBNl6MUbtTzyxogX/ltfosrYrsK1W
+         ukbHTdoheSpC4mi3+swuWKJMWUMvllUxyoHhA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CUMQksGgCdQmcHrJcF66PznC3AjKKF/X4cilDJy65/w=;
-        b=UyAzKjm3yP5njIF38Dkn5TAzGZXe7uLT30kwKRtxmV5WuxBxXoZdl8QA/x3jymoX1P
-         qQ32iV5dP4l0DyEOJDoOH/iyL6ZQF7/T80P7K/wXW97YlzN0oNYUBZu6I5HMFU/m17jf
-         647DT1kR3VXzXbYkzKRufGv/rHCJ01s9G0H0lnFfELUJgE6svZMh5BkPpBSwINxgtWpr
-         wVw5toIXQxzIcuJZMh6pq+94l2ijG32ypT/dlb7mCWCFOV3Dy4r0VOhEUGK1CQ+LwFEG
-         PVyZy4yDLXBMZpA/96AHcxIyeGqrPTarqEodEDKSpcK1JUx6LABrW/vNkBNsIncqd0/N
-         WcMA==
-X-Gm-Message-State: AOAM531eUf2XJX3uvOijmWMb0YcLgb1/Cw4gwtTqYo2reMxQtPTB1U+u
-	Wz6b+j2cAfItb7n65wr0vVWVx1Lm18tUIlZWs/Jkkw==
-X-Google-Smtp-Source: ABdhPJzCxFT3dV8gojSRQ4YAikZ6dGu6NuaatVUte2DQRtdeETHIEzS6FLUxjVZqUU2RsWwhnDqKYQp3Aem765MNgqc=
-X-Received: by 2002:ac2:5feb:0:b0:448:2707:6bfd with SMTP id
- s11-20020ac25feb000000b0044827076bfdmr1082389lfg.380.1646862842545; Wed, 09
- Mar 2022 13:54:02 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4umDXsTj1CldyJcysNP+Nnq3pVu2iPQxmtjAZsmbWQc=;
+        b=X0a3PH8/tMQw3TXB5xWqwgcMXPt1xAZINW/7ojmfGsFea2T/cJWXHxQMQLgrKAi9DT
+         d/L+UfDeKkOOqxpTC1xjZEr6inPi97YCRz852DYGhYHEe6KSL4MxZ/M/NLD/wMi5ZKkj
+         koum3LM4MrJ0QFdWmRBMkkG0Cibwet8XGv1MAL6aeE2SZrDfCpAFbI4GgoIvSDlU/Xzl
+         WiRJIT2fGU0etISOuiQKtEvW+kQ1ViOzi67y+fr7InlEbDfJ2yQURlqGPVIsCYSnmJUu
+         JlOBZt2l/4sCJpkRN5gRJ+/sadvZNDDUyhnERJjxK5tbevig6l53+DVkm9aGIrpX9Eap
+         5NfA==
+X-Gm-Message-State: AOAM532VA0MSmJp6QDTojfhZmE5MqxwsJHtIXC3t1sqGKq8ddyyx/Hhg
+	fCJvVdA5T973XUqQ64mnHcfLdA==
+X-Google-Smtp-Source: ABdhPJzGofjm+FGYBG97TRW7gxvFjqmZFdCBX6uEyrkbYPtSeUo2O0Yh6GCX+Sushx4dJa23puvXbA==
+X-Received: by 2002:a17:902:7404:b0:151:c3f9:e43a with SMTP id g4-20020a170902740400b00151c3f9e43amr1839188pll.12.1646863595999;
+        Wed, 09 Mar 2022 14:06:35 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u8-20020a056a00098800b004f702473553sm4134935pfg.6.2022.03.09.14.06.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 14:06:35 -0800 (PST)
+Date: Wed, 9 Mar 2022 14:06:35 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Marc Zyngier <maz@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+	Yanteng Si <siyanteng01@gmail.com>, linux-mips@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Only use current_stack_pointer on GCC
+Message-ID: <202203091406.E94510FD@keescook>
+References: <20220309204537.390428-1-keescook@chromium.org>
+ <YikTQRql+il3HbrK@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220309191633.2307110-1-nathan@kernel.org>
-In-Reply-To: <20220309191633.2307110-1-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 9 Mar 2022 13:53:50 -0800
-Message-ID: <CAKwvOdkrgtyE3rU8Xa2B8QQJ1ZErSTB9PDuikPF6=4D4Q80XVQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: Do not include __READ_ONCE() block in assembly files
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>, 
-	James Morse <james.morse@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YikTQRql+il3HbrK@dev-arch.thelio-3990X>
 
-On Wed, Mar 9, 2022 at 11:19 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> When building arm64 defconfig + CONFIG_LTO_CLANG_{FULL,THIN}=y after
-> commit 558c303c9734 ("arm64: Mitigate spectre style branch history side
-> channels"), the following error occurs:
->
->   <instantiation>:4:2: error: invalid fixup for movz/movk instruction
->    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
->    ^
->
-> Marc figured out that moving "#include <linux/init.h>" in
-> include/linux/arm-smccc.h into a !__ASSEMBLY__ block resolves it. The
-> full include chain with CONFIG_LTO=y from include/linux/arm-smccc.h:
->
-> include/linux/init.h
-> include/linux/compiler.h
-> arch/arm64/include/asm/rwonce.h
-> arch/arm64/include/asm/alternative-macros.h
-> arch/arm64/include/asm/assembler.h
->
-> The asm/alternative-macros.h include in asm/rwonce.h only happens when
-> CONFIG_LTO is set, which ultimately casues asm/assembler.h to be
-> included before the definition of ARM_SMCCC_ARCH_WORKAROUND_3. As a
-> result, the preprocessor does not expand ARM_SMCCC_ARCH_WORKAROUND_3 in
-> __mitigate_spectre_bhb_fw, which results in the error above.
->
-> Avoid this problem by just avoiding the CONFIG_LTO=y __READ_ONCE() block
-> in asm/rwonce.h with assembly files, as nothing in that block is useful
-> to assembly files, which allows ARM_SMCCC_ARCH_WORKAROUND_3 to be
-> properly expanded with CONFIG_LTO=y builds.
->
-> Cc: stable@vger.kernel.org
-> Fixes: e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when CONFIG_LTO=y")
-> Link: https://lore.kernel.org/r/20220309155716.3988480-1-maz@kernel.org/
-> Reported-by: Marc Zyngier <maz@kernel.org>
-> Acked-by: James Morse <james.morse@arm.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Wed, Mar 09, 2022 at 01:51:13PM -0700, Nathan Chancellor wrote:
+> Nit: I think the subject needs to be updated (I assume this was written
+> before Nick's fix?).
+> 
+> On Wed, Mar 09, 2022 at 12:45:37PM -0800, Kees Cook wrote:
+> > Unfortunately, Clang did not have support for "sp" as a global register
+> > definition, and was crashing after the addition of current_stack_pointer.
+> > This has been fixed in Clang 15, but earlier Clang versions need to
+> > avoid this code, so add a versioned test and revert back to the
+> > open-coded asm instances. Fixes Clang build error:
+> > 
+> > fatal error: error in backend: Invalid register name global variable
+> > 
+> > Fixes: 200ed341b864 ("mips: Implement "current_stack_pointer"")
+> > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Yanteng Si <siyanteng01@gmail.com>
+> > Cc: linux-mips@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> Thanks for sending this!
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> > ---
+> >  arch/mips/Kconfig                   | 2 +-
+> >  arch/mips/include/asm/thread_info.h | 2 ++
+> >  arch/mips/kernel/irq.c              | 3 ++-
+> >  arch/mips/lib/uncached.c            | 4 +++-
+> >  4 files changed, 8 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> > index 3f58b45fc953..15769013f46e 100644
+> > --- a/arch/mips/Kconfig
+> > +++ b/arch/mips/Kconfig
+> > @@ -4,7 +4,7 @@ config MIPS
+> >  	default y
+> >  	select ARCH_32BIT_OFF_T if !64BIT
+> >  	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
+> > -	select ARCH_HAS_CURRENT_STACK_POINTER
+> > +	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 150000
+> 
+> Nit: This can be 140000, as release/14.x has received the fix:
+> 
+> https://github.com/llvm/llvm-project/commit/0826716786cd4a8c7cbcb8c01e4d9fac46b7a17a
 
-Thanks for taking point on all of the BHB fallout.
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
->
-> This is based on current mainline; if it should be based on a specific
-> arm64 branch, please let me know.
->
-> As 558c303c9734 is going to stable, I marked this for stable as well to
-> avoid breaking Android. I used e35123d83ee3 for the fixes tag to make it
-> clear to the stable team this should only go where that commit is
-> present. If a different fixes tag should be used, please feel free to
-> substitute.
->
->  arch/arm64/include/asm/rwonce.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-> index 1bce62fa908a..56f7b1d4d54b 100644
-> --- a/arch/arm64/include/asm/rwonce.h
-> +++ b/arch/arm64/include/asm/rwonce.h
-> @@ -5,7 +5,7 @@
->  #ifndef __ASM_RWONCE_H
->  #define __ASM_RWONCE_H
->
-> -#ifdef CONFIG_LTO
-> +#if defined(CONFIG_LTO) && !defined(__ASSEMBLY__)
->
->  #include <linux/compiler_types.h>
->  #include <asm/alternative-macros.h>
-> @@ -66,7 +66,7 @@
->  })
->
->  #endif /* !BUILD_VDSO */
-> -#endif /* CONFIG_LTO */
-> +#endif /* CONFIG_LTO && !__ASSEMBLY__ */
->
->  #include <asm-generic/rwonce.h>
->
->
-> base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
-> --
-> 2.35.1
->
-
+Oh! Excellent. Thanks; I missed that it made the branch. I'll send a v2.
 
 -- 
-Thanks,
-~Nick Desaulniers
+Kees Cook
