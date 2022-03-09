@@ -1,183 +1,75 @@
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EA217C0
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 09:34:36 +0000 (UTC)
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 2299YNO3028339
-	for <llvm@lists.linux.dev>; Wed, 9 Mar 2022 18:34:23 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2299YNO3028339
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1646818464;
-	bh=ecQr6qIvWdbKOOftT0P5bw/2I4nX2mhfpun9h1TgUeg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=T3m02rMsnkG8ueOBQKJ+9EZUCgrBL0yxlqORHIdYbLJmwC+kyR+foPAE2CDaC9fTH
-	 Lg33gby+NPDwlEIRnu63aMCybVu2qSFerzNxmInEjbacq05fo39qwIVZjKUsGkVlKT
-	 +FUwzBplWXwfFKYGV2qr8r97p0IdzPUf2SPv6a9f02uNS0prdIIC9J85QugH99UKcl
-	 V1hbPHDYwzlaZpsfmnAWEstKvWRGVnv2l6Cx6xSXc+bjt2YH1v0BGwQsLVd6L3Gj4+
-	 /rBrYlfcxcr8sNWuVV2u1XsX24PdeAa9+Q3ZWgSFsusRfqUpl+tx9HZiEnpfNayTLE
-	 QMOI2sSbr/1/Q==
-X-Nifty-SrcIP: [209.85.216.50]
-Received: by mail-pj1-f50.google.com with SMTP id e3so1672665pjm.5
-        for <llvm@lists.linux.dev>; Wed, 09 Mar 2022 01:34:23 -0800 (PST)
-X-Gm-Message-State: AOAM530a1YArN05riOxpHCNaxEJAEwsgVVg4YljBB+e26aFRLX5q178u
-	JRxAJ0Kjzm1p0hmE2VYRtPQVyOYgRWGwqqr3ezQ=
-X-Google-Smtp-Source: ABdhPJz2CczPHj/qvuG++hUUJmOu8k6TahMuAauT21WWVlzprNBuAo3FW0eZmY/eannNxGvP75auJcjlLg4O/GXMSf4=
-X-Received: by 2002:a17:90a:1108:b0:1be:e1bd:e2f0 with SMTP id
- d8-20020a17090a110800b001bee1bde2f0mr9463553pja.144.1646818462899; Wed, 09
- Mar 2022 01:34:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6034A17C0
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 09:46:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E3F5C340EC;
+	Wed,  9 Mar 2022 09:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1646819212;
+	bh=geLRBWENKCwJOCIWvAmJoYArFJeDkSTw01PcBkGt78A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rCsOT45PImRoFDvI7+Dso/Dn9H+15bU3hJBCg7O5903v+/zUlMIJjemMf+ogpArqZ
+	 vuDXmI9qEzTnjwQC/xpY326mzpNusS/abbc3GweBvhaPgvqn1ln0zXmpW+homSThWK
+	 TSwgU7gwfhL02gfEoZdueVY9wOMMxtT6hfyBDuZw=
+Date: Wed, 9 Mar 2022 10:46:46 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Robin Murphy <robin.murphy@arm.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Sasha Levin <sashal@kernel.org>, "# 3.4.x" <stable@vger.kernel.org>,
+	Manoj Gupta <manojgupta@google.com>,
+	Denis Nikitin <denik@google.com>, Will Deacon <will@kernel.org>,
+	llvm@lists.linux.dev,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: arm64 memcpy+memove 5.10 patch
+Message-ID: <Yih3hvLi+JUytgps@kroah.com>
+References: <CAKwvOd=iOS3HEUH1w-R4vYSNMwAzE7kr30FcXNZg0e1WBvpenQ@mail.gmail.com>
+ <7341895d-0c69-5a84-6dfe-f228a05df03b@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220304170813.1689186-1-nathan@kernel.org> <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
- <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
-In-Reply-To: <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 9 Mar 2022 18:33:40 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAThknb0=-XhfB6zspke-sNHMEmTbGy8WVeg20ntT72wqA@mail.gmail.com>
-Message-ID: <CAK7LNAThknb0=-XhfB6zspke-sNHMEmTbGy8WVeg20ntT72wqA@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        llvm@lists.linux.dev,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7341895d-0c69-5a84-6dfe-f228a05df03b@arm.com>
 
-On Wed, Mar 9, 2022 at 12:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
-> > On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> > > index d32616891dcf..68b74416ec48 100644
-> > > --- a/Documentation/kbuild/llvm.rst
-> > > +++ b/Documentation/kbuild/llvm.rst
-> > > @@ -49,17 +49,36 @@ example: ::
-> > >  LLVM Utilities
-> > >  --------------
-> > >
-> > > -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
-> > > -to enable them. ::
-> > > -
-> > > -       make LLVM=1
-> > > -
-> > > -They can be enabled individually. The full list of the parameters: ::
-> > > +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
-> > > +The full list of supported make variables: ::
-> > >
-> > >         make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
-> > >           OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
-> > >           HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
-> > >
-> > > +To simplify the above command, Kbuild supports the ``LLVM`` variable: ::
-> > > +
-> > > +       make LLVM=1
-> > > +
-> > > +If your LLVM tools are not available in your PATH, you can supply their
-> > > +location using the LLVM variable with a trailing slash: ::
-> > > +
-> > > +       make LLVM=/path/to/llvm/
-> > > +
-> > > +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
-> >
-> > I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
-> > works and (my interpretation of what) Masahiro said "if anyone asks
-> > for this, here's how we could do that."  I don't think I've seen an
-> > explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
-> > won't hold this patch up over that.  Either way:
->
-> Right, there has not been an explicit ask for the prefix support yet,
-> although I know I personally would use it, but I think that it is worth
-> doing now instead of later for a few reasons:
->
-> 1. It makes path goofs easier to spot. If you do
->
->      $ PATH=/path/to/llvm:$PATH make LLVM=1 ...
->
->    with a path to LLVM that does not exist (maybe you are bisecting an
->    issue and using a temporary build of LLVM and you forgot the path it
->    was in), you fall back to the LLVM tools that are in other places in
->    your PATH, which is not what the developer intended. I know that I
->    have messed up bisects that way. If you did
->
->      $ make LLVM=/path/to/llvm/
->
->    with a path that does not exist, there will be an error much earlier:
->
->      $ make LLVM=/this/path/does/not/exist/ defconfig
->      /bin/sh: line 1: /this/path/does/not/exist/clang: No such file or directory
->
-> 2. It does not take that much more code or documentation to support. It
->    is the same amount of code as the suffix and the documentation is
->    roughly the same amount of lines as well.
->
-> 3. If we wait to implement the path-based use of $(LLVM), we have three
->    "sequence" points: the initial support of $(LLVM), the suffix
->    support, and the prefix support. As we are constantly working with
->    various trees, it would make it harder to know what to use when. If
->    we just do it in the same patch, we know 5.18+ can use both of these
->    methods.
->
-> However, at the end of the day, we are a team and if you feel like we
-> should only have suffix support, I am more than happy to push a v3 that
-> does just that and we can revist prefix support in the future. Just let
-> me know!
+On Tue, Mar 08, 2022 at 11:11:38PM +0000, Robin Murphy wrote:
+> On 2022-03-08 22:38, Nick Desaulniers wrote:
+> > Dear stable kernel maintainers,
+> > Please consider cherry-picking
+> > 
+> > commit 6c23d54f4cb8 ("arm64: Import latest memcpy()/memmove() implementation")
+> > 
+> > to v5.10.y.  It first landed in v5.14-rc1.
+> > 
+> > It fixes a linkage failure observed when building kernels for ChromeOS
+> > under AutoFDO:
+> > 
+> > ld.lld: error: arch/arm64/lib/lib.a(memmove.o):(function __memmove:
+> > .text+0x8): relocation R_AARCH64_CONDBR19 out of range: -6331272 is
+> > not in [-1048576, 1048575]; references __memcpy
+> > > > > defined in arch/arm64/lib/lib.a(memcpy.o)
+> > 
+> > (The prior version of memmove used assembler conditional branches to
+> > memcpy; under AutoFDO the linker will decide where best to place
+> > memmove; it may be > 1MB away from memcpy. After this patch, memcpy
+> > and memmove are the same function).
+> 
+> Just beware that the new implementation turned out to be really good at
+> finding places where __iomem pointers are erroneously being passed to
+> memcpy(), by more readily triggering alignment faults, so there is a
+> non-zero possibility of functional regressions if any of those places are
+> still present in 5.10.y (particularly any which had "naturally" disappeared
+> before 5.14). At least one of them still isn't fixed in mainline, but that
+> one's so obscure I wouldn't consider it a major concern by itself.
 
+Yeah, because of this, I'm a bit nervous to add this change to the
+stable tree.  ChromeOS can keep it in their tree as they "know" they
+have properly audited all of their drivers to get this right and they
+can own the fallout if they didn't :)
 
-I do not have a strong opinion about this.
-(I just mentioned the LLVM=/path/to/llvm/ form because I guessed
-somebody would request this sooner or later.)
+thanks,
 
-
-If you want me to pick up this version, I will apply it with fixing up
-a nit pointed out by Kees   (": ::" -> "::")
-
-If you want to send v3, that is fine with me as well.
-
-Please let me know your thoughts.
-
-
-
-
-
-
-
-
->
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> > > +
-> > > +If your LLVM tools have a version suffix and you want to test with that
-> > > +explicit version rather than the unsuffixed executables like ``LLVM=1``, you
-> > > +can pass the suffix using the ``LLVM`` variable: ::
-> > > +
-> > > +       make LLVM=-14
-> > > +
-> > > +which will use ``clang-14``, ``ld.lld-14``, etc.
-> > > +
-> > > +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
-> > > +``LLVM=1``.
-> >
-> > Hmm... I can see someone's build wrappers setting LLVM=1, then them
-> > being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
-> > might expect.  But Masahiro says let's fix this later which is fine.
->
-> Sure, I guess that is a reasonable case to support. I'll see if I can
-> come up with something that makes sense after this change lands.
->
-> Cheers,
-> Nathan
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+greg k-h
