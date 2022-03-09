@@ -1,139 +1,102 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C400645B
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 01:45:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1646790346;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SoSjGNV88MG8vTOWxA+NDnTl5MshzRww6v3Ri4neFBo=;
-	b=Di/XAU/7UCbNx3IHpFCjVjoDoTmgv4dgHOUfxBXkuQjEwNKBd5NkYLGR4PrnhWop8XhDAI
-	/Z9PaRxAqQ0ebiqZxpNlPNUsocQpJSR37mDFt0shfWH1qrMZitfwRs5TRqT+b1dN3c8YhK
-	vkCVircHwImCb5g2Pm58fETWQTyihkw=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-bJ_eyD1pOX231fMvMruAWw-1; Tue, 08 Mar 2022 20:45:45 -0500
-X-MC-Unique: bJ_eyD1pOX231fMvMruAWw-1
-Received: by mail-il1-f200.google.com with SMTP id f18-20020a926a12000000b002be48b02bc6so437597ilc.17
-        for <llvm@lists.linux.dev>; Tue, 08 Mar 2022 17:45:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=SoSjGNV88MG8vTOWxA+NDnTl5MshzRww6v3Ri4neFBo=;
-        b=hXNi+v6+p5xFRRbgFMt7zkWaB+pNz+XKs7y7ldXyFOzECbcD25dSVmJH+8aOgXMzIG
-         i0FdpVqWpA/PTIP6ZpSL5ce7t2vHqwdJH8JEEQChSaujz7bIdOHUJ1eR3Z6SS/7yn8Pf
-         8mt6jCRz/YLLcTWK8IzJWyDXc1y3OHkC/BO74M+4W6Opce/8su8oIvp0wP4lngQTN/z6
-         VBu796ydbaH8de4hR/89VvFGNkrolwO7he/Sekj/pTzqIF4aYENf3fIZCRO/AGXm07xg
-         UsE6EpKLNVQS9V2rcnwMilwHERZMVpOHJgEobAT02tzLnkUfQFicM1kOIam43puP5wrS
-         eHtA==
-X-Gm-Message-State: AOAM531gii6F2lD7+LjWqG2KbTDI5WD5oH5NUw7YaginJSgIB2VWg+EQ
-	ZExTyx7V3MpA/K9G6V40zJi4tQZBTwEuvR6tAGXdBWFtT5wxZS5TmhGoLolH0Ri5dQSseNJsZ63
-	xllE1UBjW4uoGoA==
-X-Received: by 2002:a05:6638:408:b0:313:f2bd:2d2 with SMTP id q8-20020a056638040800b00313f2bd02d2mr18041838jap.110.1646790344953;
-        Tue, 08 Mar 2022 17:45:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzS8AzsMXjFYL+igfxZixZE0Qq62nR7+uTTQrLwMYMJvP3DkjKhEFaYhZPtj7W2LUu1X5ok/g==
-X-Received: by 2002:a05:6638:408:b0:313:f2bd:2d2 with SMTP id q8-20020a056638040800b00313f2bd02d2mr18041820jap.110.1646790344764;
-        Tue, 08 Mar 2022 17:45:44 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id p4-20020a92d284000000b002c64436fa71sm281578ilp.72.2022.03.08.17.45.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 17:45:44 -0800 (PST)
-Subject: Re: [PATCH] drm/bridge: anx7625: check the return on
- anx7625_aux_trans
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: andrzej.hajda@intel.com, narmstrong@baylibre.com, robert.foss@linaro.org,
- laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
- jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
- nathan@kernel.org, xji@analogixsemi.com, sam@ravnborg.org,
- tzungbi@google.com, pihsun@chromium.org, maxime@cerno.tech,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, hsinyi@chromium.org
-References: <20220303201943.501746-1-trix@redhat.com>
- <CAKwvOdnoV_SsFuWWJd4nOOd1vGG6_-gg-KvdOg4_NHuRp7_WfA@mail.gmail.com>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <5b6a10bd-5650-2924-d1cc-e4664a0e7255@redhat.com>
-Date: Tue, 8 Mar 2022 17:45:41 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C1B6464
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 02:24:58 +0000 (UTC)
+Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-05.nifty.com with ESMTP id 2292Haeq013109
+	for <llvm@lists.linux.dev>; Wed, 9 Mar 2022 11:17:36 +0900
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44]) (authenticated)
+	by conssluserg-02.nifty.com with ESMTP id 2292HQDF025535
+	for <llvm@lists.linux.dev>; Wed, 9 Mar 2022 11:17:27 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2292HQDF025535
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1646792247;
+	bh=yrz8MJgeMKuvnz33SMeYLZ7Cine73+llQkRSU7j3OeY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=QdLV+YuJnE3AuI25L44qDcEFha7V2tJikwuAbHrYtTptepmqS8wiUbtBjtqUKfiAe
+	 GrVcq0Nf1zqBNYDN27k7DKPnorO++0pTgwRsKM/FmO+CaVio1dVjjmRHjNh7nvdN12
+	 mnq8a/cyE3WVGk8FBI3Js7IexJIJXuXDmwovsVnUovEf7ioR8AbYSywB/qFq1Cly01
+	 cLWX0DcMiW6S9JNVwcNjC5r7LbbjKr9K8LGSQJPy/07z/ZATjmEjMCk0Cd/RwvjwhZ
+	 w/j0JU9CtFQ1+eQpoaJt6iY4/UdfEYRQ5jGuAiwMPNLt97UzDe1YtJpEAyhtL4FNAx
+	 ZJAQuF3XM469w==
+X-Nifty-SrcIP: [209.85.216.44]
+Received: by mail-pj1-f44.google.com with SMTP id c16-20020a17090aa61000b001befad2bfaaso1026725pjq.1
+        for <llvm@lists.linux.dev>; Tue, 08 Mar 2022 18:17:27 -0800 (PST)
+X-Gm-Message-State: AOAM533OqdYHOI/IXD4a+t3vk/MXgu6ElfkSjYRCQDGMrdz0dRpeBbJw
+	c+mT16ej1po1xBEm5dF1vfyOtHbjLDvQH2zKa0s=
+X-Google-Smtp-Source: ABdhPJyMpYSk5zXrKpcgek+899vxIgkJpkfAkc4Uc5APGsnHYk6hCj+dOoi9kSCk2xTpgtEh31/JWnYw2PXFOhrKljg=
+X-Received: by 2002:a17:902:eb84:b0:151:f80e:e98b with SMTP id
+ q4-20020a170902eb8400b00151f80ee98bmr9234067plg.99.1646792246518; Tue, 08 Mar
+ 2022 18:17:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdnoV_SsFuWWJd4nOOd1vGG6_-gg-KvdOg4_NHuRp7_WfA@mail.gmail.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20220308215615.14183-1-arnd@kernel.org> <CAHk-=wjsCrVxToP0Zx+cUAVZmSKi=Y6NP1+VnBcoPyPPEBfonQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wjsCrVxToP0Zx+cUAVZmSKi=Y6NP1+VnBcoPyPPEBfonQ@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 9 Mar 2022 11:16:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQoFFVLfkhA7FC9vDbvc4wdLginYeRHL0xHVAumu6p=uw@mail.gmail.com>
+Message-ID: <CAK7LNAQoFFVLfkhA7FC9vDbvc4wdLginYeRHL0xHVAumu6p=uw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] [v4] Kbuild: std=gnu11 changes
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, Alex Shi <alexs@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        Marco Elver <elver@google.com>, Jani Nikula <jani.nikula@intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Mark Rutland <mark.rutland@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-
-On 3/8/22 2:57 PM, Nick Desaulniers wrote:
-> On Thu, Mar 3, 2022 at 12:19 PM <trix@redhat.com> wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> Clang static analysis reports this issue
->> anx7625.c:876:13: warning: The left operand of '&' is
->>    a garbage value
->>    if (!(bcap & 0xOA01)) {
->>          ~~~~ ^
->>
->> bcap is only set by a successful call to
->> anx7625_aux_trans().  So check.
->>
->> Fixes: cd1637c7e480 ("drm/bridge: anx7625: add HDCP support")
-> Is this the correct Fixes tag?
-yes
-> I think it should be
+On Wed, Mar 9, 2022 at 9:09 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Fixes: adca62ec370c ("drm/bridge: anx7625: Support reading edid
-> through aux channel")
-
-This one changes the name of the function
-
--       anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
-+       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
-
-A return check from the earlier commit, when this block of code came 
-into existence, is when it was first needed.
-
-Tom
-
+> On Tue, Mar 8, 2022 at 1:56 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > I've incorporated the feedback from Masahiro Yamada in this
+> > version, splitting out one more patch, rebasing on top of
+> > the kbuild tree, and changing the order of the patches.
+> >
+> > Please apply to the kbuild tree.
 >
-> instead.
->
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>   drivers/gpu/drm/bridge/analogix/anx7625.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
->> index 633618bafd75d..f02ac079ed2ec 100644
->> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
->> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
->> @@ -872,7 +872,10 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
->>          }
->>
->>          /* Read downstream capability */
->> -       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
->> +       ret = anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
->> +       if (ret < 0)
->> +               return ret;
->> +
->>          if (!(bcap & 0x01)) {
->>                  pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
->>                  return 0;
->> --
->> 2.26.3
->>
->
+> I'd actually like to see this as a separate branch, so that I can
+> merge it early - or other peoples git branches end up depending on it.
 
+
+OK, I can apply this to a separate branch, kbuild-gnu11.
+(and I will queue this up shortly because it is already -rc7)
+
+Then, I will send two pull reqs in the next MW,
+but please note they will conflict with each other,
+between this gnu11 patch set and the following
+one in my usual kbuild branch:
+
+https://patchwork.kernel.org/project/linux-kbuild/patch/20220201213542.2808035-1-quic_eberman@quicinc.com/
+
+
+I hope this is not a complex conflict, but please let me know
+if you have any requests to me.
+
+
+
+
+
+> Yeah, it shouldn't change anything on its own, but since it allows for
+> new syntax, we might have other things depending on it (I'm obviously
+> thinking of the list_for_each_entry() series that keeps getting
+> posted).
+>
+>                       Linus
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
