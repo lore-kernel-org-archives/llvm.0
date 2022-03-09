@@ -1,44 +1,45 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A70F7B
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 15:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20792F2E
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 16:30:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646840957; x=1678376957;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lHmim/t1mNWqeBmeWIUCTJKiVvrd9JTET7i8LSirLEk=;
-  b=ipjBsdtzWTm4IY0zv63AlbGjFOwR7AlEiYI3XkV9bF0mizaY0B90DNLy
-   LVxFYAj4tI+jRbCZu14TdH+3GeQSAqvo5XRxMhGXtEV3jYLzY5/UM+4jt
-   iopVL/4DQAGqF6aa47NegSwdpvn0qwjKG7GTbDEniR8XjsTbG7YvzFWgE
-   wVsAfkXEL3lvlzdjvPejfuHExJA8Cs0x51MkgB+h/4fP5DPLyCr355MV2
-   4YSJDttGYjcjufS3NDAaiBoWuaSwLQlhz3vYSIO3xBsRW4VeSqKlr6t65
-   PqLRmSL5whprI8Ho0WUiX7V+d3Z2NLbdXUykAhD/TJL1mtMr+fc1j2Frz
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="242446373"
+  t=1646843420; x=1678379420;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0mhJZxu3qOrqONHFGjz4knvkPkOaSmPWHhE9ahCLLtc=;
+  b=K0XE3RYGfc3XxR6tRxfaSwmheIiwRKi0EIlVE2aAZLqEzdCeMKNHsaGx
+   R+SV3G+Z3bh6v9kPpHJYe5IUB3yE14/OyWSXyplQPvq4clrYB3dStVl+7
+   kQSuDMGpiNUwYPp6RxJT8K2EipK9OC1l0s3Z6usE5pAa13rIk3AnWUJO9
+   j1w0WcOl4OVKQVbPZQu/uj7dqV3ovEAPsnWuUmao1dRBZlkavQqpSzQ+J
+   5oxd5cGQm2LLFRplFm7PCruo5q6h1tiRyn6n4BiVE9JOOWA4NyAxlAymR
+   l2k2et7rbGw5ihXJ16JEIdUCM/jAKrf2j40rTBt83y6GNyUd/jhJpSEaO
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="235621760"
 X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="242446373"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 07:49:16 -0800
+   d="scan'208";a="235621760"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 08:30:18 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="495876047"
+   d="scan'208";a="510539478"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 09 Mar 2022 07:49:14 -0800
+  by orsmga002.jf.intel.com with ESMTP; 09 Mar 2022 08:30:16 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nRyYs-0003Tk-0X; Wed, 09 Mar 2022 15:49:14 +0000
-Date: Wed, 9 Mar 2022 23:48:38 +0800
+	id 1nRzCa-0003Xk-16; Wed, 09 Mar 2022 16:30:16 +0000
+Date: Thu, 10 Mar 2022 00:30:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrew Jeffery <andrew@aj.id.au>
+To: Vijay Balakrishna <vijayb@linux.microsoft.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Linux Memory Management List <linux-mm@kvack.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	=?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
-Subject: [linux-next:master 9327/11713] drivers/leds/leds-pca955x.c:149:19:
- warning: unused function 'pca95xx_num_led_regs'
-Message-ID: <202203092319.4Bkj9Bnn-lkp@intel.com>
+	Will Deacon <will@kernel.org>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>
+Subject: [linux-next:master 11113/11713] arch/arm64/mm/init.c:90:19: error:
+ redefinition of 'arm64_dma_phys_limit' with a different type: 'const
+ phys_addr_t' (aka 'const unsigned long long') vs 'phys_addr_t' (aka
+ 'unsigned long long')
+Message-ID: <202203100052.aZByW83b-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,338 +48,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git=
- master
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
 head:   4e7a74a6856f8613dab9794da4b5cfb8fd54fb8c
-commit: ca386253ff6fb86128a7c61e1c38ca91de38048d [9327/11713] leds: pca955x=
-: Make the gpiochip always expose all pins
-config: mips-randconfig-c004-20220309 (https://download.01.org/0day-ci/arch=
-ive/20220309/202203092319.4Bkj9Bnn-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca8=
-7382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
+commit: 031495635b4668f94e964e037ca93d0d38bfde58 [11113/11713] arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones
+config: arm64-randconfig-r012-20220309 (https://download.01.org/0day-ci/archive/20220310/202203100052.aZByW83b-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it/commit/?id=3Dca386253ff6fb86128a7c61e1c38ca91de38048d
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kern=
-el/git/next/linux-next.git
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=031495635b4668f94e964e037ca93d0d38bfde58
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
         git fetch --no-tags linux-next master
-        git checkout ca386253ff6fb86128a7c61e1c38ca91de38048d
+        git checkout 031495635b4668f94e964e037ca93d0d38bfde58
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash drivers/leds/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/leds/leds-pca955x.c:149:19: warning: unused function 'pca95xx_nu=
-m_led_regs'
-   static inline int pca95xx_num_led_regs(int bits)
-   ^
-   fatal error: error in backend: Nested variants found in inline asm strin=
-g: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
-h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
-branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
-de/asm/bitops.h", .line =3D 103, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
-et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0. Program arguments: clang -Wp,-MMD,drivers/leds/.leds-pca955x.o.d -nos=
-tdinc -Iarch/mips/include -I./arch/mips/include/generated -Iinclude -I./inc=
-lude -Iarch/mips/include/uapi -I./arch/mips/include/generated/uapi -Iinclud=
-e/uapi -I./include/generated/uapi -include include/linux/compiler-version.h=
- -include include/linux/kconfig.h -include include/linux/compiler_types.h -=
-D__KERNEL__ -DVMLINUX_LOAD_ADDRESS=3D0xffffffff80101000 -DLINKER_LOAD_ADDRE=
-SS=3D0x80101000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=
-=3D -DKBUILD_EXTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-tri=
-graphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dim=
-plicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -W=
-no-format-security -std=3Dgnu89 --target=3Dmipsel-linux -fintegrated-as -We=
-rror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument -mno-=
-check-zero-division -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-flo=
-at -DGAS_HAS_SET_HARDFLOAT -Wa,-msoft-float -ffreestanding -EL -fno-stack-c=
-heck -march=3Dmips32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/inclu=
-de/asm/mach-rc32434 -Iarch/mips/include/asm/mach-generic -fno-asynchronous-=
-unwind-tables -fno-delete-null-pointer-checks -Wno-frame-address -Wno-addre=
-ss-of-packed-member -O2 -Wframe-larger-than=3D1024 -fno-stack-protector -Wi=
-mplicit-fallthrough -Wno-gnu -mno-global-merge -Wno-unused-but-set-variable=
- -Wno-unused-const-variable -ftrivial-auto-var-init=3Dzero -enable-trivial-=
-auto-var-init-zero-knowing-it-will-be-removed-from-clang -fno-stack-clash-p=
-rotection -pg -Wdeclaration-after-statement -Wvla -Wno-pointer-sign -Wcast-=
-function-type -Wno-array-bounds -fno-strict-overflow -fno-stack-check -Werr=
-or=3Ddate-time -Werror=3Dincompatible-pointer-types -Wextra -Wunused -Wno-u=
-nused-parameter -Wmissing-declarations -Wmissing-format-attribute -Wmissing=
--prototypes -Wold-style-definition -Wmissing-include-dirs -Wunused-but-set-=
-variable -Wunused-const-variable -Wno-missing-field-initializers -Wno-sign-=
-compare -Wno-type-limits -fsanitize=3Darray-bounds -fsanitize=3Dshift -fsan=
-itize=3Dbool -fsanitize=3Denum -I drivers/leds -I ./drivers/leds -DMODULE -=
-mlong-calls -DKBUILD_BASENAME=3D"leds_pca955x" -DKBUILD_MODNAME=3D"leds_pca=
-955x" -D__KBUILD_MODNAME=3Dkmod_leds_pca955x -c -o drivers/leds/leds-pca955=
-x.o drivers/leds/leds-pca955x.c
-   1. <eof> parser at end of file
-   2. Code generation
-   3. Running pass 'Function Pass Manager' on module 'drivers/leds/leds-pca=
-955x.c'.
-   4. Running pass 'Mips Assembly Printer' on function '@pca955x_probe'
-   #0 0x00005606c72f860f Signals.cpp:0:0
-   #1 0x00005606c72f64ec llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
-oss/clang-276ca87382/bin/clang-15+0x34914ec)
-   #2 0x00005606c7236ac7 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
-cross/clang-276ca87382/bin/clang-15+0x33d1ac7)
-   #3 0x00005606c72eeb9e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
-ang-276ca87382/bin/clang-15+0x3489b9e)
-   #4 0x00005606c4efd62b (/opt/cross/clang-276ca87382/bin/clang-15+0x109862=
-b)
-   #5 0x00005606c723d5ec llvm::report_fatal_error(llvm::Twine const&, bool)=
- (/opt/cross/clang-276ca87382/bin/clang-15+0x33d85ec)
-   #6 0x00005606c7f52900 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
- const (/opt/cross/clang-276ca87382/bin/clang-15+0x40ed900)
-   #7 0x00005606c7f4e834 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
-lang-276ca87382/bin/clang-15+0x40e9834)
-   #8 0x00005606c5975df7 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
-achineFunction&) (/opt/cross/clang-276ca87382/bin/clang-15+0x1b10df7)
-   #9 0x00005606c663db4d llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
-ction&) (.part.53) MachineFunctionPass.cpp:0:0
-   #10 0x00005606c6a861b7 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (/opt/cross/clang-276ca87382/bin/clang-15+0x2c211b7)
-   #11 0x00005606c6a86331 llvm::FPPassManager::runOnModule(llvm::Module&) (=
-/opt/cross/clang-276ca87382/bin/clang-15+0x2c21331)
-   #12 0x00005606c6a86eaf llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (/opt/cross/clang-276ca87382/bin/clang-15+0x2c21eaf)
-   #13 0x00005606c7615797 clang::EmitBackendOutput(clang::DiagnosticsEngine=
-&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
-TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
-ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
-lvm::raw_pwrite_stream> >) (/opt/cross/clang-276ca87382/bin/clang-15+0x37b0=
-797)
-   #14 0x00005606c826ed33 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (/opt/cross/clang-276ca87382/bin/clang-15+0x4409d33)
-   #15 0x00005606c8d5b291 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
-ross/clang-276ca87382/bin/clang-15+0x4ef6291)
-   #16 0x00005606c826db6f clang::CodeGenAction::ExecuteAction() (/opt/cross=
-/clang-276ca87382/bin/clang-15+0x4408b6f)
-   #17 0x00005606c7c6cb01 clang::FrontendAction::Execute() (/opt/cross/clan=
-g-276ca87382/bin/clang-15+0x3e07b01)
-   #18 0x00005606c7c0295a clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (/opt/cross/clang-276ca87382/bin/clang-15+0x3d9d95a)
-   #19 0x00005606c7d31f3b (/opt/cross/clang-276ca87382/bin/clang-15+0x3eccf=
-3b)
-   #20 0x00005606c4efebdc cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
-ng-276ca87382/bin/clang-15+0x1099bdc)
-   #21 0x00005606c4efb8ab ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
-cpp:0:0
-   #22 0x00005606c7a9a4a5 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
-ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
-tor<char> const::'lambda'()>(long) Job.cpp:0:0
-   #23 0x00005606c7236983 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (/opt/cross/clang-276ca87382/bin/clang-15+0x33d1983)
-   #24 0x00005606c7a9ad9e clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
-har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
-   #25 0x00005606c7a6f4b7 clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const (/opt/cross/clang-276=
-ca87382/bin/clang-15+0x3c0a4b7)
-   #26 0x00005606c7a6fe97 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) const (/opt/cross/clang-276ca87382/bin/clang-15+0x3c0ae97)
-   #27 0x00005606c7a793ea clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) (/opt/cross/clang-276ca87382/bin/clang-15+0x3c143ea)
-   #28 0x00005606c4e487cf main (/opt/cross/clang-276ca87382/bin/clang-15+0x=
-fe37cf)
-   #29 0x00007f23d2855d0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x26d0a)
-   #30 0x00005606c4efb3ca _start (/opt/cross/clang-276ca87382/bin/clang-15+=
-0x10963ca)
-   clang-15: error: clang frontend command failed with exit code 70 (use -v=
- to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project 276ca87382b8f16a65bdd=
-ac700202924228982f6)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-276ca87382/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch drivers fs include kernel nr_bisected scripts source usr
---
->> drivers/leds/leds-pca955x.c:149:19: warning: unused function 'pca95xx_nu=
-m_led_regs'
-   static inline int pca95xx_num_led_regs(int bits)
-   ^
-   fatal error: error in backend: Nested variants found in inline asm strin=
-g: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
-h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
-branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
-de/asm/bitops.h", .line =3D 103, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
-et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0. Program arguments: clang -Wp,-MMD,drivers/leds/.leds-pca955x.o.d -nos=
-tdinc -Iarch/mips/include -I./arch/mips/include/generated -Iinclude -I./inc=
-lude -Iarch/mips/include/uapi -I./arch/mips/include/generated/uapi -Iinclud=
-e/uapi -I./include/generated/uapi -include include/linux/compiler-version.h=
- -include include/linux/kconfig.h -include include/linux/compiler_types.h -=
-D__KERNEL__ -DVMLINUX_LOAD_ADDRESS=3D0xffffffff80101000 -DLINKER_LOAD_ADDRE=
-SS=3D0x80101000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=
-=3D -DKBUILD_EXTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-tri=
-graphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dim=
-plicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -W=
-no-format-security -std=3Dgnu89 --target=3Dmipsel-linux -fintegrated-as -We=
-rror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument -mno-=
-check-zero-division -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-flo=
-at -DGAS_HAS_SET_HARDFLOAT -Wa,-msoft-float -ffreestanding -EL -fno-stack-c=
-heck -march=3Dmips32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/inclu=
-de/asm/mach-rc32434 -Iarch/mips/include/asm/mach-generic -fno-asynchronous-=
-unwind-tables -fno-delete-null-pointer-checks -Wno-frame-address -Wno-addre=
-ss-of-packed-member -O2 -Wframe-larger-than=3D1024 -fno-stack-protector -Wi=
-mplicit-fallthrough -Wno-gnu -mno-global-merge -Wno-unused-but-set-variable=
- -Wno-unused-const-variable -ftrivial-auto-var-init=3Dzero -enable-trivial-=
-auto-var-init-zero-knowing-it-will-be-removed-from-clang -fno-stack-clash-p=
-rotection -pg -Wdeclaration-after-statement -Wvla -Wno-pointer-sign -Wcast-=
-function-type -Wno-array-bounds -fno-strict-overflow -fno-stack-check -Werr=
-or=3Ddate-time -Werror=3Dincompatible-pointer-types -Wextra -Wunused -Wno-u=
-nused-parameter -Wmissing-declarations -Wmissing-format-attribute -Wmissing=
--prototypes -Wold-style-definition -Wmissing-include-dirs -Wunused-but-set-=
-variable -Wunused-const-variable -Wno-missing-field-initializers -Wno-sign-=
-compare -Wno-type-limits -fsanitize=3Darray-bounds -fsanitize=3Dshift -fsan=
-itize=3Dbool -fsanitize=3Denum -DMODULE -mlong-calls -DKBUILD_BASENAME=3D"l=
-eds_pca955x" -DKBUILD_MODNAME=3D"leds_pca955x" -D__KBUILD_MODNAME=3Dkmod_le=
-ds_pca955x -c -o drivers/leds/leds-pca955x.o drivers/leds/leds-pca955x.c
-   1. <eof> parser at end of file
-   2. Code generation
-   3. Running pass 'Function Pass Manager' on module 'drivers/leds/leds-pca=
-955x.c'.
-   4. Running pass 'Mips Assembly Printer' on function '@pca955x_probe'
-   #0 0x000055fd91ce560f Signals.cpp:0:0
-   #1 0x000055fd91ce34ec llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
-oss/clang-276ca87382/bin/clang-15+0x34914ec)
-   #2 0x000055fd91c23ac7 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
-cross/clang-276ca87382/bin/clang-15+0x33d1ac7)
-   #3 0x000055fd91cdbb9e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
-ang-276ca87382/bin/clang-15+0x3489b9e)
-   #4 0x000055fd8f8ea62b (/opt/cross/clang-276ca87382/bin/clang-15+0x109862=
-b)
-   #5 0x000055fd91c2a5ec llvm::report_fatal_error(llvm::Twine const&, bool)=
- (/opt/cross/clang-276ca87382/bin/clang-15+0x33d85ec)
-   #6 0x000055fd9293f900 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
- const (/opt/cross/clang-276ca87382/bin/clang-15+0x40ed900)
-   #7 0x000055fd9293b834 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
-lang-276ca87382/bin/clang-15+0x40e9834)
-   #8 0x000055fd90362df7 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
-achineFunction&) (/opt/cross/clang-276ca87382/bin/clang-15+0x1b10df7)
-   #9 0x000055fd9102ab4d llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
-ction&) (.part.53) MachineFunctionPass.cpp:0:0
-   #10 0x000055fd914731b7 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (/opt/cross/clang-276ca87382/bin/clang-15+0x2c211b7)
-   #11 0x000055fd91473331 llvm::FPPassManager::runOnModule(llvm::Module&) (=
-/opt/cross/clang-276ca87382/bin/clang-15+0x2c21331)
-   #12 0x000055fd91473eaf llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (/opt/cross/clang-276ca87382/bin/clang-15+0x2c21eaf)
-   #13 0x000055fd92002797 clang::EmitBackendOutput(clang::DiagnosticsEngine=
-&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
-TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
-ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
-lvm::raw_pwrite_stream> >) (/opt/cross/clang-276ca87382/bin/clang-15+0x37b0=
-797)
-   #14 0x000055fd92c5bd33 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (/opt/cross/clang-276ca87382/bin/clang-15+0x4409d33)
-   #15 0x000055fd93748291 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
-ross/clang-276ca87382/bin/clang-15+0x4ef6291)
-   #16 0x000055fd92c5ab6f clang::CodeGenAction::ExecuteAction() (/opt/cross=
-/clang-276ca87382/bin/clang-15+0x4408b6f)
-   #17 0x000055fd92659b01 clang::FrontendAction::Execute() (/opt/cross/clan=
-g-276ca87382/bin/clang-15+0x3e07b01)
-   #18 0x000055fd925ef95a clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (/opt/cross/clang-276ca87382/bin/clang-15+0x3d9d95a)
-   #19 0x000055fd9271ef3b (/opt/cross/clang-276ca87382/bin/clang-15+0x3eccf=
-3b)
-   #20 0x000055fd8f8ebbdc cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
-ng-276ca87382/bin/clang-15+0x1099bdc)
-   #21 0x000055fd8f8e88ab ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
-cpp:0:0
-   #22 0x000055fd924874a5 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
-ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
-tor<char> const::'lambda'()>(long) Job.cpp:0:0
-   #23 0x000055fd91c23983 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (/opt/cross/clang-276ca87382/bin/clang-15+0x33d1983)
-   #24 0x000055fd92487d9e clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
-har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
-   #25 0x000055fd9245c4b7 clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const (/opt/cross/clang-276=
-ca87382/bin/clang-15+0x3c0a4b7)
-   #26 0x000055fd9245ce97 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) const (/opt/cross/clang-276ca87382/bin/clang-15+0x3c0ae97)
-   #27 0x000055fd924663ea clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) (/opt/cross/clang-276ca87382/bin/clang-15+0x3c143ea)
-   #28 0x000055fd8f8357cf main (/opt/cross/clang-276ca87382/bin/clang-15+0x=
-fe37cf)
-   #29 0x00007fe4d637bd0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x26d0a)
-   #30 0x000055fd8f8e83ca _start (/opt/cross/clang-276ca87382/bin/clang-15+=
-0x10963ca)
-   clang-15: error: clang frontend command failed with exit code 70 (use -v=
- to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project 276ca87382b8f16a65bdd=
-ac700202924228982f6)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-276ca87382/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch drivers fs include kernel nr_bisected scripts source usr
+>> arch/arm64/mm/init.c:90:19: error: redefinition of 'arm64_dma_phys_limit' with a different type: 'const phys_addr_t' (aka 'const unsigned long long') vs 'phys_addr_t' (aka 'unsigned long long')
+   const phys_addr_t arm64_dma_phys_limit = PHYS_MASK + 1;
+                     ^
+   arch/arm64/include/asm/processor.h:102:20: note: previous declaration is here
+   extern phys_addr_t arm64_dma_phys_limit;
+                      ^
+   1 error generated.
 
 
-vim +/pca95xx_num_led_regs +149 drivers/leds/leds-pca955x.c
+vim +90 arch/arm64/mm/init.c
 
-f46e9203d9a100 Nate Case 2008-07-16  147 =20
-f46e9203d9a100 Nate Case 2008-07-16  148  /* 4 bits per LED selector regist=
-er */
-f46e9203d9a100 Nate Case 2008-07-16 @149  static inline int pca95xx_num_led=
-_regs(int bits)
-f46e9203d9a100 Nate Case 2008-07-16  150  {
-f46e9203d9a100 Nate Case 2008-07-16  151  	return (bits + 3)  / 4;
-f46e9203d9a100 Nate Case 2008-07-16  152  }
-f46e9203d9a100 Nate Case 2008-07-16  153 =20
-
-:::::: The code at line 149 was first introduced by commit
-:::::: f46e9203d9a100bae216cc06e17f2e77351aa8d8 leds: Add support for Phili=
-ps PCA955x I2C LED drivers
-
-:::::: TO: Nate Case <ncase@xes-inc.com>
-:::::: CC: Richard Purdie <rpurdie@rpsys.net>
+    57	
+    58	/*
+    59	 * If the corresponding config options are enabled, we create both ZONE_DMA
+    60	 * and ZONE_DMA32. By default ZONE_DMA covers the 32-bit addressable memory
+    61	 * unless restricted on specific platforms (e.g. 30-bit on Raspberry Pi 4).
+    62	 * In such case, ZONE_DMA32 covers the rest of the 32-bit addressable memory,
+    63	 * otherwise it is empty.
+    64	 *
+    65	 * Memory reservation for crash kernel either done early or deferred
+    66	 * depending on DMA memory zones configs (ZONE_DMA) --
+    67	 *
+    68	 * In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
+    69	 * here instead of max_zone_phys().  This lets early reservation of
+    70	 * crash kernel memory which has a dependency on arm64_dma_phys_limit.
+    71	 * Reserving memory early for crash kernel allows linear creation of block
+    72	 * mappings (greater than page-granularity) for all the memory bank rangs.
+    73	 * In this scheme a comparatively quicker boot is observed.
+    74	 *
+    75	 * If ZONE_DMA configs are defined, crash kernel memory reservation
+    76	 * is delayed until DMA zone memory range size initilazation performed in
+    77	 * zone_sizes_init().  The defer is necessary to steer clear of DMA zone
+    78	 * memory range to avoid overlap allocation.  So crash kernel memory boundaries
+    79	 * are not known when mapping all bank memory ranges, which otherwise means
+    80	 * not possible to exclude crash kernel range from creating block mappings
+    81	 * so page-granularity mappings are created for the entire memory range.
+    82	 * Hence a slightly slower boot is observed.
+    83	 *
+    84	 * Note: Page-granularity mapppings are necessary for crash kernel memory
+    85	 * range for shrinking its size via /sys/kernel/kexec_crash_size interface.
+    86	 */
+    87	#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
+    88	phys_addr_t __ro_after_init arm64_dma_phys_limit;
+    89	#else
+  > 90	const phys_addr_t arm64_dma_phys_limit = PHYS_MASK + 1;
+    91	#endif
+    92	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
