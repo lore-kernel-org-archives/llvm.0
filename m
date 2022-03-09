@@ -1,71 +1,113 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4805387
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 22:44:56 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-130-G6u0jimIM3m0Ki7tttEtKA-1; Wed, 09 Mar 2022 22:44:53 +0000
-X-MC-Unique: G6u0jimIM3m0Ki7tttEtKA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 9 Mar 2022 22:44:52 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 9 Mar 2022 22:44:52 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Kees Cook' <keescook@chromium.org>, Thomas Bogendoerfer
-	<tsbogend@alpha.franken.de>
-CC: Nathan Chancellor <nathan@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>, Yanteng Si <siyanteng01@gmail.com>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, Mark Rutland <mark.rutland@arm.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH v2] MIPS: Only use current_stack_pointer on GCC
-Thread-Topic: [PATCH v2] MIPS: Only use current_stack_pointer on GCC
-Thread-Index: AQHYNAKAxELb5a0xTk6/Jkk5NqddlKy3pmYg
-Date: Wed, 9 Mar 2022 22:44:52 +0000
-Message-ID: <3bb36a2d506a4b73aefec200d1edd40a@AcuMS.aculab.com>
-References: <20220309220939.392227-1-keescook@chromium.org>
-In-Reply-To: <20220309220939.392227-1-keescook@chromium.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAD917C0
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 23:09:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D513C340E8;
+	Wed,  9 Mar 2022 23:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646867392;
+	bh=ibHZIpp5hEnoCg+q6FN9PuIaT2D/qY/GSosZEsHZ2tg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=afb38Szwtnh5oFv17U8cT3v2S5KMa3QRhS+q5FQbRxe7JHYT3NhJQJki4rTuLxswW
+	 0qCh1fHS8MANQH8HeheJisbcT8i7df3kTd+cndZzquefKyfGLsqf+NmgHMRofZs9QQ
+	 5MO1K1l8btLqsExCflkVGk+2Kv+7M1IysDylbohfUtcb92VWvN6M/OdQOk593Q7apB
+	 S1olQJxl3DGtaVmqlizg7730+1n0cojCShDMYqT83yUL0iPCWov/uzymg/pmk15KQe
+	 91d0tTDn13RuH+4/mCaLsM3l/xdYxeWbcu3R8ITcvhSv2xPAwIRPmf2xG0FurClY6E
+	 49WI3dJFpRtMw==
+Date: Wed, 9 Mar 2022 17:09:50 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Marek Vasut <marek.vasut+renesas@gmail.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [lpieralisi-pci:pci/rcar 2/2]
+ drivers/pci/controller/pcie-rcar-host.c:139:3: error: instruction requires:
+ data-barriers
+Message-ID: <20220309230950.GA89632@bhelgaas>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202203091741.IetDk7a7-lkp@intel.com>
 
-From: Kees Cook
-> Sent: 09 March 2022 22:10
->=20
-> Unfortunately, Clang did not have support for "sp" as a global register
-> definition, and was crashing after the addition of current_stack_pointer.
-> This has been fixed in Clang 15, but earlier Clang versions need to
-                               ^^ 14
-> avoid this code, so add a versioned test and revert back to the
-> open-coded asm instances. Fixes Clang build error:
->=20
-> fatal error: error in backend: Invalid register name global variable
+On Wed, Mar 09, 2022 at 05:04:28PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git pci/rcar
+> head:   9775965dbae50a04f12879179d6d6fb58f240d6b
+> commit: 9775965dbae50a04f12879179d6d6fb58f240d6b [2/2] PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception
+> config: arm-randconfig-c002-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091741.IetDk7a7-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git/commit/?id=9775965dbae50a04f12879179d6d6fb58f240d6b
+>         git remote add lpieralisi-pci https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git
+>         git fetch --no-tags lpieralisi-pci pci/rcar
+>         git checkout 9775965dbae50a04f12879179d6d6fb58f240d6b
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/pci/controller/pcie-rcar-host.c:139:3: error: instruction requires: data-barriers
+>                    __rcar_pci_rw_reg_workaround("str")
+>                    ^
+>    drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+>                    "2:     isb\n"                                          \
+>                     ^
+>    <inline asm>:2:4: note: instantiated into assembly here
+>    2:      isb
+>            ^
+>    drivers/pci/controller/pcie-rcar-host.c:153:3: error: instruction requires: data-barriers
+>                    __rcar_pci_rw_reg_workaround("ldr")
+>                    ^
+>    drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+>                    "2:     isb\n"                                          \
+>                     ^
+>    <inline asm>:2:4: note: instantiated into assembly here
+>    2:      isb
+>            ^
+>    2 errors generated.
 
-=09David
+I don't know how to fix this.  We currently have these on Lorenzo's
+pci/rcar branch:
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+  9775965dbae5 ("PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception")
+  de6b5097f58b ("PCI: rcar: Finish transition to L1 state in rcar_pcie_config_access()")
 
+To avoid this error, for now I have cherry-picked de6b5097f58b to a
+local pci/host/rcar branch and dropped 9775965dbae5.
+
+> vim +139 drivers/pci/controller/pcie-rcar-host.c
+> 
+>    132	
+>    133	static int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val,
+>    134						 unsigned int reg)
+>    135	{
+>    136		int error = PCIBIOS_SUCCESSFUL;
+>    137	#ifdef CONFIG_ARM
+>    138		asm volatile(
+>  > 139			__rcar_pci_rw_reg_workaround("str")
+>    140		: "+r"(error):"r"(val), "r"(pcie->base + reg) : "memory");
+>    141	#else
+>    142		rcar_pci_write_reg(pcie, val, reg);
+>    143	#endif
+>    144		return error;
+>    145	}
+>    146	
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
