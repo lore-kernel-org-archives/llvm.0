@@ -1,85 +1,124 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED2E7E
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 11:09:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646824147; x=1678360147;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J0YY95aE/Id7lJdSP/3jCRc5QFoNIt2d2lg8BvEmkHQ=;
-  b=WvnnrIm3NG6qciDz8KQnLQT19HmLgk4j7hUCUvw8mUM0o8XDG14pbfWq
-   XM24HDyB1oT3zUQiRcNHZA7uOE9ycCRxlsN0Zycuahq4uVrAIQkrNCtNg
-   n2RlYrLe0xSmH3DC4A+gUmLaSbtAazRL0SPXZidiAS5OfQgVEbZEpLqkZ
-   m521BLFXAOlCUJDMtRgaOUL7W6vodsny1g3G5UWZ/wMtZJKnFE9g/KEQA
-   a8Spp1UbUOAoqdn8g4QbzyiUqToDTpWqQ9tV16JysuD7o+ZbOkdmQQkrz
-   yugQakM3B4xdR9qicbh0MTMI6Et9QQaexeVicT/nS7bF9e0S75hcEGq32
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="255139553"
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="255139553"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 03:09:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="513489052"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2022 03:09:05 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nRuBk-000397-NP; Wed, 09 Mar 2022 11:09:04 +0000
-Date: Wed, 9 Mar 2022 19:08:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Divya Koppera <Divya.Koppera@microchip.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:netdev/net-next/master 34/177] ld.lld: error:
- undefined symbol: ptp_clock_register
-Message-ID: <202203091943.vWYw7yEQ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBEB87C
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 13:48:29 +0000 (UTC)
+Received: by mail-pl1-f182.google.com with SMTP id p17so1972220plo.9
+        for <llvm@lists.linux.dev>; Wed, 09 Mar 2022 05:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Awv2807Q48rVf5K7n4tpsQ5KWBJDVYHY3kmCWNGk/aI=;
+        b=wcsOfALNDGWwsppDVr612z56RIFdWApQ9M7wYfkJMq8/nhsKXsyw0kUUx2ytQ3ByPz
+         zxpSHo1d+oR+6+rDhvl/kyJW7BR7yQAr/q++8bz8KhQVUiUscD8mN7mE4ATjdySjvqnq
+         einFiM8EQ7zx0LK5iXHZClxZkmp13xYREyuO/zvxbFnzaxyub6tECJA89p37uOCS9WUa
+         j0bT5jMYmF+ZZRn6G/BQ02rNDkquRPi5dwKuD+O6u2EX14z1GLCiPowGsop2oYdThZIL
+         u4gd1htJyC834tEP9cAT+ZzpmcnuaD6AADdllgz/iFBuh31TRqz9TQwAuG1DUu8vor1y
+         B50w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Awv2807Q48rVf5K7n4tpsQ5KWBJDVYHY3kmCWNGk/aI=;
+        b=Csgy47XOaQ34B4YrAHmunvMabC0s1hJvP7q2zmm0pyUeO0NA/N/LVZfRUSoa3Y88cW
+         qYXwb9UUQ438AbaFQlbvlQSMfiq4O1gVCYti5zGAt8XKkdtbXp3trODpP3XovZsnClZO
+         K1Nwy2OwsiEHKtZjZwnZy/b9sz/huXnzvW2uo9sYsBoYWbD6NQ7CkQVF+AyeIernLbQ4
+         9pb+Qgcpitl2RZqHW9e0bMzIKINUWzMe7jVDjr+WZQ0ZakrgmcSPz+Xvj4nfAjymyWxt
+         uoJkek312J7SnpBt6SrZ+3M0T9NnPBplJ2aBlXQQLwJqtDgARc5biYQiGKzeP4iypsiv
+         xcWA==
+X-Gm-Message-State: AOAM530QOMpZ2g7TOWNUjsK0hSIzu5TdsoVzSavjFRCcDmM56/0CxSvN
+	lh5vSodwfaQhk3L1lUzv6FJndIOjZ1a92wR4YiqitA==
+X-Google-Smtp-Source: ABdhPJxxGgkv/4ONjg/97nbBdxzNOqwNnUzRdkuGoFC3g9OqxkCMUZRKN+0ZNpfJPSVMPuq50dxWQN74mQ3jU4SqXbA=
+X-Received: by 2002:a17:90b:124c:b0:1bc:369b:7db5 with SMTP id
+ gx12-20020a17090b124c00b001bc369b7db5mr10521690pjb.179.1646833709168; Wed, 09
+ Mar 2022 05:48:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220303201943.501746-1-trix@redhat.com> <CAKwvOdnoV_SsFuWWJd4nOOd1vGG6_-gg-KvdOg4_NHuRp7_WfA@mail.gmail.com>
+ <5b6a10bd-5650-2924-d1cc-e4664a0e7255@redhat.com>
+In-Reply-To: <5b6a10bd-5650-2924-d1cc-e4664a0e7255@redhat.com>
+From: Robert Foss <robert.foss@linaro.org>
+Date: Wed, 9 Mar 2022 14:48:18 +0100
+Message-ID: <CAG3jFyuBuJmr=NJROWHyEQqW9qng6KtwhJ1a9ACUEGfZ7g-Mxg@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: anx7625: check the return on anx7625_aux_trans
+To: Tom Rix <trix@redhat.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, andrzej.hajda@intel.com, 
+	narmstrong@baylibre.com, laurent.pinchart@ideasonboard.com, jonas@kwiboo.se, 
+	jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch, 
+	nathan@kernel.org, xji@analogixsemi.com, sam@ravnborg.org, tzungbi@google.com, 
+	pihsun@chromium.org, maxime@cerno.tech, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, hsinyi@chromium.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/ammarfaizi2/linux-block netdev/net-next/master
-head:   d82a6c5ef9dc0aab296936e1aa4ad28fd5162a55
-commit: ece19502834d84ece2e056db28257ca2aa6e4d48 [34/177] net: phy: micrel: 1588 support for LAN8814 phy
-config: hexagon-randconfig-r041-20220308 (https://download.01.org/0day-ci/archive/20220309/202203091943.vWYw7yEQ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/ece19502834d84ece2e056db28257ca2aa6e4d48
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block netdev/net-next/master
-        git checkout ece19502834d84ece2e056db28257ca2aa6e4d48
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+On Wed, 9 Mar 2022 at 02:45, Tom Rix <trix@redhat.com> wrote:
+>
+>
+> On 3/8/22 2:57 PM, Nick Desaulniers wrote:
+> > On Thu, Mar 3, 2022 at 12:19 PM <trix@redhat.com> wrote:
+> >> From: Tom Rix <trix@redhat.com>
+> >>
+> >> Clang static analysis reports this issue
+> >> anx7625.c:876:13: warning: The left operand of '&' is
+> >>    a garbage value
+> >>    if (!(bcap & 0xOA01)) {
+> >>          ~~~~ ^
+> >>
+> >> bcap is only set by a successful call to
+> >> anx7625_aux_trans().  So check.
+> >>
+> >> Fixes: cd1637c7e480 ("drm/bridge: anx7625: add HDCP support")
+> > Is this the correct Fixes tag?
+> yes
+> > I think it should be
+> >
+> > Fixes: adca62ec370c ("drm/bridge: anx7625: Support reading edid
+> > through aux channel")
+>
+> This one changes the name of the function
+>
+> -       anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+> +       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+>
+> A return check from the earlier commit, when this block of code came
+> into existence, is when it was first needed.
+>
+> Tom
+>
+> >
+> > instead.
+> >
+> >> Signed-off-by: Tom Rix <trix@redhat.com>
+> >> ---
+> >>   drivers/gpu/drm/bridge/analogix/anx7625.c | 5 ++++-
+> >>   1 file changed, 4 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> >> index 633618bafd75d..f02ac079ed2ec 100644
+> >> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> >> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> >> @@ -872,7 +872,10 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
+> >>          }
+> >>
+> >>          /* Read downstream capability */
+> >> -       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+> >> +       ret = anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+> >> +       if (ret < 0)
+> >> +               return ret;
+> >> +
+> >>          if (!(bcap & 0x01)) {
+> >>                  pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
+> >>                  return 0;
+> >> --
+> >> 2.26.3
+> >>
+> >
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: ptp_clock_register
-   >>> referenced by micrel.c
-   >>> net/phy/micrel.o:(lan8814_probe) in archive drivers/built-in.a
-   >>> referenced by micrel.c
-   >>> net/phy/micrel.o:(lan8814_probe) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: ptp_clock_index
-   >>> referenced by micrel.c
-   >>> net/phy/micrel.o:(lan8814_ts_info) in archive drivers/built-in.a
-   >>> referenced by micrel.c
-   >>> net/phy/micrel.o:(lan8814_ts_info) in archive drivers/built-in.a
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Applied to drm-misc-next.
