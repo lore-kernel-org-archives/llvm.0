@@ -1,91 +1,180 @@
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B832315BD
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 07:05:03 +0000 (UTC)
-Received: from localhost.localdomain (unknown [138.197.159.143])
-	by gnuweeb.org (Postfix) with ESMTPSA id 934627E2B4;
-	Wed,  9 Mar 2022 06:59:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1646809146;
-	bh=XOsQg5Wg6D7N7E5H1D+daqbJz5RJM1qCGTDWtbNB08c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HVo3Iaa0NIhYESCGguWkOvc+o9kTJzFhAyH9Lx5IXJIy+Q7O4zl1oLinQtoawnc9x
-	 qV3+ueZu7m3VLLsCTwCv1BwqWSKoXVrD9+9XN8cCCCYi5FRoNepLcKDiQLY8RWwNpS
-	 G4XN+QQNy44lglNZdimwgOpIWFpRXBWIqHFE58Sfv7KzQAXfA/rj2HURXK9x1z+lcZ
-	 GEETY6W+I1hG9lj2bJ9wzwsCU/6EiKwBqKbaYyKHXXLw0m4KPXDOsXYwGLP0upc2K4
-	 xJNCBD5bFDGbOmopb+RjOX63yl+x5/iWAdDcb5Jj7wiCXC9H9PPF/7PC29YIwZF2rv
-	 OEWDTyfj1R7QA==
-From: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
-	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	Nugraha <richiisei@gmail.com>,
-	llvm@lists.linux.dev,
-	kbuild-all@lists.01.org,
-	gwml@vger.gnuweeb.org,
-	linux-kernel@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] ASoC: atmel: mchp-pdmc: Fix `-Wpointer-bool-conversion` warning
-Date: Wed,  9 Mar 2022 06:58:49 +0000
-Message-Id: <20220309065849.96165-1-alviro.iskandar@gnuweeb.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <202203091430.MLY27Bif-lkp@intel.com>
-References: <202203091430.MLY27Bif-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6044915BD
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 07:22:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646810524; x=1678346524;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8P15gyfMQXBcZtwt5sBe3cAJYWyxAa9xsRjkNdIfHfs=;
+  b=c4rfCkKtxWbo2cNwGtazxDrff4PLQO3Bd8dSZnzZ15U0A7hK6JaOdK3T
+   lM/OMA3SewgeGxHgAnLKnvFUWIs8F64MgNzs7OG/4mUx/+cPfibUDYGrz
+   oc4oQuPihxkWXArRQIP710+6KzgFyOjaxYftaLTIXpxH82iiNA9YnWKpm
+   6awFm3cP03W8tsLb6VfxR67yip3BSl0uUXk9CJrGfewQPMqAzOEWQZJYG
+   sjleyWoz9tViXjnwGsUysmYd9xpoiC4dngT2oxOEEnzH4GGxpKfXogBIf
+   AOdNJOuLqcTz4OUPLtj5HxlS7991m738MjwNYN2gXRfv8KY4F60roK1SL
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254638599"
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="254638599"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 23:22:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="814643883"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Mar 2022 23:21:57 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nRqdw-0002pB-R8; Wed, 09 Mar 2022 07:21:56 +0000
+Date: Wed, 9 Mar 2022 15:21:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Byungchul Park <byungchul.park@lge.com>, torvalds@linux-foundation.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+	mingo@redhat.com, linux-kernel@vger.kernel.org, will@kernel.org,
+	tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
+	sashal@kernel.org, daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+	tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+	amir73il@gmail.com, bfields@fieldses.org,
+	gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
+	akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
+	hannes@cmpxchg.org
+Subject: Re: [PATCH v4 02/24] dept: Implement Dept(Dependency Tracker)
+Message-ID: <202203091550.PnufQ7gO-lkp@intel.com>
+References: <1646377603-19730-3-git-send-email-byungchul.park@lge.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1646377603-19730-3-git-send-email-byungchul.park@lge.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-In function mchp_pdmc_af_put(), Intel's kernel test robot reports the
-following warning:
+Hi Byungchul,
 
-  sound/soc/atmel/mchp-pdmc.c:186:34: warning: address of array \
-  'uvalue->value.integer.value' will always evaluate to 'true' \
-  [-Wpointer-bool-conversion]
+Thank you for the patch! Perhaps something to improve:
 
-This is because we are using `uvalue->value.integer.value` which its
-type is `long value[128];` for conditional expression and that array
-will always decay to a non-NULL pointer. Using a non-NULL pointer for
-conditional expression will always evaluate to true.
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on linux/master linus/master v5.17-rc7]
+[cannot apply to tip/locking/core hnaz-mm/master next-20220308]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Fix this by changing it to `uvalue->value.integer.value[0]` as that's
-what the mchp_pdmc_af_get() function sets.
+url:    https://github.com/0day-ci/linux/commits/Byungchul-Park/DEPT-Dependency-Tracker/20220304-150943
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 25795ef6299f07ce3838f3253a9cb34f64efcfae
+config: hexagon-randconfig-r022-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091550.PnufQ7gO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/387c58f459c6eb2a17a99b6c42ad57512a917d5d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Byungchul-Park/DEPT-Dependency-Tracker/20220304-150943
+        git checkout 387c58f459c6eb2a17a99b6c42ad57512a917d5d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/target/ kernel/dependency/
 
-To: Mark Brown <broonie@kernel.org>
-Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Cc: Nugraha <richiisei@gmail.com>
-Cc: llvm@lists.linux.dev
-Cc: kbuild-all@lists.01.org
-Cc: gwml@vger.gnuweeb.org
-Cc: linux-kernel@vger.kernel.org
+If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202203091430.MLY27Bif-lkp@intel.com
-Fixes: 50291652af5269813baa6024eb0e81b5f0bbb451 ("ASoC: atmel: mchp-pdmc: add PDMC driver")
-Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/dependency/dept.c:2093:6: warning: no previous prototype for function '__dept_wait' [-Wmissing-prototypes]
+   void __dept_wait(struct dept_map *m, unsigned long w_f, unsigned long ip,
+        ^
+   kernel/dependency/dept.c:2093:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __dept_wait(struct dept_map *m, unsigned long w_f, unsigned long ip,
+   ^
+   static 
+   In file included from kernel/dependency/dept.c:2532:
+>> kernel/dependency/dept_hash.h:9:1: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+   HASH(dep, 12)
+   ^~~~~~~~~~~~~
+   kernel/dependency/dept.c:2531:14: note: expanded from macro 'HASH'
+                  #id, B2KB(sizeof(struct hlist_head) * (1UL << bits)));
+                  ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:519:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   kernel/dependency/dept.c:2497:17: note: expanded from macro 'B2KB'
+   #define B2KB(B) ((B) / 1024)
+                   ^~~~~~~~~~~~
+   In file included from kernel/dependency/dept.c:2532:
+   kernel/dependency/dept_hash.h:10:1: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+   HASH(class, 12)
+   ^~~~~~~~~~~~~~~
+   kernel/dependency/dept.c:2531:14: note: expanded from macro 'HASH'
+                  #id, B2KB(sizeof(struct hlist_head) * (1UL << bits)));
+                  ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:519:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   kernel/dependency/dept.c:2497:17: note: expanded from macro 'B2KB'
+   #define B2KB(B) ((B) / 1024)
+                   ^~~~~~~~~~~~
+   3 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FRAME_POINTER
+   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS
+   Selected by
+   - DEPT && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
+
+
+vim +/__dept_wait +2093 kernel/dependency/dept.c
+
+  2092	
+> 2093	void __dept_wait(struct dept_map *m, unsigned long w_f, unsigned long ip,
+  2094			 const char *w_fn, int ne)
+  2095	{
+  2096		int e;
+  2097	
+  2098		/*
+  2099		 * Be as conservative as possible. In case of mulitple waits for
+  2100		 * a single dept_map, we are going to keep only the last wait's
+  2101		 * wgen for simplicity - keeping all wgens seems overengineering.
+  2102		 *
+  2103		 * Of course, it might cause missing some dependencies that
+  2104		 * would rarely, probabily never, happen but it helps avoid
+  2105		 * false positive report.
+  2106		 */
+  2107		for_each_set_bit(e, &w_f, DEPT_MAX_SUBCLASSES_EVT) {
+  2108			struct dept_class *c;
+  2109			struct dept_key *k;
+  2110	
+  2111			k = m->keys ?: &m->keys_local;
+  2112			c = check_new_class(&m->keys_local, k,
+  2113					    map_sub(m, e), m->name);
+  2114			if (!c)
+  2115				continue;
+  2116	
+  2117			add_wait(c, ip, w_fn, ne);
+  2118		}
+  2119	}
+  2120	
+
 ---
- sound/soc/atmel/mchp-pdmc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/atmel/mchp-pdmc.c b/sound/soc/atmel/mchp-pdmc.c
-index c44636f6207d..7b87f75c284c 100644
---- a/sound/soc/atmel/mchp-pdmc.c
-+++ b/sound/soc/atmel/mchp-pdmc.c
-@@ -183,7 +183,7 @@ static int mchp_pdmc_af_put(struct snd_kcontrol *kcontrol,
- {
- 	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
- 	struct mchp_pdmc *dd = snd_soc_component_get_drvdata(component);
--	bool af = uvalue->value.integer.value ? true : false;
-+	bool af = uvalue->value.integer.value[0] ? true : false;
- 
- 	if (dd->audio_filter_en == af)
- 		return 0;
-
-base-commit: 50291652af5269813baa6024eb0e81b5f0bbb451
--- 
-2.27.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
