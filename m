@@ -1,33 +1,57 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA795107
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 19:20:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2929C340E8;
-	Wed,  9 Mar 2022 19:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646853608;
-	bh=8GG5k+aRyvEM7ZRAADPAKqbxwXD95Kna8A+kMz3JX40=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KTmS/5MYRMuZXRKc24SHA1hdwWMOWx76Sf+Sp3OGW0NRtnl95dw+FjSDYYSwsfmai
-	 /3xCmDGqEzJ+retkKCKiBq0CrkPBVwAidp/JS/EezOFm9YBkHdguzMXNwX0jhDWV8g
-	 KHgGSGNtBGvZ9QPjQXzpPq9waUS8h5bqqlg+T8ZnzenvS51Tx0MvDoKk6UeFba60q8
-	 Z5gSkVYI3thKlBGQsHj6Pi05blb3taZjzNlqbnWZjMG2Oeedq4Tgs695YsZku6GU0F
-	 6jSYZ4ueF7V1lHHjDhBjUGJdwqB+21Pj4qCXrTXyc60mr/yEsZ4RMEJoIwTYXgobSt
-	 ztEzR6A3AhuDg==
-Date: Wed, 9 Mar 2022 12:20:01 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	kernel-team@android.com, James Morse <james.morse@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] arm64: Paper over ARM_SMCCC_ARCH_WORKAROUND_3 Clang issue
-Message-ID: <Yij94ZY5fOaqlkki@dev-arch.thelio-3990X>
-References: <20220309155716.3988480-1-maz@kernel.org>
- <YijftpaApSJWuZ3m@dev-arch.thelio-3990X>
- <Yijo7Nmt3AiP1uLH@dev-arch.thelio-3990X>
- <Yij1uUwvnsxjbvR+@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083175107
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 20:16:48 +0000 (UTC)
+Received: by mail-pg1-f170.google.com with SMTP id bc27so2905806pgb.4
+        for <llvm@lists.linux.dev>; Wed, 09 Mar 2022 12:16:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6BaluqbU/Z25J2R97A+4bgdc+ob1O3EWcsEpPLgF3pk=;
+        b=ISdtbAOwnBbYGM4PCvpKrrw5HmGmfUq3wg3g9OLspUaLc+zFWwDqcVsYfOgzslDf9L
+         8ZVKnke21o94g0bfC8pnuFzNLInuTyhowTRNulQ+CAFOHtaG0pSBOXjDS2XuX6b8YzvF
+         ilTdwW3UUTtdTskFFMnGU9GNP34o5UgoK+vm4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6BaluqbU/Z25J2R97A+4bgdc+ob1O3EWcsEpPLgF3pk=;
+        b=wTTFeDpykNlP9c3E0ehLIIzKMQ2W5iUxVgtUjgdA67rDF3r47iBCYxrCdOj7MowfNS
+         U26cM/JkOFAzD6bCFTsgtDnEF/q1eMUR2tllr+1fC/eVtQGnF3qCNMRi28I0TVJ58ofM
+         QdzLtpnOFyEHhxLtHMMvFhqH+3BsF7nt58akKD7avQHH34X+IfTEmhjCYD42r7dipkgH
+         mP8AtuwzQh/IAeW5IdtwsMfUnzlWr0Dix5BBVuyoTiwoWH59xH+IBjl/I9NS7tx3i/vz
+         2L6Jf5nbaUkMrj56ixyWJrf8l9n4o8qUqsTc9YQcVbdaJJQMc9VvwjxAzOPnmu/R9Hlg
+         mk1w==
+X-Gm-Message-State: AOAM530h2ufzsTedUKwhzsbwmBNIxeTRYol/0evDkKr0GOQTIuiBVcyK
+	iJ15zLWBbYQxqhOqZok7+DBXXg==
+X-Google-Smtp-Source: ABdhPJwlFCfuaoDPFowRrKqu5kBpvMkL/ybtBrvNihxj3zKsFGRIqd0H9DrqrIK7H2SCt/BiTczTZA==
+X-Received: by 2002:a05:6a00:2168:b0:4f6:eb64:71dd with SMTP id r8-20020a056a00216800b004f6eb6471ddmr1450854pff.40.1646857008474;
+        Wed, 09 Mar 2022 12:16:48 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e6-20020a63aa06000000b00380c8bed5a6sm1650747pgf.46.2022.03.09.12.16.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 12:16:48 -0800 (PST)
+Date: Wed, 9 Mar 2022 12:16:47 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Dan Li <ashimida@linux.alibaba.com>
+Cc: akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
+	gregkh@linuxfoundation.org, linux@roeck-us.net,
+	luc.vanoostenryck@gmail.com, elver@google.com, mark.rutland@arm.com,
+	masahiroy@kernel.org, ojeda@kernel.org, nathan@kernel.org,
+	npiggin@gmail.com, ndesaulniers@google.com, samitolvanen@google.com,
+	shuah@kernel.org, tglx@linutronix.de, will@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
+Message-ID: <202203091211.4F00F560@keescook>
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+ <20220303074339.86337-1-ashimida@linux.alibaba.com>
+ <202203031010.0A492D114@keescook>
+ <202203031105.A1B4CAE6@keescook>
+ <92a767c4-09e1-8783-2581-9848bb72890d@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,39 +60,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yij1uUwvnsxjbvR+@arm.com>
+In-Reply-To: <92a767c4-09e1-8783-2581-9848bb72890d@linux.alibaba.com>
 
-On Wed, Mar 09, 2022 at 06:45:13PM +0000, Catalin Marinas wrote:
-> On Wed, Mar 09, 2022 at 10:50:36AM -0700, Nathan Chancellor wrote:
-> > This diff seems like a somewhat proper solution, as __READ_ONCE() cannot
-> > be used in assembly, but I am open to other suggestions.
-> > 
-> > diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-> > index 1bce62fa908a..56f7b1d4d54b 100644
-> > --- a/arch/arm64/include/asm/rwonce.h
-> > +++ b/arch/arm64/include/asm/rwonce.h
-> > @@ -5,7 +5,7 @@
-> >  #ifndef __ASM_RWONCE_H
-> >  #define __ASM_RWONCE_H
-> >  
-> > -#ifdef CONFIG_LTO
-> > +#if defined(CONFIG_LTO) && !defined(__ASSEMBLY__)
-> >  
-> >  #include <linux/compiler_types.h>
-> >  #include <asm/alternative-macros.h>
-> > @@ -66,7 +66,7 @@
-> >  })
-> >  
-> >  #endif	/* !BUILD_VDSO */
-> > -#endif	/* CONFIG_LTO */
-> > +#endif	/* CONFIG_LTO && !__ASSEMBLY__ */
+On Mon, Mar 07, 2022 at 07:16:36AM -0800, Dan Li wrote:
+> The following code seems to work fine under clang/gcc, x86_64/aarch64
+> (also tested in lkdtm_CFI_BACKWARD_SHADOW):
 > 
-> Thanks Nathan. Would you please send a proper patch for this? I'd go
-> with your proposal as it seems more related to LTO than Marc's patch ;).
+> #include <stdio.h>
+> 
+> static __attribute__((noinline))
+> void set_return_addr(unsigned long *expected, unsigned long *addr)
+> {
+>     /* Use of volatile is to make sure final write isn't seen as a dead store. */
+>     unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> 
+>     /* Make sure we've found the right place on the stack before writing it. */
+>     if(*ret_addr == expected)
+>         *ret_addr = (addr);
+> }
+> 
+> static volatile int force_label;
+> 
+> int main(void)
+> {
+>     void *array[] = {0, &&normal, &&redirected};
+> 
+>     if (force_label) {
+>         /* Call it with a NULL to avoid parameters being treated as constants in -02. */
+>         set_return_addr(NULL, NULL);
+>         goto * array[force_label];
+>     }
 
-Done, thanks Catalin and James for your input!
+Hah! I like that. :) I had a weird switch statement that was working for
+me; this is cleaner.
 
-https://lore.kernel.org/r/20220309191633.2307110-1-nathan@kernel.org/
+> 
+>     do {
+> 
+>         set_return_addr(&&normal, &&redirected);
+> 
+> normal:
+>         printf("I should be skipped\n");
+>         break;
+> 
+> redirected:
+>         printf("Redirected\n");
+> 
+>     } while (0);
+> 
+>     return 0;
+> }
+> 
+> But currently it still crashes when I try to enable
+> "-mbranch-protection=pac-ret+leaf+bti".
+> 
+> Because the address of "&&redirected" is not encrypted under pac,
+> the autiasp check will fail when set_return_addr returns, and
+> eventually cause the function to crash when it returns to "&&redirected"
+> ("&&redirected" as a reserved label always seems to start with a bti j
+> insn).
 
-Cheers,
-Nathan
+Strictly speaking, this is entirely correct. :)
+
+> For lkdtm, if we're going to handle both cases in one function, maybe
+> it would be better to turn off the -mbranch-protection=pac-ret+leaf+bti
+> and maybe also turn off -O2 options for the function :)
+
+If we can apply a function attribute to turn off pac for the "does this
+work without protections", that should be sufficient.
+
+-- 
+Kees Cook
