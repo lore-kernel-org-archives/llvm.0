@@ -1,115 +1,84 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7926442
-	for <llvm@lists.linux.dev>; Tue,  8 Mar 2022 23:30:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646782246; x=1678318246;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nq7TLCy8Yv0GpYqMYR80Z81yi6Re6AZfB/yw1zWXOKo=;
-  b=nIi6MTVd1SLXp9ViK9m4OtIw9vv0q4GPhP6AGvn2FAb3fLLn4JE5Kxay
-   yZpR3Hxe+uS/gEiDq9svagXSwnoMjPcfRwTiYzDCHB9Prikym+ZkFZ59b
-   MaJ93aiioOZOzf/CDunMLGDLTxMCr8DPfegK0BLEQilofVCLQl1BX/cP5
-   9oqeCtFGSxn0joDGDA0gDjZAeRD9DN9wWAceYPhzJ23jrw8aymw2ZU38q
-   nAvYB9g3/t4q0s0PVD6KH0BFpvPGgOWV4GzAYhVWhWbsfsZlijuAzOaFC
-   BaWvrDEjDLi+cvRnn8nrPnOImgncFOxySHwrY87AwhA/zjLS8h23ICiDj
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253670299"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="253670299"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 15:30:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="711729553"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2022 15:30:43 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nRjHu-0002BJ-H4; Tue, 08 Mar 2022 23:30:42 +0000
-Date: Wed, 9 Mar 2022 07:30:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Elliot Berman <quic_eberman@quicinc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Todd Kjos <tkjos@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
- 3194/9999] kernel/module.c:4792:6: warning: no previous prototype for
- function 'android_debug_for_each_module'
-Message-ID: <202203090739.89kwW2Yp-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F6C7B
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 00:09:31 +0000 (UTC)
+Received: by mail-lf1-f41.google.com with SMTP id bu29so964189lfb.0
+        for <llvm@lists.linux.dev>; Tue, 08 Mar 2022 16:09:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tYmupwL1NthFsF42+Fr0z4aIrhKGW9iSWfQCfyDDaEk=;
+        b=T9Y8CKYiSW3hGc9HM0/MT5sFo5blD99UIhMWcRbFD5kggM3DUwxybXuISqMFUGIjrg
+         mWQ74CDHtfn9kXLqt5VqIvjs1zPAj3pO65tEdbgr+OX1FrAEaiMiYghKLtQSRfh7w9WS
+         TgKR2SZWDkmK6Hkv45V1e1kyBDZQ0M8AOrIp8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tYmupwL1NthFsF42+Fr0z4aIrhKGW9iSWfQCfyDDaEk=;
+        b=AhKoW6xlf5bv45hLXoPM0Lp+3+LdsS7tV3vP1iUTG6MNWs9lfR66ACKcK4iDoGRiyZ
+         h3wRImIoXEjfWcAb9Ds7R+dQm3YuU/rAwoK6E7hgSjRj9B5/qbugl8CcmApPH06Q1Uwf
+         2UArpBtZZguOMNt+6eL54bXfx75MfN5zHolLIFIZIAO/OkZNSB8BH4s4XY5/rE/9wQhK
+         b9OGvxgrBkGpHoE9PoFcV5R0Z68Rnd4KBT7pnQdywCq4O8S8aRLhD/QyX2g+Q50A772b
+         I/Q+EVKnD4cnGm/oTy2pUpaR5Cke2llw1Qz9h8NrmDMs6jXCJo9rHaZ9RrgzzbRA+uZo
+         IPdg==
+X-Gm-Message-State: AOAM530KVyjPqdnUeyK0bemYnqyDrvrpdTW1+DpB50GinZGQTT0RQQM3
+	GEPxy2vab+DMcAziqU2xu+bCysLofyvs+k2+zrM=
+X-Google-Smtp-Source: ABdhPJy4KH501vtGRi59Lg2gZhqjOzgEo3knanJBhoPeAT0I8p77JmMGE83Z6fCW7DaNPls/aZnUoA==
+X-Received: by 2002:ac2:44ae:0:b0:445:bf4b:303b with SMTP id c14-20020ac244ae000000b00445bf4b303bmr12719271lfm.253.1646784569869;
+        Tue, 08 Mar 2022 16:09:29 -0800 (PST)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id r6-20020a19ac46000000b00442f6964cc1sm61389lfc.230.2022.03.08.16.09.27
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 16:09:28 -0800 (PST)
+Received: by mail-lj1-f181.google.com with SMTP id v28so828577ljv.9
+        for <llvm@lists.linux.dev>; Tue, 08 Mar 2022 16:09:27 -0800 (PST)
+X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
+ u16-20020a2e9b10000000b00247f28cffd3mr3400178lji.152.1646784567653; Tue, 08
+ Mar 2022 16:09:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220308215615.14183-1-arnd@kernel.org>
+In-Reply-To: <20220308215615.14183-1-arnd@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 8 Mar 2022 16:09:11 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjsCrVxToP0Zx+cUAVZmSKi=Y6NP1+VnBcoPyPPEBfonQ@mail.gmail.com>
+Message-ID: <CAHk-=wjsCrVxToP0Zx+cUAVZmSKi=Y6NP1+VnBcoPyPPEBfonQ@mail.gmail.com>
+Subject: Re: [PATCH 0/4] [v4] Kbuild: std=gnu11 changes
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Alex Shi <alexs@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>, Marco Elver <elver@google.com>, 
+	Jani Nikula <jani.nikula@intel.com>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Mark Rutland <mark.rutland@arm.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Elliot,
+On Tue, Mar 8, 2022 at 1:56 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> I've incorporated the feedback from Masahiro Yamada in this
+> version, splitting out one more patch, rebasing on top of
+> the kbuild tree, and changing the order of the patches.
+>
+> Please apply to the kbuild tree.
 
-FYI, the error/warning still remains.
+I'd actually like to see this as a separate branch, so that I can
+merge it early - or other peoples git branches end up depending on it.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
-head:   8ffc7ff817fe552592daa2b0de1760e3539663f3
-commit: 0bb433e0140efece0a1ce8124283cb68fda33a3f [3194/9999] ANDROID: debug_symbols: Add android_debug_for_each_module
-config: i386-randconfig-a013-20220307 (https://download.01.org/0day-ci/archive/20220309/202203090739.89kwW2Yp-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/0bb433e0140efece0a1ce8124283cb68fda33a3f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
-        git checkout 0bb433e0140efece0a1ce8124283cb68fda33a3f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Yeah, it shouldn't change anything on its own, but since it allows for
+new syntax, we might have other things depending on it (I'm obviously
+thinking of the list_for_each_entry() series that keeps getting
+posted).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/module.c:4792:6: warning: no previous prototype for function 'android_debug_for_each_module' [-Wmissing-prototypes]
-   void android_debug_for_each_module(int (*fn)(const char *mod_name, void *mod_addr, void *data),
-        ^
-   kernel/module.c:4792:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void android_debug_for_each_module(int (*fn)(const char *mod_name, void *mod_addr, void *data),
-   ^
-   static 
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for ASYNC_TX_ENABLE_CHANNEL_SWITCH
-   Depends on DMADEVICES
-   Selected by
-   - GKI_HIDDEN_DMA_CONFIGS
-
-
-vim +/android_debug_for_each_module +4792 kernel/module.c
-
-  4790	
-  4791	#ifdef CONFIG_ANDROID_DEBUG_SYMBOLS
-> 4792	void android_debug_for_each_module(int (*fn)(const char *mod_name, void *mod_addr, void *data),
-  4793		void *data)
-  4794	{
-  4795		struct module *module;
-  4796	
-  4797		preempt_disable();
-  4798		list_for_each_entry_rcu(module, &modules, list) {
-  4799			if (fn(module->name, module->core_layout.base, data))
-  4800				goto out;
-  4801		}
-  4802	out:
-  4803		preempt_enable();
-  4804	}
-  4805	EXPORT_SYMBOL_GPL(android_debug_for_each_module);
-  4806	#endif
-  4807	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+                      Linus
