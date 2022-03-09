@@ -1,32 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAD917C0
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 23:09:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D513C340E8;
-	Wed,  9 Mar 2022 23:09:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646867392;
-	bh=ibHZIpp5hEnoCg+q6FN9PuIaT2D/qY/GSosZEsHZ2tg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=afb38Szwtnh5oFv17U8cT3v2S5KMa3QRhS+q5FQbRxe7JHYT3NhJQJki4rTuLxswW
-	 0qCh1fHS8MANQH8HeheJisbcT8i7df3kTd+cndZzquefKyfGLsqf+NmgHMRofZs9QQ
-	 5MO1K1l8btLqsExCflkVGk+2Kv+7M1IysDylbohfUtcb92VWvN6M/OdQOk593Q7apB
-	 S1olQJxl3DGtaVmqlizg7730+1n0cojCShDMYqT83yUL0iPCWov/uzymg/pmk15KQe
-	 91d0tTDn13RuH+4/mCaLsM3l/xdYxeWbcu3R8ITcvhSv2xPAwIRPmf2xG0FurClY6E
-	 49WI3dJFpRtMw==
-Date: Wed, 9 Mar 2022 17:09:50 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Marek Vasut <marek.vasut+renesas@gmail.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [lpieralisi-pci:pci/rcar 2/2]
- drivers/pci/controller/pcie-rcar-host.c:139:3: error: instruction requires:
- data-barriers
-Message-ID: <20220309230950.GA89632@bhelgaas>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31F717C0
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 23:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646867597; x=1678403597;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U7Nwa2/MaFerIKl5/9Kdbe5rlL2Uh6Li/uVnnd8vg8E=;
+  b=ilrWHQr1XVyHo8nr4DtGS9Oo/TeocYyMIbfUIuUd5y7H8H++D6F1xhGi
+   7Nd65+90nfyNF8V+TDOhDMaq+9gRm5vGgBUrdN8uVFyrZIflhkOl6QG5B
+   Bn7/r0bQsj78MkZtHbypARVC4zdLTNDinUNsokmCYYN/9YwxvOvPni24U
+   D2weSXfT/JTZmWVy7jqQieyUdrPY8VFV6EfAiVSlC7n/cYX+V4xOsAz5y
+   fQBJ7R0q/aRkld8eaGRCZvwhOn8W90tgi9NVscuJoSI7bmQdtan7mYzbG
+   AsuiiQMaw77ESCN09nua0ITwor0b3/zg9kDfLF2bZeZrXoD9jV7z8MKVJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255056361"
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="255056361"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 15:13:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="632782804"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Mar 2022 15:13:15 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nS5UZ-0003wa-9v; Wed, 09 Mar 2022 23:13:15 +0000
+Date: Thu, 10 Mar 2022 07:13:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v8 08/13] media: atmel: atmel-isc: change format
+ propagation to subdev into only verification
+Message-ID: <202203100702.sKbUGmsv-lkp@intel.com>
+References: <20220309163758.2672727-9-eugen.hristev@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,79 +45,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202203091741.IetDk7a7-lkp@intel.com>
+In-Reply-To: <20220309163758.2672727-9-eugen.hristev@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Mar 09, 2022 at 05:04:28PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git pci/rcar
-> head:   9775965dbae50a04f12879179d6d6fb58f240d6b
-> commit: 9775965dbae50a04f12879179d6d6fb58f240d6b [2/2] PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception
-> config: arm-randconfig-c002-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091741.IetDk7a7-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git/commit/?id=9775965dbae50a04f12879179d6d6fb58f240d6b
->         git remote add lpieralisi-pci https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git
->         git fetch --no-tags lpieralisi-pci pci/rcar
->         git checkout 9775965dbae50a04f12879179d6d6fb58f240d6b
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/pci/controller/pcie-rcar-host.c:139:3: error: instruction requires: data-barriers
->                    __rcar_pci_rw_reg_workaround("str")
->                    ^
->    drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
->                    "2:     isb\n"                                          \
->                     ^
->    <inline asm>:2:4: note: instantiated into assembly here
->    2:      isb
->            ^
->    drivers/pci/controller/pcie-rcar-host.c:153:3: error: instruction requires: data-barriers
->                    __rcar_pci_rw_reg_workaround("ldr")
->                    ^
->    drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
->                    "2:     isb\n"                                          \
->                     ^
->    <inline asm>:2:4: note: instantiated into assembly here
->    2:      isb
->            ^
->    2 errors generated.
+Hi Eugen,
 
-I don't know how to fix this.  We currently have these on Lorenzo's
-pci/rcar branch:
+I love your patch! Perhaps something to improve:
 
-  9775965dbae5 ("PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception")
-  de6b5097f58b ("PCI: rcar: Finish transition to L1 state in rcar_pcie_config_access()")
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on next-20220309]
+[cannot apply to robh/for-next linux/master linus/master v5.17-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-To avoid this error, for now I have cherry-picked de6b5097f58b to a
-local pci/host/rcar branch and dropped 9775965dbae5.
+url:    https://github.com/0day-ci/linux/commits/Eugen-Hristev/media-atmel-atmel-isc-implement-media-controller/20220310-010819
+base:   git://linuxtv.org/media_tree.git master
+config: arm64-randconfig-r011-20220309 (https://download.01.org/0day-ci/archive/20220310/202203100702.sKbUGmsv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/9309e70b1b6779814e915f8e103048c6681f280f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Eugen-Hristev/media-atmel-atmel-isc-implement-media-controller/20220310-010819
+        git checkout 9309e70b1b6779814e915f8e103048c6681f280f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/media/platform/atmel/
 
-> vim +139 drivers/pci/controller/pcie-rcar-host.c
-> 
->    132	
->    133	static int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val,
->    134						 unsigned int reg)
->    135	{
->    136		int error = PCIBIOS_SUCCESSFUL;
->    137	#ifdef CONFIG_ARM
->    138		asm volatile(
->  > 139			__rcar_pci_rw_reg_workaround("str")
->    140		: "+r"(error):"r"(val), "r"(pcie->base + reg) : "memory");
->    141	#else
->    142		rcar_pci_write_reg(pcie, val, reg);
->    143	#endif
->    144		return error;
->    145	}
->    146	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/atmel/atmel-isc-base.c:1955:5: warning: no previous prototype for function 'isc_link_validate' [-Wmissing-prototypes]
+   int isc_link_validate(struct media_link *link)
+       ^
+   drivers/media/platform/atmel/atmel-isc-base.c:1955:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int isc_link_validate(struct media_link *link)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/isc_link_validate +1955 drivers/media/platform/atmel/atmel-isc-base.c
+
+  1954	
+> 1955	int isc_link_validate(struct media_link *link)
+  1956	{
+  1957		struct video_device *vdev =
+  1958			media_entity_to_video_device(link->sink->entity);
+  1959		struct isc_device *isc = video_get_drvdata(vdev);
+  1960		int ret;
+  1961	
+  1962		ret = v4l2_subdev_link_validate(link);
+  1963		if (ret)
+  1964			return ret;
+  1965	
+  1966		return isc_validate(isc);
+  1967	}
+  1968	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
