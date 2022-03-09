@@ -1,30 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6034A17C0
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 09:46:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E3F5C340EC;
-	Wed,  9 Mar 2022 09:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1646819212;
-	bh=geLRBWENKCwJOCIWvAmJoYArFJeDkSTw01PcBkGt78A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rCsOT45PImRoFDvI7+Dso/Dn9H+15bU3hJBCg7O5903v+/zUlMIJjemMf+ogpArqZ
-	 vuDXmI9qEzTnjwQC/xpY326mzpNusS/abbc3GweBvhaPgvqn1ln0zXmpW+homSThWK
-	 TSwgU7gwfhL02gfEoZdueVY9wOMMxtT6hfyBDuZw=
-Date: Wed, 9 Mar 2022 10:46:46 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Sasha Levin <sashal@kernel.org>, "# 3.4.x" <stable@vger.kernel.org>,
-	Manoj Gupta <manojgupta@google.com>,
-	Denis Nikitin <denik@google.com>, Will Deacon <will@kernel.org>,
-	llvm@lists.linux.dev,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: arm64 memcpy+memove 5.10 patch
-Message-ID: <Yih3hvLi+JUytgps@kroah.com>
-References: <CAKwvOd=iOS3HEUH1w-R4vYSNMwAzE7kr30FcXNZg0e1WBvpenQ@mail.gmail.com>
- <7341895d-0c69-5a84-6dfe-f228a05df03b@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4249F7E
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 10:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646823525; x=1678359525;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SqqKqJwel56I/p78Nxema8iyKpDbYSQbjl0FOHA7r2I=;
+  b=aXD/FtWnUDdeKYqm8YpoMnxitWyZEttuU7EMKeGzO5d4sojgwasKsNue
+   3FyebkpiR5xorhX0LHXMnBM/zJXdnPpNOAy6WHY0A8H6/JY29H6Ix4jRH
+   iWbT2gewtmcoQSsrlv5WEupxWbQXcYoszySBxxQBPef0EWeoxk++Pv3Xs
+   QdK2bbNDBiT6v3EWJ6Uo0XiZ9UTZIHJ74jtjBtXGV7pY7Gpz4QuPmmu0W
+   wowSWU6O7GzjqYyt/rdUwCXNrXX7XhuC7Sl0xJX6DcAIIYc4JnnKH8bt6
+   /9Cy3OAgI2DGTnQrLGpMcbJyQS3U4gA811lf1GoED+spRVvxYFgzq+BVB
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="242391942"
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="242391942"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 02:58:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="513486040"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2022 02:58:04 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nRu16-00037j-3K; Wed, 09 Mar 2022 10:58:04 +0000
+Date: Wed, 9 Mar 2022 18:57:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Isaku Yamahata <isaku.yamahata@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Chenyi Qiang <chenyi.qiang@intel.com>
+Subject: [intel-tdx:kvm 24/193] arch/x86/kernel/cpu/tsx.c:186:5: warning: no
+ previous prototype for function 'tsx_ctrl_clear'
+Message-ID: <202203091813.vrTfwPUD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,43 +44,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7341895d-0c69-5a84-6dfe-f228a05df03b@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Mar 08, 2022 at 11:11:38PM +0000, Robin Murphy wrote:
-> On 2022-03-08 22:38, Nick Desaulniers wrote:
-> > Dear stable kernel maintainers,
-> > Please consider cherry-picking
-> > 
-> > commit 6c23d54f4cb8 ("arm64: Import latest memcpy()/memmove() implementation")
-> > 
-> > to v5.10.y.  It first landed in v5.14-rc1.
-> > 
-> > It fixes a linkage failure observed when building kernels for ChromeOS
-> > under AutoFDO:
-> > 
-> > ld.lld: error: arch/arm64/lib/lib.a(memmove.o):(function __memmove:
-> > .text+0x8): relocation R_AARCH64_CONDBR19 out of range: -6331272 is
-> > not in [-1048576, 1048575]; references __memcpy
-> > > > > defined in arch/arm64/lib/lib.a(memcpy.o)
-> > 
-> > (The prior version of memmove used assembler conditional branches to
-> > memcpy; under AutoFDO the linker will decide where best to place
-> > memmove; it may be > 1MB away from memcpy. After this patch, memcpy
-> > and memmove are the same function).
-> 
-> Just beware that the new implementation turned out to be really good at
-> finding places where __iomem pointers are erroneously being passed to
-> memcpy(), by more readily triggering alignment faults, so there is a
-> non-zero possibility of functional regressions if any of those places are
-> still present in 5.10.y (particularly any which had "naturally" disappeared
-> before 5.14). At least one of them still isn't fixed in mainline, but that
-> one's so obscure I wouldn't consider it a major concern by itself.
+Hi Isaku,
 
-Yeah, because of this, I'm a bit nervous to add this change to the
-stable tree.  ChromeOS can keep it in their tree as they "know" they
-have properly audited all of their drivers to get this right and they
-can own the fallout if they didn't :)
+FYI, the error/warning still remains.
 
-thanks,
+tree:   https://github.com/intel/tdx.git kvm
+head:   7a7d51d52f45bbd82e264c7f940d74491305f5ce
+commit: 2c9aac7eef8430d99ae51f243da09dd7892dc9cd [24/193] x86/cpu/tsx: Add helper functions to save/restore IA32_TSX_CTRL MSR
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220309/202203091813.vrTfwPUD-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/2c9aac7eef8430d99ae51f243da09dd7892dc9cd
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm
+        git checkout 2c9aac7eef8430d99ae51f243da09dd7892dc9cd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/cpu/
 
-greg k-h
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/cpu/tsx.c:186:5: warning: no previous prototype for function 'tsx_ctrl_clear' [-Wmissing-prototypes]
+   u64 tsx_ctrl_clear(void)
+       ^
+   arch/x86/kernel/cpu/tsx.c:186:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u64 tsx_ctrl_clear(void)
+   ^
+   static 
+>> arch/x86/kernel/cpu/tsx.c:199:6: warning: no previous prototype for function 'tsx_ctrl_restore' [-Wmissing-prototypes]
+   void tsx_ctrl_restore(u64 tsx_ctrl)
+        ^
+   arch/x86/kernel/cpu/tsx.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tsx_ctrl_restore(u64 tsx_ctrl)
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/tsx_ctrl_clear +186 arch/x86/kernel/cpu/tsx.c
+
+   184	
+   185	/* Clear the MSR_TSX_CTRL and return the old value if supported */
+ > 186	u64 tsx_ctrl_clear(void)
+   187	{
+   188		u64 tsx_ctrl = 0;
+   189	
+   190		if (ia32_tsx_ctrl_supported) {
+   191			rdmsrl(MSR_IA32_TSX_CTRL, tsx_ctrl);
+   192			if (tsx_ctrl & MSR_TSX_CTRL_MASK)
+   193				wrmsrl(MSR_IA32_TSX_CTRL, tsx_ctrl & ~MSR_TSX_CTRL_MASK);
+   194		}
+   195		return tsx_ctrl;
+   196	}
+   197	EXPORT_SYMBOL_GPL(tsx_ctrl_clear);
+   198	
+ > 199	void tsx_ctrl_restore(u64 tsx_ctrl)
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
