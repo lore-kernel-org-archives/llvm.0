@@ -1,43 +1,46 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413A748C1
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 18:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09E45104
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 18:24:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646849639; x=1678385639;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RZLsY8+CmLza9rZ0DHCp01fg5BvcoWuNoW10xFOmjx8=;
-  b=EhtCCnGKSZ226XsJnXbLnjBiwx4ye8iJFKOu2gouDHQwKRdQsaZV2l7i
-   1C2btK8KPRWkC399HyoKnc2RF3RjhC+0jsCOApPvysUQZN4e1TKW/uERX
-   3C8PKVUmeo3pSBGiqZkhQJzzDUI4l1gS5oFyd/i/hbI93YieTYhoYlUcN
-   bd73usKA2+2VrsWQp9mOF47gE8ah+PH7bBqDC/irHX0FF1ypfE4npNZX9
-   f+67XEwHA4SgmtCAFQUGbCl8tZYY0LIp4yPBoE8XXO1MtObHxQv9+XdwT
-   E+W4JG+bP/9XAOBl9ytoWOw+lT1nYoqsSVmkW0ELxX+qt8ksxp/4wBotG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="341482808"
+  t=1646850265; x=1678386265;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Nb2k3DJ2sjUn++CWwkUeUgChHZFdkntbRCx6xp/JsJA=;
+  b=BiMAcojiTvW6l2mCDZ1lZBOHy97xmowqkbHYr6AHUXkxElGAx4vTakUW
+   mxfGWHyKKo9UcsgVOcx9pow/UcE8e6cluVwcjUfbyLOlK/0l9zR/Lgost
+   3Db2jDMA8S/uCxY5JL4mDdjHgQwaLkMwtfuJaTvcRvN2Ak6Cm0dNVb7Q2
+   5bnHjNqsZfV5UvwlaGQ1r1Q0o3fFDmSFC9gG4aFu4I5/toGsJQKN2yKru
+   48l1vY7DtH/VpBWxWJaW0uOIM7azbqLjNNl21BA0l2+jg0/6LZcMnk6Wa
+   vCCBtoMlHmoQD5yh6DDk2M/QjAA3nQmsyIxOt1ccmG6i03dboYA7fKy4u
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="253887412"
 X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
-   d="scan'208";a="341482808"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 10:13:23 -0800
+   d="scan'208";a="253887412"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 10:24:25 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="642248545"
+X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
+   d="scan'208";a="815073576"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Mar 2022 10:13:21 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 09 Mar 2022 10:24:22 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nS0oL-0003fo-84; Wed, 09 Mar 2022 18:13:21 +0000
-Date: Thu, 10 Mar 2022 02:12:46 +0800
+	id 1nS0z0-0003go-4i; Wed, 09 Mar 2022 18:24:22 +0000
+Date: Thu, 10 Mar 2022 02:23:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To: Raghu Bankapur <quic_rbankapu@quicinc.com>,
+	Vinod Koul <vkoul@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:master 173/592]
- drivers/clk/clk-xlnx-clock-wizard.c:324:8: error: implicit declaration of
- function 'FIELD_PREP'
-Message-ID: <202203100259.o3TUVa5w-lkp@intel.com>
+	Krishna Jha <quic_kkishorj@quicinc.com>
+Subject: Re: [PATCH V0 1/1] ASoC: msm: fix integer overflow for long duration
+ offload playback
+Message-ID: <202203100248.RVGW6JZh-lkp@intel.com>
+References: <b906dbaf772d0152a3af52d639b090d15fe8c362.1646835508.git.quic_rbankapu@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,148 +49,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <b906dbaf772d0152a3af52d639b090d15fe8c362.1646835508.git.quic_rbankapu@quicinc.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Shubhrajyoti,
+Hi Raghu,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Perhaps something to improve:
 
-tree:   https://github.com/Xilinx/linux-xlnx master
-head:   ef4ac9cad9406e869e7c20191f3a3b0bb9663d81
-commit: bf7387ee9a75c2a390b19f63c47076344e664b86 [173/592] clocking-wizard: Support higher frequency accuracy
-config: arm-randconfig-r035-20220309 (https://download.01.org/0day-ci/archive/20220310/202203100259.o3TUVa5w-lkp@intel.com/config)
+[auto build test WARNING on tiwai-sound/for-next]
+[also build test WARNING on vkoul-dmaengine/next broonie-sound/for-next v5.17-rc7 next-20220309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Raghu-Bankapur/ASoC-msm-fix-integer-overflow-for-long-duration-compress-offload-playback/20220309-222520
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220310/202203100248.RVGW6JZh-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/Xilinx/linux-xlnx/commit/bf7387ee9a75c2a390b19f63c47076344e664b86
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx master
-        git checkout bf7387ee9a75c2a390b19f63c47076344e664b86
+        # https://github.com/0day-ci/linux/commit/9020c5c2e38ba210a8d822d20e32bed85a4ffcab
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Raghu-Bankapur/ASoC-msm-fix-integer-overflow-for-long-duration-compress-offload-playback/20220309-222520
+        git checkout 9020c5c2e38ba210a8d822d20e32bed85a4ffcab
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/intel/atom/sst/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/clk/clk-xlnx-clock-wizard.c:324:8: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
-           reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
-                 ^
->> drivers/clk/clk-xlnx-clock-wizard.c:392:6: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
-           d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-               ^
-   2 errors generated.
+>> sound/soc/intel/atom/sst/sst_drv_interface.c:370:11: warning: format specifies type 'int' but the argument has type '__u64' (aka 'unsigned long long') [-Wformat]
+                   str_id, tstamp->copied_total, tstamp->pcm_frames);
+                           ^~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/FIELD_PREP +324 drivers/clk/clk-xlnx-clock-wizard.c
+vim +370 sound/soc/intel/atom/sst/sst_drv_interface.c
 
-   301	
-   302	static int clk_wzrd_dynamic_all_nolock(struct clk_hw *hw, unsigned long rate,
-   303					       unsigned long parent_rate)
-   304	{
-   305		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   306		u32 reg, pre;
-   307		u16 retries;
-   308		int err;
-   309		u64 vco_freq, rate_div, f, clockout0_div;
-   310	
-   311		err = clk_wzrd_get_divisors(hw, rate, parent_rate);
-   312		if (err)
-   313			pr_err("failed to get divisors\n");
-   314	
-   315		vco_freq = DIV_ROUND_CLOSEST((parent_rate * divider->valuem), divider->valued);
-   316		rate_div = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
-   317	
-   318		clockout0_div = rate_div / WZRD_FRAC_POINTS;
-   319	
-   320		pre = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
-   321		f = (u32)(pre - (clockout0_div * WZRD_FRAC_POINTS));
-   322		f = f & WZRD_CLKOUT_FRAC_MASK;
-   323	
- > 324		reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
-   325		      FIELD_PREP(WZRD_CLKOUT0_FRAC_MASK, f);
-   326	
-   327		writel(reg, divider->base + WZRD_CLK_CFG_REG(2));
-   328		/* Set divisor and clear phase offset */
-   329		reg = FIELD_PREP(WZRD_CLKFBOUT_MULT_MASK, divider->valuem) |
-   330		      FIELD_PREP(WZRD_DIVCLK_DIVIDE_MASK, divider->valued);
-   331		writel(reg, divider->base + WZRD_CLK_CFG_REG(0));
-   332		writel(divider->valueo, divider->base + WZRD_CLK_CFG_REG(2));
-   333		writel(0, divider->base + WZRD_CLK_CFG_REG(3));
-   334		/* Check status register */
-   335		retries = WZRD_DR_NUM_RETRIES;
-   336		while (retries--) {
-   337			if (readl(divider->base + WZRD_DR_STATUS_REG_OFFSET) &
-   338								WZRD_DR_LOCK_BIT_MASK)
-   339				break;
-   340		}
-   341	
-   342		if (!retries)
-   343			return -ETIMEDOUT;
-   344	
-   345		/* Initiate reconfiguration */
-   346		writel(WZRD_DR_BEGIN_DYNA_RECONF,
-   347		       divider->base + WZRD_DR_INIT_REG_OFFSET);
-   348	
-   349		/* Check status register */
-   350		retries = WZRD_DR_NUM_RETRIES;
-   351		while (retries--) {
-   352			if (readl(divider->base + WZRD_DR_STATUS_REG_OFFSET) &
-   353								WZRD_DR_LOCK_BIT_MASK)
-   354				break;
-   355		}
-   356	
-   357		if (!retries)
-   358			return -ETIMEDOUT;
-   359	
-   360		return 0;
-   361	}
-   362	
-   363	static int clk_wzrd_dynamic_all(struct clk_hw *hw, unsigned long rate,
-   364					unsigned long parent_rate)
-   365	{
-   366		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   367		unsigned long flags = 0;
-   368		int ret;
-   369	
-   370		if (divider->lock)
-   371			spin_lock_irqsave(divider->lock, flags);
-   372		else
-   373			__acquire(divider->lock);
-   374	
-   375		ret = clk_wzrd_dynamic_all_nolock(hw, rate, parent_rate);
-   376	
-   377		if (divider->lock)
-   378			spin_unlock_irqrestore(divider->lock, flags);
-   379		else
-   380			__release(divider->lock);
-   381	
-   382		return ret;
-   383	}
-   384	
-   385	static unsigned long clk_wzrd_recalc_rate_all(struct clk_hw *hw,
-   386						      unsigned long parent_rate)
-   387	{
-   388		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   389		u32 m, d, o, div, reg, f;
-   390	
-   391		reg = readl(divider->base + WZRD_CLK_CFG_REG(0));
- > 392		d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-   393		m = FIELD_GET(WZRD_CLKFBOUT_MULT_MASK, reg);
-   394		reg = readl(divider->base + WZRD_CLK_CFG_REG(2));
-   395		o = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-   396		f = FIELD_GET(WZRD_CLKOUT0_FRAC_MASK, reg);
-   397	
-   398		div = DIV_ROUND_CLOSEST(d * (WZRD_FRAC_POINTS * o + f), WZRD_FRAC_POINTS);
-   399		return divider_recalc_rate(hw, parent_rate * m, div, divider->table,
-   400				divider->flags, divider->width);
-   401	}
-   402	
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  343  
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  344  static int sst_cdev_tstamp(struct device *dev, unsigned int str_id,
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  345  		struct snd_compr_tstamp *tstamp)
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  346  {
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  347  	struct snd_sst_tstamp fw_tstamp = {0,};
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  348  	struct stream_info *stream;
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  349  	struct intel_sst_drv *ctx = dev_get_drvdata(dev);
+ce1cfe295abaa7 sound/soc/intel/atom/sst/sst_drv_interface.c Pierre-Louis Bossart 2018-07-24  350  	void __iomem *addr;
+ce1cfe295abaa7 sound/soc/intel/atom/sst/sst_drv_interface.c Pierre-Louis Bossart 2018-07-24  351  
+ce1cfe295abaa7 sound/soc/intel/atom/sst/sst_drv_interface.c Pierre-Louis Bossart 2018-07-24  352  	addr = (void __iomem *)(ctx->mailbox + ctx->tstamp) +
+ce1cfe295abaa7 sound/soc/intel/atom/sst/sst_drv_interface.c Pierre-Louis Bossart 2018-07-24  353  		(str_id * sizeof(fw_tstamp));
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  354  
+ce1cfe295abaa7 sound/soc/intel/atom/sst/sst_drv_interface.c Pierre-Louis Bossart 2018-07-24  355  	memcpy_fromio(&fw_tstamp, addr, sizeof(fw_tstamp));
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  356  
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  357  	stream = get_stream_info(ctx, str_id);
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  358  	if (!stream)
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  359  		return -EINVAL;
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  360  	dev_dbg(dev, "rb_counter %llu in bytes\n", fw_tstamp.ring_buffer_counter);
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  361  
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  362  	tstamp->copied_total = fw_tstamp.ring_buffer_counter;
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  363  	tstamp->pcm_frames = fw_tstamp.frames_decoded;
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  364  	tstamp->pcm_io_frames = div_u64(fw_tstamp.hardware_counter,
+75afbd052b3675 sound/soc/intel/atom/sst/sst_drv_interface.c Dan Carpenter        2015-04-09  365  			(u64)stream->num_ch * SST_GET_BYTES_PER_SAMPLE(24));
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  366  	tstamp->sampling_rate = fw_tstamp.sampling_frequency;
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  367  
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  368  	dev_dbg(dev, "PCM  = %u\n", tstamp->pcm_io_frames);
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  369  	dev_dbg(dev, "Ptr Query on strid = %d  copied_total %d, decodec %d\n",
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30 @370  		str_id, tstamp->copied_total, tstamp->pcm_frames);
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  371  	dev_dbg(dev, "rendered %d\n", tstamp->pcm_io_frames);
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  372  
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  373  	return 0;
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  374  }
+7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  375  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
