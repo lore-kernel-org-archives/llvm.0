@@ -1,42 +1,40 @@
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51897A
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 04:57:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4EA7A
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 05:28:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646801874; x=1678337874;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4+tpppr2nS3z3jqvQ18eYrd8CDvGD+af7zUmyFkKqOM=;
-  b=dwacL0R33tFthWwCBDO8gqzEfqy+uqZ2aYCodcgr+K3wVrBmPoaJAYfn
-   WSDT+UGRb7keKEtnQuaK7UUJ2LVIucg3VdqvlHB/L3fhdYJ+24OwrRhJK
-   kbeygL1QXQExTdmUeOe4cp0tREkYkeb2Z/9QIUPOxCMAP6lSHLrYKAA5Y
-   2dzaI22Z+66od9ysbhE8OtZcZrOzO2SkDrqFoL+D24IbKGlqTcSEAT4bD
-   lCCpY/Jj+zCs1PgBzDgsmXoJIPrnI9VzhGiOHvvjV3DhnDLSr7bFB0iEk
-   3tLdphXONablYHLsSJwcBR5WHVYzgHDInZROKmDNN8fxg2WKd7QsQqnxI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253717159"
+  t=1646803737; x=1678339737;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Nu2WxIggiNPVjjNfuM5deMMlqTtROYrGu670/znHKJ0=;
+  b=HH6e4iXsdt4Bak1fThYXqw1HUN595AGzZnbijrQ9KRet/LAPfOLBxMm9
+   WV30a3xYAxxrG1w4vHYTSxkhKuqFdiJjCJ/lko8XMmuT1vIHcqKdyNJ66
+   pdrwtDumgaBYj+pa9N/qBZln0MGGNbgSrTzkD/O7HHT+xBfwXk2fGGlqm
+   EzjFgUh7b8r9AcdIkzujdB1aiIzsWTxU85nZquQ8BC1lQpAcnkgf2dFsr
+   XTzTJeFpdnd+z3WrUQcDLvldAVPPg12cacLtAQMyOwvXRkpyAoLeEc5E8
+   xY80rHfC8b0y/mexNMNTgPbx9oRh+BVioh4r74rh+PFy7URoqa+zCPSEu
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253722627"
 X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="253717159"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 20:57:54 -0800
+   d="scan'208";a="253722627"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 21:28:53 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="643913005"
+   d="scan'208";a="711810188"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 20:57:52 -0800
+  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2022 21:28:52 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nRoOV-0002c8-6N; Wed, 09 Mar 2022 04:57:51 +0000
-Date: Wed, 9 Mar 2022 12:57:17 +0800
+	id 1nRosW-0002ef-5j; Wed, 09 Mar 2022 05:28:52 +0000
+Date: Wed, 9 Mar 2022 13:28:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:queue/5.10 9971/9999]
- arch/arm/kernel/spectre.c:13:14: error: expected ';' after return statement
-Message-ID: <202203091205.qc6V73C4-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-stable-rc:queue/5.4 1059/9999] arch/x86/xen/enlighten_pv.o:
+ warning: objtool: xen_cpuid()+0x180: can't find jump dest instruction at
+ .text+0x277
+Message-ID: <202203091306.V8INj4uJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,48 +45,35 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
-head:   fbf58a03f7a4df716d2470b8badfa0cada9e6fde
-commit: 06036e20ed2d16694cd91fd64fe6f031756c138c [9971/9999] ARM: include unprivileged BPF status in Spectre V2 reporting
-config: arm-milbeaut_m10v_defconfig (https://download.01.org/0day-ci/archive/20220309/202203091205.qc6V73C4-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Josh Poimboeuf <jpoimboe@redhat.com>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Borislav Petkov <bp@suse.de>
+CC: Sasha Levin <sashal@kernel.org>
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.4
+head:   e53e4ce486167f8081d88b2008748b6112170bd4
+commit: d85044145fdd791ea391fb0b09c9c036a7b02146 [1059/9999] objtool: Fix noreturn detection for ignored functions
+config: x86_64-randconfig-c007-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091306.V8INj4uJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=06036e20ed2d16694cd91fd64fe6f031756c138c
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=d85044145fdd791ea391fb0b09c9c036a7b02146
         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.10
-        git checkout 06036e20ed2d16694cd91fd64fe6f031756c138c
+        git fetch --no-tags linux-stable-rc queue/5.4
+        git checkout d85044145fdd791ea391fb0b09c9c036a7b02146
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/arm/kernel/spectre.c:13:14: error: expected ';' after return statement
-           return false
-                       ^
-                       ;
-   1 error generated.
-
-
-vim +13 arch/arm/kernel/spectre.c
-
-     7	
-     8	static bool _unprivileged_ebpf_enabled(void)
-     9	{
-    10	#ifdef CONFIG_BPF_SYSCALL
-    11		return !sysctl_unprivileged_bpf_disabled;
-    12	#else
-  > 13		return false
-    14	#endif
-    15	}
-    16	
+>> arch/x86/xen/enlighten_pv.o: warning: objtool: xen_cpuid()+0x180: can't find jump dest instruction at .text+0x277
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
