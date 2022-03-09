@@ -1,44 +1,42 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8A915A3
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 03:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51897A
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 04:57:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646797612; x=1678333612;
+  t=1646801874; x=1678337874;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+XoGocbZi1cgmzEERFKFOdrREAn1nTxyNcMKoacKCLQ=;
-  b=LuQJ2Zi4VOghwZq8QdXK5xC24tgr37NA+iINHBOhcfnizdyvxAvlLYgN
-   deR/Qsr+eK9phfJyEhQQ+07o2aomggWK5ZxNNBrZ2+io9UNDEJN6I7psG
-   giS/E1YoQXfcFd/Gk+cfYl9dsIR+XcV9LioOWIJnKrUQ1CtqiNhWxxaFI
-   bi2Wmco2uKmBGgEuHgJ6tpJES9LyUwskY39+Q1VAqHuGnq1T03F0Qv6av
-   43d0q/OAu6/BIxaTzDlUT3XRe8r5f7JhhaTPnvYQsU247RuFDGGosS4ol
-   fqdJVoiESrCdJhDbkZwzPZ2a2/2SI8KQfGv0Jfh8aRqLRXz9DFox87GKp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="315595428"
+  bh=4+tpppr2nS3z3jqvQ18eYrd8CDvGD+af7zUmyFkKqOM=;
+  b=dwacL0R33tFthWwCBDO8gqzEfqy+uqZ2aYCodcgr+K3wVrBmPoaJAYfn
+   WSDT+UGRb7keKEtnQuaK7UUJ2LVIucg3VdqvlHB/L3fhdYJ+24OwrRhJK
+   kbeygL1QXQExTdmUeOe4cp0tREkYkeb2Z/9QIUPOxCMAP6lSHLrYKAA5Y
+   2dzaI22Z+66od9ysbhE8OtZcZrOzO2SkDrqFoL+D24IbKGlqTcSEAT4bD
+   lCCpY/Jj+zCs1PgBzDgsmXoJIPrnI9VzhGiOHvvjV3DhnDLSr7bFB0iEk
+   3tLdphXONablYHLsSJwcBR5WHVYzgHDInZROKmDNN8fxg2WKd7QsQqnxI
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253717159"
 X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="315595428"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 19:46:52 -0800
+   d="scan'208";a="253717159"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 20:57:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="711788810"
+   d="scan'208";a="643913005"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2022 19:46:50 -0800
+  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 20:57:52 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nRnHl-0002WO-9U; Wed, 09 Mar 2022 03:46:49 +0000
-Date: Wed, 9 Mar 2022 11:45:56 +0800
+	id 1nRoOV-0002c8-6N; Wed, 09 Mar 2022 04:57:51 +0000
+Date: Wed, 9 Mar 2022 12:57:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Huang Pei <huangpei@loongson.cn>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:queue/5.15 4120/4370]
- arch/mips/include/asm/asm.h:68:9: warning: 'END' macro redefined
-Message-ID: <202203091113.kxjEu6kW-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [linux-stable-rc:queue/5.10 9971/9999]
+ arch/arm/kernel/spectre.c:13:14: error: expected ';' after return statement
+Message-ID: <202203091205.qc6V73C4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,108 +47,48 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.15
-head:   93b383f9f7788c5ac3ebc43f7405e1924037224e
-commit: f98371d2ac835f1fa0705978623e051dc1397f20 [4120/4370] MIPS: fix local_{add,sub}_return on MIPS64
-config: mips-randconfig-r015-20220308 (https://download.01.org/0day-ci/archive/20220309/202203091113.kxjEu6kW-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+head:   fbf58a03f7a4df716d2470b8badfa0cada9e6fde
+commit: 06036e20ed2d16694cd91fd64fe6f031756c138c [9971/9999] ARM: include unprivileged BPF status in Spectre V2 reporting
+config: arm-milbeaut_m10v_defconfig (https://download.01.org/0day-ci/archive/20220309/202203091205.qc6V73C4-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f98371d2ac835f1fa0705978623e051dc1397f20
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=06036e20ed2d16694cd91fd64fe6f031756c138c
         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.15
-        git checkout f98371d2ac835f1fa0705978623e051dc1397f20
+        git fetch --no-tags linux-stable-rc queue/5.10
+        git checkout 06036e20ed2d16694cd91fd64fe6f031756c138c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/slip/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/slip/slip.c:91:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:53:
-   In file included from include/linux/memcontrol.h:22:
-   In file included from include/linux/writeback.h:14:
-   In file included from include/linux/blk-cgroup.h:23:
-   In file included from include/linux/blkdev.h:8:
-   In file included from include/linux/genhd.h:20:
-   In file included from arch/mips/include/asm/local.h:8:
->> arch/mips/include/asm/asm.h:68:9: warning: 'END' macro redefined [-Wmacro-redefined]
-   #define END(function)                                   \
-           ^
-   drivers/net/slip/slip.h:44:9: note: previous definition is here
-   #define END             0300            /* indicates end of frame       */
-           ^
->> drivers/net/slip/slip.c:930:11: error: use of undeclared identifier 'END'
-           *ptr++ = END;
-                    ^
-   drivers/net/slip/slip.c:939:8: error: use of undeclared identifier 'END'
-                   case END:
-                        ^
-   drivers/net/slip/slip.c:952:11: error: use of undeclared identifier 'END'
-           *ptr++ = END;
-                    ^
-   drivers/net/slip/slip.c:960:7: error: use of undeclared identifier 'END'
-           case END:
-                ^
-   drivers/net/slip/slip.c:983:8: error: use of undeclared identifier 'END'
-                           s = END;
-                               ^
-   drivers/net/slip/slip.c:1395:22: error: use of undeclared identifier 'END'
-                           unsigned char s = END;
-                                             ^
-   1 warning and 6 errors generated.
+>> arch/arm/kernel/spectre.c:13:14: error: expected ';' after return statement
+           return false
+                       ^
+                       ;
+   1 error generated.
 
 
-vim +/END +68 arch/mips/include/asm/asm.h
+vim +13 arch/arm/kernel/spectre.c
 
-894ef530012fb50 arch/mips/include/asm/asm.h Alexander Lobakin 2021-01-10  38  
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  39  /*
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  40   * LEAF - declare leaf routine
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  41   */
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  42  #define LEAF(symbol)					\
-894ef530012fb50 arch/mips/include/asm/asm.h Alexander Lobakin 2021-01-10  43  		CFI_SECTIONS;				\
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  44  		.globl	symbol;				\
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  45  		.align	2;				\
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  46  		.type	symbol, @function;		\
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  47  		.ent	symbol, 0;			\
-08889582b8aa0bb arch/mips/include/asm/asm.h Paul Burton       2016-11-07  48  symbol:		.frame	sp, 0, ra;			\
-866b6a89c6d1876 arch/mips/include/asm/asm.h Corey Minyard     2017-08-10  49  		.cfi_startproc;				\
-08889582b8aa0bb arch/mips/include/asm/asm.h Paul Burton       2016-11-07  50  		.insn
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  51  
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  52  /*
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  53   * NESTED - declare nested routine entry point
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  54   */
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  55  #define NESTED(symbol, framesize, rpc)			\
-894ef530012fb50 arch/mips/include/asm/asm.h Alexander Lobakin 2021-01-10  56  		CFI_SECTIONS;				\
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  57  		.globl	symbol;				\
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  58  		.align	2;				\
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  59  		.type	symbol, @function;		\
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  60  		.ent	symbol, 0;			\
-08889582b8aa0bb arch/mips/include/asm/asm.h Paul Burton       2016-11-07  61  symbol:		.frame	sp, framesize, rpc;		\
-866b6a89c6d1876 arch/mips/include/asm/asm.h Corey Minyard     2017-08-10  62  		.cfi_startproc;				\
-08889582b8aa0bb arch/mips/include/asm/asm.h Paul Burton       2016-11-07  63  		.insn
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  64  
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  65  /*
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  66   * END - mark end of function
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  67   */
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16 @68  #define END(function)					\
-866b6a89c6d1876 arch/mips/include/asm/asm.h Corey Minyard     2017-08-10  69  		.cfi_endproc;				\
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  70  		.end	function;			\
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  71  		.size	function, .-function
-^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  72  
-
-:::::: The code at line 68 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+     7	
+     8	static bool _unprivileged_ebpf_enabled(void)
+     9	{
+    10	#ifdef CONFIG_BPF_SYSCALL
+    11		return !sysctl_unprivileged_bpf_disabled;
+    12	#else
+  > 13		return false
+    14	#endif
+    15	}
+    16	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
