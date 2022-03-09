@@ -1,43 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5013615A3
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 03:25:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8A915A3
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 03:46:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646796352; x=1678332352;
+  t=1646797612; x=1678333612;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Gth5hINsnvAcq51cqIrJAOXK3LeiVlry6Zr5SVVDeeo=;
-  b=OfT7XiGMzMgbrHnr8i+xUUV+p48eSwgls4vvtKjP9KkD/0AyLlVnWWa8
-   BKBhTTwgGn50S/+MoDXVi6DOtl4wQwaYnmlV2yGxSs7Ua9KaPQC5fSEp+
-   Mjc0MIAtB+Hc5jLZAaWie5kTg44i/1xN8ounNx76bAUpp29FtNya9itdk
-   XgvMx8s3+JovAlyJ4HAOkb1oRGEWd87PCxa6Ym83UgWQ8iT5a/JLgiLB4
-   WeRsKUkY3juSQSXozHkaky3aB0KlZrxfQDTj7N+ZPV7XOoYiMDI9xTK94
-   HYSvIlwf3DyX7hLrFOoFejMfh6+FXijaA01bWr8Df30Zd0FS9Oc/vnLXO
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="279598518"
+  bh=+XoGocbZi1cgmzEERFKFOdrREAn1nTxyNcMKoacKCLQ=;
+  b=LuQJ2Zi4VOghwZq8QdXK5xC24tgr37NA+iINHBOhcfnizdyvxAvlLYgN
+   deR/Qsr+eK9phfJyEhQQ+07o2aomggWK5ZxNNBrZ2+io9UNDEJN6I7psG
+   giS/E1YoQXfcFd/Gk+cfYl9dsIR+XcV9LioOWIJnKrUQ1CtqiNhWxxaFI
+   bi2Wmco2uKmBGgEuHgJ6tpJES9LyUwskY39+Q1VAqHuGnq1T03F0Qv6av
+   43d0q/OAu6/BIxaTzDlUT3XRe8r5f7JhhaTPnvYQsU247RuFDGGosS4ol
+   fqdJVoiESrCdJhDbkZwzPZ2a2/2SI8KQfGv0Jfh8aRqLRXz9DFox87GKp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="315595428"
 X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="279598518"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 19:25:51 -0800
+   d="scan'208";a="315595428"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 19:46:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="537837159"
+   d="scan'208";a="711788810"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 08 Mar 2022 19:25:49 -0800
+  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2022 19:46:50 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nRmxQ-0002UL-JP; Wed, 09 Mar 2022 03:25:48 +0000
-Date: Wed, 9 Mar 2022 11:25:21 +0800
+	id 1nRnHl-0002WO-9U; Wed, 09 Mar 2022 03:46:49 +0000
+Date: Wed, 9 Mar 2022 11:45:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Minchan Kim <minchan@kernel.org>
+To: Huang Pei <huangpei@loongson.cn>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10
- 2362/9999] mm/page_pinner.c:304:22: warning: variable 'page_pinner' set but
- not used
-Message-ID: <202203091120.mN0fCHUE-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:queue/5.15 4120/4370]
+ arch/mips/include/asm/asm.h:68:9: warning: 'END' macro redefined
+Message-ID: <202203091113.kxjEu6kW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,484 +49,108 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10
-head:   fcaaaaae6d4c72eb4084dc136acd478ad09fe0f0
-commit: ddc4a48797352076586ef3ab79c6bfaba08fd06e [2362/9999] ANDROID: mm: page_pinner: introduce failure_tracking feature
-config: x86_64-randconfig-c007-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091120.mN0fCHUE-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.15
+head:   93b383f9f7788c5ac3ebc43f7405e1924037224e
+commit: f98371d2ac835f1fa0705978623e051dc1397f20 [4120/4370] MIPS: fix local_{add,sub}_return on MIPS64
+config: mips-randconfig-r015-20220308 (https://download.01.org/0day-ci/archive/20220309/202203091113.kxjEu6kW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/ddc4a48797352076586ef3ab79c6bfaba08fd06e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10
-        git checkout ddc4a48797352076586ef3ab79c6bfaba08fd06e
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f98371d2ac835f1fa0705978623e051dc1397f20
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.15
+        git checkout f98371d2ac835f1fa0705978623e051dc1397f20
         # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64 clang-analyzer 
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/slip/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> mm/page_pinner.c:304:22: warning: variable 'page_pinner' set but not used [-Wunused-but-set-variable]
-           struct page_pinner *page_pinner;
+   In file included from drivers/net/slip/slip.c:91:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:53:
+   In file included from include/linux/memcontrol.h:22:
+   In file included from include/linux/writeback.h:14:
+   In file included from include/linux/blk-cgroup.h:23:
+   In file included from include/linux/blkdev.h:8:
+   In file included from include/linux/genhd.h:20:
+   In file included from arch/mips/include/asm/local.h:8:
+>> arch/mips/include/asm/asm.h:68:9: warning: 'END' macro redefined [-Wmacro-redefined]
+   #define END(function)                                   \
+           ^
+   drivers/net/slip/slip.h:44:9: note: previous definition is here
+   #define END             0300            /* indicates end of frame       */
+           ^
+>> drivers/net/slip/slip.c:930:11: error: use of undeclared identifier 'END'
+           *ptr++ = END;
+                    ^
+   drivers/net/slip/slip.c:939:8: error: use of undeclared identifier 'END'
+                   case END:
+                        ^
+   drivers/net/slip/slip.c:952:11: error: use of undeclared identifier 'END'
+           *ptr++ = END;
+                    ^
+   drivers/net/slip/slip.c:960:7: error: use of undeclared identifier 'END'
+           case END:
+                ^
+   drivers/net/slip/slip.c:983:8: error: use of undeclared identifier 'END'
+                           s = END;
                                ^
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_MIPI_DSI
-   Depends on HAS_IOMEM && DRM
-   Selected by
-   - GKI_HIDDEN_DRM_CONFIGS
-   WARNING: unmet direct dependencies detected for DRM_KMS_CMA_HELPER
-   Depends on HAS_IOMEM && DRM
-   Selected by
-   - GKI_HIDDEN_DRM_CONFIGS
-   WARNING: unmet direct dependencies detected for DRM_GEM_CMA_HELPER
-   Depends on HAS_IOMEM && DRM
-   Selected by
-   - GKI_HIDDEN_DRM_CONFIGS
+   drivers/net/slip/slip.c:1395:22: error: use of undeclared identifier 'END'
+                           unsigned char s = END;
+                                             ^
+   1 warning and 6 errors generated.
 
 
-clang-analyzer warnings: (new ones prefixed by >>)
-               ^~~~~~
-   drivers/scsi/myrb.c:478:56: note: Left side of '&&' is false
-           if (status == MYRB_NO_STDBY_RBLD_OR_CHECK_IN_PROGRESS &&
-                                                                 ^
-   drivers/scsi/myrb.c:481:6: note: 'status' is not equal to MYRB_NO_STDBY_RBLD_OR_CHECK_IN_PROGRESS
-           if (status != MYRB_NO_STDBY_RBLD_OR_CHECK_IN_PROGRESS) {
-               ^~~~~~
-   drivers/scsi/myrb.c:481:2: note: Taking true branch
-           if (status != MYRB_NO_STDBY_RBLD_OR_CHECK_IN_PROGRESS) {
-           ^
-   drivers/scsi/myrb.c:483:23: note: The left operand of '-' is a garbage value
-                           rbld_buf.ldev_size - rbld_buf.blocks_left;
-                           ~~~~~~~~~~~~~~~~~~ ^
-   drivers/scsi/myrb.c:1937:24: warning: The left operand of '!=' is a garbage value [clang-analyzer-core.UndefinedBinaryOperatorResult]
-           if (rbld_buf.ldev_num != sdev->id ||
-                                 ^
-   drivers/scsi/myrb.c:2160:9: note: Calling 'rebuild_show'
-           return rebuild_show(dev, attr, buf);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/myrb.c:1927:29: note: Left side of '&&' is false
-           struct scsi_device *sdev = to_scsi_device(dev);
-                                      ^
-   include/scsi/scsi_device.h:244:2: note: expanded from macro 'to_scsi_device'
-           container_of(d, struct scsi_device, sdev_gendev)
-           ^
-   include/linux/kernel.h:853:61: note: expanded from macro 'container_of'
-           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
-                                                                      ^
-   drivers/scsi/myrb.c:1927:29: note: Taking false branch
-           struct scsi_device *sdev = to_scsi_device(dev);
-                                      ^
-   include/scsi/scsi_device.h:244:2: note: expanded from macro 'to_scsi_device'
-           container_of(d, struct scsi_device, sdev_gendev)
-           ^
-   include/linux/kernel.h:853:2: note: expanded from macro 'container_of'
-           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
-           ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:323:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:311:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:303:3: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ^
-   drivers/scsi/myrb.c:1927:29: note: Loop condition is false.  Exiting loop
-           struct scsi_device *sdev = to_scsi_device(dev);
-                                      ^
-   include/scsi/scsi_device.h:244:2: note: expanded from macro 'to_scsi_device'
-           container_of(d, struct scsi_device, sdev_gendev)
-           ^
-   include/linux/kernel.h:853:2: note: expanded from macro 'container_of'
-           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
-           ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:323:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:311:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:301:2: note: expanded from macro '__compiletime_assert'
-           do {                                                            \
-           ^
-   drivers/scsi/myrb.c:1932:6: note: Assuming the condition is false
-           if (sdev->channel < myrb_logical_channel(sdev->host))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/myrb.c:1932:2: note: Taking false branch
-           if (sdev->channel < myrb_logical_channel(sdev->host))
-           ^
-   drivers/scsi/myrb.c:1935:11: note: Calling 'myrb_get_rbld_progress'
-           status = myrb_get_rbld_progress(cb, &rbld_buf);
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/myrb.c:451:6: note: Assuming 'rbld_buf' is null
-           if (!rbld_buf)
-               ^~~~~~~~~
-   drivers/scsi/myrb.c:451:2: note: Taking true branch
-           if (!rbld_buf)
-           ^
-   drivers/scsi/myrb.c:452:3: note: Returning without writing to 'rbld->ldev_num'
-                   return MYRB_STATUS_RBLD_NOT_CHECKED;
-                   ^
-   drivers/scsi/myrb.c:1935:11: note: Returning from 'myrb_get_rbld_progress'
-           status = myrb_get_rbld_progress(cb, &rbld_buf);
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/myrb.c:1937:24: note: The left operand of '!=' is a garbage value
-           if (rbld_buf.ldev_num != sdev->id ||
-               ~~~~~~~~~~~~~~~~~ ^
-   Suppressed 18 warnings (6 in non-user code, 12 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
->> mm/page_pinner.c:312:2: warning: Value stored to 'page_pinner' is never read [clang-analyzer-deadcode.DeadStores]
-           page_pinner = get_page_pinner(page_ext);
-           ^             ~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/page_pinner.c:312:2: note: Value stored to 'page_pinner' is never read
-           page_pinner = get_page_pinner(page_ext);
-           ^             ~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 6 warnings (5 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
-   Suppressed 4 warnings (4 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
-   Suppressed 4 warnings (4 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
-   Suppressed 4 warnings (4 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   12 warnings generated.
-   drivers/scsi/smartpqi/smartpqi_init.c:1650:4: warning: Value stored to 'count' is never read [clang-analyzer-deadcode.DeadStores]
-                           count += scnprintf(buffer + count,
-                           ^        ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1650:4: note: Value stored to 'count' is never read
-                           count += scnprintf(buffer + count,
-                           ^        ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1662:4: warning: Value stored to 'count' is never read [clang-analyzer-deadcode.DeadStores]
-                           count += scnprintf(buffer + count,
-                           ^        ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1662:4: note: Value stored to 'count' is never read
-                           count += scnprintf(buffer + count,
-                           ^        ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:2117:19: warning: Access to field 'wwid' results in a dereference of a null pointer (loaded from variable 'phys_lun_ext_entry') [clang-analyzer-core.NullDereference]
-                           device->wwid = phys_lun_ext_entry->wwid;
-                                          ^~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1976:7: note: Calling 'pqi_get_device_lists'
-           rc = pqi_get_device_lists(ctrl_info, &physdev_list, &logdev_list);
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1001:6: note: 'rc' is 0
-           if (rc)
-               ^~
-   drivers/scsi/smartpqi/smartpqi_init.c:1001:2: note: Taking false branch
-           if (rc)
-           ^
-   drivers/scsi/smartpqi/smartpqi_init.c:1006:6: note: 'rc' is 0
-           if (rc)
-               ^~
-   drivers/scsi/smartpqi/smartpqi_init.c:1006:2: note: Taking false branch
-           if (rc)
-           ^
-   drivers/scsi/smartpqi/smartpqi_init.c:1016:6: note: 'logdev_data' is non-null
-           if (logdev_data) {
-               ^~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1016:2: note: Taking true branch
-           if (logdev_data) {
-           ^
-   drivers/scsi/smartpqi/smartpqi_init.c:1031:6: note: Assuming 'internal_logdev_list' is non-null
-           if (!internal_logdev_list) {
-               ^~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1031:2: note: Taking false branch
-           if (!internal_logdev_list) {
-           ^
-   drivers/scsi/smartpqi/smartpqi_init.c:1047:2: note: Returning zero, which participates in a condition later
-           return 0;
-           ^~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1976:7: note: Returning from 'pqi_get_device_lists'
-           rc = pqi_get_device_lists(ctrl_info, &physdev_list, &logdev_list);
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1977:6: note: 'rc' is 0
-           if (rc)
-               ^~
-   drivers/scsi/smartpqi/smartpqi_init.c:1977:2: note: Taking false branch
-           if (rc)
---
-           __X64_SYS_STUBx(x, name, __VA_ARGS__)                           \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/syscall_wrapper.h:96:2: note: expanded from macro '__X64_SYS_STUBx'
-           __SYS_STUBx(x64, sys##name,                                     \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/syscall_wrapper.h:79:10: note: expanded from macro '__SYS_STUBx'
-                   return __se_##name(__VA_ARGS__);                        \
-                          ^~~~~~~~~~~~~~~~~~~~~~~~
-   note: expanded from here
-   fs/pipe.c:1013:1: note: Calling '__do_sys_pipe'
-   SYSCALL_DEFINE1(pipe, int __user *, fildes)
-   ^
-   include/linux/syscalls.h:213:36: note: expanded from macro 'SYSCALL_DEFINE1'
-   #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, __VA_ARGS__)
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/syscalls.h:224:2: note: expanded from macro 'SYSCALL_DEFINEx'
-           __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/syscall_wrapper.h:234:14: note: expanded from macro '__SYSCALL_DEFINEx'
-                   long ret = __do_sys##name(__MAP(x,__SC_CAST,__VA_ARGS__));\
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: expanded from here
-   fs/pipe.c:1015:9: note: Calling 'do_pipe2'
-           return do_pipe2(fildes, 0);
-                  ^~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:992:10: note: Calling '__do_pipe_flags'
-           error = __do_pipe_flags(fd, files, flags);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:941:2: note: Taking false branch
-           if (flags & ~(O_CLOEXEC | O_NONBLOCK | O_DIRECT | O_NOTIFICATION_PIPE))
-           ^
-   fs/pipe.c:944:10: note: Calling 'create_pipe_files'
-           error = create_pipe_files(files, flags);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:899:7: note: 'inode' is non-null
-           if (!inode)
-                ^~~~~
-   fs/pipe.c:899:2: note: Taking false branch
-           if (!inode)
-           ^
-   fs/pipe.c:902:2: note: Taking false branch
-           if (flags & O_NOTIFICATION_PIPE) {
-           ^
-   fs/pipe.c:914:2: note: Taking false branch
-           if (IS_ERR(f)) {
-           ^
-   fs/pipe.c:924:2: note: Taking true branch
-           if (IS_ERR(res[0])) {
-           ^
-   fs/pipe.c:944:10: note: Returning from 'create_pipe_files'
-           error = create_pipe_files(files, flags);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:945:6: note: Assuming 'error' is 0
-           if (error)
-               ^~~~~
-   fs/pipe.c:945:2: note: Taking false branch
-           if (error)
-           ^
-   fs/pipe.c:949:6: note: Assuming 'error' is >= 0
-           if (error < 0)
-               ^~~~~~~~~
-   fs/pipe.c:949:2: note: Taking false branch
-           if (error < 0)
-           ^
-   fs/pipe.c:954:6: note: Assuming 'error' is >= 0
-           if (error < 0)
-               ^~~~~~~~~
-   fs/pipe.c:954:2: note: Taking false branch
-           if (error < 0)
-           ^
-   fs/pipe.c:961:2: note: Returning zero, which participates in a condition later
-           return 0;
-           ^~~~~~~~
-   fs/pipe.c:992:10: note: Returning from '__do_pipe_flags'
-           error = __do_pipe_flags(fd, files, flags);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:993:7: note: 'error' is 0
-           if (!error) {
-                ^~~~~
-   fs/pipe.c:993:2: note: Taking true branch
-           if (!error) {
-           ^
-   fs/pipe.c:994:7: note: Assuming the condition is true
-                   if (unlikely(copy_to_user(fildes, fd, sizeof(fd)))) {
-                       ^
-   include/linux/compiler.h:78:40: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                             ^~~~
-   fs/pipe.c:994:3: note: Taking false branch
-                   if (unlikely(copy_to_user(fildes, fd, sizeof(fd)))) {
-                   ^
-   fs/pipe.c:1002:4: note: 2nd function call argument is an uninitialized value
-                           fd_install(fd[1], files[1]);
-                           ^                 ~~~~~~~~
-   Suppressed 10 warnings (5 in non-user code, 5 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
->> mm/page_pinner.c:312:2: warning: Value stored to 'page_pinner' is never read [clang-analyzer-deadcode.DeadStores]
-           page_pinner = get_page_pinner(page_ext);
-           ^             ~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/page_pinner.c:312:2: note: Value stored to 'page_pinner' is never read
-           page_pinner = get_page_pinner(page_ext);
-           ^             ~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 6 warnings (5 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
-   Suppressed 4 warnings (4 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   Suppressed 7 warnings (6 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   Suppressed 7 warnings (6 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   Suppressed 7 warnings (6 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   Suppressed 7 warnings (6 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   14 warnings generated.
-   drivers/scsi/aic7xxx/aic79xx_osm.c:561:2: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-           strcpy(bp, "Adaptec AIC79XX PCI-X SCSI HBA DRIVER, Rev " AIC79XX_DRIVER_VERSION "\n"
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:561:2: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
-           strcpy(bp, "Adaptec AIC79XX PCI-X SCSI HBA DRIVER, Rev " AIC79XX_DRIVER_VERSION "\n"
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:563:2: warning: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-           strcat(bp, ahd->description);
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:563:2: note: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119
-           strcat(bp, ahd->description);
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:564:2: warning: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-           strcat(bp, ">\n"
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:564:2: note: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119
-           strcat(bp, ">\n"
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:567:2: warning: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-           strcat(bp, ahd_info);
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:567:2: note: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119
-           strcat(bp, ahd_info);
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:649:2: warning: Value stored to 'tinfo' is never read [clang-analyzer-deadcode.DeadStores]
-           tinfo = ahd_fetch_transinfo(ahd, channel, ahd->our_id,
-           ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:649:2: note: Value stored to 'tinfo' is never read
-           tinfo = ahd_fetch_transinfo(ahd, channel, ahd->our_id,
-           ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:1239:3: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-                   strcpy(new_name, buf);
-                   ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:1239:3: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
-                   strcpy(new_name, buf);
-                   ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:2257:2: warning: Value stored to 'saved_scsiid' is never read [clang-analyzer-deadcode.DeadStores]
-           saved_scsiid = ahd_inb(ahd, SAVED_SCSIID);
-           ^              ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:2257:2: note: Value stored to 'saved_scsiid' is never read
-           saved_scsiid = ahd_inb(ahd, SAVED_SCSIID);
-           ^              ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 7 warnings (6 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   kernel/trace/ring_buffer.c:1985:2: warning: Value stored to 'size' is never read [clang-analyzer-deadcode.DeadStores]
-           size = nr_pages * BUF_PAGE_SIZE;
-           ^      ~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/ring_buffer.c:1985:2: note: Value stored to 'size' is never read
-           size = nr_pages * BUF_PAGE_SIZE;
-           ^      ~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 6 warnings (5 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   11 warnings generated.
-   kernel/trace/trace.c:353:2: warning: Access to field 'next' results in a dereference of a null pointer [clang-analyzer-core.NullDereference]
-           rcu_assign_pointer(*p, (*p)->next);
-           ^
-   include/linux/rcupdate.h:424:35: note: expanded from macro 'rcu_assign_pointer'
-           uintptr_t _r_a_p__v = (uintptr_t)(v);                                 \
-                                            ^
-   kernel/trace/trace.c:396:2: note: Value assigned to 'ftrace_exports_list'
-           mutex_lock(&ftrace_export_lock);
-           ^
+vim +/END +68 arch/mips/include/asm/asm.h
 
-vim +/page_pinner +304 mm/page_pinner.c
+894ef530012fb50 arch/mips/include/asm/asm.h Alexander Lobakin 2021-01-10  38  
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  39  /*
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  40   * LEAF - declare leaf routine
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  41   */
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  42  #define LEAF(symbol)					\
+894ef530012fb50 arch/mips/include/asm/asm.h Alexander Lobakin 2021-01-10  43  		CFI_SECTIONS;				\
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  44  		.globl	symbol;				\
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  45  		.align	2;				\
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  46  		.type	symbol, @function;		\
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  47  		.ent	symbol, 0;			\
+08889582b8aa0bb arch/mips/include/asm/asm.h Paul Burton       2016-11-07  48  symbol:		.frame	sp, 0, ra;			\
+866b6a89c6d1876 arch/mips/include/asm/asm.h Corey Minyard     2017-08-10  49  		.cfi_startproc;				\
+08889582b8aa0bb arch/mips/include/asm/asm.h Paul Burton       2016-11-07  50  		.insn
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  51  
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  52  /*
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  53   * NESTED - declare nested routine entry point
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  54   */
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  55  #define NESTED(symbol, framesize, rpc)			\
+894ef530012fb50 arch/mips/include/asm/asm.h Alexander Lobakin 2021-01-10  56  		CFI_SECTIONS;				\
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  57  		.globl	symbol;				\
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  58  		.align	2;				\
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  59  		.type	symbol, @function;		\
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  60  		.ent	symbol, 0;			\
+08889582b8aa0bb arch/mips/include/asm/asm.h Paul Burton       2016-11-07  61  symbol:		.frame	sp, framesize, rpc;		\
+866b6a89c6d1876 arch/mips/include/asm/asm.h Corey Minyard     2017-08-10  62  		.cfi_startproc;				\
+08889582b8aa0bb arch/mips/include/asm/asm.h Paul Burton       2016-11-07  63  		.insn
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  64  
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  65  /*
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  66   * END - mark end of function
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  67   */
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16 @68  #define END(function)					\
+866b6a89c6d1876 arch/mips/include/asm/asm.h Corey Minyard     2017-08-10  69  		.cfi_endproc;				\
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  70  		.end	function;			\
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  71  		.size	function, .-function
+^1da177e4c3f415 include/asm-mips/asm.h      Linus Torvalds    2005-04-16  72  
 
-   300	
-   301	void __page_pinner_migration_failed(struct page *page)
-   302	{
-   303		struct page_ext *page_ext = lookup_page_ext(page);
- > 304		struct page_pinner *page_pinner;
-   305		depot_stack_handle_t handle;
-   306		unsigned long flags;
-   307		unsigned int idx;
-   308	
-   309		if (unlikely(!page_ext))
-   310			return;
-   311	
- > 312		page_pinner = get_page_pinner(page_ext);
-   313		if (!test_bit(PAGE_EXT_PINNER_MIGRATION_FAILED, &page_ext->flags))
-   314			return;
-   315	
-   316		handle = save_stack(GFP_NOWAIT|__GFP_NOWARN);
-   317	
-   318		spin_lock_irqsave(&acf_pinner.lock, flags);
-   319		idx = acf_pinner.index++;
-   320		acf_pinner.index %= LONTERM_PIN_BUCKETS;
-   321	
-   322		acf_pinner.pinner[idx].handle = handle;
-   323		acf_pinner.pinner[idx].ts_usec = ktime_to_us(ktime_get_boottime());
-   324		acf_pinner.pinner[idx].page_flags = page->flags;
-   325		acf_pinner.pinner[idx].page_mt = get_pageblock_migratetype(page);
-   326		acf_pinner.pinner[idx].pfn = page_to_pfn(page);
-   327		spin_unlock_irqrestore(&acf_pinner.lock, flags);
-   328	}
-   329	EXPORT_SYMBOL(__page_pinner_migration_failed);
-   330	
+:::::: The code at line 68 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
