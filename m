@@ -1,32 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B23248C1
-	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 17:50:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CF7C340E8;
-	Wed,  9 Mar 2022 17:50:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646848243;
-	bh=VdG6uAa2J6he+KPew0C79IKsNwlXvnDZ0mqMytTw22k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P6p7FnS9EiEt35jbFmuRlV/KsI2WlZJfdnduKDl5rRGIi72y5qqm1RHnB9IhWO4q1
-	 u61rUciMyfmWa70zNlqiYSByBrj0X3CJ0Bz4leRC4o4rShBqO8UMqA/toF+DE4CJ2s
-	 QeS3uXcUJyDsShcZL68sy4cKOVptiTFkbFvKYFZOiKhtAX8AG2/rR7ccw8OqqEj9L9
-	 P0Ign7+5UuFaLBtsT5aewmRIxg7Fh5YIG7ptcbo7deukNRja0DtZWChf4XnbAC6tbc
-	 R1uo5zP2da2re8WjAolSzR9LZPasuosCVDmys9npSR6Ba9FYaHcFtEdbe4AaEIoeBx
-	 9Tu9RpbXODGMA==
-Date: Wed, 9 Mar 2022 10:50:36 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, kernel-team@android.com,
-	James Morse <james.morse@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH] arm64: Paper over ARM_SMCCC_ARCH_WORKAROUND_3 Clang issue
-Message-ID: <Yijo7Nmt3AiP1uLH@dev-arch.thelio-3990X>
-References: <20220309155716.3988480-1-maz@kernel.org>
- <YijftpaApSJWuZ3m@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413A748C1
+	for <llvm@lists.linux.dev>; Wed,  9 Mar 2022 18:13:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646849639; x=1678385639;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RZLsY8+CmLza9rZ0DHCp01fg5BvcoWuNoW10xFOmjx8=;
+  b=EhtCCnGKSZ226XsJnXbLnjBiwx4ye8iJFKOu2gouDHQwKRdQsaZV2l7i
+   1C2btK8KPRWkC399HyoKnc2RF3RjhC+0jsCOApPvysUQZN4e1TKW/uERX
+   3C8PKVUmeo3pSBGiqZkhQJzzDUI4l1gS5oFyd/i/hbI93YieTYhoYlUcN
+   bd73usKA2+2VrsWQp9mOF47gE8ah+PH7bBqDC/irHX0FF1ypfE4npNZX9
+   f+67XEwHA4SgmtCAFQUGbCl8tZYY0LIp4yPBoE8XXO1MtObHxQv9+XdwT
+   E+W4JG+bP/9XAOBl9ytoWOw+lT1nYoqsSVmkW0ELxX+qt8ksxp/4wBotG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="341482808"
+X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
+   d="scan'208";a="341482808"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 10:13:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="642248545"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 09 Mar 2022 10:13:21 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nS0oL-0003fo-84; Wed, 09 Mar 2022 18:13:21 +0000
+Date: Thu, 10 Mar 2022 02:12:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:master 173/592]
+ drivers/clk/clk-xlnx-clock-wizard.c:324:8: error: implicit declaration of
+ function 'FIELD_PREP'
+Message-ID: <202203100259.o3TUVa5w-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,122 +46,149 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YijftpaApSJWuZ3m@dev-arch.thelio-3990X>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Mar 09, 2022 at 10:11:18AM -0700, Nathan Chancellor wrote:
-> On Wed, Mar 09, 2022 at 03:57:16PM +0000, Marc Zyngier wrote:
-> > Compiling the arm64 kernel with the BHB workarounds and Clang+LTO
-> > results in a bunch of:
-> > 
-> > <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-> >  mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-> > 
-> > when compiling arch/arm64/kernel/entry.S, and makes no sense at all.
-> > 
-> > As it turns out, moving a single include line around makes the
-> > problem disappear. Why, you'd ask? Well, I don't have the faintest
-> > idea, and I'm running out of patience. So make of that what you want.
-> > 
-> > Cc: James Morse <james.morse@arm.com>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Signed-off-by: Marc Zyngier <maz@kernel.org>
-> > ---
-> >  include/linux/arm-smccc.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
-> > index 220c8c60e021..0a341dd9ff61 100644
-> > --- a/include/linux/arm-smccc.h
-> > +++ b/include/linux/arm-smccc.h
-> > @@ -5,7 +5,6 @@
-> >  #ifndef __LINUX_ARM_SMCCC_H
-> >  #define __LINUX_ARM_SMCCC_H
-> >  
-> > -#include <linux/init.h>
-> >  #include <uapi/linux/const.h>
-> >  
-> >  /*
-> > @@ -193,6 +192,7 @@
-> >  
-> >  #ifndef __ASSEMBLY__
-> >  
-> > +#include <linux/init.h>
-> >  #include <linux/linkage.h>
-> >  #include <linux/types.h>
-> >  
-> > -- 
-> > 2.34.1
-> 
-> I am still looking at this but I wanted to post a preliminary finding.
-> It seems the source of the error is that ARM_SMCCC_ARCH_WORKAROUND_3 is
-> not getting expanded by the preprocessor. If you preprocess
-> arch/arm64/kernel/entry.S without LTO then with LTO, it reveals the
-> attached diff, which shows just "#ARM_SMCCC_ARCH_WORKAROUND_3", rather
-> than "# (((1) << 31) | ((0) << 30) | (((0) & 0x3F) << 24) | ((0x3fff) & 0xFFFF))".
+Hi Shubhrajyoti,
 
-CONFIG_LTO=y causes the following include chain:
+FYI, the error/warning still remains.
 
-include/linux/arm-smccc.h
-include/linux/init.h
-include/linux/compiler.h
-arch/arm64/include/asm/rwonce.h
-arch/arm64/include/asm/alternative-macros.h
-arch/arm64/include/asm/assembler.h
+tree:   https://github.com/Xilinx/linux-xlnx master
+head:   ef4ac9cad9406e869e7c20191f3a3b0bb9663d81
+commit: bf7387ee9a75c2a390b19f63c47076344e664b86 [173/592] clocking-wizard: Support higher frequency accuracy
+config: arm-randconfig-r035-20220309 (https://download.01.org/0day-ci/archive/20220310/202203100259.o3TUVa5w-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/Xilinx/linux-xlnx/commit/bf7387ee9a75c2a390b19f63c47076344e664b86
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx master
+        git checkout bf7387ee9a75c2a390b19f63c47076344e664b86
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
 
-assembler.h has the use of ARM_SMCCC_ARCH_WORKAROUND_3 but the init.h
-include in arm-smccc.h happens before the definition, so it does not get
-expanded. This completely hacky patch proves that, as the error goes
-away with it:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
-index 220c8c60e021..6cf6bcf00647 100644
---- a/include/linux/arm-smccc.h
-+++ b/include/linux/arm-smccc.h
-@@ -5,7 +5,6 @@
- #ifndef __LINUX_ARM_SMCCC_H
- #define __LINUX_ARM_SMCCC_H
- 
--#include <linux/init.h>
- #include <uapi/linux/const.h>
- 
- /*
-@@ -97,6 +96,8 @@
- 			   ARM_SMCCC_SMC_32,				\
- 			   0, 0x3fff)
- 
-+#include <linux/init.h>
-+
- #define ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID				\
- 	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
- 			   ARM_SMCCC_SMC_32,				\
+All errors (new ones prefixed by >>):
 
-This diff seems like a somewhat proper solution, as __READ_ONCE() cannot
-be used in assembly, but I am open to other suggestions.
+>> drivers/clk/clk-xlnx-clock-wizard.c:324:8: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+           reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
+                 ^
+>> drivers/clk/clk-xlnx-clock-wizard.c:392:6: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
+               ^
+   2 errors generated.
 
-diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-index 1bce62fa908a..56f7b1d4d54b 100644
---- a/arch/arm64/include/asm/rwonce.h
-+++ b/arch/arm64/include/asm/rwonce.h
-@@ -5,7 +5,7 @@
- #ifndef __ASM_RWONCE_H
- #define __ASM_RWONCE_H
- 
--#ifdef CONFIG_LTO
-+#if defined(CONFIG_LTO) && !defined(__ASSEMBLY__)
- 
- #include <linux/compiler_types.h>
- #include <asm/alternative-macros.h>
-@@ -66,7 +66,7 @@
- })
- 
- #endif	/* !BUILD_VDSO */
--#endif	/* CONFIG_LTO */
-+#endif	/* CONFIG_LTO && !__ASSEMBLY__ */
- 
- #include <asm-generic/rwonce.h>
- 
 
-Cheers,
-Nathan
+vim +/FIELD_PREP +324 drivers/clk/clk-xlnx-clock-wizard.c
+
+   301	
+   302	static int clk_wzrd_dynamic_all_nolock(struct clk_hw *hw, unsigned long rate,
+   303					       unsigned long parent_rate)
+   304	{
+   305		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   306		u32 reg, pre;
+   307		u16 retries;
+   308		int err;
+   309		u64 vco_freq, rate_div, f, clockout0_div;
+   310	
+   311		err = clk_wzrd_get_divisors(hw, rate, parent_rate);
+   312		if (err)
+   313			pr_err("failed to get divisors\n");
+   314	
+   315		vco_freq = DIV_ROUND_CLOSEST((parent_rate * divider->valuem), divider->valued);
+   316		rate_div = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
+   317	
+   318		clockout0_div = rate_div / WZRD_FRAC_POINTS;
+   319	
+   320		pre = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
+   321		f = (u32)(pre - (clockout0_div * WZRD_FRAC_POINTS));
+   322		f = f & WZRD_CLKOUT_FRAC_MASK;
+   323	
+ > 324		reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
+   325		      FIELD_PREP(WZRD_CLKOUT0_FRAC_MASK, f);
+   326	
+   327		writel(reg, divider->base + WZRD_CLK_CFG_REG(2));
+   328		/* Set divisor and clear phase offset */
+   329		reg = FIELD_PREP(WZRD_CLKFBOUT_MULT_MASK, divider->valuem) |
+   330		      FIELD_PREP(WZRD_DIVCLK_DIVIDE_MASK, divider->valued);
+   331		writel(reg, divider->base + WZRD_CLK_CFG_REG(0));
+   332		writel(divider->valueo, divider->base + WZRD_CLK_CFG_REG(2));
+   333		writel(0, divider->base + WZRD_CLK_CFG_REG(3));
+   334		/* Check status register */
+   335		retries = WZRD_DR_NUM_RETRIES;
+   336		while (retries--) {
+   337			if (readl(divider->base + WZRD_DR_STATUS_REG_OFFSET) &
+   338								WZRD_DR_LOCK_BIT_MASK)
+   339				break;
+   340		}
+   341	
+   342		if (!retries)
+   343			return -ETIMEDOUT;
+   344	
+   345		/* Initiate reconfiguration */
+   346		writel(WZRD_DR_BEGIN_DYNA_RECONF,
+   347		       divider->base + WZRD_DR_INIT_REG_OFFSET);
+   348	
+   349		/* Check status register */
+   350		retries = WZRD_DR_NUM_RETRIES;
+   351		while (retries--) {
+   352			if (readl(divider->base + WZRD_DR_STATUS_REG_OFFSET) &
+   353								WZRD_DR_LOCK_BIT_MASK)
+   354				break;
+   355		}
+   356	
+   357		if (!retries)
+   358			return -ETIMEDOUT;
+   359	
+   360		return 0;
+   361	}
+   362	
+   363	static int clk_wzrd_dynamic_all(struct clk_hw *hw, unsigned long rate,
+   364					unsigned long parent_rate)
+   365	{
+   366		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   367		unsigned long flags = 0;
+   368		int ret;
+   369	
+   370		if (divider->lock)
+   371			spin_lock_irqsave(divider->lock, flags);
+   372		else
+   373			__acquire(divider->lock);
+   374	
+   375		ret = clk_wzrd_dynamic_all_nolock(hw, rate, parent_rate);
+   376	
+   377		if (divider->lock)
+   378			spin_unlock_irqrestore(divider->lock, flags);
+   379		else
+   380			__release(divider->lock);
+   381	
+   382		return ret;
+   383	}
+   384	
+   385	static unsigned long clk_wzrd_recalc_rate_all(struct clk_hw *hw,
+   386						      unsigned long parent_rate)
+   387	{
+   388		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   389		u32 m, d, o, div, reg, f;
+   390	
+   391		reg = readl(divider->base + WZRD_CLK_CFG_REG(0));
+ > 392		d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
+   393		m = FIELD_GET(WZRD_CLKFBOUT_MULT_MASK, reg);
+   394		reg = readl(divider->base + WZRD_CLK_CFG_REG(2));
+   395		o = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
+   396		f = FIELD_GET(WZRD_CLKOUT0_FRAC_MASK, reg);
+   397	
+   398		div = DIV_ROUND_CLOSEST(d * (WZRD_FRAC_POINTS * o + f), WZRD_FRAC_POINTS);
+   399		return divider_recalc_rate(hw, parent_rate * m, div, divider->table,
+   400				divider->flags, divider->width);
+   401	}
+   402	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
