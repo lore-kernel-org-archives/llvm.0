@@ -1,43 +1,41 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF3C7A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 14:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A13D18D
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 14:42:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646920942; x=1678456942;
+  t=1646923343; x=1678459343;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uOwhborcRgavFTSUWMRWRCM1yBEHDdqFGkJhMAWS0dQ=;
-  b=iXjdJ2TDjCoVC2Rr12YFWIoj8pOJ63fTfIgt6FYi9fpPnZkL5ncPnmeg
-   byH//2WPT5qYB5VXB5fCfb5uLXVLkRO+jHnW43SGN63sfBykMQeDjmmM/
-   np5h167Lzkf5k/u0n49JSce5KDH6CXpX47P63zoTlFhsEkj/LAU07OjC8
-   Myanml3GeGDqXgGSFgw++B80VZPrTm5owOBa6iqX0pBsVXgu79IxBmM2a
-   e0s9FepX6RBzmDlwbx5GI+OXOaAZxb1lPLL3osTOpFWFVSauo5NwYZD9i
-   Af4tMJYgKn2vy8++FAY3g85EYHYgAlY0EAFIeBAqJv0xF61vFW8DTzkjq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="235204069"
+  bh=OJKaj+dkol1FacgiHUcMifV8v9tMiNuuIHX0fa00Bf0=;
+  b=laeHErhLCsVi8eKkCT3dq/0jbaKcqXqABmMUwE0Yn2H8Lf1kK8mAuXGJ
+   CwTbHdfR4gA4aVhZePDoWo0FDzT9MbFADEEJ/5qCcaaHLCZXq/fPst3xN
+   cSWafNYLrbzPIu9x4wgE8P2UcXZbA2NVrGvQkItXrY/Mkzs8UwON0mwsn
+   XMhkJFHUjfpVUe3quuSFdPuVMuMCDH6GvawANdAoE1YZpbjELpRAgKKGq
+   rXKBhF6q7ra5OD0FqhroAr8pi3poaRgaG/da8hG2ZK12ZKrixvQOJoUh8
+   9QerQI4UcF+I54PxtBupLTWeTDzLs6JZRRi3xitjlx21laV2/DQFwJ4VL
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="318486734"
 X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="235204069"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:02:21 -0800
+   d="scan'208";a="318486734"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:42:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="548017116"
+   d="scan'208";a="633006274"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Mar 2022 06:02:20 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2022 06:42:21 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nSJMx-00050L-AI; Thu, 10 Mar 2022 14:02:19 +0000
-Date: Thu, 10 Mar 2022 22:01:40 +0800
+	id 1nSJzg-00051c-7O; Thu, 10 Mar 2022 14:42:20 +0000
+Date: Thu, 10 Mar 2022 22:42:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sami Tolvanen <samitolvanen@google.com>
+To: Marc Zyngier <maz@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Alistair Delva <adelva@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
- 1249/8858] arch/mips/include/asm/page.h:12:10: fatal error: 'spaces.h' file
- not found
-Message-ID: <202203102157.Kyxw6NdP-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>
+Subject: arch/arm64/kvm/va_layout.c:292:6: warning: no previous prototype for
+ function 'kvm_compute_final_ctr_el0'
+Message-ID: <202203102230.x3TDH4ku-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,54 +46,58 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
-head:   9771767708df4fcf51cd1642e041c804a86e740c
-commit: 08f67ef189ecce0f8330e53e5b78157f1b5afa19 [1249/8858] ANDROID: module: cfi: ensure __cfi_check alignment
-config: mips-cavium_octeon_defconfig (https://download.01.org/0day-ci/archive/20220310/202203102157.Kyxw6NdP-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1db333d9a51f3459fba1bcaa564d95befe79f0b3
+commit: 755db23420a1ce4b740186543432983e9bbe713e KVM: arm64: Generate final CTR_EL0 value when running in Protected mode
+date:   12 months ago
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220310/202203102230.x3TDH4ku-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/08f67ef189ecce0f8330e53e5b78157f1b5afa19
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
-        git checkout 08f67ef189ecce0f8330e53e5b78157f1b5afa19
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=755db23420a1ce4b740186543432983e9bbe713e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 755db23420a1ce4b740186543432983e9bbe713e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips modules_prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ arch/arm64/kvm/ drivers/gpu/drm/tegra/ drivers/usb/host/ kernel/debug/kdb/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from scripts/module.lds.S:6:
->> arch/mips/include/asm/page.h:12:10: fatal error: 'spaces.h' file not found
-   #include <spaces.h>
-            ^~~~~~~~~~
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:367: scripts/module.lds] Error 1
-   make[1]: *** [Makefile:1469: modules_prepare] Error 2
-   make: *** [Makefile:185: __sub-make] Error 2
-   make: Target 'modules_prepare' not remade because of errors.
+   arch/arm64/kvm/va_layout.c:188:6: warning: no previous prototype for function 'kvm_patch_vector_branch' [-Wmissing-prototypes]
+   void kvm_patch_vector_branch(struct alt_instr *alt,
+        ^
+   arch/arm64/kvm/va_layout.c:188:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void kvm_patch_vector_branch(struct alt_instr *alt,
+   ^
+   static 
+   arch/arm64/kvm/va_layout.c:286:6: warning: no previous prototype for function 'kvm_get_kimage_voffset' [-Wmissing-prototypes]
+   void kvm_get_kimage_voffset(struct alt_instr *alt,
+        ^
+   arch/arm64/kvm/va_layout.c:286:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void kvm_get_kimage_voffset(struct alt_instr *alt,
+   ^
+   static 
+>> arch/arm64/kvm/va_layout.c:292:6: warning: no previous prototype for function 'kvm_compute_final_ctr_el0' [-Wmissing-prototypes]
+   void kvm_compute_final_ctr_el0(struct alt_instr *alt,
+        ^
+   arch/arm64/kvm/va_layout.c:292:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void kvm_compute_final_ctr_el0(struct alt_instr *alt,
+   ^
+   static 
+   3 warnings generated.
 
 
-vim +12 arch/mips/include/asm/page.h
+vim +/kvm_compute_final_ctr_el0 +292 arch/arm64/kvm/va_layout.c
 
-^1da177e4c3f415 include/asm-mips/page.h      Linus Torvalds  2005-04-16  11  
-^1da177e4c3f415 include/asm-mips/page.h      Linus Torvalds  2005-04-16 @12  #include <spaces.h>
-99502d94c3649c5 arch/mips/include/asm/page.h Nelson Elhage   2009-07-31  13  #include <linux/const.h>
-75b5b5e0a262790 arch/mips/include/asm/page.h Leonid Yegoshin 2013-11-14  14  #include <linux/kernel.h>
-75b5b5e0a262790 arch/mips/include/asm/page.h Leonid Yegoshin 2013-11-14  15  #include <asm/mipsregs.h>
-^1da177e4c3f415 include/asm-mips/page.h      Linus Torvalds  2005-04-16  16  
-
-:::::: The code at line 12 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+   291	
+ > 292	void kvm_compute_final_ctr_el0(struct alt_instr *alt,
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
