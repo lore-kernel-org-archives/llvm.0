@@ -1,60 +1,42 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192067A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 11:10:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=QxtDdpYcf2JOJsi93GYP3dL8Ehp+16/1AcbmlLBV8SI=; b=DfaF72qUfGgARtmwcXdEeQaVt6
-	+UkPOlx2TBKBhG5WEVjjZ5Nshc+6uAKuTHeqpCbhZjZVAngNTGN8APsy0tsHTocIhXGjaaCK+o4uj
-	Ya7FMADf+iaWzf8fy9Qv93yuv+NWuxDKH44KMppwWWKQ18yW8ZNG8/9y1cNcTnSL1mPKzMDEJS9su
-	HFy9JLFEIffeGJtgfcIDX/ANlFCZocLXeCXbrc5IE99qinD6DHKl4EswHu3DGQB0hJDOEQ3YKv1rp
-	y+LSoMjDOkJKM5ntw6YEFwElx0Ewwi1fgDERMNJ39+9Jnp7BzX0Q4IwVTcpeqIWiLK/Tt+iVuSbpX
-	YK09Y1Qg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nSFq2-00H50N-2H; Thu, 10 Mar 2022 10:16:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7791C30027B;
-	Thu, 10 Mar 2022 11:16:03 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 5AD152B52E224; Thu, 10 Mar 2022 11:16:03 +0100 (CET)
-Date: Thu, 10 Mar 2022 11:16:03 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: David Laight <David.Laight@aculab.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-	"andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"samitolvanen@google.com" <samitolvanen@google.com>,
-	"mark.rutland@arm.com" <mark.rutland@arm.com>,
-	"alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
-	"mbenes@suse.cz" <mbenes@suse.cz>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"mhiramat@kernel.org" <mhiramat@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
-References: <20220308153011.021123062@infradead.org>
- <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
- <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
- <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
- <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
- <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDA17A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 11:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646911137; x=1678447137;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dsW0j/sIpHjN8S+oDTjReBWOqeVvM7grh7Y/5Yy1ouk=;
+  b=Ozqs6Pvsi8CDikKJCOKXw5CNQaKrpqbkh6aRHYm1ARP4Za+eigPPtgvq
+   I6+YI8dlyUL42C8pacTvp/nPU31yhxoWGZ08kP5/E1bMB0vaxjX9Fs4HD
+   c6WC2c68bix20ZxPphn/wZ2YZ2FtRnstdguI4wwy5K6y9mQPsf07A7YUX
+   Ce/PuCJwJQpoXo7uZe4VrCdb/cZT92m/n0iWtMkwXZxNE4miVes2lQeYq
+   T46d/f5wZn3I8MK2MCLHAReFGZQux0HiVBA1zrJEa8L+/LSR/wl2TAQgI
+   GzpbMVDNZ/auzQvAONPXSm4sBf+x//Q61Pfmdh/M9blvbcn2fL/oSBacz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="235831549"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="235831549"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 03:18:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="632955802"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2022 03:18:54 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSGoo-0004q3-63; Thu, 10 Mar 2022 11:18:54 +0000
+Date: Thu, 10 Mar 2022 19:18:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Quentin Perret <qperret@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+	Will Deacon <will@kernel.org>
+Subject: arch/arm64/kvm/hyp/nvhe/setup.c:133:17: warning: no previous
+ prototype for function '__pkvm_init_finalise'
+Message-ID: <202203101914.nXeIxgaM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,135 +45,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Mar 10, 2022 at 09:22:59AM +0000, David Laight wrote:
-> From: Peter Zijlstra
-> > Sent: 10 March 2022 09:05
-> > 
-> > On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
-> > 
-> > > I observed the following error when building with
-> > > CONFIG_LTO_CLANG_FULL=y enabled:
-> > >
-> > > ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
-> > > already defined
-> > >         ibt_selftest_ip:
-> > >         ^
-> > >
-> > > Seems to come from
-> > > commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
-> > >
-> > > Commenting out the label in the inline asm, I then observed:
-> > > vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
-> > > callable instruction with modified stack frame
-> > > vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
-> > > mismatch: cfa1=4+64 cfa2=4+8
-> > > These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
-> > > disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
-> > > the ibt_selftest_ip label).
-> > 
-> > Urgh.. I'm thikning this is a clang bug :/
-> > 
-> > The code in question is:
-> > 
-> > 
-> > void ibt_selftest_ip(void); /* code label defined in asm below */
-> > 
-> > DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-> > {
-> > 	/* ... */
-> > 
-> > 	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
-> > 		regs->ax = 0;
-> > 		return;
-> > 	}
-> > 
-> > 	/* ... */
-> > }
-> > 
-> > bool ibt_selftest(void)
-> > {
-> > 	unsigned long ret;
-> > 
-> > 	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
-> > 	     ANNOTATE_RETPOLINE_SAFE
-> > 	     "	jmp *%%rax\n\t"
-> > 	     "ibt_selftest_ip:\n\t"
-> > 	     UNWIND_HINT_FUNC
-> > 	     ANNOTATE_NOENDBR
-> > 	     "	nop\n\t"
-> > 
-> > 	     : "=a" (ret) : : "memory");
-> > 
-> > 	return !ret;
-> > }
-> > 
-> > There is only a single definition of that symbol, the one in the asm.
-> > The other is a declaration, which is used in the exception handler to
-> > compare against regs->ip.
-> 
-> LTO has probably inlined it twice.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b
+commit: f320bc742bc23c1d43567712fe2814bf04b19ebc KVM: arm64: Prepare the creation of s1 mappings at EL2
+date:   12 months ago
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220310/202203101914.nXeIxgaM-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f320bc742bc23c1d43567712fe2814bf04b19ebc
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f320bc742bc23c1d43567712fe2814bf04b19ebc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ arch/arm64/kvm/ drivers/gpu/drm/tegra/ drivers/usb/host/ kernel/debug/kdb/
 
-Indeed, adding noinline to ibt_selftest() makes it work.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kvm/hyp/nvhe/setup.c:133:17: warning: no previous prototype for function '__pkvm_init_finalise' [-Wmissing-prototypes]
+   void __noreturn __pkvm_init_finalise(void)
+                   ^
+   arch/arm64/kvm/hyp/nvhe/setup.c:133:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __noreturn __pkvm_init_finalise(void)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/__pkvm_init_finalise +133 arch/arm64/kvm/hyp/nvhe/setup.c
+
+   132	
+ > 133	void __noreturn __pkvm_init_finalise(void)
+   134	{
+   135		struct kvm_host_data *host_data = this_cpu_ptr(&kvm_host_data);
+   136		struct kvm_cpu_context *host_ctxt = &host_data->host_ctxt;
+   137		unsigned long nr_pages, reserved_pages, pfn;
+   138		int ret;
+   139	
+   140		/* Now that the vmemmap is backed, install the full-fledged allocator */
+   141		pfn = hyp_virt_to_pfn(hyp_pgt_base);
+   142		nr_pages = hyp_s1_pgtable_pages();
+   143		reserved_pages = hyp_early_alloc_nr_used_pages();
+   144		ret = hyp_pool_init(&hpool, pfn, nr_pages, reserved_pages);
+   145		if (ret)
+   146			goto out;
+   147	
+   148		pkvm_pgtable_mm_ops = (struct kvm_pgtable_mm_ops) {
+   149			.zalloc_page = hyp_zalloc_hyp_page,
+   150			.phys_to_virt = hyp_phys_to_virt,
+   151			.virt_to_phys = hyp_virt_to_phys,
+   152			.get_page = hyp_get_page,
+   153			.put_page = hyp_put_page,
+   154		};
+   155		pkvm_pgtable.mm_ops = &pkvm_pgtable_mm_ops;
+   156	
+   157	out:
+   158		/*
+   159		 * We tail-called to here from handle___pkvm_init() and will not return,
+   160		 * so make sure to propagate the return value to the host.
+   161		 */
+   162		cpu_reg(host_ctxt, 1) = ret;
+   163	
+   164		__host_enter(host_ctxt);
+   165	}
+   166	
 
 ---
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index d8bbc705efe5..0c737cc31ee5 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -781,7 +781,8 @@ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data
- 	return NOTIFY_STOP;
- }
- 
--static void __init int3_selftest(void)
-+/* Must be noinline to ensure uniqueness of int3_selftest_ip. */
-+static noinline void __init int3_selftest(void)
- {
- 	static __initdata struct notifier_block int3_exception_nb = {
- 		.notifier_call	= int3_exception_notify,
-@@ -794,9 +795,8 @@ static void __init int3_selftest(void)
- 	/*
- 	 * Basically: int3_magic(&val); but really complicated :-)
- 	 *
--	 * Stick the address of the INT3 instruction into int3_selftest_ip,
--	 * then trigger the INT3, padded with NOPs to match a CALL instruction
--	 * length.
-+	 * INT3 padded with NOP to CALL_INSN_SIZE. The int3_exception_nb
-+	 * notifier above will emulate CALL for us.
- 	 */
- 	asm volatile ("int3_selftest_ip:\n\t"
- 		      ANNOTATE_NOENDBR
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 837cc3c7d4f4..fb89a2f1011f 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -214,7 +214,7 @@ DEFINE_IDTENTRY(exc_overflow)
- 
- static __ro_after_init bool ibt_fatal = true;
- 
--void ibt_selftest_ip(void); /* code label defined in asm below */
-+extern void ibt_selftest_ip(void); /* code label defined in asm below */
- 
- enum cp_error_code {
- 	CP_EC        = (1 << 15) - 1,
-@@ -238,7 +238,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
- 	if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
- 		return;
- 
--	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
-+	if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
- 		regs->ax = 0;
- 		return;
- 	}
-@@ -252,7 +252,8 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
- 	BUG();
- }
- 
--bool ibt_selftest(void)
-+/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
-+noinline bool ibt_selftest(void)
- {
- 	unsigned long ret;
- 
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
