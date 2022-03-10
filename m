@@ -1,227 +1,220 @@
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7875A38
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 21:08:21 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id u3so13392062ybh.5
-        for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 13:08:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AoJgc8/XnE4YrAFvzjMb/nlQIHB+pdKEnLifo5xoa18=;
-        b=KUljDMOIzqGE2FBqr8pMlGir6/9goyS8TIVzokE5OtrWG88qLRUHma7TIXBIR0wbL4
-         8nfib+aheOPJWl51BWVKggxaz0GQiR8ktsmHcFEQMwQeToyTw05G1HRQiqo/RzDD9k57
-         En4tgXG2dUk/hRzydvwYJ/yu3W0kbJRN0rVPdJ+QQsqSHQS2Ff8/SWgvdrxlxX56vTcW
-         N0muxSrY70ZKElG4jcyxnhqadPAw3Ri3hti7obESWGVwX8zROBoVseD6KAfajuNbbM61
-         Vr15XTpBzvT0AT2wOl6uoPITVVSgXWvScZMoucwPzK9Shcn/0yvOWpuPRMA5+m4S+BtW
-         uZEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AoJgc8/XnE4YrAFvzjMb/nlQIHB+pdKEnLifo5xoa18=;
-        b=X72Rkbcj2SR6GTGy371A7C5ev/Qctp5nYCRzjEBbqylX9bxvjqlr3LiZtnnQXKJItG
-         aD8Fg7FasDYIVlSOKi5tHukPNwojEq5G178sb+mAGJqZ8j0tS2xSUE7+ZXNmPtLHl/sC
-         IsIaxG+HKL7P8dbTat9+7qedSP2ufJFEB5X8Z9qTz0iBk5CHrc3oWkPj0RoWbjwkfStW
-         8jTzrJrgqf7p7xEYULnzjN1fKIIU7vEbODXxSC+NiehSNSv4kXoGgzC+f5LYa6AxGPXP
-         em6Iq+Y4XOn1mT1A6fknERkvDNt9cAv6mwQD6AtdyqhJgIjL4u1fAf2YhuV9ZApDJJ7r
-         dhvw==
-X-Gm-Message-State: AOAM532VQtGxnr+iMrJFRl/PPfBRUr2sWUqLyX9IZX9cYC7YemWNMotW
-	6GO5djCYGXeYYFatz97DbJ912mHDWhCivD/8NW7e/A==
-X-Google-Smtp-Source: ABdhPJwHHO2clzc5zDTSYlF0hJici3Nu0+6fZ8h3npgvBuTlFDcMMwLqvfjvJYerGu7PBi0lZV9SbiToj11l5pmbbg8=
-X-Received: by 2002:a05:6902:1087:b0:628:788e:8a51 with SMTP id
- v7-20020a056902108700b00628788e8a51mr5327444ybu.242.1646946499750; Thu, 10
- Mar 2022 13:08:19 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5035A38
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 21:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646947873; x=1678483873;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RGNlWOxbgI16WpvZrVCQjPfVySv652dMFOKfh08ofHM=;
+  b=Puec7REf5ewZEpetYErCYepIwnTEmHctJvmy3aZVGsXPjSK0sLzNizrf
+   KFzr2RBMyNznoFUU5rjHxLNr69mKFHooeQto45hO+orDzodD8HwUZ1PFx
+   MWohPaan8UVWIFLijMbKRjszNp0ZD3rpl8vScnm6U228OnEakdlCBeoSA
+   +kHCDJ8rGDjQXa9Eey1N6URRHpEMJp9GSiLqubHWTlhDiS0wUjvbvUe4Z
+   S5gTZLXh4YsFZDFDw7WvEsLvBAZ3v8HWujUnsQ31WvrdBZ+I+Zg8TY+Fd
+   Q8UWsEQSmp00juKjI4+l5G3jpycxFsS4sipYidrsRUy5VuUEq/sKeMgiZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="255120581"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="255120581"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 13:31:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="554856683"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 10 Mar 2022 13:31:08 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSQNC-0005Q5-Ql; Thu, 10 Mar 2022 21:31:02 +0000
+Date: Fri, 11 Mar 2022 05:30:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org,
+	robh+dt@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, aaronyu@google.com,
+	matthias.bgg@gmail.com, trevor.wu@mediatek.com, tzungbi@google.com,
+	linmq006@gmail.com, alsa-devel@alsa-project.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+	Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: Re: [v2 2/2] ASoC: mediatek: mt8192: support rt1015p_rt5682s
+Message-ID: <202203110529.Y6LSPpwn-lkp@intel.com>
+References: <20220310153707.29722-3-jiaxin.yu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220309055118.1551013-1-maskray@google.com> <CAKwvOdmMS4=QAoBFvhAdXWaLHOwH2252FX9i_yZyiCOpOt=3Dw@mail.gmail.com>
-In-Reply-To: <CAKwvOdmMS4=QAoBFvhAdXWaLHOwH2252FX9i_yZyiCOpOt=3Dw@mail.gmail.com>
-From: =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Date: Thu, 10 Mar 2022 13:08:08 -0800
-Message-ID: <CAFP8O3+jJf=amTYjm6YQbJKAuK0XRNoG3Gwc6C+E0=CPd46ZAw@mail.gmail.com>
-Subject: Re: [PATCH] powerpc: Replace ppc64 DT_RELACOUNT usage with DT_RELASZ/24
-To: Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>, linuxppc-dev@lists.ozlabs.org, 
-	Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310153707.29722-3-jiaxin.yu@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Mar 10, 2022 at 11:48 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Tue, Mar 8, 2022 at 9:53 PM Fangrui Song <maskray@google.com> wrote:
-> >
-> > DT_RELACOUNT is an ELF dynamic tag inherited from SunOS indicating the
-> > number of R_*_RELATIVE relocations. It is optional but {ld.lld,ld.lld}
-> > -z combreloc always creates it (if non-zero) to slightly speed up glibc
-> > ld.so relocation resolving by avoiding R_*R_PPC64_RELATIVE type
-> > comparison. The tag is otherwise nearly unused in the wild and I'd
-> > recommend that software avoids using it.
-> >
-> > lld>=14.0.0 (since commit da0e5b885b25cf4ded0fa89b965dc6979ac02ca9)
-> > underestimates DT_RELACOUNT for ppc64 when position-independent long
-> > branch thunks are used. Correcting it needs non-trivial arch-specific
-> > complexity which I'd prefer to avoid. Since our code always compares the
-> > relocation type with R_PPC64_RELATIVE, replacing every occurrence of
-> > DT_RELACOUNT with DT_RELASZ/sizeof(Elf64_Rela)=DT_RELASZ/24 is a correct
-> > alternative.
->
-> checking that sizeof(Elf64_Rela) == 24, yep: https://godbolt.org/z/bb4aKbo5T
->
-> >
-> > DT_RELASZ is in practice bounded by an uint32_t. Dividing x by 24 can be
-> > implemented as (uint32_t)(x*0xaaaaaaab) >> 4.
->
-> Yep: https://godbolt.org/z/x9445ePPv
->
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1581
-> > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > Signed-off-by: Fangrui Song <maskray@google.com>
-> > ---
-> >  arch/powerpc/boot/crt0.S       | 28 +++++++++++++++++-----------
-> >  arch/powerpc/kernel/reloc_64.S | 15 +++++++++------
-> >  2 files changed, 26 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/arch/powerpc/boot/crt0.S b/arch/powerpc/boot/crt0.S
-> > index feadee18e271..1c96ebe7ef1a 100644
-> > --- a/arch/powerpc/boot/crt0.S
-> > +++ b/arch/powerpc/boot/crt0.S
-> > @@ -8,7 +8,7 @@
-> >  #include "ppc_asm.h"
-> >
-> >  RELA = 7
-> > -RELACOUNT = 0x6ffffff9
-> > +RELASZ = 8
-> >
-> >         .data
-> >         /* A procedure descriptor used when booting this as a COFF file.
-> > @@ -65,7 +65,7 @@ p_base:       mflr    r10             /* r10 now points to runtime addr of p_base */
-> >         subf    r11,r11,r12     /* runtime - linktime offset */
-> >
-> >         /* The dynamic section contains a series of tagged entries.
-> > -        * We need the RELA and RELACOUNT entries. */
-> > +        * We need the RELA and RELASZ entries. */
-> >         li      r9,0
-> >         li      r0,0
-> >  9:     lwz     r8,0(r12)       /* get tag */
-> > @@ -75,18 +75,21 @@ p_base:     mflr    r10             /* r10 now points to runtime addr of p_base */
-> >         bne     11f
-> >         lwz     r9,4(r12)       /* get RELA pointer in r9 */
-> >         b       12f
-> > -11:    addis   r8,r8,(-RELACOUNT)@ha
-> > -       cmpwi   r8,RELACOUNT@l
-> > +11:    cmpwi   r8,RELASZ
-> >         bne     12f
-> > -       lwz     r0,4(r12)       /* get RELACOUNT value in r0 */
-> > +       lwz     r0,4(r12)       /* get RELASZ / 24 in r0 */
-> > +       lis     r8,0xaaaa
-> > +       ori     r8,r8,0xaaab
-> > +       mulhwu  r0,r0,r8
-> > +       srwi    r0,r0,4
->
-> Both translation units include arch/powerpc/include/asm/ppc_asm.h,
-> which happens to define LOAD_REG_IMMEDIATE. Let's reuse that rather
-> than open code lis+ori?
->
-> >  12:    addi    r12,r12,8
-> >         b       9b
-> >
-> >         /* The relocation section contains a list of relocations.
-> >          * We now do the R_PPC_RELATIVE ones, which point to words
-> >          * which need to be initialized with addend + offset.
-> > -        * The R_PPC_RELATIVE ones come first and there are RELACOUNT
-> > -        * of them. */
-> > +        * The R_PPC_RELATIVE ones come first and there are at most
-> > +         * RELASZ/24 of them. */
-> >  10:    /* skip relocation if we don't have both */
-> >         cmpwi   r0,0
-> >         beq     3f
-> > @@ -160,14 +163,17 @@ p_base:   mflr    r10             /* r10 now points to runtime addr of p_base */
-> >         bne     10f
-> >         ld      r13,8(r11)       /* get RELA pointer in r13 */
-> >         b       11f
-> > -10:    addis   r12,r12,(-RELACOUNT)@ha
-> > -       cmpdi   r12,RELACOUNT@l
-> > +10:    cmpdi   r12,RELASZ
-> >         bne     11f
-> > -       ld      r8,8(r11)       /* get RELACOUNT value in r8 */
-> > +       ld      r8,8(r11)       /* get RELASZ / 24 in r8 */
-> > +       lis     r0,0xaaaa
-> > +       ori     r0,r0,0xaaab
-> > +       mulhwu  r8,r8,r0
-> > +       srwi    r8,r8,4
-> >  11:    addi    r11,r11,16
-> >         b       9b
-> >  12:
-> > -       cmpdi   r13,0            /* check we have both RELA and RELACOUNT */
-> > +       cmpdi   r13,0            /* check we have both RELA and RELASZ */
-> >         cmpdi   cr1,r8,0
-> >         beq     3f
-> >         beq     cr1,3f
-> > diff --git a/arch/powerpc/kernel/reloc_64.S b/arch/powerpc/kernel/reloc_64.S
-> > index 02d4719bf43a..362be759609f 100644
-> > --- a/arch/powerpc/kernel/reloc_64.S
-> > +++ b/arch/powerpc/kernel/reloc_64.S
-> > @@ -8,7 +8,7 @@
-> >  #include <asm/ppc_asm.h>
-> >
-> >  RELA = 7
-> > -RELACOUNT = 0x6ffffff9
-> > +RELASZ = 8
-> >  R_PPC64_RELATIVE = 22
-> >
-> >  /*
-> > @@ -27,7 +27,7 @@ _GLOBAL(relocate)
-> >         add     r10,r10,r12     /* r10 has runtime addr of _stext */
-> >
-> >         /*
-> > -        * Scan the dynamic section for the RELA and RELACOUNT entries.
-> > +        * Scan the dynamic section for the RELA and RELASZ entries.
-> >          */
-> >         li      r7,0
-> >         li      r8,0
-> > @@ -38,13 +38,16 @@ _GLOBAL(relocate)
-> >         bne     2f
-> >         ld      r7,8(r11)       /* get RELA pointer in r7 */
-> >         b       3f
-> > -2:     addis   r6,r6,(-RELACOUNT)@ha
-> > -       cmpdi   r6,RELACOUNT@l
-> > +2:     cmpdi   r6,RELASZ
-> >         bne     3f
-> > -       ld      r8,8(r11)       /* get RELACOUNT value in r8 */
-> > +       ld      r8,8(r11)       /* get RELA / 24 in r8 */
-> > +       lis     r0,0xaaaa
-> > +       ori     r0,r0,0xaaab
-> > +       mulhwu  r8,r8,r0
-> > +       srwi    r8,r8,4
-> >  3:     addi    r11,r11,16
-> >         b       1b
-> > -4:     cmpdi   r7,0            /* check we have both RELA and RELACOUNT */
-> > +4:     cmpdi   r7,0            /* check we have both RELA and RELASZ */
-> >         cmpdi   cr1,r8,0
-> >         beq     6f
-> >         beq     cr1,6f
-> > --
-> > 2.35.1.616.g0bdcbb4464-goog
-> >
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
->
+Hi Jiaxin,
 
-I rebased the patch on
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-master and got a conflict.
-Seems that https://lore.kernel.org/linuxppc-dev/20220309061822.168173-1-aik@ozlabs.ru/T/#u
-("[PATCH kernel v4] powerpc/64: Add UADDR64 relocation support") fixed
-the issue.
-It just doesn't change arch/powerpc/boot/crt0.S
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on next-20220310]
+[cannot apply to broonie-spi/for-next robh/for-next v5.17-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jiaxin-Yu/ASoC-mediatek-mt8192-support-rt1015p_rt5682s/20220310-233935
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220311/202203110529.Y6LSPpwn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/0342dabf16890d0fa839ccbedcb3fee8936cd749
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jiaxin-Yu/ASoC-mediatek-mt8192-support-rt1015p_rt5682s/20220310-233935
+        git checkout 0342dabf16890d0fa839ccbedcb3fee8936cd749
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/mediatek/mt8192/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c:1170:21: warning: data argument not used by format string [-Wformat-extra-args]
+                                         __func__, dai_link->name);
+                                                   ^
+   sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c:1177:21: warning: data argument not used by format string [-Wformat-extra-args]
+                                         __func__, dai_link->name);
+                                                   ^
+   2 warnings generated.
+
+
+vim +1170 sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
+
+  1115	
+  1116	static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
+  1117	{
+  1118		struct snd_soc_card *card;
+  1119		struct device_node *platform_node, *hdmi_codec, *headset_codec, *speaker_codec;
+  1120		int ret, i;
+  1121		struct snd_soc_dai_link *dai_link;
+  1122		struct mt8192_mt6359_priv *priv;
+  1123		struct device *dev;
+  1124	
+  1125		card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
+  1126		if (!card)
+  1127			return -EINVAL;
+  1128		card->dev = &pdev->dev;
+  1129		dev = &pdev->dev;
+  1130	
+  1131		if (of_device_is_compatible(dev->of_node, RT1015P_RT5682_OF_NAME))
+  1132			card->name = RT1015P_RT5682_CARD_NAME;
+  1133		else if (of_device_is_compatible(dev->of_node, RT1015P_RT5682S_OF_NAME))
+  1134			card->name = RT1015P_RT5682S_CARD_NAME;
+  1135		else
+  1136			dev_dbg(dev, "No need to set card name\n");
+  1137	
+  1138		platform_node = of_parse_phandle(dev->of_node, "mediatek,platform", 0);
+  1139		if (!platform_node) {
+  1140			ret = -EINVAL;
+  1141			dev_err_probe(dev, ret, "Property 'platform' missing or invalid\n");
+  1142			goto err_platform_node;
+  1143		}
+  1144	
+  1145		hdmi_codec = of_parse_phandle(dev->of_node, "mediatek,hdmi-codec", 0);
+  1146		if (!hdmi_codec) {
+  1147			ret = -EINVAL;
+  1148			dev_err_probe(dev, ret, "Property 'hdmi-codec' missing or invalid\n");
+  1149			goto err_hdmi_codec;
+  1150		}
+  1151	
+  1152		speaker_codec = of_get_child_by_name(dev->of_node, "mediatek,speaker-codec");
+  1153		if (!speaker_codec) {
+  1154			ret = -EINVAL;
+  1155			dev_err_probe(dev, ret, "Property 'speaker_codec' missing or invalid\n");
+  1156			goto err_speaker_codec;
+  1157		}
+  1158	
+  1159		headset_codec = of_get_child_by_name(dev->of_node, "mediatek,headset-codec");
+  1160		if (!headset_codec) {
+  1161			ret = -EINVAL;
+  1162			dev_err_probe(dev, ret, "Property 'headset_codec' missing or invalid\n");
+  1163			goto err_headset_codec;
+  1164		}
+  1165	
+  1166		for_each_card_prelinks(card, i, dai_link) {
+  1167			ret = mt8192_mt6359_card_set_be_link(card, dai_link, speaker_codec, "I2S3");
+  1168			if (ret) {
+  1169				dev_err_probe(&pdev->dev, ret, "%s set speaker_codec fail\n",
+> 1170					      __func__, dai_link->name);
+  1171				goto err_probe;
+  1172			}
+  1173	
+  1174			ret = mt8192_mt6359_card_set_be_link(card, dai_link, headset_codec, "I2S8");
+  1175			if (ret) {
+  1176				dev_err_probe(&pdev->dev, ret, "%s set headset_codec fail\n",
+  1177					      __func__, dai_link->name);
+  1178				goto err_probe;
+  1179			}
+  1180	
+  1181			ret = mt8192_mt6359_card_set_be_link(card, dai_link, headset_codec, "I2S9");
+  1182			if (ret) {
+  1183				dev_err_probe(&pdev->dev, ret, "%s set %s headset_codec fail\n",
+  1184					      __func__, dai_link->name);
+  1185				goto err_probe;
+  1186			}
+  1187	
+  1188			if (hdmi_codec && strcmp(dai_link->name, "TDM") == 0) {
+  1189				dai_link->codecs->of_node = hdmi_codec;
+  1190				dai_link->ignore = 0;
+  1191			}
+  1192	
+  1193			if (strcmp(dai_link->codecs[0].dai_name, RT1015_CODEC_DAI) == 0)
+  1194				dai_link->ops = &mt8192_rt1015_i2s_ops;
+  1195	
+  1196			if (!dai_link->platforms->name)
+  1197				dai_link->platforms->of_node = platform_node;
+  1198		}
+  1199	
+  1200		priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+  1201		if (!priv) {
+  1202			ret = -ENOMEM;
+  1203			goto err_probe;
+  1204		}
+  1205		snd_soc_card_set_drvdata(card, priv);
+  1206	
+  1207		ret = mt8192_afe_gpio_init(&pdev->dev);
+  1208		if (ret) {
+  1209			dev_err_probe(&pdev->dev, ret, "%s init gpio error\n", __func__);
+  1210			goto err_probe;
+  1211		}
+  1212	
+  1213		ret = devm_snd_soc_register_card(&pdev->dev, card);
+  1214		if (ret)
+  1215			dev_err_probe(&pdev->dev, ret,
+  1216				      "%s snd_soc_register_card fail\n", __func__);
+  1217	
+  1218	err_probe:
+  1219		of_node_put(headset_codec);
+  1220	err_headset_codec:
+  1221		of_node_put(speaker_codec);
+  1222	err_speaker_codec:
+  1223		of_node_put(hdmi_codec);
+  1224	err_hdmi_codec:
+  1225		of_node_put(platform_node);
+  1226	err_platform_node:
+  1227	
+  1228		return ret;
+  1229	}
+  1230	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
