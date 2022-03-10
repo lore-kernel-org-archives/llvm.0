@@ -1,42 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C946B7A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 06:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A157A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 07:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646895157; x=1678431157;
+  t=1646896419; x=1678432419;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c5Cn77my4fxZsjlLZmTRZYb8Yewm32e4tPUpwayZdUs=;
-  b=Q4UiWmZbUFlmL/52+FhsUMDmXNMj5EZaYzo41x357Pu9fL3auiaVueYM
-   aZJRjyjl5kR2kYhVEU7z/JoVOpxAnALEsCN5G8g8Y2cctjHnWa1hnVhdP
-   sf+g/uQn3CUrtknpMhDdpF0xuJf7bBlwgtZIBpz+MvfLtlytRrRO39E8Y
-   g8xywexFwbOwBDQb2ltzdJsFyjXzyoCqUFgH+CUgNXLSx+yjKQPsFhZr2
-   3AbHktkM7LOpxZUke/hq8j1BctheGzGmUz91ulEsphKg1qchxyJbf5fy3
-   b6g976whrVGV2W72PWsE2o7aVL3DhDD/JkrROjGiP1OzPZtWm0Nov47Aj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254005498"
+  bh=5ernpgFyeVBaec0j6i1p29XPpb2BWKA2H3QhtbjZW8c=;
+  b=US/WuWJYNvD36MuEPxUOBSsPkqCHTwFbH5EFF53gc2V9gn8PSG/QeSN1
+   PJ55s9AHy1GvH4sIokDy44UyxJLsH8eBKe2B0PmfjK2Ui0fqrYEKKjx84
+   sX6+7jBZPZGSqQ0EnsIuf9wDpmdPSDbpfjk8rvl19zZHLfBw7MVvxM2mW
+   ynh9XaLJ4Ewdb9shbQBq21F7QoOc8ZGqUMx2vbBGRWBtahxM64buyz+nA
+   TGUrUJplW1k07YnBJ7DdSHxGtz0mEAX19yRyeDy7txLWX06RDJ+i3J4vp
+   syoQJyhLx7QGfY2XKWP66gy4DuBGbe2jH8Mce+kzPTcG7IxthkwfjQD8H
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="341607073"
 X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="254005498"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 22:52:37 -0800
+   d="scan'208";a="341607073"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 23:13:38 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="513861327"
+   d="scan'208";a="712252760"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2022 22:52:34 -0800
+  by orsmga005.jf.intel.com with ESMTP; 09 Mar 2022 23:13:36 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nSCf4-0004Uo-8G; Thu, 10 Mar 2022 06:52:34 +0000
-Date: Thu, 10 Mar 2022 14:52:17 +0800
+	id 1nSCzP-0004WM-LZ; Thu, 10 Mar 2022 07:13:35 +0000
+Date: Thu, 10 Mar 2022 15:12:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
+To: Dai Ngo <dai.ngo@oracle.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-pci@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [helgaas-pci:for-linus 3/3] arch/x86/kernel/resource.c:51:18:
- warning: missing terminating '"' character
-Message-ID: <202203101402.DpRD30NZ-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>
+Subject: [cel:nfsd-courteous-server 39/39] fs/nfsd/nfs4state.c:2460:60:
+ warning: format specifies type 'long' but the argument has type 'u64' (aka
+ 'unsigned long long')
+Message-ID: <202203101509.pWJbkMAO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,83 +47,82 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git for-linus
-head:   3018c5d59f923be2fa2d91c4ce02c8d97a37edce
-commit: 3018c5d59f923be2fa2d91c4ce02c8d97a37edce [3/3] x86/PCI: Preserve host bridge windows completely covered by E820
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220310/202203101402.DpRD30NZ-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-courteous-server
+head:   25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea
+commit: 25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea [39/39] NFSD: Show state of courtesy clients in client info
+config: arm-colibri_pxa270_defconfig (https://download.01.org/0day-ci/archive/20220310/202203101509.pWJbkMAO-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?id=3018c5d59f923be2fa2d91c4ce02c8d97a37edce
-        git remote add helgaas-pci https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
-        git fetch --no-tags helgaas-pci for-linus
-        git checkout 3018c5d59f923be2fa2d91c4ce02c8d97a37edce
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea
+        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+        git fetch --no-tags cel nfsd-courteous-server
+        git checkout 25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/nfsd/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kernel/resource.c:51:18: warning: missing terminating '"' character [-Winvalid-pp-token]
-                           dev_info(dev, "resource %pR fully covered by e820 entry
-                                         ^
-   arch/x86/kernel/resource.c:52:24: warning: missing terminating '"' character [-Winvalid-pp-token]
-   [mem %#010Lx-%#010Lx]\n",
-                          ^
-   arch/x86/kernel/resource.c:51:18: error: expected expression
-                           dev_info(dev, "resource %pR fully covered by e820 entry
-                                         ^
-   2 warnings and 1 error generated.
+>> fs/nfsd/nfs4state.c:2460:60: warning: format specifies type 'long' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
+           seq_printf(m, "time since last renew: %02ld:%02d:%02d\n", hrs, mins, secs);
+                                                 ~~~~~               ^~~
+                                                 %02llu
+   1 warning generated.
 
 
-vim +51 arch/x86/kernel/resource.c
+vim +2460 fs/nfsd/nfs4state.c
 
-    26	
-    27	void remove_e820_regions(struct device *dev, struct resource *avail)
-    28	{
-    29		struct resource orig = *avail;
-    30		int i;
-    31		struct e820_entry *entry;
-    32		u64 e820_start, e820_end;
-    33	
-    34		if (!(avail->flags & IORESOURCE_MEM))
-    35			return;
-    36	
-    37		for (i = 0; i < e820_table->nr_entries; i++) {
-    38			entry = &e820_table->entries[i];
-    39			e820_start = entry->addr;
-    40			e820_end = entry->addr + entry->size - 1;
-    41	
-    42			/*
-    43			 * If an E820 entry covers just part of the resource, we
-    44			 * assume E820 is telling us about something like host
-    45			 * bridge register space that is unavailable for PCI
-    46			 * devices.  But if it covers the *entire* resource, it's
-    47			 * more likely just telling us that this is MMIO space, and
-    48			 * that doesn't need to be removed.
-    49			 */
-    50			if (e820_start <= avail->start && avail->end <= e820_end) {
-  > 51				dev_info(dev, "resource %pR fully covered by e820 entry
-    52	[mem %#010Lx-%#010Lx]\n",
-    53					 avail, e820_start, e820_end);
-    54	
-    55				continue;
-    56			}
-    57	
-    58			resource_clip(avail, e820_start, e820_end);
-    59			if (orig.start != avail->start || orig.end != avail->end) {
-    60				dev_info(dev, "clipped %pR to %pR for e820 entry [mem %#010Lx-%#010Lx]\n",
-    61					 &orig, avail, e820_start, e820_end);
-    62				orig = *avail;
-    63			}
-    64		}
-    65	}
-    66	
+  2437	
+  2438	static int client_info_show(struct seq_file *m, void *v)
+  2439	{
+  2440		struct inode *inode = m->private;
+  2441		struct nfs4_client *clp;
+  2442		u64 clid, hrs;
+  2443		u32 mins, secs;
+  2444	
+  2445		clp = get_nfsdfs_clp(inode);
+  2446		if (!clp)
+  2447			return -ENXIO;
+  2448		memcpy(&clid, &clp->cl_clientid, sizeof(clid));
+  2449		seq_printf(m, "clientid: 0x%llx\n", clid);
+  2450		seq_printf(m, "address: \"%pISpc\"\n", (struct sockaddr *)&clp->cl_addr);
+  2451		if (test_bit(NFSD4_CLIENT_CONFIRMED, &clp->cl_flags))
+  2452			seq_puts(m, "status: confirmed\n");
+  2453		else
+  2454			seq_puts(m, "status: unconfirmed\n");
+  2455		seq_printf(m, "courtesy client: %s\n",
+  2456			test_bit(NFSD4_CLIENT_COURTESY, &clp->cl_flags) ? "yes" : "no");
+  2457		hrs = div_u64_rem(ktime_get_boottime_seconds() - clp->cl_time,
+  2458					3600, &secs);
+  2459		mins = div_u64_rem((u64)secs, 60, &secs);
+> 2460		seq_printf(m, "time since last renew: %02ld:%02d:%02d\n", hrs, mins, secs);
+  2461		seq_printf(m, "name: ");
+  2462		seq_quote_mem(m, clp->cl_name.data, clp->cl_name.len);
+  2463		seq_printf(m, "\nminor version: %d\n", clp->cl_minorversion);
+  2464		if (clp->cl_nii_domain.data) {
+  2465			seq_printf(m, "Implementation domain: ");
+  2466			seq_quote_mem(m, clp->cl_nii_domain.data,
+  2467						clp->cl_nii_domain.len);
+  2468			seq_printf(m, "\nImplementation name: ");
+  2469			seq_quote_mem(m, clp->cl_nii_name.data, clp->cl_nii_name.len);
+  2470			seq_printf(m, "\nImplementation time: [%lld, %ld]\n",
+  2471				clp->cl_nii_time.tv_sec, clp->cl_nii_time.tv_nsec);
+  2472		}
+  2473		seq_printf(m, "callback state: %s\n", cb_state2str(clp->cl_cb_state));
+  2474		seq_printf(m, "callback address: %pISpc\n", &clp->cl_cb_conn.cb_addr);
+  2475		drop_client(clp);
+  2476	
+  2477		return 0;
+  2478	}
+  2479	
 
 ---
-0-DAY CI Kernel Test Service
+0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
