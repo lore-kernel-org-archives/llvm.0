@@ -1,92 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39BEC5CA9
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 22:09:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C40AAC340E9;
-	Thu, 10 Mar 2022 22:09:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646950180;
-	bh=nbZcLuFYhFoAwayMU7WIynO05puat2p3vzjHgrWypJo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gbqrCE4jXmfgTJyo13N2P9AnUUqV53HHGqmjPA3cx5b08Ri4OJUnE9Q4OqHY5PeD8
-	 NWws8QrfwaOztwnMhv8QUcPEk4r8MFwrYU+tXWGVIp7xUU5BakKICBMFEMUWWz2icn
-	 MxxqIfETRUt7eAqy1gZX8lCFFOKzS3cDcxLj+kvGAIDN1UqIDlrc1Eioe3lwiKn1Jz
-	 YJoD8RoOPu6ARD/+Ia5KWGfC28xGXIQ5YwoS3aHCYMYRs6qV1pNoY4EQ83gH11zPsr
-	 cWE7WkSAdJjEC1tKr3aabgbmJV0hDrG6cRh+bzzKDuO0zPgt+OnuwKBnG5UEwOz5sH
-	 iTlGGjDBG+wfg==
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	"Michael S . Tsirkin" <mst@redhat.com>,
-	llvm@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 2/2] Documentation/sparse: Add hints about __CHECKER__
-Date: Thu, 10 Mar 2022 16:09:27 -0600
-Message-Id: <20220310220927.245704-3-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220310220927.245704-1-helgaas@kernel.org>
-References: <20220310220927.245704-1-helgaas@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEE75CA9
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 22:23:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646950988; x=1678486988;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fF+3qyUbUukq0jg8sTNO94/16OGrvG79CjMrQVctGRM=;
+  b=Q/TCAC4aYNyCnLLZ8jQMTjWgbmxzEkEjTiGPVC37NaBugId/aUhYYvvo
+   lsHjdVjk5RebNku7Wv1anTqCjJ5Q0n4IEj33ju45vXxNsKzlyymFvpBAS
+   vOx92x3V8CIppXzZ/+rBEMl7No9zsKpK7r1jJbDqfQsKS9ZbTL/nyhxwT
+   mwhrG8cZeILw6haRpxRYRRNI3CxVd7gHg021XiHm4ruhtywGAHa/U/HKp
+   Sk0HLuUYJwfuRwQhF7bKncgXDmp/ktQN/VCjyQ2aq/nd/ugp0sczvNJ6C
+   7I2WoxE80wNOCdrEFlKL47pUoESktspF28i/lmXKr+FVn+i+Z/VAzPBdV
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="237568371"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="237568371"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 14:23:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="633160066"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2022 14:23:04 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSRBY-0005Ta-5G; Thu, 10 Mar 2022 22:23:04 +0000
+Date: Fri, 11 Mar 2022 06:22:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrew Scull <ascull@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Subject: arch/arm64/kvm/handle_exit.c:295:24: warning: no previous prototype
+ for function 'nvhe_hyp_panic_handler'
+Message-ID: <202203110617.SylT3htc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1db333d9a51f3459fba1bcaa564d95befe79f0b3
+commit: aec0fae62e47050019474936248a311a0ab08705 KVM: arm64: Log source when panicking from nVHE hyp
+date:   11 months ago
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220311/202203110617.SylT3htc-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aec0fae62e47050019474936248a311a0ab08705
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout aec0fae62e47050019474936248a311a0ab08705
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ arch/arm64/kvm/ drivers/gpu/drm/tegra/ drivers/usb/host/ kernel/debug/kdb/
 
-Several attributes depend on __CHECKER__, but previously there was no clue
-in the tree about when __CHECKER__ might be defined.  Add hints at the most
-common places (__kernel, __user, __iomem, __bitwise) and in the sparse
-documentation.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+All warnings (new ones prefixed by >>):
+
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:182:25: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_CP14_64]    = kvm_handle_cp14_64,
+                                     ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:183:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_HVC32]      = handle_hvc,
+                                     ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:184:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_SMC32]      = handle_smc,
+                                     ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:185:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_HVC64]      = handle_hvc,
+                                     ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:186:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_SMC64]      = handle_smc,
+                                     ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:187:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_SYS64]      = kvm_handle_sys_reg,
+                                     ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:188:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_SVE]        = handle_sve,
+                                     ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:189:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_IABT_LOW]   = kvm_handle_guest_abort,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:190:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_DABT_LOW]   = kvm_handle_guest_abort,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:191:28: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_SOFTSTP_LOW]= kvm_handle_guest_debug,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:192:28: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_WATCHPT_LOW]= kvm_handle_guest_debug,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:193:28: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_BREAKPT_LOW]= kvm_handle_guest_debug,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:194:24: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_BKPT32]     = kvm_handle_guest_debug,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:195:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_BRK64]      = kvm_handle_guest_debug,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:196:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_FP_ASIMD]   = handle_no_fpsimd,
+                                     ^~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:197:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_PAC]        = kvm_handle_ptrauth,
+                                     ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+>> arch/arm64/kvm/handle_exit.c:295:24: warning: no previous prototype for function 'nvhe_hyp_panic_handler' [-Wmissing-prototypes]
+   void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
+                          ^
+   arch/arm64/kvm/handle_exit.c:295:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
+   ^
+   static 
+   22 warnings generated.
+
+
+vim +/nvhe_hyp_panic_handler +295 arch/arm64/kvm/handle_exit.c
+
+   294	
+ > 295	void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
+
 ---
- Documentation/dev-tools/sparse.rst | 2 ++
- include/linux/compiler_types.h     | 1 +
- include/uapi/linux/types.h         | 1 +
- 3 files changed, 4 insertions(+)
-
-diff --git a/Documentation/dev-tools/sparse.rst b/Documentation/dev-tools/sparse.rst
-index 02102be7ff49..dc791c8d84d1 100644
---- a/Documentation/dev-tools/sparse.rst
-+++ b/Documentation/dev-tools/sparse.rst
-@@ -100,3 +100,5 @@ have already built it.
- 
- The optional make variable CF can be used to pass arguments to sparse.  The
- build system passes -Wbitwise to sparse automatically.
-+
-+Note that sparse defines the __CHECKER__ preprocessor symbol.
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 3c1795fdb568..4b3915ce38a4 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -4,6 +4,7 @@
- 
- #ifndef __ASSEMBLY__
- 
-+/* sparse defines __CHECKER__; see Documentation/dev-tools/sparse.rst */
- #ifdef __CHECKER__
- /* address spaces */
- # define __kernel	__attribute__((address_space(0)))
-diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
-index 71696f424ac8..c4dc597f3dcf 100644
---- a/include/uapi/linux/types.h
-+++ b/include/uapi/linux/types.h
-@@ -19,6 +19,7 @@
-  * any application/library that wants linux/types.h.
-  */
- 
-+/* sparse defines __CHECKER__; see Documentation/dev-tools/sparse.rst */
- #ifdef __CHECKER__
- #define __bitwise	__attribute__((bitwise))
- #else
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
