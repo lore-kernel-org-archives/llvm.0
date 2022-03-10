@@ -1,104 +1,97 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A13D18D
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 14:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646923343; x=1678459343;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OJKaj+dkol1FacgiHUcMifV8v9tMiNuuIHX0fa00Bf0=;
-  b=laeHErhLCsVi8eKkCT3dq/0jbaKcqXqABmMUwE0Yn2H8Lf1kK8mAuXGJ
-   CwTbHdfR4gA4aVhZePDoWo0FDzT9MbFADEEJ/5qCcaaHLCZXq/fPst3xN
-   cSWafNYLrbzPIu9x4wgE8P2UcXZbA2NVrGvQkItXrY/Mkzs8UwON0mwsn
-   XMhkJFHUjfpVUe3quuSFdPuVMuMCDH6GvawANdAoE1YZpbjELpRAgKKGq
-   rXKBhF6q7ra5OD0FqhroAr8pi3poaRgaG/da8hG2ZK12ZKrixvQOJoUh8
-   9QerQI4UcF+I54PxtBupLTWeTDzLs6JZRRi3xitjlx21laV2/DQFwJ4VL
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="318486734"
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="318486734"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:42:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="633006274"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2022 06:42:21 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSJzg-00051c-7O; Thu, 10 Mar 2022 14:42:20 +0000
-Date: Thu, 10 Mar 2022 22:42:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>
-Subject: arch/arm64/kvm/va_layout.c:292:6: warning: no previous prototype for
- function 'kvm_compute_final_ctr_el0'
-Message-ID: <202203102230.x3TDH4ku-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC1A18D
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 15:35:26 +0000 (UTC)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <heiko@sntech.de>)
+	id 1nSK7V-0004bE-W9; Thu, 10 Mar 2022 15:50:26 +0100
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: Colin Ian King <colin.i.king@gmail.com>, Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sandy Huang <hjc@rock-chips.com>, David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, knaerzche@gmail.com
+Subject: Re: [PATCH] drm/rockchip: remove redundant assignment to pointer connector
+Date: Thu, 10 Mar 2022 15:50:25 +0100
+Message-ID: <4453075.DPozGzHrQt@diego>
+In-Reply-To: <CAKwvOdkXNGRJkZDd7Cg8jhL9Ex7R+VPYqEEc+VpwDyi9NJKXQQ@mail.gmail.com>
+References: <20220307181704.149076-1-colin.i.king@gmail.com> <CAKwvOdkXNGRJkZDd7Cg8jhL9Ex7R+VPYqEEc+VpwDyi9NJKXQQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1db333d9a51f3459fba1bcaa564d95befe79f0b3
-commit: 755db23420a1ce4b740186543432983e9bbe713e KVM: arm64: Generate final CTR_EL0 value when running in Protected mode
-date:   12 months ago
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220310/202203102230.x3TDH4ku-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=755db23420a1ce4b740186543432983e9bbe713e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 755db23420a1ce4b740186543432983e9bbe713e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ arch/arm64/kvm/ drivers/gpu/drm/tegra/ drivers/usb/host/ kernel/debug/kdb/
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+looks like I wasn't in the original recipient list, so only got Nick's
+answer.
 
-All warnings (new ones prefixed by >>):
+Am Mittwoch, 9. M=E4rz 2022, 00:10:31 CET schrieb Nick Desaulniers:
+> On Mon, Mar 7, 2022 at 10:17 AM Colin Ian King <colin.i.king@gmail.com> w=
+rote:
+> >
+> > The pointer connector is being assigned a value that is never read,
+> > it is being re-assigned in the following statement. The assignment
+> > is redundant and can be removed.
+> >
+> > Cleans up clang scan build warning:
+> > drivers/gpu/drm/rockchip/rockchip_rgb.c:153:2: warning: Value stored
+> > to 'connector' is never read [deadcode.DeadStores]
+>=20
+> + Author & reviewer of:
+> Fixes: 2e87bf389e13 ("drm/rockchip: add DRM_BRIDGE_ATTACH_NO_CONNECTOR
+> flag to drm_bridge_attach")
+>=20
+> >
+> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> > ---
+> >  drivers/gpu/drm/rockchip/rockchip_rgb.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/rockchip/rockchip_rgb.c b/drivers/gpu/drm/=
+rockchip/rockchip_rgb.c
+> > index 2494b079489d..92a727931a49 100644
+> > --- a/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> > +++ b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> > @@ -150,7 +150,6 @@ struct rockchip_rgb *rockchip_rgb_init(struct devic=
+e *dev,
+> >         if (ret)
+> >                 goto err_free_encoder;
+> >
+> > -       connector =3D &rgb->connector;
+> >         connector =3D drm_bridge_connector_init(rgb->drm_dev, encoder);
 
-   arch/arm64/kvm/va_layout.c:188:6: warning: no previous prototype for function 'kvm_patch_vector_branch' [-Wmissing-prototypes]
-   void kvm_patch_vector_branch(struct alt_instr *alt,
-        ^
-   arch/arm64/kvm/va_layout.c:188:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kvm_patch_vector_branch(struct alt_instr *alt,
-   ^
-   static 
-   arch/arm64/kvm/va_layout.c:286:6: warning: no previous prototype for function 'kvm_get_kimage_voffset' [-Wmissing-prototypes]
-   void kvm_get_kimage_voffset(struct alt_instr *alt,
-        ^
-   arch/arm64/kvm/va_layout.c:286:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kvm_get_kimage_voffset(struct alt_instr *alt,
-   ^
-   static 
->> arch/arm64/kvm/va_layout.c:292:6: warning: no previous prototype for function 'kvm_compute_final_ctr_el0' [-Wmissing-prototypes]
-   void kvm_compute_final_ctr_el0(struct alt_instr *alt,
-        ^
-   arch/arm64/kvm/va_layout.c:292:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kvm_compute_final_ctr_el0(struct alt_instr *alt,
-   ^
-   static 
-   3 warnings generated.
+I don't think this will work as expected.
+
+Yes, the whole thing looks a bit broken right now, but the connector
+field in the rockchip_rgb struct still exists and rockchip_rgb_fini also
+still uses it when calling drm_connector_cleanup.
+
+Same issue seems to exist in in rockchip_lvds.c with drm_connector_cleanup
+it seems.
+
+I guess drm_bridge_connector_destroy() is responsible for the cleanup so
+the drm_connector_cleanup call both in rockchip_rgb and rockchip_lvds
+as well as the local connector elements can go away as well?
 
 
-vim +/kvm_compute_final_ctr_el0 +292 arch/arm64/kvm/va_layout.c
+Heiko
 
-   291	
- > 292	void kvm_compute_final_ctr_el0(struct alt_instr *alt,
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >         if (IS_ERR(connector)) {
+> >                 DRM_DEV_ERROR(drm_dev->dev,
+> > --
+> > 2.35.1
+> >
+> >
+>=20
+>=20
+>=20
+
+
+
+
