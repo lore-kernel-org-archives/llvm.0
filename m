@@ -1,179 +1,124 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339335A38
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 20:49:43 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id w12so11532935lfr.9
-        for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 12:49:43 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898E55A38
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 20:59:40 +0000 (UTC)
+Received: by mail-lj1-f175.google.com with SMTP id l12so9455482ljh.12
+        for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 12:59:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LoJnjb1eTkY6RbpEBPOSq+mDiZAbj8l9xQTfBcxy8oU=;
-        b=Y7FvDAJsL40Mo2PA9+bZiLPYtKMnLPXzXJ5HLFicNxmCzZdjJYLjv5yqpsyhCi7vOr
-         CD+QPTbXobrKHAuNAA7EVyR6s5AJ2oTb3lHlMncdUyYPQ4ai6e5Om/5yCjw+F2P89/hF
-         lzvVtisopmYw9PsQWFgxf4X1aLVZkcgRXPVxUBeu2A8j9m7lL4/+HuQTMMTU8yAuUPIr
-         /9UskIi+Izx38o1RWUn/mGiOU115InWglwpA0y6MGBMTHlx/0TvsozCBTKVyaBjguFqC
-         U25qw5VYUkLud9lfcYzlxnt+DNX0zT/h2pGf4bXY+rXL37GWa3nX4nAjILfxiBwfELTC
-         y3yg==
+        bh=hF2vs9NjbnbTdElM7rjadc3y+URyZ5G/GV8Xp9q1mTc=;
+        b=jTZl4VzzG5Q/ZojFtK0EuWylpf+MnbQerQTQQNfnAaCNKZymDKsEAKa5Fj3TO2YKsC
+         QTpys3btqW2Pvkks/qOmvvXxNAMrCpZlFVTKykLpxMFVxI6Q/DuCp0UkrAYh2PMd73NY
+         LnVj2uYkUal0uVXSSwNUzosRY7Ulu0YgBKzfJvz/rIODlteH479tBcaXz9YyiJzslCdy
+         bQDR6HjFtB1GaBxAFkEdscDkleuxvw6HlA7REQJUYS3V11pkTJ0Z4RsVOjHsE/zv1N/w
+         uTlucTGl2lViLrmHFOya2MO5LmjoE+qk9PO376fPxjuUhJRlbHF5W4XM5Pt7LDk2t25x
+         hYAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LoJnjb1eTkY6RbpEBPOSq+mDiZAbj8l9xQTfBcxy8oU=;
-        b=JABDvb5pEFfwPDfGSp937okvlgRmI/FKEsxUmZjzVoyl9BxCEssiPCh6wyCTjJfmbt
-         QRr0WFyB+YpMpdsJRbFT9LWFenAE2/qlMSYQ9R2PHSYEde/UkU6puCE8A+IyWWA7w/kd
-         n4nkOn4BtzP8QwK+cymyfNvzqWf9olyCnGTKhFwNfPdT+P09mVQPsRlCpy2GRTwqdN4C
-         CcjtE0PfDH5OMsYZa6abZ/b9CQ3c3rjc8jWCdjX3pN0s/zzpsMdzAl+GaPOnQpPwFsK/
-         N4KSQBA2rVUn3nOZ1+47NGEvRCZdEIG1RxAKS3+LP1XPZ9rJCx4yg6EgT5WkJe2o7RvD
-         6QLw==
-X-Gm-Message-State: AOAM533EKRmDpwbPHsb7OsZeqoZQQIm09He6fIQv15e+anDrYoDnyAwm
-	oZcnM832xE6gcecf+F0QRBWCsCbiHli/xfW4/jHk6w==
-X-Google-Smtp-Source: ABdhPJy8imNzaXNZDqs43TGptWccGDGO5gCC4bQU1a3VTUFE15BERAeVO8Mg8dbe5wwLt+vA1yx3Tir6Y+d/zYS/XIE=
-X-Received: by 2002:a05:6512:31d4:b0:445:e4ef:c0f8 with SMTP id
- j20-20020a05651231d400b00445e4efc0f8mr4046529lfe.626.1646945381031; Thu, 10
- Mar 2022 12:49:41 -0800 (PST)
+        bh=hF2vs9NjbnbTdElM7rjadc3y+URyZ5G/GV8Xp9q1mTc=;
+        b=vtW+g79V2DNn6Mq7aHf+dZXLzpt7ceYVwIdW+JnkNNY1ZiX7jfUd9MJtg2wJcWXbNn
+         0/lKzcY1riLL+eYG9VNIDzbxQnm1DI9x0kY4llAmsit1g5P5T3KQiGdW0XzbFiKXmUhD
+         WjE4Pb113B1ZBIrUrcN05oSti9BqbV8tsH0b3r4I9ulpc+iKcSDcQNioxL6cJ0rFOTMd
+         PK2JAgbyjrGF+4AGHMPCggplAAR5recLoZWhlr3zlDgjWYqzXdElJzrougva8hzmN6RM
+         nffsX61qnWt6MtXX2PZ0ITjkPGwT0ubLQdsFroF9snApmYaO1k+8Ccl1itqEGAFyhqPV
+         SMpg==
+X-Gm-Message-State: AOAM532VhdC+ZclrrwKuTfpzvFLuTsIdVWo7iXMTYiId5tCALRO6DDfG
+	iiyeth1IEGdq+Fl1evQ6gxeul5ck8QT60WYApxQzDw==
+X-Google-Smtp-Source: ABdhPJz7LqBzuCq1k8LyUcOYgy42GVU7SXtVjTWf+4IKEBb+ZOjwaRVTp+GH1VGP7i0urW9HLCHLpuocaa3JTpZ+XhI=
+X-Received: by 2002:a05:651c:1791:b0:243:94bd:d94c with SMTP id
+ bn17-20020a05651c179100b0024394bdd94cmr4080754ljb.468.1646945978202; Thu, 10
+ Mar 2022 12:59:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220308153011.021123062@infradead.org> <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net> <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
- <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
- <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net> <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
- <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
-In-Reply-To: <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
+References: <20220310061909.20166-1-sedat.dilek@gmail.com>
+In-Reply-To: <20220310061909.20166-1-sedat.dilek@gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 10 Mar 2022 12:49:29 -0800
-Message-ID: <CAKwvOdkyi1c9TvP_Bzn3+71kKsJzAbQZmgDzfDM8c7sce-V0Dw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: David Laight <David.Laight@aculab.com>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, "x86@kernel.org" <x86@kernel.org>, 
-	"joao@overdrivepizza.com" <joao@overdrivepizza.com>, "hjl.tools@gmail.com" <hjl.tools@gmail.com>, 
-	"jpoimboe@redhat.com" <jpoimboe@redhat.com>, 
-	"andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"keescook@chromium.org" <keescook@chromium.org>, "samitolvanen@google.com" <samitolvanen@google.com>, 
-	"mark.rutland@arm.com" <mark.rutland@arm.com>, 
-	"alyssa.milburn@intel.com" <alyssa.milburn@intel.com>, "mbenes@suse.cz" <mbenes@suse.cz>, 
-	"rostedt@goodmis.org" <rostedt@goodmis.org>, "mhiramat@kernel.org" <mhiramat@kernel.org>, 
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org" <andrii@kernel.org>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Date: Thu, 10 Mar 2022 12:59:26 -0800
+Message-ID: <CAKwvOdnAbU8gpPAba9g1ptZxSdOOTe7edT1OV_n1f=zAwp9y_g@mail.gmail.com>
+Subject: Re: [PATCH] tools: feature/test-libperl.c: Sync PERL_EMBED_CCOPTS
+ with perf
+To: Sedat Dilek <sedat.dilek@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>, Ian Rogers <irogers@google.com>, 
+	Florian Fainelli <f.fainelli@gmail.com>, Fangrui Song <maskray@google.com>, Jiri Olsa <jolsa@redhat.com>, 
+	Michael Petlan <mpetlan@redhat.com>, Leo Yan <leo.yan@linaro.org>, 
+	John Keeping <john@metanate.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Jiri Olsa <olsajiri@gmail.com>, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Mar 10, 2022 at 2:16 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed, Mar 9, 2022 at 10:19 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 >
-> On Thu, Mar 10, 2022 at 09:22:59AM +0000, David Laight wrote:
-> > From: Peter Zijlstra
-> > > Sent: 10 March 2022 09:05
-> > >
-> > > On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
-> > >
-> > > > I observed the following error when building with
-> > > > CONFIG_LTO_CLANG_FULL=y enabled:
-> > > >
-> > > > ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
-> > > > already defined
-> > > >         ibt_selftest_ip:
-> > > >         ^
-> > > >
-> > > > Seems to come from
-> > > > commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
-> > > >
-> > > > Commenting out the label in the inline asm, I then observed:
-> > > > vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
-> > > > callable instruction with modified stack frame
-> > > > vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
-> > > > mismatch: cfa1=4+64 cfa2=4+8
-> > > > These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
-> > > > disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
-> > > > the ibt_selftest_ip label).
-> > >
-> > LTO has probably inlined it twice.
+> When trying to build perf with a LLVM/Clang toolchain people see errors
+> when testing for libperl feature.
 >
-> Indeed, adding noinline to ibt_selftest() makes it work.
+> Jiri reports:
+>
+> > I'm getting some other lto related error:
+> >
+> >         $ cat test-libperl.make.output
+> >         clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+> >
+>
+> The reason is PERL_EMBED_CCOPTS is defined in two places:
+>
+> tools/build/feature/Makefile
+> tools/perf/Makefile.config
+>
+> As an result FLAGS_PERL_EMBED is set differently.
 
-Yep, that LGTM. If you end up sticking that as a patch on top:
+s/an/a/
 
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> For building perf '-ffat-lto-objects' is filtered-out:
+>
+> $ git grep ffat-lto-objects tools/perf/
+> tools/perf/Makefile.config:  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+>
+> Sync PERL_EMBED_CCOPTS in tools/build/feature/Makefile to fix this.
+>
+> For a minimal fix for Linux v5.17 this here was preferred by Arnaldo.
+>
+> Link: https://marc.info/?t=164646683300002&r=1&w=2
+
+Hey Sedat, we prefer lore links now to external mirrors!
+
+Link: https://lore.kernel.org/lkml/CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com/
+
+> Reported-by: Jiri Olsa <olsajiri@gmail.com>
+> Reported-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> Tested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> Suggested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
+
+Thanks for the patch!
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-For the kernel IBT series @ v4 plus this diff:
-
-Tested-by: Nick Desaulniers <ndesaulniers@google.com> # llvm build, non-IBT boot
-
->
->
 > ---
-> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> index d8bbc705efe5..0c737cc31ee5 100644
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -781,7 +781,8 @@ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data
->         return NOTIFY_STOP;
->  }
+>  tools/build/feature/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> -static void __init int3_selftest(void)
-> +/* Must be noinline to ensure uniqueness of int3_selftest_ip. */
-> +static noinline void __init int3_selftest(void)
->  {
->         static __initdata struct notifier_block int3_exception_nb = {
->                 .notifier_call  = int3_exception_notify,
-> @@ -794,9 +795,8 @@ static void __init int3_selftest(void)
->         /*
->          * Basically: int3_magic(&val); but really complicated :-)
->          *
-> -        * Stick the address of the INT3 instruction into int3_selftest_ip,
-> -        * then trigger the INT3, padded with NOPs to match a CALL instruction
-> -        * length.
-> +        * INT3 padded with NOP to CALL_INSN_SIZE. The int3_exception_nb
-> +        * notifier above will emulate CALL for us.
->          */
->         asm volatile ("int3_selftest_ip:\n\t"
->                       ANNOTATE_NOENDBR
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index 837cc3c7d4f4..fb89a2f1011f 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -214,7 +214,7 @@ DEFINE_IDTENTRY(exc_overflow)
+> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> index 1480910c792e..869073cf8449 100644
+> --- a/tools/build/feature/Makefile
+> +++ b/tools/build/feature/Makefile
+> @@ -218,6 +218,7 @@ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+>  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+>  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+>  PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+> +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+>  FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
 >
->  static __ro_after_init bool ibt_fatal = true;
->
-> -void ibt_selftest_ip(void); /* code label defined in asm below */
-> +extern void ibt_selftest_ip(void); /* code label defined in asm below */
->
->  enum cp_error_code {
->         CP_EC        = (1 << 15) - 1,
-> @@ -238,7 +238,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
->         if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
->                 return;
->
-> -       if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
-> +       if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
-
-(Though adding the address of operator & to the function name in the
-comparisons isn't strictly necessary; functions used in expressions
-"decay" into function pointers; I guess the standard calls these
-"function designators." I see that's been added to be consistent
-between the two...See 6.3.2.1.4 of
-http://open-std.org/jtc1/sc22/wg14/www/docs/n2731.pdf pdf page
-62/printed page 46.)
-
->                 regs->ax = 0;
->                 return;
->         }
-> @@ -252,7 +252,8 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
->         BUG();
->  }
->
-> -bool ibt_selftest(void)
-> +/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
-> +noinline bool ibt_selftest(void)
->  {
->         unsigned long ret;
+>  $(OUTPUT)test-libperl.bin:
+> --
+> 2.35.1
 >
 
 
