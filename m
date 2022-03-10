@@ -1,118 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEC97F
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 00:18:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E4C1C340E8;
-	Thu, 10 Mar 2022 00:18:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646871538;
-	bh=GVv4mxk8ewyfsCZHIqin2zrYrFLWh4W9/mCezQgG92A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Oz24NHQU2jKUym5bzo7Ln16IBL7cFLQWQleV2JSNkC73vGPTDtXfGZ10C9WC98Afh
-	 adRpLhGZT2GyixgH6DxkqpBNleHOKmlADxgK0xXhU2c2knOlIjhW7MNOAoXmYL9iz7
-	 E6Ea7kxuB35ctEiqOb9qjpndSq0DGCEBFYPcUrfkjOmlARbfR4QiUjfD+ScAiw9uL1
-	 9DfmmLw978Q0AH1Nv3fhEd9jWOdPDZzzMv847orxxTCzoZfv0NYoyjSZb+4HDE/aUT
-	 K9M/Kx/34K6Gl5tPi070CayBP70UiyfGGCJ92PGF0lNMsEm6t9YgicdUnyQvHzow52
-	 KJcCD2p48RPyQ==
-Date: Wed, 9 Mar 2022 17:18:51 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Marek Vasut <marek.vasut+renesas@gmail.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [lpieralisi-pci:pci/rcar 2/2]
- drivers/pci/controller/pcie-rcar-host.c:139:3: error: instruction requires:
- data-barriers
-Message-ID: <YilD68QeKpgJG1W2@dev-arch.thelio-3990X>
-References: <202203091741.IetDk7a7-lkp@intel.com>
- <20220309230950.GA89632@bhelgaas>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C517A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 00:30:42 +0000 (UTC)
+Received: by mail-lf1-f51.google.com with SMTP id w12so6644037lfr.9
+        for <llvm@lists.linux.dev>; Wed, 09 Mar 2022 16:30:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+bEaQ5W7/uwxuPOhbs7aFS9WiQFjr1dAU1fc+RFzx3w=;
+        b=GO1t2zd3diCLOfc1GR/4QHxRBwrXV3/Ri2DyCkq4E1Njl+mjDqufI33kutF5DdEGbM
+         gwB9uJ0GOTZZadP1Tx+ogWkrvDnn+qqvel7Ys+vdsRnsIM9i3ysfWrJ4HXUr8JdUKcrm
+         8A2f7TXgUf1IHxsom0VuQZ+muNjQGSsk5YvC8JFZvHiaS81hWoKbwhk3n+AEmcByhmI2
+         3xtNdmnsv5psAM65huJgPO0CxRkkDVJDB4Sjet93q4qclZOwmw6QnjR5wd7Yv/wnoodE
+         3FRZGLdaYleo426aRw5WO3nGJPErBzgC1aGr/9IMEZoxny2/W4khl7VKOy0p1ToVzBr3
+         HfZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+bEaQ5W7/uwxuPOhbs7aFS9WiQFjr1dAU1fc+RFzx3w=;
+        b=i3H6P1vDMVbLjI+9YxCqmZKI57o3QrzBza/fOmVwDaFkECyCBLZRO3Vvq8cyhBJD0s
+         Ns2ggwT7n067pFyLbUPpPhpOswx1310O3WliGwxQVwMwh6PnmnFyQZ6MzhoSyNEiHwD0
+         a8IB7MzLMjGX7u6tfOAZMQaRKHS4lyVsyjf0QzDnQIy7pGlb2cg9WzJfaxjt5nTzNo2d
+         ni1gAma/nixkDkopcHf/vnntmdpu623Gjgg0FiQZufV/OgKJCogH5nReVLR6hjy1mDwn
+         2on5Kqg1zd2THfCKMBQvsVhHUmRlDpM5nOLit4BbjQSYr/SudJ8ETvszTiBAH7MWBK95
+         eQyg==
+X-Gm-Message-State: AOAM533cbAZXAYLM2wIUmCZSByEt8FeVvng7f3vgHQOQA6NvLwjGU/GV
+	RuZ4CjWfbEa7OS1SN/7iBYM0bgCTVAvDN6zuXnKmrw==
+X-Google-Smtp-Source: ABdhPJzUUdb5H/LMWsKDBHyHNBeZMnD/yO8aJ/W7N28+TxUIsfQLa/4g1x3U6w4mi39mlp++/YJ9Y98gdyc+MF3LGG0=
+X-Received: by 2002:a05:6512:308e:b0:448:3826:6d68 with SMTP id
+ z14-20020a056512308e00b0044838266d68mr1329592lfd.184.1646872240210; Wed, 09
+ Mar 2022 16:30:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309230950.GA89632@bhelgaas>
+References: <20220308153011.021123062@infradead.org> <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net> <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+In-Reply-To: <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 9 Mar 2022 16:30:28 -0800
+Message-ID: <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org, joao@overdrivepizza.com, 
+	hjl.tools@gmail.com, jpoimboe@redhat.com, andrew.cooper3@citrix.com, 
+	linux-kernel@vger.kernel.org, keescook@chromium.org, samitolvanen@google.com, 
+	mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz, 
+	rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Bjorn,
+On Tue, Mar 8, 2022 at 2:32 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Mar 08, 2022 at 11:01:04PM +0100, Peter Zijlstra wrote:
+> > On Tue, Mar 08, 2022 at 12:00:52PM -0800, Alexei Starovoitov wrote:
+> > > On Tue, Mar 08, 2022 at 04:30:11PM +0100, Peter Zijlstra wrote:
+> > > > Hopefully last posting...
+> > > >
+> > > > Since last time:
+> > > >  - verified clang-14-rc2 works
+> > > >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
 
-On Wed, Mar 09, 2022 at 05:09:50PM -0600, Bjorn Helgaas wrote:
-> On Wed, Mar 09, 2022 at 05:04:28PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git pci/rcar
-> > head:   9775965dbae50a04f12879179d6d6fb58f240d6b
-> > commit: 9775965dbae50a04f12879179d6d6fb58f240d6b [2/2] PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception
-> > config: arm-randconfig-c002-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091741.IetDk7a7-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm cross compiling tool for clang build
-> >         # apt-get install binutils-arm-linux-gnueabi
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git/commit/?id=9775965dbae50a04f12879179d6d6fb58f240d6b
-> >         git remote add lpieralisi-pci https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git
-> >         git fetch --no-tags lpieralisi-pci pci/rcar
-> >         git checkout 9775965dbae50a04f12879179d6d6fb58f240d6b
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> > >> drivers/pci/controller/pcie-rcar-host.c:139:3: error: instruction requires: data-barriers
-> >                    __rcar_pci_rw_reg_workaround("str")
-> >                    ^
-> >    drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
-> >                    "2:     isb\n"                                          \
-> >                     ^
-> >    <inline asm>:2:4: note: instantiated into assembly here
-> >    2:      isb
-> >            ^
-> >    drivers/pci/controller/pcie-rcar-host.c:153:3: error: instruction requires: data-barriers
-> >                    __rcar_pci_rw_reg_workaround("ldr")
-> >                    ^
-> >    drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
-> >                    "2:     isb\n"                                          \
-> >                     ^
-> >    <inline asm>:2:4: note: instantiated into assembly here
-> >    2:      isb
-> >            ^
-> >    2 errors generated.
-> 
-> I don't know how to fix this.  We currently have these on Lorenzo's
-> pci/rcar branch:
-> 
->   9775965dbae5 ("PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception")
->   de6b5097f58b ("PCI: rcar: Finish transition to L1 state in rcar_pcie_config_access()")
-> 
-> To avoid this error, for now I have cherry-picked de6b5097f58b to a
-> local pci/host/rcar branch and dropped 9775965dbae5.
+I observed the following error when building with
+CONFIG_LTO_CLANG_FULL=y enabled:
 
-FWIW, this is not clang specific, the same configuration blows up with
-GCC 11.2.0 as well:
+ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
+already defined
+        ibt_selftest_ip:
+        ^
 
-$ make -skj"$(nproc)" \
-       ARCH=arm \
-       CROSS_COMPILE=arm-linux-gnueabi- \
-       olddefconfig drivers/pci/controller/pcie-rcar-host.o
-/tmp/ccz8ybtm.s: Assembler messages:
-/tmp/ccz8ybtm.s:742: Error: selected processor does not support `isb' in ARM mode
-/tmp/ccz8ybtm.s:812: Error: selected processor does not support `isb' in ARM mode
-make[4]: *** [scripts/Makefile.build:288: drivers/pci/controller/pcie-rcar-host.o] Error 1
+Seems to come from
+commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
 
-$ rg CONFIG_CPU_32 .config
-289:CONFIG_CPU_32v4=y
+Commenting out the label in the inline asm, I then observed:
+vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
+callable instruction with modified stack frame
+vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
+mismatch: cfa1=4+64 cfa2=4+8
+These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
+disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
+the ibt_selftest_ip label).
 
-It does not look like isb can be used with this configuration, at least
-if I understand arch/arm/include/asm/barrier.h correctly.
+Otherwise defconfig and CONFIG_LTO_CLANG_THIN=y both built and booted
+in a vm WITHOUT IBT support.
 
-Cheers,
-Nathan
+Any idea what's the status of IBT emulation in QEMU, and if it exists,
+what's the necessary `-cpu` flag to enable it?
+-- 
+Thanks,
+~Nick Desaulniers
