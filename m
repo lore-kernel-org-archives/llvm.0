@@ -1,214 +1,115 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DEA1512C
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 11:18:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646911137; x=1678447137;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ij64YaEGZcOroztzs+elVlDtqBEnxXq6HVi2BAsUsaI=;
-  b=MKGgEFio/j1d9MQG+OGXm08VwHlL4J3JCk5DjYJ0okRGf/MQXqqFo9xR
-   K0EvlYy8XGPKGFoWudGrupwahk9OUAhLlR/A76Fh1OeRhAe/DOYhNojm7
-   +MADpVx3RfnzdWSRHsAMnXhca70nKesdE7lRiqgPWKVz+Sj/VFdvZuRma
-   Bg7lrep5fxOubEXM+u2qJ5Lt++ZB5u6er8h/gjbW1f+Cz/qxyE9Bj85F+
-   5Bx8FxApxXPyRKpAmFvcQCB5VtVcgNryNdO9XjmiL1tRTXtgt7RSDu+hN
-   2N5LOtsdNMWbjYVkyszP7ZhaC/JXX6mdFvqM30rI59pAEi+57lj+PFw92
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="242670564"
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="242670564"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 03:18:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="578763176"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 10 Mar 2022 03:18:54 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSGoo-0004q0-5S; Thu, 10 Mar 2022 11:18:54 +0000
-Date: Thu, 10 Mar 2022 19:18:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Howard Yen <howardyen@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2021-12
- 1512/9999] drivers/usb/host/xhci-ring.c:2900:5: warning: no previous
- prototype for function 'xhci_handle_event'
-Message-ID: <202203101947.WZi4vEux-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AFAD7A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 11:37:49 +0000 (UTC)
+Received: by mail-yb1-f171.google.com with SMTP id l2so10263178ybe.8
+        for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 03:37:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=1ziSuPMzYNAw8eT+iBfN5WM2hFNCKf7IS7RFWaVxPlg=;
+        b=ba8/6TOQ+hGmIeTYsQ6ojj2JBVlxNbrThk3McB+mMlo48TRziTO1ei4nh8wKenWuZ/
+         lt7Dpyww+cpYm4aeKTTnJpxvpUXKaTEXJ08x4JkUKrFFZqSEhPRiGKmgzZ3BI65+uW2k
+         thDlndn1Qt70mJ1l63wW/vWAenB67L2+FyXfLTARv7lmWrYxJQ+uXfa+v9Qztlm1p0bX
+         9jKSqFinWTLMVDCTMCiKjgdUZU2x6DI5VBynij+OtCxAwMYMHr61JDseNwpJjIlmjMJh
+         eSo1sQSn3cNYI7UbJsS6J7+oOlukXH/vGxTTSCEdTvZqvZo1VWkbLOeQW5wg29GppWnG
+         3M0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=1ziSuPMzYNAw8eT+iBfN5WM2hFNCKf7IS7RFWaVxPlg=;
+        b=PIYVT1M/U+alGldLM1R0reenLbnE1//s8TaG7iqNMg3F6r+YW14PiEnDEtmi6VPDYf
+         H/wCwV88r1lXkNpxuwW8Y0nt2fF3VipigoG1vRXWmRg8Ba4A4cm/P/i1gAxLb4nKnCLv
+         82E3Em712+S3zBi/4bxnGxTWngVBWQl7SXp5Rfg/7h/Ut2+mYELGY1Vrg1+ZLvEvAILK
+         BXuRwwzcof4xvqfgI/HpBfXrQoEQcxUDXtMSpCpoN3z5c3Be0Ng9XYaXR1n4HI6GaukI
+         E/cn0bxysGct5UT5wV1kHjhNUsbYtgC/DioiWh496IcxZery9Ua7ecOmTanQYd/KdA89
+         5BYw==
+X-Gm-Message-State: AOAM533Me8PHxwFtbraO9u9kBlnDUTRMcxTvgcNwCYLIBd6o6dxmvozF
+	BbCvtwHikQCvFNLFuXaRTU1nRbfSFb0qzIRhi0MAkA==
+X-Google-Smtp-Source: ABdhPJxjhA4KF95Phht4rOAHa4GEkQ+TbVYtbU348Hj9PBYLNJOVYP54qb9DxrOcA9Y52tkAu1hFeD+l7r+aAwisBmw=
+X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
+ z9-20020a259909000000b00624057ed919mr3599420ybn.494.1646912267954; Thu, 10
+ Mar 2022 03:37:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Thu, 10 Mar 2022 17:07:36 +0530
+Message-ID: <CA+G9fYsz7+Ooc8L-Dpfjp6mMDdw43=SjqiE0ryABy3t6qEzRoQ@mail.gmail.com>
+Subject: [next] ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT expected,
+ but got NOCROSSREFS
+To: clang-built-linux <clang-built-linux@googlegroups.com>, llvm@lists.linux.dev, 
+	Linux-Next Mailing List <linux-next@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Howard,
+Linux next-20220310 arm clang builds failed due to following errors/warning=
+s.
 
-FYI, the error/warning still remains.
+metadata:
+    git_describe: next-20220310
+    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+    git_sha: 71941773e143369a73c9c4a3b62fbb60736a1182
+    git_short_log: 71941773e143 (\Add linux-next specific files for 2022031=
+0\)
+    target_arch: arm
+    toolchain: clang-14
+    Kconfig: https://builds.tuxbuild.com/26BmBgHzW9MFZ3R0kIwL0Ce2r09/config
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2021-12
-head:   66c74c58ab38fb1f5edb12b8bace4cf5bbad2cfd
-commit: 26afe6712de0fad3a5de2b372286d029f8ff3231 [1512/9999] FROMLIST: usb: host: export symbols for xhci hooks usage
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220310/202203101947.WZi4vEux-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/26afe6712de0fad3a5de2b372286d029f8ff3231
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2021-12
-        git checkout 26afe6712de0fad3a5de2b372286d029f8ff3231
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/host/
+make --silent --keep-going --jobs=3D8
+O=3D/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=3D1 LLVM_IAS=3D1
+ARCH=3Darm CROSS_COMPILE=3Darm-linux-gnueabihf- 'HOSTCC=3Dsccache clang'
+'CC=3Dsccache clang'
+clang: warning: argument unused during compilation: '-march=3Darmv7-a'
+[-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-march=3Darmv7-a'
+[-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-march=3Darmv7-a'
+[-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-march=3Darmv7-a'
+[-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-march=3Darmv7-a'
+[-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-march=3Darmv7-a'
+[-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-march=3Darmv7-a'
+[-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-march=3Darmv7-a'
+[-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-march=3Darmv7-a'
+[-Wunused-command-line-argument]
+ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT expected, but got
+NOCROSSREFS
+>>>  __vectors_lma =3D .; OVERLAY 0xffff0000 : NOCROSSREFS AT(__vectors_lma=
+) { .vectors { *(.vectors) } .vectors.bhb.loop8 { *(.vectors.bhb.loop8) } .=
+vectors.bhb.bpiall { *(.vectors.bhb.bpiall) } } __vectors_start =3D LOADADD=
+R(.vectors); __vectors_end =3D LOADADDR(.vectors) + SIZEOF(.vectors); __vec=
+tors_bhb_loop8_start =3D LOADADDR(.vectors.bhb.loop8); __vectors_bhb_loop8_=
+end =3D LOADADDR(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.loop8); __vector=
+s_bhb_bpiall_start =3D LOADADDR(.vectors.bhb.bpiall); __vectors_bhb_bpiall_=
+end =3D LOADADDR(.vectors.bhb.bpiall) + SIZEOF(.vectors.bhb.bpiall); . =3D =
+__vectors_lma + SIZEOF(.vectors) + SIZEOF(.vectors.bhb.loop8) + SIZEOF(.vec=
+tors.bhb.bpiall); __stubs_lma =3D .; .stubs ADDR(.vectors) + 0x1000 : AT(__=
+stubs_lma) { *(.stubs) } __stubs_start =3D LOADADDR(.stubs); __stubs_end =
+=3D LOADADDR(.stubs) + SIZEOF(.stubs); . =3D __stubs_lma + SIZEOF(.stubs); =
+PROVIDE(vector_fiq_offset =3D vector_fiq - ADDR(.vectors));
+>>>                                          ^
+make[1]: *** [/builds/linux/Makefile:1225: vmlinux] Error 1
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-All warnings (new ones prefixed by >>):
+build link [1]
 
->> drivers/usb/host/xhci-ring.c:2900:5: warning: no previous prototype for function 'xhci_handle_event' [-Wmissing-prototypes]
-   int xhci_handle_event(struct xhci_hcd *xhci)
-       ^
-   drivers/usb/host/xhci-ring.c:2900:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int xhci_handle_event(struct xhci_hcd *xhci)
-   ^
-   static 
->> drivers/usb/host/xhci-ring.c:2976:6: warning: no previous prototype for function 'xhci_update_erst_dequeue' [-Wmissing-prototypes]
-   void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
-        ^
-   drivers/usb/host/xhci-ring.c:2976:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
-   ^
-   static 
-   2 warnings generated.
+--
+Linaro LKFT
+https://lkft.linaro.org
 
-
-vim +/xhci_handle_event +2900 drivers/usb/host/xhci-ring.c
-
-  2893	
-  2894	/*
-  2895	 * This function handles all OS-owned events on the event ring.  It may drop
-  2896	 * xhci->lock between event processing (e.g. to pass up port status changes).
-  2897	 * Returns >0 for "possibly more events to process" (caller should call again),
-  2898	 * otherwise 0 if done.  In future, <0 returns should indicate error code.
-  2899	 */
-> 2900	int xhci_handle_event(struct xhci_hcd *xhci)
-  2901	{
-  2902		union xhci_trb *event;
-  2903		int update_ptrs = 1;
-  2904		u32 trb_type;
-  2905		int ret;
-  2906	
-  2907		/* Event ring hasn't been allocated yet. */
-  2908		if (!xhci->event_ring || !xhci->event_ring->dequeue) {
-  2909			xhci_err(xhci, "ERROR event ring not ready\n");
-  2910			return -ENOMEM;
-  2911		}
-  2912	
-  2913		event = xhci->event_ring->dequeue;
-  2914		/* Does the HC or OS own the TRB? */
-  2915		if ((le32_to_cpu(event->event_cmd.flags) & TRB_CYCLE) !=
-  2916		    xhci->event_ring->cycle_state)
-  2917			return 0;
-  2918	
-  2919		trace_xhci_handle_event(xhci->event_ring, &event->generic);
-  2920	
-  2921		/*
-  2922		 * Barrier between reading the TRB_CYCLE (valid) flag above and any
-  2923		 * speculative reads of the event's flags/data below.
-  2924		 */
-  2925		rmb();
-  2926		trb_type = TRB_FIELD_TO_TYPE(le32_to_cpu(event->event_cmd.flags));
-  2927		/* FIXME: Handle more event types. */
-  2928	
-  2929		switch (trb_type) {
-  2930		case TRB_COMPLETION:
-  2931			handle_cmd_completion(xhci, &event->event_cmd);
-  2932			break;
-  2933		case TRB_PORT_STATUS:
-  2934			handle_port_status(xhci, event);
-  2935			update_ptrs = 0;
-  2936			break;
-  2937		case TRB_TRANSFER:
-  2938			ret = handle_tx_event(xhci, &event->trans_event);
-  2939			if (ret >= 0)
-  2940				update_ptrs = 0;
-  2941			break;
-  2942		case TRB_DEV_NOTE:
-  2943			handle_device_notification(xhci, event);
-  2944			break;
-  2945		default:
-  2946			if (trb_type >= TRB_VENDOR_DEFINED_LOW)
-  2947				handle_vendor_event(xhci, event, trb_type);
-  2948			else
-  2949				xhci_warn(xhci, "ERROR unknown event type %d\n", trb_type);
-  2950		}
-  2951		/* Any of the above functions may drop and re-acquire the lock, so check
-  2952		 * to make sure a watchdog timer didn't mark the host as non-responsive.
-  2953		 */
-  2954		if (xhci->xhc_state & XHCI_STATE_DYING) {
-  2955			xhci_dbg(xhci, "xHCI host dying, returning from "
-  2956					"event handler.\n");
-  2957			return 0;
-  2958		}
-  2959	
-  2960		if (update_ptrs)
-  2961			/* Update SW event ring dequeue pointer */
-  2962			inc_deq(xhci, xhci->event_ring);
-  2963	
-  2964		/* Are there more items on the event ring?  Caller will call us again to
-  2965		 * check.
-  2966		 */
-  2967		return 1;
-  2968	}
-  2969	EXPORT_SYMBOL_GPL(xhci_handle_event);
-  2970	
-  2971	/*
-  2972	 * Update Event Ring Dequeue Pointer:
-  2973	 * - When all events have finished
-  2974	 * - To avoid "Event Ring Full Error" condition
-  2975	 */
-> 2976	void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
-  2977			union xhci_trb *event_ring_deq)
-  2978	{
-  2979		u64 temp_64;
-  2980		dma_addr_t deq;
-  2981	
-  2982		temp_64 = xhci_read_64(xhci, &xhci->ir_set->erst_dequeue);
-  2983		/* If necessary, update the HW's version of the event ring deq ptr. */
-  2984		if (event_ring_deq != xhci->event_ring->dequeue) {
-  2985			deq = xhci_trb_virt_to_dma(xhci->event_ring->deq_seg,
-  2986					xhci->event_ring->dequeue);
-  2987			if (deq == 0)
-  2988				xhci_warn(xhci, "WARN something wrong with SW event ring dequeue ptr\n");
-  2989			/*
-  2990			 * Per 4.9.4, Software writes to the ERDP register shall
-  2991			 * always advance the Event Ring Dequeue Pointer value.
-  2992			 */
-  2993			if ((temp_64 & (u64) ~ERST_PTR_MASK) ==
-  2994					((u64) deq & (u64) ~ERST_PTR_MASK))
-  2995				return;
-  2996	
-  2997			/* Update HC event ring dequeue pointer */
-  2998			temp_64 &= ERST_PTR_MASK;
-  2999			temp_64 |= ((u64) deq & (u64) ~ERST_PTR_MASK);
-  3000		}
-  3001	
-  3002		/* Clear the event handler busy flag (RW1C) */
-  3003		temp_64 |= ERST_EHB;
-  3004		xhci_write_64(xhci, temp_64, &xhci->ir_set->erst_dequeue);
-  3005	}
-  3006	EXPORT_SYMBOL_GPL(xhci_update_erst_dequeue);
-  3007	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[1] https://builds.tuxbuild.com/26BmBgHzW9MFZ3R0kIwL0Ce2r09/
