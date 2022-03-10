@@ -1,215 +1,94 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AEF75A1F
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 19:48:54 +0000 (UTC)
-Received: by mail-lf1-f46.google.com with SMTP id n19so11285182lfh.8
-        for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 11:48:54 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106BC5A1F
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 19:54:18 +0000 (UTC)
+Received: by mail-lj1-f177.google.com with SMTP id bn33so9279361ljb.6
+        for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 11:54:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1CNOBoxVbf2yOnaM5LMckiDdeuOKkzXjqAU3tP0JnvM=;
-        b=VpGSdMZzA15dmS3baG0WWpQHKlUdgRHpzZZ1fu77CLkC0wsCYsUloZHyoR//d9PyfU
-         25siN+iFX93vVQWvW6TWsQkyQs/ZvCcz2cjSQvejoDr8sF2rv5bvCgQmjSUNoAXhe5hd
-         +yl0I4ibmsob6oEmwJF/iEGMImW4NbFZSAFXuE4JIPAW6PjxU1dNd2lE6Iz0jcTKUPfo
-         h08ss2YaGFOUDPsd61gWSDwr3Mg/66GQi6yhNiHvGSwOx23NKAma+41zrBD+W6Z51qBc
-         rYEImlBHQAto9ZYKuGEW40qXmd0LkvjokivV31c2UNq+AeH3hjc5X77B4Fp8XKk6vMZy
-         UvHg==
+        bh=rzaQ2PbNM4OWTXaZoJt/jXvupOFzRgUwd9R+pk/wVa4=;
+        b=ggQcQqPLxpOZkN6xIBmGo28BFFNVs8UHh/IjTismzkd/xutuOP3k5tn1+FwAUGOdME
+         ijmW6ES+X3xtP5GsM+KaXI/PkzOVWIepnTeRlLgvxFf927Y6oeyhziTD93hpj9haMeW2
+         4sR1SVVJTjClDlayb91EzsELLkTrbyUNBXvGTeBCZ95F1EVYZw0zR/drMfnnvYjhGk5P
+         Q5h+jGoARJcL8RZqMhQtYxcnuodadvcOqVMRiZnL1TxTi6MCDte9MgECS5fyzxcmsrFL
+         X1DiCbujfGDfGOI2Y2KBoG94i5Aq0hk1yfzkHxoXvswummOpH/BZeROScMxSnjmmO3ZC
+         TVOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1CNOBoxVbf2yOnaM5LMckiDdeuOKkzXjqAU3tP0JnvM=;
-        b=RZr6OmcsfOd8UbQHfvefAoVzCQY//EfBg6Hx32im24SigrGxh8XBv7qJJP8zchb8P1
-         2ilKtkFLMqMXqZ/IQO+qEXmk9LGaReTQslEEuEpyOg7y6ATiMGkBa2RnPeLmxago9J9s
-         z/RKs0Nw5FlrE3S7ISLZoNuVC2pVbUvf9gpWObuljjGEjeIH996DVW9isyMVI7m/M4XD
-         WFWFrzN8k+KzDetc2abfi5tHlWpKiz3+lB+Oj5Uode9fteyePHJtzWyuKd6QOy+phk6n
-         gmev/L9uvdz6ynHxTJHLGWq0bIXj+HH4+xWroiwrpchAZL4tsBsd31grZPDwoPZxUfx0
-         692g==
-X-Gm-Message-State: AOAM5306qroExs3eZQH1pjkAdxqpAxH7a0zh29qID/GQSWD7qWOJ1qEF
-	Min7+sPfwNzbDCVbiBPscBQYRZRFfub4+bhzkFTwKQ==
-X-Google-Smtp-Source: ABdhPJxZJMISMntu6GUJGH+kbfib6YP35AKLxqEncK+Sv6f9ewx9YcMieptPH4kCPHcyy6AfkOrZ1epQyLxD8EqMLEw=
-X-Received: by 2002:a05:6512:31d4:b0:445:e4ef:c0f8 with SMTP id
- j20-20020a05651231d400b00445e4efc0f8mr3915707lfe.626.1646941732231; Thu, 10
- Mar 2022 11:48:52 -0800 (PST)
+        bh=rzaQ2PbNM4OWTXaZoJt/jXvupOFzRgUwd9R+pk/wVa4=;
+        b=G2t7jZwljcBfawW5/XCg7ylxRTjSB4ecQRsTktKcUaZfI8TLJLEY7zrkyISDuctlqK
+         h/FLoeRSbqp24kKPWRsor7X83KjecLYSnlU5WJEj8c7Jg5OjxtZU+oyrHWe+4cmLaKPU
+         Vu/g98SU/WxvMt0adk4ZuvMZluLPOMU7iK5bfC8D6tPcnF5vT5xy21hL4ZWllzIjOeZT
+         fB15W9yR6eZVcOTufpbNCwkZY3f9iPhvF+S8GxoIsej5CWT8gmWvnSrssdf5/HD/2hyg
+         qDpd05FSRIX/z6rxC1/6Xdeni6Rc/gVmkZqrbfDXZIaZYDSqa3kYN0six393qCb825V8
+         gOyA==
+X-Gm-Message-State: AOAM5320+7RcTRLUhpeLLDP3aNtD1UZztrC8U1GKmaVfwh4L2qf+9XP4
+	zklROP30y7h2YfLfg31r+8CA7QK2KtGf2tY1/zUr/Pelk+yIJf62
+X-Google-Smtp-Source: ABdhPJyY7388Mtw8RGExlOptHW56bIIwr/NeZd5PjTV9oufBuCB4djbN4p9cTgNfi9U6KFgbFw4lY8mvI6K5M3SXiDU=
+X-Received: by 2002:a2e:871a:0:b0:246:ee2:1109 with SMTP id
+ m26-20020a2e871a000000b002460ee21109mr3957045lji.165.1646942056815; Thu, 10
+ Mar 2022 11:54:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220309055118.1551013-1-maskray@google.com>
-In-Reply-To: <20220309055118.1551013-1-maskray@google.com>
+References: <1646865178129106@kroah.com> <YiktjbXe/2XmjHrb@dev-arch.thelio-3990X>
+ <YinFYzenEjq99R3w@kroah.com>
+In-Reply-To: <YinFYzenEjq99R3w@kroah.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 10 Mar 2022 11:48:40 -0800
-Message-ID: <CAKwvOdmMS4=QAoBFvhAdXWaLHOwH2252FX9i_yZyiCOpOt=3Dw@mail.gmail.com>
-Subject: Re: [PATCH] powerpc: Replace ppc64 DT_RELACOUNT usage with DT_RELASZ/24
-To: Fangrui Song <maskray@google.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
-	Alexey Kardashevskiy <aik@ozlabs.ru>, linuxppc-dev@lists.ozlabs.org, 
-	Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Thu, 10 Mar 2022 11:54:05 -0800
+Message-ID: <CAKwvOdnw3L+SCNo1FJpXSnFhkzXpY_+ZQHLW+mM2UUZaofuLfQ@mail.gmail.com>
+Subject: Re: Patch "ARM: Do not use NOCROSSREFS directive with ld.lld" has
+ been added to the 4.19-stable tree
+To: Greg KH <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: torvalds@linux-foundation.org, stable-commits@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 8, 2022 at 9:53 PM Fangrui Song <maskray@google.com> wrote:
+On Thu, Mar 10, 2022 at 1:31 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> DT_RELACOUNT is an ELF dynamic tag inherited from SunOS indicating the
-> number of R_*_RELATIVE relocations. It is optional but {ld.lld,ld.lld}
-> -z combreloc always creates it (if non-zero) to slightly speed up glibc
-> ld.so relocation resolving by avoiding R_*R_PPC64_RELATIVE type
-> comparison. The tag is otherwise nearly unused in the wild and I'd
-> recommend that software avoids using it.
+> On Wed, Mar 09, 2022 at 03:43:25PM -0700, Nathan Chancellor wrote:
+> > Hi Greg,
+> >
+> > On Wed, Mar 09, 2022 at 11:32:58PM +0100, gregkh@linuxfoundation.org wrote:
+> > >
+> > > This is a note to let you know that I've just added the patch titled
+> > >
+> > >     ARM: Do not use NOCROSSREFS directive with ld.lld
+> > >
+> > > to the 4.19-stable tree which can be found at:
+> > >     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+> >
+> > <snip>
+> >
+> > > +/*
+> > > + * ld.lld does not support NOCROSSREFS:
+> > > + * https://github.com/ClangBuiltLinux/linux/issues/1609
+> > > + */
+> > > +#ifdef CONFIG_LD_IS_LLD
+> >
+> > Please cherry-pick commit b744b43f79cc ("kbuild: add CONFIG_LD_IS_LLD")
+> > to 4.19 so that this patch works as intended.
 >
-> lld>=14.0.0 (since commit da0e5b885b25cf4ded0fa89b965dc6979ac02ca9)
-> underestimates DT_RELACOUNT for ppc64 when position-independent long
-> branch thunks are used. Correcting it needs non-trivial arch-specific
-> complexity which I'd prefer to avoid. Since our code always compares the
-> relocation type with R_PPC64_RELATIVE, replacing every occurrence of
-> DT_RELACOUNT with DT_RELASZ/sizeof(Elf64_Rela)=DT_RELASZ/24 is a correct
-> alternative.
+> Now queued up, thanks.
+>
+> > We do not link with ld.lld on 4.9 or 4.14 so the NOCROSSREFS patch is
+> > not technically needed there but it does no harm if it is.
+>
+> I'll leave it as I'm sure there might be others out there that do that
+> (Android or ChromeOS?)  I already did the backport-by-hand work, might
+> as not waste it :)
 
-checking that sizeof(Elf64_Rela) == 24, yep: https://godbolt.org/z/bb4aKbo5T
-
->
-> DT_RELASZ is in practice bounded by an uint32_t. Dividing x by 24 can be
-> implemented as (uint32_t)(x*0xaaaaaaab) >> 4.
-
-Yep: https://godbolt.org/z/x9445ePPv
-
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1581
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Fangrui Song <maskray@google.com>
-> ---
->  arch/powerpc/boot/crt0.S       | 28 +++++++++++++++++-----------
->  arch/powerpc/kernel/reloc_64.S | 15 +++++++++------
->  2 files changed, 26 insertions(+), 17 deletions(-)
->
-> diff --git a/arch/powerpc/boot/crt0.S b/arch/powerpc/boot/crt0.S
-> index feadee18e271..1c96ebe7ef1a 100644
-> --- a/arch/powerpc/boot/crt0.S
-> +++ b/arch/powerpc/boot/crt0.S
-> @@ -8,7 +8,7 @@
->  #include "ppc_asm.h"
->
->  RELA = 7
-> -RELACOUNT = 0x6ffffff9
-> +RELASZ = 8
->
->         .data
->         /* A procedure descriptor used when booting this as a COFF file.
-> @@ -65,7 +65,7 @@ p_base:       mflr    r10             /* r10 now points to runtime addr of p_base */
->         subf    r11,r11,r12     /* runtime - linktime offset */
->
->         /* The dynamic section contains a series of tagged entries.
-> -        * We need the RELA and RELACOUNT entries. */
-> +        * We need the RELA and RELASZ entries. */
->         li      r9,0
->         li      r0,0
->  9:     lwz     r8,0(r12)       /* get tag */
-> @@ -75,18 +75,21 @@ p_base:     mflr    r10             /* r10 now points to runtime addr of p_base */
->         bne     11f
->         lwz     r9,4(r12)       /* get RELA pointer in r9 */
->         b       12f
-> -11:    addis   r8,r8,(-RELACOUNT)@ha
-> -       cmpwi   r8,RELACOUNT@l
-> +11:    cmpwi   r8,RELASZ
->         bne     12f
-> -       lwz     r0,4(r12)       /* get RELACOUNT value in r0 */
-> +       lwz     r0,4(r12)       /* get RELASZ / 24 in r0 */
-> +       lis     r8,0xaaaa
-> +       ori     r8,r8,0xaaab
-> +       mulhwu  r0,r0,r8
-> +       srwi    r0,r0,4
-
-Both translation units include arch/powerpc/include/asm/ppc_asm.h,
-which happens to define LOAD_REG_IMMEDIATE. Let's reuse that rather
-than open code lis+ori?
-
->  12:    addi    r12,r12,8
->         b       9b
->
->         /* The relocation section contains a list of relocations.
->          * We now do the R_PPC_RELATIVE ones, which point to words
->          * which need to be initialized with addend + offset.
-> -        * The R_PPC_RELATIVE ones come first and there are RELACOUNT
-> -        * of them. */
-> +        * The R_PPC_RELATIVE ones come first and there are at most
-> +         * RELASZ/24 of them. */
->  10:    /* skip relocation if we don't have both */
->         cmpwi   r0,0
->         beq     3f
-> @@ -160,14 +163,17 @@ p_base:   mflr    r10             /* r10 now points to runtime addr of p_base */
->         bne     10f
->         ld      r13,8(r11)       /* get RELA pointer in r13 */
->         b       11f
-> -10:    addis   r12,r12,(-RELACOUNT)@ha
-> -       cmpdi   r12,RELACOUNT@l
-> +10:    cmpdi   r12,RELASZ
->         bne     11f
-> -       ld      r8,8(r11)       /* get RELACOUNT value in r8 */
-> +       ld      r8,8(r11)       /* get RELASZ / 24 in r8 */
-> +       lis     r0,0xaaaa
-> +       ori     r0,r0,0xaaab
-> +       mulhwu  r8,r8,r0
-> +       srwi    r8,r8,4
->  11:    addi    r11,r11,16
->         b       9b
->  12:
-> -       cmpdi   r13,0            /* check we have both RELA and RELACOUNT */
-> +       cmpdi   r13,0            /* check we have both RELA and RELASZ */
->         cmpdi   cr1,r8,0
->         beq     3f
->         beq     cr1,3f
-> diff --git a/arch/powerpc/kernel/reloc_64.S b/arch/powerpc/kernel/reloc_64.S
-> index 02d4719bf43a..362be759609f 100644
-> --- a/arch/powerpc/kernel/reloc_64.S
-> +++ b/arch/powerpc/kernel/reloc_64.S
-> @@ -8,7 +8,7 @@
->  #include <asm/ppc_asm.h>
->
->  RELA = 7
-> -RELACOUNT = 0x6ffffff9
-> +RELASZ = 8
->  R_PPC64_RELATIVE = 22
->
->  /*
-> @@ -27,7 +27,7 @@ _GLOBAL(relocate)
->         add     r10,r10,r12     /* r10 has runtime addr of _stext */
->
->         /*
-> -        * Scan the dynamic section for the RELA and RELACOUNT entries.
-> +        * Scan the dynamic section for the RELA and RELASZ entries.
->          */
->         li      r7,0
->         li      r8,0
-> @@ -38,13 +38,16 @@ _GLOBAL(relocate)
->         bne     2f
->         ld      r7,8(r11)       /* get RELA pointer in r7 */
->         b       3f
-> -2:     addis   r6,r6,(-RELACOUNT)@ha
-> -       cmpdi   r6,RELACOUNT@l
-> +2:     cmpdi   r6,RELASZ
->         bne     3f
-> -       ld      r8,8(r11)       /* get RELACOUNT value in r8 */
-> +       ld      r8,8(r11)       /* get RELA / 24 in r8 */
-> +       lis     r0,0xaaaa
-> +       ori     r0,r0,0xaaab
-> +       mulhwu  r8,r8,r0
-> +       srwi    r8,r8,4
->  3:     addi    r11,r11,16
->         b       1b
-> -4:     cmpdi   r7,0            /* check we have both RELA and RELACOUNT */
-> +4:     cmpdi   r7,0            /* check we have both RELA and RELASZ */
->         cmpdi   cr1,r8,0
->         beq     6f
->         beq     cr1,6f
-> --
-> 2.35.1.616.g0bdcbb4464-goog
->
->
-
-
+FWIW, ld.lld support in 4.14 exists only for ARCH=arm64 and
+ARCH=x86_64. The NOCROSSREFS patch is specific to ARCH=arm. I agree
+with GKH that it won't hurt to backport b744b43f79cc.
 -- 
 Thanks,
 ~Nick Desaulniers
