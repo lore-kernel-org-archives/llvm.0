@@ -1,92 +1,65 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF317A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 09:46:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646905613; x=1678441613;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b3/fS2yHAqNHl1jboCRu52MjsVGWP5Iqz5RL18JPJbw=;
-  b=dV/ul8ePl3mPbMP4AUCHHtL98ECFK95d3xsrsBC5u2MC+4A8DGTcil/c
-   rn1V/HBHyqUl7/tLJzRfQZxZKieUB+o/NDQH4Owlvb4LO11gHr23Qi3gE
-   UDq96dWT2esoqvTVUHaMfgOesZYKp/eIEICNnR9YuYcM1vxZuR0OmBpDc
-   HSTGzUbHZqDolg45lIX/DjM+rXr9aLWaiHhI11VNtsUSkSIm5XsTiXbIw
-   wenDieCDJwFvrDcLqCE9IgjR+oBRW/mmkzNMaRTfMy3XFW9wCXhcgpLgp
-   1JeStvssveRXBkjNpJgU/1fyKKPddi73VKO78WSLvVBGCn8Ey0hf13nhc
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="279945290"
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="279945290"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 01:46:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="781400231"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Mar 2022 01:46:49 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSFNh-0004ks-66; Thu, 10 Mar 2022 09:46:49 +0000
-Date: Thu, 10 Mar 2022 17:46:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ansuel Smith <ansuelsmth@gmail.com>, Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ansuel Smith <ansuelsmth@gmail.com>,
-	Jonathan McDowell <noodles@earth.li>
-Subject: Re: [PATCH v3 10/18] ARM: dts: qcom: add saw for l2 cache and
- kraitcc for ipq8064
-Message-ID: <202203101733.hkbTGp6Y-lkp@intel.com>
-References: <20220309190152.7998-11-ansuelsmth@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364C87A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 10:52:39 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(Authenticated sender: kholk11)
+	with ESMTPSA id 6AC6C1F454C5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1646909549;
+	bh=N4fl3qvUTmmfImneM6TYMxfbc131Zodk0cnqZ2UgY0s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iPmtWJrNwgUqLzVwFXEqQawHj4XRZWgoaTqyhqPR927Huz+S5f/A2WUVWq0MriyTI
+	 tEdz6wee4AI0ZBq9uxzO7Yl2ef7IY649XopbAh1f7CBrJDaUo5wAsGx1jmT1g2P8Iv
+	 vo6wskOclk2/ObiG7s23Fy9OjM750z4cCS8AEOmMpRik0cshQX/sD7KpIsFrMeYlrW
+	 WAIzTAKhvxikjLhsmLJPGbOoE6mINyeqoNtQnXpzKg1fn9PNHGRdG4Oijh+ipdstay
+	 ywXGC1SS3Kb4sVGzl1l4l2SmisFoHXgVDEorK2gOg4tZOopIDy7mDRkdeuCgN/aKb7
+	 /NE+KYMlS0JZg==
+Message-ID: <81720566-0f99-536b-30c7-38ef99821d92@collabora.com>
+Date: Thu, 10 Mar 2022 11:52:25 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309190152.7998-11-ansuelsmth@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v14 03/22] dt-bindings: mediatek: add ethdr definition for
+ mt8195
+Content-Language: en-US
+To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+ linux@roeck-us.net
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+ Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev, singo.chang@mediatek.com, srv_heupstream@mediatek.com,
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220310035515.16881-1-nancy.lin@mediatek.com>
+ <20220310035515.16881-4-nancy.lin@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220310035515.16881-4-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Ansuel,
+Il 10/03/22 04:54, Nancy.Lin ha scritto:
+> Add vdosys1 ETHDR definition.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 
-Thank you for the patch! Yet something to improve:
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linux/master linus/master v5.17-rc7 next-20220309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Ansuel-Smith/Multiple-addition-to-ipq8064-dtsi/20220310-031750
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220310/202203101733.hkbTGp6Y-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/52c3b4af226c7a50772c40012b3789b5348e49b5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Ansuel-Smith/Multiple-addition-to-ipq8064-dtsi/20220310-031750
-        git checkout 52c3b4af226c7a50772c40012b3789b5348e49b5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ERROR: Input tree has errors, aborting (use -f to force output)
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>   .../display/mediatek/mediatek,ethdr.yaml      | 158 ++++++++++++++++++
+>   1 file changed, 158 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+> 
