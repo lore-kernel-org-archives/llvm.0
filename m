@@ -1,111 +1,182 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D496469
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 20:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646944805; x=1678480805;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9jAQl+d3TqTy+GhqGoxe3e/ZBiWEWppWLjUInnU/Mrc=;
-  b=OPZs4AMnqAbdXlomFyhI+QcR6FJC/C3GEFhkO3onJ6zdM754sfqvN2l1
-   v7Ikve53rxfg/eQi2uX0wCTJwHRQhOfI7K+XAJSE/f1Db+R6UML3TF20i
-   vIU0j6ek+6+IbZezsCtjYs4lnKeBHvuW0wUB6U/33TnZ45lRtUEc+8X2U
-   aNoZovoa2rRpwkSAvPwTADGQka1SkCFqXrStD+Is6uP8Pr8kDiIpPPSUi
-   wJ+rFxNbcEq/zvRrxkfQBZ9ST6IdOKUku5Y31rW+h+MAlm+GyOXHX4BLj
-   9kY6lXXPDM9Vjn8Hjgt8TpsqSurEdEjy+YP1Ubng/G76hEgtmOcU8CJOB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="318599737"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="318599737"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 12:40:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="578952716"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 10 Mar 2022 12:40:02 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSPZp-0005NU-J7; Thu, 10 Mar 2022 20:40:01 +0000
-Date: Fri, 11 Mar 2022 04:39:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jacopo Mondi <jacopo@jmondi.org>,
-	Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jacopo Mondi <jacopo@jmondi.org>,
-	jeanmichel.hautbois@ideasonboard.com,
-	laurent.pinchart@ideasonboard.com, paul.kocialkowski@bootlin.com,
-	sakari.ailus@iki.fi, paul.elder@ideasonboard.com,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org
-Subject: Re: [PATCH 2/6] media: i2c: ov5670: Allow probing with OF
-Message-ID: <202203110425.5nMUZpmG-lkp@intel.com>
-References: <20220310130829.96001-3-jacopo@jmondi.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339335A38
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 20:49:43 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id w12so11532935lfr.9
+        for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 12:49:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LoJnjb1eTkY6RbpEBPOSq+mDiZAbj8l9xQTfBcxy8oU=;
+        b=Y7FvDAJsL40Mo2PA9+bZiLPYtKMnLPXzXJ5HLFicNxmCzZdjJYLjv5yqpsyhCi7vOr
+         CD+QPTbXobrKHAuNAA7EVyR6s5AJ2oTb3lHlMncdUyYPQ4ai6e5Om/5yCjw+F2P89/hF
+         lzvVtisopmYw9PsQWFgxf4X1aLVZkcgRXPVxUBeu2A8j9m7lL4/+HuQTMMTU8yAuUPIr
+         /9UskIi+Izx38o1RWUn/mGiOU115InWglwpA0y6MGBMTHlx/0TvsozCBTKVyaBjguFqC
+         U25qw5VYUkLud9lfcYzlxnt+DNX0zT/h2pGf4bXY+rXL37GWa3nX4nAjILfxiBwfELTC
+         y3yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LoJnjb1eTkY6RbpEBPOSq+mDiZAbj8l9xQTfBcxy8oU=;
+        b=JABDvb5pEFfwPDfGSp937okvlgRmI/FKEsxUmZjzVoyl9BxCEssiPCh6wyCTjJfmbt
+         QRr0WFyB+YpMpdsJRbFT9LWFenAE2/qlMSYQ9R2PHSYEde/UkU6puCE8A+IyWWA7w/kd
+         n4nkOn4BtzP8QwK+cymyfNvzqWf9olyCnGTKhFwNfPdT+P09mVQPsRlCpy2GRTwqdN4C
+         CcjtE0PfDH5OMsYZa6abZ/b9CQ3c3rjc8jWCdjX3pN0s/zzpsMdzAl+GaPOnQpPwFsK/
+         N4KSQBA2rVUn3nOZ1+47NGEvRCZdEIG1RxAKS3+LP1XPZ9rJCx4yg6EgT5WkJe2o7RvD
+         6QLw==
+X-Gm-Message-State: AOAM533EKRmDpwbPHsb7OsZeqoZQQIm09He6fIQv15e+anDrYoDnyAwm
+	oZcnM832xE6gcecf+F0QRBWCsCbiHli/xfW4/jHk6w==
+X-Google-Smtp-Source: ABdhPJy8imNzaXNZDqs43TGptWccGDGO5gCC4bQU1a3VTUFE15BERAeVO8Mg8dbe5wwLt+vA1yx3Tir6Y+d/zYS/XIE=
+X-Received: by 2002:a05:6512:31d4:b0:445:e4ef:c0f8 with SMTP id
+ j20-20020a05651231d400b00445e4efc0f8mr4046529lfe.626.1646945381031; Thu, 10
+ Mar 2022 12:49:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310130829.96001-3-jacopo@jmondi.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220308153011.021123062@infradead.org> <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net> <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+ <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net> <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
+ <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
+In-Reply-To: <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 10 Mar 2022 12:49:29 -0800
+Message-ID: <CAKwvOdkyi1c9TvP_Bzn3+71kKsJzAbQZmgDzfDM8c7sce-V0Dw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: David Laight <David.Laight@aculab.com>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, "x86@kernel.org" <x86@kernel.org>, 
+	"joao@overdrivepizza.com" <joao@overdrivepizza.com>, "hjl.tools@gmail.com" <hjl.tools@gmail.com>, 
+	"jpoimboe@redhat.com" <jpoimboe@redhat.com>, 
+	"andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"keescook@chromium.org" <keescook@chromium.org>, "samitolvanen@google.com" <samitolvanen@google.com>, 
+	"mark.rutland@arm.com" <mark.rutland@arm.com>, 
+	"alyssa.milburn@intel.com" <alyssa.milburn@intel.com>, "mbenes@suse.cz" <mbenes@suse.cz>, 
+	"rostedt@goodmis.org" <rostedt@goodmis.org>, "mhiramat@kernel.org" <mhiramat@kernel.org>, 
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org" <andrii@kernel.org>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jacopo,
+On Thu, Mar 10, 2022 at 2:16 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Mar 10, 2022 at 09:22:59AM +0000, David Laight wrote:
+> > From: Peter Zijlstra
+> > > Sent: 10 March 2022 09:05
+> > >
+> > > On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
+> > >
+> > > > I observed the following error when building with
+> > > > CONFIG_LTO_CLANG_FULL=y enabled:
+> > > >
+> > > > ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
+> > > > already defined
+> > > >         ibt_selftest_ip:
+> > > >         ^
+> > > >
+> > > > Seems to come from
+> > > > commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
+> > > >
+> > > > Commenting out the label in the inline asm, I then observed:
+> > > > vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
+> > > > callable instruction with modified stack frame
+> > > > vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
+> > > > mismatch: cfa1=4+64 cfa2=4+8
+> > > > These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
+> > > > disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
+> > > > the ibt_selftest_ip label).
+> > >
+> > LTO has probably inlined it twice.
+>
+> Indeed, adding noinline to ibt_selftest() makes it work.
 
-I love your patch! Yet something to improve:
+Yep, that LGTM. If you end up sticking that as a patch on top:
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on v5.17-rc7 next-20220310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-url:    https://github.com/0day-ci/linux/commits/Jacopo-Mondi/media-i2c-ov5670-OF-support-runtime_pm-regulators/20220310-211143
-base:   git://linuxtv.org/media_tree.git master
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220311/202203110425.5nMUZpmG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/f5425877ffa93005c9f71ce9ce4185a787db66eb
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jacopo-Mondi/media-i2c-ov5670-OF-support-runtime_pm-regulators/20220310-211143
-        git checkout f5425877ffa93005c9f71ce9ce4185a787db66eb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+For the kernel IBT series @ v4 plus this diff:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com> # llvm build, non-IBT boot
 
-All errors (new ones prefixed by >>):
+>
+>
+> ---
+> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+> index d8bbc705efe5..0c737cc31ee5 100644
+> --- a/arch/x86/kernel/alternative.c
+> +++ b/arch/x86/kernel/alternative.c
+> @@ -781,7 +781,8 @@ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data
+>         return NOTIFY_STOP;
+>  }
+>
+> -static void __init int3_selftest(void)
+> +/* Must be noinline to ensure uniqueness of int3_selftest_ip. */
+> +static noinline void __init int3_selftest(void)
+>  {
+>         static __initdata struct notifier_block int3_exception_nb = {
+>                 .notifier_call  = int3_exception_notify,
+> @@ -794,9 +795,8 @@ static void __init int3_selftest(void)
+>         /*
+>          * Basically: int3_magic(&val); but really complicated :-)
+>          *
+> -        * Stick the address of the INT3 instruction into int3_selftest_ip,
+> -        * then trigger the INT3, padded with NOPs to match a CALL instruction
+> -        * length.
+> +        * INT3 padded with NOP to CALL_INSN_SIZE. The int3_exception_nb
+> +        * notifier above will emulate CALL for us.
+>          */
+>         asm volatile ("int3_selftest_ip:\n\t"
+>                       ANNOTATE_NOENDBR
+> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> index 837cc3c7d4f4..fb89a2f1011f 100644
+> --- a/arch/x86/kernel/traps.c
+> +++ b/arch/x86/kernel/traps.c
+> @@ -214,7 +214,7 @@ DEFINE_IDTENTRY(exc_overflow)
+>
+>  static __ro_after_init bool ibt_fatal = true;
+>
+> -void ibt_selftest_ip(void); /* code label defined in asm below */
+> +extern void ibt_selftest_ip(void); /* code label defined in asm below */
+>
+>  enum cp_error_code {
+>         CP_EC        = (1 << 15) - 1,
+> @@ -238,7 +238,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+>         if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
+>                 return;
+>
+> -       if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
+> +       if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
 
->> drivers/media/i2c/ov5670.c:2601:34: error: use of undeclared identifier 'ov5670_of_ids'
-                   .of_match_table = of_match_ptr(ov5670_of_ids),
-                                                  ^
-   1 error generated.
+(Though adding the address of operator & to the function name in the
+comparisons isn't strictly necessary; functions used in expressions
+"decay" into function pointers; I guess the standard calls these
+"function designators." I see that's been added to be consistent
+between the two...See 6.3.2.1.4 of
+http://open-std.org/jtc1/sc22/wg14/www/docs/n2731.pdf pdf page
+62/printed page 46.)
+
+>                 regs->ax = 0;
+>                 return;
+>         }
+> @@ -252,7 +252,8 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+>         BUG();
+>  }
+>
+> -bool ibt_selftest(void)
+> +/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
+> +noinline bool ibt_selftest(void)
+>  {
+>         unsigned long ret;
+>
 
 
-vim +/ov5670_of_ids +2601 drivers/media/i2c/ov5670.c
-
-  2595	
-  2596	static struct i2c_driver ov5670_i2c_driver = {
-  2597		.driver = {
-  2598			.name = "ov5670",
-  2599			.pm = &ov5670_pm_ops,
-  2600			.acpi_match_table = ACPI_PTR(ov5670_acpi_ids),
-> 2601			.of_match_table = of_match_ptr(ov5670_of_ids),
-  2602		},
-  2603		.probe_new = ov5670_probe,
-  2604		.remove = ov5670_remove,
-  2605		.flags = I2C_DRV_ACPI_WAIVE_D0_PROBE,
-  2606	};
-  2607	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Thanks,
+~Nick Desaulniers
