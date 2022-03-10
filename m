@@ -1,42 +1,27 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24487A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 09:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646904433; x=1678440433;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=72L4ehMp6FZhWswWWlpVdAywCocM3srYiCHwUoPWtCQ=;
-  b=hy5Y8D9zQMP5jsOBlU9IAMHrCAFYW7TTFym9pnvaYawuR3CljY6+18n5
-   ilSisfQTU2Uyq4dBdPAEHXgCa36OxPCYrzVBcFomocumBl72fJYV/7CWz
-   Cgk6SoDJRjC7Uj+m4oKXyagRWpB92dsmK4E1nSfn+YXHkugvdqt/+bQz9
-   /53R5/B5LAWSBnFok/u4miqk0OVism/xpocWDvdrd2iHiKGdF4qZfBjMQ
-   hy4BJ23hrwnjBIvtRXb3cIpJfZka2A+LiZLJZzDQnUWrK9jtizfTwXCO0
-   IJ4hZyx0G/YezJfl+uPHA8Qu6v9rRXCMcfOBWLbkAESNnyltorrYdk4bM
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254033609"
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="254033609"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 01:26:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="547955817"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Mar 2022 01:26:48 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSF4J-0004jk-L9; Thu, 10 Mar 2022 09:26:47 +0000
-Date: Thu, 10 Mar 2022 17:26:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning:
- no previous prototype for function '__ashldi3'
-Message-ID: <202203101712.9ZWwXz8a-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084747A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 09:31:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61AF0C340EC;
+	Thu, 10 Mar 2022 09:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1646904679;
+	bh=DcJ1hfj1GWNM7xbrACMXqJpfy5RJJBKnXx2LrCwTs8c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=xqwa9YQf3QFd6YIwgIqk5fU9jR11K7Q7EJEL/jaZ9pZEiEL1UBCcWk7GXwXSXn9j/
+	 735Tvv2VTvPkO4+2lqCMC/KQXClaVS+VuC9XZgNC3F3wNDbFfmfQkTZ7h7OPfq2toX
+	 yc8X9geowJk/a4PxekMI5eMPSPytvxMpSZhQihQo=
+Date: Thu, 10 Mar 2022 10:31:15 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: torvalds@linux-foundation.org, stable-commits@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: Patch "ARM: Do not use NOCROSSREFS directive with ld.lld" has
+ been added to the 4.19-stable tree
+Message-ID: <YinFYzenEjq99R3w@kroah.com>
+References: <1646865178129106@kroah.com>
+ <YiktjbXe/2XmjHrb@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,58 +30,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YiktjbXe/2XmjHrb@dev-arch.thelio-3990X>
 
-Hi Masahiro,
+On Wed, Mar 09, 2022 at 03:43:25PM -0700, Nathan Chancellor wrote:
+> Hi Greg,
+> 
+> On Wed, Mar 09, 2022 at 11:32:58PM +0100, gregkh@linuxfoundation.org wrote:
+> > 
+> > This is a note to let you know that I've just added the patch titled
+> > 
+> >     ARM: Do not use NOCROSSREFS directive with ld.lld
+> > 
+> > to the 4.19-stable tree which can be found at:
+> >     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+> 
+> <snip>
+> 
+> > +/*
+> > + * ld.lld does not support NOCROSSREFS:
+> > + * https://github.com/ClangBuiltLinux/linux/issues/1609
+> > + */
+> > +#ifdef CONFIG_LD_IS_LLD
+> 
+> Please cherry-pick commit b744b43f79cc ("kbuild: add CONFIG_LD_IS_LLD")
+> to 4.19 so that this patch works as intended.
 
-FYI, the error/warning still remains.
+Now queued up, thanks.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b
-commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
-date:   4 months ago
-config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20220310/202203101712.9ZWwXz8a-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+> We do not link with ld.lld on 4.9 or 4.14 so the NOCROSSREFS patch is
+> not technically needed there but it does no harm if it is.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I'll leave it as I'm sure there might be others out there that do that
+(Android or ChromeOS?)  I already did the backport-by-hand work, might
+as not waste it :)
 
-All warnings (new ones prefixed by >>):
+thanks,
 
-   In file included from arch/mips/boot/compressed/ashldi3.c:2:
->> arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning: no previous prototype for function '__ashldi3' [-Wmissing-prototypes]
-   long long notrace __ashldi3(long long u, word_type b)
-                     ^
-   arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   long long notrace __ashldi3(long long u, word_type b)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/__ashldi3 +9 arch/mips/boot/compressed/../../../../lib/ashldi3.c
-
-b35cd9884fa5d81 Palmer Dabbelt 2017-05-23  8  
-b35cd9884fa5d81 Palmer Dabbelt 2017-05-23 @9  long long notrace __ashldi3(long long u, word_type b)
-
-:::::: The code at line 9 was first introduced by commit
-:::::: b35cd9884fa5d81c9d5e7f57c9d03264ae2bd835 lib: Add shared copies of some GCC library routines
-
-:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
-:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+greg k-h
