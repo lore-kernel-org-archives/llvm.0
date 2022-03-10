@@ -1,48 +1,44 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89FE7A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 01:07:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365BF7A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 01:29:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646874441; x=1678410441;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fGSNyt7jWba9WqdnHOS4UIzGPJ7XPpWz0AKT3Bmx+oY=;
-  b=b+PcXq9COf0rUARbpkesAQI1UDgYkpHpV4ydPkQhkMEQpwoGYSQNBZD3
-   24HwAjrvJ38T6c8uwlNvGj8KV8kGdOjhyrzG59JRo+/g3pQ4hhAcvo2Pj
-   xHpbV/L/Trdjkc/FEi+8hCUhFP20jBsT0JiH9Yie3TsjvFeUOZnLINCDW
-   z3incp0ivC99eJ7dqBqke6J8cH5Jgsx3Ij3RdE1au5PIzC3itt0kiWgAf
-   U1oEA6nrEC6wQviL94iYR6nYbfLqnAZdT4axuF1SU1s7DLQnYuMdMfx91
-   bq4IIV2+xxxbR572e3fYD6lWmCyzFoN43u+jYW+Q0zT45jjLqtFb8EAhf
+  t=1646875776; x=1678411776;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OXbYneJInVZwCybUdFLiYyvUCfRWNANF7grxShhCeP8=;
+  b=bjMpv+pq9v67w+RUYMBdTI55wAETPvOoIqkukDp4WYjj9qLtk6sR1pyW
+   zPTJeogkIhLwWv3FC3r20gOYUFQEceHHJDEu/1RqIPnbbqaacTCmb8TZy
+   6HFj9s7t6frafQFKj5ownxoC47TBTXZT+72WVx27bEmZqV06z2gLOUAC3
+   4OX2GG1M8NIwcHzK47COxB7BZBRnhyY8z1L3uA8vo2jnwvP0CprhdZx1A
+   RyaG//ka0S9rAcZwuMXguz2a50ne4fwFKNedKSaUNXD0U2TcskQcs3U3L
+   13qgVa8tsFzNuc2uNM3wGFHjt8/pei1Sk5uIn3tbcRthRoSiebHTJ8/54
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254862306"
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="237301363"
 X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="254862306"
+   d="scan'208";a="237301363"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 17:07:21 -0800
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 17:29:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="611566901"
+   d="scan'208";a="611571847"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Mar 2022 17:07:16 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 09 Mar 2022 17:29:33 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nS7Gu-00046O-0H; Thu, 10 Mar 2022 01:07:16 +0000
-Date: Thu, 10 Mar 2022 09:07:06 +0800
+	id 1nS7cS-00048o-J7; Thu, 10 Mar 2022 01:29:32 +0000
+Date: Thu, 10 Mar 2022 09:28:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>, gustavo.pimentel@synopsys.com,
-	hongxing.zhu@nxp.com, l.stach@pengutronix.de, linux-imx@nxp.com,
-	linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-	fancer.lancer@gmail.com, lznuaa@gmail.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, vkoul@kernel.org,
-	lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-	bhelgaas@google.com, shawnguo@kernel.org,
-	manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v4 7/8] dmaengine: dw-edma: add flags at struct
- dw_edma_chip
-Message-ID: <202203100909.fpkA804r-lkp@intel.com>
-References: <20220309211204.26050-8-Frank.Li@nxp.com>
+To: Li RongQing <lirongqing@baidu.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
+	Robert Hu <robert.hu@intel.com>,
+	Farrah Chen <farrah.chen@intel.com>,
+	Danmei Wei <danmei.wei@intel.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Subject: [kvm:queue 182/205] <inline asm>:40:208: error: expected relocatable
+ expression
+Message-ID: <202203100905.1o88Cp2l-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,127 +47,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220309211204.26050-8-Frank.Li@nxp.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Frank,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on vkoul-dmaengine/next]
-[also build test ERROR on helgaas-pci/next linus/master v5.17-rc7 next-20220309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Frank-Li/Enable-designware-PCI-EP-EDMA-locally/20220310-051510
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220310/202203100909.fpkA804r-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+head:   8c1db5a775bc8314d78e99263e0d063a01b692c2
+commit: 4ab22f38c2046f2c949cb43fc0f7515666a2a2fb [182/205] KVM: x86: Support the vCPU preemption check with nopvspin and realtime hint
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220310/202203100905.1o88Cp2l-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/f7947d784b0fe089bdaef2fee8e57f84e390d3f2
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Frank-Li/Enable-designware-PCI-EP-EDMA-locally/20220310-051510
-        git checkout f7947d784b0fe089bdaef2fee8e57f84e390d3f2
+        # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=4ab22f38c2046f2c949cb43fc0f7515666a2a2fb
+        git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
+        git fetch --no-tags kvm queue
+        git checkout 4ab22f38c2046f2c949cb43fc0f7515666a2a2fb
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/dma/dw-edma/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/dma/dw-edma/dw-edma-v0-core.c:427:4: error: implicit declaration of function 'SET_CH_64' [-Werror,-Wimplicit-function-declaration]
-                           SET_CH_64(dw, chan->dir, chan->id, llp.reg,
-                           ^
->> drivers/dma/dw-edma/dw-edma-v0-core.c:427:39: error: use of undeclared identifier 'llp'
-                           SET_CH_64(dw, chan->dir, chan->id, llp.reg,
-                                                              ^
-   2 errors generated.
-
-
-vim +/SET_CH_64 +427 drivers/dma/dw-edma/dw-edma-v0-core.c
-
-   359	
-   360	void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
-   361	{
-   362		struct dw_edma_chan *chan = chunk->chan;
-   363		struct dw_edma *dw = chan->dw;
-   364		u32 tmp;
-   365	
-   366		dw_edma_v0_core_write_chunk(chunk);
-   367	
-   368		if (first) {
-   369			/* Enable engine */
-   370			SET_RW_32(dw, chan->dir, engine_en, BIT(0));
-   371			if (dw->chip->mf == EDMA_MF_HDMA_COMPAT) {
-   372				switch (chan->id) {
-   373				case 0:
-   374					SET_RW_COMPAT(dw, chan->dir, ch0_pwr_en,
-   375						      BIT(0));
-   376					break;
-   377				case 1:
-   378					SET_RW_COMPAT(dw, chan->dir, ch1_pwr_en,
-   379						      BIT(0));
-   380					break;
-   381				case 2:
-   382					SET_RW_COMPAT(dw, chan->dir, ch2_pwr_en,
-   383						      BIT(0));
-   384					break;
-   385				case 3:
-   386					SET_RW_COMPAT(dw, chan->dir, ch3_pwr_en,
-   387						      BIT(0));
-   388					break;
-   389				case 4:
-   390					SET_RW_COMPAT(dw, chan->dir, ch4_pwr_en,
-   391						      BIT(0));
-   392					break;
-   393				case 5:
-   394					SET_RW_COMPAT(dw, chan->dir, ch5_pwr_en,
-   395						      BIT(0));
-   396					break;
-   397				case 6:
-   398					SET_RW_COMPAT(dw, chan->dir, ch6_pwr_en,
-   399						      BIT(0));
-   400					break;
-   401				case 7:
-   402					SET_RW_COMPAT(dw, chan->dir, ch7_pwr_en,
-   403						      BIT(0));
-   404					break;
-   405				}
-   406			}
-   407			/* Interrupt unmask - done, abort */
-   408			tmp = GET_RW_32(dw, chan->dir, int_mask);
-   409			tmp &= ~FIELD_PREP(EDMA_V0_DONE_INT_MASK, BIT(chan->id));
-   410			tmp &= ~FIELD_PREP(EDMA_V0_ABORT_INT_MASK, BIT(chan->id));
-   411			SET_RW_32(dw, chan->dir, int_mask, tmp);
-   412			/* Linked list error */
-   413			tmp = GET_RW_32(dw, chan->dir, linked_list_err_en);
-   414			tmp |= FIELD_PREP(EDMA_V0_LINKED_LIST_ERR_MASK, BIT(chan->id));
-   415			SET_RW_32(dw, chan->dir, linked_list_err_en, tmp);
-   416			/* Channel control */
-   417			SET_CH_32(dw, chan->dir, chan->id, ch_control1,
-   418				  (DW_EDMA_V0_CCS | DW_EDMA_V0_LLE));
-   419			/* Linked list */
-   420			if ((chan->dw->chip->flags & DW_EDMA_CHIP_32BIT_DBI) ||
-   421			    !IS_ENABLED(CONFIG_64BIT)) {
-   422				SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
-   423					  lower_32_bits(chunk->ll_region.paddr));
-   424				SET_CH_32(dw, chan->dir, chan->id, llp.msb,
-   425					  upper_32_bits(chunk->ll_region.paddr));
-   426			} else {
- > 427				SET_CH_64(dw, chan->dir, chan->id, llp.reg,
-   428					  chunk->ll_region.paddr);
-   429			}
-   430		}
-   431		/* Doorbell */
-   432		SET_RW_32(dw, chan->dir, doorbell,
-   433			  FIELD_PREP(EDMA_V0_DOORBELL_CH_MASK, chan->id));
-   434	}
-   435	
+>> <inline asm>:40:208: error: expected relocatable expression
+   .pushsection .text;.global __raw_callee_save___kvm_vcpu_is_preempted;.type __raw_callee_save___kvm_vcpu_is_preempted, @function;__raw_callee_save___kvm_vcpu_is_preempted:movq  __per_cpu_offset(,%rdi,8), %rax;cmpb    $0, KVM_STEAL_TIME_preempted+steal_time(%rax);setne     %al;ret;.size __raw_callee_save___kvm_vcpu_is_preempted, .-__raw_callee_save___kvm_vcpu_is_preempted;.popsection
+                                                                                                                                                                                                                   ^
+   1 error generated.
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
