@@ -1,27 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084747A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 09:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61AF0C340EC;
-	Thu, 10 Mar 2022 09:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1646904679;
-	bh=DcJ1hfj1GWNM7xbrACMXqJpfy5RJJBKnXx2LrCwTs8c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=xqwa9YQf3QFd6YIwgIqk5fU9jR11K7Q7EJEL/jaZ9pZEiEL1UBCcWk7GXwXSXn9j/
-	 735Tvv2VTvPkO4+2lqCMC/KQXClaVS+VuC9XZgNC3F3wNDbFfmfQkTZ7h7OPfq2toX
-	 yc8X9geowJk/a4PxekMI5eMPSPytvxMpSZhQihQo=
-Date: Thu, 10 Mar 2022 10:31:15 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: torvalds@linux-foundation.org, stable-commits@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: Patch "ARM: Do not use NOCROSSREFS directive with ld.lld" has
- been added to the 4.19-stable tree
-Message-ID: <YinFYzenEjq99R3w@kroah.com>
-References: <1646865178129106@kroah.com>
- <YiktjbXe/2XmjHrb@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF317A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 09:46:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646905613; x=1678441613;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b3/fS2yHAqNHl1jboCRu52MjsVGWP5Iqz5RL18JPJbw=;
+  b=dV/ul8ePl3mPbMP4AUCHHtL98ECFK95d3xsrsBC5u2MC+4A8DGTcil/c
+   rn1V/HBHyqUl7/tLJzRfQZxZKieUB+o/NDQH4Owlvb4LO11gHr23Qi3gE
+   UDq96dWT2esoqvTVUHaMfgOesZYKp/eIEICNnR9YuYcM1vxZuR0OmBpDc
+   HSTGzUbHZqDolg45lIX/DjM+rXr9aLWaiHhI11VNtsUSkSIm5XsTiXbIw
+   wenDieCDJwFvrDcLqCE9IgjR+oBRW/mmkzNMaRTfMy3XFW9wCXhcgpLgp
+   1JeStvssveRXBkjNpJgU/1fyKKPddi73VKO78WSLvVBGCn8Ey0hf13nhc
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="279945290"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="279945290"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 01:46:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="781400231"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Mar 2022 01:46:49 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSFNh-0004ks-66; Thu, 10 Mar 2022 09:46:49 +0000
+Date: Thu, 10 Mar 2022 17:46:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ansuel Smith <ansuelsmth@gmail.com>, Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Ansuel Smith <ansuelsmth@gmail.com>,
+	Jonathan McDowell <noodles@earth.li>
+Subject: Re: [PATCH v3 10/18] ARM: dts: qcom: add saw for l2 cache and
+ kraitcc for ipq8064
+Message-ID: <202203101733.hkbTGp6Y-lkp@intel.com>
+References: <20220309190152.7998-11-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -30,40 +50,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YiktjbXe/2XmjHrb@dev-arch.thelio-3990X>
+In-Reply-To: <20220309190152.7998-11-ansuelsmth@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Mar 09, 2022 at 03:43:25PM -0700, Nathan Chancellor wrote:
-> Hi Greg,
-> 
-> On Wed, Mar 09, 2022 at 11:32:58PM +0100, gregkh@linuxfoundation.org wrote:
-> > 
-> > This is a note to let you know that I've just added the patch titled
-> > 
-> >     ARM: Do not use NOCROSSREFS directive with ld.lld
-> > 
-> > to the 4.19-stable tree which can be found at:
-> >     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-> 
-> <snip>
-> 
-> > +/*
-> > + * ld.lld does not support NOCROSSREFS:
-> > + * https://github.com/ClangBuiltLinux/linux/issues/1609
-> > + */
-> > +#ifdef CONFIG_LD_IS_LLD
-> 
-> Please cherry-pick commit b744b43f79cc ("kbuild: add CONFIG_LD_IS_LLD")
-> to 4.19 so that this patch works as intended.
+Hi Ansuel,
 
-Now queued up, thanks.
+Thank you for the patch! Yet something to improve:
 
-> We do not link with ld.lld on 4.9 or 4.14 so the NOCROSSREFS patch is
-> not technically needed there but it does no harm if it is.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linux/master linus/master v5.17-rc7 next-20220309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I'll leave it as I'm sure there might be others out there that do that
-(Android or ChromeOS?)  I already did the backport-by-hand work, might
-as not waste it :)
+url:    https://github.com/0day-ci/linux/commits/Ansuel-Smith/Multiple-addition-to-ipq8064-dtsi/20220310-031750
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220310/202203101733.hkbTGp6Y-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/52c3b4af226c7a50772c40012b3789b5348e49b5
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Ansuel-Smith/Multiple-addition-to-ipq8064-dtsi/20220310-031750
+        git checkout 52c3b4af226c7a50772c40012b3789b5348e49b5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-thanks,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-greg k-h
+All errors (new ones prefixed by >>):
+
+>> ERROR: Input tree has errors, aborting (use -f to force output)
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
