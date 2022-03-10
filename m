@@ -1,46 +1,43 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FA07A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 09:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=asZaKof/Ycf9Yl/IenjXZLrN7xJYPH+zuWKph/YnaGE=; b=mPNMJ1Y4nU566VAWE+/NYgv08b
-	fnoUNB++Yh/YKvbCQYGfC8U772Xr6Xf6cRnvIb/1RPGfBQ+7ctL/m6ntNGPUbgCz+7y8MEzVM8vTX
-	AadX+R+AmeKWwfoeS+z2TK2R7SJ7VcVvWpIuf42dJ69D2Ws1aeq3t4asGj4pZv0Aj3/YjpMFFSPD3
-	i/rW8D4rdjYC9pHvANvFG0HJJTAzLZR6cb8sOdvF+OJPZh/OoMwUu8tYjcPF5WT6Ys/vHywQDhZKc
-	5tFCASSZpCD/LLA1tyKH5+S7oUWSmBwbGmLjiu5EPiCx2HFyXRO/vnxoFuEAe7SHVJioEAx4hxOgs
-	bFD5LLxw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nSEjK-000Mm2-EX; Thu, 10 Mar 2022 09:05:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1367430041D;
-	Thu, 10 Mar 2022 10:05:05 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id E86EC264E62B6; Thu, 10 Mar 2022 10:05:04 +0100 (CET)
-Date: Thu, 10 Mar 2022 10:05:04 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org,
-	joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-	andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-	keescook@chromium.org, samitolvanen@google.com,
-	mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-	rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
-References: <20220308153011.021123062@infradead.org>
- <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
- <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
- <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E26B7A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 09:05:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646903156; x=1678439156;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=M82xsNeo1Txk79yU2M24O6ziQEPCl6oeTfC2wcFQDzY=;
+  b=k/bOnumtsJOosZM7xUPgwebAUwROh92Ysbby6AuV315fSXlBOn/NVhzG
+   uhQes7+SKouCZRKu8WokXuNLWmbgLFHSnQWzQMe/MfH4c2hKiYhXagG7H
+   lJ3cfQdvq/wbjdX+YHxn/sjf10/iKRzXVcgaMsuQNVLj6ugd7b/winKqD
+   HpRW3yBzuSim1h2Y2Y2IoOmy8GZeGyyVf42zCfn3nL/YUx4iwCJSjMQd+
+   UH0Pg8Z26xGfslDa0HQUm2y2X+mz6nrYIFZ6wIWrDoAEbnirVFQq+rjRR
+   3e5tmfM3XWWpn++IQwWI01kFjiH4rIRMDLwPFnxbYhj5D5wElgv4V0TrN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="242644531"
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="242644531"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 01:05:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="510819893"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 10 Mar 2022 01:05:46 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSEjx-0004hY-FK; Thu, 10 Mar 2022 09:05:45 +0000
+Date: Thu, 10 Mar 2022 17:05:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
+	Robert Hu <robert.hu@intel.com>,
+	Farrah Chen <farrah.chen@intel.com>,
+	Danmei Wei <danmei.wei@intel.com>
+Subject: [kvm:queue 210/210] arch/x86/kvm/cpuid.c:739:2: warning: unannotated
+ fall-through between switch labels
+Message-ID: <202203101604.2rV6WBqW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,85 +46,109 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
+tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+head:   ce41d078aaa9cf15cbbb4a42878cc6160d76525e
+commit: ce41d078aaa9cf15cbbb4a42878cc6160d76525e [210/210] KVM: x86: synthesize CPUID leaf 0x80000021h if useful
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220310/202203101604.2rV6WBqW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=ce41d078aaa9cf15cbbb4a42878cc6160d76525e
+        git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
+        git fetch --no-tags kvm queue
+        git checkout ce41d078aaa9cf15cbbb4a42878cc6160d76525e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
-> I observed the following error when building with
-> CONFIG_LTO_CLANG_FULL=y enabled:
-> 
-> ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
-> already defined
->         ibt_selftest_ip:
->         ^
-> 
-> Seems to come from
-> commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
-> 
-> Commenting out the label in the inline asm, I then observed:
-> vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
-> callable instruction with modified stack frame
-> vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
-> mismatch: cfa1=4+64 cfa2=4+8
-> These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
-> disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
-> the ibt_selftest_ip label).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Urgh.. I'm thikning this is a clang bug :/
+All warnings (new ones prefixed by >>):
 
-The code in question is:
+>> arch/x86/kvm/cpuid.c:739:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           default:
+           ^
+   arch/x86/kvm/cpuid.c:739:2: note: insert 'break;' to avoid fall-through
+           default:
+           ^
+           break; 
+   1 warning generated.
 
 
-void ibt_selftest_ip(void); /* code label defined in asm below */
+vim +739 arch/x86/kvm/cpuid.c
 
-DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-{
-	/* ... */
+e53c95e8d41ef9 Sean Christopherson 2020-03-02  707  
+e53c95e8d41ef9 Sean Christopherson 2020-03-02  708  static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
+aa10a7dc8858f6 Sean Christopherson 2020-03-02  709  					      u32 function, u32 index)
+00b27a3efb1160 Avi Kivity          2011-11-23  710  {
+e53c95e8d41ef9 Sean Christopherson 2020-03-02  711  	struct kvm_cpuid_entry2 *entry;
+e53c95e8d41ef9 Sean Christopherson 2020-03-02  712  
+e53c95e8d41ef9 Sean Christopherson 2020-03-02  713  	if (array->nent >= array->maxnent)
+aa10a7dc8858f6 Sean Christopherson 2020-03-02  714  		return NULL;
+e53c95e8d41ef9 Sean Christopherson 2020-03-02  715  
+e53c95e8d41ef9 Sean Christopherson 2020-03-02  716  	entry = &array->entries[array->nent++];
+aa10a7dc8858f6 Sean Christopherson 2020-03-02  717  
+2746a6b72ab9a9 Paolo Bonzini       2021-10-28  718  	memset(entry, 0, sizeof(*entry));
+00b27a3efb1160 Avi Kivity          2011-11-23  719  	entry->function = function;
+00b27a3efb1160 Avi Kivity          2011-11-23  720  	entry->index = index;
+2746a6b72ab9a9 Paolo Bonzini       2021-10-28  721  	switch (function & 0xC0000000) {
+2746a6b72ab9a9 Paolo Bonzini       2021-10-28  722  	case 0x40000000:
+2746a6b72ab9a9 Paolo Bonzini       2021-10-28  723  		/* Hypervisor leaves are always synthesized by __do_cpuid_func.  */
+2746a6b72ab9a9 Paolo Bonzini       2021-10-28  724  		return entry;
+2746a6b72ab9a9 Paolo Bonzini       2021-10-28  725  
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  726  	case 0x80000000:
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  727  		/*
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  728  		 * 0x80000021 is sometimes synthesized by __do_cpuid_func, which
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  729  		 * would result in out-of-bounds calls to do_host_cpuid.
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  730  		 */
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  731  		{
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  732  			static int max_cpuid_80000000;
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  733  			if (!READ_ONCE(max_cpuid_80000000))
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  734  				WRITE_ONCE(max_cpuid_80000000, cpuid_eax(0x80000000));
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  735  			if (function > READ_ONCE(max_cpuid_80000000))
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  736  				return entry;
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  737  		}
+ce41d078aaa9cf Paolo Bonzini       2021-10-21  738  
+2746a6b72ab9a9 Paolo Bonzini       2021-10-28 @739  	default:
+2746a6b72ab9a9 Paolo Bonzini       2021-10-28  740  		break;
+2746a6b72ab9a9 Paolo Bonzini       2021-10-28  741  	}
+ab8bcf64971180 Paolo Bonzini       2019-06-24  742  
+00b27a3efb1160 Avi Kivity          2011-11-23  743  	cpuid_count(entry->function, entry->index,
+00b27a3efb1160 Avi Kivity          2011-11-23  744  		    &entry->eax, &entry->ebx, &entry->ecx, &entry->edx);
+d9aadaf689928b Paolo Bonzini       2019-07-04  745  
+d9aadaf689928b Paolo Bonzini       2019-07-04  746  	switch (function) {
+d9aadaf689928b Paolo Bonzini       2019-07-04  747  	case 4:
+d9aadaf689928b Paolo Bonzini       2019-07-04  748  	case 7:
+d9aadaf689928b Paolo Bonzini       2019-07-04  749  	case 0xb:
+d9aadaf689928b Paolo Bonzini       2019-07-04  750  	case 0xd:
+a06dcd625d6181 Jim Mattson         2019-09-12  751  	case 0xf:
+a06dcd625d6181 Jim Mattson         2019-09-12  752  	case 0x10:
+a06dcd625d6181 Jim Mattson         2019-09-12  753  	case 0x12:
+d9aadaf689928b Paolo Bonzini       2019-07-04  754  	case 0x14:
+a06dcd625d6181 Jim Mattson         2019-09-12  755  	case 0x17:
+a06dcd625d6181 Jim Mattson         2019-09-12  756  	case 0x18:
+690a757d610e50 Jing Liu            2022-01-05  757  	case 0x1d:
+690a757d610e50 Jing Liu            2022-01-05  758  	case 0x1e:
+a06dcd625d6181 Jim Mattson         2019-09-12  759  	case 0x1f:
+d9aadaf689928b Paolo Bonzini       2019-07-04  760  	case 0x8000001d:
+d9aadaf689928b Paolo Bonzini       2019-07-04  761  		entry->flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
+d9aadaf689928b Paolo Bonzini       2019-07-04  762  		break;
+d9aadaf689928b Paolo Bonzini       2019-07-04  763  	}
+aa10a7dc8858f6 Sean Christopherson 2020-03-02  764  
+aa10a7dc8858f6 Sean Christopherson 2020-03-02  765  	return entry;
+00b27a3efb1160 Avi Kivity          2011-11-23  766  }
+00b27a3efb1160 Avi Kivity          2011-11-23  767  
 
-	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
-		regs->ax = 0;
-		return;
-	}
+:::::: The code at line 739 was first introduced by commit
+:::::: 2746a6b72ab9a92bd188c4ac3e4122ee1c18f754 KVM: x86: skip host CPUID call for hypervisor leaves
 
-	/* ... */
-}
+:::::: TO: Paolo Bonzini <pbonzini@redhat.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
-bool ibt_selftest(void)
-{
-	unsigned long ret;
-
-	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
-	     ANNOTATE_RETPOLINE_SAFE
-	     "	jmp *%%rax\n\t"
-	     "ibt_selftest_ip:\n\t"
-	     UNWIND_HINT_FUNC
-	     ANNOTATE_NOENDBR
-	     "	nop\n\t"
-
-	     : "=a" (ret) : : "memory");
-
-	return !ret;
-}
-
-There is only a single definition of that symbol, the one in the asm.
-The other is a declaration, which is used in the exception handler to
-compare against regs->ip.
-
-So what this code does is trigger an explicit #CP and special case that
-in the handler. For that the handler needs to know the special IP that
-will trigger the failure, this is cummunicated with that symbol.
-
-> Otherwise defconfig and CONFIG_LTO_CLANG_THIN=y both built and booted
-> in a vm WITHOUT IBT support.
-> 
-> Any idea what's the status of IBT emulation in QEMU, and if it exists,
-> what's the necessary `-cpu` flag to enable it?
-
-I have a very ugly kvm patch that goes with a very ugly qemu patch to
-make it work. I would very much not recommend those getting merged.
-
-Someone with some actual kvm/qemu foo should do one. The complicating
-factor is that IA32_S_CET also contains SHSTK enable bits, so a straight
-passthrough like I use relies on the guest never setting those bits or
-keeping the pieces. It either needs to filter the MSR or implement the
-full CET mess.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
