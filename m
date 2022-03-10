@@ -1,131 +1,143 @@
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC897A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 10:53:08 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(Authenticated sender: kholk11)
-	with ESMTPSA id 70CF21F454C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1646909587;
-	bh=/gNWVadDfDGHqNyl7lJyNQZh6ChwEINYUFyIGatCL1M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AGV3VigDWxu0PfehGZ2acLaX+HM0VeKT3xlJoPRA6pxisHTKZUbrEmzSW9Jrzwfqk
-	 cVncWHKPaXKR/u9m9paG+QZxjyyCe67geLsp3EgoZ0dd06LCTfzKJC4d7yviicTnzE
-	 JthQlmrJNZBZjaXDV486nsWQeXnt20hA+EgwmbPEq2INHfNox7yS5uBDSR7XrfI028
-	 eWCBlBdYnyFZANqf8VzT+xBDf7lVW3TpUscXIDxEWSr/UI1CwFp5EjvPjxr/DWPizN
-	 VCLLsM4JmYf8XCMQucjmDVQbpHTpU6/N8wlClJEy33dotHvE10bnC2H9OwQ8EYjNL7
-	 ZXbABZYumsrxQ==
-Message-ID: <b9404776-b5c7-7321-f352-1995dafa1565@collabora.com>
-Date: Thu, 10 Mar 2022 11:53:04 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C897A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 10:58:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646909935; x=1678445935;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M5q+tzMs3gOSchhRYjEnJEfpVP9MK4AAfGfOf27NKUM=;
+  b=XlEyUvCafG+7YI3VLzXVbtR4hBybG6txrZBe78mBQOwxWwtkFpTxU9Mx
+   blWBvu7knGGr5Rmw9o4CwmBx3O1+n/W93EtoBQEHg2JS9klKGVpthaNJi
+   YrEpbh4eWImessOGEvgfw9lO54uL1yrjI+VwzeKJyPyWOtkHpwt9t5B6Q
+   aAf+5kDVCjtBO0k/t8XGJcXuefDRi0up0rfK5CLDSE1EQf10pSDD07R+a
+   rHdqgzCsKDcgjUjqZJYctltjfvRKqcVJVgXJmwdAd8gOq8gLvVZa6xx3i
+   hjs+b5NXxT/1NxE1rYmk5Pp2LCp4OU7PMdWBEfI+BEfH0s8rJEvDDZYv+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255413588"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="255413588"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 02:58:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="547978293"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Mar 2022 02:58:52 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSGVP-0004p8-MG; Thu, 10 Mar 2022 10:58:51 +0000
+Date: Thu, 10 Mar 2022 18:58:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrea Tomassetti <andrea.tomassetti@devo.com>,
+	linux-bcache@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, Coly Li <colyli@suse.de>,
+	Kent Overstreet <kmo@daterainc.com>,
+	Zhang Zhen <zhangzhen.email@gmail.com>,
+	Andrea Tomassetti <andrea.tomassetti@devo.com>
+Subject: Re: [PATCH] bcache: Use bcache without formatting existing device
+Message-ID: <202203101836.DQDgIjIF-lkp@intel.com>
+References: <20220310085240.334068-1-andrea.tomassetti@devo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v14 22/22] arm64: dts: mt8195: add display node for
- vdosys1
-Content-Language: en-US
-To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Chun-Kuang Hu <chunkuang.hu@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
- linux@roeck-us.net
-Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- "jason-jh . lin" <jason-jh.lin@mediatek.com>,
- Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
- llvm@lists.linux.dev, singo.chang@mediatek.com, srv_heupstream@mediatek.com,
- Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220310035515.16881-1-nancy.lin@mediatek.com>
- <20220310035515.16881-23-nancy.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220310035515.16881-23-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310085240.334068-1-andrea.tomassetti@devo.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Il 10/03/22 04:55, Nancy.Lin ha scritto:
-> Add display node for vdosys1.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 223 +++++++++++++++++++++++
->   1 file changed, 223 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index dbca699bba05..e650ec759235 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+Hi Andrea,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.17-rc7 next-20220309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Andrea-Tomassetti/bcache-Use-bcache-without-formatting-existing-device/20220310-165353
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b
+config: riscv-buildonly-randconfig-r002-20220310 (https://download.01.org/0day-ci/archive/20220310/202203101836.DQDgIjIF-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/b5073e4ece2a86f002ca66fb1d864034c12be3e2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Andrea-Tomassetti/bcache-Use-bcache-without-formatting-existing-device/20220310-165353
+        git checkout b5073e4ece2a86f002ca66fb1d864034c12be3e2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/md/bcache/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/md/bcache/control.c:18:6: warning: no previous prototype for function 'bch_service_ioctl_ctrl' [-Wmissing-prototypes]
+   long bch_service_ioctl_ctrl(struct file *filp, unsigned int cmd,
+        ^
+   drivers/md/bcache/control.c:18:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   long bch_service_ioctl_ctrl(struct file *filp, unsigned int cmd,
+   ^
+   static 
+   1 warning generated.
 
 
-..snip..
+vim +/bch_service_ioctl_ctrl +18 drivers/md/bcache/control.c
 
-> +
-> +		ethdr0: ethdr@1c114000 {
-> +			compatible = "mediatek,mt8195-disp-ethdr";
-> +			reg = <0 0x1c114000 0 0x1000>,
-> +			      <0 0x1c115000 0 0x1000>,
-> +			      <0 0x1c117000 0 0x1000>,
-> +			      <0 0x1c119000 0 0x1000>,
-> +			      <0 0x1c11A000 0 0x1000>,
-> +			      <0 0x1c11B000 0 0x1000>,
-> +			      <0 0x1c11C000 0 0x1000>;
+    15	
+    16	/* this handles IOCTL for /dev/bcache_ctrl */
+    17	/*********************************************/
+  > 18	long bch_service_ioctl_ctrl(struct file *filp, unsigned int cmd,
+    19			unsigned long arg)
+    20	{
+    21		int retval = 0;
+    22	
+    23		if (_IOC_TYPE(cmd) != BCH_IOCTL_MAGIC)
+    24			return -EINVAL;
+    25	
+    26		if (!capable(CAP_SYS_ADMIN)) {
+    27			/* Must be root to issue ioctls */
+    28			return -EPERM;
+    29		}
+    30	
+    31		switch (cmd) {
+    32		case BCH_IOCTL_REGISTER_DEVICE: {
+    33			struct bch_register_device *cmd_info;
+    34	
+    35			cmd_info = vmalloc(sizeof(struct bch_register_device));
+    36			if (!cmd_info)
+    37				return -ENOMEM;
+    38	
+    39			if (copy_from_user(cmd_info, (void __user *)arg,
+    40					sizeof(struct bch_register_device))) {
+    41				pr_err("Cannot copy cmd info from user space\n");
+    42				vfree(cmd_info);
+    43				return -EINVAL;
+    44			}
+    45	
+    46			retval = register_bcache_ioctl(cmd_info);
+    47	
+    48			vfree(cmd_info);
+    49			return retval;
+    50		}
+    51	
+    52		default:
+    53			return -EINVAL;
+    54		}
+    55	}
+    56	
 
-Hello Nancy,
-looks like you partially forgot to use lower-case hex here...
-
-0x1c11a000 0x1c11b000 0x1c11c000
-
-> +			reg-names = "mixer", "vdo_fe0", "vdo_fe1", "gfx_fe0", "gfx_fe1",
-> +				    "vdo_be", "adl_ds";
-> +			mediatek,gce-client-reg = <&gce0 SUBSYS_1c11XXXX 0x4000 0x1000>,
-> +						  <&gce0 SUBSYS_1c11XXXX 0x5000 0x1000>,
-> +						  <&gce0 SUBSYS_1c11XXXX 0x7000 0x1000>,
-> +						  <&gce0 SUBSYS_1c11XXXX 0x9000 0x1000>,
-> +						  <&gce0 SUBSYS_1c11XXXX 0xA000 0x1000>,
-> +						  <&gce0 SUBSYS_1c11XXXX 0xB000 0x1000>,
-> +						  <&gce0 SUBSYS_1c11XXXX 0xC000 0x1000>;
-
-...and here too: 0xa000 0xb000 0xc000
-
-Please fix that, after which, you can add my
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> +			clocks = <&vdosys1 CLK_VDO1_DISP_MIXER>,
-> +				 <&vdosys1 CLK_VDO1_HDR_VDO_FE0>,
-> +				 <&vdosys1 CLK_VDO1_HDR_VDO_FE1>,
-> +				 <&vdosys1 CLK_VDO1_HDR_GFX_FE0>,
-> +				 <&vdosys1 CLK_VDO1_HDR_GFX_FE1>,
-> +				 <&vdosys1 CLK_VDO1_HDR_VDO_BE>,
-> +				 <&vdosys1 CLK_VDO1_26M_SLOW>,
-> +				 <&vdosys1 CLK_VDO1_HDR_VDO_FE0_DL_ASYNC>,
-> +				 <&vdosys1 CLK_VDO1_HDR_VDO_FE1_DL_ASYNC>,
-> +				 <&vdosys1 CLK_VDO1_HDR_GFX_FE0_DL_ASYNC>,
-> +				 <&vdosys1 CLK_VDO1_HDR_GFX_FE1_DL_ASYNC>,
-> +				 <&vdosys1 CLK_VDO1_HDR_VDO_BE_DL_ASYNC>,
-> +				 <&topckgen CLK_TOP_ETHDR>;
-> +			clock-names = "mixer", "vdo_fe0", "vdo_fe1", "gfx_fe0", "gfx_fe1",
-> +				      "vdo_be", "adl_ds", "vdo_fe0_async", "vdo_fe1_async",
-> +				      "gfx_fe0_async", "gfx_fe1_async","vdo_be_async",
-> +				      "ethdr_top";
-> +			power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
-> +			iommus = <&iommu_vpp M4U_PORT_L3_HDR_DS>,
-> +				 <&iommu_vpp M4U_PORT_L3_HDR_ADL>;
-> +			interrupts = <GIC_SPI 517 IRQ_TYPE_LEVEL_HIGH 0>; /* disp mixer */
-> +			resets = <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE0_DL_ASYNC>,
-> +				 <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE1_DL_ASYNC>,
-> +				 <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE0_DL_ASYNC>,
-> +				 <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE1_DL_ASYNC>,
-> +				 <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_BE_DL_ASYNC>;
-> +		};
-> +
->   	};
->   };
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
