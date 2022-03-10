@@ -1,154 +1,138 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E26B7A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 09:05:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646903156; x=1678439156;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=M82xsNeo1Txk79yU2M24O6ziQEPCl6oeTfC2wcFQDzY=;
-  b=k/bOnumtsJOosZM7xUPgwebAUwROh92Ysbby6AuV315fSXlBOn/NVhzG
-   uhQes7+SKouCZRKu8WokXuNLWmbgLFHSnQWzQMe/MfH4c2hKiYhXagG7H
-   lJ3cfQdvq/wbjdX+YHxn/sjf10/iKRzXVcgaMsuQNVLj6ugd7b/winKqD
-   HpRW3yBzuSim1h2Y2Y2IoOmy8GZeGyyVf42zCfn3nL/YUx4iwCJSjMQd+
-   UH0Pg8Z26xGfslDa0HQUm2y2X+mz6nrYIFZ6wIWrDoAEbnirVFQq+rjRR
-   3e5tmfM3XWWpn++IQwWI01kFjiH4rIRMDLwPFnxbYhj5D5wElgv4V0TrN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="242644531"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="242644531"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 01:05:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="510819893"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 10 Mar 2022 01:05:46 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSEjx-0004hY-FK; Thu, 10 Mar 2022 09:05:45 +0000
-Date: Thu, 10 Mar 2022 17:05:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
-	Robert Hu <robert.hu@intel.com>,
-	Farrah Chen <farrah.chen@intel.com>,
-	Danmei Wei <danmei.wei@intel.com>
-Subject: [kvm:queue 210/210] arch/x86/kvm/cpuid.c:739:2: warning: unannotated
- fall-through between switch labels
-Message-ID: <202203101604.2rV6WBqW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E4C7A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 09:23:03 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-189-Cn9pbkHFPAe5BCPpwhZIzg-1; Thu, 10 Mar 2022 09:23:00 +0000
+X-MC-Unique: Cn9pbkHFPAe5BCPpwhZIzg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Thu, 10 Mar 2022 09:22:59 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Thu, 10 Mar 2022 09:22:59 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Peter Zijlstra' <peterz@infradead.org>, Nick Desaulniers
+	<ndesaulniers@google.com>
+CC: Alexei Starovoitov <alexei.starovoitov@gmail.com>, "x86@kernel.org"
+	<x86@kernel.org>, "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>, "jpoimboe@redhat.com"
+	<jpoimboe@redhat.com>, "andrew.cooper3@citrix.com"
+	<andrew.cooper3@citrix.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "keescook@chromium.org"
+	<keescook@chromium.org>, "samitolvanen@google.com" <samitolvanen@google.com>,
+	"mark.rutland@arm.com" <mark.rutland@arm.com>, "alyssa.milburn@intel.com"
+	<alyssa.milburn@intel.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>, "mhiramat@kernel.org"
+	<mhiramat@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"andrii@kernel.org" <andrii@kernel.org>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [PATCH v4 00/45] x86: Kernel IBT
+Thread-Topic: [PATCH v4 00/45] x86: Kernel IBT
+Thread-Index: AQHYNF3uCfkzaUw3o020v7uo0T//Qqy4V9+w
+Date: Thu, 10 Mar 2022 09:22:59 +0000
+Message-ID: <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
+References: <20220308153011.021123062@infradead.org>
+ <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
+ <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+ <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-head:   ce41d078aaa9cf15cbbb4a42878cc6160d76525e
-commit: ce41d078aaa9cf15cbbb4a42878cc6160d76525e [210/210] KVM: x86: synthesize CPUID leaf 0x80000021h if useful
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220310/202203101604.2rV6WBqW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=ce41d078aaa9cf15cbbb4a42878cc6160d76525e
-        git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
-        git fetch --no-tags kvm queue
-        git checkout ce41d078aaa9cf15cbbb4a42878cc6160d76525e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+From: Peter Zijlstra
+> Sent: 10 March 2022 09:05
+>=20
+> On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
+>=20
+> > I observed the following error when building with
+> > CONFIG_LTO_CLANG_FULL=3Dy enabled:
+> >
+> > ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
+> > already defined
+> >         ibt_selftest_ip:
+> >         ^
+> >
+> > Seems to come from
+> > commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
+> >
+> > Commenting out the label in the inline asm, I then observed:
+> > vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
+> > callable instruction with modified stack frame
+> > vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
+> > mismatch: cfa1=3D4+64 cfa2=3D4+8
+> > These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=3Dy but the=
+n
+> > disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
+> > the ibt_selftest_ip label).
+>=20
+> Urgh.. I'm thikning this is a clang bug :/
+>=20
+> The code in question is:
+>=20
+>=20
+> void ibt_selftest_ip(void); /* code label defined in asm below */
+>=20
+> DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+> {
+> =09/* ... */
+>=20
+> =09if (unlikely(regs->ip =3D=3D (unsigned long)ibt_selftest_ip)) {
+> =09=09regs->ax =3D 0;
+> =09=09return;
+> =09}
+>=20
+> =09/* ... */
+> }
+>=20
+> bool ibt_selftest(void)
+> {
+> =09unsigned long ret;
+>=20
+> =09asm ("=09lea ibt_selftest_ip(%%rip), %%rax\n\t"
+> =09     ANNOTATE_RETPOLINE_SAFE
+> =09     "=09jmp *%%rax\n\t"
+> =09     "ibt_selftest_ip:\n\t"
+> =09     UNWIND_HINT_FUNC
+> =09     ANNOTATE_NOENDBR
+> =09     "=09nop\n\t"
+>=20
+> =09     : "=3Da" (ret) : : "memory");
+>=20
+> =09return !ret;
+> }
+>=20
+> There is only a single definition of that symbol, the one in the asm.
+> The other is a declaration, which is used in the exception handler to
+> compare against regs->ip.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+LTO has probably inlined it twice.
 
-All warnings (new ones prefixed by >>):
+=09David
 
->> arch/x86/kvm/cpuid.c:739:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   arch/x86/kvm/cpuid.c:739:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   1 warning generated.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-
-vim +739 arch/x86/kvm/cpuid.c
-
-e53c95e8d41ef9 Sean Christopherson 2020-03-02  707  
-e53c95e8d41ef9 Sean Christopherson 2020-03-02  708  static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
-aa10a7dc8858f6 Sean Christopherson 2020-03-02  709  					      u32 function, u32 index)
-00b27a3efb1160 Avi Kivity          2011-11-23  710  {
-e53c95e8d41ef9 Sean Christopherson 2020-03-02  711  	struct kvm_cpuid_entry2 *entry;
-e53c95e8d41ef9 Sean Christopherson 2020-03-02  712  
-e53c95e8d41ef9 Sean Christopherson 2020-03-02  713  	if (array->nent >= array->maxnent)
-aa10a7dc8858f6 Sean Christopherson 2020-03-02  714  		return NULL;
-e53c95e8d41ef9 Sean Christopherson 2020-03-02  715  
-e53c95e8d41ef9 Sean Christopherson 2020-03-02  716  	entry = &array->entries[array->nent++];
-aa10a7dc8858f6 Sean Christopherson 2020-03-02  717  
-2746a6b72ab9a9 Paolo Bonzini       2021-10-28  718  	memset(entry, 0, sizeof(*entry));
-00b27a3efb1160 Avi Kivity          2011-11-23  719  	entry->function = function;
-00b27a3efb1160 Avi Kivity          2011-11-23  720  	entry->index = index;
-2746a6b72ab9a9 Paolo Bonzini       2021-10-28  721  	switch (function & 0xC0000000) {
-2746a6b72ab9a9 Paolo Bonzini       2021-10-28  722  	case 0x40000000:
-2746a6b72ab9a9 Paolo Bonzini       2021-10-28  723  		/* Hypervisor leaves are always synthesized by __do_cpuid_func.  */
-2746a6b72ab9a9 Paolo Bonzini       2021-10-28  724  		return entry;
-2746a6b72ab9a9 Paolo Bonzini       2021-10-28  725  
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  726  	case 0x80000000:
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  727  		/*
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  728  		 * 0x80000021 is sometimes synthesized by __do_cpuid_func, which
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  729  		 * would result in out-of-bounds calls to do_host_cpuid.
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  730  		 */
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  731  		{
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  732  			static int max_cpuid_80000000;
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  733  			if (!READ_ONCE(max_cpuid_80000000))
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  734  				WRITE_ONCE(max_cpuid_80000000, cpuid_eax(0x80000000));
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  735  			if (function > READ_ONCE(max_cpuid_80000000))
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  736  				return entry;
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  737  		}
-ce41d078aaa9cf Paolo Bonzini       2021-10-21  738  
-2746a6b72ab9a9 Paolo Bonzini       2021-10-28 @739  	default:
-2746a6b72ab9a9 Paolo Bonzini       2021-10-28  740  		break;
-2746a6b72ab9a9 Paolo Bonzini       2021-10-28  741  	}
-ab8bcf64971180 Paolo Bonzini       2019-06-24  742  
-00b27a3efb1160 Avi Kivity          2011-11-23  743  	cpuid_count(entry->function, entry->index,
-00b27a3efb1160 Avi Kivity          2011-11-23  744  		    &entry->eax, &entry->ebx, &entry->ecx, &entry->edx);
-d9aadaf689928b Paolo Bonzini       2019-07-04  745  
-d9aadaf689928b Paolo Bonzini       2019-07-04  746  	switch (function) {
-d9aadaf689928b Paolo Bonzini       2019-07-04  747  	case 4:
-d9aadaf689928b Paolo Bonzini       2019-07-04  748  	case 7:
-d9aadaf689928b Paolo Bonzini       2019-07-04  749  	case 0xb:
-d9aadaf689928b Paolo Bonzini       2019-07-04  750  	case 0xd:
-a06dcd625d6181 Jim Mattson         2019-09-12  751  	case 0xf:
-a06dcd625d6181 Jim Mattson         2019-09-12  752  	case 0x10:
-a06dcd625d6181 Jim Mattson         2019-09-12  753  	case 0x12:
-d9aadaf689928b Paolo Bonzini       2019-07-04  754  	case 0x14:
-a06dcd625d6181 Jim Mattson         2019-09-12  755  	case 0x17:
-a06dcd625d6181 Jim Mattson         2019-09-12  756  	case 0x18:
-690a757d610e50 Jing Liu            2022-01-05  757  	case 0x1d:
-690a757d610e50 Jing Liu            2022-01-05  758  	case 0x1e:
-a06dcd625d6181 Jim Mattson         2019-09-12  759  	case 0x1f:
-d9aadaf689928b Paolo Bonzini       2019-07-04  760  	case 0x8000001d:
-d9aadaf689928b Paolo Bonzini       2019-07-04  761  		entry->flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
-d9aadaf689928b Paolo Bonzini       2019-07-04  762  		break;
-d9aadaf689928b Paolo Bonzini       2019-07-04  763  	}
-aa10a7dc8858f6 Sean Christopherson 2020-03-02  764  
-aa10a7dc8858f6 Sean Christopherson 2020-03-02  765  	return entry;
-00b27a3efb1160 Avi Kivity          2011-11-23  766  }
-00b27a3efb1160 Avi Kivity          2011-11-23  767  
-
-:::::: The code at line 739 was first introduced by commit
-:::::: 2746a6b72ab9a92bd188c4ac3e4122ee1c18f754 KVM: x86: skip host CPUID call for hypervisor leaves
-
-:::::: TO: Paolo Bonzini <pbonzini@redhat.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
