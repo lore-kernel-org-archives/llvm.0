@@ -1,97 +1,88 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC1A18D
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 15:35:26 +0000 (UTC)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <heiko@sntech.de>)
-	id 1nSK7V-0004bE-W9; Thu, 10 Mar 2022 15:50:26 +0100
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Colin Ian King <colin.i.king@gmail.com>, Nick Desaulniers <ndesaulniers@google.com>
-Cc: Sandy Huang <hjc@rock-chips.com>, David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, knaerzche@gmail.com
-Subject: Re: [PATCH] drm/rockchip: remove redundant assignment to pointer connector
-Date: Thu, 10 Mar 2022 15:50:25 +0100
-Message-ID: <4453075.DPozGzHrQt@diego>
-In-Reply-To: <CAKwvOdkXNGRJkZDd7Cg8jhL9Ex7R+VPYqEEc+VpwDyi9NJKXQQ@mail.gmail.com>
-References: <20220307181704.149076-1-colin.i.king@gmail.com> <CAKwvOdkXNGRJkZDd7Cg8jhL9Ex7R+VPYqEEc+VpwDyi9NJKXQQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2AA118D
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 16:20:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C11C340E8;
+	Thu, 10 Mar 2022 16:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646929225;
+	bh=a93gAwwuRaMdx+LeMidQ2gboZH9pO+gKAeYJd4lUHr0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ff/rsOwFUZtQTB7RsovNGrr7AQWgG02Qq5n2Egz6N2tbuwMJk9ULhCrU5khFNqRIq
+	 hTG4l7v7zYfbfiRNT/YJV8PWVThg1Di+zVuIZC6afMGF7StzE7kaff1NYzxOKkKbj7
+	 1fYqaOwbdplom0TpvYonjfTDaVPTHeVRHpKm3cSJJtajDJBsNI2GJC0QOzOB7sg9nw
+	 Trn5BSq7jIYM9/LhFcP0iEt0sW4aaL2xw7QWmWGfKcNK5qbeoByDTwrKBoS/R3GJ5Q
+	 JddMSo94Qttd1a9PaHQsegKWh6RUS63igbGkyw0+FUutM6CngPwuClnriPcza53FzK
+	 YzWNnuDRe2+Qg==
+Date: Thu, 10 Mar 2022 09:20:18 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: clang-built-linux <clang-built-linux@googlegroups.com>,
+	llvm@lists.linux.dev,
+	Linux-Next Mailing List <linux-next@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [next] ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT
+ expected, but got NOCROSSREFS
+Message-ID: <YiolQp58KrkNkj5R@dev-arch.thelio-3990X>
+References: <CA+G9fYsz7+Ooc8L-Dpfjp6mMDdw43=SjqiE0ryABy3t6qEzRoQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYsz7+Ooc8L-Dpfjp6mMDdw43=SjqiE0ryABy3t6qEzRoQ@mail.gmail.com>
 
-Hi,
+On Thu, Mar 10, 2022 at 05:07:36PM +0530, Naresh Kamboju wrote:
+> Linux next-20220310 arm clang builds failed due to following errors/warnings.
+> 
+> metadata:
+>     git_describe: next-20220310
+>     git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>     git_sha: 71941773e143369a73c9c4a3b62fbb60736a1182
+>     git_short_log: 71941773e143 (\Add linux-next specific files for 20220310\)
+>     target_arch: arm
+>     toolchain: clang-14
+>     Kconfig: https://builds.tuxbuild.com/26BmBgHzW9MFZ3R0kIwL0Ce2r09/config
+> 
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+> ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- 'HOSTCC=sccache clang'
+> 'CC=sccache clang'
+> clang: warning: argument unused during compilation: '-march=armv7-a'
+> [-Wunused-command-line-argument]
+> clang: warning: argument unused during compilation: '-march=armv7-a'
+> [-Wunused-command-line-argument]
+> clang: warning: argument unused during compilation: '-march=armv7-a'
+> [-Wunused-command-line-argument]
+> clang: warning: argument unused during compilation: '-march=armv7-a'
+> [-Wunused-command-line-argument]
+> clang: warning: argument unused during compilation: '-march=armv7-a'
+> [-Wunused-command-line-argument]
+> clang: warning: argument unused during compilation: '-march=armv7-a'
+> [-Wunused-command-line-argument]
+> clang: warning: argument unused during compilation: '-march=armv7-a'
+> [-Wunused-command-line-argument]
+> clang: warning: argument unused during compilation: '-march=armv7-a'
+> [-Wunused-command-line-argument]
+> clang: warning: argument unused during compilation: '-march=armv7-a'
+> [-Wunused-command-line-argument]
+> ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT expected, but got
+> NOCROSSREFS
+> >>>  __vectors_lma = .; OVERLAY 0xffff0000 : NOCROSSREFS AT(__vectors_lma) { .vectors { *(.vectors) } .vectors.bhb.loop8 { *(.vectors.bhb.loop8) } .vectors.bhb.bpiall { *(.vectors.bhb.bpiall) } } __vectors_start = LOADADDR(.vectors); __vectors_end = LOADADDR(.vectors) + SIZEOF(.vectors); __vectors_bhb_loop8_start = LOADADDR(.vectors.bhb.loop8); __vectors_bhb_loop8_end = LOADADDR(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.loop8); __vectors_bhb_bpiall_start = LOADADDR(.vectors.bhb.bpiall); __vectors_bhb_bpiall_end = LOADADDR(.vectors.bhb.bpiall) + SIZEOF(.vectors.bhb.bpiall); . = __vectors_lma + SIZEOF(.vectors) + SIZEOF(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.bpiall); __stubs_lma = .; .stubs ADDR(.vectors) + 0x1000 : AT(__stubs_lma) { *(.stubs) } __stubs_start = LOADADDR(.stubs); __stubs_end = LOADADDR(.stubs) + SIZEOF(.stubs); . = __stubs_lma + SIZEOF(.stubs); PROVIDE(vector_fiq_offset = vector_fiq - ADDR(.vectors));
+> >>>                                          ^
+> make[1]: *** [/builds/linux/Makefile:1225: vmlinux] Error 1
 
-looks like I wasn't in the original recipient list, so only got Nick's
-answer.
+Hi Naresh,
 
-Am Mittwoch, 9. M=E4rz 2022, 00:10:31 CET schrieb Nick Desaulniers:
-> On Mon, Mar 7, 2022 at 10:17 AM Colin Ian King <colin.i.king@gmail.com> w=
-rote:
-> >
-> > The pointer connector is being assigned a value that is never read,
-> > it is being re-assigned in the following statement. The assignment
-> > is redundant and can be removed.
-> >
-> > Cleans up clang scan build warning:
-> > drivers/gpu/drm/rockchip/rockchip_rgb.c:153:2: warning: Value stored
-> > to 'connector' is never read [deadcode.DeadStores]
->=20
-> + Author & reviewer of:
-> Fixes: 2e87bf389e13 ("drm/rockchip: add DRM_BRIDGE_ATTACH_NO_CONNECTOR
-> flag to drm_bridge_attach")
->=20
-> >
-> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> > ---
-> >  drivers/gpu/drm/rockchip/rockchip_rgb.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/rockchip/rockchip_rgb.c b/drivers/gpu/drm/=
-rockchip/rockchip_rgb.c
-> > index 2494b079489d..92a727931a49 100644
-> > --- a/drivers/gpu/drm/rockchip/rockchip_rgb.c
-> > +++ b/drivers/gpu/drm/rockchip/rockchip_rgb.c
-> > @@ -150,7 +150,6 @@ struct rockchip_rgb *rockchip_rgb_init(struct devic=
-e *dev,
-> >         if (ret)
-> >                 goto err_free_encoder;
-> >
-> > -       connector =3D &rgb->connector;
-> >         connector =3D drm_bridge_connector_init(rgb->drm_dev, encoder);
+Thank you for the report! This is already fixed in mainline with
+commit 36168e387fa7 ("ARM: Do not use NOCROSSREFS directive with
+ld.lld"). This should be in next-20220311.
 
-I don't think this will work as expected.
-
-Yes, the whole thing looks a bit broken right now, but the connector
-field in the rockchip_rgb struct still exists and rockchip_rgb_fini also
-still uses it when calling drm_connector_cleanup.
-
-Same issue seems to exist in in rockchip_lvds.c with drm_connector_cleanup
-it seems.
-
-I guess drm_bridge_connector_destroy() is responsible for the cleanup so
-the drm_connector_cleanup call both in rockchip_rgb and rockchip_lvds
-as well as the local connector elements can go away as well?
-
-
-Heiko
-
-
-> >         if (IS_ERR(connector)) {
-> >                 DRM_DEV_ERROR(drm_dev->dev,
-> > --
-> > 2.35.1
-> >
-> >
->=20
->=20
->=20
-
-
-
-
+Cheers,
+Nathan
