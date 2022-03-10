@@ -1,118 +1,129 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0907A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 06:19:21 +0000 (UTC)
-Received: by mail-wm1-f50.google.com with SMTP id c192so2604222wma.4
-        for <llvm@lists.linux.dev>; Wed, 09 Mar 2022 22:19:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hK3i648v5ZRE0u4MjHqsn4u0/9AEYQ3KjKpmR6d4Ca0=;
-        b=eUg52CM/HBJNtxq0M1QzN9jctEijngYy/DGxazUSwGYjQLaztjTRMRPQ08epOUfXXs
-         0mTlYilpJoocy1Wm1VANEm4yUAzCNM9r62S2NjZIdUD9e19QyJPmZonkEusTOUkmAlla
-         UDN13lgOoDDH73/fsmalKiVA04Ljf20quSR5dzc8S3XhXi3/BCxaXxJRgW6kunZJYJBT
-         sb68giQPubBxPk3wbbV59pos62YZvTKz/Ll3jXqfZl59yxtnF5pjp9fl4M81J61YGUb8
-         E3zH4d45lFJvdfneB/WnRH+UtsNDEju6WlkwPaI3oAi6ERxC3SLe+sBYlIsDa21MjK4m
-         SegA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hK3i648v5ZRE0u4MjHqsn4u0/9AEYQ3KjKpmR6d4Ca0=;
-        b=ouFe3iYW82UB9twCXBqDIB80m6GO3JeciPwrt9Ka+f1nCZTuvYCKKYKP1i8op8Kp6E
-         93DySZL2Ny93D1wo2EGUadgif1SqEynnQGCE37bsaSB1OiWGJtSbqZsFS7qSvWZn2K9/
-         BKvF+CLLtP3YBYosbyk5ElAGs8OeQZrDA2S7119nnWtJIYynRKHH75P6QdNDalzTyGiq
-         NUi1E2rXREfE1wjZhC2BDqbEB8aDuIwoRulQGZvhjmhRFcolfa539QjPAxnjydjF5v6k
-         f2taOE3itjU1TzxzOuyqArfH2lWedv3t7fvEXzJa0IZGpSl0iCalMbAYtOsd50B9yOTk
-         NQEA==
-X-Gm-Message-State: AOAM533ZBQfkfHK1lpvV2bfCNnbisX/CMCVLIeDLlK82UXRI1hzYhaLw
-	SQb5FSLh4zT5ozOZl1G83Kg=
-X-Google-Smtp-Source: ABdhPJxAhcjgVxeXrz8BV8hZBn7P/icuke3Yd8rG4bfw9T/tQdwR3SThnGaU84eW4VlPqRYtYsfp5Q==
-X-Received: by 2002:a05:600c:214a:b0:385:9c42:848 with SMTP id v10-20020a05600c214a00b003859c420848mr2227655wml.176.1646893159959;
-        Wed, 09 Mar 2022 22:19:19 -0800 (PST)
-Received: from localhost.localdomain ([2a02:3035:40a:e40c:8335:59f7:b7d4:4936])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056000022a00b001f017dfb5cdsm4415885wrz.90.2022.03.09.22.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 22:19:19 -0800 (PST)
-From: Sedat Dilek <sedat.dilek@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Ian Rogers <irogers@google.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Fangrui Song <maskray@google.com>,
-	Jiri Olsa <jolsa@redhat.com>,
-	Michael Petlan <mpetlan@redhat.com>,
-	Leo Yan <leo.yan@linaro.org>,
-	John Keeping <john@metanate.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Subject: [PATCH] tools: feature/test-libperl.c: Sync PERL_EMBED_CCOPTS with perf
-Date: Thu, 10 Mar 2022 07:19:09 +0100
-Message-Id: <20220310061909.20166-1-sedat.dilek@gmail.com>
-X-Mailer: git-send-email 2.35.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C946B7A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 06:52:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646895157; x=1678431157;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=c5Cn77my4fxZsjlLZmTRZYb8Yewm32e4tPUpwayZdUs=;
+  b=Q4UiWmZbUFlmL/52+FhsUMDmXNMj5EZaYzo41x357Pu9fL3auiaVueYM
+   aZJRjyjl5kR2kYhVEU7z/JoVOpxAnALEsCN5G8g8Y2cctjHnWa1hnVhdP
+   sf+g/uQn3CUrtknpMhDdpF0xuJf7bBlwgtZIBpz+MvfLtlytRrRO39E8Y
+   g8xywexFwbOwBDQb2ltzdJsFyjXzyoCqUFgH+CUgNXLSx+yjKQPsFhZr2
+   3AbHktkM7LOpxZUke/hq8j1BctheGzGmUz91ulEsphKg1qchxyJbf5fy3
+   b6g976whrVGV2W72PWsE2o7aVL3DhDD/JkrROjGiP1OzPZtWm0Nov47Aj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254005498"
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="254005498"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 22:52:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="513861327"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2022 22:52:34 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSCf4-0004Uo-8G; Thu, 10 Mar 2022 06:52:34 +0000
+Date: Thu, 10 Mar 2022 14:52:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-pci@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [helgaas-pci:for-linus 3/3] arch/x86/kernel/resource.c:51:18:
+ warning: missing terminating '"' character
+Message-ID: <202203101402.DpRD30NZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-When trying to build perf with a LLVM/Clang toolchain people see errors
-when testing for libperl feature.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git for-linus
+head:   3018c5d59f923be2fa2d91c4ce02c8d97a37edce
+commit: 3018c5d59f923be2fa2d91c4ce02c8d97a37edce [3/3] x86/PCI: Preserve host bridge windows completely covered by E820
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220310/202203101402.DpRD30NZ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?id=3018c5d59f923be2fa2d91c4ce02c8d97a37edce
+        git remote add helgaas-pci https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
+        git fetch --no-tags helgaas-pci for-linus
+        git checkout 3018c5d59f923be2fa2d91c4ce02c8d97a37edce
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
 
-Jiri reports:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> I'm getting some other lto related error:
->
->         $ cat test-libperl.make.output
->         clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
->
+All warnings (new ones prefixed by >>):
 
-The reason is PERL_EMBED_CCOPTS is defined in two places:
+>> arch/x86/kernel/resource.c:51:18: warning: missing terminating '"' character [-Winvalid-pp-token]
+                           dev_info(dev, "resource %pR fully covered by e820 entry
+                                         ^
+   arch/x86/kernel/resource.c:52:24: warning: missing terminating '"' character [-Winvalid-pp-token]
+   [mem %#010Lx-%#010Lx]\n",
+                          ^
+   arch/x86/kernel/resource.c:51:18: error: expected expression
+                           dev_info(dev, "resource %pR fully covered by e820 entry
+                                         ^
+   2 warnings and 1 error generated.
 
-tools/build/feature/Makefile
-tools/perf/Makefile.config
 
-As an result FLAGS_PERL_EMBED is set differently.
+vim +51 arch/x86/kernel/resource.c
 
-For building perf '-ffat-lto-objects' is filtered-out:
+    26	
+    27	void remove_e820_regions(struct device *dev, struct resource *avail)
+    28	{
+    29		struct resource orig = *avail;
+    30		int i;
+    31		struct e820_entry *entry;
+    32		u64 e820_start, e820_end;
+    33	
+    34		if (!(avail->flags & IORESOURCE_MEM))
+    35			return;
+    36	
+    37		for (i = 0; i < e820_table->nr_entries; i++) {
+    38			entry = &e820_table->entries[i];
+    39			e820_start = entry->addr;
+    40			e820_end = entry->addr + entry->size - 1;
+    41	
+    42			/*
+    43			 * If an E820 entry covers just part of the resource, we
+    44			 * assume E820 is telling us about something like host
+    45			 * bridge register space that is unavailable for PCI
+    46			 * devices.  But if it covers the *entire* resource, it's
+    47			 * more likely just telling us that this is MMIO space, and
+    48			 * that doesn't need to be removed.
+    49			 */
+    50			if (e820_start <= avail->start && avail->end <= e820_end) {
+  > 51				dev_info(dev, "resource %pR fully covered by e820 entry
+    52	[mem %#010Lx-%#010Lx]\n",
+    53					 avail, e820_start, e820_end);
+    54	
+    55				continue;
+    56			}
+    57	
+    58			resource_clip(avail, e820_start, e820_end);
+    59			if (orig.start != avail->start || orig.end != avail->end) {
+    60				dev_info(dev, "clipped %pR to %pR for e820 entry [mem %#010Lx-%#010Lx]\n",
+    61					 &orig, avail, e820_start, e820_end);
+    62				orig = *avail;
+    63			}
+    64		}
+    65	}
+    66	
 
-$ git grep ffat-lto-objects tools/perf/
-tools/perf/Makefile.config:  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-
-Sync PERL_EMBED_CCOPTS in tools/build/feature/Makefile to fix this.
-
-For a minimal fix for Linux v5.17 this here was preferred by Arnaldo.
-
-Link: https://marc.info/?t=164646683300002&r=1&w=2
-Reported-by: Jiri Olsa <olsajiri@gmail.com>
-Reported-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Tested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Suggested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
 ---
- tools/build/feature/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 1480910c792e..869073cf8449 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -218,6 +218,7 @@ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
- PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
- PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
- PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-+PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
- FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
- 
- $(OUTPUT)test-libperl.bin:
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
