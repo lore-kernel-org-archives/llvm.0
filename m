@@ -1,37 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DBF18D
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 17:36:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69144C340E8;
-	Thu, 10 Mar 2022 17:36:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE6418D
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 17:46:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A046C340E8;
+	Thu, 10 Mar 2022 17:46:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646933811;
-	bh=h0waVYpyuTnkxGPqGqawZDdOqQAy45V3TgKXqVDiUgs=;
+	s=k20201202; t=1646934408;
+	bh=LxrudhChGHrWoF38IaSbjEege9yFf0TdQNlrpDPlnzY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gGgZ9ufXsEo9xVy70iZNBJODuGslQ1+tolhXfEhoXVWR6AqvkeyQcsvQeD/AOt2V4
-	 7GfFsQc0SBybJ2TgT/QjnghtIz9FaqXAZcua97AnhAxTWfZzZebelbBOCiHU8DeQjK
-	 z7dWBNBei5WZ6MNIHnI4x152MF+LBn3KBWls7cuIwjczDJhFfIMbhz0DNortW5fqIg
-	 LeDnJ08FqIqa+M74JiEfpJtCeE/z+XV3CAn8npZPVXcBkF0imyPcw9sOYTllUQT1aD
-	 Dl+ym1SUXxpRfOkBQmv4qsjEswk1zps8/YN7keBqTbZeozmOrjrOsFeG9Au5LbJ8Wf
-	 nu50xEtAaOVvg==
-Date: Thu, 10 Mar 2022 10:36:43 -0700
+	b=ZU1GyeQmIgwUqzKzHhAwr1T6sq0dJwnbY19s6LOErPieKaKNFF11L0iHWK8+PkdYU
+	 fMXVuhEXvBn3zXgiB36LwKWPKkq4c2zku6AjryeV7MTnKOLydfIelEOvuiQUftc/g6
+	 qvzQtl22mf1EzX+X9lympGIAkx5AxzH75Hq8XNpMghfOF83NbQlOXDI3gV+ahpDtZv
+	 lkGdlbo4fWs80sG1XUh5V1ksI8h6m39xciPf43IfXf3Dm1sfFtxMkusJS04T+dAr0a
+	 x0xQ7rBIpSr9SfWEnrFIv+aGKu4V5jraBZCAyaPgLKArmeO3u224oyLLNXws45v30m
+	 rwBMqnL/eMDFg==
+Date: Thu, 10 Mar 2022 10:46:41 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-	llvm@lists.linux.dev,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
-Message-ID: <Yio3K4bgdyFEBy7J@dev-arch.thelio-3990X>
-References: <20220304170813.1689186-1-nathan@kernel.org>
- <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
- <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
- <CAK7LNAThknb0=-XhfB6zspke-sNHMEmTbGy8WVeg20ntT72wqA@mail.gmail.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
+	Robert Hu <robert.hu@intel.com>,
+	Farrah Chen <farrah.chen@intel.com>,
+	Danmei Wei <danmei.wei@intel.com>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [kvm:queue 210/210] arch/x86/kvm/cpuid.c:739:2: warning:
+ unannotated fall-through between switch labels
+Message-ID: <Yio5gfTHY5qvcEyU@dev-arch.thelio-3990X>
+References: <202203101604.2rV6WBqW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,134 +35,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNAThknb0=-XhfB6zspke-sNHMEmTbGy8WVeg20ntT72wqA@mail.gmail.com>
+In-Reply-To: <202203101604.2rV6WBqW-lkp@intel.com>
 
-On Wed, Mar 09, 2022 at 06:33:40PM +0900, Masahiro Yamada wrote:
-> On Wed, Mar 9, 2022 at 12:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
-> > > On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > >
-> > > > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> > > > index d32616891dcf..68b74416ec48 100644
-> > > > --- a/Documentation/kbuild/llvm.rst
-> > > > +++ b/Documentation/kbuild/llvm.rst
-> > > > @@ -49,17 +49,36 @@ example: ::
-> > > >  LLVM Utilities
-> > > >  --------------
-> > > >
-> > > > -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
-> > > > -to enable them. ::
-> > > > -
-> > > > -       make LLVM=1
-> > > > -
-> > > > -They can be enabled individually. The full list of the parameters: ::
-> > > > +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
-> > > > +The full list of supported make variables: ::
-> > > >
-> > > >         make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
-> > > >           OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
-> > > >           HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
-> > > >
-> > > > +To simplify the above command, Kbuild supports the ``LLVM`` variable: ::
-> > > > +
-> > > > +       make LLVM=1
-> > > > +
-> > > > +If your LLVM tools are not available in your PATH, you can supply their
-> > > > +location using the LLVM variable with a trailing slash: ::
-> > > > +
-> > > > +       make LLVM=/path/to/llvm/
-> > > > +
-> > > > +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
-> > >
-> > > I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
-> > > works and (my interpretation of what) Masahiro said "if anyone asks
-> > > for this, here's how we could do that."  I don't think I've seen an
-> > > explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
-> > > won't hold this patch up over that.  Either way:
-> >
-> > Right, there has not been an explicit ask for the prefix support yet,
-> > although I know I personally would use it, but I think that it is worth
-> > doing now instead of later for a few reasons:
-> >
-> > 1. It makes path goofs easier to spot. If you do
-> >
-> >      $ PATH=/path/to/llvm:$PATH make LLVM=1 ...
-> >
-> >    with a path to LLVM that does not exist (maybe you are bisecting an
-> >    issue and using a temporary build of LLVM and you forgot the path it
-> >    was in), you fall back to the LLVM tools that are in other places in
-> >    your PATH, which is not what the developer intended. I know that I
-> >    have messed up bisects that way. If you did
-> >
-> >      $ make LLVM=/path/to/llvm/
-> >
-> >    with a path that does not exist, there will be an error much earlier:
-> >
-> >      $ make LLVM=/this/path/does/not/exist/ defconfig
-> >      /bin/sh: line 1: /this/path/does/not/exist/clang: No such file or directory
-> >
-> > 2. It does not take that much more code or documentation to support. It
-> >    is the same amount of code as the suffix and the documentation is
-> >    roughly the same amount of lines as well.
-> >
-> > 3. If we wait to implement the path-based use of $(LLVM), we have three
-> >    "sequence" points: the initial support of $(LLVM), the suffix
-> >    support, and the prefix support. As we are constantly working with
-> >    various trees, it would make it harder to know what to use when. If
-> >    we just do it in the same patch, we know 5.18+ can use both of these
-> >    methods.
-> >
-> > However, at the end of the day, we are a team and if you feel like we
-> > should only have suffix support, I am more than happy to push a v3 that
-> > does just that and we can revist prefix support in the future. Just let
-> > me know!
-> 
-> 
-> I do not have a strong opinion about this.
-> (I just mentioned the LLVM=/path/to/llvm/ form because I guessed
-> somebody would request this sooner or later.)
-> 
-> 
-> If you want me to pick up this version, I will apply it with fixing up
-> a nit pointed out by Kees   (": ::" -> "::")
-> 
-> If you want to send v3, that is fine with me as well.
-> 
-> Please let me know your thoughts.
+Hi Paolo,
 
-Given Nick's response, please pick up this revision with Kees' nit.
-Thank you!
+On Thu, Mar 10, 2022 at 05:05:41PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+> head:   ce41d078aaa9cf15cbbb4a42878cc6160d76525e
+> commit: ce41d078aaa9cf15cbbb4a42878cc6160d76525e [210/210] KVM: x86: synthesize CPUID leaf 0x80000021h if useful
+> config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220310/202203101604.2rV6WBqW-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=ce41d078aaa9cf15cbbb4a42878cc6160d76525e
+>         git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
+>         git fetch --no-tags kvm queue
+>         git checkout ce41d078aaa9cf15cbbb4a42878cc6160d76525e
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> arch/x86/kvm/cpuid.c:739:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+>            default:
+>            ^
+>    arch/x86/kvm/cpuid.c:739:2: note: insert 'break;' to avoid fall-through
+>            default:
+>            ^
+>            break; 
+>    1 warning generated.
+> 
+> 
+> vim +739 arch/x86/kvm/cpuid.c
+> 
+> e53c95e8d41ef9 Sean Christopherson 2020-03-02  707  
+> e53c95e8d41ef9 Sean Christopherson 2020-03-02  708  static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
+> aa10a7dc8858f6 Sean Christopherson 2020-03-02  709  					      u32 function, u32 index)
+> 00b27a3efb1160 Avi Kivity          2011-11-23  710  {
+> e53c95e8d41ef9 Sean Christopherson 2020-03-02  711  	struct kvm_cpuid_entry2 *entry;
+> e53c95e8d41ef9 Sean Christopherson 2020-03-02  712  
+> e53c95e8d41ef9 Sean Christopherson 2020-03-02  713  	if (array->nent >= array->maxnent)
+> aa10a7dc8858f6 Sean Christopherson 2020-03-02  714  		return NULL;
+> e53c95e8d41ef9 Sean Christopherson 2020-03-02  715  
+> e53c95e8d41ef9 Sean Christopherson 2020-03-02  716  	entry = &array->entries[array->nent++];
+> aa10a7dc8858f6 Sean Christopherson 2020-03-02  717  
+> 2746a6b72ab9a9 Paolo Bonzini       2021-10-28  718  	memset(entry, 0, sizeof(*entry));
+> 00b27a3efb1160 Avi Kivity          2011-11-23  719  	entry->function = function;
+> 00b27a3efb1160 Avi Kivity          2011-11-23  720  	entry->index = index;
+> 2746a6b72ab9a9 Paolo Bonzini       2021-10-28  721  	switch (function & 0xC0000000) {
+> 2746a6b72ab9a9 Paolo Bonzini       2021-10-28  722  	case 0x40000000:
+> 2746a6b72ab9a9 Paolo Bonzini       2021-10-28  723  		/* Hypervisor leaves are always synthesized by __do_cpuid_func.  */
+> 2746a6b72ab9a9 Paolo Bonzini       2021-10-28  724  		return entry;
+> 2746a6b72ab9a9 Paolo Bonzini       2021-10-28  725  
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  726  	case 0x80000000:
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  727  		/*
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  728  		 * 0x80000021 is sometimes synthesized by __do_cpuid_func, which
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  729  		 * would result in out-of-bounds calls to do_host_cpuid.
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  730  		 */
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  731  		{
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  732  			static int max_cpuid_80000000;
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  733  			if (!READ_ONCE(max_cpuid_80000000))
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  734  				WRITE_ONCE(max_cpuid_80000000, cpuid_eax(0x80000000));
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  735  			if (function > READ_ONCE(max_cpuid_80000000))
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  736  				return entry;
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  737  		}
+> ce41d078aaa9cf Paolo Bonzini       2021-10-21  738  
+
+Please add a "break;" here to fix this clang warning. GCC does not warn
+when falling through to a case statement that just contains "break" or
+"return" but clang's verion of the warning does, which matches the
+kernel's guidance in Documentation/process/deprecated.rst for having all
+case statements end in either "break", "continue", "fallthrough",
+"goto", or "return".
+
+> 2746a6b72ab9a9 Paolo Bonzini       2021-10-28 @739  	default:
+> 2746a6b72ab9a9 Paolo Bonzini       2021-10-28  740  		break;
+> 2746a6b72ab9a9 Paolo Bonzini       2021-10-28  741  	}
+> ab8bcf64971180 Paolo Bonzini       2019-06-24  742  
+> 00b27a3efb1160 Avi Kivity          2011-11-23  743  	cpuid_count(entry->function, entry->index,
+> 00b27a3efb1160 Avi Kivity          2011-11-23  744  		    &entry->eax, &entry->ebx, &entry->ecx, &entry->edx);
+> d9aadaf689928b Paolo Bonzini       2019-07-04  745  
+> d9aadaf689928b Paolo Bonzini       2019-07-04  746  	switch (function) {
+> d9aadaf689928b Paolo Bonzini       2019-07-04  747  	case 4:
+> d9aadaf689928b Paolo Bonzini       2019-07-04  748  	case 7:
+> d9aadaf689928b Paolo Bonzini       2019-07-04  749  	case 0xb:
+> d9aadaf689928b Paolo Bonzini       2019-07-04  750  	case 0xd:
+> a06dcd625d6181 Jim Mattson         2019-09-12  751  	case 0xf:
+> a06dcd625d6181 Jim Mattson         2019-09-12  752  	case 0x10:
+> a06dcd625d6181 Jim Mattson         2019-09-12  753  	case 0x12:
+> d9aadaf689928b Paolo Bonzini       2019-07-04  754  	case 0x14:
+> a06dcd625d6181 Jim Mattson         2019-09-12  755  	case 0x17:
+> a06dcd625d6181 Jim Mattson         2019-09-12  756  	case 0x18:
+> 690a757d610e50 Jing Liu            2022-01-05  757  	case 0x1d:
+> 690a757d610e50 Jing Liu            2022-01-05  758  	case 0x1e:
+> a06dcd625d6181 Jim Mattson         2019-09-12  759  	case 0x1f:
+> d9aadaf689928b Paolo Bonzini       2019-07-04  760  	case 0x8000001d:
+> d9aadaf689928b Paolo Bonzini       2019-07-04  761  		entry->flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
+> d9aadaf689928b Paolo Bonzini       2019-07-04  762  		break;
+> d9aadaf689928b Paolo Bonzini       2019-07-04  763  	}
+> aa10a7dc8858f6 Sean Christopherson 2020-03-02  764  
+> aa10a7dc8858f6 Sean Christopherson 2020-03-02  765  	return entry;
+> 00b27a3efb1160 Avi Kivity          2011-11-23  766  }
+> 00b27a3efb1160 Avi Kivity          2011-11-23  767  
+> 
+> :::::: The code at line 739 was first introduced by commit
+> :::::: 2746a6b72ab9a92bd188c4ac3e4122ee1c18f754 KVM: x86: skip host CPUID call for hypervisor leaves
+> 
+> :::::: TO: Paolo Bonzini <pbonzini@redhat.com>
+> :::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+> 
 
 Cheers,
 Nathan
-
-> > > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > >
-> > > > +
-> > > > +If your LLVM tools have a version suffix and you want to test with that
-> > > > +explicit version rather than the unsuffixed executables like ``LLVM=1``, you
-> > > > +can pass the suffix using the ``LLVM`` variable: ::
-> > > > +
-> > > > +       make LLVM=-14
-> > > > +
-> > > > +which will use ``clang-14``, ``ld.lld-14``, etc.
-> > > > +
-> > > > +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
-> > > > +``LLVM=1``.
-> > >
-> > > Hmm... I can see someone's build wrappers setting LLVM=1, then them
-> > > being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
-> > > might expect.  But Masahiro says let's fix this later which is fine.
-> >
-> > Sure, I guess that is a reasonable case to support. I'll see if I can
-> > come up with something that makes sense after this change lands.
-> >
-> > Cheers,
-> > Nathan
-> 
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
