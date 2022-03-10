@@ -1,132 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63DF45A1F
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 19:16:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C92C340E8;
-	Thu, 10 Mar 2022 19:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550C05A1F
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 19:44:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C84C340E8;
+	Thu, 10 Mar 2022 19:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646939815;
-	bh=98BAjpDiS+f2yyd2llp2H9fAlMk4kAmKnIuHf/iQiIE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ltuGhYwGrHmQ4/SbpQCjde+9HFEtPRQcvBoWa/6qGrHJA3GnlXFFrUwWPjaV7Zgge
-	 VCIllPabGBZmYOwEOzkmoBLIE4tEb0bRhTbMEmPPZ3mF6b1bg8S/qzdqitJ41LAIqm
-	 wp6khX8bmr1v33FZMGmFOTFvrSdoVCfgDqoXFmQ2uaS7yVqenfUi88w7PY0y7uJr+v
-	 vF5I7IIBUvJEY2+ZI6NUbiSXEfpzk+DdO3HmU+cMTEj4Ko2wMVKVsBp2hOicW5qbUd
-	 HawRm7Y1GL1sj9UlPLYuAaEi3vJ3x3LPy3Ol31W2fRgXa6p7H4HRg4MR1sgZut3B1z
-	 pzqGe0LLOcIQg==
-Date: Thu, 10 Mar 2022 12:16:48 -0700
+	s=k20201202; t=1646941455;
+	bh=1I6monj8Z80bkIg29uwQzm498syCFKo8PKbjOheNRj4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e2sipm9ZeVufcrhX8Hgh2DfYiJ1srdCUKpFl7TTrvGTi6cT4TkBK2iVqo3TxooJIA
+	 3jqIBPpGu0CmrOT32DeWYFiTm2YXnp44uVt6WfuKxuQCptiEjlAyH20vDDwDFD+wgw
+	 foleS6LWcJYPV7dS54byuUxK73qyBIqOxpXo2G2tvRtSmOzSaeYvX/HUB6IiJludIO
+	 qaWlywJuVQIrxE0rVgcMiifzP5K42bnF6M73sodkfY8gEK5anXZq3bF7kf7GjGMb30
+	 8i9Xc8l3U8GyuqQUo+WJL8ryLL9d7orqL87sO5+pAbTUVatFD+uB6sQoaFpnPXYdy6
+	 5NXMysl6sGDmg==
+Date: Thu, 10 Mar 2022 12:44:07 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Russell King <linux@armlinux.org.uk>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: CONFIG_THUMB2_KERNEL=y boot failure after Spectre BHB fixes
-Message-ID: <YipOoAaBIHjeCKOq@dev-arch.thelio-3990X>
+To: kernel test robot <lkp@intel.com>
+Cc: Li RongQing <lirongqing@baidu.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, kvm@vger.kernel.org,
+	Robert Hu <robert.hu@intel.com>,
+	Farrah Chen <farrah.chen@intel.com>,
+	Danmei Wei <danmei.wei@intel.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [kvm:queue 182/205] <inline asm>:40:208: error: expected
+ relocatable expression
+Message-ID: <YipVB6MiWdjY3HI3@dev-arch.thelio-3990X>
+References: <202203100905.1o88Cp2l-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="JBR58G1UIffudVF/"
-Content-Disposition: inline
-
-
---JBR58G1UIffudVF/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202203100905.1o88Cp2l-lkp@intel.com>
 
-Hi Russell,
+On Thu, Mar 10, 2022 at 09:28:32AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+> head:   8c1db5a775bc8314d78e99263e0d063a01b692c2
+> commit: 4ab22f38c2046f2c949cb43fc0f7515666a2a2fb [182/205] KVM: x86: Support the vCPU preemption check with nopvspin and realtime hint
+> config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220310/202203100905.1o88Cp2l-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=4ab22f38c2046f2c949cb43fc0f7515666a2a2fb
+>         git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
+>         git fetch --no-tags kvm queue
+>         git checkout 4ab22f38c2046f2c949cb43fc0f7515666a2a2fb
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> <inline asm>:40:208: error: expected relocatable expression
+>    .pushsection .text;.global __raw_callee_save___kvm_vcpu_is_preempted;.type __raw_callee_save___kvm_vcpu_is_preempted, @function;__raw_callee_save___kvm_vcpu_is_preempted:movq  __per_cpu_offset(,%rdi,8), %rax;cmpb    $0, KVM_STEAL_TIME_preempted+steal_time(%rax);setne     %al;ret;.size __raw_callee_save___kvm_vcpu_is_preempted, .-__raw_callee_save___kvm_vcpu_is_preempted;.popsection
+>                                                                                                                                                                                                                    ^
+>    1 error generated.
 
-Apologies if this has already been reported, I did not see anything when
-sifting through lore.kernel.org and I can still reproduce this with
-current mainline (1db333d9a51f).
+It looks like there is a new revision of the patch that should resolve
+this.
 
-I noticed a QEMU boot failure with multi_v7_defconfig with
-CONFIG_THUMB2_KERNEL=y in our continuous integration [1]. It does not
-appear to be compiler specific, as it reproduces with a bunch of
-different clang versions and GCC 11.2.0 (I didn't try other GCC
-versions).
+https://lore.kernel.org/r/1646891689-53368-1-git-send-email-lirongqing@baidu.com/
 
-At commit 04e91b732476 ("ARM: early traps initialisation"), everything
-boots fine.
+It happens with GCC / GNU as too.
 
-At commit 8d9d651ff227 ("ARM: use LOADADDR() to get load address of
-sections"), there is no output from QEMU at all.
-
-At commit b9baf5c8c5c3 ("ARM: Spectre-BHB workaround"), there is some
-output but the boot still hangs before init. I have included a log of
-the output of QEMU at this revision along with the command line I am
-using, which comes from [2]. If I disable CONFIG_HARDEN_BRANCH_HISTORY,
-the kernel boots.
-
-If there is any further information I can provide or patches I can try,
-I am happy to do so.
-
-[1]: https://github.com/ClangBuiltLinux/continuous-integration2/runs/5496036256?check_suite_focus=true
-[2]: https://github.com/ClangBuiltLinux/boot-utils
+/tmp/cc6grhKv.s: Assembler messages:
+/tmp/cc6grhKv.s:52: Error: invalid operands (*UND* and .data sections) for `+'
 
 Cheers,
 Nathan
-
---JBR58G1UIffudVF/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="boot.log"
-
-+ timeout --foreground 1m stdbuf -oL -eL qemu-system-arm -initrd /home/nathan/cbl/github/boot-utils-ro/images/arm/rootfs.cpio -append 'console=ttyAMA0 earlycon' -machine virt -no-reboot -display none -kernel /home/nathan/cbl/src/linux/arch/arm/boot/zImage -m 512m -nodefaults -serial mon:stdio
-[    0.000000] Booting Linux on physical CPU 0x0
-[    0.000000] Linux version 5.16.0-00004-gb9baf5c8c5c3 (nathan@dev-arch.thelio-3990X) (arm-none-eabi-gcc (Arch Repository) 11.2.0, GNU ld (GNU Binutils) 2.37) #1 SMP Thu Mar 10 12:03:57 MST 2022
-[    0.000000] CPU: ARMv7 Processor [412fc0f1] revision 1 (ARMv7), cr=50c5387d
-[    0.000000] CPU: div instructions available: patching division code
-[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, PIPT instruction cache
-[    0.000000] OF: fdt: Machine model: linux,dummy-virt
-[    0.000000] earlycon: pl11 at MMIO 0x09000000 (options '')
-[    0.000000] printk: bootconsole [pl11] enabled
-[    0.000000] Memory policy: Data cache writealloc
-[    0.000000] efi: UEFI not found.
-[    0.000000] cma: Reserved 64 MiB at 0x5c000000
-[    0.000000] Zone ranges:
-[    0.000000]   DMA      [mem 0x0000000040000000-0x000000005fffffff]
-[    0.000000]   Normal   empty
-[    0.000000]   HighMem  empty
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000040000000-0x000000005fffffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000040000000-0x000000005fffffff]
-[    0.000000] psci: probing for conduit method from DT.
-[    0.000000] psci: PSCIv1.1 detected in firmware.
-[    0.000000] psci: Using standard PSCI v0.2 function IDs
-[    0.000000] psci: Trusted OS migration not required
-[    0.000000] psci: SMC Calling Convention v1.0
-[    0.000000] percpu: Embedded 16 pages/cpu s33996 r8192 d23348 u65536
-[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 130048
-[    0.000000] Kernel command line: console=ttyAMA0 earlycon
-[    0.000000] Dentry cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
-[    0.000000] Inode-cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
-[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-[    0.000000] Memory: 428336K/524288K available (10240K kernel code, 2268K rwdata, 5524K rodata, 2048K init, 392K bss, 30416K reserved, 65536K cma-reserved, 0K highmem)
-[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
-[    0.000000] trace event string verifier disabled
-[    0.000000] rcu: Hierarchical RCU implementation.
-[    0.000000] rcu: 	RCU event tracing is enabled.
-[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=16 to nr_cpu_ids=1.
-[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
-[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
-[    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
-[    0.000000] GICv2m: range[mem 0x08020000-0x08020fff], SPI[80:143]
-[    0.000000] random: get_random_bytes called from _etext+0x600c95/0x67d464 with crng_init=0
-[    0.000000] arch_timer: cp15 timer(s) running at 62.50MHz (virt).
-[    0.000000] clocksource: arch_sys_counter: mask: 0x1ffffffffffffff max_cycles: 0x1cd42e208c, max_idle_ns: 881590405314 ns
-[    0.000114] sched_clock: 57 bits at 62MHz, resolution 16ns, wraps every 4398046511096ns
-[    0.000363] Switching to timer-based delay loop, resolution 16ns
-[    0.002953] Console: colour dummy device 80x30
-[    0.004065] Calibrating delay loop (skipped), value calculated using timer frequency.. 125.00 BogoMIPS (lpj=625000)
-[    0.004331] pid_max: default: 32768 minimum: 301
-[    0.005091] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-[    0.005239] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-qemu-system-arm: terminating on signal 15 from pid 511549 (timeout)
-+ RET=124
-+ set +x
-
---JBR58G1UIffudVF/--
