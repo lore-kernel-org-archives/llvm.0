@@ -1,41 +1,46 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CE37A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 08:35:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646901348; x=1678437348;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TOmmHXBy4Vw8h+IYfazTSOkCfXOokZJIGk+zAXH08VY=;
-  b=JgvN0tiqBfwGtNTqc3BwP4x8ezSCL3AfH/PzS/MCmusRLxoQYDMPlGoR
-   ucMB9OnZySBZ3OPjPO8djNBOSxjy+luc1pPnnT07Ddiuo73dZk/kS2wUI
-   0ctV55Jrx+D4aFgVUsEMkvVjI22/cLUbItfSvu9gFVzNQ2JzFIMHh1seU
-   RjnBSqtEt0ilUptU72I5k8BBX3za10mKlxJ5Q3LjKQ6Jab9UuY7Pv7MHD
-   c8tISOUb+KZt4jACuPv5SKWA7L5BIynU08AECHxYl1MdDVIQtCLGbzfu5
-   tRktvsJfMezoB+dnS4amCVgjHjMIbZ/LHR25m6H+iaCKBpyifdkmyesEy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="252762290"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="252762290"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 00:35:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="712277523"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 10 Mar 2022 00:35:44 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSEGt-0004eX-LL; Thu, 10 Mar 2022 08:35:43 +0000
-Date: Thu, 10 Mar 2022 16:34:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: arch/arm/mm/proc-v7-bugs.c:111:15: warning: more '%' conversions
- than data arguments
-Message-ID: <202203101629.dia0kbU5-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FA07A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 09:05:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=asZaKof/Ycf9Yl/IenjXZLrN7xJYPH+zuWKph/YnaGE=; b=mPNMJ1Y4nU566VAWE+/NYgv08b
+	fnoUNB++Yh/YKvbCQYGfC8U772Xr6Xf6cRnvIb/1RPGfBQ+7ctL/m6ntNGPUbgCz+7y8MEzVM8vTX
+	AadX+R+AmeKWwfoeS+z2TK2R7SJ7VcVvWpIuf42dJ69D2Ws1aeq3t4asGj4pZv0Aj3/YjpMFFSPD3
+	i/rW8D4rdjYC9pHvANvFG0HJJTAzLZR6cb8sOdvF+OJPZh/OoMwUu8tYjcPF5WT6Ys/vHywQDhZKc
+	5tFCASSZpCD/LLA1tyKH5+S7oUWSmBwbGmLjiu5EPiCx2HFyXRO/vnxoFuEAe7SHVJioEAx4hxOgs
+	bFD5LLxw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nSEjK-000Mm2-EX; Thu, 10 Mar 2022 09:05:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1367430041D;
+	Thu, 10 Mar 2022 10:05:05 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id E86EC264E62B6; Thu, 10 Mar 2022 10:05:04 +0100 (CET)
+Date: Thu, 10 Mar 2022 10:05:04 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org,
+	joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
+	andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+	keescook@chromium.org, samitolvanen@google.com,
+	mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+	rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
+References: <20220308153011.021123062@infradead.org>
+ <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
+ <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,126 +49,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b
-commit: 9dd78194a3722fa6712192cdd4f7032d45112a9a ARM: report Spectre v2 status through sysfs
-date:   5 days ago
-config: arm-randconfig-r035-20220310 (https://download.01.org/0day-ci/archive/20220310/202203101629.dia0kbU5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9dd78194a3722fa6712192cdd4f7032d45112a9a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9dd78194a3722fa6712192cdd4f7032d45112a9a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
+On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> I observed the following error when building with
+> CONFIG_LTO_CLANG_FULL=y enabled:
+> 
+> ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
+> already defined
+>         ibt_selftest_ip:
+>         ^
+> 
+> Seems to come from
+> commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
+> 
+> Commenting out the label in the inline asm, I then observed:
+> vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
+> callable instruction with modified stack frame
+> vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
+> mismatch: cfa1=4+64 cfa2=4+8
+> These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
+> disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
+> the ibt_selftest_ip label).
 
-All warnings (new ones prefixed by >>):
+Urgh.. I'm thikning this is a clang bug :/
 
->> arch/arm/mm/proc-v7-bugs.c:111:15: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
-           pr_info("CPU%u: Spectre V2: workarounds disabled by configuration\n");
-                       ~^
-   include/linux/printk.h:523:26: note: expanded from macro 'pr_info'
-           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-                                   ^~~
-   include/linux/printk.h:340:21: note: expanded from macro 'pr_fmt'
-   #define pr_fmt(fmt) fmt
-                       ^~~
-   include/linux/printk.h:450:53: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ^~~
-   include/linux/printk.h:422:11: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ^~~~
-   arch/arm/mm/proc-v7-bugs.c:205:6: warning: no previous prototype for function 'cpu_v7_ca8_ibe' [-Wmissing-prototypes]
-   void cpu_v7_ca8_ibe(void)
-        ^
-   arch/arm/mm/proc-v7-bugs.c:205:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void cpu_v7_ca8_ibe(void)
-   ^
-   static 
-   arch/arm/mm/proc-v7-bugs.c:211:6: warning: no previous prototype for function 'cpu_v7_ca15_ibe' [-Wmissing-prototypes]
-   void cpu_v7_ca15_ibe(void)
-        ^
-   arch/arm/mm/proc-v7-bugs.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void cpu_v7_ca15_ibe(void)
-   ^
-   static 
-   arch/arm/mm/proc-v7-bugs.c:217:6: warning: no previous prototype for function 'cpu_v7_bugs_init' [-Wmissing-prototypes]
-   void cpu_v7_bugs_init(void)
-        ^
-   arch/arm/mm/proc-v7-bugs.c:217:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void cpu_v7_bugs_init(void)
-   ^
-   static 
-   4 warnings generated.
+The code in question is:
 
 
-vim +111 arch/arm/mm/proc-v7-bugs.c
+void ibt_selftest_ip(void); /* code label defined in asm below */
 
-    65	
-    66	static unsigned int spectre_v2_install_workaround(unsigned int method)
-    67	{
-    68		const char *spectre_v2_method = NULL;
-    69		int cpu = smp_processor_id();
-    70	
-    71		if (per_cpu(harden_branch_predictor_fn, cpu))
-    72			return SPECTRE_MITIGATED;
-    73	
-    74		switch (method) {
-    75		case SPECTRE_V2_METHOD_BPIALL:
-    76			per_cpu(harden_branch_predictor_fn, cpu) =
-    77				harden_branch_predictor_bpiall;
-    78			spectre_v2_method = "BPIALL";
-    79			break;
-    80	
-    81		case SPECTRE_V2_METHOD_ICIALLU:
-    82			per_cpu(harden_branch_predictor_fn, cpu) =
-    83				harden_branch_predictor_iciallu;
-    84			spectre_v2_method = "ICIALLU";
-    85			break;
-    86	
-    87		case SPECTRE_V2_METHOD_HVC:
-    88			per_cpu(harden_branch_predictor_fn, cpu) =
-    89				call_hvc_arch_workaround_1;
-    90			cpu_do_switch_mm = cpu_v7_hvc_switch_mm;
-    91			spectre_v2_method = "hypervisor";
-    92			break;
-    93	
-    94		case SPECTRE_V2_METHOD_SMC:
-    95			per_cpu(harden_branch_predictor_fn, cpu) =
-    96				call_smc_arch_workaround_1;
-    97			cpu_do_switch_mm = cpu_v7_smc_switch_mm;
-    98			spectre_v2_method = "firmware";
-    99			break;
-   100		}
-   101	
-   102		if (spectre_v2_method)
-   103			pr_info("CPU%u: Spectre v2: using %s workaround\n",
-   104				smp_processor_id(), spectre_v2_method);
-   105	
-   106		return SPECTRE_MITIGATED;
-   107	}
-   108	#else
-   109	static unsigned int spectre_v2_install_workaround(unsigned int method)
-   110	{
- > 111		pr_info("CPU%u: Spectre V2: workarounds disabled by configuration\n");
-   112	
-   113		return SPECTRE_VULNERABLE;
-   114	}
-   115	#endif
-   116	
+DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+{
+	/* ... */
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
+		regs->ax = 0;
+		return;
+	}
+
+	/* ... */
+}
+
+bool ibt_selftest(void)
+{
+	unsigned long ret;
+
+	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
+	     ANNOTATE_RETPOLINE_SAFE
+	     "	jmp *%%rax\n\t"
+	     "ibt_selftest_ip:\n\t"
+	     UNWIND_HINT_FUNC
+	     ANNOTATE_NOENDBR
+	     "	nop\n\t"
+
+	     : "=a" (ret) : : "memory");
+
+	return !ret;
+}
+
+There is only a single definition of that symbol, the one in the asm.
+The other is a declaration, which is used in the exception handler to
+compare against regs->ip.
+
+So what this code does is trigger an explicit #CP and special case that
+in the handler. For that the handler needs to know the special IP that
+will trigger the failure, this is cummunicated with that symbol.
+
+> Otherwise defconfig and CONFIG_LTO_CLANG_THIN=y both built and booted
+> in a vm WITHOUT IBT support.
+> 
+> Any idea what's the status of IBT emulation in QEMU, and if it exists,
+> what's the necessary `-cpu` flag to enable it?
+
+I have a very ugly kvm patch that goes with a very ugly qemu patch to
+make it work. I would very much not recommend those getting merged.
+
+Someone with some actual kvm/qemu foo should do one. The complicating
+factor is that IA32_S_CET also contains SHSTK enable bits, so a straight
+passthrough like I use relies on the guest never setting those bits or
+keeping the pieces. It either needs to filter the MSR or implement the
+full CET mess.
