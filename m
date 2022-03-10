@@ -1,80 +1,95 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365BF7A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 01:29:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646875776; x=1678411776;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OXbYneJInVZwCybUdFLiYyvUCfRWNANF7grxShhCeP8=;
-  b=bjMpv+pq9v67w+RUYMBdTI55wAETPvOoIqkukDp4WYjj9qLtk6sR1pyW
-   zPTJeogkIhLwWv3FC3r20gOYUFQEceHHJDEu/1RqIPnbbqaacTCmb8TZy
-   6HFj9s7t6frafQFKj5ownxoC47TBTXZT+72WVx27bEmZqV06z2gLOUAC3
-   4OX2GG1M8NIwcHzK47COxB7BZBRnhyY8z1L3uA8vo2jnwvP0CprhdZx1A
-   RyaG//ka0S9rAcZwuMXguz2a50ne4fwFKNedKSaUNXD0U2TcskQcs3U3L
-   13qgVa8tsFzNuc2uNM3wGFHjt8/pei1Sk5uIn3tbcRthRoSiebHTJ8/54
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="237301363"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="237301363"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 17:29:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="611571847"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Mar 2022 17:29:33 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nS7cS-00048o-J7; Thu, 10 Mar 2022 01:29:32 +0000
-Date: Thu, 10 Mar 2022 09:28:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Li RongQing <lirongqing@baidu.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
-	Robert Hu <robert.hu@intel.com>,
-	Farrah Chen <farrah.chen@intel.com>,
-	Danmei Wei <danmei.wei@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Subject: [kvm:queue 182/205] <inline asm>:40:208: error: expected relocatable
- expression
-Message-ID: <202203100905.1o88Cp2l-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3337A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 02:41:44 +0000 (UTC)
+X-UUID: 0187fc527e794af4b7218f3ee2f6f0eb-20220310
+X-UUID: 0187fc527e794af4b7218f3ee2f6f0eb-20220310
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1145003533; Thu, 10 Mar 2022 10:41:32 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 10 Mar 2022 10:41:31 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 10 Mar 2022 10:41:31 +0800
+Message-ID: <9576ee1f2e59b3e719f0d4d5f861e1268821e973.camel@mediatek.com>
+Subject: Re: [RESEND v13 07/22] soc: mediatek: mmsys: specify 64BIT
+ dependency for MTK_MMSYS
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, "Rob
+ Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel
+	<p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
+	<srv_heupstream@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date: Thu, 10 Mar 2022 10:41:31 +0800
+In-Reply-To: <d6fa28ef-fdbb-2b6c-acaa-4c35bb631ab4@collabora.com>
+References: <20220308093018.24189-1-nancy.lin@mediatek.com>
+	 <20220308093018.24189-8-nancy.lin@mediatek.com>
+	 <d6fa28ef-fdbb-2b6c-acaa-4c35bb631ab4@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-head:   8c1db5a775bc8314d78e99263e0d063a01b692c2
-commit: 4ab22f38c2046f2c949cb43fc0f7515666a2a2fb [182/205] KVM: x86: Support the vCPU preemption check with nopvspin and realtime hint
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220310/202203100905.1o88Cp2l-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=4ab22f38c2046f2c949cb43fc0f7515666a2a2fb
-        git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
-        git fetch --no-tags kvm queue
-        git checkout 4ab22f38c2046f2c949cb43fc0f7515666a2a2fb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi Angelo,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the review.
 
-All errors (new ones prefixed by >>):
+On Tue, 2022-03-08 at 14:41 +0100, AngeloGioacchino Del Regno wrote:
+> Il 08/03/22 10:30, Nancy.Lin ha scritto:
+> > Because mtk-mutex change to use unsigned long mutex module type,
+> > it should depend 64BIT. This is a preparation for adding support
+> > for
+> > mt8195 vdosys1 mutex.
+> > 
+> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> > ---
+> >   drivers/soc/mediatek/Kconfig | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/soc/mediatek/Kconfig
+> > b/drivers/soc/mediatek/Kconfig
+> > index fdd8bc08569e..24f792c46444 100644
+> > --- a/drivers/soc/mediatek/Kconfig
+> > +++ b/drivers/soc/mediatek/Kconfig
+> > @@ -68,6 +68,7 @@ config MTK_SCPSYS_PM_DOMAINS
+> >   config MTK_MMSYS
+> >   	bool "MediaTek MMSYS Support"
+> >   	default ARCH_MEDIATEK
+> > +	depends on 64BIT
+> >   	depends on HAS_IOMEM
+> >   	help
+> >   	  Say yes here to add support for the MediaTek Multimedia
+> 
+> Breaking old platforms is forbidden.
+> 
+> MT2701 and MT7623N are 32-bit ARM SoCs and:
+> - mt2701 needs mmsys only; but
+> - mt7623n needs mmsys and mutex.
+> 
+> Besides, this is an easy fix: just change your unsigned long to a
+> fixed size u64.
 
->> <inline asm>:40:208: error: expected relocatable expression
-   .pushsection .text;.global __raw_callee_save___kvm_vcpu_is_preempted;.type __raw_callee_save___kvm_vcpu_is_preempted, @function;__raw_callee_save___kvm_vcpu_is_preempted:movq  __per_cpu_offset(,%rdi,8), %rax;cmpb    $0, KVM_STEAL_TIME_preempted+steal_time(%rax);setne     %al;ret;.size __raw_callee_save___kvm_vcpu_is_preempted, .-__raw_callee_save___kvm_vcpu_is_preempted;.popsection
-                                                                                                                                                                                                                   ^
-   1 error generated.
+OK, I will change to use fixed size u64. Thanks for your sugguestion.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Regards,
+Nancy
+
