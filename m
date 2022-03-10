@@ -1,42 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A157A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 07:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F9E7A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 07:23:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646896419; x=1678432419;
+  t=1646897019; x=1678433019;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5ernpgFyeVBaec0j6i1p29XPpb2BWKA2H3QhtbjZW8c=;
-  b=US/WuWJYNvD36MuEPxUOBSsPkqCHTwFbH5EFF53gc2V9gn8PSG/QeSN1
-   PJ55s9AHy1GvH4sIokDy44UyxJLsH8eBKe2B0PmfjK2Ui0fqrYEKKjx84
-   sX6+7jBZPZGSqQ0EnsIuf9wDpmdPSDbpfjk8rvl19zZHLfBw7MVvxM2mW
-   ynh9XaLJ4Ewdb9shbQBq21F7QoOc8ZGqUMx2vbBGRWBtahxM64buyz+nA
-   TGUrUJplW1k07YnBJ7DdSHxGtz0mEAX19yRyeDy7txLWX06RDJ+i3J4vp
-   syoQJyhLx7QGfY2XKWP66gy4DuBGbe2jH8Mce+kzPTcG7IxthkwfjQD8H
+  bh=8DW4ZkjykbyMj9hKtNQeQHVqLXxJ1uy9HK9dUIuuugg=;
+  b=J8EBIco8/OmZ77TRGJqwXRMbbZtUZAawrwhwdl7QWLwVrcX9F1Kuz5DT
+   tnJkGq9cV8tMgFWZbR5U/Be7ip2XSyusSrzkOMe7xhe83cpuz+v2uScu7
+   raXZK70C159x1TSVSKi8sqE7s5pFPemv2D3iSg4ufwuvclQqk5JXq9OPT
+   iVCVI12fgaXOYjdUzp9yol5rB9FMZCSHK1tmeVDezjZgYL74rI0VP3KSb
+   ktTYd/fVzPey4c7UyuEEUldHidNzQvfxvD03MbmUSg+K+ysUsBLiioyx8
+   st6GwMzD4NlJeA+ndbsQGq33+aSxvjyyDvMsbr+oxAHVyGba2krkbM3RB
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="341607073"
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="242625979"
 X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="341607073"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 23:13:38 -0800
+   d="scan'208";a="242625979"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 23:23:38 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="712252760"
+   d="scan'208";a="554517163"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 09 Mar 2022 23:13:36 -0800
+  by orsmga008.jf.intel.com with ESMTP; 09 Mar 2022 23:23:36 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nSCzP-0004WM-LZ; Thu, 10 Mar 2022 07:13:35 +0000
-Date: Thu, 10 Mar 2022 15:12:45 +0800
+	id 1nSD96-0004XS-4D; Thu, 10 Mar 2022 07:23:36 +0000
+Date: Thu, 10 Mar 2022 15:23:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dai Ngo <dai.ngo@oracle.com>
+To: Sam Shih <sam.shih@mediatek.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>
-Subject: [cel:nfsd-courteous-server 39/39] fs/nfsd/nfs4state.c:2460:60:
- warning: format specifies type 'long' but the argument has type 'u64' (aka
- 'unsigned long long')
-Message-ID: <202203101509.pWJbkMAO-lkp@intel.com>
+	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [groeck-staging:watchdog-next 22/33]
+ drivers/watchdog/mtk_wdt.c:13:10: fatal error:
+ 'dt-bindings/reset/mt7986-resets.h' file not found
+Message-ID: <202203101530.3l4W0JyC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,82 +48,58 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-courteous-server
-head:   25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea
-commit: 25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea [39/39] NFSD: Show state of courtesy clients in client info
-config: arm-colibri_pxa270_defconfig (https://download.01.org/0day-ci/archive/20220310/202203101509.pWJbkMAO-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+head:   b6447e51682d2d364b82ba35606888e39251dfcf
+commit: 6c2b372365e1e64170e209a1e903c5cb64bebc63 [22/33] watchdog: mtk_wdt: mt7986: Add toprgu reset controller support
+config: arm-randconfig-r001-20220310 (https://download.01.org/0day-ci/archive/20220310/202203101530.3l4W0JyC-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel nfsd-courteous-server
-        git checkout 25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea
+        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=6c2b372365e1e64170e209a1e903c5cb64bebc63
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch --no-tags groeck-staging watchdog-next
+        git checkout 6c2b372365e1e64170e209a1e903c5cb64bebc63
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/nfsd/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/watchdog/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/nfsd/nfs4state.c:2460:60: warning: format specifies type 'long' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
-           seq_printf(m, "time since last renew: %02ld:%02d:%02d\n", hrs, mins, secs);
-                                                 ~~~~~               ^~~
-                                                 %02llu
-   1 warning generated.
+>> drivers/watchdog/mtk_wdt.c:13:10: fatal error: 'dt-bindings/reset/mt7986-resets.h' file not found
+   #include <dt-bindings/reset/mt7986-resets.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +2460 fs/nfsd/nfs4state.c
+vim +13 drivers/watchdog/mtk_wdt.c
 
-  2437	
-  2438	static int client_info_show(struct seq_file *m, void *v)
-  2439	{
-  2440		struct inode *inode = m->private;
-  2441		struct nfs4_client *clp;
-  2442		u64 clid, hrs;
-  2443		u32 mins, secs;
-  2444	
-  2445		clp = get_nfsdfs_clp(inode);
-  2446		if (!clp)
-  2447			return -ENXIO;
-  2448		memcpy(&clid, &clp->cl_clientid, sizeof(clid));
-  2449		seq_printf(m, "clientid: 0x%llx\n", clid);
-  2450		seq_printf(m, "address: \"%pISpc\"\n", (struct sockaddr *)&clp->cl_addr);
-  2451		if (test_bit(NFSD4_CLIENT_CONFIRMED, &clp->cl_flags))
-  2452			seq_puts(m, "status: confirmed\n");
-  2453		else
-  2454			seq_puts(m, "status: unconfirmed\n");
-  2455		seq_printf(m, "courtesy client: %s\n",
-  2456			test_bit(NFSD4_CLIENT_COURTESY, &clp->cl_flags) ? "yes" : "no");
-  2457		hrs = div_u64_rem(ktime_get_boottime_seconds() - clp->cl_time,
-  2458					3600, &secs);
-  2459		mins = div_u64_rem((u64)secs, 60, &secs);
-> 2460		seq_printf(m, "time since last renew: %02ld:%02d:%02d\n", hrs, mins, secs);
-  2461		seq_printf(m, "name: ");
-  2462		seq_quote_mem(m, clp->cl_name.data, clp->cl_name.len);
-  2463		seq_printf(m, "\nminor version: %d\n", clp->cl_minorversion);
-  2464		if (clp->cl_nii_domain.data) {
-  2465			seq_printf(m, "Implementation domain: ");
-  2466			seq_quote_mem(m, clp->cl_nii_domain.data,
-  2467						clp->cl_nii_domain.len);
-  2468			seq_printf(m, "\nImplementation name: ");
-  2469			seq_quote_mem(m, clp->cl_nii_name.data, clp->cl_nii_name.len);
-  2470			seq_printf(m, "\nImplementation time: [%lld, %ld]\n",
-  2471				clp->cl_nii_time.tv_sec, clp->cl_nii_time.tv_nsec);
-  2472		}
-  2473		seq_printf(m, "callback state: %s\n", cb_state2str(clp->cl_cb_state));
-  2474		seq_printf(m, "callback address: %pISpc\n", &clp->cl_cb_conn.cb_addr);
-  2475		drop_client(clp);
-  2476	
-  2477		return 0;
-  2478	}
-  2479	
+  > 13	#include <dt-bindings/reset/mt7986-resets.h>
+    14	#include <dt-bindings/reset/mt8183-resets.h>
+    15	#include <dt-bindings/reset/mt8186-resets.h>
+    16	#include <dt-bindings/reset/mt8192-resets.h>
+    17	#include <dt-bindings/reset/mt8195-resets.h>
+    18	#include <linux/delay.h>
+    19	#include <linux/err.h>
+    20	#include <linux/init.h>
+    21	#include <linux/io.h>
+    22	#include <linux/kernel.h>
+    23	#include <linux/module.h>
+    24	#include <linux/moduleparam.h>
+    25	#include <linux/of.h>
+    26	#include <linux/of_device.h>
+    27	#include <linux/platform_device.h>
+    28	#include <linux/reset-controller.h>
+    29	#include <linux/types.h>
+    30	#include <linux/watchdog.h>
+    31	#include <linux/interrupt.h>
+    32	
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
+0-DAY CI Kernel Test Service
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
