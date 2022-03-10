@@ -1,21 +1,24 @@
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF9117F3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6514117EE
 	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 03:55:32 +0000 (UTC)
-X-UUID: 23a8b3d187c2494dbda5be89e167e7f7-20220310
-X-UUID: 23a8b3d187c2494dbda5be89e167e7f7-20220310
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+X-UUID: a0d04e4e0fb04367aee911c7b6b53683-20220310
+X-UUID: a0d04e4e0fb04367aee911c7b6b53683-20220310
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 809275659; Thu, 10 Mar 2022 11:55:19 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 10 Mar 2022 11:55:17 +0800
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 840161636; Thu, 10 Mar 2022 11:55:20 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 10 Mar 2022 11:55:19 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 10 Mar
+ 2022 11:55:18 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 10 Mar 2022 11:55:17 +0800
+ Transport; Thu, 10 Mar 2022 11:55:18 +0800
 From: Nancy.Lin <nancy.lin@mediatek.com>
 To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
 	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
@@ -30,9 +33,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>, <srv_heupstream@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v14 06/22] soc: mediatek: add cmdq support of mtk-mmsys config API for mt8195 vdosys1
-Date: Thu, 10 Mar 2022 11:54:59 +0800
-Message-ID: <20220310035515.16881-7-nancy.lin@mediatek.com>
+Subject: [PATCH v14 12/22] drm/mediatek: add display merge start/stop API for cmdq support
+Date: Thu, 10 Mar 2022 11:55:05 +0800
+Message-ID: <20220310035515.16881-13-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220310035515.16881-1-nancy.lin@mediatek.com>
 References: <20220310035515.16881-1-nancy.lin@mediatek.com>
@@ -45,108 +48,70 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-Add cmdq support for mtk-mmsys config API.
-The mmsys config register settings need to take effect with the other
-HW settings(like OVL_ADAPTOR...) at the same vblanking time.
-
-If we use CPU to write the mmsys reg, we can't guarantee all the
-settings can be written in the same vblanking time.
-Cmdq is used for this purpose. We prepare all the related HW settings
-in one cmdq packet. The first command in the packet is "wait stream done",
-and then following with all the HW settings. After the cmdq packet is
-flush to GCE HW. The GCE waits for the "stream done event" to coming
-and then starts flushing all the HW settings. This can guarantee all
-the settings flush in the same vblanking.
+Add merge start/stop API for cmdq support. The ovl_adaptor merges
+are configured with each drm plane update. Need to enable/disable
+merge with cmdq making sure all the settings taken effect in the
+same vblank.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 ---
- drivers/soc/mediatek/mtk-mmsys.c       | 27 +++++++++++++++++++++-----
- include/linux/soc/mediatek/mtk-mmsys.h |  6 +++++-
- 2 files changed, 27 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h   |  2 ++
+ drivers/gpu/drm/mediatek/mtk_disp_merge.c | 20 +++++++++++++++++---
+ 2 files changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index 6dd68483012c..c686b17ca62f 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -98,6 +98,7 @@ struct mtk_mmsys {
- 	const struct mtk_mmsys_driver_data *data;
- 	spinlock_t lock; /* protects mmsys_sw_rst_b reg */
- 	struct reset_controller_dev rcdev;
-+	struct cmdq_client_reg cmdq_base;
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+index c2de53a5892e..224a710bb537 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
++++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+@@ -66,6 +66,8 @@ void mtk_merge_stop(struct device *dev);
+ void mtk_merge_advance_config(struct device *dev, unsigned int l_w, unsigned int r_w,
+ 			      unsigned int h, unsigned int vrefresh, unsigned int bpc,
+ 			      struct cmdq_pkt *cmdq_pkt);
++void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt);
++void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt);
+ 
+ void mtk_ovl_bgclr_in_on(struct device *dev);
+ void mtk_ovl_bgclr_in_off(struct device *dev);
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+index 40da0555416d..c0d9b43b2a66 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+@@ -67,17 +67,31 @@ struct mtk_disp_merge {
  };
  
- void mtk_mmsys_ddp_connect(struct device *dev,
-@@ -190,7 +191,7 @@ static const struct reset_control_ops mtk_mmsys_reset_ops = {
- };
- 
- void mtk_mmsys_ddp_config(struct device *dev, enum mtk_mmsys_config_type config,
--			  u32 id, u32 val)
-+			  u32 id, u32 val, struct cmdq_pkt *cmdq_pkt)
+ void mtk_merge_start(struct device *dev)
++{
++	mtk_merge_start_cmdq(dev, NULL);
++}
++
++void mtk_merge_stop(struct device *dev)
  {
- 	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
- 	const struct mtk_mmsys_config *mmsys_config = mmsys->data->config;
-@@ -214,10 +215,19 @@ void mtk_mmsys_ddp_config(struct device *dev, enum mtk_mmsys_config_type config,
- 	mask = mmsys_config[i].mask;
- 	reg_val = val << mmsys_config[i].shift;
+ 	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
  
--	tmp = readl(mmsys->regs + offset);
--
--	tmp = (tmp & ~mask) | reg_val;
--	writel(tmp, mmsys->regs + offset);
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	if (cmdq_pkt && mmsys->cmdq_base.size) {
-+		cmdq_pkt_write_mask(cmdq_pkt, mmsys->cmdq_base.subsys,
-+				    mmsys->cmdq_base.offset + offset, reg_val,
-+				    mask);
-+	} else {
-+#endif
-+		tmp = readl(mmsys->regs + offset);
-+		tmp = (tmp & ~mask) | reg_val;
-+		writel(tmp, mmsys->regs + offset);
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	}
-+#endif
+-	writel(MERGE_EN, priv->regs + DISP_REG_MERGE_CTRL);
++	mtk_merge_stop_cmdq(dev, NULL);
  }
- EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_config);
  
-@@ -253,6 +263,13 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
- 	}
- 
- 	mmsys->data = of_device_get_match_data(&pdev->dev);
+-void mtk_merge_stop(struct device *dev)
++void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
++{
++	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
 +
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	ret = cmdq_dev_get_client_reg(dev, &mmsys->cmdq_base, 0);
-+	if (ret)
-+		dev_dbg(dev, "No mediatek,gce-client-reg!\n");
-+#endif
++	mtk_ddp_write(cmdq_pkt, 1, &priv->cmdq_reg, priv->regs,
++		      DISP_REG_MERGE_CTRL);
++}
 +
- 	platform_set_drvdata(pdev, mmsys);
++void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
+ {
+ 	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
  
- 	clks = platform_device_register_data(&pdev->dev, mmsys->data->clk_driver,
-diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
-index b2d2310d7e7a..3e998bfb795a 100644
---- a/include/linux/soc/mediatek/mtk-mmsys.h
-+++ b/include/linux/soc/mediatek/mtk-mmsys.h
-@@ -6,6 +6,10 @@
- #ifndef __MTK_MMSYS_H
- #define __MTK_MMSYS_H
+-	writel(0x0, priv->regs + DISP_REG_MERGE_CTRL);
++	mtk_ddp_write(cmdq_pkt, 0, &priv->cmdq_reg, priv->regs,
++		      DISP_REG_MERGE_CTRL);
+ }
  
-+#include <linux/mailbox_controller.h>
-+#include <linux/mailbox/mtk-cmdq-mailbox.h>
-+#include <linux/soc/mediatek/mtk-cmdq.h>
-+
- enum mtk_ddp_comp_id;
- struct device;
- 
-@@ -78,6 +82,6 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
- 			      enum mtk_ddp_comp_id next);
- 
- void mtk_mmsys_ddp_config(struct device *dev, enum mtk_mmsys_config_type config,
--			  u32 id, u32 val);
-+			  u32 id, u32 val, struct cmdq_pkt *cmdq_pkt);
- 
- #endif /* __MTK_MMSYS_H */
+ static void mtk_merge_fifo_setting(struct mtk_disp_merge *priv,
 -- 
 2.18.0
 
