@@ -1,23 +1,23 @@
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9E0510A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 10:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616D7510A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 10:52:46 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
 	(Authenticated sender: kholk11)
-	with ESMTPSA id 548481F454C9
+	with ESMTPSA id D1F101F454CA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1646909557;
-	bh=9aUbcW04U/4ptYzSIBnfoM+hXNE0ptVvNH6aQoyUu9Q=;
+	s=mail; t=1646909564;
+	bh=iaPl/wBMV7VEkkcx27N58lqaWdw70k/KuIUFajX1kAc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=igI/BZK/FA9bN67UwQfOCHAz40Bvc+sn142E6OatI1gORrtDMHcmx5GF3v8WZv91W
-	 vPZERPUOJmWusSETIeJmIap+chaysvjB9mHy12BGGcAmNdiX04hWKNfZUYRJ8fkYF+
-	 3wlQvzgxLYKDFOXLNUwTcP1HEpAoqGRxwZm8W+wRCz80KfFZhdZFuUMBgEZAk5lfIL
-	 wBGH62C+lCVSyEpk/SjXWceXCuMjkv98X7YvpSQ5HpV+maoybrw/e9XDrbZhygD/Vn
-	 ktDhfvRlenO3eZv2Hua4o/4TCCr5Q+tc7I5uaBVrV9moXNPkeG/3NoBx6BxrWKNV7k
-	 rA2ucxVfYlTOA==
-Message-ID: <fba2646a-6eb6-eabe-538f-ed54bfd60c14@collabora.com>
-Date: Thu, 10 Mar 2022 11:52:33 +0100
+	b=RILJR2YqXjGkvpAHxHrr3jwAbnum4SVrq42QjIyfd/U6mzmjVmXEwJGA3GDPB3DO4
+	 Jfb1HW8xJ6A3wl7fHbqrEm7YD2TsgEnlZGBjSNeyfjaHLlf29Yu4AYdPtPL73kEBPH
+	 +AFNY5/CqC0Ye48VGs4aa8KRAfYFVqmahs8rP9TQSzuJ9TXA8MCMqjMKGQ1Mx/K9lU
+	 bh+pbHvJIBw1NQQ6aZSkEd74YAket+2FFoq2/OYhuXB3zT/unQkyXk+MI261elMb9T
+	 1angw0DoqnGORe/su+wRIb94Pt30V/6rjLwS7lueq2PJKZ/t7nKfw4jkU1h5F5SuN+
+	 w4EuDulUnha8g==
+Message-ID: <ab0dd83f-7630-4c2a-2d7e-14b4d7399736@collabora.com>
+Date: Thu, 10 Mar 2022 11:52:41 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,8 +26,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [PATCH v14 10/22] drm/mediatek: add display MDP RDMA support for
- MT8195
+Subject: Re: [PATCH v14 12/22] drm/mediatek: add display merge start/stop API
+ for cmdq support
 Content-Language: en-US
 To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
  Matthias Brugger <matthias.bgg@gmail.com>,
@@ -44,15 +44,17 @@ Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
  llvm@lists.linux.dev, singo.chang@mediatek.com, srv_heupstream@mediatek.com,
  Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220310035515.16881-1-nancy.lin@mediatek.com>
- <20220310035515.16881-11-nancy.lin@mediatek.com>
+ <20220310035515.16881-13-nancy.lin@mediatek.com>
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220310035515.16881-11-nancy.lin@mediatek.com>
+In-Reply-To: <20220310035515.16881-13-nancy.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Il 10/03/22 04:55, Nancy.Lin ha scritto:
-> Add MDP_RDMA driver for MT8195. MDP_RDMA is the DMA engine of
-> the ovl_adaptor component.
+> Add merge start/stop API for cmdq support. The ovl_adaptor merges
+> are configured with each drm plane update. Need to enable/disable
+> merge with cmdq making sure all the settings taken effect in the
+> same vblank.
 > 
 > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
 > Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
@@ -60,14 +62,7 @@ Il 10/03/22 04:55, Nancy.Lin ha scritto:
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 > ---
->   drivers/gpu/drm/mediatek/Makefile       |   3 +-
->   drivers/gpu/drm/mediatek/mtk_disp_drv.h |   7 +
->   drivers/gpu/drm/mediatek/mtk_drm_drv.c  |   1 +
->   drivers/gpu/drm/mediatek/mtk_drm_drv.h  |   1 +
->   drivers/gpu/drm/mediatek/mtk_mdp_rdma.c | 315 ++++++++++++++++++++++++
->   drivers/gpu/drm/mediatek/mtk_mdp_rdma.h |  20 ++
->   6 files changed, 346 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/gpu/drm/mediatek/mtk_mdp_rdma.c
->   create mode 100644 drivers/gpu/drm/mediatek/mtk_mdp_rdma.h
+>   drivers/gpu/drm/mediatek/mtk_disp_drv.h   |  2 ++
+>   drivers/gpu/drm/mediatek/mtk_disp_merge.c | 20 +++++++++++++++++---
+>   2 files changed, 19 insertions(+), 3 deletions(-)
 > 
-
