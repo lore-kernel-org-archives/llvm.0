@@ -1,80 +1,178 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52867A
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 00:36:33 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id bt26so6712149lfb.3
-        for <llvm@lists.linux.dev>; Wed, 09 Mar 2022 16:36:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tU+Fe+vcmWYII8bcpQckbuUOYQxVwc8Ms6FjnpeZUXo=;
-        b=L/mvPUr5+ed9/8F1xYBeOkHEQX/N5BqBnxQcWBYwpz8RAerWYK3vG+jQ8UcnJ76O8n
-         Z6F8qP7cE8tNgjablMkD4TSjih/QPIMEsvNLTgmbdeWBRVediWkgAMhZdVVhEgcgGEdK
-         lMZ1J3pO3p0Ql46BLe9TS7msF+0WkJiXc3GEYEhfXxvSABXRpmnJrXBNidzsucgWij7W
-         h71P/xxdG4gMnr+gam3ehpQ7R8zTNQQGhJ/hYPRcyYsfLb7u+8rs0B5WjYUfbEvSpW08
-         3VtCaxMUJjZ5zrZuYEdWuLeNzUmAVqnhioFkV1FhQj3OlGZ8RQb3TRq3538igabd/3yR
-         jrhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tU+Fe+vcmWYII8bcpQckbuUOYQxVwc8Ms6FjnpeZUXo=;
-        b=ve47enlyar8i9qfHeE9NAV8JGgQnRAgt6n3aT1UAo5hJ6HIYraUGKReyZ+8W4Sb6tr
-         tRzIkTSppdmt4bX+nF7sgg4VEDxKPhvGib7+X5vcpSb2k4WpzA55nleIJ0vc4baGmspG
-         9TiLTPZTq6Dx8AYV7oXZJiFjwy+UMXO3fELXdVVWbt7JorXZjF/ZMITN8vIUGzX3cYGF
-         jGO+DK/YZsZMPu3LLoHBwgibDDw4MwlOv+TFAt0uJEZs+yjHd+zhkFHod7YmhrWSLuZN
-         T5xXCBz5/+vsvdjbS7Y5vYAe6Kx4v0AGeIzmylD7HNWv9990nXlnK7GDOk5kIzPOFLjc
-         lwbg==
-X-Gm-Message-State: AOAM5325xk1griVPd7Lw+GI7irlf+NDbsh5gBgSdL7El+Vi1Lmn6LI3E
-	pVih9KE4eHV0J68y65SclcKh1BVnbGEDqJnKo46O4w==
-X-Google-Smtp-Source: ABdhPJytXKwI98E3nQqK0BdQ0dFxt9GnezH6c63KyMKM/BPYYzDCKWIjWSo338Qxmgo/66zO3+BC+IAEhGNy/BYPIF4=
-X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id
- i3-20020ac25223000000b004485100e427mr1387380lfl.87.1646872591569; Wed, 09 Mar
- 2022 16:36:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89FE7A
+	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 01:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646874441; x=1678410441;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fGSNyt7jWba9WqdnHOS4UIzGPJ7XPpWz0AKT3Bmx+oY=;
+  b=b+PcXq9COf0rUARbpkesAQI1UDgYkpHpV4ydPkQhkMEQpwoGYSQNBZD3
+   24HwAjrvJ38T6c8uwlNvGj8KV8kGdOjhyrzG59JRo+/g3pQ4hhAcvo2Pj
+   xHpbV/L/Trdjkc/FEi+8hCUhFP20jBsT0JiH9Yie3TsjvFeUOZnLINCDW
+   z3incp0ivC99eJ7dqBqke6J8cH5Jgsx3Ij3RdE1au5PIzC3itt0kiWgAf
+   U1oEA6nrEC6wQviL94iYR6nYbfLqnAZdT4axuF1SU1s7DLQnYuMdMfx91
+   bq4IIV2+xxxbR572e3fYD6lWmCyzFoN43u+jYW+Q0zT45jjLqtFb8EAhf
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254862306"
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="254862306"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 17:07:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="611566901"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Mar 2022 17:07:16 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nS7Gu-00046O-0H; Thu, 10 Mar 2022 01:07:16 +0000
+Date: Thu, 10 Mar 2022 09:07:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frank Li <Frank.Li@nxp.com>, gustavo.pimentel@synopsys.com,
+	hongxing.zhu@nxp.com, l.stach@pengutronix.de, linux-imx@nxp.com,
+	linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+	fancer.lancer@gmail.com, lznuaa@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, vkoul@kernel.org,
+	lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+	bhelgaas@google.com, shawnguo@kernel.org,
+	manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH v4 7/8] dmaengine: dw-edma: add flags at struct
+ dw_edma_chip
+Message-ID: <202203100909.fpkA804r-lkp@intel.com>
+References: <20220309211204.26050-8-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220304170813.1689186-1-nathan@kernel.org> <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
- <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
-In-Reply-To: <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 9 Mar 2022 16:36:20 -0800
-Message-ID: <CAKwvOd=0tn3DeqDkKxxk61EvHY9Vb+SnHkXugUmHCMFF_0VVoQ@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309211204.26050-8-Frank.Li@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Mar 8, 2022 at 7:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
-> > On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > +If your LLVM tools are not available in your PATH, you can supply their
-> > > +location using the LLVM variable with a trailing slash: ::
-> > > +
-> > > +       make LLVM=/path/to/llvm/
-> > > +
-> > > +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
-> >
-> > I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
-> > works and (my interpretation of what) Masahiro said "if anyone asks
-> > for this, here's how we could do that."  I don't think I've seen an
-> > explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
-> > won't hold this patch up over that.  Either way:
->
-> Right, there has not been an explicit ask for the prefix support yet,
-> although I know I personally would use it,
+Hi Frank,
 
-Then let that be reason enough. :)
--- 
-Thanks,
-~Nick Desaulniers
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on vkoul-dmaengine/next]
+[also build test ERROR on helgaas-pci/next linus/master v5.17-rc7 next-20220309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Frank-Li/Enable-designware-PCI-EP-EDMA-locally/20220310-051510
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220310/202203100909.fpkA804r-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/f7947d784b0fe089bdaef2fee8e57f84e390d3f2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Frank-Li/Enable-designware-PCI-EP-EDMA-locally/20220310-051510
+        git checkout f7947d784b0fe089bdaef2fee8e57f84e390d3f2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/dma/dw-edma/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/dma/dw-edma/dw-edma-v0-core.c:427:4: error: implicit declaration of function 'SET_CH_64' [-Werror,-Wimplicit-function-declaration]
+                           SET_CH_64(dw, chan->dir, chan->id, llp.reg,
+                           ^
+>> drivers/dma/dw-edma/dw-edma-v0-core.c:427:39: error: use of undeclared identifier 'llp'
+                           SET_CH_64(dw, chan->dir, chan->id, llp.reg,
+                                                              ^
+   2 errors generated.
+
+
+vim +/SET_CH_64 +427 drivers/dma/dw-edma/dw-edma-v0-core.c
+
+   359	
+   360	void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
+   361	{
+   362		struct dw_edma_chan *chan = chunk->chan;
+   363		struct dw_edma *dw = chan->dw;
+   364		u32 tmp;
+   365	
+   366		dw_edma_v0_core_write_chunk(chunk);
+   367	
+   368		if (first) {
+   369			/* Enable engine */
+   370			SET_RW_32(dw, chan->dir, engine_en, BIT(0));
+   371			if (dw->chip->mf == EDMA_MF_HDMA_COMPAT) {
+   372				switch (chan->id) {
+   373				case 0:
+   374					SET_RW_COMPAT(dw, chan->dir, ch0_pwr_en,
+   375						      BIT(0));
+   376					break;
+   377				case 1:
+   378					SET_RW_COMPAT(dw, chan->dir, ch1_pwr_en,
+   379						      BIT(0));
+   380					break;
+   381				case 2:
+   382					SET_RW_COMPAT(dw, chan->dir, ch2_pwr_en,
+   383						      BIT(0));
+   384					break;
+   385				case 3:
+   386					SET_RW_COMPAT(dw, chan->dir, ch3_pwr_en,
+   387						      BIT(0));
+   388					break;
+   389				case 4:
+   390					SET_RW_COMPAT(dw, chan->dir, ch4_pwr_en,
+   391						      BIT(0));
+   392					break;
+   393				case 5:
+   394					SET_RW_COMPAT(dw, chan->dir, ch5_pwr_en,
+   395						      BIT(0));
+   396					break;
+   397				case 6:
+   398					SET_RW_COMPAT(dw, chan->dir, ch6_pwr_en,
+   399						      BIT(0));
+   400					break;
+   401				case 7:
+   402					SET_RW_COMPAT(dw, chan->dir, ch7_pwr_en,
+   403						      BIT(0));
+   404					break;
+   405				}
+   406			}
+   407			/* Interrupt unmask - done, abort */
+   408			tmp = GET_RW_32(dw, chan->dir, int_mask);
+   409			tmp &= ~FIELD_PREP(EDMA_V0_DONE_INT_MASK, BIT(chan->id));
+   410			tmp &= ~FIELD_PREP(EDMA_V0_ABORT_INT_MASK, BIT(chan->id));
+   411			SET_RW_32(dw, chan->dir, int_mask, tmp);
+   412			/* Linked list error */
+   413			tmp = GET_RW_32(dw, chan->dir, linked_list_err_en);
+   414			tmp |= FIELD_PREP(EDMA_V0_LINKED_LIST_ERR_MASK, BIT(chan->id));
+   415			SET_RW_32(dw, chan->dir, linked_list_err_en, tmp);
+   416			/* Channel control */
+   417			SET_CH_32(dw, chan->dir, chan->id, ch_control1,
+   418				  (DW_EDMA_V0_CCS | DW_EDMA_V0_LLE));
+   419			/* Linked list */
+   420			if ((chan->dw->chip->flags & DW_EDMA_CHIP_32BIT_DBI) ||
+   421			    !IS_ENABLED(CONFIG_64BIT)) {
+   422				SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
+   423					  lower_32_bits(chunk->ll_region.paddr));
+   424				SET_CH_32(dw, chan->dir, chan->id, llp.msb,
+   425					  upper_32_bits(chunk->ll_region.paddr));
+   426			} else {
+ > 427				SET_CH_64(dw, chan->dir, chan->id, llp.reg,
+   428					  chunk->ll_region.paddr);
+   429			}
+   430		}
+   431		/* Doorbell */
+   432		SET_RW_32(dw, chan->dir, doorbell,
+   433			  FIELD_PREP(EDMA_V0_DOORBELL_CH_MASK, chan->id));
+   434	}
+   435	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
