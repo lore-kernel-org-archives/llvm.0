@@ -1,113 +1,156 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590FD7E
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 09:27:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646990864; x=1678526864;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XK/3Vbkegr98tnNmM9a3loe1RZVP6tyIvUV7gAuPdk4=;
-  b=iaygd3wQ/nTExO78Zz6b/NUevFiodNTNiBjo8psP78HWD72tP9sw6NSd
-   LbHVOP+fxczWDVSBsCx8bxYSSy+sifEGO8fJwie5Rqz6xU6C/NJEvhAKD
-   /VahvD936ZUm6PNNdVkCZCl6KndU10oqo+O9OCtinSR7kF+LXE7TxCmlq
-   smDOwH35drg89FhqGdKvWzwwtGEgSR5niyE+MUlgEvT/0bscDpcjsYFYg
-   4CObRH+FqM2WjQtct/HVzg/wax8eoUgGq85x4CJuuSBgR0BUK7xDbsExm
-   712HSw/PSdIb4Pyjt08EYIfTiFf9GCWaPEiKqudiH3vlbBkk93W4CmpVt
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="318760412"
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="318760412"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 01:27:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="644877489"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2022 01:27:41 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSbYi-0006Aw-FG; Fri, 11 Mar 2022 09:27:40 +0000
-Date: Fri, 11 Mar 2022 17:26:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	"Darrick J. Wong" <darrick.wong@oracle.com>,
-	linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:vectorized-scrub 95/346] fs/xfs/xfs_inode.c:952:1:
- error: expected identifier or '('
-Message-ID: <202203111719.V8By8dfs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108AE7E
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 09:31:11 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(Authenticated sender: kholk11)
+	with ESMTPSA id A01EE1F4648B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1646991070;
+	bh=8RCQviM0W1Pt/BRbjJaaMonMEQR44D+N89LwIichuDs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fZPhMZ2PUdwYLtdcdhTVypXcWOSfx0jYBWpOLppNtIF3Gkvp5zKWhwRtaDdfaacr5
+	 VRAIQ41PjvYJG8xVDFrqRKSG3dZYUCvyNDSsLNVq699ZW5O36wcKxEyWIbq8kWYaGa
+	 QT9pm7XUUE53qU22izZZAXkDQ5C20SyoL2TwbIkHJDwOStyWinvFKFP93V2XDBl5X4
+	 rAeje5RZ5z8QTqI3Q1a6LLUdIQO7OYm1MX23LsU1jSdzpfMF9Ldcnxts5i3jYNe7Fg
+	 1uqEe/3sc4ENcjpo621475Dp9GrmxvUzPnR9H1L8aKtcnH1q5sfeA8r3lGgnV5CfTx
+	 Nwk5cmwo7kqKw==
+Message-ID: <7e31d769-3a22-eebc-5025-af56bf104c81@collabora.com>
+Date: Fri, 11 Mar 2022 10:31:06 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v15 01/22] dt-bindings: mediatek: add vdosys1 RDMA
+ definition for mt8195
+Content-Language: en-US
+To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+ linux@roeck-us.net
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+ Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev, singo.chang@mediatek.com, srv_heupstream@mediatek.com,
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220311015506.11232-1-nancy.lin@mediatek.com>
+ <20220311015506.11232-2-nancy.lin@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220311015506.11232-2-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
-head:   38ef7fcbbc5b33107155955dcd6ed6c92f4ceb91
-commit: af5ea75e919d339b63fdbac6de44242559497a78 [95/346] xfs: track file link count updates during live nlinks fsck
-config: hexagon-randconfig-r025-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111719.V8By8dfs-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=af5ea75e919d339b63fdbac6de44242559497a78
-        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
-        git fetch --no-tags djwong-xfs vectorized-scrub
-        git checkout af5ea75e919d339b63fdbac6de44242559497a78
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/xfs/
+Il 11/03/22 02:54, Nancy.Lin ha scritto:
+> Add vdosys1 RDMA definition.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-All errors (new ones prefixed by >>):
-
->> fs/xfs/xfs_inode.c:952:1: error: expected identifier or '('
-   XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
-   ^
-   fs/xfs/xfs_mount.h:78:42: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                             ^
->> fs/xfs/xfs_inode.c:952:1: error: expected ')'
-   fs/xfs/xfs_mount.h:78:42: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                             ^
-   fs/xfs/xfs_inode.c:952:1: note: to match this '('
-   fs/xfs/xfs_mount.h:78:41: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                            ^
->> fs/xfs/xfs_inode.c:952:1: error: expected ')'
-   XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
-   ^
-   fs/xfs/xfs_mount.h:78:47: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                                  ^
-   fs/xfs/xfs_inode.c:952:1: note: to match this '('
-   fs/xfs/xfs_mount.h:78:40: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                           ^
-   3 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OMAP_GPMC
-   Depends on MEMORY && OF_ADDRESS
-   Selected by
-   - MTD_NAND_OMAP2 && MTD && MTD_RAW_NAND && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST && HAS_IOMEM
-
-
-vim +952 fs/xfs/xfs_inode.c
-
-   950	
-   951	#ifdef CONFIG_XFS_LIVE_HOOKS
- > 952	XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
-   953	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>   .../arm/mediatek/mediatek,mdp-rdma.yaml       | 86 +++++++++++++++++++
+>   1 file changed, 86 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-rdma.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-rdma.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-rdma.yaml
+> new file mode 100644
+> index 000000000000..6ab773569462
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-rdma.yaml
+> @@ -0,0 +1,86 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mdp-rdma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek MDP RDMA
+> +
+> +maintainers:
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +
+> +description: |
+> +  The mediatek MDP RDMA stands for Read Direct Memory Access.
+> +  It provides real time data to the back-end panel driver, such as DSI,
+> +  DPI and DP_INTF.
+> +  It contains one line buffer to store the sufficient pixel data.
+> +  RDMA device node must be siblings to the central MMSYS_CONFIG node.
+> +  For a description of the MMSYS_CONFIG binding, see
+> +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml for details.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: mediatek,mt8195-vdo1-rdma
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    description: A phandle and PM domain specifier as defined by bindings of
+> +      the power controller specified by phandle. See
+> +      Documentation/devicetree/bindings/power/power-domain.yaml for details.
+> +
+> +  clocks:
+> +    items:
+> +      - description: RDMA Clock
+> +
+> +  iommus:
+> +    description:
+> +      This property should point to the respective IOMMU block with master port as argument,
+> +      see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
+> +
+> +  mediatek,gce-client-reg:
+> +    description:
+> +      The register of display function block to be set by gce. There are 4 arguments,
+> +      such as gce node, subsys id, offset and register size. The subsys id that is
+> +      mapping to the register of display function blocks is defined in the gce header
+> +      include/include/dt-bindings/gce/<chip>-gce.h of each chips.
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - power-domains
+> +  - clocks
+> +  - iommus
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/mt8195-clk.h>
+> +    #include <dt-bindings/power/mt8195-power.h>
+> +    #include <dt-bindings/gce/mt8195-gce.h>
+> +    #include <dt-bindings/memory/mt8195-memory-port.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        vdo1_rdma0: mdp-rdma@1c104000 {
+> +            compatible = "mediatek,mt8195-vdo1-rdma";
+> +            reg = <0 0x1c104000 0 0x1000>;
+> +            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
+> +            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
+> +            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
+> +            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
+> +            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX 0x4000 0x1000>;
+> +        };
+> +    };
