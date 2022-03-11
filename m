@@ -1,1324 +1,259 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839B157D0
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 18:05:11 +0000 (UTC)
-Received: by mail-pl1-f179.google.com with SMTP id q13so8270509plk.12
-        for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 10:05:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Z9YY+s1tNeMPpFhbB3ddFae/AKgBRXTgFo0w3D9Mv3w=;
-        b=YUW1v6KYOceIDg4AkIHEOoQCP/coRC48dfHKohC0yoU+7LzeaocTDg2Pv5gJJlMYyI
-         YMayODSndnNLvssoYCHUWkjbQB/kZnw14VTpmTuyyQFLW+ANZkh5KZaB+f2WlIFd/tEY
-         Y0v4gxNa2idmA/fySvpuXfGOLuK2bPoL+X98tuYlBvR3RiL6BEea3nrkgd89+Zi03l9s
-         gRaNg5eBicmPRHycH5leg4LcL2JVEL8+96SqtSRLynz69eM+Z+LFitqEaWZ0nyqMUnwD
-         SqTEu5bn6CcJInlYubuD1/KT+p3wqxdwB5bOC/XjorKDGCXbJ5Dmvzwl/jYI7LmpOTcr
-         4yJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Z9YY+s1tNeMPpFhbB3ddFae/AKgBRXTgFo0w3D9Mv3w=;
-        b=2A87ckU28Pdzs/Jy4HOwyi8SKH6NoXUcdjbxWZblZDroIGo4jxQn6mUKrI6BsoBrp6
-         nD2VfMt+06uvnAFszPodyPv0Gfut0xDtUpkta6EqWFGmHwoAPLH5oxEXevi16geuTcc1
-         XP05EK/olbMNU5zgUHYAcKbVld3+8YX9XYzmi9C1Y64N8exWowf/jkKDjD6Ypyv9tsk8
-         xN0FzN5u8xbxWPVIOgX9L3SaJZaazw03z+4DaMV+/roxYct+fdu07ylto/m0kQp1bOU9
-         mfY3VwuzBB9TANtFIvIeBMpmWaez3QGma71LQvdwCuWFGVOydJfnMLsnHSegP8Lzle6R
-         3kOA==
-X-Gm-Message-State: AOAM531l//mr1wSWSLfgQtjeGvFJkZnWJwp00iaJrP2MLNfWbSJYWOau
-	JcGcyMk+F7iE9yPhcGw7YiguHUnv5TaEAMLWyUM=
-X-Google-Smtp-Source: ABdhPJxKlT1fuG4zQF3/vZVpnDrOp5UFjStegHlANRP1Kfx6oI5rqNgzDY6GP+dWwqTjCml6EM2SWw==
-X-Received: by 2002:a17:90a:1197:b0:1bf:65ff:f542 with SMTP id e23-20020a17090a119700b001bf65fff542mr22986282pja.5.1647021909378;
-        Fri, 11 Mar 2022 10:05:09 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j14-20020a056a00174e00b004f66ce6367bsm12603535pfc.147.2022.03.11.10.05.08
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 10:05:08 -0800 (PST)
-Message-ID: <622b8f54.1c69fb81.bf8a6.fefb@mx.google.com>
-Date: Fri, 11 Mar 2022 10:05:08 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D8E211B
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 19:02:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647025377; x=1678561377;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6OB4B+4u4bJUkff8S9HsxqQidY+uv8RWGSGkNX5sfdY=;
+  b=OUXHZJe5HvozGkLkIngLrBF8xF07u+uGk4gDkqrgeidoQybWWHo0+SW+
+   UmKzb2VZ37toWT1ml0DFT4Akn42d4yi99lcbMmZTPvyEUOxslkdzvscPz
+   N/+MaMN6L99DKhiWKoGCM0fc/RQX4GzKjY1WtL+nci72xXRONWC3pymhO
+   K1vMq9dxI0fcPjvbw5O6Cwk0TSSpyXj126yI96U8GsxH+JAZTQRzCc4yg
+   1uWR336kf0W8XuoLf2msgP+z73ag7ZioffXwjuN2IfWmDk0a/JA/k7qp8
+   bXHpmTBO+ZgprlKDxcCxE7S1AOPKbvgFDIrmRLJHICYvvfIwcpDDvFbRf
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="316356245"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="316356245"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 11:02:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="645021844"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2022 11:02:46 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSkXF-0006xo-D0; Fri, 11 Mar 2022 19:02:45 +0000
+Date: Sat, 12 Mar 2022 03:02:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Subject: [agd5f:amd-staging-drm-next 1275/1333]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:5089: warning: expecting
+ prototype for amdgpu_device_gpu_recover(). Prototype was for
+ amdgpu_device_gpu_recover_imp() instead
+Message-ID: <202203120337.51TmNkmV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20220310
-Subject: next/master build: 164 builds: 12 failed, 152 passed, 23 errors,
- 59 warnings (next-20220310)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master build: 164 builds: 12 failed, 152 passed, 23 errors, 59 warning=
-s (next-20220310)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220310/
-
-Tree: next
-Branch: master
-Git Describe: next-20220310
-Git Commit: 71941773e143369a73c9c4a3b62fbb60736a1182
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    allmodconfig: (clang-14) FAIL
-
-arm:
-    allmodconfig: (clang-14) FAIL
-    allnoconfig: (clang-14) FAIL
-    aspeed_g5_defconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-    imote2_defconfig: (gcc-10) FAIL
-    qcom_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-14) FAIL
-
-mips:
-    decstation_64_defconfig: (gcc-10) FAIL
-    ip27_defconfig: (gcc-10) FAIL
-
-x86_64:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-    tinyconfig (gcc-10): 2 warnings
-
-arm64:
-    allmodconfig (clang-14): 2 errors
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 1 warning
-
-arm:
-    allmodconfig (clang-14): 1 error, 13 warnings
-    allmodconfig (gcc-10): 1 error
-    allnoconfig (clang-14): 1 error, 1 warning
-    aspeed_g5_defconfig (clang-14): 1 error, 9 warnings
-    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 2 warnings
-    qcom_defconfig (gcc-10): 4 errors
-    tct_hammer_defconfig (gcc-10): 2 warnings
-
-i386:
-    allmodconfig (clang-14): 3 errors
-    tinyconfig (gcc-10): 2 warnings
-
-mips:
-    32r2el_defconfig+debug (gcc-10): 1 warning
-    bcm47xx_defconfig (gcc-10): 1 warning
-    ci20_defconfig (gcc-10): 1 warning
-    fuloong2e_defconfig (gcc-10): 1 error
-    ip27_defconfig (gcc-10): 4 errors
-    loongson2k_defconfig (gcc-10): 1 error
-    rb532_defconfig (gcc-10): 1 warning
-
-riscv:
-    nommu_k210_defconfig (gcc-10): 2 warnings
-    nommu_k210_sdcard_defconfig (gcc-10): 2 warnings
-
-x86_64:
-    allmodconfig (gcc-10): 2 errors
-    allmodconfig (clang-14): 2 errors, 15 warnings
-    tinyconfig (gcc-10): 2 warnings
-    x86_64_defconfig+debug (gcc-10): 2 warnings
-
-Errors summary:
-
-    3    sound/soc/atmel/mchp-pdmc.c:186:34: error: address of array 'uvalu=
-e->value.integer.value' will always evaluate to 'true' [-Werror,-Wpointer-b=
-ool-conversion]
-    2    ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT expected, but =
-got NOCROSSREFS
-    2    include/linux/fortify-string.h:328:4: error: call to __write_overf=
-low_field declared with 'warning' attribute: detected write beyond size of =
-field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warni=
-ng]
-    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
-:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
-irectory
-    1    page_alloc.c:(.init.text+0x1ba8): undefined reference to `node_dat=
-a'
-    1    mips-linux-gnu-ld: page_alloc.c:(.init.text+0x1bf4): undefined ref=
-erence to `node_data'
-    1    mips-linux-gnu-ld: page_alloc.c:(.init.text+0x1be4): undefined ref=
-erence to `node_data'
-    1    mips-linux-gnu-ld: page_alloc.c:(.init.text+0x1bcc): undefined ref=
-erence to `node_data'
-    1    ld.lld: error: ./arch/arm/kernel/vmlinux.lds:30: AT expected, but =
-got NOCROSSREFS
-    1    drm_dp_mst_topology.c:(.text+0x870c): undefined reference to `drm_=
-kms_helper_hotplug_event'
-    1    drm_dp_mst_topology.c:(.text+0x7660): undefined reference to `drm_=
-kms_helper_hotplug_event'
-    1    drm_dp_mst_topology.c:(.text+0x2964): undefined reference to `drm_=
-kms_helper_hotplug_event'
-    1    drm_dp_mst_topology.c:(.text+0x1ffc): undefined reference to `__dr=
-m_atomic_helper_private_obj_duplicate_state'
-    1    drivers/gpu/drm/selftests/test-drm_plane_helper.c:76:5: error: sta=
-ck frame size (1084) exceeds limit (1024) in 'igt_check_plane_state' [-Werr=
-or,-Wframe-larger-than]
-    1    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly r=
-equires more registers than available
-    1    ERROR: modpost: "__aeabi_ldivmod" [drivers/media/platform/amphion/=
-amphion-vpu.ko] undefined!
-
-Warnings summary:
-
-    22   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    3    kernel/sched/rt.c:3032:12: warning: =E2=80=98sched_rr_handler=E2=
-=80=99 defined but not used [-Wunused-function]
-    3    kernel/sched/rt.c:2993:12: warning: =E2=80=98sched_rt_handler=E2=
-=80=99 defined but not used [-Wunused-function]
-    2    drivers/i2c/busses/i2c-designware-platdrv.c:465:12: warning: =E2=
-=80=98dw_i2c_plat_resume=E2=80=99 defined but not used [-Wunused-function]
-    2    drivers/i2c/busses/i2c-designware-platdrv.c:444:12: warning: =E2=
-=80=98dw_i2c_plat_suspend=E2=80=99 defined but not used [-Wunused-function]
-    1    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8a: call to mem=
-cpy() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() le=
-aves .noinstr.text section
-    1    vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_sta=
-ck_page() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_en=
-try_stack() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: fixup_bad_iret()+0x32: call to memset=
-() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x35: call to memcpy=
-() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa0: call to memcpy=
-() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x5a: call to=
- ghcb_set_sw_exit_code() leaves .noinstr.text section
-    1    net/ipv6/ip6mr.c:1656:7: warning: unused variable =E2=80=98do_wrmi=
-fwhole=E2=80=99 [-Wunused-variable]
-    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x59: call to=
- do_strnlen_user() with UACCESS enabled
-    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
-6: call to do_strncpy_from_user() with UACCESS enabled
-    1    kernel/sched/rt.c:3032:12: warning: 'sched_rr_handler' defined but=
- not used [-Wunused-function]
-    1    kernel/sched/rt.c:2993:12: warning: 'sched_rt_handler' defined but=
- not used [-Wunused-function]
-    1    fs/reiserfs/lbalance.o: warning: objtool: leaf_copy_items_entirely=
-()+0x7fd: stack state mismatch: cfa1=3D4+240 cfa2=3D4+232
-    1    drivers/video/fbdev/udlfb.o: warning: objtool: dlfb_ops_write() fa=
-lls through to next function dlfb_ops_setcolreg()
-    1    drivers/video/fbdev/smscufx.o: warning: objtool: ufx_ops_write() f=
-alls through to next function ufx_ops_setcolreg()
-    1    drivers/soc/qcom/rpmh-rsc.o: warning: objtool: rpmh_rsc_write_ctrl=
-_data() falls through to next function trace_raw_output_rpmh_tx_done()
-    1    drivers/scsi/mpi3mr/mpi3mr_fw.o: warning: objtool: mpi3mr_op_reque=
-st_post() falls through to next function mpi3mr_check_rh_fault_ioc()
-    1    drivers/gpu/drm/radeon/sumo_dpm.o: warning: objtool: sumo_dpm_set_=
-power_state() falls through to next function sumo_dpm_post_set_power_state()
-    1    clang: warning: argument unused during compilation: '-march=3Darmv=
-7-m' [-Wunused-command-line-argument]
-    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
-s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
--overflow=3D]
-    1    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls t=
-hrough to next function startup_64_setup_env()
-    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
-_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
-ld not have leading "0x"
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    1    arch/arm64/kernel/elfcore.c:69:1: warning: the frame size of 2064 =
-bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
-    1    arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 i=
-s below array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=
-=80=99} [-Warray-bounds]
-    1    arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 i=
-s below array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=
-=80=99} [-Warray-bounds]
-
-Section mismatches summary:
-
-    1    WARNING: modpost: vmlinux.o(.text+0x155c57): Section mismatch in r=
-eference from the function __next_node() to the variable .init.data:numa_no=
-des_parsed
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-14) =E2=80=94 FAIL, 1 error, 13 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT expected, but got N=
-OCROSSREFS
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
-:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
-ory
-    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
-:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
-ory
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
-ismatches
-
-Errors:
-    ERROR: modpost: "__aeabi_ldivmod" [drivers/media/platform/amphion/amphi=
-on-vpu.ko] undefined!
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    sound/soc/atmel/mchp-pdmc.c:186:34: error: address of array 'uvalue->va=
-lue.integer.value' will always evaluate to 'true' [-Werror,-Wpointer-bool-c=
-onversion]
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-
----------------------------------------------------------------------------=
------
-allmodconfig (i386, clang-14) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    sound/soc/atmel/mchp-pdmc.c:186:34: error: address of array 'uvalue->va=
-lue.integer.value' will always evaluate to 'true' [-Werror,-Wpointer-bool-c=
-onversion]
-    drivers/gpu/drm/selftests/test-drm_plane_helper.c:76:5: error: stack fr=
-ame size (1084) exceeds limit (1024) in 'igt_check_plane_state' [-Werror,-W=
-frame-larger-than]
-    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly requir=
-es more registers than available
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 2 errors, 15 warnings, 0 se=
-ction mismatches
-
-Errors:
-    sound/soc/atmel/mchp-pdmc.c:186:34: error: address of array 'uvalue->va=
-lue.integer.value' will always evaluate to 'true' [-Werror,-Wpointer-bool-c=
-onversion]
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-
-Warnings:
-    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls throug=
-h to next function startup_64_setup_env()
-    vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves =
-.noinstr.text section
-    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8a: call to memcpy()=
- leaves .noinstr.text section
-    vmlinux.o: warning: objtool: fixup_bad_iret()+0x32: call to memset() le=
-aves .noinstr.text section
-    vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_pa=
-ge() leaves .noinstr.text section
-    vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_entry_s=
-tack() leaves .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x5a: call to ghcb=
-_set_sw_exit_code() leaves .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa0: call to memcpy() le=
-aves .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x35: call to memcpy() le=
-aves .noinstr.text section
-    drivers/soc/qcom/rpmh-rsc.o: warning: objtool: rpmh_rsc_write_ctrl_data=
-() falls through to next function trace_raw_output_rpmh_tx_done()
-    fs/reiserfs/lbalance.o: warning: objtool: leaf_copy_items_entirely()+0x=
-7fd: stack state mismatch: cfa1=3D4+240 cfa2=3D4+232
-    drivers/video/fbdev/udlfb.o: warning: objtool: dlfb_ops_write() falls t=
-hrough to next function dlfb_ops_setcolreg()
-    drivers/video/fbdev/smscufx.o: warning: objtool: ufx_ops_write() falls =
-through to next function ufx_ops_setcolreg()
-    drivers/gpu/drm/radeon/sumo_dpm.o: warning: objtool: sumo_dpm_set_power=
-_state() falls through to next function sumo_dpm_post_set_power_state()
-    drivers/scsi/mpi3mr/mpi3mr_fw.o: warning: objtool: mpi3mr_op_request_po=
-st() falls through to next function mpi3mr_check_rh_fault_ioc()
-
-Section mismatches:
-    WARNING: modpost: vmlinux.o(.text+0x155c57): Section mismatch in refere=
-nce from the function __next_node() to the variable .init.data:numa_nodes_p=
-arsed
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arm, clang-14) =E2=80=94 FAIL, 1 error, 1 warning, 0 section m=
-ismatches
-
-Errors:
-    ld.lld: error: ./arch/arm/kernel/vmlinux.lds:30: AT expected, but got N=
-OCROSSREFS
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-m' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-14) =E2=80=94 FAIL, 1 error, 9 warnings, 0 =
-section mismatches
-
-Errors:
-    ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT expected, but got N=
-OCROSSREFS
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    net/ipv6/ip6mr.c:1656:7: warning: unused variable =E2=80=98do_wrmifwhol=
-e=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
-ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
-t have leading "0x"
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 1 warning, 0 section mismatches
-
-Warnings:
-    arch/arm64/kernel/elfcore.c:69:1: warning: the frame size of 2064 bytes=
- is larger than 2048 bytes [-Wframe-larger-than=3D]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-imote2_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 4 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    page_alloc.c:(.init.text+0x1ba8): undefined reference to `node_data'
-    mips-linux-gnu-ld: page_alloc.c:(.init.text+0x1bcc): undefined referenc=
-e to `node_data'
-    mips-linux-gnu-ld: page_alloc.c:(.init.text+0x1be4): undefined referenc=
-e to `node_data'
-    mips-linux-gnu-ld: page_alloc.c:(.init.text+0x1bf4): undefined referenc=
-e to `node_data'
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2=
- warnings, 0 section mismatches
-
-Warnings:
-    arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 is bel=
-ow array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=80=
-=99} [-Warray-bounds]
-    arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 is bel=
-ow array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=80=
-=99} [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, =
-0 section mismatches
-
-Warnings:
-    drivers/i2c/busses/i2c-designware-platdrv.c:465:12: warning: =E2=80=98d=
-w_i2c_plat_resume=E2=80=99 defined but not used [-Wunused-function]
-    drivers/i2c/busses/i2c-designware-platdrv.c:444:12: warning: =E2=80=98d=
-w_i2c_plat_suspend=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
-nings, 0 section mismatches
-
-Warnings:
-    drivers/i2c/busses/i2c-designware-platdrv.c:465:12: warning: =E2=80=98d=
-w_i2c_plat_resume=E2=80=99 defined but not used [-Wunused-function]
-    drivers/i2c/busses/i2c-designware-platdrv.c:444:12: warning: =E2=80=98d=
-w_i2c_plat_suspend=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 0 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    drm_dp_mst_topology.c:(.text+0x1ffc): undefined reference to `__drm_ato=
-mic_helper_private_obj_duplicate_state'
-    drm_dp_mst_topology.c:(.text+0x2964): undefined reference to `drm_kms_h=
-elper_hotplug_event'
-    drm_dp_mst_topology.c:(.text+0x7660): undefined reference to `drm_kms_h=
-elper_hotplug_event'
-    drm_dp_mst_topology.c:(.text+0x870c): undefined reference to `drm_kms_h=
-elper_hotplug_event'
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
-bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
-flow=3D]
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    kernel/sched/rt.c:3032:12: warning: =E2=80=98sched_rr_handler=E2=80=99 =
-defined but not used [-Wunused-function]
-    kernel/sched/rt.c:2993:12: warning: =E2=80=98sched_rt_handler=E2=80=99 =
-defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section mi=
-smatches
-
-Warnings:
-    kernel/sched/rt.c:3032:12: warning: 'sched_rr_handler' defined but not =
-used [-Wunused-function]
-    kernel/sched/rt.c:2993:12: warning: 'sched_rt_handler' defined but not =
-used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    kernel/sched/rt.c:3032:12: warning: =E2=80=98sched_rr_handler=E2=80=99 =
-defined but not used [-Wunused-function]
-    kernel/sched/rt.c:2993:12: warning: =E2=80=98sched_rt_handler=E2=80=99 =
-defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section m=
-ismatches
-
-Warnings:
-    kernel/sched/rt.c:3032:12: warning: =E2=80=98sched_rr_handler=E2=80=99 =
-defined but not used [-Wunused-function]
-    kernel/sched/rt.c:2993:12: warning: =E2=80=98sched_rt_handler=E2=80=99 =
-defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x86: ca=
-ll to do_strncpy_from_user() with UACCESS enabled
-    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x59: call to do_s=
-trnlen_user() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git amd-staging-drm-next
+head:   d974d4a696618e82ed6d39ad2b3688d915bb13dd
+commit: 92fc842d9da15ae9b14dc964d115e250c7b568e1 [1275/1333] drm/amdgpu: Serialize non TDR gpu recovery with TDRs
+config: riscv-randconfig-c006-20220310 (https://download.01.org/0day-ci/archive/20220312/202203120337.51TmNkmV-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f amd-staging-drm-next
+        git checkout 92fc842d9da15ae9b14dc964d115e250c7b568e1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:5089: warning: expecting prototype for amdgpu_device_gpu_recover(). Prototype was for amdgpu_device_gpu_recover_imp() instead
+
+
+vim +5089 drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+
+e6c6338f393b74 Jack Zhang            2021-03-08  5075  
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5076  /**
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5077   * amdgpu_device_gpu_recover - reset the asic and recover scheduler
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5078   *
+982a820bac1b64 Mauro Carvalho Chehab 2020-10-21  5079   * @adev: amdgpu_device pointer
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5080   * @job: which job trigger hang
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5081   *
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5082   * Attempt to reset the GPU if it has hung (all asics).
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5083   * Attempt to do soft-reset or full-reset and reinitialize Asic
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5084   * Returns 0 for success or an error on failure.
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5085   */
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5086  
+92fc842d9da15a Andrey Grodzovsky     2021-12-17  5087  int amdgpu_device_gpu_recover_imp(struct amdgpu_device *adev,
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5088  			      struct amdgpu_job *job)
+26bc534094ed45 Andrey Grodzovsky     2018-11-22 @5089  {
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5090  	struct list_head device_list, *device_list_handle =  NULL;
+7dd8c205eaedfa Evan Quan             2020-04-16  5091  	bool job_signaled = false;
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5092  	struct amdgpu_hive_info *hive = NULL;
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5093  	struct amdgpu_device *tmp_adev = NULL;
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5094  	int i, r = 0;
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5095  	bool need_emergency_restart = false;
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5096  	bool audio_suspended = false;
+e6c6338f393b74 Jack Zhang            2021-03-08  5097  	int tmp_vram_lost_counter;
+04442bf70debb1 Lijo Lazar            2021-03-16  5098  	struct amdgpu_reset_context reset_context;
+04442bf70debb1 Lijo Lazar            2021-03-16  5099  
+04442bf70debb1 Lijo Lazar            2021-03-16  5100  	memset(&reset_context, 0, sizeof(reset_context));
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5101  
+6e3cd2a9a6ac32 Mauro Carvalho Chehab 2020-10-23  5102  	/*
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5103  	 * Special case: RAS triggered and full reset isn't supported
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5104  	 */
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5105  	need_emergency_restart = amdgpu_ras_need_emergency_restart(adev);
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5106  
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5107  	/*
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5108  	 * Flush RAM to disk so that after reboot
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5109  	 * the user can read log and see why the system rebooted.
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5110  	 */
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5111  	if (need_emergency_restart && amdgpu_ras_get_context(adev)->reboot) {
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5112  		DRM_WARN("Emergency reboot.");
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5113  
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5114  		ksys_sync_helper();
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5115  		emergency_restart();
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5116  	}
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5117  
+b823821f2244ad Le Ma                 2019-11-27  5118  	dev_info(adev->dev, "GPU %s begin!\n",
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5119  		need_emergency_restart ? "jobs stop":"reset");
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5120  
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5121  	/*
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5122  	 * Here we trylock to avoid chain of resets executing from
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5123  	 * either trigger by jobs on different adevs in XGMI hive or jobs on
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5124  	 * different schedulers for same device while this TO handler is running.
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5125  	 * We always reset all schedulers for device and all devices for XGMI
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5126  	 * hive so that should take care of them too.
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5127  	 */
+175ac6ec6bd8db Zhigang Luo           2021-11-26  5128  	if (!amdgpu_sriov_vf(adev))
+d95e8e97e2d522 Dennis Li             2020-08-18  5129  		hive = amdgpu_get_xgmi_hive(adev);
+53b3f8f40e6cff Dennis Li             2020-08-19  5130  	if (hive) {
+53b3f8f40e6cff Dennis Li             2020-08-19  5131  		if (atomic_cmpxchg(&hive->in_reset, 0, 1) != 0) {
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5132  			DRM_INFO("Bailing on TDR for s_job:%llx, hive: %llx as another already in progress",
+0b2d2c2eecf27f Andrey Grodzovsky     2019-08-27  5133  				job ? job->base.id : -1, hive->hive_id);
+d95e8e97e2d522 Dennis Li             2020-08-18  5134  			amdgpu_put_xgmi_hive(hive);
+ff99849b00fef5 Jingwen Chen          2021-07-20  5135  			if (job && job->vm)
+91fb309d8294be Horace Chen           2021-01-20  5136  				drm_sched_increase_karma(&job->base);
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5137  			return 0;
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5138  		}
+53b3f8f40e6cff Dennis Li             2020-08-19  5139  		mutex_lock(&hive->hive_lock);
+53b3f8f40e6cff Dennis Li             2020-08-19  5140  	}
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5141  
+04442bf70debb1 Lijo Lazar            2021-03-16  5142  	reset_context.method = AMD_RESET_METHOD_NONE;
+04442bf70debb1 Lijo Lazar            2021-03-16  5143  	reset_context.reset_req_dev = adev;
+04442bf70debb1 Lijo Lazar            2021-03-16  5144  	reset_context.job = job;
+04442bf70debb1 Lijo Lazar            2021-03-16  5145  	reset_context.hive = hive;
+04442bf70debb1 Lijo Lazar            2021-03-16  5146  	clear_bit(AMDGPU_NEED_FULL_RESET, &reset_context.flags);
+04442bf70debb1 Lijo Lazar            2021-03-16  5147  
+91fb309d8294be Horace Chen           2021-01-20  5148  	/*
+91fb309d8294be Horace Chen           2021-01-20  5149  	 * lock the device before we try to operate the linked list
+91fb309d8294be Horace Chen           2021-01-20  5150  	 * if didn't get the device lock, don't touch the linked list since
+91fb309d8294be Horace Chen           2021-01-20  5151  	 * others may iterating it.
+91fb309d8294be Horace Chen           2021-01-20  5152  	 */
+91fb309d8294be Horace Chen           2021-01-20  5153  	r = amdgpu_device_lock_hive_adev(adev, hive);
+91fb309d8294be Horace Chen           2021-01-20  5154  	if (r) {
+91fb309d8294be Horace Chen           2021-01-20  5155  		dev_info(adev->dev, "Bailing on TDR for s_job:%llx, as another already in progress",
+91fb309d8294be Horace Chen           2021-01-20  5156  					job ? job->base.id : -1);
+91fb309d8294be Horace Chen           2021-01-20  5157  
+91fb309d8294be Horace Chen           2021-01-20  5158  		/* even we skipped this reset, still need to set the job to guilty */
+ff99849b00fef5 Jingwen Chen          2021-07-20  5159  		if (job && job->vm)
+91fb309d8294be Horace Chen           2021-01-20  5160  			drm_sched_increase_karma(&job->base);
+91fb309d8294be Horace Chen           2021-01-20  5161  		goto skip_recovery;
+91fb309d8294be Horace Chen           2021-01-20  5162  	}
+91fb309d8294be Horace Chen           2021-01-20  5163  
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5164  	/*
+9e94d22c008585 Evan Quan             2020-04-16  5165  	 * Build list of devices to reset.
+9e94d22c008585 Evan Quan             2020-04-16  5166  	 * In case we are in XGMI hive mode, resort the device list
+9e94d22c008585 Evan Quan             2020-04-16  5167  	 * to put adev in the 1st position.
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5168  	 */
+9e94d22c008585 Evan Quan             2020-04-16  5169  	INIT_LIST_HEAD(&device_list);
+175ac6ec6bd8db Zhigang Luo           2021-11-26  5170  	if (!amdgpu_sriov_vf(adev) && (adev->gmc.xgmi.num_physical_nodes > 1)) {
+655ce9cb13b596 shaoyunl              2021-03-04  5171  		list_for_each_entry(tmp_adev, &hive->device_list, gmc.xgmi.head)
+655ce9cb13b596 shaoyunl              2021-03-04  5172  			list_add_tail(&tmp_adev->reset_list, &device_list);
+655ce9cb13b596 shaoyunl              2021-03-04  5173  		if (!list_is_first(&adev->reset_list, &device_list))
+655ce9cb13b596 shaoyunl              2021-03-04  5174  			list_rotate_to_front(&adev->reset_list, &device_list);
+655ce9cb13b596 shaoyunl              2021-03-04  5175  		device_list_handle = &device_list;
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5176  	} else {
+655ce9cb13b596 shaoyunl              2021-03-04  5177  		list_add_tail(&adev->reset_list, &device_list);
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5178  		device_list_handle = &device_list;
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5179  	}
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5180  
+12ffa55da60f83 Andrey Grodzovsky     2019-08-30  5181  	/* block all schedulers and reset given job's ring */
+655ce9cb13b596 shaoyunl              2021-03-04  5182  	list_for_each_entry(tmp_adev, device_list_handle, reset_list) {
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5183  		/*
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5184  		 * Try to put the audio codec into suspend state
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5185  		 * before gpu reset started.
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5186  		 *
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5187  		 * Due to the power domain of the graphics device
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5188  		 * is shared with AZ power domain. Without this,
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5189  		 * we may change the audio hardware from behind
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5190  		 * the audio driver's back. That will trigger
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5191  		 * some audio codec errors.
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5192  		 */
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5193  		if (!amdgpu_device_suspend_display_audio(tmp_adev))
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5194  			audio_suspended = true;
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5195  
+9e94d22c008585 Evan Quan             2020-04-16  5196  		amdgpu_ras_set_error_query_ready(tmp_adev, false);
+9e94d22c008585 Evan Quan             2020-04-16  5197  
+52fb44cf30fc6b Evan Quan             2020-04-16  5198  		cancel_delayed_work_sync(&tmp_adev->delayed_init_work);
+52fb44cf30fc6b Evan Quan             2020-04-16  5199  
+428890a3fec131 shaoyunl              2021-11-29  5200  		if (!amdgpu_sriov_vf(tmp_adev))
+9e94d22c008585 Evan Quan             2020-04-16  5201  			amdgpu_amdkfd_pre_reset(tmp_adev);
+9e94d22c008585 Evan Quan             2020-04-16  5202  
+fdafb3597a2cc4 Evan Quan             2019-06-26  5203  		/*
+fdafb3597a2cc4 Evan Quan             2019-06-26  5204  		 * Mark these ASICs to be reseted as untracked first
+fdafb3597a2cc4 Evan Quan             2019-06-26  5205  		 * And add them back after reset completed
+fdafb3597a2cc4 Evan Quan             2019-06-26  5206  		 */
+fdafb3597a2cc4 Evan Quan             2019-06-26  5207  		amdgpu_unregister_gpu_instance(tmp_adev);
+fdafb3597a2cc4 Evan Quan             2019-06-26  5208  
+087451f372bf76 Evan Quan             2021-10-19  5209  		drm_fb_helper_set_suspend_unlocked(adev_to_drm(adev)->fb_helper, true);
+565d1941557756 Evan Quan             2020-03-11  5210  
+f1c1314be42971 xinhui pan            2019-07-04  5211  		/* disable ras on ALL IPs */
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5212  		if (!need_emergency_restart &&
+b823821f2244ad Le Ma                 2019-11-27  5213  		      amdgpu_device_ip_need_full_reset(tmp_adev))
+f1c1314be42971 xinhui pan            2019-07-04  5214  			amdgpu_ras_suspend(tmp_adev);
+f1c1314be42971 xinhui pan            2019-07-04  5215  
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5216  		for (i = 0; i < AMDGPU_MAX_RINGS; ++i) {
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5217  			struct amdgpu_ring *ring = tmp_adev->rings[i];
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5218  
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5219  			if (!ring || !ring->sched.thread)
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5220  				continue;
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5221  
+0b2d2c2eecf27f Andrey Grodzovsky     2019-08-27  5222  			drm_sched_stop(&ring->sched, job ? &job->base : NULL);
+7c6e68c777f109 Andrey Grodzovsky     2019-09-13  5223  
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5224  			if (need_emergency_restart)
+7c6e68c777f109 Andrey Grodzovsky     2019-09-13  5225  				amdgpu_job_stop_all_jobs_on_sched(&ring->sched);
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5226  		}
+8f8c80f4300967 Jingwen Chen          2021-02-25  5227  		atomic_inc(&tmp_adev->gpu_reset_counter);
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5228  	}
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5229  
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5230  	if (need_emergency_restart)
+7c6e68c777f109 Andrey Grodzovsky     2019-09-13  5231  		goto skip_sched_resume;
+7c6e68c777f109 Andrey Grodzovsky     2019-09-13  5232  
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5233  	/*
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5234  	 * Must check guilty signal here since after this point all old
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5235  	 * HW fences are force signaled.
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5236  	 *
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5237  	 * job->base holds a reference to parent fence
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5238  	 */
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5239  	if (job && job->base.s_fence->parent &&
+7dd8c205eaedfa Evan Quan             2020-04-16  5240  	    dma_fence_is_signaled(job->base.s_fence->parent)) {
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5241  		job_signaled = true;
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5242  		dev_info(adev->dev, "Guilty job already signaled, skipping HW reset");
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5243  		goto skip_hw_reset;
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5244  	}
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5245  
+
+:::::: The code at line 5089 was first introduced by commit
+:::::: 26bc534094ed45fdedef6b4ce8b96030340c5ce7 drm/amdgpu: Refactor GPU reset for XGMI hive case
+
+:::::: TO: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
 ---
-For more info write to <info@kernelci.org>
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
