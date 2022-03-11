@@ -1,41 +1,41 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8D333D5
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 13:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B5B733D5
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 13:43:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647004327; x=1678540327;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AWq7WnNf892beOMKbeBL1LamJ6gbZ6LG2IxRKIe5Kpw=;
-  b=GG67jQPug0jOH9OopZRfbyVUWdcE6eAp54G+++NdCd5ikFkaj2uqaaZp
-   wgROuMpvMhzWVz1fb30y64IBN8LFCMiQNs+gx4JrzPzIruLz3alSgDLA/
-   3EXZ0pD/6kdXHqjBT++UhkvwzL5UnNuFZcI3dSTg8pXpuWWDE4S/UCJT2
-   C9tWZrlxE+AxHyGuJD4G6cTAIR/C9sNEfDDyJ4TwF/L0knf2SzSGAy0rh
-   Ms9GamNsBCDRGVi1/MXRRZ57mvNms6HdKYEbeAVcbSifEk+yihmcbDW1h
-   jHs25w1e0k6gvFxu0puAKFh6is5lgTfU55BESTJAmfqKxq0unEbcWC5IY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="237741587"
+  t=1647006188; x=1678542188;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZYWAt8CasOmpFYYg90HlEKCCSdk6/jyMs4zTHkqPfRo=;
+  b=kNm2KgvZ2V18VRCtNbOMRYjeHyZicgwDzeEQKG4peFMEJytfozVZthP6
+   1rcBsIAeaLBfGKgqLt4bDlEXeEvxr2sOiqKuKpJ8CmFDRoD0uBmJULwJ8
+   yDg+8VzVeiLeUubZBuCMuhdVqpdefPgzfjP1rOHEmwaFHL7Jm1cKCUsID
+   76Cyuz3Mwy7Ee2AMH03fWpGvlNkUEi1HRf7V7Foytt2YgrBS0RBxVbu+V
+   Z3Bowv3T7faJKzXZBs09IMOXS8Huo5ZSftYEhDCWrf8SDfkOR5m4p7h0j
+   sjVqCta2OtgAaTBz+0Tv5n0tpdvcBY9vduMYSAEWUbOyALlvsjh/fIobv
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254401130"
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="237741587"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:12:06 -0800
+   d="scan'208";a="254401130"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:43:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="496759227"
+   d="scan'208";a="514507837"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2022 05:12:05 -0800
+  by orsmga006.jf.intel.com with ESMTP; 11 Mar 2022 05:43:06 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nSf3s-0006Rk-Dd; Fri, 11 Mar 2022 13:12:04 +0000
-Date: Fri, 11 Mar 2022 21:11:46 +0800
+	id 1nSfXt-0006UT-L0; Fri, 11 Mar 2022 13:43:05 +0000
+Date: Fri, 11 Mar 2022 21:42:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Gow <davidgow@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: lib/list-test.c:15:2: error: type name requires a specifier or
- qualifier
-Message-ID: <202203112120.LIt7DF8t-lkp@intel.com>
+To: Jiyong Park <jiyong@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 1/2] vsock: each transport cycles only on its own sockets
+Message-ID: <202203112159.kNHX2McH-lkp@intel.com>
+References: <20220310125425.4193879-2-jiyong@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,77 +44,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220310125425.4193879-2-jiyong@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220311-151720/Xiaomeng-Tong/list_for_each_entry-make-iterator-invisiable-outside-the-loop/20220301-160113
-head:   54ae283053c127aac4b946dffa0f31f9885dbb77
-commit: 32c7dc1050a5376225f79589948ac5a63cb75e5a list: test: Add a test for list_traverse
-date:   6 hours ago
-config: hexagon-randconfig-r045-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112120.LIt7DF8t-lkp@intel.com/config)
+Hi Jiyong,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on 3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b]
+
+url:    https://github.com/0day-ci/linux/commits/Jiyong-Park/vsock-cycle-only-on-its-own-socket/20220310-205638
+base:   3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220311/202203112159.kNHX2McH-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/32c7dc1050a5376225f79589948ac5a63cb75e5a
+        # https://github.com/0day-ci/linux/commit/6219060e1d706d7055fb0829b3bf23c5ae84790e
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220311-151720/Xiaomeng-Tong/list_for_each_entry-make-iterator-invisiable-outside-the-loop/20220301-160113
-        git checkout 32c7dc1050a5376225f79589948ac5a63cb75e5a
+        git fetch --no-tags linux-review Jiyong-Park/vsock-cycle-only-on-its-own-socket/20220310-205638
+        git checkout 6219060e1d706d7055fb0829b3bf23c5ae84790e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> lib/list-test.c:15:2: error: type name requires a specifier or qualifier
-           list_traversal_head(struct list_test_struct, head, list);
-           ^
->> lib/list-test.c:15:47: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-           list_traversal_head(struct list_test_struct, head, list);
-                                                        ^
-   lib/list-test.c:15:53: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-           list_traversal_head(struct list_test_struct, head, list);
-                                                              ^
->> lib/list-test.c:665:23: error: no member named 'head' in 'struct list_test_struct'
-           INIT_LIST_HEAD(&head.head);
-                           ~~~~ ^
-   lib/list-test.c:669:41: error: no member named 'head' in 'struct list_test_struct'
-                   list_add_tail(&entries[i].list, &head.head);
-                                                    ~~~~ ^
->> lib/list-test.c:674:2: error: implicit declaration of function 'list_traverse' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           list_traverse(cur, &head.head, list) {
-           ^
-   lib/list-test.c:674:27: error: no member named 'head' in 'struct list_test_struct'
-           list_traverse(cur, &head.head, list) {
-                               ~~~~ ^
->> lib/list-test.c:674:38: error: expected ';' after expression
-           list_traverse(cur, &head.head, list) {
-                                               ^
-                                               ;
->> lib/list-test.c:674:16: error: use of undeclared identifier 'cur'
-           list_traverse(cur, &head.head, list) {
-                         ^
->> lib/list-test.c:674:33: error: use of undeclared identifier 'list'
-           list_traverse(cur, &head.head, list) {
-                                          ^
-   lib/list-test.c:675:25: error: use of undeclared identifier 'cur'
-                   KUNIT_EXPECT_EQ(test, cur->data, i);
-                                         ^
-   lib/list-test.c:675:25: error: use of undeclared identifier 'cur'
-   12 errors generated.
+>> net/vmw_vsock/vmci_transport.c:808:25: error: use of undeclared identifier 'vmci_transport'
+           if (vsk->transport != &vmci_transport)
+                                  ^
+   1 error generated.
 
 
-vim +15 lib/list-test.c
+vim +/vmci_transport +808 net/vmw_vsock/vmci_transport.c
 
-    11	
-    12	struct list_test_struct {
-    13		int data;
-    14		struct list_head list;
-  > 15		list_traversal_head(struct list_test_struct, head, list);
-    16	};
-    17	
+   800	
+   801	static void vmci_transport_handle_detach(struct sock *sk)
+   802	{
+   803		struct vsock_sock *vsk;
+   804	
+   805		vsk = vsock_sk(sk);
+   806	
+   807		/* Only handle our own sockets */
+ > 808		if (vsk->transport != &vmci_transport)
+   809			return;
+   810	
+   811		if (!vmci_handle_is_invalid(vmci_trans(vsk)->qp_handle)) {
+   812			sock_set_flag(sk, SOCK_DONE);
+   813	
+   814			/* On a detach the peer will not be sending or receiving
+   815			 * anymore.
+   816			 */
+   817			vsk->peer_shutdown = SHUTDOWN_MASK;
+   818	
+   819			/* We should not be sending anymore since the peer won't be
+   820			 * there to receive, but we can still receive if there is data
+   821			 * left in our consume queue. If the local endpoint is a host,
+   822			 * we can't call vsock_stream_has_data, since that may block,
+   823			 * but a host endpoint can't read data once the VM has
+   824			 * detached, so there is no available data in that case.
+   825			 */
+   826			if (vsk->local_addr.svm_cid == VMADDR_CID_HOST ||
+   827			    vsock_stream_has_data(vsk) <= 0) {
+   828				if (sk->sk_state == TCP_SYN_SENT) {
+   829					/* The peer may detach from a queue pair while
+   830					 * we are still in the connecting state, i.e.,
+   831					 * if the peer VM is killed after attaching to
+   832					 * a queue pair, but before we complete the
+   833					 * handshake. In that case, we treat the detach
+   834					 * event like a reset.
+   835					 */
+   836	
+   837					sk->sk_state = TCP_CLOSE;
+   838					sk->sk_err = ECONNRESET;
+   839					sk_error_report(sk);
+   840					return;
+   841				}
+   842				sk->sk_state = TCP_CLOSE;
+   843			}
+   844			sk->sk_state_change(sk);
+   845		}
+   846	}
+   847	
 
 ---
 0-DAY CI Kernel Test Service
