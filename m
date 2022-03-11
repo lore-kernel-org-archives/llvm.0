@@ -1,42 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBADF33D5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226F533D8
 	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 13:02:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647003726; x=1678539726;
+  t=1647003727; x=1678539727;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8p85oTWSgB5OqD5IXy7JJjQ5MEHJCs1MBGpwJc3QHC8=;
-  b=WfMl+PuO3si1oZCpGxg83o0WjshOGRtaxBIiU9tukuG4N0/EryhMYPfb
-   FTtGVPWcYhX6cl2CT/z2DqXRcVoqJ4Su29IZn3zKXejPXGd3Rz0W54kYs
-   bi//Kr5vaRZ5ydlPp0zb+xmuKiszG0SKEX5jqgX+pWM/3oirJ06Bw1t2E
-   h7IGZK/c1hIqiYbWzerOtfepR4lEHkef5P7TJvaI2TdMy7Lvk1dslUBZA
-   LbK23V/QQCzEDULojw7fUL6rTTm9hwaN1Jfecsylw7Z8cWfIEYHdea6Go
-   8JMIwESbYAILj78+rqs5TUw8FY/BOqLshrjA3/T9+gSZcacx/lf1qomG1
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="318790254"
+  bh=0nqluSQ8r5IJ3BfjMoXfkA5pM/vYkb+BwHqp2NsdFTc=;
+  b=SNl12gwaZc0MXSUirJVpEWmqVD6DRxT1808VoQIc5a9iIQcHzQOOjDQr
+   gW94NDUlSgyv+4qtbJcgSloERyK3inuFMg2/PhOkLnFRcWxY/JEzAGy0a
+   Dq2cVp84iicJ50QcLcfpWMhTNsOKe+xHAGLyQTy6WX3TFWgMPDmkgZZyO
+   bu8fFhFUqZMoYxFaTd269k1MXfFY7S7ET7AyJ35HZlamPils7yVDRW+Fw
+   sNTp8G/J8HW4JKCJrgBnM/oO3bTE2uDjuW67oLGRuchHN/n8fT6Zf5O6I
+   rxhYxjoz1Ktl/OOGQm0bdf80oCyimxi0HjTo3LTKRyISH4lDEWz5iCrTI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254395508"
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="318790254"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:02:06 -0800
+   d="scan'208";a="254395508"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:02:06 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="597103569"
+   d="scan'208";a="644926847"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Mar 2022 05:02:04 -0800
+  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2022 05:02:04 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nSeuC-0006Qd-3Y; Fri, 11 Mar 2022 13:02:04 +0000
-Date: Fri, 11 Mar 2022 21:01:24 +0800
+	id 1nSeuC-0006Qi-4H; Fri, 11 Mar 2022 13:02:04 +0000
+Date: Fri, 11 Mar 2022 21:01:30 +0800
 From: kernel test robot <lkp@intel.com>
 To: Linus Walleij <linus.walleij@linaro.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.17-rc1 4/8]
- arch/arm/mm/init.c:317:5: warning: format specifies type 'unsigned long' but
- the argument has type 'char *'
-Message-ID: <202203112007.GfOV3M1u-lkp@intel.com>
+Subject: [arm-integrator:kernel-in-vmalloc-v5.17-rc1 6/8]
+ arch/arm/include/asm/memory.h:332:5: error: use of undeclared identifier
+ 'KERNEL_PFN_OFFSET'
+Message-ID: <202203112027.GAmJRxFY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,96 +49,66 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.17-rc1
 head:   66e9038ef48dc66c07b12443b73e2d1f3f12cbab
-commit: 18e0d99ee35450767fc8222f1727febdd2a4deac [4/8] ARM: Print virtual memory info again
-config: arm-orion5x_defconfig (https://download.01.org/0day-ci/archive/20220311/202203112007.GfOV3M1u-lkp@intel.com/config)
+commit: 5976b9fa0b76bace6d7b038a7e1941175da8f5c5 [6/8] ARM: Compile the kernel into VMALLOC
+config: arm-randconfig-r032-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112027.GAmJRxFY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=18e0d99ee35450767fc8222f1727febdd2a4deac
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=5976b9fa0b76bace6d7b038a7e1941175da8f5c5
         git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
         git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.17-rc1
-        git checkout 18e0d99ee35450767fc8222f1727febdd2a4deac
+        git checkout 5976b9fa0b76bace6d7b038a7e1941175da8f5c5
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   arch/arm/mm/init.c:97:13: warning: no previous prototype for function 'setup_dma_zone' [-Wmissing-prototypes]
-   void __init setup_dma_zone(const struct machine_desc *mdesc)
-               ^
-   arch/arm/mm/init.c:97:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init setup_dma_zone(const struct machine_desc *mdesc)
-   ^
-   static 
->> arch/arm/mm/init.c:317:5: warning: format specifies type 'unsigned long' but the argument has type 'char *' [-Wformat]
-                     "     kernel : 0x%08lx - 0x%08lx   (%4ld MB)\n",
-                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
->> arch/arm/mm/init.c:322:5: warning: data argument not used by format string [-Wformat-extra-args]
-                     MLM(MODULES_VADDR, MODULES_END),
-                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^
-   arch/arm/mm/init.c:309:25: note: expanded from macro 'MLM'
-   #define MLM(b, t) b, t, ((t) - (b)) >> 20
-                           ^
-   arch/arm/mm/init.c:307:13: warning: no previous prototype for function 'mem_init_print_arm_info' [-Wmissing-prototypes]
-   void __init mem_init_print_arm_info(void)
-               ^
-   arch/arm/mm/init.c:307:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init mem_init_print_arm_info(void)
-   ^
-   static 
-   4 warnings generated.
+   In file included from arch/arm/kernel/asm-offsets.c:11:
+   In file included from include/linux/sched.h:12:
+   In file included from arch/arm/include/asm/current.h:50:
+   In file included from include/asm-generic/current.h:5:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/arm/include/asm/thread_info.h:14:
+   In file included from arch/arm/include/asm/page.h:160:
+>> arch/arm/include/asm/memory.h:332:5: error: use of undeclared identifier 'KERNEL_PFN_OFFSET'
+                                   KERNEL_PFN_OFFSET);
+                                   ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/arm/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +317 arch/arm/mm/init.c
+vim +/KERNEL_PFN_OFFSET +332 arch/arm/include/asm/memory.h
 
-   306	
-   307	void __init mem_init_print_arm_info(void)
-   308	{
-   309	#define MLM(b, t) b, t, ((t) - (b)) >> 20
-   310		pr_notice("Virtual kernel memory layout:\n"
-   311			  "    fixmap  : 0x%08lx - 0x%08lx   (%4ld MB)\n"
-   312			  "    vmalloc : 0x%08lx - 0x%08lx   (%4ld MB)\n"
-   313			  "    lowmem  : 0x%08lx - 0x%08lx   (%4ld MB)\n"
-   314	#ifdef CONFIG_MODULES
-   315			  "    modules : 0x%08lx - 0x%08lx   (%4ld MB)\n",
-   316	#endif
- > 317			  "     kernel : 0x%08lx - 0x%08lx   (%4ld MB)\n",
-   318			  MLM(FIXADDR_START, FIXADDR_END),
-   319			  MLM(VMALLOC_START, VMALLOC_END),
-   320			  MLM(PAGE_OFFSET, (unsigned long)high_memory),
-   321	#ifdef CONFIG_MODULES
- > 322			  MLM(MODULES_VADDR, MODULES_END),
-   323	#endif
-   324			  /* From beginning of .text to end of .bss */
-   325			  MLM((unsigned long)_text, (unsigned long)__bss_stop));
-   326	#undef MLM
-   327	}
-   328	
+   322	
+   323	static inline unsigned long virt_to_pfn(unsigned long kaddr)
+   324	{
+   325		if (!IS_ENABLED(CONFIG_ARM_KERNEL_IN_VMALLOC)) {
+   326			return (((kaddr - PAGE_OFFSET) >> PAGE_SHIFT) +
+   327				PHYS_PFN_OFFSET);
+   328		} else {
+   329			if ((kaddr >= KERNEL_OFFSET) &&
+   330			    (kaddr < (KERNEL_OFFSET + KERNEL_SECTION_SIZE))) {
+   331				return (((kaddr - KERNEL_OFFSET) >> PAGE_SHIFT) +
+ > 332					KERNEL_PFN_OFFSET);
+   333			} else {
+   334				return (((kaddr - PAGE_OFFSET) >> PAGE_SHIFT) +
+   335					PHYS_PFN_OFFSET);
+   336			}
+   337		}
+   338	}
+   339	
 
 ---
 0-DAY CI Kernel Test Service
