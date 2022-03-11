@@ -1,190 +1,119 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEE75CA9
-	for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 22:23:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646950988; x=1678486988;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fF+3qyUbUukq0jg8sTNO94/16OGrvG79CjMrQVctGRM=;
-  b=Q/TCAC4aYNyCnLLZ8jQMTjWgbmxzEkEjTiGPVC37NaBugId/aUhYYvvo
-   lsHjdVjk5RebNku7Wv1anTqCjJ5Q0n4IEj33ju45vXxNsKzlyymFvpBAS
-   vOx92x3V8CIppXzZ/+rBEMl7No9zsKpK7r1jJbDqfQsKS9ZbTL/nyhxwT
-   mwhrG8cZeILw6haRpxRYRRNI3CxVd7gHg021XiHm4ruhtywGAHa/U/HKp
-   Sk0HLuUYJwfuRwQhF7bKncgXDmp/ktQN/VCjyQ2aq/nd/ugp0sczvNJ6C
-   7I2WoxE80wNOCdrEFlKL47pUoESktspF28i/lmXKr+FVn+i+Z/VAzPBdV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="237568371"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="237568371"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 14:23:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="633160066"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2022 14:23:04 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSRBY-0005Ta-5G; Thu, 10 Mar 2022 22:23:04 +0000
-Date: Fri, 11 Mar 2022 06:22:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Scull <ascull@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
-Subject: arch/arm64/kvm/handle_exit.c:295:24: warning: no previous prototype
- for function 'nvhe_hyp_panic_handler'
-Message-ID: <202203110617.SylT3htc-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE447E
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 01:01:31 +0000 (UTC)
+Received: by mail-io1-f44.google.com with SMTP id 195so8606528iou.0
+        for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 17:01:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=pRxA0EhnfxgZREQ1JvLzAPp++HtgLS4XlH6e6oYQepQ=;
+        b=Vjyrm+kxdESZsbe9Az2HSAn1ZpwOhiXOQhxWSpGgTSM6JMYxnEEe0SCktudWT3F5XE
+         swt0tuE0Hy+xbGfbZn3E7alYtyxeQI7b30khdNhKZd2moPZ5H/yCp2PUiHKFGDqi4fXv
+         iJu7wQTUj1bxP/oV5fScpxSWxptw7coza83wBrqnoqidrZBXDwx7bg11LchfTWjGofEa
+         pRYj07cJAvx0KLkoncwItp+hX7own7GZp0HIbCa8T5P0L+ffzQy/SOxiuejlFmIXDEbF
+         O7+ZLSSAOm6Tuam5uE5mYwADZzyArnJziKAYIE6kVjMAVypCWgLfj5J81e06T/m8VD18
+         VjkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=pRxA0EhnfxgZREQ1JvLzAPp++HtgLS4XlH6e6oYQepQ=;
+        b=Z3BMWsUFJhgmMw79UZmuUQj1osq4qhJZ2d5dekIskRmMqn09031AEk6BlYGCpX19TE
+         mRmA5CqkMzeKvnnwk0GRHBFCV1YAs2iVxr6YIBNH20URemMCM7fX+d2wpPag75ixMi3O
+         7AzFO3fPfTi8NZFzAYGKu4Txix9qRRWep2EoyGRh+SXxjGVTJU88aWJCCW0mc7aOOxet
+         Qsoss00xAZ6tJz8TH4H5/p6ztyMPdqm+qCxMkWNrIZvOfGHDpkCnPeccEXYcCfiS7rp4
+         TrJ92W03tkFX1UwQ8+Bj8dIuFejlp9gyRs3p3hYFOX5dXrvS3cmUtlaxZRCwgDcfqSAn
+         8SAA==
+X-Gm-Message-State: AOAM533UyTZddt8FiYsIA6BQVUJAoPv2Wp0UDgArmI9OzciOLkbO+meN
+	sQ7KTh2eLMwKC7aNUK6o4fjK0oCC0LoKpkFZ+kw=
+X-Google-Smtp-Source: ABdhPJzg+9ZIr0/5erj9eCsxaC8HgT2nZx0GKAKjWV4ekUcW2ZeWfYetjEmfk7Yd433gAaCBj883R1wfARex/2tSmKU=
+X-Received: by 2002:a6b:8f15:0:b0:645:dfdb:7a35 with SMTP id
+ r21-20020a6b8f15000000b00645dfdb7a35mr5902984iod.36.1646960490953; Thu, 10
+ Mar 2022 17:01:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220308215615.14183-1-arnd@kernel.org> <CAHk-=wjsCrVxToP0Zx+cUAVZmSKi=Y6NP1+VnBcoPyPPEBfonQ@mail.gmail.com>
+ <CAK7LNAQoFFVLfkhA7FC9vDbvc4wdLginYeRHL0xHVAumu6p=uw@mail.gmail.com>
+ <CAK7LNASuy5hSOU7Y7Tr8_6Ks1ZqEeUKv_-c6fDjMubq0_ENRaw@mail.gmail.com> <YilBFcKIN1Ao5Ld1@dev-arch.thelio-3990X>
+In-Reply-To: <YilBFcKIN1Ao5Ld1@dev-arch.thelio-3990X>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Fri, 11 Mar 2022 02:00:55 +0100
+Message-ID: <CA+icZUX0SXwBF+CzaOAPKzOujSRVOKRZwS7nppPjraLvOSeMDw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] [v4] Kbuild: std=gnu11 changes
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Arnd Bergmann <arnd@kernel.org>, Alex Shi <alexs@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	David Sterba <dsterba@suse.com>, Marco Elver <elver@google.com>, Jani Nikula <jani.nikula@intel.com>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Mark Rutland <mark.rutland@arm.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1db333d9a51f3459fba1bcaa564d95befe79f0b3
-commit: aec0fae62e47050019474936248a311a0ab08705 KVM: arm64: Log source when panicking from nVHE hyp
-date:   11 months ago
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220311/202203110617.SylT3htc-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aec0fae62e47050019474936248a311a0ab08705
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout aec0fae62e47050019474936248a311a0ab08705
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ arch/arm64/kvm/ drivers/gpu/drm/tegra/ drivers/usb/host/ kernel/debug/kdb/
+On Thu, Mar 10, 2022 at 5:01 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Wed, Mar 09, 2022 at 06:18:18PM +0900, Masahiro Yamada wrote:
+> > On Wed, Mar 9, 2022 at 11:16 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > On Wed, Mar 9, 2022 at 9:09 AM Linus Torvalds
+> > > <torvalds@linux-foundation.org> wrote:
+> > > >
+> > > > On Tue, Mar 8, 2022 at 1:56 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > > > >
+> > > > > From: Arnd Bergmann <arnd@arndb.de>
+> > > > >
+> > > > > I've incorporated the feedback from Masahiro Yamada in this
+> > > > > version, splitting out one more patch, rebasing on top of
+> > > > > the kbuild tree, and changing the order of the patches.
+> > > > >
+> > > > > Please apply to the kbuild tree.
+> > > >
+> > > > I'd actually like to see this as a separate branch, so that I can
+> > > > merge it early - or other peoples git branches end up depending on it.
+> > >
+> > >
+> > > OK, I can apply this to a separate branch, kbuild-gnu11.
+> > > (and I will queue this up shortly because it is already -rc7)
+> > >
+> > > Then, I will send two pull reqs in the next MW,
+> > > but please note they will conflict with each other,
+> > > between this gnu11 patch set and the following
+> > > one in my usual kbuild branch:
+> > >
+> > > https://patchwork.kernel.org/project/linux-kbuild/patch/20220201213542.2808035-1-quic_eberman@quicinc.com/
+> > >
+> > >
+> > > I hope this is not a complex conflict, but please let me know
+> > > if you have any requests to me.
+> > >
+> > >
+> > >
+> > >
+> > >
+> >
+> >
+> > All, applied to linux-kbuild/kbuild-gnu11.
+> >
+> > If somebody wants to give Reviewed-by, Acked-by, Tested-by, please.
+> >
+> > I will append them later.
+>
+> For the series:
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+For the series:
 
-All warnings (new ones prefixed by >>):
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v13.0.0 (x86-64)
 
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:182:25: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_CP14_64]    = kvm_handle_cp14_64,
-                                     ^~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:183:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_HVC32]      = handle_hvc,
-                                     ^~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:184:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SMC32]      = handle_smc,
-                                     ^~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:185:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_HVC64]      = handle_hvc,
-                                     ^~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:186:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SMC64]      = handle_smc,
-                                     ^~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:187:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SYS64]      = kvm_handle_sys_reg,
-                                     ^~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:188:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SVE]        = handle_sve,
-                                     ^~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:189:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_IABT_LOW]   = kvm_handle_guest_abort,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:190:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_DABT_LOW]   = kvm_handle_guest_abort,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:191:28: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SOFTSTP_LOW]= kvm_handle_guest_debug,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:192:28: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_WATCHPT_LOW]= kvm_handle_guest_debug,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:193:28: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_BREAKPT_LOW]= kvm_handle_guest_debug,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:194:24: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_BKPT32]     = kvm_handle_guest_debug,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:195:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_BRK64]      = kvm_handle_guest_debug,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:196:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_FP_ASIMD]   = handle_no_fpsimd,
-                                     ^~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:197:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_PAC]        = kvm_handle_ptrauth,
-                                     ^~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
-                                     ^~~~~~~~~~~~~~~~~~~~~
->> arch/arm64/kvm/handle_exit.c:295:24: warning: no previous prototype for function 'nvhe_hyp_panic_handler' [-Wmissing-prototypes]
-   void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
-                          ^
-   arch/arm64/kvm/handle_exit.c:295:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
-   ^
-   static 
-   22 warnings generated.
-
-
-vim +/nvhe_hyp_panic_handler +295 arch/arm64/kvm/handle_exit.c
-
-   294	
- > 295	void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+- Sedat -
