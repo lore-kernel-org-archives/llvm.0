@@ -1,100 +1,86 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF30211B
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 19:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647025972; x=1678561972;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=avT+4TnON8uQFynhMWL9RnsVIOvaVLLk/mGKUdy8nA4=;
-  b=ClQh7SKl4nCJzqjimRvrvzp6xY8jMSM6Hc/Creefom4TaDjHbLgO2xmW
-   BeBUPccs37ZwfJwq0U1jJpftmk3wkW4Xc+WPJmoe9fCGMyfYXyTdTSA4w
-   5Nezmp9HdsBKVHrDaBf6o8/ENqcweaHpjTkcx6yRrUoLZl2Faui9muUhJ
-   OFsjvBMJVHE7AL9CyYYHd88AYD7GcKqcElZzALcKpMGm44skgjFI9YoqV
-   drtHYXozQ2+iJHRdy/S6SrUZcJ36HpXxkkx7ayxNTlmJBD2KsY/jOU2px
-   MJQ381GhWOoXi7K95qx7CV/khWdpsNPBnzfAJjBNi70kha5+ZM2NC0DkA
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="237808098"
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="237808098"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 11:12:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="511476030"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 11 Mar 2022 11:12:49 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSkgy-0006yN-Aa; Fri, 11 Mar 2022 19:12:48 +0000
-Date: Sat, 12 Mar 2022 03:12:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark-PK Tsai <mark-pk.tsai@mediatek.com>, rostedt@goodmis.org,
-	mingo@redhat.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, matthias.bgg@gmail.com,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, mark-pk.tsai@mediatek.com,
-	yj.chiang@mediatek.com
-Subject: Re: [PATCH] tracing: make tracer_init_tracefs initcall asynchronous
-Message-ID: <202203120304.sJ9EJI90-lkp@intel.com>
-References: <20220311112656.25348-1-mark-pk.tsai@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0B55CC6
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 19:57:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E0DC340E9;
+	Fri, 11 Mar 2022 19:57:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647028632;
+	bh=K/3BmQl+yVa1K2EX0K8gw5URhrVb2cfe6vu4OaCFOK8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=rV6f1TwUIGZwmcr6Y5HkN1tBwPzvtU7wFLyxgmgSuGRi/i8IGByG0aHENT6ReWWv2
+	 mXod3uImMVCGpfLNXQLg4MkgLRysLlri+jBd3DnqAaWi1ivVn9wyEd3Q6gCh7BKiuy
+	 i/jazlJYYXsHker3KfD3V67ZkMW2rIodyB1Zexg/SwaOwNzcI8TETlKXbx254SqUiv
+	 J4gTnunCG06jq+w0AHevNo07z9n6YdkuPbEErAtce7aVa14LXXEZmSPTbVwUTuW96C
+	 BEgQ6joyvm4bmTw3EHxeeeqeHWt5hrj0ApB2PH6JWyKpzOs4m0FRwxtVhquvpHUPG7
+	 bElweiqncqSTQ==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>,
+	x86@kernel.org
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] x86/ibt: Fix CC_HAS_IBT check for clang
+Date: Fri, 11 Mar 2022 12:56:42 -0700
+Message-Id: <20220311195642.2033108-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311112656.25348-1-mark-pk.tsai@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Mark-PK,
+Commit 41c5ef31ad71 ("x86/ibt: Base IBT bits") added a check for a crash
+in clang. However, this check does not work for two reasons.
 
-I love your patch! Perhaps something to improve:
+The first reason is that '-pg' is missing from the check, which is
+required for '-mfentry' to do anything.
 
-[auto build test WARNING on rostedt-trace/for-next]
-[also build test WARNING on v5.17-rc7 next-20220310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+The second reason is that cc-option only uses /dev/null as the input
+file, which does not show a problem:
 
-url:    https://github.com/0day-ci/linux/commits/Mark-PK-Tsai/tracing-make-tracer_init_tracefs-initcall-asynchronous/20220311-192857
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: riscv-randconfig-r042-20220310 (https://download.01.org/0day-ci/archive/20220312/202203120304.sJ9EJI90-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/134c5fb991a16bf28b500e8e52296447013b5b01
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Mark-PK-Tsai/tracing-make-tracer_init_tracefs-initcall-asynchronous/20220311-192857
-        git checkout 134c5fb991a16bf28b500e8e52296447013b5b01
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+$ clang --version | head -1
+Ubuntu clang version 12.0.1-8build1
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+$ clang -fcf-protection=branch -mfentry -pg -c -x c /dev/null -o /dev/null
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+$ echo $?
+0
 
->> WARNING: modpost: vmlinux.o(.text+0xa792a): Section mismatch in reference from the function tracefs_init() to the function .init.text:create_trace_instances()
-The function tracefs_init() references
-the function __init create_trace_instances().
-This is often because tracefs_init lacks a __init
-annotation or the annotation of create_trace_instances is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0xade5e): Section mismatch in reference from the function event_trace_init() to the function .init.text:early_event_add_tracer()
-The function event_trace_init() references
-the function __init early_event_add_tracer().
-This is often because event_trace_init lacks a __init
-annotation or the annotation of early_event_add_tracer is wrong.
+$ echo "void a(void) {}" | clang -fcf-protection=branch -mfentry -pg -c -x c - -o /dev/null
+...
 
+$ echo $?
+139
+
+Use this test instead so that the check works for older versions of
+clang.
+
+Fixes: 41c5ef31ad71 ("x86/ibt: Base IBT bits")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/x86/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 4ca7bfe927b3..870e0d10452d 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1867,7 +1867,7 @@ config CC_HAS_IBT
+ 	# Clang/LLVM >= 14
+ 	# fentry check to work around https://reviews.llvm.org/D111108
+ 	def_bool ((CC_IS_GCC && $(cc-option, -fcf-protection=branch -mindirect-branch-register)) || \
+-		  (CC_IS_CLANG && $(cc-option, -fcf-protection=branch -mfentry))) && \
++		  (CC_IS_CLANG && $(success,echo "void a(void) {}" | $(CC) -Werror $(CLANG_FLAGS) -fcf-protection=branch -mfentry -pg -x c - -c -o /dev/null))) && \
+ 		  $(as-instr,endbr64)
+ 
+ config X86_KERNEL_IBT
+
+base-commit: 9e1db76f44de4d9439e48c9ef61e5d457395202b
+-- 
+2.35.1
+
