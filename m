@@ -1,41 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CB233DF
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 13:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E131A33E9
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 14:45:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647006190; x=1678542190;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1WLciB+5XZNIRAFHKD3kF9c7MeIlHZUQ5tWcGCfeQD0=;
-  b=oHwEMUBW7/m5j2tsYzDAXy1ybWu3Wgw+uxR7DQjUrFuf2LXhNKhQlgOe
-   g3pk7vifFa/AVhci1fpIJS/tZqMJpugSMj7gYcu7tfACYeAh7EqUxpTma
-   LI0d9/ehy0Oufp1pUhX3oPUZHGhb0mgWHmj0sLVT9y6NQcDJ2iOajlqX0
-   3S8/lqZ/i1JNNgbPqnknl2RI2EQtfxJKd3jBtb76YjQfpWhJ3ZFk1XepV
-   ln2fo/qLTwpPG/tcovMB3cy35BlArPMse/fRy6ZzBrY1iYLUGLQS5XxMz
-   2LAUusZjNIqX+UCRHDGYU8qrD6yZ3+GSrsGG5WpoueFTqicrOXHZfaOTU
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="253135553"
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="253135553"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:43:09 -0800
+  t=1647009913; x=1678545913;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7imDiHgNuiMxr2hOIVDWdZH6orveZbeCw0iXTGMX94I=;
+  b=oJKvUd5+JeRvopMbwFV2vR0SYSDatir44eCGdR9IoIY45MrX4Nb1tJt3
+   +OCXZWPq8+LuItj0SyrC3t0A91Z95j/Ohlm2L9nHVO92FzPwNxPCqw1mQ
+   fYse+GsuzVQfBDG/lezNR2fw+o9xJwdn+PD92oVdJjOIYbo3cPt4XgX3j
+   zPjy8oBvbk9d9ADfEgAr/1Nv7DnF8n838EfV9jVuivXqIuTIkHjpn1eUu
+   DKw8on4chBQhW3olxRi0l8LhfD3FNBEl9YLwSwFw5NPsjstgMJ9VaaIHJ
+   535U0INeE/G0F/NE2G11npuytTXdLKBxRxSW9K0pqr99XBLlYWH6dE6fq
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="255317403"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="255317403"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 06:45:13 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="644934835"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="539014648"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2022 05:43:07 -0800
+  by orsmga007.jf.intel.com with ESMTP; 11 Mar 2022 06:45:11 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nSfXu-0006UW-9F; Fri, 11 Mar 2022 13:43:06 +0000
-Date: Fri, 11 Mar 2022 21:42:53 +0800
+	id 1nSgVy-0006ZT-JJ; Fri, 11 Mar 2022 14:45:10 +0000
+Date: Fri, 11 Mar 2022 22:44:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To: Matt Roper <matthew.d.roper@intel.com>, intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: drivers/dma/iop-adma.c:170:5: error: implicit declaration of
- function 'list_for_each_entry_from_inside' is invalid in C99
-Message-ID: <202203112154.lWEn6Enk-lkp@intel.com>
+	dri-devel@lists.freedesktop.org
+Subject: Re: [Intel-gfx] [PATCH 2/2] drm/i915/xehp: Update topology dumps for
+ Xe_HP
+Message-ID: <202203112234.rtvKSbsq-lkp@intel.com>
+References: <20220311061543.153611-2-matthew.d.roper@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,233 +46,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220311061543.153611-2-matthew.d.roper@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220311-151720/Xiaomeng-Tong/list_for_each_entry-make-iterator-invisiable-outside-the-loop/20220301-160113
-head:   54ae283053c127aac4b946dffa0f31f9885dbb77
-commit: 54ae283053c127aac4b946dffa0f31f9885dbb77 drivers/dma: remove iterator use outside the loop
-date:   6 hours ago
-config: arm64-randconfig-r014-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112154.lWEn6Enk-lkp@intel.com/config)
+Hi Matt,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on drm-tip/drm-tip]
+[also build test WARNING on drm-exynos/exynos-drm-next drm/drm-next next-20220310]
+[cannot apply to drm-intel/for-linux-next tegra-drm/drm/tegra/for-next v5.17-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Matt-Roper/drm-i915-sseu-Don-t-overallocate-subslice-storage/20220311-141705
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220311/202203112234.rtvKSbsq-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/54ae283053c127aac4b946dffa0f31f9885dbb77
+        # https://github.com/0day-ci/linux/commit/38985b2e6acdbe67dedb5de8a8aeef917b746453
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220311-151720/Xiaomeng-Tong/list_for_each_entry-make-iterator-invisiable-outside-the-loop/20220301-160113
-        git checkout 54ae283053c127aac4b946dffa0f31f9885dbb77
+        git fetch --no-tags linux-review Matt-Roper/drm-i915-sseu-Don-t-overallocate-subslice-storage/20220311-141705
+        git checkout 38985b2e6acdbe67dedb5de8a8aeef917b746453
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/dma/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/ net/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/dma/iop-adma.c:170:5: error: implicit declaration of function 'list_for_each_entry_from_inside' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                                   list_for_each_entry_from_inside(grp_iter, grp_start,
-                                   ^
->> drivers/dma/iop-adma.c:171:35: error: expected ';' after expression
-                                           &iop_chan->chain, chain_node) {
-                                                                        ^
-                                                                        ;
->> drivers/dma/iop-adma.c:170:37: error: use of undeclared identifier 'grp_iter'
-                                   list_for_each_entry_from_inside(grp_iter, grp_start,
-                                                                   ^
->> drivers/dma/iop-adma.c:171:24: error: use of undeclared identifier 'chain_node'
-                                           &iop_chan->chain, chain_node) {
-                                                             ^
-   drivers/dma/iop-adma.c:173:35: error: use of undeclared identifier 'grp_iter'; did you mean 'dup_iter'?
-                                               iop_desc_get_zero_result(grp_iter);
-                                                                        ^~~~~~~~
-                                                                        dup_iter
-   include/linux/uio.h:242:13: note: 'dup_iter' declared here
-   const void *dup_iter(struct iov_iter *new, struct iov_iter *old, gfp_t flags);
-               ^
-   drivers/dma/iop-adma.c:175:10: error: use of undeclared identifier 'grp_iter'; did you mean 'grp_start'?
-                                               grp_iter->idx, zero_sum_result);
-                                               ^~~~~~~~
-                                               grp_start
-   include/linux/printk.h:574:26: note: expanded from macro 'pr_debug'
-           dynamic_pr_debug(fmt, ##__VA_ARGS__)
-                                   ^
-   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
-                              pr_fmt(fmt), ##__VA_ARGS__)
-                                             ^
-   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
-           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-                                                                 ^
-   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
-                   func(&id, ##__VA_ARGS__);               \
-                               ^
-   drivers/dma/iop-adma.c:106:44: note: 'grp_start' declared here
-           struct iop_adma_desc_slot *iter, *_iter, *grp_start = NULL;
-                                                     ^
->> drivers/dma/iop-adma.c:187:4: error: implicit declaration of function 'list_for_each_entry_safe_from_inside' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           list_for_each_entry_safe_from_inside(grp_iter, _grp_iter,
-                           ^
-   drivers/dma/iop-adma.c:188:45: error: expected ';' after expression
-                                   grp_start, &iop_chan->chain, chain_node) {
-                                                                           ^
-                                                                           ;
-   drivers/dma/iop-adma.c:187:41: error: use of undeclared identifier 'grp_iter'
-                           list_for_each_entry_safe_from_inside(grp_iter, _grp_iter,
-                                                                ^
->> drivers/dma/iop-adma.c:187:51: error: use of undeclared identifier '_grp_iter'
-                           list_for_each_entry_safe_from_inside(grp_iter, _grp_iter,
-                                                                          ^
-   drivers/dma/iop-adma.c:188:34: error: use of undeclared identifier 'chain_node'
-                                   grp_start, &iop_chan->chain, chain_node) {
-                                                                ^
-   drivers/dma/iop-adma.c:190:6: error: use of undeclared identifier 'grp_iter'; did you mean 'dup_iter'?
-                                           grp_iter, iop_chan, cookie);
-                                           ^~~~~~~~
-                                           dup_iter
-   include/linux/uio.h:242:13: note: 'dup_iter' declared here
-   const void *dup_iter(struct iov_iter *new, struct iov_iter *old, gfp_t flags);
-               ^
-   drivers/dma/iop-adma.c:193:40: error: use of undeclared identifier 'grp_iter'; did you mean 'dup_iter'?
-                                   end_of_chain = iop_adma_clean_slot(grp_iter,
-                                                                      ^~~~~~~~
-                                                                      dup_iter
-   include/linux/uio.h:242:13: note: 'dup_iter' declared here
-   const void *dup_iter(struct iov_iter *new, struct iov_iter *old, gfp_t flags);
-               ^
-   13 errors generated.
+>> drivers/gpu/drm/i915/gt/intel_sseu.c:59:5: warning: no previous prototype for function 'intel_sseu_get_geometry_subslices' [-Wmissing-prototypes]
+   u32 intel_sseu_get_geometry_subslices(const struct sseu_dev_info *sseu)
+       ^
+   drivers/gpu/drm/i915/gt/intel_sseu.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 intel_sseu_get_geometry_subslices(const struct sseu_dev_info *sseu)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/list_for_each_entry_from_inside +170 drivers/dma/iop-adma.c
+vim +/intel_sseu_get_geometry_subslices +59 drivers/gpu/drm/i915/gt/intel_sseu.c
 
-   103	
-   104	static void __iop_adma_slot_cleanup(struct iop_adma_chan *iop_chan)
-   105	{
- > 106		struct iop_adma_desc_slot *iter, *_iter, *grp_start = NULL;
-   107		dma_cookie_t cookie = 0;
-   108		u32 current_desc = iop_chan_get_current_descriptor(iop_chan);
-   109		int busy = iop_chan_is_busy(iop_chan);
-   110		int seen_current = 0, slot_cnt = 0, slots_per_op = 0;
-   111	
-   112		dev_dbg(iop_chan->device->common.dev, "%s\n", __func__);
-   113		/* free completed slots from the chain starting with
-   114		 * the oldest descriptor
-   115		 */
-   116		list_for_each_entry_safe(iter, _iter, &iop_chan->chain,
-   117						chain_node) {
-   118			pr_debug("\tcookie: %d slot: %d busy: %d "
-   119				"this_desc: %pad next_desc: %#llx ack: %d\n",
-   120				iter->async_tx.cookie, iter->idx, busy,
-   121				&iter->async_tx.phys, (u64)iop_desc_get_next_desc(iter),
-   122				async_tx_test_ack(&iter->async_tx));
-   123			prefetch(_iter);
-   124			prefetch(&_iter->async_tx);
-   125	
-   126			/* do not advance past the current descriptor loaded into the
-   127			 * hardware channel, subsequent descriptors are either in
-   128			 * process or have not been submitted
-   129			 */
-   130			if (seen_current)
-   131				break;
-   132	
-   133			/* stop the search if we reach the current descriptor and the
-   134			 * channel is busy, or if it appears that the current descriptor
-   135			 * needs to be re-read (i.e. has been appended to)
-   136			 */
-   137			if (iter->async_tx.phys == current_desc) {
-   138				BUG_ON(seen_current++);
-   139				if (busy || iop_desc_get_next_desc(iter))
-   140					break;
-   141			}
-   142	
-   143			/* detect the start of a group transaction */
-   144			if (!slot_cnt && !slots_per_op) {
-   145				slot_cnt = iter->slot_cnt;
-   146				slots_per_op = iter->slots_per_op;
-   147				if (slot_cnt <= slots_per_op) {
-   148					slot_cnt = 0;
-   149					slots_per_op = 0;
-   150				}
-   151			}
-   152	
-   153			if (slot_cnt) {
-   154				pr_debug("\tgroup++\n");
-   155				if (!grp_start)
-   156					grp_start = iter;
-   157				slot_cnt -= slots_per_op;
-   158			}
-   159	
-   160			/* all the members of a group are complete */
-   161			if (slots_per_op != 0 && slot_cnt == 0) {
-   162				int end_of_chain = 0;
-   163				pr_debug("\tgroup end\n");
-   164	
-   165				/* collect the total results */
-   166				if (grp_start->xor_check_result) {
-   167					u32 zero_sum_result = 0;
-   168					slot_cnt = grp_start->slot_cnt;
-   169	
- > 170					list_for_each_entry_from_inside(grp_iter, grp_start,
- > 171						&iop_chan->chain, chain_node) {
-   172						zero_sum_result |=
-   173						    iop_desc_get_zero_result(grp_iter);
-   174						pr_debug("\titer%d result: %d\n",
-   175						    grp_iter->idx, zero_sum_result);
-   176						slot_cnt -= slots_per_op;
-   177						if (slot_cnt == 0)
-   178							break;
-   179					}
-   180					pr_debug("\tgrp_start->xor_check_result: %p\n",
-   181						grp_start->xor_check_result);
-   182					*grp_start->xor_check_result = zero_sum_result;
-   183				}
-   184	
-   185				/* clean up the group */
-   186				slot_cnt = grp_start->slot_cnt;
- > 187				list_for_each_entry_safe_from_inside(grp_iter, _grp_iter,
- > 188					grp_start, &iop_chan->chain, chain_node) {
-   189					cookie = iop_adma_run_tx_complete_actions(
-   190						grp_iter, iop_chan, cookie);
-   191	
-   192					slot_cnt -= slots_per_op;
-   193					end_of_chain = iop_adma_clean_slot(grp_iter,
-   194						iop_chan);
-   195	
-   196					if (slot_cnt == 0 || end_of_chain)
-   197						break;
-   198				}
-   199	
-   200				/* the group should be complete at this point */
-   201				BUG_ON(slot_cnt);
-   202	
-   203				slots_per_op = 0;
-   204				grp_start = NULL;
-   205				if (end_of_chain)
-   206					break;
-   207				else
-   208					continue;
-   209			} else if (slots_per_op) /* wait for group completion */
-   210				continue;
-   211	
-   212			/* write back zero sum results (single descriptor case) */
-   213			if (iter->xor_check_result && iter->async_tx.cookie)
-   214				*iter->xor_check_result =
-   215					iop_desc_get_zero_result(iter);
-   216	
-   217			cookie = iop_adma_run_tx_complete_actions(
-   218						iter, iop_chan, cookie);
-   219	
-   220			if (iop_adma_clean_slot(iter, iop_chan))
-   221				break;
-   222		}
-   223	
-   224		if (cookie > 0) {
-   225			iop_chan->common.completed_cookie = cookie;
-   226			pr_debug("\tcompleted cookie %d\n", cookie);
-   227		}
-   228	}
-   229	
+    58	
+  > 59	u32 intel_sseu_get_geometry_subslices(const struct sseu_dev_info *sseu)
+    60	{
+    61		return _intel_sseu_get_subslices(sseu, sseu->geometry_subslice_mask, 0);
+    62	}
+    63	
 
 ---
 0-DAY CI Kernel Test Service
