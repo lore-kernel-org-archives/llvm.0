@@ -1,51 +1,45 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60082102
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 16:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632BF2102
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 17:29:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647017921; x=1678553921;
+  t=1647019782; x=1678555782;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hBJLDracNIElCTfhPdQSzpk98yuQXkyTtpQr/vOOpJM=;
-  b=WSBmZsuM/f3cc9p7eOQf5IM6lZP5okeUicWmWsUIInm58Lc5ivLjXKVv
-   GTEu2uqpjPKZAd6zOGBTwrVZEyHvNmYcJ0NBnrPyz8PkWhii5ykYJlG88
-   /RpfM2GHCJVoZVvWKonhjeCqxei0mFeXZVMqQg1nwfhjZwGvS5bZ2iIpe
-   7evYW1ud6pp7aMmhwdtqcbjJ93Z6O+z2wyohknx7XDp519d6DL1NRw+kf
-   L31GUJacEnNiU4GSHrirDCr3UDDUEhugdmZIrUyr2ZXbWRQxQ2FKmjq6n
-   8upp2fhe8WOyYbybd38bxCMQl4qIQbcr0EStU2p5fGHJNhyFHjuP5rdDg
+  bh=icNk0QqUK4xYwGy7RzSXOYunnwxl8oLQQKUMhnVt744=;
+  b=Li45OcpH/mmWdd7UunfVmSga5NDlZ4pg5cDYZh6pkAoziMaH/gDwHkoH
+   5WkJckcTbxveT0QOP3enTyw7qDwuwXvF3hpZ1byIXwlQF2bwAXhzCrChq
+   wgf3UDpvYuJCq9mbTAXplHJNklIiDT/Gt3L86eGYN/S3zL/F6K6q5DyTL
+   7v3NBQX/i2Izx4r8PCtNmI16RWD7mpubFEcAZN/OpcsbBVgWuG0PharDt
+   lRqP8IjbIQ3TpQCNjAX515tY0wsaIxkEJSko7c7tn/60zUdqvx1JRy14q
+   5qDzGxtdnXRLa0JOGRXUVzU6ghZzLJIf8UFwMZF+4HeboQ6leQdmYNDZp
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="255342690"
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="318836873"
 X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="255342690"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 08:58:41 -0800
+   d="scan'208";a="318836873"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:29:41 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="633467843"
+   d="scan'208";a="689120408"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 11 Mar 2022 08:58:37 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 11 Mar 2022 09:29:39 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nSib6-0006nB-Bp; Fri, 11 Mar 2022 16:58:36 +0000
-Date: Sat, 12 Mar 2022 00:57:51 +0800
+	id 1nSj58-0006rD-NW; Fri, 11 Mar 2022 17:29:38 +0000
+Date: Sat, 12 Mar 2022 01:28:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Michael Riesch <michael.riesch@wolfvision.net>,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+	sumit.semwal@linaro.org, gustavo@padovan.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-	Levin Du <djw@t-chip.com.cn>, Tianling Shen <cnsztl@gmail.com>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Alex Bee <knaerzche@gmail.com>, Liang Chen <cl@rock-chips.com>,
-	Peter Geis <pgwipeout@gmail.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>
-Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: enable vop2 and hdmi tx on
- rock-3a
-Message-ID: <202203120049.YIR5IFdM-lkp@intel.com>
-References: <20220310210352.451136-4-michael.riesch@wolfvision.net>
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Subject: Re: [PATCH 1/2] dma-buf: add dma_fence_unwrap
+Message-ID: <202203120114.jpyQmShC-lkp@intel.com>
+References: <20220311110244.1245-1-christian.koenig@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,58 +48,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220310210352.451136-4-michael.riesch@wolfvision.net>
+In-Reply-To: <20220311110244.1245-1-christian.koenig@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Michael,
+Hi "Christian,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on arm/for-next xilinx-xlnx/master arm64/for-next/core shawnguo/for-next clk/clk-next kvmarm/next keystone/next v5.17-rc7]
-[cannot apply to rockchip/for-next soc/for-next next-20220310]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.17-rc7 next-20220310]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Michael-Riesch/arm64-dts-rockchip-add-basic-dts-for-the-radxa-rock3-model-a/20220311-050612
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm64-randconfig-r014-20220310 (https://download.01.org/0day-ci/archive/20220312/202203120049.YIR5IFdM-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Christian-K-nig/dma-buf-add-dma_fence_unwrap/20220311-190352
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 79b00034e9dcd2b065c1665c8b42f62b6b80a9be
+config: hexagon-randconfig-r045-20220310 (https://download.01.org/0day-ci/archive/20220312/202203120114.jpyQmShC-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/c217f194b7a9cbdb7cbb8149ae1f6e8c2faf6e3f
+        # https://github.com/0day-ci/linux/commit/088aa14c0f5cad378854823fa661ee145dd2c01b
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Michael-Riesch/arm64-dts-rockchip-add-basic-dts-for-the-radxa-rock3-model-a/20220311-050612
-        git checkout c217f194b7a9cbdb7cbb8149ae1f6e8c2faf6e3f
+        git fetch --no-tags linux-review Christian-K-nig/dma-buf-add-dma_fence_unwrap/20220311-190352
+        git checkout 088aa14c0f5cad378854823fa661ee145dd2c01b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/dma-buf/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts:7:10: fatal error: 'dt-bindings/soc/rockchip,vop2.h' file not found
-   #include <dt-bindings/soc/rockchip,vop2.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+   In file included from drivers/dma-buf/st-dma-fence-unwrap.c:7:
+   include/linux/dma-fence-unwrap.h:44:18: error: implicit declaration of function 'dma_fence_chain_contained' [-Werror,-Wimplicit-function-declaration]
+           cursor->array = dma_fence_chain_contained(cursor->chain);
+                           ^
+   include/linux/dma-fence-unwrap.h:44:18: note: did you mean 'dma_fence_chain_init'?
+   include/linux/dma-fence-chain.h:108:6: note: 'dma_fence_chain_init' declared here
+   void dma_fence_chain_init(struct dma_fence_chain *chain,
+        ^
+   In file included from drivers/dma-buf/st-dma-fence-unwrap.c:7:
+>> include/linux/dma-fence-unwrap.h:44:16: warning: incompatible integer to pointer conversion assigning to 'struct dma_fence *' from 'int' [-Wint-conversion]
+           cursor->array = dma_fence_chain_contained(cursor->chain);
+                         ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-fence-unwrap.h:46:9: error: implicit declaration of function 'dma_fence_array_first' [-Werror,-Wimplicit-function-declaration]
+           return dma_fence_array_first(cursor->array);
+                  ^
+   include/linux/dma-fence-unwrap.h:46:9: note: did you mean 'dma_fence_array_create'?
+   include/linux/dma-fence-array.h:77:25: note: 'dma_fence_array_create' declared here
+   struct dma_fence_array *dma_fence_array_create(int num_fences,
+                           ^
+   In file included from drivers/dma-buf/st-dma-fence-unwrap.c:7:
+>> include/linux/dma-fence-unwrap.h:46:9: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct dma_fence *' [-Wint-conversion]
+           return dma_fence_array_first(cursor->array);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-fence-unwrap.h:77:8: error: implicit declaration of function 'dma_fence_array_next' [-Werror,-Wimplicit-function-declaration]
+           tmp = dma_fence_array_next(cursor->array, cursor->index);
+                 ^
+   include/linux/dma-fence-unwrap.h:77:6: warning: incompatible integer to pointer conversion assigning to 'struct dma_fence *' from 'int' [-Wint-conversion]
+           tmp = dma_fence_array_next(cursor->array, cursor->index);
+               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/dma-buf/st-dma-fence-unwrap.c:133:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
+           int err = 0;
+               ^
+   drivers/dma-buf/st-dma-fence-unwrap.c:175:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
+           int err = 0;
+               ^
+   drivers/dma-buf/st-dma-fence-unwrap.c:217:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
+           int err = 0;
+               ^
+   6 warnings and 3 errors generated.
 
 
-vim +7 arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+vim +44 include/linux/dma-fence-unwrap.h
 
-     2	
-     3	/dts-v1/;
-     4	#include <dt-bindings/gpio/gpio.h>
-     5	#include <dt-bindings/leds/common.h>
-     6	#include <dt-bindings/pinctrl/rockchip.h>
-   > 7	#include <dt-bindings/soc/rockchip,vop2.h>
-     8	#include "rk3568.dtsi"
-     9	
+    33	
+    34	/**
+    35	 * dma_fence_unwrap_array - helper to unwrap dma_fence_arrays
+    36	 * @cursor: cursor to initialize
+    37	 *
+    38	 * Helper function to unwrap dma_fence_array containers, don't touch directly.
+    39	 * Use dma_fence_unwrap_first/next instead.
+    40	 */
+    41	static inline struct dma_fence *
+    42	dma_fence_unwrap_array(struct dma_fence_unwrap * cursor)
+    43	{
+  > 44		cursor->array = dma_fence_chain_contained(cursor->chain);
+    45		cursor->index = 0;
+  > 46		return dma_fence_array_first(cursor->array);
+    47	}
+    48	
 
 ---
 0-DAY CI Kernel Test Service
