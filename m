@@ -1,41 +1,41 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B5B733D5
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 13:43:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CB233DF
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 13:43:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647006188; x=1678542188;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZYWAt8CasOmpFYYg90HlEKCCSdk6/jyMs4zTHkqPfRo=;
-  b=kNm2KgvZ2V18VRCtNbOMRYjeHyZicgwDzeEQKG4peFMEJytfozVZthP6
-   1rcBsIAeaLBfGKgqLt4bDlEXeEvxr2sOiqKuKpJ8CmFDRoD0uBmJULwJ8
-   yDg+8VzVeiLeUubZBuCMuhdVqpdefPgzfjP1rOHEmwaFHL7Jm1cKCUsID
-   76Cyuz3Mwy7Ee2AMH03fWpGvlNkUEi1HRf7V7Foytt2YgrBS0RBxVbu+V
-   Z3Bowv3T7faJKzXZBs09IMOXS8Huo5ZSftYEhDCWrf8SDfkOR5m4p7h0j
-   sjVqCta2OtgAaTBz+0Tv5n0tpdvcBY9vduMYSAEWUbOyALlvsjh/fIobv
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254401130"
+  t=1647006190; x=1678542190;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1WLciB+5XZNIRAFHKD3kF9c7MeIlHZUQ5tWcGCfeQD0=;
+  b=oHwEMUBW7/m5j2tsYzDAXy1ybWu3Wgw+uxR7DQjUrFuf2LXhNKhQlgOe
+   g3pk7vifFa/AVhci1fpIJS/tZqMJpugSMj7gYcu7tfACYeAh7EqUxpTma
+   LI0d9/ehy0Oufp1pUhX3oPUZHGhb0mgWHmj0sLVT9y6NQcDJ2iOajlqX0
+   3S8/lqZ/i1JNNgbPqnknl2RI2EQtfxJKd3jBtb76YjQfpWhJ3ZFk1XepV
+   ln2fo/qLTwpPG/tcovMB3cy35BlArPMse/fRy6ZzBrY1iYLUGLQS5XxMz
+   2LAUusZjNIqX+UCRHDGYU8qrD6yZ3+GSrsGG5WpoueFTqicrOXHZfaOTU
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="253135553"
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="254401130"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:43:07 -0800
+   d="scan'208";a="253135553"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:43:09 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="514507837"
+   d="scan'208";a="644934835"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 11 Mar 2022 05:43:06 -0800
+  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2022 05:43:07 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nSfXt-0006UT-L0; Fri, 11 Mar 2022 13:43:05 +0000
-Date: Fri, 11 Mar 2022 21:42:56 +0800
+	id 1nSfXu-0006UW-9F; Fri, 11 Mar 2022 13:43:06 +0000
+Date: Fri, 11 Mar 2022 21:42:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiyong Park <jiyong@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 1/2] vsock: each transport cycles only on its own sockets
-Message-ID: <202203112159.kNHX2McH-lkp@intel.com>
-References: <20220310125425.4193879-2-jiyong@google.com>
+To: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: drivers/dma/iop-adma.c:170:5: error: implicit declaration of
+ function 'list_for_each_entry_from_inside' is invalid in C99
+Message-ID: <202203112154.lWEn6Enk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,91 +44,233 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220310125425.4193879-2-jiyong@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Jiyong,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on 3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b]
-
-url:    https://github.com/0day-ci/linux/commits/Jiyong-Park/vsock-cycle-only-on-its-own-socket/20220310-205638
-base:   3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220311/202203112159.kNHX2McH-lkp@intel.com/config)
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220311-151720/Xiaomeng-Tong/list_for_each_entry-make-iterator-invisiable-outside-the-loop/20220301-160113
+head:   54ae283053c127aac4b946dffa0f31f9885dbb77
+commit: 54ae283053c127aac4b946dffa0f31f9885dbb77 drivers/dma: remove iterator use outside the loop
+date:   6 hours ago
+config: arm64-randconfig-r014-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112154.lWEn6Enk-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/6219060e1d706d7055fb0829b3bf23c5ae84790e
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/54ae283053c127aac4b946dffa0f31f9885dbb77
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jiyong-Park/vsock-cycle-only-on-its-own-socket/20220310-205638
-        git checkout 6219060e1d706d7055fb0829b3bf23c5ae84790e
+        git fetch --no-tags linux-review UPDATE-20220311-151720/Xiaomeng-Tong/list_for_each_entry-make-iterator-invisiable-outside-the-loop/20220301-160113
+        git checkout 54ae283053c127aac4b946dffa0f31f9885dbb77
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/dma/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> net/vmw_vsock/vmci_transport.c:808:25: error: use of undeclared identifier 'vmci_transport'
-           if (vsk->transport != &vmci_transport)
-                                  ^
-   1 error generated.
+>> drivers/dma/iop-adma.c:170:5: error: implicit declaration of function 'list_for_each_entry_from_inside' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                                   list_for_each_entry_from_inside(grp_iter, grp_start,
+                                   ^
+>> drivers/dma/iop-adma.c:171:35: error: expected ';' after expression
+                                           &iop_chan->chain, chain_node) {
+                                                                        ^
+                                                                        ;
+>> drivers/dma/iop-adma.c:170:37: error: use of undeclared identifier 'grp_iter'
+                                   list_for_each_entry_from_inside(grp_iter, grp_start,
+                                                                   ^
+>> drivers/dma/iop-adma.c:171:24: error: use of undeclared identifier 'chain_node'
+                                           &iop_chan->chain, chain_node) {
+                                                             ^
+   drivers/dma/iop-adma.c:173:35: error: use of undeclared identifier 'grp_iter'; did you mean 'dup_iter'?
+                                               iop_desc_get_zero_result(grp_iter);
+                                                                        ^~~~~~~~
+                                                                        dup_iter
+   include/linux/uio.h:242:13: note: 'dup_iter' declared here
+   const void *dup_iter(struct iov_iter *new, struct iov_iter *old, gfp_t flags);
+               ^
+   drivers/dma/iop-adma.c:175:10: error: use of undeclared identifier 'grp_iter'; did you mean 'grp_start'?
+                                               grp_iter->idx, zero_sum_result);
+                                               ^~~~~~~~
+                                               grp_start
+   include/linux/printk.h:574:26: note: expanded from macro 'pr_debug'
+           dynamic_pr_debug(fmt, ##__VA_ARGS__)
+                                   ^
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                             ^
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^
+   drivers/dma/iop-adma.c:106:44: note: 'grp_start' declared here
+           struct iop_adma_desc_slot *iter, *_iter, *grp_start = NULL;
+                                                     ^
+>> drivers/dma/iop-adma.c:187:4: error: implicit declaration of function 'list_for_each_entry_safe_from_inside' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           list_for_each_entry_safe_from_inside(grp_iter, _grp_iter,
+                           ^
+   drivers/dma/iop-adma.c:188:45: error: expected ';' after expression
+                                   grp_start, &iop_chan->chain, chain_node) {
+                                                                           ^
+                                                                           ;
+   drivers/dma/iop-adma.c:187:41: error: use of undeclared identifier 'grp_iter'
+                           list_for_each_entry_safe_from_inside(grp_iter, _grp_iter,
+                                                                ^
+>> drivers/dma/iop-adma.c:187:51: error: use of undeclared identifier '_grp_iter'
+                           list_for_each_entry_safe_from_inside(grp_iter, _grp_iter,
+                                                                          ^
+   drivers/dma/iop-adma.c:188:34: error: use of undeclared identifier 'chain_node'
+                                   grp_start, &iop_chan->chain, chain_node) {
+                                                                ^
+   drivers/dma/iop-adma.c:190:6: error: use of undeclared identifier 'grp_iter'; did you mean 'dup_iter'?
+                                           grp_iter, iop_chan, cookie);
+                                           ^~~~~~~~
+                                           dup_iter
+   include/linux/uio.h:242:13: note: 'dup_iter' declared here
+   const void *dup_iter(struct iov_iter *new, struct iov_iter *old, gfp_t flags);
+               ^
+   drivers/dma/iop-adma.c:193:40: error: use of undeclared identifier 'grp_iter'; did you mean 'dup_iter'?
+                                   end_of_chain = iop_adma_clean_slot(grp_iter,
+                                                                      ^~~~~~~~
+                                                                      dup_iter
+   include/linux/uio.h:242:13: note: 'dup_iter' declared here
+   const void *dup_iter(struct iov_iter *new, struct iov_iter *old, gfp_t flags);
+               ^
+   13 errors generated.
 
 
-vim +/vmci_transport +808 net/vmw_vsock/vmci_transport.c
+vim +/list_for_each_entry_from_inside +170 drivers/dma/iop-adma.c
 
-   800	
-   801	static void vmci_transport_handle_detach(struct sock *sk)
-   802	{
-   803		struct vsock_sock *vsk;
-   804	
-   805		vsk = vsock_sk(sk);
-   806	
-   807		/* Only handle our own sockets */
- > 808		if (vsk->transport != &vmci_transport)
-   809			return;
-   810	
-   811		if (!vmci_handle_is_invalid(vmci_trans(vsk)->qp_handle)) {
-   812			sock_set_flag(sk, SOCK_DONE);
-   813	
-   814			/* On a detach the peer will not be sending or receiving
-   815			 * anymore.
-   816			 */
-   817			vsk->peer_shutdown = SHUTDOWN_MASK;
-   818	
-   819			/* We should not be sending anymore since the peer won't be
-   820			 * there to receive, but we can still receive if there is data
-   821			 * left in our consume queue. If the local endpoint is a host,
-   822			 * we can't call vsock_stream_has_data, since that may block,
-   823			 * but a host endpoint can't read data once the VM has
-   824			 * detached, so there is no available data in that case.
-   825			 */
-   826			if (vsk->local_addr.svm_cid == VMADDR_CID_HOST ||
-   827			    vsock_stream_has_data(vsk) <= 0) {
-   828				if (sk->sk_state == TCP_SYN_SENT) {
-   829					/* The peer may detach from a queue pair while
-   830					 * we are still in the connecting state, i.e.,
-   831					 * if the peer VM is killed after attaching to
-   832					 * a queue pair, but before we complete the
-   833					 * handshake. In that case, we treat the detach
-   834					 * event like a reset.
-   835					 */
-   836	
-   837					sk->sk_state = TCP_CLOSE;
-   838					sk->sk_err = ECONNRESET;
-   839					sk_error_report(sk);
-   840					return;
-   841				}
-   842				sk->sk_state = TCP_CLOSE;
-   843			}
-   844			sk->sk_state_change(sk);
-   845		}
-   846	}
-   847	
+   103	
+   104	static void __iop_adma_slot_cleanup(struct iop_adma_chan *iop_chan)
+   105	{
+ > 106		struct iop_adma_desc_slot *iter, *_iter, *grp_start = NULL;
+   107		dma_cookie_t cookie = 0;
+   108		u32 current_desc = iop_chan_get_current_descriptor(iop_chan);
+   109		int busy = iop_chan_is_busy(iop_chan);
+   110		int seen_current = 0, slot_cnt = 0, slots_per_op = 0;
+   111	
+   112		dev_dbg(iop_chan->device->common.dev, "%s\n", __func__);
+   113		/* free completed slots from the chain starting with
+   114		 * the oldest descriptor
+   115		 */
+   116		list_for_each_entry_safe(iter, _iter, &iop_chan->chain,
+   117						chain_node) {
+   118			pr_debug("\tcookie: %d slot: %d busy: %d "
+   119				"this_desc: %pad next_desc: %#llx ack: %d\n",
+   120				iter->async_tx.cookie, iter->idx, busy,
+   121				&iter->async_tx.phys, (u64)iop_desc_get_next_desc(iter),
+   122				async_tx_test_ack(&iter->async_tx));
+   123			prefetch(_iter);
+   124			prefetch(&_iter->async_tx);
+   125	
+   126			/* do not advance past the current descriptor loaded into the
+   127			 * hardware channel, subsequent descriptors are either in
+   128			 * process or have not been submitted
+   129			 */
+   130			if (seen_current)
+   131				break;
+   132	
+   133			/* stop the search if we reach the current descriptor and the
+   134			 * channel is busy, or if it appears that the current descriptor
+   135			 * needs to be re-read (i.e. has been appended to)
+   136			 */
+   137			if (iter->async_tx.phys == current_desc) {
+   138				BUG_ON(seen_current++);
+   139				if (busy || iop_desc_get_next_desc(iter))
+   140					break;
+   141			}
+   142	
+   143			/* detect the start of a group transaction */
+   144			if (!slot_cnt && !slots_per_op) {
+   145				slot_cnt = iter->slot_cnt;
+   146				slots_per_op = iter->slots_per_op;
+   147				if (slot_cnt <= slots_per_op) {
+   148					slot_cnt = 0;
+   149					slots_per_op = 0;
+   150				}
+   151			}
+   152	
+   153			if (slot_cnt) {
+   154				pr_debug("\tgroup++\n");
+   155				if (!grp_start)
+   156					grp_start = iter;
+   157				slot_cnt -= slots_per_op;
+   158			}
+   159	
+   160			/* all the members of a group are complete */
+   161			if (slots_per_op != 0 && slot_cnt == 0) {
+   162				int end_of_chain = 0;
+   163				pr_debug("\tgroup end\n");
+   164	
+   165				/* collect the total results */
+   166				if (grp_start->xor_check_result) {
+   167					u32 zero_sum_result = 0;
+   168					slot_cnt = grp_start->slot_cnt;
+   169	
+ > 170					list_for_each_entry_from_inside(grp_iter, grp_start,
+ > 171						&iop_chan->chain, chain_node) {
+   172						zero_sum_result |=
+   173						    iop_desc_get_zero_result(grp_iter);
+   174						pr_debug("\titer%d result: %d\n",
+   175						    grp_iter->idx, zero_sum_result);
+   176						slot_cnt -= slots_per_op;
+   177						if (slot_cnt == 0)
+   178							break;
+   179					}
+   180					pr_debug("\tgrp_start->xor_check_result: %p\n",
+   181						grp_start->xor_check_result);
+   182					*grp_start->xor_check_result = zero_sum_result;
+   183				}
+   184	
+   185				/* clean up the group */
+   186				slot_cnt = grp_start->slot_cnt;
+ > 187				list_for_each_entry_safe_from_inside(grp_iter, _grp_iter,
+ > 188					grp_start, &iop_chan->chain, chain_node) {
+   189					cookie = iop_adma_run_tx_complete_actions(
+   190						grp_iter, iop_chan, cookie);
+   191	
+   192					slot_cnt -= slots_per_op;
+   193					end_of_chain = iop_adma_clean_slot(grp_iter,
+   194						iop_chan);
+   195	
+   196					if (slot_cnt == 0 || end_of_chain)
+   197						break;
+   198				}
+   199	
+   200				/* the group should be complete at this point */
+   201				BUG_ON(slot_cnt);
+   202	
+   203				slots_per_op = 0;
+   204				grp_start = NULL;
+   205				if (end_of_chain)
+   206					break;
+   207				else
+   208					continue;
+   209			} else if (slots_per_op) /* wait for group completion */
+   210				continue;
+   211	
+   212			/* write back zero sum results (single descriptor case) */
+   213			if (iter->xor_check_result && iter->async_tx.cookie)
+   214				*iter->xor_check_result =
+   215					iop_desc_get_zero_result(iter);
+   216	
+   217			cookie = iop_adma_run_tx_complete_actions(
+   218						iter, iop_chan, cookie);
+   219	
+   220			if (iop_adma_clean_slot(iter, iop_chan))
+   221				break;
+   222		}
+   223	
+   224		if (cookie > 0) {
+   225			iop_chan->common.completed_cookie = cookie;
+   226			pr_debug("\tcompleted cookie %d\n", cookie);
+   227		}
+   228	}
+   229	
 
 ---
 0-DAY CI Kernel Test Service
