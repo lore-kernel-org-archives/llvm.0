@@ -1,120 +1,107 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B1E7E
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 05:45:19 +0000 (UTC)
-Received: by mail-wm1-f41.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so424669wme.5
-        for <llvm@lists.linux.dev>; Thu, 10 Mar 2022 21:45:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=11FvPvpUVotQ9jY+zQvOHGZO2byI0bkimo/rEQnPxJE=;
-        b=ekozbChKbpW8GZL9kUFBEDUxX05BOSH5K9gUF2d9I0XZ4OI7yg7wjlBL75B3Uxqbn1
-         mmUTiRDhPalAbzG0/H2FxM2m+IBTS8Lt7RSuU9vYAwovoN7/bgwvWzgkJJT2q7dhA+s7
-         dKiIo2z7yyBCoUqIgknT1iN5tDFgheAanLnZRPY3RCn/HrCN+x3RoGItWYnFeea2gXRA
-         XQ9qzYAmAO6ow9mtiMMoiOrjs2F9SVxruHVkOb/2szt3vmwML8Ld73jiDkqPVaxRDSPR
-         rpVacc7gtvg+4Eq23IILSLyKfcXj/j9xzWHGabYlbZFSngIX1SD1J1vxdgsRq9K+m+X+
-         cRAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=11FvPvpUVotQ9jY+zQvOHGZO2byI0bkimo/rEQnPxJE=;
-        b=BZ8BKPwa+A6Sj1cZPz3YyJvttt9OU1S9bIXUUilWNTwN8CE/fHFS+SgVwtLUYyhHZR
-         NyU2qd6PMHvRo4pSmRP9XbyXX9mtl2BErhbVUZBmubQwyg+NnYw5XrgjX/DpKACs4i1h
-         v8HMyz4BuJapBzeftgrCNm4uDFTv1toy0rgkUw7Es8uc5W6yYnZ1EF4XfjcIoYCBHvfj
-         4tkxxaKPJyy1Dq5TIqxp/V8Dtr8L/PGVO8I8yU6Js9awBlY0yPfI0K9NregqLivJDeLo
-         oShcDYUuEnA0tKDrqqoB9umPNP4mQqQ+pkNlHt5DqAQxNunCth83l3DjcPh3sluV80nM
-         WMyg==
-X-Gm-Message-State: AOAM531WiafCQXyWYZ8GVSyuPdW8EZvBRci4nEbECrLdCc1ql9SxjUst
-	v5tU9xHiYHIPeDA8Wd54Rkw=
-X-Google-Smtp-Source: ABdhPJxvBwFmzse2Kx1hsyFAMg8k8RWVvVr0RzVZVok/Ojk1rmfowT0jWel05bJdkcDXj2WeQlwdDQ==
-X-Received: by 2002:a7b:c150:0:b0:389:95ee:4a20 with SMTP id z16-20020a7bc150000000b0038995ee4a20mr6220285wmi.145.1646977518091;
-        Thu, 10 Mar 2022 21:45:18 -0800 (PST)
-Received: from localhost.localdomain ([2a02:3035:40f:58f5:e8dd:8a44:b12a:d7ed])
-        by smtp.gmail.com with ESMTPSA id f15-20020a0560001a8f00b0020397ea11d2sm352593wry.20.2022.03.10.21.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 21:45:17 -0800 (PST)
-From: Sedat Dilek <sedat.dilek@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Ian Rogers <irogers@google.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Leo Yan <leo.yan@linaro.org>,
-	John Keeping <john@metanate.com>,
-	Michael Petlan <mpetlan@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Subject: [PATCH 5.17] tools: feature/test-libperl.c: Sync PERL_EMBED_CCOPTS with perf
-Date: Fri, 11 Mar 2022 06:44:55 +0100
-Message-Id: <20220311054455.5911-1-sedat.dilek@gmail.com>
-X-Mailer: git-send-email 2.35.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDD07E
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 07:22:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646983357; x=1678519357;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u8g6o6mmzKfeSZyi85GEnzkTpDNKFd0dqka1Dten3mQ=;
+  b=AQwizOjrqH7kMY5V3w6EnlZ6dVzJhS/3KPWbaLVW0ibxt+8QNJWhra6H
+   Tf4Ee5qHxcLxOM4JMUgeLMFftkuW4bGdGLYK70XG7PQe70UysGH77N0nF
+   XW7Raz+JKcPCCiP/REu3CKJB1rtBIYBlVQixTsJEv6DMheJerRZuF6e7W
+   E90ODytIwlhcPm0jnfG5FiyrnsZnjUG3yLgsGyt6RCYQLf1kpP335h5VL
+   vJZjK15k9hkz9lRA+u+i2RJxSaMDylJ4l2AsfDpm+fCJqHuGaL+wvSMVI
+   upzT2SHRabDJ0HrOi73gKcDAEk0DBewl49P/DMg+Dtazb+igWstkmCfKn
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="255252989"
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="255252989"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 23:22:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="644847458"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 10 Mar 2022 23:22:35 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSZbe-000626-9J; Fri, 11 Mar 2022 07:22:34 +0000
+Date: Fri, 11 Mar 2022 15:21:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: nick.hawkins@hpe.com, verdun@hpe.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Nick Hawkins <nick.hawkins@hpe.com>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 01/10] arch: arm: mach-hpe: Introduce the HPE GXP
+ architecture
+Message-ID: <202203111516.oSsKrRqX-lkp@intel.com>
+References: <20220310195229.109477-1-nick.hawkins@hpe.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310195229.109477-1-nick.hawkins@hpe.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-When trying to build perf with a LLVM/Clang toolchain people see errors
-when testing for libperl feature.
+Hi,
 
-Jiri reports:
+Thank you for the patch! Perhaps something to improve:
 
-> I'm getting some other lto related error:
->
->         $ cat test-libperl.make.output
->         clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
->
+[auto build test WARNING on tip/timers/core]
+[also build test WARNING on soc/for-next robh/for-next linus/master v5.17-rc7 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-The reason is PERL_EMBED_CCOPTS is defined in two places:
+url:    https://github.com/0day-ci/linux/commits/nick-hawkins-hpe-com/arch-arm-mach-hpe-Introduce-the-HPE-GXP-architecture/20220311-035513
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 58dedf0a4782ce42b4d31f1f62e5ad80a1b73d72
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220311/202203111516.oSsKrRqX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/9fbfc32473a65e025764e0a1456c421b4706fe8e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review nick-hawkins-hpe-com/arch-arm-mach-hpe-Introduce-the-HPE-GXP-architecture/20220311-035513
+        git checkout 9fbfc32473a65e025764e0a1456c421b4706fe8e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-tools/build/feature/Makefile
-tools/perf/Makefile.config
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-As a result FLAGS_PERL_EMBED is set differently.
+All warnings (new ones prefixed by >>):
 
-For building perf '-ffat-lto-objects' is filtered out:
+>> arch/arm/mach-hpe/gxp.c:26:13: warning: no previous prototype for function 'gxp_map_io' [-Wmissing-prototypes]
+   void __init gxp_map_io(void)
+               ^
+   arch/arm/mach-hpe/gxp.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init gxp_map_io(void)
+   ^
+   static 
+   1 warning generated.
 
-$ git grep ffat-lto-objects tools/perf/
-tools/perf/Makefile.config:  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
 
-Sync PERL_EMBED_CCOPTS in tools/build/feature/Makefile to fix this.
+vim +/gxp_map_io +26 arch/arm/mach-hpe/gxp.c
 
-For a minimal fix for Linux v5.17 this here was preferred by Arnaldo.
+    25	
+  > 26	void __init gxp_map_io(void)
+    27	{
+    28		iotable_init(gxp_io_desc, ARRAY_SIZE(gxp_io_desc));
+    29	}
+    30	
 
-Link: https://lore.kernel.org/lkml/CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com/
-Reported-by: Jiri Olsa <olsajiri@gmail.com>
-Reported-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Tested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Suggested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
 ---
-Changes v1->v2:
-- Fix some typos and use lore link as requested by Nick
-- Add credits for Nick
-
- tools/build/feature/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 1480910c792e..869073cf8449 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -218,6 +218,7 @@ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
- PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
- PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
- PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-+PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
- FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
- 
- $(OUTPUT)test-libperl.bin:
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
