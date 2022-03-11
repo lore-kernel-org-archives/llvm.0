@@ -1,44 +1,30 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDCE833E9;
-	Fri, 11 Mar 2022 16:06:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647014781; x=1678550781;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8sd/osNdwpZjh8x9Ga7m3iWdLk1yyi5ow5D55whePkk=;
-  b=B345YMVjQWwhM4GUzrwJyfrhCBEc/Pb7pnnflGI9gWYbVvDbQ3VBQDCQ
-   +wXotgBxbXUaji6ClRVu8DwM5BwyIHBM76faAl+0zH2i1++q0sAFvFxrC
-   l6n9k3F0hkzeaU2cfqlt4/k0Un8DGCoWc9bcfygGRcmSavGPPN8JAk3iE
-   +T1eORA8E/6ZfiU9+HDDuWWeA9DGqeiMzwFafOuJHlEBksLZDFmd0bLuV
-   JvjCnR1Lhw4udwzaz8OjDSzf2wJc6wo4/hHz1D0WfJsbeIxsPz/px+M6O
-   AuBJAgwRP/DcP09a5sNEac7OYp4GtwWhE66I/zggOkleT1izWLvZHiLqh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="253162486"
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="253162486"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 08:06:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="712887681"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 11 Mar 2022 08:06:18 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nShmU-0006ha-0Q; Fri, 11 Mar 2022 16:06:18 +0000
-Date: Sat, 12 Mar 2022 00:06:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-	Forest Bond <forest@alittletooquiet.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 2/5] staging: vt6656: Remove unused rf_type in baseband.c
-Message-ID: <202203112347.5u5Hv6vj-lkp@intel.com>
-References: <77dcff8602084484532fcbd734aafd138087c5ee.1646935331.git.philipp.g.hortmann@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292AD33E9
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 16:18:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAEFC340E9;
+	Fri, 11 Mar 2022 16:18:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647015488;
+	bh=0cZ6b7AXYUuBOJstkAJvZYlOE56pXKXh0+MXEe4ilt4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=bB44RNJRgO12CFLMJfvtN1ALIgpjM0ISOh98aXoHrV4oBVvMBWQwNrFwqSw8Eia4E
+	 KkVvEiNjIZgSTdlg7CbSYxzSSbdTQ/dIqLhJWXJAfqkLsCTWxTFoYjSUfxH+gm85bx
+	 j0KcaRgviBPwBM33xK6jpiJhtjFjmAhX41lHTABOMVIZ5MXwmZM/+We+CRzVOECSy5
+	 lThdGaVKKdgrej4/GGRdGTX5pThtNx8+XtW2THufklst1w4Mw23j8UkLKI2tneIF2B
+	 y5iaNFRjlEP90KBeHI1frVg7vThMDrmPMhNXLCvYprz5Eu9lGIsRC97XWf5lex9WUY
+	 +10LtiIw9lMsw==
+Date: Fri, 11 Mar 2022 10:18:06 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	"Michael S . Tsirkin" <mst@redhat.com>, llvm@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 1/2] linux/types.h: Remove unnecessary __bitwise__
+Message-ID: <20220311161806.GA304449@bhelgaas>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,71 +33,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <77dcff8602084484532fcbd734aafd138087c5ee.1646935331.git.philipp.g.hortmann@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220310175216.252fabefeca040004216d40d@linux-foundation.org>
 
-Hi Philipp,
+On Thu, Mar 10, 2022 at 05:52:16PM -0800, Andrew Morton wrote:
+> On Thu, 10 Mar 2022 16:09:26 -0600 Bjorn Helgaas <helgaas@kernel.org> wrote:
+> 
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> > 
+> > There are no users of "__bitwise__" except the definition of "__bitwise".
+> > Remove __bitwise__ and define __bitwise directly.
+> > 
+> > This is a follow-up to 05de97003c77 ("linux/types.h: enable endian checks
+> > for all sparse builds").
+> > 
+> 
+> Can we change the copy-pasted code in tools/include/linux/types.h while
+> we're there?
 
-Thank you for the patch! Perhaps something to improve:
+Oh, you bet!  Thanks for pointing that out!
 
-[auto build test WARNING on staging/staging-testing]
-
-url:    https://github.com/0day-ci/linux/commits/Philipp-Hortmann/staging-vt6656-Remove-unused-5GHz-support/20220311-025658
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git b25c7dc13fb8842e8634bd846a7a96f2176f0244
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220311/202203112347.5u5Hv6vj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/747c899152efe7f0dbbcdd5399f1b1de3a7ba51d
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Philipp-Hortmann/staging-vt6656-Remove-unused-5GHz-support/20220311-025658
-        git checkout 747c899152efe7f0dbbcdd5399f1b1de3a7ba51d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/bluetooth/ drivers/staging/vt6656/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/staging/vt6656/baseband.c:170:35: warning: unused variable 'vt3342_vnt_threshold' [-Wunused-const-variable]
-   static const struct vnt_threshold vt3342_vnt_threshold[] = {
-                                     ^
-   1 warning generated.
-
-
-vim +/vt3342_vnt_threshold +170 drivers/staging/vt6656/baseband.c
-
-69a809e1569312 Oscar Carter 2020-03-28  169  
-69a809e1569312 Oscar Carter 2020-03-28 @170  static const struct vnt_threshold vt3342_vnt_threshold[] = {
-69a809e1569312 Oscar Carter 2020-03-28  171  	{0, 0x00, 0x38},	/* Max sensitivity */
-69a809e1569312 Oscar Carter 2020-03-28  172  	{66, 0x00, 0x43},
-69a809e1569312 Oscar Carter 2020-03-28  173  	{65, 0x00, 0x52},
-69a809e1569312 Oscar Carter 2020-03-28  174  	{64, 0x00, 0x68},
-69a809e1569312 Oscar Carter 2020-03-28  175  	{63, 0x00, 0x80},
-69a809e1569312 Oscar Carter 2020-03-28  176  	{62, 0x00, 0x9c},
-69a809e1569312 Oscar Carter 2020-03-28  177  	{61, 0x00, 0xc0},
-69a809e1569312 Oscar Carter 2020-03-28  178  	{60, 0x00, 0xea},
-69a809e1569312 Oscar Carter 2020-03-28  179  	{59, 0x01, 0x30},
-69a809e1569312 Oscar Carter 2020-03-28  180  	{58, 0x01, 0x70},
-69a809e1569312 Oscar Carter 2020-03-28  181  	{57, 0x01, 0xb0},
-69a809e1569312 Oscar Carter 2020-03-28  182  	{56, 0x02, 0x30},
-69a809e1569312 Oscar Carter 2020-03-28  183  	{55, 0x02, 0xc0},
-69a809e1569312 Oscar Carter 2020-03-28  184  	{53, 0x04, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  185  	{51, 0x07, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  186  	{49, 0x0a, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  187  	{47, 0x11, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  188  	{45, 0x18, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  189  	{43, 0x26, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  190  	{42, 0x36, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  191  	{41, 0xff, 0x00}
-69a809e1569312 Oscar Carter 2020-03-28  192  };
-69a809e1569312 Oscar Carter 2020-03-28  193  
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> --- a/tools/include/linux/types.h~linux-typesh-remove-unnecessary-__bitwise__-fix
+> +++ a/tools/include/linux/types.h
+> @@ -43,11 +43,10 @@ typedef __u8  u8;
+>  typedef __s8  s8;
+>  
+>  #ifdef __CHECKER__
+> -#define __bitwise__ __attribute__((bitwise))
+> +#define __bitwise	__attribute__((bitwise))
+>  #else
+> -#define __bitwise__
+> +#define __bitwise
+>  #endif
+> -#define __bitwise __bitwise__
+>  
+>  #define __force
+>  #define __user
+> _
+> 
