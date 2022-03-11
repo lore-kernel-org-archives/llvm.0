@@ -1,114 +1,207 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A7C258E
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 22:44:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647038696; x=1678574696;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4O6RQpYi/eKw9Hf8Nu6/EgAcpKedC0HtOcEN0Pgu728=;
-  b=NY23CWEo9QpV2N7PEuepgOIG4CxB8qgSKbMk5ZcqSgi+pXEzSxwovODP
-   qwRx+2UnmmWlJ7ANkvw73uB6bWzcsaXK2vYGJE+8e3UpyxdoHfoP9izMR
-   Znre/lvYgnIrMEJRaPPugHahk3FUVZw1XslbIkzHTQ+sFHVXjaFnTxPSf
-   rGHAsgKgz/75xCCnTh0wgchlKLIB3kKLpEYEU2sauw/I2NMtG9Rx2IHAu
-   xMwbE1C/ABh8ZOTEmGPWWO+L6UJTKPgTP8OJYGcYZRb6/HapS7Xgy6vjt
-   oavHlj76sctnWm5mziwOziL71wTU8FPC4kEcJmn1kVibtSrZt4MAX3iAu
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="243114151"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="243114151"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 14:44:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="539165362"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 11 Mar 2022 14:44:53 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSo0D-0007CK-5g; Fri, 11 Mar 2022 22:44:53 +0000
-Date: Sat, 12 Mar 2022 06:44:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Florian Westphal <fw@strlen.de>, netfilter-devel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Florian Westphal <fw@strlen.de>
-Subject: Re: [PATCH nf-next] netfilter: nf_tables: add stubs for readonly
- expressions
-Message-ID: <202203120618.2FZ2VXaE-lkp@intel.com>
-References: <20220311105430.12075-1-fw@strlen.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5387F258E
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 23:31:33 +0000 (UTC)
+Received: by mail-io1-f51.google.com with SMTP id q11so11908610iod.6
+        for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 15:31:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=Crfg5p3u8iOjVMjNQSoRE5tSoR+VziHj4ctmIY8Vq5Y=;
+        b=OFv3TefVhiVY/87I7RmhlHM9WNvjDUVHqD2l7pOU+AOp4Eiq7vZYluTW8Z2exjLlht
+         /jFRA3c/ExxJXiFVZGeDHhVa8ULbUCj1KZ6R2q6LnoUG9FbkARoZVErbKfvdo6rBiCib
+         vOiwv6K5k4KSKLp18hLgwS/AW8LJspgsZY9YgJ23zF5DQHuvq9uLYQsa5eHH6wpeYeEq
+         z95A6Zrr0ysM9dWENLCDlTmrzdolg0jregmDNn074G+4dJeB4v6QEKQ7ma+DFy3Pvr6W
+         8t8IFr45/nOOFvKkiuu9H8ugcH7roeEGDkVx5C+ymy67xV3nAu6N7X+HNhDihzg3AANP
+         6xtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=Crfg5p3u8iOjVMjNQSoRE5tSoR+VziHj4ctmIY8Vq5Y=;
+        b=xC6/e+APqpQVqIy1nhJiPuandhfW3xB//9/um/bH9FSSpbxHx8ZXyCCWo9onmmEKE3
+         VKWBMWVljhAoCKA/teNe0/XCTE9hNS2j5cLw0UBsrGITPif+Wq/j7C1+b9xjsh7HKNDc
+         75ySb9QvQaBHNivNfSRH09H3oe+ITT+P1KnLawL7CGXaesC6AAhvGVGVmJNH6wpCMLAB
+         eCz78Fu1WyKCLH24TOiDRjmf/AGN8bV1GRJOPNBn4szAFvmHeHRH7Vvi6BHkjgbYzZe8
+         +fqV0nMilDP2XvBvo1DH1ULZEYTXJMyBwd0Y+Jj3PUVctNm0JiJz7nrivO9FcCzbkT66
+         4hzg==
+X-Gm-Message-State: AOAM532/L9vnNGA4g3D1ForyWiJXXkjnQn34DB4wCxoL28JZJm9lMhQC
+	/W3a7v2icma3PrK+GjqR50ebTNA4X3htlc1Zf7k=
+X-Google-Smtp-Source: ABdhPJw2dTC/Q+jNz8Q1iPs7I5wa9Y9NLalzPXgZnBmVEV5rYgKugqoxoH82xz+H6yi5k+S3SrapbwqsFcQkvUnj9K8=
+X-Received: by 2002:a05:6638:204:b0:319:1b34:1c57 with SMTP id
+ e4-20020a056638020400b003191b341c57mr10420432jaq.80.1647041492205; Fri, 11
+ Mar 2022 15:31:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311105430.12075-1-fw@strlen.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220310061909.20166-1-sedat.dilek@gmail.com> <Yis41ykyJq1fHYSx@krava>
+In-Reply-To: <Yis41ykyJq1fHYSx@krava>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Sat, 12 Mar 2022 00:30:56 +0100
+Message-ID: <CA+icZUVzQwGSS9hcMMP-HeOAFYxrMH9oCRbxLEdcEUwEJ8Wa3Q@mail.gmail.com>
+Subject: Re: [PATCH] tools: feature/test-libperl.c: Sync PERL_EMBED_CCOPTS
+ with perf
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, Ian Rogers <irogers@google.com>, 
+	Florian Fainelli <f.fainelli@gmail.com>, Fangrui Song <maskray@google.com>, Jiri Olsa <jolsa@redhat.com>, 
+	Michael Petlan <mpetlan@redhat.com>, Leo Yan <leo.yan@linaro.org>, 
+	John Keeping <john@metanate.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Florian,
+On Fri, Mar 11, 2022 at 12:56 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Thu, Mar 10, 2022 at 07:19:09AM +0100, Sedat Dilek wrote:
+> > When trying to build perf with a LLVM/Clang toolchain people see errors
+> > when testing for libperl feature.
+> >
+> > Jiri reports:
+> >
+> > > I'm getting some other lto related error:
+> > >
+> > >         $ cat test-libperl.make.output
+> > >         clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+> > >
+> >
+> > The reason is PERL_EMBED_CCOPTS is defined in two places:
+> >
+> > tools/build/feature/Makefile
+> > tools/perf/Makefile.config
+> >
+> > As an result FLAGS_PERL_EMBED is set differently.
+> >
+> > For building perf '-ffat-lto-objects' is filtered-out:
+> >
+> > $ git grep ffat-lto-objects tools/perf/
+> > tools/perf/Makefile.config:  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+> >
+> > Sync PERL_EMBED_CCOPTS in tools/build/feature/Makefile to fix this.
+> >
+> > For a minimal fix for Linux v5.17 this here was preferred by Arnaldo.
+> >
+> > Link: https://marc.info/?t=164646683300002&r=1&w=2
+> > Reported-by: Jiri Olsa <olsajiri@gmail.com>
+> > Reported-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> > Tested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> > Suggested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> > Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
+> > ---
+> >  tools/build/feature/Makefile | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> > index 1480910c792e..869073cf8449 100644
+> > --- a/tools/build/feature/Makefile
+> > +++ b/tools/build/feature/Makefile
+> > @@ -218,6 +218,7 @@ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+> >  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+> >  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+> >  PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+> > +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+>
+> it looks like this is not enough, at least on fedora 35
+>
+> I had to add changes below on top of your patch, it fixed the perl
+> feature detection and perf build itself, but I'm still getting error
+> with perf/python.so:
+>
 
-I love your patch! Yet something to improve:
+Correct. This patch simply fixes the perl feature detection.
 
-[auto build test ERROR on next-20220310]
-[cannot apply to nf-next/master nf/master linus/master v5.17-rc7 v5.17-rc6 v5.17-rc5 v5.17-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>         $ CC=clang make JOBS=1
+>         ...
+>           GEN     python/perf.so
+>         python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: file not recognized: file format not recognized
+>         clang-13: error: linker command failed with exit code 1 (use -v to see invocation)
+>         error: command 'clang' failed with exit status 1
+>         cp: cannot stat 'python_ext_build/lib/perf*.so': No such file or directory
+>
+> with:
+>
+>         $ file python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o
+>         python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: LLVM IR bitcode
+>
+> do you get clean compile with python lang enabled?
+>
+> jirka
+>
+>
+> ---
+> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> index 869073cf8449..86df0fe11ee5 100644
+> --- a/tools/build/feature/Makefile
+> +++ b/tools/build/feature/Makefile
+> @@ -217,9 +217,9 @@ strip-libs = $(filter-out -l%,$(1))
+>  PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+>  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+>  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+> -PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+> +PERL_EMBED_CCOPTS := $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+>  PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+> -FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+> +FLAGS_PERL_EMBED  := $(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
+>
+>  $(OUTPUT)test-libperl.bin:
+>         $(BUILD) $(FLAGS_PERL_EMBED)
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index 96ad944ca6a8..38b0b0e7a168 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -778,7 +778,7 @@ else
+>    PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+>    PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+>    PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
+> -  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+> +  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS)) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
+>    PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
+>    FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+>
 
-url:    https://github.com/0day-ci/linux/commits/Florian-Westphal/netfilter-nf_tables-add-stubs-for-readonly-expressions/20220311-185613
-base:    71941773e143369a73c9c4a3b62fbb60736a1182
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220312/202203120618.2FZ2VXaE-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/a0cb27794354ccba36b882731b93fdda090f2003
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Florian-Westphal/netfilter-nf_tables-add-stubs-for-readonly-expressions/20220311-185613
-        git checkout a0cb27794354ccba36b882731b93fdda090f2003
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/panel/ net/netfilter/
+I fixed that differently by (see [1]),
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -213,7 +213,7 @@ endif
 
-All errors (new ones prefixed by >>):
+# Treat warnings as errors unless directed not to
+ifneq ($(WERROR),0)
+-  CORE_CFLAGS += -Werror
++  CORE_CFLAGS += -Werror -Wno-compound-token-split-by-macro
+  CXXFLAGS += -Werror
+  HOSTCFLAGS += -Werror
+endif
 
->> net/netfilter/nft_cmp.c:363:13: error: use of undeclared identifier 'nft_cmp_reduce'; did you mean 'nft_cmp_dump'?
-           .reduce         = nft_cmp_reduce,
-                             ^~~~~~~~~~~~~~
-                             nft_cmp_dump
-   net/netfilter/nft_cmp.c:99:12: note: 'nft_cmp_dump' declared here
-   static int nft_cmp_dump(struct sk_buff *skb, const struct nft_expr *expr)
-              ^
->> net/netfilter/nft_cmp.c:363:13: error: incompatible function pointer types initializing 'bool (*)(struct nft_regs_track *, const struct nft_expr *)' (aka '_Bool (*)(struct nft_regs_track *, const struct nft_expr *)') with an expression of type 'int (struct sk_buff *, const struct nft_expr *)' [-Werror,-Wincompatible-function-pointer-types]
-           .reduce         = nft_cmp_reduce,
-                             ^~~~~~~~~~~~~~
-   2 errors generated.
+This was sufficient here to build perf successfully.
+And maybe ifdef-ed for clang?
 
+But all this is a follow-up?
 
-vim +363 net/netfilter/nft_cmp.c
+[1] https://lore.kernel.org/lkml/CA+icZUUCO+gOPLZumu_rTOJz1_v7gRRYVzzEZ+RZPOZBmkqCQg@mail.gmail.com/
 
-   354	
-   355	
-   356	const struct nft_expr_ops nft_cmp16_fast_ops = {
-   357		.type		= &nft_cmp_type,
-   358		.size		= NFT_EXPR_SIZE(sizeof(struct nft_cmp16_fast_expr)),
-   359		.eval		= NULL,	/* inlined */
-   360		.init		= nft_cmp16_fast_init,
-   361		.dump		= nft_cmp16_fast_dump,
-   362		.offload	= nft_cmp16_fast_offload,
- > 363		.reduce		= nft_cmp_reduce,
-   364	};
-   365	
+> diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+> index 483f05004e68..cfbb03babf63 100644
+> --- a/tools/perf/util/setup.py
+> +++ b/tools/perf/util/setup.py
+> @@ -43,7 +43,7 @@ class install_lib(_install_lib):
+>
+>  cflags = getenv('CFLAGS', '').split()
+>  # switch off several checks (need to be at the end of cflags list)
+> -cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-DPYTHON_PERF' ]
+> +cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-Wno-ignored-optimization-argument', '-DPYTHON_PERF' ]
+>  if not cc_is_clang:
+>      cflags += ['-Wno-cast-function-type' ]
+>
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cannot say much to that.
+
+Do we want to fix perf building with LLVM/Clang for Linux v5.17 final or later?
+Arnaldo?
+
+- Sedat -
