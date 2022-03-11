@@ -1,28 +1,27 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953A020FD
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 01:55:24 +0000 (UTC)
-X-UUID: 4a6ec2c19e3941fcbba868f1d911fa02-20220311
-X-UUID: 4a6ec2c19e3941fcbba868f1d911fa02-20220311
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC32920FB
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 01:55:25 +0000 (UTC)
+X-UUID: 29ae48d52ff048639d38366515b76a5c-20220311
+X-UUID: 29ae48d52ff048639d38366515b76a5c-20220311
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1928382275; Fri, 11 Mar 2022 09:55:11 +0800
+	with ESMTP id 557365279; Fri, 11 Mar 2022 09:55:10 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 11 Mar 2022 09:55:08 +0800
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 11 Mar 2022 09:55:08 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Fri, 11 Mar 2022 09:55:08 +0800
 From: Nancy.Lin <nancy.lin@mediatek.com>
 To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
- Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
- Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp
+ Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, AngeloGioacchino
+ Del Regno <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
 	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
 	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
 	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -30,9 +29,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>, <srv_heupstream@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v15 07/22] soc: mediatek: mmsys: modify reset controller for MT8195 vdosys1
-Date: Fri, 11 Mar 2022 09:54:51 +0800
-Message-ID: <20220311015506.11232-8-nancy.lin@mediatek.com>
+Subject: [PATCH v15 09/22] soc: mediatek: add mtk-mutex support for mt8195 vdosys1
+Date: Fri, 11 Mar 2022 09:54:53 +0800
+Message-ID: <20220311015506.11232-10-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220311015506.11232-1-nancy.lin@mediatek.com>
 References: <20220311015506.11232-1-nancy.lin@mediatek.com>
@@ -45,135 +44,102 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-MT8195 vdosys1 has more than 32 reset bits and a different reset base
-than other chips. Modify mmsys for support 64 bit and different reset
-base.
+Add mtk-mutex support for mt8195 vdosys1.
+The vdosys1 path component contains ovl_adaptor, merge5,
+and dp_intf1. Ovl_adaptor is composed of several sub-elements.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/soc/mediatek/mt8195-mmsys.h |  1 +
- drivers/soc/mediatek/mtk-mmsys.c    | 20 +++++++++++++++-----
- drivers/soc/mediatek/mtk-mmsys.h    |  1 +
- 3 files changed, 17 insertions(+), 5 deletions(-)
+ drivers/soc/mediatek/mtk-mutex.c | 54 ++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/drivers/soc/mediatek/mt8195-mmsys.h b/drivers/soc/mediatek/mt8195-mmsys.h
-index 8b7adbd22919..fafe7c639b52 100644
---- a/drivers/soc/mediatek/mt8195-mmsys.h
-+++ b/drivers/soc/mediatek/mt8195-mmsys.h
-@@ -139,6 +139,7 @@
- #define MT8195_VDO1_MIXER_SOUT_SEL_IN				0xf68
- #define MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER			0
+diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+index cb791671d751..70e6043e99df 100644
+--- a/drivers/soc/mediatek/mtk-mutex.c
++++ b/drivers/soc/mediatek/mtk-mutex.c
+@@ -129,6 +129,35 @@
+ #define MT8195_MUTEX_MOD_DISP_PWM0		BIT(27)
+ #define MT8195_MUTEX_MOD_DISP_PWM1		BIT(28)
  
-+#define MT8195_VDO1_SW0_RST_B		0x1d0
- #define MT8195_VDO1_MERGE0_ASYNC_CFG_WD	0xe30
- #define MT8195_VDO1_MERGE1_ASYNC_CFG_WD	0xe40
- #define MT8195_VDO1_MERGE2_ASYNC_CFG_WD	0xe50
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index c686b17ca62f..f36e41b2df82 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -20,6 +20,8 @@
- #include "mt8195-mmsys.h"
- #include "mt8365-mmsys.h"
- 
-+#define MMSYS_SW_RESET_PER_REG 32
++#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA0	BIT(0)
++#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA1	BIT(1)
++#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA2	BIT(2)
++#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA3	BIT(3)
++#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA4	BIT(4)
++#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA5	BIT(5)
++#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA6	BIT(6)
++#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA7	BIT(7)
++#define MT8195_MUTEX_MOD_DISP1_VPP_MERGE0	BIT(8)
++#define MT8195_MUTEX_MOD_DISP1_VPP_MERGE1	BIT(9)
++#define MT8195_MUTEX_MOD_DISP1_VPP_MERGE2	BIT(10)
++#define MT8195_MUTEX_MOD_DISP1_VPP_MERGE3	BIT(11)
++#define MT8195_MUTEX_MOD_DISP1_VPP_MERGE4	BIT(12)
++#define MT8195_MUTEX_MOD_DISP1_VPP2_DL_RELAY	BIT(13)
++#define MT8195_MUTEX_MOD_DISP1_VPP3_DL_RELAY	BIT(14)
++#define MT8195_MUTEX_MOD_DISP1_VDO0_DSC_DL_ASYNC	BIT(15)
++#define MT8195_MUTEX_MOD_DISP1_VDO0_MERGE_DL_ASYNC	BIT(16)
++#define MT8195_MUTEX_MOD_DISP1_VDO1_OUT_DL_RELAY	BIT(17)
++#define MT8195_MUTEX_MOD_DISP1_DISP_MIXER	BIT(18)
++#define MT8195_MUTEX_MOD_DISP1_HDR_VDO_FE0	BIT(19)
++#define MT8195_MUTEX_MOD_DISP1_HDR_VDO_FE1	BIT(20)
++#define MT8195_MUTEX_MOD_DISP1_HDR_GFX_FE0	BIT(21)
++#define MT8195_MUTEX_MOD_DISP1_HDR_GFX_FE1	BIT(22)
++#define MT8195_MUTEX_MOD_DISP1_HDR_VDO_BE0	BIT(23)
++#define MT8195_MUTEX_MOD_DISP1_HDR_MLOAD	BIT(24)
++#define MT8195_MUTEX_MOD_DISP1_DPI0		BIT(25)
++#define MT8195_MUTEX_MOD_DISP1_DPI1		BIT(26)
++#define MT8195_MUTEX_MOD_DISP1_DP_INTF0		BIT(27)
 +
- static const struct mtk_mmsys_driver_data mt2701_mmsys_driver_data = {
- 	.clk_driver = "clk-mt2701-mm",
- 	.routes = mmsys_default_routing_table,
-@@ -51,6 +53,7 @@ static const struct mtk_mmsys_driver_data mt8173_mmsys_driver_data = {
- 	.routes = mmsys_default_routing_table,
- 	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
- 	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-+	.num_resets = 32,
+ #define MT2712_MUTEX_MOD_DISP_PWM2		BIT(10)
+ #define MT2712_MUTEX_MOD_DISP_OVL0		BIT(11)
+ #define MT2712_MUTEX_MOD_DISP_OVL1		BIT(12)
+@@ -332,6 +361,27 @@ static const u64 mt8195_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+ 	[DDP_COMPONENT_DSI0] = MT8195_MUTEX_MOD_DISP_DSI0,
+ 	[DDP_COMPONENT_PWM0] = MT8195_MUTEX_MOD_DISP_PWM0,
+ 	[DDP_COMPONENT_DP_INTF0] = MT8195_MUTEX_MOD_DISP_DP_INTF0,
++	[DDP_COMPONENT_OVL_ADAPTOR] = MT8195_MUTEX_MOD_DISP1_MDP_RDMA0 |
++				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA1 |
++				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA2 |
++				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA3 |
++				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA4 |
++				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA5 |
++				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA6 |
++				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA7 |
++				      MT8195_MUTEX_MOD_DISP1_VPP_MERGE0 |
++				      MT8195_MUTEX_MOD_DISP1_VPP_MERGE1 |
++				      MT8195_MUTEX_MOD_DISP1_VPP_MERGE2 |
++				      MT8195_MUTEX_MOD_DISP1_VPP_MERGE3 |
++				      MT8195_MUTEX_MOD_DISP1_HDR_VDO_FE0 |
++				      MT8195_MUTEX_MOD_DISP1_HDR_VDO_FE1 |
++				      MT8195_MUTEX_MOD_DISP1_HDR_GFX_FE0 |
++				      MT8195_MUTEX_MOD_DISP1_HDR_GFX_FE1 |
++				      MT8195_MUTEX_MOD_DISP1_HDR_VDO_BE0 |
++				      MT8195_MUTEX_MOD_DISP1_HDR_MLOAD |
++				      MT8195_MUTEX_MOD_DISP1_DISP_MIXER,
++	[DDP_COMPONENT_MERGE5] = MT8195_MUTEX_MOD_DISP1_VPP_MERGE4,
++	[DDP_COMPONENT_DP_INTF1] = MT8195_MUTEX_MOD_DISP1_DP_INTF0,
  };
  
- static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
-@@ -58,6 +61,7 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
- 	.routes = mmsys_mt8183_routing_table,
- 	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
- 	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-+	.num_resets = 32,
- };
- 
- static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
-@@ -65,6 +69,7 @@ static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
- 	.routes = mmsys_mt8186_routing_table,
- 	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
- 	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
-+	.num_resets = 32,
- };
- 
- static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
-@@ -85,6 +90,8 @@ static const struct mtk_mmsys_driver_data mt8195_vdosys1_driver_data = {
- 	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
- 	.config = mmsys_mt8195_config_table,
- 	.num_configs = ARRAY_SIZE(mmsys_mt8195_config_table),
-+	.sw0_rst_offset = MT8195_VDO1_SW0_RST_B,
-+	.num_resets = 64,
- };
- 
- static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data = {
-@@ -143,18 +150,22 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
- {
- 	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys, rcdev);
- 	unsigned long flags;
-+	u32 offset;
- 	u32 reg;
- 
-+	offset = (id / MMSYS_SW_RESET_PER_REG) * sizeof(u32);
-+	id = id % MMSYS_SW_RESET_PER_REG;
-+
- 	spin_lock_irqsave(&mmsys->lock, flags);
- 
--	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
-+	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset + offset);
- 
- 	if (assert)
- 		reg &= ~BIT(id);
- 	else
- 		reg |= BIT(id);
- 
--	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
-+	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset + offset);
- 
- 	spin_unlock_irqrestore(&mmsys->lock, flags);
- 
-@@ -250,10 +261,11 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	mmsys->data = of_device_get_match_data(&pdev->dev);
- 	spin_lock_init(&mmsys->lock);
- 
- 	mmsys->rcdev.owner = THIS_MODULE;
--	mmsys->rcdev.nr_resets = 32;
-+	mmsys->rcdev.nr_resets = mmsys->data->num_resets;
- 	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
- 	mmsys->rcdev.of_node = pdev->dev.of_node;
- 	ret = devm_reset_controller_register(&pdev->dev, &mmsys->rcdev);
-@@ -262,8 +274,6 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	mmsys->data = of_device_get_match_data(&pdev->dev);
--
- #if IS_REACHABLE(CONFIG_MTK_CMDQ)
- 	ret = cmdq_dev_get_client_reg(dev, &mmsys->cmdq_base, 0);
- 	if (ret)
-diff --git a/drivers/soc/mediatek/mtk-mmsys.h b/drivers/soc/mediatek/mtk-mmsys.h
-index 78c7069bac0e..013639e34617 100644
---- a/drivers/soc/mediatek/mtk-mmsys.h
-+++ b/drivers/soc/mediatek/mtk-mmsys.h
-@@ -99,6 +99,7 @@ struct mtk_mmsys_driver_data {
- 	const struct mtk_mmsys_routes *routes;
- 	const unsigned int num_routes;
- 	const u16 sw0_rst_offset;
-+	const u32 num_resets;
- 	const struct mtk_mmsys_config *config;
- 	const unsigned int num_configs;
- };
+ static const unsigned int mt2712_mutex_sof[DDP_MUTEX_SOF_MAX] = {
+@@ -517,6 +567,9 @@ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
+ 	case DDP_COMPONENT_DP_INTF0:
+ 		sof_id = MUTEX_SOF_DP_INTF0;
+ 		break;
++	case DDP_COMPONENT_DP_INTF1:
++		sof_id = MUTEX_SOF_DP_INTF1;
++		break;
+ 	default:
+ 		if (mtx->data->mutex_mod[id] <= BIT(31)) {
+ 			offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg,
+@@ -557,6 +610,7 @@ void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
+ 	case DDP_COMPONENT_DPI0:
+ 	case DDP_COMPONENT_DPI1:
+ 	case DDP_COMPONENT_DP_INTF0:
++	case DDP_COMPONENT_DP_INTF1:
+ 		writel_relaxed(MUTEX_SOF_SINGLE_MODE,
+ 			       mtx->regs +
+ 			       DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg,
 -- 
 2.18.0
 
