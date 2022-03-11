@@ -1,24 +1,21 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A652103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105A420FF
 	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 01:55:24 +0000 (UTC)
-X-UUID: e4f5c369a92043908b0a113f06d28538-20220311
-X-UUID: e4f5c369a92043908b0a113f06d28538-20220311
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+X-UUID: 4d1933d41f624437976459de5f833d28-20220311
+X-UUID: 4d1933d41f624437976459de5f833d28-20220311
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 2138413934; Fri, 11 Mar 2022 09:55:10 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 11 Mar 2022 09:55:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 11 Mar
- 2022 09:55:08 +0800
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 2040392605; Fri, 11 Mar 2022 09:55:14 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 11 Mar 2022 09:55:10 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 11 Mar 2022 09:55:07 +0800
+ Transport; Fri, 11 Mar 2022 09:55:10 +0800
 From: Nancy.Lin <nancy.lin@mediatek.com>
 To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
 	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
@@ -33,9 +30,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>, <srv_heupstream@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v15 04/22] soc: mediatek: add mtk-mmsys support for mt8195 vdosys1
-Date: Fri, 11 Mar 2022 09:54:48 +0800
-Message-ID: <20220311015506.11232-5-nancy.lin@mediatek.com>
+Subject: [PATCH v15 20/22] drm/mediatek: add drm ovl_adaptor sub driver for MT8195
+Date: Fri, 11 Mar 2022 09:55:04 +0800
+Message-ID: <20220311015506.11232-21-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220311015506.11232-1-nancy.lin@mediatek.com>
 References: <20220311015506.11232-1-nancy.lin@mediatek.com>
@@ -48,219 +45,257 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-Add mt8195 vdosys1 clock driver name and routing table to
-the driver data of mtk-mmsys.
+Add drm ovl_adaptor sub driver. Bring up ovl_adaptor sub driver if
+the component exists in the path.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/soc/mediatek/mt8195-mmsys.h    | 136 +++++++++++++++++++++++++
- drivers/soc/mediatek/mtk-mmsys.c       |  10 ++
- include/linux/soc/mediatek/mtk-mmsys.h |   2 +
- 3 files changed, 148 insertions(+)
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 18 ++++------
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c | 31 +++++++++++++---
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  1 +
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c      | 40 ++++++++++++---------
+ 4 files changed, 58 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/soc/mediatek/mt8195-mmsys.h b/drivers/soc/mediatek/mt8195-mmsys.h
-index 24a3afe23bc8..369fb0aab56d 100644
---- a/drivers/soc/mediatek/mt8195-mmsys.h
-+++ b/drivers/soc/mediatek/mt8195-mmsys.h
-@@ -75,6 +75,70 @@
- #define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0		(2 << 16)
- #define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE			(3 << 16)
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+index 0cca1966b622..28a691328998 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+@@ -889,20 +889,16 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+ 	for (i = 0; i < path_len; i++) {
+ 		enum mtk_ddp_comp_id comp_id = path[i];
+ 		struct device_node *node;
+-		struct mtk_ddp_comp *comp;
  
-+#define MT8195_VDO1_VPP_MERGE0_P0_SEL_IN			0xf04
-+#define MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0			1
-+
-+#define MT8195_VDO1_VPP_MERGE0_P1_SEL_IN			0xf08
-+#define MT8195_VPP_MERGE0_P1_SEL_IN_FROM_MDP_RDMA1			1
-+
-+#define MT8195_VDO1_DISP_DPI1_SEL_IN				0xf10
-+#define MT8195_DISP_DPI1_SEL_IN_FROM_VPP_MERGE4_MOUT			0
-+
-+#define MT8195_VDO1_DISP_DP_INTF0_SEL_IN			0xf14
-+#define MT8195_DISP_DP_INTF0_SEL_IN_FROM_VPP_MERGE4_MOUT		0
-+
-+#define MT8195_VDO1_MERGE4_SOUT_SEL				0xf18
-+#define MT8195_MERGE4_SOUT_TO_DPI1_SEL					2
-+#define MT8195_MERGE4_SOUT_TO_DP_INTF0_SEL				3
-+
-+#define MT8195_VDO1_MIXER_IN1_SEL_IN				0xf24
-+#define MT8195_MIXER_IN1_SEL_IN_FROM_MERGE0_ASYNC_SOUT			1
-+
-+#define MT8195_VDO1_MIXER_IN2_SEL_IN				0xf28
-+#define MT8195_MIXER_IN2_SEL_IN_FROM_MERGE1_ASYNC_SOUT			1
-+
-+#define MT8195_VDO1_MIXER_IN3_SEL_IN				0xf2c
-+#define MT8195_MIXER_IN3_SEL_IN_FROM_MERGE2_ASYNC_SOUT			1
-+
-+#define MT8195_VDO1_MIXER_IN4_SEL_IN				0xf30
-+#define MT8195_MIXER_IN4_SEL_IN_FROM_MERGE3_ASYNC_SOUT			1
-+
-+#define MT8195_VDO1_MIXER_OUT_SOUT_SEL				0xf34
-+#define MT8195_MIXER_SOUT_TO_MERGE4_ASYNC_SEL				1
-+
-+#define MT8195_VDO1_VPP_MERGE1_P0_SEL_IN			0xf3c
-+#define MT8195_VPP_MERGE1_P0_SEL_IN_FROM_MDP_RDMA2			1
-+
-+#define MT8195_VDO1_MERGE0_ASYNC_SOUT_SEL			0xf40
-+#define MT8195_SOUT_TO_MIXER_IN1_SEL					1
-+
-+#define MT8195_VDO1_MERGE1_ASYNC_SOUT_SEL			0xf44
-+#define MT8195_SOUT_TO_MIXER_IN2_SEL					1
-+
-+#define MT8195_VDO1_MERGE2_ASYNC_SOUT_SEL			0xf48
-+#define MT8195_SOUT_TO_MIXER_IN3_SEL					1
-+
-+#define MT8195_VDO1_MERGE3_ASYNC_SOUT_SEL			0xf4c
-+#define MT8195_SOUT_TO_MIXER_IN4_SEL					1
-+
-+#define MT8195_VDO1_MERGE4_ASYNC_SEL_IN				0xf50
-+#define MT8195_MERGE4_ASYNC_SEL_IN_FROM_MIXER_OUT_SOUT			1
-+
-+#define MT8195_VDO1_MIXER_IN1_SOUT_SEL				0xf58
-+#define MT8195_MIXER_IN1_SOUT_TO_DISP_MIXER				0
-+
-+#define MT8195_VDO1_MIXER_IN2_SOUT_SEL				0xf5c
-+#define MT8195_MIXER_IN2_SOUT_TO_DISP_MIXER				0
-+
-+#define MT8195_VDO1_MIXER_IN3_SOUT_SEL				0xf60
-+#define MT8195_MIXER_IN3_SOUT_TO_DISP_MIXER				0
-+
-+#define MT8195_VDO1_MIXER_IN4_SOUT_SEL				0xf64
-+#define MT8195_MIXER_IN4_SOUT_TO_DISP_MIXER				0
-+
-+#define MT8195_VDO1_MIXER_SOUT_SEL_IN				0xf68
-+#define MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER			0
-+
- static const struct mtk_mmsys_routes mmsys_mt8195_routing_table[] = {
- 	{
- 		DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
-@@ -124,6 +188,78 @@ static const struct mtk_mmsys_routes mmsys_mt8195_routing_table[] = {
- 		DDP_COMPONENT_MERGE0, DDP_COMPONENT_DP_INTF0,
- 		MT8195_VDO0_SEL_OUT, MT8195_SOUT_VPP_MERGE_TO_MASK,
- 		MT8195_SOUT_VPP_MERGE_TO_DP_INTF0
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_VPP_MERGE0_P0_SEL_IN, GENMASK(0, 0),
-+		MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_VPP_MERGE0_P1_SEL_IN, GENMASK(0, 0),
-+		MT8195_VPP_MERGE0_P1_SEL_IN_FROM_MDP_RDMA1
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_VPP_MERGE1_P0_SEL_IN, GENMASK(0, 0),
-+		MT8195_VPP_MERGE1_P0_SEL_IN_FROM_MDP_RDMA2
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MERGE0_ASYNC_SOUT_SEL, GENMASK(1, 0),
-+		MT8195_SOUT_TO_MIXER_IN1_SEL
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MERGE1_ASYNC_SOUT_SEL, GENMASK(1, 0),
-+		MT8195_SOUT_TO_MIXER_IN2_SEL
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MERGE2_ASYNC_SOUT_SEL, GENMASK(1, 0),
-+		MT8195_SOUT_TO_MIXER_IN3_SEL
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MERGE3_ASYNC_SOUT_SEL, GENMASK(1, 0),
-+		MT8195_SOUT_TO_MIXER_IN4_SEL
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MIXER_OUT_SOUT_SEL, GENMASK(0, 0),
-+		MT8195_MIXER_SOUT_TO_MERGE4_ASYNC_SEL
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MIXER_IN1_SEL_IN, GENMASK(0, 0),
-+		MT8195_MIXER_IN1_SEL_IN_FROM_MERGE0_ASYNC_SOUT
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MIXER_IN2_SEL_IN, GENMASK(0, 0),
-+		MT8195_MIXER_IN2_SEL_IN_FROM_MERGE1_ASYNC_SOUT
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MIXER_IN3_SEL_IN, GENMASK(0, 0),
-+		MT8195_MIXER_IN3_SEL_IN_FROM_MERGE2_ASYNC_SOUT
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MIXER_IN4_SEL_IN, GENMASK(0, 0),
-+		MT8195_MIXER_IN4_SEL_IN_FROM_MERGE3_ASYNC_SOUT
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MIXER_SOUT_SEL_IN, GENMASK(2, 0),
-+		MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER
-+	}, {
-+		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-+		MT8195_VDO1_MERGE4_ASYNC_SEL_IN, GENMASK(2, 0),
-+		MT8195_MERGE4_ASYNC_SEL_IN_FROM_MIXER_OUT_SOUT
-+	}, {
-+		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DPI1,
-+		MT8195_VDO1_DISP_DPI1_SEL_IN, GENMASK(1, 0),
-+		MT8195_DISP_DPI1_SEL_IN_FROM_VPP_MERGE4_MOUT
-+	}, {
-+		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DPI1,
-+		MT8195_VDO1_MERGE4_SOUT_SEL, GENMASK(1, 0),
-+		MT8195_MERGE4_SOUT_TO_DPI1_SEL
-+	}, {
-+		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DP_INTF1,
-+		MT8195_VDO1_DISP_DP_INTF0_SEL_IN, GENMASK(1, 0),
-+		MT8195_DISP_DP_INTF0_SEL_IN_FROM_VPP_MERGE4_MOUT
-+	}, {
-+		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DP_INTF1,
-+		MT8195_VDO1_MERGE4_SOUT_SEL, GENMASK(1, 0),
-+		MT8195_MERGE4_SOUT_TO_DP_INTF0_SEL
+ 		node = priv->comp_node[comp_id];
+-		comp = &priv->ddp_comp[comp_id];
+ 
+-		if (!node) {
+-			dev_info(dev,
+-				 "Not creating crtc %d because component %d is disabled or missing\n",
+-				 crtc_i, comp_id);
+-			return 0;
+-		}
+-
+-		if (!comp->dev) {
+-			dev_err(dev, "Component %pOF not initialized\n", node);
++		/* Not all drm components have a DTS device node, such as ovl_adaptor,
++		 * which is the drm bring up sub driver
++		 */
++		if (!node && comp_id != DDP_COMPONENT_OVL_ADAPTOR) {
++			dev_err(dev,
++				"Not creating crtc %d because component %d is disabled, missing or not initialized\n",
++				crtc_i, comp_id);
+ 			return -ENODEV;
+ 		}
  	}
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+index 26d197da41c0..acc6f09da653 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+@@ -385,6 +385,19 @@ static const struct mtk_ddp_comp_funcs ddp_ufoe = {
+ 	.start = mtk_ufoe_start,
  };
  
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index dc5c51f0ccc8..0b77624cf6ca 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -79,6 +79,12 @@ static const struct mtk_mmsys_driver_data mt8195_vdosys0_driver_data = {
- 	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
- };
- 
-+static const struct mtk_mmsys_driver_data mt8195_vdosys1_driver_data = {
-+	.clk_driver = "clk-mt8195-vdo1",
-+	.routes = mmsys_mt8195_routing_table,
-+	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
++static const struct mtk_ddp_comp_funcs ddp_ovl_adaptor = {
++	.clk_enable = mtk_ovl_adaptor_clk_enable,
++	.clk_disable = mtk_ovl_adaptor_clk_disable,
++	.config = mtk_ovl_adaptor_config,
++	.start = mtk_ovl_adaptor_start,
++	.stop = mtk_ovl_adaptor_stop,
++	.layer_nr = mtk_ovl_adaptor_layer_nr,
++	.layer_config = mtk_ovl_adaptor_layer_config,
++	.enable_vblank = mtk_ovl_adaptor_enable_vblank,
++	.disable_vblank = mtk_ovl_adaptor_disable_vblank,
++	.dma_dev_get = mtk_ovl_adaptor_dma_dev_get,
 +};
 +
- static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data = {
- 	.clk_driver = "clk-mt8365-mm",
- 	.routes = mt8365_mmsys_routing_table,
-@@ -271,6 +277,10 @@ static const struct of_device_id of_match_mtk_mmsys[] = {
- 		.compatible = "mediatek,mt8195-vdosys0",
- 		.data = &mt8195_vdosys0_driver_data,
- 	},
-+	{
-+		.compatible = "mediatek,mt8195-vdosys1",
-+		.data = &mt8195_vdosys1_driver_data,
-+	},
- 	{
- 		.compatible = "mediatek,mt8365-mmsys",
- 		.data = &mt8365_mmsys_driver_data,
-diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
-index 64c77c4a6c56..eaf7f7345519 100644
---- a/include/linux/soc/mediatek/mtk-mmsys.h
-+++ b/include/linux/soc/mediatek/mtk-mmsys.h
-@@ -18,6 +18,7 @@ enum mtk_ddp_comp_id {
- 	DDP_COMPONENT_COLOR1,
- 	DDP_COMPONENT_DITHER,
- 	DDP_COMPONENT_DP_INTF0,
-+	DDP_COMPONENT_DP_INTF1,
- 	DDP_COMPONENT_DPI0,
- 	DDP_COMPONENT_DPI1,
- 	DDP_COMPONENT_DSC0,
-@@ -39,6 +40,7 @@ enum mtk_ddp_comp_id {
- 	DDP_COMPONENT_OVL_2L0,
- 	DDP_COMPONENT_OVL_2L1,
- 	DDP_COMPONENT_OVL_2L2,
-+	DDP_COMPONENT_OVL_ADAPTOR,
- 	DDP_COMPONENT_OVL1,
- 	DDP_COMPONENT_POSTMASK0,
- 	DDP_COMPONENT_PWM0,
+ static const char * const mtk_ddp_comp_stem[MTK_DDP_COMP_TYPE_MAX] = {
+ 	[MTK_DISP_AAL] = "aal",
+ 	[MTK_DISP_BLS] = "bls",
+@@ -398,6 +411,7 @@ static const char * const mtk_ddp_comp_stem[MTK_DDP_COMP_TYPE_MAX] = {
+ 	[MTK_DISP_OD] = "od",
+ 	[MTK_DISP_OVL] = "ovl",
+ 	[MTK_DISP_OVL_2L] = "ovl-2l",
++	[MTK_DISP_OVL_ADAPTOR] = "ovl_adaptor",
+ 	[MTK_DISP_POSTMASK] = "postmask",
+ 	[MTK_DISP_PWM] = "pwm",
+ 	[MTK_DISP_RDMA] = "rdma",
+@@ -443,6 +457,7 @@ static const struct mtk_ddp_comp_match mtk_ddp_matches[DDP_COMPONENT_ID_MAX] = {
+ 	[DDP_COMPONENT_OVL_2L0]		= { MTK_DISP_OVL_2L,	0, &ddp_ovl },
+ 	[DDP_COMPONENT_OVL_2L1]		= { MTK_DISP_OVL_2L,	1, &ddp_ovl },
+ 	[DDP_COMPONENT_OVL_2L2]		= { MTK_DISP_OVL_2L,    2, &ddp_ovl },
++	[DDP_COMPONENT_OVL_ADAPTOR]	= { MTK_DISP_OVL_ADAPTOR,	0, &ddp_ovl_adaptor },
+ 	[DDP_COMPONENT_POSTMASK0]	= { MTK_DISP_POSTMASK,	0, &ddp_postmask },
+ 	[DDP_COMPONENT_PWM0]		= { MTK_DISP_PWM,	0, NULL },
+ 	[DDP_COMPONENT_PWM1]		= { MTK_DISP_PWM,	1, NULL },
+@@ -548,12 +563,17 @@ int mtk_ddp_comp_init(struct device_node *node, struct mtk_ddp_comp *comp,
+ 
+ 	comp->id = comp_id;
+ 	comp->funcs = mtk_ddp_matches[comp_id].funcs;
+-	comp_pdev = of_find_device_by_node(node);
+-	if (!comp_pdev) {
+-		DRM_INFO("Waiting for device %s\n", node->full_name);
+-		return -EPROBE_DEFER;
++	/* Not all drm components have a DTS device node, such as ovl_adaptor,
++	 * which is the drm bring up sub driver
++	 */
++	if (node) {
++		comp_pdev = of_find_device_by_node(node);
++		if (!comp_pdev) {
++			DRM_INFO("Waiting for device %s\n", node->full_name);
++			return -EPROBE_DEFER;
++		}
++		comp->dev = &comp_pdev->dev;
+ 	}
+-	comp->dev = &comp_pdev->dev;
+ 
+ 	/* Only DMA capable components need the LARB property */
+ 	if (type == MTK_DISP_OVL ||
+@@ -573,6 +593,7 @@ int mtk_ddp_comp_init(struct device_node *node, struct mtk_ddp_comp *comp,
+ 	    type == MTK_DISP_MERGE ||
+ 	    type == MTK_DISP_OVL ||
+ 	    type == MTK_DISP_OVL_2L ||
++	    type == MTK_DISP_OVL_ADAPTOR ||
+ 	    type == MTK_DISP_PWM ||
+ 	    type == MTK_DISP_RDMA ||
+ 	    type == MTK_DPI ||
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+index 4f7fae41c916..1862eba41c45 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+@@ -30,6 +30,7 @@ enum mtk_ddp_comp_type {
+ 	MTK_DISP_OD,
+ 	MTK_DISP_OVL,
+ 	MTK_DISP_OVL_2L,
++	MTK_DISP_OVL_ADAPTOR,
+ 	MTK_DISP_POSTMASK,
+ 	MTK_DISP_PWM,
+ 	MTK_DISP_RDMA,
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+index a05703843af2..99f37f8f6639 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+@@ -351,9 +351,7 @@ static int mtk_drm_kms_init(struct drm_device *drm)
+ {
+ 	struct mtk_drm_private *private = drm->dev_private;
+ 	struct mtk_drm_private *priv_n;
+-	struct platform_device *pdev;
+-	struct device_node *np = NULL;
+-	struct device *dma_dev;
++	struct device *dma_dev = NULL;
+ 	int ret, i, j;
+ 
+ 	ret = drmm_mode_config_init(drm);
+@@ -388,7 +386,6 @@ static int mtk_drm_kms_init(struct drm_device *drm)
+ 	 *    different drm private data structures. Loop through crtc index to
+ 	 *    create crtc from the main path and then ext_path and finally the
+ 	 *    third path.
+-	 * 3. Use OVL device for all DMA memory allocations
+ 	 */
+ 	for (i = 0; i < MAX_CRTC; i++) {
+ 		for (j = 0; j < private->data->mmsys_dev_num; j++) {
+@@ -400,9 +397,6 @@ static int mtk_drm_kms_init(struct drm_device *drm)
+ 				if (ret)
+ 					goto err_component_unbind;
+ 
+-				if (!np)
+-					np = priv_n->comp_node[priv_n->data->main_path[0]];
+-
+ 				continue;
+ 			} else if (i == 1 && priv_n->data->ext_len) {
+ 				ret = mtk_drm_crtc_create(drm, priv_n->data->ext_path,
+@@ -410,9 +404,6 @@ static int mtk_drm_kms_init(struct drm_device *drm)
+ 				if (ret)
+ 					goto err_component_unbind;
+ 
+-				if (!np)
+-					np = priv_n->comp_node[priv_n->data->ext_path[0]];
+-
+ 				continue;
+ 			} else if (i == 2 && priv_n->data->third_len) {
+ 				ret = mtk_drm_crtc_create(drm, priv_n->data->third_path,
+@@ -420,22 +411,19 @@ static int mtk_drm_kms_init(struct drm_device *drm)
+ 				if (ret)
+ 					goto err_component_unbind;
+ 
+-				if (!np)
+-					np = priv_n->comp_node[priv_n->data->third_path[0]];
+-
+ 				continue;
+ 			}
+ 		}
+ 	}
+ 
+-	pdev = of_find_device_by_node(np);
+-	if (!pdev) {
++	/* Use OVL device for all DMA memory allocations */
++	dma_dev = mtk_drm_crtc_dma_dev_get(drm_crtc_from_index(drm, 0));
++	if (!dma_dev) {
+ 		ret = -ENODEV;
+ 		dev_err(drm->dev, "Need at least one OVL device\n");
+ 		goto err_component_unbind;
+ 	}
+ 
+-	dma_dev = &pdev->dev;
+ 	for (i = 0; i < private->data->mmsys_dev_num; i++)
+ 		private->all_drm_private[i]->dma_dev = dma_dev;
+ 
+@@ -514,6 +502,11 @@ static int compare_of(struct device *dev, void *data)
+ 	return dev->of_node == data;
+ }
+ 
++static int compare_dev(struct device *dev, void *data)
++{
++	return dev == (struct device *)data;
++}
++
+ static int mtk_drm_bind(struct device *dev)
+ {
+ 	struct mtk_drm_private *private = dev_get_drvdata(dev);
+@@ -702,6 +695,7 @@ static int mtk_drm_probe(struct platform_device *pdev)
+ 	struct mtk_drm_private *private;
+ 	struct device_node *node;
+ 	struct component_match *match = NULL;
++	struct platform_device *ovl_adaptor;
+ 	int ret;
+ 	int i;
+ 
+@@ -727,6 +721,18 @@ static int mtk_drm_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
++	/* Bringup ovl_adaptor */
++	if (mtk_drm_find_mmsys_comp(private, DDP_COMPONENT_OVL_ADAPTOR)) {
++		ovl_adaptor = platform_device_register_data(dev, "mediatek-disp-ovl-adaptor",
++							    PLATFORM_DEVID_AUTO,
++							    (void *)private->mmsys_dev,
++							    sizeof(*private->mmsys_dev));
++		private->ddp_comp[DDP_COMPONENT_OVL_ADAPTOR].dev = &ovl_adaptor->dev;
++		mtk_ddp_comp_init(NULL, &private->ddp_comp[DDP_COMPONENT_OVL_ADAPTOR],
++				  DDP_COMPONENT_OVL_ADAPTOR);
++		component_match_add(dev, &match, compare_dev, &ovl_adaptor->dev);
++	}
++
+ 	/* Iterate over sibling DISP function blocks */
+ 	for_each_child_of_node(phandle->parent, node) {
+ 		const struct of_device_id *of_id;
+@@ -780,6 +786,7 @@ static int mtk_drm_probe(struct platform_device *pdev)
+ 		    comp_type == MTK_DISP_MERGE ||
+ 		    comp_type == MTK_DISP_OVL ||
+ 		    comp_type == MTK_DISP_OVL_2L ||
++		    comp_type == MTK_DISP_OVL_ADAPTOR ||
+ 		    comp_type == MTK_DISP_RDMA ||
+ 		    comp_type == MTK_DPI ||
+ 		    comp_type == MTK_DSI) {
+@@ -882,6 +889,7 @@ static struct platform_driver * const mtk_drm_drivers[] = {
+ 	&mtk_disp_color_driver,
+ 	&mtk_disp_gamma_driver,
+ 	&mtk_disp_merge_driver,
++	&mtk_disp_ovl_adaptor_driver,
+ 	&mtk_disp_ovl_driver,
+ 	&mtk_disp_rdma_driver,
+ 	&mtk_dpi_driver,
 -- 
 2.18.0
 
