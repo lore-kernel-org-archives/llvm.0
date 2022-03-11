@@ -1,27 +1,31 @@
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB43920FC
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 01:55:18 +0000 (UTC)
-X-UUID: 9f1fd0487bbb4a69bb5f1c64af03e7f6-20220311
-X-UUID: 9f1fd0487bbb4a69bb5f1c64af03e7f6-20220311
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15F520FE
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 01:55:19 +0000 (UTC)
+X-UUID: fc939d723ae646c199a309317e287848-20220311
+X-UUID: fc939d723ae646c199a309317e287848-20220311
 Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 53809322; Fri, 11 Mar 2022 09:55:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 11 Mar 2022 09:55:08 +0800
+	with ESMTP id 895446369; Fri, 11 Mar 2022 09:55:09 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 11 Mar 2022 09:55:08 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 11 Mar
+ 2022 09:55:07 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 11 Mar 2022 09:55:08 +0800
+ Transport; Fri, 11 Mar 2022 09:55:07 +0800
 From: Nancy.Lin <nancy.lin@mediatek.com>
 To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp
- Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, AngeloGioacchino
- Del Regno <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
+ Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
 	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
 	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
 	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -29,9 +33,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>, <srv_heupstream@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v15 08/22] soc: mediatek: change the mutex defines and the mutex_mod type
-Date: Fri, 11 Mar 2022 09:54:52 +0800
-Message-ID: <20220311015506.11232-9-nancy.lin@mediatek.com>
+Subject: [PATCH v15 01/22] dt-bindings: mediatek: add vdosys1 RDMA definition for mt8195
+Date: Fri, 11 Mar 2022 09:54:45 +0800
+Message-ID: <20220311015506.11232-2-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220311015506.11232-1-nancy.lin@mediatek.com>
 References: <20220311015506.11232-1-nancy.lin@mediatek.com>
@@ -44,390 +48,106 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-This is a preparation for adding support for mt8195 vdosys1 mutex.
-The vdosys1 path component contains ovl_adaptor, merge5,
-and dp_intf1. Ovl_adaptor is composed of several sub-elements,
-so change it to support multi-bit control.
+Add vdosys1 RDMA definition.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/soc/mediatek/mtk-mutex.c | 264 +++++++++++++++----------------
- 1 file changed, 132 insertions(+), 132 deletions(-)
+ .../arm/mediatek/mediatek,mdp-rdma.yaml       | 86 +++++++++++++++++++
+ 1 file changed, 86 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-rdma.yaml
 
-diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index 1c7ffcdadcea..cb791671d751 100644
---- a/drivers/soc/mediatek/mtk-mutex.c
-+++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -29,16 +29,16 @@
- 
- #define INT_MUTEX				BIT(1)
- 
--#define MT8186_MUTEX_MOD_DISP_OVL0		0
--#define MT8186_MUTEX_MOD_DISP_OVL0_2L		1
--#define MT8186_MUTEX_MOD_DISP_RDMA0		2
--#define MT8186_MUTEX_MOD_DISP_COLOR0		4
--#define MT8186_MUTEX_MOD_DISP_CCORR0		5
--#define MT8186_MUTEX_MOD_DISP_AAL0		7
--#define MT8186_MUTEX_MOD_DISP_GAMMA0		8
--#define MT8186_MUTEX_MOD_DISP_POSTMASK0		9
--#define MT8186_MUTEX_MOD_DISP_DITHER0		10
--#define MT8186_MUTEX_MOD_DISP_RDMA1		17
-+#define MT8186_MUTEX_MOD_DISP_OVL0		BIT(0)
-+#define MT8186_MUTEX_MOD_DISP_OVL0_2L		BIT(1)
-+#define MT8186_MUTEX_MOD_DISP_RDMA0		BIT(2)
-+#define MT8186_MUTEX_MOD_DISP_COLOR0		BIT(4)
-+#define MT8186_MUTEX_MOD_DISP_CCORR0		BIT(5)
-+#define MT8186_MUTEX_MOD_DISP_AAL0		BIT(7)
-+#define MT8186_MUTEX_MOD_DISP_GAMMA0		BIT(8)
-+#define MT8186_MUTEX_MOD_DISP_POSTMASK0		BIT(9)
-+#define MT8186_MUTEX_MOD_DISP_DITHER0		BIT(10)
-+#define MT8186_MUTEX_MOD_DISP_RDMA1		BIT(17)
- 
- #define MT8186_MUTEX_SOF_SINGLE_MODE		0
- #define MT8186_MUTEX_SOF_DSI0			1
-@@ -46,113 +46,113 @@
- #define MT8186_MUTEX_EOF_DSI0			(MT8186_MUTEX_SOF_DSI0 << 6)
- #define MT8186_MUTEX_EOF_DPI0			(MT8186_MUTEX_SOF_DPI0 << 6)
- 
--#define MT8167_MUTEX_MOD_DISP_PWM		1
--#define MT8167_MUTEX_MOD_DISP_OVL0		6
--#define MT8167_MUTEX_MOD_DISP_OVL1		7
--#define MT8167_MUTEX_MOD_DISP_RDMA0		8
--#define MT8167_MUTEX_MOD_DISP_RDMA1		9
--#define MT8167_MUTEX_MOD_DISP_WDMA0		10
--#define MT8167_MUTEX_MOD_DISP_CCORR		11
--#define MT8167_MUTEX_MOD_DISP_COLOR		12
--#define MT8167_MUTEX_MOD_DISP_AAL		13
--#define MT8167_MUTEX_MOD_DISP_GAMMA		14
--#define MT8167_MUTEX_MOD_DISP_DITHER		15
--#define MT8167_MUTEX_MOD_DISP_UFOE		16
--
--#define MT8192_MUTEX_MOD_DISP_OVL0		0
--#define MT8192_MUTEX_MOD_DISP_OVL0_2L		1
--#define MT8192_MUTEX_MOD_DISP_RDMA0		2
--#define MT8192_MUTEX_MOD_DISP_COLOR0		4
--#define MT8192_MUTEX_MOD_DISP_CCORR0		5
--#define MT8192_MUTEX_MOD_DISP_AAL0		6
--#define MT8192_MUTEX_MOD_DISP_GAMMA0		7
--#define MT8192_MUTEX_MOD_DISP_POSTMASK0		8
--#define MT8192_MUTEX_MOD_DISP_DITHER0		9
--#define MT8192_MUTEX_MOD_DISP_OVL2_2L		16
--#define MT8192_MUTEX_MOD_DISP_RDMA4		17
--
--#define MT8183_MUTEX_MOD_DISP_RDMA0		0
--#define MT8183_MUTEX_MOD_DISP_RDMA1		1
--#define MT8183_MUTEX_MOD_DISP_OVL0		9
--#define MT8183_MUTEX_MOD_DISP_OVL0_2L		10
--#define MT8183_MUTEX_MOD_DISP_OVL1_2L		11
--#define MT8183_MUTEX_MOD_DISP_WDMA0		12
--#define MT8183_MUTEX_MOD_DISP_COLOR0		13
--#define MT8183_MUTEX_MOD_DISP_CCORR0		14
--#define MT8183_MUTEX_MOD_DISP_AAL0		15
--#define MT8183_MUTEX_MOD_DISP_GAMMA0		16
--#define MT8183_MUTEX_MOD_DISP_DITHER0		17
--
--#define MT8173_MUTEX_MOD_DISP_OVL0		11
--#define MT8173_MUTEX_MOD_DISP_OVL1		12
--#define MT8173_MUTEX_MOD_DISP_RDMA0		13
--#define MT8173_MUTEX_MOD_DISP_RDMA1		14
--#define MT8173_MUTEX_MOD_DISP_RDMA2		15
--#define MT8173_MUTEX_MOD_DISP_WDMA0		16
--#define MT8173_MUTEX_MOD_DISP_WDMA1		17
--#define MT8173_MUTEX_MOD_DISP_COLOR0		18
--#define MT8173_MUTEX_MOD_DISP_COLOR1		19
--#define MT8173_MUTEX_MOD_DISP_AAL		20
--#define MT8173_MUTEX_MOD_DISP_GAMMA		21
--#define MT8173_MUTEX_MOD_DISP_UFOE		22
--#define MT8173_MUTEX_MOD_DISP_PWM0		23
--#define MT8173_MUTEX_MOD_DISP_PWM1		24
--#define MT8173_MUTEX_MOD_DISP_OD		25
--
--#define MT8195_MUTEX_MOD_DISP_OVL0		0
--#define MT8195_MUTEX_MOD_DISP_WDMA0		1
--#define MT8195_MUTEX_MOD_DISP_RDMA0		2
--#define MT8195_MUTEX_MOD_DISP_COLOR0		3
--#define MT8195_MUTEX_MOD_DISP_CCORR0		4
--#define MT8195_MUTEX_MOD_DISP_AAL0		5
--#define MT8195_MUTEX_MOD_DISP_GAMMA0		6
--#define MT8195_MUTEX_MOD_DISP_DITHER0		7
--#define MT8195_MUTEX_MOD_DISP_DSI0		8
--#define MT8195_MUTEX_MOD_DISP_DSC_WRAP0_CORE0	9
--#define MT8195_MUTEX_MOD_DISP_OVL1		10
--#define MT8195_MUTEX_MOD_DISP_WDMA1		11
--#define MT8195_MUTEX_MOD_DISP_RDMA1		12
--#define MT8195_MUTEX_MOD_DISP_COLOR1		13
--#define MT8195_MUTEX_MOD_DISP_CCORR1		14
--#define MT8195_MUTEX_MOD_DISP_AAL1		15
--#define MT8195_MUTEX_MOD_DISP_GAMMA1		16
--#define MT8195_MUTEX_MOD_DISP_DITHER1		17
--#define MT8195_MUTEX_MOD_DISP_DSI1		18
--#define MT8195_MUTEX_MOD_DISP_DSC_WRAP0_CORE1	19
--#define MT8195_MUTEX_MOD_DISP_VPP_MERGE		20
--#define MT8195_MUTEX_MOD_DISP_DP_INTF0		21
--#define MT8195_MUTEX_MOD_DISP_VPP1_DL_RELAY0	22
--#define MT8195_MUTEX_MOD_DISP_VPP1_DL_RELAY1	23
--#define MT8195_MUTEX_MOD_DISP_VDO1_DL_RELAY2	24
--#define MT8195_MUTEX_MOD_DISP_VDO0_DL_RELAY3	25
--#define MT8195_MUTEX_MOD_DISP_VDO0_DL_RELAY4	26
--#define MT8195_MUTEX_MOD_DISP_PWM0		27
--#define MT8195_MUTEX_MOD_DISP_PWM1		28
--
--#define MT2712_MUTEX_MOD_DISP_PWM2		10
--#define MT2712_MUTEX_MOD_DISP_OVL0		11
--#define MT2712_MUTEX_MOD_DISP_OVL1		12
--#define MT2712_MUTEX_MOD_DISP_RDMA0		13
--#define MT2712_MUTEX_MOD_DISP_RDMA1		14
--#define MT2712_MUTEX_MOD_DISP_RDMA2		15
--#define MT2712_MUTEX_MOD_DISP_WDMA0		16
--#define MT2712_MUTEX_MOD_DISP_WDMA1		17
--#define MT2712_MUTEX_MOD_DISP_COLOR0		18
--#define MT2712_MUTEX_MOD_DISP_COLOR1		19
--#define MT2712_MUTEX_MOD_DISP_AAL0		20
--#define MT2712_MUTEX_MOD_DISP_UFOE		22
--#define MT2712_MUTEX_MOD_DISP_PWM0		23
--#define MT2712_MUTEX_MOD_DISP_PWM1		24
--#define MT2712_MUTEX_MOD_DISP_OD0		25
--#define MT2712_MUTEX_MOD2_DISP_AAL1		33
--#define MT2712_MUTEX_MOD2_DISP_OD1		34
--
--#define MT2701_MUTEX_MOD_DISP_OVL		3
--#define MT2701_MUTEX_MOD_DISP_WDMA		6
--#define MT2701_MUTEX_MOD_DISP_COLOR		7
--#define MT2701_MUTEX_MOD_DISP_BLS		9
--#define MT2701_MUTEX_MOD_DISP_RDMA0		10
--#define MT2701_MUTEX_MOD_DISP_RDMA1		12
-+#define MT8167_MUTEX_MOD_DISP_PWM		BIT(1)
-+#define MT8167_MUTEX_MOD_DISP_OVL0		BIT(6)
-+#define MT8167_MUTEX_MOD_DISP_OVL1		BIT(7)
-+#define MT8167_MUTEX_MOD_DISP_RDMA0		BIT(8)
-+#define MT8167_MUTEX_MOD_DISP_RDMA1		BIT(9)
-+#define MT8167_MUTEX_MOD_DISP_WDMA0		BIT(10)
-+#define MT8167_MUTEX_MOD_DISP_CCORR		BIT(11)
-+#define MT8167_MUTEX_MOD_DISP_COLOR		BIT(12)
-+#define MT8167_MUTEX_MOD_DISP_AAL		BIT(13)
-+#define MT8167_MUTEX_MOD_DISP_GAMMA		BIT(14)
-+#define MT8167_MUTEX_MOD_DISP_DITHER		BIT(15)
-+#define MT8167_MUTEX_MOD_DISP_UFOE		BIT(16)
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-rdma.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-rdma.yaml
+new file mode 100644
+index 000000000000..6ab773569462
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-rdma.yaml
+@@ -0,0 +1,86 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mdp-rdma.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#define MT8192_MUTEX_MOD_DISP_OVL0		BIT(0)
-+#define MT8192_MUTEX_MOD_DISP_OVL0_2L		BIT(1)
-+#define MT8192_MUTEX_MOD_DISP_RDMA0		BIT(2)
-+#define MT8192_MUTEX_MOD_DISP_COLOR0		BIT(4)
-+#define MT8192_MUTEX_MOD_DISP_CCORR0		BIT(5)
-+#define MT8192_MUTEX_MOD_DISP_AAL0		BIT(6)
-+#define MT8192_MUTEX_MOD_DISP_GAMMA0		BIT(7)
-+#define MT8192_MUTEX_MOD_DISP_POSTMASK0		BIT(8)
-+#define MT8192_MUTEX_MOD_DISP_DITHER0		BIT(9)
-+#define MT8192_MUTEX_MOD_DISP_OVL2_2L		BIT(16)
-+#define MT8192_MUTEX_MOD_DISP_RDMA4		BIT(17)
++title: Mediatek MDP RDMA
 +
-+#define MT8183_MUTEX_MOD_DISP_RDMA0		BIT(0)
-+#define MT8183_MUTEX_MOD_DISP_RDMA1		BIT(1)
-+#define MT8183_MUTEX_MOD_DISP_OVL0		BIT(9)
-+#define MT8183_MUTEX_MOD_DISP_OVL0_2L		BIT(10)
-+#define MT8183_MUTEX_MOD_DISP_OVL1_2L		BIT(11)
-+#define MT8183_MUTEX_MOD_DISP_WDMA0		BIT(12)
-+#define MT8183_MUTEX_MOD_DISP_COLOR0		BIT(13)
-+#define MT8183_MUTEX_MOD_DISP_CCORR0		BIT(14)
-+#define MT8183_MUTEX_MOD_DISP_AAL0		BIT(15)
-+#define MT8183_MUTEX_MOD_DISP_GAMMA0		BIT(16)
-+#define MT8183_MUTEX_MOD_DISP_DITHER0		BIT(17)
++maintainers:
++  - Matthias Brugger <matthias.bgg@gmail.com>
 +
-+#define MT8173_MUTEX_MOD_DISP_OVL0		BIT(11)
-+#define MT8173_MUTEX_MOD_DISP_OVL1		BIT(12)
-+#define MT8173_MUTEX_MOD_DISP_RDMA0		BIT(13)
-+#define MT8173_MUTEX_MOD_DISP_RDMA1		BIT(14)
-+#define MT8173_MUTEX_MOD_DISP_RDMA2		BIT(15)
-+#define MT8173_MUTEX_MOD_DISP_WDMA0		BIT(16)
-+#define MT8173_MUTEX_MOD_DISP_WDMA1		BIT(17)
-+#define MT8173_MUTEX_MOD_DISP_COLOR0		BIT(18)
-+#define MT8173_MUTEX_MOD_DISP_COLOR1		BIT(19)
-+#define MT8173_MUTEX_MOD_DISP_AAL		BIT(20)
-+#define MT8173_MUTEX_MOD_DISP_GAMMA		BIT(21)
-+#define MT8173_MUTEX_MOD_DISP_UFOE		BIT(22)
-+#define MT8173_MUTEX_MOD_DISP_PWM0		BIT(23)
-+#define MT8173_MUTEX_MOD_DISP_PWM1		BIT(24)
-+#define MT8173_MUTEX_MOD_DISP_OD		BIT(25)
++description: |
++  The mediatek MDP RDMA stands for Read Direct Memory Access.
++  It provides real time data to the back-end panel driver, such as DSI,
++  DPI and DP_INTF.
++  It contains one line buffer to store the sufficient pixel data.
++  RDMA device node must be siblings to the central MMSYS_CONFIG node.
++  For a description of the MMSYS_CONFIG binding, see
++  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml for details.
 +
-+#define MT8195_MUTEX_MOD_DISP_OVL0		BIT(0)
-+#define MT8195_MUTEX_MOD_DISP_WDMA0		BIT(1)
-+#define MT8195_MUTEX_MOD_DISP_RDMA0		BIT(2)
-+#define MT8195_MUTEX_MOD_DISP_COLOR0		BIT(3)
-+#define MT8195_MUTEX_MOD_DISP_CCORR0		BIT(4)
-+#define MT8195_MUTEX_MOD_DISP_AAL0		BIT(5)
-+#define MT8195_MUTEX_MOD_DISP_GAMMA0		BIT(6)
-+#define MT8195_MUTEX_MOD_DISP_DITHER0		BIT(7)
-+#define MT8195_MUTEX_MOD_DISP_DSI0		BIT(8)
-+#define MT8195_MUTEX_MOD_DISP_DSC_WRAP0_CORE0	BIT(9)
-+#define MT8195_MUTEX_MOD_DISP_OVL1		BIT(10)
-+#define MT8195_MUTEX_MOD_DISP_WDMA1		BIT(11)
-+#define MT8195_MUTEX_MOD_DISP_RDMA1		BIT(12)
-+#define MT8195_MUTEX_MOD_DISP_COLOR1		BIT(13)
-+#define MT8195_MUTEX_MOD_DISP_CCORR1		BIT(14)
-+#define MT8195_MUTEX_MOD_DISP_AAL1		BIT(15)
-+#define MT8195_MUTEX_MOD_DISP_GAMMA1		BIT(16)
-+#define MT8195_MUTEX_MOD_DISP_DITHER1		BIT(17)
-+#define MT8195_MUTEX_MOD_DISP_DSI1		BIT(18)
-+#define MT8195_MUTEX_MOD_DISP_DSC_WRAP0_CORE1	BIT(19)
-+#define MT8195_MUTEX_MOD_DISP_VPP_MERGE		BIT(20)
-+#define MT8195_MUTEX_MOD_DISP_DP_INTF0		BIT(21)
-+#define MT8195_MUTEX_MOD_DISP_VPP1_DL_RELAY0	BIT(22)
-+#define MT8195_MUTEX_MOD_DISP_VPP1_DL_RELAY1	BIT(23)
-+#define MT8195_MUTEX_MOD_DISP_VDO1_DL_RELAY2	BIT(24)
-+#define MT8195_MUTEX_MOD_DISP_VDO0_DL_RELAY3	BIT(25)
-+#define MT8195_MUTEX_MOD_DISP_VDO0_DL_RELAY4	BIT(26)
-+#define MT8195_MUTEX_MOD_DISP_PWM0		BIT(27)
-+#define MT8195_MUTEX_MOD_DISP_PWM1		BIT(28)
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - const: mediatek,mt8195-vdo1-rdma
 +
-+#define MT2712_MUTEX_MOD_DISP_PWM2		BIT(10)
-+#define MT2712_MUTEX_MOD_DISP_OVL0		BIT(11)
-+#define MT2712_MUTEX_MOD_DISP_OVL1		BIT(12)
-+#define MT2712_MUTEX_MOD_DISP_RDMA0		BIT(13)
-+#define MT2712_MUTEX_MOD_DISP_RDMA1		BIT(14)
-+#define MT2712_MUTEX_MOD_DISP_RDMA2		BIT(15)
-+#define MT2712_MUTEX_MOD_DISP_WDMA0		BIT(16)
-+#define MT2712_MUTEX_MOD_DISP_WDMA1		BIT(17)
-+#define MT2712_MUTEX_MOD_DISP_COLOR0		BIT(18)
-+#define MT2712_MUTEX_MOD_DISP_COLOR1		BIT(19)
-+#define MT2712_MUTEX_MOD_DISP_AAL0		BIT(20)
-+#define MT2712_MUTEX_MOD_DISP_UFOE		BIT(22)
-+#define MT2712_MUTEX_MOD_DISP_PWM0		BIT(23)
-+#define MT2712_MUTEX_MOD_DISP_PWM1		BIT(24)
-+#define MT2712_MUTEX_MOD_DISP_OD0		BIT(25)
-+#define MT2712_MUTEX_MOD2_DISP_AAL1		BIT_ULL(33)
-+#define MT2712_MUTEX_MOD2_DISP_OD1		BIT_ULL(34)
++  reg:
++    maxItems: 1
 +
-+#define MT2701_MUTEX_MOD_DISP_OVL		BIT(3)
-+#define MT2701_MUTEX_MOD_DISP_WDMA		BIT(6)
-+#define MT2701_MUTEX_MOD_DISP_COLOR		BIT(7)
-+#define MT2701_MUTEX_MOD_DISP_BLS		BIT(9)
-+#define MT2701_MUTEX_MOD_DISP_RDMA0		BIT(10)
-+#define MT2701_MUTEX_MOD_DISP_RDMA1		BIT(12)
- 
- #define MT2712_MUTEX_SOF_SINGLE_MODE		0
- #define MT2712_MUTEX_SOF_DSI0			1
-@@ -200,7 +200,7 @@ enum mtk_mutex_sof_id {
- };
- 
- struct mtk_mutex_data {
--	const unsigned int *mutex_mod;
-+	const u64 *mutex_mod;
- 	const unsigned int *mutex_sof;
- 	const unsigned int mutex_mod_reg;
- 	const unsigned int mutex_sof_reg;
-@@ -215,7 +215,7 @@ struct mtk_mutex_ctx {
- 	const struct mtk_mutex_data	*data;
- };
- 
--static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-+static const u64 mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_BLS] = MT2701_MUTEX_MOD_DISP_BLS,
- 	[DDP_COMPONENT_COLOR0] = MT2701_MUTEX_MOD_DISP_COLOR,
- 	[DDP_COMPONENT_OVL0] = MT2701_MUTEX_MOD_DISP_OVL,
-@@ -224,7 +224,7 @@ static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_WDMA0] = MT2701_MUTEX_MOD_DISP_WDMA,
- };
- 
--static const unsigned int mt2712_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-+static const u64 mt2712_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_AAL0] = MT2712_MUTEX_MOD_DISP_AAL0,
- 	[DDP_COMPONENT_AAL1] = MT2712_MUTEX_MOD2_DISP_AAL1,
- 	[DDP_COMPONENT_COLOR0] = MT2712_MUTEX_MOD_DISP_COLOR0,
-@@ -244,7 +244,7 @@ static const unsigned int mt2712_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_WDMA1] = MT2712_MUTEX_MOD_DISP_WDMA1,
- };
- 
--static const unsigned int mt8167_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-+static const u64 mt8167_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_AAL0] = MT8167_MUTEX_MOD_DISP_AAL,
- 	[DDP_COMPONENT_CCORR] = MT8167_MUTEX_MOD_DISP_CCORR,
- 	[DDP_COMPONENT_COLOR0] = MT8167_MUTEX_MOD_DISP_COLOR,
-@@ -259,7 +259,7 @@ static const unsigned int mt8167_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_WDMA0] = MT8167_MUTEX_MOD_DISP_WDMA0,
- };
- 
--static const unsigned int mt8173_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-+static const u64 mt8173_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_AAL0] = MT8173_MUTEX_MOD_DISP_AAL,
- 	[DDP_COMPONENT_COLOR0] = MT8173_MUTEX_MOD_DISP_COLOR0,
- 	[DDP_COMPONENT_COLOR1] = MT8173_MUTEX_MOD_DISP_COLOR1,
-@@ -277,7 +277,7 @@ static const unsigned int mt8173_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_WDMA1] = MT8173_MUTEX_MOD_DISP_WDMA1,
- };
- 
--static const unsigned int mt8183_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-+static const u64 mt8183_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_AAL0] = MT8183_MUTEX_MOD_DISP_AAL0,
- 	[DDP_COMPONENT_CCORR] = MT8183_MUTEX_MOD_DISP_CCORR0,
- 	[DDP_COMPONENT_COLOR0] = MT8183_MUTEX_MOD_DISP_COLOR0,
-@@ -291,7 +291,7 @@ static const unsigned int mt8183_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_WDMA0] = MT8183_MUTEX_MOD_DISP_WDMA0,
- };
- 
--static const unsigned int mt8186_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-+static const u64 mt8186_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_AAL0] = MT8186_MUTEX_MOD_DISP_AAL0,
- 	[DDP_COMPONENT_CCORR] = MT8186_MUTEX_MOD_DISP_CCORR0,
- 	[DDP_COMPONENT_COLOR0] = MT8186_MUTEX_MOD_DISP_COLOR0,
-@@ -304,7 +304,7 @@ static const unsigned int mt8186_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_RDMA1] = MT8186_MUTEX_MOD_DISP_RDMA1,
- };
- 
--static const unsigned int mt8192_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-+static const u64 mt8192_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_AAL0] = MT8192_MUTEX_MOD_DISP_AAL0,
- 	[DDP_COMPONENT_CCORR] = MT8192_MUTEX_MOD_DISP_CCORR0,
- 	[DDP_COMPONENT_COLOR0] = MT8192_MUTEX_MOD_DISP_COLOR0,
-@@ -318,7 +318,7 @@ static const unsigned int mt8192_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_RDMA4] = MT8192_MUTEX_MOD_DISP_RDMA4,
- };
- 
--static const unsigned int mt8195_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-+static const u64 mt8195_mutex_mod[DDP_COMPONENT_ID_MAX] = {
- 	[DDP_COMPONENT_OVL0] = MT8195_MUTEX_MOD_DISP_OVL0,
- 	[DDP_COMPONENT_WDMA0] = MT8195_MUTEX_MOD_DISP_WDMA0,
- 	[DDP_COMPONENT_RDMA0] = MT8195_MUTEX_MOD_DISP_RDMA0,
-@@ -518,16 +518,16 @@ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
- 		sof_id = MUTEX_SOF_DP_INTF0;
- 		break;
- 	default:
--		if (mtx->data->mutex_mod[id] < 32) {
-+		if (mtx->data->mutex_mod[id] <= BIT(31)) {
- 			offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg,
- 						    mutex->id);
- 			reg = readl_relaxed(mtx->regs + offset);
--			reg |= 1 << mtx->data->mutex_mod[id];
-+			reg |= mtx->data->mutex_mod[id];
- 			writel_relaxed(reg, mtx->regs + offset);
- 		} else {
- 			offset = DISP_REG_MUTEX_MOD2(mutex->id);
- 			reg = readl_relaxed(mtx->regs + offset);
--			reg |= 1 << (mtx->data->mutex_mod[id] - 32);
-+			reg |= (mtx->data->mutex_mod[id] >> 32);
- 			writel_relaxed(reg, mtx->regs + offset);
- 		}
- 		return;
-@@ -563,16 +563,16 @@ void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- 						  mutex->id));
- 		break;
- 	default:
--		if (mtx->data->mutex_mod[id] < 32) {
-+		if (mtx->data->mutex_mod[id] <= BIT(31)) {
- 			offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg,
- 						    mutex->id);
- 			reg = readl_relaxed(mtx->regs + offset);
--			reg &= ~(1 << mtx->data->mutex_mod[id]);
-+			reg &= ~(mtx->data->mutex_mod[id]);
- 			writel_relaxed(reg, mtx->regs + offset);
- 		} else {
- 			offset = DISP_REG_MUTEX_MOD2(mutex->id);
- 			reg = readl_relaxed(mtx->regs + offset);
--			reg &= ~(1 << (mtx->data->mutex_mod[id] - 32));
-+			reg &= ~(mtx->data->mutex_mod[id] >> 32);
- 			writel_relaxed(reg, mtx->regs + offset);
- 		}
- 		break;
++  interrupts:
++    maxItems: 1
++
++  power-domains:
++    description: A phandle and PM domain specifier as defined by bindings of
++      the power controller specified by phandle. See
++      Documentation/devicetree/bindings/power/power-domain.yaml for details.
++
++  clocks:
++    items:
++      - description: RDMA Clock
++
++  iommus:
++    description:
++      This property should point to the respective IOMMU block with master port as argument,
++      see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
++
++  mediatek,gce-client-reg:
++    description:
++      The register of display function block to be set by gce. There are 4 arguments,
++      such as gce node, subsys id, offset and register size. The subsys id that is
++      mapping to the register of display function blocks is defined in the gce header
++      include/include/dt-bindings/gce/<chip>-gce.h of each chips.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - power-domains
++  - clocks
++  - iommus
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/mt8195-clk.h>
++    #include <dt-bindings/power/mt8195-power.h>
++    #include <dt-bindings/gce/mt8195-gce.h>
++    #include <dt-bindings/memory/mt8195-memory-port.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        vdo1_rdma0: mdp-rdma@1c104000 {
++            compatible = "mediatek,mt8195-vdo1-rdma";
++            reg = <0 0x1c104000 0 0x1000>;
++            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
++            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
++            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
++            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
++            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX 0x4000 0x1000>;
++        };
++    };
 -- 
 2.18.0
 
