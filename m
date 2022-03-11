@@ -1,58 +1,43 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984537E
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 11:56:12 +0000 (UTC)
-Received: by mail-ed1-f44.google.com with SMTP id t1so10415628edc.3
-        for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 03:56:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6KOGVQhF6Egz+9fEXxCfdvhyFjVJMc2MkMjncsNH6FY=;
-        b=ZjR0WX7iatYsrjjBNG3xudpmqpCa87TT88mnirCe2wJwBR7bTEZGS/DMl6ngBgG5md
-         9ETRrW5uw21nHQqsaAIT8fOOpYE2rg1AIwGkKnGInLRtnfdjBJ+wCLWqxnDylxEPCCK9
-         3Kd9r18mjoTW015rjw445mY5xCyZBOH2lCHnyO6OK7OtMfwgax/SSWJm+cdLuomPVycd
-         aH63yCC9GJiYeBaQl1kIvPa0yHjz2Y+K0WTnV8o6joikseReV81eigOsceorEnc6nzep
-         3212R3MMZ3YkQIoLmU0xqNt2zFmUGO7fkR+g7Ee5E7PfYlmbz6K6XMejV8Jm041QLCBZ
-         aGjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6KOGVQhF6Egz+9fEXxCfdvhyFjVJMc2MkMjncsNH6FY=;
-        b=U+8ZaGwOg8B7MTWOayBAAZLJcnKWyawXzeaTuA916Ina97syKnAHeAQnF4pea0TH2O
-         KLqX7Wg1fFlWjT+wLdGhmXGnWB7I3Q8q4ly9JRGVja+vYDAyHz+/oZObXa5X5NXXuQ3L
-         L3haAJSIhpQ3kbokB5DfPbg/eKBMZov33ynRr8XptUTw57R+RgwogvfY3GzrHRUfyMNp
-         kz6AQ7Y92uCQcILgzaTy59M/waEdmgPujSC4aVsjNKLlQhndkPs4DSz8WtUqWURFVUME
-         SOGuaz07d6ovChlxX9qZTqDAmR0M6MhmGXYko1sO2YFWRmPlRtVVwSHcZ+ckvUstj1BI
-         Wc2Q==
-X-Gm-Message-State: AOAM533hv1Xv0uwKGEnJIWSJeD6pAXx7x/G6EEc1RHYQotfuvuULimXS
-	RuptQ5nLuF3+m7cuLXvTHOY=
-X-Google-Smtp-Source: ABdhPJyhKwKHXdrgcx+VP6v6R/hLiE3rrgLkmwTvpB5t09YXQIcSL8iR1eb1Ba0dij/oJWd4Dd2Fdg==
-X-Received: by 2002:aa7:c687:0:b0:415:eb43:8ff5 with SMTP id n7-20020aa7c687000000b00415eb438ff5mr8551105edq.74.1646999770590;
-        Fri, 11 Mar 2022 03:56:10 -0800 (PST)
-Received: from krava ([83.240.61.119])
-        by smtp.gmail.com with ESMTPSA id a9-20020a1709066d4900b006da888c3ef0sm2860274ejt.108.2022.03.11.03.56.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 03:56:10 -0800 (PST)
-Date: Fri, 11 Mar 2022 12:56:07 +0100
-From: Jiri Olsa <olsajiri@gmail.com>
-To: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Ian Rogers <irogers@google.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Fangrui Song <maskray@google.com>, Jiri Olsa <jolsa@redhat.com>,
-	Michael Petlan <mpetlan@redhat.com>, Leo Yan <leo.yan@linaro.org>,
-	John Keeping <john@metanate.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Subject: Re: [PATCH] tools: feature/test-libperl.c: Sync PERL_EMBED_CCOPTS
- with perf
-Message-ID: <Yis41ykyJq1fHYSx@krava>
-References: <20220310061909.20166-1-sedat.dilek@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C112C9D
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 12:31:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647001864; x=1678537864;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FoD1JM/1D0JznHoPzQxU879H7hdslD8rGb6v2/pSS1o=;
+  b=a0xnRAeArV6AcN4DLEfaP67aSjB4G88+oggdFnYCOQWFo/YnAkpLYxtu
+   un0D3Qg2c1ctkdZWv3uIj2qttAhapPgK6NHxQdVOwF98xJbfK0eDSfWkS
+   9qJwB3C8tBCMDI/02GsBQgdRO8kIzEFk4MXM0g1B/Sl1P0QsWT4R41POu
+   Z0RXOVobCeyhLsHbYL4MRJvCGaOvGen/8QRK2mmyD/iucJDj7PEBRLv4e
+   1nr2Q2QSZjKNWdOFMgVaNkhaoP/TQHcbCx6GrGoMzKnp1MHqjETJyxtt2
+   nSCd6CBb/g2FbJ/TKmdsxmMwOs3gCoChSKuRyurJppQlssZYGXFr7Ac7s
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="255298035"
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="255298035"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 04:31:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="579273474"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2022 04:31:02 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSeQA-0006O5-6G; Fri, 11 Mar 2022 12:31:02 +0000
+Date: Fri, 11 Mar 2022 20:30:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v5.17-rc1 6/8]
+ drivers/xen/xenfs/xenstored.c:42:20: warning: incompatible pointer to
+ integer conversion passing 'struct xenstore_domain_interface *' to parameter
+ of type 'unsigned long'
+Message-ID: <202203112032.czFw7ztl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,120 +46,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220310061909.20166-1-sedat.dilek@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Mar 10, 2022 at 07:19:09AM +0100, Sedat Dilek wrote:
-> When trying to build perf with a LLVM/Clang toolchain people see errors
-> when testing for libperl feature.
-> 
-> Jiri reports:
-> 
-> > I'm getting some other lto related error:
-> >
-> >         $ cat test-libperl.make.output
-> >         clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
-> >
-> 
-> The reason is PERL_EMBED_CCOPTS is defined in two places:
-> 
-> tools/build/feature/Makefile
-> tools/perf/Makefile.config
-> 
-> As an result FLAGS_PERL_EMBED is set differently.
-> 
-> For building perf '-ffat-lto-objects' is filtered-out:
-> 
-> $ git grep ffat-lto-objects tools/perf/
-> tools/perf/Makefile.config:  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-> 
-> Sync PERL_EMBED_CCOPTS in tools/build/feature/Makefile to fix this.
-> 
-> For a minimal fix for Linux v5.17 this here was preferred by Arnaldo.
-> 
-> Link: https://marc.info/?t=164646683300002&r=1&w=2
-> Reported-by: Jiri Olsa <olsajiri@gmail.com>
-> Reported-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> Tested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> Suggested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
-> ---
->  tools/build/feature/Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> index 1480910c792e..869073cf8449 100644
-> --- a/tools/build/feature/Makefile
-> +++ b/tools/build/feature/Makefile
-> @@ -218,6 +218,7 @@ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
->  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
->  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
->  PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-> +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.17-rc1
+head:   66e9038ef48dc66c07b12443b73e2d1f3f12cbab
+commit: 5976b9fa0b76bace6d7b038a7e1941175da8f5c5 [6/8] ARM: Compile the kernel into VMALLOC
+config: arm-randconfig-r036-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112032.czFw7ztl-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=5976b9fa0b76bace6d7b038a7e1941175da8f5c5
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.17-rc1
+        git checkout 5976b9fa0b76bace6d7b038a7e1941175da8f5c5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/xen/xenfs/
 
-it looks like this is not enough, at least on fedora 35
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I had to add changes below on top of your patch, it fixed the perl
-feature detection and perf build itself, but I'm still getting error
-with perf/python.so:
+All warnings (new ones prefixed by >>):
 
-	$ CC=clang make JOBS=1 
-	...
-	  GEN     python/perf.so
-	python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: file not recognized: file format not recognized
-	clang-13: error: linker command failed with exit code 1 (use -v to see invocation)
-	error: command 'clang' failed with exit status 1
-	cp: cannot stat 'python_ext_build/lib/perf*.so': No such file or directory
+>> drivers/xen/xenfs/xenstored.c:42:20: warning: incompatible pointer to integer conversion passing 'struct xenstore_domain_interface *' to parameter of type 'unsigned long' [-Wint-conversion]
+                               virt_to_pfn(xen_store_interface),
+                                           ^~~~~~~~~~~~~~~~~~~
+   arch/arm/include/asm/memory.h:323:55: note: passing argument to parameter 'kaddr' here
+   static inline unsigned long virt_to_pfn(unsigned long kaddr)
+                                                         ^
+   1 warning generated.
 
-with:
 
-	$ file python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o
-	python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: LLVM IR bitcode
+vim +42 drivers/xen/xenfs/xenstored.c
 
-do you get clean compile with python lang enabled?
+655d406a7c80bf Ian Campbell 2009-02-06  33  
+655d406a7c80bf Ian Campbell 2009-02-06  34  static int xsd_kva_mmap(struct file *file, struct vm_area_struct *vma)
+655d406a7c80bf Ian Campbell 2009-02-06  35  {
+655d406a7c80bf Ian Campbell 2009-02-06  36  	size_t size = vma->vm_end - vma->vm_start;
+655d406a7c80bf Ian Campbell 2009-02-06  37  
+655d406a7c80bf Ian Campbell 2009-02-06  38  	if ((size > PAGE_SIZE) || (vma->vm_pgoff != 0))
+655d406a7c80bf Ian Campbell 2009-02-06  39  		return -EINVAL;
+655d406a7c80bf Ian Campbell 2009-02-06  40  
+655d406a7c80bf Ian Campbell 2009-02-06  41  	if (remap_pfn_range(vma, vma->vm_start,
+655d406a7c80bf Ian Campbell 2009-02-06 @42  			    virt_to_pfn(xen_store_interface),
+655d406a7c80bf Ian Campbell 2009-02-06  43  			    size, vma->vm_page_prot))
+655d406a7c80bf Ian Campbell 2009-02-06  44  		return -EAGAIN;
+655d406a7c80bf Ian Campbell 2009-02-06  45  
+655d406a7c80bf Ian Campbell 2009-02-06  46  	return 0;
+655d406a7c80bf Ian Campbell 2009-02-06  47  }
+655d406a7c80bf Ian Campbell 2009-02-06  48  
 
-jirka
+:::::: The code at line 42 was first introduced by commit
+:::::: 655d406a7c80bffc03263d071b6ba1e0fcf548f9 xen: add /proc/xen/xsd_{kva,port} to xenfs
 
+:::::: TO: Ian Campbell <ian.campbell@citrix.com>
+:::::: CC: Jeremy Fitzhardinge <jeremy.fitzhardinge@citrix.com>
 
 ---
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 869073cf8449..86df0fe11ee5 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -217,9 +217,9 @@ strip-libs = $(filter-out -l%,$(1))
- PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
- PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
- PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
--PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-+PERL_EMBED_CCOPTS := $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
- PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
--FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
-+FLAGS_PERL_EMBED  := $(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
- 
- $(OUTPUT)test-libperl.bin:
- 	$(BUILD) $(FLAGS_PERL_EMBED)
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 96ad944ca6a8..38b0b0e7a168 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -778,7 +778,7 @@ else
-   PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
-   PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
-   PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
--  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-+  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS)) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
-   PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
-   FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
- 
-diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
-index 483f05004e68..cfbb03babf63 100644
---- a/tools/perf/util/setup.py
-+++ b/tools/perf/util/setup.py
-@@ -43,7 +43,7 @@ class install_lib(_install_lib):
- 
- cflags = getenv('CFLAGS', '').split()
- # switch off several checks (need to be at the end of cflags list)
--cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-DPYTHON_PERF' ]
-+cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-Wno-ignored-optimization-argument', '-DPYTHON_PERF' ]
- if not cc_is_clang:
-     cflags += ['-Wno-cast-function-type' ]
- 
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
