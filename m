@@ -1,42 +1,58 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F6E7E
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 10:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646995128; x=1678531128;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ERoDqGPLZcDRwDdhAPlR9WKCdT1GPrd63rNG7I71OYY=;
-  b=dyZg81u2DAMVzQWWAQuEExy6latdkQSGvIdUEX/euXWdMRTzT8LXV2sW
-   FPV4X194+qSwvbJdxl0cHXu/rXRvvg8jnyLXcddXNlblNLmXG6GIWCGDU
-   zHogBxo4aqAnsE96UjmUj0mbw4EmjVYf8ECVwn/7/51KjVsHWexqFB4t7
-   mWnA0Ggs2k+SyUKrf5c/g/v3zR6XOdUHjDy66Wbbr3wxCn40aVt7MJUVH
-   s48BpsTb+UWaR6Ivtkl63cMhM0TW85skOptVSQmILt7We2BVfBIk831UD
-   P+n9DeD5p0Mtbz8Xlw1EY469xjW8O6liKB3W7F6mwoWQkUO7h//U9hwd9
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="235500079"
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="235500079"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 02:38:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="644893929"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2022 02:38:46 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nScfV-0006G3-Bz; Fri, 11 Mar 2022 10:38:45 +0000
-Date: Fri, 11 Mar 2022 18:38:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	"Darrick J. Wong" <darrick.wong@oracle.com>,
-	linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:vectorized-scrub 123/346]
- fs/xfs/libxfs/xfs_rmap.c:783:1: error: expected identifier or '('
-Message-ID: <202203111813.2n44ZvrR-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984537E
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 11:56:12 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id t1so10415628edc.3
+        for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 03:56:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6KOGVQhF6Egz+9fEXxCfdvhyFjVJMc2MkMjncsNH6FY=;
+        b=ZjR0WX7iatYsrjjBNG3xudpmqpCa87TT88mnirCe2wJwBR7bTEZGS/DMl6ngBgG5md
+         9ETRrW5uw21nHQqsaAIT8fOOpYE2rg1AIwGkKnGInLRtnfdjBJ+wCLWqxnDylxEPCCK9
+         3Kd9r18mjoTW015rjw445mY5xCyZBOH2lCHnyO6OK7OtMfwgax/SSWJm+cdLuomPVycd
+         aH63yCC9GJiYeBaQl1kIvPa0yHjz2Y+K0WTnV8o6joikseReV81eigOsceorEnc6nzep
+         3212R3MMZ3YkQIoLmU0xqNt2zFmUGO7fkR+g7Ee5E7PfYlmbz6K6XMejV8Jm041QLCBZ
+         aGjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6KOGVQhF6Egz+9fEXxCfdvhyFjVJMc2MkMjncsNH6FY=;
+        b=U+8ZaGwOg8B7MTWOayBAAZLJcnKWyawXzeaTuA916Ina97syKnAHeAQnF4pea0TH2O
+         KLqX7Wg1fFlWjT+wLdGhmXGnWB7I3Q8q4ly9JRGVja+vYDAyHz+/oZObXa5X5NXXuQ3L
+         L3haAJSIhpQ3kbokB5DfPbg/eKBMZov33ynRr8XptUTw57R+RgwogvfY3GzrHRUfyMNp
+         kz6AQ7Y92uCQcILgzaTy59M/waEdmgPujSC4aVsjNKLlQhndkPs4DSz8WtUqWURFVUME
+         SOGuaz07d6ovChlxX9qZTqDAmR0M6MhmGXYko1sO2YFWRmPlRtVVwSHcZ+ckvUstj1BI
+         Wc2Q==
+X-Gm-Message-State: AOAM533hv1Xv0uwKGEnJIWSJeD6pAXx7x/G6EEc1RHYQotfuvuULimXS
+	RuptQ5nLuF3+m7cuLXvTHOY=
+X-Google-Smtp-Source: ABdhPJyhKwKHXdrgcx+VP6v6R/hLiE3rrgLkmwTvpB5t09YXQIcSL8iR1eb1Ba0dij/oJWd4Dd2Fdg==
+X-Received: by 2002:aa7:c687:0:b0:415:eb43:8ff5 with SMTP id n7-20020aa7c687000000b00415eb438ff5mr8551105edq.74.1646999770590;
+        Fri, 11 Mar 2022 03:56:10 -0800 (PST)
+Received: from krava ([83.240.61.119])
+        by smtp.gmail.com with ESMTPSA id a9-20020a1709066d4900b006da888c3ef0sm2860274ejt.108.2022.03.11.03.56.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 03:56:10 -0800 (PST)
+Date: Fri, 11 Mar 2022 12:56:07 +0100
+From: Jiri Olsa <olsajiri@gmail.com>
+To: Sedat Dilek <sedat.dilek@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Ian Rogers <irogers@google.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Fangrui Song <maskray@google.com>, Jiri Olsa <jolsa@redhat.com>,
+	Michael Petlan <mpetlan@redhat.com>, Leo Yan <leo.yan@linaro.org>,
+	John Keeping <john@metanate.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Subject: Re: [PATCH] tools: feature/test-libperl.c: Sync PERL_EMBED_CCOPTS
+ with perf
+Message-ID: <Yis41ykyJq1fHYSx@krava>
+References: <20220310061909.20166-1-sedat.dilek@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,69 +61,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220310061909.20166-1-sedat.dilek@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
-head:   38ef7fcbbc5b33107155955dcd6ed6c92f4ceb91
-commit: e0be8b1f630bd6eda5845896af660c5cc1b43831 [123/346] xfs: hook live rmap operations during a repair operation
-config: hexagon-randconfig-r025-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111813.2n44ZvrR-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=e0be8b1f630bd6eda5845896af660c5cc1b43831
-        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
-        git fetch --no-tags djwong-xfs vectorized-scrub
-        git checkout e0be8b1f630bd6eda5845896af660c5cc1b43831
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/xfs/
+On Thu, Mar 10, 2022 at 07:19:09AM +0100, Sedat Dilek wrote:
+> When trying to build perf with a LLVM/Clang toolchain people see errors
+> when testing for libperl feature.
+> 
+> Jiri reports:
+> 
+> > I'm getting some other lto related error:
+> >
+> >         $ cat test-libperl.make.output
+> >         clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+> >
+> 
+> The reason is PERL_EMBED_CCOPTS is defined in two places:
+> 
+> tools/build/feature/Makefile
+> tools/perf/Makefile.config
+> 
+> As an result FLAGS_PERL_EMBED is set differently.
+> 
+> For building perf '-ffat-lto-objects' is filtered-out:
+> 
+> $ git grep ffat-lto-objects tools/perf/
+> tools/perf/Makefile.config:  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+> 
+> Sync PERL_EMBED_CCOPTS in tools/build/feature/Makefile to fix this.
+> 
+> For a minimal fix for Linux v5.17 this here was preferred by Arnaldo.
+> 
+> Link: https://marc.info/?t=164646683300002&r=1&w=2
+> Reported-by: Jiri Olsa <olsajiri@gmail.com>
+> Reported-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> Tested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> Suggested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
+> ---
+>  tools/build/feature/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> index 1480910c792e..869073cf8449 100644
+> --- a/tools/build/feature/Makefile
+> +++ b/tools/build/feature/Makefile
+> @@ -218,6 +218,7 @@ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+>  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+>  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+>  PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+> +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+it looks like this is not enough, at least on fedora 35
 
-All errors (new ones prefixed by >>):
+I had to add changes below on top of your patch, it fixed the perl
+feature detection and perf build itself, but I'm still getting error
+with perf/python.so:
 
->> fs/xfs/libxfs/xfs_rmap.c:783:1: error: expected identifier or '('
-   XFS_HOOKS_SWITCH_DEFINE(xfs_rmap_hooks_switch);
-   ^
-   fs/xfs/xfs_mount.h:78:42: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                             ^
->> fs/xfs/libxfs/xfs_rmap.c:783:1: error: expected ')'
-   fs/xfs/xfs_mount.h:78:42: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                             ^
-   fs/xfs/libxfs/xfs_rmap.c:783:1: note: to match this '('
-   fs/xfs/xfs_mount.h:78:41: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                            ^
->> fs/xfs/libxfs/xfs_rmap.c:783:1: error: expected ')'
-   XFS_HOOKS_SWITCH_DEFINE(xfs_rmap_hooks_switch);
-   ^
-   fs/xfs/xfs_mount.h:78:47: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                                  ^
-   fs/xfs/libxfs/xfs_rmap.c:783:1: note: to match this '('
-   fs/xfs/xfs_mount.h:78:40: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                           ^
-   3 errors generated.
+	$ CC=clang make JOBS=1 
+	...
+	  GEN     python/perf.so
+	python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: file not recognized: file format not recognized
+	clang-13: error: linker command failed with exit code 1 (use -v to see invocation)
+	error: command 'clang' failed with exit status 1
+	cp: cannot stat 'python_ext_build/lib/perf*.so': No such file or directory
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OMAP_GPMC
-   Depends on MEMORY && OF_ADDRESS
-   Selected by
-   - MTD_NAND_OMAP2 && MTD && MTD_RAW_NAND && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST && HAS_IOMEM
+with:
 
+	$ file python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o
+	python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: LLVM IR bitcode
 
-vim +783 fs/xfs/libxfs/xfs_rmap.c
+do you get clean compile with python lang enabled?
 
-   781	
-   782	#ifdef CONFIG_XFS_LIVE_HOOKS
- > 783	XFS_HOOKS_SWITCH_DEFINE(xfs_rmap_hooks_switch);
-   784	
+jirka
+
 
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 869073cf8449..86df0fe11ee5 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -217,9 +217,9 @@ strip-libs = $(filter-out -l%,$(1))
+ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+ PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+ PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+-PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
++PERL_EMBED_CCOPTS := $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+ PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+-FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
++FLAGS_PERL_EMBED  := $(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
+ 
+ $(OUTPUT)test-libperl.bin:
+ 	$(BUILD) $(FLAGS_PERL_EMBED)
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 96ad944ca6a8..38b0b0e7a168 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -778,7 +778,7 @@ else
+   PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+   PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+   PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
+-  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
++  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS)) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
+   PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
+   FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+ 
+diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+index 483f05004e68..cfbb03babf63 100644
+--- a/tools/perf/util/setup.py
++++ b/tools/perf/util/setup.py
+@@ -43,7 +43,7 @@ class install_lib(_install_lib):
+ 
+ cflags = getenv('CFLAGS', '').split()
+ # switch off several checks (need to be at the end of cflags list)
+-cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-DPYTHON_PERF' ]
++cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-Wno-ignored-optimization-argument', '-DPYTHON_PERF' ]
+ if not cc_is_clang:
+     cflags += ['-Wno-cast-function-type' ]
+ 
