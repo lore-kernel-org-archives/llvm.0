@@ -1,30 +1,52 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292AD33E9
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 16:18:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAEFC340E9;
-	Fri, 11 Mar 2022 16:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647015488;
-	bh=0cZ6b7AXYUuBOJstkAJvZYlOE56pXKXh0+MXEe4ilt4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=bB44RNJRgO12CFLMJfvtN1ALIgpjM0ISOh98aXoHrV4oBVvMBWQwNrFwqSw8Eia4E
-	 KkVvEiNjIZgSTdlg7CbSYxzSSbdTQ/dIqLhJWXJAfqkLsCTWxTFoYjSUfxH+gm85bx
-	 j0KcaRgviBPwBM33xK6jpiJhtjFjmAhX41lHTABOMVIZ5MXwmZM/+We+CRzVOECSy5
-	 lThdGaVKKdgrej4/GGRdGTX5pThtNx8+XtW2THufklst1w4Mw23j8UkLKI2tneIF2B
-	 y5iaNFRjlEP90KBeHI1frVg7vThMDrmPMhNXLCvYprz5Eu9lGIsRC97XWf5lex9WUY
-	 +10LtiIw9lMsw==
-Date: Fri, 11 Mar 2022 10:18:06 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	"Michael S . Tsirkin" <mst@redhat.com>, llvm@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH 1/2] linux/types.h: Remove unnecessary __bitwise__
-Message-ID: <20220311161806.GA304449@bhelgaas>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A2233E9
+	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 16:27:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647016046; x=1678552046;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nRlFhJ+PIU5XoBZQ7PKvZSY+ABJ08XeIWijk9GDqH4k=;
+  b=YGXMihIT/a1avz+xaOZhtWPrpD1I0VVvYVEXKaU+nyMBIfoxX9H51c2R
+   yP+wS1S4Yw6dI24t/+9s7oP1c3NcOjl+Kzdu+owwwWBGlzG003rha/Uv+
+   TnxSj1NFxXfqWT8SBVhiaJb0n7hjBq3PCJWQ6rr3HXz0jtXBy9nmv0gZp
+   EJUTAP5mLKqWIwcSW54Xqt4wxJWkxDktRdCifLdVVqOm2vK98AWXCF4CV
+   9D9hfZ/wU/C/orK69W0Dpuv9jYBCZBuDPX5bDKyejJmZ97oxnMBJMnJNZ
+   4rqjZJjr39cfXTqcfg3lY5HwNBZ6EpH2rB5k3oqDJx0CdN2rEV5PffVXC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="342030950"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="342030950"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 08:27:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="597157659"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 11 Mar 2022 08:27:22 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nSi6r-0006kG-R5; Fri, 11 Mar 2022 16:27:21 +0000
+Date: Sat, 12 Mar 2022 00:27:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	LKML <linux-kernel@vger.kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Ingo Molnar <mingo@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-rt-users <linux-rt-users@vger.kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Tom Zanussi <zanussi@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH] tracing: Add snapshot at end of kernel boot up
+Message-ID: <202203120019.Oteoj0K7-lkp@intel.com>
+References: <20220310214133.0e58e321@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,40 +55,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220310175216.252fabefeca040004216d40d@linux-foundation.org>
+In-Reply-To: <20220310214133.0e58e321@gandalf.local.home>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Mar 10, 2022 at 05:52:16PM -0800, Andrew Morton wrote:
-> On Thu, 10 Mar 2022 16:09:26 -0600 Bjorn Helgaas <helgaas@kernel.org> wrote:
-> 
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> > 
-> > There are no users of "__bitwise__" except the definition of "__bitwise".
-> > Remove __bitwise__ and define __bitwise directly.
-> > 
-> > This is a follow-up to 05de97003c77 ("linux/types.h: enable endian checks
-> > for all sparse builds").
-> > 
-> 
-> Can we change the copy-pasted code in tools/include/linux/types.h while
-> we're there?
+Hi Steven,
 
-Oh, you bet!  Thanks for pointing that out!
+Thank you for the patch! Perhaps something to improve:
 
-> --- a/tools/include/linux/types.h~linux-typesh-remove-unnecessary-__bitwise__-fix
-> +++ a/tools/include/linux/types.h
-> @@ -43,11 +43,10 @@ typedef __u8  u8;
->  typedef __s8  s8;
->  
->  #ifdef __CHECKER__
-> -#define __bitwise__ __attribute__((bitwise))
-> +#define __bitwise	__attribute__((bitwise))
->  #else
-> -#define __bitwise__
-> +#define __bitwise
->  #endif
-> -#define __bitwise __bitwise__
->  
->  #define __force
->  #define __user
-> _
-> 
+[auto build test WARNING on rostedt-trace/for-next]
+[also build test WARNING on linux/master hnaz-mm/master linus/master v5.17-rc7 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Steven-Rostedt/tracing-Add-snapshot-at-end-of-kernel-boot-up/20220311-104216
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220312/202203120019.Oteoj0K7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/60ed6397c93a264f9ccbc8a6ca0b3ecc4dfdf6da
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Steven-Rostedt/tracing-Add-snapshot-at-end-of-kernel-boot-up/20220311-104216
+        git checkout 60ed6397c93a264f9ccbc8a6ca0b3ecc4dfdf6da
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: vmlinux.o(.text+0x179120): Section mismatch in reference from the function do_init_module() to the function .init.text:ftrace_boot_snapshot()
+The function do_init_module() references
+the function __init ftrace_boot_snapshot().
+This is often because do_init_module lacks a __init
+annotation or the annotation of ftrace_boot_snapshot is wrong.
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
