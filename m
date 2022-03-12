@@ -1,188 +1,331 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798495EBA
-	for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 23:57:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647043020; x=1678579020;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MabYLtoRr/27XJXS/axTXZVdr+xFb6V5oA8gJZ5La1M=;
-  b=id+V1ZmsXRJAjjTOz5TqVt3i9Uau8WhuaIA1IKE3dHKFS0VkCVbw2h1W
-   P4Op0/gqJKwcz9kWu6pByPzaroBrRsEc7yzAlMtdm6JgrXHB46Q2nfB8B
-   idD+Ucm2nOnX7DwYhTFH3SyaS4PboPHDVwlkUhOjWRo8TfytLzjJJ6lwJ
-   gIGTS4h1tC6vxI63eiN/ShfmCF4Ygd71FdcgsvrJKIWe9WwjsONkH57hd
-   l9RytXClDBBvyLJjf0rNbaN2INbauRSYmht/ifUk/yNLRcAzRJbgmBIO0
-   9qYONOy2qAbbVFsIRnUnU0VppuFhVygsLhmHCUvSwwlNbl0c//9sDEPwA
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="255624275"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="255624275"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 15:57:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="579455185"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2022 15:56:57 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nSp7w-0007Hk-9k; Fri, 11 Mar 2022 23:56:56 +0000
-Date: Sat, 12 Mar 2022 07:56:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tinghan Shen <tinghan.shen@mediatek.com>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	Tinghan Shen <tinghan.shen@mediatek.com>
-Subject: Re: [PATCH v2] remoteproc: mediatek: fix side effect of mt8195 sram
- power on
-Message-ID: <202203120744.6e2bnwRT-lkp@intel.com>
-References: <20220311123056.32689-1-tinghan.shen@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059DE36A
+	for <llvm@lists.linux.dev>; Sat, 12 Mar 2022 01:41:57 +0000 (UTC)
+Received: by mail-il1-f177.google.com with SMTP id b9so5805589ila.8
+        for <llvm@lists.linux.dev>; Fri, 11 Mar 2022 17:41:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=gjrIJEvturuOkGG4WOKX2ibXNmzFS1Llju2YLJueftY=;
+        b=hE4wLtAam09Akp+Wv7whDj/+Xzi9ITiKqrZQNXHGL/4nPH1UG/nk2ovpfhfA+JK6VK
+         AqDV+uNl6tGiSAWaIgo0tJm+tHhGmJi5touEh0PzE96vvB/1TlTiV9uGN1r0dOXwvHW5
+         TZr2P8WC1Pmgr+dZj1agP+6zEI7twc6XiK3mcoiY9iafNPM/NpQrKKGo4FAJFKQ5hp1x
+         dLfgLrb15BNm8kLZfxRosU5RFpoJmZktpEUUv3Wa/by553ZvtI2H25+uVivxz1Rp0a55
+         VssXOXjxjQ0M+3IoA68cA0XxGLsVwbEYYRU+Jbea9H7LE8sXU/DnT6j1TGPrCg7tkSQx
+         nQfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=gjrIJEvturuOkGG4WOKX2ibXNmzFS1Llju2YLJueftY=;
+        b=aGsasPWu8tqCIA7yB4QUgJHkSDG2yb/TuTG0jAxhgXvr7sxI+1x+oTeHVvGINfGZgN
+         qK6N/TRn/m4DLOu7QcLnuseByaHfXM4T99/Fy7eky2kThC2jxivxgIuVP+oWcEwsVLGJ
+         Roegq1kzypMeXzmzyrSk8zF9paFag02lJgKbpDYJ/UD3Acpixddv8hoggrZqfQf+k1ov
+         qUyqXhK9cObb8azaDoQ6KswxcfpEm5Dopd+6k/E9vE+7oBFVwVHQMWnzbA+Bha+Ama3p
+         tsARjj5YDTjj0+TK/KhG+ErN+IvHKJ95iVDBKPY08aAJ79yAQnOxjOQRwIP5hqzq73yV
+         sdpg==
+X-Gm-Message-State: AOAM531jRBlqx214zwNrwKCRQDXVKCFLBhvQhz5FyrqMUwVVjtFaKcge
+	6BWWCBWIOUenU7JA3kojk55G5PhqA1CSssjurPA=
+X-Google-Smtp-Source: ABdhPJzdWs9RYq4jlhF0C5R3JgUmRoIKLMSJY2kWO16afkcFIOKfNM3ARlm3voy0sIMG7btL1MtIIBntRTKoz4D3OUQ=
+X-Received: by 2002:a05:6e02:de2:b0:2c6:f14:884a with SMTP id
+ m2-20020a056e020de200b002c60f14884amr10104444ilj.100.1647049316936; Fri, 11
+ Mar 2022 17:41:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311123056.32689-1-tinghan.shen@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220310061909.20166-1-sedat.dilek@gmail.com> <Yis41ykyJq1fHYSx@krava>
+ <CA+icZUVzQwGSS9hcMMP-HeOAFYxrMH9oCRbxLEdcEUwEJ8Wa3Q@mail.gmail.com> <CA+icZUUZjmAmNDfVVMqo_OBWsuS=DpET27nLn3yzPHVcFhxe9A@mail.gmail.com>
+In-Reply-To: <CA+icZUUZjmAmNDfVVMqo_OBWsuS=DpET27nLn3yzPHVcFhxe9A@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Sat, 12 Mar 2022 02:41:20 +0100
+Message-ID: <CA+icZUWK_N67mqSv4uqGuCD5RtvyJFUo_JHsySa+RbhPXFppSg@mail.gmail.com>
+Subject: Re: [PATCH] tools: feature/test-libperl.c: Sync PERL_EMBED_CCOPTS
+ with perf
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, Ian Rogers <irogers@google.com>, 
+	Florian Fainelli <f.fainelli@gmail.com>, Fangrui Song <maskray@google.com>, Jiri Olsa <jolsa@redhat.com>, 
+	Michael Petlan <mpetlan@redhat.com>, Leo Yan <leo.yan@linaro.org>, 
+	John Keeping <john@metanate.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Tinghan,
+On Sat, Mar 12, 2022 at 12:39 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Sat, Mar 12, 2022 at 12:30 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > On Fri, Mar 11, 2022 at 12:56 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > On Thu, Mar 10, 2022 at 07:19:09AM +0100, Sedat Dilek wrote:
+> > > > When trying to build perf with a LLVM/Clang toolchain people see errors
+> > > > when testing for libperl feature.
+> > > >
+> > > > Jiri reports:
+> > > >
+> > > > > I'm getting some other lto related error:
+> > > > >
+> > > > >         $ cat test-libperl.make.output
+> > > > >         clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+> > > > >
+> > > >
+> > > > The reason is PERL_EMBED_CCOPTS is defined in two places:
+> > > >
+> > > > tools/build/feature/Makefile
+> > > > tools/perf/Makefile.config
+> > > >
+> > > > As an result FLAGS_PERL_EMBED is set differently.
+> > > >
+> > > > For building perf '-ffat-lto-objects' is filtered-out:
+> > > >
+> > > > $ git grep ffat-lto-objects tools/perf/
+> > > > tools/perf/Makefile.config:  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+> > > >
+> > > > Sync PERL_EMBED_CCOPTS in tools/build/feature/Makefile to fix this.
+> > > >
+> > > > For a minimal fix for Linux v5.17 this here was preferred by Arnaldo.
+> > > >
+> > > > Link: https://marc.info/?t=164646683300002&r=1&w=2
+> > > > Reported-by: Jiri Olsa <olsajiri@gmail.com>
+> > > > Reported-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> > > > Tested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> > > > Suggested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> > > > Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
+> > > > ---
+> > > >  tools/build/feature/Makefile | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> > > > index 1480910c792e..869073cf8449 100644
+> > > > --- a/tools/build/feature/Makefile
+> > > > +++ b/tools/build/feature/Makefile
+> > > > @@ -218,6 +218,7 @@ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+> > > >  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+> > > >  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+> > > >  PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+> > > > +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+> > >
+> > > it looks like this is not enough, at least on fedora 35
+> > >
+> > > I had to add changes below on top of your patch, it fixed the perl
+> > > feature detection and perf build itself, but I'm still getting error
+> > > with perf/python.so:
+> > >
+> >
+> > Correct. This patch simply fixes the perl feature detection.
+> >
+> > >         $ CC=clang make JOBS=1
+> > >         ...
+> > >           GEN     python/perf.so
+> > >         python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: file not recognized: file format not recognized
+> > >         clang-13: error: linker command failed with exit code 1 (use -v to see invocation)
+> > >         error: command 'clang' failed with exit status 1
+> > >         cp: cannot stat 'python_ext_build/lib/perf*.so': No such file or directory
+> > >
+> > > with:
+> > >
+> > >         $ file python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o
+> > >         python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: LLVM IR bitcode
+> > >
+> > > do you get clean compile with python lang enabled?
+> > >
+> > > jirka
+> > >
+> > >
+> > > ---
+> > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> > > index 869073cf8449..86df0fe11ee5 100644
+> > > --- a/tools/build/feature/Makefile
+> > > +++ b/tools/build/feature/Makefile
+> > > @@ -217,9 +217,9 @@ strip-libs = $(filter-out -l%,$(1))
+> > >  PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+> > >  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+> > >  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+> > > -PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+> > > +PERL_EMBED_CCOPTS := $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+> > >  PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+> > > -FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+> > > +FLAGS_PERL_EMBED  := $(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
+> > >
+> > >  $(OUTPUT)test-libperl.bin:
+> > >         $(BUILD) $(FLAGS_PERL_EMBED)
+> > > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > > index 96ad944ca6a8..38b0b0e7a168 100644
+> > > --- a/tools/perf/Makefile.config
+> > > +++ b/tools/perf/Makefile.config
+> > > @@ -778,7 +778,7 @@ else
+> > >    PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+> > >    PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+> > >    PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
+> > > -  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+> > > +  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS)) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
+> > >    PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
+> > >    FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+> > >
+> >
+> > I fixed that differently by (see [1]),
+> >
+> > --- a/tools/perf/Makefile.config
+> > +++ b/tools/perf/Makefile.config
+> > @@ -213,7 +213,7 @@ endif
+> >
+> > # Treat warnings as errors unless directed not to
+> > ifneq ($(WERROR),0)
+> > -  CORE_CFLAGS += -Werror
+> > +  CORE_CFLAGS += -Werror -Wno-compound-token-split-by-macro
+> >   CXXFLAGS += -Werror
+> >   HOSTCFLAGS += -Werror
+> > endif
+> >
+> > This was sufficient here to build perf successfully.
+> > And maybe ifdef-ed for clang?
+> >
+> > But all this is a follow-up?
+> >
+> > [1] https://lore.kernel.org/lkml/CA+icZUUCO+gOPLZumu_rTOJz1_v7gRRYVzzEZ+RZPOZBmkqCQg@mail.gmail.com/
+> >
+> > > diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+> > > index 483f05004e68..cfbb03babf63 100644
+> > > --- a/tools/perf/util/setup.py
+> > > +++ b/tools/perf/util/setup.py
+> > > @@ -43,7 +43,7 @@ class install_lib(_install_lib):
+> > >
+> > >  cflags = getenv('CFLAGS', '').split()
+> > >  # switch off several checks (need to be at the end of cflags list)
+> > > -cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-DPYTHON_PERF' ]
+> > > +cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-Wno-ignored-optimization-argument', '-DPYTHON_PERF' ]
+> > >  if not cc_is_clang:
+> > >      cflags += ['-Wno-cast-function-type' ]
+> > >
+> >
+> > Cannot say much to that.
+> >
+> > Do we want to fix perf building with LLVM/Clang for Linux v5.17 final or later?
+> > Arnaldo?
+> >
+>
+> Attached is the patch I use to build perf.
+> ( As said in the initial report I wanted to test perf with -std=gnu11. )
+> ( Cannot say much if this related to perl v5.34 only. )
+>
+> - Sedat -
+>
+> [1] https://lore.kernel.org/lkml/CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com/
 
-Thank you for the patch! Yet something to improve:
+I am not familiar with your Red Hat / Fedore LLVM toolchain
+environment as I use Debian/unstable AMD64.
+Also, I am not a perl expert.
 
-[auto build test ERROR on remoteproc/rproc-next]
-[also build test ERROR on v5.17-rc7 next-20220310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Again, tools/ has its own build-system and rules other than top-level Makefile.
 
-url:    https://github.com/0day-ci/linux/commits/Tinghan-Shen/remoteproc-mediatek-fix-side-effect-of-mt8195-sram-power-on/20220311-203255
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
-config: s390-buildonly-randconfig-r004-20220310 (https://download.01.org/0day-ci/archive/20220312/202203120744.6e2bnwRT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/6d56ab3bae4e0d5e07d295169602883ba7d7de08
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tinghan-Shen/remoteproc-mediatek-fix-side-effect-of-mt8195-sram-power-on/20220311-203255
-        git checkout 6d56ab3bae4e0d5e07d295169602883ba7d7de08
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/remoteproc/
+By building with...
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+CC=clang ...
 
-All errors (new ones prefixed by >>):
+You simply use the clang compiler, but *GNU binutils*.
 
-   In file included from drivers/remoteproc/mtk_scp.c:7:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/remoteproc/mtk_scp.c:7:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/remoteproc/mtk_scp.c:7:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/remoteproc/mtk_scp.c:418:6: error: use of undeclared identifier 'MT8195_L1TCM_SRAM_PDN_RESERVED_BITS'
-                             MT8195_L1TCM_SRAM_PDN_RESERVED_BITS);
-                             ^
-   drivers/remoteproc/mtk_scp.c:592:7: error: use of undeclared identifier 'MT8195_L1TCM_SRAM_PDN_RESERVED_BITS'
-                              MT8195_L1TCM_SRAM_PDN_RESERVED_BITS);
-                              ^
-   12 warnings and 2 errors generated.
+My reproducer uses clang + LLVM (bin)utils by setting also for HOSTXX:
 
+make V=1 -j4
+   HOSTCC=clang HOSTLD=ld.lld HOSTAR=llvm-ar
+   CC=clang LD=ld.lld AR=llvm-ar STRIP=llvm-strip
+   -C tools/perf
+   PYTHON=python3.10 install-bin
 
-vim +/MT8195_L1TCM_SRAM_PDN_RESERVED_BITS +418 drivers/remoteproc/mtk_scp.c
+I highly suggest testing this first.
 
-   405	
-   406	static int mt8195_scp_before_load(struct mtk_scp *scp)
-   407	{
-   408		/* clear SPM interrupt, SCP2SPM_IPC_CLR */
-   409		writel(0xff, scp->reg_base + MT8192_SCP2SPM_IPC_CLR);
-   410	
-   411		writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
-   412	
-   413		/* enable SRAM clock */
-   414		scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-   415		scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-   416		scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-   417		scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
- > 418				  MT8195_L1TCM_SRAM_PDN_RESERVED_BITS);
-   419		scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
-   420	
-   421		/* enable MPU for all memory regions */
-   422		writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
-   423	
-   424		return 0;
-   425	}
-   426	
+Please, have a look into:
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[ tools/scripts/Makefile.include ]
+
+ifneq ($(LLVM),)
+$(call allow-override,CC,clang)
+$(call allow-override,AR,llvm-ar)
+$(call allow-override,LD,ld.lld)
+$(call allow-override,CXX,clang++)
+$(call allow-override,STRIP,llvm-strip)
+...
+endif
+...
+ifneq ($(LLVM),)
+HOSTAR  ?= llvm-ar
+HOSTCC  ?= clang
+HOSTLD  ?= ld.lld
+...
+endif
+
+Furthermore, to pass unused compiler flags for clang we use in
+top-level Makefile:
+
+[ Makefile ]
+
+ifdef CONFIG_CC_IS_CLANG
+KBUILD_CPPFLAGS += -Qunused-arguments
+...
+endif
+
+Again, tools/ ECO build-system is different.
+No nothing -Qunused-arguments passed to any (CPP)FLAGS.
+
+The other possibility is to do this for perf like here (as you did):
+
+[ tools/testing/selftests/bpf/Makefile ]
+
+ifneq ($(LLVM),)
+CFLAGS += -Wno-unused-command-line-argument
+endif
+
+NOTE: Cannot say to use "ifneq ($(LLVM),)" or check for CC_NO_CLANG or
+"ifeq ($(USE_CLANG), 1)" (see tools/perf/Makefile.perf).
+
+Or even better in tools/scripts/Makefile.include.
+That's sort of "tools/ top-level Make(file) include".
+
+But I guess the problem with perf and LLVM/Clang and specific versions
+of perl is the usage of -Werror.
+
+I did:
+
+[ tools/build/feature/Makefile ]
+
+__BUILD = $(CC) $(CFLAGS) -MD -Wall -Werror -o $@ $(patsubst
+%.bin,%.c,$(@F)) $(LDFLAGS)
+__BUILD = $(CC) $(CFLAGS) -MD -Wall -Werror
+-Wno-compound-token-split-by-macro -o $@ $(patsubst %.bin,%.c,$(@F))
+$(LDFLAGS)
+
+[ tools/perf/Makefile.config ]
+
+CORE_CFLAGS += -Werror
+CORE_CFLAGS += -Werror -Wno-compound-token-split-by-macro
+
+With those changes I am able to build perf with:
+1. LLVM/Clang v13 and v14
+2. LLVM (bin)utils v13 and v14
+3. perf v5.34
+4. -std=gnu11 (with some additional patches to tools/)
+
+Might be worth testing with (UNTESTED):
+
+[ tools/build/feature/Makefile ]
+[ tools/perf/Makefile.config ]
+
+ifneq ($(LLVM),)
+CFLAGS += -Wno-unused-command-line-argument
+CFLAGS += -Wno-compound-token-split-by-macro
+CFLAGS += -Wno-ignored-optimization-argument
+endif
+
+The tools/ build-system is a mess and needs to be cleaned up.
+
+And as Arnaldo pointed out:
+Consolidate PERL_EMBED_XXX and XXX_PERL_EMBED in a single place.
+
+Happy hacking!
+- sed@ -
