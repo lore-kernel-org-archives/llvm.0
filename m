@@ -1,31 +1,43 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305EF4280
-	for <llvm@lists.linux.dev>; Sat, 12 Mar 2022 12:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=I4LbsDeMsT9PAzJ2X50ulKRjmZGAas7W4QaYBWmBc+c=; b=Vh1QuQPvLdKK7Q1gALKLp5ebnY
-	VReCh60MtZR8uf4Wbqto6ILSSDF3OcCYeHUJ0OsDU9b/S2DKgycXIhWsKP0hNw7sAj/mcHT5FYnWJ
-	8AykbnXvWaLSMIxI3H9vsidoGHmrA/Lh40OmEHcHolID/vHfnyZk0DBiht9GVpYq6+xpUIm1hdCfo
-	Dme8w5aWqhrOZEA1YAsQVj6aQtuxs6HMt4ybKge1pkOBi0hYfbHpd17HXaoN+/qYCHMmGj/1hoxBi
-	l3DGbg04Mlnil6LX9rceP/bQh/sXPaX6gas9YkXoJAwQf0VQeFrffdgaSU1g33rMhT5e9Z4t3j2OX
-	A2xKo5sg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nT0j2-000AEP-Je; Sat, 12 Mar 2022 12:20:00 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 39C4B98791D; Sat, 12 Mar 2022 13:20:00 +0100 (CET)
-Date: Sat, 12 Mar 2022 13:20:00 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: x86@kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/ibt: Fix CC_HAS_IBT check for clang
-Message-ID: <20220312122000.GB28057@worktop.programming.kicks-ass.net>
-References: <20220311195642.2033108-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF344296
+	for <llvm@lists.linux.dev>; Sat, 12 Mar 2022 13:28:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647091711; x=1678627711;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lN2zXVmtYoxNKXB19+1YdjQmuTD84Gfz+wwuT706X30=;
+  b=jnk/NubPRkfIAohpYv7U7ZkavIZxbXcGe73d/RBECKmNWtLsO5cglGin
+   +FNyxwjxlm2E7L4E9xWI0w+K1SwduGeR4AJdfdkQCNkpHyXubyaUO2b4+
+   9+tC9qRyiUztehcuk5kJARbrhcaRTlq3cL5cWBTnj8pxbLuxeoVW+hLtz
+   HWLa69jVQSpAPgKkFK6JIVjKNlasExULKYpLhoQRl0HrPJTioOXTDt4DM
+   O5L9omRmuPulRowWeHSDFvqtbX1dbBmzlLV4lRfD8/EIBqp+beJA6B6V7
+   bHk7p27cwyJMWCfCf+eHq6PCqB6UuWrk+WO89wRmiJ8H1Awdiqj+IAvrb
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="280541467"
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="280541467"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 05:28:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="597413002"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Mar 2022 05:28:29 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nT1nI-0007u3-Oo; Sat, 12 Mar 2022 13:28:28 +0000
+Date: Sat, 12 Mar 2022 21:27:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Youghandhar Chintala <youghand@codeaurora.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org,
+	Johannes Berg <johannes.berg@intel.com>
+Subject: [ammarfaizi2-block:netdev/net-next/master 41/77] ERROR: modpost:
+ "ieee80211_sta_restart" [net/mac80211/mac80211.ko] undefined!
+Message-ID: <202203122147.Q0VtHIf0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,38 +46,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220311195642.2033108-1-nathan@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Mar 11, 2022 at 12:56:42PM -0700, Nathan Chancellor wrote:
-> Commit 41c5ef31ad71 ("x86/ibt: Base IBT bits") added a check for a crash
-> in clang. However, this check does not work for two reasons.
-> 
-> The first reason is that '-pg' is missing from the check, which is
-> required for '-mfentry' to do anything.
-> 
-> The second reason is that cc-option only uses /dev/null as the input
-> file, which does not show a problem:
-> 
-> $ clang --version | head -1
-> Ubuntu clang version 12.0.1-8build1
-> 
-> $ clang -fcf-protection=branch -mfentry -pg -c -x c /dev/null -o /dev/null
-> 
-> $ echo $?
-> 0
-> 
-> $ echo "void a(void) {}" | clang -fcf-protection=branch -mfentry -pg -c -x c - -o /dev/null
-> ...
-> 
-> $ echo $?
-> 139
-> 
-> Use this test instead so that the check works for older versions of
-> clang.
-> 
-> Fixes: 41c5ef31ad71 ("x86/ibt: Base IBT bits")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://github.com/ammarfaizi2/linux-block netdev/net-next/master
+head:   625788b5844511cf4c30cffa7fa0bc3a69cebc82
+commit: 7d352ccf1e9935b5222ca84e8baeb07a0c8f94b9 [41/77] mac80211: Add support to trigger sta disconnect on hardware restart
+config: mips-malta_defconfig (https://download.01.org/0day-ci/archive/20220312/202203122147.Q0VtHIf0-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 43f668b98e8d87290fc6bbf5ed13c3ab542e3497)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/7d352ccf1e9935b5222ca84e8baeb07a0c8f94b9
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block netdev/net-next/master
+        git checkout 7d352ccf1e9935b5222ca84e8baeb07a0c8f94b9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Urgh... not pretty, but that's what we gotta live with I suppose.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks!
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "ieee80211_sta_restart" [net/mac80211/mac80211.ko] undefined!
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
