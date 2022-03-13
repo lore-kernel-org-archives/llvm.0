@@ -1,131 +1,128 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EC47E
-	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 14:25:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647181501; x=1678717501;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GsoMy3pNwX+miIvAX+S9WS81Z/reAnObWZHUu459PP8=;
-  b=hYXHXk7NuhEJ/4wDBUhxqpJFkQsbmd6QOauRvLX8ESpc8WeJ57yHDkOm
-   XP30yHgts4Ajz1TZAwbflmVXidPp/aod4Zurj3i0uASydzDtgNFLhbTFU
-   yJJ0KL8RF+mDTHE5HpWzkAI1NGN/s3xAHhbIBuQ0VyV+hB/RtHFnxgJqv
-   dZg/OY6fe48MZg+AQBz9DA61ADZOyhnpSGCGQK1HuO3hiqk9FB+u+KicJ
-   EU+o9+DBR4AWE4ICO/ipr6aZRYXxcLcRKdwr52i8Ji8Wl3XxSLjbjFcB2
-   ex6zHHdS+UfJsMa4jdrhef4zkgF0SD57JiE0ARPLbE1i9DTwNCHKSD/Fk
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="342299387"
-X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="342299387"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 07:25:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="515113492"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 07:24:58 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nTP9W-000919-0h; Sun, 13 Mar 2022 14:24:58 +0000
-Date: Sun, 13 Mar 2022 22:24:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [hare-scsi-devel:tls-upcall.v4 118/156] crypto/hkdf.c:26:5: warning:
- no previous prototype for function 'hkdf_extract'
-Message-ID: <202203132236.VeI6E96J-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A7D7A
+	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 15:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1647183744;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OZkkggqsQIoWieW/oVrOCwUkJK6lKvyxEtn8wx8/DH4=;
+	b=ITlXUbAseMe9EwMvroC0JZLKidlAvrvoGoAMGL1vZYOI1gXzEzrVqR9Jwumst3VR7K30TO
+	TIpR0zizhQ6vhvczt0KbRtkGfSp22xAmMVLEmdEVZmbvyDmvdX1fpvK8jmsarhpGkBvkKE
+	/jjDeU4uvKn8VxTsGOX6pDJm0MfbCmY=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-508-qBx57_reMBa_GqpscE-Vaw-1; Sun, 13 Mar 2022 11:02:23 -0400
+X-MC-Unique: qBx57_reMBa_GqpscE-Vaw-1
+Received: by mail-ot1-f71.google.com with SMTP id o6-20020a9d4106000000b005b23737b666so10018800ote.16
+        for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 08:02:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OZkkggqsQIoWieW/oVrOCwUkJK6lKvyxEtn8wx8/DH4=;
+        b=UJNqpCfSv8hLEqpPxs8cflF8hR/bcLRs0m9rATxcb36iMFXtgEP+PITsuibpwcLkO9
+         9g8SC/xkFH0aVVbrkJfMR1+r2aNUplU4xqp6paGSY9lGDMSuhq4EcsQ/juqqP6gIsAlH
+         28HQgEPK/09GA/b4Qxt7w9MTKAw0X33fNFlUhmlMj9dLjIDW1es6IUFDIFChNOYcovOO
+         4O1CvJLM6CFaMpxbNjd7eKaMpqEMeLjfRDfwURPBBUzbdDGyhyJenabAnqdxNKTGSow8
+         Op7sweaXiJWPou5cZD6pih2ft4VERkWliiLcsylwCiYWlR2HiZaSG6ONvXSmBhajF06Y
+         Aq6g==
+X-Gm-Message-State: AOAM530aLEZZT+9uWa0yevfCgVfVxxu/GlNR0TUENZJjaICF0Ht43U8S
+	n+gTcuyVisRfIv51IU0PwNc3mz7QodN+WV4UC5pu5Xc0XdQ4vTKSnDHUpG0sQ0pKKicoDMt//RD
+	imGi1wHwP8xwyCQ==
+X-Received: by 2002:a9d:4e99:0:b0:5b2:54f4:75e7 with SMTP id v25-20020a9d4e99000000b005b254f475e7mr9119069otk.94.1647183741501;
+        Sun, 13 Mar 2022 08:02:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzjb1ejVgoHBYltkBU7cyugOD8fhaxKGdkCT++7rWLl8GnDe8scorY7NgLJqvOmNm3oOxRWWQ==
+X-Received: by 2002:a9d:4e99:0:b0:5b2:54f4:75e7 with SMTP id v25-20020a9d4e99000000b005b254f475e7mr9119012otk.94.1647183739823;
+        Sun, 13 Mar 2022 08:02:19 -0700 (PDT)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id o17-20020a9d5c11000000b005b2611a13edsm6324116otk.61.2022.03.13.08.02.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Mar 2022 08:02:19 -0700 (PDT)
+From: trix@redhat.com
+To: jesse.brandeburg@intel.com,
+	anthony.l.nguyen@intel.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: intel-wired-lan@lists.osuosl.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] igb: zero hwtstamp by default
+Date: Sun, 13 Mar 2022 08:02:10 -0700
+Message-Id: <20220313150210.1508203-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
-head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
-commit: ea4c6fc32e5e02a1e4c841f462c3a931b8838f33 [118/156] crypto,fs: Separate out hkdf_extract() and hkdf_expand()
-config: hexagon-randconfig-r045-20220313 (https://download.01.org/0day-ci/archive/20220313/202203132236.VeI6E96J-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=ea4c6fc32e5e02a1e4c841f462c3a931b8838f33
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel tls-upcall.v4
-        git checkout ea4c6fc32e5e02a1e4c841f462c3a931b8838f33
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+From: Tom Rix <trix@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Clang static analysis reports this representative issue
+igb_ptp.c:997:3: warning: The left operand of '+' is a
+  garbage value
+  ktime_add_ns(shhwtstamps.hwtstamp, adjust);
+  ^            ~~~~~~~~~~~~~~~~~~~~
 
-All warnings (new ones prefixed by >>):
+shhwtstamps.hwtstamp is set by a call to
+igb_ptp_systim_to_hwtstamp().  In the switch-statement
+for the hw type, the hwtstamp is zeroed for matches
+but not the default case.  Move the memset out of
+switch-statement.  This degarbages the default case
+and reduces the size.
 
->> crypto/hkdf.c:26:5: warning: no previous prototype for function 'hkdf_extract' [-Wmissing-prototypes]
-   int hkdf_extract(struct crypto_shash *hmac_tfm, const u8 *ikm,
-       ^
-   crypto/hkdf.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int hkdf_extract(struct crypto_shash *hmac_tfm, const u8 *ikm,
-   ^
-   static 
->> crypto/hkdf.c:52:5: warning: no previous prototype for function 'hkdf_expand' [-Wmissing-prototypes]
-   int hkdf_expand(struct crypto_shash *hmac_tfm,
-       ^
-   crypto/hkdf.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int hkdf_expand(struct crypto_shash *hmac_tfm,
-   ^
-   static 
-   2 warnings generated.
+Some whitespace cleanup of empty lines
 
-
-vim +/hkdf_extract +26 crypto/hkdf.c
-
-    14	
-    15	/*
-    16	 * HKDF consists of two steps:
-    17	 *
-    18	 * 1. HKDF-Extract: extract a pseudorandom key of length HKDF_HASHLEN bytes from
-    19	 *    the input keying material and optional salt.
-    20	 * 2. HKDF-Expand: expand the pseudorandom key into output keying material of
-    21	 *    any length, parameterized by an application-specific info string.
-    22	 *
-    23	 */
-    24	
-    25	/* HKDF-Extract (RFC 5869 section 2.2), unsalted */
-  > 26	int hkdf_extract(struct crypto_shash *hmac_tfm, const u8 *ikm,
-    27			 unsigned int ikmlen, u8 *prk)
-    28	{
-    29		unsigned int prklen = crypto_shash_digestsize(hmac_tfm);
-    30		u8 *default_salt;
-    31		int err;
-    32	
-    33		default_salt = kzalloc(prklen, GFP_KERNEL);
-    34		if (!default_salt)
-    35			return -ENOMEM;
-    36		err = crypto_shash_setkey(hmac_tfm, default_salt, prklen);
-    37		if (!err)
-    38			err = crypto_shash_tfm_digest(hmac_tfm, ikm, ikmlen, prk);
-    39	
-    40		kfree(default_salt);
-    41		return err;
-    42	}
-    43	EXPORT_SYMBOL_GPL(hkdf_extract);
-    44	
-    45	/*
-    46	 * HKDF-Expand (RFC 5869 section 2.3).
-    47	 * This expands the pseudorandom key, which was already keyed into @hmac_tfm,
-    48	 * into @okmlen bytes of output keying material parameterized by the
-    49	 * application-specific @info of length @infolen bytes.
-    50	 * This is thread-safe and may be called by multiple threads in parallel.
-    51	 */
-  > 52	int hkdf_expand(struct crypto_shash *hmac_tfm,
-
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/net/ethernet/intel/igb/igb_ptp.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/igb/igb_ptp.c b/drivers/net/ethernet/intel/igb/igb_ptp.c
+index 6580fcddb4be5..02fec948ce642 100644
+--- a/drivers/net/ethernet/intel/igb/igb_ptp.c
++++ b/drivers/net/ethernet/intel/igb/igb_ptp.c
+@@ -165,23 +165,21 @@ static void igb_ptp_systim_to_hwtstamp(struct igb_adapter *adapter,
+ 	unsigned long flags;
+ 	u64 ns;
+ 
++	memset(hwtstamps, 0, sizeof(*hwtstamps));
++
+ 	switch (adapter->hw.mac.type) {
+ 	case e1000_82576:
+ 	case e1000_82580:
+ 	case e1000_i354:
+ 	case e1000_i350:
+ 		spin_lock_irqsave(&adapter->tmreg_lock, flags);
+-
+ 		ns = timecounter_cyc2time(&adapter->tc, systim);
+-
+ 		spin_unlock_irqrestore(&adapter->tmreg_lock, flags);
+ 
+-		memset(hwtstamps, 0, sizeof(*hwtstamps));
+ 		hwtstamps->hwtstamp = ns_to_ktime(ns);
+ 		break;
+ 	case e1000_i210:
+ 	case e1000_i211:
+-		memset(hwtstamps, 0, sizeof(*hwtstamps));
+ 		/* Upper 32 bits contain s, lower 32 bits contain ns. */
+ 		hwtstamps->hwtstamp = ktime_set(systim >> 32,
+ 						systim & 0xFFFFFFFF);
+-- 
+2.26.3
+
