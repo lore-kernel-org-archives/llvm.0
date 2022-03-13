@@ -1,42 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863C37A
-	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 15:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975667A
+	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 16:08:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647184621; x=1678720621;
+  t=1647187682; x=1678723682;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O0VqEfqjnBx+Dpm+Q40vwVnp1fvnK7PimOrVNx2xalU=;
-  b=PKEXd2ToSizFgaPVMRrHsv6BszCBuaiyJPqDcHatUJXBaT5QCaRZ6MBx
-   0ERS6J//mDNHqYs9EURcmO6+aJR3b09IubMIEretgSIZekT6UjBJDb8TU
-   dLm/zy404WyeFaGjZd8baN2jcq5m1yb9xja/fDFysQ+tA8VahW89mXQ7V
-   gzb56lvfvtTJn/BnYoSwpqbDBcezcnLx7cRNUxdWyQDip8tE87v+PA7OX
-   7pI4kDZDGUUgVm0zr8mN5y45TVpEOSUqnCzhYtbT6QPBcU4jCajkWfrye
-   Cx+H5RHYZ9TXjXbXSNbJnwm7y8sFzqddsXtIHQDtHs+OFNKRHUzLOzPjC
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="243325387"
+  bh=VR6DIT4iWdB9Gac4LY/lE+YdUIzpFqDBgGviZC8By/c=;
+  b=AsGIDT/zw29jTva92HfZAYIw9G/zZp2spG2jdV8aLWe4Hl4PnOUbKYBe
+   EjowpHSlGXefQBv3x1yP30TlFzrjEuRi5RltfYfI8UvsxDj5+h+XOr+li
+   F+5leqe7pwoswqWnTALe2F9VFXh5GAAlQFhpb/YA1hRHWsRcoRyEvbL7y
+   i3fubUe1rO5oRToXpSbRpPRc4BDgnCYdpQWZrHOjaqJRQ0IAYj9Nuq4Wh
+   c3zdpiWvEIvQHJnWx+Nno9G3jKyNAxiVKEBtvacYS19WW/6uoAS2c1rQ2
+   /9q+Ytfg0XjPAlONBRYkdJAxHGbg7hTDUWXJ1+5r7wDNJtEcLQg+2VxdM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="236484219"
 X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="243325387"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 08:17:01 -0700
+   d="scan'208";a="236484219"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 09:08:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="497324618"
+   d="scan'208";a="713447402"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 13 Mar 2022 08:16:59 -0700
+  by orsmga005.jf.intel.com with ESMTP; 13 Mar 2022 09:08:00 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nTPxq-000948-U5; Sun, 13 Mar 2022 15:16:58 +0000
-Date: Sun, 13 Mar 2022 23:16:31 +0800
+	id 1nTQlD-00095p-LS; Sun, 13 Mar 2022 16:07:59 +0000
+Date: Mon, 14 Mar 2022 00:07:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
+To: Marc Zyngier <maz@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [hare-scsi-devel:tls-upcall.v4 152/156] net/tls/af_tlsh.c:647:6:
- warning: variable 'outlen' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202203132353.gVyyCtsm-lkp@intel.com>
+	linux-arm-kernel@lists.infradead.org
+Subject: [arm-platforms:irq/gpio-immutable 12/12]
+ drivers/gpio/gpio-pl061.c:297:3: error: field designator
+ 'irq_request_resource' does not refer to any field in type 'const struct
+ irq_chip'; did you mean 'irq_request_resources'?
+Message-ID: <202203132300.UZKclCS6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,106 +48,61 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
-head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
-commit: 90c95b5f64cbdc8e88523332e8c28796669b2db1 [152/156] af_tlsh: allocate priorities string
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220313/202203132353.gVyyCtsm-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git irq/gpio-immutable
+head:   0ddc020186ee141ff434eb515e5a0eeea2afafbc
+commit: 0ddc020186ee141ff434eb515e5a0eeea2afafbc [12/12] gpio: pl061: Make the irqchip immutable
+config: arm-buildonly-randconfig-r001-20220313 (https://download.01.org/0day-ci/archive/20220313/202203132300.UZKclCS6-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=90c95b5f64cbdc8e88523332e8c28796669b2db1
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel tls-upcall.v4
-        git checkout 90c95b5f64cbdc8e88523332e8c28796669b2db1
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?id=0ddc020186ee141ff434eb515e5a0eeea2afafbc
+        git remote add arm-platforms https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git
+        git fetch --no-tags arm-platforms irq/gpio-immutable
+        git checkout 0ddc020186ee141ff434eb515e5a0eeea2afafbc
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/tls/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/tls/af_tlsh.c:647:6: warning: variable 'outlen' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (val) {
-               ^~~
-   net/tls/af_tlsh.c:659:15: note: uninitialized use occurs here
-           if (put_user(outlen, optlen))
-                        ^~~~~~
-   arch/x86/include/asm/uaccess.h:252:70: note: expanded from macro 'put_user'
-   #define put_user(x, ptr) ({ might_fault(); do_put_user_call(put_user,x,ptr); })
-                                                                        ^
-   arch/x86/include/asm/uaccess.h:224:14: note: expanded from macro 'do_put_user_call'
-           __val_pu = (x);                                                 \
-                       ^
-   net/tls/af_tlsh.c:647:2: note: remove the 'if' if its condition is always false
-           if (val) {
-           ^~~~~~~~~~
-   net/tls/af_tlsh.c:623:12: note: initialize the variable 'outlen' to silence this warning
-           int outlen, len, ret;
-                     ^
-                      = 0
-   1 warning generated.
+>> drivers/gpio/gpio-pl061.c:297:3: error: field designator 'irq_request_resource' does not refer to any field in type 'const struct irq_chip'; did you mean 'irq_request_resources'?
+           .irq_request_resource   = gpiochip_irq_reqres,
+            ^~~~~~~~~~~~~~~~~~~~
+            irq_request_resources
+   include/linux/irq.h:536:9: note: 'irq_request_resources' declared here
+           int             (*irq_request_resources)(struct irq_data *data);
+                             ^
+>> drivers/gpio/gpio-pl061.c:298:3: error: field designator 'irq_release_resource' does not refer to any field in type 'const struct irq_chip'; did you mean 'irq_release_resources'?
+           .irq_release_resource   = gpiochip_irq_relres,
+            ^~~~~~~~~~~~~~~~~~~~
+            irq_release_resources
+   include/linux/irq.h:537:10: note: 'irq_release_resources' declared here
+           void            (*irq_release_resources)(struct irq_data *data);
+                             ^
+   2 errors generated.
 
 
-vim +647 net/tls/af_tlsh.c
+vim +297 drivers/gpio/gpio-pl061.c
 
-33ec82590b0b91 Chuck Lever     2021-11-19  618  
-33ec82590b0b91 Chuck Lever     2021-11-19  619  static int tlsh_getsockopt_priorities(struct sock *sk, char __user *optval,
-33ec82590b0b91 Chuck Lever     2021-11-19  620  				      int __user *optlen)
-33ec82590b0b91 Chuck Lever     2021-11-19  621  {
-33ec82590b0b91 Chuck Lever     2021-11-19  622  	struct tlsh_sock_info *info;
-33ec82590b0b91 Chuck Lever     2021-11-19  623  	int outlen, len, ret;
-33ec82590b0b91 Chuck Lever     2021-11-19  624  	const char *val;
-33ec82590b0b91 Chuck Lever     2021-11-19  625  
-33ec82590b0b91 Chuck Lever     2021-11-19  626  	if (get_user(len, optlen))
-33ec82590b0b91 Chuck Lever     2021-11-19  627  		return -EFAULT;
-33ec82590b0b91 Chuck Lever     2021-11-19  628  	if (!optval)
-33ec82590b0b91 Chuck Lever     2021-11-19  629  		return -EINVAL;
-33ec82590b0b91 Chuck Lever     2021-11-19  630  
-33ec82590b0b91 Chuck Lever     2021-11-19  631  	ret = 0;
-33ec82590b0b91 Chuck Lever     2021-11-19  632  
-33ec82590b0b91 Chuck Lever     2021-11-19  633  	sock_hold(sk);
-33ec82590b0b91 Chuck Lever     2021-11-19  634  	write_lock_bh(&sk->sk_callback_lock);
-33ec82590b0b91 Chuck Lever     2021-11-19  635  
-33ec82590b0b91 Chuck Lever     2021-11-19  636  	info = sk->sk_tlsh_priv;
-33ec82590b0b91 Chuck Lever     2021-11-19  637  	if (info) {
-33ec82590b0b91 Chuck Lever     2021-11-19  638  		val = info->tsi_tls_priorities;
-33ec82590b0b91 Chuck Lever     2021-11-19  639  	} else {
-33ec82590b0b91 Chuck Lever     2021-11-19  640  		write_unlock_bh(&sk->sk_callback_lock);
-33ec82590b0b91 Chuck Lever     2021-11-19  641  		ret = -EBUSY;
-33ec82590b0b91 Chuck Lever     2021-11-19  642  		goto out_put;
-33ec82590b0b91 Chuck Lever     2021-11-19  643  	}
-33ec82590b0b91 Chuck Lever     2021-11-19  644  
-33ec82590b0b91 Chuck Lever     2021-11-19  645  	write_unlock_bh(&sk->sk_callback_lock);
-33ec82590b0b91 Chuck Lever     2021-11-19  646  
-33ec82590b0b91 Chuck Lever     2021-11-19 @647  	if (val) {
-33ec82590b0b91 Chuck Lever     2021-11-19  648  		int outlen = strlen(val);
-33ec82590b0b91 Chuck Lever     2021-11-19  649  
-90c95b5f64cbdc Hannes Reinecke 2022-03-10  650  		if (len < outlen)
-33ec82590b0b91 Chuck Lever     2021-11-19  651  			ret = -EINVAL;
-90c95b5f64cbdc Hannes Reinecke 2022-03-10  652  		else if (copy_to_user(optval, val, outlen))
-90c95b5f64cbdc Hannes Reinecke 2022-03-10  653  			ret = -EFAULT;
-33ec82590b0b91 Chuck Lever     2021-11-19  654  	} else {
-33ec82590b0b91 Chuck Lever     2021-11-19  655  		outlen = 0;
-33ec82590b0b91 Chuck Lever     2021-11-19  656  	}
-33ec82590b0b91 Chuck Lever     2021-11-19  657  
-90c95b5f64cbdc Hannes Reinecke 2022-03-10  658  
-90c95b5f64cbdc Hannes Reinecke 2022-03-10  659  	if (put_user(outlen, optlen))
-33ec82590b0b91 Chuck Lever     2021-11-19  660  		ret = -EFAULT;
-33ec82590b0b91 Chuck Lever     2021-11-19  661  
-33ec82590b0b91 Chuck Lever     2021-11-19  662  out_put:
-33ec82590b0b91 Chuck Lever     2021-11-19  663  	sock_put(sk);
-33ec82590b0b91 Chuck Lever     2021-11-19  664  	return ret;
-33ec82590b0b91 Chuck Lever     2021-11-19  665  }
-33ec82590b0b91 Chuck Lever     2021-11-19  666  
-
-:::::: The code at line 647 was first introduced by commit
-:::::: 33ec82590b0b919215a255fb431d661be4807b45 net/tls: Add support for PF_TLSH (a TLS handshake listener)
-
-:::::: TO: Chuck Lever <chuck.lever@oracle.com>
-:::::: CC: Hannes Reinecke <hare@suse.de>
+   295	
+   296	static const struct irq_chip pl061_irq_chip = {
+ > 297		.irq_request_resource	= gpiochip_irq_reqres,
+ > 298		.irq_release_resource	= gpiochip_irq_relres,
+   299		.irq_ack		= pl061_irq_ack,
+   300		.irq_mask		= pl061_irq_mask,
+   301		.irq_unmask		= pl061_irq_unmask,
+   302		.irq_set_type		= pl061_irq_type,
+   303		.irq_set_wake		= pl061_irq_set_wake,
+   304		.irq_print_chip		= pl061_irq_print_chip,
+   305		.flags			= IRQCHIP_IMMUTABLE,
+   306	};
+   307	
 
 ---
 0-DAY CI Kernel Test Service
