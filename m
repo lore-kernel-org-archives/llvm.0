@@ -1,41 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3545E2F44
-	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 19:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897E02F44
+	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 20:22:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647200467; x=1678736467;
+  t=1647202929; x=1678738929;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=svrbwD1vAwBdp0B/NJZW2Wx/ZbO0Qa4uavKbDO0rfLI=;
-  b=csr/JtegkULCRjMy22p0atzfZWLq9sKkCxdxPn7oDbMqe2dikOcEC3X4
-   +i0BB2MvpZmQFe3riCKKX0wmkLrp7Y/ThjRCZzV4FbQF644kIYzJzNQZv
-   ASis6aeYOw3IjpvuwbmgfCgenEd7kQ/NWiJBrU42vVh9e4WS/5OR0AKBV
-   aYxZzw1f5EjGaNYXK5eB8AVhho5IPTwyvsFSgSblZH3O6QaaREoJ49zlM
-   SBGDVXLhf9DZqb1tUQvqpGTS06xAHk5o6LAJ9j6XOlJCqrsOdHL6OM6w0
-   juLhp/Y6lp5+CGaN3zwJkrGibDW17DEOxDlKDAk4dkso7ijWuVeLee3qD
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="238065133"
+  bh=9YapVSMVKThjCQUu7poc5w6eEUHWTa3pA/0z4XDeDIY=;
+  b=dXM5nfCJ1sgK9gJLeY3/stfABq8GE1GXfMnG9rz622/BaK4uwJDX/kwX
+   bm0GIGcWAz1EJKV+0+GqGbjJGI+azeyuuAzN3Ut9/C/+WYvfV95Pxh2xJ
+   lEeAyHv1RqDtjPfrB9e020eKJ0ZXWMowdeVrqhajZuGc/L+Q2ZQP8Exhw
+   3nX0pRBpN8+cw4IfK72rv/CB7MPygGV3tEwppea2D9j2YdTsOCK/WB9mC
+   2VOw0CCbiV2toBrXqlcHJn7Go4Pf/ur51axWQcn5A9vzCfgIO/y/e+zSI
+   /nO+eFfODndRCyzaVMa6KpoO+MEE4kximVz7kMj0SeP8+dx+wFRh8rYVO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="253456365"
 X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="238065133"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 12:41:06 -0700
+   d="scan'208";a="253456365"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 13:22:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="511970430"
+   d="scan'208";a="597669843"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 13 Mar 2022 12:41:05 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 13 Mar 2022 13:22:07 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nTU5Q-0009EO-Co; Sun, 13 Mar 2022 19:41:04 +0000
-Date: Mon, 14 Mar 2022 03:40:28 +0800
+	id 1nTUj8-0009FW-Cf; Sun, 13 Mar 2022 20:22:06 +0000
+Date: Mon, 14 Mar 2022 04:21:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chuck Lever <chuck.lever@oracle.com>
+To: Gal Pressman <gal@nvidia.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [hare-scsi-devel:tls-upcall.v4 121/156] ld.lld: error: undefined
- symbol: inet6_release
-Message-ID: <202203140324.e59XsOnR-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Eric Dumazet <edumazet@google.com>
+Subject: arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous
+ prototype for function 'putc'
+Message-ID: <202203140415.rtqGbgJn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,40 +48,54 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
-head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
-commit: 33ec82590b0b919215a255fb431d661be4807b45 [121/156] net/tls: Add support for PF_TLSH (a TLS handshake listener)
-config: hexagon-randconfig-r011-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140324.e59XsOnR-lkp@intel.com/config)
+Hi Gal,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f0e18b03fcafd8344539101f564ae358950ae892
+commit: 48cec899e357cfb92d022a9c0df6bbe72a7f6951 tcp: Add a stub for sk_defer_free_flush()
+date:   7 weeks ago
+config: mips-randconfig-r016-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140415.rtqGbgJn-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=33ec82590b0b919215a255fb431d661be4807b45
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel tls-upcall.v4
-        git checkout 33ec82590b0b919215a255fb431d661be4807b45
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=48cec899e357cfb92d022a9c0df6bbe72a7f6951
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 48cec899e357cfb92d022a9c0df6bbe72a7f6951
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: inet6_release
-   >>> referenced by af_tlsh.c
-   >>> tls/af_tlsh.o:(tlsh_release) in archive net/built-in.a
-   >>> referenced by af_tlsh.c
-   >>> tls/af_tlsh.o:(tlsh_release) in archive net/built-in.a
-   >>> did you mean: inet_release
-   >>> defined in: net/built-in.a(ipv4/af_inet.o)
---
->> ld.lld: error: undefined symbol: inet6_getname
-   >>> referenced by af_tlsh.c
-   >>> tls/af_tlsh.o:(tlsh_getname) in archive net/built-in.a
-   >>> referenced by af_tlsh.c
-   >>> tls/af_tlsh.o:(tlsh_getname) in archive net/built-in.a
+>> arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous prototype for function 'putc' [-Wmissing-prototypes]
+   void putc(char c)
+        ^
+   arch/mips/boot/compressed/uart-16550.c:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void putc(char c)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/putc +44 arch/mips/boot/compressed/uart-16550.c
+
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  43  
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14 @44  void putc(char c)
+
+:::::: The code at line 44 was first introduced by commit
+:::::: 1b93b3c3e94be2605759735a89fc935ba5f58dcf MIPS: Add support for GZIP / BZIP2 / LZMA compressed kernel images
+
+:::::: TO: Wu Zhangjin <wuzhangjin@gmail.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 ---
 0-DAY CI Kernel Test Service
