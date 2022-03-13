@@ -1,177 +1,122 @@
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD903810
-	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 09:57:59 +0000 (UTC)
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 22D9vUN4003483
-	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 18:57:30 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 22D9vUN4003483
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1647165451;
-	bh=CVkDJWyjpgTbqf6NbvF5iJ65YgXX8GQWf/kMJmCia3g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=r9LI2x/9NAE1AoERxMehOCqYpS9WGx0aX+pWHCwYe9rLf14pmrAZXu0d+6bcuSwjr
-	 5NiporrUwu4R2//I8cUEyARY012ijFlVWZJLEKbj7+PW/tLsSR3gIXwzvia8b0MiRV
-	 nMC6BELhGc/zWrubnXgpjqB5j5wXWkqFWDlEIwKoy/e35UtiOj50bMLBNbauV+rnEh
-	 qiCx8d8pRHVAE2KMSaqjZuXyAIPND7WcLwqp2jCKu9pIp8IrtE5JKMWdjrdzroREjI
-	 K3QY4g6m8AFTTD1kWqeQTqMBVxL45YHe5hl9ccyuyKTtv//oVEYpPXPinKsyhtbZ5R
-	 ZlmBbXQ3WxaTA==
-X-Nifty-SrcIP: [209.85.210.171]
-Received: by mail-pf1-f171.google.com with SMTP id u17so9584243pfk.11
-        for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 01:57:30 -0800 (PST)
-X-Gm-Message-State: AOAM531MrIosfZ0AXl2pcH+IrojXXZjR0ur6j4Ity5Fpvz/DSq0je/Wh
-	eV8CFWCDpgKPdEuFLV74NoSKZuRZ/v8hhX5vROk=
-X-Google-Smtp-Source: ABdhPJzT5Nq4XZCfY/Rsvf1/ZbAx301JNi+kv1+XtIjZ5cbv7gStF2u34m1AvSCoAQBU1vfZQOvAbOSGxl7Lc/8zh58=
-X-Received: by 2002:a05:6a00:24cd:b0:4f7:2340:a6cf with SMTP id
- d13-20020a056a0024cd00b004f72340a6cfmr18488551pfv.36.1647165450123; Sun, 13
- Mar 2022 01:57:30 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE7EA46
+	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 11:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647169798; x=1678705798;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aguLsOnyq0yLgPc+X0LVWMnYNOAs6i0m0YbcdLSg49w=;
+  b=R7ePGPUU+FcjHTUMGftgu5r0SIM1TNasOB38vHtV0UQ6B8efPLb7+TOn
+   dzjfKg9QUHkV4CevIZ9Yf75CSHG3oDERYYp28pt/jUre5UILYsZZLBTLF
+   MZuVFDw8608OXTCe3ZKon5q3wiW2fvWxce72OwaE9ZScQC1j9NhtJtOiM
+   87s/3TkZ+a+7PI6xCKIJJ3NHB9P8bumooVZOSrsKfoQzbeT0CMhZMiXUP
+   2rAQJ9Qd5rfeTMHvd1Fyjz0AV6SP3/RtlI7gRhtgzLxoXYGn/05o7KTs5
+   LPkCQfHiYdqJVu0c9AHxS6lmyrJRJ+ZWcoE4bQrcqiAuBi6CxMXziIGGV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="238032317"
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="238032317"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 04:09:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="515078359"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 04:09:56 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nTM6l-0008tU-Nd; Sun, 13 Mar 2022 11:09:55 +0000
+Date: Sun, 13 Mar 2022 19:09:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mhiramat:bootconfig/core 1/3] init/main.c:471:36: error: too many
+ arguments to function call, expected single argument '_size', have 2
+ arguments
+Message-ID: <202203131946.cvmwTGeZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220305125605.149913-1-masahiroy@kernel.org> <CAKwvOdkYs8wkFOGpPc6SKY8CSFHdT8t_AJdFTkSCr+43dm20Mg@mail.gmail.com>
-In-Reply-To: <CAKwvOdkYs8wkFOGpPc6SKY8CSFHdT8t_AJdFTkSCr+43dm20Mg@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 13 Mar 2022 18:56:49 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASbauVkv298jVZhgEnKGSznKSwyA82kEBL39E1KvsMx3w@mail.gmail.com>
-Message-ID: <CAK7LNASbauVkv298jVZhgEnKGSznKSwyA82kEBL39E1KvsMx3w@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: add --target to correctly cross-compile UAPI
- headers with Clang
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: David Howells <dhowells@redhat.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-        Fangrui Song <maskray@google.com>,
-        "Dmitry V. Levin" <ldv@altlinux.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Mar 11, 2022 at 4:16 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Sat, Mar 5, 2022 at 4:56 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > When you compile-test UAPI headers (CONFIG_UAPI_HEADER_TEST=y) with
-> > Clang, they are currently compiled for the host target (likely x86_64)
-> > regardless of the given ARCH=.
-> >
-> > In fact, some exported headers include libc headers. For example,
-> > include/uapi/linux/agpgart.h includes <stdlib.h> after being exported.
-> > The header search paths should match to the target we are compiling
-> > them for.
->
-> Isn't that a bug in that header though? Why does it inconsistently use
-> size_t vs. __kernel_size_t. Shouldn't it be consistently using
-> __kernel_size_t? (Seeing TRUE/FALSE defined in such a low level header
-> is also *yikes*.) Are there platforms where sizeof(size_t) !=
-> sizeof(__kernel_size_t)?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git bootconfig/core
+head:   851eb04a13868ed61bd973f38e4fa9d741eef92e
+commit: 5698b97b8004472839e402af5b4abbbf73755772 [1/3] bootconfig: Check the checksum before removing the bootconfig from initrd
+config: hexagon-randconfig-r041-20220313 (https://download.01.org/0day-ci/archive/20220313/202203131946.cvmwTGeZ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/commit/?id=5698b97b8004472839e402af5b4abbbf73755772
+        git remote add mhiramat https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git
+        git fetch --no-tags mhiramat bootconfig/core
+        git checkout 5698b97b8004472839e402af5b4abbbf73755772
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-size_t and __kernel_size_t are always the same.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-For uapi headers  (include/uapi, arch/*/include/uapi), __kernel_size_t
-should be used.
+All errors (new ones prefixed by >>):
 
-
-See this series, which is already available in linux-next.
-
-https://lore.kernel.org/all/20220210021129.3386083-1-masahiroy@kernel.org/
-
-
->
-> Usually to bootstrap a toolchain you need to start with kernel headers
-> to bootstrap the libc.  It seems like some kind of circular dependency
-> to me if kernel headers are dependent on libc headers.
-
-Right, ideally, UAPI headers should be self-contained.
-Hence, CONFIG_UAPI_HEADER_TEST exists.
-But, I am not sure how far we can obey this rule.
-
-Arnd Bergmann is an expert in this area.
-
-The number of "no-header-test" in usr/include/Makefile
-is gradually decreasing, but there are still more than 30.
-They must be checked one by one.
+>> init/main.c:471:36: error: too many arguments to function call, expected single argument '_size', have 2 arguments
+           get_boot_config_from_initrd(NULL, NULL);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~       ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+   #define NULL ((void *)0)
+                ^~~~~~~~~~~
+   init/main.c:315:22: note: 'get_boot_config_from_initrd' declared here
+   static void * __init get_boot_config_from_initrd(u32 *_size)
+                        ^
+   init/main.c:766:20: warning: no previous prototype for function 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
+   void __init __weak arch_post_acpi_subsys_init(void) { }
+                      ^
+   init/main.c:766:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak arch_post_acpi_subsys_init(void) { }
+   ^
+   static 
+   init/main.c:778:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
+   void __init __weak mem_encrypt_init(void) { }
+                      ^
+   init/main.c:778:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak mem_encrypt_init(void) { }
+   ^
+   static 
+   init/main.c:780:20: warning: no previous prototype for function 'poking_init' [-Wmissing-prototypes]
+   void __init __weak poking_init(void) { }
+                      ^
+   init/main.c:780:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak poking_init(void) { }
+   ^
+   static 
+   3 warnings and 1 error generated.
 
 
+vim +/_size +471 init/main.c
 
+de462e5f107185 Masami Hiramatsu 2020-04-26  467  
+2b7d2fe76f9c84 Cao jin          2021-03-11  468  static void __init setup_boot_config(void)
+de462e5f107185 Masami Hiramatsu 2020-04-26  469  {
+de462e5f107185 Masami Hiramatsu 2020-04-26  470  	/* Remove bootconfig data from initrd */
+de462e5f107185 Masami Hiramatsu 2020-04-26 @471  	get_boot_config_from_initrd(NULL, NULL);
+de462e5f107185 Masami Hiramatsu 2020-04-26  472  }
+d8a953ddde5ec3 Masami Hiramatsu 2020-02-20  473  
 
+:::::: The code at line 471 was first introduced by commit
+:::::: de462e5f10718517bacf2f84c8aa2804567ef7df bootconfig: Fix to remove bootconfig data from initrd while boot
 
-> Hence my
-> previous comment about -ffreestanding.
+:::::: TO: Masami Hiramatsu <mhiramat@kernel.org>
+:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-To ensure that we are not including any header from the system,
--nostdinc is a more correct flag.
-
-
--ffreestanding still allows system headers to be included.
-
-
-I am skeptical about adding -ffreestanding here.
-Please note we are compiling the user-space on the operating
-system (this is what is called "hosted environment", which is
-opposed to the "freestanding environment").
-
-
-
-
->
-> >
-> > Pick up the --target triple from KBUILD_CFLAGS in the same ways as
-> > commit 7f58b487e9ff ("kbuild: make Clang build userprogs for target
-> > architecture").
->
-> Oh boy thanks for finding+fixing this! I still suspect we shouldn't
-> need a cross-libc for UAPI header testing, and that the kernel headers
-> simply need to be cleaned up. But regardless of that it doesn't make
-> sense to use the wrong target when checking headers generated for the
-> target. Thanks for the patch (and sorry I've been falling behind on
-> code review lately).
->
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> > Changes in v2:
-> >   - Reword the commit description to mention agpgart.h instead of
-> >     asound.h because the latter is in the no-header-test list.
-> >
-> >  usr/include/Makefile | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/usr/include/Makefile b/usr/include/Makefile
-> > index ac206fb27c65..4215801e1110 100644
-> > --- a/usr/include/Makefile
-> > +++ b/usr/include/Makefile
-> > @@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
-> >
-> >  # In theory, we do not care -m32 or -m64 for header compile tests.
-> >  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
-> > -UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
-> > +UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
-> >
-> >  # USERCFLAGS might contain sysroot location for CC.
-> >  UAPI_CFLAGS += $(USERCFLAGS)
-> > --
-> > 2.32.0
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
