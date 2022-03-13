@@ -1,146 +1,177 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C335620
-	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 02:40:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647139249; x=1678675249;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3TEMZ6JGrSqCrHXC0AsoypfXwz2WCwrOhrkmqjeajGQ=;
-  b=EshXvxqMmTzGZ3ee2z6gZJsgmk7vvq8scA7iq+6ZqOWvqmLMf3A3p5aM
-   C2JolwuXDseUCH7HxVQNUjad0Abop+i6SuQcaFy9qJ2AbawatN78tR0Le
-   Sn5VWHgJ3WWp0SovntM6+3UErQPq91Ba3/DDVVlUogz+8AJ+Yi/9Yt6za
-   ng2wlTFF8XtS7EgA1+QipfGIEwLF81P9ub8peYg7g7oeceTF6OAB6AGgX
-   GOnWmO4FxV1+53D2UEEGDxpKXkBLHRTfT/ZFgwQ1Z+EjXtGH4RJpacect
-   w1XbyKQcJFFv5D0t3IZ8VALn7jlwQQCSTNfxrUDX4ramH1o1y7rvkUSZ8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="256022191"
-X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
-   d="scan'208";a="256022191"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 18:40:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
-   d="scan'208";a="645380167"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 12 Mar 2022 18:40:47 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nTEA2-0008Vk-D1; Sun, 13 Mar 2022 02:40:46 +0000
-Date: Sun, 13 Mar 2022 10:40:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Ahern <dsahern@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [dsahern:vrf-keep-orig-oif 1/2] net/xfrm/xfrm_interface.c:514:64:
- error: too few arguments to function call, expected 7, have 6
-Message-ID: <202203131015.oW2gjrul-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD903810
+	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 09:57:59 +0000 (UTC)
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171]) (authenticated)
+	by conssluserg-02.nifty.com with ESMTP id 22D9vUN4003483
+	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 18:57:30 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 22D9vUN4003483
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1647165451;
+	bh=CVkDJWyjpgTbqf6NbvF5iJ65YgXX8GQWf/kMJmCia3g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=r9LI2x/9NAE1AoERxMehOCqYpS9WGx0aX+pWHCwYe9rLf14pmrAZXu0d+6bcuSwjr
+	 5NiporrUwu4R2//I8cUEyARY012ijFlVWZJLEKbj7+PW/tLsSR3gIXwzvia8b0MiRV
+	 nMC6BELhGc/zWrubnXgpjqB5j5wXWkqFWDlEIwKoy/e35UtiOj50bMLBNbauV+rnEh
+	 qiCx8d8pRHVAE2KMSaqjZuXyAIPND7WcLwqp2jCKu9pIp8IrtE5JKMWdjrdzroREjI
+	 K3QY4g6m8AFTTD1kWqeQTqMBVxL45YHe5hl9ccyuyKTtv//oVEYpPXPinKsyhtbZ5R
+	 ZlmBbXQ3WxaTA==
+X-Nifty-SrcIP: [209.85.210.171]
+Received: by mail-pf1-f171.google.com with SMTP id u17so9584243pfk.11
+        for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 01:57:30 -0800 (PST)
+X-Gm-Message-State: AOAM531MrIosfZ0AXl2pcH+IrojXXZjR0ur6j4Ity5Fpvz/DSq0je/Wh
+	eV8CFWCDpgKPdEuFLV74NoSKZuRZ/v8hhX5vROk=
+X-Google-Smtp-Source: ABdhPJzT5Nq4XZCfY/Rsvf1/ZbAx301JNi+kv1+XtIjZ5cbv7gStF2u34m1AvSCoAQBU1vfZQOvAbOSGxl7Lc/8zh58=
+X-Received: by 2002:a05:6a00:24cd:b0:4f7:2340:a6cf with SMTP id
+ d13-20020a056a0024cd00b004f72340a6cfmr18488551pfv.36.1647165450123; Sun, 13
+ Mar 2022 01:57:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220305125605.149913-1-masahiroy@kernel.org> <CAKwvOdkYs8wkFOGpPc6SKY8CSFHdT8t_AJdFTkSCr+43dm20Mg@mail.gmail.com>
+In-Reply-To: <CAKwvOdkYs8wkFOGpPc6SKY8CSFHdT8t_AJdFTkSCr+43dm20Mg@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 13 Mar 2022 18:56:49 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASbauVkv298jVZhgEnKGSznKSwyA82kEBL39E1KvsMx3w@mail.gmail.com>
+Message-ID: <CAK7LNASbauVkv298jVZhgEnKGSznKSwyA82kEBL39E1KvsMx3w@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: add --target to correctly cross-compile UAPI
+ headers with Clang
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: David Howells <dhowells@redhat.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        Fangrui Song <maskray@google.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/dsahern/linux vrf-keep-orig-oif
-head:   9830d54a15a0e242fe89180d8e54fe04211abd82
-commit: 038474b9858f889e59d274e2eaea63e2d3bcc00e [1/2] wip - mostly works needs to be simplified
-config: hexagon-randconfig-r032-20220313 (https://download.01.org/0day-ci/archive/20220313/202203131015.oW2gjrul-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/dsahern/linux/commit/038474b9858f889e59d274e2eaea63e2d3bcc00e
-        git remote add dsahern https://github.com/dsahern/linux
-        git fetch --no-tags dsahern vrf-keep-orig-oif
-        git checkout 038474b9858f889e59d274e2eaea63e2d3bcc00e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/xfrm/
+On Fri, Mar 11, 2022 at 4:16 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Sat, Mar 5, 2022 at 4:56 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > When you compile-test UAPI headers (CONFIG_UAPI_HEADER_TEST=y) with
+> > Clang, they are currently compiled for the host target (likely x86_64)
+> > regardless of the given ARCH=.
+> >
+> > In fact, some exported headers include libc headers. For example,
+> > include/uapi/linux/agpgart.h includes <stdlib.h> after being exported.
+> > The header search paths should match to the target we are compiling
+> > them for.
+>
+> Isn't that a bug in that header though? Why does it inconsistently use
+> size_t vs. __kernel_size_t. Shouldn't it be consistently using
+> __kernel_size_t? (Seeing TRUE/FALSE defined in such a low level header
+> is also *yikes*.) Are there platforms where sizeof(size_t) !=
+> sizeof(__kernel_size_t)?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+size_t and __kernel_size_t are always the same.
 
-All errors (new ones prefixed by >>):
-
->> net/xfrm/xfrm_interface.c:514:64: error: too few arguments to function call, expected 7, have 6
-                   ip6_update_pmtu(skb, net, info, 0, 0, sock_net_uid(net, NULL));
-                   ~~~~~~~~~~~~~~~                                              ^
-   include/net/ip6_route.h:185:6: note: 'ip6_update_pmtu' declared here
-   void ip6_update_pmtu(struct sk_buff *skb, struct net *net, __be32 mtu, int oif,
-        ^
-   1 error generated.
+For uapi headers  (include/uapi, arch/*/include/uapi), __kernel_size_t
+should be used.
 
 
-vim +514 net/xfrm/xfrm_interface.c
+See this series, which is already available in linux-next.
 
-f203b76d78092f Steffen Klassert 2018-06-12  464  
-f203b76d78092f Steffen Klassert 2018-06-12  465  static int xfrmi6_err(struct sk_buff *skb, struct inet6_skb_parm *opt,
-f203b76d78092f Steffen Klassert 2018-06-12  466  		    u8 type, u8 code, int offset, __be32 info)
-f203b76d78092f Steffen Klassert 2018-06-12  467  {
-f203b76d78092f Steffen Klassert 2018-06-12  468  	const struct ipv6hdr *iph = (const struct ipv6hdr *)skb->data;
-f203b76d78092f Steffen Klassert 2018-06-12  469  	struct net *net = dev_net(skb->dev);
-f203b76d78092f Steffen Klassert 2018-06-12  470  	int protocol = iph->nexthdr;
-f203b76d78092f Steffen Klassert 2018-06-12  471  	struct ip_comp_hdr *ipch;
-f203b76d78092f Steffen Klassert 2018-06-12  472  	struct ip_esp_hdr *esph;
-f203b76d78092f Steffen Klassert 2018-06-12  473  	struct ip_auth_hdr *ah;
-f203b76d78092f Steffen Klassert 2018-06-12  474  	struct xfrm_state *x;
-f203b76d78092f Steffen Klassert 2018-06-12  475  	struct xfrm_if *xi;
-f203b76d78092f Steffen Klassert 2018-06-12  476  	__be32 spi;
-f203b76d78092f Steffen Klassert 2018-06-12  477  
-f203b76d78092f Steffen Klassert 2018-06-12  478  	switch (protocol) {
-f203b76d78092f Steffen Klassert 2018-06-12  479  	case IPPROTO_ESP:
-f203b76d78092f Steffen Klassert 2018-06-12  480  		esph = (struct ip_esp_hdr *)(skb->data + offset);
-f203b76d78092f Steffen Klassert 2018-06-12  481  		spi = esph->spi;
-f203b76d78092f Steffen Klassert 2018-06-12  482  		break;
-f203b76d78092f Steffen Klassert 2018-06-12  483  	case IPPROTO_AH:
-f203b76d78092f Steffen Klassert 2018-06-12  484  		ah = (struct ip_auth_hdr *)(skb->data + offset);
-f203b76d78092f Steffen Klassert 2018-06-12  485  		spi = ah->spi;
-f203b76d78092f Steffen Klassert 2018-06-12  486  		break;
-f203b76d78092f Steffen Klassert 2018-06-12  487  	case IPPROTO_COMP:
-f203b76d78092f Steffen Klassert 2018-06-12  488  		ipch = (struct ip_comp_hdr *)(skb->data + offset);
-f203b76d78092f Steffen Klassert 2018-06-12  489  		spi = htonl(ntohs(ipch->cpi));
-f203b76d78092f Steffen Klassert 2018-06-12  490  		break;
-f203b76d78092f Steffen Klassert 2018-06-12  491  	default:
-f203b76d78092f Steffen Klassert 2018-06-12  492  		return 0;
-f203b76d78092f Steffen Klassert 2018-06-12  493  	}
-f203b76d78092f Steffen Klassert 2018-06-12  494  
-f203b76d78092f Steffen Klassert 2018-06-12  495  	if (type != ICMPV6_PKT_TOOBIG &&
-f203b76d78092f Steffen Klassert 2018-06-12  496  	    type != NDISC_REDIRECT)
-f203b76d78092f Steffen Klassert 2018-06-12  497  		return 0;
-f203b76d78092f Steffen Klassert 2018-06-12  498  
-f203b76d78092f Steffen Klassert 2018-06-12  499  	x = xfrm_state_lookup(net, skb->mark, (const xfrm_address_t *)&iph->daddr,
-f203b76d78092f Steffen Klassert 2018-06-12  500  			      spi, protocol, AF_INET6);
-f203b76d78092f Steffen Klassert 2018-06-12  501  	if (!x)
-f203b76d78092f Steffen Klassert 2018-06-12  502  		return 0;
-f203b76d78092f Steffen Klassert 2018-06-12  503  
-f203b76d78092f Steffen Klassert 2018-06-12  504  	xi = xfrmi_lookup(net, x);
-f203b76d78092f Steffen Klassert 2018-06-12  505  	if (!xi) {
-f203b76d78092f Steffen Klassert 2018-06-12  506  		xfrm_state_put(x);
-f203b76d78092f Steffen Klassert 2018-06-12  507  		return -1;
-f203b76d78092f Steffen Klassert 2018-06-12  508  	}
-f203b76d78092f Steffen Klassert 2018-06-12  509  
-f203b76d78092f Steffen Klassert 2018-06-12  510  	if (type == NDISC_REDIRECT)
-f203b76d78092f Steffen Klassert 2018-06-12  511  		ip6_redirect(skb, net, skb->dev->ifindex, 0,
-f203b76d78092f Steffen Klassert 2018-06-12  512  			     sock_net_uid(net, NULL));
-f203b76d78092f Steffen Klassert 2018-06-12  513  	else
-f203b76d78092f Steffen Klassert 2018-06-12 @514  		ip6_update_pmtu(skb, net, info, 0, 0, sock_net_uid(net, NULL));
-f203b76d78092f Steffen Klassert 2018-06-12  515  	xfrm_state_put(x);
-f203b76d78092f Steffen Klassert 2018-06-12  516  
-f203b76d78092f Steffen Klassert 2018-06-12  517  	return 0;
-f203b76d78092f Steffen Klassert 2018-06-12  518  }
-f203b76d78092f Steffen Klassert 2018-06-12  519  
+https://lore.kernel.org/all/20220210021129.3386083-1-masahiroy@kernel.org/
 
-:::::: The code at line 514 was first introduced by commit
-:::::: f203b76d78092faf248db3f851840fbecf80b40e xfrm: Add virtual xfrm interfaces
 
-:::::: TO: Steffen Klassert <steffen.klassert@secunet.com>
-:::::: CC: Steffen Klassert <steffen.klassert@secunet.com>
+>
+> Usually to bootstrap a toolchain you need to start with kernel headers
+> to bootstrap the libc.  It seems like some kind of circular dependency
+> to me if kernel headers are dependent on libc headers.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Right, ideally, UAPI headers should be self-contained.
+Hence, CONFIG_UAPI_HEADER_TEST exists.
+But, I am not sure how far we can obey this rule.
+
+Arnd Bergmann is an expert in this area.
+
+The number of "no-header-test" in usr/include/Makefile
+is gradually decreasing, but there are still more than 30.
+They must be checked one by one.
+
+
+
+
+
+> Hence my
+> previous comment about -ffreestanding.
+
+To ensure that we are not including any header from the system,
+-nostdinc is a more correct flag.
+
+
+-ffreestanding still allows system headers to be included.
+
+
+I am skeptical about adding -ffreestanding here.
+Please note we are compiling the user-space on the operating
+system (this is what is called "hosted environment", which is
+opposed to the "freestanding environment").
+
+
+
+
+>
+> >
+> > Pick up the --target triple from KBUILD_CFLAGS in the same ways as
+> > commit 7f58b487e9ff ("kbuild: make Clang build userprogs for target
+> > architecture").
+>
+> Oh boy thanks for finding+fixing this! I still suspect we shouldn't
+> need a cross-libc for UAPI header testing, and that the kernel headers
+> simply need to be cleaned up. But regardless of that it doesn't make
+> sense to use the wrong target when checking headers generated for the
+> target. Thanks for the patch (and sorry I've been falling behind on
+> code review lately).
+>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> > Changes in v2:
+> >   - Reword the commit description to mention agpgart.h instead of
+> >     asound.h because the latter is in the no-header-test list.
+> >
+> >  usr/include/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/usr/include/Makefile b/usr/include/Makefile
+> > index ac206fb27c65..4215801e1110 100644
+> > --- a/usr/include/Makefile
+> > +++ b/usr/include/Makefile
+> > @@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+> >
+> >  # In theory, we do not care -m32 or -m64 for header compile tests.
+> >  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+> > -UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
+> > +UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
+> >
+> >  # USERCFLAGS might contain sysroot location for CC.
+> >  UAPI_CFLAGS += $(USERCFLAGS)
+> > --
+> > 2.32.0
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
