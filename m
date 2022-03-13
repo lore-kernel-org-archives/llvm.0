@@ -1,43 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897E02F44
-	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 20:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400E3A23
+	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 23:46:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647202929; x=1678738929;
+  t=1647215205; x=1678751205;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9YapVSMVKThjCQUu7poc5w6eEUHWTa3pA/0z4XDeDIY=;
-  b=dXM5nfCJ1sgK9gJLeY3/stfABq8GE1GXfMnG9rz622/BaK4uwJDX/kwX
-   bm0GIGcWAz1EJKV+0+GqGbjJGI+azeyuuAzN3Ut9/C/+WYvfV95Pxh2xJ
-   lEeAyHv1RqDtjPfrB9e020eKJ0ZXWMowdeVrqhajZuGc/L+Q2ZQP8Exhw
-   3nX0pRBpN8+cw4IfK72rv/CB7MPygGV3tEwppea2D9j2YdTsOCK/WB9mC
-   2VOw0CCbiV2toBrXqlcHJn7Go4Pf/ur51axWQcn5A9vzCfgIO/y/e+zSI
-   /nO+eFfODndRCyzaVMa6KpoO+MEE4kximVz7kMj0SeP8+dx+wFRh8rYVO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="253456365"
+  bh=wMf00R80cVF9qHEEHx61TQwqkfmpJ3tk31BJz9qEcok=;
+  b=a6vzues0T1oEWS6nQDX+qrbdGvgfE0ESPGK4xIzSX+/acngcNslSijSV
+   polp7waZxiaexoO4b4tNK0KYmYqMZEDhCvfIEpl26CgzY464ZpvbY31Ea
+   VqTKRW7gVrLlqURVpvRU/sNfjHfLO2SYnp+UwODDzb/yy0EWlzrmpAsIX
+   v1BS+uTrvk+UtWMMsXJJHFkmWRAn6x3eiHcA4ANOuZ7i+tRn8tFIKzVNK
+   wBfGmHBWOB0MDP7/VqKL60BF70S5935BIChTyf4Huo2HLnCPFBuLtjr9Y
+   sHTIYbtpC2HjO47y+DYHSObO83mHOYxASyo6cM+yCuuVe5bPf7zOuGX4W
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="319133216"
 X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="253456365"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 13:22:08 -0700
+   d="scan'208";a="319133216"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 16:46:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="597669843"
+   d="scan'208";a="515207768"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Mar 2022 13:22:07 -0700
+  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 16:46:43 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nTUj8-0009FW-Cf; Sun, 13 Mar 2022 20:22:06 +0000
-Date: Mon, 14 Mar 2022 04:21:22 +0800
+	id 1nTXv8-0009OV-ES; Sun, 13 Mar 2022 23:46:42 +0000
+Date: Mon, 14 Mar 2022 07:45:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gal Pressman <gal@nvidia.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Eric Dumazet <edumazet@google.com>
-Subject: arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous
- prototype for function 'putc'
-Message-ID: <202203140415.rtqGbgJn-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: [toke:xdp-queueing-03 7/9] include/linux/bpf.h:2064:9: warning:
+ incompatible pointer to integer conversion returning 'void *' from a
+ function with result type 'int'
+Message-ID: <202203140739.otiRAMwr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,54 +48,85 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Gal,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f0e18b03fcafd8344539101f564ae358950ae892
-commit: 48cec899e357cfb92d022a9c0df6bbe72a7f6951 tcp: Add a stub for sk_defer_free_flush()
-date:   7 weeks ago
-config: mips-randconfig-r016-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140415.rtqGbgJn-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-03
+head:   3e7f25d58b1bfd5ad623678bf9e11f27c98a8094
+commit: 28d9ca982b9ae96bcad2bee81647ba18ae049a69 [7/9] bpf: Enable direct packet access for dequeue packets
+config: hexagon-randconfig-r045-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140739.otiRAMwr-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=48cec899e357cfb92d022a9c0df6bbe72a7f6951
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 48cec899e357cfb92d022a9c0df6bbe72a7f6951
+        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=28d9ca982b9ae96bcad2bee81647ba18ae049a69
+        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
+        git fetch --no-tags toke xdp-queueing-03
+        git checkout 28d9ca982b9ae96bcad2bee81647ba18ae049a69
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous prototype for function 'putc' [-Wmissing-prototypes]
-   void putc(char c)
-        ^
-   arch/mips/boot/compressed/uart-16550.c:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void putc(char c)
-   ^
-   static 
+   In file included from net/core/sock.c:133:
+   In file included from include/linux/filter.h:9:
+>> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+           return ERR_PTR(-EINVAL);
+                  ^~~~~~~~~~~~~~~~
    1 warning generated.
+--
+   In file included from net/core/dev.c:95:
+>> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+           return ERR_PTR(-EINVAL);
+                  ^~~~~~~~~~~~~~~~
+   net/core/dev.c:5011:1: warning: unused function 'sch_handle_ingress' [-Wunused-function]
+   sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
+   ^
+   net/core/dev.c:5160:19: warning: unused function 'nf_ingress' [-Wunused-function]
+   static inline int nf_ingress(struct sk_buff *skb, struct packet_type **pt_prev,
+                     ^
+   3 warnings generated.
+--
+   In file included from net/core/filter.c:38:
+   In file included from include/linux/skmsg.h:7:
+>> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+           return ERR_PTR(-EINVAL);
+                  ^~~~~~~~~~~~~~~~
+>> net/core/filter.c:9720:14: warning: incompatible integer to pointer conversion assigning to 'struct btf *' from 'int' [-Wint-conversion]
+           btf_vmlinux = bpf_get_btf_vmlinux();
+                       ^ ~~~~~~~~~~~~~~~~~~~~~
+   net/core/filter.c:9848:14: warning: incompatible integer to pointer conversion assigning to 'struct btf *' from 'int' [-Wint-conversion]
+           btf_vmlinux = bpf_get_btf_vmlinux();
+                       ^ ~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+--
+   In file included from net/core/net-traces.c:35:
+   In file included from include/trace/events/tcp.h:12:
+   In file included from include/net/tcp.h:35:
+   In file included from include/net/sock_reuseport.h:5:
+   In file included from include/linux/filter.h:9:
+>> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+           return ERR_PTR(-EINVAL);
+                  ^~~~~~~~~~~~~~~~
+   In file included from net/core/net-traces.c:50:
+   In file included from include/trace/events/neigh.h:255:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:873:
+   include/trace/events/neigh.h:42:20: warning: variable 'pin6' set but not used [-Wunused-but-set-variable]
+                   struct in6_addr *pin6;
+                                    ^
+   2 warnings generated.
 
 
-vim +/putc +44 arch/mips/boot/compressed/uart-16550.c
+vim +2064 include/linux/bpf.h
 
-1b93b3c3e94be2 Wu Zhangjin 2009-10-14  43  
-1b93b3c3e94be2 Wu Zhangjin 2009-10-14 @44  void putc(char c)
-
-:::::: The code at line 44 was first introduced by commit
-:::::: 1b93b3c3e94be2605759735a89fc935ba5f58dcf MIPS: Add support for GZIP / BZIP2 / LZMA compressed kernel images
-
-:::::: TO: Wu Zhangjin <wuzhangjin@gmail.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+  2061	
+  2062	static inline bpf_get_btf_vmlinux(void)
+  2063	{
+> 2064		return ERR_PTR(-EINVAL);
+  2065	}
+  2066	
 
 ---
 0-DAY CI Kernel Test Service
