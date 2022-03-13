@@ -1,128 +1,153 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A7D7A
-	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 15:02:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1647183744;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=OZkkggqsQIoWieW/oVrOCwUkJK6lKvyxEtn8wx8/DH4=;
-	b=ITlXUbAseMe9EwMvroC0JZLKidlAvrvoGoAMGL1vZYOI1gXzEzrVqR9Jwumst3VR7K30TO
-	TIpR0zizhQ6vhvczt0KbRtkGfSp22xAmMVLEmdEVZmbvyDmvdX1fpvK8jmsarhpGkBvkKE
-	/jjDeU4uvKn8VxTsGOX6pDJm0MfbCmY=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-508-qBx57_reMBa_GqpscE-Vaw-1; Sun, 13 Mar 2022 11:02:23 -0400
-X-MC-Unique: qBx57_reMBa_GqpscE-Vaw-1
-Received: by mail-ot1-f71.google.com with SMTP id o6-20020a9d4106000000b005b23737b666so10018800ote.16
-        for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 08:02:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OZkkggqsQIoWieW/oVrOCwUkJK6lKvyxEtn8wx8/DH4=;
-        b=UJNqpCfSv8hLEqpPxs8cflF8hR/bcLRs0m9rATxcb36iMFXtgEP+PITsuibpwcLkO9
-         9g8SC/xkFH0aVVbrkJfMR1+r2aNUplU4xqp6paGSY9lGDMSuhq4EcsQ/juqqP6gIsAlH
-         28HQgEPK/09GA/b4Qxt7w9MTKAw0X33fNFlUhmlMj9dLjIDW1es6IUFDIFChNOYcovOO
-         4O1CvJLM6CFaMpxbNjd7eKaMpqEMeLjfRDfwURPBBUzbdDGyhyJenabAnqdxNKTGSow8
-         Op7sweaXiJWPou5cZD6pih2ft4VERkWliiLcsylwCiYWlR2HiZaSG6ONvXSmBhajF06Y
-         Aq6g==
-X-Gm-Message-State: AOAM530aLEZZT+9uWa0yevfCgVfVxxu/GlNR0TUENZJjaICF0Ht43U8S
-	n+gTcuyVisRfIv51IU0PwNc3mz7QodN+WV4UC5pu5Xc0XdQ4vTKSnDHUpG0sQ0pKKicoDMt//RD
-	imGi1wHwP8xwyCQ==
-X-Received: by 2002:a9d:4e99:0:b0:5b2:54f4:75e7 with SMTP id v25-20020a9d4e99000000b005b254f475e7mr9119069otk.94.1647183741501;
-        Sun, 13 Mar 2022 08:02:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzjb1ejVgoHBYltkBU7cyugOD8fhaxKGdkCT++7rWLl8GnDe8scorY7NgLJqvOmNm3oOxRWWQ==
-X-Received: by 2002:a9d:4e99:0:b0:5b2:54f4:75e7 with SMTP id v25-20020a9d4e99000000b005b254f475e7mr9119012otk.94.1647183739823;
-        Sun, 13 Mar 2022 08:02:19 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id o17-20020a9d5c11000000b005b2611a13edsm6324116otk.61.2022.03.13.08.02.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 08:02:19 -0700 (PDT)
-From: trix@redhat.com
-To: jesse.brandeburg@intel.com,
-	anthony.l.nguyen@intel.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: intel-wired-lan@lists.osuosl.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] igb: zero hwtstamp by default
-Date: Sun, 13 Mar 2022 08:02:10 -0700
-Message-Id: <20220313150210.1508203-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863C37A
+	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 15:17:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647184621; x=1678720621;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O0VqEfqjnBx+Dpm+Q40vwVnp1fvnK7PimOrVNx2xalU=;
+  b=PKEXd2ToSizFgaPVMRrHsv6BszCBuaiyJPqDcHatUJXBaT5QCaRZ6MBx
+   0ERS6J//mDNHqYs9EURcmO6+aJR3b09IubMIEretgSIZekT6UjBJDb8TU
+   dLm/zy404WyeFaGjZd8baN2jcq5m1yb9xja/fDFysQ+tA8VahW89mXQ7V
+   gzb56lvfvtTJn/BnYoSwpqbDBcezcnLx7cRNUxdWyQDip8tE87v+PA7OX
+   7pI4kDZDGUUgVm0zr8mN5y45TVpEOSUqnCzhYtbT6QPBcU4jCajkWfrye
+   Cx+H5RHYZ9TXjXbXSNbJnwm7y8sFzqddsXtIHQDtHs+OFNKRHUzLOzPjC
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="243325387"
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="243325387"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 08:17:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="497324618"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 13 Mar 2022 08:16:59 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nTPxq-000948-U5; Sun, 13 Mar 2022 15:16:58 +0000
+Date: Sun, 13 Mar 2022 23:16:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@suse.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [hare-scsi-devel:tls-upcall.v4 152/156] net/tls/af_tlsh.c:647:6:
+ warning: variable 'outlen' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202203132353.gVyyCtsm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
+head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
+commit: 90c95b5f64cbdc8e88523332e8c28796669b2db1 [152/156] af_tlsh: allocate priorities string
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220313/202203132353.gVyyCtsm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=90c95b5f64cbdc8e88523332e8c28796669b2db1
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v4
+        git checkout 90c95b5f64cbdc8e88523332e8c28796669b2db1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/tls/
 
-Clang static analysis reports this representative issue
-igb_ptp.c:997:3: warning: The left operand of '+' is a
-  garbage value
-  ktime_add_ns(shhwtstamps.hwtstamp, adjust);
-  ^            ~~~~~~~~~~~~~~~~~~~~
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-shhwtstamps.hwtstamp is set by a call to
-igb_ptp_systim_to_hwtstamp().  In the switch-statement
-for the hw type, the hwtstamp is zeroed for matches
-but not the default case.  Move the memset out of
-switch-statement.  This degarbages the default case
-and reduces the size.
+All warnings (new ones prefixed by >>):
 
-Some whitespace cleanup of empty lines
+>> net/tls/af_tlsh.c:647:6: warning: variable 'outlen' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (val) {
+               ^~~
+   net/tls/af_tlsh.c:659:15: note: uninitialized use occurs here
+           if (put_user(outlen, optlen))
+                        ^~~~~~
+   arch/x86/include/asm/uaccess.h:252:70: note: expanded from macro 'put_user'
+   #define put_user(x, ptr) ({ might_fault(); do_put_user_call(put_user,x,ptr); })
+                                                                        ^
+   arch/x86/include/asm/uaccess.h:224:14: note: expanded from macro 'do_put_user_call'
+           __val_pu = (x);                                                 \
+                       ^
+   net/tls/af_tlsh.c:647:2: note: remove the 'if' if its condition is always false
+           if (val) {
+           ^~~~~~~~~~
+   net/tls/af_tlsh.c:623:12: note: initialize the variable 'outlen' to silence this warning
+           int outlen, len, ret;
+                     ^
+                      = 0
+   1 warning generated.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+
+vim +647 net/tls/af_tlsh.c
+
+33ec82590b0b91 Chuck Lever     2021-11-19  618  
+33ec82590b0b91 Chuck Lever     2021-11-19  619  static int tlsh_getsockopt_priorities(struct sock *sk, char __user *optval,
+33ec82590b0b91 Chuck Lever     2021-11-19  620  				      int __user *optlen)
+33ec82590b0b91 Chuck Lever     2021-11-19  621  {
+33ec82590b0b91 Chuck Lever     2021-11-19  622  	struct tlsh_sock_info *info;
+33ec82590b0b91 Chuck Lever     2021-11-19  623  	int outlen, len, ret;
+33ec82590b0b91 Chuck Lever     2021-11-19  624  	const char *val;
+33ec82590b0b91 Chuck Lever     2021-11-19  625  
+33ec82590b0b91 Chuck Lever     2021-11-19  626  	if (get_user(len, optlen))
+33ec82590b0b91 Chuck Lever     2021-11-19  627  		return -EFAULT;
+33ec82590b0b91 Chuck Lever     2021-11-19  628  	if (!optval)
+33ec82590b0b91 Chuck Lever     2021-11-19  629  		return -EINVAL;
+33ec82590b0b91 Chuck Lever     2021-11-19  630  
+33ec82590b0b91 Chuck Lever     2021-11-19  631  	ret = 0;
+33ec82590b0b91 Chuck Lever     2021-11-19  632  
+33ec82590b0b91 Chuck Lever     2021-11-19  633  	sock_hold(sk);
+33ec82590b0b91 Chuck Lever     2021-11-19  634  	write_lock_bh(&sk->sk_callback_lock);
+33ec82590b0b91 Chuck Lever     2021-11-19  635  
+33ec82590b0b91 Chuck Lever     2021-11-19  636  	info = sk->sk_tlsh_priv;
+33ec82590b0b91 Chuck Lever     2021-11-19  637  	if (info) {
+33ec82590b0b91 Chuck Lever     2021-11-19  638  		val = info->tsi_tls_priorities;
+33ec82590b0b91 Chuck Lever     2021-11-19  639  	} else {
+33ec82590b0b91 Chuck Lever     2021-11-19  640  		write_unlock_bh(&sk->sk_callback_lock);
+33ec82590b0b91 Chuck Lever     2021-11-19  641  		ret = -EBUSY;
+33ec82590b0b91 Chuck Lever     2021-11-19  642  		goto out_put;
+33ec82590b0b91 Chuck Lever     2021-11-19  643  	}
+33ec82590b0b91 Chuck Lever     2021-11-19  644  
+33ec82590b0b91 Chuck Lever     2021-11-19  645  	write_unlock_bh(&sk->sk_callback_lock);
+33ec82590b0b91 Chuck Lever     2021-11-19  646  
+33ec82590b0b91 Chuck Lever     2021-11-19 @647  	if (val) {
+33ec82590b0b91 Chuck Lever     2021-11-19  648  		int outlen = strlen(val);
+33ec82590b0b91 Chuck Lever     2021-11-19  649  
+90c95b5f64cbdc Hannes Reinecke 2022-03-10  650  		if (len < outlen)
+33ec82590b0b91 Chuck Lever     2021-11-19  651  			ret = -EINVAL;
+90c95b5f64cbdc Hannes Reinecke 2022-03-10  652  		else if (copy_to_user(optval, val, outlen))
+90c95b5f64cbdc Hannes Reinecke 2022-03-10  653  			ret = -EFAULT;
+33ec82590b0b91 Chuck Lever     2021-11-19  654  	} else {
+33ec82590b0b91 Chuck Lever     2021-11-19  655  		outlen = 0;
+33ec82590b0b91 Chuck Lever     2021-11-19  656  	}
+33ec82590b0b91 Chuck Lever     2021-11-19  657  
+90c95b5f64cbdc Hannes Reinecke 2022-03-10  658  
+90c95b5f64cbdc Hannes Reinecke 2022-03-10  659  	if (put_user(outlen, optlen))
+33ec82590b0b91 Chuck Lever     2021-11-19  660  		ret = -EFAULT;
+33ec82590b0b91 Chuck Lever     2021-11-19  661  
+33ec82590b0b91 Chuck Lever     2021-11-19  662  out_put:
+33ec82590b0b91 Chuck Lever     2021-11-19  663  	sock_put(sk);
+33ec82590b0b91 Chuck Lever     2021-11-19  664  	return ret;
+33ec82590b0b91 Chuck Lever     2021-11-19  665  }
+33ec82590b0b91 Chuck Lever     2021-11-19  666  
+
+:::::: The code at line 647 was first introduced by commit
+:::::: 33ec82590b0b919215a255fb431d661be4807b45 net/tls: Add support for PF_TLSH (a TLS handshake listener)
+
+:::::: TO: Chuck Lever <chuck.lever@oracle.com>
+:::::: CC: Hannes Reinecke <hare@suse.de>
+
 ---
- drivers/net/ethernet/intel/igb/igb_ptp.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/igb/igb_ptp.c b/drivers/net/ethernet/intel/igb/igb_ptp.c
-index 6580fcddb4be5..02fec948ce642 100644
---- a/drivers/net/ethernet/intel/igb/igb_ptp.c
-+++ b/drivers/net/ethernet/intel/igb/igb_ptp.c
-@@ -165,23 +165,21 @@ static void igb_ptp_systim_to_hwtstamp(struct igb_adapter *adapter,
- 	unsigned long flags;
- 	u64 ns;
- 
-+	memset(hwtstamps, 0, sizeof(*hwtstamps));
-+
- 	switch (adapter->hw.mac.type) {
- 	case e1000_82576:
- 	case e1000_82580:
- 	case e1000_i354:
- 	case e1000_i350:
- 		spin_lock_irqsave(&adapter->tmreg_lock, flags);
--
- 		ns = timecounter_cyc2time(&adapter->tc, systim);
--
- 		spin_unlock_irqrestore(&adapter->tmreg_lock, flags);
- 
--		memset(hwtstamps, 0, sizeof(*hwtstamps));
- 		hwtstamps->hwtstamp = ns_to_ktime(ns);
- 		break;
- 	case e1000_i210:
- 	case e1000_i211:
--		memset(hwtstamps, 0, sizeof(*hwtstamps));
- 		/* Upper 32 bits contain s, lower 32 bits contain ns. */
- 		hwtstamps->hwtstamp = ktime_set(systim >> 32,
- 						systim & 0xFFFFFFFF);
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
