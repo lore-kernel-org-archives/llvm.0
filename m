@@ -1,42 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95417A46
-	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 12:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2097E
+	for <llvm@lists.linux.dev>; Sun, 13 Mar 2022 14:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647172919; x=1678708919;
+  t=1647180900; x=1678716900;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4SRHZuX/eV2gOdC6RCH3ANjbmHhZl4jM6hxYVQo8gOQ=;
-  b=jtfKPKRpDFR376TtYg1Ii8whcDnaSlliVEShYFannnTMufAVC/cflTHW
-   X5UvX5psLrxP66x1rr/ZWwjdoM90jRDqQ8JpFyuGTnVGTZkdWAS5uImkz
-   61/ZMG0kh6ITDZz1n6mDxDvKztgoRlUdfSubD9ifHMKjzQV35Lu93ZNUJ
-   X1qCDMO3umz0wboq6O8HLG6U0pXCfQtQdOqHtjh0jXmPXjqvSxEYwCe75
-   YeKqvUmTr8tuor1/A2zfC4XPMDtYwneXNY6aIcGW1IFm2lU/7JhpqynVO
-   wWp+D7v92LouQQA/qHiXemGp+6UNz7/Dbh2Jmv2RlMjoPyMm1z0rgXexw
+  bh=ZfCMqNdnz7oT+vWM/EyZiN6yIW0Ppad31aIVidoCT5c=;
+  b=My7Z1YHpf6sJeLfXX4XvTV/tN+b75+P5OTlhZjDdZqif78fBwM2FsgSm
+   5qaOSHnrD+cYutlMfzbuWidezMh1FF/aJgk2SaRIjAm7kIf9sKKueqRe9
+   HpgtdsVO5Kk/dUbtJLXeTPT8sUqBVOgPBnzMxs0bJugvDB6mpDOG+apNW
+   0E1itZxEao4QlY6wvgY4Su+HaA0KbadiB+GJnVmUoTv4UGgPnxGLUbDJV
+   2xlQ1qdoVyo7YeqzTWQs0sooztT5v1jH8vuLMSWBXA9cKq2rvReJH7uai
+   YxABa6ceOe+uQU4dzz/mn34iFynxtVgFs2BvWHqf/KjL20PN7VEM39umr
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="254693388"
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="255824773"
 X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="254693388"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 05:01:58 -0700
+   d="scan'208";a="255824773"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 07:15:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="515086042"
+   d="scan'208";a="556038899"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 05:01:57 -0700
+  by orsmga008.jf.intel.com with ESMTP; 13 Mar 2022 07:14:58 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nTMv6-0008vY-AM; Sun, 13 Mar 2022 12:01:56 +0000
-Date: Sun, 13 Mar 2022 20:00:55 +0800
+	id 1nTOzp-00090o-V2; Sun, 13 Mar 2022 14:14:57 +0000
+Date: Sun, 13 Mar 2022 22:14:27 +0800
 From: kernel test robot <lkp@intel.com>
 To: Hannes Reinecke <hare@suse.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [hare-scsi-devel:tls-upcall.v4 141/156]
- drivers/nvme/host/tcp.c:674:7: warning: variable 'map' is uninitialized when
- used here
-Message-ID: <202203131914.rJjnMLih-lkp@intel.com>
+Subject: [hare-scsi-devel:tls-upcall.v4 127/156] net/tls/tls_main.c:1062:20:
+ warning: format specifies type 'unsigned long' but the argument has type
+ 'size_t' (aka 'unsigned int')
+Message-ID: <202203132251.f1LqIqDZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,75 +49,186 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
 head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
-commit: fb16aba001d4b403be727c8dd379da6e3dbf56e4 [141/156] nvme-tcp: decode c2h term PDU
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220313/202203131914.rJjnMLih-lkp@intel.com/config)
+commit: 97a450fed0d4ce4978d51685dcca85f9e8b71811 [127/156] net/tls: register '.tls' keyring
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220313/202203132251.f1LqIqDZ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=fb16aba001d4b403be727c8dd379da6e3dbf56e4
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=97a450fed0d4ce4978d51685dcca85f9e8b71811
         git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
         git fetch --no-tags hare-scsi-devel tls-upcall.v4
-        git checkout fb16aba001d4b403be727c8dd379da6e3dbf56e4
+        git checkout 97a450fed0d4ce4978d51685dcca85f9e8b71811
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/nvme/host/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/tls/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/nvme/host/tcp.c:674:7: warning: variable 'map' is uninitialized when used here [-Wuninitialized]
-                   if (map[i].fes == pdu->fes) {
-                       ^~~
-   drivers/nvme/host/tcp.c:668:28: note: initialize the variable 'map' to silence this warning
-           struct fes_status_map *map;
-                                     ^
-                                      = NULL
-   1 warning generated.
+>> net/tls/tls_main.c:1062:20: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                            __func__, src, src_len);
+                                           ^~~~~~~
+   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   net/tls/tls_main.c:1076:20: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                            __func__, dst, dst_len);
+                                           ^~~~~~~
+   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   net/tls/tls_main.c:1090:21: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                            __func__, port, port_len);
+                                            ^~~~~~~~
+   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   net/tls/tls_main.c:1105:28: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                    __func__, match_id, id, id_len);
+                                            ^~~~~~
+   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   4 warnings generated.
 
 
-vim +/map +674 drivers/nvme/host/tcp.c
+vim +1062 net/tls/tls_main.c
 
-   663	
-   664	static int nvme_tcp_handle_c2h_term(struct nvme_tcp_queue *queue,
-   665			struct nvme_tcp_term_pdu *pdu)
-   666	{
-   667		struct nvme_tcp_hdr *ref_pdu;
-   668		struct fes_status_map *map;
-   669		const char *fes_desc = NULL;
-   670		int i;
-   671		u32 pdu_offset;
-   672	
-   673		for (i = 0; i < ARRAY_SIZE(fes_status); i++) {
- > 674			if (map[i].fes == pdu->fes) {
-   675				fes_desc = map[i].desc;
-   676				break;
-   677			}
-   678		}
-   679		if (!fes_desc)
-   680			fes_desc = "unknown fatal error status";
-   681	
-   682		if (pdu->hdr.plen > sizeof(struct nvme_tcp_term_pdu))
-   683			ref_pdu = (struct nvme_tcp_hdr *)((u8 *)pdu + 1);
-   684	
-   685		if (pdu->fes == NVME_TCP_FES_INVALID_PDU_HDR ||
-   686		    pdu->fes == NVME_TCP_FES_HDR_DIGEST_ERR ||
-   687		    pdu->fes == NVME_TCP_FES_UNSUPPORTED_PARAM) {
-   688			pdu_offset = le32_to_cpu(pdu->fei);
-   689	
-   690			dev_err(queue->ctrl->ctrl.device,
-   691				"queue %d c2h term, %s, pdu type %u offset %u\n",
-   692				nvme_tcp_queue_id(queue), fes_desc, ref_pdu->type, pdu_offset);
-   693		} else
-   694			dev_err(queue->ctrl->ctrl.device,
-   695				"queue %d c2h term, %s, pdu type %u\n",
-   696				nvme_tcp_queue_id(queue), fes_desc, ref_pdu->type);
-   697	
-   698		return -ECONNRESET;
-   699	}
-   700	
+  1013	
+  1014	static bool tls_psk_identity_match(const struct key *key,
+  1015					   const struct key_match_data *match_data)
+  1016	{
+  1017		const char *src = key->description;
+  1018		const char *dst = NULL, *port = NULL, *id = NULL;
+  1019		const char *match_src, *match_dst, *match_port, *match_id;
+  1020		size_t src_len, dst_len, port_len, id_len;
+  1021	
+  1022		dst = strchr(src, ';');
+  1023		id_len = strlen(src);
+  1024		if (dst) {
+  1025			src_len = dst - src;
+  1026			if (!src_len)
+  1027				src = NULL;
+  1028			id_len -= src_len + 1;
+  1029			dst++;
+  1030			port = strchr(dst, ';');
+  1031			if (port) {
+  1032				dst_len = port - dst;
+  1033				if (!dst_len)
+  1034					dst = NULL;
+  1035				id_len -= dst_len + 1;
+  1036				port++;
+  1037				id = strchr(port, ';');
+  1038				if (id) {
+  1039					port_len = id - port;
+  1040					if (!port_len)
+  1041						port = NULL;
+  1042					id_len -= port_len + 1;
+  1043					id++;
+  1044				}
+  1045			}
+  1046		}
+  1047		pr_debug("%s: src %s dst %s port %s\n", __func__, src, dst, port);
+  1048		/* simple string-based IP address matching */
+  1049		/* hare: convert to sockaddr matching */
+  1050		match_src = match_data->raw_data;
+  1051		match_dst = strchr(match_src, ';');
+  1052		/* Parsing error */
+  1053		if (!match_dst) {
+  1054			pr_debug("%s: match dst missing\n", __func__);
+  1055			return false;
+  1056		}
+  1057		match_dst++;
+  1058		pr_debug("%s: match src %s\n", __func__, match_src);
+  1059		if (src && (match_dst - match_src) > 0 &&
+  1060		    memcmp(src, match_src, src_len)) {
+  1061			pr_debug("%s: non-matching src %s len %lu\n",
+> 1062				 __func__, src, src_len);
+  1063				return false;
+  1064		}
+  1065	
+  1066		match_port = strchr(match_dst, ';');
+  1067		if (!match_port) {
+  1068			pr_debug("%s: match port missing\n", __func__);
+  1069			return false;
+  1070		}
+  1071		match_port++;
+  1072		pr_debug("%s: match dst %s\n", __func__, match_dst);
+  1073		if (dst && (match_port - match_dst) > 0 &&
+  1074		    memcmp(dst, match_dst, dst_len)) {
+  1075			pr_debug("%s: non-matching dst %s len %lu\n",
+  1076				 __func__, dst, dst_len);
+  1077			return false;
+  1078		}
+  1079	
+  1080		match_id = strchr(match_port, ';');
+  1081		if (!match_id) {
+  1082			pr_debug("%s: match identity missing\n", __func__);
+  1083			return false;
+  1084		}
+  1085		match_id++;
+  1086		pr_debug("%s: match port %s\n", __func__, match_port);
+  1087		if (port && (match_id - match_port) > 0 &&
+  1088		    memcmp(port, match_port, port_len)) {
+  1089			pr_debug("%s: non-matching port %s len %lu\n",
+  1090				 __func__, port, port_len);
+  1091			return false;
+  1092		}
+  1093	
+  1094		/* No match ID specified: match agains all IDs */
+  1095		if (!match_id || !strlen(match_id)) {
+  1096			pr_debug("%s: match w/ no identity\n", __func__);
+  1097			return true;
+  1098		}
+  1099		/* Match ID specified, but no key ID: no match */
+  1100		if (!id) {
+  1101			pr_debug("%s: no identity to match\n", __func__);
+  1102			return false;
+  1103		}
+  1104		pr_debug("%s: match '%s' '%s' len %lu\n",
+  1105			 __func__, match_id, id, id_len);
+  1106		return !memcmp(id, match_id, id_len);
+  1107	}
+  1108	
 
 ---
 0-DAY CI Kernel Test Service
