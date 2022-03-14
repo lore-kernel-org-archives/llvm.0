@@ -1,42 +1,42 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B356AB3
-	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 20:14:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=pMJTaScS4byrcx8FOghvfu/S1us65v7BrF2Jbfl4qTg=; b=NH/fSe+V6fhCP8oc91us13bAUZ
-	egzjpYUV2TI7Pj2K0OvioWzc4btSc1Uhx0tsK4DWvigkUJpy/CbqJUS9Tnhk6IehO7dHtAXUH1xna
-	/aMj3Gq88il5cb4yj8u7JVoGfqMH3xZOe/syBoWEjdha1Mr4TZHKXDN3gnpZlpMMEnGp5IxA+XYZr
-	IEM1coren+qQvIgrVnL8931g7IlfJ/cgtpS3fYEkgxfV+YaJAuDG9Rg/L9YTUSOlHN+9LbSbWXXne
-	eelF0Qt1Q2607RACjEFT25m0RRkqp9Mu6I8S7d7ZvKDCy9YI0DKOwuEzUxpPThqwn/A43Cjl1lgZS
-	evub9vcw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nTr4i-004N9Z-CO; Mon, 14 Mar 2022 20:13:52 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 56B59300325;
-	Mon, 14 Mar 2022 21:13:50 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 13275203C7999; Mon, 14 Mar 2022 21:13:50 +0100 (CET)
-Date: Mon, 14 Mar 2022 21:13:50 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-	linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 0/2] x86: Avoid CONFIG_X86_X32_ABI=y with llvm-objcopy
-Message-ID: <Yi+h/h6xcTQBdQBY@hirez.programming.kicks-ass.net>
-References: <20220314194842.3452-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A4A6AB3
+	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 20:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647289718; x=1678825718;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4xWLVh6Y0J/c6z9+70Wssy2yirKlCGy2XXFFDPfN2/c=;
+  b=DNVyUBpqMAV/zGYta74bJ0RSaqpJGefbbkpHw9ODYDe/7A8W39oZHnrS
+   T44gTGtom75FD42hCpsD9yqnoUNA343v1Hpl4qneSfs3ma363S9BieC+1
+   wL56l6k14M9B1xjDHy1HGbUUzOOgSgIUqiCDEbwKFtPv4BE+Ji3FaXvFS
+   HwptTPyuR9vXbVD1Wfuv97+Bpz0Tyh2Q89COqlw+XzNfirW76vR2XDZ34
+   JFKHA02Yce/TTxOzDT0ADdUWa/osknzj/bHFrvhRxTsfMWWzOmksGmX4h
+   HIM1OEEcotfTcW/mlPxMptUS1PQskPgflpG3RKbJwXWvml9WlENuOik32
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255869189"
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="255869189"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 13:28:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="515593471"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 14 Mar 2022 13:28:35 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nTrIw-000ACw-M9; Mon, 14 Mar 2022 20:28:34 +0000
+Date: Tue, 15 Mar 2022 04:28:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Adam Honse <calcprogrammer1@gmail.com>, jdelvare@suse.de,
+	linux-i2c@vger.kernel.org, jdelvare@suse.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] i2c: New driver for Nuvoton SMBus adapters
+Message-ID: <202203150442.qhRCXPnf-lkp@intel.com>
+References: <20220313224020.9005-1-calcprogrammer1@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,18 +45,312 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220314194842.3452-1-nathan@kernel.org>
+In-Reply-To: <20220313224020.9005-1-calcprogrammer1@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Mar 14, 2022 at 12:48:40PM -0700, Nathan Chancellor wrote:
-> This is based on -tip x86/core and I would like for both patches to go
-> with the IBT changes so that there is no build breakage.
-> 
-> Masahiro Yamada (1):
->   x86: Remove toolchain check for X32 ABI capability
-> 
-> Nathan Chancellor (1):
->   x86/Kconfig: Do not allow CONFIG_X86_X32_ABI=y with llvm-objcopy
-> 
+Hi Adam,
 
-Mucho gracias, I was indeed seeing a lot of that. I was also in the
-process of rebasing that tree, so I'll stick these on top.
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on wsa/i2c/for-next]
+[also build test WARNING on v5.17-rc8 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Adam-Honse/i2c-New-driver-for-Nuvoton-SMBus-adapters/20220314-064247
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220315/202203150442.qhRCXPnf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/040a1be0d30ce2c611e30eb923d6f1b0afc44e7d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Adam-Honse/i2c-New-driver-for-Nuvoton-SMBus-adapters/20220314-064247
+        git checkout 040a1be0d30ce2c611e30eb923d6f1b0afc44e7d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/i2c/busses/ drivers/mfd/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-nct6775.c:219:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           case I2C_SMBUS_BYTE:
+           ^
+   drivers/i2c/busses/i2c-nct6775.c:219:2: note: insert '__attribute__((fallthrough));' to silence this warning
+           case I2C_SMBUS_BYTE:
+           ^
+           __attribute__((fallthrough)); 
+   drivers/i2c/busses/i2c-nct6775.c:219:2: note: insert 'break;' to avoid fall-through
+           case I2C_SMBUS_BYTE:
+           ^
+           break; 
+>> drivers/i2c/busses/i2c-nct6775.c:90:27: warning: unused variable 'nct6775_device_names' [-Wunused-const-variable]
+   static const char * const nct6775_device_names[] = {
+                             ^
+   drivers/i2c/busses/i2c-nct6775.c:133:1: warning: unused function 'superio_outb' [-Wunused-function]
+   superio_outb(int ioreg, int reg, int val)
+   ^
+   3 warnings generated.
+
+
+vim +219 drivers/i2c/busses/i2c-nct6775.c
+
+    88	
+    89	/* used to set data->name = nct6775_device_names[data->sio_kind] */
+  > 90	static const char * const nct6775_device_names[] = {
+    91		"nct6106",
+    92		"nct6775",
+    93		"nct6776",
+    94		"nct6779",
+    95		"nct6791",
+    96		"nct6792",
+    97		"nct6793",
+    98		"nct6795",
+    99		"nct6796",
+   100		"nct6798",
+   101	};
+   102	
+   103	static const char * const nct6775_sio_names[] __initconst = {
+   104		"NCT6106D",
+   105		"NCT6775F",
+   106		"NCT6776D/F",
+   107		"NCT6779D",
+   108		"NCT6791D",
+   109		"NCT6792D",
+   110		"NCT6793D",
+   111		"NCT6795D",
+   112		"NCT6796D",
+   113		"NCT6798D",
+   114	};
+   115	
+   116	#define SIO_REG_LDSEL		0x07	/* Logical device select */
+   117	#define SIO_REG_DEVID		0x20	/* Device ID (2 bytes) */
+   118	#define SIO_REG_SMBA		0x62	/* SMBus base address register */
+   119	
+   120	#define SIO_NCT6106_ID		0xc450
+   121	#define SIO_NCT6775_ID		0xb470
+   122	#define SIO_NCT6776_ID		0xc330
+   123	#define SIO_NCT6779_ID		0xc560
+   124	#define SIO_NCT6791_ID		0xc800
+   125	#define SIO_NCT6792_ID		0xc910
+   126	#define SIO_NCT6793_ID		0xd120
+   127	#define SIO_NCT6795_ID		0xd350
+   128	#define SIO_NCT6796_ID		0xd420
+   129	#define SIO_NCT6798_ID		0xd428
+   130	#define SIO_ID_MASK			0xFFF0
+   131	
+   132	static inline void
+   133	superio_outb(int ioreg, int reg, int val)
+   134	{
+   135		outb(reg, ioreg);
+   136		outb(val, ioreg + 1);
+   137	}
+   138	
+   139	static inline int
+   140	superio_inb(int ioreg, int reg)
+   141	{
+   142		outb(reg, ioreg);
+   143		return inb(ioreg + 1);
+   144	}
+   145	
+   146	static inline void
+   147	superio_select(int ioreg, int ld)
+   148	{
+   149		outb(SIO_REG_LDSEL, ioreg);
+   150		outb(ld, ioreg + 1);
+   151	}
+   152	
+   153	static inline int
+   154	superio_enter(int ioreg)
+   155	{
+   156		/*
+   157		 * Try to reserve <ioreg> and <ioreg + 1> for exclusive access.
+   158		 */
+   159		if (!request_muxed_region(ioreg, 2, DRVNAME))
+   160			return -EBUSY;
+   161	
+   162		outb(0x87, ioreg);
+   163		outb(0x87, ioreg);
+   164	
+   165		return 0;
+   166	}
+   167	
+   168	static inline void
+   169	superio_exit(int ioreg)
+   170	{
+   171		outb(0xaa, ioreg);
+   172		outb(0x02, ioreg);
+   173		outb(0x02, ioreg + 1);
+   174		release_region(ioreg, 2);
+   175	}
+   176	
+   177	/*
+   178	 * ISA constants
+   179	 */
+   180	
+   181	#define IOREGION_ALIGNMENT	(~7)
+   182	#define IOREGION_LENGTH		2
+   183	#define ADDR_REG_OFFSET		0
+   184	#define DATA_REG_OFFSET		1
+   185	
+   186	#define NCT6775_REG_BANK	0x4E
+   187	#define NCT6775_REG_CONFIG	0x40
+   188	
+   189	static struct i2c_adapter *nct6775_adapter;
+   190	
+   191	struct i2c_nct6775_adapdata {
+   192		unsigned short smba;
+   193	};
+   194	
+   195	/* Return negative errno on error. */
+   196	static s32 nct6775_access(struct i2c_adapter *adap, u16 addr,
+   197			 unsigned short flags, char read_write,
+   198			 u8 command, int size, union i2c_smbus_data *data)
+   199	{
+   200		struct i2c_nct6775_adapdata *adapdata = i2c_get_adapdata(adap);
+   201		unsigned short nuvoton_nct6793d_smba = adapdata->smba;
+   202		int i, len, cnt;
+   203		union i2c_smbus_data tmp_data;
+   204		int timeout = 0;
+   205	
+   206		tmp_data.word = 0;
+   207		cnt = 0;
+   208		len = 0;
+   209	
+   210		outb_p(NCT6793D_SOFT_RESET, SMBHSTCTL);
+   211	
+   212		switch (size) {
+   213		case I2C_SMBUS_QUICK:
+   214			outb_p((addr << 1) | read_write,
+   215					SMBHSTADD);
+   216			break;
+   217		case I2C_SMBUS_BYTE_DATA:
+   218			tmp_data.byte = data->byte;
+ > 219		case I2C_SMBUS_BYTE:
+   220			outb_p((addr << 1) | read_write,
+   221					SMBHSTADD);
+   222			outb_p(command, SMBHSTIDX);
+   223			if (read_write == I2C_SMBUS_WRITE) {
+   224				outb_p(tmp_data.byte, SMBHSTDAT);
+   225				outb_p(NCT6793D_WRITE_BYTE, SMBHSTCMD);
+   226			} else {
+   227				outb_p(NCT6793D_READ_BYTE, SMBHSTCMD);
+   228			}
+   229			break;
+   230		case I2C_SMBUS_WORD_DATA:
+   231			outb_p((addr << 1) | read_write,
+   232					SMBHSTADD);
+   233			outb_p(command, SMBHSTIDX);
+   234			if (read_write == I2C_SMBUS_WRITE) {
+   235				outb_p(data->word & 0xff, SMBHSTDAT);
+   236				outb_p((data->word & 0xff00) >> 8, SMBHSTDAT);
+   237				outb_p(NCT6793D_WRITE_WORD, SMBHSTCMD);
+   238			} else {
+   239				outb_p(NCT6793D_READ_WORD, SMBHSTCMD);
+   240			}
+   241			break;
+   242		case I2C_SMBUS_BLOCK_DATA:
+   243			outb_p((addr << 1) | read_write,
+   244					SMBHSTADD);
+   245			outb_p(command, SMBHSTIDX);
+   246			if (read_write == I2C_SMBUS_WRITE) {
+   247				len = data->block[0];
+   248				if (len == 0 || len > I2C_SMBUS_BLOCK_MAX)
+   249					return -EINVAL;
+   250				outb_p(len, SMBBLKSZ);
+   251	
+   252				cnt = 1;
+   253				if (len >= 4) {
+   254					for (i = cnt; i <= 4; i++)
+   255						outb_p(data->block[i], SMBHSTDAT);
+   256	
+   257					len -= 4;
+   258					cnt += 4;
+   259				} else {
+   260					for (i = cnt; i <= len; i++)
+   261						outb_p(data->block[i], SMBHSTDAT);
+   262	
+   263					len = 0;
+   264				}
+   265	
+   266				outb_p(NCT6793D_WRITE_BLOCK, SMBHSTCMD);
+   267			} else {
+   268				return -EOPNOTSUPP;
+   269			}
+   270			break;
+   271		default:
+   272			dev_warn(&adap->dev, "Unsupported transaction %d\n", size);
+   273			return -EOPNOTSUPP;
+   274		}
+   275	
+   276		outb_p(NCT6793D_MANUAL_START, SMBHSTCTL);
+   277	
+   278		while ((size == I2C_SMBUS_BLOCK_DATA) && (len > 0)) {
+   279			if (read_write == I2C_SMBUS_WRITE) {
+   280				timeout = 0;
+   281				while ((inb_p(SMBHSTSTS) & NCT6793D_FIFO_EMPTY) == 0) {
+   282					if (timeout > MAX_RETRIES)
+   283						return -ETIMEDOUT;
+   284	
+   285					usleep_range(250, 500);
+   286					timeout++;
+   287				}
+   288	
+   289				//Load more bytes into FIFO
+   290				if (len >= 4) {
+   291					for (i = cnt; i <= (cnt + 4); i++)
+   292						outb_p(data->block[i], SMBHSTDAT);
+   293	
+   294					len -= 4;
+   295					cnt += 4;
+   296				} else {
+   297					for (i = cnt; i <= (cnt + len); i++)
+   298						outb_p(data->block[i], SMBHSTDAT);
+   299	
+   300					len = 0;
+   301				}
+   302			} else {
+   303				return -EOPNOTSUPP;
+   304			}
+   305	
+   306		}
+   307	
+   308		//wait for manual mode to complete
+   309		timeout = 0;
+   310		while ((inb_p(SMBHSTSTS) & NCT6793D_MANUAL_ACTIVE) != 0) {
+   311			if (timeout > MAX_RETRIES)
+   312				return -ETIMEDOUT;
+   313	
+   314			usleep_range(250, 500);
+   315			timeout++;
+   316		}
+   317	
+   318		if ((inb_p(SMBHSTERR) & NCT6793D_NO_ACK) != 0)
+   319			return -ENXIO;
+   320	
+   321		else if ((read_write == I2C_SMBUS_WRITE) || (size == I2C_SMBUS_QUICK))
+   322			return 0;
+   323	
+   324		switch (size) {
+   325		case I2C_SMBUS_QUICK:
+   326		case I2C_SMBUS_BYTE_DATA:
+   327			data->byte = inb_p(SMBHSTDAT);
+   328			break;
+   329		case I2C_SMBUS_WORD_DATA:
+   330			data->word = inb_p(SMBHSTDAT) + (inb_p(SMBHSTDAT) << 8);
+   331			break;
+   332		}
+   333		return 0;
+   334	}
+   335	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
