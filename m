@@ -1,82 +1,92 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9A17A
-	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 09:19:45 +0000 (UTC)
-Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M42fG-1nTgrZ2iUS-0008Qs for <llvm@lists.linux.dev>; Mon, 14 Mar 2022
- 10:19:37 +0100
-Received: by mail-wr1-f43.google.com with SMTP id p9so22752976wra.12
-        for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 02:19:37 -0700 (PDT)
-X-Gm-Message-State: AOAM532Fw95H/La3DFyBJ9MBcDBSSGZnCBfpmYBZgpKyyJoneqsYKM/i
-	jOZrhQKAG5U1p0gsNXWlL4z94SpzLZzNmhOBe3I=
-X-Google-Smtp-Source: ABdhPJw1TgSEGWls36dsqQHki/rQyFgnONCGRQaK0Rt+A3nm2L9IHD+dXHVrauXi+iRe3bEroixu/aUQvpON/ku+icw=
-X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
- e15-20020a5d6d0f000000b0020391571c48mr12910202wrq.192.1647249577205; Mon, 14
- Mar 2022 02:19:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C6E7A
+	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 10:08:21 +0000 (UTC)
+X-UUID: ce2c967006b74899b0ccc8346247be61-20220314
+X-UUID: ce2c967006b74899b0ccc8346247be61-20220314
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+	(envelope-from <ck.hu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 826461066; Mon, 14 Mar 2022 18:08:10 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 14 Mar 2022 18:08:09 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 14 Mar 2022 18:08:08 +0800
+Message-ID: <abdf2bf18c57b8c622970252f58d4849823e48bd.camel@mediatek.com>
+Subject: Re: [PATCH v15 19/22] drm/mediatek: modify mediatek-drm for mt8195
+ multi mmsys support
+From: CK Hu <ck.hu@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <srv_heupstream@mediatek.com>, David Airlie
+	<airlied@linux.ie>, "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+	<singo.chang@mediatek.com>, <llvm@lists.linux.dev>, Nick Desaulniers
+	<ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
+Date: Mon, 14 Mar 2022 18:08:08 +0800
+In-Reply-To: <20220311015506.11232-20-nancy.lin@mediatek.com>
+References: <20220311015506.11232-1-nancy.lin@mediatek.com>
+	 <20220311015506.11232-20-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202203141621.9GAoyWx1-lkp@intel.com>
-In-Reply-To: <202203141621.9GAoyWx1-lkp@intel.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 14 Mar 2022 10:19:21 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0FwEPBBSar1t0BDgOBCZr6sxBDdOAMAFC4Cn0Gam2dxQ@mail.gmail.com>
-Message-ID: <CAK8P3a0FwEPBBSar1t0BDgOBCZr6sxBDdOAMAFC4Cn0Gam2dxQ@mail.gmail.com>
-Subject: Re: [masahiroy-kbuild:for-next 3/5] arch/arm/mm/copypage-v4mc.c:70:3:
- error: implicit declaration of function '__flush_dcache_page' is invalid in C99
-To: kernel test robot <lkp@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Alex Shi <alexs@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:EJP0jUuxJ6OzMv/zrM/Fq8aZNlr4x8g67n9Bt2agEuEoSVSTUjZ
- vhG52KPsx4XSfHi019XegwdE4uUIYOQK9rdyASUC1azKpNDMYXoVT+/+8GbbNK4WHTR6cS3
- DlkeN2zl0Fh9onyJ69uWN03ZkZgsgQeFFMA6LLFi47fOCsAekYJjOMxksZI2qrxwPnYkQRj
- yJuL7dn7Dp9CZ6CoVBkrQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mGhw521z/qM=:uskDeFPCpMKNdZz8KvucbJ
- HNTR9Io2yNxmfWWoYGjALy3NZxXXHmMLJWS79SgbdZZ8Jc7qrZYOTSeoqZ99crngLcVuwKo8Y
- /AABI2z000hA/L6zayj6Z83ZjecAeiaCpqHcAObTlILzsvrxEkkmG3u10Yl2eSigsu0sVS97T
- sKl070d4kXq9suxUNNb3A2mSSXkD0hnSjShSIHM2Jv/OXVSMnDlzxVltmMamx2HHnpclMVQxa
- chjwyZs2o1QDjn0WVWobNHfRaSqWQ+ikacnyNpLueqoMHuvBbi6zKHAmkndIQ2OTmFAQYhQ6g
- vWkn1MOpcOpnjjSPST0AZSyZsJGirT47uU11x6xkc4WTH7zLkG9Iufa2JtY4Mky79kVXLkmAq
- THgGF+7A/Lzwoq9M4oNBx2AS8SIL/JF/NAxtsj2mkwbwp/6adHlrYZTNKurUBY8nRfbAIAg2f
- Fdz2/Ph40HZCfk3fiPK4o9FWR8R4Sxq/NTPnKjyr22e242Z5tS2mrHw49JZ0q3JOLlAS1Y1xP
- XhvAcZ/cSUmmSp8wEt9+AAohRIlcPMykPH3i3xSWTI0ggfGEhuejYRr992CP8VQknxRtSnUiM
- oNGb2T1Q7ULaxnMx1XzVhDoxUIC+KkbJPeaBt++0mSxN3jfa7sS/MfhHlWPvJI8usVyh/q5LP
- 2izh+HsAw06zf1zG3oelbydu8DW7uAvIKnYEgZ2qtT31DJGI9aJHH6OdIiXv168a8cO8Y7SvF
- 7mnK92+RojRg3X0f1U0B97lakpk3FXSw814CSCStyIy3Le4v6c7heJ8LPVKCov3d51GdPr7oZ
- yUhJDZWINjiEjkzC0bgzZC9Kloogw+S1cbQmnkw/65qvMhqlGU=
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-On Mon, Mar 14, 2022 at 9:06 AM kernel test robot <lkp@intel.com> wrote:
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> arch/arm/mm/copypage-v4mc.c:70:3: error: implicit declaration of function '__flush_dcache_page' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
->                    __flush_dcache_page(page_mapping_file(from), from);
->                    ^
->    arch/arm/mm/copypage-v4mc.c:70:3: note: did you mean 'flush_dcache_page'?
->    arch/arm/include/asm/cacheflush.h:292:13: note: 'flush_dcache_page' declared here
->    extern void flush_dcache_page(struct page *);
->                ^
-> >> arch/arm/mm/copypage-v4mc.c:74:2: error: implicit declaration of function 'set_top_pte' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+Hi, Nancy:
 
-I checked this, and found that the configuration was already broken,
-what changed is just the
-exact error message that gcc produces, so lkp flags it as a regression.
+On Fri, 2022-03-11 at 09:55 +0800, Nancy.Lin wrote:
+> MT8195 have two mmsys. Modify drm for MT8195 multi-mmsys support.
+> The two mmsys (vdosys0 and vdosys1) will bring up two drm drivers,
+> only one drm driver register as the drm device.
+> Each drm driver binds its own component. The last bind drm driver
+> allocates and registers the drm device to drm core.
+> Each crtc path is created with the corresponding drm driver data.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_drm_crtc.c |  24 +-
+>  drivers/gpu/drm/mediatek/mtk_drm_crtc.h |   3 +-
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.c  | 300 ++++++++++++++++++--
+> ----
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.h  |  10 +-
+>  4 files changed, 246 insertions(+), 91 deletions(-)
+> 
+> 
 
-This is a NOMMU StrongARM1100 config, which has been broken for a long time,
-and already have a patch to disallow that configuration because we ran
-into another
-issue with NOMMU classic processors last week.
+[snip]
 
-         Arnd
+>  
+>  static const struct mtk_mmsys_driver_data mt8195_vdosys0_driver_data
+> = {
+>  	.main_path = mt8195_mtk_ddp_main,
+>  	.main_len = ARRAY_SIZE(mt8195_mtk_ddp_main),
+> +	.mmsys_dev_num = 2,
+
+After apply this patch, vdosys0 only would not work. So I think this
+should be set to 1 in this patch, and set to 2 in the patch that
+support mt8195 vdosys1. With this modification,
+
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+
+>  };
+>  
+> 
+
