@@ -1,92 +1,122 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C6E7A
-	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 10:08:21 +0000 (UTC)
-X-UUID: ce2c967006b74899b0ccc8346247be61-20220314
-X-UUID: ce2c967006b74899b0ccc8346247be61-20220314
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-	(envelope-from <ck.hu@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 826461066; Mon, 14 Mar 2022 18:08:10 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 14 Mar 2022 18:08:09 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 14 Mar 2022 18:08:08 +0800
-Message-ID: <abdf2bf18c57b8c622970252f58d4849823e48bd.camel@mediatek.com>
-Subject: Re: [PATCH v15 19/22] drm/mediatek: modify mediatek-drm for mt8195
- multi mmsys support
-From: CK Hu <ck.hu@mediatek.com>
-To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
-	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
-	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: <devicetree@vger.kernel.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <srv_heupstream@mediatek.com>, David Airlie
-	<airlied@linux.ie>, "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-	<singo.chang@mediatek.com>, <llvm@lists.linux.dev>, Nick Desaulniers
-	<ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
-Date: Mon, 14 Mar 2022 18:08:08 +0800
-In-Reply-To: <20220311015506.11232-20-nancy.lin@mediatek.com>
-References: <20220311015506.11232-1-nancy.lin@mediatek.com>
-	 <20220311015506.11232-20-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B24F137B
+	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 10:39:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647254380; x=1678790380;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r0p9pm3oLKHWsveSIV6tlhiifZD0ElwFW/9g6MXz/7M=;
+  b=S6eVOtRb7cvEJhuqGzRTvLcoVo0T0QfDdvqN8YBApMJgJcQlJgJyTolY
+   z0zGbC6f4jgY3+t8z/6+aBTl7PNZR2DyTKjxnChW/EsbDeCV7ZqAn6zXy
+   SR0pdjkfHsr1F2M8S+5WBHWzBjpZwG3jE/Pwi38MNiM+ZAhNfvdsnU1P+
+   41qMHTX1Wob8Sg5CZhhq9V5/Qzwx5h3aQC1jDHrcOsrQanh6t+rkMDAx4
+   dkc2LfGqKm/sExQInbHvCu1qxjtQ1FwYEZh2dYGi36YfdqoRn26syXuxu
+   TbCnUXhYt/ViHPm+Kzbx46l7mUFruMv8sgl9ARvr41nz4ufOtJL4sL2MV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="253551650"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="253551650"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 03:39:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="515372378"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 14 Mar 2022 03:39:37 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nTi6y-0009ne-Km; Mon, 14 Mar 2022 10:39:36 +0000
+Date: Mon, 14 Mar 2022 18:38:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	netfilter-devel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH nf-next 02/12,v2] netfilter: nf_tables: cancel tracking
+ for clobbered destination registers
+Message-ID: <202203141859.3tgWL82t-lkp@intel.com>
+References: <20220314005417.315832-3-pablo@netfilter.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314005417.315832-3-pablo@netfilter.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi, Nancy:
+Hi Pablo,
 
-On Fri, 2022-03-11 at 09:55 +0800, Nancy.Lin wrote:
-> MT8195 have two mmsys. Modify drm for MT8195 multi-mmsys support.
-> The two mmsys (vdosys0 and vdosys1) will bring up two drm drivers,
-> only one drm driver register as the drm device.
-> Each drm driver binds its own component. The last bind drm driver
-> allocates and registers the drm device to drm core.
-> Each crtc path is created with the corresponding drm driver data.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_drm_crtc.c |  24 +-
->  drivers/gpu/drm/mediatek/mtk_drm_crtc.h |   3 +-
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c  | 300 ++++++++++++++++++--
-> ----
->  drivers/gpu/drm/mediatek/mtk_drm_drv.h  |  10 +-
->  4 files changed, 246 insertions(+), 91 deletions(-)
-> 
-> 
+I love your patch! Perhaps something to improve:
 
-[snip]
+[auto build test WARNING on next-20220310]
+[cannot apply to nf-next/master nf/master linus/master v5.17-rc8 v5.17-rc7 v5.17-rc6 v5.17-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
->  
->  static const struct mtk_mmsys_driver_data mt8195_vdosys0_driver_data
-> = {
->  	.main_path = mt8195_mtk_ddp_main,
->  	.main_len = ARRAY_SIZE(mt8195_mtk_ddp_main),
-> +	.mmsys_dev_num = 2,
+url:    https://github.com/0day-ci/linux/commits/Pablo-Neira-Ayuso/register-tracking-infrastructure-follow-up/20220314-085726
+base:    71941773e143369a73c9c4a3b62fbb60736a1182
+config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220314/202203141859.3tgWL82t-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/33636fda14d7c54d333c939eaac47768c7baf913
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Pablo-Neira-Ayuso/register-tracking-infrastructure-follow-up/20220314-085726
+        git checkout 33636fda14d7c54d333c939eaac47768c7baf913
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-After apply this patch, vdosys0 only would not work. So I think this
-should be set to 1 in this patch, and set to 2 in the patch that
-support mt8195 vdosys1. With this modification,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->  };
->  
-> 
+>> WARNING: modpost: vmlinux.o(.data+0x2b2994): Section mismatch in reference from the variable trace_event_fields_rpcgss_need_reencode to the function .init.text:set_reset_devices()
+The variable trace_event_fields_rpcgss_need_reencode references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
 
+--
+>> WARNING: modpost: vmlinux.o(.data+0x2940fc): Section mismatch in reference from the variable nft_range_type to the function .init.text:set_reset_devices()
+The variable nft_range_type references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0x1448bbe): Section mismatch in reference from the function tcp4_proc_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1448bc2): Section mismatch in reference from the function tcp4_proc_exit() to the variable .init.text:.LBB98_4
+<< WARNING: modpost: vmlinux.o(.data+0x2b14a0): Section mismatch in reference from the variable trace_event_fields_rpcgss_ctx_class to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b14b4): Section mismatch in reference from the variable trace_event_fields_rpcgss_ctx_class to the variable .exit.text:.LBB0_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b15e8): Section mismatch in reference from the variable event_rpcgss_ctx_init to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1634): Section mismatch in reference from the variable event_rpcgss_ctx_destroy to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1660): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the variable .init.text:.LBB1_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b168c): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the variable .exit.text:.LBB0_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b1690): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x293824): Section mismatch in reference from the variable nf_ct_proto_mutex to the function .init.text:loglevel()
+<< WARNING: modpost: vmlinux.o(.text+0x1448bbe): Section mismatch in reference from the function tcp4_proc_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1448bc2): Section mismatch in reference from the function tcp4_proc_exit() to the variable .init.text:.LBB98_4
+<< WARNING: modpost: vmlinux.o(.data+0x2b14a0): Section mismatch in reference from the variable trace_event_fields_rpcgss_ctx_class to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b14b4): Section mismatch in reference from the variable trace_event_fields_rpcgss_ctx_class to the variable .exit.text:.LBB0_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b15e8): Section mismatch in reference from the variable event_rpcgss_ctx_init to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1634): Section mismatch in reference from the variable event_rpcgss_ctx_destroy to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1660): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the variable .init.text:.LBB1_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b168c): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the variable .exit.text:.LBB0_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b1690): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x293824): Section mismatch in reference from the variable nf_ct_proto_mutex to the function .init.text:loglevel()
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
