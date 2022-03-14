@@ -1,93 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAED06AB3
-	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 19:50:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF52C340EE;
-	Mon, 14 Mar 2022 19:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647287421;
-	bh=pyw+uUsWl3RVdP8v6qowJOWyQJdm2VaPP/Bj2TK1ByM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V35xPzC0SANL4OOpntptnxwfH3nLIYI5VEaA9BrwfwAu8bvPOHyAqVUw21vYwVrAk
-	 BE5/t7c15HReRasVusQQv81fElEBG3vFWSvir6e8NJI0FHrAmInGhKkxkr64Ge2tSt
-	 3Y5mzD6EWbBR2HGUd2PvFkmH64XSZ6Ije2djTBcdzpvhRp/Y+bGCgBRz4Q0WVx9TqW
-	 O4H6xttVahB95D7TRtPhoEdwKcjVctFHjWNYaQazpf9nZQlppkShxTpdFuo2PA2xNb
-	 FmQWRJtWbFVp4Pz8M8/ZiWhPityGzRb61SWCJO6KTXLpHDReAXGSpmLEadGt/jWb01
-	 VkyTxadUGALpQ==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>,
-	x86@kernel.org
-Cc: Andy Lutomirski <luto@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	alsa-devel@alsa-project.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-xfs@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 2/2] x86/Kconfig: Do not allow CONFIG_X86_X32_ABI=y with llvm-objcopy
-Date: Mon, 14 Mar 2022 12:48:42 -0700
-Message-Id: <20220314194842.3452-3-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314194842.3452-1-nathan@kernel.org>
-References: <20220314194842.3452-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C94F6AB3
+	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 19:58:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647287909; x=1678823909;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I5hLqAPtwDrTpIjnWP/nITosRUyTCLL8YBk1Kaj6UBw=;
+  b=korZH+K1ysuCF4Q5N0r0c9ogSdqtFHdSa0bs8Dn0cyS+rWL9WXNGF/vN
+   +ymYdHBtY8gCu1oZtEE3i7nzchCOU1ZI8TC5NDJ1Zn5J3HsL43nYzXLIy
+   PF8XugjlnqbB5J89YsT2GzS3T8Nu4xhOEAlpSKjARKPRfExekftkUkToL
+   VOYwdpwtZTLeJ2Y4yrjQJExWeTL3K+IvRLi/jtdza/Wj8YHNH1vjsVVDM
+   KmFxA4jTNKAW+hSiZSR120QdUkO5NLlCo2gAkPBxpWtoeyIz+AfTCvP4N
+   GvrMWOf2oot103ooOsIzKvUmbojqtgvrX2bnlZQkLZnKP/+kFJ0yRnVzO
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="238303008"
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="238303008"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:58:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="512348515"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 14 Mar 2022 12:58:27 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nTqpm-000ABg-G0; Mon, 14 Mar 2022 19:58:26 +0000
+Date: Tue, 15 Mar 2022 03:57:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jorge Lopez <jorge.lopez2@hp.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [pdx86-platform-drivers-x86:review-hans 67/67]
+ drivers/platform/x86/hp-wmi.c:86: warning: wrong kernel-doc identifier on
+ line:
+Message-ID: <202203150330.81L3pgxq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-There are two outstanding issues with CONFIG_X86_X32_ABI and
-llvm-objcopy, with similar root causes:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
+head:   9f7e383ebdee6712bee02e3a6c2027cf287950fc
+commit: 9f7e383ebdee6712bee02e3a6c2027cf287950fc [67/67] Changing bios_args.data to be dynamically allocated
+config: i386-randconfig-a016-20220314 (https://download.01.org/0day-ci/archive/20220315/202203150330.81L3pgxq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?id=9f7e383ebdee6712bee02e3a6c2027cf287950fc
+        git remote add pdx86-platform-drivers-x86 https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
+        git fetch --no-tags pdx86-platform-drivers-x86 review-hans
+        git checkout 9f7e383ebdee6712bee02e3a6c2027cf287950fc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/
 
-1. llvm-objcopy does not properly convert .note.gnu.property when going
-   from x86_64 to x86_x32, resulting in a corrupted section when
-   linking:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-   https://github.com/ClangBuiltLinux/linux/issues/1141
+All warnings (new ones prefixed by >>):
 
-2. llvm-objcopy produces corrupted compressed debug sections when going
-   from x86_64 to x86_x32, also resulting in an error when linking:
+>> drivers/platform/x86/hp-wmi.c:86: warning: wrong kernel-doc identifier on line:
+    * struct bios_args buffer is dynamically allocated.  New WMI command types
 
-   https://github.com/ClangBuiltLinux/linux/issues/514
 
-After commit 41c5ef31ad71 ("x86/ibt: Base IBT bits"), the
-.note.gnu.property section is always generated when
-CONFIG_X86_KERNEL_IBT is enabled, which causes the first issue to become
-visible with an allmodconfig build:
+vim +86 drivers/platform/x86/hp-wmi.c
 
-  ld.lld: error: arch/x86/entry/vdso/vclock_gettime-x32.o:(.note.gnu.property+0x1c): program property is too short
+    84	
+    85	/**
+  > 86	 * struct bios_args buffer is dynamically allocated.  New WMI command types
+    87	 * were introduced that exceeds 128-byte data size.  Changes to handle
+    88	 * the data size allocation scheme were kept in hp_wmi_perform_qurey function.
+    89	 */
+    90	struct bios_args {
+    91		u32 signature;
+    92		u32 command;
+    93		u32 commandtype;
+    94		u32 datasize;
+    95		u8 data[];
+    96	};
+    97	
 
-To avoid this error, do not allow CONFIG_X86_X32_ABI to be selected when
-using llvm-objcopy. If the two issues ever get fixed in llvm-objcopy,
-this can be turned into a feature check.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- arch/x86/Kconfig | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index b903bfcd713c..0f0672d2c816 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2864,6 +2864,11 @@ config IA32_AOUT
- config X86_X32_ABI
- 	bool "x32 ABI for 64-bit mode"
- 	depends on X86_64
-+	# llvm-objcopy does not convert x86_64 .note.gnu.property or
-+	# compressed debug sections to x86_x32 properly:
-+	# https://github.com/ClangBuiltLinux/linux/issues/514
-+	# https://github.com/ClangBuiltLinux/linux/issues/1141
-+	depends on $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
- 	help
- 	  Include code to run binaries for the x32 native 32-bit ABI
- 	  for 64-bit processors.  An x32 process gets access to the
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
