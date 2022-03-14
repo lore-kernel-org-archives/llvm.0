@@ -1,34 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB3A6AD9
-	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 22:07:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E8A0C340E9;
-	Mon, 14 Mar 2022 22:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647295621;
-	bh=ICh66fxhgwpO5RAgPSp5R1pdsftDqr3eOFQyVmWHtv4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ewtWIpqRSmFuZEjh0N2QSwALxm6+U0Dcpyd0/GCmrj8/e96YkBXvkAOpRN41qtXZe
-	 FrjPPTasHuiKnzXt9wSSF9xN73o4JmGeJIpNqdTdunttJkzEeJIZiPpizTYB1denO/
-	 ooXrac87wrTxrdPWCX+gjfsPwNjS9XgWBQ1nFuj36qj5WfqvxeKkl7yzktYBK0zKwi
-	 dcxGX+Injh2W+y1MZFN6xB/da0luNDV0h/EbFFtbNpZN17fgLAbAAmRKdN/2unKQnj
-	 brlzeMRn3T3LTAAMr0gVk8bbcW7AfmkRaj9kyDBDLdPZQSwy+7z7hOuFVRxdIoC0Vc
-	 GtBO/0AtMuQDQ==
-Date: Mon, 14 Mar 2022 15:06:54 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Cc: Mark Brown <broonie@kernel.org>,
-	Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
-	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	Nugraha <richiisei@gmail.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, gwml@vger.gnuweeb.org,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] ASoC: atmel: mchp-pdmc: Fix `-Wpointer-bool-conversion`
- warning
-Message-ID: <Yi+8ft7yXrNN4+Yx@dev-arch.thelio-3990X>
-References: <202203091430.MLY27Bif-lkp@intel.com>
- <20220309065849.96165-1-alviro.iskandar@gnuweeb.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F807469
+	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 23:02:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647298935; x=1678834935;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JaV6oL4I/FyyR5iNIPQSHqtEHwPP6w7CGUb3lzX8owI=;
+  b=PNQ4NAYGtBga9sdZv5goOjKuRZ/mq5dpX4Et74RJNHQ7Ux58vvVdIHfQ
+   fDYPhgPpaqPBQJe1xytRK4H1N2IjnJehJW/shc5XFSjAXX45VjhzEsnM0
+   q7HC3aGluan6QHDa1/b1bCuwQCnzHWccnwd+ZwC9fgvsefdlPNBsQUCa5
+   +qPV8hpKCLp65/FGZYGcCzK2tkzJakLaGqjByZQSHuTzaY/SM2vwRb9hj
+   Z8W/RtuTGDB/4U/eYIuSrBjBnYAgQvBLC7vWpNwVcNaYWvIP46WhHS8lh
+   rAG3667pSgEnAr6JPA9PXaZNdSb3FBAJgAPyXaqcuNDDUcF7AH+sXu/36
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="238332146"
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="238332146"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 16:02:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="819323692"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 14 Mar 2022 16:02:12 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nTthc-000AJb-A0; Mon, 14 Mar 2022 23:02:12 +0000
+Date: Tue, 15 Mar 2022 07:01:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mauricio Faria de Oliveira <mfo@canonical.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Huang, Ying" <ying.huang@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [linux-next:master 11943/11953] WARNING: modpost:
+ vmlinux.o(.data+0x29bf44): Section mismatch in reference from the variable
+ ip_vs_ftp to the function .init.text:set_reset_devices()
+Message-ID: <202203150613.IspFektS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,90 +47,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220309065849.96165-1-alviro.iskandar@gnuweeb.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Alviro,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   71941773e143369a73c9c4a3b62fbb60736a1182
+commit: ce5dfdfe401f01f58e5c98661c8a8bd566374585 [11943/11953] mm: fix race between MADV_FREE reclaim and blkdev direct IO read
+config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220315/202203150613.IspFektS-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ce5dfdfe401f01f58e5c98661c8a8bd566374585
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout ce5dfdfe401f01f58e5c98661c8a8bd566374585
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-On Wed, Mar 09, 2022 at 06:58:49AM +0000, Alviro Iskandar Setiawan wrote:
-> In function mchp_pdmc_af_put(), Intel's kernel test robot reports the
-> following warning:
-> 
->   sound/soc/atmel/mchp-pdmc.c:186:34: warning: address of array \
->   'uvalue->value.integer.value' will always evaluate to 'true' \
->   [-Wpointer-bool-conversion]
-> 
-> This is because we are using `uvalue->value.integer.value` which its
-> type is `long value[128];` for conditional expression and that array
-> will always decay to a non-NULL pointer. Using a non-NULL pointer for
-> conditional expression will always evaluate to true.
-> 
-> Fix this by changing it to `uvalue->value.integer.value[0]` as that's
-> what the mchp_pdmc_af_get() function sets.
-> 
-> To: Mark Brown <broonie@kernel.org>
-> Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> Cc: Nugraha <richiisei@gmail.com>
-> Cc: llvm@lists.linux.dev
-> Cc: kbuild-all@lists.01.org
-> Cc: gwml@vger.gnuweeb.org
-> Cc: linux-kernel@vger.kernel.org
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I would recommend removing these and just setting those values via git
-send-email flags. In other words:
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-git send-email --to "..." --cc "..." --cc "..." <path to .patch>
+>> WARNING: modpost: vmlinux.o(.data+0x29bf44): Section mismatch in reference from the variable ip_vs_ftp to the function .init.text:set_reset_devices()
+The variable ip_vs_ftp references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
 
-and so on. It can cause a lot of spam if this patch is ever backported
-or needed in other trees.
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/lkml/202203091430.MLY27Bif-lkp@intel.com
-> Fixes: 50291652af5269813baa6024eb0e81b5f0bbb451 ("ASoC: atmel: mchp-pdmc: add PDMC driver")
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0x1448b7a): Section mismatch in reference from the function tcp4_proc_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2b15e8): Section mismatch in reference from the variable event_rpcgss_ctx_init to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b15ec): Section mismatch in reference from the variable event_rpcgss_ctx_init to the variable .exit.text:.LBB0_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b1618): Section mismatch in reference from the variable event_rpcgss_ctx_destroy to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1638): Section mismatch in reference from the variable event_rpcgss_ctx_destroy to the variable .exit.text:.LBB0_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b1660): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1690): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the function .init.text:init_nls_cp737()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1be8): Section mismatch in reference from the variable event_rpcgss_svc_unwrap to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1c08): Section mismatch in reference from the variable event_rpcgss_svc_unwrap to the variable .init.text:.LBB1_1
+<< WARNING: modpost: vmlinux.o(.data+0x293824): Section mismatch in reference from the variable nf_ct_proto_mutex to the function .init.text:loglevel()
 
-This should be simplified to:
-
-Fixes: 50291652af52 ("ASoC: atmel: mchp-pdmc: add PDMC driver")
-
-I don't think the automated checkers will complain about that but the
-short form is preferred.
-
-> Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-
-Thanks a lot for the patch!
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-I don't know if those nits are worth resending but I do not see this
-applied to Mark's tree yet. It might have gotten lost because this was
-sent as a reply to the build report, rather than its own thread, which
-has caused issues for me in the past:
-
-https://lore.kernel.org/r/20210903162639.GM4932@sirena.org.uk/
-
-If there is no action on this patch in the next couple of days, please
-consider resending with the above nits addressed with Codrin's tag and
-my tag.
-
-> ---
->  sound/soc/atmel/mchp-pdmc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/atmel/mchp-pdmc.c b/sound/soc/atmel/mchp-pdmc.c
-> index c44636f6207d..7b87f75c284c 100644
-> --- a/sound/soc/atmel/mchp-pdmc.c
-> +++ b/sound/soc/atmel/mchp-pdmc.c
-> @@ -183,7 +183,7 @@ static int mchp_pdmc_af_put(struct snd_kcontrol *kcontrol,
->  {
->  	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
->  	struct mchp_pdmc *dd = snd_soc_component_get_drvdata(component);
-> -	bool af = uvalue->value.integer.value ? true : false;
-> +	bool af = uvalue->value.integer.value[0] ? true : false;
->  
->  	if (dd->audio_filter_en == af)
->  		return 0;
-> 
-> base-commit: 50291652af5269813baa6024eb0e81b5f0bbb451
-> -- 
-> 2.27.0
-> 
-> 
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
