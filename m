@@ -1,43 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2DE1366
-	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 06:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6547E
+	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 07:36:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647239114; x=1678775114;
+  t=1647243377; x=1678779377;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yLhqFbqmfhdtW/1QaxDmVN2vNMMMlcXf2bqf20bJsGs=;
-  b=lVWFx2ih1bizUra92Regk0cHnDUgoAT8bAVU/gPiPznjuQ1HaUVTeLAd
-   a8qjufpsqv96rdU0jhLo8Qby3d/x7G9s+scrPwft/i4KcKVNIaQs4RZAi
-   uSCztVIrqr12ZLUmFhNSVhsfqHWQEAwMzwTI5xBjlTa6RBp39LnpYlI7P
-   f4MJAku96fl1P3WoXzSuUhqJEXj+JsG8D6sswWomaJ8ekz+Q2Lvhcok8A
-   hoe12x6clrwLQ5MTmu41BPFtEcwGku07ulxgZqHzfPgXDJWXDJHzSEqF6
-   5rWg8QVIn2/3IxeqTomfxKHx9lyNRePPfH7iHqdy3FlsYWukYVK+mUboG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="254774750"
-X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="254774750"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 23:25:11 -0700
+  bh=8WH2UbYG0ReXKv7c6v0ene8EGu8uj68lyZsd6Zr7ZWo=;
+  b=O5VrASOvWC6Df/5e2mxota9HuqCyA2KGK8lzhn5vgrb+i4wpgfsZWviL
+   7SFrF319/yhUrFxNE41ZIENwMaM28qPqKAdwTIZgUPOWOCYD3f5eAprbP
+   Ek5AG+ZxhCLO6l72bFADnDJ8t0EnvQWnW0PUfhGjoIBhWs8URgLvoCDPQ
+   dKiNsJGdpHVHXFueoQi8OI4pBxYgnf4aaQF2lEzq1KZDqy5ttDtTocZT+
+   7Nr324WxpHY6SrS4rbCpsuQMSebQHcjoVzeSaFEbgJkq/PgJWeCajWtEf
+   wTS4ciVq8o2dzUkwtRSDMvhBu/XqAJW0XdPjtb4hJ9cKg+fVUjtdYX938
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="236563020"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="236563020"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 00:36:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="515290522"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="645690610"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 23:25:08 -0700
+  by orsmga004.jf.intel.com with ESMTP; 14 Mar 2022 00:36:14 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nTe8h-0009dU-MY; Mon, 14 Mar 2022 06:25:07 +0000
-Date: Mon, 14 Mar 2022 14:24:41 +0800
+	id 1nTfFV-0009hD-Fy; Mon, 14 Mar 2022 07:36:13 +0000
+Date: Mon, 14 Mar 2022 15:35:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: tien.sung.ang@intel.com, Dinh Nguyen <dinguyen@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: Re: [PATCH 3/3] firmware: stratix10-svc: add new FCS commands
-Message-ID: <202203141422.aNYTcoGn-lkp@intel.com>
-References: <20220314102807.1746893-1-tien.sung.ang@intel.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	netfilter-devel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH nf-next 01/12,v2] netfilter: nf_tables: do not reduce
+ read-only expressions
+Message-ID: <202203141536.2pRQaVTk-lkp@intel.com>
+References: <20220314005417.315832-2-pablo@netfilter.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,368 +46,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220314102807.1746893-1-tien.sung.ang@intel.com>
+In-Reply-To: <20220314005417.315832-2-pablo@netfilter.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi,
+Hi Pablo,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on linus/master v5.17-rc8]
-[cannot apply to next-20220310]
+[auto build test WARNING on next-20220310]
+[cannot apply to nf-next/master nf/master linus/master v5.17-rc8 v5.17-rc7 v5.17-rc6 v5.17-rc8]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/tien-sung-ang-intel-com/firmware-stratix10-svc-Add-new-FCS-support/20220314-102938
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: arm-socfpga_defconfig (https://download.01.org/0day-ci/archive/20220314/202203141422.aNYTcoGn-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Pablo-Neira-Ayuso/register-tracking-infrastructure-follow-up/20220314-085726
+base:    71941773e143369a73c9c4a3b62fbb60736a1182
+config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220314/202203141536.2pRQaVTk-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/21427534c2a95b30f967d178ee997d8ca94b34e6
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/95cc95fe1fe4ea0141d13453b818a3f14aacf4f0
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review tien-sung-ang-intel-com/firmware-stratix10-svc-Add-new-FCS-support/20220314-102938
-        git checkout 21427534c2a95b30f967d178ee997d8ca94b34e6
+        git fetch --no-tags linux-review Pablo-Neira-Ayuso/register-tracking-infrastructure-follow-up/20220314-085726
+        git checkout 95cc95fe1fe4ea0141d13453b818a3f14aacf4f0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from drivers/mfd/altera-sysmgr.c:13:
-   In file included from include/linux/mfd/altera-sysmgr.h:13:
-   include/linux/firmware/intel/stratix10-smc.h:406:4: warning: declaration specifier missing, defaulting to 'int'
-    * Request INTEL_SIP_SMC_SERVICE_COMPLETED
-      ^
-    int
->> include/linux/firmware/intel/stratix10-smc.h:406:11: error: expected ';' after top level declarator
-    * Request INTEL_SIP_SMC_SERVICE_COMPLETED
-             ^
-             ;
-   In file included from drivers/mfd/altera-sysmgr.c:13:
-   include/linux/mfd/altera-sysmgr.h:18:60: warning: declaration of 'struct device_node' will not be visible outside of this function [-Wvisibility]
-   struct regmap *altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
-                                                              ^
->> drivers/mfd/altera-sysmgr.c:96:16: error: conflicting types for 'altr_sysmgr_regmap_lookup_by_phandle'
-   struct regmap *altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
-                  ^
-   include/linux/mfd/altera-sysmgr.h:18:16: note: previous declaration is here
-   struct regmap *altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
-                  ^
-   2 warnings and 2 errors generated.
---
-   In file included from drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:7:
-   In file included from include/linux/mfd/altera-sysmgr.h:13:
-   include/linux/firmware/intel/stratix10-smc.h:406:4: warning: declaration specifier missing, defaulting to 'int'
-    * Request INTEL_SIP_SMC_SERVICE_COMPLETED
-      ^
-    int
->> include/linux/firmware/intel/stratix10-smc.h:406:11: error: expected ';' after top level declarator
-    * Request INTEL_SIP_SMC_SERVICE_COMPLETED
-             ^
-             ;
-   In file included from drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:7:
-   include/linux/mfd/altera-sysmgr.h:18:60: warning: declaration of 'struct device_node' will not be visible outside of this function [-Wvisibility]
-   struct regmap *altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
-                                                              ^
->> drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:113:40: error: incompatible pointer types passing 'struct device_node *' to parameter of type 'struct device_node *' [-Werror,-Wincompatible-pointer-types]
-                   altr_sysmgr_regmap_lookup_by_phandle(np, "altr,sysmgr-syscon");
-                                                        ^~
-   include/linux/mfd/altera-sysmgr.h:18:73: note: passing argument to parameter 'np' here
-   struct regmap *altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
-                                                                           ^
-   2 warnings and 2 errors generated.
+>> WARNING: modpost: vmlinux.o(.data+0x2b2500): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_authenticate to the function .init.text:set_reset_devices()
+The variable trace_event_fields_rpcgss_svc_authenticate references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
 
 
-vim +406 include/linux/firmware/intel/stratix10-smc.h
-
-7ca5ce896524f52 Richard Gong  2018-11-13  147  
-7ca5ce896524f52 Richard Gong  2018-11-13  148  /**
-7ca5ce896524f52 Richard Gong  2018-11-13  149   * Request INTEL_SIP_SMC_FPGA_CONFIG_ISDONE
-7ca5ce896524f52 Richard Gong  2018-11-13  150   *
-7ca5ce896524f52 Richard Gong  2018-11-13  151   * Sync call used by service driver at EL1 to inform secure world that all
-7ca5ce896524f52 Richard Gong  2018-11-13  152   * data are sent, to check whether or not the secure world had completed
-7ca5ce896524f52 Richard Gong  2018-11-13  153   * the FPGA configuration process.
-7ca5ce896524f52 Richard Gong  2018-11-13  154   *
-7ca5ce896524f52 Richard Gong  2018-11-13  155   * Call register usage:
-7ca5ce896524f52 Richard Gong  2018-11-13  156   * a0: INTEL_SIP_SMC_FPGA_CONFIG_ISDONE.
-7ca5ce896524f52 Richard Gong  2018-11-13  157   * a1-7: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  158   *
-7ca5ce896524f52 Richard Gong  2018-11-13  159   * Return status:
-7536ad8dbfcfd56 Richard Gong  2020-04-14  160   * a0: INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_BUSY or
-7536ad8dbfcfd56 Richard Gong  2020-04-14  161   * INTEL_SIP_SMC_STATUS_ERROR.
-7ca5ce896524f52 Richard Gong  2018-11-13  162   * a1-3: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  163   */
-7ca5ce896524f52 Richard Gong  2018-11-13  164  #define INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_ISDONE 4
-7ca5ce896524f52 Richard Gong  2018-11-13  165  #define INTEL_SIP_SMC_FPGA_CONFIG_ISDONE \
-7ca5ce896524f52 Richard Gong  2018-11-13  166  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_ISDONE)
-7ca5ce896524f52 Richard Gong  2018-11-13  167  
-7ca5ce896524f52 Richard Gong  2018-11-13  168  /**
-7ca5ce896524f52 Richard Gong  2018-11-13  169   * Request INTEL_SIP_SMC_FPGA_CONFIG_GET_MEM
-7ca5ce896524f52 Richard Gong  2018-11-13  170   *
-7ca5ce896524f52 Richard Gong  2018-11-13  171   * Sync call used by service driver at EL1 to query the physical address of
-7ca5ce896524f52 Richard Gong  2018-11-13  172   * memory block reserved by secure monitor software.
-7ca5ce896524f52 Richard Gong  2018-11-13  173   *
-7ca5ce896524f52 Richard Gong  2018-11-13  174   * Call register usage:
-7ca5ce896524f52 Richard Gong  2018-11-13  175   * a0:INTEL_SIP_SMC_FPGA_CONFIG_GET_MEM.
-7ca5ce896524f52 Richard Gong  2018-11-13  176   * a1-7: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  177   *
-7ca5ce896524f52 Richard Gong  2018-11-13  178   * Return status:
-7536ad8dbfcfd56 Richard Gong  2020-04-14  179   * a0: INTEL_SIP_SMC_STATUS_OK or INTEL_SIP_SMC_STATUS_ERROR.
-7ca5ce896524f52 Richard Gong  2018-11-13  180   * a1: start of physical address of reserved memory block.
-7ca5ce896524f52 Richard Gong  2018-11-13  181   * a2: size of reserved memory block.
-7ca5ce896524f52 Richard Gong  2018-11-13  182   * a3: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  183   */
-7ca5ce896524f52 Richard Gong  2018-11-13  184  #define INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_GET_MEM 5
-7ca5ce896524f52 Richard Gong  2018-11-13  185  #define INTEL_SIP_SMC_FPGA_CONFIG_GET_MEM \
-7ca5ce896524f52 Richard Gong  2018-11-13  186  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_GET_MEM)
-7ca5ce896524f52 Richard Gong  2018-11-13  187  
-7ca5ce896524f52 Richard Gong  2018-11-13  188  /**
-7ca5ce896524f52 Richard Gong  2018-11-13  189   * Request INTEL_SIP_SMC_FPGA_CONFIG_LOOPBACK
-7ca5ce896524f52 Richard Gong  2018-11-13  190   *
-7ca5ce896524f52 Richard Gong  2018-11-13  191   * For SMC loop-back mode only, used for internal integration, debugging
-7ca5ce896524f52 Richard Gong  2018-11-13  192   * or troubleshooting.
-7ca5ce896524f52 Richard Gong  2018-11-13  193   *
-7ca5ce896524f52 Richard Gong  2018-11-13  194   * Call register usage:
-7ca5ce896524f52 Richard Gong  2018-11-13  195   * a0: INTEL_SIP_SMC_FPGA_CONFIG_LOOPBACK.
-7ca5ce896524f52 Richard Gong  2018-11-13  196   * a1-7: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  197   *
-7ca5ce896524f52 Richard Gong  2018-11-13  198   * Return status:
-7536ad8dbfcfd56 Richard Gong  2020-04-14  199   * a0: INTEL_SIP_SMC_STATUS_OK or INTEL_SIP_SMC_STATUS_ERROR.
-7ca5ce896524f52 Richard Gong  2018-11-13  200   * a1-3: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  201   */
-7ca5ce896524f52 Richard Gong  2018-11-13  202  #define INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_LOOPBACK 6
-7ca5ce896524f52 Richard Gong  2018-11-13  203  #define INTEL_SIP_SMC_FPGA_CONFIG_LOOPBACK \
-7ca5ce896524f52 Richard Gong  2018-11-13  204  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_LOOPBACK)
-7ca5ce896524f52 Richard Gong  2018-11-13  205  
-b5dc75c915cdaeb Richard Gong  2019-09-03  206  /**
-7ca5ce896524f52 Richard Gong  2018-11-13  207   * Request INTEL_SIP_SMC_REG_READ
-7ca5ce896524f52 Richard Gong  2018-11-13  208   *
-7ca5ce896524f52 Richard Gong  2018-11-13  209   * Read a protected register at EL3
-7ca5ce896524f52 Richard Gong  2018-11-13  210   *
-7ca5ce896524f52 Richard Gong  2018-11-13  211   * Call register usage:
-7ca5ce896524f52 Richard Gong  2018-11-13  212   * a0: INTEL_SIP_SMC_REG_READ.
-7ca5ce896524f52 Richard Gong  2018-11-13  213   * a1: register address.
-7ca5ce896524f52 Richard Gong  2018-11-13  214   * a2-7: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  215   *
-7ca5ce896524f52 Richard Gong  2018-11-13  216   * Return status:
-7ca5ce896524f52 Richard Gong  2018-11-13  217   * a0: INTEL_SIP_SMC_STATUS_OK or INTEL_SIP_SMC_REG_ERROR.
-7ca5ce896524f52 Richard Gong  2018-11-13  218   * a1: value in the register
-7ca5ce896524f52 Richard Gong  2018-11-13  219   * a2-3: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  220   */
-7ca5ce896524f52 Richard Gong  2018-11-13  221  #define INTEL_SIP_SMC_FUNCID_REG_READ 7
-7ca5ce896524f52 Richard Gong  2018-11-13  222  #define INTEL_SIP_SMC_REG_READ \
-7ca5ce896524f52 Richard Gong  2018-11-13  223  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_REG_READ)
-7ca5ce896524f52 Richard Gong  2018-11-13  224  
-b5dc75c915cdaeb Richard Gong  2019-09-03  225  /**
-7ca5ce896524f52 Richard Gong  2018-11-13  226   * Request INTEL_SIP_SMC_REG_WRITE
-7ca5ce896524f52 Richard Gong  2018-11-13  227   *
-7ca5ce896524f52 Richard Gong  2018-11-13  228   * Write a protected register at EL3
-7ca5ce896524f52 Richard Gong  2018-11-13  229   *
-7ca5ce896524f52 Richard Gong  2018-11-13  230   * Call register usage:
-7ca5ce896524f52 Richard Gong  2018-11-13  231   * a0: INTEL_SIP_SMC_REG_WRITE.
-7ca5ce896524f52 Richard Gong  2018-11-13  232   * a1: register address
-7ca5ce896524f52 Richard Gong  2018-11-13  233   * a2: value to program into register.
-7ca5ce896524f52 Richard Gong  2018-11-13  234   * a3-7: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  235   *
-7ca5ce896524f52 Richard Gong  2018-11-13  236   * Return status:
-7ca5ce896524f52 Richard Gong  2018-11-13  237   * a0: INTEL_SIP_SMC_STATUS_OK or INTEL_SIP_SMC_REG_ERROR.
-7ca5ce896524f52 Richard Gong  2018-11-13  238   * a1-3: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  239   */
-7ca5ce896524f52 Richard Gong  2018-11-13  240  #define INTEL_SIP_SMC_FUNCID_REG_WRITE 8
-7ca5ce896524f52 Richard Gong  2018-11-13  241  #define INTEL_SIP_SMC_REG_WRITE \
-7ca5ce896524f52 Richard Gong  2018-11-13  242  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_REG_WRITE)
-7ca5ce896524f52 Richard Gong  2018-11-13  243  
-b5dc75c915cdaeb Richard Gong  2019-09-03  244  /**
-7ca5ce896524f52 Richard Gong  2018-11-13  245   * Request INTEL_SIP_SMC_FUNCID_REG_UPDATE
-7ca5ce896524f52 Richard Gong  2018-11-13  246   *
-7ca5ce896524f52 Richard Gong  2018-11-13  247   * Update one or more bits in a protected register at EL3 using a
-7ca5ce896524f52 Richard Gong  2018-11-13  248   * read-modify-write operation.
-7ca5ce896524f52 Richard Gong  2018-11-13  249   *
-7ca5ce896524f52 Richard Gong  2018-11-13  250   * Call register usage:
-7ca5ce896524f52 Richard Gong  2018-11-13  251   * a0: INTEL_SIP_SMC_REG_UPDATE.
-7ca5ce896524f52 Richard Gong  2018-11-13  252   * a1: register address
-7ca5ce896524f52 Richard Gong  2018-11-13  253   * a2: write Mask.
-7ca5ce896524f52 Richard Gong  2018-11-13  254   * a3: value to write.
-7ca5ce896524f52 Richard Gong  2018-11-13  255   * a4-7: not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  256   *
-7ca5ce896524f52 Richard Gong  2018-11-13  257   * Return status:
-7ca5ce896524f52 Richard Gong  2018-11-13  258   * a0: INTEL_SIP_SMC_STATUS_OK or INTEL_SIP_SMC_REG_ERROR.
-7ca5ce896524f52 Richard Gong  2018-11-13  259   * a1-3: Not used.
-7ca5ce896524f52 Richard Gong  2018-11-13  260   */
-7ca5ce896524f52 Richard Gong  2018-11-13  261  #define INTEL_SIP_SMC_FUNCID_REG_UPDATE 9
-7ca5ce896524f52 Richard Gong  2018-11-13  262  #define INTEL_SIP_SMC_REG_UPDATE \
-7ca5ce896524f52 Richard Gong  2018-11-13  263  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_REG_UPDATE)
-7ca5ce896524f52 Richard Gong  2018-11-13  264  
-b5dc75c915cdaeb Richard Gong  2019-09-03  265  /**
-6b50d882d38d5a1 Richard Gong  2018-11-13  266   * Request INTEL_SIP_SMC_RSU_STATUS
-6b50d882d38d5a1 Richard Gong  2018-11-13  267   *
-6b50d882d38d5a1 Richard Gong  2018-11-13  268   * Request remote status update boot log, call is synchronous.
-6b50d882d38d5a1 Richard Gong  2018-11-13  269   *
-6b50d882d38d5a1 Richard Gong  2018-11-13  270   * Call register usage:
-6b50d882d38d5a1 Richard Gong  2018-11-13  271   * a0 INTEL_SIP_SMC_RSU_STATUS
-6b50d882d38d5a1 Richard Gong  2018-11-13  272   * a1-7 not used
-6b50d882d38d5a1 Richard Gong  2018-11-13  273   *
-6b50d882d38d5a1 Richard Gong  2018-11-13  274   * Return status
-6b50d882d38d5a1 Richard Gong  2018-11-13  275   * a0: Current Image
-6b50d882d38d5a1 Richard Gong  2018-11-13  276   * a1: Last Failing Image
-6b50d882d38d5a1 Richard Gong  2018-11-13  277   * a2: Version | State
-6b50d882d38d5a1 Richard Gong  2018-11-13  278   * a3: Error details | Error location
-6b50d882d38d5a1 Richard Gong  2018-11-13  279   *
-6b50d882d38d5a1 Richard Gong  2018-11-13  280   * Or
-6b50d882d38d5a1 Richard Gong  2018-11-13  281   *
-6b50d882d38d5a1 Richard Gong  2018-11-13  282   * a0: INTEL_SIP_SMC_RSU_ERROR
-6b50d882d38d5a1 Richard Gong  2018-11-13  283   */
-6b50d882d38d5a1 Richard Gong  2018-11-13  284  #define INTEL_SIP_SMC_FUNCID_RSU_STATUS 11
-6b50d882d38d5a1 Richard Gong  2018-11-13  285  #define INTEL_SIP_SMC_RSU_STATUS \
-6b50d882d38d5a1 Richard Gong  2018-11-13  286  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_RSU_STATUS)
-6b50d882d38d5a1 Richard Gong  2018-11-13  287  
-b5dc75c915cdaeb Richard Gong  2019-09-03  288  /**
-6b50d882d38d5a1 Richard Gong  2018-11-13  289   * Request INTEL_SIP_SMC_RSU_UPDATE
-6b50d882d38d5a1 Richard Gong  2018-11-13  290   *
-6b50d882d38d5a1 Richard Gong  2018-11-13  291   * Request to set the offset of the bitstream to boot after reboot, call
-6b50d882d38d5a1 Richard Gong  2018-11-13  292   * is synchronous.
-6b50d882d38d5a1 Richard Gong  2018-11-13  293   *
-6b50d882d38d5a1 Richard Gong  2018-11-13  294   * Call register usage:
-6b50d882d38d5a1 Richard Gong  2018-11-13  295   * a0 INTEL_SIP_SMC_RSU_UPDATE
-6b50d882d38d5a1 Richard Gong  2018-11-13  296   * a1 64bit physical address of the configuration data memory in flash
-6b50d882d38d5a1 Richard Gong  2018-11-13  297   * a2-7 not used
-6b50d882d38d5a1 Richard Gong  2018-11-13  298   *
-6b50d882d38d5a1 Richard Gong  2018-11-13  299   * Return status
-6b50d882d38d5a1 Richard Gong  2018-11-13  300   * a0 INTEL_SIP_SMC_STATUS_OK
-6b50d882d38d5a1 Richard Gong  2018-11-13  301   */
-6b50d882d38d5a1 Richard Gong  2018-11-13  302  #define INTEL_SIP_SMC_FUNCID_RSU_UPDATE 12
-6b50d882d38d5a1 Richard Gong  2018-11-13  303  #define INTEL_SIP_SMC_RSU_UPDATE \
-6b50d882d38d5a1 Richard Gong  2018-11-13  304  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_RSU_UPDATE)
-fad9fab975cb9fa Thor Thayer   2019-04-02  305  
-b5dc75c915cdaeb Richard Gong  2019-09-03  306  /**
-fad9fab975cb9fa Thor Thayer   2019-04-02  307   * Request INTEL_SIP_SMC_ECC_DBE
-fad9fab975cb9fa Thor Thayer   2019-04-02  308   *
-fad9fab975cb9fa Thor Thayer   2019-04-02  309   * Sync call used by service driver at EL1 to alert EL3 that a Double
-fad9fab975cb9fa Thor Thayer   2019-04-02  310   * Bit ECC error has occurred.
-fad9fab975cb9fa Thor Thayer   2019-04-02  311   *
-fad9fab975cb9fa Thor Thayer   2019-04-02  312   * Call register usage:
-fad9fab975cb9fa Thor Thayer   2019-04-02  313   * a0 INTEL_SIP_SMC_ECC_DBE
-fad9fab975cb9fa Thor Thayer   2019-04-02  314   * a1 SysManager Double Bit Error value
-fad9fab975cb9fa Thor Thayer   2019-04-02  315   * a2-7 not used
-fad9fab975cb9fa Thor Thayer   2019-04-02  316   *
-fad9fab975cb9fa Thor Thayer   2019-04-02  317   * Return status
-fad9fab975cb9fa Thor Thayer   2019-04-02  318   * a0 INTEL_SIP_SMC_STATUS_OK
-fad9fab975cb9fa Thor Thayer   2019-04-02  319   */
-fad9fab975cb9fa Thor Thayer   2019-04-02  320  #define INTEL_SIP_SMC_FUNCID_ECC_DBE 13
-fad9fab975cb9fa Thor Thayer   2019-04-02  321  #define INTEL_SIP_SMC_ECC_DBE \
-fad9fab975cb9fa Thor Thayer   2019-04-02  322  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_ECC_DBE)
-fad9fab975cb9fa Thor Thayer   2019-04-02  323  
-b5dc75c915cdaeb Richard Gong  2019-09-03  324  /**
-b5dc75c915cdaeb Richard Gong  2019-09-03  325   * Request INTEL_SIP_SMC_RSU_NOTIFY
-b5dc75c915cdaeb Richard Gong  2019-09-03  326   *
-b5dc75c915cdaeb Richard Gong  2019-09-03  327   * Sync call used by service driver at EL1 to report hard processor
-b5dc75c915cdaeb Richard Gong  2019-09-03  328   * system execution stage to firmware
-b5dc75c915cdaeb Richard Gong  2019-09-03  329   *
-b5dc75c915cdaeb Richard Gong  2019-09-03  330   * Call register usage:
-b5dc75c915cdaeb Richard Gong  2019-09-03  331   * a0 INTEL_SIP_SMC_RSU_NOTIFY
-b5dc75c915cdaeb Richard Gong  2019-09-03  332   * a1 32bit value representing hard processor system execution stage
-b5dc75c915cdaeb Richard Gong  2019-09-03  333   * a2-7 not used
-b5dc75c915cdaeb Richard Gong  2019-09-03  334   *
-b5dc75c915cdaeb Richard Gong  2019-09-03  335   * Return status
-b5dc75c915cdaeb Richard Gong  2019-09-03  336   * a0 INTEL_SIP_SMC_STATUS_OK
-b5dc75c915cdaeb Richard Gong  2019-09-03  337   */
-b5dc75c915cdaeb Richard Gong  2019-09-03  338  #define INTEL_SIP_SMC_FUNCID_RSU_NOTIFY 14
-b5dc75c915cdaeb Richard Gong  2019-09-03  339  #define INTEL_SIP_SMC_RSU_NOTIFY \
-b5dc75c915cdaeb Richard Gong  2019-09-03  340  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_RSU_NOTIFY)
-b5dc75c915cdaeb Richard Gong  2019-09-03  341  
-b5dc75c915cdaeb Richard Gong  2019-09-03  342  /**
-b5dc75c915cdaeb Richard Gong  2019-09-03  343   * Request INTEL_SIP_SMC_RSU_RETRY_COUNTER
-b5dc75c915cdaeb Richard Gong  2019-09-03  344   *
-b5dc75c915cdaeb Richard Gong  2019-09-03  345   * Sync call used by service driver at EL1 to query RSU retry counter
-b5dc75c915cdaeb Richard Gong  2019-09-03  346   *
-b5dc75c915cdaeb Richard Gong  2019-09-03  347   * Call register usage:
-b5dc75c915cdaeb Richard Gong  2019-09-03  348   * a0 INTEL_SIP_SMC_RSU_RETRY_COUNTER
-b5dc75c915cdaeb Richard Gong  2019-09-03  349   * a1-7 not used
-b5dc75c915cdaeb Richard Gong  2019-09-03  350   *
-b5dc75c915cdaeb Richard Gong  2019-09-03  351   * Return status
-b5dc75c915cdaeb Richard Gong  2019-09-03  352   * a0 INTEL_SIP_SMC_STATUS_OK
-b5dc75c915cdaeb Richard Gong  2019-09-03  353   * a1 the retry counter
-b5dc75c915cdaeb Richard Gong  2019-09-03  354   *
-b5dc75c915cdaeb Richard Gong  2019-09-03  355   * Or
-b5dc75c915cdaeb Richard Gong  2019-09-03  356   *
-b5dc75c915cdaeb Richard Gong  2019-09-03  357   * a0 INTEL_SIP_SMC_RSU_ERROR
-b5dc75c915cdaeb Richard Gong  2019-09-03  358   */
-b5dc75c915cdaeb Richard Gong  2019-09-03  359  #define INTEL_SIP_SMC_FUNCID_RSU_RETRY_COUNTER 15
-b5dc75c915cdaeb Richard Gong  2019-09-03  360  #define INTEL_SIP_SMC_RSU_RETRY_COUNTER \
-b5dc75c915cdaeb Richard Gong  2019-09-03  361  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_RSU_RETRY_COUNTER)
-bf0e5bf68a207b1 Richard Gong  2020-06-15  362  
-bf0e5bf68a207b1 Richard Gong  2020-06-15  363  /**
-bf0e5bf68a207b1 Richard Gong  2020-06-15  364   * Request INTEL_SIP_SMC_RSU_DCMF_VERSION
-bf0e5bf68a207b1 Richard Gong  2020-06-15  365   *
-bf0e5bf68a207b1 Richard Gong  2020-06-15  366   * Sync call used by service driver at EL1 to query DCMF (Decision
-bf0e5bf68a207b1 Richard Gong  2020-06-15  367   * Configuration Management Firmware) version from FW
-bf0e5bf68a207b1 Richard Gong  2020-06-15  368   *
-bf0e5bf68a207b1 Richard Gong  2020-06-15  369   * Call register usage:
-bf0e5bf68a207b1 Richard Gong  2020-06-15  370   * a0 INTEL_SIP_SMC_RSU_DCMF_VERSION
-bf0e5bf68a207b1 Richard Gong  2020-06-15  371   * a1-7 not used
-bf0e5bf68a207b1 Richard Gong  2020-06-15  372   *
-bf0e5bf68a207b1 Richard Gong  2020-06-15  373   * Return status
-bf0e5bf68a207b1 Richard Gong  2020-06-15  374   * a0 INTEL_SIP_SMC_STATUS_OK
-bf0e5bf68a207b1 Richard Gong  2020-06-15  375   * a1 dcmf1 | dcmf0
-bf0e5bf68a207b1 Richard Gong  2020-06-15  376   * a2 dcmf3 | dcmf2
-bf0e5bf68a207b1 Richard Gong  2020-06-15  377   *
-bf0e5bf68a207b1 Richard Gong  2020-06-15  378   * Or
-bf0e5bf68a207b1 Richard Gong  2020-06-15  379   *
-bf0e5bf68a207b1 Richard Gong  2020-06-15  380   * a0 INTEL_SIP_SMC_RSU_ERROR
-bf0e5bf68a207b1 Richard Gong  2020-06-15  381   */
-bf0e5bf68a207b1 Richard Gong  2020-06-15  382  #define INTEL_SIP_SMC_FUNCID_RSU_DCMF_VERSION 16
-bf0e5bf68a207b1 Richard Gong  2020-06-15  383  #define INTEL_SIP_SMC_RSU_DCMF_VERSION \
-bf0e5bf68a207b1 Richard Gong  2020-06-15  384  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_RSU_DCMF_VERSION)
-bf0e5bf68a207b1 Richard Gong  2020-06-15  385  
-bf0e5bf68a207b1 Richard Gong  2020-06-15  386  /**
-bf0e5bf68a207b1 Richard Gong  2020-06-15  387   * Request INTEL_SIP_SMC_RSU_MAX_RETRY
-bf0e5bf68a207b1 Richard Gong  2020-06-15  388   *
-bf0e5bf68a207b1 Richard Gong  2020-06-15  389   * Sync call used by service driver at EL1 to query max retry value from FW
-bf0e5bf68a207b1 Richard Gong  2020-06-15  390   *
-bf0e5bf68a207b1 Richard Gong  2020-06-15  391   * Call register usage:
-bf0e5bf68a207b1 Richard Gong  2020-06-15  392   * a0 INTEL_SIP_SMC_RSU_MAX_RETRY
-bf0e5bf68a207b1 Richard Gong  2020-06-15  393   * a1-7 not used
-bf0e5bf68a207b1 Richard Gong  2020-06-15  394   *
-bf0e5bf68a207b1 Richard Gong  2020-06-15  395   * Return status
-bf0e5bf68a207b1 Richard Gong  2020-06-15  396   * a0 INTEL_SIP_SMC_STATUS_OK
-bf0e5bf68a207b1 Richard Gong  2020-06-15  397   * a1 max retry value
-bf0e5bf68a207b1 Richard Gong  2020-06-15  398   *
-bf0e5bf68a207b1 Richard Gong  2020-06-15  399   * Or
-bf0e5bf68a207b1 Richard Gong  2020-06-15  400   * a0 INTEL_SIP_SMC_RSU_ERROR
-bf0e5bf68a207b1 Richard Gong  2020-06-15  401   */
-bf0e5bf68a207b1 Richard Gong  2020-06-15  402  #define INTEL_SIP_SMC_FUNCID_RSU_MAX_RETRY 18
-bf0e5bf68a207b1 Richard Gong  2020-06-15  403  #define INTEL_SIP_SMC_RSU_MAX_RETRY \
-bf0e5bf68a207b1 Richard Gong  2020-06-15  404  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_RSU_MAX_RETRY)
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  405  
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14 @406   * Request INTEL_SIP_SMC_SERVICE_COMPLETED
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  407   * Sync call to check if the secure world have completed service request
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  408   * or not.
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  409   *
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  410   * Call register usage:
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  411   * a0: INTEL_SIP_SMC_SERVICE_COMPLETED
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  412   * a1: the physical address for secure firmware to put output data
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  413   * a2: size
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  414   * a3-a7: not used
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  415   *
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  416   * Return status:
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  417   * a0: INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_ERROR,
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  418   *     INTEL_SIP_SMC_REJECTED or INTEL_SIP_SMC_STATUS_BUSY
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  419   * a1: physical address for the output daat
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  420   * a2: output data size
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  421   */
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  422  #define INTEL_SIP_SMC_FUNCID_SERVICE_COMPLETED 30
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  423  #define INTEL_SIP_SMC_SERVICE_COMPLETED \
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  424  	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_SERVICE_COMPLETED)
-19e0bcb19109ac6 Ang Tien Sung 2022-03-14  425  
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0x1448baa): Section mismatch in reference from the function tcp4_proc_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2b15cc): Section mismatch in reference from the variable event_rpcgss_ctx_init to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b15ec): Section mismatch in reference from the variable event_rpcgss_ctx_init to the variable .exit.text:.LBB0_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b1618): Section mismatch in reference from the variable event_rpcgss_ctx_destroy to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1638): Section mismatch in reference from the variable event_rpcgss_ctx_destroy to the variable .exit.text:.LBB0_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b1660): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1690): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the function .init.text:init_nls_cp737()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1be8): Section mismatch in reference from the variable event_rpcgss_svc_unwrap to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x293824): Section mismatch in reference from the variable nf_ct_proto_mutex to the function .init.text:loglevel()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1c08): Section mismatch in reference from the variable event_rpcgss_svc_unwrap to the variable .init.text:.LBB1_1
 
 ---
 0-DAY CI Kernel Test Service
