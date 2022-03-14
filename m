@@ -1,249 +1,77 @@
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2841B68
-	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 14:09:40 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0V7AmGzm_1647266032;
-Received: from localhost(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V7AmGzm_1647266032)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 14 Mar 2022 21:53:59 +0800
-From: Dan Li <ashimida@linux.alibaba.com>
-To: catalin.marinas@arm.com,
-	will@kernel.org,
-	keescook@chromium.org,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	shuah@kernel.org,
-	ashimida@linux.alibaba.com,
-	mark.rutland@arm.com,
-	ojeda@kernel.org,
-	akpm@linux-foundation.org,
-	elver@google.com,
-	luc.vanoostenryck@gmail.com,
-	samitolvanen@google.com
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 2/2] lkdtm: Add Shadow Call Stack tests
-Date: Mon, 14 Mar 2022 06:53:29 -0700
-Message-Id: <20220314135329.80621-1-ashimida@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220303074339.86337-1-ashimida@linux.alibaba.com>
-References: <20220303074339.86337-1-ashimida@linux.alibaba.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C5F1B68
+	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 14:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647267882; x=1678803882;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0Fn/rtdY6z3i+splslh2Ush124x6+MmeaRJF5pJJ5tw=;
+  b=VXM4EDREDdB3bQ78tqH9ox6S7SwI2exlJZTqh9Je/UUvhDpf/zaCVOE3
+   Wi66gHa7mvePkmG5ondlEgjUrqp5RKwo/4KrTMGXllreUq/QoxFt/L01i
+   zgxJCGs3K0d0/EJFP412Cp8huv27yI54x+iA+oSQVHJmF/JM7k2Hk5ddu
+   3OJdN88EApCkvAL0Q9nbyvrQLmok/WhLrGStRyKXt1ZkjSzIF12RiLxsy
+   mKENl7BmeYJuF5CjqqJTPWgnogvtJCuzXqjCCGiYXjKOoQ6lWko1hXcxp
+   0jZhplO53IpG5WvzkqcfqE7mJ4Aw6ReicMFH/ZvjBWMzhc80Lvx3CA/yF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="254869432"
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="254869432"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 07:24:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="497628506"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 14 Mar 2022 07:24:39 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nTlcl-0009va-7H; Mon, 14 Mar 2022 14:24:39 +0000
+Date: Mon, 14 Mar 2022 22:23:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chaitanya Kulkarni <kch@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-nvme@lists.infradead.org, Christoph Hellwig <hch@lst.de>
+Subject: [linux-nvme:nvme-5.18 11/12] ld.lld: error: undefined symbol:
+ nvmet_get_feat_async_event
+Message-ID: <202203142235.GRM0KrZ4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Add tests for SCS (Shadow Call Stack) based backward CFI.
+tree:   git://git.infradead.org/nvme.git nvme-5.18
+head:   0ad57fcd030f0bda79a3b6c2fb8fc29b871d9538
+commit: 7d36f577e5a3f73768327ca237f444e59140e261 [11/12] nvmet: open code nvmet_get_feat_async_event()
+config: i386-randconfig-a016-20220314 (https://download.01.org/0day-ci/archive/20220314/202203142235.GRM0KrZ4-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add linux-nvme git://git.infradead.org/nvme.git
+        git fetch --no-tags linux-nvme nvme-5.18
+        git checkout 7d36f577e5a3f73768327ca237f444e59140e261
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: nvmet_get_feat_async_event
+   >>> referenced by discovery.c:343 (drivers/nvme/target/discovery.c:343)
+   >>>               vmlinux.o:(nvmet_execute_disc_get_features)
+   >>> did you mean: nvmet_set_feat_async_event
+   >>> defined in: vmlinux.o
+
 ---
- arch/arm64/include/asm/compiler.h       | 18 ++++++
- drivers/misc/lkdtm/cfi.c                | 84 +++++++++++++++++++++++++
- drivers/misc/lkdtm/core.c               |  1 +
- drivers/misc/lkdtm/lkdtm.h              |  1 +
- include/linux/compiler-clang.h          |  1 +
- include/linux/compiler-gcc.h            |  2 +
- include/linux/compiler_types.h          |  4 ++
- tools/testing/selftests/lkdtm/tests.txt |  1 +
- 8 files changed, 112 insertions(+)
-
-diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
-index dc3ea4080e2e..96590fb4a8de 100644
---- a/arch/arm64/include/asm/compiler.h
-+++ b/arch/arm64/include/asm/compiler.h
-@@ -8,6 +8,24 @@
- #define ARM64_ASM_PREAMBLE
- #endif
- 
-+#ifndef __ASSEMBLY__
-+#ifdef __KERNEL__
-+
-+#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
-+
-+#ifdef CONFIG_ARM64_BTI_KERNEL
-+# define __no_ptrauth __attribute__((target("branch-protection=bti")))
-+#elif defined(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET)
-+# define __no_ptrauth __attribute__((target("branch-protection=none")))
-+#elif defined(CONFIG_CC_HAS_SIGN_RETURN_ADDRESS)
-+# define __no_ptrauth __attribute__((target("sign-return-address=none")))
-+#endif
-+
-+#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
-+
-+#endif /* __KERNEL__ */
-+#endif /* __ASSEMBLY__ */
-+
- /*
-  * The EL0/EL1 pointer bits used by a pointer authentication code.
-  * This is dependent on TBI0/TBI1 being enabled, or bits 63:56 would also apply.
-diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
-index c9aeddef1044..468ba2f26f74 100644
---- a/drivers/misc/lkdtm/cfi.c
-+++ b/drivers/misc/lkdtm/cfi.c
-@@ -41,3 +41,87 @@ void lkdtm_CFI_FORWARD_PROTO(void)
- 	pr_err("FAIL: survived mismatched prototype function call!\n");
- 	pr_expected_config(CONFIG_CFI_CLANG);
- }
-+
-+#ifdef CONFIG_ARM64
-+/*
-+ * This function is used to modify its return address. The PAC needs to be turned
-+ * off here to ensure that the modification of the return address will not be blocked.
-+ */
-+static noinline __no_ptrauth
-+void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr)
-+{
-+	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-+	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-+
-+	/* Make sure we've found the right place on the stack before writing it. */
-+	if (*ret_addr == expected)
-+		*ret_addr = addr;
-+}
-+
-+/* Function with __noscs attribute attempts to modify its return address. */
-+static noinline __no_ptrauth __noscs
-+void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr)
-+{
-+	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-+	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-+
-+	/* Make sure we've found the right place on the stack before writing it. */
-+	if (*ret_addr == expected)
-+		*ret_addr = addr;
-+}
-+#else
-+static inline void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr) { }
-+static inline void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr) { }
-+#endif
-+
-+static volatile unsigned int force_label;
-+
-+/*
-+ * This first checks whether a function with the __noscs attribute under
-+ * the current platform can directly modify its return address, and if so,
-+ * checks whether scs takes effect.
-+ */
-+void __no_optimize lkdtm_CFI_BACKWARD_SHADOW(void)
-+{
-+	void *array[] = {&&unexpected, &&expected, &&good_scs, &&bad_scs};
-+
-+	if (force_label && (force_label < sizeof(array))) {
-+		/*
-+		 * Call them with "NULL" first to avoid
-+		 * arguments being treated as constants in -02.
-+		 */
-+		lkdtm_noscs_set_lr(NULL, NULL);
-+		lkdtm_scs_set_lr(NULL, NULL);
-+		goto *array[force_label];
-+	}
-+
-+	/* Keep labels in scope to avoid compiler warnings. */
-+	do {
-+		/* Verify the "normal" condition of LR corruption working. */
-+		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
-+		lkdtm_noscs_set_lr(&&unexpected, &&expected);
-+
-+unexpected:
-+		/*
-+		 * If lr cannot be modified, the following check is meaningless,
-+		 * returns directly.
-+		 */
-+		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
-+		break;
-+
-+expected:
-+		pr_info("ok: lr corruption redirected without scs.\n");
-+
-+		/* Verify that SCS is in effect. */
-+		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-+		lkdtm_scs_set_lr(&&good_scs, &&bad_scs);
-+
-+good_scs:
-+		pr_info("ok: scs takes effect.\n");
-+		break;
-+
-+bad_scs:
-+		pr_err("FAIL: return address rewritten!\n");
-+		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
-+	} while (0);
-+}
-diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-index f69b964b9952..7af7268b82e4 100644
---- a/drivers/misc/lkdtm/core.c
-+++ b/drivers/misc/lkdtm/core.c
-@@ -178,6 +178,7 @@ static const struct crashtype crashtypes[] = {
- 	CRASHTYPE(USERCOPY_KERNEL),
- 	CRASHTYPE(STACKLEAK_ERASING),
- 	CRASHTYPE(CFI_FORWARD_PROTO),
-+	CRASHTYPE(CFI_BACKWARD_SHADOW),
- 	CRASHTYPE(FORTIFIED_OBJECT),
- 	CRASHTYPE(FORTIFIED_SUBOBJECT),
- 	CRASHTYPE(FORTIFIED_STRSCPY),
-diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-index d6137c70ebbe..a66fba949ab5 100644
---- a/drivers/misc/lkdtm/lkdtm.h
-+++ b/drivers/misc/lkdtm/lkdtm.h
-@@ -157,6 +157,7 @@ void lkdtm_STACKLEAK_ERASING(void);
- 
- /* cfi.c */
- void lkdtm_CFI_FORWARD_PROTO(void);
-+void lkdtm_CFI_BACKWARD_SHADOW(void);
- 
- /* fortify.c */
- void lkdtm_FORTIFIED_OBJECT(void);
-diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-index 3c4de9b6c6e3..2db37db36651 100644
---- a/include/linux/compiler-clang.h
-+++ b/include/linux/compiler-clang.h
-@@ -68,3 +68,4 @@
- 
- #define __nocfi		__attribute__((__no_sanitize__("cfi")))
- #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
-+#define __no_optimize	__attribute__((optnone))
-diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-index deff5b308470..28d1b0ec6656 100644
---- a/include/linux/compiler-gcc.h
-+++ b/include/linux/compiler-gcc.h
-@@ -162,3 +162,5 @@
- #if GCC_VERSION < 90100
- #undef __alloc_size__
- #endif
-+
-+#define __no_optimize	__attribute__((optimize("-O0")))
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 3c1795fdb568..f5ad83f7ea2f 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -257,6 +257,10 @@ struct ftrace_likely_data {
- # define __nocfi
- #endif
- 
-+#ifndef __no_ptrauth
-+# define __no_ptrauth
-+#endif
-+
- #ifndef __cficanonical
- # define __cficanonical
- #endif
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index 6b36b7f5dcf9..12df67a3b419 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -73,6 +73,7 @@ USERCOPY_STACK_BEYOND
- USERCOPY_KERNEL
- STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
- CFI_FORWARD_PROTO
-+CFI_BACKWARD_SHADOW ok: scs takes effect
- FORTIFIED_STRSCPY
- FORTIFIED_OBJECT
- FORTIFIED_SUBOBJECT
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
