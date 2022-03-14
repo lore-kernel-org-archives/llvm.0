@@ -1,44 +1,54 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F807469
-	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 23:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2077469
+	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 23:02:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647298935; x=1678834935;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JaV6oL4I/FyyR5iNIPQSHqtEHwPP6w7CGUb3lzX8owI=;
-  b=PNQ4NAYGtBga9sdZv5goOjKuRZ/mq5dpX4Et74RJNHQ7Ux58vvVdIHfQ
-   fDYPhgPpaqPBQJe1xytRK4H1N2IjnJehJW/shc5XFSjAXX45VjhzEsnM0
-   q7HC3aGluan6QHDa1/b1bCuwQCnzHWccnwd+ZwC9fgvsefdlPNBsQUCa5
-   +qPV8hpKCLp65/FGZYGcCzK2tkzJakLaGqjByZQSHuTzaY/SM2vwRb9hj
-   Z8W/RtuTGDB/4U/eYIuSrBjBnYAgQvBLC7vWpNwVcNaYWvIP46WhHS8lh
-   rAG3667pSgEnAr6JPA9PXaZNdSb3FBAJgAPyXaqcuNDDUcF7AH+sXu/36
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="238332146"
+  t=1647298938; x=1678834938;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=t7C/pcYibGXzuw1c7KT4Go7pZLQBu1j2wb9INd1xCZM=;
+  b=TXWzrIinVGabdNU8yziLIBVl0joTOxV+usC9itSaefyR8RrDrxozn2ru
+   OvhOkD/LkL5U4BakdXJJA9mCSw3uMvgVODaUaoKqT7jRurobZwwGtBhHi
+   vkqaB7JN91VGExDTfI5kvnUrZaKFd11cS4rHwGf0jKAuFSCP3fwYBF/RA
+   5hI39HtmS48lkCNZykQAHLjlXc6gOWzKiNtIdaXxnHpvhvKzhYee+9Nqd
+   WCnuVmhiRH6QA4L5LQPCZmHgwEFZ7UCD/DJR+wJ1wtM3hNFLSN3i4ReY8
+   zzlYTT2Vp5dIMhamZGIMap7apFZaVyim0+4e/qmb3nZqrFQZHVSKxHqeG
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="253725328"
 X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="238332146"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 16:02:14 -0700
+   d="scan'208";a="253725328"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 16:02:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="819323692"
+   d="scan'208";a="515638274"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Mar 2022 16:02:12 -0700
+  by orsmga006.jf.intel.com with ESMTP; 14 Mar 2022 16:02:13 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nTthc-000AJb-A0; Mon, 14 Mar 2022 23:02:12 +0000
-Date: Tue, 15 Mar 2022 07:01:55 +0800
+	id 1nTthc-000AJg-BB; Mon, 14 Mar 2022 23:02:12 +0000
+Date: Tue, 15 Mar 2022 07:02:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauricio Faria de Oliveira <mfo@canonical.com>
+To: Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Darren Hart <darren@os.amperecomputing.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Huang, Ying" <ying.huang@intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: [linux-next:master 11943/11953] WARNING: modpost:
- vmlinux.o(.data+0x29bf44): Section mismatch in reference from the variable
- ip_vs_ftp to the function .init.text:set_reset_devices()
-Message-ID: <202203150613.IspFektS-lkp@intel.com>
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Will Deacon <will@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	Linux Arm <linux-arm-kernel@lists.infradead.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Catalin Marinas <Catalin.Marinas@arm.com>,
+	Barry Song <song.bao.hua@hisilicon.com>,
+	Valentin Schneider <Valentin.Schneider@arm.com>,
+	"D . Scott Phillips" <scott@os.amperecomputing.com>,
+	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] arch_topology: Swap MC & CLS SD mask if MC weight==1 &
+Message-ID: <202203150659.T51bnDgz-lkp@intel.com>
+References: <9398d7ad-30e7-890a-3e18-c3011c383585@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,49 +57,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <9398d7ad-30e7-890a-3e18-c3011c383585@arm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   71941773e143369a73c9c4a3b62fbb60736a1182
-commit: ce5dfdfe401f01f58e5c98661c8a8bd566374585 [11943/11953] mm: fix race between MADV_FREE reclaim and blkdev direct IO read
-config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220315/202203150613.IspFektS-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
+Hi Dietmar,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on driver-core/driver-core-testing]
+[also build test WARNING on v5.17-rc8 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Dietmar-Eggemann/arch_topology-Swap-MC-CLS-SD-mask-if-MC-weight-1/20220315-004742
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 4a248f85b3dd8e010ff8335755c927130e9b0764
+config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220315/202203150659.T51bnDgz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ce5dfdfe401f01f58e5c98661c8a8bd566374585
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout ce5dfdfe401f01f58e5c98661c8a8bd566374585
+        # https://github.com/0day-ci/linux/commit/7528fb2ea1e30038ee1dcc48df9d413502977895
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Dietmar-Eggemann/arch_topology-Swap-MC-CLS-SD-mask-if-MC-weight-1/20220315-004742
+        git checkout 7528fb2ea1e30038ee1dcc48df9d413502977895
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/base/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> WARNING: modpost: vmlinux.o(.data+0x29bf44): Section mismatch in reference from the variable ip_vs_ftp to the function .init.text:set_reset_devices()
-The variable ip_vs_ftp references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+>> drivers/base/arch_topology.c:617:23: warning: no previous prototype for function '_cpu_coregroup_mask' [-Wmissing-prototypes]
+   const struct cpumask *_cpu_coregroup_mask(int cpu)
+                         ^
+   drivers/base/arch_topology.c:617:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   const struct cpumask *_cpu_coregroup_mask(int cpu)
+         ^
+   static 
+>> drivers/base/arch_topology.c:634:23: warning: no previous prototype for function '_cpu_clustergroup_mask' [-Wmissing-prototypes]
+   const struct cpumask *_cpu_clustergroup_mask(int cpu)
+                         ^
+   drivers/base/arch_topology.c:634:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   const struct cpumask *_cpu_clustergroup_mask(int cpu)
+         ^
+   static 
+   2 warnings generated.
 
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x1448b7a): Section mismatch in reference from the function tcp4_proc_exit() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2b15e8): Section mismatch in reference from the variable event_rpcgss_ctx_init to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.data+0x2b15ec): Section mismatch in reference from the variable event_rpcgss_ctx_init to the variable .exit.text:.LBB0_1
-<< WARNING: modpost: vmlinux.o(.data+0x2b1618): Section mismatch in reference from the variable event_rpcgss_ctx_destroy to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.data+0x2b1638): Section mismatch in reference from the variable event_rpcgss_ctx_destroy to the variable .exit.text:.LBB0_1
-<< WARNING: modpost: vmlinux.o(.data+0x2b1660): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.data+0x2b1690): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the function .init.text:init_nls_cp737()
-<< WARNING: modpost: vmlinux.o(.data+0x2b1be8): Section mismatch in reference from the variable event_rpcgss_svc_unwrap to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2b1c08): Section mismatch in reference from the variable event_rpcgss_svc_unwrap to the variable .init.text:.LBB1_1
-<< WARNING: modpost: vmlinux.o(.data+0x293824): Section mismatch in reference from the variable nf_ct_proto_mutex to the function .init.text:loglevel()
+vim +/_cpu_coregroup_mask +617 drivers/base/arch_topology.c
+
+   616	
+ > 617	const struct cpumask *_cpu_coregroup_mask(int cpu)
+   618	{
+   619		const cpumask_t *core_mask = cpumask_of_node(cpu_to_node(cpu));
+   620	
+   621		/* Find the smaller of NUMA, core or LLC siblings */
+   622		if (cpumask_subset(&cpu_topology[cpu].core_sibling, core_mask)) {
+   623			/* not numa in package, lets use the package siblings */
+   624			core_mask = &cpu_topology[cpu].core_sibling;
+   625		}
+   626		if (cpu_topology[cpu].llc_id != -1) {
+   627			if (cpumask_subset(&cpu_topology[cpu].llc_sibling, core_mask))
+   628				core_mask = &cpu_topology[cpu].llc_sibling;
+   629		}
+   630	
+   631		return core_mask;
+   632	}
+   633	
+ > 634	const struct cpumask *_cpu_clustergroup_mask(int cpu)
+   635	{
+   636		return &cpu_topology[cpu].cluster_sibling;
+   637	}
+   638	
 
 ---
 0-DAY CI Kernel Test Service
