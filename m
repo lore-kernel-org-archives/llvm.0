@@ -1,55 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7D07A
-	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 16:44:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2113FEC
+	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 19:06:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647276247; x=1678812247;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xMR2siyabd4TCf1hepbxmt8sSzOlcSZlRl6asTaBpWM=;
-  b=JTfaqib7LYI7KTSN2U3nk/PWdqiQ7lAC1HKobrVZhOlwxJjTUjh1sD5Y
-   qEMkZsGBQacYKn+91IjDYNttYCQ1yM528flFLNRMau18PBpa3Srs9LDXe
-   G4yu2PgGrMpH/BgBwVoc1jt7Gf2NT2At+VImMke0tmq+NJ0cJzCZD+XrF
-   iRRHUYdepuTknQHMjw2DRj+tOpcJsLCP8ts1Ar25PMmPWh9f4Q5j/0TxR
-   QJDEZF6d14w6Sfu1Nri2U647VOYGXmGkeewPtnCPD5RlXYNsiVROQm+Eb
-   g1e2xTvqtAIJe2O3Q5xWK11B6Yhp5AHt87iZKf/rjjcIV42ty58+qWBol
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="342508374"
+  t=1647284781; x=1678820781;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=W9eYCz3qDCCSFkac5uy8vhRJ/mXF052JjK3aEXTF4Ns=;
+  b=cfZeCu4Iemk/L8JRYOPPTpmC7S+XnkimMqT3kMWSVgRjVH10bOWP40lZ
+   m7ruNefAl2VrWiSdYODgpsl1Lhj/KiLd+b0mn4DZIfR/ST+uIVY9pSqhD
+   3fwmfuOUV08cKjUUVg7v9KxsvkTUiKjvbiDAh6DPTjiJ7hOKC7Sq6WUNW
+   +mdpSAUJjCZZSnZRxul8KoSDXCMbslAl4v3vmaz/jCGStMUwjM/KdrO2A
+   REmGMUpT06i1mWZ/IhqWDJh1NO7wdLygTZH+9FCr4SztBAHkw6+2GvuQq
+   2R5LqrdVqcLyDMuH/Ll8lfxwO6T02tkt+N7rLJPScFmlmODLKf59h8Z14
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="238292334"
 X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="342508374"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 09:44:06 -0700
+   d="scan'208";a="238292334"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:06:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="612955175"
+   d="scan'208";a="515568278"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Mar 2022 09:44:01 -0700
+  by orsmga006.jf.intel.com with ESMTP; 14 Mar 2022 12:06:19 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nTnnd-000A1r-66; Mon, 14 Mar 2022 16:44:01 +0000
-Date: Tue, 15 Mar 2022 00:43:16 +0800
+	id 1nTq1K-000A95-TH; Mon, 14 Mar 2022 19:06:18 +0000
+Date: Tue, 15 Mar 2022 03:05:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
-	kuba@kernel.org
+To: David Hildenbrand <david@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Andrew Lunn <andrew@lunn.ch>,
-	Vivien Didelot <vivien.didelot@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-	Ivan Vecera <ivecera@redhat.com>, Roopa Prabhu <roopa@nvidia.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
-	Cooper Lees <me@cooperlees.com>,
-	Matt Johnston <matt@codeconstruct.com.au>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v3 net-next 01/14] net: bridge: mst: Multiple Spanning
- Tree (MST) mode
-Message-ID: <202203150034.m0Fvevlq-lkp@intel.com>
-References: <20220314095231.3486931-2-tobias@waldekranz.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [linux-next:master 11931/11953] WARNING: modpost:
+ vmlinux.o(.data+0x29c244): Section mismatch in reference from the variable
+ ipv4_route_table to the function .init.text:set_reset_devices()
+Message-ID: <202203150329.AC4pjgdo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,82 +46,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220314095231.3486931-2-tobias@waldekranz.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Tobias,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/0day-ci/linux/commits/Tobias-Waldekranz/net-bridge-Multiple-Spanning-Trees/20220314-175717
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git de29aff976d3216e7f3ab41fcd7af46fa8f7eab7
-config: hexagon-randconfig-r041-20220314 (https://download.01.org/0day-ci/archive/20220315/202203150034.m0Fvevlq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   71941773e143369a73c9c4a3b62fbb60736a1182
+commit: 8a676c9d1697eaf76d2e81b5b18e09af21d7c7bd [11931/11953] mm: optimize do_wp_page() for fresh pages in local LRU pagevecs
+config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220315/202203150329.AC4pjgdo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/702c502efb27c12860bc55fc8d9b1bfd99466623
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tobias-Waldekranz/net-bridge-Multiple-Spanning-Trees/20220314-175717
-        git checkout 702c502efb27c12860bc55fc8d9b1bfd99466623
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=8a676c9d1697eaf76d2e81b5b18e09af21d7c7bd
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 8a676c9d1697eaf76d2e81b5b18e09af21d7c7bd
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/bridge/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> net/bridge/br.c:269:9: error: implicit declaration of function 'br_mst_set_enabled' [-Werror,-Wimplicit-function-declaration]
-                   err = br_mst_set_enabled(br, on, extack);
-                         ^
-   net/bridge/br.c:269:9: note: did you mean 'br_stp_set_enabled'?
-   net/bridge/br_private.h:1828:5: note: 'br_stp_set_enabled' declared here
-   int br_stp_set_enabled(struct net_bridge *br, unsigned long val,
-       ^
-   1 error generated.
+>> WARNING: modpost: vmlinux.o(.data+0x29c244): Section mismatch in reference from the variable ipv4_route_table to the function .init.text:set_reset_devices()
+The variable ipv4_route_table references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
 
 
-vim +/br_mst_set_enabled +269 net/bridge/br.c
-
-   245	
-   246	/* br_boolopt_toggle - change user-controlled boolean option
-   247	 *
-   248	 * @br: bridge device
-   249	 * @opt: id of the option to change
-   250	 * @on: new option value
-   251	 * @extack: extack for error messages
-   252	 *
-   253	 * Changes the value of the respective boolean option to @on taking care of
-   254	 * any internal option value mapping and configuration.
-   255	 */
-   256	int br_boolopt_toggle(struct net_bridge *br, enum br_boolopt_id opt, bool on,
-   257			      struct netlink_ext_ack *extack)
-   258	{
-   259		int err = 0;
-   260	
-   261		switch (opt) {
-   262		case BR_BOOLOPT_NO_LL_LEARN:
-   263			br_opt_toggle(br, BROPT_NO_LL_LEARN, on);
-   264			break;
-   265		case BR_BOOLOPT_MCAST_VLAN_SNOOPING:
-   266			err = br_multicast_toggle_vlan_snooping(br, on, extack);
-   267			break;
-   268		case BR_BOOLOPT_MST_ENABLE:
- > 269			err = br_mst_set_enabled(br, on, extack);
-   270			break;
-   271		default:
-   272			/* shouldn't be called with unsupported options */
-   273			WARN_ON(1);
-   274			break;
-   275		}
-   276	
-   277		return err;
-   278	}
-   279	
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0x1448b2a): Section mismatch in reference from the function tcp4_proc_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2b15e8): Section mismatch in reference from the variable event_rpcgss_ctx_init to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b15ec): Section mismatch in reference from the variable event_rpcgss_ctx_init to the variable .exit.text:.LBB0_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b1618): Section mismatch in reference from the variable event_rpcgss_ctx_destroy to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1638): Section mismatch in reference from the variable event_rpcgss_ctx_destroy to the variable .exit.text:.LBB0_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b1660): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1690): Section mismatch in reference from the variable trace_event_fields_rpcgss_svc_gssapi_class to the function .init.text:init_nls_cp737()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1be8): Section mismatch in reference from the variable event_rpcgss_svc_unwrap to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2b1c08): Section mismatch in reference from the variable event_rpcgss_svc_unwrap to the variable .init.text:.LBB1_1
+<< WARNING: modpost: vmlinux.o(.data+0x293824): Section mismatch in reference from the variable nf_ct_proto_mutex to the function .init.text:loglevel()
 
 ---
 0-DAY CI Kernel Test Service
