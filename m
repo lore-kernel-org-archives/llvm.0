@@ -1,44 +1,34 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C916AD9
-	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 21:41:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647294060; x=1678830060;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=duz+74g0FHVD9ZCC3FyZ5cJrURG4rWVLDfZjXqxt3QM=;
-  b=YgO7YW7pkj/iTSh3QuMPFOFGvmHz6uR4k1JPnZ/+452Cp3FgnNKZvUcP
-   21ThVk2FFOZ1hpUG/L4h5IciMWWsHxk5k0HcU50LejzNeIfYGmTQfWvFi
-   hrB7MvoVnAH9DCp4F59iJ4X3lBwNtAFpLtaqkl3kOfWoWnSeOUEWgQIDE
-   GjArwdw6lhLViJHu0gR3QItI7nzKAmPjzRNnTtwTy5A+WyHY0z89Oej/Q
-   AzBX2bX778YMgSHeF43BUrO7oXy4/JdC4WcJS49+4XKat+WAE+WWjj9jk
-   w4nDynZ1MZONlbEiypttSvTrtB0RUXUVXdG2sqtHea4UEIHudNu5bbHWI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="342579375"
-X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="342579375"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 14:41:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="540158450"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 14 Mar 2022 14:40:58 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nTsQz-000AFt-P0; Mon, 14 Mar 2022 21:40:57 +0000
-Date: Tue, 15 Mar 2022 05:40:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-	David Sterba <dsterba@suse.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-	Josef Bacik <josef@toxicpanda.com>, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH v2] btrfs: zoned: make auto-reclaim less aggressive
-Message-ID: <202203150504.VbCtEy3b-lkp@intel.com>
-References: <d4e31fe56800bdc3bd8ed9230c6a5629ee555cd5.1647268601.git.johannes.thumshirn@wdc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB3A6AD9
+	for <llvm@lists.linux.dev>; Mon, 14 Mar 2022 22:07:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E8A0C340E9;
+	Mon, 14 Mar 2022 22:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647295621;
+	bh=ICh66fxhgwpO5RAgPSp5R1pdsftDqr3eOFQyVmWHtv4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ewtWIpqRSmFuZEjh0N2QSwALxm6+U0Dcpyd0/GCmrj8/e96YkBXvkAOpRN41qtXZe
+	 FrjPPTasHuiKnzXt9wSSF9xN73o4JmGeJIpNqdTdunttJkzEeJIZiPpizTYB1denO/
+	 ooXrac87wrTxrdPWCX+gjfsPwNjS9XgWBQ1nFuj36qj5WfqvxeKkl7yzktYBK0zKwi
+	 dcxGX+Injh2W+y1MZFN6xB/da0luNDV0h/EbFFtbNpZN17fgLAbAAmRKdN/2unKQnj
+	 brlzeMRn3T3LTAAMr0gVk8bbcW7AfmkRaj9kyDBDLdPZQSwy+7z7hOuFVRxdIoC0Vc
+	 GtBO/0AtMuQDQ==
+Date: Mon, 14 Mar 2022 15:06:54 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Cc: Mark Brown <broonie@kernel.org>,
+	Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
+	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+	Nugraha <richiisei@gmail.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, gwml@vger.gnuweeb.org,
+	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] ASoC: atmel: mchp-pdmc: Fix `-Wpointer-bool-conversion`
+ warning
+Message-ID: <Yi+8ft7yXrNN4+Yx@dev-arch.thelio-3990X>
+References: <202203091430.MLY27Bif-lkp@intel.com>
+ <20220309065849.96165-1-alviro.iskandar@gnuweeb.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,48 +37,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d4e31fe56800bdc3bd8ed9230c6a5629ee555cd5.1647268601.git.johannes.thumshirn@wdc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220309065849.96165-1-alviro.iskandar@gnuweeb.org>
 
-Hi Johannes,
+Hi Alviro,
 
-I love your patch! Yet something to improve:
+On Wed, Mar 09, 2022 at 06:58:49AM +0000, Alviro Iskandar Setiawan wrote:
+> In function mchp_pdmc_af_put(), Intel's kernel test robot reports the
+> following warning:
+> 
+>   sound/soc/atmel/mchp-pdmc.c:186:34: warning: address of array \
+>   'uvalue->value.integer.value' will always evaluate to 'true' \
+>   [-Wpointer-bool-conversion]
+> 
+> This is because we are using `uvalue->value.integer.value` which its
+> type is `long value[128];` for conditional expression and that array
+> will always decay to a non-NULL pointer. Using a non-NULL pointer for
+> conditional expression will always evaluate to true.
+> 
+> Fix this by changing it to `uvalue->value.integer.value[0]` as that's
+> what the mchp_pdmc_af_get() function sets.
+> 
+> To: Mark Brown <broonie@kernel.org>
+> Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> Cc: Nugraha <richiisei@gmail.com>
+> Cc: llvm@lists.linux.dev
+> Cc: kbuild-all@lists.01.org
+> Cc: gwml@vger.gnuweeb.org
+> Cc: linux-kernel@vger.kernel.org
 
-[auto build test ERROR on kdave/for-next]
-[also build test ERROR on next-20220310]
-[cannot apply to v5.17-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I would recommend removing these and just setting those values via git
+send-email flags. In other words:
 
-url:    https://github.com/0day-ci/linux/commits/Johannes-Thumshirn/btrfs-zoned-make-auto-reclaim-less-aggressive/20220314-231037
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-config: hexagon-randconfig-r041-20220313 (https://download.01.org/0day-ci/archive/20220315/202203150504.VbCtEy3b-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/e742bf2051b5066cae517342b8bbe81eb44809a4
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Johannes-Thumshirn/btrfs-zoned-make-auto-reclaim-less-aggressive/20220314-231037
-        git checkout e742bf2051b5066cae517342b8bbe81eb44809a4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+git send-email --to "..." --cc "..." --cc "..." <path to .patch>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+and so on. It can cause a lot of spam if this patch is ever backported
+or needed in other trees.
 
-All errors (new ones prefixed by >>):
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/lkml/202203091430.MLY27Bif-lkp@intel.com
+> Fixes: 50291652af5269813baa6024eb0e81b5f0bbb451 ("ASoC: atmel: mchp-pdmc: add PDMC driver")
 
->> ld.lld: error: undefined symbol: __hexagon_udivdi3
-   >>> referenced by zoned.c
-   >>>               btrfs/zoned.o:(btrfs_zoned_should_reclaim) in archive fs/built-in.a
-   >>> referenced by zoned.c
-   >>>               btrfs/zoned.o:(btrfs_zoned_should_reclaim) in archive fs/built-in.a
-   >>> did you mean: __hexagon_udivsi3
-   >>> defined in: arch/hexagon/built-in.a(lib/udivsi3.o)
+This should be simplified to:
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Fixes: 50291652af52 ("ASoC: atmel: mchp-pdmc: add PDMC driver")
+
+I don't think the automated checkers will complain about that but the
+short form is preferred.
+
+> Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+
+Thanks a lot for the patch!
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+I don't know if those nits are worth resending but I do not see this
+applied to Mark's tree yet. It might have gotten lost because this was
+sent as a reply to the build report, rather than its own thread, which
+has caused issues for me in the past:
+
+https://lore.kernel.org/r/20210903162639.GM4932@sirena.org.uk/
+
+If there is no action on this patch in the next couple of days, please
+consider resending with the above nits addressed with Codrin's tag and
+my tag.
+
+> ---
+>  sound/soc/atmel/mchp-pdmc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/sound/soc/atmel/mchp-pdmc.c b/sound/soc/atmel/mchp-pdmc.c
+> index c44636f6207d..7b87f75c284c 100644
+> --- a/sound/soc/atmel/mchp-pdmc.c
+> +++ b/sound/soc/atmel/mchp-pdmc.c
+> @@ -183,7 +183,7 @@ static int mchp_pdmc_af_put(struct snd_kcontrol *kcontrol,
+>  {
+>  	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
+>  	struct mchp_pdmc *dd = snd_soc_component_get_drvdata(component);
+> -	bool af = uvalue->value.integer.value ? true : false;
+> +	bool af = uvalue->value.integer.value[0] ? true : false;
+>  
+>  	if (dd->audio_filter_en == af)
+>  		return 0;
+> 
+> base-commit: 50291652af5269813baa6024eb0e81b5f0bbb451
+> -- 
+> 2.27.0
+> 
+> 
