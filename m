@@ -1,217 +1,227 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5831B75
-	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 07:19:52 +0000 (UTC)
-Received: by mail-pf1-f181.google.com with SMTP id s42so18253767pfg.0
-        for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 00:19:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p6a+ldiuXESu4qxXGLzCnVcToyGykG8cnSUJjrZSQGk=;
-        b=XfmeXGN74t17L1BFQbR7/m90bVFPgD96D0wRoiR1no2Afczoyz7KefF2F19z+S2D72
-         s7rwtI1TXV4RHN2/ra47AllVCgx4vmZ+S1Q4Xj8kKRjo6GpWbzEsekyh8ueaJjQmlWRG
-         8MTIq4oQmWvSEhpCMAQwb/2irUXgi8TlXL3MnQbHs8UnnBg24rZ/ecxoLg8uPyEnveDX
-         3lP3my/DQkkKj2ay6xn/WZAXnu9S+wIXttDlK/Vhcqr2ZHrBtpzUjz76C/K1I7RdzltL
-         dTYPHETRgbUj5Ys7TFyvv/QvWJOrJT7BWZuCDv8e9iIo+IKjTZUJJyPSoI9rgW1xXxAR
-         cLEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p6a+ldiuXESu4qxXGLzCnVcToyGykG8cnSUJjrZSQGk=;
-        b=QhIGWeBblQOAvDX2+8ozMJbxIgJK7XZCWVWTKmw76/FLIVPEiNsBM2OPS5ET/0IImF
-         mC/avttIG1YceP/+eHcGT1N4/ZJW8FsYN8duE3qwdkbmRLiQ1YT01XBluZKM23aaHM81
-         NBnAtx85gGC2LeUp/Pwf27p4X8aPHcW0EC7QjajmOpVtx2rUfCEyYyamJ07dz6RxGeHS
-         hk+IGnoG54UnmoC+U93WlnQlxOQxNLP+/MXWFCS9ZNEQw7w0reWgYFHsutvn1IQ4DtA+
-         zJD0gcs0Xfz/HSIPgEzKcQHcr56WN8CLe/ZU3sNX06Yez2DTg/3quCERfkoA6jUNPD2o
-         V9tg==
-X-Gm-Message-State: AOAM533RulzL4f3yZTidL/Kbzsq6Elo/LESDgNOyvo1LSlC1oKkbBXeH
-	nIualqGf0y5arRxwYA83dDPoIgF3zDpz0OL1hbqV
-X-Google-Smtp-Source: ABdhPJwDanBd0HC6cmWxvTTs2OyG7r1sqAWmV7ySSFTcT8DLEthzhhmJLZoslQFRxcp34sWAxzqDxJvCep1a8qx6HdA=
-X-Received: by 2002:a63:8348:0:b0:380:bcc4:861f with SMTP id
- h69-20020a638348000000b00380bcc4861fmr22998547pge.151.1647328791308; Tue, 15
- Mar 2022 00:19:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD4E1B75
+	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 07:38:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647329896; x=1678865896;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FYNhQYCA7hfsUV9fqsiMThE6b9nySacqxqWFdbXGZ+4=;
+  b=NlZT+AyWXdp5Zn2GpAorUkVT0zlQQSq6mLw/bqqsFsynaZeQSzvQE/2P
+   SMqxr2hc+L9ZAyW445imRJPx4s0GnDvN3H+9ewq53/Pe6EKIkXVCoVG+9
+   oVbQRzhRCYOAntDHC7fCv6baE/p4RitE13F1bXl0O2bIV/28dBCngrmFR
+   Os1nvZ+VpIVrFi2wVdvohleUPneT4teILsiGEbiJpjsDwNG5XWpLpxmhR
+   KQp41t2G7Qe6n40i2YSku9vzZu7mq4pJD6xiWdFN4gO8OpKS5ccmtRhpP
+   k7E8iVxBZkozUXn4KbPNpNBqneG/q0y3qKu9L9EmEQKHgCQwitjp/rxSb
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="319456714"
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="319456714"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 00:36:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="540320693"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Mar 2022 00:36:11 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nU1j0-000Ah3-Ll; Tue, 15 Mar 2022 07:36:10 +0000
+Date: Tue, 15 Mar 2022 15:35:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Isaku Yamahata <isaku.yamahata@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream-workaround 149/296]
+ arch/x86/kvm/vmx/main.c:175:51: error: invalid application of 'sizeof' to an
+ incomplete type 'struct kvm_tdx'
+Message-ID: <202203151531.zATdFM5Y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com>
- <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com>
-In-Reply-To: <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com>
-From: Bill Wendling <morbo@google.com>
-Date: Tue, 15 Mar 2022 00:19:40 -0700
-Message-ID: <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Mar 14, 2022 at 6:08 PM H. Peter Anvin <hpa@zytor.com> wrote:
->
-> My only concern is this: how does this affect the placement of these sequences in relation to the things they need to protect?
->
-With clang (and I assume it's similar with gcc), the
-__builtin_ia32_readeflags_u{64|32} builtins specify that the EFLAGS
-register is used (and the stack pointer is modified). Instructions
-that may change EFLAGS are marked as defining EFLAGS, and clang and
-gcc are careful not to move instructions that access EFLAGS past them.
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   97612c5f3be3447870b5d6fd476931a4c5ff280f
+commit: 540e161d6f1b1e4ca7535ef11258660947ae7b00 [149/296] KVM: TDX: Add placeholders for TDX VM/vcpu structure
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220315/202203151531.zATdFM5Y-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/540e161d6f1b1e4ca7535ef11258660947ae7b00
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 540e161d6f1b1e4ca7535ef11258660947ae7b00
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
-One change you may see due to this patch is the compiler moving the
-"pop %..." instruction away from the "pushf" instruction. This could
-happen if the compiler determines that it could produce better code by
-doing so---e.g. to reduce register pressure. The "gcc -O2" example
-below shows this code movement.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--bw
+All errors (new ones prefixed by >>):
 
-> On March 14, 2022 4:07:23 PM PDT, Bill Wendling <morbo@google.com> wrote:
->>
->> On Tue, Mar 1, 2022 at 12:19 PM Bill Wendling <morbo@google.com> wrote:
->>>
->>>
->> Bump for review.
->>
->> -bw
->>
->>>  This issue arose due to Clang's issue with the "=rm" constraint. Clang
->>>  chooses to be conservative in these situations and always uses memory
->>>  instead of registers, resulting in sub-optimal code. (This is a known
->>>  issue, which is currently being addressed.)
->>>
->>>  This function has gone through numerous changes over the years:
->>>
->>>    - The original version of this function used the "=g" constraint,
->>>      which has the following description:
->>>
->>>        Any register, memory or immediate integer operand is allowed,
->>>        except for registers that are not general registers.
->>>
->>>    - This was changed to "=r" in commit f1f029c7bfbf ("x86: fix assembly
->>>      constraints in native_save_fl()"), because someone noticed that:
->>>
->>>        the offset of the flags variable from the stack pointer will
->>>        change when the pushf is performed. gcc doesn't attempt to
->>>        understand that fact, and address used for pop will still be the
->>>        same. It will write to somewhere near flags on the stack but not
->>>        actually into it and overwrite some other value.
->>>
->>>    - However, commit f1f029c7bfbf ("x86: fix assembly constraints in
->>>      native_save_fl()") was partially reverted in commit ab94fcf528d1
->>>      ("x86: allow "=rm" in native_save_fl()"), because the original
->>>      reporter of the issue was using a broken x86 simulator. The
->>>      justification for this change was:
->>>
->>>        "=rm" is allowed in this context, because "pop" is explicitly
->>>        defined to adjust the stack pointer *before* it evaluates its
->>>        effective address, if it has one.  Thus, we do end up writing to
->>>        the correct address even if we use an on-stack memory argument.
->>>
->>>  Clang generates good code when the builtins are used. On one benchmark,
->>>  a hotspot in kmem_cache_free went from using 5.18% of cycles popping to
->>>  a memory address to 0.13% popping to a register. This benefit is
->>>  magnified given that this code is inlined in numerous places in the
->>>  kernel.
->>>
->>>  The builtins also help GCC. It allows GCC (and Clang) to reduce register
->>>  pressure and, consequently, register spills by rescheduling
->>>  instructions. It can't happen with instructions in inline assembly,
->>>  because compilers view inline assembly blocks as "black boxes," whose
->>>  instructions can't be rescheduled.
->>>
->>>  Another benefit of builtins over asm blocks is that compilers are able
->>>  to make more precise inlining decisions, since they no longer need to
->>>  rely on imprecise measures based on newline counts.
->>>
->>>  A trivial example demonstrates this code motion.
->>>
->>>          void y(void);
->>>          unsigned long x(void) {
->>>                  unsigned long v = __builtin_ia32_readeflags_u64();
->>>                  y();
->>>                  return v;
->>>          }
->>>
->>>  GCC at -O1:
->>>          pushq   %rbx
->>>          pushfq
->>>          popq    %rbx
->>>          movl    $0, %eax
->>>          call    y
->>>          movq    %rbx, %rax
->>>          popq    %rbx
->>>          ret
->>>
->>>  GCC at -O2:
->>>          pushq   %r12
->>>          pushfq
->>>          xorl    %eax, %eax
->>>          popq    %r12
->>>          call    y
->>>          movq    %r12, %rax
->>>          popq    %r12
->>>          ret
->>>
->>>  Link: https://gist.github.com/nickdesaulniers/b4d0f6e26f8cbef0ae4c5352cfeaca67
->>>  Link: https://github.com/llvm/llvm-project/issues/20571
->>>  Link: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html#Simple-Constraints
->>>  Link: https://godbolt.org/z/5n3Eov1xT
->>>  Signed-off-by: Bill Wendling <morbo@google.com>
->>>  Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->>> ________________________________
->>>  v5: - Incorporate Nick's suggestion to limit the change to Clang >= 14.0 and
->>>        GCC.
->>>  v4: - Clang now no longer generates stack frames when using these builtins.
->>>      - Corrected misspellings.
->>>  v3: - Add blurb indicating that GCC's output hasn't changed.
->>>  v2: - Kept the original function to retain the out-of-line symbol.
->>>      - Improved the commit message.
->>>      - Note that I couldn't use Nick's suggestion of
->>>
->>>          return IS_ENABLED(CONFIG_X86_64) ? ...
->>>
->>>        because Clang complains about using __builtin_ia32_readeflags_u32 in
->>>        64-bit mode.
->>> ________________________________
->>>   arch/x86/include/asm/irqflags.h | 10 ++++++++++
->>>   1 file changed, 10 insertions(+)
->>>
->>>  diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
->>>  index 87761396e8cc..2eded855f6ab 100644
->>>  --- a/arch/x86/include/asm/irqflags.h
->>>  +++ b/arch/x86/include/asm/irqflags.h
->>>  @@ -19,6 +19,11 @@
->>>   extern inline unsigned long native_save_fl(void);
->>>   extern __always_inline unsigned long native_save_fl(void)
->>>   {
->>>  +#if defined(CC_IS_CLANG) && defined(UNWINDER_ORC) && CLANG_VERSION < 140000
->>>  +       /*
->>>  +        * Clang forced frame pointers via the builtins until Clang-14. Use
->>>  +        * this as a fall-back until the minimum Clang version is >= 14.0.
->>>  +        */
->>>          unsigned long flags;
->>>
->>>          /*
->>>  @@ -33,6 +38,11 @@ extern __always_inline unsigned long native_save_fl(void)
->>>                       : "memory");
->>>
->>>          return flags;
->>>  +#elif defined(CONFIG_X86_64)
->>>  +       return __builtin_ia32_readeflags_u64();
->>>  +#else
->>>  +       return __builtin_ia32_readeflags_u32();
->>>  +#endif
->>>   }
->>>
->>>   static __always_inline void native_irq_disable(void)
->>>  --
->>>  2.35.1.574.g5d30c73bfb-goog
->>>
+>> arch/x86/kvm/vmx/main.c:175:51: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_tdx'
+           vt_x86_ops.vm_size = max(sizeof(struct kvm_vmx), sizeof(struct kvm_tdx));
+                                                            ^     ~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:36: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                                            ^
+   include/linux/minmax.h:36:38: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                               ^
+   include/linux/minmax.h:26:19: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                                   ^
+   include/linux/minmax.h:20:39: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                                                ^
+   arch/x86/kvm/vmx/tdx.h:38:8: note: forward declaration of 'struct kvm_tdx'
+   struct kvm_tdx;
+          ^
+>> arch/x86/kvm/vmx/main.c:175:51: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_tdx'
+           vt_x86_ops.vm_size = max(sizeof(struct kvm_vmx), sizeof(struct kvm_tdx));
+                                                            ^     ~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:36: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                                            ^
+   include/linux/minmax.h:36:38: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                               ^
+   include/linux/minmax.h:26:46: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                                                              ^
+   include/linux/minmax.h:23:40: note: expanded from macro '__no_side_effects'
+                   (__is_constexpr(x) && __is_constexpr(y))
+                                                        ^
+   include/linux/const.h:12:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   arch/x86/kvm/vmx/tdx.h:38:8: note: forward declaration of 'struct kvm_tdx'
+   struct kvm_tdx;
+          ^
+>> arch/x86/kvm/vmx/main.c:176:43: error: invalid application of 'sizeof' to an incomplete type 'struct vcpu_tdx'
+           vcpu_size = max(sizeof(struct vcpu_vmx), sizeof(struct vcpu_tdx));
+                                                    ^     ~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:36: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                                            ^
+   include/linux/minmax.h:36:38: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                               ^
+   include/linux/minmax.h:26:19: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                                   ^
+   include/linux/minmax.h:20:39: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                                                ^
+   arch/x86/kvm/vmx/tdx.h:39:8: note: forward declaration of 'struct vcpu_tdx'
+   struct vcpu_tdx;
+          ^
+>> arch/x86/kvm/vmx/main.c:176:43: error: invalid application of 'sizeof' to an incomplete type 'struct vcpu_tdx'
+           vcpu_size = max(sizeof(struct vcpu_vmx), sizeof(struct vcpu_tdx));
+                                                    ^     ~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:36: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                                            ^
+   include/linux/minmax.h:36:38: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                               ^
+   include/linux/minmax.h:26:46: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                                                              ^
+   include/linux/minmax.h:23:40: note: expanded from macro '__no_side_effects'
+                   (__is_constexpr(x) && __is_constexpr(y))
+                                                        ^
+   include/linux/const.h:12:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   arch/x86/kvm/vmx/tdx.h:39:8: note: forward declaration of 'struct vcpu_tdx'
+   struct vcpu_tdx;
+          ^
+>> arch/x86/kvm/vmx/main.c:178:4: error: invalid application of '__alignof' to an incomplete type 'struct vcpu_tdx'
+                           __alignof__(struct vcpu_tdx));
+                           ^          ~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:36: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                                            ^
+   include/linux/minmax.h:36:38: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                               ^
+   include/linux/minmax.h:26:19: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                                   ^
+   include/linux/minmax.h:20:39: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                                                ^
+   arch/x86/kvm/vmx/tdx.h:39:8: note: forward declaration of 'struct vcpu_tdx'
+   struct vcpu_tdx;
+          ^
+>> arch/x86/kvm/vmx/main.c:178:4: error: invalid application of '__alignof' to an incomplete type 'struct vcpu_tdx'
+                           __alignof__(struct vcpu_tdx));
+                           ^          ~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:36: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                                            ^
+   include/linux/minmax.h:36:38: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                               ^
+   include/linux/minmax.h:26:46: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                                                              ^
+   include/linux/minmax.h:23:40: note: expanded from macro '__no_side_effects'
+                   (__is_constexpr(x) && __is_constexpr(y))
+                                                        ^
+   include/linux/const.h:12:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   arch/x86/kvm/vmx/tdx.h:39:8: note: forward declaration of 'struct vcpu_tdx'
+   struct vcpu_tdx;
+          ^
+   6 errors generated.
+
+
+vim +175 arch/x86/kvm/vmx/main.c
+
+   169	
+   170	static int __init vt_init(void)
+   171	{
+   172		unsigned int vcpu_size, vcpu_align;
+   173		int r;
+   174	
+ > 175		vt_x86_ops.vm_size = max(sizeof(struct kvm_vmx), sizeof(struct kvm_tdx));
+ > 176		vcpu_size = max(sizeof(struct vcpu_vmx), sizeof(struct vcpu_tdx));
+   177		vcpu_align = max(__alignof__(struct vcpu_vmx),
+ > 178				__alignof__(struct vcpu_tdx));
+   179	
+   180		hv_vp_assist_page_init();
+   181	
+   182		r = kvm_init(&vt_init_ops, vcpu_size, vcpu_align, THIS_MODULE);
+   183		if (r)
+   184			goto err_vmx_post_exit;
+   185	
+   186		r = vmx_init();
+   187		if (r)
+   188			goto err_kvm_exit;
+   189	
+   190		return 0;
+   191	
+   192	err_kvm_exit:
+   193		kvm_exit();
+   194	err_vmx_post_exit:
+   195		hv_vp_assist_page_exit();
+   196		return r;
+   197	}
+   198	module_init(vt_init);
+   199	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
