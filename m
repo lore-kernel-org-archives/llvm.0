@@ -1,45 +1,44 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143A310F3
-	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 01:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DCA10F3
+	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 02:27:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647306270; x=1678842270;
+  t=1647311255; x=1678847255;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=VI+nwOGBY1F4nf8CO+rm2Eo6mglQSNN3eSB1ZecEdas=;
-  b=dKRcR0zbOAbHLnmvhsJo4NEc1JfXM8WzFgrqxF/7uA8Z0jgN3cLi8SF1
-   SaJqjwSl4O7MoQ6WgYB89yVno5EtOgvH1tVrYC+WtBZDWer+A7NLuq+0/
-   tG1gVqHoEW3aGReaCVMJTzYgxLOuiJkiUqDz0L6I5AcukOow6+G+n4QqA
-   CsvljnzcjJ9+j7RT1wKSobktaIFTgvcvRqMj8p+yKaEkZLFr2h1GlMSCW
-   us4ULDcefycSS7Z8lDnCBOwR9HI3C9zvH1h5r145wr+JF21mnEnKiaL4X
-   RR7c99OPWQqp7eJ92jJxjdRxgOqxqifmFoQ026zg8PAKh6+3XC2dfiO6W
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236789573"
-X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="236789573"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 18:04:29 -0700
+  bh=fripwg00pfSQfabbTuvnkWTq/KoP7URqqQDIfqLL22M=;
+  b=MA4rk+ybUem6cjJok+4ZMZeXvw7XeWh3880YXKACXGFEVaTrDIK/IBsu
+   IizQ/bDdtI73NQhPKFnA7KucNPx9+5FQko1VqPu3hgNAyPs9s6zcE6n/v
+   QG0fgGnhe02Qk6Ujtt1oJUvX35B4Go89h+wCbGvqvukzuEY9MOtQvpuPL
+   LxsDL3YPBN5dI2dZjPxx60ZcjnhLtvoTcOFndlwXDn2cEq9Y45CO1Yvzj
+   Rv1mdk2An2M1LYvty5p7eBa2D6hqZxjekopNsYAsbDnEMQXscSdeu7nZM
+   kcvfP+tNoBVDJ5R6cb1oCBj2yNWoOyDN4PwVU3AdDBa9N3IPt3bUKJIGa
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="238362370"
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="238362370"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 19:27:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="634415278"
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="713982385"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Mar 2022 18:04:27 -0700
+  by orsmga005.jf.intel.com with ESMTP; 14 Mar 2022 19:27:33 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nTvbu-000AOb-DX; Tue, 15 Mar 2022 01:04:26 +0000
-Date: Tue, 15 Mar 2022 09:03:44 +0800
+	id 1nTwuK-000ASs-Na; Tue, 15 Mar 2022 02:27:32 +0000
+Date: Tue, 15 Mar 2022 10:26:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paul Menzel <pmenzel@molgen.mpg.de>, Adam Radford <aradford@gmail.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
+To: Alan Previn <alan.previn.teres.alexis@intel.com>,
+	intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Paul Menzel <pmenzel@molgen.mpg.de>, linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: 3w-sas: Correct log level of several messages
-Message-ID: <202203150825.QbKs1io1-lkp@intel.com>
-References: <20220314195728.119160-1-pmenzel@molgen.mpg.de>
+	Alan Previn <alan.previn.teres.alexis@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v9 13/13] drm/i915/guc: Print the GuC error
+ capture output register list.
+Message-ID: <202203151007.mYugtWwO-lkp@intel.com>
+References: <20220314170954.1537154-14-alan.previn.teres.alexis@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,124 +47,249 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220314195728.119160-1-pmenzel@molgen.mpg.de>
+In-Reply-To: <20220314170954.1537154-14-alan.previn.teres.alexis@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Paul,
+Hi Alan,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on jejb-scsi/for-next]
-[also build test ERROR on mkp-scsi/for-next v5.17-rc8 next-20220310]
+[auto build test ERROR on drm-tip/drm-tip]
+[cannot apply to drm-intel/for-linux-next drm-exynos/exynos-drm-next drm/drm-next tegra-drm/drm/tegra/for-next v5.17-rc8 next-20220310]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Paul-Menzel/scsi-3w-sas-Correct-log-level-of-several-messages/20220315-035918
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220315/202203150825.QbKs1io1-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Alan-Previn/Add-GuC-Error-Capture-Support/20220315-010958
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220315/202203151007.mYugtWwO-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/8d5baa500eb6500560660c4c5c355f9556cc4a51
+        # https://github.com/0day-ci/linux/commit/90c08c10562cba1ebf8b31788e7a9550c7637838
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Paul-Menzel/scsi-3w-sas-Correct-log-level-of-several-messages/20220315-035918
-        git checkout 8d5baa500eb6500560660c4c5c355f9556cc4a51
+        git fetch --no-tags linux-review Alan-Previn/Add-GuC-Error-Capture-Support/20220315-010958
+        git checkout 90c08c10562cba1ebf8b31788e7a9550c7637838
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/scsi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/scsi/3w-sas.c:876:11: error: use of undeclared identifier 'KERN_ERROR'; did you mean 'KERN_PROF'?
-                           printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
-                                  ^~~~~~~~~~
-                                  KERN_PROF
-   include/linux/printk.h:446:53: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ^
-   include/linux/printk.h:418:11: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ^
-   include/uapi/linux/sysctl.h:90:2: note: 'KERN_PROF' declared here
-           KERN_PROF=6,            /* table: profiling information */
-           ^
-   drivers/scsi/3w-sas.c:883:11: error: use of undeclared identifier 'KERN_ERROR'; did you mean 'KERN_PROF'?
-                           printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
-                                  ^~~~~~~~~~
-                                  KERN_PROF
-   include/linux/printk.h:446:53: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ^
-   include/linux/printk.h:418:11: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ^
-   include/uapi/linux/sysctl.h:90:2: note: 'KERN_PROF' declared here
-           KERN_PROF=6,            /* table: profiling information */
-           ^
-   drivers/scsi/3w-sas.c:1569:49: warning: shift count >= width of type [-Wshift-count-overflow]
-           retval = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   drivers/scsi/3w-sas.c:1786:49: warning: shift count >= width of type [-Wshift-count-overflow]
-           retval = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   2 warnings and 2 errors generated.
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1497:2: error: no member named 'drm' in 'struct drm_i915_error_state_buf'
+           __out(ebuf, "global --- GuC Error Capture on %s command stream:\n",
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1442:19: note: expanded from macro '__out'
+                   drm_warn((&(a)->drm), __VA_ARGS__); \
+                   ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:435:16: note: expanded from macro 'drm_warn'
+           __drm_printk((drm), warn,, fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:425:21: note: expanded from macro '__drm_printk'
+           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:146:49: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                           ^~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1502:3: error: no member named 'drm' in 'struct drm_i915_error_state_buf'
+                   __out(ebuf, "  No matching ee-node\n");
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1442:19: note: expanded from macro '__out'
+                   drm_warn((&(a)->drm), __VA_ARGS__); \
+                   ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:435:16: note: expanded from macro 'drm_warn'
+           __drm_printk((drm), warn,, fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:425:21: note: expanded from macro '__drm_printk'
+           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:146:49: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                           ^~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1506:2: error: no member named 'drm' in 'struct drm_i915_error_state_buf'
+           __out(ebuf, "Coverage:  %s\n", grptype[node->is_partial]);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1442:19: note: expanded from macro '__out'
+                   drm_warn((&(a)->drm), __VA_ARGS__); \
+                   ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:435:16: note: expanded from macro 'drm_warn'
+           __drm_printk((drm), warn,, fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:425:21: note: expanded from macro '__drm_printk'
+           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:146:49: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                           ^~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1509:3: error: no member named 'drm' in 'struct drm_i915_error_state_buf'
+                   __out(ebuf, "  RegListType: %s\n",
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1442:19: note: expanded from macro '__out'
+                   drm_warn((&(a)->drm), __VA_ARGS__); \
+                   ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:435:16: note: expanded from macro 'drm_warn'
+           __drm_printk((drm), warn,, fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:425:21: note: expanded from macro '__drm_printk'
+           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:146:49: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                           ^~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1511:3: error: no member named 'drm' in 'struct drm_i915_error_state_buf'
+                   __out(ebuf, "    Owner-Id: %d\n", node->reginfo[i].vfid);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1442:19: note: expanded from macro '__out'
+                   drm_warn((&(a)->drm), __VA_ARGS__); \
+                   ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:435:16: note: expanded from macro 'drm_warn'
+           __drm_printk((drm), warn,, fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:425:21: note: expanded from macro '__drm_printk'
+           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:146:49: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                           ^~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1518:4: error: no member named 'drm' in 'struct drm_i915_error_state_buf'
+                           __out(ebuf, "    GuC-Eng-Class: %d\n", node->eng_class);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c:1442:19: note: expanded from macro '__out'
+                   drm_warn((&(a)->drm), __VA_ARGS__); \
+                   ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:435:16: note: expanded from macro 'drm_warn'
+           __drm_printk((drm), warn,, fmt, ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:425:21: note: expanded from macro '__drm_printk'
+           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
 
 
-vim +876 drivers/scsi/3w-sas.c
+vim +1497 drivers/gpu/drm/i915/gt/uc/intel_guc_capture.c
 
-   857	
-   858	/* This function passes sense data from firmware to scsi layer */
-   859	static int twl_fill_sense(TW_Device_Extension *tw_dev, int i, int request_id, int copy_sense, int print_host)
-   860	{
-   861		TW_Command_Apache_Header *header;
-   862		TW_Command_Full *full_command_packet;
-   863		unsigned short error;
-   864		char *error_str;
-   865	
-   866		header = tw_dev->sense_buffer_virt[i];
-   867		full_command_packet = tw_dev->command_packet_virt[request_id];
-   868	
-   869		/* Get embedded firmware error string */
-   870		error_str = &(header->err_specific_desc[strlen(header->err_specific_desc) + 1]);
-   871	
-   872		/* Don't print error for Logical unit not supported during rollcall */
-   873		error = le16_to_cpu(header->status_block.error);
-   874		if ((error != TW_ERROR_LOGICAL_UNIT_NOT_SUPPORTED) && (error != TW_ERROR_UNIT_OFFLINE) && (error != TW_ERROR_INVALID_FIELD_IN_CDB)) {
-   875			if (print_host)
- > 876				printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
-   877				       tw_dev->host->host_no,
-   878				       TW_MESSAGE_SOURCE_CONTROLLER_ERROR,
-   879				       header->status_block.error,
-   880				       error_str,
-   881				       header->err_specific_desc);
-   882			else
-   883				printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
-   884				       TW_MESSAGE_SOURCE_CONTROLLER_ERROR,
-   885				       header->status_block.error,
-   886				       error_str,
-   887				       header->err_specific_desc);
-   888		}
-   889	
-   890		if (copy_sense) {
-   891			memcpy(tw_dev->srb[request_id]->sense_buffer, header->sense_data, TW_SENSE_DATA_LENGTH);
-   892			tw_dev->srb[request_id]->result = (full_command_packet->command.newcommand.status << 1);
-   893			goto out;
-   894		}
-   895	out:
-   896		return 1;
-   897	} /* End twl_fill_sense() */
-   898	
+  1449	
+  1450	#define GCAP_PRINT_INTEL_ENG_INFO(ebuf, eng) \
+  1451		do { \
+  1452			__out(ebuf, "    i915-Eng-Name: %s command stream\n", \
+  1453			      (eng)->name); \
+  1454			__out(ebuf, "    i915-Eng-Inst-Class: 0x%02x\n", (eng)->class); \
+  1455			__out(ebuf, "    i915-Eng-Inst-Id: 0x%02x\n", (eng)->instance); \
+  1456			__out(ebuf, "    i915-Eng-LogicalMask: 0x%08x\n", \
+  1457			      (eng)->logical_mask); \
+  1458		} while (0)
+  1459	
+  1460	#define GCAP_PRINT_GUC_INST_INFO(ebuf, node) \
+  1461		do { \
+  1462			__out(ebuf, "    GuC-Engine-Inst-Id: 0x%08x\n", \
+  1463			      (node)->eng_inst); \
+  1464			__out(ebuf, "    GuC-Context-Id: 0x%08x\n", (node)->guc_id); \
+  1465			__out(ebuf, "    LRCA: 0x%08x\n", (node)->lrca); \
+  1466		} while (0)
+  1467	
+  1468	int intel_guc_capture_print_engine_node(struct drm_i915_error_state_buf *ebuf,
+  1469						const struct intel_engine_coredump *ee)
+  1470	{
+  1471		const char *grptype[GUC_STATE_CAPTURE_GROUP_TYPE_MAX] = {
+  1472			"full-capture",
+  1473			"partial-capture"
+  1474		};
+  1475		const char *datatype[GUC_CAPTURE_LIST_TYPE_MAX] = {
+  1476			"Global",
+  1477			"Engine-Class",
+  1478			"Engine-Instance"
+  1479		};
+  1480		struct intel_guc_state_capture *cap;
+  1481		struct __guc_capture_parsed_output *node;
+  1482		struct intel_engine_cs *eng;
+  1483		struct guc_mmio_reg *regs;
+  1484		struct intel_guc *guc;
+  1485		const char *str;
+  1486		int numregs, i, j;
+  1487		u32 is_ext;
+  1488	
+  1489		if (!ebuf || !ee)
+  1490			return -EINVAL;
+  1491		cap = ee->capture;
+  1492		if (!cap || !ee->engine)
+  1493			return -ENODEV;
+  1494	
+  1495		guc = &ee->engine->gt->uc.guc;
+  1496	
+> 1497		__out(ebuf, "global --- GuC Error Capture on %s command stream:\n",
+  1498		      ee->engine->name);
+  1499	
+  1500		node = ee->guc_capture_node;
+  1501		if (!node) {
+  1502			__out(ebuf, "  No matching ee-node\n");
+  1503			return 0;
+  1504		}
+  1505	
+  1506		__out(ebuf, "Coverage:  %s\n", grptype[node->is_partial]);
+  1507	
+  1508		for (i = GUC_CAPTURE_LIST_TYPE_GLOBAL; i < GUC_CAPTURE_LIST_TYPE_MAX; ++i) {
+  1509			__out(ebuf, "  RegListType: %s\n",
+  1510			      datatype[i % GUC_CAPTURE_LIST_TYPE_MAX]);
+  1511			__out(ebuf, "    Owner-Id: %d\n", node->reginfo[i].vfid);
+  1512	
+  1513			switch (i) {
+  1514			case GUC_CAPTURE_LIST_TYPE_GLOBAL:
+  1515			default:
+  1516				break;
+  1517			case GUC_CAPTURE_LIST_TYPE_ENGINE_CLASS:
+  1518				__out(ebuf, "    GuC-Eng-Class: %d\n", node->eng_class);
+  1519				__out(ebuf, "    i915-Eng-Class: %d\n",
+  1520				      guc_class_to_engine_class(node->eng_class));
+  1521				break;
+  1522			case GUC_CAPTURE_LIST_TYPE_ENGINE_INSTANCE:
+  1523				eng = intel_guc_lookup_engine(guc, node->eng_class, node->eng_inst);
+  1524				if (eng)
+  1525					GCAP_PRINT_INTEL_ENG_INFO(ebuf, eng);
+  1526				else
+  1527					__out(ebuf, "    i915-Eng-Lookup Fail!\n");
+  1528				GCAP_PRINT_GUC_INST_INFO(ebuf, node);
+  1529				break;
+  1530			}
+  1531	
+  1532			numregs = node->reginfo[i].num_regs;
+  1533			__out(ebuf, "    NumRegs: %d\n", numregs);
+  1534			j = 0;
+  1535			while (numregs--) {
+  1536				regs = node->reginfo[i].regs;
+  1537				str = guc_capture_reg_to_str(guc, GUC_CAPTURE_LIST_INDEX_PF, i,
+  1538							     node->eng_class, 0, regs[j].offset, &is_ext);
+  1539				if (!str)
+  1540					__out(ebuf, "      REG-0x%08x", regs[j].offset);
+  1541				else
+  1542					__out(ebuf, "      %s", str);
+  1543				if (is_ext)
+  1544					__out(ebuf, "[%ld][%ld]",
+  1545					      FIELD_GET(GUC_REGSET_STEERING_GROUP, regs[j].flags),
+  1546					      FIELD_GET(GUC_REGSET_STEERING_INSTANCE, regs[j].flags));
+  1547				__out(ebuf, ":  0x%08x\n", regs[j].value);
+  1548				++j;
+  1549			}
+  1550		}
+  1551		return 0;
+  1552	}
+  1553	
 
 ---
 0-DAY CI Kernel Test Service
