@@ -1,42 +1,43 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5DD3663
-	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 21:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A475A3663
+	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 22:07:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647381437; x=1678917437;
+  t=1647382036; x=1678918036;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CoR2irF5hj3EpTP3LGkuGrU7+xfPocs9SVr/gslfAGE=;
-  b=E8ZU6Z2xwv3KY4Rntrd9//ctgdqz3YjccxtNipbvJxM2UwbXNbXkwgoy
-   iiDTFwKLXwXeyB/IxABRgNcBHyzIdjRdNwDguBMeOyghkoMBf0IH/Gi+q
-   b/6SuIcmHSws+DZxNG1gN//8iAPTM0AxUvz9ci19keCbJF8TcKGBKUr+0
-   H/viA1ROVHCY38warwwAVdPdkEs6YsYnFCH+iC+l3MmAbbt2+oqj3I5HZ
-   pcG4cLZ3rLq9Wxo43i1GhHLnQx503Glt/kstIiarkFvd4taqQbDg/fOLh
-   5KBMP6qM2x2dxHRMCpxamkl3osgRiKTxole76a7kEMRls/SjJVEDP4y06
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="281205194"
+  bh=KjSnKNj2twZsTMnSIET3Dl065/bPUJXT5F0mwdP1/6g=;
+  b=XbfuuWTaYgYYaz4YokIHm9Q+zT0ctriJLVa34CD32+pFro4HoIZS1EXK
+   J+zt6Hadnwgs4Ax2dq0UdUWw/vfI9fJ8T2+PHsAjVjGD2ijU+pGbm+BBG
+   Qs7TNX0oe8Guiofm/qBFBwPkB48LSyCnDfNpSqm7fgCasQlDiMOXoorj5
+   fwalrz2CqVL/2qaxYGuRL5mUHT3DYhwpvlgyBDQTAPqsSE88csNNMrtzD
+   2ywm7uvrgJrFVh3Z4zaFAkB6V7ql4Ehd1ecHhh0vkEot2I8xqXLgrMsHa
+   Lvll4Gm0+x4x+AhjRhZOYKPHSOgzcVGSm5PhB+0whESR4pLJ8rODieDOt
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="238598599"
 X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="281205194"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 14:57:16 -0700
+   d="scan'208";a="238598599"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 15:07:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="516055548"
+   d="scan'208";a="613420169"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 15 Mar 2022 14:57:13 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 15 Mar 2022 15:07:14 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nUFAG-000BXA-Vf; Tue, 15 Mar 2022 21:57:12 +0000
-Date: Wed, 16 Mar 2022 05:56:39 +0800
+	id 1nUFJx-000BYI-Cv; Tue, 15 Mar 2022 22:07:13 +0000
+Date: Wed, 16 Mar 2022 06:06:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
+To: Venkateshwar Rao G <venkateshwar.rao.gannavarapu@xilinx.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [broonie-misc:arm64-sysreg-gen 6/9]
- arch/arm64/include/asm/sysreg.h:125:10: fatal error:
- 'generated/asm/sysreg.h' file not found
-Message-ID: <202203160508.k7vz4ZxC-lkp@intel.com>
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>, Hyun Kwon <hyun.kwon@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 643/983]
+ drivers/gpu/drm/xlnx/xlnx_scaler.c:866:3: warning: variable 'nr_rds' is
+ uninitialized when used here
+Message-ID: <202203160632.WrayAcJE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,61 +48,117 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git arm64-sysreg-gen
-head:   72b2ee21681c0c515c6a8bb62bd289766ce324a1
-commit: caf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff [6/9] arm64/sysreg: Enable automatic generation of system register definitions
-config: arm64-randconfig-r006-20220313 (https://download.01.org/0day-ci/archive/20220316/202203160508.k7vz4ZxC-lkp@intel.com/config)
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
+head:   82a6a288ad2ea30575c859f1a5ec2ad014e51528
+commit: 3a0ea0feebe5cb529d57e0f9673d22e4754c6415 [643/983] drm: xlnx: scaler: Adding vpss-scaler driver
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220316/202203160632.WrayAcJE-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=caf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff
-        git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
-        git fetch --no-tags broonie-misc arm64-sysreg-gen
-        git checkout caf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff
+        # https://github.com/Xilinx/linux-xlnx/commit/3a0ea0feebe5cb529d57e0f9673d22e4754c6415
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
+        git checkout 3a0ea0feebe5cb529d57e0f9673d22e4754c6415
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/clk/ drivers/gpu/drm/xlnx/ drivers/media/platform/xilinx/ drivers/net/ethernet/xilinx/ drivers/phy/xilinx/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/bounds.c:10:
-   In file included from include/linux/page-flags.h:10:
-   In file included from include/linux/bug.h:5:
-   In file included from arch/arm64/include/asm/bug.h:26:
-   In file included from include/asm-generic/bug.h:22:
-   In file included from include/linux/printk.h:9:
-   In file included from include/linux/cache.h:6:
-   In file included from arch/arm64/include/asm/cache.h:8:
-   In file included from arch/arm64/include/asm/cputype.h:173:
->> arch/arm64/include/asm/sysreg.h:125:10: fatal error: 'generated/asm/sysreg.h' file not found
-   #include "generated/asm/sysreg.h"
-            ^~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> drivers/gpu/drm/xlnx/xlnx_scaler.c:866:3: warning: variable 'nr_rds' is uninitialized when used here [-Wuninitialized]
+                   nr_rds += nr_rds_clck;
+                   ^~~~~~
+   drivers/gpu/drm/xlnx/xlnx_scaler.c:821:12: note: initialize the variable 'nr_rds' to silence this warning
+           int nr_rds;
+                     ^
+                      = 0
+   drivers/gpu/drm/xlnx/xlnx_scaler.c:1394:6: warning: variable 'fmt_in' set but not used [-Wunused-but-set-variable]
+           u32 fmt_in, fmt_out;
+               ^
+   drivers/gpu/drm/xlnx/xlnx_scaler.c:1394:14: warning: variable 'fmt_out' set but not used [-Wunused-but-set-variable]
+           u32 fmt_in, fmt_out;
+                       ^
+   3 warnings generated.
 
 
-vim +125 arch/arm64/include/asm/sysreg.h
+vim +/nr_rds +866 drivers/gpu/drm/xlnx/xlnx_scaler.c
 
-   118	
-   119	/*
-   120	 * Automatically generated definitions for system registers, the
-   121	 * manual encodings below are in the process of being converted to
-   122	 * come from here. The header relies on the definition of sys_reg()
-   123	 * earlier in this file.
-   124	 */
- > 125	#include "generated/asm/sysreg.h"
-   126	
+   800	
+   801	/**
+   802	 * xv_hscaler_calculate_phases - Calculates h-scaler phases
+   803	 * @scaler: Pointer to scaler registers base
+   804	 * @width_in: input width
+   805	 * @width_out: output width
+   806	 * @pixel_rate: pixel rate
+   807	 *
+   808	 */
+   809	static void
+   810	xv_hscaler_calculate_phases(struct xilinx_scaler *scaler,
+   811				    u32 width_in, u32 width_out, u32 pixel_rate)
+   812	{
+   813		unsigned int loop_width;
+   814		unsigned int x, s;
+   815		int offset = 0;
+   816		int xwrite_pos = 0;
+   817		bool output_write_en;
+   818		bool get_new_pix;
+   819		u64 phaseH;
+   820		u32 array_idx = 0;
+   821		int nr_rds;
+   822		int nr_rds_clck;
+   823		unsigned int nphases = scaler->max_num_phases;
+   824		unsigned int nppc = scaler->pix_per_clk;
+   825		unsigned int shift = XHSC_STEP_PRECISION_SHIFT - ilog2(nphases);
+   826	
+   827		loop_width = max_t(u32, width_in, width_out);
+   828		loop_width = ALIGN(loop_width + nppc - 1, nppc);
+   829	
+   830		for (x = 0; x < loop_width; x++) {
+   831			nr_rds_clck = 0;
+   832			for (s = 0; s < nppc; s++) {
+   833				phaseH = (offset >> shift) & (nphases - 1);
+   834				get_new_pix = false;
+   835				output_write_en = false;
+   836				if ((offset >> XHSC_STEP_PRECISION_SHIFT) != 0) {
+   837					get_new_pix = true;
+   838					offset -= (1 << XHSC_STEP_PRECISION_SHIFT);
+   839					array_idx++;
+   840				}
+   841	
+   842				if (((offset >> XHSC_STEP_PRECISION_SHIFT) == 0) &&
+   843				    xwrite_pos < width_out) {
+   844					offset += pixel_rate;
+   845					output_write_en = true;
+   846					xwrite_pos++;
+   847				}
+   848	
+   849				scaler->H_phases[x] |= (phaseH <<
+   850							(s * XHSC_HPHASE_MULTIPLIER));
+   851				scaler->H_phases[x] |= (array_idx <<
+   852							(XHSC_HPHASE_SHIFT_BY_6 +
+   853							(s * XHSC_HPHASE_MULTIPLIER)));
+   854				if (output_write_en) {
+   855					scaler->H_phases[x] |=
+   856					(XV_HSCALER_PHASESH_V_OUTPUT_WR_EN <<
+   857					(s * XHSC_HPHASE_MULTIPLIER));
+   858				}
+   859	
+   860				if (get_new_pix)
+   861					nr_rds_clck++;
+   862			}
+   863			if (array_idx >= nppc)
+   864				array_idx &= (nppc - 1);
+   865	
+ > 866			nr_rds += nr_rds_clck;
+   867			if (nr_rds >= nppc)
+   868				nr_rds -= nppc;
+   869		}
+   870	}
+   871	
 
 ---
 0-DAY CI Kernel Test Service
