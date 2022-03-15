@@ -1,394 +1,217 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504821B75
-	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 06:55:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647327302; x=1678863302;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K4nJgs5xtwq4yKb4yM+G38J43n1l2K0izWthYKyK94E=;
-  b=Y4K0yjlEvPpJMAmj9zB2fIPQDrZlxxC9+Sv3NgC3RIndcNdDW3kK88co
-   gL54F9nVs26bg68fwRVVTGG/Zf+BdXvhw8NEkF91QsAIn4S6lt8PE4n6K
-   7h2p0IDwYopweF8iSmHOkk4+PdtAi2X4HXJkQnB2KvgAYocMKN6YU43Z3
-   +eRAeAjGDaFxH7SAksXOwirStNsEdDMPWZ4wJ0zsj0jYbHSy4qJYeQcD0
-   QFjH4DtkF0OnCACEJ32fj80Kz3aff5JMqlkT1MkyRqWtJ4IGuR7Pu0Im8
-   x1NCcZKaWGHw9DG3ogetdQ3toAcOrmyNq7g/pMSVhl9AtleD76oqM8s8E
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255956559"
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="255956559"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 23:55:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="646113955"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 14 Mar 2022 23:54:59 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nU158-000AfM-PB; Tue, 15 Mar 2022 06:54:58 +0000
-Date: Tue, 15 Mar 2022 14:54:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xiubo Li <xiubli@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>
-Subject: [jlayton:ceph-fscrypt-sparse 66/74] fs/ceph/dir.c:424:10: error:
- implicit declaration of function 'ceph_encode_encrypted_dname'
-Message-ID: <202203151450.7EtYHIru-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5831B75
+	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 07:19:52 +0000 (UTC)
+Received: by mail-pf1-f181.google.com with SMTP id s42so18253767pfg.0
+        for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 00:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p6a+ldiuXESu4qxXGLzCnVcToyGykG8cnSUJjrZSQGk=;
+        b=XfmeXGN74t17L1BFQbR7/m90bVFPgD96D0wRoiR1no2Afczoyz7KefF2F19z+S2D72
+         s7rwtI1TXV4RHN2/ra47AllVCgx4vmZ+S1Q4Xj8kKRjo6GpWbzEsekyh8ueaJjQmlWRG
+         8MTIq4oQmWvSEhpCMAQwb/2irUXgi8TlXL3MnQbHs8UnnBg24rZ/ecxoLg8uPyEnveDX
+         3lP3my/DQkkKj2ay6xn/WZAXnu9S+wIXttDlK/Vhcqr2ZHrBtpzUjz76C/K1I7RdzltL
+         dTYPHETRgbUj5Ys7TFyvv/QvWJOrJT7BWZuCDv8e9iIo+IKjTZUJJyPSoI9rgW1xXxAR
+         cLEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p6a+ldiuXESu4qxXGLzCnVcToyGykG8cnSUJjrZSQGk=;
+        b=QhIGWeBblQOAvDX2+8ozMJbxIgJK7XZCWVWTKmw76/FLIVPEiNsBM2OPS5ET/0IImF
+         mC/avttIG1YceP/+eHcGT1N4/ZJW8FsYN8duE3qwdkbmRLiQ1YT01XBluZKM23aaHM81
+         NBnAtx85gGC2LeUp/Pwf27p4X8aPHcW0EC7QjajmOpVtx2rUfCEyYyamJ07dz6RxGeHS
+         hk+IGnoG54UnmoC+U93WlnQlxOQxNLP+/MXWFCS9ZNEQw7w0reWgYFHsutvn1IQ4DtA+
+         zJD0gcs0Xfz/HSIPgEzKcQHcr56WN8CLe/ZU3sNX06Yez2DTg/3quCERfkoA6jUNPD2o
+         V9tg==
+X-Gm-Message-State: AOAM533RulzL4f3yZTidL/Kbzsq6Elo/LESDgNOyvo1LSlC1oKkbBXeH
+	nIualqGf0y5arRxwYA83dDPoIgF3zDpz0OL1hbqV
+X-Google-Smtp-Source: ABdhPJwDanBd0HC6cmWxvTTs2OyG7r1sqAWmV7ySSFTcT8DLEthzhhmJLZoslQFRxcp34sWAxzqDxJvCep1a8qx6HdA=
+X-Received: by 2002:a63:8348:0:b0:380:bcc4:861f with SMTP id
+ h69-20020a638348000000b00380bcc4861fmr22998547pge.151.1647328791308; Tue, 15
+ Mar 2022 00:19:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com>
+ <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com>
+In-Reply-To: <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com>
+From: Bill Wendling <morbo@google.com>
+Date: Tue, 15 Mar 2022 00:19:40 -0700
+Message-ID: <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
+Subject: Re: [PATCH v5] x86: use builtins to read eflags
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt-sparse
-head:   0d355bda666e44314f11974167e8d9bb010a539e
-commit: 4378b10dd7df64ef085e3fe2a2251034ee98c4dc [66/74] ceph: dencrypt the dentry names early and once for readdir
-config: hexagon-randconfig-r012-20220313 (https://download.01.org/0day-ci/archive/20220315/202203151450.7EtYHIru-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=4378b10dd7df64ef085e3fe2a2251034ee98c4dc
-        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
-        git fetch --no-tags jlayton ceph-fscrypt-sparse
-        git checkout 4378b10dd7df64ef085e3fe2a2251034ee98c4dc
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ethernet/mscc/ fs/ceph/
+On Mon, Mar 14, 2022 at 6:08 PM H. Peter Anvin <hpa@zytor.com> wrote:
+>
+> My only concern is this: how does this affect the placement of these sequences in relation to the things they need to protect?
+>
+With clang (and I assume it's similar with gcc), the
+__builtin_ia32_readeflags_u{64|32} builtins specify that the EFLAGS
+register is used (and the stack pointer is modified). Instructions
+that may change EFLAGS are marked as defining EFLAGS, and clang and
+gcc are careful not to move instructions that access EFLAGS past them.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+One change you may see due to this patch is the compiler moving the
+"pop %..." instruction away from the "pushf" instruction. This could
+happen if the compiler determines that it could produce better code by
+doing so---e.g. to reduce register pressure. The "gcc -O2" example
+below shows this code movement.
 
-All errors (new ones prefixed by >>):
+-bw
 
->> fs/ceph/dir.c:424:10: error: implicit declaration of function 'ceph_encode_encrypted_dname' [-Werror,-Wimplicit-function-declaration]
-                           err = ceph_encode_encrypted_dname(inode, &d_name, req->r_path2);
-                                 ^
-   fs/ceph/dir.c:424:10: note: did you mean 'ceph_encode_encrypted_fname'?
-   fs/ceph/crypto.h:175:19: note: 'ceph_encode_encrypted_fname' declared here
-   static inline int ceph_encode_encrypted_fname(const struct inode *parent,
-                     ^
-   1 error generated.
-
-
-vim +/ceph_encode_encrypted_dname +424 fs/ceph/dir.c
-
-   307	
-   308	static int ceph_readdir(struct file *file, struct dir_context *ctx)
-   309	{
-   310		struct ceph_dir_file_info *dfi = file->private_data;
-   311		struct inode *inode = file_inode(file);
-   312		struct ceph_inode_info *ci = ceph_inode(inode);
-   313		struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
-   314		struct ceph_mds_client *mdsc = fsc->mdsc;
-   315		int i;
-   316		int err;
-   317		unsigned frag = -1;
-   318		struct ceph_mds_reply_info_parsed *rinfo;
-   319	
-   320		dout("readdir %p file %p pos %llx\n", inode, file, ctx->pos);
-   321		if (dfi->file_info.flags & CEPH_F_ATEND)
-   322			return 0;
-   323	
-   324		/* always start with . and .. */
-   325		if (ctx->pos == 0) {
-   326			dout("readdir off 0 -> '.'\n");
-   327			if (!dir_emit(ctx, ".", 1, ceph_present_inode(inode),
-   328				    inode->i_mode >> 12))
-   329				return 0;
-   330			ctx->pos = 1;
-   331		}
-   332		if (ctx->pos == 1) {
-   333			u64 ino;
-   334			struct dentry *dentry = file->f_path.dentry;
-   335	
-   336			spin_lock(&dentry->d_lock);
-   337			ino = ceph_present_inode(dentry->d_parent->d_inode);
-   338			spin_unlock(&dentry->d_lock);
-   339	
-   340			dout("readdir off 1 -> '..'\n");
-   341			if (!dir_emit(ctx, "..", 2, ino, inode->i_mode >> 12))
-   342				return 0;
-   343			ctx->pos = 2;
-   344		}
-   345	
-   346		err = fscrypt_prepare_readdir(inode);
-   347		if (err)
-   348			return err;
-   349	
-   350		spin_lock(&ci->i_ceph_lock);
-   351		/* request Fx cap. if have Fx, we don't need to release Fs cap
-   352		 * for later create/unlink. */
-   353		__ceph_touch_fmode(ci, mdsc, CEPH_FILE_MODE_WR);
-   354		/* can we use the dcache? */
-   355		if (ceph_test_mount_opt(fsc, DCACHE) &&
-   356		    !ceph_test_mount_opt(fsc, NOASYNCREADDIR) &&
-   357		    ceph_snap(inode) != CEPH_SNAPDIR &&
-   358		    __ceph_dir_is_complete_ordered(ci) &&
-   359		    __ceph_caps_issued_mask_metric(ci, CEPH_CAP_FILE_SHARED, 1)) {
-   360			int shared_gen = atomic_read(&ci->i_shared_gen);
-   361	
-   362			spin_unlock(&ci->i_ceph_lock);
-   363			err = __dcache_readdir(file, ctx, shared_gen);
-   364			if (err != -EAGAIN)
-   365				return err;
-   366		} else {
-   367			spin_unlock(&ci->i_ceph_lock);
-   368		}
-   369	
-   370		/* proceed with a normal readdir */
-   371	more:
-   372		/* do we have the correct frag content buffered? */
-   373		if (need_send_readdir(dfi, ctx->pos)) {
-   374			struct ceph_mds_request *req;
-   375			int op = ceph_snap(inode) == CEPH_SNAPDIR ?
-   376				CEPH_MDS_OP_LSSNAP : CEPH_MDS_OP_READDIR;
-   377	
-   378			/* discard old result, if any */
-   379			if (dfi->last_readdir) {
-   380				ceph_mdsc_put_request(dfi->last_readdir);
-   381				dfi->last_readdir = NULL;
-   382			}
-   383	
-   384			if (is_hash_order(ctx->pos)) {
-   385				/* fragtree isn't always accurate. choose frag
-   386				 * based on previous reply when possible. */
-   387				if (frag == (unsigned)-1)
-   388					frag = ceph_choose_frag(ci, fpos_hash(ctx->pos),
-   389								NULL, NULL);
-   390			} else {
-   391				frag = fpos_frag(ctx->pos);
-   392			}
-   393	
-   394			dout("readdir fetching %llx.%llx frag %x offset '%s'\n",
-   395			     ceph_vinop(inode), frag, dfi->last_name);
-   396			req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
-   397			if (IS_ERR(req)) {
-   398				err = PTR_ERR(req);
-   399				goto out;
-   400			}
-   401			err = ceph_alloc_readdir_reply_buffer(req, inode);
-   402			if (err) {
-   403				ceph_mdsc_put_request(req);
-   404				goto out;
-   405			}
-   406			/* hints to request -> mds selection code */
-   407			req->r_direct_mode = USE_AUTH_MDS;
-   408			if (op == CEPH_MDS_OP_READDIR) {
-   409				req->r_direct_hash = ceph_frag_value(frag);
-   410				__set_bit(CEPH_MDS_R_DIRECT_IS_HASH, &req->r_req_flags);
-   411				req->r_inode_drop = CEPH_CAP_FILE_EXCL;
-   412			}
-   413			if (dfi->last_name) {
-   414				struct qstr d_name = { .name = dfi->last_name,
-   415						       .len = strlen(dfi->last_name) };
-   416	
-   417				req->r_path2 = kzalloc(NAME_MAX + 1, GFP_KERNEL);
-   418				if (!req->r_path2) {
-   419					ceph_mdsc_put_request(req);
-   420					err = -ENOMEM;
-   421					goto out;
-   422				}
-   423	
- > 424				err = ceph_encode_encrypted_dname(inode, &d_name, req->r_path2);
-   425				if (err < 0) {
-   426					ceph_mdsc_put_request(req);
-   427					goto out;
-   428				}
-   429			} else if (is_hash_order(ctx->pos)) {
-   430				req->r_args.readdir.offset_hash =
-   431					cpu_to_le32(fpos_hash(ctx->pos));
-   432			}
-   433	
-   434			req->r_dir_release_cnt = dfi->dir_release_count;
-   435			req->r_dir_ordered_cnt = dfi->dir_ordered_count;
-   436			req->r_readdir_cache_idx = dfi->readdir_cache_idx;
-   437			req->r_readdir_offset = dfi->next_offset;
-   438			req->r_args.readdir.frag = cpu_to_le32(frag);
-   439			req->r_args.readdir.flags =
-   440					cpu_to_le16(CEPH_READDIR_REPLY_BITFLAGS);
-   441	
-   442			req->r_inode = inode;
-   443			ihold(inode);
-   444			req->r_dentry = dget(file->f_path.dentry);
-   445			err = ceph_mdsc_do_request(mdsc, NULL, req);
-   446			if (err < 0) {
-   447				ceph_mdsc_put_request(req);
-   448				goto out;
-   449			}
-   450			dout("readdir got and parsed readdir result=%d on "
-   451			     "frag %x, end=%d, complete=%d, hash_order=%d\n",
-   452			     err, frag,
-   453			     (int)req->r_reply_info.dir_end,
-   454			     (int)req->r_reply_info.dir_complete,
-   455			     (int)req->r_reply_info.hash_order);
-   456	
-   457			rinfo = &req->r_reply_info;
-   458			if (le32_to_cpu(rinfo->dir_dir->frag) != frag) {
-   459				frag = le32_to_cpu(rinfo->dir_dir->frag);
-   460				if (!rinfo->hash_order) {
-   461					dfi->next_offset = req->r_readdir_offset;
-   462					/* adjust ctx->pos to beginning of frag */
-   463					ctx->pos = ceph_make_fpos(frag,
-   464								  dfi->next_offset,
-   465								  false);
-   466				}
-   467			}
-   468	
-   469			dfi->frag = frag;
-   470			dfi->last_readdir = req;
-   471	
-   472			if (test_bit(CEPH_MDS_R_DID_PREPOPULATE, &req->r_req_flags)) {
-   473				dfi->readdir_cache_idx = req->r_readdir_cache_idx;
-   474				if (dfi->readdir_cache_idx < 0) {
-   475					/* preclude from marking dir ordered */
-   476					dfi->dir_ordered_count = 0;
-   477				} else if (ceph_frag_is_leftmost(frag) &&
-   478					   dfi->next_offset == 2) {
-   479					/* note dir version at start of readdir so
-   480					 * we can tell if any dentries get dropped */
-   481					dfi->dir_release_count = req->r_dir_release_cnt;
-   482					dfi->dir_ordered_count = req->r_dir_ordered_cnt;
-   483				}
-   484			} else {
-   485				dout("readdir !did_prepopulate\n");
-   486				/* disable readdir cache */
-   487				dfi->readdir_cache_idx = -1;
-   488				/* preclude from marking dir complete */
-   489				dfi->dir_release_count = 0;
-   490			}
-   491	
-   492			/* note next offset and last dentry name */
-   493			if (rinfo->dir_nr > 0) {
-   494				struct ceph_mds_reply_dir_entry *rde =
-   495						rinfo->dir_entries + (rinfo->dir_nr-1);
-   496				unsigned next_offset = req->r_reply_info.dir_end ?
-   497						2 : (fpos_off(rde->offset) + 1);
-   498				err = note_last_dentry(dfi, rde->name, rde->name_len,
-   499						       next_offset);
-   500				if (err) {
-   501					ceph_mdsc_put_request(dfi->last_readdir);
-   502					dfi->last_readdir = NULL;
-   503					goto out;
-   504				}
-   505			} else if (req->r_reply_info.dir_end) {
-   506				dfi->next_offset = 2;
-   507				/* keep last name */
-   508			}
-   509		}
-   510	
-   511		rinfo = &dfi->last_readdir->r_reply_info;
-   512		dout("readdir frag %x num %d pos %llx chunk first %llx\n",
-   513		     dfi->frag, rinfo->dir_nr, ctx->pos,
-   514		     rinfo->dir_nr ? rinfo->dir_entries[0].offset : 0LL);
-   515	
-   516		i = 0;
-   517		/* search start position */
-   518		if (rinfo->dir_nr > 0) {
-   519			int step, nr = rinfo->dir_nr;
-   520			while (nr > 0) {
-   521				step = nr >> 1;
-   522				if (rinfo->dir_entries[i + step].offset < ctx->pos) {
-   523					i +=  step + 1;
-   524					nr -= step + 1;
-   525				} else {
-   526					nr = step;
-   527				}
-   528			}
-   529		}
-   530		for (; i < rinfo->dir_nr; i++) {
-   531			struct ceph_mds_reply_dir_entry *rde = rinfo->dir_entries + i;
-   532	
-   533			BUG_ON(rde->offset < ctx->pos);
-   534			BUG_ON(!rde->inode.in);
-   535	
-   536			ctx->pos = rde->offset;
-   537			dout("readdir (%d/%d) -> %llx '%.*s' %p\n",
-   538			     i, rinfo->dir_nr, ctx->pos,
-   539			     rde->name_len, rde->name, &rde->inode.in);
-   540	
-   541			if (!dir_emit(ctx, rde->name, rde->name_len,
-   542				      ceph_present_ino(inode->i_sb, le64_to_cpu(rde->inode.in->ino)),
-   543				      le32_to_cpu(rde->inode.in->mode) >> 12)) {
-   544				/*
-   545				 * NOTE: Here no need to put the 'dfi->last_readdir',
-   546				 * because when dir_emit stops us it's most likely
-   547				 * doesn't have enough memory, etc. So for next readdir
-   548				 * it will continue.
-   549				 */
-   550				dout("filldir stopping us...\n");
-   551				err = 0;
-   552				goto out;
-   553			}
-   554	
-   555			/* Reset the lengths to their original allocated vals */
-   556			ctx->pos++;
-   557		}
-   558	
-   559		ceph_mdsc_put_request(dfi->last_readdir);
-   560		dfi->last_readdir = NULL;
-   561	
-   562		if (dfi->next_offset > 2) {
-   563			frag = dfi->frag;
-   564			goto more;
-   565		}
-   566	
-   567		/* more frags? */
-   568		if (!ceph_frag_is_rightmost(dfi->frag)) {
-   569			frag = ceph_frag_next(dfi->frag);
-   570			if (is_hash_order(ctx->pos)) {
-   571				loff_t new_pos = ceph_make_fpos(ceph_frag_value(frag),
-   572								dfi->next_offset, true);
-   573				if (new_pos > ctx->pos)
-   574					ctx->pos = new_pos;
-   575				/* keep last_name */
-   576			} else {
-   577				ctx->pos = ceph_make_fpos(frag, dfi->next_offset,
-   578								false);
-   579				kfree(dfi->last_name);
-   580				dfi->last_name = NULL;
-   581			}
-   582			dout("readdir next frag is %x\n", frag);
-   583			goto more;
-   584		}
-   585		dfi->file_info.flags |= CEPH_F_ATEND;
-   586	
-   587		/*
-   588		 * if dir_release_count still matches the dir, no dentries
-   589		 * were released during the whole readdir, and we should have
-   590		 * the complete dir contents in our cache.
-   591		 */
-   592		if (atomic64_read(&ci->i_release_count) ==
-   593						dfi->dir_release_count) {
-   594			spin_lock(&ci->i_ceph_lock);
-   595			if (dfi->dir_ordered_count ==
-   596					atomic64_read(&ci->i_ordered_count)) {
-   597				dout(" marking %p complete and ordered\n", inode);
-   598				/* use i_size to track number of entries in
-   599				 * readdir cache */
-   600				BUG_ON(dfi->readdir_cache_idx < 0);
-   601				i_size_write(inode, dfi->readdir_cache_idx *
-   602					     sizeof(struct dentry*));
-   603			} else {
-   604				dout(" marking %p complete\n", inode);
-   605			}
-   606			__ceph_dir_set_complete(ci, dfi->dir_release_count,
-   607						dfi->dir_ordered_count);
-   608			spin_unlock(&ci->i_ceph_lock);
-   609		}
-   610		err = 0;
-   611		dout("readdir %p file %p done.\n", inode, file);
-   612	out:
-   613		return err;
-   614	}
-   615	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> On March 14, 2022 4:07:23 PM PDT, Bill Wendling <morbo@google.com> wrote:
+>>
+>> On Tue, Mar 1, 2022 at 12:19 PM Bill Wendling <morbo@google.com> wrote:
+>>>
+>>>
+>> Bump for review.
+>>
+>> -bw
+>>
+>>>  This issue arose due to Clang's issue with the "=rm" constraint. Clang
+>>>  chooses to be conservative in these situations and always uses memory
+>>>  instead of registers, resulting in sub-optimal code. (This is a known
+>>>  issue, which is currently being addressed.)
+>>>
+>>>  This function has gone through numerous changes over the years:
+>>>
+>>>    - The original version of this function used the "=g" constraint,
+>>>      which has the following description:
+>>>
+>>>        Any register, memory or immediate integer operand is allowed,
+>>>        except for registers that are not general registers.
+>>>
+>>>    - This was changed to "=r" in commit f1f029c7bfbf ("x86: fix assembly
+>>>      constraints in native_save_fl()"), because someone noticed that:
+>>>
+>>>        the offset of the flags variable from the stack pointer will
+>>>        change when the pushf is performed. gcc doesn't attempt to
+>>>        understand that fact, and address used for pop will still be the
+>>>        same. It will write to somewhere near flags on the stack but not
+>>>        actually into it and overwrite some other value.
+>>>
+>>>    - However, commit f1f029c7bfbf ("x86: fix assembly constraints in
+>>>      native_save_fl()") was partially reverted in commit ab94fcf528d1
+>>>      ("x86: allow "=rm" in native_save_fl()"), because the original
+>>>      reporter of the issue was using a broken x86 simulator. The
+>>>      justification for this change was:
+>>>
+>>>        "=rm" is allowed in this context, because "pop" is explicitly
+>>>        defined to adjust the stack pointer *before* it evaluates its
+>>>        effective address, if it has one.  Thus, we do end up writing to
+>>>        the correct address even if we use an on-stack memory argument.
+>>>
+>>>  Clang generates good code when the builtins are used. On one benchmark,
+>>>  a hotspot in kmem_cache_free went from using 5.18% of cycles popping to
+>>>  a memory address to 0.13% popping to a register. This benefit is
+>>>  magnified given that this code is inlined in numerous places in the
+>>>  kernel.
+>>>
+>>>  The builtins also help GCC. It allows GCC (and Clang) to reduce register
+>>>  pressure and, consequently, register spills by rescheduling
+>>>  instructions. It can't happen with instructions in inline assembly,
+>>>  because compilers view inline assembly blocks as "black boxes," whose
+>>>  instructions can't be rescheduled.
+>>>
+>>>  Another benefit of builtins over asm blocks is that compilers are able
+>>>  to make more precise inlining decisions, since they no longer need to
+>>>  rely on imprecise measures based on newline counts.
+>>>
+>>>  A trivial example demonstrates this code motion.
+>>>
+>>>          void y(void);
+>>>          unsigned long x(void) {
+>>>                  unsigned long v = __builtin_ia32_readeflags_u64();
+>>>                  y();
+>>>                  return v;
+>>>          }
+>>>
+>>>  GCC at -O1:
+>>>          pushq   %rbx
+>>>          pushfq
+>>>          popq    %rbx
+>>>          movl    $0, %eax
+>>>          call    y
+>>>          movq    %rbx, %rax
+>>>          popq    %rbx
+>>>          ret
+>>>
+>>>  GCC at -O2:
+>>>          pushq   %r12
+>>>          pushfq
+>>>          xorl    %eax, %eax
+>>>          popq    %r12
+>>>          call    y
+>>>          movq    %r12, %rax
+>>>          popq    %r12
+>>>          ret
+>>>
+>>>  Link: https://gist.github.com/nickdesaulniers/b4d0f6e26f8cbef0ae4c5352cfeaca67
+>>>  Link: https://github.com/llvm/llvm-project/issues/20571
+>>>  Link: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html#Simple-Constraints
+>>>  Link: https://godbolt.org/z/5n3Eov1xT
+>>>  Signed-off-by: Bill Wendling <morbo@google.com>
+>>>  Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>>> ________________________________
+>>>  v5: - Incorporate Nick's suggestion to limit the change to Clang >= 14.0 and
+>>>        GCC.
+>>>  v4: - Clang now no longer generates stack frames when using these builtins.
+>>>      - Corrected misspellings.
+>>>  v3: - Add blurb indicating that GCC's output hasn't changed.
+>>>  v2: - Kept the original function to retain the out-of-line symbol.
+>>>      - Improved the commit message.
+>>>      - Note that I couldn't use Nick's suggestion of
+>>>
+>>>          return IS_ENABLED(CONFIG_X86_64) ? ...
+>>>
+>>>        because Clang complains about using __builtin_ia32_readeflags_u32 in
+>>>        64-bit mode.
+>>> ________________________________
+>>>   arch/x86/include/asm/irqflags.h | 10 ++++++++++
+>>>   1 file changed, 10 insertions(+)
+>>>
+>>>  diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+>>>  index 87761396e8cc..2eded855f6ab 100644
+>>>  --- a/arch/x86/include/asm/irqflags.h
+>>>  +++ b/arch/x86/include/asm/irqflags.h
+>>>  @@ -19,6 +19,11 @@
+>>>   extern inline unsigned long native_save_fl(void);
+>>>   extern __always_inline unsigned long native_save_fl(void)
+>>>   {
+>>>  +#if defined(CC_IS_CLANG) && defined(UNWINDER_ORC) && CLANG_VERSION < 140000
+>>>  +       /*
+>>>  +        * Clang forced frame pointers via the builtins until Clang-14. Use
+>>>  +        * this as a fall-back until the minimum Clang version is >= 14.0.
+>>>  +        */
+>>>          unsigned long flags;
+>>>
+>>>          /*
+>>>  @@ -33,6 +38,11 @@ extern __always_inline unsigned long native_save_fl(void)
+>>>                       : "memory");
+>>>
+>>>          return flags;
+>>>  +#elif defined(CONFIG_X86_64)
+>>>  +       return __builtin_ia32_readeflags_u64();
+>>>  +#else
+>>>  +       return __builtin_ia32_readeflags_u32();
+>>>  +#endif
+>>>   }
+>>>
+>>>   static __always_inline void native_irq_disable(void)
+>>>  --
+>>>  2.35.1.574.g5d30c73bfb-goog
+>>>
