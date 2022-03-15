@@ -1,71 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F831FD4
-	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 13:40:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73DFBC340E8;
-	Tue, 15 Mar 2022 13:40:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647351646;
-	bh=C/o2T8nJgf3Rnc5Q9iT/wcGUFU5ZGrsNC2dWsPGR7K4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=UdxrzCsPqbbxkCeIoUMtBeHpiBEolJbIaeipPFlL47wev0K70DexdCnkIuF4RIYED
-	 P6JsarA9Y7uFVzxlfarDe13HEMkrJ0dG3HVsJedmeXvC4tyJ3DWVW/l9snGwaa3ktC
-	 4EUawKIxAx5mQSFUSSVBpRWzaKMer/D99cJBLFlvMYSrLK35EvNsufJyciBqQQ4sgY
-	 ybzOkbnBgYqobzfW/itPPMSi9JTc1uFTl8qOqe06RjpNsm2yCQFk7sTtNaTNdywEXJ
-	 gvcZNw4oZDJ9p1JdkaeLI8SWZ88zfbgHOHKG1CL4unO4jaNgZpA1cmLTuMq20yxz3V
-	 U/FGgcngwQfuw==
-From: Mark Brown <broonie@kernel.org>
-To: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>, Nugraha <richiisei@gmail.com>, Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>, kbuild-all@lists.01.org, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, Codrin Ciubotariu <codrin.ciubotariu@microchip.com>, GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-In-Reply-To: <20220315001848.3763534-1-alviro.iskandar@gnuweeb.org>
-References: <20220315001848.3763534-1-alviro.iskandar@gnuweeb.org>
-Subject: Re: [PATCH for-5.18 v2] ASoC: atmel: mchp-pdmc: Fix `-Wpointer-bool-conversion` warning
-Message-Id: <164735164416.3687290.11047333931734060111.b4-ty@kernel.org>
-Date: Tue, 15 Mar 2022 13:40:44 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D0E23B5
+	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 15:03:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1647356611;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mSX+faho8xqDoVPijM+rIMu9Kx34W1Ic4d6/tlFnRWo=;
+	b=M73Ex80s9SgLc1C+3Brye3BLi/eD7dl+PVOItGUeIkErrXJ1Wuxdg1Qjz8mPSaNjtgRCx+
+	fH7NXhJpHWfYg8CQqDuwOD9qulpjMeTiVemy8vBqLbbhNWaBXNQsyaAp1rQl6KIlC9oi8b
+	W9Cq3Mzoh0JZFjsQ0VQjsFIcHVQ3gbE=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-336-5nEwMs3APBmdm4QYOmIx9A-1; Tue, 15 Mar 2022 11:03:30 -0400
+X-MC-Unique: 5nEwMs3APBmdm4QYOmIx9A-1
+Received: by mail-oi1-f198.google.com with SMTP id 13-20020aca210d000000b002da5b484056so11924807oiz.8
+        for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 08:03:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=mSX+faho8xqDoVPijM+rIMu9Kx34W1Ic4d6/tlFnRWo=;
+        b=nuH3YwH/DVMeuCydgiMO8FX/kq/qTeoXL3j02JcEJ1zqpPA+1yXgZh+TvmfvpT/lg9
+         mHLoCPE/JSnfSt0ONgLG70KfNVtXKQQQ0sTUVd3mi7yrvB0BXCrsDC+4n6csBV5O4DqY
+         YlKQsY5zoKCbI4l1tuTK6KSBbFHp3hpVasnYmNGXkiBGKSk6gQRaGbsDPxO0XWWm1tWA
+         WJT/fgNN3NT8uCCdtBvIMnffEKqp+SFiUdNzL4Eybhj/4xlifhdwxdkyWCC21FjzFBNt
+         cH8l2Zaa5xeucODlqLGn2chuogzvyG12t1nkM2LbQjoipSvn5X0A8ND/77md5z8KOlCu
+         tSpA==
+X-Gm-Message-State: AOAM533zD+JVodvjuvXHUHu0lukar53oeVDuGUJB1xH6ZqcZk8qLtpI5
+	pHvi2hs3kOqz+oCgn7bYxzRjdZ/hp8mEpnI1pB/emyf2i4rYiRUXVMCJaH03Qclcu+eSz9tnCS1
+	GKfuVLfjGovYq35MCErwyDrtFmOqael2iWWgCOXRIVKrvs4TVUZ1rD9YYjrvu
+X-Received: by 2002:a05:6808:11c4:b0:2d9:c395:f15e with SMTP id p4-20020a05680811c400b002d9c395f15emr1878777oiv.47.1647356609808;
+        Tue, 15 Mar 2022 08:03:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxVPIWyooT0FFEBTsFQHrT1xW8in3OhVEUH8z6AQbt6iwYxScdXWDH/MZW/GaJHAs02XRhdeg==
+X-Received: by 2002:a05:6808:11c4:b0:2d9:c395:f15e with SMTP id p4-20020a05680811c400b002d9c395f15emr1878750oiv.47.1647356609398;
+        Tue, 15 Mar 2022 08:03:29 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id x17-20020a056870b1d100b000d9f73ce6e7sm7911766oak.52.2022.03.15.08.03.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 08:03:29 -0700 (PDT)
+Subject: Re: [PATCH] vDPA/ifcvf: match pointer check to use
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: jasowang@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+ lingshan.zhu@intel.com, sgarzare@redhat.com, xieyongji@bytedance.com,
+ virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20220315124130.1710030-1-trix@redhat.com>
+ <20220315092656-mutt-send-email-mst@kernel.org>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <512a392d-23d7-c25b-7576-571001f28288@redhat.com>
+Date: Tue, 15 Mar 2022 08:03:26 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220315092656-mutt-send-email-mst@kernel.org>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 
-On Tue, 15 Mar 2022 00:18:48 +0000, Alviro Iskandar Setiawan wrote:
-> In function mchp_pdmc_af_put(), Intel's kernel test robot reports the
-> following warning:
-> 
->   sound/soc/atmel/mchp-pdmc.c:186:34: warning: address of array \
->   'uvalue->value.integer.value' will always evaluate to 'true' \
->   [-Wpointer-bool-conversion]
-> 
-> [...]
 
-Applied to
+On 3/15/22 6:28 AM, Michael S. Tsirkin wrote:
+> On Tue, Mar 15, 2022 at 05:41:30AM -0700, trix@redhat.com wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> Clang static analysis reports this issue
+>> ifcvf_main.c:49:4: warning: Called function
+>>    pointer is null (null dereference)
+>>    vf->vring->cb.callback(vring->cb.private);
+>>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> The check
+>>    vring = &vf->vring[i];
+>>    if (vring->cb.callback)
+>>
+>> Does not match the use.  Change dereference so they match.
+>>
+>> Fixes: 79333575b8bd ("vDPA/ifcvf: implement shared IRQ feature")
+> Thanks a lot! I squashed this into the offending patch - no point in
+> breaking bisect. Pushed to linux. However I'm now
+> having second thoughts about applying that patchset - I'd like
+> soma analysis explaining how this got through testing.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+static analysis is something i do treewide.
 
-Thanks!
+There are currently ~2500 issues in linux-next, do not panic! many are 
+false positives.
 
-[1/1] ASoC: atmel: mchp-pdmc: Fix `-Wpointer-bool-conversion` warning
-      commit: a8ae15ead9c9d10671c3f76cb0749dec6e571ce7
+It is pretty easy to setup and once you have a baseline you can filter 
+only your files.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Tom
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>   drivers/vdpa/ifcvf/ifcvf_main.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
+>> index 3b48e717e89f7..4366320fb68d3 100644
+>> --- a/drivers/vdpa/ifcvf/ifcvf_main.c
+>> +++ b/drivers/vdpa/ifcvf/ifcvf_main.c
+>> @@ -46,7 +46,7 @@ static irqreturn_t ifcvf_vqs_reused_intr_handler(int irq, void *arg)
+>>   	for (i = 0; i < vf->nr_vring; i++) {
+>>   		vring = &vf->vring[i];
+>>   		if (vring->cb.callback)
+>> -			vf->vring->cb.callback(vring->cb.private);
+>> +			vring->cb.callback(vring->cb.private);
+>>   	}
+>>   
+>>   	return IRQ_HANDLED;
+>> -- 
+>> 2.26.3
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
