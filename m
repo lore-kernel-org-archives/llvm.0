@@ -1,41 +1,41 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8090F10E8
-	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 06:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504821B75
+	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 06:55:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647326640; x=1678862640;
+  t=1647327302; x=1678863302;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gW3Vm5mt+vLThltYqtT30lxxWl2VJq0wNPuHLeVRcOw=;
-  b=PwvybsM9S5SsICRUQk/MHIJfb9zlUKpiVH+vAm8XXGDaJjdytvvRZ9l6
-   DheqHfii8zs9qTp6Bt4ILlbNTYuEXskVAA55L9DFyuR3E5sUHTNai/F+9
-   P/PCUeRc48eX5Q7vV7XNQNhPo50Q+VGjEj/MAy1o5aX0S6zOvdcUjhXKC
-   dbk6hVpyoIv7dRhQLhkVSlwwFDf+j8iIheJBwYrlSBjmq9lIIOpKd9vw+
-   3iHewgs4bvgQqAq5Sk85S1n2ycPniVob2CNv4kJgn5Zyn+eXeoGjel55b
-   U10ZKTP1qZWBZE4auyRqrp6xcKf4wCDwh92jrvA/c22aWYe5KR/c9xR28
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255057149"
+  bh=K4nJgs5xtwq4yKb4yM+G38J43n1l2K0izWthYKyK94E=;
+  b=Y4K0yjlEvPpJMAmj9zB2fIPQDrZlxxC9+Sv3NgC3RIndcNdDW3kK88co
+   gL54F9nVs26bg68fwRVVTGG/Zf+BdXvhw8NEkF91QsAIn4S6lt8PE4n6K
+   7h2p0IDwYopweF8iSmHOkk4+PdtAi2X4HXJkQnB2KvgAYocMKN6YU43Z3
+   +eRAeAjGDaFxH7SAksXOwirStNsEdDMPWZ4wJ0zsj0jYbHSy4qJYeQcD0
+   QFjH4DtkF0OnCACEJ32fj80Kz3aff5JMqlkT1MkyRqWtJ4IGuR7Pu0Im8
+   x1NCcZKaWGHw9DG3ogetdQ3toAcOrmyNq7g/pMSVhl9AtleD76oqM8s8E
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255956559"
 X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="255057149"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 23:43:59 -0700
+   d="scan'208";a="255956559"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 23:55:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="714042247"
+   d="scan'208";a="646113955"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 14 Mar 2022 23:43:57 -0700
+  by orsmga004.jf.intel.com with ESMTP; 14 Mar 2022 23:54:59 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nU0uS-000Aej-PS; Tue, 15 Mar 2022 06:43:56 +0000
-Date: Tue, 15 Mar 2022 14:43:46 +0800
+	id 1nU158-000AfM-PB; Tue, 15 Mar 2022 06:54:58 +0000
+Date: Tue, 15 Mar 2022 14:54:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
+To: Xiubo Li <xiubli@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jlayton:ceph-fscrypt-sparse 72/74] fs/ceph/file.c:1032:4: warning:
- variable 'fret' is uninitialized when used here
-Message-ID: <202203151433.MbNp3362-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>
+Subject: [jlayton:ceph-fscrypt-sparse 66/74] fs/ceph/dir.c:424:10: error:
+ implicit declaration of function 'ceph_encode_encrypted_dname'
+Message-ID: <202203151450.7EtYHIru-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,224 +48,346 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt-sparse
 head:   0d355bda666e44314f11974167e8d9bb010a539e
-commit: cbe05f4053d9f2f72668b9385e0e14c11c9adf32 [72/74] ceph: use r_pp for sparse reads
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220315/202203151433.MbNp3362-lkp@intel.com/config)
+commit: 4378b10dd7df64ef085e3fe2a2251034ee98c4dc [66/74] ceph: dencrypt the dentry names early and once for readdir
+config: hexagon-randconfig-r012-20220313 (https://download.01.org/0day-ci/archive/20220315/202203151450.7EtYHIru-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=cbe05f4053d9f2f72668b9385e0e14c11c9adf32
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=4378b10dd7df64ef085e3fe2a2251034ee98c4dc
         git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
         git fetch --no-tags jlayton ceph-fscrypt-sparse
-        git checkout cbe05f4053d9f2f72668b9385e0e14c11c9adf32
+        git checkout 4378b10dd7df64ef085e3fe2a2251034ee98c4dc
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ceph/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ethernet/mscc/ fs/ceph/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/ceph/file.c:1032:4: warning: variable 'fret' is uninitialized when used here [-Wuninitialized]
-                           fret -= (off - read_off);
-                           ^~~~
-   fs/ceph/file.c:1029:12: note: initialize the variable 'fret' to silence this warning
-                           int fret;
-                                   ^
-                                    = 0
-   1 warning generated.
+>> fs/ceph/dir.c:424:10: error: implicit declaration of function 'ceph_encode_encrypted_dname' [-Werror,-Wimplicit-function-declaration]
+                           err = ceph_encode_encrypted_dname(inode, &d_name, req->r_path2);
+                                 ^
+   fs/ceph/dir.c:424:10: note: did you mean 'ceph_encode_encrypted_fname'?
+   fs/ceph/crypto.h:175:19: note: 'ceph_encode_encrypted_fname' declared here
+   static inline int ceph_encode_encrypted_fname(const struct inode *parent,
+                     ^
+   1 error generated.
 
 
-vim +/fret +1032 fs/ceph/file.c
+vim +/ceph_encode_encrypted_dname +424 fs/ceph/dir.c
 
-83701246aee8f83 Yan, Zheng   2014-11-14   921  
-124e68e74099090 Sage Weil    2009-10-06   922  /*
-124e68e74099090 Sage Weil    2009-10-06   923   * Completely synchronous read and write methods.  Direct from __user
-124e68e74099090 Sage Weil    2009-10-06   924   * buffer to osd, or directly to user pages (if O_DIRECT).
-124e68e74099090 Sage Weil    2009-10-06   925   *
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   926   * If the read spans object boundary, just do multiple reads.  (That's not
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   927   * atomic, but good enough for now.)
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   928   *
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   929   * If we get a short result from the OSD, check against i_size; we need to
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   930   * only return a short read to the caller if we hit EOF.
-124e68e74099090 Sage Weil    2009-10-06   931   */
-1c3b32d36296389 Xiubo Li     2021-11-05   932  ssize_t __ceph_sync_read(struct inode *inode, loff_t *ki_pos,
-cd6ba7d365023a0 Xiubo Li     2021-12-08   933  			 struct iov_iter *to, int *retry_op,
-cd6ba7d365023a0 Xiubo Li     2021-12-08   934  			 u64 *last_objver)
-124e68e74099090 Sage Weil    2009-10-06   935  {
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   936  	struct ceph_inode_info *ci = ceph_inode(inode);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   937  	struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   938  	struct ceph_osd_client *osdc = &fsc->client->osdc;
-7ce469a53e7106a Yan, Zheng   2016-11-08   939  	ssize_t ret;
-1c3b32d36296389 Xiubo Li     2021-11-05   940  	u64 off = *ki_pos;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   941  	u64 len = iov_iter_count(to);
-e485d028bb1075d Jeff Layton  2021-11-23   942  	u64 i_size = i_size_read(inode);
-cd6ba7d365023a0 Xiubo Li     2021-12-08   943  	u64 objver = 0;
-124e68e74099090 Sage Weil    2009-10-06   944  
-1c3b32d36296389 Xiubo Li     2021-11-05   945  	dout("sync_read on inode %p %llu~%u\n", inode, *ki_pos, (unsigned)len);
-d0d0db2268cc343 Yan, Zheng   2014-07-21   946  
-d0d0db2268cc343 Yan, Zheng   2014-07-21   947  	if (!len)
-d0d0db2268cc343 Yan, Zheng   2014-07-21   948  		return 0;
-124e68e74099090 Sage Weil    2009-10-06   949  	/*
-124e68e74099090 Sage Weil    2009-10-06   950  	 * flush any page cache pages in this range.  this
-e98b6fed84d0f01 Sage Weil    2010-11-09   951  	 * will make concurrent normal and sync io slow,
-124e68e74099090 Sage Weil    2009-10-06   952  	 * but it will at least behave sensibly when they are
-124e68e74099090 Sage Weil    2009-10-06   953  	 * in sequence.
-124e68e74099090 Sage Weil    2009-10-06   954  	 */
-e450f4d1a5d633d zhengbin     2019-02-01   955  	ret = filemap_write_and_wait_range(inode->i_mapping,
-e450f4d1a5d633d zhengbin     2019-02-01   956  					   off, off + len - 1);
-29065a513aa4c7e Yehuda Sadeh 2010-02-09   957  	if (ret < 0)
-8eb4efb091c8d8f majianpeng   2013-09-26   958  		return ret;
-29065a513aa4c7e Yehuda Sadeh 2010-02-09   959  
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   960  	ret = 0;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   961  	while ((len = iov_iter_count(to)) > 0) {
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   962  		struct ceph_osd_request *req;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   963  		struct page **pages;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   964  		int num_pages;
-7ce469a53e7106a Yan, Zheng   2016-11-08   965  		size_t page_off;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   966  		bool more;
-c5f575ed08c38d0 Jeff Layton  2020-08-21   967  		int idx;
-c5f575ed08c38d0 Jeff Layton  2020-08-21   968  		size_t left;
-7b8289467f2eaaf Jeff Layton  2021-01-28   969  		u64 read_off = off;
-7b8289467f2eaaf Jeff Layton  2021-01-28   970  		u64 read_len = len;
-7b8289467f2eaaf Jeff Layton  2021-01-28   971  
-7b8289467f2eaaf Jeff Layton  2021-01-28   972  		/* determine new offset/length if encrypted */
-7b8289467f2eaaf Jeff Layton  2021-01-28   973  		ceph_fscrypt_adjust_off_and_len(inode, &read_off, &read_len);
-7b8289467f2eaaf Jeff Layton  2021-01-28   974  
-7b8289467f2eaaf Jeff Layton  2021-01-28   975  		dout("sync_read orig %llu~%llu reading %llu~%llu",
-7b8289467f2eaaf Jeff Layton  2021-01-28   976  		     off, len, read_off, read_len);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   977  
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   978  		req = ceph_osdc_new_request(osdc, &ci->i_layout,
-7b8289467f2eaaf Jeff Layton  2021-01-28   979  					ci->i_vino, read_off, &read_len, 0, 1,
-5020f1a5464bf0c Jeff Layton  2022-02-26   980  					CEPH_OSD_OP_SPARSE_READ, CEPH_OSD_FLAG_READ,
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   981  					NULL, ci->i_truncate_seq,
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   982  					ci->i_truncate_size, false);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   983  		if (IS_ERR(req)) {
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   984  			ret = PTR_ERR(req);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   985  			break;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   986  		}
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   987  
-7b8289467f2eaaf Jeff Layton  2021-01-28   988  		/* adjust len downward if the request truncated the len */
-7b8289467f2eaaf Jeff Layton  2021-01-28   989  		if (off + len > read_off + read_len)
-7b8289467f2eaaf Jeff Layton  2021-01-28   990  			len = read_off + read_len - off;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   991  		more = len < iov_iter_count(to);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   992  
-7b8289467f2eaaf Jeff Layton  2021-01-28   993  		num_pages = calc_pages_for(read_off, read_len);
-7b8289467f2eaaf Jeff Layton  2021-01-28   994  		page_off = offset_in_page(off);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   995  		pages = ceph_alloc_page_vector(num_pages, GFP_KERNEL);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   996  		if (IS_ERR(pages)) {
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   997  			ceph_osdc_put_request(req);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   998  			ret = PTR_ERR(pages);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29   999  			break;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1000  		}
-7ce469a53e7106a Yan, Zheng   2016-11-08  1001  
-7b8289467f2eaaf Jeff Layton  2021-01-28  1002  		osd_req_op_extent_osd_data_pages(req, 0, pages, read_len,
-7b8289467f2eaaf Jeff Layton  2021-01-28  1003  						 offset_in_page(read_off),
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1004  						 false, false);
-cbe05f4053d9f2f Jeff Layton  2022-03-11  1005  		ihold(inode);
-cbe05f4053d9f2f Jeff Layton  2022-03-11  1006  		req->r_inode = inode;
-cbe05f4053d9f2f Jeff Layton  2022-03-11  1007  		req->r_pp = ceph_sparse_read_pp;
-cbe05f4053d9f2f Jeff Layton  2022-03-11  1008  
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1009  		ret = ceph_osdc_start_request(osdc, req, false);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1010  		if (!ret)
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1011  			ret = ceph_osdc_wait_request(osdc, req);
-97e27aaa9a2cbd6 Xiubo Li     2020-03-19  1012  
-8ae99ae2b40766a Xiubo Li     2021-03-22  1013  		ceph_update_read_metrics(&fsc->mdsc->metric,
-97e27aaa9a2cbd6 Xiubo Li     2020-03-19  1014  					 req->r_start_latency,
-97e27aaa9a2cbd6 Xiubo Li     2020-03-19  1015  					 req->r_end_latency,
-7b8289467f2eaaf Jeff Layton  2021-01-28  1016  					 read_len, ret);
-97e27aaa9a2cbd6 Xiubo Li     2020-03-19  1017  
-cd6ba7d365023a0 Xiubo Li     2021-12-08  1018  		if (ret > 0)
-cd6ba7d365023a0 Xiubo Li     2021-12-08  1019  			objver = req->r_version;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1020  		ceph_osdc_put_request(req);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1021  		i_size = i_size_read(inode);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1022  		dout("sync_read %llu~%llu got %zd i_size %llu%s\n",
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1023  		     off, len, ret, i_size, (more ? " MORE" : ""));
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1024  
-7b8289467f2eaaf Jeff Layton  2021-01-28  1025  		if (ret == -ENOENT) {
-7b8289467f2eaaf Jeff Layton  2021-01-28  1026  			/* No object? Then this is a hole */
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1027  			ret = 0;
-7b8289467f2eaaf Jeff Layton  2021-01-28  1028  		} else if (ret > 0 && IS_ENCRYPTED(inode)) {
-7b8289467f2eaaf Jeff Layton  2021-01-28  1029  			int fret;
-7b8289467f2eaaf Jeff Layton  2021-01-28  1030  
-7b8289467f2eaaf Jeff Layton  2021-01-28  1031  			/* account for any partial block at the beginning */
-7b8289467f2eaaf Jeff Layton  2021-01-28 @1032  			fret -= (off - read_off);
-7b8289467f2eaaf Jeff Layton  2021-01-28  1033  
-7b8289467f2eaaf Jeff Layton  2021-01-28  1034  			/*
-7b8289467f2eaaf Jeff Layton  2021-01-28  1035  			 * Short read after big offset adjustment?
-7b8289467f2eaaf Jeff Layton  2021-01-28  1036  			 * Nothing is usable, just call it a zero
-7b8289467f2eaaf Jeff Layton  2021-01-28  1037  			 * len read.
-7b8289467f2eaaf Jeff Layton  2021-01-28  1038  			 */
-7b8289467f2eaaf Jeff Layton  2021-01-28  1039  			fret = max(fret, 0);
-7b8289467f2eaaf Jeff Layton  2021-01-28  1040  
-7b8289467f2eaaf Jeff Layton  2021-01-28  1041  			/* account for partial block at the end */
-7b8289467f2eaaf Jeff Layton  2021-01-28  1042  			ret = min_t(ssize_t, fret, len);
-7b8289467f2eaaf Jeff Layton  2021-01-28  1043  		}
-7b8289467f2eaaf Jeff Layton  2021-01-28  1044  
-7b8289467f2eaaf Jeff Layton  2021-01-28  1045  		/* Short read but not EOF? Zero out the remainder. */
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1046  		if (ret >= 0 && ret < len && (off + ret < i_size)) {
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1047  			int zlen = min(len - ret, i_size - off - ret);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1048  			int zoff = page_off + ret;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1049  			dout("sync_read zero gap %llu~%llu\n",
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1050  			     off + ret, off + ret + zlen);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1051  			ceph_zero_page_vector_range(zoff, zlen, pages);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1052  			ret += zlen;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1053  		}
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1054  
-c5f575ed08c38d0 Jeff Layton  2020-08-21  1055  		idx = 0;
-c5f575ed08c38d0 Jeff Layton  2020-08-21  1056  		left = ret > 0 ? ret : 0;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1057  		while (left > 0) {
-7b8289467f2eaaf Jeff Layton  2021-01-28  1058  			size_t plen, copied;
-7b8289467f2eaaf Jeff Layton  2021-01-28  1059  			plen = min_t(size_t, left, PAGE_SIZE - page_off);
-c5f575ed08c38d0 Jeff Layton  2020-08-21  1060  			SetPageUptodate(pages[idx]);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1061  			copied = copy_page_to_iter(pages[idx++],
-7b8289467f2eaaf Jeff Layton  2021-01-28  1062  						   page_off, plen, to);
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1063  			off += copied;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1064  			left -= copied;
-7b8289467f2eaaf Jeff Layton  2021-01-28  1065  			page_off = 0;
-7b8289467f2eaaf Jeff Layton  2021-01-28  1066  			if (copied < plen) {
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1067  				ret = -EFAULT;
-8eb4efb091c8d8f majianpeng   2013-09-26  1068  				break;
-8eb4efb091c8d8f majianpeng   2013-09-26  1069  			}
-8eb4efb091c8d8f majianpeng   2013-09-26  1070  		}
-124e68e74099090 Sage Weil    2009-10-06  1071  		ceph_release_page_vector(pages, num_pages);
-8eb4efb091c8d8f majianpeng   2013-09-26  1072  
-131d7eb4faa1fc0 Yan, Zheng   2019-07-25  1073  		if (ret < 0) {
-0b98acd61883093 Ilya Dryomov 2020-09-14  1074  			if (ret == -EBLOCKLISTED)
-0b98acd61883093 Ilya Dryomov 2020-09-14  1075  				fsc->blocklisted = true;
-131d7eb4faa1fc0 Yan, Zheng   2019-07-25  1076  			break;
-131d7eb4faa1fc0 Yan, Zheng   2019-07-25  1077  		}
-131d7eb4faa1fc0 Yan, Zheng   2019-07-25  1078  
-131d7eb4faa1fc0 Yan, Zheng   2019-07-25  1079  		if (off >= i_size || !more)
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1080  			break;
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1081  	}
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1082  
-7b8289467f2eaaf Jeff Layton  2021-01-28  1083  	if (ret > 0) {
-1c3b32d36296389 Xiubo Li     2021-11-05  1084  		if (off > *ki_pos) {
-c3d8e0b5de487a7 Xiubo Li     2021-10-30  1085  			if (off >= i_size) {
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1086  				*retry_op = CHECK_EOF;
-1c3b32d36296389 Xiubo Li     2021-11-05  1087  				ret = i_size - *ki_pos;
-1c3b32d36296389 Xiubo Li     2021-11-05  1088  				*ki_pos = i_size;
-c3d8e0b5de487a7 Xiubo Li     2021-10-30  1089  			} else {
-1c3b32d36296389 Xiubo Li     2021-11-05  1090  				ret = off - *ki_pos;
-1c3b32d36296389 Xiubo Li     2021-11-05  1091  				*ki_pos = off;
-8eb4efb091c8d8f majianpeng   2013-09-26  1092  			}
-c3d8e0b5de487a7 Xiubo Li     2021-10-30  1093  		}
-8eb4efb091c8d8f majianpeng   2013-09-26  1094  
-7b8289467f2eaaf Jeff Layton  2021-01-28  1095  		if (last_objver)
-cd6ba7d365023a0 Xiubo Li     2021-12-08  1096  			*last_objver = objver;
-7b8289467f2eaaf Jeff Layton  2021-01-28  1097  	}
-fce7a9744bdf3ba Yan, Zheng   2018-09-29  1098  	dout("sync_read result %zd retry_op %d\n", ret, *retry_op);
-124e68e74099090 Sage Weil    2009-10-06  1099  	return ret;
-124e68e74099090 Sage Weil    2009-10-06  1100  }
-124e68e74099090 Sage Weil    2009-10-06  1101  
-
-:::::: The code at line 1032 was first introduced by commit
-:::::: 7b8289467f2eaafe662a32ddc148c8302b4c1ef6 ceph: plumb in decryption during sync reads
-
-:::::: TO: Jeff Layton <jlayton@kernel.org>
-:::::: CC: Jeff Layton <jlayton@kernel.org>
+   307	
+   308	static int ceph_readdir(struct file *file, struct dir_context *ctx)
+   309	{
+   310		struct ceph_dir_file_info *dfi = file->private_data;
+   311		struct inode *inode = file_inode(file);
+   312		struct ceph_inode_info *ci = ceph_inode(inode);
+   313		struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
+   314		struct ceph_mds_client *mdsc = fsc->mdsc;
+   315		int i;
+   316		int err;
+   317		unsigned frag = -1;
+   318		struct ceph_mds_reply_info_parsed *rinfo;
+   319	
+   320		dout("readdir %p file %p pos %llx\n", inode, file, ctx->pos);
+   321		if (dfi->file_info.flags & CEPH_F_ATEND)
+   322			return 0;
+   323	
+   324		/* always start with . and .. */
+   325		if (ctx->pos == 0) {
+   326			dout("readdir off 0 -> '.'\n");
+   327			if (!dir_emit(ctx, ".", 1, ceph_present_inode(inode),
+   328				    inode->i_mode >> 12))
+   329				return 0;
+   330			ctx->pos = 1;
+   331		}
+   332		if (ctx->pos == 1) {
+   333			u64 ino;
+   334			struct dentry *dentry = file->f_path.dentry;
+   335	
+   336			spin_lock(&dentry->d_lock);
+   337			ino = ceph_present_inode(dentry->d_parent->d_inode);
+   338			spin_unlock(&dentry->d_lock);
+   339	
+   340			dout("readdir off 1 -> '..'\n");
+   341			if (!dir_emit(ctx, "..", 2, ino, inode->i_mode >> 12))
+   342				return 0;
+   343			ctx->pos = 2;
+   344		}
+   345	
+   346		err = fscrypt_prepare_readdir(inode);
+   347		if (err)
+   348			return err;
+   349	
+   350		spin_lock(&ci->i_ceph_lock);
+   351		/* request Fx cap. if have Fx, we don't need to release Fs cap
+   352		 * for later create/unlink. */
+   353		__ceph_touch_fmode(ci, mdsc, CEPH_FILE_MODE_WR);
+   354		/* can we use the dcache? */
+   355		if (ceph_test_mount_opt(fsc, DCACHE) &&
+   356		    !ceph_test_mount_opt(fsc, NOASYNCREADDIR) &&
+   357		    ceph_snap(inode) != CEPH_SNAPDIR &&
+   358		    __ceph_dir_is_complete_ordered(ci) &&
+   359		    __ceph_caps_issued_mask_metric(ci, CEPH_CAP_FILE_SHARED, 1)) {
+   360			int shared_gen = atomic_read(&ci->i_shared_gen);
+   361	
+   362			spin_unlock(&ci->i_ceph_lock);
+   363			err = __dcache_readdir(file, ctx, shared_gen);
+   364			if (err != -EAGAIN)
+   365				return err;
+   366		} else {
+   367			spin_unlock(&ci->i_ceph_lock);
+   368		}
+   369	
+   370		/* proceed with a normal readdir */
+   371	more:
+   372		/* do we have the correct frag content buffered? */
+   373		if (need_send_readdir(dfi, ctx->pos)) {
+   374			struct ceph_mds_request *req;
+   375			int op = ceph_snap(inode) == CEPH_SNAPDIR ?
+   376				CEPH_MDS_OP_LSSNAP : CEPH_MDS_OP_READDIR;
+   377	
+   378			/* discard old result, if any */
+   379			if (dfi->last_readdir) {
+   380				ceph_mdsc_put_request(dfi->last_readdir);
+   381				dfi->last_readdir = NULL;
+   382			}
+   383	
+   384			if (is_hash_order(ctx->pos)) {
+   385				/* fragtree isn't always accurate. choose frag
+   386				 * based on previous reply when possible. */
+   387				if (frag == (unsigned)-1)
+   388					frag = ceph_choose_frag(ci, fpos_hash(ctx->pos),
+   389								NULL, NULL);
+   390			} else {
+   391				frag = fpos_frag(ctx->pos);
+   392			}
+   393	
+   394			dout("readdir fetching %llx.%llx frag %x offset '%s'\n",
+   395			     ceph_vinop(inode), frag, dfi->last_name);
+   396			req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
+   397			if (IS_ERR(req)) {
+   398				err = PTR_ERR(req);
+   399				goto out;
+   400			}
+   401			err = ceph_alloc_readdir_reply_buffer(req, inode);
+   402			if (err) {
+   403				ceph_mdsc_put_request(req);
+   404				goto out;
+   405			}
+   406			/* hints to request -> mds selection code */
+   407			req->r_direct_mode = USE_AUTH_MDS;
+   408			if (op == CEPH_MDS_OP_READDIR) {
+   409				req->r_direct_hash = ceph_frag_value(frag);
+   410				__set_bit(CEPH_MDS_R_DIRECT_IS_HASH, &req->r_req_flags);
+   411				req->r_inode_drop = CEPH_CAP_FILE_EXCL;
+   412			}
+   413			if (dfi->last_name) {
+   414				struct qstr d_name = { .name = dfi->last_name,
+   415						       .len = strlen(dfi->last_name) };
+   416	
+   417				req->r_path2 = kzalloc(NAME_MAX + 1, GFP_KERNEL);
+   418				if (!req->r_path2) {
+   419					ceph_mdsc_put_request(req);
+   420					err = -ENOMEM;
+   421					goto out;
+   422				}
+   423	
+ > 424				err = ceph_encode_encrypted_dname(inode, &d_name, req->r_path2);
+   425				if (err < 0) {
+   426					ceph_mdsc_put_request(req);
+   427					goto out;
+   428				}
+   429			} else if (is_hash_order(ctx->pos)) {
+   430				req->r_args.readdir.offset_hash =
+   431					cpu_to_le32(fpos_hash(ctx->pos));
+   432			}
+   433	
+   434			req->r_dir_release_cnt = dfi->dir_release_count;
+   435			req->r_dir_ordered_cnt = dfi->dir_ordered_count;
+   436			req->r_readdir_cache_idx = dfi->readdir_cache_idx;
+   437			req->r_readdir_offset = dfi->next_offset;
+   438			req->r_args.readdir.frag = cpu_to_le32(frag);
+   439			req->r_args.readdir.flags =
+   440					cpu_to_le16(CEPH_READDIR_REPLY_BITFLAGS);
+   441	
+   442			req->r_inode = inode;
+   443			ihold(inode);
+   444			req->r_dentry = dget(file->f_path.dentry);
+   445			err = ceph_mdsc_do_request(mdsc, NULL, req);
+   446			if (err < 0) {
+   447				ceph_mdsc_put_request(req);
+   448				goto out;
+   449			}
+   450			dout("readdir got and parsed readdir result=%d on "
+   451			     "frag %x, end=%d, complete=%d, hash_order=%d\n",
+   452			     err, frag,
+   453			     (int)req->r_reply_info.dir_end,
+   454			     (int)req->r_reply_info.dir_complete,
+   455			     (int)req->r_reply_info.hash_order);
+   456	
+   457			rinfo = &req->r_reply_info;
+   458			if (le32_to_cpu(rinfo->dir_dir->frag) != frag) {
+   459				frag = le32_to_cpu(rinfo->dir_dir->frag);
+   460				if (!rinfo->hash_order) {
+   461					dfi->next_offset = req->r_readdir_offset;
+   462					/* adjust ctx->pos to beginning of frag */
+   463					ctx->pos = ceph_make_fpos(frag,
+   464								  dfi->next_offset,
+   465								  false);
+   466				}
+   467			}
+   468	
+   469			dfi->frag = frag;
+   470			dfi->last_readdir = req;
+   471	
+   472			if (test_bit(CEPH_MDS_R_DID_PREPOPULATE, &req->r_req_flags)) {
+   473				dfi->readdir_cache_idx = req->r_readdir_cache_idx;
+   474				if (dfi->readdir_cache_idx < 0) {
+   475					/* preclude from marking dir ordered */
+   476					dfi->dir_ordered_count = 0;
+   477				} else if (ceph_frag_is_leftmost(frag) &&
+   478					   dfi->next_offset == 2) {
+   479					/* note dir version at start of readdir so
+   480					 * we can tell if any dentries get dropped */
+   481					dfi->dir_release_count = req->r_dir_release_cnt;
+   482					dfi->dir_ordered_count = req->r_dir_ordered_cnt;
+   483				}
+   484			} else {
+   485				dout("readdir !did_prepopulate\n");
+   486				/* disable readdir cache */
+   487				dfi->readdir_cache_idx = -1;
+   488				/* preclude from marking dir complete */
+   489				dfi->dir_release_count = 0;
+   490			}
+   491	
+   492			/* note next offset and last dentry name */
+   493			if (rinfo->dir_nr > 0) {
+   494				struct ceph_mds_reply_dir_entry *rde =
+   495						rinfo->dir_entries + (rinfo->dir_nr-1);
+   496				unsigned next_offset = req->r_reply_info.dir_end ?
+   497						2 : (fpos_off(rde->offset) + 1);
+   498				err = note_last_dentry(dfi, rde->name, rde->name_len,
+   499						       next_offset);
+   500				if (err) {
+   501					ceph_mdsc_put_request(dfi->last_readdir);
+   502					dfi->last_readdir = NULL;
+   503					goto out;
+   504				}
+   505			} else if (req->r_reply_info.dir_end) {
+   506				dfi->next_offset = 2;
+   507				/* keep last name */
+   508			}
+   509		}
+   510	
+   511		rinfo = &dfi->last_readdir->r_reply_info;
+   512		dout("readdir frag %x num %d pos %llx chunk first %llx\n",
+   513		     dfi->frag, rinfo->dir_nr, ctx->pos,
+   514		     rinfo->dir_nr ? rinfo->dir_entries[0].offset : 0LL);
+   515	
+   516		i = 0;
+   517		/* search start position */
+   518		if (rinfo->dir_nr > 0) {
+   519			int step, nr = rinfo->dir_nr;
+   520			while (nr > 0) {
+   521				step = nr >> 1;
+   522				if (rinfo->dir_entries[i + step].offset < ctx->pos) {
+   523					i +=  step + 1;
+   524					nr -= step + 1;
+   525				} else {
+   526					nr = step;
+   527				}
+   528			}
+   529		}
+   530		for (; i < rinfo->dir_nr; i++) {
+   531			struct ceph_mds_reply_dir_entry *rde = rinfo->dir_entries + i;
+   532	
+   533			BUG_ON(rde->offset < ctx->pos);
+   534			BUG_ON(!rde->inode.in);
+   535	
+   536			ctx->pos = rde->offset;
+   537			dout("readdir (%d/%d) -> %llx '%.*s' %p\n",
+   538			     i, rinfo->dir_nr, ctx->pos,
+   539			     rde->name_len, rde->name, &rde->inode.in);
+   540	
+   541			if (!dir_emit(ctx, rde->name, rde->name_len,
+   542				      ceph_present_ino(inode->i_sb, le64_to_cpu(rde->inode.in->ino)),
+   543				      le32_to_cpu(rde->inode.in->mode) >> 12)) {
+   544				/*
+   545				 * NOTE: Here no need to put the 'dfi->last_readdir',
+   546				 * because when dir_emit stops us it's most likely
+   547				 * doesn't have enough memory, etc. So for next readdir
+   548				 * it will continue.
+   549				 */
+   550				dout("filldir stopping us...\n");
+   551				err = 0;
+   552				goto out;
+   553			}
+   554	
+   555			/* Reset the lengths to their original allocated vals */
+   556			ctx->pos++;
+   557		}
+   558	
+   559		ceph_mdsc_put_request(dfi->last_readdir);
+   560		dfi->last_readdir = NULL;
+   561	
+   562		if (dfi->next_offset > 2) {
+   563			frag = dfi->frag;
+   564			goto more;
+   565		}
+   566	
+   567		/* more frags? */
+   568		if (!ceph_frag_is_rightmost(dfi->frag)) {
+   569			frag = ceph_frag_next(dfi->frag);
+   570			if (is_hash_order(ctx->pos)) {
+   571				loff_t new_pos = ceph_make_fpos(ceph_frag_value(frag),
+   572								dfi->next_offset, true);
+   573				if (new_pos > ctx->pos)
+   574					ctx->pos = new_pos;
+   575				/* keep last_name */
+   576			} else {
+   577				ctx->pos = ceph_make_fpos(frag, dfi->next_offset,
+   578								false);
+   579				kfree(dfi->last_name);
+   580				dfi->last_name = NULL;
+   581			}
+   582			dout("readdir next frag is %x\n", frag);
+   583			goto more;
+   584		}
+   585		dfi->file_info.flags |= CEPH_F_ATEND;
+   586	
+   587		/*
+   588		 * if dir_release_count still matches the dir, no dentries
+   589		 * were released during the whole readdir, and we should have
+   590		 * the complete dir contents in our cache.
+   591		 */
+   592		if (atomic64_read(&ci->i_release_count) ==
+   593						dfi->dir_release_count) {
+   594			spin_lock(&ci->i_ceph_lock);
+   595			if (dfi->dir_ordered_count ==
+   596					atomic64_read(&ci->i_ordered_count)) {
+   597				dout(" marking %p complete and ordered\n", inode);
+   598				/* use i_size to track number of entries in
+   599				 * readdir cache */
+   600				BUG_ON(dfi->readdir_cache_idx < 0);
+   601				i_size_write(inode, dfi->readdir_cache_idx *
+   602					     sizeof(struct dentry*));
+   603			} else {
+   604				dout(" marking %p complete\n", inode);
+   605			}
+   606			__ceph_dir_set_complete(ci, dfi->dir_release_count,
+   607						dfi->dir_ordered_count);
+   608			spin_unlock(&ci->i_ceph_lock);
+   609		}
+   610		err = 0;
+   611		dout("readdir %p file %p done.\n", inode, file);
+   612	out:
+   613		return err;
+   614	}
+   615	
 
 ---
 0-DAY CI Kernel Test Service
