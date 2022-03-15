@@ -1,97 +1,109 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0341FB8
-	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 11:32:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647343951; x=1678879951;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QylzSgpK5+LAs1zN8uASLzmlF5ziZW+Fxf/h0yakyAc=;
-  b=Bqggs8pKhXFloTgd6ThSKYzvq4orBE8EKnMngbB/Tky/Tgy40u50FoMa
-   wDUFfb28R/zieSGb9VH1TP9jHACa+2CaKTFv3rSp8KIhfrQ2nrSs8xeni
-   hz+Y7zeddYo7k6URkE0YIWJZpqZY6gHPU7pkqaYOtP9VChZ8f/FixkVUw
-   p0TZ2hwicx/GqiJFU/dqgUYG3bFsuPO7taHqeuSykb5S62KN+bwi+m/Ok
-   LKRan6zQpKVVTPd0QeuB+kb/yWDyBg3ZBC4+wluB5cJwtLQicMgPUQ+S8
-   WDQQUT2OON2shzLAIWFecAL/wTlYDssknnTSqXQXkk7Dpn/BCXtXEyLs0
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236221706"
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="236221706"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 04:32:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="497980434"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Mar 2022 04:32:29 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nU5Pg-000Atx-Ie; Tue, 15 Mar 2022 11:32:28 +0000
-Date: Tue, 15 Mar 2022 19:31:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 470/983]
- drivers/misc/jesd204b/jesd_phy.c:172:6: warning: no previous prototype for
- function 'jesd204_phy_set_speed'
-Message-ID: <202203151951.Hsvy84Tb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6909810EF
+	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 12:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1647348117;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=L8qSvNcazquKGgqZpfRwZOK5T4G+V/7nPQSKEnK7vHo=;
+	b=jBOS4yiS+3DulS7vM34DduuIdCDVE0i/lNhh2sWJIlcZ/wI897UY0gsWyy4Rj/Dim6bg/M
+	aE4Y0opK4IpBU81w3i3d8RfoG4AQVqo4BK9EplGH9jvn7x1Jfp8IBONI/FQwIWU6AVUvxz
+	wNV4IavazvTpbyZ2BoHOnAVnjnmuVvA=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-10-Lg7bhVmPOmOxrxPzmszjrg-1; Tue, 15 Mar 2022 08:41:55 -0400
+X-MC-Unique: Lg7bhVmPOmOxrxPzmszjrg-1
+Received: by mail-ot1-f71.google.com with SMTP id t16-20020a9d7290000000b005b24005289dso13810291otj.11
+        for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 05:41:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L8qSvNcazquKGgqZpfRwZOK5T4G+V/7nPQSKEnK7vHo=;
+        b=6cyynjh6EYOGtrJ6Wqam576rKo1XH51zuEedXnfy3/uXjMKiDCHB1ez/oKE1dALlIZ
+         8Ia2nGndu3jGbefpUSOcx/oMn8J5Ua93BZinWLqDRY7dwdR5z4PqIbxsqA19tLxGGhoa
+         xcc/cCX38RHebKsgfhzQvyBGt+nnfhsHiJ2Blkme+mCOXa2grSXfIfaDkrkzKAXwTnlg
+         y4yxvFriIpxt01hZzpHf9aeXK1iJKo5ForxQbIPoUPxV24RyKyrCPRrd9l6hklNblM+0
+         +liP4ZXlY/6QQ+V4hf+6qhfshAY0cfaCiIrnRpXp6jh9YLhdPLZLYYit+E/gbiKCW1fS
+         D2BA==
+X-Gm-Message-State: AOAM532xztcPzwlv5V3SyqVZf0Hw01pPBsauuY5P4Nfxql44xZXffhXO
+	Xuymk+p9cpd4TBnxRe12i9lCf8UU9JFEHNZ5T1ayvafu9l2dCYQvjFtxWxI0cI21ylmz8TpYwbQ
+	Lkv5CJ0xl4QixZQ==
+X-Received: by 2002:a05:6830:2a13:b0:5b2:4818:9e47 with SMTP id y19-20020a0568302a1300b005b248189e47mr12799099otu.246.1647348115064;
+        Tue, 15 Mar 2022 05:41:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxcpL+Gz6iIXjMEkxLwJ/eu0PZYTQsZg4Pa8CgHWGB+zJNMcXTr1+Z1m4WKMcLCOWc4CCmSkw==
+X-Received: by 2002:a05:6830:2a13:b0:5b2:4818:9e47 with SMTP id y19-20020a0568302a1300b005b248189e47mr12799084otu.246.1647348114840;
+        Tue, 15 Mar 2022 05:41:54 -0700 (PDT)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id y15-20020a056870b00f00b000d75f1d9b81sm7762654oae.46.2022.03.15.05.41.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 05:41:54 -0700 (PDT)
+From: trix@redhat.com
+To: mst@redhat.com,
+	jasowang@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	lingshan.zhu@intel.com,
+	sgarzare@redhat.com,
+	xieyongji@bytedance.com
+Cc: virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] vDPA/ifcvf: match pointer check to use
+Date: Tue, 15 Mar 2022 05:41:30 -0700
+Message-Id: <20220315124130.1710030-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
-head:   82a6a288ad2ea30575c859f1a5ec2ad014e51528
-commit: 4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486 [470/983] misc: jesd204b: Add driver for Xilinx jesd204b
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220315/202203151951.Hsvy84Tb-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
-        git checkout 4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/clk/ drivers/gpu/drm/xlnx/ drivers/media/platform/xilinx/ drivers/misc/jesd204b/ drivers/net/ethernet/xilinx/ drivers/phy/xilinx/ drivers/ptp/
+From: Tom Rix <trix@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Clang static analysis reports this issue
+ifcvf_main.c:49:4: warning: Called function
+  pointer is null (null dereference)
+  vf->vring->cb.callback(vring->cb.private);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-All warnings (new ones prefixed by >>):
+The check
+  vring = &vf->vring[i];
+  if (vring->cb.callback)
 
-   drivers/misc/jesd204b/jesd_phy.c:97:6: warning: variable 'pll' set but not used [-Wunused-but-set-variable]
-           int pll = st->pll;
-               ^
->> drivers/misc/jesd204b/jesd_phy.c:172:6: warning: no previous prototype for function 'jesd204_phy_set_speed' [-Wmissing-prototypes]
-   void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
-        ^
-   drivers/misc/jesd204b/jesd_phy.c:172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
-   ^
-   static 
-   2 warnings generated.
+Does not match the use.  Change dereference so they match.
 
-
-vim +/jesd204_phy_set_speed +172 drivers/misc/jesd204b/jesd_phy.c
-
-   171	
- > 172	void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
-   173	{
-   174		/* make sure we have the correct PLL's selected. */
-   175		configure_channel_drp(st, band);
-   176	}
-   177	
-
+Fixes: 79333575b8bd ("vDPA/ifcvf: implement shared IRQ feature")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/vdpa/ifcvf/ifcvf_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
+index 3b48e717e89f7..4366320fb68d3 100644
+--- a/drivers/vdpa/ifcvf/ifcvf_main.c
++++ b/drivers/vdpa/ifcvf/ifcvf_main.c
+@@ -46,7 +46,7 @@ static irqreturn_t ifcvf_vqs_reused_intr_handler(int irq, void *arg)
+ 	for (i = 0; i < vf->nr_vring; i++) {
+ 		vring = &vf->vring[i];
+ 		if (vring->cb.callback)
+-			vf->vring->cb.callback(vring->cb.private);
++			vring->cb.callback(vring->cb.private);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+-- 
+2.26.3
+
