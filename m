@@ -1,92 +1,172 @@
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059E410E8
-	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 00:19:09 +0000 (UTC)
-Received: from localhost.localdomain (unknown [138.197.159.143])
-	by gnuweeb.org (Postfix) with ESMTPSA id 986F17E2F9;
-	Tue, 15 Mar 2022 00:19:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1647303549;
-	bh=YmnblpNsix8T9TQK/9fc5lZTlTPeY19ZiZ1wc0hMFC4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Meu929TlhtA0QIVd7+KjNVuM68lkip//sZfWas0NJnHvz/NK+x1dIQ/yOyM+oCHtD
-	 GDhJn+ur/9YvaZe0R3Pupr2GDEZ/WIJPHg4266ZdvvewI33Cc8OwgfM1/ngyFdjAWx
-	 hayrKccZl9T3Igs/YsViHngRVruEgzMz+DIGPaiK7wzJazop9hrUyM10YK3fSuby/l
-	 2s5ABXgFU8MYwNwCjCiCUB7DXZphbHA4RkQHc+na5z1wACUc51UBaQHTR80hbdE1m3
-	 hZEJE/yKpDTypBQTXFzv+q8U0Rt6tysvJb5qWm5NkGrzz4vfYPYzVqSpft1cQKxUMM
-	 GsOP08tJhPCSQ==
-From: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-	Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
-	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	kbuild-all@lists.01.org,
-	kernel test robot <lkp@intel.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev,
-	Nugraha <richiisei@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH for-5.18 v2] ASoC: atmel: mchp-pdmc: Fix `-Wpointer-bool-conversion` warning
-Date: Tue, 15 Mar 2022 00:18:48 +0000
-Message-Id: <20220315001848.3763534-1-alviro.iskandar@gnuweeb.org>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143A310F3
+	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 01:04:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647306270; x=1678842270;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VI+nwOGBY1F4nf8CO+rm2Eo6mglQSNN3eSB1ZecEdas=;
+  b=dKRcR0zbOAbHLnmvhsJo4NEc1JfXM8WzFgrqxF/7uA8Z0jgN3cLi8SF1
+   SaJqjwSl4O7MoQ6WgYB89yVno5EtOgvH1tVrYC+WtBZDWer+A7NLuq+0/
+   tG1gVqHoEW3aGReaCVMJTzYgxLOuiJkiUqDz0L6I5AcukOow6+G+n4QqA
+   CsvljnzcjJ9+j7RT1wKSobktaIFTgvcvRqMj8p+yKaEkZLFr2h1GlMSCW
+   us4ULDcefycSS7Z8lDnCBOwR9HI3C9zvH1h5r145wr+JF21mnEnKiaL4X
+   RR7c99OPWQqp7eJ92jJxjdRxgOqxqifmFoQ026zg8PAKh6+3XC2dfiO6W
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236789573"
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="236789573"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 18:04:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="634415278"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Mar 2022 18:04:27 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nTvbu-000AOb-DX; Tue, 15 Mar 2022 01:04:26 +0000
+Date: Tue, 15 Mar 2022 09:03:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Menzel <pmenzel@molgen.mpg.de>, Adam Radford <aradford@gmail.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Paul Menzel <pmenzel@molgen.mpg.de>, linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: 3w-sas: Correct log level of several messages
+Message-ID: <202203150825.QbKs1io1-lkp@intel.com>
+References: <20220314195728.119160-1-pmenzel@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314195728.119160-1-pmenzel@molgen.mpg.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-In function mchp_pdmc_af_put(), Intel's kernel test robot reports the
-following warning:
+Hi Paul,
 
-  sound/soc/atmel/mchp-pdmc.c:186:34: warning: address of array \
-  'uvalue->value.integer.value' will always evaluate to 'true' \
-  [-Wpointer-bool-conversion]
+Thank you for the patch! Yet something to improve:
 
-This is because we are using `uvalue->value.integer.value` which its
-type is `long value[128];` for conditional expression and that array
-will always decay to a non-NULL pointer. Using a non-NULL pointer for
-conditional expression will always evaluate to true.
+[auto build test ERROR on jejb-scsi/for-next]
+[also build test ERROR on mkp-scsi/for-next v5.17-rc8 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Fix this by changing it to `uvalue->value.integer.value[0]` as that's
-what the mchp_pdmc_af_get() function sets.
+url:    https://github.com/0day-ci/linux/commits/Paul-Menzel/scsi-3w-sas-Correct-log-level-of-several-messages/20220315-035918
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220315/202203150825.QbKs1io1-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/8d5baa500eb6500560660c4c5c355f9556cc4a51
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Paul-Menzel/scsi-3w-sas-Correct-log-level-of-several-messages/20220315-035918
+        git checkout 8d5baa500eb6500560660c4c5c355f9556cc4a51
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/scsi/
 
-Cc: Nugraha <richiisei@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202203091430.MLY27Bif-lkp@intel.com
-Fixes: 50291652af52 ("ASoC: atmel: mchp-pdmc: add PDMC driver")
-Link: https://lore.gnuweeb.org/gwml/20220309065849.96165-1-alviro.iskandar@gnuweeb.org # v1
-Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/scsi/3w-sas.c:876:11: error: use of undeclared identifier 'KERN_ERROR'; did you mean 'KERN_PROF'?
+                           printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+                                  ^~~~~~~~~~
+                                  KERN_PROF
+   include/linux/printk.h:446:53: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ^
+   include/linux/printk.h:418:11: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ^
+   include/uapi/linux/sysctl.h:90:2: note: 'KERN_PROF' declared here
+           KERN_PROF=6,            /* table: profiling information */
+           ^
+   drivers/scsi/3w-sas.c:883:11: error: use of undeclared identifier 'KERN_ERROR'; did you mean 'KERN_PROF'?
+                           printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+                                  ^~~~~~~~~~
+                                  KERN_PROF
+   include/linux/printk.h:446:53: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ^
+   include/linux/printk.h:418:11: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ^
+   include/uapi/linux/sysctl.h:90:2: note: 'KERN_PROF' declared here
+           KERN_PROF=6,            /* table: profiling information */
+           ^
+   drivers/scsi/3w-sas.c:1569:49: warning: shift count >= width of type [-Wshift-count-overflow]
+           retval = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+                                                          ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   drivers/scsi/3w-sas.c:1786:49: warning: shift count >= width of type [-Wshift-count-overflow]
+           retval = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+                                                          ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   2 warnings and 2 errors generated.
+
+
+vim +876 drivers/scsi/3w-sas.c
+
+   857	
+   858	/* This function passes sense data from firmware to scsi layer */
+   859	static int twl_fill_sense(TW_Device_Extension *tw_dev, int i, int request_id, int copy_sense, int print_host)
+   860	{
+   861		TW_Command_Apache_Header *header;
+   862		TW_Command_Full *full_command_packet;
+   863		unsigned short error;
+   864		char *error_str;
+   865	
+   866		header = tw_dev->sense_buffer_virt[i];
+   867		full_command_packet = tw_dev->command_packet_virt[request_id];
+   868	
+   869		/* Get embedded firmware error string */
+   870		error_str = &(header->err_specific_desc[strlen(header->err_specific_desc) + 1]);
+   871	
+   872		/* Don't print error for Logical unit not supported during rollcall */
+   873		error = le16_to_cpu(header->status_block.error);
+   874		if ((error != TW_ERROR_LOGICAL_UNIT_NOT_SUPPORTED) && (error != TW_ERROR_UNIT_OFFLINE) && (error != TW_ERROR_INVALID_FIELD_IN_CDB)) {
+   875			if (print_host)
+ > 876				printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+   877				       tw_dev->host->host_no,
+   878				       TW_MESSAGE_SOURCE_CONTROLLER_ERROR,
+   879				       header->status_block.error,
+   880				       error_str,
+   881				       header->err_specific_desc);
+   882			else
+   883				printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+   884				       TW_MESSAGE_SOURCE_CONTROLLER_ERROR,
+   885				       header->status_block.error,
+   886				       error_str,
+   887				       header->err_specific_desc);
+   888		}
+   889	
+   890		if (copy_sense) {
+   891			memcpy(tw_dev->srb[request_id]->sense_buffer, header->sense_data, TW_SENSE_DATA_LENGTH);
+   892			tw_dev->srb[request_id]->result = (full_command_packet->command.newcommand.status << 1);
+   893			goto out;
+   894		}
+   895	out:
+   896		return 1;
+   897	} /* End twl_fill_sense() */
+   898	
+
 ---
-
-  v1 -> v2:
-    - Remove mailing list from the CC tags.
-    - Append reviewed by tags from Nathan and Codrin.
-
- sound/soc/atmel/mchp-pdmc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/atmel/mchp-pdmc.c b/sound/soc/atmel/mchp-pdmc.c
-index c44636f6207d..7b87f75c284c 100644
---- a/sound/soc/atmel/mchp-pdmc.c
-+++ b/sound/soc/atmel/mchp-pdmc.c
-@@ -183,7 +183,7 @@ static int mchp_pdmc_af_put(struct snd_kcontrol *kcontrol,
- {
- 	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
- 	struct mchp_pdmc *dd = snd_soc_component_get_drvdata(component);
--	bool af = uvalue->value.integer.value ? true : false;
-+	bool af = uvalue->value.integer.value[0] ? true : false;
- 
- 	if (dd->audio_filter_en == af)
- 		return 0;
-
-base-commit: 50291652af5269813baa6024eb0e81b5f0bbb451
--- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
