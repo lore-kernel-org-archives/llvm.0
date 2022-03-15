@@ -1,116 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241DD23CC
-	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 16:55:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3539C340E8;
-	Tue, 15 Mar 2022 16:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647363339;
-	bh=8ARYFhjWfd7G/MaMBnSlEToE5LqJPYI3a47OYB8X3ko=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PVWHwvXPSZhU8/4TlfZn/9l1E2x/H4YA9CiYkuZY4hsRwamcwcHEueH/I63xjj1r1
-	 Qkvsilmo7jWwqAN7LcWY7jPuiWXD8nTl1EnyuOVhk7WfLKx1o96ITCuAcJRsAEhQ84
-	 B7lqbouv0m16EINbjsCbOjg+/CdmwpyyWtM11jWQ/kFu9fPAvdDTs2impDh2YYB/an
-	 OhodRVQkUPp6xXL8oxKkgIMO4nr6PRi0Ncx9mjDw7rDjdWqShNFYYbsAPgpaZEYUqI
-	 bc8bcW6Ux9VGzB+HX/nWD19cTAUkwLTJkq8+2Ah6YZWkUPDPTXldeAFmc9X2kJG8xn
-	 E8ZTOvEk4zdOg==
-Date: Tue, 15 Mar 2022 09:55:32 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Jacopo Mondi <jacopo@jmondi.org>,
-	Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	krzysztof.kozlowski@canonical.com,
-	jeanmichel.hautbois@ideasonboard.com,
-	laurent.pinchart@ideasonboard.com, paul.kocialkowski@bootlin.com,
-	sakari.ailus@iki.fi, paul.elder@ideasonboard.com,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] media: i2c: ov5670: Add .get_selection() support
-Message-ID: <YjDFBKhV0ALzu36l@dev-arch.thelio-3990X>
-References: <20220314162714.153970-9-jacopo@jmondi.org>
- <202203151238.pCKNarov-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BEDA23CC
+	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 17:03:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1647363794;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OmxYI6ts0ifPqvBUGqySYDpgc0rBSTfKUOaCBQr9r+M=;
+	b=b2ihGmTiWo8zyEu6088kz+G03V5Pv+c6Zlnc6mxOW5EAEPIkPyKlRDEnH+B7dxmiicyg4m
+	ABvZpexrl4xqaur29yt4sgH5NcbP41h5jN+bGkVSq0So3YtzqXdrJ9IYnxjscnsgk7G7cH
+	/mg8asS5C4f9lcpH92eDcJomFtUnNo4=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-157-EUVYbAVcOgy2kLILimqUaw-1; Tue, 15 Mar 2022 13:03:11 -0400
+X-MC-Unique: EUVYbAVcOgy2kLILimqUaw-1
+Received: by mail-wr1-f72.google.com with SMTP id w17-20020adfec51000000b001f068bc3342so5527126wrn.6
+        for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 10:03:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OmxYI6ts0ifPqvBUGqySYDpgc0rBSTfKUOaCBQr9r+M=;
+        b=WRR9fmH5uqhcWRagbJLJp38nF6PgPSW+bRnbUDHKy05XO7AslVhH9Br/fPKIcaE93b
+         Rq1gJsPa72c3K4pJOWbQKjHEyxIqFoOOGo3x74Uz5z20A/00GdSWR5d1pN1t/gHTLu0U
+         6RSgauBP9JqjzA+/DXNFaqBMJskw5mMuw0ZTBUjW/o4KIkqSmNx3XjQSTzvUdoQ2OHvL
+         8UiJf5N0y48w3EZDZklw4R7PEs9JKI/uEYtFrGfhCrhDnP4DfNahFNXuWP8RrS7jCadN
+         H84tAW0N3CaBBm09resEnpfw4zoGOsT4DdnxwOEcSrm0wuBZXmLGdHnnM2ihSPgmuTDq
+         uFeA==
+X-Gm-Message-State: AOAM530zDZ4jU54tlT/X1YYOEjBWhemc7orI5s32LA7S2N3zEtt15WZq
+	FlGdWStHYn+Uj4QxcaUwKZbmZvCjQQvFhVyTtny6caXl4uogNMkh9KxK94GOlWAoCQQWBNj7zko
+	39e+j6qGSbZ3oWg==
+X-Received: by 2002:a05:6000:2c6:b0:203:871d:aaa4 with SMTP id o6-20020a05600002c600b00203871daaa4mr20082230wry.47.1647363790164;
+        Tue, 15 Mar 2022 10:03:10 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz0VnXioS5GPLkgJGEECy6qRxXD0f5fqDGsdTj5oM5pW6HFay89xxxO5qnSXYIleqPeTR4uQw==
+X-Received: by 2002:a05:6000:2c6:b0:203:871d:aaa4 with SMTP id o6-20020a05600002c600b00203871daaa4mr20082206wry.47.1647363789931;
+        Tue, 15 Mar 2022 10:03:09 -0700 (PDT)
+Received: from redhat.com ([2.53.2.35])
+        by smtp.gmail.com with ESMTPSA id j7-20020a5d5647000000b0020372c969d9sm15998430wrw.29.2022.03.15.10.03.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 10:03:09 -0700 (PDT)
+Date: Tue, 15 Mar 2022 13:03:05 -0400
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 1/2] linux/types.h: Remove unnecessary __bitwise__
+Message-ID: <20220315130258-mutt-send-email-mst@kernel.org>
+References: <20220315153048.621328-1-helgaas@kernel.org>
+ <20220315153048.621328-2-helgaas@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20220315153048.621328-2-helgaas@kernel.org>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=mst@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202203151238.pCKNarov-lkp@intel.com>
 
-On Tue, Mar 15, 2022 at 12:18:48PM +0800, kernel test robot wrote:
-> Hi Jacopo,
+On Tue, Mar 15, 2022 at 10:30:47AM -0500, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Thank you for the patch! Yet something to improve:
+> There are no users of "__bitwise__" except the definition of "__bitwise".
+> Remove __bitwise__ and define __bitwise directly.
 > 
-> [auto build test ERROR on media-tree/master]
-> [also build test ERROR on linus/master v5.17-rc8 next-20220310]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
+> This is a follow-up to 05de97003c77 ("linux/types.h: enable endian checks
+> for all sparse builds").
 > 
-> url:    https://github.com/0day-ci/linux/commits/Jacopo-Mondi/media-i2c-ov5670-OF-support-runtime_pm-regulators/20220315-003034
-> base:   git://linuxtv.org/media_tree.git master
-> config: i386-randconfig-a012-20220314 (https://download.01.org/0day-ci/archive/20220315/202203151238.pCKNarov-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/c619a8eee6477517dfaa05511344d0bddc4e1c55
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Jacopo-Mondi/media-i2c-ov5670-OF-support-runtime_pm-regulators/20220315-003034
->         git checkout c619a8eee6477517dfaa05511344d0bddc4e1c55
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/media/i2c/ov5670.c:1787:18: error: initializer element is not a compile-time constant
->                    .analog_crop = ov5670_analog_crop,
->                                   ^~~~~~~~~~~~~~~~~~
->    1 error generated.
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Michael S. Tsirkin <mst@redhat.com>
 
-GCC versions prior to 8 will complain about this as well:
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-$ gcc --version | head -1
-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+> ---
+>  include/uapi/linux/types.h  | 5 ++---
+>  tools/include/linux/types.h | 5 ++---
+>  2 files changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
+> index f6d2f83cbe29..71696f424ac8 100644
+> --- a/include/uapi/linux/types.h
+> +++ b/include/uapi/linux/types.h
+> @@ -20,11 +20,10 @@
+>   */
+>  
+>  #ifdef __CHECKER__
+> -#define __bitwise__ __attribute__((bitwise))
+> +#define __bitwise	__attribute__((bitwise))
+>  #else
+> -#define __bitwise__
+> +#define __bitwise
+>  #endif
+> -#define __bitwise __bitwise__
+>  
+>  typedef __u16 __bitwise __le16;
+>  typedef __u16 __bitwise __be16;
+> diff --git a/tools/include/linux/types.h b/tools/include/linux/types.h
+> index 6e14a533ab4e..6c18c54e7d7f 100644
+> --- a/tools/include/linux/types.h
+> +++ b/tools/include/linux/types.h
+> @@ -43,11 +43,10 @@ typedef __u8  u8;
+>  typedef __s8  s8;
+>  
+>  #ifdef __CHECKER__
+> -#define __bitwise__ __attribute__((bitwise))
+> +#define __bitwise	__attribute__((bitwise))
+>  #else
+> -#define __bitwise__
+> +#define __bitwise
+>  #endif
+> -#define __bitwise __bitwise__
+>  
+>  #define __force
+>  #define __user
+> -- 
+> 2.25.1
 
-$ make -j"$(nproc)" mrproper allmodconfig drivers/media/i2c/ov5670.o
-drivers/media/i2c/ov5670.c:1787:18: error: initializer element is not constant
-   .analog_crop = ov5670_analog_crop,
-                  ^~~~~~~~~~~~~~~~~~
-drivers/media/i2c/ov5670.c:1787:18: note: (near initialization for ‘supported_modes[0].analog_crop’)
-drivers/media/i2c/ov5670.c:1799:18: error: initializer element is not constant
-   .analog_crop = ov5670_analog_crop,
-                  ^~~~~~~~~~~~~~~~~~
-drivers/media/i2c/ov5670.c:1799:18: note: (near initialization for ‘supported_modes[1].analog_crop’)
-drivers/media/i2c/ov5670.c:1811:18: error: initializer element is not constant
-   .analog_crop = ov5670_analog_crop,
-                  ^~~~~~~~~~~~~~~~~~
-drivers/media/i2c/ov5670.c:1811:18: note: (near initialization for ‘supported_modes[2].analog_crop’)
-drivers/media/i2c/ov5670.c:1823:18: error: initializer element is not constant
-   .analog_crop = ov5670_analog_crop,
-                  ^~~~~~~~~~~~~~~~~~
-drivers/media/i2c/ov5670.c:1823:18: note: (near initialization for ‘supported_modes[3].analog_crop’)
-drivers/media/i2c/ov5670.c:1836:18: error: initializer element is not constant
-   .analog_crop = ov5670_analog_crop,
-                  ^~~~~~~~~~~~~~~~~~
-drivers/media/i2c/ov5670.c:1836:18: note: (near initialization for ‘supported_modes[4].analog_crop’)
-drivers/media/i2c/ov5670.c:1848:18: error: initializer element is not constant
-   .analog_crop = ov5670_analog_crop,
-                  ^~~~~~~~~~~~~~~~~~
-drivers/media/i2c/ov5670.c:1848:18: note: (near initialization for ‘supported_modes[5].analog_crop’)
-scripts/Makefile.build:288: recipe for target 'drivers/media/i2c/ov5670.o' failed
-
-clang may eventually support this: https://reviews.llvm.org/D76096
-
-Cheers,
-Nathan
