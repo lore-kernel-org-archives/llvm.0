@@ -1,51 +1,45 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C8623CC
-	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 18:09:52 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id n15so16894476plh.2
-        for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 11:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LnfhahHm3PDL9lPgihcYM1ixyCrpxkRE4I19AMm+GpI=;
-        b=JVFkFjRzXHvl4p6lzecOm3qCuwJkQk5Aq/4Fikfk7weWrbtXCItQc1wAZya5H6IJDG
-         QNI3GLzgvk3q2YYFCgId9Id3a/AMxyHSRXjdwlpHsKqaZesf5hk2QTOeNe8E421h+niV
-         56QoMW3xTldNTC6XDzfuHu9lXtWAK74IHih4w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LnfhahHm3PDL9lPgihcYM1ixyCrpxkRE4I19AMm+GpI=;
-        b=MOoidDPqDJF1peg8oHtwvuK5bMXMUdyzbjg0F2jVjWjfG28Tz33Jw+vwWbJTqbIr6b
-         rBGminVacItFtquAwcfFt4FWm+6fGPSqRWl7FMgCKx3LlTJ76TasUNlk6AiaLv2VLDav
-         /dx4HZLXe4SzW1D6srnbEUMp4xY+5emlqSISAM7RiX2jEU9wAzstxR4FPl3uc3RkMoVi
-         X76afDI4cwUl0KXbtJ2CzDoX0wN8SamTvUWHX1Wx/XcpMgEVplqH4GDEX7x5uzXyJKGW
-         cvf0a870RktlO10JJc0tr4vb5M22/UP2c3YVncxLMcacC/KFDxtJ+mlJST7wlcl/+roJ
-         cSUQ==
-X-Gm-Message-State: AOAM531bHmY5OdX/chys945YTEq5kEeBwjGCcl9VdDUl8kWn/JHNEl7/
-	S9ajIHswhcad+U8VPUtvmcfixw==
-X-Google-Smtp-Source: ABdhPJxrv8JWlmC583Lem9EnnxkdYf2cpc2Vr67JCGAwKnCX6HsrocM0D0dZOBLboyTP/eYhDYcA9Q==
-X-Received: by 2002:a17:90a:17ab:b0:1bf:9519:fe86 with SMTP id q40-20020a17090a17ab00b001bf9519fe86mr6027447pja.25.1647367792246;
-        Tue, 15 Mar 2022 11:09:52 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 16-20020a17090a19d000b001c1c6b25cb2sm3736609pjj.26.2022.03.15.11.09.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 11:09:51 -0700 (PDT)
-Date: Tue, 15 Mar 2022 11:09:51 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Yanteng Si <siyanteng01@gmail.com>, linux-mips@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: Only use current_stack_pointer on GCC
-Message-ID: <202203151109.F59911C4CB@keescook>
-References: <20220309220939.392227-1-keescook@chromium.org>
- <20220314145215.GD13438@alpha.franken.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475F47A
+	for <llvm@lists.linux.dev>; Tue, 15 Mar 2022 18:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647370420; x=1678906420;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m3cKAwOJqOsA7eAOkUV4eguAJkZnzQNcLpMZ96NtvPk=;
+  b=XMx5IBbe+W1MRVCJJN1smoN4sp/VP69GmCt/jPRTIYUAWzT7j1/Qmfyc
+   INiuPNHIrwp8MHzCuqi4njGQHQhmHcOsV6b9i2boaykQiybgpB4RdKTvA
+   JgcTK1ts34W5skmYrHJxjNC/Zng5qLfuBz0x00jWPDtP296ZClL5qHxEd
+   0ga4xZg9Fpv8iyvMSwaxEmodhA1pN1mTr6++3oNyd7Ma6yxWGBKXJCc42
+   02IDIWHNML7tnoiNIAl6SY2kA+u41f7aVtYEs+yaoC3keBZaIsFFE5uNX
+   4hJUKdNuCJJbgL7aGxq1VhYXOAtXUWP0SUzGdwzgC9ZgaJqYEsvpKuL+i
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="281174709"
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="281174709"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 11:53:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="690312679"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Mar 2022 11:53:37 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nUCIa-000BNG-Gw; Tue, 15 Mar 2022 18:53:36 +0000
+Date: Wed, 16 Mar 2022 02:52:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shreeya Patel <shreeya.patel@collabora.com>, linus.walleij@linaro.org,
+	brgl@bgdev.pl, krisman@collabora.com, andy.shevchenko@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel@collabora.com, Shreeya Patel <shreeya.patel@collabora.com>
+Subject: Re: [PATCH v2] gpio: Restrict usage of gc irq members before
+ initialization
+Message-ID: <202203160247.JiwK1pqP-lkp@intel.com>
+References: <20220315103813.84407-1-shreeya.patel@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,43 +48,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220314145215.GD13438@alpha.franken.de>
+In-Reply-To: <20220315103813.84407-1-shreeya.patel@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Mar 14, 2022 at 03:52:15PM +0100, Thomas Bogendoerfer wrote:
-> On Wed, Mar 09, 2022 at 02:09:39PM -0800, Kees Cook wrote:
-> > Unfortunately, Clang did not have support for "sp" as a global register
-> > definition, and was crashing after the addition of current_stack_pointer.
-> > This has been fixed in Clang 15, but earlier Clang versions need to
-> > avoid this code, so add a versioned test and revert back to the
-> > open-coded asm instances. Fixes Clang build error:
-> > 
-> > fatal error: error in backend: Invalid register name global variable
-> > 
-> > Fixes: 200ed341b864 ("mips: Implement "current_stack_pointer"")
-> > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > Link: https://lore.kernel.org/lkml/YikTQRql+il3HbrK@dev-arch.thelio-3990X
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Marc Zyngier <maz@kernel.org>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: Yanteng Si <siyanteng01@gmail.com>
-> > Cc: linux-mips@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > v1: https://lore.kernel.org/lkml/20220309204537.390428-1-keescook@chromium.org
-> > v2: - adjust Clang version (Nathan)
-> > ---
-> >  arch/mips/Kconfig                   | 2 +-
-> >  arch/mips/include/asm/thread_info.h | 2 ++
-> >  arch/mips/kernel/irq.c              | 3 ++-
-> >  arch/mips/lib/uncached.c            | 4 +++-
-> >  4 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> applied to mips-next with the Clang version in the decscription fixed.
+Hi Shreeya,
 
-Excellent; thanks very much!
+Thank you for the patch! Yet something to improve:
 
--Kees
+[auto build test ERROR on linusw-gpio/for-next]
+[also build test ERROR on v5.17-rc8 next-20220315]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
--- 
-Kees Cook
+url:    https://github.com/0day-ci/linux/commits/Shreeya-Patel/gpio-Restrict-usage-of-gc-irq-members-before-initialization/20220315-183950
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git for-next
+config: arm-palmz72_defconfig (https://download.01.org/0day-ci/archive/20220316/202203160247.JiwK1pqP-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/9f566a088a6f5fcb8830b07020294835072d516c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Shreeya-Patel/gpio-Restrict-usage-of-gc-irq-members-before-initialization/20220315-183950
+        git checkout 9f566a088a6f5fcb8830b07020294835072d516c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpio/gpiolib.c:3068:24: error: no member named 'irq' in 'struct gpio_chip'
+           if (gc->to_irq && gc->irq.gc_irq_initialized) {
+                             ~~  ^
+   1 error generated.
+
+
+vim +3068 drivers/gpio/gpiolib.c
+
+  3045	
+  3046	/**
+  3047	 * gpiod_to_irq() - return the IRQ corresponding to a GPIO
+  3048	 * @desc: gpio whose IRQ will be returned (already requested)
+  3049	 *
+  3050	 * Return the IRQ corresponding to the passed GPIO, or an error code in case of
+  3051	 * error.
+  3052	 */
+  3053	int gpiod_to_irq(const struct gpio_desc *desc)
+  3054	{
+  3055		struct gpio_chip *gc;
+  3056		int offset;
+  3057	
+  3058		/*
+  3059		 * Cannot VALIDATE_DESC() here as gpiod_to_irq() consumer semantics
+  3060		 * requires this function to not return zero on an invalid descriptor
+  3061		 * but rather a negative error number.
+  3062		 */
+  3063		if (!desc || IS_ERR(desc) || !desc->gdev || !desc->gdev->chip)
+  3064			return -EINVAL;
+  3065	
+  3066		gc = desc->gdev->chip;
+  3067		offset = gpio_chip_hwgpio(desc);
+> 3068		if (gc->to_irq && gc->irq.gc_irq_initialized) {
+  3069			int retirq = gc->to_irq(gc, offset);
+  3070	
+  3071			/* Zero means NO_IRQ */
+  3072			if (!retirq)
+  3073				return -ENXIO;
+  3074	
+  3075			return retirq;
+  3076		}
+  3077		return -ENXIO;
+  3078	}
+  3079	EXPORT_SYMBOL_GPL(gpiod_to_irq);
+  3080	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
