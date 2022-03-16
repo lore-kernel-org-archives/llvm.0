@@ -1,78 +1,83 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A9B3B23
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 18:06:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647454019; x=1678990019;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=ZlSYxyPwOOZ+3GmwhSq3L0adUNnNONwDWaP0HH/ffCY=;
-  b=iofu9Lk41J5xA1rXAbj69+CFypJr3A5nCgXmYsrs1V8SnyU3TzvTRqcq
-   n6Gu13FbQ45zMnIZk12aKNxvUPAcDQNqwcq42RcjnmmikmmS7ujjJs4Lj
-   NjET65jvGpcsvVd4jBKlBBfjZl8/9OcrN7W6JrPTpmp3AImXr5L4pvSNl
-   hmgYEOKY6eucJ5oYZQAzp17BNwze8Xrw1zXBIY2r7X0Tg3NMgJE4h2DQl
-   kf9a+x9MO9U+sVPnmCTT1gGnPji3rYNuz8O5Prmj5dd68c4tLfeYHcxaD
-   PzbFrshhWMa3M7QPqMAungXJ5NpJ92iU8C7gR7gRXyD56p4LeH3zQ+geN
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="317398763"
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="317398763"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 11:06:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="714716054"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2022 11:06:55 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nUY2w-000CiS-5K; Wed, 16 Mar 2022 18:06:54 +0000
-Date: Thu, 17 Mar 2022 02:05:54 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [asahilinux:asahi 78/171] kernel/reboot.o: warning: objtool:
- sys_off_handler_power_off()+0xb7: sibling call from callable instruction
- with modified stack frame
-Message-ID: <202203170244.ghsqkc3L-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150A138F5
+	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 18:38:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 808AFC340E9;
+	Wed, 16 Mar 2022 18:38:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647455918;
+	bh=4I2dqIsVLhZjm8CnyFJ7pDn7LPMROJTBLGpZPLGAP1Y=;
+	h=From:To:Cc:Subject:Date:From;
+	b=t8k6kmURw5+vEqAankWi7xR5393jq2B2dTT6kRbbvlzSuA3N9Wzxe5sR5t4IiJ7hS
+	 MF8jtysqZtFol5FQSA2ItMQbSuOeOSno8XJJVq69g8QwwroQo3meoToEM5Y2A4XbKp
+	 lZGjVUX7Yxom72fOEIHmsin0Q8O0GCvdcVfkQxSwJ+0BNIe7xlP2JIuxYfcqyVEnyJ
+	 BJCugmhH6pIBKU72w0XIjzRzQccQYx5cJQsQyZ2i9H4/trUXekogPPq4abFL3CE8wO
+	 F0PzVZGGXhXL8hjV6FGBiOi13fAmbcrmy1Dm/TmIZJC02opyIs/PF4RCO6hrJVp2SK
+	 AFs9eozuUQDjQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	James Morse <james.morse@arm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] arm64: fix clang warning about TRAMP_VALIAS
+Date: Wed, 16 Mar 2022 19:38:18 +0100
+Message-Id: <20220316183833.1563139-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Dmitry Osipenko <digetx@gmail.com>
-CC: Hector Martin <marcan@marcan.st>
+From: Arnd Bergmann <arnd@arndb.de>
 
-tree:   https://github.com/AsahiLinux/linux asahi
-head:   2a904d884c710b730c9c1c712072f86fb7d2e9b2
-commit: ec159207530d80c0a0bd04c1ac94db5766bbc3c0 [78/171] kernel: Add combined power-off+restart handler call chain API
-config: x86_64-randconfig-a014-20220314 (https://download.01.org/0day-ci/archive/20220317/202203170244.ghsqkc3L-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/ec159207530d80c0a0bd04c1ac94db5766bbc3c0
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux asahi
-        git checkout ec159207530d80c0a0bd04c1ac94db5766bbc3c0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The newly introduced TRAMP_VALIAS definition causes a build warning
+with clang-14:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
+                return (char *)TRAMP_VALIAS + SZ_2K * slot;
 
-All warnings (new ones prefixed by >>):
+Change the addition to something clang does not complain about.
 
->> kernel/reboot.o: warning: objtool: sys_off_handler_power_off()+0xb7: sibling call from callable instruction with modified stack frame
-
+Fixes: bd09128d16fa ("arm64: Add percpu vectors for EL1")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/arm64/include/asm/vectors.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+I see this warning on 5.17-rc8, but did not test it on linux-next,
+which may already have a fix.
+
+diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
+index f64613a96d53..bc9a2145f419 100644
+--- a/arch/arm64/include/asm/vectors.h
++++ b/arch/arm64/include/asm/vectors.h
+@@ -56,14 +56,14 @@ enum arm64_bp_harden_el1_vectors {
+ DECLARE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector);
+ 
+ #ifndef CONFIG_UNMAP_KERNEL_AT_EL0
+-#define TRAMP_VALIAS	0
++#define TRAMP_VALIAS	0ul
+ #endif
+ 
+ static inline const char *
+ arm64_get_bp_hardening_vector(enum arm64_bp_harden_el1_vectors slot)
+ {
+ 	if (arm64_kernel_unmapped_at_el0())
+-		return (char *)TRAMP_VALIAS + SZ_2K * slot;
++		return (char *)(TRAMP_VALIAS + SZ_2K * slot);
+ 
+ 	WARN_ON_ONCE(slot == EL1_VECTOR_KPTI);
+ 
+-- 
+2.29.2
+
