@@ -1,41 +1,41 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F13D7A
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 10:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855047A
+	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 11:44:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647427979; x=1678963979;
+  t=1647431046; x=1678967046;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eoN56wltdawSBnQ/5OZKTvvvjGtUupSo97DKz81C/v8=;
-  b=H0yOGntfT5XoNeel7yc9lvWPJ5pVa+gm5iKi+E08zoBwdNL6c92UTHMR
-   sljR1Z04pg3g94r8fA7l/aQm3NgPMZeKCt/sqJgGRU3/gxIh383fYrcQR
-   0Epem+c4KYcWl3fmqSJHOvQuz+NFKGZcU2ivFSNyeryqotPJjrT7NYqfP
-   3hvTnUZjtgJfyqSyqTmB+xAsmbUmDuLr1sCUY1LDlalAk9GLQ+OQH6wX8
-   u4o3rKUiZm/rneXg/NccZf3kH2TEwa2OiBq36rwJ0zV9IWYnn1fTVIPZY
-   KCS8F7mfpJ0cd42pkTV21mcg8vyUN43K+lwi3uDHALwlTh5xrKCuRAWUT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="342978690"
+  bh=TjHSq7qvFumBqiO3rkcvDarW0hT9OOL4EOBhnFPeSLY=;
+  b=kQ1XKFnPLpK/aUMdvPgoLEvbjXvWcXIUf9gcYdo3qz13bJ1A9uqLU7XL
+   EmBc5b7OyxEyb/JCesVXLQCESlDjppadJbnGzwOEnKKzXbtknrvQXv+LE
+   Xso47v9pp8P/b/FqIExGOyDCjDky6C9zO2ksYFHcVoYjqvK+tj3Nip0bz
+   iWvrPqhnhm53+Xb9W4B+AhAvcnS08vh6Hgx+kkYQLiEj1A4JkJzsZXuah
+   sPe1rOZq/k3x1rl6csHhRi7R5UcnQaUEK6p4jDy02+xSeLSYssxC6xEUt
+   f3eW0BR+l7HrbtmEE7LRRyCZAzaO3TOGnIR7tr+w0wD3HXg9ur6sVPlsI
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="281337197"
 X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="342978690"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 03:52:58 -0700
+   d="scan'208";a="281337197"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 04:44:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="540861798"
+   d="scan'208";a="714562619"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 16 Mar 2022 03:52:56 -0700
+  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2022 04:44:04 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nURGy-000CHO-5S; Wed, 16 Mar 2022 10:52:56 +0000
-Date: Wed, 16 Mar 2022 18:52:37 +0800
+	id 1nUS4R-000CLS-VZ; Wed, 16 Mar 2022 11:44:03 +0000
+Date: Wed, 16 Mar 2022 19:43:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: hch <hch@lst.de>
+To: Jiri Olsa <jolsa@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: drivers/nvme/host/core.c:3629:50: error: use of undeclared
- identifier 'ctrl'
-Message-ID: <202203161805.I9aAHZ66-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/kprobe_multi 6/13] kernel/trace/bpf_trace.c:1058:57:
+ error: no member named 'ip' in 'struct pt_regs'
+Message-ID: <202203161933.KSScXEmp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,62 +46,43 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220315-151414/Sungup-Moon/driver-nvme-host-Support-duplicated-nsid-for-the-private-ns/20220314-191232
-head:   7101b34f72a97926495a7befec1c27c502c1f792
-commit: 7101b34f72a97926495a7befec1c27c502c1f792 driver/nvme/host: Support duplicated nsid for the private ns
-date:   28 hours ago
-config: hexagon-randconfig-r045-20220313 (https://download.01.org/0day-ci/archive/20220316/202203161805.I9aAHZ66-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/kprobe_multi
+head:   9ef3ebdfd199decf414614d0de32df0484090275
+commit: acf299442762d7b680bfb3b6ca545d9c12bc640f [6/13] bpf: Add cookie support to programs attached with kprobe multi link
+config: arm64-randconfig-r031-20220313 (https://download.01.org/0day-ci/archive/20220316/202203161933.KSScXEmp-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/7101b34f72a97926495a7befec1c27c502c1f792
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220315-151414/Sungup-Moon/driver-nvme-host-Support-duplicated-nsid-for-the-private-ns/20220314-191232
-        git checkout 7101b34f72a97926495a7befec1c27c502c1f792
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=acf299442762d7b680bfb3b6ca545d9c12bc640f
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/kprobe_multi
+        git checkout acf299442762d7b680bfb3b6ca545d9c12bc640f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/nvme/host/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/nvme/host/core.c:3629:50: error: use of undeclared identifier 'ctrl'
-                   if (h->ns_id != nsid || !nvme_is_uniqueue_nsid(ctrl, head))
-                                                                  ^
->> drivers/nvme/host/core.c:3629:56: error: use of undeclared identifier 'head'
-                   if (h->ns_id != nsid || !nvme_is_uniqueue_nsid(ctrl, head))
-                                                                        ^
-   2 errors generated.
+>> kernel/trace/bpf_trace.c:1058:57: error: no member named 'ip' in 'struct pt_regs'
+           return bpf_kprobe_multi_cookie(current->bpf_ctx, regs->ip);
+                                                            ~~~~  ^
+   1 error generated.
 
 
-vim +/ctrl +3629 drivers/nvme/host/core.c
+vim +1058 kernel/trace/bpf_trace.c
 
-  3615	
-  3616	static struct nvme_ns_head *nvme_find_ns_head(struct nvme_subsystem *subsys,
-  3617			unsigned nsid)
-  3618	{
-  3619		struct nvme_ns_head *h;
-  3620	
-  3621		lockdep_assert_held(&subsys->lock);
-  3622	
-  3623		list_for_each_entry(h, &subsys->nsheads, entry) {
-  3624			/*
-  3625			 * Private namespaces can share NSIDs under some conditions.
-  3626			 * In that case we can't use the same ns_head for namespaces
-  3627			 * with the same NSID.
-  3628			 */
-> 3629			if (h->ns_id != nsid || !nvme_is_uniqueue_nsid(ctrl, head))
-  3630				continue;
-  3631			if (!list_empty(&h->list) && nvme_tryget_ns_head(h))
-  3632				return h;
-  3633		}
-  3634	
-  3635		return NULL;
-  3636	}
-  3637	
+  1055	
+  1056	BPF_CALL_1(bpf_get_attach_cookie_kprobe_multi, struct pt_regs *, regs)
+  1057	{
+> 1058		return bpf_kprobe_multi_cookie(current->bpf_ctx, regs->ip);
+  1059	}
+  1060	
 
 ---
 0-DAY CI Kernel Test Service
