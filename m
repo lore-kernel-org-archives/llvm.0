@@ -1,41 +1,42 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B84138F5
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 19:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151AD38F5
+	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 19:48:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647460126; x=1678996126;
+  t=1647460130; x=1678996130;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w6HTcuQU7kuBsWFPMo2uk0m+iZu9BqIdqJFSj1qd4Qc=;
-  b=QD6R7Mm9XppznX2M5X7+oT/KP0Nl3IbwvOJFDByh/nWVAtVXWWoTxCOE
-   ApVLgwmDnTNN8q/09AHGfl+hGl8El3ItsFxohiX5rY0Wwkx4VAz7QPIC6
-   4tOGnEAu2oSVAFbwuaelJE9Kx5nPIDdf2iGHp8R7GbWu9C4R5IDknjirs
-   Z8b8s4UaZcNHqQp4I3sTyNK7a7wbzO/kNo5poCHaj8dW6sjVwYaxppWpp
-   xcfB3QHegKvtq1VuYBHF2tsaWsJThmigk6BES8jnMvE5wXMYMGSi/mrHe
-   EHeQp0HLbRNvr78gc8F+jqSACDH/LWoQCKqgwKMHTVh+Jlvw+tym0wcgN
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="343133589"
+  bh=AQmhkNekX7a5TUZZ/G5mXI5zHkY52A3CggUt8MKCEzA=;
+  b=jdJRH2B0xfHYXTRwrrpVLhNCmZv+SQ1xH5Ukbuzu0jIF5eo5XDzhHUXf
+   yCI4VJa08lNAWlmms3T5LuRTpUECKYjeV/3QoJRw62PmJVlUqhJtoI+mG
+   edhi1aAPCAl3CW0vDklvn0nXln//TQ5pckvLEiGCbNvmUZRhuZ8cRBF+N
+   rjg05mjesm+BMmc7XhmqplXJX5gTeyuTs2gUxPuw8boTb3edPRRij7pZc
+   V+EPz5Eo8kPwSKxcTXWt+/G5UFEm1PaVvwO1DcNReYGCyMe36jquBooYt
+   wUWZ1VHxbSYsI9+lNl1T1aB2P8gQ7OTHVFWXigwnPlGJGTgZG+YqkV6YB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="319911786"
 X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="343133589"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 12:48:46 -0700
+   d="scan'208";a="319911786"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 12:48:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="714748115"
+   d="scan'208";a="498568611"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2022 12:48:44 -0700
+  by orsmga003.jf.intel.com with ESMTP; 16 Mar 2022 12:48:44 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nUZdT-000CpF-VI; Wed, 16 Mar 2022 19:48:43 +0000
-Date: Thu, 17 Mar 2022 03:47:44 +0800
+	id 1nUZdT-000CpH-Vk; Wed, 16 Mar 2022 19:48:43 +0000
+Date: Thu, 17 Mar 2022 03:47:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Anup Patel <apatel@ventanamicro.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 2011/2335] arch/s390/include/asm/smp.h:20:30:
- error: expected ';' after top level declarator
-Message-ID: <202203170304.AksZVl8r-lkp@intel.com>
+Subject: [avpatel:riscv_kvm_aia_v1 32/38] arch/arm64/kvm/mmu.c:768:55:
+ warning: incompatible pointer to integer conversion initializing 'gfp_t'
+ (aka 'unsigned int') with an expression of type 'void *'
+Message-ID: <202203170328.blnyldnz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,72 +47,93 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   85293bf3fca6d85608cff1447ce3097583f15fab
-commit: 4f65f03071d3f05b9768f9999f35a95978daab34 [2011/2335] headers/deps: locking/lockdep: Split <linux/lockep.h> into <linux/lockep_types.h> and <linux/lockep_api.h>
-config: s390-randconfig-r002-20220313 (https://download.01.org/0day-ci/archive/20220317/202203170304.AksZVl8r-lkp@intel.com/config)
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   1f93371b93e3d215381b1ebcecacb9f2e54b270f
+commit: ef83a194815d993203e117d8a83e591f0a0c288e [32/38] RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
+config: arm64-randconfig-r013-20220314 (https://download.01.org/0day-ci/archive/20220317/202203170328.blnyldnz-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=4f65f03071d3f05b9768f9999f35a95978daab34
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout 4f65f03071d3f05b9768f9999f35a95978daab34
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/avpatel/linux/commit/ef83a194815d993203e117d8a83e591f0a0c288e
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout ef83a194815d993203e117d8a83e591f0a0c288e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hashtable_api.h:16:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:23:
-   In file included from include/linux/lockdep_api.h:27:
-   In file included from include/linux/smp_api.h:15:
->> arch/s390/include/asm/smp.h:20:30: error: expected ';' after top level declarator
-   extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
-                                ^
-                                ;
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hashtable_api.h:16:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:35:
-   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
-   # include <generated/asm-offsets.h>
-             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/s390/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> arch/arm64/kvm/mmu.c:768:55: warning: incompatible pointer to integer conversion initializing 'gfp_t' (aka 'unsigned int') with an expression of type 'void *' [-Wint-conversion]
+           struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+                                                                ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+   #define NULL ((void *)0)
+                ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +20 arch/s390/include/asm/smp.h
+vim +768 arch/arm64/kvm/mmu.c
 
-^1da177e4c3f41 include/asm-s390/smp.h      Linus Torvalds     2005-04-16  16  
-dbd70fb499952d include/asm-s390/smp.h      Heiko Carstens     2008-04-17  17  extern struct mutex smp_cpu_state_mutex;
-10ad34bc76dfbc arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  18  extern unsigned int smp_cpu_mt_shift;
-10ad34bc76dfbc arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  19  extern unsigned int smp_cpu_mtid;
-1a36a39e225d35 arch/s390/include/asm/smp.h Martin Schwidefsky 2015-10-29 @20  extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
-a052096bdd6809 arch/s390/include/asm/smp.h Sven Schnelle      2021-08-27  21  extern cpumask_t cpu_setup_mask;
-8b646bd759086f arch/s390/include/asm/smp.h Martin Schwidefsky 2012-03-11  22  
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  753  
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  754  /**
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  755   * kvm_phys_addr_ioremap - map a device range to guest IPA
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  756   *
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  757   * @kvm:	The KVM pointer
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  758   * @guest_ipa:	The IPA at which to insert the mapping
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  759   * @pa:		The physical address of the device
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  760   * @size:	The size of the mapping
+c9c0279cc02b4e1 arch/arm64/kvm/mmu.c Xiaofei Tan         2020-09-17  761   * @writable:   Whether or not to create a writable mapping
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  762   */
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  763  int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+c40f2f8ff833edd arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  764  			  phys_addr_t pa, unsigned long size, bool writable)
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  765  {
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  766  	phys_addr_t addr;
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  767  	int ret = 0;
+c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02 @768  	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  769  	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  770  	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  771  				     KVM_PGTABLE_PROT_R |
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  772  				     (writable ? KVM_PGTABLE_PROT_W : 0);
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  773  
+bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  774  	if (is_protected_kvm_enabled())
+bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  775  		return -EPERM;
+bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  776  
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  777  	size += offset_in_page(guest_ipa);
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  778  	guest_ipa &= PAGE_MASK;
+c40f2f8ff833edd arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  779  
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  780  	for (addr = guest_ipa; addr < guest_ipa + size; addr += PAGE_SIZE) {
+c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  781  		ret = kvm_mmu_topup_memory_cache(&cache,
+61ffb3a50c4402e arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  782  						 kvm_mmu_cache_min_pages(kvm));
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  783  		if (ret)
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  784  			break;
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  785  
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  786  		spin_lock(&kvm->mmu_lock);
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  787  		ret = kvm_pgtable_stage2_map(pgt, addr, PAGE_SIZE, pa, prot,
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  788  					     &cache);
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  789  		spin_unlock(&kvm->mmu_lock);
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  790  		if (ret)
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  791  			break;
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  792  
+02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  793  		pa += PAGE_SIZE;
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  794  	}
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  795  
+c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  796  	kvm_mmu_free_memory_cache(&cache);
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  797  	return ret;
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  798  }
+d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  799  
 
-:::::: The code at line 20 was first introduced by commit
-:::::: 1a36a39e225d3558fb3776a3d3d7736cf1ec9f60 s390/dump: rework CPU register dump code
+:::::: The code at line 768 was first introduced by commit
+:::::: c1a33aebe91d49c958df1648b2a84db96c403075 KVM: arm64: Use common KVM implementation of MMU memory caches
 
-:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
-:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
+:::::: TO: Sean Christopherson <sean.j.christopherson@intel.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
 ---
 0-DAY CI Kernel Test Service
