@@ -1,132 +1,74 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB6738C2
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 13:43:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647438234; x=1678974234;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ia464ki27ge9N+7v/cZ9X6DfqHOtFnitVi0AdRUCp78=;
-  b=Tf2SvcFZ9lnoZWdS54XWHD84B7Pi71a4/UlI6Qa6mZk2IrpV0ks/5wQZ
-   xQw1xsp73BIe3kKb48EagMIjvY1S/geZfNXyKvFERph6q1QMHG5LR5jnT
-   I4IgG8sZvH+F41Ngaa3LcBy6qzBvihykdOPV1R67kiFNrhlFbH5/RtWEX
-   nq7Wme6aj0UokYkaZHBdQpKeEFkDFo9ExkzF+56Gkea8t3MHyyXSholEx
-   JX0dVCfiPb0N9okXZzG1bq1LlXfX5j32huxyLJkrr5ycECcb/UM6P3GYl
-   0cf6TKPUUnD7EB/Fk4970thETlZUgrm1qIGVYi92dEp1gSgFk524aFr8F
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236535792"
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="236535792"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 06:43:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="513021924"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 16 Mar 2022 06:43:52 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nUTwN-000CTJ-GC; Wed, 16 Mar 2022 13:43:51 +0000
-Date: Wed, 16 Mar 2022 21:42:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guo Ren <guoren@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [csky-linux:riscv_compat_v8 20/20]
- arch/riscv/kernel/compat_signal.c:199:5: warning: no previous prototype for
- function 'compat_setup_rt_frame'
-Message-ID: <202203162123.Ksr0CtpZ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CA838C2
+	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 13:55:52 +0000 (UTC)
+Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N62mG-1oA3Bv0Nho-016Kwk for <llvm@lists.linux.dev>; Wed, 16 Mar 2022
+ 14:55:51 +0100
+Received: by mail-wr1-f47.google.com with SMTP id h23so2481763wrb.8
+        for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 06:55:50 -0700 (PDT)
+X-Gm-Message-State: AOAM532w3GfA8YT2tokH/R6obj7xZ9yyE4kjkpJdfJxPTC7NKIf0bhUI
+	7BhAsc0ZAoKsLVFfPo7q9Cgjxl/1MWDSBwFcY44=
+X-Google-Smtp-Source: ABdhPJy+lwx53EZnd7w8d/ihKdeWtRvy8fq/hg43IWx4M+zNwmv/HP81T+84POeldU40HhcONYSQPVqVO7LeEIbIOV0=
+X-Received: by 2002:adf:edc3:0:b0:1ec:5f11:5415 with SMTP id
+ v3-20020adfedc3000000b001ec5f115415mr48812wro.317.1647438950657; Wed, 16 Mar
+ 2022 06:55:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <202203162123.Ksr0CtpZ-lkp@intel.com>
+In-Reply-To: <202203162123.Ksr0CtpZ-lkp@intel.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Wed, 16 Mar 2022 14:55:34 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1atu-azCPCC_1c-MKTungkHVn0Wd1awhZ4=hf1i9MWfA@mail.gmail.com>
+Message-ID: <CAK8P3a1atu-azCPCC_1c-MKTungkHVn0Wd1awhZ4=hf1i9MWfA@mail.gmail.com>
+Subject: Re: [csky-linux:riscv_compat_v8 20/20] arch/riscv/kernel/compat_signal.c:199:5:
+ warning: no previous prototype for function 'compat_setup_rt_frame'
+To: Guo Ren <guoren@linux.alibaba.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:uV4EFctnBr372wgQzCONr0lV643RczXljTXZ3UUV8T3uzVG6Trh
+ I1XNFt/GpaICDUKG/quoaSj5zBoWnF4s1VkfNdm++FQBSy3jboQlJfyTvP/NqyE1qJRn6if
+ 4wEwT4AQon6NF/D9qwOqRCyFcyn/Q6lNeMg7gKxctB+fYvMJrhKiK206kAx7+KQHxmAujb7
+ 8cG7P9htVjsdfpTK4TV0Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:KzBLOvuekmw=:dBL09SKFTI6t+N33qV4s4J
+ zICFxJ7e9DJ1vPYNphUXSODZMpFFErR8Vn5aWsUKVlEKU/qQ4zDF4FOsNq7Sx/unl6VbkHrZZ
+ Jna+3G5zIUq60NBVbS+3dn1HPC8/CWhKLxjEzQLqx8cTr1DnpxvivA8xQl2N7PJsdxbpGHiki
+ R9SAJclvvSsvTsdBghWXZd71g10MttfrqaAYkIFtzwkgZNIV1+2g4lYAUsUYwvatVeSNYq1kK
+ yo9UtYuVQZC3E+G4EFZNHaJ8jH/KxHQH8muHLC26RYGPnQXG6waEQidxi7y2tbRRQn9Vy0olh
+ 4F12N7+OMYkq3Qye3RxE7lCfOYo4yLMfN9k8u/cMwFzYM5lQeOEEciEMAdjOgMWs6GtRyrIIF
+ +u6ZpjiVIxc+/ePt5+NgqLSrCPQ7yD2RNura3yt9KcRrOc2kmV8LXhss86BCzBIR5v6l6MHwh
+ RGklo4cxwHXSB5L79YklzzYsSZVeZWrbcTZvP+d6tuolnxHkMS+kIubRoBCEvOm1x28I0iTMD
+ +d7ZvtmYItnG3CLll23jFaSFip31vGr6hvo6LTM4O/6pssVUHGhCEvF95kJu3YoAN2VOV/Ao0
+ fS1+C9UoJiLaJcG2qrn1TlxHVB4t/ODorl7kxA+iDi5TU9tc7Az8myVmeI07ThDhKHfUiNsYk
+ j0fCw3oK0Qy9qo/l1nC5by9Dr9iRehkrxoqyPChi04p0N0bwp0jMMJDEcV+buniDZk9/YGcMg
+ CBmRw0YIa45WQPjs0cw27E4pcp0yv/eDZru0HWOtzMLmQIbr7Z6RvCQjEEMxllIO7IuiSCCim
+ T2u0lA235V90fe1agiP/4YWBxzBikfSmNNe2APF89fopimz5t4=
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v8
-head:   5e16532e9a75c08518ff196285fe079ee12188ae
-commit: 5e16532e9a75c08518ff196285fe079ee12188ae [20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-config: riscv-randconfig-r033-20220313 (https://download.01.org/0day-ci/archive/20220316/202203162123.Ksr0CtpZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/c-sky/csky-linux/commit/5e16532e9a75c08518ff196285fe079ee12188ae
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v8
-        git checkout 5e16532e9a75c08518ff196285fe079ee12188ae
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+On Wed, Mar 16, 2022 at 2:42 PM kernel test robot <lkp@intel.com> wrote:
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> arch/riscv/kernel/compat_signal.c:199:5: warning: no previous prototype for function 'compat_setup_rt_frame' [-Wmissing-prototypes]
+>    int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+>        ^
+>    arch/riscv/kernel/compat_signal.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+>    ^
+>    static
+>    1 warning generated.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The problem here is that the compat_setup_rt_frame() declaration got added to
+arch/riscv/kernel/signal.c instead of a header file that is included by both
+signal.c and compat_signal.c.
 
-All warnings (new ones prefixed by >>):
+Alternatively, the definition could be made static and moved into signal.c.
 
->> arch/riscv/kernel/compat_signal.c:199:5: warning: no previous prototype for function 'compat_setup_rt_frame' [-Wmissing-prototypes]
-   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-       ^
-   arch/riscv/kernel/compat_signal.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/compat_setup_rt_frame +199 arch/riscv/kernel/compat_signal.c
-
-45847575ba9c88 Guo Ren 2021-12-13  198  
-45847575ba9c88 Guo Ren 2021-12-13 @199  int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-45847575ba9c88 Guo Ren 2021-12-13  200  	struct pt_regs *regs)
-45847575ba9c88 Guo Ren 2021-12-13  201  {
-45847575ba9c88 Guo Ren 2021-12-13  202  	struct compat_rt_sigframe __user *frame;
-45847575ba9c88 Guo Ren 2021-12-13  203  	long err = 0;
-45847575ba9c88 Guo Ren 2021-12-13  204  
-45847575ba9c88 Guo Ren 2021-12-13  205  	frame = compat_get_sigframe(ksig, regs, sizeof(*frame));
-45847575ba9c88 Guo Ren 2021-12-13  206  	if (!access_ok(frame, sizeof(*frame)))
-45847575ba9c88 Guo Ren 2021-12-13  207  		return -EFAULT;
-45847575ba9c88 Guo Ren 2021-12-13  208  
-45847575ba9c88 Guo Ren 2021-12-13  209  	err |= copy_siginfo_to_user32(&frame->info, &ksig->info);
-45847575ba9c88 Guo Ren 2021-12-13  210  
-45847575ba9c88 Guo Ren 2021-12-13  211  	/* Create the ucontext. */
-45847575ba9c88 Guo Ren 2021-12-13  212  	err |= __put_user(0, &frame->uc.uc_flags);
-45847575ba9c88 Guo Ren 2021-12-13  213  	err |= __put_user(NULL, &frame->uc.uc_link);
-45847575ba9c88 Guo Ren 2021-12-13  214  	err |= __compat_save_altstack(&frame->uc.uc_stack, regs->sp);
-45847575ba9c88 Guo Ren 2021-12-13  215  	err |= compat_setup_sigcontext(frame, regs);
-45847575ba9c88 Guo Ren 2021-12-13  216  	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
-45847575ba9c88 Guo Ren 2021-12-13  217  	if (err)
-45847575ba9c88 Guo Ren 2021-12-13  218  		return -EFAULT;
-45847575ba9c88 Guo Ren 2021-12-13  219  
-45847575ba9c88 Guo Ren 2021-12-13  220  	regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
-45847575ba9c88 Guo Ren 2021-12-13  221  			current->mm->context.vdso, rt_sigreturn);
-45847575ba9c88 Guo Ren 2021-12-13  222  
-45847575ba9c88 Guo Ren 2021-12-13  223  	/*
-45847575ba9c88 Guo Ren 2021-12-13  224  	 * Set up registers for signal handler.
-45847575ba9c88 Guo Ren 2021-12-13  225  	 * Registers that we don't modify keep the value they had from
-45847575ba9c88 Guo Ren 2021-12-13  226  	 * user-space at the time we took the signal.
-45847575ba9c88 Guo Ren 2021-12-13  227  	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
-45847575ba9c88 Guo Ren 2021-12-13  228  	 * since some things rely on this (e.g. glibc's debug/segfault.c).
-45847575ba9c88 Guo Ren 2021-12-13  229  	 */
-45847575ba9c88 Guo Ren 2021-12-13  230  	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
-45847575ba9c88 Guo Ren 2021-12-13  231  	regs->sp = (unsigned long)frame;
-45847575ba9c88 Guo Ren 2021-12-13  232  	regs->a0 = ksig->sig;                     /* a0: signal number */
-45847575ba9c88 Guo Ren 2021-12-13  233  	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
-45847575ba9c88 Guo Ren 2021-12-13  234  	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
-45847575ba9c88 Guo Ren 2021-12-13  235  
-
-:::::: The code at line 199 was first introduced by commit
-:::::: 45847575ba9c8837017d2a6af498aaeee0477b3c riscv: compat: signal: Add rt_frame implementation
-
-:::::: TO: Guo Ren <guoren@linux.alibaba.com>
-:::::: CC: Guo Ren <guoren@linux.alibaba.com>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+       Arnd
