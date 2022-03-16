@@ -1,107 +1,182 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7954698
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 01:33:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9065346A3
+	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 02:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647394415; x=1678930415;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xAHtXDDav9BrhYDuigVnMmC1A+VvTM+jKpTIjJx+T54=;
-  b=No5L+gykqVV4ix9o2A3UnhQqKnpcLOp86V/EfF+gddP1uzAU8LFvivqW
-   DXFpIA5jzXoToplYQxIgmJPuxmtx1I9zPK1z1ukSPTLJck6bhbE35MHQT
-   iAgs89jrYnVLr4WyrmMhJ3JyKbqOY2fosNeL5utV1U9ujx5F7pLtSWSI3
-   1aSZpgJb4ibd/HXI3OKJE5j7RZukpmqqSrVVn3EdDq52jfWBw55tbjnHW
-   yuj3Eol49Jfkex9WLna8Uw2qVNSnPO1YpyuPUpDrEaho7D/JtNj0hMO7y
-   9i36wYJKZKKsXx+BoZvBa1XkiXYmocW95JdpicibFfP8zgLxuqhieaIr4
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="342890834"
+  t=1647397534; x=1678933534;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2VA94Eh1qS411dAUoSCxbhcrRfvG6zQ7XscUmqUXoRY=;
+  b=SPLTKn6kf+pUR36OW/W+mo8d+EBvpt+E3FNwyQh0JbGP91v1Fwsg9bdS
+   rviTEM5R5aJ75edDWfGpi17/EArvhHgRauKjEG4UNNJBWGL1cIhAPdjhE
+   WalV9jxr6Qr8IOXyHDuFUrluS3TI4lRuqhAfQIv8wlkimLVi5XYIkIU4O
+   gPDLzCNJ19aAKnXI/KL/Jm4JI528WP15YtIx7AEWb0LejA434pHCbcQH1
+   57fO4WEuJmD8Zc2BihCWL20rY0Bp/RA8ctjfFKvJWu7Zxn+/5aBKlh+zo
+   K6myq+HuDnnmR+/UvVbULwP90iwl4Gw0H9x0hN1uAfludx/W4YfxMIicZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="243925216"
 X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="342890834"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 18:33:34 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="243925216"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 19:25:34 -0700
 X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="646451611"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2022 18:33:31 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nUIXa-000BlM-8n; Wed, 16 Mar 2022 01:33:30 +0000
-Date: Wed, 16 Mar 2022 09:32:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Will Deacon <will@kernel.org>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	"open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH 2/2] thunderbolt: Use pre-boot DMA protection on AMD
- systems
-Message-ID: <202203160904.VB4alCdg-lkp@intel.com>
-References: <20220315162455.5190-2-mario.limonciello@amd.com>
+   d="scan'208";a="557221241"
+Received: from lingshan-mobl.ccr.corp.intel.com (HELO [10.255.31.20]) ([10.255.31.20])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 19:25:31 -0700
+Message-ID: <eb3b0964-662e-2c5f-02c6-6141c4c5bf92@intel.com>
+Date: Wed, 16 Mar 2022 10:25:28 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315162455.5190-2-mario.limonciello@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-Hi Mario,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on joro-iommu/next]
-[also build test ERROR on arm-perf/for-next/perf linus/master v5.17-rc8 next-20220315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220316-002821
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220316/202203160904.VB4alCdg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/9b0b7079d348c607cba7af4c87eaae1a79e52d91
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220316-002821
-        git checkout 9b0b7079d348c607cba7af4c87eaae1a79e52d91
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/thunderbolt/domain.c:9:
->> include/linux/amd-iommu.h:159:52: error: use of undeclared identifier 'ENODEV'
-   static inline int amd_iommu_detect(void) { return -ENODEV; }
-                                                      ^
-   1 error generated.
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.6.1
+Subject: Re: [PATCH] vDPA/ifcvf: match pointer check to use
+Content-Language: en-US
+To: "Michael S. Tsirkin" <mst@redhat.com>, Tom Rix <trix@redhat.com>
+Cc: jasowang@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+ sgarzare@redhat.com, xieyongji@bytedance.com,
+ virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20220315124130.1710030-1-trix@redhat.com>
+ <20220315092656-mutt-send-email-mst@kernel.org>
+ <512a392d-23d7-c25b-7576-571001f28288@redhat.com>
+ <20220315111456-mutt-send-email-mst@kernel.org>
+From: "Zhu, Lingshan" <lingshan.zhu@intel.com>
+In-Reply-To: <20220315111456-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +/ENODEV +159 include/linux/amd-iommu.h
 
-6a9401a7ac13e6 arch/x86/include/asm/amd_iommu.h Joerg Roedel          2009-11-20  158  
-480125ba49ba62 arch/x86/include/asm/amd_iommu.h Konrad Rzeszutek Wilk 2010-08-26 @159  static inline int amd_iommu_detect(void) { return -ENODEV; }
-6a9401a7ac13e6 arch/x86/include/asm/amd_iommu.h Joerg Roedel          2009-11-20  160  
+On 3/15/2022 11:15 PM, Michael S. Tsirkin wrote:
+> On Tue, Mar 15, 2022 at 08:03:26AM -0700, Tom Rix wrote:
+>> On 3/15/22 6:28 AM, Michael S. Tsirkin wrote:
+>>> On Tue, Mar 15, 2022 at 05:41:30AM -0700, trix@redhat.com wrote:
+>>>> From: Tom Rix <trix@redhat.com>
+>>>>
+>>>> Clang static analysis reports this issue
+>>>> ifcvf_main.c:49:4: warning: Called function
+>>>>     pointer is null (null dereference)
+>>>>     vf->vring->cb.callback(vring->cb.private);
+>>>>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>>
+>>>> The check
+>>>>     vring = &vf->vring[i];
+>>>>     if (vring->cb.callback)
+>>>>
+>>>> Does not match the use.  Change dereference so they match.
+>>>>
+>>>> Fixes: 79333575b8bd ("vDPA/ifcvf: implement shared IRQ feature")
+>>> Thanks a lot! I squashed this into the offending patch - no point in
+>>> breaking bisect. Pushed to linux. However I'm now
+>>> having second thoughts about applying that patchset - I'd like
+>>> soma analysis explaining how this got through testing.
+>> static analysis is something i do treewide.
+>>
+>> There are currently ~2500 issues in linux-next, do not panic! many are false
+>> positives.
+>>
+>> It is pretty easy to setup and once you have a baseline you can filter only
+>> your files.
+>>
+>> Tom
+> Thanks for that info! I was actually directing this question to the
+> contributor since the code does not look like it could have ever
+> worked. I don't have the hardware in question myself.
+Oh, that's my bad introducing this bug by typo, thanks Tom for fixing that!
+In my previous testing, I tolerated the lower performance(only one queue 
+working as you pointed out)
+due to the shared irq, and did not check mq status, sorry for that.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+After fixing this issue, test again:
+
+(1)set nvectors = 2 after allocate MSI vectors, force the queues share 
+one vector. from /proc/interrupts, we can see:
+[lszhu@localhost linux]$ cat /proc/interrupts | grep ifcvf
+  241:          0          0          0          0 0          0          
+0          0          0          0 0          0          0          
+0          0          0 0          0          0          0          
+0          0 0          0          0          0          0          0 
+0          0    2724424          0          0          0 0          
+0          0          0          0          0 IR-PCI-MSI 
+534528-edge      ifcvf[0000:01:00.5]-vqs-reused-irq
+  242:          0          0          0          0 0          0          
+0          0          0          0 0          0          0          
+0          0          0 0          0          0          0          
+0          0 0          0          0          0          0          0 
+0          0          0          0          0          0 0          
+0          0          0          0          0 IR-PCI-MSI 
+534529-edge      ifcvf[0000:01:00.5]-config
+  251:          0          0          0          0 0          0          
+0          0          0          0 0    2693318          0          
+0          0          0 0          0          0          0          
+0          0 0          0          0          0          0          0 
+0          0          0          0          0          0 0          
+0          0          0          0          0 IR-PCI-MSI 
+536576-edge      ifcvf[0000:01:00.6]-vqs-reused-irq
+  252:          0          0          0          0 0          0          
+0          0          0          0 0          0          0          
+0          0          0 0          0          0          0          
+0          0 0          0          0          0          0          0 
+0          0          0          0          0          0 0          
+0          0          0          0          0 IR-PCI-MSI 
+536577-edge      ifcvf[0000:01:00.6]-config
+
+(2) after several rounds of scp from a VF to another, at the source 
+side, ethtool -S shows(cut off, only tx):
+localhost:/home/lszhu # ethtool -S eth1
+NIC statistics:
+      tx_queue_0_packets: 437256
+      tx_queue_0_bytes: 629246017
+      tx_queue_0_xdp_tx: 0
+      tx_queue_0_xdp_tx_drops: 0
+      tx_queue_0_kicks: 34089
+      tx_queue_1_packets: 73
+      tx_queue_1_bytes: 96721
+      tx_queue_1_xdp_tx: 0
+      tx_queue_1_xdp_tx_drops: 0
+      tx_queue_1_kicks: 12
+      tx_queue_2_packets: 294647
+      tx_queue_2_bytes: 433949815
+      tx_queue_2_xdp_tx: 0
+      tx_queue_2_xdp_tx_drops: 0
+      tx_queue_2_kicks: 14948
+      tx_queue_3_packets: 20226451
+      tx_queue_3_bytes: 29735633548
+      tx_queue_3_xdp_tx: 0
+      tx_queue_3_xdp_tx_drops: 0
+      tx_queue_3_kicks: 1123675
+
+so every queue carries traffic now, all enabled
+
+Thanks,
+Zhu Lingshan
+
+
+>
+>
+>>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>>> ---
+>>>>    drivers/vdpa/ifcvf/ifcvf_main.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
+>>>> index 3b48e717e89f7..4366320fb68d3 100644
+>>>> --- a/drivers/vdpa/ifcvf/ifcvf_main.c
+>>>> +++ b/drivers/vdpa/ifcvf/ifcvf_main.c
+>>>> @@ -46,7 +46,7 @@ static irqreturn_t ifcvf_vqs_reused_intr_handler(int irq, void *arg)
+>>>>    	for (i = 0; i < vf->nr_vring; i++) {
+>>>>    		vring = &vf->vring[i];
+>>>>    		if (vring->cb.callback)
+>>>> -			vf->vring->cb.callback(vring->cb.private);
+>>>> +			vring->cb.callback(vring->cb.private);
+>>>>    	}
+>>>>    	return IRQ_HANDLED;
+>>>> -- 
+>>>> 2.26.3
+
