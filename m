@@ -1,175 +1,247 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4212628E6
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 06:14:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E38290E
+	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 07:09:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647411273; x=1678947273;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=oRZ2kyfXQEZBfhEvbJqH1ebiV5fhOMT9+fkYV2aQKXU=;
-  b=eFuc0+31Glny3XjA528VWQReYe2aGEEZ8siesCKzY4sAY3C0V9LV4nn6
-   0NfR8t8A3t/Z6DaR5bUf+zJ4GdI9TNRDbWV8sHggqX/CrkUBoLwyGWu0k
-   L/NPaVylYBDPrsx2SayGCLnplIVLxNXLGJXNS3jNY0TtDxW3fhbdDrwpd
-   aJL8d2/L/w8MHtUzz29tnYmDKVyW8/sKfO611uP0tfY2pcBvk1PtwW/6e
-   IRS0CK32lqMIbakpokFa8BPbT7GnJAlPLE1Pa3Ps+xEf6mSlIK6NxFFq+
-   JBm0ldnCsdqgs8s9ZziBqcLdNboEwIODeVPhbwQYkD1iausdDGDQJul8d
+  t=1647414551; x=1678950551;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LouiWGDFHGRlNiTQXVxortXoLK+VtqxbnrnyktLsAUI=;
+  b=WaVleVwC8BBNag/tL4x2uhiNOZgrmypiqILusizG1V1NgUv5hLR18Vyl
+   nMrNXgGOIoBT5CsG+gtZzKHGeySTt8nmA5sC51s+tp+MQybcsCJgsTXWF
+   p16PCP/NPgbPHQTXhU86FMd4npzlB7EG58c3lrQa0NnKpopU73BeOn8yN
+   /rk3Q08GmjIZTvBoWQYh2KX/51DcmLxprHBIDhGlWTuGSX0PlSi2QTsL8
+   9aRLF6EO7uQUqmvtq7ac0Oy1+wH6lxoPeLYd/D/XzsVkRNqkD1wyG1fNI
+   JG6j7keqySqFoXiFF1G429eFOl3GdpOWjurzw8xuFaYp9dUMllTiN0C99
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236447871"
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="236447871"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 23:14:32 -0700
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="254069231"
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="254069231"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 00:09:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="613527070"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Mar 2022 23:14:32 -0700
-Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Mar 2022 23:14:32 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Tue, 15 Mar 2022 23:14:32 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.171)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Tue, 15 Mar 2022 23:14:26 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cXWGM/v7JpgROb8CORpyq0TPkni7Yi8/Vy1uD1GapuP03jIUTcLhZR2XzgubMwv9DfPOVb9oAL9cWD/8kUOhNwLsk6AxWdBWM0y6Vymt8rXMUEWZqaGOa0APE5hy2hccFFQfa6xtBzBx/AUt3nH1/4kzpV7v6eTe8Srx8L/ixJS25aKjvxKXSH7SOW5SX641W8wReVfp866ZqovYzkgwNh+wjF0ti7QtR9VvpkzxkQWieaVB1vg8JMudxjE7hi0JFt/jSikAniMTYPB6DD0VgLyffQwqvRFhXSuKhpMSthlIruDUif9Y7FBOkFbUzaCsgAUzZrCFhLssozjfGwtvTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kawNmd2gJILum81JFNbz0vQE6pgsvo/fkdaQXgHlmRs=;
- b=Oli1CNPUh3b4ZHrBBFybI+Jn6/ITGPaeletKoFaG7IOcIKVQpFEvQjN46A7dmME/Dbc055Uu8VNGnHmc6yys47YxHME0lxH0mt0QoK+skI8GtRviB8zmVTfPoToxlQg31K8y4JMVA98P2igtGusQgeM+uKXy+H1ctvEDTQ7iVdGG7aG76usbBmZxrlIUvKUACzghaX6Hw1GZlvkBsI21L15qs8/icDwn1VxbPGGw/ENgitmqrO/5tqoeTPwgwWVCSH1sNRBCX1di8BxJn7ZAlYgtzRK8+mTix4Jzp8nqp1BBFweh4YQqnd7wpCPqbNuvKwd1kwTh+h2wuN+m6evZqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com (2603:10b6:a03:79::29)
- by DM6PR11MB4218.namprd11.prod.outlook.com (2603:10b6:5:201::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.26; Wed, 16 Mar
- 2022 06:14:24 +0000
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::8113:f21a:30e7:26db]) by BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::8113:f21a:30e7:26db%4]) with mapi id 15.20.5061.026; Wed, 16 Mar 2022
- 06:14:24 +0000
-From: "G, GurucharanX" <gurucharanx.g@intel.com>
-To: "trix@redhat.com" <trix@redhat.com>, "Brandeburg, Jesse"
-	<jesse.brandeburg@intel.com>, "Nguyen, Anthony L"
-	<anthony.l.nguyen@intel.com>, "davem@davemloft.net" <davem@davemloft.net>,
-	"kuba@kernel.org" <kuba@kernel.org>, "nathan@kernel.org" <nathan@kernel.org>,
-	"ndesaulniers@google.com" <ndesaulniers@google.com>
-CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, "intel-wired-lan@lists.osuosl.org"
-	<intel-wired-lan@lists.osuosl.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [Intel-wired-lan] [PATCH] igb: zero hwtstamp by default
-Thread-Topic: [Intel-wired-lan] [PATCH] igb: zero hwtstamp by default
-Thread-Index: AQHYNutt+L5RW/R3dE+eXMovLeKQLKzBjDKA
-Date: Wed, 16 Mar 2022 06:14:24 +0000
-Message-ID: <BYAPR11MB3367BC9F34175A1D52EB68D4FC119@BYAPR11MB3367.namprd11.prod.outlook.com>
-References: <20220313150210.1508203-1-trix@redhat.com>
-In-Reply-To: <20220313150210.1508203-1-trix@redhat.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 102e11a9-f5c1-4dab-63e5-08da0714380e
-x-ms-traffictypediagnostic: DM6PR11MB4218:EE_
-x-microsoft-antispam-prvs: <DM6PR11MB4218720A9AADD7E6E6D1FE21FC119@DM6PR11MB4218.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: b7AK/oiMZSKkXVHOaQQmEPsAhyTz+TTSJpsRi/A88fgIn5DyvwQd0LvPeAVZ0lSthOR6LVa/4HKWhxQCJgaGc1IlZWQ1ZJsBHeGqQeTKe/123qr3//R0LJqGUC4EfT7/Vdw28YjL4Fcg8nWVlYIKLCyLVEj/l6kNn0sayTy+iUb95S5mpG7yqwIwlUnZQ60q4MwV/Weo8mGqx+f95oJGpfFldT3iKPwzCWiwdVHTbmdKw/rTPqJx65HEnOVQBcEKM+R7EqI4C9VWmkpX3Q+qUNtm9986mz2plqGxr69jBVv9LR+12Ao77BaxSakNslSSSgAsm99KdTUbbkqSVfzY0ZItWvyoIlXH8IVexrx3fI8ZgxsDUfAW07skgk5I/+u0zTasDKYqIdbm3oEUGZ7nPIfJjp+Qkg2WJfyUmSm3H/PN1w5AU3nZ+coqoxjFuwfkOzkt+kQd2sMzYXypinwV62M59cp7r2UFVr28Z4XgaIV/vI3bq4HDa4JAlAmtUIwwjKVxSEXJ3bMQ5m5WTAMPEAIxE8vcvL7KaDW8gCWaRpxAVhUpXvpDOSJJMvV4AGp7t7c/9rrRlYKbhcNe7vMOYoe895HahghkStwbax2LLVZMlKRYLpiogDpeu6xwpjRL1ujnbYCT2ASBsDck6DHyzqAqPAVlczqHgXtlSAwL0azt8vzxSfalDUIapw5xYTn2/xvChRDIHNQopgN2LVdBkg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3367.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38070700005)(122000001)(71200400001)(82960400001)(508600001)(66556008)(38100700002)(76116006)(66476007)(66446008)(64756008)(66946007)(110136005)(316002)(8676002)(86362001)(54906003)(26005)(186003)(4326008)(53546011)(9686003)(7696005)(6506007)(83380400001)(2906002)(33656002)(8936002)(52536014)(55016003)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qAkHyJ2Nrvh4QKhIknWOUIHM1teu49ZZp6GRD5ce0PacH+GVQ+Vp8DITG12x?=
- =?us-ascii?Q?6RzuYClgb3YaVL5Pmhn8abukYQU/fZ76xTTJ1QQdmJgLS0Qa4Ofgx89ZUAiu?=
- =?us-ascii?Q?Fkvfr39XhGIzAEbuuQXob6AKHn06kGq5H7W1iMF4cQ3zu3UNz7Sdzo9zQoaD?=
- =?us-ascii?Q?9ctZSfGdBeYFg54v+KM1r60EVwz9kUCHqrDunCwy/OQotQnEGJV7+hcapC0Q?=
- =?us-ascii?Q?tGMybYPNXCTXGjjwvuCplYGMx0T6/dvPMHmPJ61pI6R/SstIQK7Yac8Zm+rm?=
- =?us-ascii?Q?2BtCQyF0yxC8T5HRXkNb3ypIelrNpPjya0iVNlCLrhNcbP/B12IJuXCvbuMg?=
- =?us-ascii?Q?sHjsCqDDCTIsKISCo/sUaDb5CHZlZ7VW986BsSvtKm2dVR9rW1hehWnn4UEZ?=
- =?us-ascii?Q?Jwn6sCiypibcySYkLgKs1Xb47jrYtwOx4Te6xoOJIK5B1aoTbSTzuP/0788F?=
- =?us-ascii?Q?X1VxM5q5u6VEhNnVGJaVuEGNnOFg8iWVQNUwQwWihqPsfdBuVRmiP5Xberyy?=
- =?us-ascii?Q?+L4CoIsyVESjgg9vogP58hWS0yU9YxAEaJdATwiYufpuouvKBpcFXtpAlliF?=
- =?us-ascii?Q?O5hE5qNV8wvzPD/CxL+r0cHvJqr2xmEZLc2gtDPVqLIsGwb334YTt4bux8tB?=
- =?us-ascii?Q?XKfxI1Vp5+tB6/dMEGyIjIInqi61HfSojffaL7HCMVoJQlTURps8/i2NBzxq?=
- =?us-ascii?Q?jXLNDNAzzRvXWNPL3/fueHr7jFxal6ibwHbX/SyO/W/mDMvqALeMj+wg+o3w?=
- =?us-ascii?Q?h1QsHqYKdHJapqiJYXeoUhAZgFELxEiSMaY5r1Bhq8P9FY/Y/C6IGqABqsP1?=
- =?us-ascii?Q?FOhraD3mhpwF2X11jhnrr4jJIB6xbV21JIAEYh6i/c6xkNl9/BkP+YIjoMsi?=
- =?us-ascii?Q?dTXP8i0zbWl63FKsp6/THBR6gsg6HpyIg12NLezHjpBA8jGEiq5KdgqLBzp7?=
- =?us-ascii?Q?rx3iNOQp6WNP9o0iph4lz3as3nyBFPu4562csGPqqYfTHEZRdioFoCj35bFP?=
- =?us-ascii?Q?yq1e15BzL3O4IvukXR97y9ampAe6sOkXDWX72iuZPqYsVae1LDgeNjuoAQ/y?=
- =?us-ascii?Q?Pf6AoQFKAWWbxd6kzimmL1xPKyj2y8Ui3Ak0/iwRiE6vxdT0GsZ9rBzNZ2LW?=
- =?us-ascii?Q?O9LCnpZrHAViSWKWm9O5aszjHnxKqbMXR0b2Ja/u+m9NvQW+1YoWG2tBpP1T?=
- =?us-ascii?Q?aRr8Einvv5BKiKt8Zwas3MA4EAm0Wt9zDt4zKe3BnRL4KMsGf1GD2JF0V3OW?=
- =?us-ascii?Q?TOlefG1ezzWzM0mjoQiAPbYHAxCa1oaMOKnkA9LJEH2LZS1LNxluxUl5KPuI?=
- =?us-ascii?Q?5B+FvLoFv2VHCiSosL22MzX/xGPrFnbaIQdUyAP1Nqbeeitb4rCiGy0INhbx?=
- =?us-ascii?Q?CmyuLaB8PbFtEY9TmyW2aNWisEhFOU/rEh4OuFbIPn2snZdcfNbWGmZ+Reip?=
- =?us-ascii?Q?wr1hYhI6iAYinGssXLG+wSU/Ab3X0nQh?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="714484284"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2022 00:09:08 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nUNmN-000C6Q-I8; Wed, 16 Mar 2022 07:09:07 +0000
+Date: Wed, 16 Mar 2022 15:08:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
+ 8455/9999] arch/arm/mach-ep93xx/crunch-bits.S:94:2: error: invalid
+ instruction
+Message-ID: <202203161410.zozX61pm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3367.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 102e11a9-f5c1-4dab-63e5-08da0714380e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2022 06:14:24.6460
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FZ04nw5ALHR7JUVD8nAEKKO3gtv3eNptDaHMbHhuLt+PLweJnn8tHHB1AxjFeupfpbL0JIGHaaHsOTTHpCBTwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4218
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
+head:   19507e098be2c5f9b07ed086c94697c694473906
+commit: ffff118fe157b534c3244f8b300e655231dbd95c [8455/9999] BACKPORT: scripts/Makefile.clang: default to LLVM_IAS=1
+config: arm-ep93xx_defconfig (https://download.01.org/0day-ci/archive/20220316/202203161410.zozX61pm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/ffff118fe157b534c3244f8b300e655231dbd95c
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
+        git checkout ffff118fe157b534c3244f8b300e655231dbd95c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/arm/mach-ep93xx/crunch-bits.S:94:2: error: invalid instruction
+    cfstr64 mvdx0, [r1, #0] @ save 64b registers
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:95:2: error: invalid instruction
+    cfstr64 mvdx1, [r1, #8]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:96:2: error: invalid instruction
+    cfstr64 mvdx2, [r1, #16]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:97:2: error: invalid instruction
+    cfstr64 mvdx3, [r1, #24]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:98:2: error: invalid instruction
+    cfstr64 mvdx4, [r1, #32]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:99:2: error: invalid instruction
+    cfstr64 mvdx5, [r1, #40]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:100:2: error: invalid instruction
+    cfstr64 mvdx6, [r1, #48]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:101:2: error: invalid instruction
+    cfstr64 mvdx7, [r1, #56]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:102:2: error: invalid instruction
+    cfstr64 mvdx8, [r1, #64]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:103:2: error: invalid instruction
+    cfstr64 mvdx9, [r1, #72]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:104:2: error: invalid instruction
+    cfstr64 mvdx10, [r1, #80]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:105:2: error: invalid instruction
+    cfstr64 mvdx11, [r1, #88]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:106:2: error: invalid instruction
+    cfstr64 mvdx12, [r1, #96]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:107:2: error: invalid instruction
+    cfstr64 mvdx13, [r1, #104]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:108:2: error: invalid instruction
+    cfstr64 mvdx14, [r1, #112]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:109:2: error: invalid instruction
+    cfstr64 mvdx15, [r1, #120]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:115:2: error: invalid instruction
+    cfmv32al mvfx0, mvax0 @ save 72b accumulators
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:116:2: error: invalid instruction
+    cfstr32 mvfx0, [r1, #128]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:117:2: error: invalid instruction
+    cfmv32am mvfx0, mvax0
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:118:2: error: invalid instruction
+    cfstr32 mvfx0, [r1, #132]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:119:2: error: invalid instruction
+    cfmv32ah mvfx0, mvax0
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:120:2: error: invalid instruction
+    cfstr32 mvfx0, [r1, #136]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:121:2: error: invalid instruction
+    cfmv32al mvfx0, mvax1
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:122:2: error: invalid instruction
+    cfstr32 mvfx0, [r1, #140]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:123:2: error: invalid instruction
+    cfmv32am mvfx0, mvax1
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:124:2: error: invalid instruction
+    cfstr32 mvfx0, [r1, #144]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:125:2: error: invalid instruction
+    cfmv32ah mvfx0, mvax1
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:126:2: error: invalid instruction
+    cfstr32 mvfx0, [r1, #148]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:127:2: error: invalid instruction
+    cfmv32al mvfx0, mvax2
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:128:2: error: invalid instruction
+    cfstr32 mvfx0, [r1, #152]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:129:2: error: invalid instruction
+    cfmv32am mvfx0, mvax2
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:130:2: error: invalid instruction
+    cfstr32 mvfx0, [r1, #156]
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:131:2: error: invalid instruction
+    cfmv32ah mvfx0, mvax2
+    ^
+   arch/arm/mach-ep93xx/crunch-bits.S:132:2: error: invalid instruction
+    cfstr32 mvfx0, [r1, #160]
 
 
+vim +94 arch/arm/mach-ep93xx/crunch-bits.S
 
-> -----Original Message-----
-> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
-> trix@redhat.com
-> Sent: Sunday, March 13, 2022 8:32 PM
-> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
-> <anthony.l.nguyen@intel.com>; davem@davemloft.net; kuba@kernel.org;
-> nathan@kernel.org; ndesaulniers@google.com
-> Cc: netdev@vger.kernel.org; llvm@lists.linux.dev; intel-wired-
-> lan@lists.osuosl.org; linux-kernel@vger.kernel.org; Tom Rix
-> <trix@redhat.com>
-> Subject: [Intel-wired-lan] [PATCH] igb: zero hwtstamp by default
->=20
-> From: Tom Rix <trix@redhat.com>
->=20
-> Clang static analysis reports this representative issue
-> igb_ptp.c:997:3: warning: The left operand of '+' is a
->   garbage value
->   ktime_add_ns(shhwtstamps.hwtstamp, adjust);
->   ^            ~~~~~~~~~~~~~~~~~~~~
->=20
-> shhwtstamps.hwtstamp is set by a call to igb_ptp_systim_to_hwtstamp().  I=
-n
-> the switch-statement for the hw type, the hwtstamp is zeroed for matches
-> but not the default case.  Move the memset out of switch-statement.  This
-> degarbages the default case and reduces the size.
->=20
-> Some whitespace cleanup of empty lines
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/net/ethernet/intel/igb/igb_ptp.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->=20
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   53  
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   54  	.text
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   55  
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   56  /*
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   57   * Lazy switching of crunch coprocessor context
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   58   *
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   59   * r10 = struct thread_info pointer
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   60   * r9  = ret_from_exception
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   61   * lr  = undefined instr exit
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   62   *
+1417a6b8dc4db7 arch/arm/mach-ep93xx/crunch-bits.S Catalin Marinas   2014-04-22   63   * called from prefetch exception handler with interrupts enabled
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   64   */
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   65  ENTRY(crunch_task_enable)
+bc94081c6ac823 arch/arm/mach-ep93xx/crunch-bits.S Catalin Marinas   2014-04-22   66  	inc_preempt_count r10, r3
+bc94081c6ac823 arch/arm/mach-ep93xx/crunch-bits.S Catalin Marinas   2014-04-22   67  
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   68  	ldr	r8, =(EP93XX_APB_VIRT_BASE + 0x00130000)	@ syscon addr
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   69  
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   70  	ldr	r1, [r8, #0x80]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   71  	tst	r1, #0x00800000			@ access to crunch enabled?
+bc94081c6ac823 arch/arm/mach-ep93xx/crunch-bits.S Catalin Marinas   2014-04-22   72  	bne	2f				@ if so no business here
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   73  	mov	r3, #0xaa			@ unlock syscon swlock
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   74  	str	r3, [r8, #0xc0]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   75  	orr	r1, r1, #0x00800000		@ enable access to crunch
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   76  	str	r1, [r8, #0x80]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   77  
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   78  	ldr	r3, =crunch_owner
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   79  	add	r0, r10, #TI_CRUNCH_STATE	@ get task crunch save area
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   80  	ldr	r2, [sp, #60]			@ current task pc value
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   81  	ldr	r1, [r3]			@ get current crunch owner
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   82  	str	r0, [r3]			@ this task now owns crunch
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   83  	sub	r2, r2, #4			@ adjust pc back
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   84  	str	r2, [sp, #60]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   85  
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   86  	ldr	r2, [r8, #0x80]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   87  	mov	r2, r2				@ flush out enable (@@@)
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   88  
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   89  	teq	r1, #0				@ test for last ownership
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   90  	mov	lr, r9				@ normal exit from exception
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   91  	beq	crunch_load			@ no owner, skip save
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   92  
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   93  crunch_save:
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  @94  	cfstr64		mvdx0, [r1, #CRUNCH_MVDX0]	@ save 64b registers
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   95  	cfstr64		mvdx1, [r1, #CRUNCH_MVDX1]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   96  	cfstr64		mvdx2, [r1, #CRUNCH_MVDX2]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   97  	cfstr64		mvdx3, [r1, #CRUNCH_MVDX3]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   98  	cfstr64		mvdx4, [r1, #CRUNCH_MVDX4]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27   99  	cfstr64		mvdx5, [r1, #CRUNCH_MVDX5]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  100  	cfstr64		mvdx6, [r1, #CRUNCH_MVDX6]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  101  	cfstr64		mvdx7, [r1, #CRUNCH_MVDX7]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  102  	cfstr64		mvdx8, [r1, #CRUNCH_MVDX8]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  103  	cfstr64		mvdx9, [r1, #CRUNCH_MVDX9]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  104  	cfstr64		mvdx10, [r1, #CRUNCH_MVDX10]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  105  	cfstr64		mvdx11, [r1, #CRUNCH_MVDX11]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  106  	cfstr64		mvdx12, [r1, #CRUNCH_MVDX12]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  107  	cfstr64		mvdx13, [r1, #CRUNCH_MVDX13]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  108  	cfstr64		mvdx14, [r1, #CRUNCH_MVDX14]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  109  	cfstr64		mvdx15, [r1, #CRUNCH_MVDX15]
+c17fad11f3105c arch/arm/kernel/crunch-bits.S      Lennert Buytenhek 2006-06-27  110  
 
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Int=
-el)
+:::::: The code at line 94 was first introduced by commit
+:::::: c17fad11f3105ca4d5bbb2686725aad208f5ead4 [ARM] 3370/2: ep93xx: add crunch support
+
+:::::: TO: Lennert Buytenhek <buytenh@wantstofly.org>
+:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
