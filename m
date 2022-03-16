@@ -1,153 +1,78 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BAF38F8
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 17:05:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C11BC340E9;
-	Wed, 16 Mar 2022 17:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647450315;
-	bh=VAILIcNcuve6zwpUMsnMu0YRMMRvlJ0yTNICt6G+urY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sGjbGSsKOjHVfjg1RR8nfoszypmTCfGdpKLHPee9b+vpktXhKcY08NcuM7VSJdw/W
-	 H1TKpfpI6sJQJeM7khd9G9np+PTzUUGtGITTDWAnga5DSuINGkRQPIX6BmuDMzCpH+
-	 AS157Qbhb4Zc5QBo46Y/v5ZEvqHzIGHKzkddsyi+vUFRqjxfEVR+HnSw5vavXW1O9V
-	 lZPWgVe017c8UqzlaQVxtO/8pUD8Ut2gwoHzPMIvtUxWm1JCdRzuo7ifXuxnEe5vz2
-	 OE8/sTFKzujkz89zwZVg4gYp7/Ov+cMoElPEveLaZgpVeuCO02q6nGpeCkG6ZHaEpP
-	 DYC5vDC0r6Vzw==
-Date: Wed, 16 Mar 2022 17:05:09 +0000
-From: Mark Brown <broonie@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [broonie-misc:arm64-sysreg-gen 6/9]
- arch/arm64/include/asm/sysreg.h:125:10: fatal error:
- 'generated/asm/sysreg.h' file not found
-Message-ID: <YjIYxWkVzT0/XYf+@sirena.org.uk>
-References: <202203160508.k7vz4ZxC-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A9B3B23
+	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 18:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647454019; x=1678990019;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=ZlSYxyPwOOZ+3GmwhSq3L0adUNnNONwDWaP0HH/ffCY=;
+  b=iofu9Lk41J5xA1rXAbj69+CFypJr3A5nCgXmYsrs1V8SnyU3TzvTRqcq
+   n6Gu13FbQ45zMnIZk12aKNxvUPAcDQNqwcq42RcjnmmikmmS7ujjJs4Lj
+   NjET65jvGpcsvVd4jBKlBBfjZl8/9OcrN7W6JrPTpmp3AImXr5L4pvSNl
+   hmgYEOKY6eucJ5oYZQAzp17BNwze8Xrw1zXBIY2r7X0Tg3NMgJE4h2DQl
+   kf9a+x9MO9U+sVPnmCTT1gGnPji3rYNuz8O5Prmj5dd68c4tLfeYHcxaD
+   PzbFrshhWMa3M7QPqMAungXJ5NpJ92iU8C7gR7gRXyD56p4LeH3zQ+geN
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="317398763"
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="317398763"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 11:06:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="714716054"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2022 11:06:55 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nUY2w-000CiS-5K; Wed, 16 Mar 2022 18:06:54 +0000
+Date: Thu, 17 Mar 2022 02:05:54 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [asahilinux:asahi 78/171] kernel/reboot.o: warning: objtool:
+ sys_off_handler_power_off()+0xb7: sibling call from callable instruction
+ with modified stack frame
+Message-ID: <202203170244.ghsqkc3L-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="47OylaR+d6CbicYl"
-Content-Disposition: inline
-In-Reply-To: <202203160508.k7vz4ZxC-lkp@intel.com>
-X-Cookie: Androphobia:
-
-
---47OylaR+d6CbicYl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Mar 16, 2022 at 05:56:39AM +0800, kernel test robot wrote:
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Dmitry Osipenko <digetx@gmail.com>
+CC: Hector Martin <marcan@marcan.st>
 
-Not deleting context for the benefit of the kbuild people I just CCed...
+tree:   https://github.com/AsahiLinux/linux asahi
+head:   2a904d884c710b730c9c1c712072f86fb7d2e9b2
+commit: ec159207530d80c0a0bd04c1ac94db5766bbc3c0 [78/171] kernel: Add combined power-off+restart handler call chain API
+config: x86_64-randconfig-a014-20220314 (https://download.01.org/0day-ci/archive/20220317/202203170244.ghsqkc3L-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/ec159207530d80c0a0bd04c1ac94db5766bbc3c0
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux asahi
+        git checkout ec159207530d80c0a0bd04c1ac94db5766bbc3c0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git =
-arm64-sysreg-gen
-> head:   72b2ee21681c0c515c6a8bb62bd289766ce324a1
-> commit: caf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff [6/9] arm64/sysreg: Enab=
-le automatic generation of system register definitions
-> config: arm64-randconfig-r006-20220313 (https://download.01.org/0day-ci/a=
-rchive/20220316/202203160508.k7vz4ZxC-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2=
-f50fb47da3baeee10b1906da6e30ac5d26ec)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.gi=
-t/commit/?id=3Dcaf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff
->         git remote add broonie-misc https://git.kernel.org/pub/scm/linux/=
-kernel/git/broonie/misc.git
->         git fetch --no-tags broonie-misc arm64-sysreg-gen
->         git checkout caf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Darm64 prepare
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
->    In file included from kernel/bounds.c:10:
->    In file included from include/linux/page-flags.h:10:
->    In file included from include/linux/bug.h:5:
->    In file included from arch/arm64/include/asm/bug.h:26:
->    In file included from include/asm-generic/bug.h:22:
->    In file included from include/linux/printk.h:9:
->    In file included from include/linux/cache.h:6:
->    In file included from arch/arm64/include/asm/cache.h:8:
->    In file included from arch/arm64/include/asm/cputype.h:173:
-> >> arch/arm64/include/asm/sysreg.h:125:10: fatal error: 'generated/asm/sy=
-sreg.h' file not found
->    #include "generated/asm/sysreg.h"
->             ^~~~~~~~~~~~~~~~~~~~~~~~
->    1 error generated.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This looks like a kbuild thing which as far as I can see only exists for
-O=3D builds and possibly only with bounds.s - if I look at the full log I
-see that we correctly generated asm/sysreg.h:
+All warnings (new ones prefixed by >>):
 
-  GEN     arch/arm64/include/generated/asm/sysreg.h
+>> kernel/reboot.o: warning: objtool: sys_off_handler_power_off()+0xb7: sibling call from callable instruction with modified stack frame
 
-but that's only passed to CC (at least for bounds.s) via an
--I./arch/arm64/include/generated so won't be found with the generated/
-prefix.  While this can be avoided by renaming the header and not
-referencing it with the prefix I do see a bunch of other headers
-throughout the tree being included with an explicit generated/ prefix so
-I'm not sure this is what's supposed to be happening, it does seem like
-a landmine somehow.
-
->    make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
->    make[2]: Target '__build' not remade because of errors.
->    make[1]: *** [Makefile:1191: prepare0] Error 2
->    make[1]: Target 'prepare' not remade because of errors.
->    make: *** [Makefile:219: __sub-make] Error 2
->    make: Target 'prepare' not remade because of errors.
->=20
->=20
-> vim +125 arch/arm64/include/asm/sysreg.h
->=20
->    118=09
->    119	/*
->    120	 * Automatically generated definitions for system registers, the
->    121	 * manual encodings below are in the process of being converted to
->    122	 * come from here. The header relies on the definition of sys_reg()
->    123	 * earlier in this file.
->    124	 */
->  > 125	#include "generated/asm/sysreg.h"
->    126=09
->=20
-> ---
-> 0-DAY CI Kernel Test Service
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
---47OylaR+d6CbicYl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIyGMUACgkQJNaLcl1U
-h9BGYAf/a5rGPjpj7U3tRYQ0COopaqhrMs7opcgx61qiaTZcuQ5SXro1NBErX1wG
-CvLTBLPSvdgiwuGPMgENDQp+rucshqYV5L6hY1E2FT0zKlViYN11HPEpGK+NBWUK
-FxkLP8AHVmPu13JPyj2cCNDHG9GVsOTjvsC+NWUOkMVA0/sPm1MDHUptOx83B9Hn
-t1JCAFZsdxQRc/9Imjl1yK26sy9OfN21H9OHDbcM239xCKbh4dWjLSCyYlhAtLJI
-7XthTpsa0fm8Xu/mYHb6Gigi+C+w8N6ZMd7bMkWaE246rrrUmnZG9pT0l86B3NMx
-E2ABvY6aKb1jnFPf9wtrPpMmYu5BMg==
-=NUi8
------END PGP SIGNATURE-----
-
---47OylaR+d6CbicYl--
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
