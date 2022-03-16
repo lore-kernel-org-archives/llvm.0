@@ -1,42 +1,45 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151AD38F5
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 19:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980363B41
+	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 20:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647460130; x=1678996130;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AQmhkNekX7a5TUZZ/G5mXI5zHkY52A3CggUt8MKCEzA=;
-  b=jdJRH2B0xfHYXTRwrrpVLhNCmZv+SQ1xH5Ukbuzu0jIF5eo5XDzhHUXf
-   yCI4VJa08lNAWlmms3T5LuRTpUECKYjeV/3QoJRw62PmJVlUqhJtoI+mG
-   edhi1aAPCAl3CW0vDklvn0nXln//TQ5pckvLEiGCbNvmUZRhuZ8cRBF+N
-   rjg05mjesm+BMmc7XhmqplXJX5gTeyuTs2gUxPuw8boTb3edPRRij7pZc
-   V+EPz5Eo8kPwSKxcTXWt+/G5UFEm1PaVvwO1DcNReYGCyMe36jquBooYt
-   wUWZ1VHxbSYsI9+lNl1T1aB2P8gQ7OTHVFWXigwnPlGJGTgZG+YqkV6YB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="319911786"
+  t=1647462012; x=1678998012;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CYMBTDd9vpTitNeMwp8pDz+kcWwpPKBKELsUab2dgkc=;
+  b=fcxbvFD33gYxJxBKMTcv8eAUpTQXwbI3L4DhUGq73BDu6LZQm5J1S4J6
+   uhjVnNzDcN0GVPfKOhLyeK63J5Xh7TMLq48BzIbduWiJYUvq2EJYo+tTx
+   Wn41i0uZmo2juQbcfHmL2tAS3Z93wabwQMAgzWxS7cRSMr33iZhU8Ajqn
+   9adRoRPx3kLugl4UTprT98vTO7OkZ+a5s/mqaaHMznzMYJevVIJQWSuxQ
+   cZ568mcia83Y6LqUKyAj5A/RNINx3KIj+ZeP/rz8kM+7Gcd5qDdaECIBi
+   2cy8qYOLBOgIkhlMOZlTB1AYznqw/P2muvbVv0VD4dxonJ2ebiMiGE125
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="256431310"
 X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="319911786"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 12:48:47 -0700
+   d="scan'208";a="256431310"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 13:20:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="498568611"
+   d="scan'208";a="646794734"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 16 Mar 2022 12:48:44 -0700
+  by orsmga004.jf.intel.com with ESMTP; 16 Mar 2022 13:20:09 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nUZdT-000CpH-Vk; Wed, 16 Mar 2022 19:48:43 +0000
-Date: Thu, 17 Mar 2022 03:47:49 +0800
+	id 1nUa7s-000CsZ-Ns; Wed, 16 Mar 2022 20:20:08 +0000
+Date: Thu, 17 Mar 2022 04:19:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
+To: Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
+	intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 32/38] arch/arm64/kvm/mmu.c:768:55:
- warning: incompatible pointer to integer conversion initializing 'gfp_t'
- (aka 'unsigned int') with an expression of type 'void *'
-Message-ID: <202203170328.blnyldnz-lkp@intel.com>
+	Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
+	Chris Wilson <chris@chris-wilson.co.uk>
+Subject: Re: [Intel-gfx] [PATCH 2/2] drm/i915/gt: preempt and reset based on
+ reset domain
+Message-ID: <202203170430.cDmFRpYE-lkp@intel.com>
+References: <20220316130754.813761-2-tejaskumarx.surendrakumar.upadhyay@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,95 +48,157 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220316130754.813761-2-tejaskumarx.surendrakumar.upadhyay@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   1f93371b93e3d215381b1ebcecacb9f2e54b270f
-commit: ef83a194815d993203e117d8a83e591f0a0c288e [32/38] RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
-config: arm64-randconfig-r013-20220314 (https://download.01.org/0day-ci/archive/20220317/202203170328.blnyldnz-lkp@intel.com/config)
+Hi Tejas,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on drm-tip/drm-tip]
+[cannot apply to drm-intel/for-linux-next v5.17-rc8 next-20220316]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Tejas-Upadhyay/drm-i915-gt-preempt-engine-to-idle-before-reset/20220316-215054
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220317/202203170430.cDmFRpYE-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/avpatel/linux/commit/ef83a194815d993203e117d8a83e591f0a0c288e
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout ef83a194815d993203e117d8a83e591f0a0c288e
+        # https://github.com/0day-ci/linux/commit/06139e9768f3f8e43bf061ae6292feb7daf07944
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Tejas-Upadhyay/drm-i915-gt-preempt-engine-to-idle-before-reset/20220316-215054
+        git checkout 06139e9768f3f8e43bf061ae6292feb7daf07944
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm64/kvm/mmu.c:768:55: warning: incompatible pointer to integer conversion initializing 'gfp_t' (aka 'unsigned int') with an expression of type 'void *' [-Wint-conversion]
-           struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-                                                                ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   1 warning generated.
+>> drivers/gpu/drm/i915/gt/intel_execlists_submission.c:2524:7: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (READ_ONCE(el->pending[0])) {
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:47:28: note: expanded from macro 'READ_ONCE'
+   #define READ_ONCE(x)                                                    \
+                                                                           ^
+   drivers/gpu/drm/i915/gt/intel_execlists_submission.c:2538:9: note: uninitialized use occurs here
+           return err;
+                  ^~~
+   drivers/gpu/drm/i915/gt/intel_execlists_submission.c:2524:3: note: remove the 'if' if its condition is always true
+                   if (READ_ONCE(el->pending[0])) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/intel_execlists_submission.c:2489:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (*el->active) { /* preempt to idle required */
+               ^~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/intel_execlists_submission.c:2538:9: note: uninitialized use occurs here
+           return err;
+                  ^~~
+   drivers/gpu/drm/i915/gt/intel_execlists_submission.c:2489:2: note: remove the 'if' if its condition is always true
+           if (*el->active) { /* preempt to idle required */
+           ^~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/intel_execlists_submission.c:2462:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   2 warnings generated.
 
 
-vim +768 arch/arm64/kvm/mmu.c
+vim +2524 drivers/gpu/drm/i915/gt/intel_execlists_submission.c
 
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  753  
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  754  /**
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  755   * kvm_phys_addr_ioremap - map a device range to guest IPA
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  756   *
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  757   * @kvm:	The KVM pointer
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  758   * @guest_ipa:	The IPA at which to insert the mapping
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  759   * @pa:		The physical address of the device
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  760   * @size:	The size of the mapping
-c9c0279cc02b4e1 arch/arm64/kvm/mmu.c Xiaofei Tan         2020-09-17  761   * @writable:   Whether or not to create a writable mapping
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  762   */
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  763  int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
-c40f2f8ff833edd arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  764  			  phys_addr_t pa, unsigned long size, bool writable)
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  765  {
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  766  	phys_addr_t addr;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  767  	int ret = 0;
-c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02 @768  	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  769  	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  770  	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  771  				     KVM_PGTABLE_PROT_R |
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  772  				     (writable ? KVM_PGTABLE_PROT_W : 0);
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  773  
-bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  774  	if (is_protected_kvm_enabled())
-bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  775  		return -EPERM;
-bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  776  
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  777  	size += offset_in_page(guest_ipa);
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  778  	guest_ipa &= PAGE_MASK;
-c40f2f8ff833edd arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  779  
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  780  	for (addr = guest_ipa; addr < guest_ipa + size; addr += PAGE_SIZE) {
-c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  781  		ret = kvm_mmu_topup_memory_cache(&cache,
-61ffb3a50c4402e arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  782  						 kvm_mmu_cache_min_pages(kvm));
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  783  		if (ret)
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  784  			break;
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  785  
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  786  		spin_lock(&kvm->mmu_lock);
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  787  		ret = kvm_pgtable_stage2_map(pgt, addr, PAGE_SIZE, pa, prot,
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  788  					     &cache);
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  789  		spin_unlock(&kvm->mmu_lock);
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  790  		if (ret)
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  791  			break;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  792  
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  793  		pa += PAGE_SIZE;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  794  	}
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  795  
-c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  796  	kvm_mmu_free_memory_cache(&cache);
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  797  	return ret;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  798  }
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  799  
-
-:::::: The code at line 768 was first introduced by commit
-:::::: c1a33aebe91d49c958df1648b2a84db96c403075 KVM: arm64: Use common KVM implementation of MMU memory caches
-
-:::::: TO: Sean Christopherson <sean.j.christopherson@intel.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2453  
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2454  /* XXX return error and force a full reset if we fail to
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2455   * preempt-to-idle
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2456   */
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2457  static int execlists_suspend(struct intel_engine_cs *engine)
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2458  {
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2459  	struct i915_sched_engine *se = engine->sched_engine;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2460  	struct intel_engine_execlists * const el = &engine->execlists;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2461  	unsigned long timeout;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2462  	int err;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2463  
+06139e9768f3f8e Tejas Upadhyay 2022-03-16  2464  	if (!intel_engine_pm_get_if_awake(engine))
+06139e9768f3f8e Tejas Upadhyay 2022-03-16  2465  		return 0;
+06139e9768f3f8e Tejas Upadhyay 2022-03-16  2466  	ENGINE_TRACE(engine, "supending active engine\n");
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2467  	/* Stop further submissions, but listen for our own preempt-to-idle */
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2468  	tasklet_disable(&se->tasklet);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2469  	se->tasklet.callback = suspend_tasklet;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2470  	tasklet_enable(&se->tasklet);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2471  
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2472  	/*
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2473  	 * We have to wait for the HW to complete a pending context switch
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2474  	 * before we can write to ELS[PQ] again. Otherwise the behaviour
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2475  	 * is undefined...
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2476  	 *
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2477  	 * If the engine is truly hung, it will neither clear pending
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2478  	 * nor respond to our preemption request. In the later case,
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2479  	 * we have the dilemma of how to restore hang detection...
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2480  	 */
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2481  	timeout = jiffies + HZ / 2;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2482  	while (READ_ONCE(el->pending[0]) && time_before(jiffies, timeout))
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2483  		intel_engine_flush_submission(engine);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2484  	if (READ_ONCE(el->pending[0])) {
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2485  		err = -EBUSY;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2486  		goto err;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2487  	}
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2488  
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2489  	if (*el->active) { /* preempt to idle required */
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2490  		struct i915_request **pending = el->pending;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2491  		struct intel_context *ce = el->preempt_context;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2492  		u64 desc;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2493  		int n;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2494  
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2495  		/* Always submit an empty / idle context */
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2496  		desc = lrc_update_regs(ce, engine, ce->ring->tail);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2497  
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2498  		/*
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2499  		 * As we submit a dummy context, we will get two events.
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2500  		 * First a preemption of the running context, causing us
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2501  		 * to promote el->pending to el->inflight. And then
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2502  		 * we will receive a completion event as our context
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2503  		 * idles.
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2504  		 *
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2505  		 * We can use any dummy request here for tracking the
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2506  		 * preemption events.
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2507  		 */
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2508  		execlists_schedule_in(*el->active, 0);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2509  		*pending++ = i915_request_get(*el->active);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2510  		*pending++ = NULL;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2511  
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2512  		/* Tell the HW to preempt to our special context */
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2513  		for (n = execlists_num_ports(el); --n; )
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2514  			write_desc(el, 0, n);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2515  		write_desc(el, desc, 0);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2516  		if (el->ctrl_reg)
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2517  			writel(EL_CTRL_LOAD, el->ctrl_reg);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2518  
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2519  		timeout = jiffies + HZ / 2;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2520  		while (READ_ONCE(el->pending[0]) &&
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2521  		       time_before(jiffies, timeout))
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2522  			intel_engine_flush_submission(engine);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2523  
+c3b2b6ffcd31318 Chris Wilson   2022-03-16 @2524  		if (READ_ONCE(el->pending[0])) {
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2525  			err = -EIO;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2526  			goto err;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2527  		}
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2528  	}
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2529  
+06139e9768f3f8e Tejas Upadhyay 2022-03-16  2530  	goto out;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2531  
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2532  err:
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2533  	tasklet_disable(&se->tasklet);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2534  	se->tasklet.callback = execlists_submission_tasklet;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2535  	tasklet_enable(&se->tasklet);
+06139e9768f3f8e Tejas Upadhyay 2022-03-16  2536  out:
+06139e9768f3f8e Tejas Upadhyay 2022-03-16  2537  	intel_engine_pm_put(engine);
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2538  	return err;
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2539  }
+c3b2b6ffcd31318 Chris Wilson   2022-03-16  2540  
 
 ---
 0-DAY CI Kernel Test Service
