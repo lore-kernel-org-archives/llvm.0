@@ -1,182 +1,97 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9065346A3
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 02:25:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794E44687
+	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 04:36:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647397534; x=1678933534;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2VA94Eh1qS411dAUoSCxbhcrRfvG6zQ7XscUmqUXoRY=;
-  b=SPLTKn6kf+pUR36OW/W+mo8d+EBvpt+E3FNwyQh0JbGP91v1Fwsg9bdS
-   rviTEM5R5aJ75edDWfGpi17/EArvhHgRauKjEG4UNNJBWGL1cIhAPdjhE
-   WalV9jxr6Qr8IOXyHDuFUrluS3TI4lRuqhAfQIv8wlkimLVi5XYIkIU4O
-   gPDLzCNJ19aAKnXI/KL/Jm4JI528WP15YtIx7AEWb0LejA434pHCbcQH1
-   57fO4WEuJmD8Zc2BihCWL20rY0Bp/RA8ctjfFKvJWu7Zxn+/5aBKlh+zo
-   K6myq+HuDnnmR+/UvVbULwP90iwl4Gw0H9x0hN1uAfludx/W4YfxMIicZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="243925216"
+  t=1647405419; x=1678941419;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=qGTcmZewtpFB/wihUaoLX+vvnOk6wMsser0w1QTbUCE=;
+  b=dSIj0W0d5XuIv+Pnat9UC5ji+K7s/YfrH1LjhqetkbvXqH4oKgbArQvA
+   tA772vHuKdcWLTYtsVux3jigtKF8wfHIJBn5IN+eBhF/VYD7csBxKBedf
+   /UGADiyefZDkSiCDprBwk653DzQ/5qrveyE/9CS9klhwA214MqbCqqs4v
+   smnmKbOTlgvLANU3DBZk3hDIHdY5FkDTK6f2MORbfGTZ1tfaxZTK8zLf2
+   pW98hQUcWl83nxSfjght56+7Fr9C6RfZTv7HP2j6LvQmy839pN5yjRvPP
+   8727k6zAohLi/0ddt+fCWOk0PCpz7H7xgKWEevuE+Xbk6Zol87mrxt2B6
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255321210"
 X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="243925216"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 19:25:34 -0700
+   d="scan'208";a="255321210"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 21:36:58 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="557221241"
-Received: from lingshan-mobl.ccr.corp.intel.com (HELO [10.255.31.20]) ([10.255.31.20])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 19:25:31 -0700
-Message-ID: <eb3b0964-662e-2c5f-02c6-6141c4c5bf92@intel.com>
-Date: Wed, 16 Mar 2022 10:25:28 +0800
+   d="scan'208";a="498296492"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 15 Mar 2022 21:36:57 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nULP6-000Bxs-Sv; Wed, 16 Mar 2022 04:36:56 +0000
+Date: Wed, 16 Mar 2022 12:35:59 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: clang-15: error: linker command failed with exit code 1 (use -v to
+ see invocation)
+Message-ID: <202203161237.pnJESX8e-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.1
-Subject: Re: [PATCH] vDPA/ifcvf: match pointer check to use
-Content-Language: en-US
-To: "Michael S. Tsirkin" <mst@redhat.com>, Tom Rix <trix@redhat.com>
-Cc: jasowang@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
- sgarzare@redhat.com, xieyongji@bytedance.com,
- virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20220315124130.1710030-1-trix@redhat.com>
- <20220315092656-mutt-send-email-mst@kernel.org>
- <512a392d-23d7-c25b-7576-571001f28288@redhat.com>
- <20220315111456-mutt-send-email-mst@kernel.org>
-From: "Zhu, Lingshan" <lingshan.zhu@intel.com>
-In-Reply-To: <20220315111456-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Daniel Axtens <dja@axtens.net>
+CC: Michael Ellerman <mpe@ellerman.id.au>
+CC: Alexey Kardashevskiy <aik@ozlabs.ru>
 
+Hi Daniel,
 
-On 3/15/2022 11:15 PM, Michael S. Tsirkin wrote:
-> On Tue, Mar 15, 2022 at 08:03:26AM -0700, Tom Rix wrote:
->> On 3/15/22 6:28 AM, Michael S. Tsirkin wrote:
->>> On Tue, Mar 15, 2022 at 05:41:30AM -0700, trix@redhat.com wrote:
->>>> From: Tom Rix <trix@redhat.com>
->>>>
->>>> Clang static analysis reports this issue
->>>> ifcvf_main.c:49:4: warning: Called function
->>>>     pointer is null (null dereference)
->>>>     vf->vring->cb.callback(vring->cb.private);
->>>>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>>
->>>> The check
->>>>     vring = &vf->vring[i];
->>>>     if (vring->cb.callback)
->>>>
->>>> Does not match the use.  Change dereference so they match.
->>>>
->>>> Fixes: 79333575b8bd ("vDPA/ifcvf: implement shared IRQ feature")
->>> Thanks a lot! I squashed this into the offending patch - no point in
->>> breaking bisect. Pushed to linux. However I'm now
->>> having second thoughts about applying that patchset - I'd like
->>> soma analysis explaining how this got through testing.
->> static analysis is something i do treewide.
->>
->> There are currently ~2500 issues in linux-next, do not panic! many are false
->> positives.
->>
->> It is pretty easy to setup and once you have a baseline you can filter only
->> your files.
->>
->> Tom
-> Thanks for that info! I was actually directing this question to the
-> contributor since the code does not look like it could have ever
-> worked. I don't have the hardware in question myself.
-Oh, that's my bad introducing this bug by typo, thanks Tom for fixing that!
-In my previous testing, I tolerated the lower performance(only one queue 
-working as you pointed out)
-due to the shared irq, and did not check mq status, sorry for that.
+FYI, the error/warning still remains.
 
-After fixing this issue, test again:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   56e337f2cf1326323844927a04e9dbce9a244835
+commit: f5140cab448e4819ca6f158cb4130352f73c92e4 powerpc: check for support for -Wa,-m{power4,any}
+date:   3 months ago
+config: powerpc64-randconfig-r021-20220316 (https://download.01.org/0day-ci/archive/20220316/202203161237.pnJESX8e-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f5140cab448e4819ca6f158cb4130352f73c92e4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f5140cab448e4819ca6f158cb4130352f73c92e4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
-(1)set nvectors = 2 after allocate MSI vectors, force the queues share 
-one vector. from /proc/interrupts, we can see:
-[lszhu@localhost linux]$ cat /proc/interrupts | grep ifcvf
-  241:          0          0          0          0 0          0          
-0          0          0          0 0          0          0          
-0          0          0 0          0          0          0          
-0          0 0          0          0          0          0          0 
-0          0    2724424          0          0          0 0          
-0          0          0          0          0 IR-PCI-MSI 
-534528-edge      ifcvf[0000:01:00.5]-vqs-reused-irq
-  242:          0          0          0          0 0          0          
-0          0          0          0 0          0          0          
-0          0          0 0          0          0          0          
-0          0 0          0          0          0          0          0 
-0          0          0          0          0          0 0          
-0          0          0          0          0 IR-PCI-MSI 
-534529-edge      ifcvf[0000:01:00.5]-config
-  251:          0          0          0          0 0          0          
-0          0          0          0 0    2693318          0          
-0          0          0 0          0          0          0          
-0          0 0          0          0          0          0          0 
-0          0          0          0          0          0 0          
-0          0          0          0          0 IR-PCI-MSI 
-536576-edge      ifcvf[0000:01:00.6]-vqs-reused-irq
-  252:          0          0          0          0 0          0          
-0          0          0          0 0          0          0          
-0          0          0 0          0          0          0          
-0          0 0          0          0          0          0          0 
-0          0          0          0          0          0 0          
-0          0          0          0          0 IR-PCI-MSI 
-536577-edge      ifcvf[0000:01:00.6]-config
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-(2) after several rounds of scp from a VF to another, at the source 
-side, ethtool -S shows(cut off, only tx):
-localhost:/home/lszhu # ethtool -S eth1
-NIC statistics:
-      tx_queue_0_packets: 437256
-      tx_queue_0_bytes: 629246017
-      tx_queue_0_xdp_tx: 0
-      tx_queue_0_xdp_tx_drops: 0
-      tx_queue_0_kicks: 34089
-      tx_queue_1_packets: 73
-      tx_queue_1_bytes: 96721
-      tx_queue_1_xdp_tx: 0
-      tx_queue_1_xdp_tx_drops: 0
-      tx_queue_1_kicks: 12
-      tx_queue_2_packets: 294647
-      tx_queue_2_bytes: 433949815
-      tx_queue_2_xdp_tx: 0
-      tx_queue_2_xdp_tx_drops: 0
-      tx_queue_2_kicks: 14948
-      tx_queue_3_packets: 20226451
-      tx_queue_3_bytes: 29735633548
-      tx_queue_3_xdp_tx: 0
-      tx_queue_3_xdp_tx_drops: 0
-      tx_queue_3_kicks: 1123675
+All errors (new ones prefixed by >>):
 
-so every queue carries traffic now, all enabled
+   <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#warnings]
+   #warning syscall futex_waitv not implemented
+    ^
+   1 warning generated.
+   /usr/bin/ld: unrecognised emulation mode: elf64ppc
+   Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
+>> clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso64/Makefile:44: arch/powerpc/kernel/vdso64/vdso64.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso64-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:424: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-Thanks,
-Zhu Lingshan
-
-
->
->
->>>> Signed-off-by: Tom Rix <trix@redhat.com>
->>>> ---
->>>>    drivers/vdpa/ifcvf/ifcvf_main.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
->>>> index 3b48e717e89f7..4366320fb68d3 100644
->>>> --- a/drivers/vdpa/ifcvf/ifcvf_main.c
->>>> +++ b/drivers/vdpa/ifcvf/ifcvf_main.c
->>>> @@ -46,7 +46,7 @@ static irqreturn_t ifcvf_vqs_reused_intr_handler(int irq, void *arg)
->>>>    	for (i = 0; i < vf->nr_vring; i++) {
->>>>    		vring = &vf->vring[i];
->>>>    		if (vring->cb.callback)
->>>> -			vf->vring->cb.callback(vring->cb.private);
->>>> +			vring->cb.callback(vring->cb.private);
->>>>    	}
->>>>    	return IRQ_HANDLED;
->>>> -- 
->>>> 2.26.3
-
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
