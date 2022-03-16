@@ -1,39 +1,39 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A263B56
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 21:31:22 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-2d726bd83a2so29161167b3.20
-        for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 14:31:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F2C3B56
+	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 21:31:26 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id x9-20020a5b0809000000b00631d9edfb96so2905410ybp.22
+        for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 14:31:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:message-id:mime-version:subject:from:to:cc;
-        bh=DuIs8YDVZ+FUMK/eJrsH1Ol6kQ1ErHXTTPKm8dwtCDY=;
-        b=qFM55vPPyVaTFZa6kKJVrPMllDMUjRNpqwlMmOmDcPlqGqlZnRgFm90OQ/CO08cIMI
-         ozQ/bQaFkgY6tBLchUOHwG5cpuV7XQUp3DlFqSxMoJeo9HYsXFotdyInje2ISR96cYQN
-         LM45pBenpgqvAz7wiBXGrQYNTwXSy3N/8foxmJA9QcViS2Q9E6oQbYNGbEyzrl3kPKe5
-         Vdth5nPe7IUQq+DLP6KJoLdgGYAdZGyuoOQivb0qDhbjrTGKvlrUlVSe4MOpDj6YjYSZ
-         sglDm0vtSzTiuyLqNmx0vUupCP0818ajsmD+wSomc8LH3tydX+mZ9Y7CoJJyg/Og5Y/P
-         i6PQ==
+        bh=5OneduaV2OXxq5CcxBruCxPc/Swfi9F6sRQ7+F/Zn1I=;
+        b=MRL/HERqsHGSzx7y32S51BGQMoiBHeB6Cac8hgvSAKrK13IeqgqUD0pF+IS1FNw2cu
+         jzx0VSzjCKMVY/v/1HF3qvNOqzulYYGxRKPwzym+fFTaatGnenQgu/BlhganrO3lc7pa
+         iAlJdEMkfkTkIh4RyCP48yTbZOApgrxxBPps7Knw6Gfxn9nl/Vce0Qx1CNuTpXFnz/IM
+         zo7DjxNlX39rtwjd0dbKZyovA7jTL6mFEoVM4PB6Lz6LUITgS0k9hc7ZWzp8J3VUTp3K
+         Az6bpTViSCQUih3Fu8fspJosmAoqOqh3ZyxiBmT8utrrzoWhmtq0pDnkPq/OGvgqnBKY
+         1srQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=DuIs8YDVZ+FUMK/eJrsH1Ol6kQ1ErHXTTPKm8dwtCDY=;
-        b=2AyVjZhfQ5bdF1Rse6pS6+w7ZBvKyZznm6y5U+Heg8i64V2WnJIvnXeyUt7E1rrKO/
-         lpvKNj8o6ll3sf7UkRKP54zq3NL6X7JWnetRhdPXRXjA7YDze7Vcs83buV7+vS5B7vpL
-         gsLa/s/g3gCQKCmD1XKipmseuq5f651qfx/OlcoWVn392zkayPrhyHaOl9GgSc3bZV5S
-         NGl1USXT48Vv8cldJX4bvGdUP5ENU58MQJMMfPMfBRcapbqpVmEA4tyhhO2lUeMs26Qf
-         0kkQDM51JxIYKePoeOz7CKBKjZU/45IDuB7j8Ybzvuj6bLDxZYZpUzJkXwNemo8Js6NG
-         z3fw==
-X-Gm-Message-State: AOAM532OXySYd706NpIn9zneu1QXrCWfNjTRBj2Ji3zOFhJTJDUVDpwq
-	ZNp7YgBaPjYZwxFwIavEIA6WVs1p
-X-Google-Smtp-Source: ABdhPJxlpI62VPESYGOV1YEH34zeiz353mKPg634ySFjExFhciP8pMKE9Jokvx3Dw4zKp9xShXZvESy+gQ==
+        bh=5OneduaV2OXxq5CcxBruCxPc/Swfi9F6sRQ7+F/Zn1I=;
+        b=RXRNtkmvVA7XLBt21/1NOMNCfU7hDkmijQVPxe/lrTj9JENlUUru+1Ut0DZEbpzFOA
+         ZkiLEYJieB03qbh5VKaS3wPzONVrAk+PfXt8I/YdanSbJSykR61fFgobhCx9pOnNxAUc
+         pq+fX+KKl3k19QSp2AXSfjeoa2A1voLMnEeQC5znkc7ljQkNXl20RTDDS/e49RV7xnbS
+         PRYrt43LQ6I90r7S1k0y7sGZmTAhT2DCVdPWIkaTOWyAhgp/DOau74ogheOIbYvvaLHA
+         spln2kE2qxdm1mZ+UIk1I2NV5R4v/z1abTEo3wA0MID94yX25mWFmPBctxVejFtZ0Qj2
+         gn+g==
+X-Gm-Message-State: AOAM531cwNzvcBXIcq1odeOan+Rxp+Tq050IhqfX8u0vVdouuj/wNzzh
+	1PzGzx+RkuRwKDb7PD97wVtKzR8x
+X-Google-Smtp-Source: ABdhPJyTwqZyQZ2E7Cpqu4oUlQxwPrDN5wlJTROylLffKhLFiErEmY9B2AIxfLeeJ8g38ybOZntyYvfoiw==
 X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:7dae:6503:2272:5cd1])
- (user=morbo job=sendgmr) by 2002:a0d:d50f:0:b0:2e5:bada:3948 with SMTP id
- x15-20020a0dd50f000000b002e5bada3948mr939764ywd.314.1647466281406; Wed, 16
- Mar 2022 14:31:21 -0700 (PDT)
-Date: Wed, 16 Mar 2022 14:31:18 -0700
-Message-Id: <20220316213118.2352683-1-morbo@google.com>
+ (user=morbo job=sendgmr) by 2002:a5b:34c:0:b0:61e:1cd0:c93f with SMTP id
+ q12-20020a5b034c000000b0061e1cd0c93fmr2113282ybp.269.1647466285413; Wed, 16
+ Mar 2022 14:31:25 -0700 (PDT)
+Date: Wed, 16 Mar 2022 14:31:22 -0700
+Message-Id: <20220316213122.2352992-1-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,39 +41,26 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [PATCH] soc: qcom: smem: use correct format characters
+Subject: [PATCH] nfsd: use correct format characters
 From: Bill Wendling <morbo@google.com>
-To: Andy Gross <agross@kernel.org>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
+To: Chuck Lever <chuck.lever@oracle.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-nfs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Cc: Bill Wendling <morbo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
 When compiling with -Wformat, clang emits the following warnings:
 
-drivers/soc/qcom/smem.c:847:41: warning: format specifies type 'unsigned
-short' but the argument has type 'unsigned int' [-Wformat]
-                        dev_err(smem->dev, "bad host %hu\n", remote_host);
-                                                     ~~~     ^~~~~~~~~~~
-                                                     %u
-./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-        dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                               ~~~     ^~~~~~~~~~~
-./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                             ~~~    ^~~~~~~~~~~
-drivers/soc/qcom/smem.c:852:47: warning: format specifies type 'unsigned
-short' but the argument has type 'unsigned int' [-Wformat]
-                        dev_err(smem->dev, "duplicate host %hu\n", remote_host);
-                                                           ~~~     ^~~~~~~~~~~
-                                                           %u
-./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-        dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                               ~~~     ^~~~~~~~~~~
-./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                             ~~~    ^~~~~~~~~~~
+fs/nfsd/flexfilelayout.c:120:27: warning: format specifies type 'unsigned
+char' but the argument has type 'int' [-Wformat]
+                         "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
+                             ~~~~              ^~~~~~~~~
+                             %d
+fs/nfsd/flexfilelayout.c:120:38: warning: format specifies type 'unsigned
+char' but the argument has type 'int' [-Wformat]
+                         "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
+                                  ~~~~                    ^~~~~~~~~~~
+                                  %d
 
 The types of these arguments are unconditionally defined, so this patch
 updates the format character to the correct ones for ints and unsigned
@@ -82,27 +69,21 @@ ints.
 Link: ClangBuiltLinux/linux#378
 Signed-off-by: Bill Wendling <morbo@google.com>
 ---
- drivers/soc/qcom/smem.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/nfsd/flexfilelayout.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
-index e2057d8f1eff..a98b5f395d15 100644
---- a/drivers/soc/qcom/smem.c
-+++ b/drivers/soc/qcom/smem.c
-@@ -844,12 +844,12 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
- 			continue;
+diff --git a/fs/nfsd/flexfilelayout.c b/fs/nfsd/flexfilelayout.c
+index 2e2f1d5e9f62..070f90ed09b6 100644
+--- a/fs/nfsd/flexfilelayout.c
++++ b/fs/nfsd/flexfilelayout.c
+@@ -117,7 +117,7 @@ nfsd4_ff_proc_getdeviceinfo(struct super_block *sb, struct svc_rqst *rqstp,
  
- 		if (remote_host >= SMEM_HOST_COUNT) {
--			dev_err(smem->dev, "bad host %hu\n", remote_host);
-+			dev_err(smem->dev, "bad host %u\n", remote_host);
- 			return -EINVAL;
- 		}
+ 	da->netaddr.addr_len =
+ 		snprintf(da->netaddr.addr, FF_ADDR_LEN + 1,
+-			 "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
++			 "%s.%d.%d", addr, port >> 8, port & 0xff);
  
- 		if (smem->partitions[remote_host]) {
--			dev_err(smem->dev, "duplicate host %hu\n", remote_host);
-+			dev_err(smem->dev, "duplicate host %u\n", remote_host);
- 			return -EINVAL;
- 		}
+ 	da->tightly_coupled = false;
  
 -- 
 2.35.1.723.g4982287a31-goog
