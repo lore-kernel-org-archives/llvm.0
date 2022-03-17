@@ -1,46 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8A23D6B
-	for <llvm@lists.linux.dev>; Wed, 16 Mar 2022 23:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B39946B6
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 00:38:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647474404; x=1679010404;
+  t=1647477489; x=1679013489;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4GjD/OZt9YStp94vzGfTNFNjIbukRi5WMqeI8i4H3aY=;
-  b=K0BF81gylwfoEKDk/OYm9fgF1bjWkvnR76MPKLok4LcijNF1YuzJ/yxu
-   ifXd5vMblKNGTXVJhvjC7p+/XSnOAGMxD0hHZ32dG3eFWmeRvncOkHGWz
-   4RIrFOJp/mmbuTN1CeqMKAEM8fHBYUU/DRrzDPfn5Tzhe9yFdjAbGHauo
-   GDTeOM1FMlbmi6Yv7sjjocCIkpIzY7e2DcjI15cv6Rl0yFJlRn44GBkDi
-   A4ZSVoYUJdMpcX8erx2By22cMiscsK3QL0Io0Y+T8AMO3Ao7AvnBYQNKN
-   XjAFKlxX0ybWxPWU4+H93wxYGAU38is0EnitiUvPPZvGzi8lgHs8g4WDr
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="256930638"
+  bh=JvZMYfhpzxsBHWbBo27k36c1NiWPthcWMJDBU4SNUM4=;
+  b=OkS/aDhcbUGQU/JLp8h4LMMaUxB4sBbxL+D7gAqfzASBYPDh7UMBkbJm
+   UyT5sqfN5b7xS3GlUyHsLqeiVaQVmLEzW0H8wzjQ0wq0bZrKX+Mij6Am2
+   MgXCOrmBbGtEMW+GAQBstcnw+5M6QmBK0awJMs9y4Uz5mw5C0aySlxSaq
+   LjMANBTdbU+Mfd8LUZrvvzaHgijKT40rc/Icyd4zktRS98JuaDbYmqVd2
+   q2rCq/tLKrepwkQsgRISfALyWRU8ZquftiE+vSVY9cFDK2RRmfXKvhAsG
+   fa6b2NgwV/j64DgwSdvOfvSKcPpd5CcN5gVppBxN7jNPWFBGQjp2fedoC
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="244201071"
 X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="256930638"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 16:46:43 -0700
+   d="scan'208";a="244201071"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 17:38:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="516547578"
+   d="scan'208";a="635187028"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2022 16:46:41 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Mar 2022 17:38:05 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nUdLk-000D5w-Jn; Wed, 16 Mar 2022 23:46:40 +0000
-Date: Thu, 17 Mar 2022 07:45:56 +0800
+	id 1nUe9V-000D7o-4n; Thu, 17 Mar 2022 00:38:05 +0000
+Date: Thu, 17 Mar 2022 08:37:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Muchun Song <songmuchun@bytedance.com>
+To: Anshuman Khandual <anshuman.khandual@arm.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:rostedt/linux-trace/merge-next-20220315 403/512]
- WARNING: modpost: vmlinux.o(.text+0x3e43c2): Section mismatch in reference
- from the function ufs_make_empty() to the function
- .init.text:set_reset_devices()
-Message-ID: <202203170727.Iy1d0my1-lkp@intel.com>
+Subject: [ammarfaizi2-block:rostedt/linux-trace/merge-next-20220315 408/512]
+ WARNING: modpost: vmlinux.o(.text+0x3ebb16): Section mismatch in reference
+ from the function ufs_rename() to the variable .init.text:.LBB130_22
+Message-ID: <202203170842.Gc2butT1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,18 +52,18 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/merge-next-20220315
 head:   87a21b60077d8cb23d3e70a00a969b542d0695d8
-commit: 76c068f7115ac5a6fb351db3cf91147ccfbd955b [403/512] mm: rmap: introduce pfn_mkclean_range() to cleans PTEs
-config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220317/202203170727.Iy1d0my1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+commit: 4beb6c5a2edf9f885d4ef58502c0c83d5e68d11d [408/512] mm/migration: add trace events for base page and HugeTLB migrations
+config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220317/202203170842.Gc2butT1-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/76c068f7115ac5a6fb351db3cf91147ccfbd955b
+        # https://github.com/ammarfaizi2/linux-block/commit/4beb6c5a2edf9f885d4ef58502c0c83d5e68d11d
         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
         git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/merge-next-20220315
-        git checkout 76c068f7115ac5a6fb351db3cf91147ccfbd955b
+        git checkout 4beb6c5a2edf9f885d4ef58502c0c83d5e68d11d
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
@@ -74,71 +73,182 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> WARNING: modpost: vmlinux.o(.text+0x3e43c2): Section mismatch in reference from the function ufs_make_empty() to the function .init.text:set_reset_devices()
-The function ufs_make_empty() references
+>> WARNING: modpost: vmlinux.o(.text+0x3ebb16): Section mismatch in reference from the function ufs_rename() to the variable .init.text:.LBB130_22
+The function ufs_rename() references
+the variable __init .LBB130_22.
+This is often because ufs_rename lacks a __init
+annotation or the annotation of .LBB130_22 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x3ebc14): Section mismatch in reference from the function ufs_rename() to the variable .init.text:.LBB130_20
+The function ufs_rename() references
+the variable __init .LBB130_20.
+This is often because ufs_rename lacks a __init
+annotation or the annotation of .LBB130_20 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x3f8d4a): Section mismatch in reference from the function jffs2_do_create() to the variable .init.text:.LBB130_32
+The function jffs2_do_create() references
+the variable __init .LBB130_32.
+This is often because jffs2_do_create lacks a __init
+annotation or the annotation of .LBB130_32 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x3f8f50): Section mismatch in reference from the function jffs2_do_unlink() to the variable .init.text:.LBB130_32
+The function jffs2_do_unlink() references
+the variable __init .LBB130_32.
+This is often because jffs2_do_unlink lacks a __init
+annotation or the annotation of .LBB130_32 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x3f91f4): Section mismatch in reference from the function jffs2_do_link() to the variable .init.text:.LBB130_32
+The function jffs2_do_link() references
+the variable __init .LBB130_32.
+This is often because jffs2_do_link lacks a __init
+annotation or the annotation of .LBB130_32 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x354e4e): Section mismatch in reference from the function nlmsvc_put_lockowner() to the function .exit.text:test_ww_mutex_exit()
+The function nlmsvc_put_lockowner() references a function in an exit section.
+Often the function test_ww_mutex_exit() has valid usage outside the exit section
+and the fix is to remove the __exit annotation of test_ww_mutex_exit.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x403312): Section mismatch in reference from the function jffs2_release_xattr_ref() to the function .init.text:set_reset_devices()
+The function jffs2_release_xattr_ref() references
 the function __init set_reset_devices().
-This is often because ufs_make_empty lacks a __init
+This is often because jffs2_release_xattr_ref lacks a __init
 annotation or the annotation of set_reset_devices is wrong.
 --
->> WARNING: modpost: vmlinux.o(.text+0x3eb1f8): Section mismatch in reference from the function ufs_mknod() to the variable .init.text:.LBB130_23
-The function ufs_mknod() references
-the variable __init .LBB130_23.
-This is often because ufs_mknod lacks a __init
-annotation or the annotation of .LBB130_23 is wrong.
+>> WARNING: modpost: vmlinux.o(.text+0x355eb6): Section mismatch in reference from the function nlmsvc_release_call() to the function .exit.text:test_ww_mutex_exit()
+The function nlmsvc_release_call() references a function in an exit section.
+Often the function test_ww_mutex_exit() has valid usage outside the exit section
+and the fix is to remove the __exit annotation of test_ww_mutex_exit.
 --
->> WARNING: modpost: vmlinux.o(.text+0x446e7c): Section mismatch in reference from the function fuse_open_common() to the variable .init.data:__TRACE_SYSTEM_afs_FS_InlineBulkStatus
-The function fuse_open_common() references
-the variable __initdata __TRACE_SYSTEM_afs_FS_InlineBulkStatus.
-This is often because fuse_open_common lacks a __initdata
-annotation or the annotation of __TRACE_SYSTEM_afs_FS_InlineBulkStatus is wrong.
+>> WARNING: modpost: vmlinux.o(.text+0x461baa): Section mismatch in reference from the function udf_add_aext() to the variable .init.data:__TRACE_SYSTEM_yfs_CB_GetLocalCell
+The function udf_add_aext() references
+the variable __initdata __TRACE_SYSTEM_yfs_CB_GetLocalCell.
+This is often because udf_add_aext lacks a __initdata
+annotation or the annotation of __TRACE_SYSTEM_yfs_CB_GetLocalCell is wrong.
 --
->> WARNING: modpost: vmlinux.o(.text+0x47be1a): Section mismatch in reference from the function duplicateIXtree() to the variable .init.data:__TRACE_SYSTEM_afs_file_error_dir_unmarked_ext
-The function duplicateIXtree() references
-the variable __initdata __TRACE_SYSTEM_afs_file_error_dir_unmarked_ext.
-This is often because duplicateIXtree lacks a __initdata
-annotation or the annotation of __TRACE_SYSTEM_afs_file_error_dir_unmarked_ext is wrong.
+>> WARNING: modpost: vmlinux.o(.text+0x3c7adc): Section mismatch in reference from the function ni_try_remove_attr_list() to the function .init.text:set_reset_devices()
+The function ni_try_remove_attr_list() references
+the function __init set_reset_devices().
+This is often because ni_try_remove_attr_list lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x484460): Section mismatch in reference from the function dtModify() to the variable .init.data:__TRACE_SYSTEM_afs_file_error_writeback_fail
+The function dtModify() references
+the variable __initdata __TRACE_SYSTEM_afs_file_error_writeback_fail.
+This is often because dtModify lacks a __initdata
+annotation or the annotation of __TRACE_SYSTEM_afs_file_error_writeback_fail is wrong.
+..
 
 Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x34c044): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34c090): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34f5ee): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
-<< WARNING: modpost: vmlinux.o(.text+0x359bd0): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359bda): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359be4): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
-<< WARNING: modpost: vmlinux.o(.text+0x359c2e): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359c72): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359ca8): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359cec): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x34c044): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34c090): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34f5ee): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
-<< WARNING: modpost: vmlinux.o(.text+0x359bd0): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359bda): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359be4): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
-<< WARNING: modpost: vmlinux.o(.text+0x359c2e): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359c72): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359ca8): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359cec): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x34c044): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34c090): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34f5ee): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
-<< WARNING: modpost: vmlinux.o(.text+0x359bd0): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359bda): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359be4): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
-<< WARNING: modpost: vmlinux.o(.text+0x359c2e): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359c72): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359ca8): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359cec): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x34c044): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34c090): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34f5ee): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
-<< WARNING: modpost: vmlinux.o(.text+0x359bd0): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359bda): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359be4): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
-<< WARNING: modpost: vmlinux.o(.text+0x359c2e): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359c72): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359ca8): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359cec): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x34c1d8): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34c224): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34f782): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
+<< WARNING: modpost: vmlinux.o(.text+0x359d64): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359d6e): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359d78): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
+<< WARNING: modpost: vmlinux.o(.text+0x359dc2): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e06): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x359e3c): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x359e80): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
 
 ---
 0-DAY CI Kernel Test Service
