@@ -1,106 +1,89 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9B54ABB
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 23:31:40 +0000 (UTC)
-Received: by mail-lj1-f173.google.com with SMTP id 17so9307633lji.1
-        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 16:31:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CBE4ABB
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 23:46:49 +0000 (UTC)
+Received: by mail-wr1-f48.google.com with SMTP id u10so9573413wra.9
+        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 16:46:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jIik/7JhUqMYYHvz4PGBxZz1oteF8rRLVp9nxcgFqks=;
-        b=DpOVy4EhBN9HRx+Owjx5178I49nqrRP/5Ghlg2kAeN2Nl1/gidgOPQ+PfyLo68cYOI
-         v+92J+gf3eOFukalAdgvfsWyXUd5I+ofPmDLRlc6sgGLysLHI0E4Go3BsZjoVkO0RYWd
-         bvEFttF33LX3h7fgWTXTuWJLu1V7dNVhisyoQ=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=44jSVu9ViGX65V2KV4sJoKN91g8S2sbZ550L2N5DUJ4=;
+        b=l/0VWzdsq+0tapKmp9GM2+I2R4GUGVKdkGWYWuAwvHzKLPI3p5TshglsScGVDa6NFW
+         DaUSL0XENlAwNhjU9nCyUGZAAKbuLTE5fPZkTuqREBsP1ImFELxbCE3lmp3Tj4nI/jZy
+         9MwmBjSZpXSmwI4DVJZDYjtVulXynQRqIUs3I7K0QsW9YAidOZSK0Tv9Ac8x3k42NYBa
+         rI6tO6VGSjlkuhdZoQ0C6BU3ba7i/97qKi1VIMAusTrJVubzZfr5sUa8Dru53eP9ebuz
+         wQGxh7PiQr4lqSAjy9LGqm91YM5rAGN3LoMMnC2WtFXix6zXjBdx0Wr+n4qempHJNmVk
+         hZKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jIik/7JhUqMYYHvz4PGBxZz1oteF8rRLVp9nxcgFqks=;
-        b=ZjcQ1kIOxzu9GvqM4xkw9QGepQj4mulTb+KwNf6gqzGdoQ+7BR3nkM7EsANk+IskXg
-         Q/zJnBkWnMEb8X3vQIfrF+O+nRS8aj8XcPB+56ABavSaMQY4CvVEuOgs3hf82bx7e8Vf
-         wpKmcZ/zvBvtWbqgU6elYKNPk80DGxZJa3lsit7WBOXsXFMeJOSK1x1gOuN2sS8hA/1y
-         TSsp2yrQHh9ZjBIIq61BMhATwAb7SxCfxt27/sVmKNcKeNv0E15veZ6Q12aWM63/J5DD
-         +YPsg5n2I1c77CDUz5UkxLU6eKwcQpLAUT93xeV+Fa7bNoM53a/QqFw3I380MeOjp8ik
-         D83w==
-X-Gm-Message-State: AOAM533SO9UNwlVV7LtsgyCehHwdV8fD4TpEe6kqcPyL83rxCixm1nLf
-	9uN5F8xEkVtOJuT6EuW9QAQU1jc0h1HmK4tZuS0=
-X-Google-Smtp-Source: ABdhPJwhYeGZLUF7cadZZX8SyUXIFpi0dpJ3MNx48VHKpGJCKSyoSvHcWOo2uet0NSpRN6Jy5ZmM0Q==
-X-Received: by 2002:a2e:8909:0:b0:247:fc9c:283f with SMTP id d9-20020a2e8909000000b00247fc9c283fmr4485280lji.21.1647559898156;
-        Thu, 17 Mar 2022 16:31:38 -0700 (PDT)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
-        by smtp.gmail.com with ESMTPSA id z11-20020a05651c11cb00b00247dee7faeasm609281ljo.12.2022.03.17.16.31.36
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 16:31:36 -0700 (PDT)
-Received: by mail-lj1-f180.google.com with SMTP id o6so9293155ljp.3
-        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 16:31:36 -0700 (PDT)
-X-Received: by 2002:a2e:a78f:0:b0:249:21ce:6d53 with SMTP id
- c15-20020a2ea78f000000b0024921ce6d53mr4379261ljf.164.1647559895803; Thu, 17
- Mar 2022 16:31:35 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=44jSVu9ViGX65V2KV4sJoKN91g8S2sbZ550L2N5DUJ4=;
+        b=hnOBtH/QC0c3KpgCKQSSiKOZYceSKTL7Bvtq02LFJMCqC2gNHq3y7+M7vFSxrVv1kk
+         /3WLhWmmfcILX4FuUDVCmADZF1PBaD+rnjFpBlFh1iR2AThqoYNwo8b5QpggWLFEHdvI
+         5CSOsyvt5LNymfS/5dtDTUPgyS685gb1YcR5YbUZNPBQfcasszeeo+OQcL/xNPJPtafh
+         kpjFJX5n+mzOQun6JW4KXm86gbJOEy3SZziXUB/03F/3y7LJ7vx2TU8QjtMGyBa7eoKa
+         TY/gT1RbIkkScEMzSjhJ175DxIPEgu7RgmU3K4FpbP3yoQ7h+BP7fUSbYIEUS2xfR8OS
+         fRJw==
+X-Gm-Message-State: AOAM533JEW9GszJQ/uvshTCJkNBUk1V7MdUfwTKDoZg7TY6ZJu2+fUgA
+	UFoyMn3/R7UEtw2Bg9y/xgg=
+X-Google-Smtp-Source: ABdhPJxdH/WN2xf224PSCmdD+V5oRw0iLxFKpaeNeTNgCZ9Kx3jYO0+gAPl3kcA/9A7EbQbNAzpyng==
+X-Received: by 2002:adf:efd2:0:b0:203:db42:c56c with SMTP id i18-20020adfefd2000000b00203db42c56cmr5842974wrp.698.1647560808002;
+        Thu, 17 Mar 2022 16:46:48 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id v5-20020adfe4c5000000b001edc1e5053esm4860565wrm.82.2022.03.17.16.46.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 16:46:47 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	xen-devel@lists.xenproject.org,
+	linux-block@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] xen-blkback: remove redundant assignment to variable i
+Date: Thu, 17 Mar 2022 23:46:46 +0000
+Message-Id: <20220317234646.78158-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
- <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
- <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
- <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com>
- <CAHk-=whn3iYE7gZM4vHx1kFhWBD2P9Wvmcyj8OOqv=y_7nemGQ@mail.gmail.com>
- <CAGG=3QWC9VS9RdGFTwY8VGqujDnFYnRTT1dQ6kkVr+0SRk6COg@mail.gmail.com>
- <CAHk-=wh=x7oCk05JD1=6XNsvvgpsidRWupoqySw1zODmvNy9Ug@mail.gmail.com>
- <CAGG=3QWcKof_NXrC0kznM2ikwTA00AgUJrcWhKBTitmjCuOxqw@mail.gmail.com>
- <CAHk-=wj=aK2T+h=rRJL4jDDTgV2U533E_duroCoVSUfkvYd0OQ@mail.gmail.com> <20220317231959.GN614@gate.crashing.org>
-In-Reply-To: <20220317231959.GN614@gate.crashing.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 17 Mar 2022 16:31:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgHgSJ-suTT6V6_2USPDrdmQweLR_M_YHjb8OsQvYWn-w@mail.gmail.com>
-Message-ID: <CAHk-=wgHgSJ-suTT6V6_2USPDrdmQweLR_M_YHjb8OsQvYWn-w@mail.gmail.com>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Bill Wendling <morbo@google.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 17, 2022 at 4:25 PM Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
->
-> > I still think that from a sanity standpoint, it would be good to
-> > actually strengthen the semantics of "asm volatile" to literally act
-> > as - and be ordered with - volatile memory accesses.
-> >
-> > But I guess that's water under the bridge.
->
-> That is what it has actually done since forever.  See C 5.1.2.3.  For
-> GCC, "asm volatile" has a side effect like in /2 there as well, as does
-> unspec_volatile (an internal GCC thing used to implement certain
-> builtins, among other things).
+Variable i is being assigned a value that is never read, it is being
+re-assigned later in a for-loop. The assignment is redundant and can
+be removed.
 
-Oh, so two "asm volatile" statements _are_ in fact defined to be
-ordered wrt each other?
+Cleans up clang scan build warning:
+drivers/block/xen-blkback/blkback.c:934:14: warning: Although the value
+stored to 'i' is used in the enclosing expression, the value is never
+actually read from 'i' [deadcode.DeadStores]
 
-Because the gcc docs certainly don't say that ;(
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/block/xen-blkback/blkback.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yeah, yeah, dead code can be removed, whether volatile or not. That's
-true of "*(volatile int *)x" too. It's not the dead code that is the
-interesting case, though..
+diff --git a/drivers/block/xen-blkback/blkback.c b/drivers/block/xen-blkback/blkback.c
+index d1e26461a64e..de42458195bc 100644
+--- a/drivers/block/xen-blkback/blkback.c
++++ b/drivers/block/xen-blkback/blkback.c
+@@ -931,7 +931,7 @@ static int xen_blkbk_parse_indirect(struct blkif_request *req,
+ 	if (rc)
+ 		goto unmap;
+ 
+-	for (n = 0, i = 0; n < nseg; n++) {
++	for (n = 0; n < nseg; n++) {
+ 		uint8_t first_sect, last_sect;
+ 
+ 		if ((n % SEGS_PER_INDIRECT_FRAME) == 0) {
+-- 
+2.35.1
 
-Is this also well-defined ordering-wise:
-
-    asm volatile("do_something");
-    WRITE_ONCE(x, 1);
-
-(where "WRITE_ONCE()" is that kernel macro that just uses a volatile
-pointer assignment to force the access)?
-
-And could we get that documented?
-
-            Linus
