@@ -1,48 +1,41 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B603D79
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 09:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773F02F38
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 10:35:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647508409; x=1679044409;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8IL//g/TMfBIk8JNUXUEvy1l+g02hROaz5Pc67EYVBM=;
-  b=OqeyraQ5/JsKcWRfch9QUKYOyFR5MZDyJP28CNGA/JdT7m1bHjdvY4g+
-   5epZJId9J5JiJnFpjuFg99Kk0ogajUB1mHwenEYzoYK8cBDnORWodITva
-   bewgc9ojKvMGho2RynTrIx1p51UlHPN4cjjlPcYOk8NZeObHdP4ssOLII
-   VxSRc17h3gyOP05zPUnkKsfJ6253If2bUL9ivtwC/WBxkHJBs6kwqOY6e
-   2SweA4XDsVuMXqPRl5yj8a8mlzne7gqBy7doJi6+VaCZLN+0wMcGuvxG6
-   xoBGP3JTx+G7+f70OltOGevVhtm7/HuHsYEGYjUtZNtoF6kT7C+R6SOsK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="317540744"
+  t=1647513316; x=1679049316;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2zHfKZKPoHZZnn4wJvN+JDaLnv8NiPFqvhCKQhrKxPQ=;
+  b=Di5Z7EQGgyBtM2OKf1FbQO6BvuNomD1/aUdvvdeT/qYt3T5BI7b+it6/
+   bSexR6xKNhs1ab1w0xqPiFz10brRUM3EbKj3S2S6lr4RGOGcYXivpdk96
+   hb/9zfnQJoYUxUIQDqr8OF4fk2+ehjljsOcN/L+JJVkORRShG5hcNeMij
+   eKX+TR2FPjKfnLS/0z1P2n5hZmg9pZwEkePpEOFZhx5pVSYhav1vjt5Zt
+   djbeqsx0hGyeozn31OecK8dqeVlGvofhhuDGzpUyBRQZJ0XTGrjIc/jXY
+   iSwEhdP4zPLZLy1UASU8fzfPNXEkqVKW9zvNiHwTl5E+1j2g1W5aN8vEE
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="237444910"
 X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="317540744"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 02:13:28 -0700
+   d="scan'208";a="237444910"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 03:35:15 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="635304398"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 02:13:25 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1nUmBZ-001QAZ-Rm;
-	Thu, 17 Mar 2022 11:12:45 +0200
-Date: Thu, 17 Mar 2022 11:12:45 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Bill Wendling <morbo@google.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
-Message-ID: <YjL7jWpOCjo9R0SH@smile.fi.intel.com>
-References: <20220316213055.2351342-1-morbo@google.com>
- <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
+   d="scan'208";a="541321853"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 17 Mar 2022 03:35:14 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nUnTN-000Dao-9p; Thu, 17 Mar 2022 10:35:13 +0000
+Date: Thu, 17 Mar 2022 18:34:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 111/2308] init/main.c:886:13: warning: no
+ previous prototype for function 'init_per_task_early'
+Message-ID: <202203171800.i5UHGBco-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,33 +44,160 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Mar 17, 2022 at 11:06:51AM +0200, Andy Shevchenko wrote:
-> On Wed, Mar 16, 2022 at 02:30:55PM -0700, Bill Wendling wrote:
-> > When compiling with -Wformat, clang emits the following warning:
-> > 
-> > drivers/gpio/gpiolib-acpi.c:393:4: warning: format specifies type
-> > 'unsigned char' but the argument has type 'int' [-Wformat]
-> >                         pin);
-> >                         ^~~
-> > 
-> > The types of these arguments are unconditionally defined, so this patch
-> > updates the format character to the correct ones for ints and unsigned
-> > ints.
-> 
-> hhX specifier refers to unsigned char. It's a bug in the compiler.
-> 
-> NAK.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   ef90a8d1de7ff54bfd0fcfe6371c20f544b14d6d
+commit: 3e2fb1b92a2026ae3608f3d77d302217390dee27 [111/2308] headers/deps: cpusets: Move task_struct::mems_allowed_seq to per_task()
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220317/202203171800.i5UHGBco-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=3e2fb1b92a2026ae3608f3d77d302217390dee27
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 3e2fb1b92a2026ae3608f3d77d302217390dee27
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Oh, I read this wrong, sorry. The pin has been checked to fit in one byte,
-but its type is bigger indeed.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I will apply your patch right away and send as a fix after rc1.
+All warnings (new ones prefixed by >>):
 
--- 
-With Best Regards,
-Andy Shevchenko
+   init/main.c:782:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
+   void __init __weak mem_encrypt_init(void) { }
+                      ^
+   init/main.c:782:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak mem_encrypt_init(void) { }
+   ^
+   static 
+>> init/main.c:886:13: warning: no previous prototype for function 'init_per_task_early' [-Wmissing-prototypes]
+   void __init init_per_task_early(void)
+               ^
+   init/main.c:886:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init init_per_task_early(void)
+   ^
+   static 
+   2 warnings generated.
 
 
+vim +/init_per_task_early +886 init/main.c
+
+   781	
+ > 782	void __init __weak mem_encrypt_init(void) { }
+   783	
+   784	void __init __weak poking_init(void) { }
+   785	
+   786	void __init __weak pgtable_cache_init(void) { }
+   787	
+   788	void __init __weak trap_init(void) { }
+   789	
+   790	bool initcall_debug;
+   791	core_param(initcall_debug, initcall_debug, bool, 0644);
+   792	
+   793	#ifdef TRACEPOINTS_ENABLED
+   794	static void __init initcall_debug_enable(void);
+   795	#else
+   796	static inline void initcall_debug_enable(void)
+   797	{
+   798	}
+   799	#endif
+   800	
+   801	/* Report memory auto-initialization states for this boot. */
+   802	static void __init report_meminit(void)
+   803	{
+   804		const char *stack;
+   805	
+   806		if (IS_ENABLED(CONFIG_INIT_STACK_ALL_PATTERN))
+   807			stack = "all(pattern)";
+   808		else if (IS_ENABLED(CONFIG_INIT_STACK_ALL_ZERO))
+   809			stack = "all(zero)";
+   810		else if (IS_ENABLED(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL))
+   811			stack = "byref_all(zero)";
+   812		else if (IS_ENABLED(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF))
+   813			stack = "byref(zero)";
+   814		else if (IS_ENABLED(CONFIG_GCC_PLUGIN_STRUCTLEAK_USER))
+   815			stack = "__user(zero)";
+   816		else
+   817			stack = "off";
+   818	
+   819		pr_info("mem auto-init: stack:%s, heap alloc:%s, heap free:%s\n",
+   820			stack, want_init_on_alloc(GFP_KERNEL) ? "on" : "off",
+   821			want_init_on_free() ? "on" : "off");
+   822		if (want_init_on_free())
+   823			pr_info("mem auto-init: clearing system memory may take some time...\n");
+   824	}
+   825	
+   826	/*
+   827	 * Set up kernel memory allocators
+   828	 */
+   829	static void __init mm_init(void)
+   830	{
+   831		/*
+   832		 * page_ext requires contiguous pages,
+   833		 * bigger than MAX_ORDER unless SPARSEMEM.
+   834		 */
+   835		page_ext_init_flatmem();
+   836		init_mem_debugging_and_hardening();
+   837		kfence_alloc_pool();
+   838		report_meminit();
+   839		stack_depot_early_init();
+   840		mem_init();
+   841		mem_init_print_info();
+   842		kmem_cache_init();
+   843		/*
+   844		 * page_owner must be initialized after buddy is ready, and also after
+   845		 * slab is ready so that stack_depot_init() works properly
+   846		 */
+   847		page_ext_init_flatmem_late();
+   848		kmemleak_init();
+   849		pgtable_init();
+   850		debug_objects_mem_init();
+   851		vmalloc_init();
+   852		/* Should be run before the first non-init thread is created */
+   853		init_espfix_bsp();
+   854		/* Should be run after espfix64 is set up. */
+   855		pti_init();
+   856	}
+   857	
+   858	#ifdef CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+   859	DEFINE_STATIC_KEY_MAYBE_RO(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,
+   860				   randomize_kstack_offset);
+   861	DEFINE_PER_CPU(u32, kstack_offset);
+   862	
+   863	static int __init early_randomize_kstack_offset(char *buf)
+   864	{
+   865		int ret;
+   866		bool bool_result;
+   867	
+   868		ret = kstrtobool(buf, &bool_result);
+   869		if (ret)
+   870			return ret;
+   871	
+   872		if (bool_result)
+   873			static_branch_enable(&randomize_kstack_offset);
+   874		else
+   875			static_branch_disable(&randomize_kstack_offset);
+   876		return 0;
+   877	}
+   878	early_param("randomize_kstack_offset", early_randomize_kstack_offset);
+   879	#endif
+   880	
+   881	void __init __weak arch_call_rest_init(void)
+   882	{
+   883		rest_init();
+   884	}
+   885	
+ > 886	void __init init_per_task_early(void)
+   887	{
+   888	#ifdef CONFIG_POSIX_TIMERS
+   889		per_task(&init_task, posix_cputimers) = (struct posix_cputimers) __INIT_CPU_TIMERS(init_task);
+   890	#endif
+   891	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
