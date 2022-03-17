@@ -1,310 +1,112 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A2C434E
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 13:01:25 +0000 (UTC)
-X-UUID: 2f78392da0264cec95c87590bc51342a-20220317
-X-UUID: 2f78392da0264cec95c87590bc51342a-20220317
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-	(envelope-from <rex-bc.chen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 113089503; Thu, 17 Mar 2022 21:01:07 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 17 Mar 2022 21:01:07 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Mar 2022 21:01:07 +0800
-Message-ID: <5c21b7c1606cf635123791c3e0c3a8a0cb8889c6.camel@mediatek.com>
-Subject: Re: [PATCH v15 04/22] soc: mediatek: add mtk-mmsys support for
- mt8195 vdosys1
-From: Rex-BC Chen <rex-bc.chen@mediatek.com>
-To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
-	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
-	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
-	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
-	<srv_heupstream@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Thu, 17 Mar 2022 21:01:07 +0800
-In-Reply-To: <20220311015506.11232-5-nancy.lin@mediatek.com>
-References: <20220311015506.11232-1-nancy.lin@mediatek.com>
-	 <20220311015506.11232-5-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360B44362
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 14:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647525614; x=1679061614;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QPfVbT9u+v+Yeu9XDEbPdkI2YLNnYH/l42UkZ4GtSgY=;
+  b=mhbwW8OvY1KETIQXcbohZxr+NNQrSHfjywhEJoyQD4O4s0C+E+2gaLi4
+   kdWa7er6oSc4/aBlN1056lzu2AMMJtypzuKu3KeNKo/jsU0YG6hdUYTBW
+   Q0rJ0Ds81xBeFayXTCzIa2OGcWavefyvxSW5tsnv8Cm1ozSWK+cTkzghf
+   QoLlH9/mETep9IR31xWN+iVhlCFnow2uJ8Eo5s1mpiik+Yc9rEqJSjRY+
+   mxOQ9+x0vdoaMgWjN4oEzx/ou4fpNt+Z8TucA0DMqJRE7Zr6jkS9abk+0
+   UVCnWuhojYCYDHbsWaK84xrFOdk7SGj1HPFgUpccPuVS8QejR7t6VAeI+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="256600413"
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="256600413"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 07:00:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="541378125"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 17 Mar 2022 07:00:11 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nUqfj-000Djh-2d; Thu, 17 Mar 2022 14:00:11 +0000
+Date: Thu, 17 Mar 2022 21:59:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:rostedt/linux-trace/merge-next-20220315 512/512]
+ WARNING: modpost: vmlinux.o(.data+0x296750): Section mismatch in reference
+ from the variable nft_rt_type to the function .init.text:set_reset_devices()
+Message-ID: <202203172141.n0ep448q-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, 2022-03-11 at 09:54 +0800, Nancy.Lin wrote:
-> Add mt8195 vdosys1 clock driver name and routing table to
-> the driver data of mtk-mmsys.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
+tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/merge-next-20220315
+head:   87a21b60077d8cb23d3e70a00a969b542d0695d8
+commit: 87a21b60077d8cb23d3e70a00a969b542d0695d8 [512/512] Merge remote-tracking branch 'ftrace/ftrace/core' into HEAD
+config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220317/202203172141.n0ep448q-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/87a21b60077d8cb23d3e70a00a969b542d0695d8
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/merge-next-20220315
+        git checkout 87a21b60077d8cb23d3e70a00a969b542d0695d8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  drivers/soc/mediatek/mt8195-mmsys.h    | 136
-> +++++++++++++++++++++++++
->  drivers/soc/mediatek/mtk-mmsys.c       |  10 ++
->  include/linux/soc/mediatek/mtk-mmsys.h |   2 +
->  3 files changed, 148 insertions(+)
-> 
-> diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
-> b/drivers/soc/mediatek/mt8195-mmsys.h
-> index 24a3afe23bc8..369fb0aab56d 100644
-> --- a/drivers/soc/mediatek/mt8195-mmsys.h
-> +++ b/drivers/soc/mediatek/mt8195-mmsys.h
-> @@ -75,6 +75,70 @@
->  #define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0		(2 <<
-> 16)
->  #define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE			
-> (3 << 16)
->  
-> +#define MT8195_VDO1_VPP_MERGE0_P0_SEL_IN			0xf04
-> +#define MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0			
-> 1
-> +
-> +#define MT8195_VDO1_VPP_MERGE0_P1_SEL_IN			0xf08
-> +#define MT8195_VPP_MERGE0_P1_SEL_IN_FROM_MDP_RDMA1			
-> 1
-> +
-> +#define MT8195_VDO1_DISP_DPI1_SEL_IN				0xf10
-> +#define MT8195_DISP_DPI1_SEL_IN_FROM_VPP_MERGE4_MOUT			
-> 0
-> +
-> +#define MT8195_VDO1_DISP_DP_INTF0_SEL_IN			0xf14
-> +#define MT8195_DISP_DP_INTF0_SEL_IN_FROM_VPP_MERGE4_MOUT		
-> 0
-> +
-> +#define MT8195_VDO1_MERGE4_SOUT_SEL				0xf18
-> +#define MT8195_MERGE4_SOUT_TO_DPI1_SEL				
-> 	2
-> +#define MT8195_MERGE4_SOUT_TO_DP_INTF0_SEL				
-> 3
-> +
-> +#define MT8195_VDO1_MIXER_IN1_SEL_IN				0xf24
-> +#define MT8195_MIXER_IN1_SEL_IN_FROM_MERGE0_ASYNC_SOUT		
-> 	1
-> +
-> +#define MT8195_VDO1_MIXER_IN2_SEL_IN				0xf28
-> +#define MT8195_MIXER_IN2_SEL_IN_FROM_MERGE1_ASYNC_SOUT		
-> 	1
-> +
-> +#define MT8195_VDO1_MIXER_IN3_SEL_IN				0xf2c
-> +#define MT8195_MIXER_IN3_SEL_IN_FROM_MERGE2_ASYNC_SOUT		
-> 	1
-> +
-> +#define MT8195_VDO1_MIXER_IN4_SEL_IN				0xf30
-> +#define MT8195_MIXER_IN4_SEL_IN_FROM_MERGE3_ASYNC_SOUT		
-> 	1
-> +
-> +#define MT8195_VDO1_MIXER_OUT_SOUT_SEL				
-> 0xf34
-> +#define MT8195_MIXER_SOUT_TO_MERGE4_ASYNC_SEL			
-> 	1
-> +
-> +#define MT8195_VDO1_VPP_MERGE1_P0_SEL_IN			0xf3c
-> +#define MT8195_VPP_MERGE1_P0_SEL_IN_FROM_MDP_RDMA2			
-> 1
-> +
-> +#define MT8195_VDO1_MERGE0_ASYNC_SOUT_SEL			0xf40
-> +#define MT8195_SOUT_TO_MIXER_IN1_SEL					
-> 1
-> +
-> +#define MT8195_VDO1_MERGE1_ASYNC_SOUT_SEL			0xf44
-> +#define MT8195_SOUT_TO_MIXER_IN2_SEL					
-> 1
-> +
-> +#define MT8195_VDO1_MERGE2_ASYNC_SOUT_SEL			0xf48
-> +#define MT8195_SOUT_TO_MIXER_IN3_SEL					
-> 1
-> +
-> +#define MT8195_VDO1_MERGE3_ASYNC_SOUT_SEL			0xf4c
-> +#define MT8195_SOUT_TO_MIXER_IN4_SEL					
-> 1
-> +
-> +#define MT8195_VDO1_MERGE4_ASYNC_SEL_IN				
-> 0xf50
-> +#define MT8195_MERGE4_ASYNC_SEL_IN_FROM_MIXER_OUT_SOUT		
-> 	1
-> +
-> +#define MT8195_VDO1_MIXER_IN1_SOUT_SEL				
-> 0xf58
-> +#define MT8195_MIXER_IN1_SOUT_TO_DISP_MIXER				
-> 0
-> +
-> +#define MT8195_VDO1_MIXER_IN2_SOUT_SEL				
-> 0xf5c
-> +#define MT8195_MIXER_IN2_SOUT_TO_DISP_MIXER				
-> 0
-> +
-> +#define MT8195_VDO1_MIXER_IN3_SOUT_SEL				
-> 0xf60
-> +#define MT8195_MIXER_IN3_SOUT_TO_DISP_MIXER				
-> 0
-> +
-> +#define MT8195_VDO1_MIXER_IN4_SOUT_SEL				
-> 0xf64
-> +#define MT8195_MIXER_IN4_SOUT_TO_DISP_MIXER				
-> 0
-> +
-> +#define MT8195_VDO1_MIXER_SOUT_SEL_IN				
-> 0xf68
-> +#define MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER			
-> 0
-> +
->  static const struct mtk_mmsys_routes mmsys_mt8195_routing_table[] =
-> {
->  	{
->  		DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
-> @@ -124,6 +188,78 @@ static const struct mtk_mmsys_routes
-> mmsys_mt8195_routing_table[] = {
->  		DDP_COMPONENT_MERGE0, DDP_COMPONENT_DP_INTF0,
->  		MT8195_VDO0_SEL_OUT, MT8195_SOUT_VPP_MERGE_TO_MASK,
->  		MT8195_SOUT_VPP_MERGE_TO_DP_INTF0
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_VPP_MERGE0_P0_SEL_IN, GENMASK(0, 0),
-> +		MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_VPP_MERGE0_P1_SEL_IN, GENMASK(0, 0),
-> +		MT8195_VPP_MERGE0_P1_SEL_IN_FROM_MDP_RDMA1
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_VPP_MERGE1_P0_SEL_IN, GENMASK(0, 0),
-> +		MT8195_VPP_MERGE1_P0_SEL_IN_FROM_MDP_RDMA2
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MERGE0_ASYNC_SOUT_SEL, GENMASK(1, 0),
-> +		MT8195_SOUT_TO_MIXER_IN1_SEL
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MERGE1_ASYNC_SOUT_SEL, GENMASK(1, 0),
-> +		MT8195_SOUT_TO_MIXER_IN2_SEL
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MERGE2_ASYNC_SOUT_SEL, GENMASK(1, 0),
-> +		MT8195_SOUT_TO_MIXER_IN3_SEL
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MERGE3_ASYNC_SOUT_SEL, GENMASK(1, 0),
-> +		MT8195_SOUT_TO_MIXER_IN4_SEL
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MIXER_OUT_SOUT_SEL, GENMASK(0, 0),
-> +		MT8195_MIXER_SOUT_TO_MERGE4_ASYNC_SEL
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MIXER_IN1_SEL_IN, GENMASK(0, 0),
-> +		MT8195_MIXER_IN1_SEL_IN_FROM_MERGE0_ASYNC_SOUT
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MIXER_IN2_SEL_IN, GENMASK(0, 0),
-> +		MT8195_MIXER_IN2_SEL_IN_FROM_MERGE1_ASYNC_SOUT
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MIXER_IN3_SEL_IN, GENMASK(0, 0),
-> +		MT8195_MIXER_IN3_SEL_IN_FROM_MERGE2_ASYNC_SOUT
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MIXER_IN4_SEL_IN, GENMASK(0, 0),
-> +		MT8195_MIXER_IN4_SEL_IN_FROM_MERGE3_ASYNC_SOUT
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MIXER_SOUT_SEL_IN, GENMASK(2, 0),
-> +		MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER
-> +	}, {
-> +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> +		MT8195_VDO1_MERGE4_ASYNC_SEL_IN, GENMASK(2, 0),
-> +		MT8195_MERGE4_ASYNC_SEL_IN_FROM_MIXER_OUT_SOUT
-> +	}, {
-> +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DPI1,
-> +		MT8195_VDO1_DISP_DPI1_SEL_IN, GENMASK(1, 0),
-> +		MT8195_DISP_DPI1_SEL_IN_FROM_VPP_MERGE4_MOUT
-> +	}, {
-> +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DPI1,
-> +		MT8195_VDO1_MERGE4_SOUT_SEL, GENMASK(1, 0),
-> +		MT8195_MERGE4_SOUT_TO_DPI1_SEL
-> +	}, {
-> +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DP_INTF1,
-> +		MT8195_VDO1_DISP_DP_INTF0_SEL_IN, GENMASK(1, 0),
-> +		MT8195_DISP_DP_INTF0_SEL_IN_FROM_VPP_MERGE4_MOUT
-> +	}, {
-> +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DP_INTF1,
-> +		MT8195_VDO1_MERGE4_SOUT_SEL, GENMASK(1, 0),
-> +		MT8195_MERGE4_SOUT_TO_DP_INTF0_SEL
->  	}
->  };
->  
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.c
-> b/drivers/soc/mediatek/mtk-mmsys.c
-> index dc5c51f0ccc8..0b77624cf6ca 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.c
-> +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> @@ -79,6 +79,12 @@ static const struct mtk_mmsys_driver_data
-> mt8195_vdosys0_driver_data = {
->  	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
->  };
->  
-> +static const struct mtk_mmsys_driver_data mt8195_vdosys1_driver_data
-> = {
-> +	.clk_driver = "clk-mt8195-vdo1",
-> +	.routes = mmsys_mt8195_routing_table,
-> +	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
-> +};
-> +
->  static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data =
-> {
->  	.clk_driver = "clk-mt8365-mm",
->  	.routes = mt8365_mmsys_routing_table,
-> @@ -271,6 +277,10 @@ static const struct of_device_id
-> of_match_mtk_mmsys[] = {
->  		.compatible = "mediatek,mt8195-vdosys0",
->  		.data = &mt8195_vdosys0_driver_data,
->  	},
-> +	{
-> +		.compatible = "mediatek,mt8195-vdosys1",
-> +		.data = &mt8195_vdosys1_driver_data,
-> +	},
->  	{
->  		.compatible = "mediatek,mt8365-mmsys",
->  		.data = &mt8365_mmsys_driver_data,
-> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h
-> b/include/linux/soc/mediatek/mtk-mmsys.h
-> index 64c77c4a6c56..eaf7f7345519 100644
-> --- a/include/linux/soc/mediatek/mtk-mmsys.h
-> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
-> @@ -18,6 +18,7 @@ enum mtk_ddp_comp_id {
->  	DDP_COMPONENT_COLOR1,
->  	DDP_COMPONENT_DITHER,
->  	DDP_COMPONENT_DP_INTF0,
-> +	DDP_COMPONENT_DP_INTF1,
->  	DDP_COMPONENT_DPI0,
->  	DDP_COMPONENT_DPI1,
->  	DDP_COMPONENT_DSC0,
-> @@ -39,6 +40,7 @@ enum mtk_ddp_comp_id {
->  	DDP_COMPONENT_OVL_2L0,
->  	DDP_COMPONENT_OVL_2L1,
->  	DDP_COMPONENT_OVL_2L2,
-> +	DDP_COMPONENT_OVL_ADAPTOR,
->  	DDP_COMPONENT_OVL1,
->  	DDP_COMPONENT_POSTMASK0,
->  	DDP_COMPONENT_PWM0,
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
+>> WARNING: modpost: vmlinux.o(.data+0x296750): Section mismatch in reference from the variable nft_rt_type to the function .init.text:set_reset_devices()
+The variable nft_rt_type references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: vmlinux.o(.data+0x296764): Section mismatch in reference from the variable nft_rt_type to the variable .init.text:.Ltmp2
+The variable nft_rt_type references
+the variable __init .Ltmp2
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0x34cb00): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34cb4c): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x3500aa): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x3ebc5c): Section mismatch in reference from the function ufs_rename() to the variable .init.text:.LBB130_20
+<< WARNING: modpost: vmlinux.o(.text+0x3ebc82): Section mismatch in reference from the function ufs_rename() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x3ebe14): Section mismatch in reference from the function ufs_error() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x3ebf6e): Section mismatch in reference from the function ufs_panic() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x3f1722): Section mismatch in reference from the function ufs_nfs_get_inode() to the variable .init.text:.LBB130_23
+<< WARNING: modpost: vmlinux.o(.text+0x3f27c4): Section mismatch in reference from the function jffs2_compressors_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x35026e): Section mismatch in reference from the function nfs3_xdr_enc_setacl3args() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34cb00): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x34cb4c): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x3500aa): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x3ebc5c): Section mismatch in reference from the function ufs_rename() to the variable .init.text:.LBB130_20
+<< WARNING: modpost: vmlinux.o(.text+0x3ebc82): Section mismatch in reference from the function ufs_rename() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x3ebe14): Section mismatch in reference from the function ufs_error() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x3ebf6e): Section mismatch in reference from the function ufs_panic() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x3f1722): Section mismatch in reference from the function ufs_nfs_get_inode() to the variable .init.text:.LBB130_23
+<< WARNING: modpost: vmlinux.o(.text+0x3f27c4): Section mismatch in reference from the function jffs2_compressors_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x35026e): Section mismatch in reference from the function nfs3_xdr_enc_setacl3args() to the function .init.text:set_reset_devices()
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
