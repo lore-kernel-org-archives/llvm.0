@@ -1,44 +1,44 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B444A84
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 20:14:14 +0000 (UTC)
-Received: by mail-lj1-f181.google.com with SMTP id 17so8765645lji.1
-        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 13:14:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23063686
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 20:36:40 +0000 (UTC)
+Received: by mail-lf1-f42.google.com with SMTP id w27so10976518lfa.5
+        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 13:36:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1u5q2Fm4MKNSsi+YVIn0z3cE8RvugcBBiZ6jMBBsc+o=;
-        b=Tv2P+GkdHQ/LpT1WXU2lG9YK+/viOPEc9xA3aFbRpn5HE8wBlRYZRSMfrlMRLReqn8
-         FfQMBXciwuNxWmd88d70YuCLr0zVBwq3S5RTSCGUfYfmNs8iXpjiPwyWiiDO5PjwFKOb
-         +/jwQ63ou7dGVUxmBColYJjRnqJvo+Ct4FjJk=
+        bh=yvCBQhvuhOwtfCqiEm+hthJDaVDRziXPjtYnTX7Px84=;
+        b=Pb7vw1v8KqV7vMdCXksuJhYR/Z0TATOJk8MxAWV0eo+m1M/QQOaITAqAhXgsEaNHAn
+         OVdl7RDl9aHsjXGHFD1lfodi4HhuuO7ryga88W9mXDwu5HKSYy+CK2HiGm/nVFQxpDaZ
+         tIovYJ38do4gLiUn0qYtQGldgNe/vrnYRv+dc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1u5q2Fm4MKNSsi+YVIn0z3cE8RvugcBBiZ6jMBBsc+o=;
-        b=3/PPtl++WDXDSor69SCsZhNn2T7qXECj/EKIvRE9YM8c+C5SoIP8jSt5V9MAhGy5n0
-         kHFA2D9dNBv7i0pNPs/FpTvDG9NHeAyOqrpgqHH/P5K9ReTxUD5HP0dj3BS/iBT64TiU
-         BKI6fptN3rR7crim1p2UzlAHfFf+9pTD7wbaxznqPwJgIZsPha1Bpabm+9IPhuln9SVI
-         bnTlzl8QU450rbOwogndpZI6V7+UzCc35UyRyA0QHUKhBYAxxEp9bXPKn5navEUYeW5H
-         cTPjXWAfceT/UqSZaPDq2Jl1nnpqBZZ6pdEWBBays0rwFXy+oLBR8JPQXAxDJL/nWi+z
-         AIoA==
-X-Gm-Message-State: AOAM530U1x0i7LYbDwaOnpa5przL0O7W+ISswvxacD+mlWnjzbEeVt95
-	Y5w4BeXtmPTSen7F1dO+wcQRK3JsqGJ8PMRUJ18=
-X-Google-Smtp-Source: ABdhPJyhalXJlwl2hEcftyjyDooXeTYQRj8Ezp4vtoYhfvMP9ZV5TaAZrEqlvMVixFK8CWBDK/HZJQ==
-X-Received: by 2002:a2e:a688:0:b0:244:cac9:8641 with SMTP id q8-20020a2ea688000000b00244cac98641mr4176196lje.154.1647548052137;
-        Thu, 17 Mar 2022 13:14:12 -0700 (PDT)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
-        by smtp.gmail.com with ESMTPSA id l4-20020a2e9084000000b00244cb29e3e4sm521549ljg.133.2022.03.17.13.14.10
+        bh=yvCBQhvuhOwtfCqiEm+hthJDaVDRziXPjtYnTX7Px84=;
+        b=uq+D105DV17UbVOqa/d+VLqn4ls6g16M2rsSHTDQaZwZ55m0n2Wu8piOgO4DU0hn5b
+         aeQAKWqPQOF4QdR73Mk00v5VG+QImykQr3xDe01QLrjIuX1xGD6pKqlq1BYbp697VXOV
+         7unsNkr9d8yiOsU9tXPAC3YfA5WV8Iw/RtEq9lExVRUkVUydTZtp+DVSPjUb+UP4reF1
+         eiTsq2q3D3XNc2llm4ba0Quxx54CoHZmnVpF50BUCAanS/CC1mo2P0sKE9dh0OTO9IH3
+         Q+/wVMnXCDwH1fJLK2kO8mX3vUAdYiyiaWgNuHrS/F7lEpddURdDQ44tNdHYeyGqPK9a
+         QgmQ==
+X-Gm-Message-State: AOAM530V79WZVzmnroM7kB5yyd6ofmj9fZWp3mJkLNsvdaAR2dBXrY+d
+	tqGdZuNI2m3I5va5GybvGjL3dhvCVtPKrXplDbE=
+X-Google-Smtp-Source: ABdhPJzpDv+08EYbfI8Zrs/nYLQppIoe7ZbvX/iVVhuIRC3ngai4NX6gk8OKUFLRWid49sbsSNC8Qg==
+X-Received: by 2002:ac2:5fc1:0:b0:448:2915:3306 with SMTP id q1-20020ac25fc1000000b0044829153306mr3884707lfg.109.1647549398570;
+        Thu, 17 Mar 2022 13:36:38 -0700 (PDT)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id k5-20020a2e2405000000b0024801a68041sm518920ljk.128.2022.03.17.13.36.36
         for <llvm@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 13:14:10 -0700 (PDT)
-Received: by mail-lj1-f182.google.com with SMTP id bx44so2221335ljb.13
-        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 13:14:10 -0700 (PDT)
-X-Received: by 2002:a05:651c:1213:b0:247:e2d9:cdda with SMTP id
- i19-20020a05651c121300b00247e2d9cddamr3952516lja.443.1647548049927; Thu, 17
- Mar 2022 13:14:09 -0700 (PDT)
+        Thu, 17 Mar 2022 13:36:37 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id o6so8822889ljp.3
+        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 13:36:36 -0700 (PDT)
+X-Received: by 2002:a2e:a78f:0:b0:249:21ce:6d53 with SMTP id
+ c15-20020a2ea78f000000b0024921ce6d53mr4013908ljf.164.1647549396155; Thu, 17
+ Mar 2022 13:36:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,107 +49,117 @@ References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1
  <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
  <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
  <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
- <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com>
-In-Reply-To: <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com>
+ <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <878rt8gwxa.fsf@oldenburg.str.redhat.com>
+In-Reply-To: <878rt8gwxa.fsf@oldenburg.str.redhat.com>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 17 Mar 2022 13:13:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whn3iYE7gZM4vHx1kFhWBD2P9Wvmcyj8OOqv=y_7nemGQ@mail.gmail.com>
-Message-ID: <CAHk-=whn3iYE7gZM4vHx1kFhWBD2P9Wvmcyj8OOqv=y_7nemGQ@mail.gmail.com>
+Date: Thu, 17 Mar 2022 13:36:19 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiZtg-E5s1CEZgaSE=e38vFoP3y2aV-4R82jqmcUoD0Aw@mail.gmail.com>
+Message-ID: <CAHk-=wiZtg-E5s1CEZgaSE=e38vFoP3y2aV-4R82jqmcUoD0Aw@mail.gmail.com>
 Subject: Re: [PATCH v5] x86: use builtins to read eflags
-To: Bill Wendling <morbo@google.com>
+To: Florian Weimer <fweimer@redhat.com>
 Cc: Nick Desaulniers <ndesaulniers@google.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
+	Bill Wendling <morbo@google.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
 	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
 	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev, 
 	LKML <linux-kernel@vger.kernel.org>, 
 	linux-toolchains <linux-toolchains@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Mar 17, 2022 at 12:45 PM Bill Wendling <morbo@google.com> wrote:
+On Thu, Mar 17, 2022 at 1:13 PM Florian Weimer <fweimer@redhat.com> wrote:
 >
-> On Thu, Mar 17, 2022 at 11:52 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
+> * Linus Torvalds:
+>
+> > You can actually operate on EFLAGS at multiple granularities.
 > >
-> > But the whole "you can't move _other_ things that you don't even
-> > understand around this either" is equally important. A "disable
-> > interrupts" could easily be protecting a "read and modify a CPU MSR
-> > value" too - no real "memory" access necessarily involved, but
-> > "memory" is the only way we can tell you "don't move this".
-> >
-> And yet that's not guaranteed. From
-> https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html:
+> >  - normal pushf/popf. Don't do it unless you are doing system software.
+>
+> There's one exception: PUSHF/twiddle/POPF/PUSHF/compare is the
+> recommended sequence to detect CPUID support on i386 (in userspace and
+> elsewhere).
 
-That's my point exactly.
+Yeah.
 
-The 'volatile' part of 'asm volatile' is almost meaningless.
+I do think that hand-crafted sequences using pushf/popf work. But I
+think they should be in one single inline asm statement.
 
-As a result, we mark pretty much all system instructions as being
-memory clobbers, because that actually works.
+Obviously the kernel use of
 
-Whether they actually clobber memory or not is immaterial, and is not
-why we do it.
+        asm volatile("# __raw_save_flags\n\t"
+                     "pushf ; pop %0"
+                     : "=rm" (flags)
+                     : /* no input */
+                     : "memory");
 
-> Note that the solution _isn't_ to add a "memory" clobber, because it's
-> not guaranteed to work, as it's explicitly defined to be a read/write
-> _memory_ barrier, despite what kernel writers wish it would do.
+is exactly that (and yes, I can well believe that we should make "=rm"
+be "=r"), or at least show that the "m" case is much more expensive
+some way).
 
-The solution you quote *ALSO* doesn't work, because they used a
-pointless example that was made-up in order to get to that solution.
+Is it optimal that we put the push/pop right next to each other? No.
+But it avoids a *lot* of problems.
 
-Nobody cares about an operation being ordered wrt an addition.
+And is that "memory" clobber because it modifies the memory location
+just below the current stack pointer?
 
-Mostly kernel people care about an operation being ordered wrt
-something that the compiler DOES NOT KNOW ABOUT, and there is no way
-to actually tell the compiler, exactly because the compiler has no
-effin idea about it.
+No, not really - outside the kernel that might be an issue, but we
+already have to build the kernel with -mno-red-zone, so if the
+compiler uses that memory location, that would be a *HUGE* compiler
+bug already.
 
-But the other thing kernel people care about is ordering those
-operations wrt externally visible things - like modifying memory. So
-an MSR write (or a write to a register like %CR0) may not itself
-directly read or modify memory at all, but there are other reasons why
-it might need to be ordered with any memory operations around it
-anyway, because some of those memory operations may be indirectly
-relevant (ie maybe they are page table writes and you just changed the
-page table pointer in %CR0, and now - even if you don't access the
-particular memory location, speculation may cause TLB fills to happen
-at any time).
+So the "memory" clobber has absolutely nothing to do with the fact
+that 'pushf' updates the stack pointer, writes to that location, and
+the popf then undoes it.
 
-You can't tell the compiler "this eflags operation must be ordered wrt
-this MSR write" - because even if the compiler knows about eflags, it
-doesn't know about things like page table contents or specific MSR
-bits, or whatever.
+It's literally because we don't want the compiler to move non-spill
+memory accesses around it (or other asm statements wiht memory
+clobbers), regardless of the fact that the sequence doesn't really
+read or write memory in any way that is relevant to the compiler.
 
-In a perfect world, we could actually enumerate resources we cared
-about somehow. But that world is not the world we live in.
+> >  - you can use lahf/sahc to load/store only the arithmetic flags
+> > into/from AH. Deprecated, and going away, but historically supported.
+>
+> And these instructions were missing from the original long mode, but
+> they were added back.
 
-So we end up basically having exactly *ONE* resource we can use as a
-"the compiler knows about this, and lets us use it as a
-synchronization point".
+They're also actively being deprecated, so the "adding back" ends up
+being (maybe) temporary.
 
-That one resource is "memory". You may not like it, but you have
-absolutely zero realistic alternatives, do you?
+> GCC doesn't have barriers in the built-ins (if we are talking about
+> __builtin_ia32_readeflags_u64 and __builtin_ia32_writeeflags_u64).  I
+> expect they are actually pretty useless, and were merely added for
+> completeness of the intrinsics headers.
 
-> Your assertion that compilers don't know about control registers isn't
-> exactly true. In the case of "pushf/popf", those instructions know
-> about the eflags registers. All subsequent instructions that read or
-> modify eflags also know about it. In essence, the compiler can
-> determine its own clobber list, which include MSRs.
+Yeah, without any kinds of ordering guarantees, I think those builtins
+are basically only so in name. They might as well return a random
+value - they're not *useful*, because they don't have any defined
+behavior.
 
-Nope.
+I mean, we *could* certainly use "read eflags" in the kernel, and yes,
+in theory it would be lovely if we didn't have to encode it as a
+"pushf/pop" sequence, and the compiler tracked the stack pointer for
+us, and perhaps combined it with other stack pointer changes to the
+point where the "popf" would never happen, it would just undo the %rsp
+change at function exit time.
 
-I think you are thinking of the arm64 MSR's. As far as I know, no
-compiler out there - and certainly not the complete set of compilers
-we support - know a thing about x86 msr registers. It's all inline
-asm.
+So yes, a builtin can improve code generation.
 
-And honestly, no sane person would _want_ a compiler worrying about x86 MSR's.
+But if there is no documented barrier guarantees, how do we know that
+the read of the eflags the compiler does doesn't migrate around the
+code that sets IF or whatever?
 
-A compiler should do a good job at the basic instruction set, adn then
-give us the escapes for the unusual cases.
+So then we'd need compiler intrinsics for 'sti' and 'cli' too. And
+then we'd need to have a way to describe the ordering requirements for
+*those* wrt all the other things we do (ie locks or whatever other
+code that need to be protected from interrupts).
 
-Stop believing that a compiler can deal with every part of system
-programming and that everything should be intrinsics. Because you
-don't have all the intrinsics we need anyway.
+None of which exists.
 
-            Linus
+And even if it ends up existing in newer compiler versions, we'd have
+to wait for the better part of a decade (or more) for that to have
+percolated everywhere.
+
+And even _then_, the builtin syntax is often easily clumsier and less
+flexible than what we get with inline asm (I'm thinking of the
+fundamentally mis-designed memory ordering intrinsics).
+
+                    Linus
