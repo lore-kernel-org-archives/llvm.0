@@ -1,44 +1,41 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8974A9F
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 21:50:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B261C3228
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 22:51:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647553817; x=1679089817;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qBEZF6yRa+414/RM17VzJuin5ptD1M2x8Pk22hpDAUY=;
-  b=HbsBF025IRAlbU7DYdc3uRFuekhxsoc4Eg509iuL3j78SGUQXXM8Vk6o
-   xq3Kao8k9PLk64ZnNqK4kHj1t+0ktbc1sEk2WNL+Z9TKPqK0z58j4WRNn
-   9ei9YTzj8NCTHCwELkGe+RqIonnOG/p/PewyON0aDyYfwBdhgj9b1YK8j
-   oMttWl06LVKSm/0Mqxc2W/YMTg9Dc48QgZ1LyJBxtiUUPdLkxT9i+Fg7a
-   uLS49nvdzdye/cOOR6Yjhw6rDFt9S7RNrbFl5z5eF842RZYXZ508Zs43J
-   56DOcZlO5vjx/BByTgDZKFWCeC1Zlan4X2V5q8i2cNiAosI+mR7+Tsn+O
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="239151610"
+  t=1647557484; x=1679093484;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o6EcUI/nffbKAi/tVN1u/XWuc/zFkhXJLQjXqtiJbJc=;
+  b=MIzpDxxQ2kduY+noKGPZAHCdGDP6FgIvI6v5zSm8fPxrWqyjIf0gx+d4
+   QjIws8VSjZYCJL6x8uooMjCHoNLSgQlHV+X0bIruNBPehlk546+dveHra
+   i1DXiEBaH2HJznj+smXrIrCeIQIt3b0tMx2UsI7T6VJykgei4H3D2dblO
+   Fo3bRQMsjy/WkaPap9vWi72t7KYyix8YGwfwNP3fB+/uFsdqdweBFpFZG
+   7b+S74VHYGwrfKrSm5JQdq60Qzw45NmDgCvY5Cc3z5z3xQPdoY5NrXtOj
+   ozhWuam5dhA2GFNu8BTsgguR00haYGndUq06bJcvLBNQfMWYp4x/11FVo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="343435137"
 X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="239151610"
+   d="scan'208";a="343435137"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 14:50:05 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 15:51:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="647211282"
+   d="scan'208";a="647226771"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 17 Mar 2022 14:50:02 -0700
+  by orsmga004.jf.intel.com with ESMTP; 17 Mar 2022 15:51:22 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nUy0Q-000E8I-5Z; Thu, 17 Mar 2022 21:50:02 +0000
-Date: Fri, 18 Mar 2022 05:49:08 +0800
+	id 1nUyxl-000EBL-Ct; Thu, 17 Mar 2022 22:51:21 +0000
+Date: Fri, 18 Mar 2022 06:51:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-	dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, daniel.vetter@ffwll.ch,
-	sam@ravnborg.org, tzimmermann@suse.de
-Subject: Re: [PATCH 1/4] drm/gma500: Remove unused declarations and other
- cruft
-Message-ID: <202203180538.gWcM5ABA-lkp@intel.com>
-References: <20220317092555.17882-1-patrik.r.jakobsson@gmail.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
+Subject: [luxis1999-iommufd:iommufd-v5.17-rc6 38/40] ld.lld: error: undefined
+ symbol: interval_tree_iter_first
+Message-ID: <202203180632.Yo8yADOY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,86 +44,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220317092555.17882-1-patrik.r.jakobsson@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Patrik,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.17-rc8 next-20220317]
-[cannot apply to airlied/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Patrik-Jakobsson/drm-gma500-Remove-unused-declarations-and-other-cruft/20220317-172741
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220318/202203180538.gWcM5ABA-lkp@intel.com/config)
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc6
+head:   5ab19f95878da0c393e4b8c3f5b0bb51efb9f99a
+commit: a7d1827d76767fe3e5366ef50efd50ebea0ed089 [38/40] vfio: Add iommufd VFIO compat support to group_fd
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220318/202203180632.Yo8yADOY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/0d50efabcb4ad52bd7a036e2542dbf51bbcf93b4
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Patrik-Jakobsson/drm-gma500-Remove-unused-declarations-and-other-cruft/20220317-172741
-        git checkout 0d50efabcb4ad52bd7a036e2542dbf51bbcf93b4
+        # https://github.com/luxis1999/iommufd/commit/a7d1827d76767fe3e5366ef50efd50ebea0ed089
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc6
+        git checkout a7d1827d76767fe3e5366ef50efd50ebea0ed089
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/gma500/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/gma500/psb_drv.c:102:6: warning: no previous prototype for function 'psb_spank' [-Wmissing-prototypes]
-   void psb_spank(struct drm_psb_private *dev_priv)
-        ^
-   drivers/gpu/drm/gma500/psb_drv.c:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void psb_spank(struct drm_psb_private *dev_priv)
-   ^
-   static 
-   drivers/gpu/drm/gma500/psb_drv.c:419:20: warning: unused function 'get_brightness' [-Wunused-function]
-   static inline void get_brightness(struct backlight_device *bd)
-                      ^
-   2 warnings generated.
+   vmlinux.o: warning: objtool: do_syscall_64()+0x18: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_int80_syscall_32()+0x25: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x29: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret()+0x21: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_page() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_entry_stack()+0x9: call to cpu_entry_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode()+0x2e: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x36: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x2e: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exit_to_user_mode()+0x26: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_exit_to_user_mode()+0xde: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x2e: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit_to_user_mode()+0x2d: call to __kcsan_check_access() leaves .noinstr.text section
+>> ld.lld: error: undefined symbol: interval_tree_iter_first
+   >>> referenced by io_pagetable.c:161 (drivers/iommu/iommufd/io_pagetable.c:161)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_map_pages) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.h:91 (drivers/iommu/iommufd/io_pagetable.h:91)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_map_pages) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.h:91 (drivers/iommu/iommufd/io_pagetable.h:91)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_find_exact_area) in archive drivers/built-in.a
+   >>> referenced 14 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_span_iter_first
+   >>> referenced by io_pagetable.c:89 (drivers/iommu/iommufd/io_pagetable.c:89)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_map_pages) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c:97 (drivers/iommu/iommufd/io_pagetable.c:97)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_map_pages) in archive drivers/built-in.a
+   >>> referenced by ioas.c:93 (drivers/iommu/iommufd/ioas.c:93)
+   >>> iommu/iommufd/ioas.o:(iommufd_ioas_iova_ranges) in archive drivers/built-in.a
+   >>> referenced 8 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_span_iter_next
+   >>> referenced by io_pagetable.c:101 (drivers/iommu/iommufd/io_pagetable.c:101)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_map_pages) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c:92 (drivers/iommu/iommufd/io_pagetable.c:92)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_map_pages) in archive drivers/built-in.a
+   >>> referenced by ioas.c:96 (drivers/iommu/iommufd/ioas.c:96)
+   >>> iommu/iommufd/ioas.o:(iommufd_ioas_iova_ranges) in archive drivers/built-in.a
+   >>> referenced 8 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_insert
+   >>> referenced by io_pagetable.c:179 (drivers/iommu/iommufd/io_pagetable.c:179)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_map_pages) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c:528 (drivers/iommu/iommufd/io_pagetable.c:528)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_reserve_iova) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c:678 (drivers/iommu/iommufd/io_pagetable.c:678)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_table_add_domain) in archive drivers/built-in.a
+   >>> referenced 2 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_remove
+   >>> referenced by io_pagetable.c:192 (drivers/iommu/iommufd/io_pagetable.c:192)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_abort_area) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c:546 (drivers/iommu/iommufd/io_pagetable.c:546)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_remove_reserved_iova) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c:697 (drivers/iommu/iommufd/io_pagetable.c:697)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_table_add_domain) in archive drivers/built-in.a
+   >>> referenced 3 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_iter_next
+   >>> referenced by io_pagetable.h:103 (drivers/iommu/iommufd/io_pagetable.h:103)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.h:103 (drivers/iommu/iommufd/io_pagetable.h:103)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_unaccess_pages) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c:543 (drivers/iommu/iommufd/io_pagetable.c:543)
+   >>> iommu/iommufd/io_pagetable.o:(iopt_remove_reserved_iova) in archive drivers/built-in.a
+   >>> referenced 6 more times
 
-
-vim +/psb_spank +102 drivers/gpu/drm/gma500/psb_drv.c
-
-5c49fd3aa0ab02 Alan Cox         2011-11-03   95  
-5c209d8056b976 Patrik Jakobsson 2021-02-01   96  /**
-5c209d8056b976 Patrik Jakobsson 2021-02-01   97   *	psb_spank		-	reset the 2D engine
-5c209d8056b976 Patrik Jakobsson 2021-02-01   98   *	@dev_priv: our PSB DRM device
-5c209d8056b976 Patrik Jakobsson 2021-02-01   99   *
-5c209d8056b976 Patrik Jakobsson 2021-02-01  100   *	Soft reset the graphics engine and then reload the necessary registers.
-5c209d8056b976 Patrik Jakobsson 2021-02-01  101   */
-5c209d8056b976 Patrik Jakobsson 2021-02-01 @102  void psb_spank(struct drm_psb_private *dev_priv)
-5c209d8056b976 Patrik Jakobsson 2021-02-01  103  {
-5c209d8056b976 Patrik Jakobsson 2021-02-01  104  	PSB_WSGX32(_PSB_CS_RESET_BIF_RESET | _PSB_CS_RESET_DPM_RESET |
-5c209d8056b976 Patrik Jakobsson 2021-02-01  105  		_PSB_CS_RESET_TA_RESET | _PSB_CS_RESET_USE_RESET |
-5c209d8056b976 Patrik Jakobsson 2021-02-01  106  		_PSB_CS_RESET_ISP_RESET | _PSB_CS_RESET_TSP_RESET |
-5c209d8056b976 Patrik Jakobsson 2021-02-01  107  		_PSB_CS_RESET_TWOD_RESET, PSB_CR_SOFT_RESET);
-5c209d8056b976 Patrik Jakobsson 2021-02-01  108  	PSB_RSGX32(PSB_CR_SOFT_RESET);
-5c209d8056b976 Patrik Jakobsson 2021-02-01  109  
-5c209d8056b976 Patrik Jakobsson 2021-02-01  110  	msleep(1);
-5c209d8056b976 Patrik Jakobsson 2021-02-01  111  
-5c209d8056b976 Patrik Jakobsson 2021-02-01  112  	PSB_WSGX32(0, PSB_CR_SOFT_RESET);
-5c209d8056b976 Patrik Jakobsson 2021-02-01  113  	wmb();
-5c209d8056b976 Patrik Jakobsson 2021-02-01  114  	PSB_WSGX32(PSB_RSGX32(PSB_CR_BIF_CTRL) | _PSB_CB_CTRL_CLEAR_FAULT,
-5c209d8056b976 Patrik Jakobsson 2021-02-01  115  		   PSB_CR_BIF_CTRL);
-5c209d8056b976 Patrik Jakobsson 2021-02-01  116  	wmb();
-5c209d8056b976 Patrik Jakobsson 2021-02-01  117  	(void) PSB_RSGX32(PSB_CR_BIF_CTRL);
-5c209d8056b976 Patrik Jakobsson 2021-02-01  118  
-5c209d8056b976 Patrik Jakobsson 2021-02-01  119  	msleep(1);
-5c209d8056b976 Patrik Jakobsson 2021-02-01  120  	PSB_WSGX32(PSB_RSGX32(PSB_CR_BIF_CTRL) & ~_PSB_CB_CTRL_CLEAR_FAULT,
-5c209d8056b976 Patrik Jakobsson 2021-02-01  121  		   PSB_CR_BIF_CTRL);
-5c209d8056b976 Patrik Jakobsson 2021-02-01  122  	(void) PSB_RSGX32(PSB_CR_BIF_CTRL);
-5c209d8056b976 Patrik Jakobsson 2021-02-01  123  	PSB_WSGX32(dev_priv->gtt.gatt_start, PSB_CR_BIF_TWOD_REQ_BASE);
-5c209d8056b976 Patrik Jakobsson 2021-02-01  124  }
-5c209d8056b976 Patrik Jakobsson 2021-02-01  125  
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for IOMMUFD
+   Depends on IOMMU_SUPPORT
+   Selected by
+   - VFIO && MMU && (X86 || S390 || ARM || ARM64)
 
 ---
 0-DAY CI Kernel Test Service
