@@ -1,152 +1,83 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03D34A84
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 19:45:42 +0000 (UTC)
-Received: by mail-pf1-f172.google.com with SMTP id h2so7653907pfh.6
-        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 12:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KSmw10ZWQdRXdgcJ3u41Wj71hgTjI3BEc50wKUXVLWs=;
-        b=gPjQ5TplXLMcZCpaEC9X3PjTfZYLbH0hkMwdcjDju6mOrYe25JROMydqyK+9alTwze
-         nI2gwGVtyDBr3n9Ci7FgiNkj4uITWRlUnqCrG5dyoN9Pfe93zbbEnZnl2eLGf+Yy55HH
-         0gHuIEu/2QYDCW+RuCq7YCbqGpt4fzc2tvVYNR9i8BPBafswwb3vUXFchMDuzhh6/5dG
-         siClIC5OA8npx2AgBFzvWFtVDmqFfN8prRBachAD/IqseJWzx0g092is1TkE+Dkf5RyH
-         OKBLPpuaO+HpX0Vp+FAI8sxXOHGwZnhjtDlmX8qcElKlIlnLptgWXHS51S3nz17oAVrd
-         Yp+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KSmw10ZWQdRXdgcJ3u41Wj71hgTjI3BEc50wKUXVLWs=;
-        b=SQBbzSuToY0Qg3hvhykq2moa7a9MgLVK0wNhDyyI7iMuKX/cyCRY+69175pMf9ceTW
-         808RimZVmKR+OQOton6K7+j3e38jMF/OS4ngcIKw2nMp481ffhTO9VR2sROJTQCgtyjI
-         HPqKv7YW1Z7xTjrwNtywcr2IJFEVws6apRAFb3dS7ixGsBFeVyLZvAUnGuGJekVhNa8f
-         P/dnHjAVe3Us5ebJvH3M8NhJGdwrH0/m3lOr5Vj7GmqY5sF0/+nnTq9/8jWte0vVySC3
-         QU3Fh04DdZfoEX7vNm5WMo/9PYhOvX/cvmjfw6Ib8sUzI137tCpEwPKjwjJfLbMgxrF5
-         mg7A==
-X-Gm-Message-State: AOAM532ekMOjBYbXU49iYcGD2HOcmSTjaikQs5ezvN9qI+riKCJSQNm7
-	PFkkRm7FbK9lgVs8r/oanZ4crLMYXRUe9jPLa7J/
-X-Google-Smtp-Source: ABdhPJw33MLed/mMzmZl9280rvcUvut4pFr3P2K7N9WAcmlAcZJf5I471YnfDun8+JhgRESdVinoi4dUJtQR12GshE4=
-X-Received: by 2002:a63:1613:0:b0:382:2a7f:5ca1 with SMTP id
- w19-20020a631613000000b003822a7f5ca1mr59852pgl.151.1647546341928; Thu, 17 Mar
- 2022 12:45:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208624A84
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 20:13:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1647547995;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9qNtFrtkLvPTt+C4lJhyxR9PYkHaXFWorb7+v2VNB60=;
+	b=JzySKq2FdrksAyB+x7CLUeROTxrdm8R5nxhX1CfsQzyLMzqwE/Ir0FQ2KHQ5bpqL3tneWz
+	iOUW2LEtAPmH6kX5DwYT64dZQAED9XyZos/VtD8+16yfjSemoV+A7GD/Fd33WliyjWribu
+	2F8gXsGpIi2q2IxvlFr+bJcnioZ0vgE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-199-BvINtsxcOa6wZL1C7IXwhw-1; Thu, 17 Mar 2022 16:13:11 -0400
+X-MC-Unique: BvINtsxcOa6wZL1C7IXwhw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E35EE296A613;
+	Thu, 17 Mar 2022 20:13:10 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 0662D401E75;
+	Thu, 17 Mar 2022 20:13:06 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,  "H. Peter Anvin"
+ <hpa@zytor.com>,  Bill Wendling <morbo@google.com>,  Thomas Gleixner
+ <tglx@linutronix.de>,  Ingo Molnar <mingo@redhat.com>,  Borislav Petkov
+ <bp@alien8.de>,  Dave Hansen <dave.hansen@linux.intel.com>,
+  "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+  Nathan Chancellor <nathan@kernel.org>,  Juergen Gross <jgross@suse.com>,
+  Peter Zijlstra <peterz@infradead.org>,  Andy Lutomirski
+ <luto@kernel.org>,  llvm@lists.linux.dev,  LKML
+ <linux-kernel@vger.kernel.org>,  linux-toolchains
+ <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH v5] x86: use builtins to read eflags
+References: <20220210223134.233757-1-morbo@google.com>
+	<20220301201903.4113977-1-morbo@google.com>
+	<CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
+	<AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com>
+	<CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
+	<F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com>
+	<CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
+	<CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
+Date: Thu, 17 Mar 2022 21:13:05 +0100
+In-Reply-To: <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
+	(Linus Torvalds's message of "Thu, 17 Mar 2022 11:52:26 -0700")
+Message-ID: <878rt8gwxa.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com>
- <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
- <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
- <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
- <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
-In-Reply-To: <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
-From: Bill Wendling <morbo@google.com>
-Date: Thu, 17 Mar 2022 12:45:30 -0700
-Message-ID: <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
 
-On Thu, Mar 17, 2022 at 11:52 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> [ I got cc'd in the middle of the discussion, so I might be missing
-> some context or pointing something out that was already discussed ]
->
-> On Thu, Mar 17, 2022 at 11:00 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > > >One change you may see due to this patch is the compiler moving the
-> > > >"pop %..." instruction away from the "pushf" instruction. This could
-> > > >happen if the compiler determines that it could produce better code by
-> > > >doing so---e.g. to reduce register pressure. The "gcc -O2" example
-> > > >below shows this code movement.
->
-> Honestly, that part worries me a _lot_.
->
-> Why?
->
-> Because clang in particular has already messed up eflags handling
-> once, by spilling condition codes (in the form of eflags) onto the
-> stack, and then loading them later with a "popf".
->
-> And it did so across a function call THAT MODIFIED 'IF'. This was a
-> major bug in clang back in 2015 or so, and made it unusable for the
-> kernel.
->
-> See for example
->
->     https://lore.kernel.org/all/CA+icZUU7y5ATSLV_0TGzi5m5deWADLmAMBkAT32FKGyUWNSJSA@mail.gmail.com/
->
-> for some kernel discussion, and separately
->
->     https://lists.llvm.org/pipermail/llvm-dev/2015-July/088774.html
->
-> for just llvm discussions.
->
-I can't account for LLVM's past sins. That particular issue was fixed
-of course. This change will only generate "pushf/popf" (actually just
-"pushf" here) only when explicitly used.
+* Linus Torvalds:
 
-> It is perhaps telling that the LLVM discussion I found seems to talk
-> more about the performance impact, not about the fact that THE
-> GENERATED CODE WAS WRONG.
->
-I think that's a bit unfair. There seemed to be a general consensus
-that the code was wrong and needed to be fixed. However, the compiler
-is also expected to generate the most performant code that it can.
-
-> That compiler bug would basically enable or disable interrupts in
-> random places - because clang developers thought that 'eflags' is only
-> about the condition codes.
->
-> > EFLAGS is defined as the lower 16 bits of FLAGS register, yeah?
->
-> No. EFLAGS is a 32-bit register.
->
-> A lot of the high bits end up being reserved, but not all of them. AC,
-> VIF/VIP are all in the upper 16 bits.
->
-> Also:
->
-> > So I don't understand your point; the finest grain resolution
-> > the compiler has to work with is the whole EFLAGS register, not
-> > individual bits like IF, DF, or AC.  (I triple checked this with the
-> > maintainer of LLVM's x86 backend)
->
 > You can actually operate on EFLAGS at multiple granularities.
 >
 >  - normal pushf/popf. Don't do it unless you are doing system software.
->
->  - You *can* (but you really *really* should not) operate on only the
-> lower 16 bits, with "popfw". Don't do it - it doesn't help, requires
-> an operand size override, and is just bad.
->
+
+There's one exception: PUSHF/twiddle/POPF/PUSHF/compare is the
+recommended sequence to detect CPUID support on i386 (in userspace and
+elsewhere).
+
 >  - you can use lahf/sahc to load/store only the arithmetic flags
 > into/from AH. Deprecated, and going away, but historically supported.
->
->  - you can obviously use arithmetic and setcc to modify/read the
-> arithmetic flags properly.
->
-> A compiler should NEVER think that it can access eflags natively with
-> pushf/popf. Clang thought it could do so, and clang was WRONG.
->
-> The absolutely only case that a compiler should ever worry about and
-> do is that last case above: arithmetic instructions that set the
-> flags, and 'jcc', 'setcc', 'cmov', 'adc' etc that test it./
->
+
+And these instructions were missing from the original long mode, but
+they were added back.
+
 > Yes, yes, that complete mental breakdown with pushf/popf did get
 > fixed, but it really makes me very wary of thinking that we should
 > ever use a built-in that compiler writers really fundamentally got so
@@ -156,126 +87,26 @@ is also expected to generate the most performant code that it can.
 > you'll basically never actually see the whole system flags issues, so
 > your test-cases would never work or be very contrieved. You'd have to
 > really work at it to see the problems.
->
-As pointed out above, the LLVM people agreed with your sentiment here:
-never generate "pushf/popf" unless explicitly told to do so. This
-patch isn't trying to walk that back, just that when "pushf/popf" is
-explicitly asked for it allows LLVM and GCC to generate the best
-instruction sequence.
 
-> > > The memory barrier is needed for IF changes, for example.
-> >
-> > Shouldn't native_irq_disable/native_irq_enable be declaring that they
-> > clobber "cc" then?
-> > https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Clobbers-and-Scratch-Registers
->
-> No. Once again: compilers don't understand system flags in eflags.
->
-> In fact, gcc pretty much documents that "cc" clobbers doesn't do
-> anything on x86, and isn't needed. It just assumes that the arithmetic
-> flags always get clobbered, because on x86 that's pretty much the
-> case. They have sometimes been added for documentation purposes in the
-> kernel, but that's all they are.
->
-> So you can find that "cc" clobber in a few places in the kernel, but
-> it's pointless.
->
-> The reason pushf/popf need to have a memory clobber is so that the
-> compiler will not move it around other things that have memory
-> clobbers.
->
-> Because memory clobbers are things that compilers *UNDERSTAND*.
->
-> Put another way: when you see that "memory" clobber in an inline asm,
-> don't think that it means "this modifies or uses memory".
->
-> That may be the documentation, and that may be how compiler people
-> think about them, but that's just wrong.
->
-> What *kernel* people think is "this makes the compiler not do stupid things".
->
-> Because compilers really don't understand things like system registers
-> and system flags, and the subtle issues they have, and the ordering
-> requirements they have. Never have, and never will.
->
-> And compilers really don't understand - or care about - things like
-> "cc", because compiler people think it's about arithmetic flags, and
-> would do things like "oh, I'll just save and restore the flags over
-> this since the asm modifies it".
->
-> Note that "eflags" is just the tip of the iceberg here. This is true
-> for a lot of other cases.
->
-> Yes, when you have something like a "disable interrupts", the compiler
-> really must not move memory accesses around it, because the interrupt
-> flag may in fact be protecting that memory access from becoming a
-> deadlock.
->
-> But the whole "you can't move _other_ things that you don't even
-> understand around this either" is equally important. A "disable
-> interrupts" could easily be protecting a "read and modify a CPU MSR
-> value" too - no real "memory" access necessarily involved, but
-> "memory" is the only way we can tell you "don't move this".
->
-And yet that's not guaranteed. From
-https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html:
+I think as the result of the nature of that kind of bug it does not
+matter whether you use a compiler builtin to access the flags (to put
+their combined value into a general-purpose register).
 
-```
-Note that the compiler can move even volatile asm instructions
-relative to other code, including across jump instructions. For
-example, on many targets there is a system register that controls the
-rounding mode of floating-point operations. Setting it with a volatile
-asm statement, as in the following PowerPC example, does not work
-reliably.
+GCC doesn't have barriers in the built-ins (if we are talking about
+__builtin_ia32_readeflags_u64 and __builtin_ia32_writeeflags_u64).  I
+expect they are actually pretty useless, and were merely added for
+completeness of the intrinsics headers.
 
-  asm volatile("mtfsf 255, %0" : : "f" (fpenv));
-  sum = x + y;
+It's not that you can write
 
-The solution is to reference the "sum" variable in the asm:
+  unsigned a, b, c;
+  // =E2=80=A6
+  c =3D a + b;
 
-  asm volatile ("mtfsf 255,%1" : "=X" (sum) : "f" (fpenv));
-```
+and examine __builtin_ia32_readeflags_u64() to see if there was an
+overflow.  Neither GCC nor Clang model the EFLAGS register and
+arithmetic expression side effects to make this possible.
 
-Note that the solution _isn't_ to add a "memory" clobber, because it's
-not guaranteed to work, as it's explicitly defined to be a read/write
-_memory_ barrier, despite what kernel writers wish it would do.
+Thanks,
+Florian
 
-Your assertion that compilers don't know about control registers isn't
-exactly true. In the case of "pushf/popf", those instructions know
-about the eflags registers. All subsequent instructions that read or
-modify eflags also know about it. In essence, the compiler can
-determine its own clobber list, which include MSRs.
-
--bw
-
-> Particularly since both the clang people and gcc people have actively
-> been trying to weaken the "volatile" semantics (which would have
-> generally been the logically consistent model - thinking if inline asm
-> to be visible in the machine model, and not being able to move them
-> around for those reasons).
->
-> > > This feels like "let's fix LLVM by hacking the kernel in dangerous ways" once again!
-> >
-> > Even if the behavior of llvm was changed, you'd _still_ get better
-> > codegen for _both_ compilers by using the intrinsics.
->
-> No.
->
-> "moving instructions around a bit" is not better code generation when
-> the end result DOES NOT WORK.
->
-> And honestly, we have absolutely zero reason to believe that it would work.
->
-> If it turns out that "pop to memory" is a big deal for performance,
-> let's just change the "=rm" to "=r" and be done with it. Problem
-> solved. We already used to do that on the "pushf" side, but these days
-> we avoid "popfl" entirely and do a conditional jump over a "sti"
-> instead.
->
-> Because maybe moving that "pop" by a few inbstructions helps a bit,
-> but if you move the "pushf" noticeably, you've just created a big big
-> problem.
->
-> A bug you've had once already.
->
->                  Linus
