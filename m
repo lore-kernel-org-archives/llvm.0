@@ -1,262 +1,141 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70041.outbound.protection.outlook.com [40.107.7.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98AA4378
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 15:44:08 +0000 (UTC)
-Received: from [IPv6:::1] ([IPv6:2601:646:8600:40c1:d475:90a3:59ac:cd29])
-	(authenticated bits=0)
-	by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 22HFhDj13844364
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 17 Mar 2022 08:43:14 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 22HFhDj13844364
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2022030301; t=1647531795;
-	bh=iq7D6YdA1OTaJKtGzHn3iVLZ8tu7Cn5WGhKt1lMbUNE=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=FGGpOi5jXQsuhUVdjmtqKkHmgtFolfieKStMhL05nhc+qKYArn8sUvDrGTYQQVoZ9
-	 1IOkQ0kl4oyQ5tXST3po09J7EWljTNdz4Hh2ez+nB7xZJTgmmYPwLBiT0WzuJlw6We
-	 IXuwtKS5Z2l6dyJsuqvzluYHB5kEqMQg42t4yLFhlRBYb9ZfxaBGMSokmMSkgZO1e4
-	 v9faz0O9pibu+yqo3eKomvCaB6BZ+xQ0QTa2p2j8mhB7cDkfNiihqEnZquriSAOaza
-	 rjp8fT89eAhhpTuorD3nguGhESih1b2z1TDh7XAqHRjOro7TYoiy2/0TwefT4O2OHh
-	 VrNXgggb5PvJg==
-Date: Thu, 17 Mar 2022 08:43:06 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Bill Wendling <morbo@google.com>
-CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com> <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
-Message-ID: <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1878E2F31
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 17:37:11 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DmHeMPYkgNZoY8MGjete8bG5MZ069sU30pJ7Y7oYO2vYivpZ22ODjWG77D8Lh4g8/lpvf6vrbiP9a/KQAs35+3H9CBd2ohuTchxgMLehebiLSArUUP/KK6hSv5a6B2v2fr4G+GD9ukJ9iG44OM6nogOKZpANuF1M89b4zOZI4iBkwQ5I0YybU/OCyiAG5dTr1Jq6eiluOr70a+kltGMjQLjY0NVaqnwNDcZa1UBQkba1uSR/VMkX6jQp+4N3rHZcBpo4lcWneF8PEXGNiS/Kpp/q9fFb7IWh8Rhs5MlriGB8+lp0JtVOegQg+INu86hv3QYkezHI7SlbUq7NxMLqAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1pPvysizrdy8QXCRh/OGt86snDOtCZ4vyCwovREc1go=;
+ b=cJRSF42NOMscWaXLleZybupvNK6s6/PDSe4D6Z1h8FIwu25Ub5zZqMcRi4HBn2irF2c26LDE5al+yyPPJVAvUWrGtK7XXRcm6s0sjZCgGf1M9HCzJl1Gd/bI6H1Cms6W7VE0TMaMTrouovQqDkr+uBU8mgp/BVF9BpVHNQfmxzWXGa7abIbjwkf9i9dm/VG0m7LA/5UCHlDMYSYc31pwQt9mMcsIA2meSiBuod5lyba3MTnhWZ/kDHtFbcwJjXUZG3yfMEaxTnsHWwuhF7nkoHJPDyKmbe+qWp0HzWtg2OMxCctvEvoFErmk75JKD1xyChwxadZMUbQvocPAPS2CQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1pPvysizrdy8QXCRh/OGt86snDOtCZ4vyCwovREc1go=;
+ b=ArdIRIfcQt0sOgpNw7Zv909LDxPzfmqc2QL5inCUEh33EglPo48dq1bJ7iEE60uC1peSE8DCXhx+tVT0UPybAweJxfA6Zx8HVdtmXkGRV4/7ZspLpiJdPCk84oUEgIadri5sNzeHsBU1bp5mAkcDOiEk+OV2zBUOfQhxp2hvmgo=
+Received: from AM9PR04MB8397.eurprd04.prod.outlook.com (2603:10a6:20b:3b5::5)
+ by DB8PR04MB6777.eurprd04.prod.outlook.com (2603:10a6:10:11f::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Thu, 17 Mar
+ 2022 17:37:09 +0000
+Received: from AM9PR04MB8397.eurprd04.prod.outlook.com
+ ([fe80::e52e:aa62:6425:9e9b]) by AM9PR04MB8397.eurprd04.prod.outlook.com
+ ([fe80::e52e:aa62:6425:9e9b%8]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
+ 17:37:09 +0000
+From: Claudiu Manoil <claudiu.manoil@nxp.com>
+To: Bill Wendling <morbo@google.com>, "David S . Miller"
+	<davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Nathan Chancellor
+	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [PATCH] enetc: use correct format characters
+Thread-Topic: [PATCH] enetc: use correct format characters
+Thread-Index: AQHYOX0qnqFJ37bnYU+9UBnfRcMWZazD12GA
+Date: Thu, 17 Mar 2022 17:37:09 +0000
+Message-ID:
+ <AM9PR04MB8397B7734E38A4E60C6965DB96129@AM9PR04MB8397.eurprd04.prod.outlook.com>
+References: <20220316213109.2352015-1-morbo@google.com>
+In-Reply-To: <20220316213109.2352015-1-morbo@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d9c90f1b-4dc8-42b5-163f-08da083cc335
+x-ms-traffictypediagnostic: DB8PR04MB6777:EE_
+x-microsoft-antispam-prvs:
+ <DB8PR04MB67774DD071651BBDD8BDFE1096129@DB8PR04MB6777.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ HouohZ5P/gCvowk+bd/KqfEf4M1PMkNhyBdg21/1n+eqEJDnVbIzy3xclnCkpoagyGdxKOq6pQVv8mZxY9iGTAXFaI6M1FMFoPhkUgjIcNIUD6rTnpJUf7pZmiAYVwQPmoFrZKTcGsIN8dJ3xwJ9+c168XjkiUN/VaZpA+vS6GjlW6vuRI2Qwuu1PMCcplhuYtpLFrrLbUV93dCq9uUAQ+nOe5H1gOSSCKwartM5VZmdhOmpNGmz0A+sbSRTq9WvsXXC8P3Zd76R8QhfqVNNGjjdbykKCuPhu2BHpsepx8+JfFq43lZk1hqJrnRxlpvAM/x9JMb3OwvCXlKOUtbnYXItJbf3nEog9IYn8qj0Wgc250iv/2w8VGqY5CjhV4oqPNk4YeOAns5EeSuz1n8lCzXvqkFz1nXsefpwcIdtsTA4lbMALgn7f26LkPBhSFvsOXT+TqUmhw5GWQ7lqAcwFWycIM52JgyigBsgCtyGCJV891hTnJolYfs3ldrODCT0mfdwUp5LOi09vQlS+f1mPNu16h+L505RefUfTVT9p8qeQUCtColkj3WmLZ+g16Yy422hlU21DH9SK8fqbbv/tJR7OQnc/e81hbUMkCBXNGJaiGDPfEU6+aNS4VGCq4TarKuvYjXPGGGbWy6z+82ywBz+h0NiKUBlAQ+azCg2n3riSf08JkLlwbDcSo58/VNWssT6WheuAg8TB5ZP9TgKow==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8397.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(38070700005)(64756008)(66446008)(86362001)(33656002)(66946007)(66556008)(71200400001)(55016003)(19627235002)(66476007)(76116006)(9686003)(5660300002)(316002)(186003)(44832011)(26005)(122000001)(52536014)(7696005)(8936002)(55236004)(83380400001)(110136005)(38100700002)(508600001)(53546011)(8676002)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?dzNzZC9IZlVmWGltWE5DNFdUVFVtL01vd3M3emo0QVVZcVB1cUdTbENvNkJI?=
+ =?utf-8?B?VUZQWk5TVHNJSjBtSWtkOVZTbi9iYjZVMytvVyt3VHM0QWc5elB4Y3FjbUpz?=
+ =?utf-8?B?Y09DSEVvWUpUY2pZZXdaWDhuN1g1NFRmdjI4emd3VXE2Y2ZqRm54WWtnNnQz?=
+ =?utf-8?B?ZDhFTDlOU1ZrS0h0Q2dwMStldS9ncW1uNGpOTGZnK0dYQ3piRklEYzBqQzh5?=
+ =?utf-8?B?Unc2OUdvc1RtOUVJVTJ4alhZNWE2Qm1XeEd6dXliNGVKN2RlMGJRcHE1V3VP?=
+ =?utf-8?B?TGUxWFZZb1BwN1ZVdUVQZk4vc2xoV21sVzVzWnQ2aWprWEptbW5wM0xMMEF4?=
+ =?utf-8?B?Vi9LNy9OWjdPUnJZWndNZlB5T0xmdVdEWFFkY09ZYVB6Z0NqaE1BUGZRN0pn?=
+ =?utf-8?B?WjJ6NkNEZFFlbmcrT0dubUcxd24zZHlKVGFLWkFEK0I5SGRMNmUvYzBYeXAy?=
+ =?utf-8?B?RW9uR2xCaVJuS1hmWWZ1aWNNS0ViVFdLVWVuMFFNMHVLNWYyWDJlWGh2bFZw?=
+ =?utf-8?B?Yzd1dXNydk5nTGhPN0VlaWxTS25zdTVuSGpMay9YNS9FdHJGcE5GRWRFNHRp?=
+ =?utf-8?B?eGcvdTNvbXF1eWFqN1B6N1I5RTRuWWVQZ201ZlB4c1E2WEZjYUdPOHlJTHlh?=
+ =?utf-8?B?L3ZyZ004TWxhd1NBS3ZuZndOOE5rUkxnRFp4K2tKcE5ta2VuWmE5b0UyZUZI?=
+ =?utf-8?B?WnpXVUZGaDZFdm91d3dTNGxNSFJkU2lCZ2tGb1pEaDB1akZVNWkreFZTSWR6?=
+ =?utf-8?B?Q1ZldGliRHlqS3JkSnpLRFBtRmlpMUNtek8zYzZycy9HS3llNVdPSUJNNFNn?=
+ =?utf-8?B?a2xaQzk4OXV0SXNEQ3d4NUN0WkVLeWRGN1psTGNEL2p6RXBXL0hNYmlmM05B?=
+ =?utf-8?B?ZmduSTREUC83eWxIYUxWbTJTS3E2dG9rTGUyeFZwRXJvR0FuOHdIOHVJK0Ur?=
+ =?utf-8?B?eFJBTXVaNlhiRUVCS3lRbFk1UkxOcGs4MEhtbE1nU0lrQjJReWdXaGhjbC9R?=
+ =?utf-8?B?Q3dOM200bUNLYk9hT0E1VXN2OEhBcWxiVVJwbzdOaEdETVhnQkdsYVRScHlk?=
+ =?utf-8?B?c0o1UVBRV0hQNWNyb2ZPZGhTTVZiZmgrWU1pU0p1dVdrZ2VGTDFVdW9KQ2NH?=
+ =?utf-8?B?dVBVcXVpdUZVK20yME9IWmRUUEx1MG1Nd3hPdmh5dUFRdUFna0ZyZ1FiVUlJ?=
+ =?utf-8?B?TWJlZVRlK1VqeUp3WHNpZE45cHBac0JHUjk4bTZxQTBabUVXL1NiYy91SUN4?=
+ =?utf-8?B?UUxzNUxUZS90WlFjNWtxSXRsdVdaaStLbHZXWmgySDMvVG9hUWUzNktQcnNW?=
+ =?utf-8?B?TzRMcGRzaklHaFhDWEEvQUIzNVlIQzlSVnFMMXhZUHJudDlWYnJnRVVuUmRl?=
+ =?utf-8?B?bjBqUk15N1grSC9DN0ZQcXhsNTVaY2pvTWpzOC9NWDV5eVUycTd1MjFXU3B2?=
+ =?utf-8?B?b3pCeUpRd05WOUQxbHQ4eW9YbVFjdDAzdVJVOU01a0dmTGZ0bHFhcnFraXlU?=
+ =?utf-8?B?TmN4L0o5UWNWdnY2TjdZcUdYUEZSUVozVm1QTUlPallQb21Xd2hIc2RVZVhW?=
+ =?utf-8?B?TmxoQVNpZTRzaW1HUWRFa05EeWpFOEtPaWpLY3o2UndsWmloNFlZVXJKbzMz?=
+ =?utf-8?B?aEdod3g5M2hBSEVyM3RrTXliUk5WKzdZZVJzVzFUbE52bVloaFczYVE2SXhC?=
+ =?utf-8?B?WTdBVW83MG1TZXZuSUZTU1Fsa3RRVFVuZzNxQy9BWUxLWml0djJ3NXczUmV2?=
+ =?utf-8?B?Z2xFcG5RcGcwZ0d5UFhPTTZiQUFHU0dqSjFyR1FST2dIdHZQc0NmSThZMCtN?=
+ =?utf-8?B?ait2eWE0UEwvNUFRcDdDbEhPNDMwVUpQZ3hGZS8rOXZESHd6WjJrVlF3Tkds?=
+ =?utf-8?B?c3Q1ZmRYVXoyekQ1Q2dlKy9uN0ZpS3Vra0tzaHdyYmxLSnQwNE5aMWtsZitB?=
+ =?utf-8?Q?9eE2CMe8mrZEHgvZOrIEISVBu0VsVf+a?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8397.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9c90f1b-4dc8-42b5-163f-08da083cc335
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2022 17:37:09.1192
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hUyln6AUzK+KTFRZvSkki6ynlqQBE2i8XGV0M/oZTGXCRHfjiDirmt07vlv/wmkAcAD4TD8NM/gno89a064LbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6777
 
-On March 15, 2022 12:19:40 AM PDT, Bill Wendling <morbo@google=2Ecom> wrote=
-:
->On Mon, Mar 14, 2022 at 6:08 PM H=2E Peter Anvin <hpa@zytor=2Ecom> wrote:
->>
->> My only concern is this: how does this affect the placement of these se=
-quences in relation to the things they need to protect?
->>
->With clang (and I assume it's similar with gcc), the
->__builtin_ia32_readeflags_u{64|32} builtins specify that the EFLAGS
->register is used (and the stack pointer is modified)=2E Instructions
->that may change EFLAGS are marked as defining EFLAGS, and clang and
->gcc are careful not to move instructions that access EFLAGS past them=2E
->
->One change you may see due to this patch is the compiler moving the
->"pop %=2E=2E=2E" instruction away from the "pushf" instruction=2E This co=
-uld
->happen if the compiler determines that it could produce better code by
->doing so---e=2Eg=2E to reduce register pressure=2E The "gcc -O2" example
->below shows this code movement=2E
->
->-bw
->
->> On March 14, 2022 4:07:23 PM PDT, Bill Wendling <morbo@google=2Ecom> wr=
-ote:
->>>
->>> On Tue, Mar 1, 2022 at 12:19 PM Bill Wendling <morbo@google=2Ecom> wro=
-te:
->>>>
->>>>
->>> Bump for review=2E
->>>
->>> -bw
->>>
->>>>  This issue arose due to Clang's issue with the "=3Drm" constraint=2E=
- Clang
->>>>  chooses to be conservative in these situations and always uses memor=
-y
->>>>  instead of registers, resulting in sub-optimal code=2E (This is a kn=
-own
->>>>  issue, which is currently being addressed=2E)
->>>>
->>>>  This function has gone through numerous changes over the years:
->>>>
->>>>    - The original version of this function used the "=3Dg" constraint=
-,
->>>>      which has the following description:
->>>>
->>>>        Any register, memory or immediate integer operand is allowed,
->>>>        except for registers that are not general registers=2E
->>>>
->>>>    - This was changed to "=3Dr" in commit f1f029c7bfbf ("x86: fix ass=
-embly
->>>>      constraints in native_save_fl()"), because someone noticed that:
->>>>
->>>>        the offset of the flags variable from the stack pointer will
->>>>        change when the pushf is performed=2E gcc doesn't attempt to
->>>>        understand that fact, and address used for pop will still be t=
-he
->>>>        same=2E It will write to somewhere near flags on the stack but=
- not
->>>>        actually into it and overwrite some other value=2E
->>>>
->>>>    - However, commit f1f029c7bfbf ("x86: fix assembly constraints in
->>>>      native_save_fl()") was partially reverted in commit ab94fcf528d1
->>>>      ("x86: allow "=3Drm" in native_save_fl()"), because the original
->>>>      reporter of the issue was using a broken x86 simulator=2E The
->>>>      justification for this change was:
->>>>
->>>>        "=3Drm" is allowed in this context, because "pop" is explicitl=
-y
->>>>        defined to adjust the stack pointer *before* it evaluates its
->>>>        effective address, if it has one=2E  Thus, we do end up writin=
-g to
->>>>        the correct address even if we use an on-stack memory argument=
-=2E
->>>>
->>>>  Clang generates good code when the builtins are used=2E On one bench=
-mark,
->>>>  a hotspot in kmem_cache_free went from using 5=2E18% of cycles poppi=
-ng to
->>>>  a memory address to 0=2E13% popping to a register=2E This benefit is
->>>>  magnified given that this code is inlined in numerous places in the
->>>>  kernel=2E
->>>>
->>>>  The builtins also help GCC=2E It allows GCC (and Clang) to reduce re=
-gister
->>>>  pressure and, consequently, register spills by rescheduling
->>>>  instructions=2E It can't happen with instructions in inline assembly=
-,
->>>>  because compilers view inline assembly blocks as "black boxes," whos=
-e
->>>>  instructions can't be rescheduled=2E
->>>>
->>>>  Another benefit of builtins over asm blocks is that compilers are ab=
-le
->>>>  to make more precise inlining decisions, since they no longer need t=
-o
->>>>  rely on imprecise measures based on newline counts=2E
->>>>
->>>>  A trivial example demonstrates this code motion=2E
->>>>
->>>>          void y(void);
->>>>          unsigned long x(void) {
->>>>                  unsigned long v =3D __builtin_ia32_readeflags_u64();
->>>>                  y();
->>>>                  return v;
->>>>          }
->>>>
->>>>  GCC at -O1:
->>>>          pushq   %rbx
->>>>          pushfq
->>>>          popq    %rbx
->>>>          movl    $0, %eax
->>>>          call    y
->>>>          movq    %rbx, %rax
->>>>          popq    %rbx
->>>>          ret
->>>>
->>>>  GCC at -O2:
->>>>          pushq   %r12
->>>>          pushfq
->>>>          xorl    %eax, %eax
->>>>          popq    %r12
->>>>          call    y
->>>>          movq    %r12, %rax
->>>>          popq    %r12
->>>>          ret
->>>>
->>>>  Link: https://gist=2Egithub=2Ecom/nickdesaulniers/b4d0f6e26f8cbef0ae=
-4c5352cfeaca67
->>>>  Link: https://github=2Ecom/llvm/llvm-project/issues/20571
->>>>  Link: https://gcc=2Egnu=2Eorg/onlinedocs/gcc/Simple-Constraints=2Eht=
-ml#Simple-Constraints
->>>>  Link: https://godbolt=2Eorg/z/5n3Eov1xT
->>>>  Signed-off-by: Bill Wendling <morbo@google=2Ecom>
->>>>  Reviewed-by: Nick Desaulniers <ndesaulniers@google=2Ecom>
->>>> ________________________________
->>>>  v5: - Incorporate Nick's suggestion to limit the change to Clang >=
-=3D 14=2E0 and
->>>>        GCC=2E
->>>>  v4: - Clang now no longer generates stack frames when using these bu=
-iltins=2E
->>>>      - Corrected misspellings=2E
->>>>  v3: - Add blurb indicating that GCC's output hasn't changed=2E
->>>>  v2: - Kept the original function to retain the out-of-line symbol=2E
->>>>      - Improved the commit message=2E
->>>>      - Note that I couldn't use Nick's suggestion of
->>>>
->>>>          return IS_ENABLED(CONFIG_X86_64) ? =2E=2E=2E
->>>>
->>>>        because Clang complains about using __builtin_ia32_readeflags_=
-u32 in
->>>>        64-bit mode=2E
->>>> ________________________________
->>>>   arch/x86/include/asm/irqflags=2Eh | 10 ++++++++++
->>>>   1 file changed, 10 insertions(+)
->>>>
->>>>  diff --git a/arch/x86/include/asm/irqflags=2Eh b/arch/x86/include/as=
-m/irqflags=2Eh
->>>>  index 87761396e8cc=2E=2E2eded855f6ab 100644
->>>>  --- a/arch/x86/include/asm/irqflags=2Eh
->>>>  +++ b/arch/x86/include/asm/irqflags=2Eh
->>>>  @@ -19,6 +19,11 @@
->>>>   extern inline unsigned long native_save_fl(void);
->>>>   extern __always_inline unsigned long native_save_fl(void)
->>>>   {
->>>>  +#if defined(CC_IS_CLANG) && defined(UNWINDER_ORC) && CLANG_VERSION =
-< 140000
->>>>  +       /*
->>>>  +        * Clang forced frame pointers via the builtins until Clang-=
-14=2E Use
->>>>  +        * this as a fall-back until the minimum Clang version is >=
-=3D 14=2E0=2E
->>>>  +        */
->>>>          unsigned long flags;
->>>>
->>>>          /*
->>>>  @@ -33,6 +38,11 @@ extern __always_inline unsigned long native_save_=
-fl(void)
->>>>                       : "memory");
->>>>
->>>>          return flags;
->>>>  +#elif defined(CONFIG_X86_64)
->>>>  +       return __builtin_ia32_readeflags_u64();
->>>>  +#else
->>>>  +       return __builtin_ia32_readeflags_u32();
->>>>  +#endif
->>>>   }
->>>>
->>>>   static __always_inline void native_irq_disable(void)
->>>>  --
->>>>  2=2E35=2E1=2E574=2Eg5d30c73bfb-goog
->>>>
-
-EFLAGS is a mishmash of different things, only some of which are visible t=
-o the compiler, and the semantics of which are totally different=2E
-
-Changing IF, changing DF, changing AC, and changing the arithmetic flags h=
-ave *enormously* different properties=2E The compiler can't know how the se=
-mantics of a particular instance is, at least without being explicitly told=
- (giving it a some kind of mask of bits that could change=2E) The memory ba=
-rrier is needed for IF changes, for example=2E
-
-This feels like "let's fix LLVM by hacking the kernel in dangerous ways" o=
-nce again! We rely on "memory" as compiler barriers *all over the place*=2E=
- This is especially so since this appears to be a suboptimal code generatio=
-n issue and not a correctness issue; your change is likely to promote the f=
-ormer (underoptimizing) to the latter (overoptimizing=2E)
-
-To whatever extent my vote matters these days:
-
-Nacked-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
-
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBCaWxsIFdlbmRsaW5nIDxtb3Ji
+b0Bnb29nbGUuY29tPg0KPiBTZW50OiBXZWRuZXNkYXksIE1hcmNoIDE2LCAyMDIyIDExOjMxIFBN
+DQpbLi4uXQ0KPiBTdWJqZWN0OiBbUEFUQ0hdIGVuZXRjOiB1c2UgY29ycmVjdCBmb3JtYXQgY2hh
+cmFjdGVycw0KPiANCj4gV2hlbiBjb21waWxpbmcgd2l0aCAtV2Zvcm1hdCwgY2xhbmcgZW1pdHMg
+dGhlIGZvbGxvd2luZyB3YXJuaW5nOg0KPiANCj4gZHJpdmVycy9uZXQvZXRoZXJuZXQvZnJlZXNj
+YWxlL2VuZXRjL2VuZXRjX21kaW8uYzoxNTE6MjI6IHdhcm5pbmc6DQo+IGZvcm1hdCBzcGVjaWZp
+ZXMgdHlwZSAndW5zaWduZWQgY2hhcicgYnV0IHRoZSBhcmd1bWVudCBoYXMgdHlwZSAnaW50Jw0K
+PiBbLVdmb3JtYXRdDQo+ICAgICAgICAgICAgICAgICAgICAgICAgIHBoeV9pZCwgZGV2X2FkZHIs
+IHJlZ251bSk7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+
+fn5+fg0KPiAuL2luY2x1ZGUvbGludXgvZGV2X3ByaW50ay5oOjE2Mzo0Nzogbm90ZTogZXhwYW5k
+ZWQgZnJvbSBtYWNybyAnZGV2X2RiZycNCj4gICAgICAgICAgICAgICAgIGRldl9wcmludGsoS0VS
+Tl9ERUJVRywgZGV2LCBkZXZfZm10KGZtdCksICMjX19WQV9BUkdTX18pOyBcDQo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB+fn4gICAgIF5+fn5+
+fn5+fn5+DQo+IC4vaW5jbHVkZS9saW51eC9kZXZfcHJpbnRrLmg6MTI5OjM0OiBub3RlOiBleHBh
+bmRlZCBmcm9tIG1hY3JvDQo+ICdkZXZfcHJpbnRrJw0KPiAgICAgICAgICAgICAgICAgX2Rldl9w
+cmludGsobGV2ZWwsIGRldiwgZm10LCAjI19fVkFfQVJHU19fKTsgICAgICAgICAgICBcDQo+ICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB+fn4gICAgXn5+fn5+fn5+fn4N
+Cj4gDQo+IFRoZSB0eXBlcyBvZiB0aGVzZSBhcmd1bWVudHMgYXJlIHVuY29uZGl0aW9uYWxseSBk
+ZWZpbmVkLCBzbyB0aGlzIHBhdGNoDQo+IHVwZGF0ZXMgdGhlIGZvcm1hdCBjaGFyYWN0ZXIgdG8g
+dGhlIGNvcnJlY3Qgb25lcyBmb3IgaW50cyBhbmQgdW5zaWduZWQgaW50cy4NCj4gDQo+IExpbms6
+IENsYW5nQnVpbHRMaW51eC9saW51eCMzNzgNCj4gU2lnbmVkLW9mZi1ieTogQmlsbCBXZW5kbGlu
+ZyA8bW9yYm9AZ29vZ2xlLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IENsYXVkaXUgTWFub2lsIDxjbGF1
+ZGl1Lm1hbm9pbEBueHAuY29tPg0KRml4ZXM6IGViZmNiMjNkNjJhYiAoImVuZXRjOiBBZGQgRU5F
+VEMgUEYgbGV2ZWwgZXh0ZXJuYWwgTURJTyBzdXBwb3J0IikNCg0KQ2FuIGJlIGFsc28gbmV0LW5l
+eHQgbWF0ZXJpYWwuIEl0J3MgdXAgdG8geW91LiBUaHguDQo=
