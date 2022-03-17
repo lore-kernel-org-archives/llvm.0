@@ -1,122 +1,133 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6FB4A9F
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 21:46:20 +0000 (UTC)
-Received: by mail-lf1-f44.google.com with SMTP id p15so485550lfk.8
-        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 14:46:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bPG2uGymrQaAjdz0Rd104PLEPknS8uFaRtBuaevCxHA=;
-        b=UTEyURlny0M3Sp02wOFqvyBlNYSNglScLLJjYWs3wxSUqoupmURo3mj/gHB5Z5k5pX
-         HPh7nIvN1DWQ+l9DF+cwJKe+pvcdckJZl8UzsZy52K+blalTvbo7u0/7Tl3LRt1+aGoJ
-         f+zhtUKsWIWSZtd2Flxj/uhYm1p/LwCawziUM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bPG2uGymrQaAjdz0Rd104PLEPknS8uFaRtBuaevCxHA=;
-        b=EE7CJB7k+V1RXD4GjijToZMjGtTBomY8jZ3yzUn9EDFCTo/IOpxajN15LozsyZHq1K
-         /sN/C8oJRX2ZRLwh5OFQwGWQ9QB1ttVVAvzzFAzhp4i9ZU+zoP9RWkdttOTQKpm7Qo4y
-         EFZFWu+m1O2RidA9V1bjrKFn7BLZzx+uN8k97i6j3PE+lzozBpxz3PrZoKYy69r3Lkv/
-         sLoXNPheRbXJ8qSwdGylk322fzBQRiJJEb7VCNdmUISKdsthTUTrjvEkvKmz+89Td3kZ
-         PfoIYC/7rtodY04ArbeX0knkk3wW3FpPY7wx4P1qULevQL8ao0DN6QHFxheiZBwdHLKg
-         6VnQ==
-X-Gm-Message-State: AOAM533NdzU6UbW5ktPbRrMy3hoQ4lzeW6zQ/CLRswtJ4HVoLl/VwgB8
-	Y71ZOH0kiGPgKDxBV1pU5ovi07szQzos+PQ3Yww=
-X-Google-Smtp-Source: ABdhPJwRqBBHHUqH530vGNQcOT773Bw0Yfajqu/4vHuRrxMVN/lFBA3nowNgupP9FbjEr+oLjxEDbw==
-X-Received: by 2002:a05:6512:3984:b0:447:6097:fb8f with SMTP id j4-20020a056512398400b004476097fb8fmr4237751lfu.166.1647553578728;
-        Thu, 17 Mar 2022 14:46:18 -0700 (PDT)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id z23-20020a2e3517000000b00247ebea6422sm555459ljz.13.2022.03.17.14.46.18
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 14:46:18 -0700 (PDT)
-Received: by mail-lj1-f174.google.com with SMTP id 17so9039364lji.1
-        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 14:46:18 -0700 (PDT)
-X-Received: by 2002:a2e:a78f:0:b0:249:21ce:6d53 with SMTP id
- c15-20020a2ea78f000000b0024921ce6d53mr4157427ljf.164.1647553190688; Thu, 17
- Mar 2022 14:39:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8974A9F
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 21:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647553817; x=1679089817;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qBEZF6yRa+414/RM17VzJuin5ptD1M2x8Pk22hpDAUY=;
+  b=HbsBF025IRAlbU7DYdc3uRFuekhxsoc4Eg509iuL3j78SGUQXXM8Vk6o
+   xq3Kao8k9PLk64ZnNqK4kHj1t+0ktbc1sEk2WNL+Z9TKPqK0z58j4WRNn
+   9ei9YTzj8NCTHCwELkGe+RqIonnOG/p/PewyON0aDyYfwBdhgj9b1YK8j
+   oMttWl06LVKSm/0Mqxc2W/YMTg9Dc48QgZ1LyJBxtiUUPdLkxT9i+Fg7a
+   uLS49nvdzdye/cOOR6Yjhw6rDFt9S7RNrbFl5z5eF842RZYXZ508Zs43J
+   56DOcZlO5vjx/BByTgDZKFWCeC1Zlan4X2V5q8i2cNiAosI+mR7+Tsn+O
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="239151610"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="239151610"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 14:50:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="647211282"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 17 Mar 2022 14:50:02 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nUy0Q-000E8I-5Z; Thu, 17 Mar 2022 21:50:02 +0000
+Date: Fri, 18 Mar 2022 05:49:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+	dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, daniel.vetter@ffwll.ch,
+	sam@ravnborg.org, tzimmermann@suse.de
+Subject: Re: [PATCH 1/4] drm/gma500: Remove unused declarations and other
+ cruft
+Message-ID: <202203180538.gWcM5ABA-lkp@intel.com>
+References: <20220317092555.17882-1-patrik.r.jakobsson@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com>
- <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
- <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
- <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
- <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com>
-In-Reply-To: <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 17 Mar 2022 14:39:34 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
-Message-ID: <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-To: Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Bill Wendling <morbo@google.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220317092555.17882-1-patrik.r.jakobsson@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Mar 17, 2022 at 2:06 PM Andrew Cooper <Andrew.Cooper3@citrix.com> wrote:
->
-> I was idly playing with this builtin in response to the thread, and
-> found that GCC has a far more serious bug than Clang had.
+Hi Patrik,
 
-Heh. Yeah, that's bad.
+I love your patch! Perhaps something to improve:
 
-But it kind of fits my argument: compiler intrinsics aren't
-necessarily such a wonderful thing. They hardly get any testing at all
-unless they are some very very core thing.
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.17-rc8 next-20220317]
+[cannot apply to airlied/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I will personally *always* prefer some generic "escape clause" over a
-compiler that thinks it knows better.
+url:    https://github.com/0day-ci/linux/commits/Patrik-Jakobsson/drm-gma500-Remove-unused-declarations-and-other-cruft/20220317-172741
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220318/202203180538.gWcM5ABA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0d50efabcb4ad52bd7a036e2542dbf51bbcf93b4
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Patrik-Jakobsson/drm-gma500-Remove-unused-declarations-and-other-cruft/20220317-172741
+        git checkout 0d50efabcb4ad52bd7a036e2542dbf51bbcf93b4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/gma500/
 
-I think compiler people should see inline asm as a really *good*
-thing, because it allows people to have that "I'm going to do
-something that nobody normal does, look away now" kind of escape
-clause, letting the compiler concentrate on the things it does best.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yes, I realize inline asm isn't something compiler people love. And
-yes, I realize that it might not give optimal code.
+All warnings (new ones prefixed by >>):
 
-But think of it a bit like casts - it adds complexity to the language,
-and it might make some optimizations harder or even impossible - but
-it makes the language much more powerful and allows you to do things
-that you simply couldn't do without it.
+>> drivers/gpu/drm/gma500/psb_drv.c:102:6: warning: no previous prototype for function 'psb_spank' [-Wmissing-prototypes]
+   void psb_spank(struct drm_psb_private *dev_priv)
+        ^
+   drivers/gpu/drm/gma500/psb_drv.c:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void psb_spank(struct drm_psb_private *dev_priv)
+   ^
+   static 
+   drivers/gpu/drm/gma500/psb_drv.c:419:20: warning: unused function 'get_brightness' [-Wunused-function]
+   static inline void get_brightness(struct backlight_device *bd)
+                      ^
+   2 warnings generated.
 
-There's a reason people use C instead of Pascal or FORTRAN. Those
-casts, and that pointer arithmetic - the bane of many optimizations -
-are really really good things.
 
-Intrinsics should generally be shunned, not seen as a "this is an
-alternative to inline asm". They should only exist for situations
-where you can show "look, I can do so much better", and have a
-test-suite for it and a real-life case where it gives you a clear and
-undeniable uplift on a meaningful load.
+vim +/psb_spank +102 drivers/gpu/drm/gma500/psb_drv.c
 
-(And here I separate 'intrinsic' and generic compiler builtins. I love
-the builtins that allow me to tell the compiler something, or the
-compiler to tell me something about the code: __builtin_unreachable()
-and __builtin_constant_p() are both wonderful examples of those kinds
-of things)
+5c49fd3aa0ab02 Alan Cox         2011-11-03   95  
+5c209d8056b976 Patrik Jakobsson 2021-02-01   96  /**
+5c209d8056b976 Patrik Jakobsson 2021-02-01   97   *	psb_spank		-	reset the 2D engine
+5c209d8056b976 Patrik Jakobsson 2021-02-01   98   *	@dev_priv: our PSB DRM device
+5c209d8056b976 Patrik Jakobsson 2021-02-01   99   *
+5c209d8056b976 Patrik Jakobsson 2021-02-01  100   *	Soft reset the graphics engine and then reload the necessary registers.
+5c209d8056b976 Patrik Jakobsson 2021-02-01  101   */
+5c209d8056b976 Patrik Jakobsson 2021-02-01 @102  void psb_spank(struct drm_psb_private *dev_priv)
+5c209d8056b976 Patrik Jakobsson 2021-02-01  103  {
+5c209d8056b976 Patrik Jakobsson 2021-02-01  104  	PSB_WSGX32(_PSB_CS_RESET_BIF_RESET | _PSB_CS_RESET_DPM_RESET |
+5c209d8056b976 Patrik Jakobsson 2021-02-01  105  		_PSB_CS_RESET_TA_RESET | _PSB_CS_RESET_USE_RESET |
+5c209d8056b976 Patrik Jakobsson 2021-02-01  106  		_PSB_CS_RESET_ISP_RESET | _PSB_CS_RESET_TSP_RESET |
+5c209d8056b976 Patrik Jakobsson 2021-02-01  107  		_PSB_CS_RESET_TWOD_RESET, PSB_CR_SOFT_RESET);
+5c209d8056b976 Patrik Jakobsson 2021-02-01  108  	PSB_RSGX32(PSB_CR_SOFT_RESET);
+5c209d8056b976 Patrik Jakobsson 2021-02-01  109  
+5c209d8056b976 Patrik Jakobsson 2021-02-01  110  	msleep(1);
+5c209d8056b976 Patrik Jakobsson 2021-02-01  111  
+5c209d8056b976 Patrik Jakobsson 2021-02-01  112  	PSB_WSGX32(0, PSB_CR_SOFT_RESET);
+5c209d8056b976 Patrik Jakobsson 2021-02-01  113  	wmb();
+5c209d8056b976 Patrik Jakobsson 2021-02-01  114  	PSB_WSGX32(PSB_RSGX32(PSB_CR_BIF_CTRL) | _PSB_CB_CTRL_CLEAR_FAULT,
+5c209d8056b976 Patrik Jakobsson 2021-02-01  115  		   PSB_CR_BIF_CTRL);
+5c209d8056b976 Patrik Jakobsson 2021-02-01  116  	wmb();
+5c209d8056b976 Patrik Jakobsson 2021-02-01  117  	(void) PSB_RSGX32(PSB_CR_BIF_CTRL);
+5c209d8056b976 Patrik Jakobsson 2021-02-01  118  
+5c209d8056b976 Patrik Jakobsson 2021-02-01  119  	msleep(1);
+5c209d8056b976 Patrik Jakobsson 2021-02-01  120  	PSB_WSGX32(PSB_RSGX32(PSB_CR_BIF_CTRL) & ~_PSB_CB_CTRL_CLEAR_FAULT,
+5c209d8056b976 Patrik Jakobsson 2021-02-01  121  		   PSB_CR_BIF_CTRL);
+5c209d8056b976 Patrik Jakobsson 2021-02-01  122  	(void) PSB_RSGX32(PSB_CR_BIF_CTRL);
+5c209d8056b976 Patrik Jakobsson 2021-02-01  123  	PSB_WSGX32(dev_priv->gtt.gatt_start, PSB_CR_BIF_TWOD_REQ_BASE);
+5c209d8056b976 Patrik Jakobsson 2021-02-01  124  }
+5c209d8056b976 Patrik Jakobsson 2021-02-01  125  
 
-But an intrinsic for some odd target-specific thing that can't even be
-portably generalized? Give me inline asm any day.
-
-We can do things with inline asms that the compiler can't even _dream_
-of, like the whole instruction rewriting thing we use.
-
-I'd much rather have a powerful generic concept (eg "asm goto" is
-lovely) than a specialized intrinsic that does only one thing, and
-doesn't even do it well because it's untested and badly defined.
-
-               Linus
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
