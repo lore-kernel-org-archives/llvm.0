@@ -1,41 +1,42 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE1D2F41
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 00:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309582F3A
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 02:44:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647478699; x=1679014699;
+  t=1647485074; x=1679021074;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=f8bXk3IskXH8eFFzpaNPyeyddF0leRb7wqn21Yw5bec=;
-  b=YVLu8DNzBp+6vacIJ5wNX7YGa9LQBdiGj7ZI6qOLF8pCa3SW0YZPj2Wx
-   e4ysYd9i3EWqxv4ZJZ9dOILLu6rsWZ+ReoFmLB9wqmcmKcZOm/P4iiLFV
-   8Rad/gIrOT9Fge9AotjA+HauHZMZcUFIOKuiSgHzlNran3iKBOmlozm0+
-   kJqsMzQ6gk9lmMSjmcDh7US4WJHX2IEJVsQ787HrfOR+mMLGn+XbIoAcS
-   FGQxqAqGtF9SfinYYBYKn/keuHqxrQwg4NXJX8O2vdvmT1ZOhhLR6WtQE
-   velMCpwhTC3hKkIxjNWwMRDGfVLdOUir0KbX433tR6dS+NTigVlHT2DoI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="343187513"
+  bh=xcmTqJewBK1TOKX2Kt1rps3pYppbIlB3gYQ0u4Egax8=;
+  b=LulnansJo5ZMaDtgxqwfXJQZ9P7RO64eKp95SUVffj2xkkhG5JS8YV3E
+   8oM1jnSBY0LGYcPhkaYqEZ40ideSPILdwxfq/4yLzJ8UU1nJPYI1Vu5+R
+   2MjPkA6DgxE67a5VByzUhc1s5LXBr+e5ktaRyxRdNQ8biWY6iXmd78dkZ
+   X88hECnkcMxyoS1SMA76uz7dfmqpobrBtUurrXf50Et30kESqU806r4q0
+   9s/qzdLxp5/NDGXoOs+dkE/maj5hMMw5+mU3Ecd7Ym0DLy1dCySxGXrYl
+   sboXqYOeUczFvWI+30BYbC2k7k0u2+TwuLKcgEysuy4KDjk3Mnd24LnXm
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="256955242"
 X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="343187513"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 17:58:18 -0700
+   d="scan'208";a="256955242"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 19:44:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="516566728"
+   d="scan'208";a="581144020"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2022 17:58:17 -0700
+  by orsmga001.jf.intel.com with ESMTP; 16 Mar 2022 19:44:31 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nUeT2-000D96-OS; Thu, 17 Mar 2022 00:58:16 +0000
-Date: Thu, 17 Mar 2022 08:58:08 +0800
+	id 1nUg7r-000DDJ-50; Thu, 17 Mar 2022 02:44:31 +0000
+Date: Thu, 17 Mar 2022 10:43:46 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 915/2335] ./usr/include/linux/if_tunnel.h:5:10:
- fatal error: 'uapi/linux/sockios.h' file not found
-Message-ID: <202203170800.LxF9hGll-lkp@intel.com>
+Subject: [mingo-tip:master 1818/2335]
+ arch/x86/entry/vsyscall/vsyscall_64.c:323:24: warning: no previous prototype
+ for function 'get_gate_vma'
+Message-ID: <202203171029.K0aYoh84-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,48 +49,89 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
 head:   85293bf3fca6d85608cff1447ce3097583f15fab
-commit: b8d36bc5384ae56de169ae667aec58547181384f [915/2335] headers/deps: Add header dependencies to .h files: <uapi/linux/sockios.h>
-config: i386-randconfig-a012-20220314 (https://download.01.org/0day-ci/archive/20220317/202203170800.LxF9hGll-lkp@intel.com/config)
+commit: 096bc34f1420485efd9a03c318ab7c44487eb8b4 [1818/2335] headers/deps: mm: Optimize <linux/mm_api.h>, remove the <linux/mm_api_gate_area.h> header
+config: x86_64-randconfig-a011-20220314 (https://download.01.org/0day-ci/archive/20220317/202203171029.K0aYoh84-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=b8d36bc5384ae56de169ae667aec58547181384f
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=096bc34f1420485efd9a03c318ab7c44487eb8b4
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip master
-        git checkout b8d36bc5384ae56de169ae667aec58547181384f
+        git checkout 096bc34f1420485efd9a03c318ab7c44487eb8b4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/vsyscall/ kernel/trace/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/if_tunnel.h:5:10: fatal error: 'uapi/linux/sockios.h' file not found
-   #include <uapi/linux/sockios.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/kcm.h:18:10: fatal error: 'uapi/linux/sockios.h' file not found
-   #include <uapi/linux/sockios.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/x25.h:15:10: fatal error: 'uapi/linux/sockios.h' file not found
-   #include <uapi/linux/sockios.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/rds.h:38:10: fatal error: 'uapi/linux/sockios.h' file not found
-   #include <uapi/linux/sockios.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> arch/x86/entry/vsyscall/vsyscall_64.c:323:24: warning: no previous prototype for function 'get_gate_vma' [-Wmissing-prototypes]
+   struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
+                          ^
+   arch/x86/entry/vsyscall/vsyscall_64.c:323:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
+   ^
+   static 
+>> arch/x86/entry/vsyscall/vsyscall_64.c:334:5: warning: no previous prototype for function 'in_gate_area' [-Wmissing-prototypes]
+   int in_gate_area(struct mm_struct *mm, unsigned long addr)
+       ^
+   arch/x86/entry/vsyscall/vsyscall_64.c:334:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int in_gate_area(struct mm_struct *mm, unsigned long addr)
+   ^
+   static 
+>> arch/x86/entry/vsyscall/vsyscall_64.c:349:5: warning: no previous prototype for function 'in_gate_area_no_mm' [-Wmissing-prototypes]
+   int in_gate_area_no_mm(unsigned long addr)
+       ^
+   arch/x86/entry/vsyscall/vsyscall_64.c:349:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int in_gate_area_no_mm(unsigned long addr)
+   ^
+   static 
+   3 warnings generated.
+
+
+vim +/get_gate_vma +323 arch/x86/entry/vsyscall/vsyscall_64.c
+
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  322  
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23 @323  struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  324  {
+c338867d0e42247 arch/x86/entry/vsyscall/vsyscall_64.c Brian Gerst             2015-06-22  325  #ifdef CONFIG_COMPAT
+ff170cd0595398a arch/x86/entry/vsyscall/vsyscall_64.c Gabriel Krisman Bertazi 2020-10-03  326  	if (!mm || !(mm->context.flags & MM_CONTEXT_HAS_VSYSCALL))
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  327  		return NULL;
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  328  #endif
+87983c66bc02c9c arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-10-29  329  	if (vsyscall_mode == NONE)
+87983c66bc02c9c arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-10-29  330  		return NULL;
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  331  	return &gate_vma;
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  332  }
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  333  
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23 @334  int in_gate_area(struct mm_struct *mm, unsigned long addr)
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  335  {
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  336  	struct vm_area_struct *vma = get_gate_vma(mm);
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  337  
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  338  	if (!vma)
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  339  		return 0;
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  340  
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  341  	return (addr >= vma->vm_start) && (addr < vma->vm_end);
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  342  }
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  343  
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  344  /*
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  345   * Use this when you have no reliable mm, typically from interrupt
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  346   * context. It is less reliable than using a task's mm and may give
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  347   * false positives.
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  348   */
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23 @349  int in_gate_area_no_mm(unsigned long addr)
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  350  {
+87983c66bc02c9c arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-10-29  351  	return vsyscall_mode != NONE && (addr & PAGE_MASK) == VSYSCALL_ADDR;
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  352  }
+b93590901a01a6d arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  353  
+
+:::::: The code at line 323 was first introduced by commit
+:::::: b93590901a01a6d036b3b7c856bcc5724fdb9911 x86_64/vsyscall: Move all of the gate_area code to vsyscall_64.c
+
+:::::: TO: Andy Lutomirski <luto@amacapital.net>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service
