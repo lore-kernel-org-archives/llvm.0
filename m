@@ -1,86 +1,127 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8307F2F22
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 06:09:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-	Reply-To:Cc:Content-ID:Content-Description;
-	bh=RnNnvxScmOOrZ5E51nA93B6vLFD/DYSAzW7tLEbHXvo=; b=Tbhcgz4qFu/F8doNKjklq5GT/n
-	tN/WNzmDi9ZU4T9RIgNZg7+0VQWg1Qr/d+ZQZEtol1QHF/Bz1L7ftmAdN0QAoML8l0diRxTapNA54
-	0KRXNzkBQoqBudUP0Jerjkua/EXnRTU90zcBTUhKTNevcgJ+sAlsKnG5qVmAM2lq6tLaePDkdribA
-	+UlhwxMVVE5c2OPlWat9Aap9+Kk8pcy7mpcc7GMYscgpHeR0GgprP1vJ3E57KWN1i5IpVcvb0ys45
-	w3kFOi48Y26DNfNaSRZ7LRaPDeClzbwQbKRYgHTm5l8UmcB0HLlc5fr75yJ2jPgVClmR48nlDBSFB
-	6IRKQH4g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nUjK3-001nz7-L8; Thu, 17 Mar 2022 06:09:20 +0000
-Message-ID: <9053a28a-0cc5-a35e-b613-c63689b9f8f7@infradead.org>
-Date: Wed, 16 Mar 2022 23:09:14 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220377A
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 06:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647499225; x=1679035225;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=r7hl2LrJPwgi1RBOzhXRymcPhWFGbQY2+v5xbTf7Wwg=;
+  b=AsdOVMtHZLYJgP3Ko7JF++DUBZD4F/ETv4cN6qiuZoAJOJptzJoASSyX
+   vv/GFwGLUd/e4caGfl/dnX94lf5/PnQRQSOxgqjuROqdWMb/sql3CTx4D
+   x8Hpg6HGlbAdZqDoVeY7eAy11Uta1R9iLWj6Ej9zZe2DbQNAdVqsPcM99
+   k8JZohCkg3o+CtgHPZLUt9YFgL05kc4FKiKQ7s9WeOplAbTlmEogVEfyJ
+   bzdk1d1iZOaorWNB6a+Do6oC3PX0ki2oR84K0fgnIP6NXT2h1M9OIJh00
+   VgqWI+SdMc0oKwOqSk1YvX1ZIFi1p0N/Fez7s5DfrVUKebyr1o/cIsUPk
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="237402605"
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="237402605"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 23:40:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="516648606"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2022 23:40:20 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nUjo3-000DOc-MQ; Thu, 17 Mar 2022 06:40:19 +0000
+Date: Thu, 17 Mar 2022 14:39:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 221/2335] drivers/xen/grant-table.c:411:22: error:
+ implicit declaration of function 'xen_gfn_to_pfn'
+Message-ID: <202203171426.IezxkFRk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] nfsd: use correct format characters
-Content-Language: en-US
-To: Bill Wendling <morbo@google.com>, Chuck Lever <chuck.lever@oracle.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, linux-nfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220316213122.2352992-1-morbo@google.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220316213122.2352992-1-morbo@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi--
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   85293bf3fca6d85608cff1447ce3097583f15fab
+commit: dbfd8a446611c67366513c5798b018f9d1b6123b [221/2335] headers/prep: Rename API: gfn_to_pfn() => xen_gfn_to_pfn()
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220317/202203171426.IezxkFRk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=dbfd8a446611c67366513c5798b018f9d1b6123b
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout dbfd8a446611c67366513c5798b018f9d1b6123b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
-On 3/16/22 14:31, Bill Wendling wrote:
-> When compiling with -Wformat, clang emits the following warnings:
-> 
-> fs/nfsd/flexfilelayout.c:120:27: warning: format specifies type 'unsigned
-> char' but the argument has type 'int' [-Wformat]
->                          "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
->                              ~~~~              ^~~~~~~~~
->                              %d
-> fs/nfsd/flexfilelayout.c:120:38: warning: format specifies type 'unsigned
-> char' but the argument has type 'int' [-Wformat]
->                          "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
->                                   ~~~~                    ^~~~~~~~~~~
->                                   %d
-> 
-> The types of these arguments are unconditionally defined, so this patch
-> updates the format character to the correct ones for ints and unsigned
-> ints.
-> 
-> Link: ClangBuiltLinux/linux#378
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Please make the Link: more complete, such as a URL/URI.
+All errors (new ones prefixed by >>):
 
-> Signed-off-by: Bill Wendling <morbo@google.com>
-> ---
->  fs/nfsd/flexfilelayout.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/nfsd/flexfilelayout.c b/fs/nfsd/flexfilelayout.c
-> index 2e2f1d5e9f62..070f90ed09b6 100644
-> --- a/fs/nfsd/flexfilelayout.c
-> +++ b/fs/nfsd/flexfilelayout.c
-> @@ -117,7 +117,7 @@ nfsd4_ff_proc_getdeviceinfo(struct super_block *sb, struct svc_rqst *rqstp,
->  
->  	da->netaddr.addr_len =
->  		snprintf(da->netaddr.addr, FF_ADDR_LEN + 1,
-> -			 "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
-> +			 "%s.%d.%d", addr, port >> 8, port & 0xff);
->  
->  	da->tightly_coupled = false;
->  
+>> drivers/xen/grant-table.c:411:22: error: implicit declaration of function 'xen_gfn_to_pfn' [-Werror,-Wimplicit-function-declaration]
+                   page = pfn_to_page(xen_gfn_to_pfn(gfn));
+                                      ^
+   include/asm-generic/memory_model.h:53:21: note: expanded from macro 'pfn_to_page'
+   #define pfn_to_page __pfn_to_page
+                       ^
+   drivers/xen/grant-table.c:411:22: note: did you mean 'gfn_to_pfn'?
+   include/asm-generic/memory_model.h:53:21: note: expanded from macro 'pfn_to_page'
+   #define pfn_to_page __pfn_to_page
+                       ^
+   arch/x86/include/asm/xen/page.h:251:29: note: 'gfn_to_pfn' declared here
+   static inline unsigned long gfn_to_pfn(unsigned long gfn)
+                               ^
+   1 error generated.
 
-thanks.
--- 
-~Randy
+
+vim +/xen_gfn_to_pfn +411 drivers/xen/grant-table.c
+
+   399	
+   400	static void gnttab_add_deferred(grant_ref_t ref, bool readonly,
+   401					struct page *page)
+   402	{
+   403		struct deferred_entry *entry;
+   404		gfp_t gfp = (in_atomic() || irqs_disabled()) ? GFP_ATOMIC : GFP_KERNEL;
+   405		const char *what = KERN_WARNING "leaking";
+   406	
+   407		entry = kmalloc(sizeof(*entry), gfp);
+   408		if (!page) {
+   409			unsigned long gfn = gnttab_interface->read_frame(ref);
+   410	
+ > 411			page = pfn_to_page(xen_gfn_to_pfn(gfn));
+   412			get_page(page);
+   413		}
+   414	
+   415		if (entry) {
+   416			unsigned long flags;
+   417	
+   418			entry->ref = ref;
+   419			entry->ro = readonly;
+   420			entry->page = page;
+   421			entry->warn_delay = 60;
+   422			spin_lock_irqsave(&gnttab_list_lock, flags);
+   423			list_add_tail(&entry->list, &deferred_list);
+   424			if (!timer_pending(&deferred_timer)) {
+   425				deferred_timer.expires = jiffies + HZ;
+   426				add_timer(&deferred_timer);
+   427			}
+   428			spin_unlock_irqrestore(&gnttab_list_lock, flags);
+   429			what = KERN_DEBUG "deferring";
+   430		}
+   431		printk("%s g.e. %#x (pfn %#lx)\n",
+   432		       what, ref, page ? page_to_pfn(page) : -1);
+   433	}
+   434	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
