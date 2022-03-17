@@ -1,200 +1,281 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F594A84
-	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 19:02:19 +0000 (UTC)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22HGntZO010900;
-	Thu, 17 Mar 2022 19:02:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=EvqJE82ena7sEY5n3yNYO9JDkj6pju+E688iAcYW/Os=;
- b=0zneIBNGTbc1h1x0JO/vlXcYJ3m8uyy6GpvvrrNwBbSeBoCIx+JFgMf7y+eDdeN49qOo
- ih709NPasnNAG5yC+VmvlsF1dPnkIU22e0XW0tizS7tWvIqyEqQQia3lZxtxNkH0lRAn
- wNQiRbDVFwWoYzOIt1EOcEfMdOinqUv+wXIVU1n7w44jvvfDivKkGGm03VDg5Q7cj5rb
- 9qkeL9JOg2h5Z6vWztkd8dXQZEjO5tvn4nI1+5KXVEOE8lrGFD4ttQc3TI7ZPUj/kAv6
- NcFjqNBr3MQLn4wMIaeYkMnrC5guZrqoZNKzYwxw7csjI6NYhJoFM1s8CPwdUfjtXBwz Vw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-	by mx0b-00069f02.pphosted.com with ESMTP id 3et60rhy9y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Mar 2022 19:02:12 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-	by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22HIu98Y017944;
-	Thu, 17 Mar 2022 19:02:11 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2040.outbound.protection.outlook.com [104.47.51.40])
-	by aserp3020.oracle.com with ESMTP id 3et64menqq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Mar 2022 19:02:11 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g/k19gqwtWPYIVB7mFJBfIDufn8p3ckvkr05Zw0m/9ijH9aSZbMGQ8VFfpubKyIcXIEApJ/LmAz5bxke3is1qQBOL/fMWPxdLZVAwLMGY23xNhTsEyHgSw8Bj5TS6yrUbWGgXuoHjlB7xomKg6HmNTokiLwgb9Ueduc+OaaKjr4EZmxNfZU6zo3j6JeOUrA3UlN0LelfNZ6Ycg+f5dHrN+RlHwPdpvs3hhuL7/YLJeDlPtNdY0baxJjFJ00HzoX/e6o3HtsiD8fvKjc40inodm+0pF+l3UVpTG+Ruu2oUhoQoSRqa46cZNaKVD/kcM14q1MAlTB1Qx/sKUC8TFLt8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EvqJE82ena7sEY5n3yNYO9JDkj6pju+E688iAcYW/Os=;
- b=PYEOdjYaYygkzxB2CoRtVK1DNkBYLHgIkwpesjodhyHePZnvsGMKnsLYh33YdxdkFjmpSAsxmQ4a5PoJmjve44kMIgrJlPKU73T9MDtE+2fX6lKcYQIJBaLIt98zj1xSMPDTm4azVaHJkYy2s4RVZfeT3mE772dKgboBsyH4i8Jnf7S2n7I4L9i1xFxRTNxfJAYS4a0GNFPwFmPDCetHEY8jBpGRxzkKO2C6OxbsN9QLEuL09jhoBAFHjIjXU+9suAJWjcIySLa2a+JMngSDiFwrQiQ+AJc1QUiOxvTQ1vuoYpF09DMT+Ow8Z/ph+k6T7ghXSkh21jZqOHSE1ZrK2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03D34A84
+	for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 19:45:42 +0000 (UTC)
+Received: by mail-pf1-f172.google.com with SMTP id h2so7653907pfh.6
+        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 12:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EvqJE82ena7sEY5n3yNYO9JDkj6pju+E688iAcYW/Os=;
- b=EErbhPdEM+uM7UALP62uGClc+r4cxoKl70ai3uN/lpXkWMGH/n0DoLG6eZ/4/JUxq9oqsVdqRLZVBMMUt0QEdBWPntDqJzKhh8rR60eghcelvB+jVM+JGlpmf6gsxEnFw0E2N+y2P5sC0VSd9vaEHtQ7N34Fn7U6Av5hCkt51F8=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by CY4PR10MB1912.namprd10.prod.outlook.com (2603:10b6:903:125::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Thu, 17 Mar
- 2022 19:02:09 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::94c5:42b1:5147:b6f0]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::94c5:42b1:5147:b6f0%6]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
- 19:02:09 +0000
-From: Chuck Lever III <chuck.lever@oracle.com>
-To: Thomas Haynes <loghyr@gmail.com>
-CC: Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers
-	<ndesaulniers@google.com>,
-        Linux NFS Mailing List
-	<linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>,
-        Bill Wendling <morbo@google.com>
-Subject: Re: [PATCH v2] nfsd: use correct format characters
-Thread-Topic: [PATCH v2] nfsd: use correct format characters
-Thread-Index: AQHYOi7VDYQCL/xF8UKwiKHmI8bB76zD7qIA
-Date: Thu, 17 Mar 2022 19:02:09 +0000
-Message-ID: <1F848996-D3E8-45A2-92E0-52939974B143@oracle.com>
-References: <20220316213122.2352992-1-morbo@google.com>
- <20220317184222.2476811-1-morbo@google.com>
-In-Reply-To: <20220317184222.2476811-1-morbo@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3654.120.0.1.13)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 83ceca9f-59a8-406a-ca21-08da0848a344
-x-ms-traffictypediagnostic: CY4PR10MB1912:EE_
-x-microsoft-antispam-prvs: 
- <CY4PR10MB19124D8D3ADFBE6BAE28E3B693129@CY4PR10MB1912.namprd10.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- mJSLuIDQ6pcWKJ5czKIsF1aaqIhD+DXL0sUzxtLxqRMX7eOt2rOlIwlvno3Yt78ayP47ZjWrJR6TInT+BvJZAhyZBul9aHt6sXkMX1nYd/CGzPV8U27j2hipqCmG5uksYCsY+9Iy3EGzsGm8h/lwG/JDIH717v042v3Per5S/6munw8+7vC0qv89XVbCI1MbbWqFtWVSF4IwQa6gTyv7BDMqp0vQ3etm+kcsnvTkFZkC/nEv3Ar7I+Cxt3OgiOZS1gm/yd0r10SYFpsb0YMku/Q64ZSRvpT86oDQyJzksl34gyBf+N/BokIv5yQOPpT5CYq4x/9UzCXvsd8epFoONYZ8yhBsOnpxz3+4eFcnQoMeNO7rwNcKFmkxuz0KMvR8GNatgzv9v8vbC37Ceeb6Zq6aKy7L3i4AVn1UN0MSuIxmq+UCOfjSVYW6URYVP8DLFKw4jjzpdVoKicORCX/Li54yPdWMt0oTQciUo6cufn84QYrCbBYHuOSjxgTZPKcm+xmx8gUS8NWiIx9cY4oE3rYYZGJc5O+eOu5ipHJOzkZLQDH4JowqdqhVxxbgNohnMiI2WYfudvTyKgsO0bAg1z0kBjiEtlGsTxmmWlnmEWBqMeE4m2Aod+J55R6vfQWOE3al3B1TlynR1o+dGWZvTxIjN2MeIUY1xMb6iy8lTXKFgrTqF5DqNe3/Nm8mOQb6NlSl6aEDPV+y15yuuygQx4OnVq+GLeqS7Gn86wQdZv8RtUcGzSfmaz4oSQu1Ud1uZ8Nr5S6PMDZHkEMTgEbh3F9MnxRYVMa9xx6NFdi1famnPjZpQiYYgH1bwpYXKCa1
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(53546011)(6506007)(38070700005)(2906002)(38100700002)(122000001)(6512007)(83380400001)(8936002)(508600001)(5660300002)(6486002)(966005)(86362001)(66476007)(66946007)(66556008)(66446008)(76116006)(4326008)(8676002)(64756008)(91956017)(71200400001)(26005)(186003)(33656002)(2616005)(316002)(36756003)(6916009)(54906003)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?us-ascii?Q?WUlMKxGfYpiu9/YpY6BsBkdZll2M2oMOFBAxWzz4wfqMy1oAVqoWb2i8utXR?=
- =?us-ascii?Q?MWMJJMLYWKPnRzf3/9eCh6AX2pCwU4Fngj/fK2a1/ZsMFD6HJuesI8QLXF4C?=
- =?us-ascii?Q?tdy5qoeU9ElgIIqu1SCnt+w0VdOkTksTe+uX/kXpE41d1MFlMuTkgCF7cBmf?=
- =?us-ascii?Q?uAnmgquXulh/bJbtqDwdsXsLExLdkRBT9cBby7bSVTTTWdaUmG10W/e39xsr?=
- =?us-ascii?Q?eVuXkxasqHjVkF3/yMHkOjc4UaoymLQu8819YCKoimD/kSvHDEoj9xYzWfm4?=
- =?us-ascii?Q?rsuKu75dc1l4tpVW1MZDdYCsy2vhSQheP1n3l/4h5F548uBoEQC9J5h9NAXT?=
- =?us-ascii?Q?+qH0vibRovxnkC5zlwHvX4kLVlOx73H7o8tp4h9ge+zGTiqeSa1yUiougy0D?=
- =?us-ascii?Q?kV3dhH29UdJ1HjtYnHC6gKZRYYzONBkyrTH1U3qFxJO26uqy8xhZkzMAAHew?=
- =?us-ascii?Q?dyr3gCcAQNl0XWr0wonKoaSkDrOCNI1QEkMFyhP6N3R0D53N2yu8clvuHeiI?=
- =?us-ascii?Q?kgDVqKTE6gz9K8bgtSFj4AOWrDDnJL2QaoubIL4uicw/x/frleULtY/9n1d/?=
- =?us-ascii?Q?GEeSTvE1CKM7B0HZ0uhO8Z9YY3y34APZdpl/NgB1VN6mmQJxV7YtyhcHzSz9?=
- =?us-ascii?Q?jkpnlAOmdOp4uvjL22ShLezCHuINl5/bNjYkhMuyblIWXdvL3pVkvarY7SbJ?=
- =?us-ascii?Q?6X13tMr+mOa0JrdIYfwSVv8y3AicACc0yVjPtEVU1l5m7tMSY8XAxUjzsPw5?=
- =?us-ascii?Q?pKIdXh4qt6OjJmM+UCMNS7+DCQQdE6AZ7+GkkIDgxe3eruaoWNoGKFcJPQYP?=
- =?us-ascii?Q?3eXdYGIOU4DjlBqEAUivrHC2wuiuStNAQ+yGRRTvfcKqBXFiZsRK4pWpr4Xr?=
- =?us-ascii?Q?e0keTijucj7l0x95BfU5dRz5ADzPbRK4K1582MV+6WzRcUaA5rT0M+mp9gPJ?=
- =?us-ascii?Q?Sd7DrX/TuGcgrsvplGSXQXw74ldHNGsmYt7GK0Sdb28PSXtyPCulzUn6pdAZ?=
- =?us-ascii?Q?k1KihO2Iqi3azhU4B293nJSRUmpQlBrZ4VuH4c9nEoQAMORdt2ApPycrT1t9?=
- =?us-ascii?Q?py9Dzn2+CzTJ/4daCK2EdRzDuNWgu0ywtfTQWt9M0O6dPE1yc4IdmlVcDFxc?=
- =?us-ascii?Q?Q9PqbnJeKKvXpoQRmagfyACyDR0NbYi9lGl7OlLKEuP6JhkR44I7GeXEQdW5?=
- =?us-ascii?Q?QFN/HVK5QFOTHpj4Y02OiitbXhdfbLKuz2KwiJ1yGWwjobtMXYTnrbkg2dC5?=
- =?us-ascii?Q?mXJFBX08GWwN8/doWPAvl6wVZHf35qYfexKndvc7fgpYDFQpBVNlY9WecB+b?=
- =?us-ascii?Q?Y47+HBDwZcc66CA2o279KDUah2so8OGaMjjoBUNTFsObPYooZ6o2mF5gnzLR?=
- =?us-ascii?Q?AWpsJsqGoo2jkWyrzs4LHMbDDc3GJYF6Dag/8uCvDwtwqibN2uL7FN9Vz13l?=
- =?us-ascii?Q?Q9jTQ+Fs9HKgFvHrv+TYAu3tWpKw4fxanT74+ldJ9WDUb9nyRE2I3g=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <78F30F064BE01F4697E897723A194790@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KSmw10ZWQdRXdgcJ3u41Wj71hgTjI3BEc50wKUXVLWs=;
+        b=gPjQ5TplXLMcZCpaEC9X3PjTfZYLbH0hkMwdcjDju6mOrYe25JROMydqyK+9alTwze
+         nI2gwGVtyDBr3n9Ci7FgiNkj4uITWRlUnqCrG5dyoN9Pfe93zbbEnZnl2eLGf+Yy55HH
+         0gHuIEu/2QYDCW+RuCq7YCbqGpt4fzc2tvVYNR9i8BPBafswwb3vUXFchMDuzhh6/5dG
+         siClIC5OA8npx2AgBFzvWFtVDmqFfN8prRBachAD/IqseJWzx0g092is1TkE+Dkf5RyH
+         OKBLPpuaO+HpX0Vp+FAI8sxXOHGwZnhjtDlmX8qcElKlIlnLptgWXHS51S3nz17oAVrd
+         Yp+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KSmw10ZWQdRXdgcJ3u41Wj71hgTjI3BEc50wKUXVLWs=;
+        b=SQBbzSuToY0Qg3hvhykq2moa7a9MgLVK0wNhDyyI7iMuKX/cyCRY+69175pMf9ceTW
+         808RimZVmKR+OQOton6K7+j3e38jMF/OS4ngcIKw2nMp481ffhTO9VR2sROJTQCgtyjI
+         HPqKv7YW1Z7xTjrwNtywcr2IJFEVws6apRAFb3dS7ixGsBFeVyLZvAUnGuGJekVhNa8f
+         P/dnHjAVe3Us5ebJvH3M8NhJGdwrH0/m3lOr5Vj7GmqY5sF0/+nnTq9/8jWte0vVySC3
+         QU3Fh04DdZfoEX7vNm5WMo/9PYhOvX/cvmjfw6Ib8sUzI137tCpEwPKjwjJfLbMgxrF5
+         mg7A==
+X-Gm-Message-State: AOAM532ekMOjBYbXU49iYcGD2HOcmSTjaikQs5ezvN9qI+riKCJSQNm7
+	PFkkRm7FbK9lgVs8r/oanZ4crLMYXRUe9jPLa7J/
+X-Google-Smtp-Source: ABdhPJw33MLed/mMzmZl9280rvcUvut4pFr3P2K7N9WAcmlAcZJf5I471YnfDun8+JhgRESdVinoi4dUJtQR12GshE4=
+X-Received: by 2002:a63:1613:0:b0:382:2a7f:5ca1 with SMTP id
+ w19-20020a631613000000b003822a7f5ca1mr59852pgl.151.1647546341928; Thu, 17 Mar
+ 2022 12:45:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83ceca9f-59a8-406a-ca21-08da0848a344
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2022 19:02:09.5102
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ocSybme9naaNV3E4L77seF0V4RzchmtHP7WVNteN0KNkuFdY3T0OUXTM262co5H81MUDpbD6bZ9uodGEpM7M5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1912
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10289 signatures=693715
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203170107
-X-Proofpoint-GUID: 6zcg0UqkAvpdNv4NaNzPLnh-mtF_qaI8
-X-Proofpoint-ORIG-GUID: 6zcg0UqkAvpdNv4NaNzPLnh-mtF_qaI8
+References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com>
+ <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
+ <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
+ <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
+ <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
+In-Reply-To: <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
+From: Bill Wendling <morbo@google.com>
+Date: Thu, 17 Mar 2022 12:45:30 -0700
+Message-ID: <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com>
+Subject: Re: [PATCH v5] x86: use builtins to read eflags
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
+On Thu, Mar 17, 2022 at 11:52 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> [ I got cc'd in the middle of the discussion, so I might be missing
+> some context or pointing something out that was already discussed ]
+>
+> On Thu, Mar 17, 2022 at 11:00 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > > >One change you may see due to this patch is the compiler moving the
+> > > >"pop %..." instruction away from the "pushf" instruction. This could
+> > > >happen if the compiler determines that it could produce better code by
+> > > >doing so---e.g. to reduce register pressure. The "gcc -O2" example
+> > > >below shows this code movement.
+>
+> Honestly, that part worries me a _lot_.
+>
+> Why?
+>
+> Because clang in particular has already messed up eflags handling
+> once, by spilling condition codes (in the form of eflags) onto the
+> stack, and then loading them later with a "popf".
+>
+> And it did so across a function call THAT MODIFIED 'IF'. This was a
+> major bug in clang back in 2015 or so, and made it unusable for the
+> kernel.
+>
+> See for example
+>
+>     https://lore.kernel.org/all/CA+icZUU7y5ATSLV_0TGzi5m5deWADLmAMBkAT32FKGyUWNSJSA@mail.gmail.com/
+>
+> for some kernel discussion, and separately
+>
+>     https://lists.llvm.org/pipermail/llvm-dev/2015-July/088774.html
+>
+> for just llvm discussions.
+>
+I can't account for LLVM's past sins. That particular issue was fixed
+of course. This change will only generate "pushf/popf" (actually just
+"pushf" here) only when explicitly used.
 
+> It is perhaps telling that the LLVM discussion I found seems to talk
+> more about the performance impact, not about the fact that THE
+> GENERATED CODE WAS WRONG.
+>
+I think that's a bit unfair. There seemed to be a general consensus
+that the code was wrong and needed to be fixed. However, the compiler
+is also expected to generate the most performant code that it can.
 
-> On Mar 17, 2022, at 2:42 PM, Bill Wendling <morbo@google.com> wrote:
->=20
-> When compiling with -Wformat, clang emits the following warnings:
->=20
-> fs/nfsd/flexfilelayout.c:120:27: warning: format specifies type 'unsigned
-> char' but the argument has type 'int' [-Wformat]
->                         "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
->                             ~~~~              ^~~~~~~~~
->                             %d
-> fs/nfsd/flexfilelayout.c:120:38: warning: format specifies type 'unsigned
-> char' but the argument has type 'int' [-Wformat]
->                         "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
->                                  ~~~~                    ^~~~~~~~~~~
->                                  %d
->=20
-> The types of these arguments are unconditionally defined, so this patch
-> updates the format character to the correct ones for ints and unsigned
-> ints.
->=20
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Bill Wendling <morbo@google.com>
-> ---
-> v2 - Fixed "Link" to be a valid URL.
+> That compiler bug would basically enable or disable interrupts in
+> random places - because clang developers thought that 'eflags' is only
+> about the condition codes.
+>
+> > EFLAGS is defined as the lower 16 bits of FLAGS register, yeah?
+>
+> No. EFLAGS is a 32-bit register.
+>
+> A lot of the high bits end up being reserved, but not all of them. AC,
+> VIF/VIP are all in the upper 16 bits.
+>
+> Also:
+>
+> > So I don't understand your point; the finest grain resolution
+> > the compiler has to work with is the whole EFLAGS register, not
+> > individual bits like IF, DF, or AC.  (I triple checked this with the
+> > maintainer of LLVM's x86 backend)
+>
+> You can actually operate on EFLAGS at multiple granularities.
+>
+>  - normal pushf/popf. Don't do it unless you are doing system software.
+>
+>  - You *can* (but you really *really* should not) operate on only the
+> lower 16 bits, with "popfw". Don't do it - it doesn't help, requires
+> an operand size override, and is just bad.
+>
+>  - you can use lahf/sahc to load/store only the arithmetic flags
+> into/from AH. Deprecated, and going away, but historically supported.
+>
+>  - you can obviously use arithmetic and setcc to modify/read the
+> arithmetic flags properly.
+>
+> A compiler should NEVER think that it can access eflags natively with
+> pushf/popf. Clang thought it could do so, and clang was WRONG.
+>
+> The absolutely only case that a compiler should ever worry about and
+> do is that last case above: arithmetic instructions that set the
+> flags, and 'jcc', 'setcc', 'cmov', 'adc' etc that test it./
+>
+> Yes, yes, that complete mental breakdown with pushf/popf did get
+> fixed, but it really makes me very wary of thinking that we should
+> ever use a built-in that compiler writers really fundamentally got so
+> wrong before.
+>
+> What would make me think that you'd get it right now? In user space,
+> you'll basically never actually see the whole system flags issues, so
+> your test-cases would never work or be very contrieved. You'd have to
+> really work at it to see the problems.
+>
+As pointed out above, the LLVM people agreed with your sentiment here:
+never generate "pushf/popf" unless explicitly told to do so. This
+patch isn't trying to walk that back, just that when "pushf/popf" is
+explicitly asked for it allows LLVM and GCC to generate the best
+instruction sequence.
 
-Hi Tom, can I get a Reviewed-by from you?
+> > > The memory barrier is needed for IF changes, for example.
+> >
+> > Shouldn't native_irq_disable/native_irq_enable be declaring that they
+> > clobber "cc" then?
+> > https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Clobbers-and-Scratch-Registers
+>
+> No. Once again: compilers don't understand system flags in eflags.
+>
+> In fact, gcc pretty much documents that "cc" clobbers doesn't do
+> anything on x86, and isn't needed. It just assumes that the arithmetic
+> flags always get clobbered, because on x86 that's pretty much the
+> case. They have sometimes been added for documentation purposes in the
+> kernel, but that's all they are.
+>
+> So you can find that "cc" clobber in a few places in the kernel, but
+> it's pointless.
+>
+> The reason pushf/popf need to have a memory clobber is so that the
+> compiler will not move it around other things that have memory
+> clobbers.
+>
+> Because memory clobbers are things that compilers *UNDERSTAND*.
+>
+> Put another way: when you see that "memory" clobber in an inline asm,
+> don't think that it means "this modifies or uses memory".
+>
+> That may be the documentation, and that may be how compiler people
+> think about them, but that's just wrong.
+>
+> What *kernel* people think is "this makes the compiler not do stupid things".
+>
+> Because compilers really don't understand things like system registers
+> and system flags, and the subtle issues they have, and the ordering
+> requirements they have. Never have, and never will.
+>
+> And compilers really don't understand - or care about - things like
+> "cc", because compiler people think it's about arithmetic flags, and
+> would do things like "oh, I'll just save and restore the flags over
+> this since the asm modifies it".
+>
+> Note that "eflags" is just the tip of the iceberg here. This is true
+> for a lot of other cases.
+>
+> Yes, when you have something like a "disable interrupts", the compiler
+> really must not move memory accesses around it, because the interrupt
+> flag may in fact be protecting that memory access from becoming a
+> deadlock.
+>
+> But the whole "you can't move _other_ things that you don't even
+> understand around this either" is equally important. A "disable
+> interrupts" could easily be protecting a "read and modify a CPU MSR
+> value" too - no real "memory" access necessarily involved, but
+> "memory" is the only way we can tell you "don't move this".
+>
+And yet that's not guaranteed. From
+https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html:
 
+```
+Note that the compiler can move even volatile asm instructions
+relative to other code, including across jump instructions. For
+example, on many targets there is a system register that controls the
+rounding mode of floating-point operations. Setting it with a volatile
+asm statement, as in the following PowerPC example, does not work
+reliably.
 
-> ---
-> fs/nfsd/flexfilelayout.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/fs/nfsd/flexfilelayout.c b/fs/nfsd/flexfilelayout.c
-> index 2e2f1d5e9f62..070f90ed09b6 100644
-> --- a/fs/nfsd/flexfilelayout.c
-> +++ b/fs/nfsd/flexfilelayout.c
-> @@ -117,7 +117,7 @@ nfsd4_ff_proc_getdeviceinfo(struct super_block *sb, s=
-truct svc_rqst *rqstp,
->=20
-> 	da->netaddr.addr_len =3D
-> 		snprintf(da->netaddr.addr, FF_ADDR_LEN + 1,
-> -			 "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
-> +			 "%s.%d.%d", addr, port >> 8, port & 0xff);
->=20
-> 	da->tightly_coupled =3D false;
->=20
-> --=20
-> 2.35.1.723.g4982287a31-goog
->=20
+  asm volatile("mtfsf 255, %0" : : "f" (fpenv));
+  sum = x + y;
 
---
-Chuck Lever
+The solution is to reference the "sum" variable in the asm:
 
+  asm volatile ("mtfsf 255,%1" : "=X" (sum) : "f" (fpenv));
+```
 
+Note that the solution _isn't_ to add a "memory" clobber, because it's
+not guaranteed to work, as it's explicitly defined to be a read/write
+_memory_ barrier, despite what kernel writers wish it would do.
 
+Your assertion that compilers don't know about control registers isn't
+exactly true. In the case of "pushf/popf", those instructions know
+about the eflags registers. All subsequent instructions that read or
+modify eflags also know about it. In essence, the compiler can
+determine its own clobber list, which include MSRs.
+
+-bw
+
+> Particularly since both the clang people and gcc people have actively
+> been trying to weaken the "volatile" semantics (which would have
+> generally been the logically consistent model - thinking if inline asm
+> to be visible in the machine model, and not being able to move them
+> around for those reasons).
+>
+> > > This feels like "let's fix LLVM by hacking the kernel in dangerous ways" once again!
+> >
+> > Even if the behavior of llvm was changed, you'd _still_ get better
+> > codegen for _both_ compilers by using the intrinsics.
+>
+> No.
+>
+> "moving instructions around a bit" is not better code generation when
+> the end result DOES NOT WORK.
+>
+> And honestly, we have absolutely zero reason to believe that it would work.
+>
+> If it turns out that "pop to memory" is a big deal for performance,
+> let's just change the "=rm" to "=r" and be done with it. Problem
+> solved. We already used to do that on the "pushf" side, but these days
+> we avoid "popfl" entirely and do a conditional jump over a "sti"
+> instead.
+>
+> Because maybe moving that "pop" by a few inbstructions helps a bit,
+> but if you move the "pushf" noticeably, you've just created a big big
+> problem.
+>
+> A bug you've had once already.
+>
+>                  Linus
