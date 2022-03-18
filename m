@@ -1,176 +1,193 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706C77A
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 05:59:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647583186; x=1679119186;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2inKC5XC+8wTQ/dAtlKptncESI8JecL0hchzmp989kc=;
-  b=kIdshUcbWLvMBRVnJb1kk1rLJdz5XvBv9bgI4AmshhZ0IKJ539RHxPX1
-   v0FQxNN7vZqWuRKzYKk5etjDaRhbaVYqyd8NCQbkllFbPRPEEqA8TTv8a
-   V1Jx2fO6ABrWQqjTViVSccHnclQCa94Bqb0xN+5YxrCJfHUANJOh/BD4m
-   IcHfeWU7f+cQ63h1qrFBku7dvpP0fESxd6HKYW3/T+yiFp/27kUQR2TdW
-   /cCpX5f51+uup3qMirVW++r+FeM5zEDFjS2f4vpHBpnUlwher49oEIwwF
-   F60OLoa155Prj4aL/b50RgvM8iF+9/2+I/grjoKyN2wAl1ZywwLpEujwp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="254613632"
-X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
-   d="scan'208";a="254613632"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 22:59:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
-   d="scan'208";a="499111280"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 17 Mar 2022 22:59:28 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nV5e3-000ESe-EC; Fri, 18 Mar 2022 05:59:27 +0000
-Date: Fri, 18 Mar 2022 13:58:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fangrui Song <maskray@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nathan Chancellor <natechancellor@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [linux-stable-rc:linux-4.19.y 2710/9999] mm/slab_common.c:1438:37:
- warning: unused variable 'proc_slabinfo_operations'
-Message-ID: <202203181306.hfAlK7cq-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0663D7B
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 07:43:48 +0000 (UTC)
+X-UUID: eb709ff3221549a5b1fbd3fa548fd7a8-20220318
+X-UUID: eb709ff3221549a5b1fbd3fa548fd7a8-20220318
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+	(envelope-from <ck.hu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 145076729; Fri, 18 Mar 2022 15:43:20 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 18 Mar 2022 15:43:18 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 18 Mar 2022 15:43:18 +0800
+Message-ID: <9bd729a6e2d8a23f25c55c3aec81cb5b64eb0057.camel@mediatek.com>
+Subject: Re: [PATCH v14 01/22] dt-bindings: mediatek: add vdosys1 RDMA
+ definition for mt8195
+From: CK Hu <ck.hu@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <srv_heupstream@mediatek.com>, David Airlie
+	<airlied@linux.ie>, "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+	<singo.chang@mediatek.com>, <llvm@lists.linux.dev>, Nick Desaulniers
+	<ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
+Date: Fri, 18 Mar 2022 15:43:18 +0800
+In-Reply-To: <20220310035515.16881-2-nancy.lin@mediatek.com>
+References: <20220310035515.16881-1-nancy.lin@mediatek.com>
+	 <20220310035515.16881-2-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-Hi Fangrui,
+Hi, Nancy:
 
-First bad commit (maybe != root cause):
+On Thu, 2022-03-10 at 11:54 +0800, Nancy.Lin wrote:
+> Add vdosys1 RDMA definition.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  .../arm/mediatek/mediatek,mdp-rdma.yaml       | 86
+> +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+>  create mode 100644
+> Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-rdma.yaml
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-head:   57e593a4ee92b5fddbab3367340e9cb0300cc241
-commit: 69c122751164c3c343eea205fd5c3e1d5132f967 [2710/9999] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
-config: mips-randconfig-r022-20220317 (https://download.01.org/0day-ci/archive/20220318/202203181306.hfAlK7cq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=69c122751164c3c343eea205fd5c3e1d5132f967
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-4.19.y
-        git checkout 69c122751164c3c343eea205fd5c3e1d5132f967
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+The better path:
+Documentation/devicetree/bindings/soc/mediatek/mediatek,mdp-rdma.yaml
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Does this mdp-rdma has relation with mdp3-rdma [1]? If the hardware are
+compatible, I think the binding document could be squashed. If no
+relation, I think mdp-rdma could be placed in display folder.
 
-All warnings (new ones prefixed by >>):
+[1] 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220117055254.9777-15-roy-cw.yeh@mediatek.com/
 
->> mm/slab_common.c:1438:37: warning: unused variable 'proc_slabinfo_operations' [-Wunused-const-variable]
-   static const struct file_operations proc_slabinfo_operations = {
-                                       ^
-   1 warning generated.
---
->> drivers/hwmon/scmi-hwmon.c:59:24: warning: address of array 'sensor->name' will always evaluate to 'true' [-Wpointer-bool-conversion]
-           if (sensor && sensor->name)
-                      ~~ ~~~~~~~~^~~~
-   1 warning generated.
---
-   drivers/tty/serial/stm32-usart.c:332:15: warning: variable 'cookie' set but not used [-Wunused-but-set-variable]
-           dma_cookie_t cookie;
-                        ^
->> drivers/tty/serial/stm32-usart.c:600:14: warning: no previous prototype for function 'stm32_get_databits' [-Wmissing-prototypes]
-   unsigned int stm32_get_databits(struct ktermios *termios)
-                ^
-   drivers/tty/serial/stm32-usart.c:600:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned int stm32_get_databits(struct ktermios *termios)
-   ^
-   static 
-   drivers/tty/serial/stm32-usart.c:929:15: warning: variable 'cookie' set but not used [-Wunused-but-set-variable]
-           dma_cookie_t cookie;
-                        ^
-   3 warnings generated.
---
-   In file included from drivers/net/wireless/intersil/hostap/hostap_ap.c:30:
-   In file included from drivers/net/wireless/intersil/hostap/hostap_wlan.h:11:
-   include/net/iw_handler.h:489:9: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
-           return IW_EV_POINT_LEN;
-                  ^~~~~~~~~~~~~~~
-   include/uapi/linux/wireless.h:1096:5: note: expanded from macro 'IW_EV_POINT_LEN'
-                            IW_EV_POINT_OFF)
-                            ^~~~~~~~~~~~~~~
-   include/uapi/linux/wireless.h:1093:75: note: expanded from macro 'IW_EV_POINT_OFF'
-   #define IW_EV_POINT_OFF (((char *) &(((struct iw_point *) NULL)->length)) - \
-                                                                             ^
-   drivers/net/wireless/intersil/hostap/hostap_ap.c:1507:8: warning: variable 'txt' set but not used [-Wunused-but-set-variable]
-           char *txt = "";
-                 ^
->> drivers/net/wireless/intersil/hostap/hostap_ap.c:372:36: warning: unused variable 'ap_control_proc_seqops' [-Wunused-const-variable]
-   static const struct seq_operations ap_control_proc_seqops = {
-                                      ^
->> drivers/net/wireless/intersil/hostap/hostap_ap.c:574:36: warning: unused variable 'prism2_ap_proc_seqops' [-Wunused-const-variable]
-   static const struct seq_operations prism2_ap_proc_seqops = {
-                                      ^
-   4 warnings generated.
---
-   In file included from drivers/net/wireless/intersil/hostap/hostap_proc.c:9:
-   In file included from drivers/net/wireless/intersil/hostap/hostap_wlan.h:11:
-   include/net/iw_handler.h:489:9: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
-           return IW_EV_POINT_LEN;
-                  ^~~~~~~~~~~~~~~
-   include/uapi/linux/wireless.h:1096:5: note: expanded from macro 'IW_EV_POINT_LEN'
-                            IW_EV_POINT_OFF)
-                            ^~~~~~~~~~~~~~~
-   include/uapi/linux/wireless.h:1093:75: note: expanded from macro 'IW_EV_POINT_OFF'
-   #define IW_EV_POINT_OFF (((char *) &(((struct iw_point *) NULL)->length)) - \
-                                                                             ^
->> drivers/net/wireless/intersil/hostap/hostap_proc.c:117:36: warning: unused variable 'prism2_wds_proc_seqops' [-Wunused-const-variable]
-   static const struct seq_operations prism2_wds_proc_seqops = {
-                                      ^
->> drivers/net/wireless/intersil/hostap/hostap_proc.c:170:36: warning: unused variable 'prism2_bss_list_proc_seqops' [-Wunused-const-variable]
-   static const struct seq_operations prism2_bss_list_proc_seqops = {
-                                      ^
-   drivers/net/wireless/intersil/hostap/hostap_proc.c:214:37: warning: unused variable 'prism2_pda_proc_fops' [-Wunused-const-variable]
-   static const struct file_operations prism2_pda_proc_fops = {
-                                       ^
-   drivers/net/wireless/intersil/hostap/hostap_proc.c:226:37: warning: unused variable 'prism2_aux_dump_proc_fops' [-Wunused-const-variable]
-   static const struct file_operations prism2_aux_dump_proc_fops = {
-                                       ^
->> drivers/net/wireless/intersil/hostap/hostap_proc.c:348:36: warning: unused variable 'prism2_scan_results_proc_seqops' [-Wunused-const-variable]
-   static const struct seq_operations prism2_scan_results_proc_seqops = {
-                                      ^
-   6 warnings generated.
+Regards,
+CK
 
+> 
+> diff --git
+> a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-
+> rdma.yaml
+> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-
+> rdma.yaml
+> new file mode 100644
+> index 000000000000..6ab773569462
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-
+> rdma.yaml
+> @@ -0,0 +1,86 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: 
+> https://urldefense.com/v3/__http://devicetree.org/schemas/arm/mediatek/mediatek,mdp-rdma.yaml*__;Iw!!CTRNKA9wMg0ARbw!0sVM-qGMUv6LrYRyg_gOLC9Em4NHxZhbtdmygv32phBHBUyLUzixXPduIIqCKA$
+>  
+> +$schema: 
+> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!0sVM-qGMUv6LrYRyg_gOLC9Em4NHxZhbtdmygv32phBHBUyLUzixXPfYY-0O3A$
+>  
+> +
+> +title: Mediatek MDP RDMA
+> +
+> +maintainers:
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +
+> +description: |
+> +  The mediatek MDP RDMA stands for Read Direct Memory Access.
+> +  It provides real time data to the back-end panel driver, such as
+> DSI,
+> +  DPI and DP_INTF.
+> +  It contains one line buffer to store the sufficient pixel data.
+> +  RDMA device node must be siblings to the central MMSYS_CONFIG
+> node.
+> +  For a description of the MMSYS_CONFIG binding, see
+> +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> for details.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: mediatek,mt8195-vdo1-rdma
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    description: A phandle and PM domain specifier as defined by
+> bindings of
+> +      the power controller specified by phandle. See
+> +      Documentation/devicetree/bindings/power/power-domain.yaml for
+> details.
+> +
+> +  clocks:
+> +    items:
+> +      - description: RDMA Clock
+> +
+> +  iommus:
+> +    description:
+> +      This property should point to the respective IOMMU block with
+> master port as argument,
+> +      see
+> Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for
+> details.
+> +
+> +  mediatek,gce-client-reg:
+> +    description:
+> +      The register of display function block to be set by gce. There
+> are 4 arguments,
+> +      such as gce node, subsys id, offset and register size. The
+> subsys id that is
+> +      mapping to the register of display function blocks is defined
+> in the gce header
+> +      include/include/dt-bindings/gce/<chip>-gce.h of each chips.
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - power-domains
+> +  - clocks
+> +  - iommus
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/mt8195-clk.h>
+> +    #include <dt-bindings/power/mt8195-power.h>
+> +    #include <dt-bindings/gce/mt8195-gce.h>
+> +    #include <dt-bindings/memory/mt8195-memory-port.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        vdo1_rdma0: mdp-rdma@1c104000 {
+> +            compatible = "mediatek,mt8195-vdo1-rdma";
+> +            reg = <0 0x1c104000 0 0x1000>;
+> +            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
+> +            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
+> +            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
+> +            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
+> +            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX 0x4000
+> 0x1000>;
+> +        };
+> +    };
 
-vim +/proc_slabinfo_operations +1438 mm/slab_common.c
-
-b7454ad3cfc304 Glauber Costa 2012-10-19  1437  
-b7454ad3cfc304 Glauber Costa 2012-10-19 @1438  static const struct file_operations proc_slabinfo_operations = {
-b7454ad3cfc304 Glauber Costa 2012-10-19  1439  	.open		= slabinfo_open,
-b7454ad3cfc304 Glauber Costa 2012-10-19  1440  	.read		= seq_read,
-b7454ad3cfc304 Glauber Costa 2012-10-19  1441  	.write          = slabinfo_write,
-b7454ad3cfc304 Glauber Costa 2012-10-19  1442  	.llseek		= seq_lseek,
-b7454ad3cfc304 Glauber Costa 2012-10-19  1443  	.release	= seq_release,
-b7454ad3cfc304 Glauber Costa 2012-10-19  1444  };
-b7454ad3cfc304 Glauber Costa 2012-10-19  1445  
-
-:::::: The code at line 1438 was first introduced by commit
-:::::: b7454ad3cfc3043c5264729a6204f049fe1f34b1 mm/sl[au]b: Move slabinfo processing to slab_common.c
-
-:::::: TO: Glauber Costa <glommer@parallels.com>
-:::::: CC: Pekka Enberg <penberg@kernel.org>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
