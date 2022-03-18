@@ -1,121 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838D6510E
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 17:59:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61796C340E8;
-	Fri, 18 Mar 2022 17:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647626374;
-	bh=DnhgQQxVOH3bMKPDnLoNfQArYffddzQ5u6wFD2OnS6A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=F9SpeWsTgjwsMojrDShOq/mHAJGifN2wkANWsbgJ5J69nrPcQfMG+Tu9TLWR3uaB4
-	 ta1BDkDp+cZwCgTRfw3ExVP0aWmzmaAVmmnDRfRNuU3kGvtAjbJo6MZ65QTh7v+I1m
-	 P9OJu9Z35IX4Dena4O85hCVin3RURminpfbXVFpIWfSIm6kQLOWlKZwa9dGVYgnKfZ
-	 3h3AAzpimeLKScsd6/Wvqfd8oUNx91kh5LhwMC4y84hpghXP9TyuN867eslGQHgKHi
-	 KqvqshCoHabejArvOhEKFd13KCLxOfXBCayrrbUuVhH6Qy8oFiYrBlbQrjFyjvpTWv
-	 xUL3ifm9OsPHA==
-Message-ID: <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org>
-Date: Fri, 18 Mar 2022 10:59:28 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A10510E
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 18:01:27 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id w27so15308009lfa.5
+        for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 11:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i1Ms63NIkd6E7s+RusloWQgZ7ue4LhJ4QsLqeHtSUJw=;
+        b=UmJ7ZODw+NbFnzVmsyjuDdBgu4T/BwFBuS2/0+3MpNrwys8fTBTfkYBO1USQX87RCc
+         GytlT2Sz0odsaeGpYDGyMwEBtfolTTfoXe/0/w8shAKFDO+IRj1la0blGBdQOVphsqY7
+         M3IJWHcNUuY3XpphtwP3Ccs3F0vVtc7X4tupL6zeR1RE0r6kEUnLdV6sv6abGBSKuAvT
+         qsz62NmNx+qchrEYSrn3OzEydIzwRraHZ8mwieJYb1vuVoLB/731mnpJMslLxnJ/Q8em
+         PiirQtwAVuwulvHUk2tiS2Du+CYiHYNqBE/RFHLy24dEqp6UfqUw5Ii145O69Lw/vjea
+         Ly/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i1Ms63NIkd6E7s+RusloWQgZ7ue4LhJ4QsLqeHtSUJw=;
+        b=ZqZR/9IUstyfpmuZGkb8OR9OqyizahLflD1+JUBxfHNlrFXfV6Q2yWuj1kUU0Pet4v
+         MfKetZ7EVaFMasCQ9E9iqfU7vPpoN52DlfcPftEdwY8L8bHHuckgsx2Pv70cQWkc7xtj
+         jJTEErolhID8sACPkY2I5BXCkPuwD9TChzSeWYrU/PFaI2gjpq+17LqSnqDPnsmvYUjq
+         Tjl6qM2Nvr98Xv4QjUJpFXJUqSPYpluKAOYF1HRGjCLcN7et4QqHz7AQFkSEUIHpn5XH
+         RYU9lqcPcHCME4Eyn64gPRP21aXk7pbF0PRzIPCDeAjy/BYYi+d3Z+NUUQb4usBWtb/l
+         wKLg==
+X-Gm-Message-State: AOAM533cZd27byDgxdkQVhO0VjgmLvWJwoH0wUWuFuF4WDJZTOBQ9y5Q
+	RdZSVl0SDEuk2dD6d+f+eMHXQII6JfqidJVL1a6wpQ==
+X-Google-Smtp-Source: ABdhPJz6aj15Mk032FInyJsNGaIzC0VM6EnNcglPQg/SUnzZ2trHPqDTPq6Y0J4vC0VxLXeRF9Apc6TRZUmywwUSrg0=
+X-Received: by 2002:a05:6512:b9e:b0:44a:10eb:9607 with SMTP id
+ b30-20020a0565120b9e00b0044a10eb9607mr1382981lfv.626.1647626485133; Fri, 18
+ Mar 2022 11:01:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>,
- Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, "H. Peter Anvin"
- <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>,
- Peter Zijlstra <peterz@infradead.org>,
- "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
- LKML <linux-kernel@vger.kernel.org>,
- linux-toolchains <linux-toolchains@vger.kernel.org>
-References: <20220210223134.233757-1-morbo@google.com>
- <20220301201903.4113977-1-morbo@google.com>
- <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
- <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com>
- <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
- <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com>
- <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
- <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
- <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com>
- <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
-From: Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220316213055.2351342-1-morbo@google.com> <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
+ <CAKwvOdkjb3uR+kqjfdKL5gqA8R+00c5=3E7uGGW+mGZ3QRsjqg@mail.gmail.com> <YjSROmYwwGhpsXMl@smile.fi.intel.com>
+In-Reply-To: <YjSROmYwwGhpsXMl@smile.fi.intel.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 18 Mar 2022 11:01:13 -0700
+Message-ID: <CAKwvOdkEjrPUL4HuO3UKaUZAzVw=XV1bEOSj6HR5R1WTUSSZ4w@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Bill Wendling <morbo@google.com>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Nathan Chancellor <nathan@kernel.org>, linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Joe Perches <joe@perches.com>, Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 3/17/22 14:39, Linus Torvalds wrote:
-> On Thu, Mar 17, 2022 at 2:06 PM Andrew Cooper <Andrew.Cooper3@citrix.com> wrote:
->>
->> I was idly playing with this builtin in response to the thread, and
->> found that GCC has a far more serious bug than Clang had.
-> 
-> Heh. Yeah, that's bad.
-> 
-> But it kind of fits my argument: compiler intrinsics aren't
-> necessarily such a wonderful thing. They hardly get any testing at all
-> unless they are some very very core thing.
-> 
-> I will personally *always* prefer some generic "escape clause" over a
-> compiler that thinks it knows better.
-> 
-> I think compiler people should see inline asm as a really *good*
-> thing, because it allows people to have that "I'm going to do
-> something that nobody normal does, look away now" kind of escape
-> clause, letting the compiler concentrate on the things it does best.
-> 
-> Yes, I realize inline asm isn't something compiler people love. And
-> yes, I realize that it might not give optimal code.
-> 
-> But think of it a bit like casts - it adds complexity to the language,
-> and it might make some optimizations harder or even impossible - but
-> it makes the language much more powerful and allows you to do things
-> that you simply couldn't do without it.
-> 
-> There's a reason people use C instead of Pascal or FORTRAN. Those
-> casts, and that pointer arithmetic - the bane of many optimizations -
-> are really really good things.
-> 
-> Intrinsics should generally be shunned, not seen as a "this is an
-> alternative to inline asm". They should only exist for situations
-> where you can show "look, I can do so much better", and have a
-> test-suite for it and a real-life case where it gives you a clear and
-> undeniable uplift on a meaningful load.
-> 
-> (And here I separate 'intrinsic' and generic compiler builtins. I love
-> the builtins that allow me to tell the compiler something, or the
-> compiler to tell me something about the code: __builtin_unreachable()
-> and __builtin_constant_p() are both wonderful examples of those kinds
-> of things)
-> 
-> But an intrinsic for some odd target-specific thing that can't even be
-> portably generalized? Give me inline asm any day.
-> 
-> We can do things with inline asms that the compiler can't even _dream_
-> of, like the whole instruction rewriting thing we use.
-> 
-> I'd much rather have a powerful generic concept (eg "asm goto" is
-> lovely) than a specialized intrinsic that does only one thing, and
-> doesn't even do it well because it's untested and badly defined.
-> 
+On Fri, Mar 18, 2022 at 7:04 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Mar 17, 2022 at 11:11:21AM -0700, Nick Desaulniers wrote:
+> > Our goal is to enable -Wformat for CC=clang.  Please see also:
+> > commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
+> > unnecessary %h[xudi] and %hh[xudi]")
+>
+> Not that I agree on that commit for %h[h]x
+>
+>         signed char ch = -1;
+>         printf("%x\n", ch);
+>         printf("%hhx\n", ch);
 
-I generally agree.  In this particular case, though, I will keep using 
-the builtin in tools/testing/selftests/x86/helpers.h unless we actually 
-hit breakage.  This is because this is *user* code, it is compiled with 
-the redzone enabled, and the asm code to do the right thing when the 
-redzone is enabled is too hairy for me to want to deal with it.  The 
-builtins have their share of problems, but they do seem to work in this 
-context.
+Will print:
+ffffffff
+ff
 
-This isn't at all an argument that we should do the same thing in actual 
-kernel code.
+Maybe we should reconsider our recommendations for signed types?
+
+It's probably worth adding `signed char` explicitly to
+Documentation/core-api/printk-formats.rst, as it is a distinct type
+from `char` in C.
+-- 
+Thanks,
+~Nick Desaulniers
