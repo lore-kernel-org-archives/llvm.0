@@ -1,127 +1,112 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56CA76444
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 23:10:14 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22IN4QwF013108;
-	Fri, 18 Mar 2022 18:04:26 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 22IN4P7s013107;
-	Fri, 18 Mar 2022 18:04:25 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Fri, 18 Mar 2022 18:04:25 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Message-ID: <20220318230425.GT614@gate.crashing.org>
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com> <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09466444
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 23:11:16 +0000 (UTC)
+Received: by mail-lj1-f180.google.com with SMTP id g24so11867539lja.7
+        for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 16:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w17JTccyG7Hu5QzrK8YkGK5ZNCS3sFkaT90voeSdkM8=;
+        b=cLQTEpkdWC2iejrFcbaeZaTYVZtnf6ppDlPoWHG3WLuvfgvVuinp5NMg79PXPpdFvH
+         gZtv89SFNJBweBpXijc5Z7vKFrmBIaNpI7tR2i6bK9UlWPOJDDmdW0uGNlVgllDgowTV
+         p3FHr8IyH/D68PKslFErhgQipgSB//BagoF2o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w17JTccyG7Hu5QzrK8YkGK5ZNCS3sFkaT90voeSdkM8=;
+        b=mmz/wJWu72Uedpzi34KY33JOHZu8hOJWfFIFP5cJK4CWxuzJM8TjHEss1ym2JCjWUd
+         KjqKeeLmvGRSe15SPPlx6F6wLQ704oZklt59g6B8MVrsZU+0yabFsnsCsnGSBNCFPaL1
+         jYRFf+vBJD7slJcOrX2re2JkhF5ORQSshk5yh5JmDWO5XtbqgOHam94oYiy46+PoIkqy
+         tlmR9M2TSuryq0k301BME+0l1Fm/y+Yt4/Y5Ro5wYEPer+nAj1HxFXHTOW+UfGz53J15
+         g9Zs0cGIf6VsuYa4TrNdhJ+L2tz/ODX0CKW9ejTVtoJe7Bvzs8qtAUhdu8kOa719tnsT
+         ZxuQ==
+X-Gm-Message-State: AOAM530dybUOsjZr1+PwUW1ofnNg59aLDxcSv5T/5vmB9FKo1iP6M+pw
+	kcQ6wBnfaxO2i+Qa5BWIF+Jm+w4Xfj+rXL/qdNY=
+X-Google-Smtp-Source: ABdhPJxAqHO6YSOUrKWTENXczYhz8dzyjQ0PstvcstZDPLvFjY1fYFCZuadRMye35n6pJjwNBWEpwA==
+X-Received: by 2002:a2e:b8c9:0:b0:249:28df:e98e with SMTP id s9-20020a2eb8c9000000b0024928dfe98emr7662618ljp.304.1647645074560;
+        Fri, 18 Mar 2022 16:11:14 -0700 (PDT)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
+        by smtp.gmail.com with ESMTPSA id a10-20020ac2504a000000b00448bcec87e9sm939405lfm.121.2022.03.18.16.11.12
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 16:11:12 -0700 (PDT)
+Received: by mail-lj1-f173.google.com with SMTP id r21so5874996ljp.8
+        for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 16:11:12 -0700 (PDT)
+X-Received: by 2002:a2e:804b:0:b0:247:e81f:87e9 with SMTP id
+ p11-20020a2e804b000000b00247e81f87e9mr7817380ljg.176.1647645071884; Fri, 18
+ Mar 2022 16:11:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
+MIME-Version: 1.0
+References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com>
+ <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
+ <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
+ <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
+ <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
+ <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
+ <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
+ <9a97330b-e5ee-7b7e-4c7a-cfdf15032094@citrix.com>
+In-Reply-To: <9a97330b-e5ee-7b7e-4c7a-cfdf15032094@citrix.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 18 Mar 2022 16:10:55 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgKBme-SdbkSxbQ4+c6tZdvY2fe1wP1TgJeuDAf+AgwMg@mail.gmail.com>
+Message-ID: <CAHk-=wgKBme-SdbkSxbQ4+c6tZdvY2fe1wP1TgJeuDAf+AgwMg@mail.gmail.com>
+Subject: Re: [PATCH v5] x86: use builtins to read eflags
+To: Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc: Andy Lutomirski <luto@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Mar 17, 2022 at 02:39:34PM -0700, Linus Torvalds wrote:
-> I think compiler people should see inline asm as a really *good*
-> thing, because it allows people to have that "I'm going to do
-> something that nobody normal does, look away now" kind of escape
-> clause, letting the compiler concentrate on the things it does best.
+On Fri, Mar 18, 2022 at 2:48 PM Andrew Cooper <Andrew.Cooper3@citrix.com> wrote:
+>
+> As such, I'm not sure how current_stack_pointer can work as intended in
+> all cases...
 
-There is a reason that we have the GCC inline asm extension at all.  It
-is not because the compiler developers think it is useless ;-)
+So as mentioned, the kernel doesn't really care, since for the kernel
+that inline asm use is more of a "get proper backtraces" thing. The
+compiler thinks the function is a leaf function, doesn't set up a
+frame for a call that  happens inside the inline asm.
 
-It often *is* abused, or used in wrong, dangerous ways.  This often will
-go undetected for a long time, for all the same reasons you want to have
-inline asm in the first place (it is an escape hatch, much of what you
-do with it is outside of what the compiler can (and does) know about)!
+The code *works* without it, but the frame annotations aren't right.
 
-> Yes, I realize inline asm isn't something compiler people love. And
-> yes, I realize that it might not give optimal code.
+And obviously we don't actually *(change* the stack pointer. Or
+rather, a call will do exactly as with pushf/pop: rsp gets updated
+there but gets put right back.
 
-Some of us do love it.  But it should not be used when you do not need
-it, indeed to get better machine code genereated, but much more
-importantly to get more correct code, and much simpler code, simpler to
-read code.  All these things are connected.
+See commit 317c2ce77d8a ("x86/alternatives: Add stack frame dependency
+to alternative_call_2()") for some details.
 
-> (And here I separate 'intrinsic' and generic compiler builtins. I love
-> the builtins that allow me to tell the compiler something, or the
-> compiler to tell me something about the code: __builtin_unreachable()
-> and __builtin_constant_p() are both wonderful examples of those kinds
-> of things)
+And yes, that trick then caused problems with clang, and we did
+f5caf621ee35 ("x86/asm: Fix inline asm call constraints for Clang")
+that created the current situation.
 
-I don't know what you mean when you say "intrinsic".  It is a worse name
-than a "built-in function", which is either not a function or not a
-built-in thing, so that name is rubbish; both "compiler intrinsic" and
-"intrinsic function" are even worse though!
+It would be lovely to have some explicit model for "I want the frame
+to have been set up for backtraces", but here we are. Marking '%rsp
+used makes the compiler understand it's not a leaf function.
 
-I like to say "builtin", which has no other meaning in the English
-language, so it cannot be easily understood to have properties it
-doesn't, not just from a misleading name anyway.
+And while we have other uses for it that then use the actual value,
+those don't care about the exact value of the stack pointer register,
+they just want "give me a pointer that is contained within the current
+stack", because we control the stack allocation and do funky things
+there. So "any random stack pointer value in this function" is
+perfectly fine and expected.
 
-And yes, __builtin_unreachable() is nicer than having to write "1/0" in
-all those places, it is much clearer.  It is undefined behaviour to
-execute it exactly the same though.
+But for user mode, it would probably be a great idea to also have a "I
+cannot use a redzone in this function" thing. The kernel can't use it
+because we have nested exceptions, but maybe some day even the kernel
+could make use of (controlled) red-zoning.
 
-__builtin_constant_p() is a curious one: it returns whether the compiler
-knows its argument to be constant, which is something C does not define
-(*cannot* define).  It is a curse as well as a blessing, moving from
-compiler bversion to compiler version can return false instead of true
-on the same expression, or the other way around, and the same when
-trying out different compilers of course.
-
-> But an intrinsic for some odd target-specific thing that can't even be
-> portably generalized? Give me inline asm any day.
-
-The vast majority of compiler builtins are for simple transformations
-that the machine can do, for example with vector instructions.  Using
-such builtins does *not* instruct the compiler to use those machine
-insns, even if the builtin name would suggest that; instead, it asks to
-have code generated that has such semantics.  So it can be optimised by
-the compiler, much more than what can be done with inline asm.
-
-It also can be optimised better by the compiler than if you would
-open-code the transforms (if you ask to frobnicate something, the
-compiler will know you want to frobnicate that thing, and it will not
-always recognise that is what you want if you just write it out in more
-general code).
-
-Well-chosen builtin names are also much more readable than the best
-inline asm can ever be, and it can express much more in a much smaller
-space, without so much opportunity to make mistakes, either.
-
-Builtins are good!
-
-> We can do things with inline asms that the compiler can't even _dream_
-> of, like the whole instruction rewriting thing we use.
-
-Yes.  Inline asm is good as well!  Both things have their places.
-
-Some builtins are not well-conceived.  And some inline asm has the
-same problem :-(
-
-> I'd much rather have a powerful generic concept (eg "asm goto" is
-> lovely) than a specialized intrinsic that does only one thing, and
-> doesn't even do it well because it's untested and badly defined.
-
-Being generally applicable is a double-edged sword.  The trick is to
-have things more general when reasonable, and not when not.
-
-
-Segher
+            Linus
