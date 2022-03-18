@@ -1,109 +1,68 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A693C5137
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 21:20:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647638451; x=1679174451;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lk0yhVMZFRoXXvMeeaLOIoOzsoWtSuPjNWunAOj+NRo=;
-  b=gAA+seUANvk5YyW1DLpozEGd09a650RzM7nqYkvmUyQwmZY/2n/xgCOb
-   A3BrwTjizSlhv0j17kMbX25zMVFyeSOylOXX6w0Hchu5VkQX2qfCoElw8
-   apEHfqbGlDk8igkEzDgEiJhrd7C8E+NqzgVOMwdBExLsYL+J5RC8+a6FR
-   iWJ8coeYUV3fPmbeP0/Npshq1K7vgbpJ19fBRW/Os6m2gOt131YNYEB0t
-   5QQOsuoDl+J7Re9iBiz6Ms2UZ5bfu3RQnk0Kct1xJ/alPNR6/wNLxUl8i
-   lVQwjgSWUNifjMEIL97cqT5Yy5OLnKY9zeHLGRk2U0ZUPt9Bl38TNsVoq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="237171935"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="237171935"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 14:20:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="542044871"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 18 Mar 2022 14:20:49 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nVK1g-000FAS-Qz; Fri, 18 Mar 2022 21:20:48 +0000
-Date: Sat, 19 Mar 2022 05:20:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [bvanassche:ufs-for-next 306/307] drivers/scsi/ufs/ufshcd.c:8314:14:
- warning: variable 'name' set but not used
-Message-ID: <202203190505.1qKIBoB1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7215137
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 21:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C9620C340F0;
+	Fri, 18 Mar 2022 21:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647639010;
+	bh=6ZLx1m6ykQe705DmybtQskmGsNNS83XaLRHUMfoEAsI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=C7DamhM3ePeMEgVZmCsZHN3KO2A2U9JfPCRy/QOgM3PZ7N8hjg1EknXk1dOpeEV/f
+	 GF6zKyVZa5PNKaEXJkwdryz40oWR1YrYrOiPF+yvwZH6vy4rfpE5u/HQVQhDdeqcaI
+	 JYP7FPeQY+xDLYJdlkzoyBT6rC4bYjBz8ZlkO800gvChiBznNmY9kSA/eGMbUkxEO1
+	 U0OjDX63uoo49G+pZP1rpGUZf2fPRw26RshJcFP+C8TAlJaM1tMLPYSRqbLFtx9iWB
+	 PAbJsquc5WGBb1SY+vQEbPb47cTmg5dCbtj4Lqh7/NpkfmmZSJtJc1oFGbdV96H5gD
+	 2VR6CTTwyDSfg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AF387F03842;
+	Fri, 18 Mar 2022 21:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] qlcnic: remove redundant assignment to variable index
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <164763901071.24897.18138645596476086788.git-patchwork-notify@kernel.org>
+Date: Fri, 18 Mar 2022 21:30:10 +0000
+References: <20220318012035.89482-1-colin.i.king@gmail.com>
+In-Reply-To: <20220318012035.89482-1-colin.i.king@gmail.com>
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: shshaikh@marvell.com, manishc@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+ davem@davemloft.net, pabeni@redhat.com, netdev@vger.kernel.org,
+ kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
 
-tree:   https://github.com/bvanassche/linux ufs-for-next
-head:   366c4aa8768b5193b782c809d7aba916d4e382da
-commit: a8a69970d87f778e000ae1b15e18061c09aa0f7b [306/307] scsi: ufs: Remove unused constants and code
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220319/202203190505.1qKIBoB1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/a8a69970d87f778e000ae1b15e18061c09aa0f7b
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche ufs-for-next
-        git checkout a8a69970d87f778e000ae1b15e18061c09aa0f7b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/ufs/
+Hello:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-All warnings (new ones prefixed by >>):
+On Fri, 18 Mar 2022 01:20:35 +0000 you wrote:
+> Variable index is being assigned a value that is never read, it is being
+> re-assigned later in a following for-loop. The assignment is redundant
+> and can be removed.
+> 
+> Cleans up clang scan build warning:
+> drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c:1358:17: warning:
+> Although the value stored to 'index' is used in the enclosing expression,
+> the value is never actually read from 'index' [deadcode.DeadStores]
+> 
+> [...]
 
->> drivers/scsi/ufs/ufshcd.c:8314:14: warning: variable 'name' set but not used [-Wunused-but-set-variable]
-           const char *name;
-                       ^
-   1 warning generated.
+Here is the summary with links:
+  - qlcnic: remove redundant assignment to variable index
+    https://git.kernel.org/netdev/net-next/c/79fdce0513ac
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-vim +/name +8314 drivers/scsi/ufs/ufshcd.c
-
-57d104c153d3d6d Subhash Jadavani    2014-09-25  8308  
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8309  static int ufshcd_config_vreg(struct device *dev,
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8310  		struct ufs_vreg *vreg, bool on)
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8311  {
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8312  	int ret = 0;
-727535903bea924 Gustavo A. R. Silva 2017-11-20  8313  	struct regulator *reg;
-727535903bea924 Gustavo A. R. Silva 2017-11-20 @8314  	const char *name;
-a8a69970d87f778 Bart Van Assche     2021-12-08  8315  	int uA_load;
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8316  
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8317  	BUG_ON(!vreg);
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8318  
-727535903bea924 Gustavo A. R. Silva 2017-11-20  8319  	reg = vreg->reg;
-727535903bea924 Gustavo A. R. Silva 2017-11-20  8320  	name = vreg->name;
-727535903bea924 Gustavo A. R. Silva 2017-11-20  8321  
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8322  	if (regulator_count_voltages(reg) > 0) {
-90d88f47e8d03b2 Asutosh Das         2020-02-10  8323  		uA_load = on ? vreg->max_uA : 0;
-90d88f47e8d03b2 Asutosh Das         2020-02-10  8324  		ret = ufshcd_config_vreg_load(dev, vreg, uA_load);
-3b141e8cfd54ba3 Stanley Chu         2019-03-28  8325  	}
-a8a69970d87f778 Bart Van Assche     2021-12-08  8326  
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8327  	return ret;
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8328  }
-aa497613093412e Sujit Reddy Thumma  2014-09-25  8329  
-
-:::::: The code at line 8314 was first introduced by commit
-:::::: 727535903bea924c4f73abb202c4b3e85fff0ca4 scsi: ufs: ufshcd: fix potential NULL pointer dereference in ufshcd_config_vreg
-
-:::::: TO: Gustavo A. R. Silva <garsilva@embeddedor.com>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
