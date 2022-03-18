@@ -1,131 +1,100 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47AF4C60
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 13:06:35 +0000 (UTC)
-X-UUID: 6a2c2ed1b07e41ecbfb8c9cd24931e0b-20220318
-X-UUID: 6a2c2ed1b07e41ecbfb8c9cd24931e0b-20220318
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 949797902; Fri, 18 Mar 2022 21:06:23 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 18 Mar 2022 21:06:17 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 18 Mar 2022 21:06:16 +0800
-Message-ID: <1ae841a059f8de6bb9366b2f776cf48721aded41.camel@mediatek.com>
-Subject: Re: [PATCH v15 21/22] drm/mediatek: add mediatek-drm of vdosys1
- support for MT8195
-From: Nancy.Lin <nancy.lin@mediatek.com>
-To: CK Hu <ck.hu@mediatek.com>, Rob Herring <robh+dt@kernel.org>, "Matthias
- Brugger" <matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	<linux@roeck-us.net>
-CC: <devicetree@vger.kernel.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <srv_heupstream@mediatek.com>, David Airlie
-	<airlied@linux.ie>, "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-	<singo.chang@mediatek.com>, <llvm@lists.linux.dev>, Nick Desaulniers
-	<ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
-Date: Fri, 18 Mar 2022 21:06:16 +0800
-In-Reply-To: <9832dacd50a744afebe9db7fcfda2b4ced572936.camel@mediatek.com>
-References: <20220311015506.11232-1-nancy.lin@mediatek.com>
-	 <20220311015506.11232-22-nancy.lin@mediatek.com>
-	 <9832dacd50a744afebe9db7fcfda2b4ced572936.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A4E4C60
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 13:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647609043; x=1679145043;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JWQdOKExQ2iNTeiUG9LPrk66W7DjmQW3vJ9Ceu7KtQQ=;
+  b=dKg6qvCaMYF5scRF1eICfWBtCVILKP10zlSmYLFmAT1nrREI1zp4ONIh
+   GoIkIU8OVWebb4G5TZjCp7AIXUb9Q5B8xHi+fqBjcju7wSTws2s+RJ2vv
+   ssTT4mjbR76btx/niPWH7pqZxq8Bw2a23bV5nxnJkmEqRXQSOQSluSoNQ
+   1mbRfMPcJ3FA49ybqCvZI+qwIE258WmvRIaDYtkMyTp7hVuYTJ27ACsGs
+   MTBQhIIkLrSl19FTHMmDO15ZHk2q8LP8yIB/tp8jMb7IiNpgpBN+9NrNU
+   JyqKtFXwlc6tvfOvpAaLzU/p75riw4p8RbqkqlYZHc9yEW6PDACkMwdY9
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="237077331"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="237077331"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:10:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="715475802"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 18 Mar 2022 06:10:40 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nVCNL-000Em6-OQ; Fri, 18 Mar 2022 13:10:39 +0000
+Date: Fri, 18 Mar 2022 21:10:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-media@vger.kernel.org
+Subject: [linux-next:master 12673/13576]
+ drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34: warning:
+ unused variable 'c8sectpfe_match'
+Message-ID: <202203182127.ZeZX6m5Y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi CK,
+Hi Mauro,
 
-Thanks for the review.
+First bad commit (maybe != root cause):
 
-On Tue, 2022-03-15 at 13:10 +0800, CK Hu wrote:
-> Hi, Nancy:
-> 
-> On Fri, 2022-03-11 at 09:55 +0800, Nancy.Lin wrote:
-> > Add driver data of mt8195 vdosys1 to mediatek-drm.
-> > 
-> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  drivers/gpu/drm/mediatek/mtk_drm_drv.c | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> > b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> > index 99f37f8f6639..2a32e5d24f19 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> > @@ -190,6 +190,12 @@ static const enum mtk_ddp_comp_id
-> > mt8195_mtk_ddp_main[] = {
-> >  	DDP_COMPONENT_DP_INTF0,
-> >  };
-> >  
-> > +static const enum mtk_ddp_comp_id mt8195_mtk_ddp_ext[] = {
-> > +	DDP_COMPONENT_OVL_ADAPTOR,
-> > +	DDP_COMPONENT_MERGE5,
-> > +	DDP_COMPONENT_DP_INTF1,
-> > +};
-> > +
-> >  static const struct mtk_mmsys_driver_data mt2701_mmsys_driver_data
-> > =
-> > {
-> >  	.main_path = mt2701_mtk_ddp_main,
-> >  	.main_len = ARRAY_SIZE(mt2701_mtk_ddp_main),
-> > @@ -254,6 +260,13 @@ static const struct mtk_mmsys_driver_data
-> > mt8195_vdosys0_driver_data = {
-> >  	.mmsys_dev_num = 2,
-> 
-> With this modification,
-> 
-> Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> 
-> 
-OK
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6d72dda014a4753974eb08950089ddf71fec4f60
+commit: 05dba31552682f0e0ff5fea48c99133068549737 [12673/13576] media: platform: place stm32/ and sti/ under st/ dir
+config: hexagon-randconfig-r034-20220317 (https://download.01.org/0day-ci/archive/20220318/202203182127.ZeZX6m5Y-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=05dba31552682f0e0ff5fea48c99133068549737
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 05dba31552682f0e0ff5fea48c99133068549737
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/st/sti/c8sectpfe/
 
-Regards,
-Nancy
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> >  };
-> >  
-> > +static const struct mtk_mmsys_driver_data
-> > mt8195_vdosys1_driver_data
-> > = {
-> > +	.ext_path = mt8195_mtk_ddp_ext,
-> > +	.ext_len = ARRAY_SIZE(mt8195_mtk_ddp_ext),
-> > +	.mmsys_id = 1,
-> > +	.mmsys_dev_num = 2,
-> > +};
-> > +
-> >  static const struct of_device_id mtk_drm_of_ids[] = {
-> >  	{ .compatible = "mediatek,mt2701-mmsys",
-> >  	  .data = &mt2701_mmsys_driver_data},
-> > @@ -271,6 +284,8 @@ static const struct of_device_id
-> > mtk_drm_of_ids[]
-> > = {
-> >  	  .data = &mt8192_mmsys_driver_data},
-> >  	{ .compatible = "mediatek,mt8195-vdosys0",
-> >  	  .data = &mt8195_vdosys0_driver_data},
-> > +	{ .compatible = "mediatek,mt8195-vdosys1",
-> > +	  .data = &mt8195_vdosys1_driver_data},
-> >  	{ }
-> >  };
-> >  MODULE_DEVICE_TABLE(of, mtk_drm_of_ids);
-> 
-> 
+All warnings (new ones prefixed by >>):
 
+>> drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34: warning: unused variable 'c8sectpfe_match' [-Wunused-const-variable]
+   static const struct of_device_id c8sectpfe_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/c8sectpfe_match +1175 drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+
+c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1174  
+c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30 @1175  static const struct of_device_id c8sectpfe_match[] = {
+c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1176  	{ .compatible = "st,stih407-c8sectpfe" },
+c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1177  	{ /* sentinel */ },
+c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1178  };
+c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1179  MODULE_DEVICE_TABLE(of, c8sectpfe_match);
+c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1180  
+
+:::::: The code at line 1175 was first introduced by commit
+:::::: c5f5d0f99794cfb675ecacfe37a1b33b352b9752 [media] c8sectpfe: STiH407/10 Linux DVB demux support
+
+:::::: TO: Peter Griffin <peter.griffin@linaro.org>
+:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
