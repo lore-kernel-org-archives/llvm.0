@@ -1,92 +1,102 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DFE215A8
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 12:37:20 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC1CC1474;
-	Fri, 18 Mar 2022 05:37:19 -0700 (PDT)
-Received: from [10.57.88.118] (unknown [10.57.88.118])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FBAE3F7F5;
-	Fri, 18 Mar 2022 05:37:18 -0700 (PDT)
-Subject: Re: [PATCH] arm64: fix clang warning about TRAMP_VALIAS
-To: Arnd Bergmann <arnd@kernel.org>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20220316183833.1563139-1-arnd@kernel.org>
-From: James Morse <james.morse@arm.com>
-Message-ID: <92859987-5088-3b2c-3e51-e61222724d23@arm.com>
-Date: Fri, 18 Mar 2022 12:37:12 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18EE44C60
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 13:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647608443; x=1679144443;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Tlb0Oa3iKmUPJmNv1OT28opAXtAx9ub/Hx+6e+uVH60=;
+  b=YG3ChxOQ+b3NBZsgVAX6VhZZzKXcP7XcPzfkWuM5A3gdjS6n3frimp9g
+   ZV1kOx4jV3X9nhkZvkB2tI7BuVFiL71re4XDPe6G7h4wFcmHAMKRZPaah
+   L1RZhC1cTTcIEslW1Q1VOUs/24njS2CI8i/nwMka3UNvw99892lV4jzoj
+   a+wMJf7Xcjn3Ld7MP6DfbZbLycsC6qby6+oWtLleOR5XLKuLbWb32ggQC
+   mR2VpxB/qVSNgdQyfZkJBCe16/izo0eDqtksmT0lPRetGJbnOeV0jryoR
+   /G4+8mvYJx5aiYF3e7p41IOU6AMD8Ur3xYxUQJix9/6oPGrRDfcI0yiDK
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="257078823"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="257078823"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:00:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="647452945"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 18 Mar 2022 06:00:40 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nVCDf-000Elh-Ht; Fri, 18 Mar 2022 13:00:39 +0000
+Date: Fri, 18 Mar 2022 21:00:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [mchehab-media-next:master 262/331]
+ drivers/media/platform/renesas/rcar_drif.c:1470:34: warning: unused variable
+ 'rcar_drif_of_table'
+Message-ID: <202203182022.SpPMtxPN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220316183833.1563139-1-arnd@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Arnd,
+Hi Mauro,
 
-On 3/16/22 6:38 PM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The newly introduced TRAMP_VALIAS definition causes a build warning
-> with clang-14:
-> 
-> arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
->                  return (char *)TRAMP_VALIAS + SZ_2K * slot;
+First bad commit (maybe != root cause):
 
-It is? Good to know!
-(clang 11 doesn't seem to be so fussy)
+tree:   git://linuxtv.org/mchehab/media-next.git master
+head:   47aa866f248c89b319b99ac7b21a0a961ed2264a
+commit: ee4a77a32b39064fdab0aa2b36bbd35ebf57e077 [262/331] media: platform: place Renesas drivers on a separate dir
+config: hexagon-randconfig-r015-20220317 (https://download.01.org/0day-ci/archive/20220318/202203182022.SpPMtxPN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add mchehab-media-next git://linuxtv.org/mchehab/media-next.git
+        git fetch --no-tags mchehab-media-next master
+        git checkout ee4a77a32b39064fdab0aa2b36bbd35ebf57e077
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/
 
-Just for some more background:
-TRAMP_VALIAS existed before, but it wasn't defined if KPTI is disabled at compile time, you can't
-do that without CONFIG_EXPERT.
-I thought these dummy definitions would be cleaner than #ifdef'ing the code.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-> Change the addition to something clang does not complain about.
-
-Acked-by: James Morse <james.morse@arm.com>
-
-
-Thanks!
-
-James
-
+>> drivers/media/platform/renesas/rcar_drif.c:1470:34: warning: unused variable 'rcar_drif_of_table' [-Wunused-const-variable]
+   static const struct of_device_id rcar_drif_of_table[] = {
+                                    ^
+   1 warning generated.
 
 
-> I see this warning on 5.17-rc8, but did not test it on linux-next,
-> which may already have a fix.
-> 
-> diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
-> index f64613a96d53..bc9a2145f419 100644
-> --- a/arch/arm64/include/asm/vectors.h
-> +++ b/arch/arm64/include/asm/vectors.h
-> @@ -56,14 +56,14 @@ enum arm64_bp_harden_el1_vectors {
->   DECLARE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector);
->   
->   #ifndef CONFIG_UNMAP_KERNEL_AT_EL0
-> -#define TRAMP_VALIAS	0
-> +#define TRAMP_VALIAS	0ul
->   #endif
->   
->   static inline const char *
->   arm64_get_bp_hardening_vector(enum arm64_bp_harden_el1_vectors slot)
->   {
->   	if (arm64_kernel_unmapped_at_el0())
-> -		return (char *)TRAMP_VALIAS + SZ_2K * slot;
-> +		return (char *)(TRAMP_VALIAS + SZ_2K * slot);
->   
->   	WARN_ON_ONCE(slot == EL1_VECTOR_KPTI);
->   
-> 
+vim +/rcar_drif_of_table +1470 drivers/media/platform/renesas/rcar_drif.c
 
+7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1466  
+7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1467  static SIMPLE_DEV_PM_OPS(rcar_drif_pm_ops, rcar_drif_suspend,
+7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1468  			 rcar_drif_resume);
+7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1469  
+7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12 @1470  static const struct of_device_id rcar_drif_of_table[] = {
+7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1471  	{ .compatible = "renesas,rcar-gen3-drif" },
+7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1472  	{ }
+7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1473  };
+7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1474  MODULE_DEVICE_TABLE(of, rcar_drif_of_table);
+7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1475  
+
+:::::: The code at line 1470 was first introduced by commit
+:::::: 7625ee981af166ddb569e2e6c0006e2af471326f [media] media: platform: rcar_drif: Add DRIF support
+
+:::::: TO: Ramesh Shanmugasundaram <ramesh.shanmugasundaram@bp.renesas.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
