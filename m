@@ -1,120 +1,103 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49694C60
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 14:23:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647613424; x=1679149424;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8zKtcZ8R8SGa0J6tXQaiMLxoieJ+sOb7fjtfyllTGMU=;
-  b=E3U9zFy1oE/ByNKo9KH86yqAfPN1L3YDevFxu/KhjRnTLzJKZqYAQjOw
-   VTxwx1EQhgL+qQV2h10+Sr64KmX7Byr7gqrakRzQk8oHVR3xcn07DvcS5
-   /OdnJPaAQWs8qcdD1aKusieUGxR51p77kwqrWR/svJZifj2p9srBdndg2
-   ikm6ZNkzvJuFMf4Y/h8xczQKj0npbyWVyXdS5yur8UWISYW+stsNmEYOU
-   84XqrtvVvZPAydjQOpqhnLjM36gyKoM9FIVK4q9XDn9p4rkRjkxYY/bSg
-   ptA/N+i15wAQ7WP+hmn6kMjRAp8gShXuTn7qdGOkJEmJSE7aVypwFGTOS
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="237090209"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="237090209"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 07:23:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="715500449"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 18 Mar 2022 07:23:41 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nVDW0-000Ep1-Sq; Fri, 18 Mar 2022 14:23:40 +0000
-Date: Fri, 18 Mar 2022 22:22:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: John Harrison <John.C.Harrison@Intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Jordan Justen <jordan.l.justen@intel.com>,
-	Michal Wajdeczko <michal.wajdeczko@intel.com>
-Subject: [drm-drm-intel:drm-intel-gt-next 1/2]
- drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning: expecting
- prototype for intel_guc_hwconfig_init(). Prototype was for
- guc_hwconfig_init() instead
-Message-ID: <202203182256.uEbGTBvI-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20AB64C7E
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 15:41:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD0FC340E8;
+	Fri, 18 Mar 2022 15:41:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647618098;
+	bh=y7pnJNbFCISqDtvibqXgoROt9qimMw/fpAcyD/5DS0Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CoifjaqeSa0nd9QsqzAbP2GUAew9/ZN+TkGuSFrxCMVuw9E34BArB3I+gKEs1SgfL
+	 TfSL3PJgIloY9ADerEFQFsryqdVfr6QQH44C72OndtONtXm1/ohI9KJaxSYTXfABw+
+	 CZA5OGULoyfDz5rMjyKKtuTRfpPwdLlpJGhkOxaEYzLwojqcIDaAYJxI+JfVuejrYK
+	 O6FJqzw+PR24+C1MkCiHiqnFLdNfQW6+TD9FDM1cuwxJeWeo/b0Wb5U31QvNaNa3dI
+	 WJ+jDBQ2TxbJT1wILhTUkMiKtJmy+j/7AF2ZpyFDKl/N5BQcVrP3pepxk+f/GuQMUk
+	 9Mm5m2tX3GMkg==
+Date: Fri, 18 Mar 2022 15:41:33 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Subject: Re: [broonie-misc:arm64-sysreg-gen 6/9]
+ arch/arm64/include/asm/sysreg.h:125:10: fatal error:
+ 'generated/asm/sysreg.h' file not found
+Message-ID: <YjSoLTbVBZTNS0tL@sirena.org.uk>
+References: <202203160508.k7vz4ZxC-lkp@intel.com>
+ <YjIYxWkVzT0/XYf+@sirena.org.uk>
+ <CAK7LNASsiYHK3QW5aOg016_XwD-MmOOcJ6UA=f95BxEZ-p+gSw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Na26+gSFr2zhmOGw"
+Content-Disposition: inline
+In-Reply-To: <CAK7LNASsiYHK3QW5aOg016_XwD-MmOOcJ6UA=f95BxEZ-p+gSw@mail.gmail.com>
+X-Cookie: laser, n.:
+
+
+--Na26+gSFr2zhmOGw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://anongit.freedesktop.org/drm/drm-intel drm-intel-gt-next
-head:   78e1fb3112c0ac440bf9dce080a4aefbaa547d52
-commit: 8781f0515247f441623a01f6e036a1d7898170e2 [1/2] drm/i915/guc: Add fetch of hwconfig blob
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220318/202203182256.uEbGTBvI-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add drm-drm-intel git://anongit.freedesktop.org/drm/drm-intel
-        git fetch --no-tags drm-drm-intel drm-intel-gt-next
-        git checkout 8781f0515247f441623a01f6e036a1d7898170e2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+On Fri, Mar 18, 2022 at 02:15:07PM +0900, Masahiro Yamada wrote:
+> On Thu, Mar 17, 2022 at 2:05 AM Mark Brown <broonie@kernel.org> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > but that's only passed to CC (at least for bounds.s) via an
+> > -I./arch/arm64/include/generated so won't be found with the generated/
+> > prefix.  While this can be avoided by renaming the header and not
+> > referencing it with the prefix I do see a bunch of other headers
+> > throughout the tree being included with an explicit generated/ prefix so
+> > I'm not sure this is what's supposed to be happening, it does seem like
+> > a landmine somehow.
 
-All warnings (new ones prefixed by >>):
+> Do not add 'generated/' prefix.
 
-   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning: Function parameter or member 'gt' not described in 'guc_hwconfig_init'
->> drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning: expecting prototype for intel_guc_hwconfig_init(). Prototype was for guc_hwconfig_init() instead
-   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:143: warning: Function parameter or member 'gt' not described in 'intel_gt_init_hwconfig'
-   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:156: warning: Function parameter or member 'gt' not described in 'intel_gt_fini_hwconfig'
+If that's something you don't want to support there's a bunch of
+existing explicit usage of generated/ in include statements that need
+fixing up.
 
+> Let's think about this scenario.
+> First foo.h was hard-coded, but sometime later,
+> somebody noticed it is better to generate it by scripting.
+> Why do we need to fix up #include <foo.h>  to #include <generated/foo.h>
+> in all the call sites?
+> Or do we need to have foo.h to wrap <generaged/foo.h> ?
 
-vim +110 drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c
+I'm not sure I see a conflict from having both ways to reach the header
+here and allowing people to do either as appropriate TBH, and indeed we
+have other cases like uapi where we have both include/ and include/uapi
+in the search path.
 
-   102	
-   103	/**
-   104	 * intel_guc_hwconfig_init - Initialize the HWConfig
-   105	 *
-   106	 * Retrieve the HWConfig table from the GuC and save it locally.
-   107	 * It can then be queried on demand by other users later on.
-   108	 */
-   109	static int guc_hwconfig_init(struct intel_gt *gt)
- > 110	{
-   111		struct intel_hwconfig *hwconfig = &gt->info.hwconfig;
-   112		struct intel_guc *guc = &gt->uc.guc;
-   113		int ret;
-   114	
-   115		if (!has_table(gt->i915))
-   116			return 0;
-   117	
-   118		ret = guc_hwconfig_discover_size(guc, hwconfig);
-   119		if (ret)
-   120			return ret;
-   121	
-   122		hwconfig->ptr = kmalloc(hwconfig->size, GFP_KERNEL);
-   123		if (!hwconfig->ptr) {
-   124			hwconfig->size = 0;
-   125			return -ENOMEM;
-   126		}
-   127	
-   128		ret = guc_hwconfig_fill_buffer(guc, hwconfig);
-   129		if (ret < 0) {
-   130			intel_gt_fini_hwconfig(gt);
-   131			return ret;
-   132		}
-   133	
-   134		return 0;
-   135	}
-   136	
+> No, users of foo.h do not need to know if it is
+> a checked-in header of a generated one.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+The use case I had was for partial conversion where some of the header
+is pulled out into a generated file with the generated file wrapping
+things.  The users are unaffected, and if the file is completely
+converted to be generated would continue to be unaffected.
+
+--Na26+gSFr2zhmOGw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmI0qCwACgkQJNaLcl1U
+h9DbOQf9Gc8eysVy5G2QmwYYFBMmlT4Ox5jWxccwmsdTgJfCAvrNbnwdlWzK4dNE
+ifOfVaHe6e8tzZ2KzznwB6vWHwo1re8vZ3VcDeENHbo4LkTBGlX4FuSDA2M0bU19
+PaTL8mcuFUCrOTNWhPs2M9PpBhAs/sg77zi9RKEwNxIVyz7VccImEQU6mD2fMfdM
+xxlFSI4hVRV6rcSID5Vu9BlnZhTMOp9Kbl3Dp8msyTEUmGPsLaS/TGXw7wXH48nW
+BEH72GIn6SdThUzO0Kd3jzWq9PgAowieLdSci6TGptVMOyeFzAalK9HFlfhfnvgo
+ZoEoiuJvUSVWziwM5Q23is7WHlRRtw==
+=Uo0H
+-----END PGP SIGNATURE-----
+
+--Na26+gSFr2zhmOGw--
