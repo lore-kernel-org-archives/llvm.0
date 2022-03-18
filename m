@@ -1,43 +1,44 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A4E4C60
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 13:10:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7A14C60
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 13:21:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647609043; x=1679145043;
+  t=1647609703; x=1679145703;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JWQdOKExQ2iNTeiUG9LPrk66W7DjmQW3vJ9Ceu7KtQQ=;
-  b=dKg6qvCaMYF5scRF1eICfWBtCVILKP10zlSmYLFmAT1nrREI1zp4ONIh
-   GoIkIU8OVWebb4G5TZjCp7AIXUb9Q5B8xHi+fqBjcju7wSTws2s+RJ2vv
-   ssTT4mjbR76btx/niPWH7pqZxq8Bw2a23bV5nxnJkmEqRXQSOQSluSoNQ
-   1mbRfMPcJ3FA49ybqCvZI+qwIE258WmvRIaDYtkMyTp7hVuYTJ27ACsGs
-   MTBQhIIkLrSl19FTHMmDO15ZHk2q8LP8yIB/tp8jMb7IiNpgpBN+9NrNU
-   JyqKtFXwlc6tvfOvpAaLzU/p75riw4p8RbqkqlYZHc9yEW6PDACkMwdY9
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="237077331"
+  bh=eqV1QWw9TmNHxfIL5myyHjYQz1fBHsC6X3GwbFchzV8=;
+  b=eBRCgxK/9l/ikPssl65LJFTpej/ZYNH3smOp3oK62bYaXh/ieDVR/0nV
+   B2ZwIjJf20OogJkAcid8dbgrx03lrrILFsc7l9poFt6E6T+5UDVYNj6Vx
+   fW5VBYsLZB50hhTsAi8i3y10yaFDvusiYc8+KzTITYOkBNuXOdlHTI4p6
+   y8nQc2Sl/8dL3lHodPEFiAwPSurYRPvnxB+Yic0r15swqeAnHb8NPH2HE
+   T+yc48CyvEqfdjM2/txWPKM5Lahkrn4NDFYpB+nPyM2/jvnTHoVHIk7sX
+   a0qMFSkEuiKxFXg3RWenepRuByGLNkBfpFvNnoqOyx2d/LLdy2GQm3g9F
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="257321304"
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="237077331"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:10:42 -0700
+   d="scan'208";a="257321304"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:21:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="715475802"
+   d="scan'208";a="541838601"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 18 Mar 2022 06:10:40 -0700
+  by orsmga007.jf.intel.com with ESMTP; 18 Mar 2022 06:21:40 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nVCNL-000Em6-OQ; Fri, 18 Mar 2022 13:10:39 +0000
-Date: Fri, 18 Mar 2022 21:10:30 +0800
+	id 1nVCXz-000EmR-S0; Fri, 18 Mar 2022 13:21:39 +0000
+Date: Fri, 18 Mar 2022 21:21:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Charan Teja Reddy <quic_charante@quicinc.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-media@vger.kernel.org
-Subject: [linux-next:master 12673/13576]
- drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34: warning:
- unused variable 'c8sectpfe_match'
-Message-ID: <202203182127.ZeZX6m5Y-lkp@intel.com>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org,
+	Suren Baghdasaryan <surenb@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
+ 5191/5193] mm/compaction.c:761:15: error: redefinition of
+ 'isolate_and_split_free_page'
+Message-ID: <202203182124.wIWFJftW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,52 +49,62 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Mauro,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   6d72dda014a4753974eb08950089ddf71fec4f60
-commit: 05dba31552682f0e0ff5fea48c99133068549737 [12673/13576] media: platform: place stm32/ and sti/ under st/ dir
-config: hexagon-randconfig-r034-20220317 (https://download.01.org/0day-ci/archive/20220318/202203182127.ZeZX6m5Y-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
+head:   f82f0ceba5827c9d5a3c9326c95f591ebf254003
+commit: f47b852faa4afaae0e534b616f2864bb587286e4 [5191/5193] ANDROID: implement wrapper for reverse migration
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220318/202203182124.wIWFJftW-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=05dba31552682f0e0ff5fea48c99133068549737
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 05dba31552682f0e0ff5fea48c99133068549737
+        # https://github.com/ammarfaizi2/linux-block/commit/f47b852faa4afaae0e534b616f2864bb587286e4
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
+        git checkout f47b852faa4afaae0e534b616f2864bb587286e4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/st/sti/c8sectpfe/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34: warning: unused variable 'c8sectpfe_match' [-Wunused-const-variable]
-   static const struct of_device_id c8sectpfe_match[] = {
-                                    ^
-   1 warning generated.
+>> mm/compaction.c:761:15: error: redefinition of 'isolate_and_split_free_page'
+   unsigned long isolate_and_split_free_page(struct page *page,
+                 ^
+   include/linux/compaction.h:230:22: note: previous definition is here
+   static unsigned long isolate_and_split_free_page(struct page *page,
+                        ^
+   1 error generated.
 
 
-vim +/c8sectpfe_match +1175 drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+vim +/isolate_and_split_free_page +761 mm/compaction.c
 
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1174  
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30 @1175  static const struct of_device_id c8sectpfe_match[] = {
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1176  	{ .compatible = "st,stih407-c8sectpfe" },
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1177  	{ /* sentinel */ },
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1178  };
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1179  MODULE_DEVICE_TABLE(of, c8sectpfe_match);
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1180  
-
-:::::: The code at line 1175 was first introduced by commit
-:::::: c5f5d0f99794cfb675ecacfe37a1b33b352b9752 [media] c8sectpfe: STiH407/10 Linux DVB demux support
-
-:::::: TO: Peter Griffin <peter.griffin@linaro.org>
-:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
+   760	
+ > 761	unsigned long isolate_and_split_free_page(struct page *page,
+   762							struct list_head *list)
+   763	{
+   764		unsigned long isolated;
+   765		unsigned int order;
+   766	
+   767		if (!PageBuddy(page))
+   768			return 0;
+   769	
+   770		order = buddy_order(page);
+   771		isolated = __isolate_free_page(page, order);
+   772		if (!isolated)
+   773			return 0;
+   774	
+   775		set_page_private(page, order);
+   776		list_add(&page->lru, list);
+   777	
+   778		split_map_pages(list);
+   779	
+   780		return isolated;
+   781	}
+   782	EXPORT_SYMBOL_GPL(isolate_and_split_free_page);
+   783	
 
 ---
 0-DAY CI Kernel Test Service
