@@ -1,114 +1,112 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BF75388
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 22:14:37 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22IM93Hc011038;
-	Fri, 18 Mar 2022 17:09:03 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 22IM91UT011037;
-	Fri, 18 Mar 2022 17:09:01 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Fri, 18 Mar 2022 17:09:01 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andy Lutomirski <luto@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Message-ID: <20220318220901.GS614@gate.crashing.org>
-References: <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com> <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8872315AC
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 22:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647642713; x=1679178713;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zIw54+e45boIaDOdi15UX3ZvBJl8AV/hmlrf8+mVydM=;
+  b=gcIC0aVqfhEBNG2vqhTjlqSwMP+C5vS5nGmnPocnf1mSq6YKUxZ6kSbX
+   AMsr79E+cXMyvDOZh/480B0JmfRaxLfuXIE4oQqt3yV8kLT65k4uT4tRH
+   WI2a6etkB5c9dSDaLcGEdd3ESrwiIuQo4WObSxr/qDob2MbdSOSY7oKLa
+   bCd7cQK0YllNS3eAFqBEmusYSXz+z6OEUe+jakgdMwS/EGU2+0JPV+0WM
+   Y4FZEQyMwCcEWNJtMg5uEwY0+XvFLaIMiQbDNcZx92AUH1xPF7RAOOP5n
+   4Ti7wWSDicX8S7/svh93HmJuSA5mrQ8dbAuIqhjhl/cWezu7RIzeKACGd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="237849342"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="237849342"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 15:31:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="581931749"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 18 Mar 2022 15:31:50 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nVL8Q-000FE6-44; Fri, 18 Mar 2022 22:31:50 +0000
+Date: Sat, 19 Mar 2022 06:31:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Lassoff <jof@thejof.com>,
+	OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, Jonathan Lassoff <jof@thejof.com>
+Subject: Re: [PATCH v2] Add FAT messages to printk index
+Message-ID: <202203190644.dlcQDVaN-lkp@intel.com>
+References: <c11c5c259d5e53afe5b20fa761002e7edd48277f.1647624190.git.jof@thejof.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
+In-Reply-To: <c11c5c259d5e53afe5b20fa761002e7edd48277f.1647624190.git.jof@thejof.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Mar 18, 2022 at 11:19:28AM -0700, Linus Torvalds wrote:
-> Or rather, it's not the redzoning itself, but the fact that the
-> compiler might use the word under the stack for random other things,
-> and the pushf will then corrupt some local variable storage.
-> 
-> I think it would be lovely to solve that in inline asm itself some way
-> - by marking the stack pointer clobbered or something.
+Hi Jonathan,
 
-Inline assembler does not allow you to change the stack pointer, in
-principle.  You have to return everything to its original state before
-you return control from the asm code, and you have to deal with what
-happens if am interrupt comes in halfway through the asm, and all other
-ABI things that may happen on your platform.
+Thank you for the patch! Perhaps something to improve:
 
-> Because you have the same issue if an inline asm might need to do a
-> function call - think magic calling conventions etc, but also possibly
-> slow-path cases.
+[auto build test WARNING on hnaz-mm/master]
+[also build test WARNING on linux/master linus/master v5.17-rc8 next-20220318]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Yes.  The compiler itself can deal with all the red zone restrictions --
-precisely *because* it is in full control of the stack frame -- but
-those restrictions are very real.  It generally is a very good idea to
-have a redzone though, without it you pay much more than necessary for
-frame setup and teardown in leaf functions (similar to some of what the
-misnamed "shrink-wrapping" optimisation does, but the two are mostly
-independent, the benefits add up).
+url:    https://github.com/0day-ci/linux/commits/Jonathan-Lassoff/Add-FAT-messages-to-printk-index/20220319-012711
+base:   https://github.com/hnaz/linux-mm master
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220319/202203190644.dlcQDVaN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/e3f2c52ef480a29ed0b693801bcd9497c19b89ab
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jonathan-Lassoff/Add-FAT-messages-to-printk-index/20220319-012711
+        git checkout e3f2c52ef480a29ed0b693801bcd9497c19b89ab
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/fat/
 
-> As mentioned, it's not an issue for the kernel proper due to
-> -mno-red-zone which we need for entirely unrelated reasons.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It might help to have some special clobber syntax that says "this asm
-clobbers the red zone", so the compiler can arrange for the red zone to
-contain nothing during the asm (it already does the same for function
-calls, for example).
+All warnings (new ones prefixed by >>):
 
-How bad is it to do the fail-safe general solution here though?  I.e.,
-write actual assembler code:
-
-# u16 getflags(void);
-getflags:
-	pushf
-	pop %ax
-	ret
-
-(or whatever the syntax is, my x86 is rusty).
-
-> Side note and kind of related: we do have this in the kernel:
-> 
->   register unsigned long current_stack_pointer asm(_ASM_SP);
->   #define ASM_CALL_CONSTRAINT "+r" (current_stack_pointer)
-> 
-> which *might* also solve the redzoning issue.
-
-The GCC documentation of inline asm says
-  Another restriction is that the clobber list should not contain the
-  stack pointer register.  This is because the compiler requires the
-  value of the stack pointer to be the same after an 'asm' statement as
-  it was on entry to the statement.  However, previous versions of GCC
-  did not enforce this rule and allowed the stack pointer to appear in
-  the list, with unclear semantics.  This behavior is deprecated and
-  listing the stack pointer may become an error in future versions of
-  GCC.
-
-> In the kernel we need it not because of redzoned stack use, but
-> because we need the stack frame to be set up properly or objtool
-> complains.
-
-If the kernel has special rules for the stack, it had better teach the
-compiler about this special ABI, or there will be tears eventually.  If
-the kernel requires only what the standard ABIs provide, it can trust
-the compiler to do that correctly, this is one of the core jobs of a
-compiler!
+   fs/fat/misc.c:49: warning: Function parameter or member 'sb' not described in '_fat_msg'
+   fs/fat/misc.c:49: warning: Function parameter or member 'level' not described in '_fat_msg'
+   fs/fat/misc.c:49: warning: Function parameter or member 'fmt' not described in '_fat_msg'
+>> fs/fat/misc.c:49: warning: expecting prototype for fat_msg(). Prototype was for _fat_msg() instead
 
 
-Segher
+vim +49 fs/fat/misc.c
+
+^1da177e4c3f41 Linus Torvalds   2005-04-16  43  
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  44  /**
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  45   * fat_msg() - print preformated FAT specific messages. Every thing what is
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  46   * not fat_fs_error() should be fat_msg().
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  47   */
+e3f2c52ef480a2 Jonathan Lassoff 2022-03-18  48  void _fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
+81ac21d34a91e8 Oleksij Rempel   2011-04-12 @49  {
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  50  	struct va_format vaf;
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  51  	va_list args;
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  52  
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  53  	va_start(args, fmt);
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  54  	vaf.fmt = fmt;
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  55  	vaf.va = &args;
+e3f2c52ef480a2 Jonathan Lassoff 2022-03-18  56  	_printk(FAT_PRINTK_PREFIX "%pV\n", level, sb->s_id, &vaf);
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  57  	va_end(args);
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  58  }
+81ac21d34a91e8 Oleksij Rempel   2011-04-12  59  
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
