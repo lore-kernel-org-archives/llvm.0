@@ -1,41 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE944C60
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 13:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327964C75
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 13:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647611562; x=1679147562;
+  t=1647611563; x=1679147563;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oTmQnH31LXnh+65zM2fyibjzTL1ZhhsTaOk5bBswryM=;
-  b=HZZmvgLq0EL1KIqyJJp8m4fpXXLEugRsGhtjAEC0U7y9dQerjuCYWGgZ
-   a2CvEXbkjQo0/WsLRBUqeaqEodkFiJBJFFcpow3A2NQj6UpXOghSREJ4L
-   D8Mpwg80IZ9vUUTGRKL4cU6vap4bFo/+yICILxeZofcw7ujoyB+YnKdgM
-   fDgR1F/MPX4cT2wga6yE4RMh0F7QTiW3DngXMWMrW9LGWdfQcFrtd62d5
-   XqIXaoBUkempJsNhltsaRySnSnstO7hwT8AZnCO5eMwNbz0SQBHN+VUyU
-   3iSxrnVuPVJJvTtli8+NM1V94k+U8+/qjMG+jgFfj6DqGFBBM0AZBrZaP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="256865922"
+  bh=ORzaS5dZOfnnd/ONeHtbNZicfajRZOYh6acjrh0bpmI=;
+  b=OH/fquNX13+PvOSgn+l0TxCKXAdejCTaB8rhYUp34/5x1TFAlntyeSYt
+   5sf5F4Zu6e8NRmRm2sjzsvVzd2X7xFgoRAkNr7tmtsxBe0qoI4HLJGo4r
+   AgBcyhf/4vKx+TawsOKPE9NFkeSDBOXiLWZ93XOFlWXu9L6yCsBG6Mz/A
+   luPQHbpqDeFV54NH5N+OY2kqqgVdPlVoD1h4czn1Q0t5XUOmcOy6q4kz1
+   X7Ky1WLHy/yAJztyD5y7T2Jaw9+hURUdPehgIBA/TYzGxNbxs6UdSRl18
+   JMEAx5WaZkcoi0Vrje9/ciNFkcggixkaJ2eU0jaJtFt/Wgkftf9bQ9mEx
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="257087612"
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="256865922"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:52:42 -0700
+   d="scan'208";a="257087612"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:52:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="715489828"
+   d="scan'208";a="517215767"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 18 Mar 2022 06:52:41 -0700
+  by orsmga006.jf.intel.com with ESMTP; 18 Mar 2022 06:52:41 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nVD20-000Enp-Fc; Fri, 18 Mar 2022 13:52:40 +0000
-Date: Fri, 18 Mar 2022 21:52:27 +0800
+	id 1nVD20-000Enj-Do; Fri, 18 Mar 2022 13:52:40 +0000
+Date: Fri, 18 Mar 2022 21:52:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 1863/2335] net/ipv6/mcast.c:257:5: warning: no
- previous prototype for function 'ipv6_sock_mc_join_ssm'
-Message-ID: <202203182145.IJoJVRxO-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-media@vger.kernel.org
+Subject: [linux-next:master 12537/13576]
+ drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused
+ variable 'samsung_jpeg_match'
+Message-ID: <202203182100.fSdmSXzo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,52 +48,69 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   85293bf3fca6d85608cff1447ce3097583f15fab
-commit: 6444b1da8c923265175370f6a07405345c316ad9 [1863/2335] headers/deps: net: Split <net/ipv6_api_sock.h> header out of <net/ipv6.h>
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220318/202203182145.IJoJVRxO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+Hi Mauro,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6d72dda014a4753974eb08950089ddf71fec4f60
+commit: 26f8b7e57c52a79c5e7c238e1deec08c0fb77b97 [12537/13576] media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
+config: hexagon-randconfig-r015-20220317 (https://download.01.org/0day-ci/archive/20220318/202203182100.fSdmSXzo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=6444b1da8c923265175370f6a07405345c316ad9
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout 6444b1da8c923265175370f6a07405345c316ad9
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=26f8b7e57c52a79c5e7c238e1deec08c0fb77b97
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 26f8b7e57c52a79c5e7c238e1deec08c0fb77b97
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/cpu/mtrr/ arch/x86/pci/ kernel/trace/ net/ipv6/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/samsung/s5p-jpeg/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/ipv6/mcast.c:257:5: warning: no previous prototype for function 'ipv6_sock_mc_join_ssm' [-Wmissing-prototypes]
-   int ipv6_sock_mc_join_ssm(struct sock *sk, int ifindex,
-       ^
-   net/ipv6/mcast.c:257:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ipv6_sock_mc_join_ssm(struct sock *sk, int ifindex,
-   ^
-   static 
+>> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
+   static const struct of_device_id samsung_jpeg_match[] = {
+                                    ^
    1 warning generated.
 
 
-vim +/ipv6_sock_mc_join_ssm +257 net/ipv6/mcast.c
+vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
 
-^1da177e4c3f41 Linus Torvalds 2005-04-16  256  
-c7ea20c9da5b94 Hangbin Liu    2018-07-10 @257  int ipv6_sock_mc_join_ssm(struct sock *sk, int ifindex,
-c7ea20c9da5b94 Hangbin Liu    2018-07-10  258  			  const struct in6_addr *addr, unsigned int mode)
-c7ea20c9da5b94 Hangbin Liu    2018-07-10  259  {
-c7ea20c9da5b94 Hangbin Liu    2018-07-10  260  	return __ipv6_sock_mc_join(sk, ifindex, addr, mode);
-c7ea20c9da5b94 Hangbin Liu    2018-07-10  261  }
-c7ea20c9da5b94 Hangbin Liu    2018-07-10  262  
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
 
-:::::: The code at line 257 was first introduced by commit
-:::::: c7ea20c9da5b94e400c8dcc0adb99411f2e430a6 ipv6/mcast: init as INCLUDE when join SSM INCLUDE group
+:::::: The code at line 3126 was first introduced by commit
+:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
 
-:::::: TO: Hangbin Liu <liuhangbin@gmail.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
 
 ---
 0-DAY CI Kernel Test Service
