@@ -1,188 +1,114 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342DF5388
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 22:02:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647640920; x=1679176920;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mzjsMglok38vJxdOChT3UF3b5/Ogv2X64UXDT0W6InE=;
-  b=LGZLKDKQCz1PcZKjdK/3IrOohDYtU1h/13/FXgbrakONUht2djHNNn9K
-   4Nn05xqwQ5EZmUVXa7guOk1LPjP6s46WubZQVHGq8Csegx1QGiD30wvlF
-   z0oCOAVe8iHp71OJPbQzS9oWBGvKp9ogzaQNXo0KKVvubV+z1S3rcHt1p
-   scvqmP1F9Zbt7fGwfcoI+FAQQ0PmC4wTDCNtTivHKNyWu66rpX2QpkcYC
-   021CtMLw6lAhmsEsJDQxnW2lYgQsM9EWiMSKzoJIvh2BCkX2NuatQbpwD
-   q0TymWQ0UbEZdrxSMMY3Fur0dCB2VrEFWxpeXSo3sTzm4vetLf4CRtVnZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="237845174"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="237845174"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 15:01:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="581919035"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 18 Mar 2022 15:01:50 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nVKfN-000FBl-Gr; Fri, 18 Mar 2022 22:01:49 +0000
-Date: Sat, 19 Mar 2022 06:01:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Justin Iurman <justin.iurman@uliege.be>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC net] Discuss seg6 potential wrong behavior
-Message-ID: <202203190555.sLM83GRv-lkp@intel.com>
-References: <20220318202138.37161-1-justin.iurman@uliege.be>
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BF75388
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 22:14:37 +0000 (UTC)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22IM93Hc011038;
+	Fri, 18 Mar 2022 17:09:03 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 22IM91UT011037;
+	Fri, 18 Mar 2022 17:09:01 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Fri, 18 Mar 2022 17:09:01 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andy Lutomirski <luto@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH v5] x86: use builtins to read eflags
+Message-ID: <20220318220901.GS614@gate.crashing.org>
+References: <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com> <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318202138.37161-1-justin.iurman@uliege.be>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
 
-Hi Justin,
+On Fri, Mar 18, 2022 at 11:19:28AM -0700, Linus Torvalds wrote:
+> Or rather, it's not the redzoning itself, but the fact that the
+> compiler might use the word under the stack for random other things,
+> and the pushf will then corrupt some local variable storage.
+> 
+> I think it would be lovely to solve that in inline asm itself some way
+> - by marking the stack pointer clobbered or something.
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on net/master]
+Inline assembler does not allow you to change the stack pointer, in
+principle.  You have to return everything to its original state before
+you return control from the asm code, and you have to deal with what
+happens if am interrupt comes in halfway through the asm, and all other
+ABI things that may happen on your platform.
 
-url:    https://github.com/0day-ci/linux/commits/Justin-Iurman/Discuss-seg6-potential-wrong-behavior/20220319-042938
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 6bd0c76bd70447aedfeafa9e1fcc249991d6c678
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220319/202203190555.sLM83GRv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/92248dc32f87d0aae6c02a08f29376a32f57b669
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Justin-Iurman/Discuss-seg6-potential-wrong-behavior/20220319-042938
-        git checkout 92248dc32f87d0aae6c02a08f29376a32f57b669
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/ipv6/
+> Because you have the same issue if an inline asm might need to do a
+> function call - think magic calling conventions etc, but also possibly
+> slow-path cases.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes.  The compiler itself can deal with all the red zone restrictions --
+precisely *because* it is in full control of the stack frame -- but
+those restrictions are very real.  It generally is a very good idea to
+have a redzone though, without it you pay much more than necessary for
+frame setup and teardown in leaf functions (similar to some of what the
+misnamed "shrink-wrapping" optimisation does, but the two are mostly
+independent, the benefits add up).
 
-All warnings (new ones prefixed by >>):
+> As mentioned, it's not an issue for the kernel proper due to
+> -mno-red-zone which we need for entirely unrelated reasons.
 
->> net/ipv6/exthdrs.c:394:8: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
-                           int offset = (hdr->hdrlen + 1) << 3;
-                               ^
-   1 warning generated.
+It might help to have some special clobber syntax that says "this asm
+clobbers the red zone", so the compiler can arrange for the red zone to
+contain nothing during the asm (it already does the same for function
+calls, for example).
+
+How bad is it to do the fail-safe general solution here though?  I.e.,
+write actual assembler code:
+
+# u16 getflags(void);
+getflags:
+	pushf
+	pop %ax
+	ret
+
+(or whatever the syntax is, my x86 is rusty).
+
+> Side note and kind of related: we do have this in the kernel:
+> 
+>   register unsigned long current_stack_pointer asm(_ASM_SP);
+>   #define ASM_CALL_CONSTRAINT "+r" (current_stack_pointer)
+> 
+> which *might* also solve the redzoning issue.
+
+The GCC documentation of inline asm says
+  Another restriction is that the clobber list should not contain the
+  stack pointer register.  This is because the compiler requires the
+  value of the stack pointer to be the same after an 'asm' statement as
+  it was on entry to the statement.  However, previous versions of GCC
+  did not enforce this rule and allowed the stack pointer to appear in
+  the list, with unclear semantics.  This behavior is deprecated and
+  listing the stack pointer may become an error in future versions of
+  GCC.
+
+> In the kernel we need it not because of redzoned stack use, but
+> because we need the stack frame to be set up properly or objtool
+> complains.
+
+If the kernel has special rules for the stack, it had better teach the
+compiler about this special ABI, or there will be tears eventually.  If
+the kernel requires only what the standard ABIs provide, it can trust
+the compiler to do that correctly, this is one of the core jobs of a
+compiler!
 
 
-vim +394 net/ipv6/exthdrs.c
-
-9baee83406d6a4b David Lebrun       2016-11-08  385  
-1ababeba4a21f3d David Lebrun       2016-11-08  386  looped_back:
-013e8167899d389 David Lebrun       2017-02-02  387  	if (hdr->segments_left == 0) {
-ee90c6ba341f7f7 Julien Massonneau  2021-03-11  388  		if (hdr->nexthdr == NEXTHDR_IPV6 || hdr->nexthdr == NEXTHDR_IPV4) {
-92248dc32f87d0a Justin Iurman      2022-03-18  389  			if (!accept_seg6) {
-92248dc32f87d0a Justin Iurman      2022-03-18  390  				kfree_skb(skb);
-92248dc32f87d0a Justin Iurman      2022-03-18  391  				return -1;
-92248dc32f87d0a Justin Iurman      2022-03-18  392  			}
-92248dc32f87d0a Justin Iurman      2022-03-18  393  
-1ababeba4a21f3d David Lebrun       2016-11-08 @394  			int offset = (hdr->hdrlen + 1) << 3;
-1ababeba4a21f3d David Lebrun       2016-11-08  395  
-1ababeba4a21f3d David Lebrun       2016-11-08  396  			skb_postpull_rcsum(skb, skb_network_header(skb),
-1ababeba4a21f3d David Lebrun       2016-11-08  397  					   skb_network_header_len(skb));
-1ababeba4a21f3d David Lebrun       2016-11-08  398  
-1ababeba4a21f3d David Lebrun       2016-11-08  399  			if (!pskb_pull(skb, offset)) {
-1ababeba4a21f3d David Lebrun       2016-11-08  400  				kfree_skb(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  401  				return -1;
-1ababeba4a21f3d David Lebrun       2016-11-08  402  			}
-1ababeba4a21f3d David Lebrun       2016-11-08  403  			skb_postpull_rcsum(skb, skb_transport_header(skb),
-1ababeba4a21f3d David Lebrun       2016-11-08  404  					   offset);
-1ababeba4a21f3d David Lebrun       2016-11-08  405  
-1ababeba4a21f3d David Lebrun       2016-11-08  406  			skb_reset_network_header(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  407  			skb_reset_transport_header(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  408  			skb->encapsulation = 0;
-ee90c6ba341f7f7 Julien Massonneau  2021-03-11  409  			if (hdr->nexthdr == NEXTHDR_IPV4)
-ee90c6ba341f7f7 Julien Massonneau  2021-03-11  410  				skb->protocol = htons(ETH_P_IP);
-1ababeba4a21f3d David Lebrun       2016-11-08  411  			__skb_tunnel_rx(skb, skb->dev, net);
-1ababeba4a21f3d David Lebrun       2016-11-08  412  
-1ababeba4a21f3d David Lebrun       2016-11-08  413  			netif_rx(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  414  			return -1;
-1ababeba4a21f3d David Lebrun       2016-11-08  415  		}
-1ababeba4a21f3d David Lebrun       2016-11-08  416  
-1ababeba4a21f3d David Lebrun       2016-11-08  417  		opt->srcrt = skb_network_header_len(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  418  		opt->lastopt = opt->srcrt;
-1ababeba4a21f3d David Lebrun       2016-11-08  419  		skb->transport_header += (hdr->hdrlen + 1) << 3;
-1ababeba4a21f3d David Lebrun       2016-11-08  420  		opt->nhoff = (&hdr->nexthdr) - skb_network_header(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  421  
-1ababeba4a21f3d David Lebrun       2016-11-08  422  		return 1;
-1ababeba4a21f3d David Lebrun       2016-11-08  423  	}
-1ababeba4a21f3d David Lebrun       2016-11-08  424  
-1ababeba4a21f3d David Lebrun       2016-11-08  425  	if (hdr->segments_left >= (hdr->hdrlen >> 1)) {
-bdb7cc643fc9db8 Stephen Suryaputra 2018-04-16  426  		__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
-1ababeba4a21f3d David Lebrun       2016-11-08  427  		icmpv6_param_prob(skb, ICMPV6_HDR_FIELD,
-1ababeba4a21f3d David Lebrun       2016-11-08  428  				  ((&hdr->segments_left) -
-1ababeba4a21f3d David Lebrun       2016-11-08  429  				   skb_network_header(skb)));
-92248dc32f87d0a Justin Iurman      2022-03-18  430  		return -1;
-92248dc32f87d0a Justin Iurman      2022-03-18  431  	}
-92248dc32f87d0a Justin Iurman      2022-03-18  432  
-92248dc32f87d0a Justin Iurman      2022-03-18  433  	if (!accept_seg6) {
-92248dc32f87d0a Justin Iurman      2022-03-18  434  		kfree_skb(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  435  		return -1;
-1ababeba4a21f3d David Lebrun       2016-11-08  436  	}
-1ababeba4a21f3d David Lebrun       2016-11-08  437  
-1ababeba4a21f3d David Lebrun       2016-11-08  438  	if (skb_cloned(skb)) {
-1ababeba4a21f3d David Lebrun       2016-11-08  439  		if (pskb_expand_head(skb, 0, 0, GFP_ATOMIC)) {
-1ababeba4a21f3d David Lebrun       2016-11-08  440  			__IP6_INC_STATS(net, ip6_dst_idev(skb_dst(skb)),
-1ababeba4a21f3d David Lebrun       2016-11-08  441  					IPSTATS_MIB_OUTDISCARDS);
-1ababeba4a21f3d David Lebrun       2016-11-08  442  			kfree_skb(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  443  			return -1;
-1ababeba4a21f3d David Lebrun       2016-11-08  444  		}
-1ababeba4a21f3d David Lebrun       2016-11-08  445  	}
-1ababeba4a21f3d David Lebrun       2016-11-08  446  
-1ababeba4a21f3d David Lebrun       2016-11-08  447  	hdr = (struct ipv6_sr_hdr *)skb_transport_header(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  448  
-1ababeba4a21f3d David Lebrun       2016-11-08  449  	hdr->segments_left--;
-1ababeba4a21f3d David Lebrun       2016-11-08  450  	addr = hdr->segments + hdr->segments_left;
-1ababeba4a21f3d David Lebrun       2016-11-08  451  
-1ababeba4a21f3d David Lebrun       2016-11-08  452  	skb_push(skb, sizeof(struct ipv6hdr));
-1ababeba4a21f3d David Lebrun       2016-11-08  453  
-1ababeba4a21f3d David Lebrun       2016-11-08  454  	if (skb->ip_summed == CHECKSUM_COMPLETE)
-1ababeba4a21f3d David Lebrun       2016-11-08  455  		seg6_update_csum(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  456  
-1ababeba4a21f3d David Lebrun       2016-11-08  457  	ipv6_hdr(skb)->daddr = *addr;
-1ababeba4a21f3d David Lebrun       2016-11-08  458  
-1ababeba4a21f3d David Lebrun       2016-11-08  459  	skb_dst_drop(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  460  
-1ababeba4a21f3d David Lebrun       2016-11-08  461  	ip6_route_input(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  462  
-1ababeba4a21f3d David Lebrun       2016-11-08  463  	if (skb_dst(skb)->error) {
-1ababeba4a21f3d David Lebrun       2016-11-08  464  		dst_input(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  465  		return -1;
-1ababeba4a21f3d David Lebrun       2016-11-08  466  	}
-1ababeba4a21f3d David Lebrun       2016-11-08  467  
-1ababeba4a21f3d David Lebrun       2016-11-08  468  	if (skb_dst(skb)->dev->flags & IFF_LOOPBACK) {
-1ababeba4a21f3d David Lebrun       2016-11-08  469  		if (ipv6_hdr(skb)->hop_limit <= 1) {
-bdb7cc643fc9db8 Stephen Suryaputra 2018-04-16  470  			__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
-1ababeba4a21f3d David Lebrun       2016-11-08  471  			icmpv6_send(skb, ICMPV6_TIME_EXCEED,
-1ababeba4a21f3d David Lebrun       2016-11-08  472  				    ICMPV6_EXC_HOPLIMIT, 0);
-1ababeba4a21f3d David Lebrun       2016-11-08  473  			kfree_skb(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  474  			return -1;
-1ababeba4a21f3d David Lebrun       2016-11-08  475  		}
-1ababeba4a21f3d David Lebrun       2016-11-08  476  		ipv6_hdr(skb)->hop_limit--;
-1ababeba4a21f3d David Lebrun       2016-11-08  477  
-1ababeba4a21f3d David Lebrun       2016-11-08  478  		skb_pull(skb, sizeof(struct ipv6hdr));
-1ababeba4a21f3d David Lebrun       2016-11-08  479  		goto looped_back;
-1ababeba4a21f3d David Lebrun       2016-11-08  480  	}
-1ababeba4a21f3d David Lebrun       2016-11-08  481  
-1ababeba4a21f3d David Lebrun       2016-11-08  482  	dst_input(skb);
-1ababeba4a21f3d David Lebrun       2016-11-08  483  
-1ababeba4a21f3d David Lebrun       2016-11-08  484  	return -1;
-1ababeba4a21f3d David Lebrun       2016-11-08  485  }
-1ababeba4a21f3d David Lebrun       2016-11-08  486  
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Segher
