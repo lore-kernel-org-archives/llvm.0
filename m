@@ -1,97 +1,108 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C7D35394
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 23:03:33 +0000 (UTC)
-Received: from [IPv6:::1] ([IPv6:2601:646:8600:40c1:8f0c:2533:51ff:d719])
-	(authenticated bits=0)
-	by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 22IN36PG1022936
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 18 Mar 2022 16:03:07 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 22IN36PG1022936
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2022030301; t=1647644587;
-	bh=svb/lgQXEzjEPgFnj7j1DJy4Iq5vz9ytaGKdBRZvYko=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=bTlBuu+sxs0JshNvGQ3E+y9m/Xuz8dwiLyY+4q3DXXgPM+fnIbGU+MrR3G+OaRy/f
-	 bx0IiUAGeRjEQdVq/J5bCDkEudRK4+mlTQO15QkG+smtmr4QeUpncwoGZ5UPk8D6n0
-	 ioY5oZG34neIzvJJgJ+3XC+z8wcnI2N3X9ze6yeUd5MZzM7zkkNS0oOqWKU9aGJ+9a
-	 4gqt5VAmjtWwVfFf1Z+SrsJzYDuGPg8t82hbTOijcDGbdTXnMobW1CJvFz2r+pCAzL
-	 w0+tk1JlrNSvoxPleYrkG9U+tBYksKJu3vc/Po7R+SLx2Hs1jodCuoPsXgwlz7zDOz
-	 GjFceMUiJgd5g==
-Date: Fri, 18 Mar 2022 16:03:01 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: David Laight <David.Laight@ACULAB.COM>,
-        "'Linus Torvalds'" <torvalds@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>
-CC: Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: RE: [PATCH v5] x86: use builtins to read eflags
-User-Agent: K-9 Mail for Android
-In-Reply-To: <5794cceec50a4f1ebca069d5a31afcdf@AcuMS.aculab.com>
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com> <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com> <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com> <5794cceec50a4f1ebca069d5a31afcdf@AcuMS.aculab.com>
-Message-ID: <8B69D1BF-8369-42EC-B0ED-DED038966FC9@zytor.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5711E5394
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 23:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93020C340E8;
+	Fri, 18 Mar 2022 23:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647644935;
+	bh=A3Y689zBKJu2EqrYev8FF9G6KLLrbNU5CtFhDlAKkoo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=K4qsOy4oKGHU5z7hHaHsd6/bgIdYpZCLAFxzaTTDq/Z09ALl0lZ9uuxdgJ0hEErOt
+	 K2mR/g4LceflzCDAQrtTYTVpUBPfO/3qZ2DZk/JTFDDXRR/cqc4TNvRc2iYi94J/GJ
+	 ScAmwIlveiilEFuFeRfGVyC3OL3s9Hg4/cAtaqIcDjD6Sm2+V03qsLGJPr2u3iqoFe
+	 xSugWArJvQ6PZFXSXPrYgU4OoM5uzeWeIqyYetfMgYZWnHh+NCfuTq8nLvGPkTIezK
+	 NumgA30BPJiK0dtKhO/h4Xbuk/97wgzJ9Rl9qHNbRwYf/nzmW6w4FgD17DAb6DkgFj
+	 zQGK8w9fZM5vQ==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>,
+	x86@kernel.org
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] Fix CONFIG_X86_KERNEL_IBT for clang and ld.lld < 14.0.0
+Date: Fri, 18 Mar 2022 16:07:45 -0700
+Message-Id: <20220318230747.3900772-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On March 18, 2022 3:43:13 PM PDT, David Laight <David=2ELaight@ACULAB=2ECOM=
-> wrote:
->From: Linus Torvalds
->> Sent: 18 March 2022 18:19
->>=20
->> On Fri, Mar 18, 2022 at 10:59 AM Andy Lutomirski <luto@kernel=2Eorg> wr=
-ote:
->> >
->> > I generally agree=2E  In this particular case, though, I will keep us=
-ing
->> > the builtin in tools/testing/selftests/x86/helpers=2Eh unless we actu=
-ally
->> > hit breakage=2E  This is because this is *user* code, it is compiled =
-with
->> > the redzone enabled, and the asm code to do the right thing when the
->> > redzone is enabled is too hairy for me to want to deal with it=2E
->>=20
->> Yeah, redzoning is a problem for "pushf"=2E
->>=20
->> Or rather, it's not the redzoning itself, but the fact that the
->> compiler might use the word under the stack for random other things,
->> and the pushf will then corrupt some local variable storage=2E
->>=20
->> I think it would be lovely to solve that in inline asm itself some way
->> - by marking the stack pointer clobbered or something=2E
->
->Something that generates:
->	mov	%rax,-8(%rsp)
->	pushf
->	xchg	%rax,0(%rsp)
->	add	%rsp,8
->should work with or without a redzone=2E
->Will be a bit slower :-(
->
->	David
->
->-
->Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
- 1PT, UK
->Registration No: 1397386 (Wales)
->
+While testing -tip after the IBT bits were merged, our continuous
+integration noticed a crash with clang-11:
 
-*Much* slower (XCHG is implicitly locked, for hysterical raisins) and you =
-are using the redzone between the mov and the push, so it seems like you ju=
-st made things worse for no reason=2E
+https://builds.tuxbuild.com/26ZRIuAPHx1L802ExiYCuLuvMhK/build.log
+
+This crash is a separate issue from the one that is already being
+checked for with '-fcf-protection=branch -mfentry -pg'. This new crash
+was fixed in clang-12:
+
+https://github.com/llvm/llvm-project/commit/e0b89df2e0f0130881bf6c39bf31d7f6aac00e0f
+
+Unfortunately, I have not been able to tease out a simplified reproducer
+for this crash that always triggers. The reproducer in that commit
+message and the reproducer commented in the LLVM test do not trigger all
+the time (at least with the clang-11 that is in Debian/Ubuntu,
+assertions might make the crash always happen but we cannot count on
+that); even the full preprocessed files straight from the kernel source
+do not always trigger a crash.
+
+As a result, this series proposes just having a hard version check for
+clang 14.0.0 and newer, which will cover this new clang-11 crash and the
+'-fcf-protection=branch -mfentry -pg' crash.
+
+Adding a check for a version of clang that has not been released yet is
+a little riskier than dynamically testing the clang binary for an issue,
+as it is possible that someone is using/testing a version of clang from
+before a particular issue was fixed, while still having the same version
+number. However, our policy for version checks in the kernel has always
+been to use the final version of clang that will have the issue fixed,
+as people should be upgrading their compilers often if they are using
+prereleased versions.
+
+In this particular instance, the '-fcf-protection=branch -mfentry -pg'
+crash has been fixed for over three months, which is plenty of time to
+upgrade:
+
+https://github.com/llvm/llvm-project/commit/dfcf69770bc522b9e411c66454934a37c1f35332
+
+At the moment, I only know of one version of clang that is fairly widely
+used that will show this crash, which is Android's clang 14.0.2. We are
+in the process of getting a newer version (14.0.3) deployed to minimize
+the impact this change will have on various testing groups:
+
+https://android-review.googlesource.com/c/kernel/common/+/2032664
+https://android-review.googlesource.com/c/kernel/common/+/2032665
+https://android-review.googlesource.com/c/kernel/common/+/2032666
+https://gitlab.com/Linaro/tuxmake/-/merge_requests/244
+
+If for some reason there are any reports of issues after this change,
+feel free to direct them to this cover letter and tell them to upgrade
+their compiler :)
+
+The second patch just codifies the result of this discussion and issue:
+
+https://lore.kernel.org/r/202202241627.EEF3D5D2@keescook/
+https://github.com/ClangBuiltLinux/linux/issues/1606
+
+This is based on -tip x86/core and it has survived an allmodconfig build
+with clang-11 through clang-15 (CC=clang and LLVM=1).
+
+Nathan Chancellor (2):
+  x86/Kconfig: Only enable CONFIG_CC_HAS_IBT for clang >= 14.0.0
+  x86/Kconfig: Only allow CONFIG_X86_KERNEL_IBT with ld.lld >= 14.0.0
+
+ arch/x86/Kconfig | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+
+base-commit: 2f35e67f621fffc636cb802a4f93fd168cf38274
+-- 
+2.35.1
+
