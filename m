@@ -1,125 +1,109 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205395115
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 19:52:32 +0000 (UTC)
-Received: by mail-lf1-f41.google.com with SMTP id e16so1515480lfc.13
-        for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 12:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AQ3E8sCDZrEL2wZ8doD+CiI98BAdcflnpsvxxLxIuMs=;
-        b=ENTvmxmfC4BBPkAvhD10+g2ipgazNCa4PAo9eVHZtO0K7t4pwlwqgomak+5pu8YwRJ
-         05IbDBoO0ky49EF0YZ16JJCVFeR7Z9tKixBgevg/2393ptzAGOCK+UyXWJAsR8TlWx9R
-         ZEjN0bsBQp4zVFejhCCUNvPjaId2PNhRRnnsQbJDR1bxrWukR/2LCBs8ftpwE68iS1ch
-         vRxY210N95DMzLNpJH2jRAEQW25g4EtYLjiYQy532pwdPCzQnkGUZ/Hz2KLzgQo+MgQA
-         djHW421qAfRshCbzSw2FzrnMQE3fucFLq7CGZfxVWOCAGxNIUiD/04HWve0DpOEztz0o
-         4zIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AQ3E8sCDZrEL2wZ8doD+CiI98BAdcflnpsvxxLxIuMs=;
-        b=jeG51yjURmtta1hjW0tnKCX9eNq5kXmKKQPSRehWtAyGbI51UAAAZBHqxqYPkECamO
-         g5/l/r4gPVLyEmJRKzvq8g0i6tw8K8HNS57YP38zjeEINaX3GTz9fu0wHOl9nVGxJZGT
-         gYe75pSuX7M0s5eS8SBtHhEQrJvtRbyIaRX3Pkaqy7iqC1a+9iBf5Z7r11F3k1EZ4gxn
-         qt5bwQCFVXmTcWetZtoxVtZ6LkWODBX536A0I9I1aQy8B/rRYoE4cY+giZa2h5DVZ6jp
-         ZPeXzwl5vA3vD4kP7RHZIuDDh2G/z+tOhPbZLdvW1p/BpJIOJkOLA/5eon1a2YjGlARf
-         RNfQ==
-X-Gm-Message-State: AOAM532rSu1Qb96A19/nDktg82tXcugNR73SoOtntQsseqZEVxiN9Esf
-	RwteLhvfSgBJrUIxSATm3oKPTo1Pw2JIRO70rWcVtw==
-X-Google-Smtp-Source: ABdhPJyRQNH0WtelZOLCxhPX/+XCdJCX7NUeT+ryQRKooQ4D3nMrEUPMm3JbVI2fIOqCYAy82TIIaA+3n9az4eMg7Ys=
-X-Received: by 2002:a05:6512:308e:b0:448:3826:6d68 with SMTP id
- z14-20020a056512308e00b0044838266d68mr6639558lfd.184.1647633149856; Fri, 18
- Mar 2022 12:52:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A693C5137
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 21:20:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647638451; x=1679174451;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lk0yhVMZFRoXXvMeeaLOIoOzsoWtSuPjNWunAOj+NRo=;
+  b=gAA+seUANvk5YyW1DLpozEGd09a650RzM7nqYkvmUyQwmZY/2n/xgCOb
+   A3BrwTjizSlhv0j17kMbX25zMVFyeSOylOXX6w0Hchu5VkQX2qfCoElw8
+   apEHfqbGlDk8igkEzDgEiJhrd7C8E+NqzgVOMwdBExLsYL+J5RC8+a6FR
+   iWJ8coeYUV3fPmbeP0/Npshq1K7vgbpJ19fBRW/Os6m2gOt131YNYEB0t
+   5QQOsuoDl+J7Re9iBiz6Ms2UZ5bfu3RQnk0Kct1xJ/alPNR6/wNLxUl8i
+   lVQwjgSWUNifjMEIL97cqT5Yy5OLnKY9zeHLGRk2U0ZUPt9Bl38TNsVoq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="237171935"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="237171935"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 14:20:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="542044871"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 18 Mar 2022 14:20:49 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nVK1g-000FAS-Qz; Fri, 18 Mar 2022 21:20:48 +0000
+Date: Sat, 19 Mar 2022 05:20:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [bvanassche:ufs-for-next 306/307] drivers/scsi/ufs/ufshcd.c:8314:14:
+ warning: variable 'name' set but not used
+Message-ID: <202203190505.1qKIBoB1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220316183833.1563139-1-arnd@kernel.org> <3b9cedd6-a084-5d87-2fdd-0da10146827b@arm.com>
-In-Reply-To: <3b9cedd6-a084-5d87-2fdd-0da10146827b@arm.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 18 Mar 2022 12:52:18 -0700
-Message-ID: <CAKwvOdnut8db1Z1FdZkkSXCvmggrzfKv9Y9GO3uz4ND=K5sB3g@mail.gmail.com>
-Subject: Re: [PATCH] arm64: fix clang warning about TRAMP_VALIAS
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, James Morse <james.morse@arm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Mar 18, 2022 at 12:11 PM Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2022-03-16 18:38, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > The newly introduced TRAMP_VALIAS definition causes a build warning
-> > with clang-14:
-> >
-> > arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
->
-> Tangentially, all the other GNU extensions we depend on throughout Linux
-> are also GNU extensions. Do we know what's special about this one?
+tree:   https://github.com/bvanassche/linux ufs-for-next
+head:   366c4aa8768b5193b782c809d7aba916d4e382da
+commit: a8a69970d87f778e000ae1b15e18061c09aa0f7b [306/307] scsi: ufs: Remove unused constants and code
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220319/202203190505.1qKIBoB1-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/bvanassche/linux/commit/a8a69970d87f778e000ae1b15e18061c09aa0f7b
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche ufs-for-next
+        git checkout a8a69970d87f778e000ae1b15e18061c09aa0f7b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/ufs/
 
-My first thought is that -Wnull-pointer-arithmetic should be in the
--Wgnu flag group, such that -Wno-gnu (as set by Kbuild) implies
--Wno-null-pointer-arithmetic.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-One issue seems to be that -Wnull-pointer-arithmetic seems to control
-at least 2 different checks in clang.
+All warnings (new ones prefixed by >>):
 
-https://godbolt.org/z/hdYYejj3d
-
-So it's likely these two checks should have 2 distinct flags, such
-that the warning we're observing can be grouped under -Wgnu.
-
-Filed: https://github.com/llvm/llvm-project/issues/54444
-
->
-> Robin.
->
-> >                  return (char *)TRAMP_VALIAS + SZ_2K * slot;
-> >
-> > Change the addition to something clang does not complain about.
-> >
-> > Fixes: bd09128d16fa ("arm64: Add percpu vectors for EL1")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >   arch/arm64/include/asm/vectors.h | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > I see this warning on 5.17-rc8, but did not test it on linux-next,
-> > which may already have a fix.
-> >
-> > diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
-> > index f64613a96d53..bc9a2145f419 100644
-> > --- a/arch/arm64/include/asm/vectors.h
-> > +++ b/arch/arm64/include/asm/vectors.h
-> > @@ -56,14 +56,14 @@ enum arm64_bp_harden_el1_vectors {
-> >   DECLARE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector);
-> >
-> >   #ifndef CONFIG_UNMAP_KERNEL_AT_EL0
-> > -#define TRAMP_VALIAS 0
-> > +#define TRAMP_VALIAS 0ul
-> >   #endif
-> >
-> >   static inline const char *
-> >   arm64_get_bp_hardening_vector(enum arm64_bp_harden_el1_vectors slot)
-> >   {
-> >       if (arm64_kernel_unmapped_at_el0())
-> > -             return (char *)TRAMP_VALIAS + SZ_2K * slot;
-> > +             return (char *)(TRAMP_VALIAS + SZ_2K * slot);
-> >
-> >       WARN_ON_ONCE(slot == EL1_VECTOR_KPTI);
-> >
+>> drivers/scsi/ufs/ufshcd.c:8314:14: warning: variable 'name' set but not used [-Wunused-but-set-variable]
+           const char *name;
+                       ^
+   1 warning generated.
 
 
+vim +/name +8314 drivers/scsi/ufs/ufshcd.c
 
--- 
-Thanks,
-~Nick Desaulniers
+57d104c153d3d6d Subhash Jadavani    2014-09-25  8308  
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8309  static int ufshcd_config_vreg(struct device *dev,
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8310  		struct ufs_vreg *vreg, bool on)
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8311  {
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8312  	int ret = 0;
+727535903bea924 Gustavo A. R. Silva 2017-11-20  8313  	struct regulator *reg;
+727535903bea924 Gustavo A. R. Silva 2017-11-20 @8314  	const char *name;
+a8a69970d87f778 Bart Van Assche     2021-12-08  8315  	int uA_load;
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8316  
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8317  	BUG_ON(!vreg);
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8318  
+727535903bea924 Gustavo A. R. Silva 2017-11-20  8319  	reg = vreg->reg;
+727535903bea924 Gustavo A. R. Silva 2017-11-20  8320  	name = vreg->name;
+727535903bea924 Gustavo A. R. Silva 2017-11-20  8321  
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8322  	if (regulator_count_voltages(reg) > 0) {
+90d88f47e8d03b2 Asutosh Das         2020-02-10  8323  		uA_load = on ? vreg->max_uA : 0;
+90d88f47e8d03b2 Asutosh Das         2020-02-10  8324  		ret = ufshcd_config_vreg_load(dev, vreg, uA_load);
+3b141e8cfd54ba3 Stanley Chu         2019-03-28  8325  	}
+a8a69970d87f778 Bart Van Assche     2021-12-08  8326  
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8327  	return ret;
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8328  }
+aa497613093412e Sujit Reddy Thumma  2014-09-25  8329  
+
+:::::: The code at line 8314 was first introduced by commit
+:::::: 727535903bea924c4f73abb202c4b3e85fff0ca4 scsi: ufs: ufshcd: fix potential NULL pointer dereference in ufshcd_config_vreg
+
+:::::: TO: Gustavo A. R. Silva <garsilva@embeddedor.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
