@@ -1,23 +1,24 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE65A4C7D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C744C85
 	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 14:20:23 +0000 (UTC)
-X-UUID: 2dcb3940d7444ed8982e59c8d2f2ecf0-20220318
-X-UUID: 2dcb3940d7444ed8982e59c8d2f2ecf0-20220318
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+X-UUID: 2ac6fc2bab0c48fe84fb5bb06e68c710-20220318
+X-UUID: 2ac6fc2bab0c48fe84fb5bb06e68c710-20220318
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 1052693040; Fri, 18 Mar 2022 22:20:17 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 18 Mar 2022 22:20:16 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 18 Mar
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 849594175; Fri, 18 Mar 2022 22:20:16 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 18 Mar 2022 22:20:15 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 18 Mar
  2022 22:20:15 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 18 Mar 2022 22:20:15 +0800
+ Transport; Fri, 18 Mar 2022 22:20:14 +0800
 From: Nancy.Lin <nancy.lin@mediatek.com>
 To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
 	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
@@ -32,9 +33,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>, <srv_heupstream@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v16 16/22] drm/mediatek: add mediatek-drm plane color encoding info
-Date: Fri, 18 Mar 2022 22:20:03 +0800
-Message-ID: <20220318142009.2796-17-nancy.lin@mediatek.com>
+Subject: [PATCH v16 14/22] drm/mediatek: add display merge async reset control
+Date: Fri, 18 Mar 2022 22:20:01 +0800
+Message-ID: <20220318142009.2796-15-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220318142009.2796-1-nancy.lin@mediatek.com>
 References: <20220318142009.2796-1-nancy.lin@mediatek.com>
@@ -47,42 +48,39 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-Add plane color encoding information for color space conversion.
-It's a preparation for adding support for mt8195 ovl_adaptor mdp_rdma
-csc control.
+Add merge async reset control in mtk_merge_stop. Async hw doesn't do self
+reset on each sof signal(start of frame), so need to reset the async to
+clear the hw status for the next merge start.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/gpu/drm/mediatek/mtk_drm_plane.c | 1 +
- drivers/gpu/drm/mediatek/mtk_drm_plane.h | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/gpu/drm/mediatek/mtk_disp_merge.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-index 075747a6d4aa..c74cb94e445e 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-@@ -138,6 +138,7 @@ static void mtk_plane_update_new_state(struct drm_plane_state *new_state,
- 	mtk_plane_state->pending.width = drm_rect_width(&new_state->dst);
- 	mtk_plane_state->pending.height = drm_rect_height(&new_state->dst);
- 	mtk_plane_state->pending.rotation = new_state->rotation;
-+	mtk_plane_state->pending.color_encoding = new_state->color_encoding;
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+index 9dca145cfb71..177473fa8160 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+@@ -8,6 +8,7 @@
+ #include <linux/of_device.h>
+ #include <linux/of_irq.h>
+ #include <linux/platform_device.h>
++#include <linux/reset.h>
+ #include <linux/soc/mediatek/mtk-cmdq.h>
+ 
+ #include "mtk_drm_ddp_comp.h"
+@@ -79,6 +80,9 @@ void mtk_merge_stop(struct device *dev)
+ 	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
+ 
+ 	mtk_merge_stop_cmdq(dev, NULL);
++
++	if (priv->async_clk)
++		device_reset_optional(dev);
  }
  
- static void mtk_plane_atomic_async_update(struct drm_plane *plane,
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.h b/drivers/gpu/drm/mediatek/mtk_drm_plane.h
-index d454bece9535..2d5ec66e3df1 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_plane.h
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.h
-@@ -24,6 +24,7 @@ struct mtk_plane_pending_state {
- 	bool				dirty;
- 	bool				async_dirty;
- 	bool				async_config;
-+	enum drm_color_encoding		color_encoding;
- };
- 
- struct mtk_plane_state {
+ void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
 -- 
 2.18.0
 
