@@ -1,102 +1,108 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18EE44C60
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 13:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647608443; x=1679144443;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Tlb0Oa3iKmUPJmNv1OT28opAXtAx9ub/Hx+6e+uVH60=;
-  b=YG3ChxOQ+b3NBZsgVAX6VhZZzKXcP7XcPzfkWuM5A3gdjS6n3frimp9g
-   ZV1kOx4jV3X9nhkZvkB2tI7BuVFiL71re4XDPe6G7h4wFcmHAMKRZPaah
-   L1RZhC1cTTcIEslW1Q1VOUs/24njS2CI8i/nwMka3UNvw99892lV4jzoj
-   a+wMJf7Xcjn3Ld7MP6DfbZbLycsC6qby6+oWtLleOR5XLKuLbWb32ggQC
-   mR2VpxB/qVSNgdQyfZkJBCe16/izo0eDqtksmT0lPRetGJbnOeV0jryoR
-   /G4+8mvYJx5aiYF3e7p41IOU6AMD8Ur3xYxUQJix9/6oPGrRDfcI0yiDK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="257078823"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="257078823"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:00:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="647452945"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 18 Mar 2022 06:00:40 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nVCDf-000Elh-Ht; Fri, 18 Mar 2022 13:00:39 +0000
-Date: Fri, 18 Mar 2022 21:00:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [mchehab-media-next:master 262/331]
- drivers/media/platform/renesas/rcar_drif.c:1470:34: warning: unused variable
- 'rcar_drif_of_table'
-Message-ID: <202203182022.SpPMtxPN-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC77C4C60
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 13:04:28 +0000 (UTC)
+X-UUID: e651d6028a3542a8b2e8a4c20047d2f4-20220318
+X-UUID: e651d6028a3542a8b2e8a4c20047d2f4-20220318
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 163792457; Fri, 18 Mar 2022 21:04:16 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 18 Mar 2022 21:04:13 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 18 Mar 2022 21:04:13 +0800
+Message-ID: <4a59806ad9adbfcaa4c34cdf79d615e24e666442.camel@mediatek.com>
+Subject: Re: [PATCH v15 19/22] drm/mediatek: modify mediatek-drm for mt8195
+ multi mmsys support
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: CK Hu <ck.hu@mediatek.com>, Rob Herring <robh+dt@kernel.org>, "Matthias
+ Brugger" <matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	<linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <srv_heupstream@mediatek.com>, David Airlie
+	<airlied@linux.ie>, "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+	<singo.chang@mediatek.com>, <llvm@lists.linux.dev>, Nick Desaulniers
+	<ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
+Date: Fri, 18 Mar 2022 21:04:13 +0800
+In-Reply-To: <abdf2bf18c57b8c622970252f58d4849823e48bd.camel@mediatek.com>
+References: <20220311015506.11232-1-nancy.lin@mediatek.com>
+	 <20220311015506.11232-20-nancy.lin@mediatek.com>
+	 <abdf2bf18c57b8c622970252f58d4849823e48bd.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-Hi Mauro,
+Hi CK,
 
-First bad commit (maybe != root cause):
+Thanks for the review.
 
-tree:   git://linuxtv.org/mchehab/media-next.git master
-head:   47aa866f248c89b319b99ac7b21a0a961ed2264a
-commit: ee4a77a32b39064fdab0aa2b36bbd35ebf57e077 [262/331] media: platform: place Renesas drivers on a separate dir
-config: hexagon-randconfig-r015-20220317 (https://download.01.org/0day-ci/archive/20220318/202203182022.SpPMtxPN-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add mchehab-media-next git://linuxtv.org/mchehab/media-next.git
-        git fetch --no-tags mchehab-media-next master
-        git checkout ee4a77a32b39064fdab0aa2b36bbd35ebf57e077
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/
+On Mon, 2022-03-14 at 18:08 +0800, CK Hu wrote:
+> Hi, Nancy:
+> 
+> On Fri, 2022-03-11 at 09:55 +0800, Nancy.Lin wrote:
+> > MT8195 have two mmsys. Modify drm for MT8195 multi-mmsys support.
+> > The two mmsys (vdosys0 and vdosys1) will bring up two drm drivers,
+> > only one drm driver register as the drm device.
+> > Each drm driver binds its own component. The last bind drm driver
+> > allocates and registers the drm device to drm core.
+> > Each crtc path is created with the corresponding drm driver data.
+> > 
+> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_drm_crtc.c |  24 +-
+> >  drivers/gpu/drm/mediatek/mtk_drm_crtc.h |   3 +-
+> >  drivers/gpu/drm/mediatek/mtk_drm_drv.c  | 300 ++++++++++++++++++--
+> > ----
+> >  drivers/gpu/drm/mediatek/mtk_drm_drv.h  |  10 +-
+> >  4 files changed, 246 insertions(+), 91 deletions(-)
+> > 
+> > 
+> 
+> [snip]
+> 
+> >  
+> >  static const struct mtk_mmsys_driver_data
+> > mt8195_vdosys0_driver_data
+> > = {
+> >  	.main_path = mt8195_mtk_ddp_main,
+> >  	.main_len = ARRAY_SIZE(mt8195_mtk_ddp_main),
+> > +	.mmsys_dev_num = 2,
+> 
+> After apply this patch, vdosys0 only would not work. So I think this
+> should be set to 1 in this patch, and set to 2 in the patch that
+> support mt8195 vdosys1. With this modification,
+> 
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+OK, I will fix it.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/renesas/rcar_drif.c:1470:34: warning: unused variable 'rcar_drif_of_table' [-Wunused-const-variable]
-   static const struct of_device_id rcar_drif_of_table[] = {
-                                    ^
-   1 warning generated.
+Regards,
+Nancy
 
 
-vim +/rcar_drif_of_table +1470 drivers/media/platform/renesas/rcar_drif.c
+> >  };
+> >  
+> > 
+> 
+> 
 
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1466  
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1467  static SIMPLE_DEV_PM_OPS(rcar_drif_pm_ops, rcar_drif_suspend,
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1468  			 rcar_drif_resume);
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1469  
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12 @1470  static const struct of_device_id rcar_drif_of_table[] = {
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1471  	{ .compatible = "renesas,rcar-gen3-drif" },
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1472  	{ }
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1473  };
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1474  MODULE_DEVICE_TABLE(of, rcar_drif_of_table);
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1475  
-
-:::::: The code at line 1470 was first introduced by commit
-:::::: 7625ee981af166ddb569e2e6c0006e2af471326f [media] media: platform: rcar_drif: Add DRIF support
-
-:::::: TO: Ramesh Shanmugasundaram <ramesh.shanmugasundaram@bp.renesas.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
