@@ -1,88 +1,79 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588EB5394
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 22:43:17 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-401-Kl5n9Y8SM8efMVGPAvZzlQ-1; Fri, 18 Mar 2022 22:43:14 +0000
-X-MC-Unique: Kl5n9Y8SM8efMVGPAvZzlQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Fri, 18 Mar 2022 22:43:13 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Fri, 18 Mar 2022 22:43:13 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Linus Torvalds' <torvalds@linux-foundation.org>, Andy Lutomirski
-	<luto@kernel.org>
-CC: Andrew Cooper <Andrew.Cooper3@citrix.com>, Nick Desaulniers
-	<ndesaulniers@google.com>, "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling
-	<morbo@google.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
-	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, "maintainer:X86 ARCHITECTURE (32-BIT AND
- 64-BIT)" <x86@kernel.org>, Nathan Chancellor <nathan@kernel.org>, "Juergen
- Gross" <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, LKML
-	<linux-kernel@vger.kernel.org>, linux-toolchains
-	<linux-toolchains@vger.kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD295394
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 22:48:23 +0000 (UTC)
+Received: from [IPv6:::1] ([IPv6:2601:646:8600:40c1:8f0c:2533:51ff:d719])
+	(authenticated bits=0)
+	by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 22IMltGC1012727
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 18 Mar 2022 15:47:56 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 22IMltGC1012727
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2022030301; t=1647643676;
+	bh=eQmUnf4BQ6Am5omHpUeOWcJu4ubjTaOa1UmiRCl9H4A=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=FjhPFIrk+8dUdZPRs95FCMKlxROzpjTBqlqt1yqa4v1OWFiKnD4uXULa4YjMf/1Yd
+	 jIcsOz4fu2fiJJzZuEyv5DAiWz+fnYMetgYZRq9ZJBSJzYLJvsJZMLvq++A3TcYmTL
+	 a4QWVdrWQFloz4VuA1nDVPOS2H8iN5Y3RBgI8NxOJ7kjK2uFKvpm2WQPWYWETmVBt2
+	 A33qv13r63/moq+OBS04JKvyzYsEifUhTMnxbCBeHz2uqpBeW2bZdd2GdUvdSDWv0R
+	 PjEQvAANiuXAZhr7Rjy9FGqM9EM1cLqeJ3I98K6cvo/7NFARUVLXlGpBDk97GJLP0S
+	 YvF6UXcUsoc5w==
+Date: Fri, 18 Mar 2022 15:47:49 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: David Laight <David.Laight@ACULAB.COM>,
+        "'Segher Boessenkool'" <segher@kernel.crashing.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC: Andy Lutomirski <luto@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
 Subject: RE: [PATCH v5] x86: use builtins to read eflags
-Thread-Topic: [PATCH v5] x86: use builtins to read eflags
-Thread-Index: AQHYOvTFBe9clLf+8ESM+1cEdgpAzqzFu3kw
-Date: Fri, 18 Mar 2022 22:43:13 +0000
-Message-ID: <5794cceec50a4f1ebca069d5a31afcdf@AcuMS.aculab.com>
-References: <20220210223134.233757-1-morbo@google.com>
- <20220301201903.4113977-1-morbo@google.com>
- <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
- <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com>
- <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
- <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com>
- <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
- <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
- <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com>
- <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
- <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org>
- <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
-In-Reply-To: <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ad0d80fdfb404df6a98c68e759fca199@AcuMS.aculab.com>
+References: <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com> <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com> <20220318220901.GS614@gate.crashing.org> <ad0d80fdfb404df6a98c68e759fca199@AcuMS.aculab.com>
+Message-ID: <93EDA96C-0EAD-4C40-ABEA-28C8BF76A9F9@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMTggTWFyY2ggMjAyMiAxODoxOQ0KPiANCj4g
-T24gRnJpLCBNYXIgMTgsIDIwMjIgYXQgMTA6NTkgQU0gQW5keSBMdXRvbWlyc2tpIDxsdXRvQGtl
-cm5lbC5vcmc+IHdyb3RlOg0KPiA+DQo+ID4gSSBnZW5lcmFsbHkgYWdyZWUuICBJbiB0aGlzIHBh
-cnRpY3VsYXIgY2FzZSwgdGhvdWdoLCBJIHdpbGwga2VlcCB1c2luZw0KPiA+IHRoZSBidWlsdGlu
-IGluIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3g4Ni9oZWxwZXJzLmggdW5sZXNzIHdlIGFjdHVh
-bGx5DQo+ID4gaGl0IGJyZWFrYWdlLiAgVGhpcyBpcyBiZWNhdXNlIHRoaXMgaXMgKnVzZXIqIGNv
-ZGUsIGl0IGlzIGNvbXBpbGVkIHdpdGgNCj4gPiB0aGUgcmVkem9uZSBlbmFibGVkLCBhbmQgdGhl
-IGFzbSBjb2RlIHRvIGRvIHRoZSByaWdodCB0aGluZyB3aGVuIHRoZQ0KPiA+IHJlZHpvbmUgaXMg
-ZW5hYmxlZCBpcyB0b28gaGFpcnkgZm9yIG1lIHRvIHdhbnQgdG8gZGVhbCB3aXRoIGl0Lg0KPiAN
-Cj4gWWVhaCwgcmVkem9uaW5nIGlzIGEgcHJvYmxlbSBmb3IgInB1c2hmIi4NCj4gDQo+IE9yIHJh
-dGhlciwgaXQncyBub3QgdGhlIHJlZHpvbmluZyBpdHNlbGYsIGJ1dCB0aGUgZmFjdCB0aGF0IHRo
-ZQ0KPiBjb21waWxlciBtaWdodCB1c2UgdGhlIHdvcmQgdW5kZXIgdGhlIHN0YWNrIGZvciByYW5k
-b20gb3RoZXIgdGhpbmdzLA0KPiBhbmQgdGhlIHB1c2hmIHdpbGwgdGhlbiBjb3JydXB0IHNvbWUg
-bG9jYWwgdmFyaWFibGUgc3RvcmFnZS4NCj4gDQo+IEkgdGhpbmsgaXQgd291bGQgYmUgbG92ZWx5
-IHRvIHNvbHZlIHRoYXQgaW4gaW5saW5lIGFzbSBpdHNlbGYgc29tZSB3YXkNCj4gLSBieSBtYXJr
-aW5nIHRoZSBzdGFjayBwb2ludGVyIGNsb2JiZXJlZCBvciBzb21ldGhpbmcuDQoNClNvbWV0aGlu
-ZyB0aGF0IGdlbmVyYXRlczoNCgltb3YJJXJheCwtOCglcnNwKQ0KCXB1c2hmDQoJeGNoZwklcmF4
-LDAoJXJzcCkNCglhZGQJJXJzcCw4DQpzaG91bGQgd29yayB3aXRoIG9yIHdpdGhvdXQgYSByZWR6
-b25lLg0KV2lsbCBiZSBhIGJpdCBzbG93ZXIgOi0oDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVk
-IEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5l
-cywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On March 18, 2022 3:36:48 PM PDT, David Laight <David=2ELaight@ACULAB=2ECOM=
+> wrote:
+>From: Segher Boessenkool
+>> Sent: 18 March 2022 22:09
+>=2E=2E=2E
+>> It generally is a very good idea to
+>> have a redzone though, without it you pay much more than necessary for
+>> frame setup and teardown in leaf functions (similar to some of what the
+>> misnamed "shrink-wrapping" optimisation does, but the two are mostly
+>> independent, the benefits add up)=2E
+>
+>Are there really leaf functions that need to spill data to stack
+>where the cost of setting up a stack frame is significant?
+>
+>I'd have thought that was relatively rare=2E
+>
+>	David
+>
+>-
+>Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+>Registration No: 1397386 (Wales)
+>
+>
 
+Yes=2E
