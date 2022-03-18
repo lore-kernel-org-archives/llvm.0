@@ -1,167 +1,176 @@
-Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDE67A
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 05:33:09 +0000 (UTC)
-Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-10.nifty.com with ESMTP id 22I5I7vD022461
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 14:18:07 +0900
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42]) (authenticated)
-	by conssluserg-06.nifty.com with ESMTP id 22I5Hh8f026829
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 14:17:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 22I5Hh8f026829
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1647580664;
-	bh=YcnKTgYW/nH97duZQDWdMClL6EBoKEP/ujVYgGk4kBk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jNNysrZl6TapPon0a/Bb3aIBWau5bhANk5Tmnz+wPJ7XmCGVD/PyEK6yCGmH2Wdvs
-	 hFrJ+m8juG2+L7UtIe7NuybdYXM39nkmmOtqyVR6asarVH+KFexwL62aB293QBbc1i
-	 Kn2m91Jrs/RjC5icdFi2iYOz4SvvWG19pxfsvBiQOak4KJMRSLZYQqVyP7SjmqKtr7
-	 jGiLIMsVGYQrc6bbFPzxiPc9hjoVWp6dnQd7WcPfhPdWaEw/+6UnkqoPC55Zqx9nMe
-	 bSB/rFWigrlNR+kcjbYcSI55z2opS9ipYAE1c1dKZFFpDYHtUIPaiOkhBb5oV5k4R9
-	 EaBqOwy/eA40g==
-X-Nifty-SrcIP: [209.85.216.42]
-Received: by mail-pj1-f42.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so1338566pjq.2
-        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 22:17:43 -0700 (PDT)
-X-Gm-Message-State: AOAM5308TP0rzOlQjYelbwzC+RmgSMlJ1uD8mlQFeVfyJKFDiW8+JQCG
-	FaU0ANMAVsMDTy5t4/ieafMp7HZ61lVWIiB63DA=
-X-Google-Smtp-Source: ABdhPJxLZbFAH9OT/iNJbXmWsB2aranEIGxuC8FF2oQTeJKBU1pgEwYGe18Vkiv5IFm4wNugBTteiAPHZDjlEzdi99I=
-X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
- s7-20020a170902988700b001516e1c7082mr8462129plp.162.1647580662904; Thu, 17
- Mar 2022 22:17:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706C77A
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 05:59:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647583186; x=1679119186;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2inKC5XC+8wTQ/dAtlKptncESI8JecL0hchzmp989kc=;
+  b=kIdshUcbWLvMBRVnJb1kk1rLJdz5XvBv9bgI4AmshhZ0IKJ539RHxPX1
+   v0FQxNN7vZqWuRKzYKk5etjDaRhbaVYqyd8NCQbkllFbPRPEEqA8TTv8a
+   V1Jx2fO6ABrWQqjTViVSccHnclQCa94Bqb0xN+5YxrCJfHUANJOh/BD4m
+   IcHfeWU7f+cQ63h1qrFBku7dvpP0fESxd6HKYW3/T+yiFp/27kUQR2TdW
+   /cCpX5f51+uup3qMirVW++r+FeM5zEDFjS2f4vpHBpnUlwher49oEIwwF
+   F60OLoa155Prj4aL/b50RgvM8iF+9/2+I/grjoKyN2wAl1ZywwLpEujwp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="254613632"
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="254613632"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 22:59:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="499111280"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 17 Mar 2022 22:59:28 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nV5e3-000ESe-EC; Fri, 18 Mar 2022 05:59:27 +0000
+Date: Fri, 18 Mar 2022 13:58:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fangrui Song <maskray@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Chancellor <natechancellor@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [linux-stable-rc:linux-4.19.y 2710/9999] mm/slab_common.c:1438:37:
+ warning: unused variable 'proc_slabinfo_operations'
+Message-ID: <202203181306.hfAlK7cq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220304170813.1689186-1-nathan@kernel.org> <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
- <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X> <CAK7LNAThknb0=-XhfB6zspke-sNHMEmTbGy8WVeg20ntT72wqA@mail.gmail.com>
- <Yio3K4bgdyFEBy7J@dev-arch.thelio-3990X>
-In-Reply-To: <Yio3K4bgdyFEBy7J@dev-arch.thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 18 Mar 2022 14:16:58 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS8u++6Z9WWtuZ_1QNZ66wiqrRTBzpsiOra7nToJ55Suw@mail.gmail.com>
-Message-ID: <CAK7LNAS8u++6Z9WWtuZ_1QNZ66wiqrRTBzpsiOra7nToJ55Suw@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        llvm@lists.linux.dev,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Mar 11, 2022 at 2:36 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Wed, Mar 09, 2022 at 06:33:40PM +0900, Masahiro Yamada wrote:
-> > On Wed, Mar 9, 2022 at 12:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
-> > > > On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > > >
-> > > > > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> > > > > index d32616891dcf..68b74416ec48 100644
-> > > > > --- a/Documentation/kbuild/llvm.rst
-> > > > > +++ b/Documentation/kbuild/llvm.rst
-> > > > > @@ -49,17 +49,36 @@ example: ::
-> > > > >  LLVM Utilities
-> > > > >  --------------
-> > > > >
-> > > > > -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
-> > > > > -to enable them. ::
-> > > > > -
-> > > > > -       make LLVM=1
-> > > > > -
-> > > > > -They can be enabled individually. The full list of the parameters: ::
-> > > > > +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
-> > > > > +The full list of supported make variables: ::
-> > > > >
-> > > > >         make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
-> > > > >           OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
-> > > > >           HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
-> > > > >
-> > > > > +To simplify the above command, Kbuild supports the ``LLVM`` variable: ::
-> > > > > +
-> > > > > +       make LLVM=1
-> > > > > +
-> > > > > +If your LLVM tools are not available in your PATH, you can supply their
-> > > > > +location using the LLVM variable with a trailing slash: ::
-> > > > > +
-> > > > > +       make LLVM=/path/to/llvm/
-> > > > > +
-> > > > > +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
-> > > >
-> > > > I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
-> > > > works and (my interpretation of what) Masahiro said "if anyone asks
-> > > > for this, here's how we could do that."  I don't think I've seen an
-> > > > explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
-> > > > won't hold this patch up over that.  Either way:
-> > >
-> > > Right, there has not been an explicit ask for the prefix support yet,
-> > > although I know I personally would use it, but I think that it is worth
-> > > doing now instead of later for a few reasons:
-> > >
-> > > 1. It makes path goofs easier to spot. If you do
-> > >
-> > >      $ PATH=/path/to/llvm:$PATH make LLVM=1 ...
-> > >
-> > >    with a path to LLVM that does not exist (maybe you are bisecting an
-> > >    issue and using a temporary build of LLVM and you forgot the path it
-> > >    was in), you fall back to the LLVM tools that are in other places in
-> > >    your PATH, which is not what the developer intended. I know that I
-> > >    have messed up bisects that way. If you did
-> > >
-> > >      $ make LLVM=/path/to/llvm/
-> > >
-> > >    with a path that does not exist, there will be an error much earlier:
-> > >
-> > >      $ make LLVM=/this/path/does/not/exist/ defconfig
-> > >      /bin/sh: line 1: /this/path/does/not/exist/clang: No such file or directory
-> > >
-> > > 2. It does not take that much more code or documentation to support. It
-> > >    is the same amount of code as the suffix and the documentation is
-> > >    roughly the same amount of lines as well.
-> > >
-> > > 3. If we wait to implement the path-based use of $(LLVM), we have three
-> > >    "sequence" points: the initial support of $(LLVM), the suffix
-> > >    support, and the prefix support. As we are constantly working with
-> > >    various trees, it would make it harder to know what to use when. If
-> > >    we just do it in the same patch, we know 5.18+ can use both of these
-> > >    methods.
-> > >
-> > > However, at the end of the day, we are a team and if you feel like we
-> > > should only have suffix support, I am more than happy to push a v3 that
-> > > does just that and we can revist prefix support in the future. Just let
-> > > me know!
-> >
-> >
-> > I do not have a strong opinion about this.
-> > (I just mentioned the LLVM=/path/to/llvm/ form because I guessed
-> > somebody would request this sooner or later.)
-> >
-> >
-> > If you want me to pick up this version, I will apply it with fixing up
-> > a nit pointed out by Kees   (": ::" -> "::")
-> >
-> > If you want to send v3, that is fine with me as well.
-> >
-> > Please let me know your thoughts.
->
-> Given Nick's response, please pick up this revision with Kees' nit.
-> Thank you!
+Hi Fangrui,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+head:   57e593a4ee92b5fddbab3367340e9cb0300cc241
+commit: 69c122751164c3c343eea205fd5c3e1d5132f967 [2710/9999] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
+config: mips-randconfig-r022-20220317 (https://download.01.org/0day-ci/archive/20220318/202203181306.hfAlK7cq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=69c122751164c3c343eea205fd5c3e1d5132f967
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-4.19.y
+        git checkout 69c122751164c3c343eea205fd5c3e1d5132f967
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> mm/slab_common.c:1438:37: warning: unused variable 'proc_slabinfo_operations' [-Wunused-const-variable]
+   static const struct file_operations proc_slabinfo_operations = {
+                                       ^
+   1 warning generated.
+--
+>> drivers/hwmon/scmi-hwmon.c:59:24: warning: address of array 'sensor->name' will always evaluate to 'true' [-Wpointer-bool-conversion]
+           if (sensor && sensor->name)
+                      ~~ ~~~~~~~~^~~~
+   1 warning generated.
+--
+   drivers/tty/serial/stm32-usart.c:332:15: warning: variable 'cookie' set but not used [-Wunused-but-set-variable]
+           dma_cookie_t cookie;
+                        ^
+>> drivers/tty/serial/stm32-usart.c:600:14: warning: no previous prototype for function 'stm32_get_databits' [-Wmissing-prototypes]
+   unsigned int stm32_get_databits(struct ktermios *termios)
+                ^
+   drivers/tty/serial/stm32-usart.c:600:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned int stm32_get_databits(struct ktermios *termios)
+   ^
+   static 
+   drivers/tty/serial/stm32-usart.c:929:15: warning: variable 'cookie' set but not used [-Wunused-but-set-variable]
+           dma_cookie_t cookie;
+                        ^
+   3 warnings generated.
+--
+   In file included from drivers/net/wireless/intersil/hostap/hostap_ap.c:30:
+   In file included from drivers/net/wireless/intersil/hostap/hostap_wlan.h:11:
+   include/net/iw_handler.h:489:9: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
+           return IW_EV_POINT_LEN;
+                  ^~~~~~~~~~~~~~~
+   include/uapi/linux/wireless.h:1096:5: note: expanded from macro 'IW_EV_POINT_LEN'
+                            IW_EV_POINT_OFF)
+                            ^~~~~~~~~~~~~~~
+   include/uapi/linux/wireless.h:1093:75: note: expanded from macro 'IW_EV_POINT_OFF'
+   #define IW_EV_POINT_OFF (((char *) &(((struct iw_point *) NULL)->length)) - \
+                                                                             ^
+   drivers/net/wireless/intersil/hostap/hostap_ap.c:1507:8: warning: variable 'txt' set but not used [-Wunused-but-set-variable]
+           char *txt = "";
+                 ^
+>> drivers/net/wireless/intersil/hostap/hostap_ap.c:372:36: warning: unused variable 'ap_control_proc_seqops' [-Wunused-const-variable]
+   static const struct seq_operations ap_control_proc_seqops = {
+                                      ^
+>> drivers/net/wireless/intersil/hostap/hostap_ap.c:574:36: warning: unused variable 'prism2_ap_proc_seqops' [-Wunused-const-variable]
+   static const struct seq_operations prism2_ap_proc_seqops = {
+                                      ^
+   4 warnings generated.
+--
+   In file included from drivers/net/wireless/intersil/hostap/hostap_proc.c:9:
+   In file included from drivers/net/wireless/intersil/hostap/hostap_wlan.h:11:
+   include/net/iw_handler.h:489:9: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
+           return IW_EV_POINT_LEN;
+                  ^~~~~~~~~~~~~~~
+   include/uapi/linux/wireless.h:1096:5: note: expanded from macro 'IW_EV_POINT_LEN'
+                            IW_EV_POINT_OFF)
+                            ^~~~~~~~~~~~~~~
+   include/uapi/linux/wireless.h:1093:75: note: expanded from macro 'IW_EV_POINT_OFF'
+   #define IW_EV_POINT_OFF (((char *) &(((struct iw_point *) NULL)->length)) - \
+                                                                             ^
+>> drivers/net/wireless/intersil/hostap/hostap_proc.c:117:36: warning: unused variable 'prism2_wds_proc_seqops' [-Wunused-const-variable]
+   static const struct seq_operations prism2_wds_proc_seqops = {
+                                      ^
+>> drivers/net/wireless/intersil/hostap/hostap_proc.c:170:36: warning: unused variable 'prism2_bss_list_proc_seqops' [-Wunused-const-variable]
+   static const struct seq_operations prism2_bss_list_proc_seqops = {
+                                      ^
+   drivers/net/wireless/intersil/hostap/hostap_proc.c:214:37: warning: unused variable 'prism2_pda_proc_fops' [-Wunused-const-variable]
+   static const struct file_operations prism2_pda_proc_fops = {
+                                       ^
+   drivers/net/wireless/intersil/hostap/hostap_proc.c:226:37: warning: unused variable 'prism2_aux_dump_proc_fops' [-Wunused-const-variable]
+   static const struct file_operations prism2_aux_dump_proc_fops = {
+                                       ^
+>> drivers/net/wireless/intersil/hostap/hostap_proc.c:348:36: warning: unused variable 'prism2_scan_results_proc_seqops' [-Wunused-const-variable]
+   static const struct seq_operations prism2_scan_results_proc_seqops = {
+                                      ^
+   6 warnings generated.
 
 
-I fixed up ": ::" to "::",
-and applied to linux-kbuild.  Thanks.
+vim +/proc_slabinfo_operations +1438 mm/slab_common.c
 
+b7454ad3cfc304 Glauber Costa 2012-10-19  1437  
+b7454ad3cfc304 Glauber Costa 2012-10-19 @1438  static const struct file_operations proc_slabinfo_operations = {
+b7454ad3cfc304 Glauber Costa 2012-10-19  1439  	.open		= slabinfo_open,
+b7454ad3cfc304 Glauber Costa 2012-10-19  1440  	.read		= seq_read,
+b7454ad3cfc304 Glauber Costa 2012-10-19  1441  	.write          = slabinfo_write,
+b7454ad3cfc304 Glauber Costa 2012-10-19  1442  	.llseek		= seq_lseek,
+b7454ad3cfc304 Glauber Costa 2012-10-19  1443  	.release	= seq_release,
+b7454ad3cfc304 Glauber Costa 2012-10-19  1444  };
+b7454ad3cfc304 Glauber Costa 2012-10-19  1445  
 
+:::::: The code at line 1438 was first introduced by commit
+:::::: b7454ad3cfc3043c5264729a6204f049fe1f34b1 mm/sl[au]b: Move slabinfo processing to slab_common.c
 
+:::::: TO: Glauber Costa <glommer@parallels.com>
+:::::: CC: Pekka Enberg <penberg@kernel.org>
 
-
-
--- 
-Best Regards
-Masahiro Yamada
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
