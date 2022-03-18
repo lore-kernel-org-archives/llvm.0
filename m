@@ -1,169 +1,159 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9990D15AC
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 02:24:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647570262; x=1679106262;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Q7hisbvBGNfj5YC4rXo2BpgMWBUIyBvckqTBdnQku9o=;
-  b=kHveFZyRIPhNIMjge4qOfHKFl3ijje1Ln9imNxUtPcLAXNYTuo1o8nzS
-   bgIhb7qny6kXkeEGzoEpIr4OXd7T/SfFxS/jIZMDqgVibhOdnzxo58Inz
-   M1x23oDRzEVn/QGCzidcwRJ4dUiZtF6hZiGRFiOlYxvXHBM5n++pe9Ziy
-   YCu7C2GUCxTBPWGpbFJOV/1J3Kn8qoQ30tDaaTYwn0yj7jq48hknscIuA
-   5MbBzAvFI9sP6+h1pmB9l9m5AXlbDq9htCmYBMReE8MFSh/eDvIpXdnaw
-   8UhsjmlhgM+gePKPowgQLMfDkOJUU+BHjRyv28aOjyC7lDjjSul9ptKvg
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="256757849"
-X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
-   d="scan'208";a="256757849"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 19:24:21 -0700
-X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
-   d="scan'208";a="558206106"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.29.89]) ([10.255.29.89])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 19:24:19 -0700
-Subject: Re: [kbuild-all] Re: [linux-next:master 4103/11953]
- arch/arm/kernel/ftrace.c:229:6: warning: no previous prototype for function
- 'prepare_ftrace_return'
-To: Steven Rostedt <rostedt@goodmis.org>, kernel test robot <lkp@intel.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, Linux Memory Management List <linux-mm@kvack.org>
-References: <202203110903.3xDyTUVl-lkp@intel.com>
- <20220310210404.7c47aa47@gandalf.local.home>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <d72b1311-2734-dca5-a105-a8ae1334627d@intel.com>
-Date: Fri, 18 Mar 2022 10:24:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782387A
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 05:27:08 +0000 (UTC)
+Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-04.nifty.com with ESMTP id 22I5GClN018684
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 14:16:12 +0900
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45]) (authenticated)
+	by conssluserg-05.nifty.com with ESMTP id 22I5FoA0001769
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 14:15:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 22I5FoA0001769
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1647580551;
+	bh=FRaQi6toG6y41cZl4bwLMsymBKFQ6HbocfhziKr6tpw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=QwkYvxzCIKxmWLontgZjsE8gpOH8R7gkXp81qPUEstldu/Feq1j2/zbjSrMvDUDHB
+	 9AXhOCZljIpgNgDxgez4w3gir5/QoRtcqYqjN73FvfRXF0i+RZJww2Uqzeot7BOz/b
+	 +br/bIiBsRVdYc5lIUZQzW8s1Exv0eaGDRd68DJYT0P1m9AeB294tBOX9sRlycNLum
+	 Az875ADdxuZ9R/9arXK92iPX21ar6BvyoR0M3fQ1csHpHX9m7GB78ytZ1iDhqrnpT9
+	 8zMEtnsaIYoV7N9Ex+FkiqhIKVUiMy+Xe4TctuS4gkSU4PWOv73AumFdyJfzVbaddV
+	 bPBYOGhzwfMOA==
+X-Nifty-SrcIP: [209.85.216.45]
+Received: by mail-pj1-f45.google.com with SMTP id m22so6687565pja.0
+        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 22:15:51 -0700 (PDT)
+X-Gm-Message-State: AOAM531VZlGDZjhedU386woBKkH/v3aiu2mSrNmnuAF+9V7Mb2NuLsGI
+	AWBnjV2fbxyBYnBuoPbB9nrdSD60HOJzbMWrDqE=
+X-Google-Smtp-Source: ABdhPJwlJEecYzAmeCCUR+2o70hp6UpG6Qk3jNtGA7IZWlX2cfpoTPaoBBeeVcdoXPVQ2mrDQjT19v1Vp8iApiWi0vo=
+X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
+ s7-20020a170902988700b001516e1c7082mr8457060plp.162.1647580550504; Thu, 17
+ Mar 2022 22:15:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220310210404.7c47aa47@gandalf.local.home>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <202203160508.k7vz4ZxC-lkp@intel.com> <YjIYxWkVzT0/XYf+@sirena.org.uk>
+In-Reply-To: <YjIYxWkVzT0/XYf+@sirena.org.uk>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 18 Mar 2022 14:15:07 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASsiYHK3QW5aOg016_XwD-MmOOcJ6UA=f95BxEZ-p+gSw@mail.gmail.com>
+Message-ID: <CAK7LNASsiYHK3QW5aOg016_XwD-MmOOcJ6UA=f95BxEZ-p+gSw@mail.gmail.com>
+Subject: Re: [broonie-misc:arm64-sysreg-gen 6/9] arch/arm64/include/asm/sysreg.h:125:10:
+ fatal error: 'generated/asm/sysreg.h' file not found
+To: Mark Brown <broonie@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+
+On Thu, Mar 17, 2022 at 2:05 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, Mar 16, 2022 at 05:56:39AM +0800, kernel test robot wrote:
+>
+> Not deleting context for the benefit of the kbuild people I just CCed...
+>
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git arm64-sysreg-gen
+> > head:   72b2ee21681c0c515c6a8bb62bd289766ce324a1
+> > commit: caf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff [6/9] arm64/sysreg: Enable automatic generation of system register definitions
+> > config: arm64-randconfig-r006-20220313 (https://download.01.org/0day-ci/archive/20220316/202203160508.k7vz4ZxC-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install arm64 cross compiling tool for clang build
+> >         # apt-get install binutils-aarch64-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=caf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff
+> >         git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
+> >         git fetch --no-tags broonie-misc arm64-sysreg-gen
+> >         git checkout caf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >    In file included from kernel/bounds.c:10:
+> >    In file included from include/linux/page-flags.h:10:
+> >    In file included from include/linux/bug.h:5:
+> >    In file included from arch/arm64/include/asm/bug.h:26:
+> >    In file included from include/asm-generic/bug.h:22:
+> >    In file included from include/linux/printk.h:9:
+> >    In file included from include/linux/cache.h:6:
+> >    In file included from arch/arm64/include/asm/cache.h:8:
+> >    In file included from arch/arm64/include/asm/cputype.h:173:
+> > >> arch/arm64/include/asm/sysreg.h:125:10: fatal error: 'generated/asm/sysreg.h' file not found
+> >    #include "generated/asm/sysreg.h"
+> >             ^~~~~~~~~~~~~~~~~~~~~~~~
+> >    1 error generated.
+>
+> This looks like a kbuild thing which as far as I can see only exists for
+> O= builds and possibly only with bounds.s - if I look at the full log I
+> see that we correctly generated asm/sysreg.h:
+>
+>   GEN     arch/arm64/include/generated/asm/sysreg.h
+>
+> but that's only passed to CC (at least for bounds.s) via an
+> -I./arch/arm64/include/generated so won't be found with the generated/
+> prefix.  While this can be avoided by renaming the header and not
+> referencing it with the prefix I do see a bunch of other headers
+> throughout the tree being included with an explicit generated/ prefix so
+> I'm not sure this is what's supposed to be happening, it does seem like
+> a landmine somehow.
+
+
+Do not add 'generated/' prefix.
+
+Let's think about this scenario.
+First foo.h was hard-coded, but sometime later,
+somebody noticed it is better to generate it by scripting.
+Why do we need to fix up #include <foo.h>  to #include <generated/foo.h>
+in all the call sites?
+Or do we need to have foo.h to wrap <generaged/foo.h> ?
+
+No, users of foo.h do not need to know if it is
+a checked-in header of a generated one.
 
 
 
-On 3/11/2022 10:04 AM, Steven Rostedt wrote:
-> On Fri, 11 Mar 2022 09:44:11 +0800
-> kernel test robot <lkp@intel.com> wrote:
-> 
->> Hi Ard,
->>
->> FYI, the error/warning still remains.
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
->> head:   71941773e143369a73c9c4a3b62fbb60736a1182
->> commit: 41918ec82eb6f80c8b401422f27ca76c85aa0cb7 [4103/11953] ARM: ftrace: enable the graph tracer with the EABI unwinder
->> config: arm-aspeed_g4_defconfig (https://download.01.org/0day-ci/archive/20220311/202203110903.3xDyTUVl-lkp@intel.com/config)
->> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install arm cross compiling tool for clang build
->>          # apt-get install binutils-arm-linux-gnueabi
->>          # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=41918ec82eb6f80c8b401422f27ca76c85aa0cb7
->>          git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->>          git fetch --no-tags linux-next master
->>          git checkout 41918ec82eb6f80c8b401422f27ca76c85aa0cb7
->>          # save the config file to linux build tree
->>          mkdir build_dir
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>>> arch/arm/kernel/ftrace.c:229:6: warning: no previous prototype for function 'prepare_ftrace_return' [-Wmissing-prototypes]
->>     void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
->>          ^
->>     arch/arm/kernel/ftrace.c:229:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->>     void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
->>     ^
->>     static
->>     1 warning generated.
->>
-> 
-> Hmm, this is only called from assembly code, which doesn't care about
-> prototypes. Is there a way to quiet this warning to say "this is called
-> only by assembly"?
-> 
-> Or do we just add a useless prototype to shut it up?
-> 
-> -- Steve
 
-Hi Steve,
 
-Sorry for the inconvenience, it's a duplicate false positive:
- 
-https://lore.kernel.org/linux-mm/2db6ea89-846a-8d4e-a5c3-954411332029@intel.com/
 
-please ignore the report, we are still working on it.
 
-Best Regards,
-Rong Chen
+>
+> >    make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+> >    make[2]: Target '__build' not remade because of errors.
+> >    make[1]: *** [Makefile:1191: prepare0] Error 2
+> >    make[1]: Target 'prepare' not remade because of errors.
+> >    make: *** [Makefile:219: __sub-make] Error 2
+> >    make: Target 'prepare' not remade because of errors.
+> >
+> >
+> > vim +125 arch/arm64/include/asm/sysreg.h
+> >
+> >    118
+> >    119        /*
+> >    120         * Automatically generated definitions for system registers, the
+> >    121         * manual encodings below are in the process of being converted to
+> >    122         * come from here. The header relies on the definition of sys_reg()
+> >    123         * earlier in this file.
+> >    124         */
+> >  > 125        #include "generated/asm/sysreg.h"
+> >    126
+> >
+> > ---
+> > 0-DAY CI Kernel Test Service
+> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
-> 
-> 
->>
->> vim +/prepare_ftrace_return +229 arch/arm/kernel/ftrace.c
->>
->> 376cfa8730c08c Tim Bird                2010-10-09  226
->> 376cfa8730c08c Tim Bird                2010-10-09  227  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  228  asmlinkage
->> 376cfa8730c08c Tim Bird                2010-10-09 @229  void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  230  			   unsigned long frame_pointer,
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  231  			   unsigned long stack_pointer)
->> 376cfa8730c08c Tim Bird                2010-10-09  232  {
->> 376cfa8730c08c Tim Bird                2010-10-09  233  	unsigned long return_hooker = (unsigned long) &return_to_handler;
->> 376cfa8730c08c Tim Bird                2010-10-09  234  	unsigned long old;
->> 376cfa8730c08c Tim Bird                2010-10-09  235
->> 376cfa8730c08c Tim Bird                2010-10-09  236  	if (unlikely(atomic_read(&current->tracing_graph_pause)))
->> 376cfa8730c08c Tim Bird                2010-10-09  237  		return;
->> 376cfa8730c08c Tim Bird                2010-10-09  238
->> 953f534a7ed6b7 Ard Biesheuvel          2022-01-25  239  	if (IS_ENABLED(CONFIG_UNWINDER_FRAME_POINTER)) {
->> 953f534a7ed6b7 Ard Biesheuvel          2022-01-25  240  		/* FP points one word below parent's top of stack */
->> 953f534a7ed6b7 Ard Biesheuvel          2022-01-25  241  		frame_pointer += 4;
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  242  	} else {
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  243  		struct stackframe frame = {
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  244  			.fp = frame_pointer,
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  245  			.sp = stack_pointer,
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  246  			.lr = self_addr,
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  247  			.pc = self_addr,
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  248  		};
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  249  		if (unwind_frame(&frame) < 0)
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  250  			return;
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  251  		if (frame.lr != self_addr)
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  252  			parent = frame.lr_addr;
->> 41918ec82eb6f8 Ard Biesheuvel          2022-01-25  253  		frame_pointer = frame.sp;
->> 953f534a7ed6b7 Ard Biesheuvel          2022-01-25  254  	}
->> 953f534a7ed6b7 Ard Biesheuvel          2022-01-25  255
->> 376cfa8730c08c Tim Bird                2010-10-09  256  	old = *parent;
->> 376cfa8730c08c Tim Bird                2010-10-09  257  	*parent = return_hooker;
->> 376cfa8730c08c Tim Bird                2010-10-09  258
->> f1f5b14afd7cce Steven Rostedt (VMware  2018-11-18  259) 	if (function_graph_enter(old, self_addr, frame_pointer, NULL))
->> 376cfa8730c08c Tim Bird                2010-10-09  260  		*parent = old;
->> 376cfa8730c08c Tim Bird                2010-10-09  261  }
->> dd686eb13959e4 Rabin Vincent           2010-11-06  262
->>
->> :::::: The code at line 229 was first introduced by commit
->> :::::: 376cfa8730c08c0394d0aa1d4a80fd8c9971f323 ARM: ftrace: function graph tracer support
->>
->> :::::: TO: Tim Bird <tim.bird@am.sony.com>
->> :::::: CC: Rabin Vincent <rabin@rab.in>
->>
->> ---
->> 0-DAY CI Kernel Test Service
->> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-> 
+
+
+-- 
+Best Regards
+Masahiro Yamada
