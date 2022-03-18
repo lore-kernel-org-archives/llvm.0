@@ -1,79 +1,130 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DD556444
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 23:47:43 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22INgDNB014381;
-	Fri, 18 Mar 2022 18:42:13 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 22INgCLj014380;
-	Fri, 18 Mar 2022 18:42:12 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Fri, 18 Mar 2022 18:42:12 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Message-ID: <20220318234212.GU614@gate.crashing.org>
-References: <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com> <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com> <9a97330b-e5ee-7b7e-4c7a-cfdf15032094@citrix.com> <CAHk-=wgKBme-SdbkSxbQ4+c6tZdvY2fe1wP1TgJeuDAf+AgwMg@mail.gmail.com>
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5A06444
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 23:52:05 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mtapsc-7-vQC6cHK1MJW3GTkXq5uV1A-1; Fri, 18 Mar 2022 23:52:02 +0000
+X-MC-Unique: vQC6cHK1MJW3GTkXq5uV1A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Fri, 18 Mar 2022 23:52:02 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Fri, 18 Mar 2022 23:52:01 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Segher Boessenkool' <segher@kernel.crashing.org>, Linus Torvalds
+	<torvalds@linux-foundation.org>
+CC: Andrew Cooper <Andrew.Cooper3@citrix.com>, Nick Desaulniers
+	<ndesaulniers@google.com>, "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling
+	<morbo@google.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, "maintainer:X86 ARCHITECTURE (32-BIT AND
+ 64-BIT)" <x86@kernel.org>, Nathan Chancellor <nathan@kernel.org>, "Juergen
+ Gross" <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, "Andy
+ Lutomirski" <luto@kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	LKML <linux-kernel@vger.kernel.org>, linux-toolchains
+	<linux-toolchains@vger.kernel.org>
+Subject: RE: [PATCH v5] x86: use builtins to read eflags
+Thread-Topic: [PATCH v5] x86: use builtins to read eflags
+Thread-Index: AQHYOxyCBe9clLf+8ESM+1cEdgpAzqzFyeaQ
+Date: Fri, 18 Mar 2022 23:52:01 +0000
+Message-ID: <04f65d1a90f640d4943c810f37016b01@AcuMS.aculab.com>
+References: <20220210223134.233757-1-morbo@google.com>
+ <20220301201903.4113977-1-morbo@google.com>
+ <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
+ <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com>
+ <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
+ <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com>
+ <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
+ <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
+ <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com>
+ <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
+ <20220318230425.GT614@gate.crashing.org>
+In-Reply-To: <20220318230425.GT614@gate.crashing.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgKBme-SdbkSxbQ4+c6tZdvY2fe1wP1TgJeuDAf+AgwMg@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 18, 2022 at 04:10:55PM -0700, Linus Torvalds wrote:
-> It would be lovely to have some explicit model for "I want the frame
-> to have been set up for backtraces", but here we are.
+From: Segher Boessenkool
+> Sent: 18 March 2022 23:04
+...
+> The vast majority of compiler builtins are for simple transformations
+> that the machine can do, for example with vector instructions.  Using
+> such builtins does *not* instruct the compiler to use those machine
+> insns, even if the builtin name would suggest that; instead, it asks to
+> have code generated that has such semantics.  So it can be optimised by
+> the compiler, much more than what can be done with inline asm.
 
-So please define exactly what that *means*?  Preferably portably, but I
-reckon at least some of it will have to be machine-specific (and ABI-
-specific).  But it needs to be well-defined, clearly defined, defined at
-all, and *documented* :-)
+Bah.
+I wrote some small functions to convert blocks of 80 audio
+samples between C 'float' and the 8-bit u-law and A-law floating
+point formats - one set use the F16C conversions for denormalised
+values.
+I really want the instructions I've asked for in the order
+I've asked for them.
+I don't want the compiler doing stupid things.
+(Like deciding to try to vectorise the bit of code at the end
+that handled non 80 byte blocks.)
 
-> Marking '%rsp
-> used makes the compiler understand it's not a leaf function.
+> It also can be optimised better by the compiler than if you would
+> open-code the transforms (if you ask to frobnicate something, the
+> compiler will know you want to frobnicate that thing, and it will not
+> always recognise that is what you want if you just write it out in more
+> general code).
 
-As I said before, this is explicitly incorrect code.  Always was, but
-it is documented since a while (since GCC 9).  Clobbering the stack
-pointer can never be correct, the stack pointer after an asm has to be
-identical to the one before that asm!
+Yep.
+If I write 'for (i =3D 0; i < n; i++) foo[i] =3D bar[i]'
+I want a loop - not a call to memcpy().
+If I want a memcpy() I'll call memcpy().
 
-> And while we have other uses for it that then use the actual value,
-> those don't care about the exact value of the stack pointer register,
-> they just want "give me a pointer that is contained within the current
-> stack", because we control the stack allocation and do funky things
-> there. So "any random stack pointer value in this function" is
-> perfectly fine and expected.
+And if I write:
+=09do {
+=09=09sum64a +=3D buff32[0];
+=09=09sum64b +=3D buff32[1];
+=09=09sum64a +=3D buff32[2];
+=09=09sum64b +=3D buff32[3];
+=09=09buff +=3D 4;
+=09} while (buff !=3D lim);
+I don't want to see 'buff[1] + buff[2]' anywhere!
+That loop has half a chance of running at 8 bytes/clock.
+But not how gcc compiles it.
 
-You can use %rsp as *input* operand just fine, which is all you need for
-that.
+> Well-chosen builtin names are also much more readable than the best
+> inline asm can ever be, and it can express much more in a much smaller
+> space, without so much opportunity to make mistakes, either.
 
-> But for user mode, it would probably be a great idea to also have a "I
-> cannot use a redzone in this function" thing. The kernel can't use it
-> because we have nested exceptions, but maybe some day even the kernel
-> could make use of (controlled) red-zoning.
+Hmmm...
+Trying to write that SSE2/AVX code was a nightmare.
+Chase through the cpu instruction set trying to sort out
+the name of the required instruction.
+Then search through the 'intrinsic' header to find the
+name of the builtin.
+Then disassemble the code to check the I'd got the right one.
+I'm pretty sure the asm would have been shorter
+and needed just as many comments.
 
-Yes.  We just have to figure out what the exact semantics we want is,
-and how to express that in a target-independent way, and then relatedly
-what a good name for it would be ("redzone" in the clobber list is the
-best I can come up with right now, but that may have to change).
+=09David
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-Segher
