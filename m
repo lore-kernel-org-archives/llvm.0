@@ -1,121 +1,95 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6CD15A0
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 00:11:04 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22I05gcE000704;
-	Thu, 17 Mar 2022 19:05:42 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 22I05eqi000699;
-	Thu, 17 Mar 2022 19:05:40 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Thu, 17 Mar 2022 19:05:40 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Bill Wendling <morbo@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Message-ID: <20220318000540.GO614@gate.crashing.org>
-References: <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com> <CAHk-=whn3iYE7gZM4vHx1kFhWBD2P9Wvmcyj8OOqv=y_7nemGQ@mail.gmail.com> <CAGG=3QWC9VS9RdGFTwY8VGqujDnFYnRTT1dQ6kkVr+0SRk6COg@mail.gmail.com> <CAHk-=wh=x7oCk05JD1=6XNsvvgpsidRWupoqySw1zODmvNy9Ug@mail.gmail.com> <CAGG=3QWcKof_NXrC0kznM2ikwTA00AgUJrcWhKBTitmjCuOxqw@mail.gmail.com> <CAHk-=wj=aK2T+h=rRJL4jDDTgV2U533E_duroCoVSUfkvYd0OQ@mail.gmail.com> <20220317231959.GN614@gate.crashing.org> <CAHk-=wgHgSJ-suTT6V6_2USPDrdmQweLR_M_YHjb8OsQvYWn-w@mail.gmail.com>
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5505815A0
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 00:23:21 +0000 (UTC)
+Received: by mail-wr1-f51.google.com with SMTP id r10so9686113wrp.3
+        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 17:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EUZS5i1fz1kAVVM80Oyu7b+mX6O5QtCzcdOhcl/QHOU=;
+        b=EqFWZ5eHPSolbx4tQvCZl+Q2JTRB/fXuFH9BjeWTK4jAKAVb6PTRAGug9WAbrk2UXe
+         ciaWvoPFO23aVrZKDwXLh059VIvo8btA5iTGOsiW2bAW/1KEePA1VvheichxFgswdqRn
+         ikJI2ZoE0tUa8rygZTxkWPLCQhcyf+26XSqsJke/Sd5WZ84as7rQl0MiS81U74hyLc55
+         LIu9Gd7JCW3OFke8+RKm0NHtzkFYTyH7lUMNBc5GhizqB808+YBdr/V3oExqSr0E+0Hj
+         r6WQ5xNiTg7voZQNAMuySEwlhQiYB/RG+ryBk3GwvUINdPgSgcKPZ50MpS755BveHCRB
+         caSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EUZS5i1fz1kAVVM80Oyu7b+mX6O5QtCzcdOhcl/QHOU=;
+        b=d6eA/JLItDBor2/QcAzUZgrcHthzJBlGf17p3uDb4mP23fhjI4mweL5NpFLyfON2/z
+         cpGMYC3T1RAViXmlqK3r+7Epc9QhLBMk0fzLOOITxUifMaYtGwk3X9//sAEGnoacn7vM
+         NOKG5ff29ADarQf5vvdW8aPmnRvce0A0tGqwRtDLAe9/Q6+AldELDVBIrYlVpSbL+Feu
+         wmWNEw405+RM7ttCPAnFJqn16yDhwM+lzcVnpaGLygthYhSYc3HJBz5gXqlrDYPicc26
+         /3sq2qA8ox3HQ2Gk7eVWitVBoHytR2N5AbcM03WyQNqOQChlSYDVZJG9mqLn3vdTI78e
+         Jizg==
+X-Gm-Message-State: AOAM532VSFuOmbr3pcRed+3RjeLMwsKB9FXAPqOW2+vt/yYLhBWnlIiG
+	fO5BzAP40jtEsjTqmV4qNHlKXyuBh50=
+X-Google-Smtp-Source: ABdhPJzDt190+x1gAiJfV2NyyJQ7Ohh8/brsXamRrkHlsLOW2WrvCVh6+ledfezGgCck7Y2vWfM3gw==
+X-Received: by 2002:a5d:504d:0:b0:203:e60e:49ef with SMTP id h13-20020a5d504d000000b00203e60e49efmr5835724wrt.546.1647562999664;
+        Thu, 17 Mar 2022 17:23:19 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g13-20020a05600c4ecd00b0038a0165f2fbsm6207260wmq.17.2022.03.17.17.23.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 17:23:18 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-input@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] Input: adi: remove redundant variable z
+Date: Fri, 18 Mar 2022 00:23:18 +0000
+Message-Id: <20220318002318.80519-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wgHgSJ-suTT6V6_2USPDrdmQweLR_M_YHjb8OsQvYWn-w@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
 
-On Thu, Mar 17, 2022 at 04:31:19PM -0700, Linus Torvalds wrote:
-> On Thu, Mar 17, 2022 at 4:25 PM Segher Boessenkool
-> <segher@kernel.crashing.org> wrote:
-> >
-> > > I still think that from a sanity standpoint, it would be good to
-> > > actually strengthen the semantics of "asm volatile" to literally act
-> > > as - and be ordered with - volatile memory accesses.
-> > >
-> > > But I guess that's water under the bridge.
-> >
-> > That is what it has actually done since forever.  See C 5.1.2.3.  For
-> > GCC, "asm volatile" has a side effect like in /2 there as well, as does
-> > unspec_volatile (an internal GCC thing used to implement certain
-> > builtins, among other things).
-> 
-> Oh, so two "asm volatile" statements _are_ in fact defined to be
-> ordered wrt each other?
+Variable z is being assigned a value that is never read, the
+variable is redundant and can be removed.
 
-Colloquially you could say that.  But that statement can be understood
-to mean more than the actual guarantee (and it is also much less than
-it, oin the positive side).
+Cleans up clang scan build warning:
+drivers/input/joystick/adi.c:139:6: warning: Although the
+value stored to 'z' is used in the enclosing expression,
+the value is never actually read from 'z' [deadcode.DeadStores]
 
-> Because the gcc docs certainly don't say that ;(
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/input/joystick/adi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Older GCC docs said
-  You will also want to add the volatile keyword if the memory affected
-  is not listed in the inputs or outputs of the asm, as the `memory'
-  clobber does not count as a side-effect of the asm.
+diff --git a/drivers/input/joystick/adi.c b/drivers/input/joystick/adi.c
+index 592c95b87f54..e10d57bf1180 100644
+--- a/drivers/input/joystick/adi.c
++++ b/drivers/input/joystick/adi.c
+@@ -123,7 +123,7 @@ static void adi_read_packet(struct adi_port *port)
+ {
+ 	struct adi *adi = port->adi;
+ 	struct gameport *gameport = port->gameport;
+-	unsigned char u, v, w, x, z;
++	unsigned char u, v, w, x;
+ 	int t[2], s[2], i;
+ 	unsigned long flags;
+ 
+@@ -136,7 +136,7 @@ static void adi_read_packet(struct adi_port *port)
+ 	local_irq_save(flags);
+ 
+ 	gameport_trigger(gameport);
+-	v = z = gameport_read(gameport);
++	v = gameport_read(gameport);
+ 
+ 	do {
+ 		u = v;
+-- 
+2.35.1
 
-and
-  The volatile keyword indicates that the instruction has important
-  side-effects. GCC will not delete a volatile asm if it is reachable.
-  (The instruction can still be deleted if GCC can prove that
-  control-flow will never reach the location of the instruction.) Note
-  that even a volatile asm instruction can be moved relative to other
-  code, including across jump instructions.
-
-and
-  Similarly, you can't expect a sequence of volatile asm instructions to
-  remain perfectly consecutive. If you want consecutive output, use a
-  single asm. Also, GCC will perform some optimizations across a
-  volatile asm instruction; GCC does not “forget everything” when it
-  encounters a volatile asm instruction the way some other compilers do.
-
-The internal assembler docs were rewritten later, because they were
-considered too terse, too hard for users to understand.  But they may
-have lost some clarity in the process.
-
-> Yeah, yeah, dead code can be removed, whether volatile or not. That's
-> true of "*(volatile int *)x" too. It's not the dead code that is the
-> interesting case, though..
-
-Internally to GCC this is the same in most ways, too; it's no accident
-this things correspond so well :-)
-
-> Is this also well-defined ordering-wise:
-> 
->     asm volatile("do_something");
->     WRITE_ONCE(x, 1);
-> 
-> (where "WRITE_ONCE()" is that kernel macro that just uses a volatile
-> pointer assignment to force the access)?
-
-The macro in asm-generic is
-
-#define __WRITE_ONCE(x, val)                                            \
-do {                                                                    \
-        *(volatile typeof(x) *)&(x) = (val);                            \
-} while (0)
-
-which will work fine given the undocumented C extension I mentioned in
-https://gcc.gnu.org/PR33053 (this will be part of C2x as well btw).
-
-I don't know if all arch-specific versions are fine.
-
-> And could we get that documented?
-
-Could you open a GCC PR for it?  I can do it, but you know better what
-you want, and I might forget, etc.
-
-
-Segher
