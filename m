@@ -1,103 +1,96 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D06215AC
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 00:31:16 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22I0Pv9f001636;
-	Thu, 17 Mar 2022 19:25:57 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 22I0Ptsh001632;
-	Thu, 17 Mar 2022 19:25:55 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Thu, 17 Mar 2022 19:25:55 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Florian Weimer <fweimer@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Message-ID: <20220318002555.GP614@gate.crashing.org>
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com> <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <878rt8gwxa.fsf@oldenburg.str.redhat.com> <CAHk-=wiZtg-E5s1CEZgaSE=e38vFoP3y2aV-4R82jqmcUoD0Aw@mail.gmail.com>
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC84415AC
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 00:39:30 +0000 (UTC)
+Received: by mail-wr1-f41.google.com with SMTP id r6so9708061wrr.2
+        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 17:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7gsTkrihCJqnEHPeTUREyY+grPIvlwOYy2RYZrHaUHI=;
+        b=FLPx3v9O3yp794Fc9m8+3Fms180PmpDjbtrLO0Xu1i8qXrAd/9enHHAeShbg4oSb7t
+         md9G09lQyD5JyMP0ZOdKfNy4zxT1/xQDszXVsxP0F/x1wl9DLVVpLchZbrsin0Bk66P1
+         6vop8DECEbBHRj1ikoWDW3T6qUgGUzdvVDfOLlDTvrq+71zXZi95SfBq+N42khglWfuX
+         awl0h72ycsBAS7Vc2MvCwZJOkRdTx/T8lBcQ45hjGnfQ3EcTD2ycbkgFp385z3MYIC6P
+         APBPni1nM3HPfu7A1b4AouHvNpwkbgHS7k3Dshz85Qn2R5p6/e7AC7alVu8nhg2wvHKX
+         yjMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7gsTkrihCJqnEHPeTUREyY+grPIvlwOYy2RYZrHaUHI=;
+        b=bC6eS63SiWSU+sfpR/mAxNeSBHwNCz4vMGmgXKMQJ/siy+dwEgYgQgKaGg6wa5KPnd
+         vwSCAIVE4MnLrbST3RMsM6hX0uqlStF638bhcrJRcn0kYbrqIt29aWCKlZ7kI/09KCMI
+         Shd6S7VAfZsOUvvSOmrOgPxFbk4/Xn84NkhvM/Mo46OVQQe/PbHorYUWDUO7ddcBM4j2
+         MzFO8j9xPL4uOI7ey4W+jPzxKbY8JgK9AAJogmiRU16u7q1dAGJLjGDBHe07e8kwgUSt
+         iOQzHdX8e8JQEKvTywuCHQ8myjhLYjSTPxZGLr113O7p5hPUP6XC0tKLOBiB/k3O0dFm
+         lT2Q==
+X-Gm-Message-State: AOAM530w9T1eA0mWwLS1Aof5yPHEChx8bsZLOlrh6vA+xr1PvvpjfDk1
+	Gi9mBKGDovsQpzeQcfiquMiCqik7Zuau1Q==
+X-Google-Smtp-Source: ABdhPJwoQZOjUskNt5TU0ZyJE8Ju4uZEdL59fCI7gDoWZSkg2jY3/M90ILkKoeR3EvRnfG/qXKEatQ==
+X-Received: by 2002:a05:6000:18ac:b0:203:ecad:a203 with SMTP id b12-20020a05600018ac00b00203ecada203mr4249744wri.177.1647563969021;
+        Thu, 17 Mar 2022 17:39:29 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 2-20020a1c1902000000b00380d3873d6asm5533293wmz.43.2022.03.17.17.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 17:39:28 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	MPT-FusionLinux.pdl@broadcom.com,
+	linux-scsi@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] scsi: message: fusion: mptbase: remove redundant variable dmp
+Date: Fri, 18 Mar 2022 00:39:27 +0000
+Message-Id: <20220318003927.81471-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiZtg-E5s1CEZgaSE=e38vFoP3y2aV-4R82jqmcUoD0Aw@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 17, 2022 at 01:36:19PM -0700, Linus Torvalds wrote:
->         asm volatile("# __raw_save_flags\n\t"
->                      "pushf ; pop %0"
->                      : "=rm" (flags)
->                      : /* no input */
->                      : "memory");
+Variable dmp is being assigned a value that is never read, the
+variable is redundant and can be removed.
 
-> And is that "memory" clobber because it modifies the memory location
-> just below the current stack pointer?
-> 
-> No, not really - outside the kernel that might be an issue, but we
-> already have to build the kernel with -mno-red-zone, so if the
-> compiler uses that memory location, that would be a *HUGE* compiler
-> bug already.
+Cleans up clang scan build warning:
+drivers/message/fusion/mptbase.c:6667:39: warning: Although
+the value stored to 'dmp' is used in the enclosing expression,
+the value is never actually read from 'dmp' [deadcode.DeadStores]
 
-There is the problem though that this might extend the stack, which
-isn't marked up anywhere, so the static checkers do not see the stack
-overflow, and it won't be noticed until runtime.  Or do the checkers
-consider such cases?
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/message/fusion/mptbase.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> So the "memory" clobber has absolutely nothing to do with the fact
-> that 'pushf' updates the stack pointer, writes to that location, and
-> the popf then undoes it.
-> 
-> It's literally because we don't want the compiler to move non-spill
-> memory accesses around it (or other asm statements wiht memory
-> clobbers), regardless of the fact that the sequence doesn't really
-> read or write memory in any way that is relevant to the compiler.
+diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
+index e90adfa57950..9b3ba2df71c7 100644
+--- a/drivers/message/fusion/mptbase.c
++++ b/drivers/message/fusion/mptbase.c
+@@ -6658,13 +6658,13 @@ static int mpt_summary_proc_show(struct seq_file *m, void *v)
+ static int mpt_version_proc_show(struct seq_file *m, void *v)
+ {
+ 	u8	 cb_idx;
+-	int	 scsi, fc, sas, lan, ctl, targ, dmp;
++	int	 scsi, fc, sas, lan, ctl, targ;
+ 	char	*drvname;
+ 
+ 	seq_printf(m, "%s-%s\n", "mptlinux", MPT_LINUX_VERSION_COMMON);
+ 	seq_printf(m, "  Fusion MPT base driver\n");
+ 
+-	scsi = fc = sas = lan = ctl = targ = dmp = 0;
++	scsi = fc = sas = lan = ctl = targ = 0;
+ 	for (cb_idx = MPT_MAX_PROTOCOL_DRIVERS-1; cb_idx; cb_idx--) {
+ 		drvname = NULL;
+ 		if (MptCallbacks[cb_idx]) {
+-- 
+2.35.1
 
-Well, that, or the write of the code didn't consider this, just went
-"writes memory, so we clobber".
-
-> > GCC doesn't have barriers in the built-ins (if we are talking about
-> > __builtin_ia32_readeflags_u64 and __builtin_ia32_writeeflags_u64).  I
-> > expect they are actually pretty useless, and were merely added for
-> > completeness of the intrinsics headers.
-> 
-> Yeah, without any kinds of ordering guarantees, I think those builtins
-> are basically only so in name. They might as well return a random
-> value - they're not *useful*, because they don't have any defined
-> behavior.
-
-No ordering wrt any other code, yes.  Which is not anything you can
-solve in only the builtin -- you need to consider the other code that
-you order with as well, change that code as well.
-
-> I mean, we *could* certainly use "read eflags" in the kernel, and yes,
-> in theory it would be lovely if we didn't have to encode it as a
-> "pushf/pop" sequence, and the compiler tracked the stack pointer for
-> us, and perhaps combined it with other stack pointer changes to the
-> point where the "popf" would never happen, it would just undo the %rsp
-> change at function exit time.
-> 
-> So yes, a builtin can improve code generation.
-
-Yes, and they are much easier to write, and can be written correctly by
-lookenspeepers who just *have* to twist every knob that they can -- more
-easily than inline asm anyway, which is unforgiving to the extreme.
-
-They are also much easier to read usually, make for cleaner code.  They
-certainly have their place.  But they should stay there, too :-)
-
-
-Segher
