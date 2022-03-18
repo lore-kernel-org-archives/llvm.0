@@ -1,31 +1,30 @@
 Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD295394
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 22:48:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C7D35394
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 23:03:33 +0000 (UTC)
 Received: from [IPv6:::1] ([IPv6:2601:646:8600:40c1:8f0c:2533:51ff:d719])
 	(authenticated bits=0)
-	by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 22IMltGC1012727
+	by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 22IN36PG1022936
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 18 Mar 2022 15:47:56 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 22IMltGC1012727
+	Fri, 18 Mar 2022 16:03:07 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 22IN36PG1022936
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2022030301; t=1647643676;
-	bh=eQmUnf4BQ6Am5omHpUeOWcJu4ubjTaOa1UmiRCl9H4A=;
+	s=2022030301; t=1647644587;
+	bh=svb/lgQXEzjEPgFnj7j1DJy4Iq5vz9ytaGKdBRZvYko=;
 	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=FjhPFIrk+8dUdZPRs95FCMKlxROzpjTBqlqt1yqa4v1OWFiKnD4uXULa4YjMf/1Yd
-	 jIcsOz4fu2fiJJzZuEyv5DAiWz+fnYMetgYZRq9ZJBSJzYLJvsJZMLvq++A3TcYmTL
-	 a4QWVdrWQFloz4VuA1nDVPOS2H8iN5Y3RBgI8NxOJ7kjK2uFKvpm2WQPWYWETmVBt2
-	 A33qv13r63/moq+OBS04JKvyzYsEifUhTMnxbCBeHz2uqpBeW2bZdd2GdUvdSDWv0R
-	 PjEQvAANiuXAZhr7Rjy9FGqM9EM1cLqeJ3I98K6cvo/7NFARUVLXlGpBDk97GJLP0S
-	 YvF6UXcUsoc5w==
-Date: Fri, 18 Mar 2022 15:47:49 -0700
+	b=bTlBuu+sxs0JshNvGQ3E+y9m/Xuz8dwiLyY+4q3DXXgPM+fnIbGU+MrR3G+OaRy/f
+	 bx0IiUAGeRjEQdVq/J5bCDkEudRK4+mlTQO15QkG+smtmr4QeUpncwoGZ5UPk8D6n0
+	 ioY5oZG34neIzvJJgJ+3XC+z8wcnI2N3X9ze6yeUd5MZzM7zkkNS0oOqWKU9aGJ+9a
+	 4gqt5VAmjtWwVfFf1Z+SrsJzYDuGPg8t82hbTOijcDGbdTXnMobW1CJvFz2r+pCAzL
+	 w0+tk1JlrNSvoxPleYrkG9U+tBYksKJu3vc/Po7R+SLx2Hs1jodCuoPsXgwlz7zDOz
+	 GjFceMUiJgd5g==
+Date: Fri, 18 Mar 2022 16:03:01 -0700
 From: "H. Peter Anvin" <hpa@zytor.com>
 To: David Laight <David.Laight@ACULAB.COM>,
-        "'Segher Boessenkool'" <segher@kernel.crashing.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC: Andy Lutomirski <luto@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        "'Linus Torvalds'" <torvalds@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>
+CC: Andrew Cooper <Andrew.Cooper3@citrix.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Bill Wendling <morbo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -38,9 +37,9 @@ CC: Andy Lutomirski <luto@kernel.org>,
         linux-toolchains <linux-toolchains@vger.kernel.org>
 Subject: RE: [PATCH v5] x86: use builtins to read eflags
 User-Agent: K-9 Mail for Android
-In-Reply-To: <ad0d80fdfb404df6a98c68e759fca199@AcuMS.aculab.com>
-References: <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com> <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com> <20220318220901.GS614@gate.crashing.org> <ad0d80fdfb404df6a98c68e759fca199@AcuMS.aculab.com>
-Message-ID: <93EDA96C-0EAD-4C40-ABEA-28C8BF76A9F9@zytor.com>
+In-Reply-To: <5794cceec50a4f1ebca069d5a31afcdf@AcuMS.aculab.com>
+References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com> <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com> <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com> <5794cceec50a4f1ebca069d5a31afcdf@AcuMS.aculab.com>
+Message-ID: <8B69D1BF-8369-42EC-B0ED-DED038966FC9@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,21 +50,39 @@ Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On March 18, 2022 3:36:48 PM PDT, David Laight <David=2ELaight@ACULAB=2ECOM=
+On March 18, 2022 3:43:13 PM PDT, David Laight <David=2ELaight@ACULAB=2ECOM=
 > wrote:
->From: Segher Boessenkool
->> Sent: 18 March 2022 22:09
->=2E=2E=2E
->> It generally is a very good idea to
->> have a redzone though, without it you pay much more than necessary for
->> frame setup and teardown in leaf functions (similar to some of what the
->> misnamed "shrink-wrapping" optimisation does, but the two are mostly
->> independent, the benefits add up)=2E
+>From: Linus Torvalds
+>> Sent: 18 March 2022 18:19
+>>=20
+>> On Fri, Mar 18, 2022 at 10:59 AM Andy Lutomirski <luto@kernel=2Eorg> wr=
+ote:
+>> >
+>> > I generally agree=2E  In this particular case, though, I will keep us=
+ing
+>> > the builtin in tools/testing/selftests/x86/helpers=2Eh unless we actu=
+ally
+>> > hit breakage=2E  This is because this is *user* code, it is compiled =
+with
+>> > the redzone enabled, and the asm code to do the right thing when the
+>> > redzone is enabled is too hairy for me to want to deal with it=2E
+>>=20
+>> Yeah, redzoning is a problem for "pushf"=2E
+>>=20
+>> Or rather, it's not the redzoning itself, but the fact that the
+>> compiler might use the word under the stack for random other things,
+>> and the pushf will then corrupt some local variable storage=2E
+>>=20
+>> I think it would be lovely to solve that in inline asm itself some way
+>> - by marking the stack pointer clobbered or something=2E
 >
->Are there really leaf functions that need to spill data to stack
->where the cost of setting up a stack frame is significant?
->
->I'd have thought that was relatively rare=2E
+>Something that generates:
+>	mov	%rax,-8(%rsp)
+>	pushf
+>	xchg	%rax,0(%rsp)
+>	add	%rsp,8
+>should work with or without a redzone=2E
+>Will be a bit slower :-(
 >
 >	David
 >
@@ -74,6 +91,7 @@ On March 18, 2022 3:36:48 PM PDT, David Laight <David=2ELaight@ACULAB=2ECOM=
  1PT, UK
 >Registration No: 1397386 (Wales)
 >
->
 
-Yes=2E
+*Much* slower (XCHG is implicitly locked, for hysterical raisins) and you =
+are using the redzone between the mov and the push, so it seems like you ju=
+st made things worse for no reason=2E
