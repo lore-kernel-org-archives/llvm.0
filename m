@@ -1,54 +1,54 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A3415AC
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 00:50:27 +0000 (UTC)
-Received: by mail-wm1-f43.google.com with SMTP id o7-20020a05600c4fc700b0038c87edc21eso347763wmq.0
-        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 17:50:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E122D15AC
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 01:20:38 +0000 (UTC)
+Received: by mail-wm1-f46.google.com with SMTP id h16so3542057wmd.0
+        for <llvm@lists.linux.dev>; Thu, 17 Mar 2022 18:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3pMEbKBsMpapDd8TCjE4RHFawECGaW/7eNS3lLK39RM=;
-        b=nurmfdO1iMIrBTlsO7SIBEuIZr5DueNEiSytzbs9NuL2KOS/DHR/ihWYxPNIKIvIos
-         qE2q38W5m0BtJEBxcRlYheiXOLooMSQf3rokqWtNO0i6qVOpzfADGXKZBGPZySVHe3xP
-         Os+26lqEw08MMVC4YINaAGUl0uGzucz7Wv1/MCy7vztqDnrqsPSVcHjEeVNpZoXZosEE
-         JO4gQ2RBB9Y+gIvpzQkIhFQ9T1ar5IgFM1rwDrPwR7PUE2cmGK91R6rK/Z3DNR4i0eLn
-         mmlgroZmqLPbYTueAZnwLINL5LYxYwTYE94eBxiT7Vz1fP6DMhAwsxFirkXj8IrsEHaR
-         zLpA==
+        bh=Ow9WE/x0y21BF9BsskKcwPU9dRpux5T6k8fuA2iplUY=;
+        b=bkbL5JcCQo9od9B8PDETuIDSCmJX4W+4yEy5eDK/EewHA/vnjY1V++LrJsoLAJNSWr
+         t++U5vfBgEh7cc4xzofaI+Hr7fB8ujopEoSCFzaGGdE8yUMlSroMIAIF4w4VWMADGRBC
+         9oPd32W+a7wG/yttwzLKjo1l+GQfc8fE+l6Fqc7aVMLogiHfwnYEWhLnCGTheo6VcRRd
+         +OWFRvg+QBKgScA+rI+nKm5DqR/qb15I0JC8aOSVtTzzO7i3VYkqYE8zmeNCwRlYKeky
+         kELehVXcLA/elcnqLI77ADQsB2txDYujDre3S+x3mwrm8UQr0ZlApYFBZeCvlTPfxPj9
+         aTGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3pMEbKBsMpapDd8TCjE4RHFawECGaW/7eNS3lLK39RM=;
-        b=NXUVBNBtRJ0jCFmRrqG27oaoR1BQBx7n1oSbQn79F6P2vwijhSijGZyLaMbeZMYkbp
-         ajSzaHwGgbHRiYiL/kcDHypI6rd1D6JQahrBxH+8PJzz7Hj+e+p7LiC+L/ymjqHVoS5s
-         S0OJUVNATnlM0H9zah9EuIybTvgZIxtNXD2EUo0lIqH2ex2Gn22zyb1I/p9NqNae6DbB
-         FMvSohvajO9O4kTBuGozoSoig/SuORslJ2CERSh+vnCPjX/HgS3ozAL7xxNe48uGR/aX
-         ZHYIsReo5Z35c6xRxsMzIh2aJB/fg660Bugneyz8I3buxyd8Wp2ArJ9eavC22oulp0pY
-         b2Pg==
-X-Gm-Message-State: AOAM531RmO4APr2P1xWFamdBa7EdYj8AIDje318I11i74dAQMzkmhQOT
-	oYhtffXXJuM/1kuUqVKpnUU=
-X-Google-Smtp-Source: ABdhPJxlOL4MExEm3h26Y4McVA9a+lQbSOcpch5+/PntdcTOqCOFkKirk/UG1u3K3uaNw444o89q6g==
-X-Received: by 2002:a05:600c:a4b:b0:37b:ea2b:5583 with SMTP id c11-20020a05600c0a4b00b0037bea2b5583mr14211291wmq.139.1647564625886;
-        Thu, 17 Mar 2022 17:50:25 -0700 (PDT)
+        bh=Ow9WE/x0y21BF9BsskKcwPU9dRpux5T6k8fuA2iplUY=;
+        b=60RzPw2Yhu8ZbvyBWYXcSiJSUpDpgBV2Wldu+AKb+onC0rJZDe7c/wgKiDYZpHFTGy
+         vtrV89AGlz+L1lNGdNAzPlHiIOVtyJuKDHdqvSS1Mq+2JY6Q85LD3HAL0ZHvU8aT4jgY
+         Q3PYT/OnCP+L8pxCLuEy+KH68eqGEEQcmb5T3xUPfGoVRG3veRq+BHppiBWE5t8kWJti
+         lkyqWhb4KSIfrN//+kn/xeANGVrIrQn0qYTRf1PFQqChLTSaK4mG2Hiaqo7mKkqYIKuG
+         CBdGs8/TSeq8sBecA+nNb1VQba3o3lzMw2CfXKZxfeCjKkdp3ktOz8fAS7kAMH1oP3nW
+         6qWQ==
+X-Gm-Message-State: AOAM533w7zNEX+Uo3RxU+hH83LIbs1Mg+RdzGn6EPJCxbpiy4QWYvdBj
+	V+oHndlaWBEz2DGPfYHSA7o=
+X-Google-Smtp-Source: ABdhPJwLPznoPhNWDA2mDexWJeLTMIRynOicTwbpMOkJYwaiy79gn+qAu0F/euVWJTGQzZS90MYo2A==
+X-Received: by 2002:a05:600c:3b14:b0:389:e95d:75af with SMTP id m20-20020a05600c3b1400b00389e95d75afmr13523900wms.143.1647566437133;
+        Thu, 17 Mar 2022 18:20:37 -0700 (PDT)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id n65-20020a1c2744000000b003862bfb509bsm9483720wmn.46.2022.03.17.17.50.24
+        by smtp.gmail.com with ESMTPSA id j34-20020a05600c1c2200b0038995cb915fsm13381888wms.9.2022.03.17.18.20.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 17:50:25 -0700 (PDT)
+        Thu, 17 Mar 2022 18:20:36 -0700 (PDT)
 From: Colin Ian King <colin.i.king@gmail.com>
-To: Chris Snook <chris.snook@gmail.com>,
+To: Shahed Shaikh <shshaikh@marvell.com>,
+	Manish Chopra <manishc@marvell.com>,
+	GR-Linux-NIC-Dev@marvell.com,
 	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
-	Gatis Peisenieks <gatis@mikrotik.com>,
 	netdev@vger.kernel.org
 Cc: kernel-janitors@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] atl1c: remove redundant assignment to variable size
-Date: Fri, 18 Mar 2022 00:50:21 +0000
-Message-Id: <20220318005021.82073-1-colin.i.king@gmail.com>
+Subject: [PATCH] qlcnic: remove redundant assignment to variable index
+Date: Fri, 18 Mar 2022 01:20:35 +0000
+Message-Id: <20220318012035.89482-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,33 +59,33 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Variable sie is being assigned a value that is never read. The
-The assignment is redundant and can be removed.
+Variable index is being assigned a value that is never read, it is being
+re-assigned later in a following for-loop. The assignment is redundant
+and can be removed.
 
 Cleans up clang scan build warning:
-drivers/net/ethernet/atheros/atl1c/atl1c_main.c:1054:22: warning:
-Although the value stored to 'size' is used in the enclosing
-expression, the value is never actually read from 'size'
-[deadcode.DeadStores]
+drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c:1358:17: warning:
+Although the value stored to 'index' is used in the enclosing expression,
+the value is never actually read from 'index' [deadcode.DeadStores]
 
 Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/net/ethernet/atheros/atl1c/atl1c_main.c | 2 +-
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c b/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
-index f50604f3e541..49459397993e 100644
---- a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
-+++ b/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
-@@ -1051,7 +1051,7 @@ static int atl1c_setup_ring_resources(struct atl1c_adapter *adapter)
- 	 * each ring/block may need up to 8 bytes for alignment, hence the
- 	 * additional bytes tacked onto the end.
- 	 */
--	ring_header->size = size =
-+	ring_header->size =
- 		sizeof(struct atl1c_tpd_desc) * tpd_ring->count * tqc +
- 		sizeof(struct atl1c_rx_free_desc) * rfd_ring->count * rqc +
- 		sizeof(struct atl1c_recv_ret_status) * rfd_ring->count * rqc +
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c
+index e10fe071a40f..54a2d653be63 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c
+@@ -1355,7 +1355,7 @@ static void qlcnic_get_ethtool_stats(struct net_device *dev,
+ 
+ 	memset(data, 0, stats->n_stats * sizeof(u64));
+ 
+-	for (ring = 0, index = 0; ring < adapter->drv_tx_rings; ring++) {
++	for (ring = 0; ring < adapter->drv_tx_rings; ring++) {
+ 		if (adapter->is_up == QLCNIC_ADAPTER_UP_MAGIC) {
+ 			tx_ring = &adapter->tx_ring[ring];
+ 			data = qlcnic_fill_tx_queue_stats(data, tx_ring);
 -- 
 2.35.1
 
