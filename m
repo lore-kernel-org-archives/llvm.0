@@ -1,137 +1,95 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249CF510E
-	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 18:27:48 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id k6so456090plg.12
-        for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 11:27:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031EF510E
+	for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 18:29:46 +0000 (UTC)
+Received: by mail-lf1-f49.google.com with SMTP id w7so15407957lfd.6
+        for <llvm@lists.linux.dev>; Fri, 18 Mar 2022 11:29:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8WHZT3KUAUavQ2A5bNmWb6pugFG7NKtgrHEyxCZZQ8c=;
-        b=qP+/lGqOusJSmXBH2pFdYcQR7H5jOG0HFGpltgeJyfNI0jM8PAdfiPbKr/9Ld1gKAK
-         h0SsmaOTqiUFmSARNB6ofnZ8v8LZ5K9t1/GhJxxR0pwRZlv8xG3QUxx2brTiHvR6dOhh
-         r6DaxzpPjmXWbvtHvaoqrkG1f2T8as7yPVtXwjSRKFf6O3OWJS8YDPEaWGGYPJR0whn6
-         lSPsfUmyo/Kr26jfsR7/X/efuZfu1ulZaG/9FrbjAokxmMxWMRAZdPbxizbtqeyvXjNA
-         3h8Eeyv7dGnPhAeCHPZXy29FhhsOx4dXzav2mYe9nXl6jKLdqGp7uW1n5xbXOP9ACfug
-         pHxg==
+        bh=JhBJua4MwTn16uw9UYiJEFGtN/+A3wWm3ncEcAGAznM=;
+        b=XveiTTIKo48Em6kpMiotlpRXPch6hY8GbRe9VEOQqpG6yRcjfb2uuLDWaH7MdWWew1
+         gI8m6zGyXqGBYZXFfD6uchEnbTiGVAMKYwtrir4sHAJ8zGXz6qPjRYwKaVh1dIgoD5Dr
+         p/bBCLdzfZWnm59rifezKBDWpY4ECydq3e1f6DbB9ztxomnVWx0X0OTb5N/R2NaqTfgh
+         HSY7TAbH+g7cVRBh1555JHIrBWYm/QyxHdHW/QN+mYGR/M20VP46tUat0iTb3tTMVIZh
+         6RAXHhN54Z3naU78SqEd065dR7pSMA9ePMsMcipIP7Ii0Q8haEBwngc91xEgEoxVmB9K
+         BZzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8WHZT3KUAUavQ2A5bNmWb6pugFG7NKtgrHEyxCZZQ8c=;
-        b=09SF7DUNT5b7EMIIp2mB0FykPNh+PtYjXxOV51eO3Ergya/H7Q8tjn17kr8aXtzj3g
-         k7D7JdwWqI+oiSk1UFflUFLZYi6g+HK+6b0FdZNvVzSmEEA+6i3XCyV0v/Uc0EhAgoV+
-         K4u4ocjwUDDys6+n6Vr/DvNpXd5GsA8AHieD250aSeTNFWhbip7fEazKRhJxGLLIBFU/
-         YL93aVc4xxJ3Jnps/FDI5lP5KN7zlJlXdGFcLziGrQ/oUPh/23rsxXYn7m+GbbCo9VdD
-         T8LEQL/OmHdYTrKI60T3qjwMItmQf2eItYpOZNhAx1lCtyzH24FXUWhUcqzv6UdlLGEX
-         Huqw==
-X-Gm-Message-State: AOAM531w5t5poS362DkBNgVf1owaFLIfoC5/skULJ/l4M+Mad+u7VSAb
-	S+DHYcNXX887bJeRbQSKKlmdeJRysZlmG1tr+woF
-X-Google-Smtp-Source: ABdhPJz8GTTEdQwG1r8ZON2uALVE+nUmtz2skm8YDqsbiVuGxiBsbB3me/uylxMnq3s5A9QqbXTG8Sg7u7HHajGT1aM=
-X-Received: by 2002:a17:90a:c252:b0:1bc:52a8:cac8 with SMTP id
- d18-20020a17090ac25200b001bc52a8cac8mr22917783pjx.61.1647628067346; Fri, 18
- Mar 2022 11:27:47 -0700 (PDT)
+        bh=JhBJua4MwTn16uw9UYiJEFGtN/+A3wWm3ncEcAGAznM=;
+        b=ZQnuIICcDan5Lwk8j4bEhm88fVQ/H78V7S3yJkMmkPb9JHG700CqHG+qfog9IB5UhI
+         mC+3/q7J1R7ufn8hx0GRG5JEwNJGdSlsIF56MzuXXQS5xuxCW+I0PaTQt5Ct4C1KaGvZ
+         cpbQgmIelbOXieIayQMZmrJfp/yYA4JV54N6cdLTs5Gz6y62oDCBEyOto662M74u4Me2
+         qf7bRbuWkCKXEg2sHBuvhfPl1sxO+efdetq8FixI3NGEDXcw5TNaJ4ztYG0feurPQIfv
+         nYza1ok0iIvl1mR6xB8IPRlt/Nv6i5bWFdF94U0Be8+U0mdwB2hsJ82Tw1n4IzX1QBti
+         4I9g==
+X-Gm-Message-State: AOAM530547P4TE0vwJai6XaVi0iYyChsC1OvqQVLSvwk12ImHcrEhgiW
+	ZengpbLedrR19zqnTWz1xg58cr+vGsQ5asiIQl8tEA==
+X-Google-Smtp-Source: ABdhPJzWbK0oJgZeNdqhptZp02Vl7ghfW80F6ZRIb/Zd4pWxJsRPSII+iAwnJeFfon+0mgclS0LLAq7EF/vEp3LrrtU=
+X-Received: by 2002:a05:6512:b9e:b0:44a:10eb:9607 with SMTP id
+ b30-20020a0565120b9e00b0044a10eb9607mr1450810lfv.626.1647628184755; Fri, 18
+ Mar 2022 11:29:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220316213118.2352683-1-morbo@google.com> <YjTJRqlFOsXz7Ss7@dev-arch.thelio-3990X>
-In-Reply-To: <YjTJRqlFOsXz7Ss7@dev-arch.thelio-3990X>
-From: Bill Wendling <morbo@google.com>
-Date: Fri, 18 Mar 2022 11:27:36 -0700
-Message-ID: <CAGG=3QUXDj1Bp1kDY2F0dqw=6f8iRqE4nRDyticUrWx-nTb-=A@mail.gmail.com>
-Subject: Re: [PATCH] soc: qcom: smem: use correct format characters
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, linux-arm-msm@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220316213055.2351342-1-morbo@google.com> <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
+ <CAKwvOdkjb3uR+kqjfdKL5gqA8R+00c5=3E7uGGW+mGZ3QRsjqg@mail.gmail.com>
+ <YjSROmYwwGhpsXMl@smile.fi.intel.com> <CAKwvOdkEjrPUL4HuO3UKaUZAzVw=XV1bEOSj6HR5R1WTUSSZ4w@mail.gmail.com>
+ <CAGG=3QVCkF7RdbQ85MtKgUjm8qP79BESAUiGU3wSQc0+ExO0gA@mail.gmail.com>
+In-Reply-To: <CAGG=3QVCkF7RdbQ85MtKgUjm8qP79BESAUiGU3wSQc0+ExO0gA@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 18 Mar 2022 11:29:32 -0700
+Message-ID: <CAKwvOd=1+JF6mxpM_K3xCYAr-R8nrj0s7tA9GwUybyiFdLpA2w@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
+To: Bill Wendling <morbo@google.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Nathan Chancellor <nathan@kernel.org>, linux-gpio@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev, Joe Perches <joe@perches.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Mar 18, 2022 at 11:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Fri, Mar 18, 2022 at 11:25 AM Bill Wendling <morbo@google.com> wrote:
 >
-> On Wed, Mar 16, 2022 at 02:31:18PM -0700, Bill Wendling wrote:
-> > When compiling with -Wformat, clang emits the following warnings:
+> On Fri, Mar 18, 2022 at 11:01 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
 > >
-> > drivers/soc/qcom/smem.c:847:41: warning: format specifies type 'unsigned
-> > short' but the argument has type 'unsigned int' [-Wformat]
-> >                         dev_err(smem->dev, "bad host %hu\n", remote_host);
-> >                                                      ~~~     ^~~~~~~~~~~
-> >                                                      %u
-> > ./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-> >         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-> >                                                                ~~~     ^~~~~~~~~~~
-> > ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-> >                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-> >                              ~~~    ^~~~~~~~~~~
-> > drivers/soc/qcom/smem.c:852:47: warning: format specifies type 'unsigned
-> > short' but the argument has type 'unsigned int' [-Wformat]
-> >                         dev_err(smem->dev, "duplicate host %hu\n", remote_host);
-> >                                                            ~~~     ^~~~~~~~~~~
-> >                                                            %u
-> > ./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-> >         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-> >                                                                ~~~     ^~~~~~~~~~~
-> > ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-> >                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-> >                              ~~~    ^~~~~~~~~~~
+> > On Fri, Mar 18, 2022 at 7:04 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > On Thu, Mar 17, 2022 at 11:11:21AM -0700, Nick Desaulniers wrote:
+> > > > Our goal is to enable -Wformat for CC=clang.  Please see also:
+> > > > commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
+> > > > unnecessary %h[xudi] and %hh[xudi]")
+> > >
+> > > Not that I agree on that commit for %h[h]x
+> > >
+> > >         signed char ch = -1;
+> > >         printf("%x\n", ch);
+> > >         printf("%hhx\n", ch);
 > >
-> > The types of these arguments are unconditionally defined, so this patch
-> > updates the format character to the correct ones for ints and unsigned
-> > ints.
+> > Will print:
+> > ffffffff
+> > ff
+> >
+> I noticed this. My first thought was to do something akin to:
 >
-> Right. Alternatively, remote_host could be turned into a u16 to match
-> host0 and host1, as those are the only values that will ever be assigned
-> to it, which should have been done in commit 13a920ae7898 ("soc: qcom:
-> smem: a few last cleanups") to avoid introducing this warning in the
-> first place.
+>   printf("%x\n", (u8)ch);
 >
-I'll be happy to redo the patch if the maintainers wish. :-)
+> but went the route of removing the "h" qualifiers to be more in line
+> with previous fixes. I will be happy to change this patch if that's
+> what you would prefer.
 
-> Probably does not matter though, unless the maintainers feel that is a
-> better fix.
->
-> > Link: ClangBuiltLinux/linux#378
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
->
-> as discussed on other patches :)
->
-Thanks! Copy-and-paste strikes again...
-
--bw
-
-> > Signed-off-by: Bill Wendling <morbo@google.com>
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> > ---
-> >  drivers/soc/qcom/smem.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
-> > index e2057d8f1eff..a98b5f395d15 100644
-> > --- a/drivers/soc/qcom/smem.c
-> > +++ b/drivers/soc/qcom/smem.c
-> > @@ -844,12 +844,12 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
-> >                       continue;
-> >
-> >               if (remote_host >= SMEM_HOST_COUNT) {
-> > -                     dev_err(smem->dev, "bad host %hu\n", remote_host);
-> > +                     dev_err(smem->dev, "bad host %u\n", remote_host);
-> >                       return -EINVAL;
-> >               }
-> >
-> >               if (smem->partitions[remote_host]) {
-> > -                     dev_err(smem->dev, "duplicate host %hu\n", remote_host);
-> > +                     dev_err(smem->dev, "duplicate host %u\n", remote_host);
-> >                       return -EINVAL;
-> >               }
-> >
-> > --
-> > 2.35.1.723.g4982287a31-goog
-> >
-> >
+Should we add a note diagnostic to clang suggesting the explicit cast
+as one method of silencing the warning?
+-- 
+Thanks,
+~Nick Desaulniers
