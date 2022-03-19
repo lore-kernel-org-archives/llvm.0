@@ -1,44 +1,41 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB77E7A
-	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 04:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D65D7A
+	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 04:10:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647662402; x=1679198402;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+LMA8Fh9czVj4i3ftlPzfpaRsQvdyoze553Y8nlUxBc=;
-  b=OJBkhIb0VJamQOTkT44urmx4iH2n6iloKeYh+UWYtum3DYbxsjwgw0+m
-   gllIsAIvEWFrIU/3FsvX7Rch5vukoXH05U5yCpMqmzjqEBX2m187+dSPu
-   I/EhShiVPc8622jWcS8im/4+fUDf6+9V34b476BWSw8Kl2tR/xGk197yG
-   HkNTnw5DBRXKshXmKiKawv4O2U4XB82E5EayYGg8HaI29YJS3dyTF4Zq8
-   y3Vao1GhKKc5cPoXZSoG9Zvo775TYTyzEHhFdjOp/SGYyeOlWDPFaPxzi
-   zl0N8UUxmKWgHpcVW5GqWDNDcQePyyjFZpplS3/cWKWbkit5+c4eqT3ej
+  t=1647663002; x=1679199002;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dGLMu86/na7XNy8AfG00unkjirXLfkOk8XkuuhsLmjk=;
+  b=DduIZKo+m9WFHIv4JTEIJx9fKJ0zuK6ZBcBCWV/kaCC9pYN5u23BxEkh
+   4AxISO3BZdABHyL5fwWSeDiG/Dx8XInIV/1/SQR6WiBBTvfg7g5o9F1H3
+   1gL7dZX7kYyGyMuZF+XkBp4GG/oV7z5jGclOu9L8W1Eo9Y1tftY9RjbvW
+   EygytCNwKByExlnp+JRdr9N7q3KfRwIwVmIhoHH43ZMsHdu4UjPpYvqIj
+   Bl/fm6ikO/T+VDuRip792SAMDPG5XhsbwC5+GahjVq/7CF4YpqUqdxOi8
+   14Th74qCeNNql0zkkff35yJufv9XLfmK/MQUGEnA9hHHAAryuHAb/t4nD
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="282089175"
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="317982902"
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="282089175"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 21:00:01 -0700
+   d="scan'208";a="317982902"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 21:10:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="647758779"
+   d="scan'208";a="499476933"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 18 Mar 2022 20:59:59 -0700
+  by orsmga003.jf.intel.com with ESMTP; 18 Mar 2022 21:09:59 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nVQFz-000FYP-39; Sat, 19 Mar 2022 03:59:59 +0000
-Date: Sat, 19 Mar 2022 11:59:25 +0800
+	id 1nVQPf-000FZ4-8c; Sat, 19 Mar 2022 04:09:59 +0000
+Date: Sat, 19 Mar 2022 12:09:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org
+To: Nick Desaulniers <ndesaulniers@google.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH net-next] net: remove noblock parameter from
- skb_recv_datagram()
-Message-ID: <202203191134.UX94Q3Ck-lkp@intel.com>
-References: <20220318204350.1918-1-socketcan@hartkopp.net>
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [peterz-queue:locking/core 17/19] arch/x86/kvm/x86.h:29:30: error:
+ too many arguments to function call, expected 0, have 1
+Message-ID: <202203191213.tC0sjaY7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,114 +44,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318204350.1918-1-socketcan@hartkopp.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Oliver,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/0day-ci/linux/commits/Oliver-Hartkopp/net-remove-noblock-parameter-from-skb_recv_datagram/20220319-044459
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git e89600ebeeb14d18c0b062837a84196f72542830
-config: arm-randconfig-r032-20220318 (https://download.01.org/0day-ci/archive/20220319/202203191134.UX94Q3Ck-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+head:   200a79c670d24d4d9a75a6a9cbfd14af2f5d0ad9
+commit: 5c9f3806a4400c2957abeea9419547f856457a20 [17/19] lockdep: Fix -Wunused-parameter for _THIS_IP_
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220319/202203191213.tC0sjaY7-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/31180f21a45948092a6c4be3400fd87517ea4eb4
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Oliver-Hartkopp/net-remove-noblock-parameter-from-skb_recv_datagram/20220319-044459
-        git checkout 31180f21a45948092a6c4be3400fd87517ea4eb4
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=5c9f3806a4400c2957abeea9419547f856457a20
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue locking/core
+        git checkout 5c9f3806a4400c2957abeea9419547f856457a20
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from net/mctp/route.c:1405:
->> net/mctp/test/route-test.c:585:43: error: too many arguments to function call, expected 3, have 4
-           skb2 = skb_recv_datagram(sock->sk, 0, 1, &rc);
-                  ~~~~~~~~~~~~~~~~~                 ^~~
-   include/linux/skbuff.h:3839:17: note: 'skb_recv_datagram' declared here
-   struct sk_buff *skb_recv_datagram(struct sock *sk, unsigned int flags, int *err);
-                   ^
+   In file included from arch/x86/kvm/x86.c:22:
+   In file included from arch/x86/kvm/mmu.h:7:
+   In file included from arch/x86/kvm/cpuid.h:5:
+>> arch/x86/kvm/x86.h:29:30: error: too many arguments to function call, expected 0, have 1
+           lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~
+   include/linux/ftrace.h:879:22: note: expanded from macro 'CALLER_ADDR0'
+   #define CALLER_ADDR0 ((unsigned long)ftrace_return_address0)
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/irqflags.h:23:15: note: 'lockdep_hardirqs_on_prepare' declared here
+     extern void lockdep_hardirqs_on_prepare(void);
+                 ^
+   In file included from arch/x86/kvm/x86.c:41:
+   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
+                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+      : ((x) & (bit1)) / ((bit1) / (bit2))))
+                       ^ ~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+--
+   In file included from arch/x86/kvm/emulate.c:28:
+>> arch/x86/kvm/x86.h:29:30: error: too many arguments to function call, expected 0, have 1
+           lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~
+   include/linux/ftrace.h:879:22: note: expanded from macro 'CALLER_ADDR0'
+   #define CALLER_ADDR0 ((unsigned long)ftrace_return_address0)
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/irqflags.h:23:15: note: 'lockdep_hardirqs_on_prepare' declared here
+     extern void lockdep_hardirqs_on_prepare(void);
+                 ^
    1 error generated.
 
 
-vim +585 net/mctp/test/route-test.c
+vim +29 arch/x86/kvm/x86.h
 
-c5755214623dd7 Jeremy Kerr 2022-02-09  534  
-c5755214623dd7 Jeremy Kerr 2022-02-09  535  /* test packet rx in the presence of various key configurations */
-c5755214623dd7 Jeremy Kerr 2022-02-09  536  static void mctp_test_route_input_sk_keys(struct kunit *test)
-c5755214623dd7 Jeremy Kerr 2022-02-09  537  {
-c5755214623dd7 Jeremy Kerr 2022-02-09  538  	const struct mctp_route_input_sk_keys_test *params;
-c5755214623dd7 Jeremy Kerr 2022-02-09  539  	struct mctp_test_route *rt;
-c5755214623dd7 Jeremy Kerr 2022-02-09  540  	struct sk_buff *skb, *skb2;
-c5755214623dd7 Jeremy Kerr 2022-02-09  541  	struct mctp_test_dev *dev;
-c5755214623dd7 Jeremy Kerr 2022-02-09  542  	struct mctp_sk_key *key;
-c5755214623dd7 Jeremy Kerr 2022-02-09  543  	struct netns_mctp *mns;
-c5755214623dd7 Jeremy Kerr 2022-02-09  544  	struct mctp_sock *msk;
-c5755214623dd7 Jeremy Kerr 2022-02-09  545  	struct socket *sock;
-c5755214623dd7 Jeremy Kerr 2022-02-09  546  	unsigned long flags;
-c5755214623dd7 Jeremy Kerr 2022-02-09  547  	int rc;
-c5755214623dd7 Jeremy Kerr 2022-02-09  548  	u8 c;
-c5755214623dd7 Jeremy Kerr 2022-02-09  549  
-c5755214623dd7 Jeremy Kerr 2022-02-09  550  	params = test->param_value;
-c5755214623dd7 Jeremy Kerr 2022-02-09  551  
-c5755214623dd7 Jeremy Kerr 2022-02-09  552  	dev = mctp_test_create_dev();
-c5755214623dd7 Jeremy Kerr 2022-02-09  553  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
-c5755214623dd7 Jeremy Kerr 2022-02-09  554  
-c5755214623dd7 Jeremy Kerr 2022-02-09  555  	rt = mctp_test_create_route(&init_net, dev->mdev, 8, 68);
-c5755214623dd7 Jeremy Kerr 2022-02-09  556  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, rt);
-c5755214623dd7 Jeremy Kerr 2022-02-09  557  
-c5755214623dd7 Jeremy Kerr 2022-02-09  558  	rc = sock_create_kern(&init_net, AF_MCTP, SOCK_DGRAM, 0, &sock);
-c5755214623dd7 Jeremy Kerr 2022-02-09  559  	KUNIT_ASSERT_EQ(test, rc, 0);
-c5755214623dd7 Jeremy Kerr 2022-02-09  560  
-c5755214623dd7 Jeremy Kerr 2022-02-09  561  	msk = container_of(sock->sk, struct mctp_sock, sk);
-c5755214623dd7 Jeremy Kerr 2022-02-09  562  	mns = &sock_net(sock->sk)->mctp;
-c5755214623dd7 Jeremy Kerr 2022-02-09  563  
-c5755214623dd7 Jeremy Kerr 2022-02-09  564  	/* set the incoming tag according to test params */
-c5755214623dd7 Jeremy Kerr 2022-02-09  565  	key = mctp_key_alloc(msk, params->key_local_addr, params->key_peer_addr,
-c5755214623dd7 Jeremy Kerr 2022-02-09  566  			     params->key_tag, GFP_KERNEL);
-c5755214623dd7 Jeremy Kerr 2022-02-09  567  
-c5755214623dd7 Jeremy Kerr 2022-02-09  568  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, key);
-c5755214623dd7 Jeremy Kerr 2022-02-09  569  
-c5755214623dd7 Jeremy Kerr 2022-02-09  570  	spin_lock_irqsave(&mns->keys_lock, flags);
-c5755214623dd7 Jeremy Kerr 2022-02-09  571  	mctp_reserve_tag(&init_net, key, msk);
-c5755214623dd7 Jeremy Kerr 2022-02-09  572  	spin_unlock_irqrestore(&mns->keys_lock, flags);
-c5755214623dd7 Jeremy Kerr 2022-02-09  573  
-c5755214623dd7 Jeremy Kerr 2022-02-09  574  	/* create packet and route */
-c5755214623dd7 Jeremy Kerr 2022-02-09  575  	c = 0;
-c5755214623dd7 Jeremy Kerr 2022-02-09  576  	skb = mctp_test_create_skb_data(&params->hdr, &c);
-c5755214623dd7 Jeremy Kerr 2022-02-09  577  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, skb);
-c5755214623dd7 Jeremy Kerr 2022-02-09  578  
-c5755214623dd7 Jeremy Kerr 2022-02-09  579  	skb->dev = dev->ndev;
-c5755214623dd7 Jeremy Kerr 2022-02-09  580  	__mctp_cb(skb);
-c5755214623dd7 Jeremy Kerr 2022-02-09  581  
-c5755214623dd7 Jeremy Kerr 2022-02-09  582  	rc = mctp_route_input(&rt->rt, skb);
-c5755214623dd7 Jeremy Kerr 2022-02-09  583  
-c5755214623dd7 Jeremy Kerr 2022-02-09  584  	/* (potentially) receive message */
-c5755214623dd7 Jeremy Kerr 2022-02-09 @585  	skb2 = skb_recv_datagram(sock->sk, 0, 1, &rc);
-c5755214623dd7 Jeremy Kerr 2022-02-09  586  
-c5755214623dd7 Jeremy Kerr 2022-02-09  587  	if (params->deliver)
-c5755214623dd7 Jeremy Kerr 2022-02-09  588  		KUNIT_EXPECT_NOT_ERR_OR_NULL(test, skb2);
-c5755214623dd7 Jeremy Kerr 2022-02-09  589  	else
-c5755214623dd7 Jeremy Kerr 2022-02-09  590  		KUNIT_EXPECT_PTR_EQ(test, skb2, NULL);
-c5755214623dd7 Jeremy Kerr 2022-02-09  591  
-c5755214623dd7 Jeremy Kerr 2022-02-09  592  	if (skb2)
-c5755214623dd7 Jeremy Kerr 2022-02-09  593  		skb_free_datagram(sock->sk, skb2);
-c5755214623dd7 Jeremy Kerr 2022-02-09  594  
-c5755214623dd7 Jeremy Kerr 2022-02-09  595  	mctp_key_unref(key);
-c5755214623dd7 Jeremy Kerr 2022-02-09  596  	__mctp_route_test_fini(test, dev, rt, sock);
-c5755214623dd7 Jeremy Kerr 2022-02-09  597  }
-c5755214623dd7 Jeremy Kerr 2022-02-09  598  
+65297341d8e15b Uros Bizjak         2021-08-09  12  
+bc908e091b3264 Sean Christopherson 2021-05-04  13  static __always_inline void kvm_guest_enter_irqoff(void)
+bc908e091b3264 Sean Christopherson 2021-05-04  14  {
+bc908e091b3264 Sean Christopherson 2021-05-04  15  	/*
+bc908e091b3264 Sean Christopherson 2021-05-04  16  	 * VMENTER enables interrupts (host state), but the kernel state is
+bc908e091b3264 Sean Christopherson 2021-05-04  17  	 * interrupts disabled when this is invoked. Also tell RCU about
+bc908e091b3264 Sean Christopherson 2021-05-04  18  	 * it. This is the same logic as for exit_to_user_mode().
+bc908e091b3264 Sean Christopherson 2021-05-04  19  	 *
+bc908e091b3264 Sean Christopherson 2021-05-04  20  	 * This ensures that e.g. latency analysis on the host observes
+bc908e091b3264 Sean Christopherson 2021-05-04  21  	 * guest mode as interrupt enabled.
+bc908e091b3264 Sean Christopherson 2021-05-04  22  	 *
+bc908e091b3264 Sean Christopherson 2021-05-04  23  	 * guest_enter_irqoff() informs context tracking about the
+bc908e091b3264 Sean Christopherson 2021-05-04  24  	 * transition to guest mode and if enabled adjusts RCU state
+bc908e091b3264 Sean Christopherson 2021-05-04  25  	 * accordingly.
+bc908e091b3264 Sean Christopherson 2021-05-04  26  	 */
+bc908e091b3264 Sean Christopherson 2021-05-04  27  	instrumentation_begin();
+bc908e091b3264 Sean Christopherson 2021-05-04  28  	trace_hardirqs_on_prepare();
+bc908e091b3264 Sean Christopherson 2021-05-04 @29  	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+bc908e091b3264 Sean Christopherson 2021-05-04  30  	instrumentation_end();
+bc908e091b3264 Sean Christopherson 2021-05-04  31  
+bc908e091b3264 Sean Christopherson 2021-05-04  32  	guest_enter_irqoff();
+bc908e091b3264 Sean Christopherson 2021-05-04  33  	lockdep_hardirqs_on(CALLER_ADDR0);
+bc908e091b3264 Sean Christopherson 2021-05-04  34  }
+bc908e091b3264 Sean Christopherson 2021-05-04  35  
+
+:::::: The code at line 29 was first introduced by commit
+:::::: bc908e091b3264672889162733020048901021fb KVM: x86: Consolidate guest enter/exit logic to common helpers
+
+:::::: TO: Sean Christopherson <seanjc@google.com>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 ---
 0-DAY CI Kernel Test Service
