@@ -1,41 +1,40 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67716160
-	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 20:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647720272; x=1679256272;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uZi+QY8aqIWvheu1K5ByqP1Ofa8djYNjjjpQQUUSs2U=;
-  b=nXS2NEVDLoQoSJZeLWmyrCA5oSprQ4hE3n9cppAjcyt5EGs7Awlk7+1h
-   5XiGfZ4vZ1NMLC6YtOqeq8DYU93SERL55jO7X1HjME4bP3t7SMJ9l5P1P
-   u9e2D6lEXug5EcWTUVpm30vvqDdqUr6lu/KYv8zFL+zo9+lF400DQD8/o
-   8csVw92qP3qq/kfKFTfuMioi9TrfMamOIfezM+cEkjYpecNYvl/b835uH
-   IkibUo9PxZmwPHinGpLjjFZYQo8mYkHxEGXeHm3znbfOujgmrRc2S0hDz
-   pKBb6wxxqEB1LpPr8HkhYS+MgOLInY0ZckZqs48Uxlf8K+vzPO1S/al8O
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="244797556"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="244797556"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 13:04:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="715970535"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 19 Mar 2022 13:04:30 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nVfJN-000GG5-KZ; Sat, 19 Mar 2022 20:04:29 +0000
-Date: Sun, 20 Mar 2022 04:04:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sven Peter <sven@svenpeter.dev>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [asahilinux:atc-WIP 186/186] ld.lld: error: undefined symbol:
- typec_mux_register
-Message-ID: <202203200422.ztLTB1O5-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57565A31
+	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 20:25:31 +0000 (UTC)
+Received: by mail-qt1-f179.google.com with SMTP id 10so9313046qtz.11
+        for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 13:25:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Xp+N5oR8cNMK62aRPk8kZIBvTheB6GVjqMQFtxgItNY=;
+        b=uzmT8YBjDg8iBBrhhgj68yxCu3JyzhzgSZoDpmmr6bS9EX9M3mtqy/eS2CyVE7CMu2
+         Uk+ntJGBzBwLKV+0maVn3pPN7uYD5kxde4IHrZTIyUZywq3B8+UgDKLDVXkerVNNklVQ
+         Zu/Y0VHjs03lI4jixz32+qvbEoHfx82oIM8Gaw/ZyV4scP5e+BkyVRmcahFm8aBSVSVd
+         LRAzeO/qQWg7oMKxYomev2f9GNS3d2tLDkCUYxvWXnZU0ODmrW4BuB8s9tweA6crM3Th
+         a644A+ujV9/I9llRFFzMO5JRaeyW7UGacKledqgasiWyJl6OfPvNp//4zcRE7AsQP80o
+         mHaQ==
+X-Gm-Message-State: AOAM5320Bt9Ec4b6Ykbat75/yIOtZu07FvyEJwPfV441piLS0FPjvFmN
+	TyjWcFlWGt0usaHq9j+n4j4=
+X-Google-Smtp-Source: ABdhPJy22V69G2sn5CzTCipKqSCrMoDq1IayC54TiCihJO7Kv2zFonrvTzWuha3ql3MkiigxvK9adQ==
+X-Received: by 2002:a05:622a:1a1d:b0:2e1:be1f:a4e8 with SMTP id f29-20020a05622a1a1d00b002e1be1fa4e8mr11352194qtb.371.1647721530594;
+        Sat, 19 Mar 2022 13:25:30 -0700 (PDT)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-023.fbsv.net. [2a03:2880:20ff:17::face:b00c])
+        by smtp.gmail.com with ESMTPSA id d26-20020a05620a159a00b0067d4f5637d7sm5549434qkk.14.2022.03.19.13.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Mar 2022 13:25:30 -0700 (PDT)
+Date: Sat, 19 Mar 2022 13:25:26 -0700
+From: David Vernet <void@manifault.com>
+To: trix@redhat.com
+Cc: jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
+	joe.lawrence@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] livepatch: Reorder to use before freeing a pointer
+Message-ID: <20220319202526.hlkrfxdod5mmkvp4@dev0025.ash9.facebook.com>
+References: <20220319165159.2170650-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,53 +43,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220319165159.2170650-1-trix@redhat.com>
+User-Agent: NeoMutt/20211029
 
-tree:   https://github.com/AsahiLinux/linux atc-WIP
-head:   edd8b87e1973b03d2a8ae654018e6a01cd1cc03e
-commit: edd8b87e1973b03d2a8ae654018e6a01cd1cc03e [186/186] WIP: atcphy
-config: arm64-randconfig-r005-20220319 (https://download.01.org/0day-ci/archive/20220320/202203200422.ztLTB1O5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 217f267efe3082438e698e2f08566b9df8c530fa)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/edd8b87e1973b03d2a8ae654018e6a01cd1cc03e
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux atc-WIP
-        git checkout edd8b87e1973b03d2a8ae654018e6a01cd1cc03e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Sat, Mar 19, 2022 at 09:51:59AM -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Clang static analysis reports this issue
+> livepatch-shadow-fix1.c:113:2: warning: Use of
+>   memory after it is freed
+>   pr_info("%s: dummy @ %p, prevented leak @ %p\n",
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> The pointer is freed in the previous statement.
+> Reorder the pr_info to report before the free.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  samples/livepatch/livepatch-shadow-fix1.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/samples/livepatch/livepatch-shadow-fix1.c b/samples/livepatch/livepatch-shadow-fix1.c
+> index 918ce17b43fda..6701641bf12d4 100644
+> --- a/samples/livepatch/livepatch-shadow-fix1.c
+> +++ b/samples/livepatch/livepatch-shadow-fix1.c
+> @@ -109,9 +109,9 @@ static void livepatch_fix1_dummy_leak_dtor(void *obj, void *shadow_data)
+>  	void *d = obj;
+>  	int **shadow_leak = shadow_data;
+>  
+> -	kfree(*shadow_leak);
+>  	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
+>  			 __func__, d, *shadow_leak);
+> +	kfree(*shadow_leak);
+>  }
+>  
+>  static void livepatch_fix1_dummy_free(struct dummy *d)
+> -- 
+> 2.26.3
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The fix looks good, though it looks like there is also a similar
+use-after-free in livepatch_fix2_dummy_leak_dtor() in
+livepatch-shadow-fix2.c. Could you please also fix that as part of this
+patch?
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: typec_mux_register
-   >>> referenced by atc.c
-   >>> phy/apple/atc.o:(atcphy_probe_mux) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: typec_switch_register
-   >>> referenced by atc.c
-   >>> phy/apple/atc.o:(atcphy_probe_switch) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: typec_mux_get_drvdata
-   >>> referenced by atc.c
-   >>> phy/apple/atc.o:(atcphy_mux_set) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: typec_switch_get_drvdata
-   >>> referenced by atc.c
-   >>> phy/apple/atc.o:(atcphy_sw_set) in archive drivers/built-in.a
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for APPLE_ADMAC
-   Depends on DMADEVICES && (ARCH_APPLE || COMPILE_TEST
-   Selected by
-   - SND_SOC_APPLE_MCA && SOUND && !UML && SND && SND_SOC && (ARCH_APPLE || COMPILE_TEST
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+David
