@@ -1,112 +1,96 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A14163
-	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 15:31:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1647703898;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RDYbzlAeYYOLKs0jJASD2ePoaygRETdsPOHhL2YcgAw=;
-	b=Y2t8oHMJSpFSykqumcD0q93Al3zp/nWd1RzoQbPMlAgI3ssa6MpmftYkBMGW+k8o01zDAC
-	E6h4kIfj0zXpgCf9i6YvXeGPdfN0uhXdN7+ZDHqcfa3GEw9cMy8XOSqLpLEriu18U6mDMW
-	k+9ttuljygxtoZbBS6oUlh+qu/4Ly/g=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-BhKZ5BZpNuqBoUJeYTJP_w-1; Sat, 19 Mar 2022 11:31:35 -0400
-X-MC-Unique: BhKZ5BZpNuqBoUJeYTJP_w-1
-Received: by mail-qt1-f199.google.com with SMTP id u8-20020ac858c8000000b002e1b3ceb167so7404929qta.10
-        for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 08:31:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RDYbzlAeYYOLKs0jJASD2ePoaygRETdsPOHhL2YcgAw=;
-        b=gwtrgDrcJLQ5VJAIykehqk1brtBWYfxHBiRhgoM3PJNgUl0jGFELDpH/sEr34aU8yJ
-         ryuzccy8O+n9b5rDeYjbNK/Dxr5nfw6K4e+uvs1abP8C6rO3dMwySK0HtuMdpJ27DpPr
-         qxiCvaU54A/Ro75rE+F0fThqvfz5DNjeZFoJJHwGiKebbFh+KixJ0rGVh0gZl+onvjas
-         trcUZqQg+G7HULCWMZ7MEMjxrVZo1zAHXLN9u2erFc+z/0/fjICLpx5A+36ZZoGy1HJV
-         oF1UrVNt3H8HFJrmrZYlb2p3P+zXrojeehVVtrv7+kxPqciFczddqW09pGxr9c1/ztxN
-         ckaQ==
-X-Gm-Message-State: AOAM531+Ey1q1jdkf2BEGAePWnt01SszMiHKz7xEjcru7fYuIcTQ+Bar
-	A5+YsZmZSAnnfaKbEAw/1+fl1t+u/lrHL+HCCykyzDKQf0KIxi33Dj9CGZ5sWGKnjGp1sunnxBh
-	gBhjggSQcfZuZxQ==
-X-Received: by 2002:a05:620a:430b:b0:67e:85d1:f53f with SMTP id u11-20020a05620a430b00b0067e85d1f53fmr376985qko.43.1647703894468;
-        Sat, 19 Mar 2022 08:31:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJylEZz+szJS3qXk/iEXTdbF/WnpVfwDLcvLyw6fK6qEuP1X7aGSWen2MjQL9ePfNbUbvv7PgQ==
-X-Received: by 2002:a05:620a:430b:b0:67e:85d1:f53f with SMTP id u11-20020a05620a430b00b0067e85d1f53fmr376962qko.43.1647703894215;
-        Sat, 19 Mar 2022 08:31:34 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id b2-20020ac87fc2000000b002e1b9ddb629sm7850596qtk.47.2022.03.19.08.31.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 08:31:33 -0700 (PDT)
-From: trix@redhat.com
-To: mkl@pengutronix.de,
-	mani@kernel.org,
-	thomas.kopp@microchip.com,
-	wg@grandegger.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] can: mcp251xfd: return errors from mcp251xfd_register_get_dev_id
-Date: Sat, 19 Mar 2022 08:31:28 -0700
-Message-Id: <20220319153128.2164120-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B274163
+	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 15:53:56 +0000 (UTC)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1nVbOY-0002zn-69; Sat, 19 Mar 2022 16:53:34 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-5e0d-31a6-08b1-9333.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5e0d:31a6:8b1:9333])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id B3DDF4F317;
+	Sat, 19 Mar 2022 15:53:30 +0000 (UTC)
+Date: Sat, 19 Mar 2022 16:53:30 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: trix@redhat.com
+Cc: mani@kernel.org, thomas.kopp@microchip.com, wg@grandegger.com,
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+	nathan@kernel.org, ndesaulniers@google.com,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] can: mcp251xfd: return errors from
+ mcp251xfd_register_get_dev_id
+Message-ID: <20220319155330.d62uvu47pujhjocy@pengutronix.de>
+References: <20220319153128.2164120-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ynf2esusfukglzhk"
+Content-Disposition: inline
+In-Reply-To: <20220319153128.2164120-1-trix@redhat.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
-From: Tom Rix <trix@redhat.com>
 
-Clang static analysis reports this issue
-mcp251xfd-core.c:1813:7: warning: The left operand
-  of '&' is a garbage value
-  FIELD_GET(MCP251XFD_REG_DEVID_ID_MASK, dev_id),
-  ^                                      ~~~~~~
+--ynf2esusfukglzhk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-dev_id is set in a successful call to
-mcp251xfd_register_get_dev_id().  Though the status
-of calls made by mcp251xfd_register_get_dev_id()
-are checked and handled, their status' are not
-returned.  So return err.
+On 19.03.2022 08:31:28, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+>=20
+> Clang static analysis reports this issue
+> mcp251xfd-core.c:1813:7: warning: The left operand
+>   of '&' is a garbage value
+>   FIELD_GET(MCP251XFD_REG_DEVID_ID_MASK, dev_id),
+>   ^                                      ~~~~~~
+>=20
+> dev_id is set in a successful call to
+> mcp251xfd_register_get_dev_id().  Though the status
+> of calls made by mcp251xfd_register_get_dev_id()
+> are checked and handled, their status' are not
+> returned.  So return err.
+>=20
+> Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD =
+SPI CAN")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for your patch, applied to linux-can/testing.
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 325024be7b045..f9dd8fdba12bc 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1786,7 +1786,7 @@ mcp251xfd_register_get_dev_id(const struct mcp251xfd_priv *priv, u32 *dev_id,
-  out_kfree_buf_rx:
- 	kfree(buf_rx);
- 
--	return 0;
-+	return err;
- }
- 
- #define MCP251XFD_QUIRK_ACTIVE(quirk) \
--- 
-2.26.3
+regards,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ynf2esusfukglzhk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmI1/HcACgkQrX5LkNig
+012uEAgAhmQLM9+G2jVF/9a2t7pFA4UKyqfdbBR+4jLttIfKO6FZKMcPubSTDsw9
+QxnM2nOYAufwvSmhgoNuo2/pFWV0JCrzb1DwvbeHUI4rm8JWGNIKT8IWPwznNmIi
+4pHg5No4rSU4b/eUeyesiSpuqxRgUXCaZ/ReYMRUpOtc/f6vATqdTWZ1SPEq+9Cl
+kBQ4BBSSLCLzFWkr01SZfUGWM3AazzUM23EPh8bx2KJ2jaki2sZxkXQAc13OSRBW
++DaRZu4Rk/DTaPXqmBGTD+5dX13d5CF/7p4l0ERJZSPJKZdZWDA3Imcn+ynGRuCJ
+zbQplLUyon4OuqH+/U5tYREWRtEdMA==
+=ySfD
+-----END PGP SIGNATURE-----
+
+--ynf2esusfukglzhk--
