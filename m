@@ -1,143 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF8F5395
-	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 23:16:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E40C340F0;
-	Sat, 19 Mar 2022 23:16:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647731763;
-	bh=lXASBNwBr/agrF4UaO6l9n/8WnFBciFHOoJgMWOR/D8=;
-	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-	b=eBatKB6Nmp9vpcfCb52hBFKQxyl8IX2UJPZkQYTXAsYhD3MjoCtq07QPgmj8QyPgv
-	 wT/RPapZ3GYTKjMarJIhahGPksV9Kkbu+bkXKvFynvascJj4xSud8Dz1Pg3L/zzUNv
-	 uQvABzzBCaaVU8gtXxJBwfazJOq/FBksiAuMUG8LKs5tAX0tm1iP6pyZBZWezqs5Rv
-	 oUWH1zVe2aVGTZl/xlXrG5DH8peri43xW/1x5vT+spU1XjXgJBEfJDYjdl9EaoMKEG
-	 Aq6j/AEDhCpOBVhHbHbGvgw9oI25Tgdp4JqeXKdnteyK77+BXRs26vPTr8jzD5BBWe
-	 1RJ/Gwt2ZDL8A==
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailauth.nyi.internal (Postfix) with ESMTP id 2A21027C0054;
-	Sat, 19 Mar 2022 19:16:01 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute5.internal (MEProxy); Sat, 19 Mar 2022 19:16:01 -0400
-X-ME-Sender: <xms:L2Q2YgRjP7fGdTj888cdkiQBoITgPrUuiC8ZXgJaBttua-qeaETy0Q>
-    <xme:L2Q2YtzcmABE6N53Go-VFtemUiTI2J5SELrnSaiPJ2NaAyrAzANe2zur6nehEiUuJ
-    jr0euCiNyYXiiY2HsA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefledgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvdelheejjeevhfdutdeggefftdejtdffgeevteehvdfgjeeiveei
-    ueefveeuvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:L2Q2Yt0JtPFmM2KrsMmKdzaqkdbOME1DJNyW6dUmQMjFecXgVt8SAQ>
-    <xmx:L2Q2YkAtJK2OokZL-Dj-GpwSTOCU4S8ldGu49kzNRiDJMh9jCePCmw>
-    <xmx:L2Q2YpiIUqx8QYjoHOlWo5pEdu6e8YN5Ij6YJrCdIyp8lTkQNGsumA>
-    <xmx:MWQ2Yp58sxnIphpwyc5K0eqFNqirM3ahbQ_dZv4qqxJbDxQ6hKzqDH90n1Y>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 805FA21E006E; Sat, 19 Mar 2022 19:15:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4907-g25ce6f34a9-fm-20220311.001-g25ce6f34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AE55395
+	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 23:21:29 +0000 (UTC)
+Received: by mail-lf1-f42.google.com with SMTP id k21so2879026lfe.4
+        for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 16:21:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rxIG59hWE7fTLM08POLwmSdeNPdfOcqzklKto3ZaqJc=;
+        b=XnkMxz93PO3rdLFMI2lfYthrx7Lhicsol4Os8Fj8YenRH3QMiQ9WWxjUZSSXfu1bCA
+         Zu4bWFkMfbjR+kCRc6DeIxpawOp55NhpZN2blZQ3VrbtvmdZrekC3NuWFiV+OFJG0yiT
+         KyGpY+qQqYk6OKrG/+Gvp83pCOZpDRi2uUqfM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rxIG59hWE7fTLM08POLwmSdeNPdfOcqzklKto3ZaqJc=;
+        b=HB90zTzaOX4kJfMKv0aIUR1zcr+7+8fzhBMD4kpHIz3ytEEB5pNMRTrR3mGPHJ6QO9
+         vjJxeTj72Zg8116IucBzgYo3Nph8NxvswJHBBXFuizmvWHMrxw6FCk3WL3yFqK2qI96e
+         qqy+0lQQ6TPMDfD0rw/DhyXNj4R58qXWwIpmoMuluKhOaoRqmVJH9AbUKQE8eIcCKgeO
+         zBKgdyLGFCbaEF6ZD3BBuPp+v25S9SVuOrMUi/NQ0wezFwb9KgOSt8i+/rSiGoUakpHd
+         E7cdalXkoLc/jxzJn9FJemC6Ow+D1gtKI+QKjERsTU5OVLU04/5rrevzGHFh8EMC18tN
+         uvvg==
+X-Gm-Message-State: AOAM530vxQ039SMrLHbPC7pYc4Ze+f+oLYNcYQpdS9qPFT1T1fxVPkM9
+	VZL09x/CHPSdZA0Xofw62LFcKEDCXVEoix0WNiM=
+X-Google-Smtp-Source: ABdhPJysb451tngVAnnr34e1fvPiaUR1yzIDsN9duhx9aA47Ffe8c/XLi4c5NOVoyxxETsowFUjvjQ==
+X-Received: by 2002:ac2:5504:0:b0:44a:2117:e6bb with SMTP id j4-20020ac25504000000b0044a2117e6bbmr2051694lfk.388.1647732087879;
+        Sat, 19 Mar 2022 16:21:27 -0700 (PDT)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
+        by smtp.gmail.com with ESMTPSA id t5-20020ac25485000000b0044833ffc127sm1400298lfk.185.2022.03.19.16.21.25
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Mar 2022 16:21:26 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id c15so15608218ljr.9
+        for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 16:21:25 -0700 (PDT)
+X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
+ u16-20020a2e9b10000000b00247f28cffd3mr10548961lji.152.1647732085458; Sat, 19
+ Mar 2022 16:21:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <4ac71b88-4848-456f-8b34-518ca7622fee@www.fastmail.com>
-In-Reply-To: <20220318234212.GU614@gate.crashing.org>
-References: 
- <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
- <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com>
- <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
- <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
- <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com>
- <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
- <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org>
- <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
- <9a97330b-e5ee-7b7e-4c7a-cfdf15032094@citrix.com>
- <CAHk-=wgKBme-SdbkSxbQ4+c6tZdvY2fe1wP1TgJeuDAf+AgwMg@mail.gmail.com>
- <20220318234212.GU614@gate.crashing.org>
-Date: Sat, 19 Mar 2022 16:15:39 -0700
-From: "Andy Lutomirski" <luto@kernel.org>
-To: "Segher Boessenkool" <segher@kernel.crashing.org>,
- "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: "Andrew Cooper" <Andrew.Cooper3@citrix.com>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "Bill Wendling" <morbo@google.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "the arch/x86 maintainers" <x86@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>, "Juergen Gross" <jgross@suse.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+References: <20220316213055.2351342-1-morbo@google.com> <20220319222228.4160598-1-morbo@google.com>
+ <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
+In-Reply-To: <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 19 Mar 2022 16:21:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgH3kbKcNwBO7os3BuU523Gd2aqdu0dVvf50bJbLKrLJg@mail.gmail.com>
+Message-ID: <CAHk-=wgH3kbKcNwBO7os3BuU523Gd2aqdu0dVvf50bJbLKrLJg@mail.gmail.com>
+Subject: Re: [PATCH v2] gpiolib: acpi: use correct format characters
+To: Bill Wendling <morbo@google.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+On Sat, Mar 19, 2022 at 3:54 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> So warning that '%hhX' is paired with an 'int' is all just completely
+> mindless and wrong.
 
+Sadly, I can see a different bogus warning reason why people would
+want to use '%02hhX'.
 
-On Fri, Mar 18, 2022, at 4:42 PM, Segher Boessenkool wrote:
-> On Fri, Mar 18, 2022 at 04:10:55PM -0700, Linus Torvalds wrote:
->> It would be lovely to have some explicit model for "I want the frame
->> to have been set up for backtraces", but here we are.
->
-> So please define exactly what that *means*?  Preferably portably, but I
-> reckon at least some of it will have to be machine-specific (and ABI-
-> specific).  But it needs to be well-defined, clearly defined, defined =
-at
-> all, and *documented* :-)
->
->> Marking '%rsp
->> used makes the compiler understand it's not a leaf function.
->
-> As I said before, this is explicitly incorrect code.  Always was, but
-> it is documented since a while (since GCC 9).  Clobbering the stack
-> pointer can never be correct, the stack pointer after an asm has to be
-> identical to the one before that asm!
->
->> And while we have other uses for it that then use the actual value,
->> those don't care about the exact value of the stack pointer register,
->> they just want "give me a pointer that is contained within the current
->> stack", because we control the stack allocation and do funky things
->> there. So "any random stack pointer value in this function" is
->> perfectly fine and expected.
->
-> You can use %rsp as *input* operand just fine, which is all you need f=
-or
-> that.
->
->> But for user mode, it would probably be a great idea to also have a "I
->> cannot use a redzone in this function" thing. The kernel can't use it
->> because we have nested exceptions, but maybe some day even the kernel
->> could make use of (controlled) red-zoning.
->
-> Yes.  We just have to figure out what the exact semantics we want is,
-> and how to express that in a target-independent way, and then relatedly
-> what a good name for it would be ("redzone" in the clobber list is the
-> best I can come up with right now, but that may have to change).
+Again, the *sane* thing from a human perspective is to use '%02X. But
+if the compiler doesn't do any range analysis at all, it could decide
+that "Oh, that print format could need up to 8 bytes of space in the
+result". Using '%02hhX' would cut that down to two.
 
-Here=E2=80=99s the semantics I want:
+And since we use
 
-I want to tell the compiler that an asm statement makes a function call.=
- I want to specify the stack alignment and offset I need.  I want the co=
-mpiler to make it work. Something like this, but preferably with better =
-syntax:
+        char ev_name[5];
 
-asm("asm here" ::: "call" (align=3D16, offset=3D0));
+and currently use "_%c%02hhX" as the format string, even a compiler
+that doesn't notice that "pin <= 255" test that guards this all will
+go "ok, that's at most 4 bytes and the final NUL termination, so it's
+fine".
 
-This means that the asm in question wants rsp to be 0 more than a multip=
-le of 16 and that it wants precisely the setup needed for a call to be d=
-one. If frame pointers are enabled, a frame should be set up. If there i=
-s a redzone then either the compiler needs to not use it or needs to adv=
-ance rsp past it.
+While a compiler - like gcc - that only sees that the original source
+of the 'pin' value is a 'unsigned short' array, and then doesn't take
+the "pin <= 255" into account, will warn like this:
 
->
->
-> Segher
+    drivers/gpio/gpiolib-acpi.c: In function 'acpi_gpiochip_request_interrupt':
+    drivers/gpio/gpiolib-acpi.c:206:24: warning: '%02X' directive
+writing between 2 and 4 bytes into a region of size 3
+[-Wformat-overflow=]
+       sprintf(ev_name, "_%c%02X",
+                            ^~~~
+    drivers/gpio/gpiolib-acpi.c:206:20: note: directive argument in
+the range [0, 65535]
+
+because gcc isn't being very good at that argument range analysis either.
+
+In other words, the original use of 'hhx' was bogus to begin with, and
+due to *another* compiler warning being bad, and we had that bad code
+being written back in 2016 to work around _that_ compiler warning
+(commit e40a3ae1f794: "gpio: acpi: work around false-positive
+-Wstring-overflow warning").
+
+Sadly, two different bad compiler warnings together does not make for
+one good one.
+
+It just makes for even more pain.
+
+End result: I think the simplest and cleanest option is simply this:
+
+  --- a/drivers/gpio/gpiolib-acpi.c
+  +++ b/drivers/gpio/gpiolib-acpi.c
+  @@ -387,8 +387,8 @@ static acpi_status
+acpi_gpiochip_alloc_event(struct acpi_resource *ares,
+        pin = agpio->pin_table[0];
+
+        if (pin <= 255) {
+  -             char ev_name[5];
+  -             sprintf(ev_name, "_%c%02hhX",
+  +             char ev_name[8];
+  +             sprintf(ev_name, "_%c%02X",
+                        agpio->triggering == ACPI_EDGE_SENSITIVE ? 'E' : 'L',
+                        pin);
+                if (ACPI_SUCCESS(acpi_get_handle(handle, ev_name, &evt_handle)))
+
+which undoes that '%hhX' change for gcc, and replaces it with just
+using a slightly bigger stack allocation. It's not like a 5-byte
+allocation is in any way likely to have saved any actual stack, since
+all the other variables in that function are 'int' or bigger.
+
+False-positive compiler warnings really do make people write worse
+code, and that's a problem. But on a scale of bad code, I feel that
+extending the buffer trivially is better than adding a pointless cast
+that literally makes no sense.
+
+At least in this case the end result isn't unreadable or buggy. We've
+had several cases of bad compiler warnings that caused changes that
+were actually horrendously wrong.
+
+                  Linus
