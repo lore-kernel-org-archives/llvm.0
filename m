@@ -1,107 +1,96 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD971161
-	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 16:52:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1647708729;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=saWneBVb3Kut4BG7sQxMXnQsPh0IPbc8oGB5dOPI5bM=;
-	b=bR3hCRhxp6/3SI8tY+7hTEkrehJe7bG2dNYv3OtqK7Lk+NZIMFxz2zEphQVxVxDbqUIs27
-	JAM4dXHV6p7caR2/Px/65dy3C5uo0OG24FXt2fAx5NjqmhLMG20Vuo7X+rkaCgq3ijftbe
-	zeXQFMVTO/oGjSIF8bWSnRIf4WbNkQo=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-230-C8ResmatMuOwMjccjddHtA-1; Sat, 19 Mar 2022 12:52:08 -0400
-X-MC-Unique: C8ResmatMuOwMjccjddHtA-1
-Received: by mail-qt1-f198.google.com with SMTP id y23-20020ac85257000000b002e06697f2ebso7453307qtn.16
-        for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 09:52:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=saWneBVb3Kut4BG7sQxMXnQsPh0IPbc8oGB5dOPI5bM=;
-        b=xp9787QO6kcAa6K9eePvh7OY5bjZwqoZGSQXgeygAvQ2IuU4pzDnkfqxIZpfC02RrS
-         H8bz4a5Dg1XIys8f2shk0C5lhkhZkH76fr8j6ASIXlQOS6zKuUew9YhjvtBoBl3Uapmc
-         ytc1E81KumaJr0E1Uop41z9ZETvcurexpi7iggWb+krTs9PvkxmcZ6qGM3xGSOIcChEf
-         bpcM7T6REFd+ctFIuCkTo2OOsFJVgBBVdS2RclUAAIfNkymKcNqc3ZrA9wgsSWrXxtX4
-         dytFjm3maszDlARqirA+om9UbKX4b3mCcUdA61W811HEO22NFFDQ0QWaBFKakYfUQi6W
-         uVcA==
-X-Gm-Message-State: AOAM531iiTePA3UPEPbXsP2Kd5CZm4YzYKrHtTghJORtu0n+tKMtRZVT
-	sGqyyjR8m6QG4yyZuHiwGBrog7Gh19omKg29LVZMhDcsbWJZ0XSpyc+8H6F6Ga0ASn9oVJahA3u
-	jJlPqzFs7L0cFRg==
-X-Received: by 2002:a05:6214:4103:b0:440:e4d1:a2a0 with SMTP id kc3-20020a056214410300b00440e4d1a2a0mr9740314qvb.42.1647708727835;
-        Sat, 19 Mar 2022 09:52:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw6jHqOfsabhjqcfSHg8Xl46akmD6Zgg5f+CqiERLbL97pJUpKF0JjaYcTkKZUJbiUaFmv2Ow==
-X-Received: by 2002:a05:6214:4103:b0:440:e4d1:a2a0 with SMTP id kc3-20020a056214410300b00440e4d1a2a0mr9740296qvb.42.1647708727655;
-        Sat, 19 Mar 2022 09:52:07 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id t66-20020ae9df45000000b0064915aff85fsm5399938qkf.45.2022.03.19.09.52.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 09:52:07 -0700 (PDT)
-From: trix@redhat.com
-To: jpoimboe@redhat.com,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: live-patching@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] livepatch: Reorder to use before freeing a pointer
-Date: Sat, 19 Mar 2022 09:51:59 -0700
-Message-Id: <20220319165159.2170650-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67716160
+	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 20:04:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647720272; x=1679256272;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uZi+QY8aqIWvheu1K5ByqP1Ofa8djYNjjjpQQUUSs2U=;
+  b=nXS2NEVDLoQoSJZeLWmyrCA5oSprQ4hE3n9cppAjcyt5EGs7Awlk7+1h
+   5XiGfZ4vZ1NMLC6YtOqeq8DYU93SERL55jO7X1HjME4bP3t7SMJ9l5P1P
+   u9e2D6lEXug5EcWTUVpm30vvqDdqUr6lu/KYv8zFL+zo9+lF400DQD8/o
+   8csVw92qP3qq/kfKFTfuMioi9TrfMamOIfezM+cEkjYpecNYvl/b835uH
+   IkibUo9PxZmwPHinGpLjjFZYQo8mYkHxEGXeHm3znbfOujgmrRc2S0hDz
+   pKBb6wxxqEB1LpPr8HkhYS+MgOLInY0ZckZqs48Uxlf8K+vzPO1S/al8O
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="244797556"
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="244797556"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 13:04:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="715970535"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 19 Mar 2022 13:04:30 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nVfJN-000GG5-KZ; Sat, 19 Mar 2022 20:04:29 +0000
+Date: Sun, 20 Mar 2022 04:04:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sven Peter <sven@svenpeter.dev>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [asahilinux:atc-WIP 186/186] ld.lld: error: undefined symbol:
+ typec_mux_register
+Message-ID: <202203200422.ztLTB1O5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+tree:   https://github.com/AsahiLinux/linux atc-WIP
+head:   edd8b87e1973b03d2a8ae654018e6a01cd1cc03e
+commit: edd8b87e1973b03d2a8ae654018e6a01cd1cc03e [186/186] WIP: atcphy
+config: arm64-randconfig-r005-20220319 (https://download.01.org/0day-ci/archive/20220320/202203200422.ztLTB1O5-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 217f267efe3082438e698e2f08566b9df8c530fa)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/edd8b87e1973b03d2a8ae654018e6a01cd1cc03e
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux atc-WIP
+        git checkout edd8b87e1973b03d2a8ae654018e6a01cd1cc03e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Clang static analysis reports this issue
-livepatch-shadow-fix1.c:113:2: warning: Use of
-  memory after it is freed
-  pr_info("%s: dummy @ %p, prevented leak @ %p\n",
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The pointer is freed in the previous statement.
-Reorder the pr_info to report before the free.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- samples/livepatch/livepatch-shadow-fix1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>> ld.lld: error: undefined symbol: typec_mux_register
+   >>> referenced by atc.c
+   >>> phy/apple/atc.o:(atcphy_probe_mux) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: typec_switch_register
+   >>> referenced by atc.c
+   >>> phy/apple/atc.o:(atcphy_probe_switch) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: typec_mux_get_drvdata
+   >>> referenced by atc.c
+   >>> phy/apple/atc.o:(atcphy_mux_set) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: typec_switch_get_drvdata
+   >>> referenced by atc.c
+   >>> phy/apple/atc.o:(atcphy_sw_set) in archive drivers/built-in.a
 
-diff --git a/samples/livepatch/livepatch-shadow-fix1.c b/samples/livepatch/livepatch-shadow-fix1.c
-index 918ce17b43fda..6701641bf12d4 100644
---- a/samples/livepatch/livepatch-shadow-fix1.c
-+++ b/samples/livepatch/livepatch-shadow-fix1.c
-@@ -109,9 +109,9 @@ static void livepatch_fix1_dummy_leak_dtor(void *obj, void *shadow_data)
- 	void *d = obj;
- 	int **shadow_leak = shadow_data;
- 
--	kfree(*shadow_leak);
- 	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
- 			 __func__, d, *shadow_leak);
-+	kfree(*shadow_leak);
- }
- 
- static void livepatch_fix1_dummy_free(struct dummy *d)
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for APPLE_ADMAC
+   Depends on DMADEVICES && (ARCH_APPLE || COMPILE_TEST
+   Selected by
+   - SND_SOC_APPLE_MCA && SOUND && !UML && SND && SND_SOC && (ARCH_APPLE || COMPILE_TEST
+
 -- 
-2.26.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
