@@ -1,41 +1,42 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D65D7A
-	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 04:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D923A17F3
+	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 05:42:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647663002; x=1679199002;
+  t=1647668523; x=1679204523;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dGLMu86/na7XNy8AfG00unkjirXLfkOk8XkuuhsLmjk=;
-  b=DduIZKo+m9WFHIv4JTEIJx9fKJ0zuK6ZBcBCWV/kaCC9pYN5u23BxEkh
-   4AxISO3BZdABHyL5fwWSeDiG/Dx8XInIV/1/SQR6WiBBTvfg7g5o9F1H3
-   1gL7dZX7kYyGyMuZF+XkBp4GG/oV7z5jGclOu9L8W1Eo9Y1tftY9RjbvW
-   EygytCNwKByExlnp+JRdr9N7q3KfRwIwVmIhoHH43ZMsHdu4UjPpYvqIj
-   Bl/fm6ikO/T+VDuRip792SAMDPG5XhsbwC5+GahjVq/7CF4YpqUqdxOi8
-   14Th74qCeNNql0zkkff35yJufv9XLfmK/MQUGEnA9hHHAAryuHAb/t4nD
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="317982902"
+  bh=wyc+92t3jH9/7ykDGLHc5IAigTXklppN+sJ0xVNcyJg=;
+  b=nr3ke8oLic+thT8EB77BwH07A4xfXCIyebfTU4hj6KVtttnyenM5puy2
+   cfrF//mf8w8flmB3wR+nIK8Cx5Bps4sbrpYUTaRhtwxigKe4Le3H81NzJ
+   l9lDQdNuhvIXwGuIgew/921vucFCrucFsCakf4xBugDIL4zpYw9Z4DYNj
+   a9WU9PlbJlyqxy9WE17+RSSo6q7jECAoFYZ4ZWD/D+WTp+RWMtWaVEAHs
+   W6hWVWizv0Ap7wGWSZPYufr6FNTHa61TfodxJKn7ycYsZYsCIMeX084Qx
+   UxjXEX0SozMuiZO0z5hXC6vDuM5nD4u3v2tTDk05DZH5+GfImnXpKANOC
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="237220913"
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="317982902"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 21:10:01 -0700
+   d="scan'208";a="237220913"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 22:42:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="499476933"
+   d="scan'208";a="599782285"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 18 Mar 2022 21:09:59 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 18 Mar 2022 22:42:01 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nVQPf-000FZ4-8c; Sat, 19 Mar 2022 04:09:59 +0000
-Date: Sat, 19 Mar 2022 12:09:50 +0800
+	id 1nVRqj-000FdW-7W; Sat, 19 Mar 2022 05:42:01 +0000
+Date: Sat, 19 Mar 2022 13:41:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
+To: Jeff Layton <jlayton@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:locking/core 17/19] arch/x86/kvm/x86.h:29:30: error:
- too many arguments to function call, expected 0, have 1
-Message-ID: <202203191213.tC0sjaY7-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [jlayton:ceph-fscrypt-sparse 14/69] net/ceph/osd_client.c:5846:30:
+ error: initializing 'struct ceph_sparse_extent *' with an expression of
+ incompatible type 'struct ceph_sparse_extent'; take the address with &
+Message-ID: <202203191347.e08ajS69-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,93 +47,129 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-head:   200a79c670d24d4d9a75a6a9cbfd14af2f5d0ad9
-commit: 5c9f3806a4400c2957abeea9419547f856457a20 [17/19] lockdep: Fix -Wunused-parameter for _THIS_IP_
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220319/202203191213.tC0sjaY7-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt-sparse
+head:   a6125c2dec56f1f523f5009ce8b25932ba4be812
+commit: e969e142a5b44ddaee26f3effb0903e5ae9c56c7 [14/69] libceph: add sparse read support to OSD client
+config: s390-randconfig-c005-20220317 (https://download.01.org/0day-ci/archive/20220319/202203191347.e08ajS69-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=5c9f3806a4400c2957abeea9419547f856457a20
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue locking/core
-        git checkout 5c9f3806a4400c2957abeea9419547f856457a20
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=e969e142a5b44ddaee26f3effb0903e5ae9c56c7
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton ceph-fscrypt-sparse
+        git checkout e969e142a5b44ddaee26f3effb0903e5ae9c56c7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash net/ceph/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/kvm/x86.c:22:
-   In file included from arch/x86/kvm/mmu.h:7:
-   In file included from arch/x86/kvm/cpuid.h:5:
->> arch/x86/kvm/x86.h:29:30: error: too many arguments to function call, expected 0, have 1
-           lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~
-   include/linux/ftrace.h:879:22: note: expanded from macro 'CALLER_ADDR0'
-   #define CALLER_ADDR0 ((unsigned long)ftrace_return_address0)
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/irqflags.h:23:15: note: 'lockdep_hardirqs_on_prepare' declared here
-     extern void lockdep_hardirqs_on_prepare(void);
-                 ^
-   In file included from arch/x86/kvm/x86.c:41:
-   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
---
-   In file included from arch/x86/kvm/emulate.c:28:
->> arch/x86/kvm/x86.h:29:30: error: too many arguments to function call, expected 0, have 1
-           lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~
-   include/linux/ftrace.h:879:22: note: expanded from macro 'CALLER_ADDR0'
-   #define CALLER_ADDR0 ((unsigned long)ftrace_return_address0)
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/irqflags.h:23:15: note: 'lockdep_hardirqs_on_prepare' declared here
-     extern void lockdep_hardirqs_on_prepare(void);
-                 ^
-   1 error generated.
+   In file included from net/ceph/osd_client.c:17:
+   In file included from include/linux/ceph/libceph.h:21:
+   In file included from include/linux/ceph/messenger.h:13:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from net/ceph/osd_client.c:17:
+   In file included from include/linux/ceph/libceph.h:21:
+   In file included from include/linux/ceph/messenger.h:13:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from net/ceph/osd_client.c:17:
+   In file included from include/linux/ceph/libceph.h:21:
+   In file included from include/linux/ceph/messenger.h:13:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> net/ceph/osd_client.c:5846:30: error: initializing 'struct ceph_sparse_extent *' with an expression of incompatible type 'struct ceph_sparse_extent'; take the address with &
+                   struct ceph_sparse_extent *ext = sr->sr_extent[i];
+                                              ^     ~~~~~~~~~~~~~~~~
+                                                    &
+   12 warnings and 1 error generated.
 
 
-vim +29 arch/x86/kvm/x86.h
+vim +5846 net/ceph/osd_client.c
 
-65297341d8e15b Uros Bizjak         2021-08-09  12  
-bc908e091b3264 Sean Christopherson 2021-05-04  13  static __always_inline void kvm_guest_enter_irqoff(void)
-bc908e091b3264 Sean Christopherson 2021-05-04  14  {
-bc908e091b3264 Sean Christopherson 2021-05-04  15  	/*
-bc908e091b3264 Sean Christopherson 2021-05-04  16  	 * VMENTER enables interrupts (host state), but the kernel state is
-bc908e091b3264 Sean Christopherson 2021-05-04  17  	 * interrupts disabled when this is invoked. Also tell RCU about
-bc908e091b3264 Sean Christopherson 2021-05-04  18  	 * it. This is the same logic as for exit_to_user_mode().
-bc908e091b3264 Sean Christopherson 2021-05-04  19  	 *
-bc908e091b3264 Sean Christopherson 2021-05-04  20  	 * This ensures that e.g. latency analysis on the host observes
-bc908e091b3264 Sean Christopherson 2021-05-04  21  	 * guest mode as interrupt enabled.
-bc908e091b3264 Sean Christopherson 2021-05-04  22  	 *
-bc908e091b3264 Sean Christopherson 2021-05-04  23  	 * guest_enter_irqoff() informs context tracking about the
-bc908e091b3264 Sean Christopherson 2021-05-04  24  	 * transition to guest mode and if enabled adjusts RCU state
-bc908e091b3264 Sean Christopherson 2021-05-04  25  	 * accordingly.
-bc908e091b3264 Sean Christopherson 2021-05-04  26  	 */
-bc908e091b3264 Sean Christopherson 2021-05-04  27  	instrumentation_begin();
-bc908e091b3264 Sean Christopherson 2021-05-04  28  	trace_hardirqs_on_prepare();
-bc908e091b3264 Sean Christopherson 2021-05-04 @29  	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-bc908e091b3264 Sean Christopherson 2021-05-04  30  	instrumentation_end();
-bc908e091b3264 Sean Christopherson 2021-05-04  31  
-bc908e091b3264 Sean Christopherson 2021-05-04  32  	guest_enter_irqoff();
-bc908e091b3264 Sean Christopherson 2021-05-04  33  	lockdep_hardirqs_on(CALLER_ADDR0);
-bc908e091b3264 Sean Christopherson 2021-05-04  34  }
-bc908e091b3264 Sean Christopherson 2021-05-04  35  
-
-:::::: The code at line 29 was first introduced by commit
-:::::: bc908e091b3264672889162733020048901021fb KVM: x86: Consolidate guest enter/exit logic to common helpers
-
-:::::: TO: Sean Christopherson <seanjc@google.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+  5839	
+  5840	#ifdef __BIG_ENDIAN
+  5841	static inline void convert_extent_map(struct ceph_sparse_read *sr)
+  5842	{
+  5843		int i;
+  5844	
+  5845		for (i = 0; i < sr->sr_count; i++) {
+> 5846			struct ceph_sparse_extent *ext = sr->sr_extent[i];
+  5847	
+  5848			ext->off = le64_to_cpu((__force __le32)ext->off);
+  5849			ext->len = le64_to_cpu((__force __le32)ext->len);
+  5850		}
+  5851	}
+  5852	#else
+  5853	static inline void convert_extent_map(struct ceph_sparse_read *sr)
+  5854	{
+  5855	}
+  5856	#endif
+  5857	
 
 ---
 0-DAY CI Kernel Test Service
