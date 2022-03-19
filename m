@@ -1,127 +1,143 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3125395
-	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 22:55:04 +0000 (UTC)
-Received: by mail-lf1-f45.google.com with SMTP id h7so1896782lfl.2
-        for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 15:55:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2RcfPrB/V6uUl/QMOUTM8niNIWsvBXQJjvqEWbLTeEM=;
-        b=KFXZqangAD/YFTarQejH6BpymNsRw63gr0TokRCxZVPSQGhHCuRkX1gEKlnnSt3JXI
-         AJ18NWnU4U+DEIWZqAZWnrEOrWu/femC+tgbzZKWiHdJXmpM0TAyJZzVAdCucZoCKym2
-         Gx8C5V/POiGMWGGwUJvnHQF7WQzLZJCrhqA2A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2RcfPrB/V6uUl/QMOUTM8niNIWsvBXQJjvqEWbLTeEM=;
-        b=wAkTvsE32AYmmozn8XvoIVz96/IZICiZ7bTeLQALijzgoIWg2D7b0oBEpxq1IsY6AC
-         610wOnZRMPV3te9p7WW1h71ByUm7E6+/hQShbs/ycNq4V9rFk5DRjycJqWghPGx3txOu
-         HenLhfpoJmfEr6gLvzDVb6Cnqq0ZZjpv7RvYL0NQrcrDys4f7vnxESfWNlhjJGzkMrBd
-         rJAwvc3UcXZfWHq6zqYiJW5n8BRRG4vUWGiJiCRJ1mdBgoPwC49klbRkP7Yby1NuQgJx
-         +xDtVJLgSSbRvnYWqSL8b5cOwsBO4tSbT/NPluBOyqH4xJrpGdf/7yl46DWD/Yl5K2SK
-         DLiA==
-X-Gm-Message-State: AOAM5305KvwsmXJDhC8o+pIz+Ef32DaijY9dRypTRuoOW/QbM2kr3bIq
-	5ARsh9J2Bs8YYG+dQ/4U5P41s66Aysw9Vp7Zfzk=
-X-Google-Smtp-Source: ABdhPJyF6BENzvrdSe4dsKO9jme5pPaYsviHdOfIpamNyffpiNCz8vf1XuEAoY11/M/CaYigtSRauQ==
-X-Received: by 2002:ac2:58f8:0:b0:448:3218:2e33 with SMTP id v24-20020ac258f8000000b0044832182e33mr9786932lfo.103.1647730502032;
-        Sat, 19 Mar 2022 15:55:02 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id s27-20020ac2465b000000b00449fa1cb427sm1098420lfo.193.2022.03.19.15.55.00
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Mar 2022 15:55:00 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id l20so19295489lfg.12
-        for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 15:55:00 -0700 (PDT)
-X-Received: by 2002:a05:6512:2294:b0:448:6c86:3c78 with SMTP id
- f20-20020a056512229400b004486c863c78mr9683258lfu.531.1647730500067; Sat, 19
- Mar 2022 15:55:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF8F5395
+	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 23:16:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E40C340F0;
+	Sat, 19 Mar 2022 23:16:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647731763;
+	bh=lXASBNwBr/agrF4UaO6l9n/8WnFBciFHOoJgMWOR/D8=;
+	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+	b=eBatKB6Nmp9vpcfCb52hBFKQxyl8IX2UJPZkQYTXAsYhD3MjoCtq07QPgmj8QyPgv
+	 wT/RPapZ3GYTKjMarJIhahGPksV9Kkbu+bkXKvFynvascJj4xSud8Dz1Pg3L/zzUNv
+	 uQvABzzBCaaVU8gtXxJBwfazJOq/FBksiAuMUG8LKs5tAX0tm1iP6pyZBZWezqs5Rv
+	 oUWH1zVe2aVGTZl/xlXrG5DH8peri43xW/1x5vT+spU1XjXgJBEfJDYjdl9EaoMKEG
+	 Aq6j/AEDhCpOBVhHbHbGvgw9oI25Tgdp4JqeXKdnteyK77+BXRs26vPTr8jzD5BBWe
+	 1RJ/Gwt2ZDL8A==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailauth.nyi.internal (Postfix) with ESMTP id 2A21027C0054;
+	Sat, 19 Mar 2022 19:16:01 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute5.internal (MEProxy); Sat, 19 Mar 2022 19:16:01 -0400
+X-ME-Sender: <xms:L2Q2YgRjP7fGdTj888cdkiQBoITgPrUuiC8ZXgJaBttua-qeaETy0Q>
+    <xme:L2Q2YtzcmABE6N53Go-VFtemUiTI2J5SELrnSaiPJ2NaAyrAzANe2zur6nehEiUuJ
+    jr0euCiNyYXiiY2HsA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefledgtdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvdelheejjeevhfdutdeggefftdejtdffgeevteehvdfgjeeiveei
+    ueefveeuvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:L2Q2Yt0JtPFmM2KrsMmKdzaqkdbOME1DJNyW6dUmQMjFecXgVt8SAQ>
+    <xmx:L2Q2YkAtJK2OokZL-Dj-GpwSTOCU4S8ldGu49kzNRiDJMh9jCePCmw>
+    <xmx:L2Q2YpiIUqx8QYjoHOlWo5pEdu6e8YN5Ij6YJrCdIyp8lTkQNGsumA>
+    <xmx:MWQ2Yp58sxnIphpwyc5K0eqFNqirM3ahbQ_dZv4qqxJbDxQ6hKzqDH90n1Y>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 805FA21E006E; Sat, 19 Mar 2022 19:15:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4907-g25ce6f34a9-fm-20220311.001-g25ce6f34
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20220316213055.2351342-1-morbo@google.com> <20220319222228.4160598-1-morbo@google.com>
-In-Reply-To: <20220319222228.4160598-1-morbo@google.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 19 Mar 2022 15:54:43 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
-Message-ID: <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
-Subject: Re: [PATCH v2] gpiolib: acpi: use correct format characters
-To: Bill Wendling <morbo@google.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Message-Id: <4ac71b88-4848-456f-8b34-518ca7622fee@www.fastmail.com>
+In-Reply-To: <20220318234212.GU614@gate.crashing.org>
+References: 
+ <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
+ <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com>
+ <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
+ <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
+ <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com>
+ <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
+ <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org>
+ <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
+ <9a97330b-e5ee-7b7e-4c7a-cfdf15032094@citrix.com>
+ <CAHk-=wgKBme-SdbkSxbQ4+c6tZdvY2fe1wP1TgJeuDAf+AgwMg@mail.gmail.com>
+ <20220318234212.GU614@gate.crashing.org>
+Date: Sat, 19 Mar 2022 16:15:39 -0700
+From: "Andy Lutomirski" <luto@kernel.org>
+To: "Segher Boessenkool" <segher@kernel.crashing.org>,
+ "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: "Andrew Cooper" <Andrew.Cooper3@citrix.com>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "Bill Wendling" <morbo@google.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "the arch/x86 maintainers" <x86@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Juergen Gross" <jgross@suse.com>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH v5] x86: use builtins to read eflags
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-So I think that clang warning is only annoying, not helpful, but:
 
-On Sat, Mar 19, 2022 at 3:22 PM Bill Wendling <morbo@google.com> wrote:
+
+On Fri, Mar 18, 2022, at 4:42 PM, Segher Boessenkool wrote:
+> On Fri, Mar 18, 2022 at 04:10:55PM -0700, Linus Torvalds wrote:
+>> It would be lovely to have some explicit model for "I want the frame
+>> to have been set up for backtraces", but here we are.
 >
-> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-> index a5495ad31c9c..92dd9b8784f2 100644
-> --- a/drivers/gpio/gpiolib-acpi.c
-> +++ b/drivers/gpio/gpiolib-acpi.c
-> @@ -388,9 +388,9 @@ static acpi_status acpi_gpiochip_alloc_event(struct acpi_resource *ares,
+> So please define exactly what that *means*?  Preferably portably, but I
+> reckon at least some of it will have to be machine-specific (and ABI-
+> specific).  But it needs to be well-defined, clearly defined, defined =
+at
+> all, and *documented* :-)
 >
->         if (pin <= 255) {
->                 char ev_name[5];
-> -               sprintf(ev_name, "_%c%02hhX",
-> +               sprintf(ev_name, "_%c%02X",
+>> Marking '%rsp
+>> used makes the compiler understand it's not a leaf function.
+>
+> As I said before, this is explicitly incorrect code.  Always was, but
+> it is documented since a while (since GCC 9).  Clobbering the stack
+> pointer can never be correct, the stack pointer after an asm has to be
+> identical to the one before that asm!
+>
+>> And while we have other uses for it that then use the actual value,
+>> those don't care about the exact value of the stack pointer register,
+>> they just want "give me a pointer that is contained within the current
+>> stack", because we control the stack allocation and do funky things
+>> there. So "any random stack pointer value in this function" is
+>> perfectly fine and expected.
+>
+> You can use %rsp as *input* operand just fine, which is all you need f=
+or
+> that.
+>
+>> But for user mode, it would probably be a great idea to also have a "I
+>> cannot use a redzone in this function" thing. The kernel can't use it
+>> because we have nested exceptions, but maybe some day even the kernel
+>> could make use of (controlled) red-zoning.
+>
+> Yes.  We just have to figure out what the exact semantics we want is,
+> and how to express that in a target-independent way, and then relatedly
+> what a good name for it would be ("redzone" in the clobber list is the
+> best I can come up with right now, but that may have to change).
 
-This part I approve of.
+Here=E2=80=99s the semantics I want:
 
->                         agpio->triggering == ACPI_EDGE_SENSITIVE ? 'E' : 'L',
-> -                       pin);
-> +                       (unsigned char)pin);
+I want to tell the compiler that an asm statement makes a function call.=
+ I want to specify the stack alignment and offset I need.  I want the co=
+mpiler to make it work. Something like this, but preferably with better =
+syntax:
 
-But this cast seems pointless and wrong.
+asm("asm here" ::: "call" (align=3D16, offset=3D0));
 
-Casts in general are bad, and should be avoided unless there's a real
-reason for them. And that reason doesn't seem to exist. We don't
-actually want to truncate the value of 'pin', and just a few lines
-earlier actually checked that it is in range.
+This means that the asm in question wants rsp to be 0 more than a multip=
+le of 16 and that it wants precisely the setup needed for a call to be d=
+one. If frame pointers are enabled, a frame should be set up. If there i=
+s a redzone then either the compiler needs to not use it or needs to adv=
+ance rsp past it.
 
-And if 'pin' can't be negative - it comes from a 'u16' table
-dereference - but even if it could have been that would have been a
-different bug here anyway (and should have been fixed by tightening
-the check).
-
-So the cast doesn't add anything - not for humans, and not for a
-compiler that could just optimize it away because it saw the range
-check.
-
-End result: just fix the pointless 'hh' in the print specifier. It
-doesn't add anything, and only causes problems. Anybody who uses '%02X
-to print a byte should only use it for byte values - and the code
-already does.
-
-Of course, the _reason_ for this all was a warning that was pointless
-to begin with, and should never have existed. Clang was not smart
-enough to take the range knowledge that it _could_ have taken into
-account, and instead wrote out a completely bogus warning.
-
-It's completely bogus not just because clang didn't do a sufficiently
-good job of range analysis - it's completely bogus because a 'varargs'
-function DOES NOT TAKE arguments of type 'char'.
-
-So the *only* reason to use '%hhX' in the first place is that you
-*want* the sprintf() to actually limit the value to a byte for you
-(possibly because you have a signed char, know it will sign-extend to
-'int', and want to limit it back to 8 bits).
-
-If you *actually* had a 'unsigned char' to begin with, you'd be
-completely insane to use %hhX. It's just pointless.
-
-So warning that '%hhX' is paired with an 'int' is all just completely
-mindless and wrong.
-
-              Linus
+>
+>
+> Segher
