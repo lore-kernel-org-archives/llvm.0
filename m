@@ -1,102 +1,60 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BC233D3
-	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 14:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1647784813;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HqtBnaidAKh4bnH8X6OIwDCPKflO5zN16a0ESKUGgsY=;
-	b=AIwB7YLIgCapeGK09QrWWwNcDxRr6Jrh8qkfGlu6R8gJtB4aBcHog9VXvHjWbm8+2aNscm
-	XcUS5kbamnJrive/csGr2vUlzlgfaErj/41YWWbC0vtLtMNpu6poeHFNPNJGvsF6KPSNC4
-	grRWF3gukbrmPI/A1RauZYFbYlqdfZ4=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-256-GQOW4BoGPrm5rwVHj1l5sg-1; Sun, 20 Mar 2022 10:00:12 -0400
-X-MC-Unique: GQOW4BoGPrm5rwVHj1l5sg-1
-Received: by mail-qk1-f199.google.com with SMTP id d12-20020a379b0c000000b0067d8cda1aaaso8506767qke.8
-        for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 07:00:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HqtBnaidAKh4bnH8X6OIwDCPKflO5zN16a0ESKUGgsY=;
-        b=SSdLUn/PiDaJkozD3qB8VMBmt0jtgoMqf7MYClys1uUfHaOx+1v55nJiQFoO00e5Um
-         l8egK1lfW9mEMHBNZeDB1tTtea5QLD0H8J1gLDs6TNvRgwGJvUaMkv1NVSkNrM5XAXnb
-         eZ+4ETNtE1zmzqqSpScEd9KQVekSZmF2ZLoMr2M23v5OmbqcjX3iy7JNLNSz5n3+55zo
-         H0px2DhvA5zQeSg4dBEENkCTjr3ZesHTuNTrbVA5zTak/0ZtyJtJ52WWAl4tf3IqjsSz
-         A28cGlx/5OlLu5y7BbMC2SngnSmVzhRFvurcg6K5d4NuCnFiSYz/pq+cIAa2JsUhjf5L
-         BhdQ==
-X-Gm-Message-State: AOAM531Jf6z+k1E2C6v1wRhwKwkfbs0g04MEQntHo6+KFaa1zbDyIV5k
-	0vmJ1rdyUhbcZComFNsckuYqQEyy343FQZZ2NY2ft2wpaH84BELF70pqL7dXevJLP3gxhcYV3rK
-	+xAXIBbkaACqZAg==
-X-Received: by 2002:a05:622a:1009:b0:2e1:a2e8:4e63 with SMTP id d9-20020a05622a100900b002e1a2e84e63mr13276893qte.668.1647784811818;
-        Sun, 20 Mar 2022 07:00:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzlqaEeWCI8SmnIB2oKIVuA19Yctu0B6K5Ke0aAHbQCy5tIqe6tYsJr/bBcM2Tr/0lC3rE78g==
-X-Received: by 2002:a05:622a:1009:b0:2e1:a2e8:4e63 with SMTP id d9-20020a05622a100900b002e1a2e84e63mr13276879qte.668.1647784811591;
-        Sun, 20 Mar 2022 07:00:11 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id h22-20020a05620a245600b0067d6dae634csm7202133qkn.9.2022.03.20.07.00.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 07:00:11 -0700 (PDT)
-From: trix@redhat.com
-To: minyard@acm.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: openipmi-developer@lists.sourceforge.net,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] ipmi: initialize len variable
-Date: Sun, 20 Mar 2022 06:59:54 -0700
-Message-Id: <20220320135954.2258545-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B88533D3
+	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 14:11:46 +0000 (UTC)
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 22KE1vIf026472;
+	Sun, 20 Mar 2022 15:01:57 +0100
+Date: Sun, 20 Mar 2022 15:01:57 +0100
+From: Willy Tarreau <w@1wt.eu>
+To: David Laight <David.Laight@ACULAB.COM>
+Cc: "'Ammar Faizi'" <ammarfaizi2@gnuweeb.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [RFC PATCH v1 3/6] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Message-ID: <20220320140157.GB26349@1wt.eu>
+References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
+ <20220320093750.159991-4-ammarfaizi2@gnuweeb.org>
+ <2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+Hi David,
 
-Clang static analysis reports this issue
-ipmi_ssif.c:1731:3: warning: 4th function call
-  argument is an uninitialized value
-  dev_info(&ssif_info->client->dev,
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Sun, Mar 20, 2022 at 01:10:33PM +0000, David Laight wrote:
+> And using xchg is slow - it is always locked.
 
-The 4th parameter is the 'len' variable.
-len is only set by a successful call to do_cmd().
-Initialize to len 0.
+Note that we don't really care here, as it remains minimal compared to
+an mmap() call.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/char/ipmi/ipmi_ssif.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> One possibility might be to do:
+> 	push arg6
+> 	push %ebp
+> 	mov  %ebp, 4(%sp)
+> 	int  0x80
+> 	pop  %ebp
+> 	add  %esp,4
+> 
+> Although I'm not sure you really want to allocate 4k pages
+> for every malloc() call.
 
-diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
-index ba779f1abb5b2..f199cc1948446 100644
---- a/drivers/char/ipmi/ipmi_ssif.c
-+++ b/drivers/char/ipmi/ipmi_ssif.c
-@@ -1625,7 +1625,7 @@ static int ssif_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	unsigned char     *resp;
- 	struct ssif_info   *ssif_info;
- 	int               rv = 0;
--	int               len;
-+	int               len = 0;
- 	int               i;
- 	u8		  slave_addr = 0;
- 	struct ssif_addr_info *addr_info = NULL;
--- 
-2.26.3
+Well, it depends. I would argue that we don't even need malloc() but
+on the other hand this is essentially used to write small regtests so
+we don't really care about the waste here if someone really needs it.
 
+I'd rather get Ammar's motivations for malloc() in the first place.
+
+Willy
