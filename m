@@ -1,73 +1,148 @@
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154827A
-	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 09:24:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=k1; bh=DPFdoQCQmmhj9TUQ4Pre53eqE/f1
-	FELjCE0PsZqk8LA=; b=t1X6KZ97L2zE6vEei/vcsQNAljIACR/1cEd/0i387rRg
-	REFwPJyTKLCtK4ZrtLNygW1/m0kgVEkJXwx4c0tSFkdJPgHHXJl/qvFD/obobrCa
-	7lhc6PjtOohBFAxYZNBvkvUccB0Qip3g2iREtfuoA031G+xBvX9eI7KURqS3LPE=
-Received: (qmail 411040 invoked from network); 20 Mar 2022 10:17:32 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Mar 2022 10:17:32 +0100
-X-UD-Smtp-Session: l3s3148p1@yLtH2aLa/LcgAQnoAFbkANnMMFqLOUjD
-Date: Sun, 20 Mar 2022 10:17:28 +0100
-From: Wolfram Sang <wsa-dev@sang-engineering.com>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-renesas-soc@vger.kernel.org, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-gpio@vger.kernel.org,
-	LUU HOAI <hoai.luu.ub@renesas.com>
-Subject: Re: [PATCH 2/2] pinctrl: renesas: r8a77990: add drive-strength
-Message-ID: <YjbxKGNwkyjdUF9Z@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa-dev@sang-engineering.com>,
-	kernel test robot <lkp@intel.com>,
-	linux-renesas-soc@vger.kernel.org, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-gpio@vger.kernel.org,
-	LUU HOAI <hoai.luu.ub@renesas.com>
-References: <20220319215706.59519-3-wsa+renesas@sang-engineering.com>
- <202203200832.RD8XJhU1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2647A
+	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 09:38:57 +0000 (UTC)
+Received: from integral2.. (unknown [182.2.42.189])
+	by gnuweeb.org (Postfix) with ESMTPSA id 1E4AA7E32F;
+	Sun, 20 Mar 2022 09:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+	s=default; t=1647769130;
+	bh=BXzzI1AHGnhVngox7MmLibr5gzV+RXSwMy3QZ9xcVDU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=PTXPJDYF2yyWTk2sjoZoOISwOfNp+Dtv5i7SIky2i2yas1T444ZvVGGLkVk3EzOjH
+	 4/bKKvJ7R4O2R1VLa7LAQgbBO5tSF8Ug2oVkaZt+2MqqM7GpVY6naWZtmcOFVompyt
+	 MbWyGY7ctisWzmb1UjtNLGPVBsS4h7WuiDP1S7M1Uu8Ae8LTnHkEWbaVTbMWLBnixW
+	 V2rjfsLBzG7wqKElpn5ykqst5hc47ubw9NVJqDleB9MGj8OzzhHkr5edJDxYBRPePR
+	 nWZ1jZk3dkoPWz855mUHE/nQshvZqjGbDAWflvxgXx4spVeHXXVCDSOgkXBnogArYw
+	 ObuL9eGCYEaSg==
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To: Willy Tarreau <w@1wt.eu>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+	Nugraha <richiisei@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	llvm@lists.linux.dev
+Subject: [RFC PATCH v1 2/6] tools/nolibc: Make the entry point not weak for clang
+Date: Sun, 20 Mar 2022 16:37:46 +0700
+Message-Id: <20220320093750.159991-3-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
+References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wRCmqLVtDslRCPnB"
-Content-Disposition: inline
-In-Reply-To: <202203200832.RD8XJhU1-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
 
+Budilig with clang yields the following error:
+```
+  <inline asm>:3:1: error: _start changed binding to STB_GLOBAL
+  .global _start
+  ^
+  1 error generated.
+```
+Don't make the entry point weak if we're compiling with clang.
 
---wRCmqLVtDslRCPnB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Cc: llvm@lists.linux.dev
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+ tools/include/nolibc/arch-aarch64.h | 2 ++
+ tools/include/nolibc/arch-arm.h     | 2 ++
+ tools/include/nolibc/arch-i386.h    | 2 ++
+ tools/include/nolibc/arch-mips.h    | 2 ++
+ tools/include/nolibc/arch-riscv.h   | 2 ++
+ tools/include/nolibc/arch-x86_64.h  | 2 ++
+ 6 files changed, 12 insertions(+)
 
+diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
+index 87d9e434820c..5084cd58b429 100644
+--- a/tools/include/nolibc/arch-aarch64.h
++++ b/tools/include/nolibc/arch-aarch64.h
+@@ -183,7 +183,9 @@ struct sys_stat_struct {
+ 
+ /* startup code */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak _start\n"
++#endif
+     ".global _start\n"
+     "_start:\n"
+     "ldr x0, [sp]\n"              // argc (x0) was in the stack
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index 001a3c8c9ad5..b3f135a615a6 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -176,7 +176,9 @@ struct sys_stat_struct {
+ 
+ /* startup code */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak _start\n"
++#endif
+     ".global _start\n"
+     "_start:\n"
+ #if defined(__THUMBEB__) || defined(__THUMBEL__)
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index d7e4d53325a3..82bf797849ae 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
+@@ -175,7 +175,9 @@ struct sys_stat_struct {
+  *
+  */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak _start\n"
++#endif
+     ".global _start\n"
+     "_start:\n"
+     "pop %eax\n"                // argc   (first arg, %eax)
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index c9a6aac87c6d..719d3808614d 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -190,7 +190,9 @@ struct sys_stat_struct {
+ 
+ /* startup code, note that it's called __start on MIPS */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak __start\n"
++#endif
+     ".set nomips16\n"
+     ".global __start\n"
+     ".set    noreorder\n"
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index bc10b7b5706d..a9704affd7de 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -184,7 +184,9 @@ struct sys_stat_struct {
+ 
+ /* startup code */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak _start\n"
++#endif
+     ".global _start\n"
+     "_start:\n"
+     ".option push\n"
+diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+index a7b70ea51b68..f453f1a05a48 100644
+--- a/tools/include/nolibc/arch-x86_64.h
++++ b/tools/include/nolibc/arch-x86_64.h
+@@ -198,7 +198,9 @@ struct sys_stat_struct {
+  *
+  */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak _start\n"
++#endif
+     ".global _start\n"
+     "_start:\n"
+     "pop %rdi\n"                // argc   (first arg, %rdi)
+-- 
+Ammar Faizi
 
-> >> drivers/pinctrl/renesas/pfc-r8a77990.c:5033:38: warning: unused variable 'pinmux_drive_regs' [-Wunused-const-variable]
->    static const struct pinmux_drive_reg pinmux_drive_regs[] = {
-
-Right, G2E has drive_regs as well. Will update!
-
-
---wRCmqLVtDslRCPnB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmI28SQACgkQFA3kzBSg
-KbZZaw/9EE+MPCH3hN5mCBQBGHAFrXTUyvS7r9eJDjBxuCz9LI/XFxd23ObdDk3O
-Srl5/SgGt9TkmDdeyKZwkPCP8Z7qaQd+rTIreeWa7k5QYALB7zRptmXs58zYBWPq
-44/+Ss9HrdpD61UwPSSRpGHNO9Hk5B7UkrG+Z05ZIdpZWBjQbQgQHiBDDoIM1njP
-IafMVBPK9Uui/gKA68REjkHW2SG8gs3Pp7l+1JJ+B1csX78gxDgJzfWq6dTMOHci
-1jYb+8W7ssQs2MLsa4Ou+UBCtFM+k7ptLwAA7yqwbyOBxL6fZhfI7rW60K0P8pyG
-0FYTRfga04DwBh9/aeZ9wODD2mtdojoeMbyMu7K1fK/4QZRWzg1e5n5hyPxtUGOv
-dVXQPDy0Kf1WuxX+t2ugE+kaZB7wvGTsVv8ELGu9Qy/pd0UbVzXgfC4nKN8Kv7MR
-i40PZLdJc+TysUG76JruQcZPbk3qrbx+VconcXDJdQgb1fhlT4Zs4ZgNZuo1b7ws
-z0/OHiULN9PH492RGyBVRpNoVbU0dfTDGuylq2LCL8xwD9fSnSwjQo0AXTtEOA3F
-1LUvrgj6K8JE+Di7iCKb7/i0ecZDoiZLfA9/RDCl/PfbHNHnwDrhJ5SC/DbMkBtE
-qRGND+D4ft5eh5Cf8jfv5P+Fm4boE9OIcdsO3RdraH3Wp9OaVXE=
-=14dA
------END PGP SIGNATURE-----
-
---wRCmqLVtDslRCPnB--
