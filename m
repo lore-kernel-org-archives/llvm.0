@@ -1,22 +1,41 @@
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2646258A
-	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 19:16:29 +0000 (UTC)
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 22KJGJcQ027355;
-	Sun, 20 Mar 2022 20:16:19 +0100
-Date: Sun, 20 Mar 2022 20:16:19 +0100
-From: Willy Tarreau <w@1wt.eu>
-To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Nugraha <richiisei@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v1 2/6] tools/nolibc: Make the entry point not weak
- for clang
-Message-ID: <20220320191619.GA27312@1wt.eu>
-References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
- <20220320093750.159991-3-ammarfaizi2@gnuweeb.org>
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B588520E4
+	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 22:08:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647814093; x=1679350093;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Plh/FqiSM376f1OJmM+nWafMP+leQzo16Fclp08fSR4=;
+  b=Ae0qNuyvx+vgSTI9QZrc/vCXm8zetwlj342I48INknQOVGv/KeJBB5DF
+   85MCm/ck/D22ozRP0InlhgykIfU0EwNMB3lrEHfAccTOmrq0kDH2YFBCm
+   ov7aiJw7FrpQMYKv44JD4ktkSXhA6fWj7ecDv916uPpMVdnBlEjZQD2iR
+   H3EHJIx9BhLTwcMIhsKWMdO9sfxxgzJ1ByqFq1oiCzVIVUJ1mnQEuc3hZ
+   6SOJD/sxF8YvRQn/zJkby/LBs1lt6V+E5lBkld0idhnqm0UC7FHuhE1J4
+   wxWGCM4MSf52NmbA16gtG0+aQEKHHYldQBcHSlw3TcWokY6qwRBKdP6aZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="318142879"
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="318142879"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 15:08:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="691989109"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Mar 2022 15:08:11 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nW3id-000HGX-4c; Sun, 20 Mar 2022 22:08:11 +0000
+Date: Mon, 21 Mar 2022 06:07:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 1565/2335] ./usr/include/linux/netlink.h:5:10:
+ fatal error: 'uapi/linux/types.h' file not found
+Message-ID: <202203210621.FuQPmWFx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -25,31 +44,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220320093750.159991-3-ammarfaizi2@gnuweeb.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Ammar,
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   85293bf3fca6d85608cff1447ce3097583f15fab
+commit: a2b0e0550eec5116e11bfda2877f58a8082b0909 [1565/2335] headers/deps: net: Optimize <uapi/linux/netlink.h>
+config: i386-randconfig-a012-20220314 (https://download.01.org/0day-ci/archive/20220321/202203210621.FuQPmWFx-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=a2b0e0550eec5116e11bfda2877f58a8082b0909
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout a2b0e0550eec5116e11bfda2877f58a8082b0909
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-I've had a look at this one.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Sun, Mar 20, 2022 at 04:37:46PM +0700, Ammar Faizi wrote:
-> Budilig with clang yields the following error:
-  ^^^^^^^
-BTW please fix the typo in the final commit message.
+All errors (new ones prefixed by >>):
 
-> @@ -183,7 +183,9 @@ struct sys_stat_struct {
->  
->  /* startup code */
->  asm(".section .text\n"
-> +#if !defined(__clang__)
->      ".weak _start\n"
-> +#endif
->      ".global _start\n"
->      "_start:\n"
+   In file included from <built-in>:1:
+>> ./usr/include/linux/netlink.h:5:10: fatal error: 'uapi/linux/types.h' file not found
+   #include <uapi/linux/types.h>
+            ^~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-So it seems that I was wrong and that .weak is an alternate for .global
-and not a complement. As such, instead of adding all these #if, please
-simply remove all .global.
-
-Thanks!
-Willy
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
