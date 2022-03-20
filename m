@@ -1,102 +1,124 @@
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDEB429AD
-	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 10:42:44 +0000 (UTC)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	by gnuweeb.org (Postfix) with ESMTPSA id 014C77E2BC
-	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 10:42:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1647772964;
-	bh=cslQqgZ7BRLt7KwLkN6alHsy0RvZ6fR/hvzrpU/IQcw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bFDGdfBQ3owjAm/4oBfunZS+DrEyK0awO7Qz5oGktEcPCnImR0wZgBv+LNd7aIC1i
-	 fGyvC6p4/FN/DDQPq228Zj2yJixTbwoCcoKkpJ0/AzFbX0uMA43D+mh2L252TLLN5B
-	 /ncMD+AGOhrx61gIsxzAKanZnCRzwtqnmuL1M091E9UV2Aeznl/4I3VTVCcEfGwE/I
-	 C1+DL4Si5HQ6+QxLauMO6t+W60QB8B0vo+6an6k8Y4FJUMgbHM+dG2rH91/RIHUJxJ
-	 9Bch068lVennn7YcAryshledQyBPUmKNHe1fzSmjiEwXmFaZsJpbiDozN9PbcIA1fW
-	 fKf+RyhIyrJhA==
-Received: by mail-lj1-f175.google.com with SMTP id q5so16497006ljb.11
-        for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 03:42:43 -0700 (PDT)
-X-Gm-Message-State: AOAM531SD/7ICHK3x4fUJdHbzB0tAa1lKwpr9o2tRHidVODZspLE150x
-	rPSKDXzWOjiqWOmmBUbrjW/HoSld3l9on59s3rA=
-X-Google-Smtp-Source: ABdhPJz2Mt7MudHlBHTgwknr9S1NVKeLSs8DnEm5oR+qe5t2az/z3e9HK824k1yGmqCzAFBlGv5uyg0SUiaDNrsvLlQ=
-X-Received: by 2002:a2e:7d05:0:b0:247:ed41:690d with SMTP id
- y5-20020a2e7d05000000b00247ed41690dmr12102096ljc.92.1647772962093; Sun, 20
- Mar 2022 03:42:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8240229AD
+	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 10:48:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647773286; x=1679309286;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GEh4lqkvNvHxXEzdBkA6/xpiAYOeW7RsnYoRHrITa7c=;
+  b=MxTs5F753RDi0twLY/TR7/SMzi2VD0Tf5eT8c0D+EOSW/PpJQNisb3RP
+   zN6QhrfHdY82/27CltWCm05SxZXwYbMBnKKEC7+/f9X5oykKr6bMwc+P0
+   pjy7HITvMGXuAWwQq8CYe6TbhEwlkeinWo6+bWl3xdIq529QaHcTjL/Zu
+   Z7GU+aPn4n5urW9LbJ5sZ0UahgIWMfHIrMEc+8iqfzDQc+bpXKoQD8PGP
+   CioAyqM5Etaz/cE6+1MHoY1gU38HntYsRqd/RIfrC5XSWpYvwJjru76Rp
+   7DdPPvDaVy2U2imjCpC7m7QXaTpUixE97f96//YB9sSg21aFUVol0kM7X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="237986619"
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="237986619"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 03:48:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="648227243"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 20 Mar 2022 03:48:03 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nVt6Q-000Gpd-Rt; Sun, 20 Mar 2022 10:48:02 +0000
+Date: Sun, 20 Mar 2022 18:47:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Chan <michael.chan@broadcom.com>, davem@davemloft.net
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	kuba@kernel.org, gospo@broadcom.com
+Subject: Re: [PATCH net-next 10/11] bnxt: support transmit and free of
+ aggregation buffers
+Message-ID: <202203201851.iT6RBOWK-lkp@intel.com>
+References: <1647759473-2414-11-git-send-email-michael.chan@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
- <20220320093750.159991-4-ammarfaizi2@gnuweeb.org> <CAOG64qO5b30GjyYxoRj9QLJpfaa-o40W1oYL0XuZ8C5QX17bww@mail.gmail.com>
-In-Reply-To: <CAOG64qO5b30GjyYxoRj9QLJpfaa-o40W1oYL0XuZ8C5QX17bww@mail.gmail.com>
-From: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Date: Sun, 20 Mar 2022 17:42:30 +0700
-X-Gmail-Original-Message-ID: <CAOG64qPyXS-NVE6wV2fs8ho5B88ziZrO9mL3cgZrLRqf6tmmQA@mail.gmail.com>
-Message-ID: <CAOG64qPyXS-NVE6wV2fs8ho5B88ziZrO9mL3cgZrLRqf6tmmQA@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 3/6] tools/nolibc: i386: Implement syscall with 6 arguments
-To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc: Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>, Nugraha <richiisei@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	"GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, x86@kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1647759473-2414-11-git-send-email-michael.chan@broadcom.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sun, Mar 20, 2022 at 5:33 PM Alviro Iskandar Setiawan wrote:
-> On Sun, Mar 20, 2022 at 4:37 PM Ammar Faizi wrote:
-> > In i386, the 6th argument of syscall goes in %ebp. However, both Clang
-> > and GCC cannot use %ebp in the clobber list and in the "r" constraint
-> > without using -fomit-frame-pointer. To make it always available for any
-> > kind of compilation, the below workaround is implemented.
-> >
-> > For clang (the Assembly statement can't clobber %ebp):
-> >   1) Save the %ebp value to the redzone area -4(%esp).
-> >   2) Load the 6-th argument from memory to %ebp.
-> >   3) Subtract the %esp by 4.
-> >   4) Do the syscall (int $0x80).
-> >   5) Pop %ebp.
->
-> I don't think you can safely use redzone from inline Assembly. The
-> compiler may also use redzone for a leaf function. In case the syscall
-> is done at the same time, your %ebp saving will clobber the redzone
-> that the compiler uses.
->
-> > For GCC, fortunately it has a #pragma that can force a specific function
-> > to be compiled with -fomit-frame-pointer, so it can always use "r"(var)
-> > where `var` is a variable bound to %ebp.
-> >
-> > Cc: x86@kernel.org
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> [...]
-> > +#if defined(__clang__)
-> > +static inline long ____do_syscall6(long eax, long ebx, long ecx, long edx,
-> > +                                  long esi, long edi, long ebp)
-> > +{
-> > +       __asm__ volatile (
-> > +               "movl   %%ebp, -4(%%esp)\n\t"
-> > +               "movl   %[arg6], %%ebp\n\t"
-> > +               "subl   $4, %%esp\n\t"
-> > +               "int    $0x80\n\t"
-> > +               "popl   %%ebp\n\t"
-> > +               : "=a"(eax)
-> > +               : "a"(eax), "b"(ebx), "c"(ecx), "d"(edx), "S"(esi), "D"(edi),
-> > +                 [arg6]"m"(ebp)
-> > +               : "memory", "cc"
-> > +       );
-> > +       return eax;
-> > +}
-> > +
->
-> -4(%esp) may be used by the compiler on a leaf call, you can't clobber that.
+Hi Michael,
 
-Using xchgl to preserve %ebp in the same place where the arg6 is
-stored in memory is a better solution and doesn't clobber anything.
+I love your patch! Perhaps something to improve:
 
-    xchgl %ebp, %[arg6]
-    int    $0x80
-    xchgl %ebp, %[arg6]
+[auto build test WARNING on net-next/master]
 
--- Viro
+url:    https://github.com/0day-ci/linux/commits/Michael-Chan/bnxt-Support-XDP-multi-buffer/20220320-150017
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 092d992b76ed9d06389af0bc5efd5279d7b1ed9f
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220320/202203201851.iT6RBOWK-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/01029de5d079c1271b0cdd6f64a6ee7132b1872f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Michael-Chan/bnxt-Support-XDP-multi-buffer/20220320-150017
+        git checkout 01029de5d079c1271b0cdd6f64a6ee7132b1872f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/broadcom/bnxt/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:203:6: warning: variable 'shinfo' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (xdp)
+               ^~~
+   drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:206:18: note: uninitialized use occurs here
+           for (i = 0; i < shinfo->nr_frags; i++) {
+                           ^~~~~~
+   drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:203:2: note: remove the 'if' if its condition is always true
+           if (xdp)
+           ^~~~~~~~
+   drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:200:32: note: initialize the variable 'shinfo' to silence this warning
+           struct skb_shared_info *shinfo;
+                                         ^
+                                          = NULL
+   drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:291:36: warning: variable 'mapping' is uninitialized when used here [-Wuninitialized]
+                   dma_unmap_page_attrs(&pdev->dev, mapping,
+                                                    ^~~~~~~
+   drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:225:20: note: initialize the variable 'mapping' to silence this warning
+           dma_addr_t mapping;
+                             ^
+                              = 0
+   2 warnings generated.
+
+
+vim +203 drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+
+   196	
+   197	void bnxt_xdp_buff_frags_free(struct bnxt_rx_ring_info *rxr,
+   198				      struct xdp_buff *xdp)
+   199	{
+   200		struct skb_shared_info *shinfo;
+   201		int i;
+   202	
+ > 203		if (xdp)
+   204			shinfo = xdp_get_shared_info_from_buff(xdp);
+   205	
+   206		for (i = 0; i < shinfo->nr_frags; i++) {
+   207			struct page *page = skb_frag_page(&shinfo->frags[i]);
+   208	
+   209			page_pool_recycle_direct(rxr->page_pool, page);
+   210		}
+   211		shinfo->nr_frags = 0;
+   212	}
+   213	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
