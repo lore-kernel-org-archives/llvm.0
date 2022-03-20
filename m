@@ -1,23 +1,23 @@
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C225D17C9
-	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 15:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6551733F1
+	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 15:09:07 +0000 (UTC)
 Received: from [192.168.12.80] (unknown [182.2.69.4])
-	by gnuweeb.org (Postfix) with ESMTPSA id 4EBE17E2DA;
-	Sun, 20 Mar 2022 15:04:17 +0000 (UTC)
+	by gnuweeb.org (Postfix) with ESMTPSA id E05F07E2C4;
+	Sun, 20 Mar 2022 15:09:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1647788661;
-	bh=KLLyJlTg8Kh9KZF5IRbm0662lOq7PeTUPfZKT4sNVEg=;
-	h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-	b=FqO1IW11GAyvJsc83NNz14DVFfn3i26xV3PuQu6wC+UcTxx+TZQ5g06TYEpAhdm9J
-	 P5panWybU2h05ExCNvlVmIeptNpiAb+aX1ewutJ7mK6eNgbcMp/LVrXnonvl8Y9J97
-	 pWszC7Sriu4zBvCqCp8lqE9VKfPVsuRPqaF/sQVtgg1fJJEVi/qKxWtjT3NQpYdapH
-	 O75op3eIMBVaZvaGVcsmlb1iBmNhVyjn4CUJ+r63ILXpzmITch0U6F65cLrlQOWqls
-	 oXC9kG4NHw50qAfQvhvRqRFFJ5CMEhWazh/HIxzmCOH1nDY6HCWQdIpcI0om3R5d1r
-	 LS2ewanUAJovA==
-Message-ID: <263c1f21-c0d6-deb1-d45e-66fd35715447@gnuweeb.org>
-Date: Sun, 20 Mar 2022 22:04:14 +0700
+	s=default; t=1647788946;
+	bh=RI2pkVzqveOuxBvWu4F+M+4HsSWEh++MgqMXUyJVxAU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=SlHIXPUJv10qRdUSpDIrnBebOXtYKTB7PW7pS788CWApSybPqObMyCQLgooiENeyU
+	 eG7btVKoK70FC5a9oKEoc0JANIh/RBi3MFvMyPsPy6JfHJxHPXXe364cgYxWsaa8je
+	 ZdnrKtul2psQvyXeOLTKRUYLZIten7J/rn61AwixHNPZoE36oR5FDO/AtM2+G6UvLF
+	 AZIGhlzshtTcpobPbeOf6fyTkWxwQlBQ9YUtFy5T3IE4MxMuxFt3beD72P7Axh5h2/
+	 R5keyd7OCg02CvBW5u4fr65q6ekM8FN5wWLwSgS6wkOO6sQcaNvMREy6I8cbr0Xc3M
+	 pzrNDHEntGM2Q==
+Message-ID: <9ba9c8bd-d4e1-a9c5-9269-4cecb1b109f6@gnuweeb.org>
+Date: Sun, 20 Mar 2022 22:09:00 +0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,82 +26,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Content-Language: en-US
-To: David Laight <David.Laight@ACULAB.COM>, Willy Tarreau <w@1wt.eu>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
- Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
- Nugraha <richiisei@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
- "x86@kernel.org" <x86@kernel.org>,
- "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
- <20220320093750.159991-4-ammarfaizi2@gnuweeb.org>
- <2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com>
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 Subject: Re: [RFC PATCH v1 3/6] tools/nolibc: i386: Implement syscall with 6
  arguments
-In-Reply-To: <2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com>
+Content-Language: en-US
+To: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Cc: Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Nugraha <richiisei@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, x86@kernel.org,
+ llvm@lists.linux.dev, David Laight <David.Laight@ACULAB.COM>
+References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
+ <20220320093750.159991-4-ammarfaizi2@gnuweeb.org>
+ <CAOG64qO5b30GjyYxoRj9QLJpfaa-o40W1oYL0XuZ8C5QX17bww@mail.gmail.com>
+ <CAOG64qPyXS-NVE6wV2fs8ho5B88ziZrO9mL3cgZrLRqf6tmmQA@mail.gmail.com>
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <CAOG64qPyXS-NVE6wV2fs8ho5B88ziZrO9mL3cgZrLRqf6tmmQA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/20/22 8:10 PM, David Laight wrote:
-> From: Ammar Faizi
->> Sent: 20 March 2022 09:38
+On 3/20/22 5:42 PM, Alviro Iskandar Setiawan wrote:
+> On Sun, Mar 20, 2022 at 5:33 PM Alviro Iskandar Setiawan wrote:
+[...]
+>> I don't think you can safely use redzone from inline Assembly. The
+>> compiler may also use redzone for a leaf function. In case the syscall
+>> is done at the same time, your %ebp saving will clobber the redzone
+>> that the compiler uses.
+
+It turned out we don't have a redzone for 32-bit.
+
 >>
->> In i386, the 6th argument of syscall goes in %ebp. However, both Clang
->> and GCC cannot use %ebp in the clobber list and in the "r" constraint
->> without using -fomit-frame-pointer. To make it always available for any
->> kind of compilation, the below workaround is implemented.
->>
->> For clang (the Assembly statement can't clobber %ebp):
->>    1) Save the %ebp value to the redzone area -4(%esp).
+>> -4(%esp) may be used by the compiler on a leaf call, you can't clobber that.
+
+Yeah, this is still wrong even with a redzone.
+
+> Using xchgl to preserve %ebp in the same place where the arg6 is
+> stored in memory is a better solution and doesn't clobber anything.
 > 
-> i386 doesn't have a redzone.
-> If you get a signal it will trash -4(%sp)
+>      xchgl %ebp, %[arg6]
+>      int    $0x80
+>      xchgl %ebp, %[arg6]
 
-OK, I missed that one. Thanks for reviewing this.
+Addressed your review in my response to David.
 
->> For GCC, fortunately it has a #pragma that can force a specific function
->> to be compiled with -fomit-frame-pointer, so it can always use "r"(var)
->> where `var` is a variable bound to %ebp.
-> 
-> How is that going to work for an inlined functon?
-
-It works, but obviously the inline modifier here is just a hint for the
-compiler, not a requirement. I just took a look at the GCC generated code.
-It doesn't inline the ____do_syscall6() despite it's marked as inline.
-
-I think this one shouldn't be marked as inline. I will remove the inline
-in the next version.
-
-> And using xchg is slow - it is always locked.
-> 
-> One possibility might be to do:
-> 	push arg6
-> 	push %ebp
-> 	mov  %ebp, 4(%sp)
-
-Did you mean `mov 4(%esp), %ebp`?
-
-> 	int  0x80
-> 	pop  %ebp
-> 	add  %esp,4
-
-I think your solution is better than the xchg approach (with the 3rd line
-fixed). Will take this in for the next version.
-
-> Although I'm not sure you really want to allocate 4k pages
-> for every malloc() call.
-> 
-> Probably better to write a mini 'libc' that uses sbrk()
-> and a best fit scan of a linear free list.
-
-^ This part is addressed by Willy's response. I will still go with mmap()
-in the next version.
-
-And yes, we do waste space for small allocations here, but we don't hit
-the scale that the waste space will cause problem.
+Thanks!
 
 -- 
 Ammar Faizi
