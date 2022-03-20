@@ -1,146 +1,129 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AE55395
-	for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 23:21:29 +0000 (UTC)
-Received: by mail-lf1-f42.google.com with SMTP id k21so2879026lfe.4
-        for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 16:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rxIG59hWE7fTLM08POLwmSdeNPdfOcqzklKto3ZaqJc=;
-        b=XnkMxz93PO3rdLFMI2lfYthrx7Lhicsol4Os8Fj8YenRH3QMiQ9WWxjUZSSXfu1bCA
-         Zu4bWFkMfbjR+kCRc6DeIxpawOp55NhpZN2blZQ3VrbtvmdZrekC3NuWFiV+OFJG0yiT
-         KyGpY+qQqYk6OKrG/+Gvp83pCOZpDRi2uUqfM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rxIG59hWE7fTLM08POLwmSdeNPdfOcqzklKto3ZaqJc=;
-        b=HB90zTzaOX4kJfMKv0aIUR1zcr+7+8fzhBMD4kpHIz3ytEEB5pNMRTrR3mGPHJ6QO9
-         vjJxeTj72Zg8116IucBzgYo3Nph8NxvswJHBBXFuizmvWHMrxw6FCk3WL3yFqK2qI96e
-         qqy+0lQQ6TPMDfD0rw/DhyXNj4R58qXWwIpmoMuluKhOaoRqmVJH9AbUKQE8eIcCKgeO
-         zBKgdyLGFCbaEF6ZD3BBuPp+v25S9SVuOrMUi/NQ0wezFwb9KgOSt8i+/rSiGoUakpHd
-         E7cdalXkoLc/jxzJn9FJemC6Ow+D1gtKI+QKjERsTU5OVLU04/5rrevzGHFh8EMC18tN
-         uvvg==
-X-Gm-Message-State: AOAM530vxQ039SMrLHbPC7pYc4Ze+f+oLYNcYQpdS9qPFT1T1fxVPkM9
-	VZL09x/CHPSdZA0Xofw62LFcKEDCXVEoix0WNiM=
-X-Google-Smtp-Source: ABdhPJysb451tngVAnnr34e1fvPiaUR1yzIDsN9duhx9aA47Ffe8c/XLi4c5NOVoyxxETsowFUjvjQ==
-X-Received: by 2002:ac2:5504:0:b0:44a:2117:e6bb with SMTP id j4-20020ac25504000000b0044a2117e6bbmr2051694lfk.388.1647732087879;
-        Sat, 19 Mar 2022 16:21:27 -0700 (PDT)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id t5-20020ac25485000000b0044833ffc127sm1400298lfk.185.2022.03.19.16.21.25
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Mar 2022 16:21:26 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id c15so15608218ljr.9
-        for <llvm@lists.linux.dev>; Sat, 19 Mar 2022 16:21:25 -0700 (PDT)
-X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
- u16-20020a2e9b10000000b00247f28cffd3mr10548961lji.152.1647732085458; Sat, 19
- Mar 2022 16:21:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC8319B
+	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 00:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647735533; x=1679271533;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y3N4exy6MfKBJE9UeXNOTUM3ieC3sG19mzFvjlL6lRs=;
+  b=k06Ca5xGwhFFs1n6oOtcawDetwxMv0C1z9g9sIrh/Ma4VfBQJiKXHrxE
+   FPs1bM/zZiKOvGG4knqPba9L9T08fTho6VqOq+cBLT5eIfVSq2K6uZZmi
+   aqtd82ByofNfXBSR6am3kNNdf4S5EXinnwIzZ+KXrPC1SyvBs7jXgvt5s
+   PU0YJRZzTWUbIA43q/eXvk0eLzzBoBNg8dprE6PQipkhhHmibg/BWrhW2
+   nySgMW9g8i7jHDLosM28ZYIFx98q5Pw3Xduiiir9rN4zgwuVlSlniwKR5
+   pLlu7LP5iAL+aVD0EpRS/b3oRmonmxuUdn5qxGEkPducVzG+oZhQGjKrt
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="257529859"
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="257529859"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 17:18:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="648129507"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 19 Mar 2022 17:18:50 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nVjHV-000GOi-Ln; Sun, 20 Mar 2022 00:18:49 +0000
+Date: Sun, 20 Mar 2022 08:18:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wolfram Sang <wsa-dev@sang-engineering.com>,
+	linux-renesas-soc@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-gpio@vger.kernel.org,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	LUU HOAI <hoai.luu.ub@renesas.com>
+Subject: Re: [PATCH 2/2] pinctrl: renesas: r8a77990: add drive-strength
+Message-ID: <202203200832.RD8XJhU1-lkp@intel.com>
+References: <20220319215706.59519-3-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220316213055.2351342-1-morbo@google.com> <20220319222228.4160598-1-morbo@google.com>
- <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
-In-Reply-To: <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 19 Mar 2022 16:21:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgH3kbKcNwBO7os3BuU523Gd2aqdu0dVvf50bJbLKrLJg@mail.gmail.com>
-Message-ID: <CAHk-=wgH3kbKcNwBO7os3BuU523Gd2aqdu0dVvf50bJbLKrLJg@mail.gmail.com>
-Subject: Re: [PATCH v2] gpiolib: acpi: use correct format characters
-To: Bill Wendling <morbo@google.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220319215706.59519-3-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, Mar 19, 2022 at 3:54 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> So warning that '%hhX' is paired with an 'int' is all just completely
-> mindless and wrong.
+Hi Wolfram,
 
-Sadly, I can see a different bogus warning reason why people would
-want to use '%02hhX'.
+I love your patch! Perhaps something to improve:
 
-Again, the *sane* thing from a human perspective is to use '%02X. But
-if the compiler doesn't do any range analysis at all, it could decide
-that "Oh, that print format could need up to 8 bytes of space in the
-result". Using '%02hhX' would cut that down to two.
+[auto build test WARNING on geert-renesas-drivers/renesas-pinctrl]
+[also build test WARNING on linusw-pinctrl/devel v5.17-rc8 next-20220318]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-And since we use
+url:    https://github.com/0day-ci/linux/commits/Wolfram-Sang/pinctrl-renesas-r8a77990-add-drive-strength/20220320-055908
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git renesas-pinctrl
+config: hexagon-randconfig-r041-20220320 (https://download.01.org/0day-ci/archive/20220320/202203200832.RD8XJhU1-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 217f267efe3082438e698e2f08566b9df8c530fa)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/844a743267be6ab69209101129c05dcb9dfd7c19
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Wolfram-Sang/pinctrl-renesas-r8a77990-add-drive-strength/20220320-055908
+        git checkout 844a743267be6ab69209101129c05dcb9dfd7c19
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/pinctrl/renesas/
 
-        char ev_name[5];
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-and currently use "_%c%02hhX" as the format string, even a compiler
-that doesn't notice that "pin <= 255" test that guards this all will
-go "ok, that's at most 4 bytes and the final NUL termination, so it's
-fine".
+All warnings (new ones prefixed by >>):
 
-While a compiler - like gcc - that only sees that the original source
-of the 'pin' value is a 'unsigned short' array, and then doesn't take
-the "pin <= 255" into account, will warn like this:
+>> drivers/pinctrl/renesas/pfc-r8a77990.c:5033:38: warning: unused variable 'pinmux_drive_regs' [-Wunused-const-variable]
+   static const struct pinmux_drive_reg pinmux_drive_regs[] = {
+                                        ^
+   1 warning generated.
 
-    drivers/gpio/gpiolib-acpi.c: In function 'acpi_gpiochip_request_interrupt':
-    drivers/gpio/gpiolib-acpi.c:206:24: warning: '%02X' directive
-writing between 2 and 4 bytes into a region of size 3
-[-Wformat-overflow=]
-       sprintf(ev_name, "_%c%02X",
-                            ^~~~
-    drivers/gpio/gpiolib-acpi.c:206:20: note: directive argument in
-the range [0, 65535]
 
-because gcc isn't being very good at that argument range analysis either.
+vim +/pinmux_drive_regs +5033 drivers/pinctrl/renesas/pfc-r8a77990.c
 
-In other words, the original use of 'hhx' was bogus to begin with, and
-due to *another* compiler warning being bad, and we had that bad code
-being written back in 2016 to work around _that_ compiler warning
-(commit e40a3ae1f794: "gpio: acpi: work around false-positive
--Wstring-overflow warning").
+  5032	
+> 5033	static const struct pinmux_drive_reg pinmux_drive_regs[] = {
+  5034		{ PINMUX_DRIVE_REG("DRVCTRL8", 0xe6060320) {
+  5035			{ RCAR_GP_PIN(3,  0), 18, 2 },	/* SD0_CLK */
+  5036			{ RCAR_GP_PIN(3,  1), 15, 2 },	/* SD0_CMD */
+  5037			{ RCAR_GP_PIN(3,  2), 12, 2 },	/* SD0_DAT0 */
+  5038			{ RCAR_GP_PIN(3,  3),  9, 2 },	/* SD0_DAT1 */
+  5039			{ RCAR_GP_PIN(3,  4),  6, 2 },	/* SD0_DAT2 */
+  5040			{ RCAR_GP_PIN(3,  5),  3, 2 },	/* SD0_DAT3 */
+  5041			{ RCAR_GP_PIN(3,  6),  0, 2 },	/* SD1_CLK */
+  5042		} },
+  5043		{ PINMUX_DRIVE_REG("DRVCTRL9", 0xe6060324) {
+  5044			{ RCAR_GP_PIN(3,  7), 29, 2 },	/* SD1_CMD */
+  5045			{ RCAR_GP_PIN(3,  8), 26, 2 },	/* SD1_DAT0 */
+  5046			{ RCAR_GP_PIN(3,  9), 23, 2 },	/* SD1_DAT1 */
+  5047			{ RCAR_GP_PIN(3, 10), 20, 2 },	/* SD1_DAT2 */
+  5048			{ RCAR_GP_PIN(3, 11), 17, 2 },	/* SD1_DAT3 */
+  5049			{ RCAR_GP_PIN(4,  0), 14, 2 },	/* SD3_CLK */
+  5050			{ RCAR_GP_PIN(4,  1), 11, 2 },	/* SD3_CMD */
+  5051			{ RCAR_GP_PIN(4,  2),  8, 2 },	/* SD3_DAT0 */
+  5052			{ RCAR_GP_PIN(4,  3),  5, 2 },	/* SD3_DAT1 */
+  5053			{ RCAR_GP_PIN(4,  4),  2, 2 },	/* SD3_DAT2 */
+  5054		} },
+  5055		{ PINMUX_DRIVE_REG("DRVCTRL10", 0xe6060328) {
+  5056			{ RCAR_GP_PIN(4,  5), 29, 2 },	/* SD3_DAT3 */
+  5057			{ RCAR_GP_PIN(4,  6), 26, 2 },	/* SD3_DAT4 */
+  5058			{ RCAR_GP_PIN(4,  7), 23, 2 },	/* SD3_DAT5 */
+  5059			{ RCAR_GP_PIN(4,  8), 20, 2 },	/* SD3_DAT6 */
+  5060			{ RCAR_GP_PIN(4,  9), 17, 2 },	/* SD3_DAT7 */
+  5061			{ RCAR_GP_PIN(4, 10), 14, 2 },	/* SD3_DS */
+  5062		} },
+  5063		{ },
+  5064	};
+  5065	
 
-Sadly, two different bad compiler warnings together does not make for
-one good one.
-
-It just makes for even more pain.
-
-End result: I think the simplest and cleanest option is simply this:
-
-  --- a/drivers/gpio/gpiolib-acpi.c
-  +++ b/drivers/gpio/gpiolib-acpi.c
-  @@ -387,8 +387,8 @@ static acpi_status
-acpi_gpiochip_alloc_event(struct acpi_resource *ares,
-        pin = agpio->pin_table[0];
-
-        if (pin <= 255) {
-  -             char ev_name[5];
-  -             sprintf(ev_name, "_%c%02hhX",
-  +             char ev_name[8];
-  +             sprintf(ev_name, "_%c%02X",
-                        agpio->triggering == ACPI_EDGE_SENSITIVE ? 'E' : 'L',
-                        pin);
-                if (ACPI_SUCCESS(acpi_get_handle(handle, ev_name, &evt_handle)))
-
-which undoes that '%hhX' change for gcc, and replaces it with just
-using a slightly bigger stack allocation. It's not like a 5-byte
-allocation is in any way likely to have saved any actual stack, since
-all the other variables in that function are 'int' or bigger.
-
-False-positive compiler warnings really do make people write worse
-code, and that's a problem. But on a scale of bad code, I feel that
-extending the buffer trivially is better than adding a pointless cast
-that literally makes no sense.
-
-At least in this case the end result isn't unreadable or buggy. We've
-had several cases of bad compiler warnings that caused changes that
-were actually horrendously wrong.
-
-                  Linus
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
