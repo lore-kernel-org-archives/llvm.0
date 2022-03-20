@@ -1,41 +1,55 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71B73FE6
-	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 17:03:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647795812; x=1679331812;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4KLxCogkaJgL1I4Qp9As2MeVvJ0l1Sntjslo9WZHLMA=;
-  b=WBlHF88RwBg87Mqb7n9J5gyZARSTRgVPUj/+1JR02XKQAYh1Nnl7kZco
-   5BXoEVF5bM3ywl2HA2EdoXVMQcW0BAhp1UkCCA8ZxUsJpDIUn4q3z4fZj
-   ZaD0Y0FkOzVtc65u+77n5FchjbuGjTgTsxjcDAMuLpg7UZOvTc8RO7F1n
-   LMFZmwUgCDe7c5OrNOGumDQieT912GmDbeFycCqGoN1+QC1mGHkrsMxe0
-   jQ6IN89C21Thd5m9qWt9abj3h70ZjNurcCHSmLLznMLZZm7WC9gxKbws/
-   SG38+6TGGp5pZ2ZS41oomkoNWxXkdiQ4hWXterF8bb0a7n3dWoQL8KihZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="238017911"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="238017911"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 10:03:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="823848173"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Mar 2022 10:03:31 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nVyxm-000H6P-FY; Sun, 20 Mar 2022 17:03:30 +0000
-Date: Mon, 21 Mar 2022 01:03:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [ardb:efi-psci 2/2] drivers/firmware/psci/psci.c:152:2: warning:
- unannotated fall-through between switch labels
-Message-ID: <202203210042.UJZ5llHd-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EDD73FE6
+	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 17:37:50 +0000 (UTC)
+Received: by mail-qv1-f43.google.com with SMTP id hu12so10060680qvb.6
+        for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 10:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UpAsH3HNGYUb6pJqoGNbhy4ESgXn7LYmalYBo847NcU=;
+        b=JGkyMerAd2g6F8muIKP6vKHK0v40lHv193s/7K77f/6/3RSE90D42rwWgO9T9yN08/
+         IEGiL+f+vNycabezRrx40IBJIx1xq8R54iLvVMqzlKFpsY8GlAbvrRSOUofIx1zradjb
+         Gw4nCwaxwZvwZeTXmQSoqf4odwfcLQGJWTL7OG1D4zejn+ChGrXQn0dmkyrKGrg/8qjv
+         4dNDH3S48w2AzRA0w9PznJM7yBFyVbWLbig9q7xomTEp8XQBUfN4lcB8n8SIHhYPBcwt
+         8ENRpNGp7OQsVot7pDepfZvt96m1Jx64kOrW1ISj2fTkTuOArAwwQvkYlTy9NZQoXy7Q
+         p7kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to;
+        bh=UpAsH3HNGYUb6pJqoGNbhy4ESgXn7LYmalYBo847NcU=;
+        b=V6Qlsb51WW6p/N8wKYwOoT3rVy+A7LzpcsfJ6iRba2/xIx6HtaXdD0sp8C9rC3v/rG
+         xMPjo3f8HHz/F1wiP9ZtEjiCEG+Pq79ECmOulpzAY+78zr0oRktR9Z4/fFAp9+xrwMKh
+         PJxLrnqhi5s0UPCqB9NOyxKkYjjZJqCdYlqV3x+Wsaa1MLWWL4tZ5oW75z3KsgI76RT0
+         4AXAzoTDVNPihsEDxMN/4TrS9JokxuWk+0bU+yxTzLzmSYcqv6z3POgmOQUsXM3hFzKp
+         nMmxHXmj+sVEFenKK0H+5em1ZgJ/agZwND3nGu969+/F2KDcg9Bf1JSPtGylizxyUARB
+         D2QQ==
+X-Gm-Message-State: AOAM533mDufHvgD4KDsrcVBq8zKyrI//0ISdlJ2jq/BBS02A+85S8cDN
+	5JZgvaRaF8nA0+Gpw2K4kg==
+X-Google-Smtp-Source: ABdhPJwh8QvADQKYx6DPR/dSdi1tzGg9wqeQVW1DOYXcHRPN0dHNgQHiyPZiuCqDYB1s0/59ZXi2HQ==
+X-Received: by 2002:a05:6214:c2a:b0:440:f702:2195 with SMTP id a10-20020a0562140c2a00b00440f7022195mr10715396qvd.37.1647797869914;
+        Sun, 20 Mar 2022 10:37:49 -0700 (PDT)
+Received: from serve.minyard.net ([47.184.144.75])
+        by smtp.gmail.com with ESMTPSA id n8-20020ac85a08000000b002e06aa02021sm10151220qta.49.2022.03.20.10.37.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 10:37:49 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:299c:3142:517:f2da])
+	by serve.minyard.net (Postfix) with ESMTPSA id 58F3F180004;
+	Sun, 20 Mar 2022 17:37:48 +0000 (UTC)
+Date: Sun, 20 Mar 2022 12:37:47 -0500
+From: Corey Minyard <minyard@acm.org>
+To: trix@redhat.com
+Cc: nathan@kernel.org, ndesaulniers@google.com,
+	openipmi-developer@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] ipmi: initialize len variable
+Message-ID: <20220320173747.GH3457@minyard.net>
+Reply-To: minyard@acm.org
+References: <20220320135954.2258545-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,88 +58,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220320135954.2258545-1-trix@redhat.com>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-psci
-head:   4b8d4b95fbd43459a4b0ae3f9020a912f7621884
-commit: 4b8d4b95fbd43459a4b0ae3f9020a912f7621884 [2/2] efi: arm: implement PSCI method backed by EFI runtime code
-config: arm64-randconfig-r022-20220320 (https://download.01.org/0day-ci/archive/20220321/202203210042.UJZ5llHd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=4b8d4b95fbd43459a4b0ae3f9020a912f7621884
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb efi-psci
-        git checkout 4b8d4b95fbd43459a4b0ae3f9020a912f7621884
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/firmware/psci/
+On Sun, Mar 20, 2022 at 06:59:54AM -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Clang static analysis reports this issue
+> ipmi_ssif.c:1731:3: warning: 4th function call
+>   argument is an uninitialized value
+>   dev_info(&ssif_info->client->dev,
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> The 4th parameter is the 'len' variable.
+> len is only set by a successful call to do_cmd().
+> Initialize to len 0.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks, it's queued for next release..
 
-All warnings (new ones prefixed by >>):
+-corey
 
->> drivers/firmware/psci/psci.c:152:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   drivers/firmware/psci/psci.c:152:2: note: insert '__attribute__((fallthrough));' to silence this warning
-           default:
-           ^
-           __attribute__((fallthrough)); 
-   drivers/firmware/psci/psci.c:152:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   drivers/firmware/psci/psci.c:94:20: warning: unused function 'psci_power_state_loses_context' [-Wunused-function]
-   static inline bool psci_power_state_loses_context(u32 state)
-                      ^
-   2 warnings generated.
-
-
-vim +152 drivers/firmware/psci/psci.c
-
-   131	
-   132	static unsigned long __invoke_psci_fn_efi(unsigned long function_id,
-   133				unsigned long arg0, unsigned long arg1,
-   134				unsigned long arg2)
-   135	{
-   136		unsigned long flags, ret;
-   137	
-   138		switch (function_id) {
-   139		case PSCI_0_2_FN_PSCI_VERSION:
-   140			return PSCI_VERSION(0, 2);
-   141		case PSCI_0_2_FN_MIGRATE_INFO_TYPE:
-   142			return PSCI_0_2_TOS_MP;
-   143		case PSCI_0_2_FN_CPU_SUSPEND:
-   144		case PSCI_0_2_FN_CPU_OFF:
-   145		case PSCI_0_2_FN_CPU_ON:
-   146		case PSCI_0_2_FN_AFFINITY_INFO:
-   147		case PSCI_0_2_FN64_CPU_SUSPEND:
-   148		case PSCI_0_2_FN64_CPU_ON:
-   149		case PSCI_0_2_FN64_AFFINITY_INFO:
-   150			if (WARN_ON_ONCE(!efi_psci.psci_handler ||
-   151					 !efi_enabled(EFI_RUNTIME_SERVICES)))
- > 152		default:
-   153				return PSCI_RET_NOT_SUPPORTED;
-   154			break;
-   155		}
-   156	
-   157		raw_local_irq_save(flags);
-   158		efi_set_pgd(&efi_mm);
-   159	
-   160		ret = efi_psci.psci_handler(function_id, arg0, arg1, arg2);
-   161	
-   162		efi_set_pgd(current->active_mm);
-   163		raw_local_irq_restore(flags);
-   164	
-   165		return ret;
-   166	}
-   167	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/char/ipmi/ipmi_ssif.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+> index ba779f1abb5b2..f199cc1948446 100644
+> --- a/drivers/char/ipmi/ipmi_ssif.c
+> +++ b/drivers/char/ipmi/ipmi_ssif.c
+> @@ -1625,7 +1625,7 @@ static int ssif_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	unsigned char     *resp;
+>  	struct ssif_info   *ssif_info;
+>  	int               rv = 0;
+> -	int               len;
+> +	int               len = 0;
+>  	int               i;
+>  	u8		  slave_addr = 0;
+>  	struct ssif_addr_info *addr_info = NULL;
+> -- 
+> 2.26.3
+> 
