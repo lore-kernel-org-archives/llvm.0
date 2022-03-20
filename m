@@ -1,78 +1,91 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C43533F1
-	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 15:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647789749; x=1679325749;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7h7VKqjqREY/mBDGPxzGzD0dmkyuCZT5dWmwIMhSAlE=;
-  b=d1JlAMa9seKbXggxc8nDUAmD1KxcaC9bqtcsjjWIjl3w/SVsM6fBFXgP
-   KgjVh639+7jt80rll9IeMyHpNUwizgQu0iMzjsRZvS+CLvkL11JB92XCY
-   YBSM7L2s1+9kHQqOACIdlsaZTX7w1GYOhLrC7XBc03Ivil2VGt0te+cK8
-   U4rDmWJr5Jj739ykAWZCCu9wsJxaKlUF8ahIqJ1NgBnLQ3H/82OBqxiil
-   8Xprfyf17ZIZWuSCvlEV6HNE1W1VjuMfTvvK7dCNzvqlUCnypHlsFh/dU
-   8aymG7rE6WHevfdU4FacopJSA9v0jLkG2Ls6DTciwRfXn1iRJfgNOW5Hw
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="320609137"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="320609137"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 08:22:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="716193914"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 Mar 2022 08:22:27 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nVxNz-000H1I-3G; Sun, 20 Mar 2022 15:22:27 +0000
-Date: Sun, 20 Mar 2022 23:22:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 1563/2335] ./usr/include/linux/if_link.h:5:10:
- fatal error: 'uapi/linux/netlink.h' file not found
-Message-ID: <202203202314.QNWyvGYM-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C3A33F1
+	for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 15:32:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414E6C340EE;
+	Sun, 20 Mar 2022 15:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647790321;
+	bh=I2fW2DdqNLY/ug4CBXSippa33Z0N+xv29/G1k8QsKmM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=JOaOpGdu7fFqvE6fUZxBZxUMph0BWJx8Bp+4/wdUadaARpL4pZEh7k5yY88GIDvhm
+	 syJi9YcMeD5ar+0knenq/PS7RhiNC2wiwr90K3NRDkdcgBc36y9rr6euWE1gzUGagZ
+	 xpzGIIXu4IkvhQO+rmgAt22DZKWhPPxw6m8OYUt7ePUCkFQyxSKMvQ62oHWNGAJCcm
+	 jFSn78SgT17gTvMTuJh0L+3XA8RGFVGvHRHrAcWJeSIPdYpxD44uzww6ifErv2VNtl
+	 JXVZ9quP5busRu610z2LHoX3a7RFzhPIWHKO1Gqju7cJs2Us0FvEySKGLksTQrCHgZ
+	 48AYBcq+irnlw==
+Date: Sun, 20 Mar 2022 15:39:25 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: trix@redhat.com
+Cc: roan@protonic.nl, lars@metafoo.de, nathan@kernel.org,
+ ndesaulniers@google.com, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] iio: scd4x: check return of scd4x_write_and_fetch
+Message-ID: <20220320153925.12bb01eb@jic23-huawei>
+In-Reply-To: <20220301025223.223223-1-trix@redhat.com>
+References: <20220301025223.223223-1-trix@redhat.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   85293bf3fca6d85608cff1447ce3097583f15fab
-commit: f9feb19bd4ff82d90e72d9471ed90de86b38aeb5 [1563/2335] headers/deps: net: Optimize <uapi/linux/if_link.h>
-config: i386-randconfig-a012-20220314 (https://download.01.org/0day-ci/archive/20220320/202203202314.QNWyvGYM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=f9feb19bd4ff82d90e72d9471ed90de86b38aeb5
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout f9feb19bd4ff82d90e72d9471ed90de86b38aeb5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Mon, 28 Feb 2022 18:52:23 -0800
+trix@redhat.com wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> From: Tom Rix <trix@redhat.com>
+> 
+> Clang static analysis reports this problem
+> scd4x.c:474:10: warning: The left operand of '==' is a
+>   garbage value
+>   if (val == 0xff) {
+>       ~~~ ^
+> val is only set from a successful call to scd4x_write_and_fetch()
+> So check it's return.
+> 
+> Fixes: 49d22b695cbb ("drivers: iio: chemical: Add support for Sensirion SCD4x CO2 sensor")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-All errors (new ones prefixed by >>):
+Hi Tom,
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/if_link.h:5:10: fatal error: 'uapi/linux/netlink.h' file not found
-   #include <uapi/linux/netlink.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+This looks good to me.  Timing was a bit unfortunate so now I'll queue this up for post
+rc1.  Hence applied to my local copy of fixes-togreg (which includes the stuff that
+should go in during the merge window) but not pushed out until I can rebase on rc1.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+Jonathan
+
+> ---
+> v2: rework return on error logic to be similar to existing code
+> 
+>  drivers/iio/chemical/scd4x.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/chemical/scd4x.c b/drivers/iio/chemical/scd4x.c
+> index 20d4e7584e923..37143b5526ee6 100644
+> --- a/drivers/iio/chemical/scd4x.c
+> +++ b/drivers/iio/chemical/scd4x.c
+> @@ -471,12 +471,15 @@ static ssize_t calibration_forced_value_store(struct device *dev,
+>  	ret = scd4x_write_and_fetch(state, CMD_FRC, arg, &val, sizeof(val));
+>  	mutex_unlock(&state->lock);
+>  
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (val == 0xff) {
+>  		dev_err(dev, "forced calibration has failed");
+>  		return -EINVAL;
+>  	}
+>  
+> -	return ret ?: len;
+> +	return len;
+>  }
+>  
+>  static IIO_DEVICE_ATTR_RW(calibration_auto_enable, 0);
+
