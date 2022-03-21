@@ -1,93 +1,188 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E6E42F24
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 09:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647855628; x=1679391628;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=46zPOcGkyW6Eo2Ri3C8hctKEdvTtcpCrYAuST6cSXTo=;
-  b=PQIF3+w5+ZvjO0FsItOwTUuvfnsSxhvQUKTxL3WnBw4eAe11ZtfVrAcR
-   gTaiv+rxgX6iaBjbFwk/xlLn6BrfcShW8EjnLRVMffuCX3Eabspaf192s
-   TEx5WhGVA5izVSVQ5E/Zh7fk9FJc9K5ekQ3p5FFPAwPOQLwsXVSa+1vgg
-   azCFDfGe18vEg1LAp8lg73QT6aRI5tT71DNFRL9j3dixl47W5AIdF5LX8
-   w3htZl+cECQXgIumjYyiCsRUOiDH1r0FsUwpkIYDftGKbGA40pRTSAjPF
-   wsteEPwJMMsxo3ccy2vt9CnqmlwoWTCQiSYF1vT7xWYoEIaBdYQXh4PGz
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="244983576"
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="244983576"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 02:40:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="600429789"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Mar 2022 02:40:25 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nWEWW-000HgW-ND; Mon, 21 Mar 2022 09:40:24 +0000
-Date: Mon, 21 Mar 2022 17:39:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heiko Stuebner <heiko@sntech.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [ammarfaizi2-block:palmer/linux/riscv-d1-merge 19/20]
- arch/riscv/errata/thead/errata.c:61:6: warning: variable 'cpu_apply_errata'
- set but not used
-Message-ID: <202203211709.nW1Uc4Zs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457F52F24
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 09:52:14 +0000 (UTC)
+X-UUID: 9a18b6fa889b44c89b8c3cf6d017351e-20220321
+X-UUID: 9a18b6fa889b44c89b8c3cf6d017351e-20220321
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+	(envelope-from <ck.hu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 819131955; Mon, 21 Mar 2022 17:52:09 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 21 Mar 2022 17:52:08 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 21 Mar 2022 17:52:08 +0800
+Message-ID: <08f212f745ed5d1fde90b3d714c6f71b6f6f8f18.camel@mediatek.com>
+Subject: Re: [PATCH v16 01/22] dt-bindings: mediatek: add vdosys1 RDMA
+ definition for mt8195
+From: CK Hu <ck.hu@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <srv_heupstream@mediatek.com>, David Airlie
+	<airlied@linux.ie>, "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+	<singo.chang@mediatek.com>, <llvm@lists.linux.dev>, Nick Desaulniers
+	<ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
+Date: Mon, 21 Mar 2022 17:52:04 +0800
+In-Reply-To: <20220318142009.2796-2-nancy.lin@mediatek.com>
+References: <20220318142009.2796-1-nancy.lin@mediatek.com>
+	 <20220318142009.2796-2-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-d1-merge
-head:   93a6d3583d613a2ff1c6d28060c78af8631e0d21
-commit: 5acf4c1828afd2b357b001c796fbbbaad5461ba4 [19/20] riscv: add memory-type errata for T-Head
-config: riscv-randconfig-c006-20220321 (https://download.01.org/0day-ci/archive/20220321/202203211709.nW1Uc4Zs-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/5acf4c1828afd2b357b001c796fbbbaad5461ba4
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-d1-merge
-        git checkout 5acf4c1828afd2b357b001c796fbbbaad5461ba4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Hi, Nancy:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Fri, 2022-03-18 at 22:19 +0800, Nancy.Lin wrote:
+> Add vdosys1 RDMA definition.
 
-All warnings (new ones prefixed by >>):
+See my review comment in v14 [1].
 
->> arch/riscv/errata/thead/errata.c:61:6: warning: variable 'cpu_apply_errata' set but not used [-Wunused-but-set-variable]
-           u32 cpu_apply_errata = 0;
-               ^
-   1 warning generated.
+[1] 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220310035515.16881-2-nancy.lin@mediatek.com/
 
+Regards,
+CK
 
-vim +/cpu_apply_errata +61 arch/riscv/errata/thead/errata.c
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  .../arm/mediatek/mediatek,mdp-rdma.yaml       | 86
+> +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+>  create mode 100644
+> Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-rdma.yaml
+> 
+> diff --git
+> a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-
+> rdma.yaml
+> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-
+> rdma.yaml
+> new file mode 100644
+> index 000000000000..6ab773569462
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mdp-
+> rdma.yaml
+> @@ -0,0 +1,86 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: 
+> https://urldefense.com/v3/__http://devicetree.org/schemas/arm/mediatek/mediatek,mdp-rdma.yaml*__;Iw!!CTRNKA9wMg0ARbw!wJXD2xhE7TC3ASmUW1ftsqaOyZ8KrCjFHeXywwGFdNi56kNKasQxnWfzt81DUQ$
+>  
+> +$schema: 
+> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!wJXD2xhE7TC3ASmUW1ftsqaOyZ8KrCjFHeXywwGFdNi56kNKasQxnWcP0BMRuw$
+>  
+> +
+> +title: Mediatek MDP RDMA
+> +
+> +maintainers:
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +
+> +description: |
+> +  The mediatek MDP RDMA stands for Read Direct Memory Access.
+> +  It provides real time data to the back-end panel driver, such as
+> DSI,
+> +  DPI and DP_INTF.
+> +  It contains one line buffer to store the sufficient pixel data.
+> +  RDMA device node must be siblings to the central MMSYS_CONFIG
+> node.
+> +  For a description of the MMSYS_CONFIG binding, see
+> +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> for details.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: mediatek,mt8195-vdo1-rdma
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    description: A phandle and PM domain specifier as defined by
+> bindings of
+> +      the power controller specified by phandle. See
+> +      Documentation/devicetree/bindings/power/power-domain.yaml for
+> details.
+> +
+> +  clocks:
+> +    items:
+> +      - description: RDMA Clock
+> +
+> +  iommus:
+> +    description:
+> +      This property should point to the respective IOMMU block with
+> master port as argument,
+> +      see
+> Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for
+> details.
+> +
+> +  mediatek,gce-client-reg:
+> +    description:
+> +      The register of display function block to be set by gce. There
+> are 4 arguments,
+> +      such as gce node, subsys id, offset and register size. The
+> subsys id that is
+> +      mapping to the register of display function blocks is defined
+> in the gce header
+> +      include/include/dt-bindings/gce/<chip>-gce.h of each chips.
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - power-domains
+> +  - clocks
+> +  - iommus
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/mt8195-clk.h>
+> +    #include <dt-bindings/power/mt8195-power.h>
+> +    #include <dt-bindings/gce/mt8195-gce.h>
+> +    #include <dt-bindings/memory/mt8195-memory-port.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        vdo1_rdma0: mdp-rdma@1c104000 {
+> +            compatible = "mediatek,mt8195-vdo1-rdma";
+> +            reg = <0 0x1c104000 0 0x1000>;
+> +            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
+> +            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
+> +            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
+> +            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
+> +            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX 0x4000
+> 0x1000>;
+> +        };
+> +    };
 
-    54	
-    55	void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
-    56						      unsigned long archid, unsigned long impid,
-    57						      unsigned int stage)
-    58	{
-    59		struct alt_entry *alt;
-    60		u32 cpu_req_errata = thead_errata_probe(stage, archid, impid);
-  > 61		u32 cpu_apply_errata = 0;
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
