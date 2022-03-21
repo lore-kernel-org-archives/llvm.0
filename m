@@ -1,77 +1,83 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4EAF2C9C
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 12:31:55 +0000 (UTC)
-Received: by mail-pl1-f170.google.com with SMTP id k6so5424077plg.12
-        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 05:31:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=puzh/4zgw5qsrOsU7JEwzpl2qiVxo2BGWuYm1B1pvJc=;
-        b=FOkQE8b15ofFRmlKdr6pjDgjDhJz4PC38Py9SSNAu0nnkM47LTPU8wiIAj/jZ4OKM7
-         qh7E0Sn2BbEx2zoZw1/Ji/fpAJnOrxQqKX5aIm6XHCLFBWzF/Ld2G7WhPE6AV2au0Hpz
-         GwCCUqr1xUsUnyWm/q2STFAefL61fCIptPeQNbVYXE3Z/7dAzjxe04cqvgDuAQzMSp1S
-         opIRB4V2nroDDj+fogAtRn52dnJM56gyezVmeghr8U8l4eTFZdnL5UyQBeT1cXufm+FY
-         oW0/NpLBpkEUpVc3ZKScnspxuMz+twZ9ZV/HvGJZmJ837fe7JhZm63EJEDtcIFNL1oql
-         Hoxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=puzh/4zgw5qsrOsU7JEwzpl2qiVxo2BGWuYm1B1pvJc=;
-        b=SCLLW8izrl5Ab6MblJWexoz7M/M9vLUuHcwnSNwHHfoYuDt69Qjl84OkyiAJsW/MoU
-         GFpY3qE8qDULoaM+8eRAP2QErqXydBh03K/Fw+3OF6LjDA3ELOUzRlLbdEWapB7sEoxh
-         6cRseAy5pt7KkOIO7QCSlTB96woXJOjcppYgMEm5YurFPIPGon+tLqm2nkDuLOkverQq
-         +LoS5J7exei9dNFtrQNFM1ErTO/0gytuijPpS+Zt59HE80unhvVPy8EXM6xbKFeCk+9N
-         RRVbaa34oE8KWvHdVpgBoIWN5tMzLCSTvqXkMGMC/9gNHMLYS14vhJXk5X+dnxbgfV9B
-         MC1A==
-X-Gm-Message-State: AOAM531NzMw+6+SF3WAtrMNIwdxLvgCXsBd07GpPyNQCUibP3CO9zmSC
-	BsBTJKwUx5MOsTpoaLhF4hEJDg==
-X-Google-Smtp-Source: ABdhPJwf6l5qKXE4WAgPzo68qMtDZFuJ6rGv+5jCaoBU8zk9mNef60xf59zruIe/sIvbJXO9IoxxSg==
-X-Received: by 2002:a17:902:f209:b0:154:3b94:e2f6 with SMTP id m9-20020a170902f20900b001543b94e2f6mr9225257plc.93.1647865914885;
-        Mon, 21 Mar 2022 05:31:54 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id mu1-20020a17090b388100b001bf861ef154sm21485472pjb.55.2022.03.21.05.31.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 05:31:54 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: xen-devel@lists.xenproject.org, linux-block@vger.kernel.org, Roger Pau Monné <roger.pau@citrix.com>, Colin Ian King <colin.i.king@gmail.com>
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-In-Reply-To: <20220317234646.78158-1-colin.i.king@gmail.com>
-References: <20220317234646.78158-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH] xen-blkback: remove redundant assignment to variable i
-Message-Id: <164786591377.5770.820740111597207436.b4-ty@kernel.dk>
-Date: Mon, 21 Mar 2022 06:31:53 -0600
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4C1C4289
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 13:18:13 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C6ADE1042;
+	Mon, 21 Mar 2022 06:18:11 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D09BE3F73D;
+	Mon, 21 Mar 2022 06:18:10 -0700 (PDT)
+Message-ID: <9159dd7d-0c5a-10a3-be47-7fb4a30a234b@arm.com>
+Date: Mon, 21 Mar 2022 13:18:05 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] arm64: assembler: Fine-tune code to improve code
+ readability
+Content-Language: en-GB
+To: Zhiyuan Dai <daizhiyuan@phytium.com.cn>, catalin.marinas@arm.com,
+ will@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <1647831274-3555-1-git-send-email-daizhiyuan@phytium.com.cn>
+From: Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <1647831274-3555-1-git-send-email-daizhiyuan@phytium.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, 17 Mar 2022 23:46:46 +0000, Colin Ian King wrote:
-> Variable i is being assigned a value that is never read, it is being
-> re-assigned later in a for-loop. The assignment is redundant and can
-> be removed.
+On 2022-03-21 02:54, Zhiyuan Dai wrote:
+> This patch tweaks the code to improve readability.
+
+...but it also changes what the code actually does :(
+
+> Defined values are:
+>   PMUVer == 0b0000 : Performance Monitors Extension not implemented.
+
+Plus all the other values, but crucially up to:
+
+"0b1111 IMPLEMENTATION DEFINED form of performance monitors supported, 
+PMUv3 not supported."
+
+> Signed-off-by: Zhiyuan Dai <daizhiyuan@phytium.com.cn>
+> ---
+>   arch/arm64/include/asm/assembler.h | 9 ++++-----
+>   1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> Cleans up clang scan build warning:
-> drivers/block/xen-blkback/blkback.c:934:14: warning: Although the value
-> stored to 'i' is used in the enclosing expression, the value is never
-> actually read from 'i' [deadcode.DeadStores]
-> 
-> [...]
+> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+> index 6ebdc0f..efd43a1 100644
+> --- a/arch/arm64/include/asm/assembler.h
+> +++ b/arch/arm64/include/asm/assembler.h
+> @@ -489,11 +489,10 @@
+>    */
+>   	.macro	reset_pmuserenr_el0, tmpreg
+>   	mrs	\tmpreg, id_aa64dfr0_el1
+> -	sbfx	\tmpreg, \tmpreg, #ID_AA64DFR0_PMUVER_SHIFT, #4
 
-Applied, thanks!
+This extracts a *signed* 4-bit field...
 
-[1/1] xen-blkback: remove redundant assignment to variable i
-      commit: 93b4e74789dbdefcffc7baac107069e74d98513c
+> -	cmp	\tmpreg, #1			// Skip if no PMU present
 
-Best regards,
--- 
-Jens Axboe
+...so this rejects values of both 0 and -1.
 
+> -	b.lt	9000f
+> -	msr	pmuserenr_el0, xzr		// Disable PMU access from EL0
+> -9000:
+> +	ubfx	\tmpreg, \tmpreg, #ID_AA64DFR0_PMUVER_SHIFT, #4
+> +	cbz	\tmpreg, .Lskip_pmu_\@		// Skip if no PMU present
+> +	msr_s   SYS_PMUSERENR_EL0, xzr	// Disable PMU access from EL0
 
+How confident are you that it's safe to touch a PMUv3 register in an 
+unknown implementation which explicitly *isn't* PMUv3?
+
+Thanks,
+Robin.
+
+> +.Lskip_pmu_\@:
+>   	.endm
+>   
+>   /*
