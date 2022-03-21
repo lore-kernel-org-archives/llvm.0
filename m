@@ -1,123 +1,68 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF4336F
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 02:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647831235; x=1679367235;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qFCBBl+Sw+dHadJW+S6qeiLknxva1nkER2nqihe0HKQ=;
-  b=XFmHvLmAUF1UlxlA5bYSZV2Rse3bFuCnjFS116jMcRVl8fD4DkUmd3dN
-   4d/13wjTZ9cW0lPBXrKag0qJ+D4BrIqli8ITeNeXxHLehxKsi/kNAbwqf
-   uQpWU/nDX7mxBpD2tTqMIKjNQgNBmFSJicJhsSmrz0ZoqcFbDVcvV4Z9d
-   EeGrDrMGfR96vfk64im4gatpSxhTYwQL5uXdSlXZWyj/PHIXUrh6V1jra
-   iMryMbva22/mQ9h9YN9df7ZDYDQbwlDukEExP23ewtdHmYR4GP5bWWU2p
-   fktD/BnabOWHHeP164VP9IO/rOZhlOw47zLKi9HBLgsyBOWkecPk5dX2y
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257175398"
-X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
-   d="scan'208";a="257175398"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 19:53:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
-   d="scan'208";a="600335412"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Mar 2022 19:53:51 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nW8B4-000HOm-GE; Mon, 21 Mar 2022 02:53:50 +0000
-Date: Mon, 21 Mar 2022 10:52:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Will Deacon <will@kernel.org>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	"open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v2] iommu/amd: Add support to indicate whether DMA remap
- support is enabled
-Message-ID: <202203211052.WEPydSQ9-lkp@intel.com>
-References: <20220318223104.7049-1-mario.limonciello@amd.com>
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 5FB9336F
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 02:54:53 +0000 (UTC)
+Received: from prodtpl.icoremail.net (unknown [10.12.1.20])
+	by hzbj-icmmx-1 (Coremail) with SMTP id AQAAfwDHA3mp6DdiHqZ7Ag--.6346S2;
+	Mon, 21 Mar 2022 10:53:29 +0800 (CST)
+Received: from centos7.localdomain (unknown [202.43.158.76])
+	by mail (Coremail) with SMTP id AQAAfwDnyqPt6DdiYiUAAA--.1485S3;
+	Mon, 21 Mar 2022 10:54:38 +0800 (CST)
+From: Zhiyuan Dai <daizhiyuan@phytium.com.cn>
+To: catalin.marinas@arm.com,
+	will@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Zhiyuan Dai <daizhiyuan@phytium.com.cn>
+Subject: [PATCH] arm64: assembler: Fine-tune code to improve code readability
+Date: Mon, 21 Mar 2022 10:54:34 +0800
+Message-Id: <1647831274-3555-1-git-send-email-daizhiyuan@phytium.com.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID:AQAAfwDnyqPt6DdiYiUAAA--.1485S3
+X-CM-SenderInfo: hgdl6xpl1xt0o6sk53xlxphulrpou0/
+Authentication-Results: hzbj-icmmx-1; spf=neutral smtp.mail=daizhiyuan
+	@phytium.com.cn;
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Gr17XFWkCF17KF1xZr45trb_yoWDAFbEkw
+	1Sqw48GrWfJrZIqry8tF1FyFy0kw4kZFZxu3Wjkrn7Jr9Fv3W5Gws7JF9Y9r47WF15Ca1x
+	ua4kJFWfJw1jqjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrnU
+	Uv73VFW2AGmfu7jjvjm3AaLaJ3UjIYCTnIWjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRUUUUU
+	UUUU=
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318223104.7049-1-mario.limonciello@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Mario,
+This patch tweaks the code to improve readability.
 
-Thank you for the patch! Yet something to improve:
+Defined values are:
+ PMUVer == 0b0000 : Performance Monitors Extension not implemented.
 
-[auto build test ERROR on joro-iommu/next]
-[also build test ERROR on v5.17 next-20220318]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Zhiyuan Dai <daizhiyuan@phytium.com.cn>
+---
+ arch/arm64/include/asm/assembler.h | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-url:    https://github.com/0day-ci/linux/commits/Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220319-063131
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
-config: x86_64-buildonly-randconfig-r004-20220321 (https://download.01.org/0day-ci/archive/20220321/202203211052.WEPydSQ9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/105690537e561d997e376617aa6a7d6d7b74a6a6
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220319-063131
-        git checkout 105690537e561d997e376617aa6a7d6d7b74a6a6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iommu/amd/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/iommu/amd/iommu.c:2165:7: error: use of undeclared identifier 'IOMMU_CAP_PRE_BOOT_PROTECTION'
-           case IOMMU_CAP_PRE_BOOT_PROTECTION:
-                ^
-   1 error generated.
-
-
-vim +/IOMMU_CAP_PRE_BOOT_PROTECTION +2165 drivers/iommu/amd/iommu.c
-
-  2155	
-  2156	static bool amd_iommu_capable(enum iommu_cap cap)
-  2157	{
-  2158		switch (cap) {
-  2159		case IOMMU_CAP_CACHE_COHERENCY:
-  2160			return true;
-  2161		case IOMMU_CAP_INTR_REMAP:
-  2162			return (irq_remapping_enabled == 1);
-  2163		case IOMMU_CAP_NOEXEC:
-  2164			return false;
-> 2165		case IOMMU_CAP_PRE_BOOT_PROTECTION:
-  2166			return amdr_ivrs_remap_support;
-  2167		default:
-  2168			break;
-  2169		}
-  2170	
-  2171		return false;
-  2172	}
-  2173	
-
+diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+index 6ebdc0f..efd43a1 100644
+--- a/arch/arm64/include/asm/assembler.h
++++ b/arch/arm64/include/asm/assembler.h
+@@ -489,11 +489,10 @@
+  */
+ 	.macro	reset_pmuserenr_el0, tmpreg
+ 	mrs	\tmpreg, id_aa64dfr0_el1
+-	sbfx	\tmpreg, \tmpreg, #ID_AA64DFR0_PMUVER_SHIFT, #4
+-	cmp	\tmpreg, #1			// Skip if no PMU present
+-	b.lt	9000f
+-	msr	pmuserenr_el0, xzr		// Disable PMU access from EL0
+-9000:
++	ubfx	\tmpreg, \tmpreg, #ID_AA64DFR0_PMUVER_SHIFT, #4
++	cbz	\tmpreg, .Lskip_pmu_\@		// Skip if no PMU present
++	msr_s   SYS_PMUSERENR_EL0, xzr	// Disable PMU access from EL0
++.Lskip_pmu_\@:
+ 	.endm
+ 
+ /*
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+1.8.3.1
+
