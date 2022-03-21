@@ -1,110 +1,93 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DED357D0
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 15:36:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647876968; x=1679412968;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=45BRElyQlnzf/S18fYMTUOtYkpVmV2cKz2ZBPWFwUqY=;
-  b=OOymeCJNC4PIdt1osSH9uMyhX90wWk+GnpB0TTGh+xkzyvNpZLB0mMyB
-   3t0UzGq3stiJUFEzxJ/fQP70QeIiAKyeEAYViTYs1nMXqbcHBw0AgLZy0
-   mXLgZK2xZvKQ5OP82ORfTxz/PGR30JbndkEmz497Rzh9TXD3Kudnb6A6O
-   X0k5CcAwtTEHYFkJLMPkX5rVoqMopbposDvCVuIZ0+cMyHaXrs+z8kpUJ
-   HvFFJNWGqPLsqQKbBJzo0rzK1iD+PEHCJQDsygAboAq9R2FMR72XPBC9p
-   Crl1tkub8XJ668gdUwxTnUwKwMM7YNTZLY4lusfvwdX3q0A4QrxIerUeg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257770196"
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="257770196"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 08:36:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="648606062"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2022 08:36:03 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nWK4g-000HwR-KK; Mon, 21 Mar 2022 15:36:02 +0000
-Date: Mon, 21 Mar 2022 23:35:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Song Liu <song@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
-Subject: [ammarfaizi2-block:bpf/bpf-next/master 251/258]
- kernel/bpf/core.c:847:9: error: use of undeclared identifier 'PMD_SIZE'
-Message-ID: <202203212309.ifp4edvz-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EB663E
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 17:06:15 +0000 (UTC)
+Received: by mail-lj1-f181.google.com with SMTP id b5so2170221ljf.13
+        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 10:06:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R/7FJJ7qSAHgZRJnHXKO5tZ1Hgqiu2AMH/REX+ZRS18=;
+        b=CcgHOId2RyMEcxGfJARNzZUbdlGCM1utZBV6z2njMf4aotZ5ZdYT92P6HnVd9xeSDn
+         6SKI9lq8krPDyV7w1W69qTqXWW/ZdAWa6Mrom2kCjhCKYZp8s9hila6IncLMwIkz1Ozv
+         Oq53zzxlEASFXHt6+NFvB+ficHM9zDUPGzfao=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R/7FJJ7qSAHgZRJnHXKO5tZ1Hgqiu2AMH/REX+ZRS18=;
+        b=UNpyMBzg3lu6k4Eze6ujxf8iFF+i7lGeeQz5zokH7s8vSSsjji9VladeDmMwooZN+V
+         HJhnnXpOvg4werTYow6kqg75QgArdxo0VFZpRCTAdjOh3D40JmxuPPpLSIL0HDSHagDk
+         73+UatKk1bMSOmpIyDcWpGcLfo/AV9JY7lwOxz2EnivG53LHAC4MFcGTwH2GC+CkEcnD
+         TzR7JKF5mMdQLgDURO/YQpK7Ci6bpgHx1QJDUUmOY+PmRnUAHW9lgOyQ9aB/LPZjvQD/
+         NCkgJhlDuBc6phiSPlgEDeuKL/VchPmoipXYIXZLGG47mbFb1sNE705ThXJva4ePvzwE
+         Y7nA==
+X-Gm-Message-State: AOAM531VhWU0jlNna7JU9SWYP5lSAARd/09r6MwAEeZ4Ls+3ynjFTECC
+	GXgycatXN6s6KpL2LHipPioYkgscYNruJm0D48E=
+X-Google-Smtp-Source: ABdhPJw/BLSTIvRphwDahUgeawA2hg/O4P9KQ37txElc7qO4wQMpoH4STWz0FFxmqp5wjmUuYVp3LQ==
+X-Received: by 2002:a05:651c:b07:b0:247:e06d:8943 with SMTP id b7-20020a05651c0b0700b00247e06d8943mr16200238ljr.426.1647882372972;
+        Mon, 21 Mar 2022 10:06:12 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id j16-20020a05651231d000b0044a01d1ee94sm1436250lfe.306.2022.03.21.10.06.11
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 10:06:12 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id w7so25643992lfd.6
+        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 10:06:11 -0700 (PDT)
+X-Received: by 2002:a05:6512:b13:b0:448:90c6:dc49 with SMTP id
+ w19-20020a0565120b1300b0044890c6dc49mr15823991lfu.542.1647882371543; Mon, 21
+ Mar 2022 10:06:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220316213055.2351342-1-morbo@google.com> <20220319222228.4160598-1-morbo@google.com>
+ <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
+ <CAHk-=wgH3kbKcNwBO7os3BuU523Gd2aqdu0dVvf50bJbLKrLJg@mail.gmail.com> <CAHp75Vc+T3eM9=yu9XccXKmf1ZnR6dz1ZP_eL4faPnM8ZNbbnQ@mail.gmail.com>
+In-Reply-To: <CAHp75Vc+T3eM9=yu9XccXKmf1ZnR6dz1ZP_eL4faPnM8ZNbbnQ@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 21 Mar 2022 10:05:55 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi0zxgKyHn1F_K6o-uxvPmdKA0njcyD3PDSAvVZgdk4OA@mail.gmail.com>
+Message-ID: <CAHk-=wi0zxgKyHn1F_K6o-uxvPmdKA0njcyD3PDSAvVZgdk4OA@mail.gmail.com>
+Subject: Re: [PATCH v2] gpiolib: acpi: use correct format characters
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Bill Wendling <morbo@google.com>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf-next/master
-head:   7ada3787e91c89b0aa7abf47682e8e587b855c13
-commit: ef078600eec20f20eb7833cf597d4a5edf2953c1 [251/258] bpf: Select proper size for bpf_prog_pack
-config: arm-randconfig-c002-20220321 (https://download.01.org/0day-ci/archive/20220321/202203212309.ifp4edvz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/ef078600eec20f20eb7833cf597d4a5edf2953c1
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block bpf/bpf-next/master
-        git checkout ef078600eec20f20eb7833cf597d4a5edf2953c1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Mon, Mar 21, 2022 at 3:09 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> Would you sign off on this? I will then replace the original patch
+> with your version.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sure. Note that I (intentionally) do bogus indentation of my inline
+patches, because that thing wasn't actually _tested_. It's obvious
+enough and should fix the issue, but I just wanted to point that out.
 
-All errors (new ones prefixed by >>):
+With that said, it's _so_ obviously correct (famous last words) that
+I'll happily add my sign-off to it:
 
->> kernel/bpf/core.c:847:9: error: use of undeclared identifier 'PMD_SIZE'
-           size = PMD_SIZE * num_online_nodes();
-                  ^
-   kernel/bpf/core.c:1629:12: warning: no previous prototype for function 'bpf_probe_read_kernel' [-Wmissing-prototypes]
-   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-              ^
-   kernel/bpf/core.c:1629:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-   ^
-   static 
-   1 warning and 1 error generated.
+    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 
+and I suspect the explanations in the email could probably be used as
+much of a commit message.
 
-vim +/PMD_SIZE +847 kernel/bpf/core.c
+> And for the record I have a follow up patch to clearly show that pin
+> is always unsigned, induced by this discussion.
 
-   841	
-   842	static size_t select_bpf_prog_pack_size(void)
-   843	{
-   844		size_t size;
-   845		void *ptr;
-   846	
- > 847		size = PMD_SIZE * num_online_nodes();
-   848		ptr = module_alloc(size);
-   849	
-   850		/* Test whether we can get huge pages. If not just use PAGE_SIZE
-   851		 * packs.
-   852		 */
-   853		if (!ptr || !is_vm_area_hugepages(ptr))
-   854			size = PAGE_SIZE;
-   855	
-   856		vfree(ptr);
-   857		return size;
-   858	}
-   859	
+Yeah, that sounds like a good idea - for a compiler it was obvious due
+to the load from a 'u16' array, but a human would actually have to go
+and check what that pin_table[] array was to see that "yup, that can't
+be negative in 'int'".
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+                Linus
