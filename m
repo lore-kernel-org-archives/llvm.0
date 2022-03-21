@@ -1,162 +1,129 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CEF63E
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 17:51:43 +0000 (UTC)
-Received: by mail-lj1-f171.google.com with SMTP id bn33so20944799ljb.6
-        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 10:51:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5E516126
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 18:05:07 +0000 (UTC)
+Received: by mail-pg1-f177.google.com with SMTP id d76so1534558pga.8
+        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 11:05:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=l7hXKhWGjeEcs+khpwcGCmvFoDcx/GKGrlZ2jh0BxlI=;
-        b=sk+tKRXHM2IngLuoMXbMO5D38y7nm/248UDBbwtMyxArJUXf+mlKvqiFHiVt4ZTDXS
-         XseMc+bCUW1A4/PpVfEcGmTob9SjNAEG+Siy2anofSZJzgzDGcjIR1eOTW61J8MVQdql
-         W+cVKOunhCc1qG2s8VO6JSV3wu7/jCaA2KhKuRKhMDKMZTDOFHPztOvsllMG1YS4RtDX
-         Vl/LjZSEv89CmBiXKrslGApiy0qrp/WlsN4dI0HE3WDhO1K+4b+Ok7uid7Hiw9h3GeOA
-         IWWA7qcZbvpO3oiKz8uHh0c9YeAJzs9HiS2eN0OIPlogqVyt2JtO0MwCZvhXAjt4GpYK
-         wScA==
+        bh=VSE/zjzMF4GUAODi9hUWbSKALcdRpi7FbYvoQ5n/zHE=;
+        b=fcyAfSP5auLlxa8uxnRYod/EMf7JE1qAALckx8tRF9JKQppHhU9QysjLogLKyxYU6a
+         2R0dvGNpSM3MjBR8fOWEDbotvhLJ42Pxjh1OR471p6ss5wu8DTreSiar/deSJfqS5Bz0
+         ZJrDvhsTfX+rv0DePsGh8eO9zBQS5Q1E1B9m1Dl2X5V7XOPM9zbO8xspgoNJrJraHldJ
+         0/lC1CNncq0xlOpMy1ldeuil3tJ8rYv0pzU/bwMTuDCOBr8j27BAiw2yTlVByaNLzcAH
+         MBY/ZTGVla0e3oHRwwiI3404xKCORRZ7UC0HAgiiacCLYjqVGDFCnIPNgeysH1TGdgfN
+         R6lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=l7hXKhWGjeEcs+khpwcGCmvFoDcx/GKGrlZ2jh0BxlI=;
-        b=dDep4GqVv4LStcAx9RD6GSPYSEew1dJteId+8JIJMK+LjJa3K4SofD4C2dQ7ygr4Ac
-         i8iZsXOpDVT8B2Pp8VeoUksduSfzUfFEUMKywtt5Bctcbx18Xy50Z8WBDs+dXIT7e4p+
-         JTOdpITUVqjDuCxAmh+xjezrfmuqr243k4EPrZzCVpgTB18CPQqPSh4tcJ62FgckgO8g
-         hh/UdTn2w4XYCLjir1wlHYqK/Ovli1R5cTwdpsc5dcear5ZVPwIDXDnrlfLnQ7vjd+aL
-         h+46C59prClR+1mR7L4TWVRJfCpVEzvT3UryhzxMTxDhNp3SMwI4yN4RO+Mek/xrqZqV
-         35wQ==
-X-Gm-Message-State: AOAM533W2YsIMbV7QWqFpsxnZMyf4PKr0hYg7dasHjrkWCjTh47opXxM
-	+okQT+fOTRB5CHyHNkDC54NRmVGn3j3bHP7iVD/Y4Q==
-X-Google-Smtp-Source: ABdhPJwc4g1+tnNgptkpnh7MDkBXPuU8MLqJs8gmUyYZJKI5J8K5reugeGbV1rdIbF/ovznFDHZzxwctW+/8mjNcfvM=
-X-Received: by 2002:a2e:3004:0:b0:223:c126:5d1a with SMTP id
- w4-20020a2e3004000000b00223c1265d1amr15912234ljw.408.1647885101104; Mon, 21
- Mar 2022 10:51:41 -0700 (PDT)
+        bh=VSE/zjzMF4GUAODi9hUWbSKALcdRpi7FbYvoQ5n/zHE=;
+        b=tt+0MJRVdzsLpEyttp1k0Na4Iq/p0PlUT1lUTtVRzE29UKL9YUjbnEebr83sGOxP7L
+         3k2KLliyN/v0ucL6hZvMC99ZtBSCl5IIGIpWX4eHFh8k8RMBUcggsURVUR7g45UL8LYW
+         +zeagWbgYZwggxY5iFQa5EUvrayDOCCo/TcDI8PJ0BWGrYZ4th5XS4KV+ME/dR5P2G+7
+         W1nY3QWdkhCBz4BA4JWPnkxz0WLujeRr8b5Lswp2sSFhlPRQx5VTozxG4uRPYZaVx77l
+         wyvFji6mxdjhQyV2wMgOT6p1AtXasL6iVUbvtj/JwWfOHZb08pNh+eazVQDKiYlA58Ku
+         xtWQ==
+X-Gm-Message-State: AOAM530e4prGZ7Np2J3d52sBm44jFFSCGqQ/qv3qcLMZMnEOgQR/68Fy
+	0B60v3ZmYx+G3eWMDUKBKqUm1r5C2K/xIfTZR4nZ
+X-Google-Smtp-Source: ABdhPJxhYv/ZbgyMx8y9NX4YnmX8FOmzPsTIfGrBazZdrmJADnDkiyJf7MEXQnfVPRrCwcTuhFqiH2ta2wyZE1ZbcL4=
+X-Received: by 2002:a63:1613:0:b0:382:2a7f:5ca1 with SMTP id
+ w19-20020a631613000000b003822a7f5ca1mr13980696pgl.151.1647885906868; Mon, 21
+ Mar 2022 11:05:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202203191213.tC0sjaY7-lkp@intel.com>
-In-Reply-To: <202203191213.tC0sjaY7-lkp@intel.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 21 Mar 2022 10:51:29 -0700
-Message-ID: <CAKwvOdnEyGLi14b0qsc2=aSRafCrQD-Zyh+Oq+E-vx+c1viErg@mail.gmail.com>
-Subject: Re: [peterz-queue:locking/core 17/19] arch/x86/kvm/x86.h:29:30:
- error: too many arguments to function call, expected 0, have 1
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, 
-	Mark Rutland <mark.rutland@arm.com>
+References: <20220316213055.2351342-1-morbo@google.com> <20220319222228.4160598-1-morbo@google.com>
+ <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
+In-Reply-To: <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
+From: Bill Wendling <morbo@google.com>
+Date: Mon, 21 Mar 2022 11:04:55 -0700
+Message-ID: <CAGG=3QWPAF4wtb93LJiv5Hz1pM+dvwM1+NNG8cr7813k-gpUTA@mail.gmail.com>
+Subject: Re: [PATCH v2] gpiolib: acpi: use correct format characters
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Mar 18, 2022 at 9:10 PM kernel test robot <lkp@intel.com> wrote:
+On Sat, Mar 19, 2022 at 3:55 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-> head:   200a79c670d24d4d9a75a6a9cbfd14af2f5d0ad9
-> commit: 5c9f3806a4400c2957abeea9419547f856457a20 [17/19] lockdep: Fix -Wunused-parameter for _THIS_IP_
-> config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220319/202203191213.tC0sjaY7-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=5c9f3806a4400c2957abeea9419547f856457a20
->         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
->         git fetch --no-tags peterz-queue locking/core
->         git checkout 5c9f3806a4400c2957abeea9419547f856457a20
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> So I think that clang warning is only annoying, not helpful, but:
 >
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> On Sat, Mar 19, 2022 at 3:22 PM Bill Wendling <morbo@google.com> wrote:
+> >
+> > diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> > index a5495ad31c9c..92dd9b8784f2 100644
+> > --- a/drivers/gpio/gpiolib-acpi.c
+> > +++ b/drivers/gpio/gpiolib-acpi.c
+> > @@ -388,9 +388,9 @@ static acpi_status acpi_gpiochip_alloc_event(struct acpi_resource *ares,
+> >
+> >         if (pin <= 255) {
+> >                 char ev_name[5];
+> > -               sprintf(ev_name, "_%c%02hhX",
+> > +               sprintf(ev_name, "_%c%02X",
 >
-> All errors (new ones prefixed by >>):
+> This part I approve of.
 >
->    In file included from arch/x86/kvm/x86.c:22:
->    In file included from arch/x86/kvm/mmu.h:7:
->    In file included from arch/x86/kvm/cpuid.h:5:
-> >> arch/x86/kvm/x86.h:29:30: error: too many arguments to function call, expected 0, have 1
->            lockdep_hardirqs_on_prepare(CALLER_ADDR0);
->            ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~
+> >                         agpio->triggering == ACPI_EDGE_SENSITIVE ? 'E' : 'L',
+> > -                       pin);
+> > +                       (unsigned char)pin);
+>
+> But this cast seems pointless and wrong.
+>
+You're right. I was trying to ensure that the patch didn't change
+behavior. But the cast achieves nothing. Thanks!
 
-Peter, I think you dropped the hunk to include/linux/kvm_host.h when
-applying this patch?
+-bw
 
-Compare:
-https://lore.kernel.org/lkml/20220314221909.2027027-1-ndesaulniers@google.com/
-vs
-https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/patch/?id=1923a1429507b15b2061968614a6943365159738
-
->    include/linux/ftrace.h:879:22: note: expanded from macro 'CALLER_ADDR0'
->    #define CALLER_ADDR0 ((unsigned long)ftrace_return_address0)
->                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/irqflags.h:23:15: note: 'lockdep_hardirqs_on_prepare' declared here
->      extern void lockdep_hardirqs_on_prepare(void);
->                  ^
->    In file included from arch/x86/kvm/x86.c:41:
->    include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
->                   _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
->                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
->       : ((x) & (bit1)) / ((bit1) / (bit2))))
->                        ^ ~~~~~~~~~~~~~~~~~
->    1 warning and 1 error generated.
-> --
->    In file included from arch/x86/kvm/emulate.c:28:
-> >> arch/x86/kvm/x86.h:29:30: error: too many arguments to function call, expected 0, have 1
->            lockdep_hardirqs_on_prepare(CALLER_ADDR0);
->            ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~
->    include/linux/ftrace.h:879:22: note: expanded from macro 'CALLER_ADDR0'
->    #define CALLER_ADDR0 ((unsigned long)ftrace_return_address0)
->                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/irqflags.h:23:15: note: 'lockdep_hardirqs_on_prepare' declared here
->      extern void lockdep_hardirqs_on_prepare(void);
->                  ^
->    1 error generated.
+> Casts in general are bad, and should be avoided unless there's a real
+> reason for them. And that reason doesn't seem to exist. We don't
+> actually want to truncate the value of 'pin', and just a few lines
+> earlier actually checked that it is in range.
 >
+> And if 'pin' can't be negative - it comes from a 'u16' table
+> dereference - but even if it could have been that would have been a
+> different bug here anyway (and should have been fixed by tightening
+> the check).
 >
-> vim +29 arch/x86/kvm/x86.h
+> So the cast doesn't add anything - not for humans, and not for a
+> compiler that could just optimize it away because it saw the range
+> check.
 >
-> 65297341d8e15b Uros Bizjak         2021-08-09  12
-> bc908e091b3264 Sean Christopherson 2021-05-04  13  static __always_inline void kvm_guest_enter_irqoff(void)
-> bc908e091b3264 Sean Christopherson 2021-05-04  14  {
-> bc908e091b3264 Sean Christopherson 2021-05-04  15       /*
-> bc908e091b3264 Sean Christopherson 2021-05-04  16        * VMENTER enables interrupts (host state), but the kernel state is
-> bc908e091b3264 Sean Christopherson 2021-05-04  17        * interrupts disabled when this is invoked. Also tell RCU about
-> bc908e091b3264 Sean Christopherson 2021-05-04  18        * it. This is the same logic as for exit_to_user_mode().
-> bc908e091b3264 Sean Christopherson 2021-05-04  19        *
-> bc908e091b3264 Sean Christopherson 2021-05-04  20        * This ensures that e.g. latency analysis on the host observes
-> bc908e091b3264 Sean Christopherson 2021-05-04  21        * guest mode as interrupt enabled.
-> bc908e091b3264 Sean Christopherson 2021-05-04  22        *
-> bc908e091b3264 Sean Christopherson 2021-05-04  23        * guest_enter_irqoff() informs context tracking about the
-> bc908e091b3264 Sean Christopherson 2021-05-04  24        * transition to guest mode and if enabled adjusts RCU state
-> bc908e091b3264 Sean Christopherson 2021-05-04  25        * accordingly.
-> bc908e091b3264 Sean Christopherson 2021-05-04  26        */
-> bc908e091b3264 Sean Christopherson 2021-05-04  27       instrumentation_begin();
-> bc908e091b3264 Sean Christopherson 2021-05-04  28       trace_hardirqs_on_prepare();
-> bc908e091b3264 Sean Christopherson 2021-05-04 @29       lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-> bc908e091b3264 Sean Christopherson 2021-05-04  30       instrumentation_end();
-> bc908e091b3264 Sean Christopherson 2021-05-04  31
-> bc908e091b3264 Sean Christopherson 2021-05-04  32       guest_enter_irqoff();
-> bc908e091b3264 Sean Christopherson 2021-05-04  33       lockdep_hardirqs_on(CALLER_ADDR0);
-> bc908e091b3264 Sean Christopherson 2021-05-04  34  }
-> bc908e091b3264 Sean Christopherson 2021-05-04  35
+> End result: just fix the pointless 'hh' in the print specifier. It
+> doesn't add anything, and only causes problems. Anybody who uses '%02X
+> to print a byte should only use it for byte values - and the code
+> already does.
 >
-> :::::: The code at line 29 was first introduced by commit
-> :::::: bc908e091b3264672889162733020048901021fb KVM: x86: Consolidate guest enter/exit logic to common helpers
+> Of course, the _reason_ for this all was a warning that was pointless
+> to begin with, and should never have existed. Clang was not smart
+> enough to take the range knowledge that it _could_ have taken into
+> account, and instead wrote out a completely bogus warning.
 >
-> :::::: TO: Sean Christopherson <seanjc@google.com>
-> :::::: CC: Thomas Gleixner <tglx@linutronix.de>
+> It's completely bogus not just because clang didn't do a sufficiently
+> good job of range analysis - it's completely bogus because a 'varargs'
+> function DOES NOT TAKE arguments of type 'char'.
 >
-> ---
-> 0-DAY CI Kernel Test Service
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
-
-
--- 
-Thanks,
-~Nick Desaulniers
+> So the *only* reason to use '%hhX' in the first place is that you
+> *want* the sprintf() to actually limit the value to a byte for you
+> (possibly because you have a signed char, know it will sign-extend to
+> 'int', and want to limit it back to 8 bits).
+>
+> If you *actually* had a 'unsigned char' to begin with, you'd be
+> completely insane to use %hhX. It's just pointless.
+>
+> So warning that '%hhX' is paired with an 'int' is all just completely
+> mindless and wrong.
+>
+>               Linus
