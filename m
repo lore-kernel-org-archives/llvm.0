@@ -1,61 +1,53 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1F04289
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 14:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647872707; x=1679408707;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZRgMOrMKRu4QklsqExf2gmjTp684KRU6lmpsY+ibWYM=;
-  b=ZATPGwFmHUN0Gf4WU4HR1IPUel3yE9oeq0AsH52KpL7pDYlIuMtkp3kQ
-   KKzELsEwfmU/EUUpv1LaKiz+MqAHnlXl9C7nyZj+hJ3y9ZW6RLzi1nhD6
-   mwJfqtkL9vAzO/YubiSrcUvbvkC1YPSSIJQUzl/09LYXMiNSb9t3+D1Vf
-   ohdFnSIDsrcsb3c+jd1PQLAhNYr2NR5XsFG2r7x6R9kZy9iVJXZffw+6Z
-   cuOVIyQRobOA/X/vF7qVbMtQUsXVECXqlsqZFyuGarvh6zGQLYgExumtQ
-   PQ4Y2rPIVhSwACeUZUtK3EWWZ5Xno4qu6YyRPSXbMFW9nkZQDZ/PnoXd9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="239721358"
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="239721358"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 07:25:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="824465825"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Mar 2022 07:25:01 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nWIxu-000HtG-Qp; Mon, 21 Mar 2022 14:24:58 +0000
-Date: Mon, 21 Mar 2022 22:24:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Quan Nguyen <quan@os.amperecomputing.com>,
-	Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Derek Kiernan <derek.kiernan@xilinx.com>,
-	Dragan Cvetic <dragan.cvetic@xilinx.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thu Nguyen <thu@os.amperecomputing.com>,
-	Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-	OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Open Source Submission <patches@amperecomputing.com>,
-	Phong Vo <phong@os.amperecomputing.com>,
-	"Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v7 3/9] misc: smpro-errmon: Add Ampere's SMpro error
- monitor driver
-Message-ID: <202203212244.dJ8wLdCt-lkp@intel.com>
-References: <20220321081355.6802-4-quan@os.amperecomputing.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC27857D0
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 15:24:33 +0000 (UTC)
+Received: by mail-oi1-f169.google.com with SMTP id e4so13502174oif.2
+        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 08:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8vnMa7QJYto3rUp2CNI3IroLa5v/hp5jnq+SU6YeAQo=;
+        b=oBP78Y9N08jETzPolQznEBXq3Uxd/XEb+yye2TG3+vbyfT33AK6uFhZBpLcMNe16q+
+         GglCnu2CKG73eZYghuFy0so04d+mdzcjU4Kv7QkEYidzH2H96h1AqO0/PuZcGuO9JgCG
+         MVd1c1MtN3Iv0PTPLiV04LcCTyMka/zZ5EpJiiYj3z5I1gjmK12qqV2XMduawUMO1aD5
+         E9gGv/7O75vqxHKpn8fCSuzHGwi4kEL6wFPLCo9m8Qmd1HbJNPvFV2qZVJhc+F3HvV/W
+         JSHonH18vIa6TjPsEEedwXC0LWVYt7ujBKv2NH3EiZmk3zXqoxznTth8WWXqk5IVrOCU
+         NQnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8vnMa7QJYto3rUp2CNI3IroLa5v/hp5jnq+SU6YeAQo=;
+        b=f7hgY0o5is+2L+6T739vhH3fyExEAhXcZ5SsuIxU4rolGSwFHDc4VZk9lIMHlq0LpD
+         N4F7VPkdcQD3HdMP7I74Q3uWmqro1gmcePvTguON/F45AC+5HprQqXA4mFeB0MWHNknr
+         bzcER8feF1ifbPWhAZwFuy1qBEwusaBDtssRGRg69ADrcPVU+ODGk0Ud6jGUx0ukpnBp
+         f6MoKvg7YdKBf/p2PRlX/lvP+Dn1miXJtxcHk55iRn+7E8dSdciEUAtQekY2nDxp7sSo
+         7QWcbUc2zrN7+2RdJ1ddQnlW7mZoSB8sCgfrZGu2cSh9Jc7l1fvE/qTuL5yQEJN0FSE8
+         B+1Q==
+X-Gm-Message-State: AOAM532z+7Fem3tqn9Gn0piXzw6gDTZ+fibTX6QgcBxP52PvtrgHIkKC
+	EEvUjYbWWJc9w4KcFZSY8XoHow==
+X-Google-Smtp-Source: ABdhPJxC6uT/rBzoCI8ifUy4cm0zSLKXkk2t+HK66PziQB2HByEqlpYQCCLQuHduP3ICCzWspKkvIA==
+X-Received: by 2002:a05:6808:3db:b0:2ec:cfe1:dfa0 with SMTP id o27-20020a05680803db00b002eccfe1dfa0mr13048421oie.127.1647876272900;
+        Mon, 21 Mar 2022 08:24:32 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id v8-20020a05683018c800b005cb39fc3e15sm5544170ote.13.2022.03.21.08.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 08:24:31 -0700 (PDT)
+Date: Mon, 21 Mar 2022 10:24:30 -0500
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
+To: Bill Wendling <morbo@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Andy Gross <agross@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-arm-msm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] soc: qcom: smem: use correct format characters
+Message-ID: <YjiYrj5euvidRKHM@builder.lan>
+References: <20220316213118.2352683-1-morbo@google.com>
+ <YjTJRqlFOsXz7Ss7@dev-arch.thelio-3990X>
+ <CAGG=3QUXDj1Bp1kDY2F0dqw=6f8iRqE4nRDyticUrWx-nTb-=A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,116 +56,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220321081355.6802-4-quan@os.amperecomputing.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAGG=3QUXDj1Bp1kDY2F0dqw=6f8iRqE4nRDyticUrWx-nTb-=A@mail.gmail.com>
 
-Hi Quan,
+On Fri 18 Mar 13:27 CDT 2022, Bill Wendling wrote:
 
-I love your patch! Perhaps something to improve:
+> On Fri, Mar 18, 2022 at 11:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > On Wed, Mar 16, 2022 at 02:31:18PM -0700, Bill Wendling wrote:
+> > > When compiling with -Wformat, clang emits the following warnings:
+> > >
+> > > drivers/soc/qcom/smem.c:847:41: warning: format specifies type 'unsigned
+> > > short' but the argument has type 'unsigned int' [-Wformat]
+> > >                         dev_err(smem->dev, "bad host %hu\n", remote_host);
+> > >                                                      ~~~     ^~~~~~~~~~~
+> > >                                                      %u
+> > > ./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+> > >         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+> > >                                                                ~~~     ^~~~~~~~~~~
+> > > ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+> > >                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+> > >                              ~~~    ^~~~~~~~~~~
+> > > drivers/soc/qcom/smem.c:852:47: warning: format specifies type 'unsigned
+> > > short' but the argument has type 'unsigned int' [-Wformat]
+> > >                         dev_err(smem->dev, "duplicate host %hu\n", remote_host);
+> > >                                                            ~~~     ^~~~~~~~~~~
+> > >                                                            %u
+> > > ./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+> > >         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+> > >                                                                ~~~     ^~~~~~~~~~~
+> > > ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+> > >                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+> > >                              ~~~    ^~~~~~~~~~~
+> > >
+> > > The types of these arguments are unconditionally defined, so this patch
+> > > updates the format character to the correct ones for ints and unsigned
+> > > ints.
+> >
+> > Right. Alternatively, remote_host could be turned into a u16 to match
+> > host0 and host1, as those are the only values that will ever be assigned
+> > to it, which should have been done in commit 13a920ae7898 ("soc: qcom:
+> > smem: a few last cleanups") to avoid introducing this warning in the
+> > first place.
+> >
+> I'll be happy to redo the patch if the maintainers wish. :-)
+> 
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on groeck-staging/hwmon-next lee-mfd/for-mfd-next v5.17 next-20220318]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Forgive me, but I think that not mixing the unsigned int and u16 would
+look better. So if you're willing to respin this to change the type of
+remote_host, I'd be happy to merge that.
 
-url:    https://github.com/0day-ci/linux/commits/Quan-Nguyen/Add-Ampere-s-Altra-SMPro-MFD-and-its-child-drivers/20220321-161811
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 37fd83916da2e4cae03d350015c82a67b1b334c4
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220321/202203212244.dJ8wLdCt-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/3e85c45303bab9bd02a4761bc7e182fb001ac625
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Quan-Nguyen/Add-Ampere-s-Altra-SMPro-MFD-and-its-child-drivers/20220321-161811
-        git checkout 3e85c45303bab9bd02a4761bc7e182fb001ac625
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/ drivers/misc/
+Thanks,
+Bjorn
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/misc/smpro-errmon.c:276:6: warning: variable 'data_hi' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (addr2 != 0xff) {
-               ^~~~~~~~~~~~~
-   drivers/misc/smpro-errmon.c:303:28: note: uninitialized use occurs here
-                            ret_hi & 0xff, ret_lo, data_hi, data_lo);
-                                                   ^~~~~~~
-   drivers/misc/smpro-errmon.c:276:2: note: remove the 'if' if its condition is always true
-           if (addr2 != 0xff) {
-           ^~~~~~~~~~~~~~~~~~~
-   drivers/misc/smpro-errmon.c:265:47: note: initialize the variable 'data_hi' to silence this warning
-           unsigned int ret_hi, ret_lo, data_lo, data_hi;
-                                                        ^
-                                                         = 0
->> drivers/misc/smpro-errmon.c:276:6: warning: variable 'data_lo' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (addr2 != 0xff) {
-               ^~~~~~~~~~~~~
-   drivers/misc/smpro-errmon.c:303:37: note: uninitialized use occurs here
-                            ret_hi & 0xff, ret_lo, data_hi, data_lo);
-                                                            ^~~~~~~
-   drivers/misc/smpro-errmon.c:276:2: note: remove the 'if' if its condition is always true
-           if (addr2 != 0xff) {
-           ^~~~~~~~~~~~~~~~~~~
-   drivers/misc/smpro-errmon.c:265:38: note: initialize the variable 'data_lo' to silence this warning
-           unsigned int ret_hi, ret_lo, data_lo, data_hi;
-                                               ^
-                                                = 0
-   2 warnings generated.
-
-
-vim +276 drivers/misc/smpro-errmon.c
-
-   261	
-   262	static s32 smpro_internal_err_get_info(struct regmap *regmap, u8 addr, u8 addr1,
-   263					       u8 addr2, u8 addr3, u8 subtype, char *buf)
-   264	{
-   265		unsigned int ret_hi, ret_lo, data_lo, data_hi;
-   266		int ret;
-   267	
-   268		ret = regmap_read(regmap, addr, &ret_lo);
-   269		if (ret)
-   270			return ret;
-   271	
-   272		ret = regmap_read(regmap, addr1, &ret_hi);
-   273		if (ret)
-   274			return ret;
-   275	
- > 276		if (addr2 != 0xff) {
-   277			ret = regmap_read(regmap, addr2, &data_lo);
-   278			if (ret)
-   279				return ret;
-   280			ret = regmap_read(regmap, addr3, &data_hi);
-   281			if (ret)
-   282				return ret;
-   283		}
-   284		/*
-   285		 * Output format:
-   286		 * <errType> <image> <dir> <Location> <errorCode> <data>
-   287		 * Where:
-   288		 *   + errType: SCP Error Type (3 bits)
-   289		 *      1: Warning
-   290		 *      2: Error
-   291		 *      4: Error with data
-   292		 *   + image: SCP Image Code (8 bits)
-   293		 *   + dir: Direction (1 bit)
-   294		 *      0: Enter
-   295		 *      1: Exit
-   296		 *   + location: SCP Module Location Code (8 bits)
-   297		 *   + errorCode: SCP Error Code (16 bits)
-   298		 *   + data : Extensive data (32 bits)
-   299		 *      All bits are 0 when errType is warning or error.
-   300		 */
-   301		return scnprintf(buf, MAX_MSG_LEN, "%01x %02x %01x %02x %04x %04x%04x\n",
-   302				 subtype, (ret_hi & 0xf000) >> 12, (ret_hi & 0x0800) >> 11,
-   303				 ret_hi & 0xff, ret_lo, data_hi, data_lo);
-   304	}
-   305	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > Probably does not matter though, unless the maintainers feel that is a
+> > better fix.
+> >
+> > > Link: ClangBuiltLinux/linux#378
+> >
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> >
+> > as discussed on other patches :)
+> >
+> Thanks! Copy-and-paste strikes again...
+> 
+> -bw
+> 
+> > > Signed-off-by: Bill Wendling <morbo@google.com>
+> >
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> > > ---
+> > >  drivers/soc/qcom/smem.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+> > > index e2057d8f1eff..a98b5f395d15 100644
+> > > --- a/drivers/soc/qcom/smem.c
+> > > +++ b/drivers/soc/qcom/smem.c
+> > > @@ -844,12 +844,12 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
+> > >                       continue;
+> > >
+> > >               if (remote_host >= SMEM_HOST_COUNT) {
+> > > -                     dev_err(smem->dev, "bad host %hu\n", remote_host);
+> > > +                     dev_err(smem->dev, "bad host %u\n", remote_host);
+> > >                       return -EINVAL;
+> > >               }
+> > >
+> > >               if (smem->partitions[remote_host]) {
+> > > -                     dev_err(smem->dev, "duplicate host %hu\n", remote_host);
+> > > +                     dev_err(smem->dev, "duplicate host %u\n", remote_host);
+> > >                       return -EINVAL;
+> > >               }
+> > >
+> > > --
+> > > 2.35.1.723.g4982287a31-goog
+> > >
+> > >
