@@ -1,93 +1,104 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EB663E
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 17:06:15 +0000 (UTC)
-Received: by mail-lj1-f181.google.com with SMTP id b5so2170221ljf.13
-        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 10:06:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C2D63E
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 17:27:16 +0000 (UTC)
+Received: by mail-lf1-f53.google.com with SMTP id bt26so25740545lfb.3
+        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 10:27:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=R/7FJJ7qSAHgZRJnHXKO5tZ1Hgqiu2AMH/REX+ZRS18=;
-        b=CcgHOId2RyMEcxGfJARNzZUbdlGCM1utZBV6z2njMf4aotZ5ZdYT92P6HnVd9xeSDn
-         6SKI9lq8krPDyV7w1W69qTqXWW/ZdAWa6Mrom2kCjhCKYZp8s9hila6IncLMwIkz1Ozv
-         Oq53zzxlEASFXHt6+NFvB+ficHM9zDUPGzfao=
+        bh=gjlWSgDYCbI3M0HlDfM+vRBeQFnG0r9FgmdbuPnrgqQ=;
+        b=aVvx3FDfpN2WfwpjlyxpAb5Fwswxlfi/0LDhMZdxBX1bJ4kqbt7F9JwUIf4M2YGi+A
+         +Wnc0mnQTa5PhVU9lA/PnyGKLEnXuH89p3UwUuSoj5zvNzipTCWhi8oYbyzjlZ+P7/bf
+         WHY1ioGhcshdkuE1zdzW3HsrHW2LidtQE0aXvGDbh9W0ZBivvNYFkFRbyEaLU1p/PkrR
+         YqnjBZe9cWSaE1WsqyzmpquwIAyvR0Y5piDM1O9Gs37X6CSORvAEy7NhCpZsbLwgAXl1
+         a9vy260QEtWazFypwCq7q+O33a7nkhm4ra1V5zP6OaPHpRUvrjGs7Xj0WY6U0JMggzFP
+         kVVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=R/7FJJ7qSAHgZRJnHXKO5tZ1Hgqiu2AMH/REX+ZRS18=;
-        b=UNpyMBzg3lu6k4Eze6ujxf8iFF+i7lGeeQz5zokH7s8vSSsjji9VladeDmMwooZN+V
-         HJhnnXpOvg4werTYow6kqg75QgArdxo0VFZpRCTAdjOh3D40JmxuPPpLSIL0HDSHagDk
-         73+UatKk1bMSOmpIyDcWpGcLfo/AV9JY7lwOxz2EnivG53LHAC4MFcGTwH2GC+CkEcnD
-         TzR7JKF5mMdQLgDURO/YQpK7Ci6bpgHx1QJDUUmOY+PmRnUAHW9lgOyQ9aB/LPZjvQD/
-         NCkgJhlDuBc6phiSPlgEDeuKL/VchPmoipXYIXZLGG47mbFb1sNE705ThXJva4ePvzwE
-         Y7nA==
-X-Gm-Message-State: AOAM531VhWU0jlNna7JU9SWYP5lSAARd/09r6MwAEeZ4Ls+3ynjFTECC
-	GXgycatXN6s6KpL2LHipPioYkgscYNruJm0D48E=
-X-Google-Smtp-Source: ABdhPJw/BLSTIvRphwDahUgeawA2hg/O4P9KQ37txElc7qO4wQMpoH4STWz0FFxmqp5wjmUuYVp3LQ==
-X-Received: by 2002:a05:651c:b07:b0:247:e06d:8943 with SMTP id b7-20020a05651c0b0700b00247e06d8943mr16200238ljr.426.1647882372972;
-        Mon, 21 Mar 2022 10:06:12 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id j16-20020a05651231d000b0044a01d1ee94sm1436250lfe.306.2022.03.21.10.06.11
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 10:06:12 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id w7so25643992lfd.6
-        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 10:06:11 -0700 (PDT)
-X-Received: by 2002:a05:6512:b13:b0:448:90c6:dc49 with SMTP id
- w19-20020a0565120b1300b0044890c6dc49mr15823991lfu.542.1647882371543; Mon, 21
- Mar 2022 10:06:11 -0700 (PDT)
+        bh=gjlWSgDYCbI3M0HlDfM+vRBeQFnG0r9FgmdbuPnrgqQ=;
+        b=hBMWFQN1NoJPH/eBfrvi9+fK69JuPDoYfOnZbSezSPU6gsR6mz3O9IQlGs/MDEk+E3
+         K/jMr66Q8CvdK+Z3Ufd2QVryO6NrvlF1Tt/8Zu9F+5qGu6dRjTwla8q4drmFM3XfM+hy
+         urYrnlMjWOP/6MMTyWynJ+EERNyEIkNyz64miSAc4y0vmFTCROi03XUMJ/BF1PraZLvf
+         KHkNM4eW+XaUDtNePiQDmPWM2ynG3Q6a2+tQMO3DpJeZVk2KgD0aShfRA6ItKYlZKrM2
+         B5NBRtWmLunhu3Q40xXqicFU8Aj+EOoStI3j5OlPlcDRzmWiJTW75Ery0uJwuSZr9vzi
+         PYGg==
+X-Gm-Message-State: AOAM530S/OTO9WPcPWiuu17A1kqBVsSlOQ7gplnWGitg+gmac2/442fX
+	v6S6QgKBxibmY0htUVxSZZd/bQCEroCFr6kDa6FMEw==
+X-Google-Smtp-Source: ABdhPJy4rZuO7vtP7+8b/Mnd+Mllf2Xr2hwf83Dz2QNhS8sDUM8I/x5BFB4QCsYPBIVI5J7rSfIgJWZP/6BJmllE6vs=
+X-Received: by 2002:a05:6512:3341:b0:433:b033:bd22 with SMTP id
+ y1-20020a056512334100b00433b033bd22mr15309077lfd.190.1647883634694; Mon, 21
+ Mar 2022 10:27:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220316213055.2351342-1-morbo@google.com> <20220319222228.4160598-1-morbo@google.com>
- <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
- <CAHk-=wgH3kbKcNwBO7os3BuU523Gd2aqdu0dVvf50bJbLKrLJg@mail.gmail.com> <CAHp75Vc+T3eM9=yu9XccXKmf1ZnR6dz1ZP_eL4faPnM8ZNbbnQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vc+T3eM9=yu9XccXKmf1ZnR6dz1ZP_eL4faPnM8ZNbbnQ@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 21 Mar 2022 10:05:55 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi0zxgKyHn1F_K6o-uxvPmdKA0njcyD3PDSAvVZgdk4OA@mail.gmail.com>
-Message-ID: <CAHk-=wi0zxgKyHn1F_K6o-uxvPmdKA0njcyD3PDSAvVZgdk4OA@mail.gmail.com>
-Subject: Re: [PATCH v2] gpiolib: acpi: use correct format characters
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Bill Wendling <morbo@google.com>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
+ <20220320093750.159991-3-ammarfaizi2@gnuweeb.org> <20220320191619.GA27312@1wt.eu>
+ <9e69af8e-74c1-f35b-98dd-e2a77153ea09@gnuweeb.org>
+In-Reply-To: <9e69af8e-74c1-f35b-98dd-e2a77153ea09@gnuweeb.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 21 Mar 2022 10:27:03 -0700
+Message-ID: <CAKwvOdmfscdQQvmDmVqX3RvH55_EnqHokC+G9jSjckYqLG-psw@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 2/6] tools/nolibc: Make the entry point not weak
+ for clang
+To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, Nugraha <richiisei@gmail.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	"GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 21, 2022 at 3:09 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Mon, Mar 21, 2022 at 4:38 AM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
 >
-> Would you sign off on this? I will then replace the original patch
-> with your version.
+> On 3/21/22 2:16 AM, Willy Tarreau wrote:
+> > Hi Ammar,
+> >
+> > I've had a look at this one.
+> >
+> > On Sun, Mar 20, 2022 at 04:37:46PM +0700, Ammar Faizi wrote:
+> >> Budilig with clang yields the following error:
+> >    ^^^^^^^
+> > BTW please fix the typo in the final commit message.
+> >
+> >> @@ -183,7 +183,9 @@ struct sys_stat_struct {
+> >>
+> >>   /* startup code */
+> >>   asm(".section .text\n"
+> >> +#if !defined(__clang__)
+> >>       ".weak _start\n"
+> >> +#endif
+> >>       ".global _start\n"
+> >>       "_start:\n"
+> >
+> > So it seems that I was wrong and that .weak is an alternate for .global
+> > and not a complement. As such, instead of adding all these #if, please
+> > simply remove all .global.
 
-Sure. Note that I (intentionally) do bogus indentation of my inline
-patches, because that thing wasn't actually _tested_. It's obvious
-enough and should fix the issue, but I just wanted to point that out.
+See also:
+commit 4d6ffa27b8e5 ("x86/lib: Change .weak to SYM_FUNC_START_WEAK for
+arch/x86/lib/mem*_64.S")
+commit ec9d78070de9 ("arm64: Change .weak to SYM_FUNC_START_WEAK_PI
+for arch/arm64/lib/mem*.S")
 
-With that said, it's _so_ obviously correct (famous last words) that
-I'll happily add my sign-off to it:
+Also, please note in the commit message that this diagnostic comes
+from using clang as the assembler (which is clang's default behavior
+unless -fno-integrated-as is passed).
 
-    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+>
+> Will fix this in the next version.
+>
+> --
+> Ammar Faizi
+>
 
-and I suspect the explanations in the email could probably be used as
-much of a commit message.
 
-> And for the record I have a follow up patch to clearly show that pin
-> is always unsigned, induced by this discussion.
-
-Yeah, that sounds like a good idea - for a compiler it was obvious due
-to the load from a 'u16' array, but a human would actually have to go
-and check what that pin_table[] array was to see that "yup, that can't
-be negative in 'int'".
-
-                Linus
+-- 
+Thanks,
+~Nick Desaulniers
