@@ -1,104 +1,141 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C2D63E
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 17:27:16 +0000 (UTC)
-Received: by mail-lf1-f53.google.com with SMTP id bt26so25740545lfb.3
-        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 10:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gjlWSgDYCbI3M0HlDfM+vRBeQFnG0r9FgmdbuPnrgqQ=;
-        b=aVvx3FDfpN2WfwpjlyxpAb5Fwswxlfi/0LDhMZdxBX1bJ4kqbt7F9JwUIf4M2YGi+A
-         +Wnc0mnQTa5PhVU9lA/PnyGKLEnXuH89p3UwUuSoj5zvNzipTCWhi8oYbyzjlZ+P7/bf
-         WHY1ioGhcshdkuE1zdzW3HsrHW2LidtQE0aXvGDbh9W0ZBivvNYFkFRbyEaLU1p/PkrR
-         YqnjBZe9cWSaE1WsqyzmpquwIAyvR0Y5piDM1O9Gs37X6CSORvAEy7NhCpZsbLwgAXl1
-         a9vy260QEtWazFypwCq7q+O33a7nkhm4ra1V5zP6OaPHpRUvrjGs7Xj0WY6U0JMggzFP
-         kVVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gjlWSgDYCbI3M0HlDfM+vRBeQFnG0r9FgmdbuPnrgqQ=;
-        b=hBMWFQN1NoJPH/eBfrvi9+fK69JuPDoYfOnZbSezSPU6gsR6mz3O9IQlGs/MDEk+E3
-         K/jMr66Q8CvdK+Z3Ufd2QVryO6NrvlF1Tt/8Zu9F+5qGu6dRjTwla8q4drmFM3XfM+hy
-         urYrnlMjWOP/6MMTyWynJ+EERNyEIkNyz64miSAc4y0vmFTCROi03XUMJ/BF1PraZLvf
-         KHkNM4eW+XaUDtNePiQDmPWM2ynG3Q6a2+tQMO3DpJeZVk2KgD0aShfRA6ItKYlZKrM2
-         B5NBRtWmLunhu3Q40xXqicFU8Aj+EOoStI3j5OlPlcDRzmWiJTW75Ery0uJwuSZr9vzi
-         PYGg==
-X-Gm-Message-State: AOAM530S/OTO9WPcPWiuu17A1kqBVsSlOQ7gplnWGitg+gmac2/442fX
-	v6S6QgKBxibmY0htUVxSZZd/bQCEroCFr6kDa6FMEw==
-X-Google-Smtp-Source: ABdhPJy4rZuO7vtP7+8b/Mnd+Mllf2Xr2hwf83Dz2QNhS8sDUM8I/x5BFB4QCsYPBIVI5J7rSfIgJWZP/6BJmllE6vs=
-X-Received: by 2002:a05:6512:3341:b0:433:b033:bd22 with SMTP id
- y1-20020a056512334100b00433b033bd22mr15309077lfd.190.1647883634694; Mon, 21
- Mar 2022 10:27:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BDD63E
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 17:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647884362; x=1679420362;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=93ScEXCpyveWIKDjm3CXxJUD3n+Kkxyy8pTNpHBuZjg=;
+  b=WHziXx19dx4yyr0RWzvOdanq4REtHQ+qLqTOnR7qEHwRHoQ4+G7EI27k
+   MQCWCLV0+FEDNHgZKhqx5/JT8v2Eb8LinDgP7Fdcroq/VS5c/ZbS968E8
+   B03akUmZiB4my3xGay85fJbdUBHnq6VWCaSyyNBlWcs7KfWdT7UcwEeWY
+   3nPwmT3ZHfADXiwDqeaJGQGOTyq+yBIEwn011DAknK3rzjoSgzTesNdxw
+   qqKihPrd9o6KwBDJcEAOqp5nqYnnmBaZgXdC41vlsCL8uNzwZL1vctPvL
+   iuHa0rsV2dTl2z5mOgsVuvfCAx/6q0Xo6RpT0IxBrCsn2hDI8dkmdOIgC
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="320815696"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="320815696"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 10:39:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="515015749"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 21 Mar 2022 10:39:15 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nWLzu-000I1T-Vq; Mon, 21 Mar 2022 17:39:15 +0000
+Date: Tue, 22 Mar 2022 01:38:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Quan Nguyen <quan@os.amperecomputing.com>,
+	Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Derek Kiernan <derek.kiernan@xilinx.com>,
+	Dragan Cvetic <dragan.cvetic@xilinx.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thu Nguyen <thu@os.amperecomputing.com>,
+	Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+	OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Open Source Submission <patches@amperecomputing.com>,
+	Phong Vo <phong@os.amperecomputing.com>,
+	"Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v7 8/9] mfd: smpro-mfd: Adds Ampere's Altra SMpro MFD
+ driver
+Message-ID: <202203220139.67ewF74A-lkp@intel.com>
+References: <20220321081355.6802-9-quan@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
- <20220320093750.159991-3-ammarfaizi2@gnuweeb.org> <20220320191619.GA27312@1wt.eu>
- <9e69af8e-74c1-f35b-98dd-e2a77153ea09@gnuweeb.org>
-In-Reply-To: <9e69af8e-74c1-f35b-98dd-e2a77153ea09@gnuweeb.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 21 Mar 2022 10:27:03 -0700
-Message-ID: <CAKwvOdmfscdQQvmDmVqX3RvH55_EnqHokC+G9jSjckYqLG-psw@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 2/6] tools/nolibc: Make the entry point not weak
- for clang
-To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc: Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, Nugraha <richiisei@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	"GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321081355.6802-9-quan@os.amperecomputing.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Mar 21, 2022 at 4:38 AM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
->
-> On 3/21/22 2:16 AM, Willy Tarreau wrote:
-> > Hi Ammar,
-> >
-> > I've had a look at this one.
-> >
-> > On Sun, Mar 20, 2022 at 04:37:46PM +0700, Ammar Faizi wrote:
-> >> Budilig with clang yields the following error:
-> >    ^^^^^^^
-> > BTW please fix the typo in the final commit message.
-> >
-> >> @@ -183,7 +183,9 @@ struct sys_stat_struct {
-> >>
-> >>   /* startup code */
-> >>   asm(".section .text\n"
-> >> +#if !defined(__clang__)
-> >>       ".weak _start\n"
-> >> +#endif
-> >>       ".global _start\n"
-> >>       "_start:\n"
-> >
-> > So it seems that I was wrong and that .weak is an alternate for .global
-> > and not a complement. As such, instead of adding all these #if, please
-> > simply remove all .global.
+Hi Quan,
 
-See also:
-commit 4d6ffa27b8e5 ("x86/lib: Change .weak to SYM_FUNC_START_WEAK for
-arch/x86/lib/mem*_64.S")
-commit ec9d78070de9 ("arm64: Change .weak to SYM_FUNC_START_WEAK_PI
-for arch/arm64/lib/mem*.S")
+I love your patch! Perhaps something to improve:
 
-Also, please note in the commit message that this diagnostic comes
-from using clang as the assembler (which is clang's default behavior
-unless -fno-integrated-as is passed).
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on groeck-staging/hwmon-next lee-mfd/for-mfd-next v5.17 next-20220321]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
->
-> Will fix this in the next version.
->
-> --
-> Ammar Faizi
->
+url:    https://github.com/0day-ci/linux/commits/Quan-Nguyen/Add-Ampere-s-Altra-SMPro-MFD-and-its-child-drivers/20220321-161811
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 37fd83916da2e4cae03d350015c82a67b1b334c4
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220322/202203220139.67ewF74A-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/20d62dfe69d4a3a0cb64bf97df0062d050d6a4d4
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Quan-Nguyen/Add-Ampere-s-Altra-SMPro-MFD-and-its-child-drivers/20220321-161811
+        git checkout 20d62dfe69d4a3a0cb64bf97df0062d050d6a4d4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/smpro-hwmon.c:378:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           default:
+           ^
+   drivers/hwmon/smpro-hwmon.c:378:2: note: insert 'break;' to avoid fall-through
+           default:
+           ^
+           break; 
+   1 warning generated.
+
+
+vim +378 drivers/hwmon/smpro-hwmon.c
+
+91d3fe230bebb1c Quan Nguyen 2022-03-21  359  
+91d3fe230bebb1c Quan Nguyen 2022-03-21  360  static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
+91d3fe230bebb1c Quan Nguyen 2022-03-21  361  				u32 attr, int channel)
+91d3fe230bebb1c Quan Nguyen 2022-03-21  362  {
+91d3fe230bebb1c Quan Nguyen 2022-03-21  363  	const struct smpro_hwmon *hwmon = data;
+91d3fe230bebb1c Quan Nguyen 2022-03-21  364  	unsigned int value;
+91d3fe230bebb1c Quan Nguyen 2022-03-21  365  	int ret;
+91d3fe230bebb1c Quan Nguyen 2022-03-21  366  
+91d3fe230bebb1c Quan Nguyen 2022-03-21  367  	switch (type) {
+91d3fe230bebb1c Quan Nguyen 2022-03-21  368  	case hwmon_temp:
+91d3fe230bebb1c Quan Nguyen 2022-03-21  369  		switch (attr) {
+91d3fe230bebb1c Quan Nguyen 2022-03-21  370  		case hwmon_temp_input:
+91d3fe230bebb1c Quan Nguyen 2022-03-21  371  		case hwmon_temp_label:
+91d3fe230bebb1c Quan Nguyen 2022-03-21  372  		case hwmon_temp_crit:
+91d3fe230bebb1c Quan Nguyen 2022-03-21  373  			ret = regmap_read(hwmon->regmap, temperature[channel].reg, &value);
+91d3fe230bebb1c Quan Nguyen 2022-03-21  374  			if (ret || value == 0xFFFF)
+91d3fe230bebb1c Quan Nguyen 2022-03-21  375  				return 0;
+91d3fe230bebb1c Quan Nguyen 2022-03-21  376  		break;
+91d3fe230bebb1c Quan Nguyen 2022-03-21  377  		}
+91d3fe230bebb1c Quan Nguyen 2022-03-21 @378  	default:
+91d3fe230bebb1c Quan Nguyen 2022-03-21  379  		break;
+91d3fe230bebb1c Quan Nguyen 2022-03-21  380  	}
+91d3fe230bebb1c Quan Nguyen 2022-03-21  381  
+91d3fe230bebb1c Quan Nguyen 2022-03-21  382  	return 0444;
+91d3fe230bebb1c Quan Nguyen 2022-03-21  383  }
+91d3fe230bebb1c Quan Nguyen 2022-03-21  384  
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
