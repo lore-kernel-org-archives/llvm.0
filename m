@@ -1,129 +1,142 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5E516126
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 18:05:07 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id d76so1534558pga.8
-        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 11:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VSE/zjzMF4GUAODi9hUWbSKALcdRpi7FbYvoQ5n/zHE=;
-        b=fcyAfSP5auLlxa8uxnRYod/EMf7JE1qAALckx8tRF9JKQppHhU9QysjLogLKyxYU6a
-         2R0dvGNpSM3MjBR8fOWEDbotvhLJ42Pxjh1OR471p6ss5wu8DTreSiar/deSJfqS5Bz0
-         ZJrDvhsTfX+rv0DePsGh8eO9zBQS5Q1E1B9m1Dl2X5V7XOPM9zbO8xspgoNJrJraHldJ
-         0/lC1CNncq0xlOpMy1ldeuil3tJ8rYv0pzU/bwMTuDCOBr8j27BAiw2yTlVByaNLzcAH
-         MBY/ZTGVla0e3oHRwwiI3404xKCORRZ7UC0HAgiiacCLYjqVGDFCnIPNgeysH1TGdgfN
-         R6lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VSE/zjzMF4GUAODi9hUWbSKALcdRpi7FbYvoQ5n/zHE=;
-        b=tt+0MJRVdzsLpEyttp1k0Na4Iq/p0PlUT1lUTtVRzE29UKL9YUjbnEebr83sGOxP7L
-         3k2KLliyN/v0ucL6hZvMC99ZtBSCl5IIGIpWX4eHFh8k8RMBUcggsURVUR7g45UL8LYW
-         +zeagWbgYZwggxY5iFQa5EUvrayDOCCo/TcDI8PJ0BWGrYZ4th5XS4KV+ME/dR5P2G+7
-         W1nY3QWdkhCBz4BA4JWPnkxz0WLujeRr8b5Lswp2sSFhlPRQx5VTozxG4uRPYZaVx77l
-         wyvFji6mxdjhQyV2wMgOT6p1AtXasL6iVUbvtj/JwWfOHZb08pNh+eazVQDKiYlA58Ku
-         xtWQ==
-X-Gm-Message-State: AOAM530e4prGZ7Np2J3d52sBm44jFFSCGqQ/qv3qcLMZMnEOgQR/68Fy
-	0B60v3ZmYx+G3eWMDUKBKqUm1r5C2K/xIfTZR4nZ
-X-Google-Smtp-Source: ABdhPJxhYv/ZbgyMx8y9NX4YnmX8FOmzPsTIfGrBazZdrmJADnDkiyJf7MEXQnfVPRrCwcTuhFqiH2ta2wyZE1ZbcL4=
-X-Received: by 2002:a63:1613:0:b0:382:2a7f:5ca1 with SMTP id
- w19-20020a631613000000b003822a7f5ca1mr13980696pgl.151.1647885906868; Mon, 21
- Mar 2022 11:05:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D24612C
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 19:30:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647891032; x=1679427032;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0TYd6gMz9/UO7N5xndFl7v9dU6morw42GxdVe8VECUw=;
+  b=cxL5bvAy78y94HsTkNLqUKoF+Gh6ifpkeofwN5O4VTzIaIUYtL9p2d0/
+   BUwN9ZuICWjQwmbe72FqFfqPYkSE9YzvxeJiWuwOSwTcWOJk3acoTUGKX
+   p3kPFYo2Z43mAnskbcsOzJj1Uyhf1wIkkdAwEAitlrAA3H76QD7rokLWE
+   a6l51YVbAE7rdScBwTaJ8nVKW90rJRfXGThrpSIUI80+kCSbSwp4lMo5c
+   WO21q1wQE4oo4sdMvobBY7iwlZCSug6HFOBHZoTjgk6fzxeTFJQDTWpgt
+   oRAuptf6F+14y0b5LCllsJyZ5Mz/bKlkVCIvwzNDOH48cA3G+fEVFQmPh
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257351210"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="257351210"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 12:30:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="716616948"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 21 Mar 2022 12:30:29 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nWNjZ-000I5t-1Y; Mon, 21 Mar 2022 19:30:29 +0000
+Date: Tue, 22 Mar 2022 03:30:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: kernel/time/hrtimer.c:276:20: warning: unused function
+ 'is_migration_base'
+Message-ID: <202203220318.lF1LF4vW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220316213055.2351342-1-morbo@google.com> <20220319222228.4160598-1-morbo@google.com>
- <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
-In-Reply-To: <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
-From: Bill Wendling <morbo@google.com>
-Date: Mon, 21 Mar 2022 11:04:55 -0700
-Message-ID: <CAGG=3QWPAF4wtb93LJiv5Hz1pM+dvwM1+NNG8cr7813k-gpUTA@mail.gmail.com>
-Subject: Re: [PATCH v2] gpiolib: acpi: use correct format characters
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, Mar 19, 2022 at 3:55 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> So I think that clang warning is only annoying, not helpful, but:
->
-> On Sat, Mar 19, 2022 at 3:22 PM Bill Wendling <morbo@google.com> wrote:
-> >
-> > diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-> > index a5495ad31c9c..92dd9b8784f2 100644
-> > --- a/drivers/gpio/gpiolib-acpi.c
-> > +++ b/drivers/gpio/gpiolib-acpi.c
-> > @@ -388,9 +388,9 @@ static acpi_status acpi_gpiochip_alloc_event(struct acpi_resource *ares,
-> >
-> >         if (pin <= 255) {
-> >                 char ev_name[5];
-> > -               sprintf(ev_name, "_%c%02hhX",
-> > +               sprintf(ev_name, "_%c%02X",
->
-> This part I approve of.
->
-> >                         agpio->triggering == ACPI_EDGE_SENSITIVE ? 'E' : 'L',
-> > -                       pin);
-> > +                       (unsigned char)pin);
->
-> But this cast seems pointless and wrong.
->
-You're right. I was trying to ensure that the patch didn't change
-behavior. But the cast achieves nothing. Thanks!
+Hi Marcelo,
 
--bw
+FYI, the error/warning still remains.
 
-> Casts in general are bad, and should be avoided unless there's a real
-> reason for them. And that reason doesn't seem to exist. We don't
-> actually want to truncate the value of 'pin', and just a few lines
-> earlier actually checked that it is in range.
->
-> And if 'pin' can't be negative - it comes from a 'u16' table
-> dereference - but even if it could have been that would have been a
-> different bug here anyway (and should have been fixed by tightening
-> the check).
->
-> So the cast doesn't add anything - not for humans, and not for a
-> compiler that could just optimize it away because it saw the range
-> check.
->
-> End result: just fix the pointless 'hh' in the print specifier. It
-> doesn't add anything, and only causes problems. Anybody who uses '%02X
-> to print a byte should only use it for byte values - and the code
-> already does.
->
-> Of course, the _reason_ for this all was a warning that was pointless
-> to begin with, and should never have existed. Clang was not smart
-> enough to take the range knowledge that it _could_ have taken into
-> account, and instead wrote out a completely bogus warning.
->
-> It's completely bogus not just because clang didn't do a sufficiently
-> good job of range analysis - it's completely bogus because a 'varargs'
-> function DOES NOT TAKE arguments of type 'char'.
->
-> So the *only* reason to use '%hhX' in the first place is that you
-> *want* the sprintf() to actually limit the value to a byte for you
-> (possibly because you have a signed char, know it will sign-extend to
-> 'int', and want to limit it back to 8 bits).
->
-> If you *actually* had a 'unsigned char' to begin with, you'd be
-> completely insane to use %hhX. It's just pointless.
->
-> So warning that '%hhX' is paired with an 'int' is all just completely
-> mindless and wrong.
->
->               Linus
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f443e374ae131c168a065ea1748feac6b2e76613
+commit: 81d741d3460ca422843ce0ec8351083f259c6166 hrtimer: Avoid unnecessary SMP function calls in clock_was_set()
+date:   7 months ago
+config: mips-randconfig-r022-20220319 (https://download.01.org/0day-ci/archive/20220322/202203220318.lF1LF4vW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 217f267efe3082438e698e2f08566b9df8c530fa)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d741d3460ca422843ce0ec8351083f259c6166
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 81d741d3460ca422843ce0ec8351083f259c6166
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iommu/ fs/ kernel/time/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_REALTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_MONOTONIC,
+   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_BOOTTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_TAI,
+   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
+   static inline bool is_migration_base(struct hrtimer_clock_base
+   ^
+>> kernel/time/hrtimer.c:1830:20: warning: unused function '__hrtimer_peek_ahead_timers'
+   static inline void __hrtimer_peek_ahead_timers(void) { }
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-85e9b2687a/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm scripts security sound source usr virt
+
+
+vim +/is_migration_base +276 kernel/time/hrtimer.c
+
+c0a3132963db68 kernel/hrtimer.c      Thomas Gleixner           2006-01-09  275  
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04 @276  static inline bool is_migration_base(struct hrtimer_clock_base *base)
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  277  {
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  278  	return false;
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  279  }
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  280  
+
+:::::: The code at line 276 was first introduced by commit
+:::::: 5d2295f3a93b04986d069ebeaf5b07725f9096c1 hrtimer: Add a missing bracket and hide `migration_base' on !SMP
+
+:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
