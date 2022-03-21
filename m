@@ -1,83 +1,66 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4C1C4289
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 13:18:13 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C6ADE1042;
-	Mon, 21 Mar 2022 06:18:11 -0700 (PDT)
-Received: from [10.57.43.230] (unknown [10.57.43.230])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D09BE3F73D;
-	Mon, 21 Mar 2022 06:18:10 -0700 (PDT)
-Message-ID: <9159dd7d-0c5a-10a3-be47-7fb4a30a234b@arm.com>
-Date: Mon, 21 Mar 2022 13:18:05 +0000
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C624289
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 13:24:16 +0000 (UTC)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 327BD1F37C;
+	Mon, 21 Mar 2022 13:24:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1647869049; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E7U5uKaIQLUvkNLhP5oQgV7mc1DnEGBbOz9yuTiVwsc=;
+	b=lLqP4nm6FvptzyZodFT83i+DUtjxZfsnYChrSh44AqUSurAS1CaHpsnPVSJPEKKRNsGut5
+	hmfHDG4J34S2R3N8MbMaZFgF4TXK6tB1pzwVILSkEt9oXGXsiKdnZZAJ6TF4SFk/Jwj2eq
+	hz5E+vzeNQyD8sY6Te9uTg2tQYOr44w=
+Received: from suse.cz (unknown [10.100.216.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by relay2.suse.de (Postfix) with ESMTPS id 12740A3B81;
+	Mon, 21 Mar 2022 13:24:09 +0000 (UTC)
+Date: Mon, 21 Mar 2022 14:24:05 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: trix@redhat.com
+Cc: jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+	joe.lawrence@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] livepatch: Reorder to use before freeing a pointer
+Message-ID: <Yjh8dX1iMsHUF4nU@alley>
+References: <20220320015143.2208591-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] arm64: assembler: Fine-tune code to improve code
- readability
-Content-Language: en-GB
-To: Zhiyuan Dai <daizhiyuan@phytium.com.cn>, catalin.marinas@arm.com,
- will@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <1647831274-3555-1-git-send-email-daizhiyuan@phytium.com.cn>
-From: Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1647831274-3555-1-git-send-email-daizhiyuan@phytium.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220320015143.2208591-1-trix@redhat.com>
 
-On 2022-03-21 02:54, Zhiyuan Dai wrote:
-> This patch tweaks the code to improve readability.
-
-...but it also changes what the code actually does :(
-
-> Defined values are:
->   PMUVer == 0b0000 : Performance Monitors Extension not implemented.
-
-Plus all the other values, but crucially up to:
-
-"0b1111 IMPLEMENTATION DEFINED form of performance monitors supported, 
-PMUv3 not supported."
-
-> Signed-off-by: Zhiyuan Dai <daizhiyuan@phytium.com.cn>
-> ---
->   arch/arm64/include/asm/assembler.h | 9 ++++-----
->   1 file changed, 4 insertions(+), 5 deletions(-)
+On Sat 2022-03-19 18:51:43, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 > 
-> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-> index 6ebdc0f..efd43a1 100644
-> --- a/arch/arm64/include/asm/assembler.h
-> +++ b/arch/arm64/include/asm/assembler.h
-> @@ -489,11 +489,10 @@
->    */
->   	.macro	reset_pmuserenr_el0, tmpreg
->   	mrs	\tmpreg, id_aa64dfr0_el1
-> -	sbfx	\tmpreg, \tmpreg, #ID_AA64DFR0_PMUVER_SHIFT, #4
+> Clang static analysis reports this issue
+> livepatch-shadow-fix1.c:113:2: warning: Use of
+>   memory after it is freed
+>   pr_info("%s: dummy @ %p, prevented leak @ %p\n",
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> The pointer is freed in the previous statement.
+> Reorder the pr_info to report before the free.
+> 
+> Similar issue in livepatch-shadow-fix2.c
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-This extracts a *signed* 4-bit field...
+Strictly speaking, the freed memory is not used.
+pr_info() only prints the address.
 
-> -	cmp	\tmpreg, #1			// Skip if no PMU present
+Anyway, I agree that the reordered code is cleaner.
 
-...so this rejects values of both 0 and -1.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-> -	b.lt	9000f
-> -	msr	pmuserenr_el0, xzr		// Disable PMU access from EL0
-> -9000:
-> +	ubfx	\tmpreg, \tmpreg, #ID_AA64DFR0_PMUVER_SHIFT, #4
-> +	cbz	\tmpreg, .Lskip_pmu_\@		// Skip if no PMU present
-> +	msr_s   SYS_PMUSERENR_EL0, xzr	// Disable PMU access from EL0
-
-How confident are you that it's safe to touch a PMUv3 register in an 
-unknown implementation which explicitly *isn't* PMUv3?
-
-Thanks,
-Robin.
-
-> +.Lskip_pmu_\@:
->   	.endm
->   
->   /*
+Best Regards,
+Petr
