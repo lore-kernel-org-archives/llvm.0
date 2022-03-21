@@ -1,82 +1,100 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A314D6144
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 21:15:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Ii3OZp8pxT+C1BTuGgcw+63YrNr4SmJ8xYBhoY0Jnnk=; b=QM0LpZRlBphKJgtC91f9ifwaof
-	BDcCZHIHvhQKSH2ghlab6L3fTaZgy1OAV+Ygtlid+iRZA434hD21AJU8LpAsztHUM4cJYpPf9eajY
-	B1gH7p2Gytky0677wEqBUsgH9V39zKaJEkRt4K9IrB3baJEuj/Utl+Rr24HVtpbMYvT1wtFcTFDvd
-	zggVCMqkfWBpefkSz/+dJbDQK9BCgmH/tH10Vj7OwJBzqcsR3hstCCJ03h5bNwV83hAylCDNY/eNz
-	/QLbyjaZFgoMuR7FzcDVnboMCe1c1VCOj2fTDrglcAadbJP17a2N2Ha9lw+fk1jcu3E4l32gqWISV
-	rDVf0x5A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nWPMj-003FTq-R5; Mon, 21 Mar 2022 21:15:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 46F763001C0;
-	Mon, 21 Mar 2022 22:14:59 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0159A2DC2BF17; Mon, 21 Mar 2022 22:14:58 +0100 (CET)
-Date: Mon, 21 Mar 2022 22:14:58 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [peterz-queue:locking/core 17/19] arch/x86/kvm/x86.h:29:30:
- error: too many arguments to function call, expected 0, have 1
-Message-ID: <Yjjq0kgGjL8Nt9CJ@hirez.programming.kicks-ass.net>
-References: <202203191213.tC0sjaY7-lkp@intel.com>
- <CAKwvOdnEyGLi14b0qsc2=aSRafCrQD-Zyh+Oq+E-vx+c1viErg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6659F6144
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 21:52:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1386C340EE;
+	Mon, 21 Mar 2022 21:52:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647899573;
+	bh=dyOSNsBIOAtZ7vGm89+pK75rTiVRFKBYVcdnYc/Tqyo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hKYd4xyiZBkMI4yuRA/8hErx9o+PvXRfji1Z0y9/HDegqUTt0h8M1w9TK2w2QcAqf
+	 W5pGZ/+zF1Nv2koHR77xl0r8J1csvPULFTmH48rBnW2vF91kC9jGMGQ/Zybvi+2hea
+	 gnIC7rPWHQUIeYFQ6hHy/PGvAVSKsz1TWtDWKzkY+733oSNR6zPzkZUjBKeLie5cpL
+	 SRWtfIEnhH/0BOgaa9QE60Gc+VkViKeLMOpXLLPKC72mEQAAQRE98RXlDjp1yXLQ7W
+	 e0hbTnI2wOKChBUwlpB/M74HNoIm2C3GWbFh7CQp2XQ01S1Z4LTOqOkR3toxVOv04/
+	 I3Af4jN1GFNfQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Yosry Ahmed <yosryahmed@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.16 6/6] selftests: vm: fix clang build error multiple output files
+Date: Mon, 21 Mar 2022 17:52:37 -0400
+Message-Id: <20220321215240.490132-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220321215240.490132-1-sashal@kernel.org>
+References: <20220321215240.490132-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdnEyGLi14b0qsc2=aSRafCrQD-Zyh+Oq+E-vx+c1viErg@mail.gmail.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 21, 2022 at 10:51:29AM -0700, Nick Desaulniers wrote:
-> On Fri, Mar 18, 2022 at 9:10 PM kernel test robot <lkp@intel.com> wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-> > head:   200a79c670d24d4d9a75a6a9cbfd14af2f5d0ad9
-> > commit: 5c9f3806a4400c2957abeea9419547f856457a20 [17/19] lockdep: Fix -Wunused-parameter for _THIS_IP_
-> > config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220319/202203191213.tC0sjaY7-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=5c9f3806a4400c2957abeea9419547f856457a20
-> >         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-> >         git fetch --no-tags peterz-queue locking/core
-> >         git checkout 5c9f3806a4400c2957abeea9419547f856457a20
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    In file included from arch/x86/kvm/x86.c:22:
-> >    In file included from arch/x86/kvm/mmu.h:7:
-> >    In file included from arch/x86/kvm/cpuid.h:5:
-> > >> arch/x86/kvm/x86.h:29:30: error: too many arguments to function call, expected 0, have 1
-> >            lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-> >            ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~
-> 
-> Peter, I think you dropped the hunk to include/linux/kvm_host.h when
-> applying this patch?
+From: Yosry Ahmed <yosryahmed@google.com>
 
-Could be I fat fingered some conflict, I'll try again.
+[ Upstream commit 1c4debc443ef7037dcb7c4f08c33b9caebd21d2e ]
+
+When building the vm selftests using clang, some errors are seen due to
+having headers in the compilation command:
+
+  clang -Wall -I ../../../../usr/include  -no-pie    gup_test.c ../../../../mm/gup_test.h -lrt -lpthread -o .../tools/testing/selftests/vm/gup_test
+  clang: error: cannot specify -o when generating multiple output files
+  make[1]: *** [../lib.mk:146: .../tools/testing/selftests/vm/gup_test] Error 1
+
+Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
+since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
+file lib.mk.
+
+Link: https://lkml.kernel.org/r/20220304000645.1888133-1-yosryahmed@google.com
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/vm/Makefile | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 1607322a112c..a14b5b800897 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -1,6 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for vm selftests
+ 
++LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
++
+ include local_config.mk
+ 
+ uname_M := $(shell uname -m 2>/dev/null || echo not)
+@@ -140,10 +142,6 @@ endif
+ 
+ $(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
+ 
+-$(OUTPUT)/gup_test: ../../../../mm/gup_test.h
+-
+-$(OUTPUT)/hmm-tests: local_config.h
+-
+ # HMM_EXTRA_LIBS may get set in local_config.mk, or it may be left empty.
+ $(OUTPUT)/hmm-tests: LDLIBS += $(HMM_EXTRA_LIBS)
+ 
+-- 
+2.34.1
+
