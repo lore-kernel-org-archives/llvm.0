@@ -1,239 +1,312 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4D52C9E
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 09:24:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647854698; x=1679390698;
-  h=message-id:date:subject:references:to:cc:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=1ZNZ/wAx6hIbsFWX4YpOQjODzHTXpRqdfrhqT8cuRs4=;
-  b=KCdj0u0UL28DQm/buC9dhaovyBqsV27AFP01Z6ewXZwYzXurDBqtEicW
-   ORc2B4AKwnZQiCarf9DCpqAJs1qhbO+nWL+PXMX4MG7dm3CC0/L6BZwmT
-   XsdFs8zdWaSgaT931RBGAEJCwc27Gmf5NE3wtdrGdhRcizyD3oGUYw8oy
-   M/I9mqQsA21Cp4XVcsu1gMVK/loKtN+d1sY3El5ti7d58hgLmDSYIV/Wt
-   3mE73FeeeUB7CiUZ0kxKE+pOZ6auIV543J/HYD9DmytQa7NbWhWEIOf7u
-   kzx0g+jT21ww8pefaZBi3drA1Hvechp5ECRoXeIwRshEu08zfprDaNfwF
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="318217720"
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="318217720"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 02:24:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="824304486"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Mar 2022 02:24:57 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 21 Mar 2022 02:24:56 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Mon, 21 Mar 2022 02:24:56 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.173)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Mon, 21 Mar 2022 02:24:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fDr2EU7whfybJtZYif36rR4aQekw/2+ZSRRQP6f7LASMuyXjwxUyG1+s0LdnmpsHpitun5FSO6/aUZO1suaxUjO4rVk07kzL4KaffvQllQ70qRI/jxcILLzkPyGc6/WVkD5ibw6RKLA7B6ALs7ruMyvJ709/Z0NCLOmoT/MvavG3xN+NdwZEQ9l6KNpnvavKRzwRqOrKAMlbCJTQmlMdY0yymcBogirSYKd24KEZjvadwwURa2HB9kcrcoAtcpKxjJrEnA/tvDdv1vNkon/mRzSS91ZA5sj9dBTaaW1zT9CEhVui9z69O9pACjrdU5ITaNFRakxuDZRI9u+G6YEylg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CbBx/yHXw3q3CQw1vsDlQ7Pz6WrJI22PYduFdKNWmIw=;
- b=D8aDYIGLoB5I2pXovDBPPhzEtZ2BK+eczPAcJhc4qDEttRl7TKw+3fLref0vIisa+Pn9DF78id38c02wq1bzqOBJB7cy8d0UpCqi2dP6l4jTzDmjZZcc+b2dXe9J5LwuPBkzEhnS1dc6ntXEUt7Tc7pDla2SfRSNGOXsIUuOvf+yhaNpQ0dGqpExHLjrGEy0JhUplh6UXlQBkWnqJ41IAgE7kSkgtvI+nQPjrwbME2Duj85xuatDTdP/uabdFsvhtU9jBy/Ho9CL9mLJuray2XSwtxYPgixaCeJViIu/zaLoGlElaKhTD+TZr+E4KXUhQCWfsFDlYCrehlqWxTypug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ0PR11MB5598.namprd11.prod.outlook.com (2603:10b6:a03:304::12)
- by MN2PR11MB4464.namprd11.prod.outlook.com (2603:10b6:208:188::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Mon, 21 Mar
- 2022 09:24:53 +0000
-Received: from SJ0PR11MB5598.namprd11.prod.outlook.com
- ([fe80::90bc:9408:541e:5b94]) by SJ0PR11MB5598.namprd11.prod.outlook.com
- ([fe80::90bc:9408:541e:5b94%8]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
- 09:24:53 +0000
-Message-ID: <af19bca5-7ae6-afb7-6f2e-57c67fb6d9b4@intel.com>
-Date: Mon, 21 Mar 2022 17:24:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: [amir73il:fsnotify-volatile 8/9]
- fs/notify/fanotify/fanotify_user.c:1202:2: warning: Value stored to 'ret' is
- never read [clang-analyzer-deadcode.DeadStores]
-References: <202203211233.Vk5Tdqt8-lkp@intel.com>
-Content-Language: en-US
-To: Amir Goldstein <amir73il@gmail.com>
-CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <kbuild-all@lists.01.org>
-From: kernel test robot <yujie.liu@intel.com>
-In-Reply-To: <202203211233.Vk5Tdqt8-lkp@intel.com>
-X-Forwarded-Message-Id: <202203211233.Vk5Tdqt8-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HK2PR0401CA0017.apcprd04.prod.outlook.com
- (2603:1096:202:2::27) To SJ0PR11MB5598.namprd11.prod.outlook.com
- (2603:10b6:a03:304::12)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B5E2F24
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 09:28:08 +0000 (UTC)
+X-UUID: 507c02d50e794f4899599f5f9203032e-20220321
+X-UUID: 507c02d50e794f4899599f5f9203032e-20220321
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+	(envelope-from <rex-bc.chen@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 1098954532; Mon, 21 Mar 2022 17:27:57 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 21 Mar 2022 17:27:56 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 21 Mar
+ 2022 17:27:55 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 21 Mar 2022 17:27:55 +0800
+Message-ID: <1f3d797103d7634160d327a1dd8982dd7a32eebc.camel@mediatek.com>
+Subject: Re: [PATCH v16 05/22] soc: mediatek: add mtk-mmsys config API for
+ mt8195 vdosys1
+From: Rex-BC Chen <rex-bc.chen@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
+	<srv_heupstream@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date: Mon, 21 Mar 2022 17:27:55 +0800
+In-Reply-To: <20220318142009.2796-6-nancy.lin@mediatek.com>
+References: <20220318142009.2796-1-nancy.lin@mediatek.com>
+	 <20220318142009.2796-6-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8ecaa3c6-c740-459d-486d-08da0b1ca829
-X-MS-TrafficTypeDiagnostic: MN2PR11MB4464:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <MN2PR11MB4464BBB38405950CE2E86A0EFB169@MN2PR11MB4464.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aV+VKV9SlMZ+XgOcW8gAoTn3jnw5hMBoCYHmUh7X6rc6tt//RMQ3OowMvTembXVX4yWWU01Eu76bdjqtCkjZng/baiNiAecfc3bl5gHTU/VilvpjO5JaRVizQk80eBE+82tyVUme85UPaz2vzafyDSAF/9xGCGYSei+bv4GRjZukIvSY+SmX4hA3HJQ4TtszoO1h9VCZkZ5uLC974KSAcXhRyyMPxc9ahHUkr6O3zMyq2HKpOQ5NMLQhjE9rDJ5BjGd0rDNw2ctPzvyksozxC+7YN6MR4PUieki3qVfvnT0NGiuGGD7OwEedHUXqKyFWoMEELqVM129HXWTwOkRLDi7wrUi2mAzwl8WA483FByHV9kJNh1Af+ch/x7picHvlV8pAKibAD7dnWl52sqLMU6vSL0K6AApL0sXc6Dqj7xyvfU332cHG4EdpeFcSq4tXsMlSBDN7oZsTpYY+KrMjG678Y5M6mc1Zf6RBDC376mNXHbATIlyVrs9B57P2PouhXvUUE6MfTwrVTpGRuz7h54qc1ytKfcDGFCsoSYQFm9cFao/KgoKyvr+pijqwQ4Vipg0LlIg0S0AG33TOHy9PoCNCR4WrLB/48dLlW5r2EMOxOgt8tCg2fcnlyjV/gVDTMceyz9tAg8ZQMtAhDKj+DVsm3X8rqd0TnHd/GV5PGwpx97D0TEVi30s4BAZxzbZJWu09H0tgJKSrV4x65tWSMzT/fA6qRGPhvPQbwcAG17yghCkKCH6aelsxfyeoxZx9rBfkg0OJMS0sHpwmUICVjBFXGm7wEWiO+GRtA7e3Gx571Wgq2FM3GKOVRibUTcbk9uQXdbEmSEUH3LiAgRWGjJCt+nAlL+e7mpu/sSJy6Wo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5598.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(66556008)(66946007)(2906002)(8676002)(4326008)(82960400001)(4001150100001)(38100700002)(36756003)(83380400001)(31686004)(6666004)(6512007)(508600001)(6506007)(6486002)(966005)(186003)(26005)(6916009)(5660300002)(316002)(86362001)(31696002)(2616005)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q0RBK3R5di9tL3lYM0YveEQrVzJZWmY5RDVxUk9xdVhLNnlNUEpVSWZKUTVk?=
- =?utf-8?B?eGFENXMvdHpJdmFLL28wV3dlemRCN09qNHZsVFMvejdKVVdPZER5U2trMVlS?=
- =?utf-8?B?bDdqdXp5cFA5d3JGZVlwTVF4SnFXcGN4MkhYSlgwM1hCOVNMOWxUK2ZUOUVz?=
- =?utf-8?B?M0taZk1TNTdiWnhyRjNXYW8vdE5Od25Qc1g1b3J6bUVMMFhQVlBrdllnanh0?=
- =?utf-8?B?TWFXb3JJUkJ0RlhJOWw0QVBJWU92bXV5eW1jYmFHMzI5YUNkTmFkY3RTNy9m?=
- =?utf-8?B?aXR3QXdWU3VFUURCczlvSGFNSlR0TSt4eHI2VG5ycDI4Y3JncThEaXBVZUZ4?=
- =?utf-8?B?SnFLclQ4VTU5bnhRaGZsN1NudXRkL3JZVWc0cmozMVpZZ1pCZzZYWi9pMkNO?=
- =?utf-8?B?VHo5WDRTbVFiRlRQa2ExYnBISCtvY0MrMXAzZVNWRExiWThveDFOV3VmMWZN?=
- =?utf-8?B?akd6ekJ6Y2RFZ2huS1dteU1hdDdid2hqamZUdDJxNmdVdnIzZDNRbzd6bW1O?=
- =?utf-8?B?WXNkb2ZCSWF5b0lxV2JzaXpscHdoSmtkMkJLd3NBNTVHVmlDTEpLV1p5ODYr?=
- =?utf-8?B?V3FvZ05iVExROFhodFZBeGpUNEdnRW1lclFLeS96NHE1d3VYay9JbUxLTEtJ?=
- =?utf-8?B?NUhLWGYvb1Zya0h4MEpJTjV5Nzl2eFJ0VFRYSmlUN25ORSsxNjdZOC9KL2FX?=
- =?utf-8?B?dTZpVnllVGd6NGtxclJPSldmQWVzZkN3TlJ6RitPL2hzZXdTRUVGWHRUaXJj?=
- =?utf-8?B?Y3ZMU1d6WXhnOUpGVExsWVZOTGpHbXRscG0yWWtmcmVtZ3htUjVadzZqSDBN?=
- =?utf-8?B?L3h5SGRGcVAwR05MY0ZzMTd2azlyVE9PbzJSeUJLbVpWTDM5dzRQbFJRZUx3?=
- =?utf-8?B?VFJsUDBqM2oyM0tweDFLQ3krTkZoWE9NVStSbGFRSHpvWXF6eGlFTmlYR3BG?=
- =?utf-8?B?TkZoZUZuTHlST1paaEFsOG1sdjdCbnNqZGJJVnV6eUFDQU9ETkpqOThhVW4z?=
- =?utf-8?B?Q3AyU21jSzMzYnNCYzVUUlZKU01qc2tROXNrUHF6UTRJMlpxWTcxSGp2TWE3?=
- =?utf-8?B?bmdkY1B5Yzc2V2J3STlwTWg0cXcvUFE4QWloempPSWgxN3FhdGNBSkxwc0xR?=
- =?utf-8?B?NDBrelhTWUlocWRNanNWT2pHeHRiQjhISEFYTVN1Y1B0MDJMdkZCWXZZakdW?=
- =?utf-8?B?cWVLOTd6WXdiWWVZMVB1N0Y5b3ZvWWJFamQ3NG9FaVZrMm81ODQrUkh1ei9Z?=
- =?utf-8?B?WEZkRytJaHRjelByWWdPa0o4UEh5STZKNUJpVzhTUHAyaWZIMUFCMmRqRGJv?=
- =?utf-8?B?RmdDa3l4blVJOUFrNXd5Wm8ydmNVcFJ0SFhvWUhKQzgrTUZmaWpzMytXbVRh?=
- =?utf-8?B?Vjljc2t5MGRXNytDQk0vR1VIWXVLVDNqdnlNUmQ2U1F4ZDg4QTlRQitiZkx2?=
- =?utf-8?B?ZTVzU3k5TE1uV2dHbU9aUEhBQ0h6K2QvUXJEODgwYjBJalN4UHEzVzY5WTNh?=
- =?utf-8?B?TXBXdXkrRmVJMGlQVS9IRVB3ejNERitreTI3WjF1OGNYU3Q5QjFTVjZEOURJ?=
- =?utf-8?B?YXBnWmN3STMrbFJQbXp4bVIrNUxKYTRubjhyNVZjTGh1OTBFSWRJRGhNbHpj?=
- =?utf-8?B?ZDdKZTdFS0FHOHo0RFBqZzMrQTRDbmdQUll2cHo0b0VTU0NaaTJPZVVvckYz?=
- =?utf-8?B?UnI5UkU4L2MrVVowMHM2cnhOV25sUkNRWFZBaGtuNmVKeHRYeEQwdU55c2J6?=
- =?utf-8?B?bEVZTGp0UlA0b1JxMmdUeWFJY3Fyam05cCtNZHVSdmE0bjZIWXE1c0ljQjNV?=
- =?utf-8?B?d3FSNVlHVEJvWHJ1REtiKzlVanJJNW1SVHRhNUQ5Mk90QitqbXg3UU9VN0xr?=
- =?utf-8?B?WXpGUk16cnFleUFYeVVORUVZVVlESWQ0UXF1RlBhQ2MrTFJaclVFajAzbDFO?=
- =?utf-8?Q?kHhDcmazNprSyXdVLrU/ay36wXfPbnLN?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ecaa3c6-c740-459d-486d-08da0b1ca829
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5598.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 09:24:53.7648
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GGoF+vhpP3etArhK06O9PQbYwUlmiVhua5qPB06jOFX0ILU3ENCNvH9oJNtuFgA7hIIgYmvfyrW9g5V4duA6xQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4464
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-tree:   https://github.com/amir73il/linux fsnotify-volatile
-head:   20c431f640f13d125fa3d80fde9ae4a28892a029
-commit: 068909e55d92d27d6c7e5688b4689235707613ba [8/9] fanotify: factor out helper fanotify_mark_update_flags()
-config: x86_64-randconfig-c007 (https://download.01.org/0day-ci/archive/20220321/202203211233.Vk5Tdqt8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-         chmod +x ~/bin/make.cross
-         # https://github.com/amir73il/linux/commit/068909e55d92d27d6c7e5688b4689235707613ba
-         git remote add amir73il https://github.com/amir73il/linux
-         git fetch --no-tags amir73il fsnotify-volatile
-         git checkout 068909e55d92d27d6c7e5688b4689235707613ba
-         # save the config file to linux build tree
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64 clang-analyzer
+On Fri, 2022-03-18 at 22:19 +0800, Nancy.Lin wrote:
+> Add mmsys config API. The config API is used for config mmsys reg.
+> Some mmsys regs need to be setting according to the HW engine binding
+> to the mmsys simultaneously.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <yujie.liu@intel.com>
+Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
+> ---
+>  drivers/soc/mediatek/mt8195-mmsys.h    | 62
+> ++++++++++++++++++++++++++
+>  drivers/soc/mediatek/mtk-mmsys.c       | 34 ++++++++++++++
+>  drivers/soc/mediatek/mtk-mmsys.h       | 10 +++++
+>  include/linux/soc/mediatek/mtk-mmsys.h | 16 +++++++
+>  4 files changed, 122 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
+> b/drivers/soc/mediatek/mt8195-mmsys.h
+> index 369fb0aab56d..8b7adbd22919 100644
+> --- a/drivers/soc/mediatek/mt8195-mmsys.h
+> +++ b/drivers/soc/mediatek/mt8195-mmsys.h
+> @@ -139,6 +139,21 @@
+>  #define MT8195_VDO1_MIXER_SOUT_SEL_IN				
+> 0xf68
+>  #define MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER			
+> 0
+>  
+> +#define MT8195_VDO1_MERGE0_ASYNC_CFG_WD	0xe30
+> +#define MT8195_VDO1_MERGE1_ASYNC_CFG_WD	0xe40
+> +#define MT8195_VDO1_MERGE2_ASYNC_CFG_WD	0xe50
+> +#define MT8195_VDO1_MERGE3_ASYNC_CFG_WD	0xe60
+> +#define MT8195_VDO1_HDRBE_ASYNC_CFG_WD	0xe70
+> +#define MT8195_VDO1_HDR_TOP_CFG		0xd00
+> +#define MT8195_VDO1_MIXER_IN1_ALPHA	0xd30
+> +#define MT8195_VDO1_MIXER_IN2_ALPHA	0xd34
+> +#define MT8195_VDO1_MIXER_IN3_ALPHA	0xd38
+> +#define MT8195_VDO1_MIXER_IN4_ALPHA	0xd3c
+> +#define MT8195_VDO1_MIXER_IN1_PAD	0xd40
+> +#define MT8195_VDO1_MIXER_IN2_PAD	0xd44
+> +#define MT8195_VDO1_MIXER_IN3_PAD	0xd48
+> +#define MT8195_VDO1_MIXER_IN4_PAD	0xd4c
+> +
+>  static const struct mtk_mmsys_routes mmsys_mt8195_routing_table[] =
+> {
+>  	{
+>  		DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
+> @@ -263,4 +278,51 @@ static const struct mtk_mmsys_routes
+> mmsys_mt8195_routing_table[] = {
+>  	}
+>  };
+>  
+> +/*
+> + * mtk_mmsys_config table is used for config mmsys reg in runtime.
+> + * MMSYS_CONFIG_MERGE_ASYNC_WIDTH: config merge async width
+> + * MMSYS_CONFIG_MERGE_ASYNC_HEIGHT: config merge async height
+> + * MMSYS_CONFIG_HDR_BE_ASYNC_WIDTH: config hdr_be async width
+> + * MMSYS_CONFIG_HDR_BE_ASYNC_HEIGHT: config hdr_be async height
+> + * MMSYS_CONFIG_MIXER_IN_ALPHA_ODD: config mixer odd channel 9bit
+> alpha value
+> + * MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN: config mixer even channel 9bit
+> alpha value
+> + * MMSYS_CONFIG_MIXER_IN_CH_SWAP: config mixer input RGB channel
+> swap
+> + * MMSYS_CONFIG_HDR_ALPHA_SEL: config alpha source
+> + * MMSYS_CONFIG_MIXER_IN_MODE: config mixer pad mode(bypass/even
+> extend mode)
+> + * MMSYS_CONFIG_MIXER_IN_BIWIDTH: config mixer pad width. formula:
+> width / 2 - 1
+> + */
+> +static const struct mtk_mmsys_config mmsys_mt8195_config_table[] = {
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_WIDTH, 0,
+> MT8195_VDO1_MERGE0_ASYNC_CFG_WD, GENMASK(13, 0), 0},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_HEIGHT, 0,
+> MT8195_VDO1_MERGE0_ASYNC_CFG_WD, GENMASK(29, 16), 16},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_WIDTH, 1,
+> MT8195_VDO1_MERGE1_ASYNC_CFG_WD, GENMASK(13, 0), 0},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_HEIGHT, 1,
+> MT8195_VDO1_MERGE1_ASYNC_CFG_WD, GENMASK(29, 16), 16},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_WIDTH, 2,
+> MT8195_VDO1_MERGE2_ASYNC_CFG_WD, GENMASK(13, 0), 0},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_HEIGHT, 2,
+> MT8195_VDO1_MERGE2_ASYNC_CFG_WD, GENMASK(29, 16), 16},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_WIDTH, 3,
+> MT8195_VDO1_MERGE3_ASYNC_CFG_WD, GENMASK(13, 0), 0},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_HEIGHT, 3,
+> MT8195_VDO1_MERGE3_ASYNC_CFG_WD, GENMASK(29, 16), 16},
+> +	{ MMSYS_CONFIG_HDR_BE_ASYNC_WIDTH, 0,
+> MT8195_VDO1_HDRBE_ASYNC_CFG_WD, GENMASK(13, 0), 0},
+> +	{ MMSYS_CONFIG_HDR_BE_ASYNC_HEIGHT, 0,
+> MT8195_VDO1_HDRBE_ASYNC_CFG_WD, GENMASK(29, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_ODD, 1,
+> MT8195_VDO1_MIXER_IN1_ALPHA, GENMASK(8, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN, 1,
+> MT8195_VDO1_MIXER_IN1_ALPHA, GENMASK(24, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_ODD, 2,
+> MT8195_VDO1_MIXER_IN2_ALPHA, GENMASK(8, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN, 2,
+> MT8195_VDO1_MIXER_IN2_ALPHA, GENMASK(24, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_ODD, 3,
+> MT8195_VDO1_MIXER_IN3_ALPHA, GENMASK(8, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN, 3,
+> MT8195_VDO1_MIXER_IN3_ALPHA, GENMASK(24, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_ODD, 4,
+> MT8195_VDO1_MIXER_IN4_ALPHA, GENMASK(8, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN, 4,
+> MT8195_VDO1_MIXER_IN4_ALPHA, GENMASK(24, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_CH_SWAP, 4, MT8195_VDO1_MIXER_IN4_PAD,
+> GENMASK(4, 4), 4},
+> +	{ MMSYS_CONFIG_HDR_ALPHA_SEL, 1, MT8195_VDO1_HDR_TOP_CFG,
+> GENMASK(20, 20), 20},
+> +	{ MMSYS_CONFIG_HDR_ALPHA_SEL, 2, MT8195_VDO1_HDR_TOP_CFG,
+> GENMASK(21, 21), 21},
+> +	{ MMSYS_CONFIG_HDR_ALPHA_SEL, 3, MT8195_VDO1_HDR_TOP_CFG,
+> GENMASK(22, 22), 22},
+> +	{ MMSYS_CONFIG_HDR_ALPHA_SEL, 4, MT8195_VDO1_HDR_TOP_CFG,
+> GENMASK(23, 23), 23},
+> +	{ MMSYS_CONFIG_MIXER_IN_MODE, 1, MT8195_VDO1_MIXER_IN1_PAD,
+> GENMASK(1, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_MODE, 2, MT8195_VDO1_MIXER_IN2_PAD,
+> GENMASK(1, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_MODE, 3, MT8195_VDO1_MIXER_IN3_PAD,
+> GENMASK(1, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_MODE, 4, MT8195_VDO1_MIXER_IN4_PAD,
+> GENMASK(1, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_BIWIDTH, 1, MT8195_VDO1_MIXER_IN1_PAD,
+> GENMASK(31, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_BIWIDTH, 2, MT8195_VDO1_MIXER_IN2_PAD,
+> GENMASK(31, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_BIWIDTH, 3, MT8195_VDO1_MIXER_IN3_PAD,
+> GENMASK(31, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_BIWIDTH, 4, MT8195_VDO1_MIXER_IN4_PAD,
+> GENMASK(31, 16), 16},
+> +};
+> +
+>  #endif /* __SOC_MEDIATEK_MT8195_MMSYS_H */
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+> b/drivers/soc/mediatek/mtk-mmsys.c
+> index 0b77624cf6ca..6dd68483012c 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -83,6 +83,8 @@ static const struct mtk_mmsys_driver_data
+> mt8195_vdosys1_driver_data = {
+>  	.clk_driver = "clk-mt8195-vdo1",
+>  	.routes = mmsys_mt8195_routing_table,
+>  	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
+> +	.config = mmsys_mt8195_config_table,
+> +	.num_configs = ARRAY_SIZE(mmsys_mt8195_config_table),
+>  };
+>  
+>  static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data =
+> {
+> @@ -187,6 +189,38 @@ static const struct reset_control_ops
+> mtk_mmsys_reset_ops = {
+>  	.reset = mtk_mmsys_reset,
+>  };
+>  
+> +void mtk_mmsys_ddp_config(struct device *dev, enum
+> mtk_mmsys_config_type config,
+> +			  u32 id, u32 val)
+> +{
+> +	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+> +	const struct mtk_mmsys_config *mmsys_config = mmsys->data-
+> >config;
+> +	u32 reg_val;
+> +	u32 mask;
+> +	u32 offset;
+> +	int i;
+> +	u32 tmp;
+> +
+> +	if (!mmsys->data->num_configs)
+> +		return;
+> +
+> +	for (i = 0; i < mmsys->data->num_configs; i++)
+> +		if (config == mmsys_config[i].config && id ==
+> mmsys_config[i].id)
+> +			break;
+> +
+> +	if (i == mmsys->data->num_configs)
+> +		return;
+> +
+> +	offset = mmsys_config[i].addr;
+> +	mask = mmsys_config[i].mask;
+> +	reg_val = val << mmsys_config[i].shift;
+> +
+> +	tmp = readl(mmsys->regs + offset);
+> +
+> +	tmp = (tmp & ~mask) | reg_val;
+> +	writel(tmp, mmsys->regs + offset);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_config);
+> +
+>  static int mtk_mmsys_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.h
+> b/drivers/soc/mediatek/mtk-mmsys.h
+> index 77f37f8c715b..78c7069bac0e 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.h
+> +++ b/drivers/soc/mediatek/mtk-mmsys.h
+> @@ -86,11 +86,21 @@ struct mtk_mmsys_routes {
+>  	u32 val;
+>  };
+>  
+> +struct mtk_mmsys_config {
+> +	enum mtk_mmsys_config_type config;
+> +	u32 id;
+> +	u32 addr;
+> +	u32 mask;
+> +	u32 shift;
+> +};
+> +
+>  struct mtk_mmsys_driver_data {
+>  	const char *clk_driver;
+>  	const struct mtk_mmsys_routes *routes;
+>  	const unsigned int num_routes;
+>  	const u16 sw0_rst_offset;
+> +	const struct mtk_mmsys_config *config;
+> +	const unsigned int num_configs;
+>  };
+>  
+>  /*
+> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h
+> b/include/linux/soc/mediatek/mtk-mmsys.h
+> index eaf7f7345519..b2d2310d7e7a 100644
+> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> @@ -56,6 +56,19 @@ enum mtk_ddp_comp_id {
+>  	DDP_COMPONENT_ID_MAX,
+>  };
+>  
+> +enum mtk_mmsys_config_type {
+> +	MMSYS_CONFIG_MERGE_ASYNC_WIDTH,
+> +	MMSYS_CONFIG_MERGE_ASYNC_HEIGHT,
+> +	MMSYS_CONFIG_HDR_BE_ASYNC_WIDTH,
+> +	MMSYS_CONFIG_HDR_BE_ASYNC_HEIGHT,
+> +	MMSYS_CONFIG_HDR_ALPHA_SEL,
+> +	MMSYS_CONFIG_MIXER_IN_ALPHA_ODD,
+> +	MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN,
+> +	MMSYS_CONFIG_MIXER_IN_CH_SWAP,
+> +	MMSYS_CONFIG_MIXER_IN_MODE,
+> +	MMSYS_CONFIG_MIXER_IN_BIWIDTH,
+> +};
+> +
+>  void mtk_mmsys_ddp_connect(struct device *dev,
+>  			   enum mtk_ddp_comp_id cur,
+>  			   enum mtk_ddp_comp_id next);
+> @@ -64,4 +77,7 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>  			      enum mtk_ddp_comp_id cur,
+>  			      enum mtk_ddp_comp_id next);
+>  
+> +void mtk_mmsys_ddp_config(struct device *dev, enum
+> mtk_mmsys_config_type config,
+> +			  u32 id, u32 val);
+> +
+>  #endif /* __MTK_MMSYS_H */
 
-clang-analyzer warnings: (new ones prefixed by >>)
-
- >> fs/notify/fanotify/fanotify_user.c:1202:2: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-            ret = 0;
-            ^     ~
-
-vim +/ret +1202 fs/notify/fanotify/fanotify_user.c
-
-5e9c070ca08543 Lino Sanfilippo         2013-07-08  1178
-eaa2c6b0c9181c Amir Goldstein          2018-06-23  1179  static int fanotify_add_mark(struct fsnotify_group *group,
-ad69cd9972e79a Amir Goldstein          2021-11-29  1180  			     fsnotify_connp_t *connp, unsigned int obj_type,
-77115225acc67d Amir Goldstein          2019-01-10  1181  			     __u32 mask, unsigned int flags,
-77115225acc67d Amir Goldstein          2019-01-10  1182  			     __kernel_fsid_t *fsid)
-2a3edf86040a7e Eric Paris              2009-12-17  1183  {
-40822e8f3f162d Amir Goldstein          2022-03-20  1184  	struct fsnotify_mark *fsn_mark = NULL;
-40822e8f3f162d Amir Goldstein          2022-03-20  1185  	void *prealloc_conn = NULL, *prealloc_mark = NULL;
-40822e8f3f162d Amir Goldstein          2022-03-20  1186  	int ret = -ENOMEM;
-40822e8f3f162d Amir Goldstein          2022-03-20  1187
-40822e8f3f162d Amir Goldstein          2022-03-20  1188  	fsn_mark = fsnotify_find_mark(connp, group);
-40822e8f3f162d Amir Goldstein          2022-03-20  1189  	/* Preallocate new mark and connector outside of group lock */
-40822e8f3f162d Amir Goldstein          2022-03-20  1190  	if (!fsn_mark) {
-40822e8f3f162d Amir Goldstein          2022-03-20  1191  		prealloc_conn = fsnotify_conn_alloc(GFP_KERNEL);
-40822e8f3f162d Amir Goldstein          2022-03-20  1192  		if (!prealloc_conn)
-40822e8f3f162d Amir Goldstein          2022-03-20  1193  			goto out;
-40822e8f3f162d Amir Goldstein          2022-03-20  1194
-40822e8f3f162d Amir Goldstein          2022-03-20  1195  		prealloc_mark = kmem_cache_alloc(fanotify_mark_cache,
-40822e8f3f162d Amir Goldstein          2022-03-20  1196  						 GFP_KERNEL);
-40822e8f3f162d Amir Goldstein          2022-03-20  1197  		if (!prealloc_mark)
-40822e8f3f162d Amir Goldstein          2022-03-20  1198  			goto out;
-40822e8f3f162d Amir Goldstein          2022-03-20  1199  	}
-88826276dcaf4c Eric Paris              2009-12-17  1200
-7b18527c4a9539 Lino Sanfilippo         2013-07-08  1201  	mutex_lock(&group->mark_mutex);
-40822e8f3f162d Amir Goldstein          2022-03-20 @1202  	ret = 0;
-40822e8f3f162d Amir Goldstein          2022-03-20  1203  	/* Check again under lock - if found will not use preallocated mark */
-40822e8f3f162d Amir Goldstein          2022-03-20  1204  	if (!fsn_mark)
-b812a9f5896379 Amir Goldstein          2018-06-23  1205  		fsn_mark = fsnotify_find_mark(connp, group);
-88826276dcaf4c Eric Paris              2009-12-17  1206  	if (!fsn_mark) {
-40822e8f3f162d Amir Goldstein          2022-03-20  1207  		fsn_mark = fanotify_add_new_mark(group, connp, obj_type, fsid,
-40822e8f3f162d Amir Goldstein          2022-03-20  1208  						 &prealloc_mark,
-40822e8f3f162d Amir Goldstein          2022-03-20  1209  						 &prealloc_conn);
-5e9c070ca08543 Lino Sanfilippo         2013-07-08  1210  		if (IS_ERR(fsn_mark)) {
-40822e8f3f162d Amir Goldstein          2022-03-20  1211  			ret = PTR_ERR(fsn_mark);
-40822e8f3f162d Amir Goldstein          2022-03-20  1212  			fsn_mark = NULL;
-40822e8f3f162d Amir Goldstein          2022-03-20  1213  			goto out_unlock;
-88826276dcaf4c Eric Paris              2009-12-17  1214  		}
-7b18527c4a9539 Lino Sanfilippo         2013-07-08  1215  	}
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1216
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1217  	/*
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1218  	 * Error events are pre-allocated per group, only if strictly
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1219  	 * needed (i.e. FAN_FS_ERROR was requested).
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1220  	 */
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1221  	if (!(flags & FAN_MARK_IGNORED_MASK) && (mask & FAN_FS_ERROR)) {
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1222  		ret = fanotify_group_init_error_pool(group);
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1223  		if (ret)
-40822e8f3f162d Amir Goldstein          2022-03-20  1224  			goto out_unlock;
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1225  	}
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1226
-068909e55d92d2 Amir Goldstein          2022-03-20  1227  	ret = fanotify_mark_add_to_mask(fsn_mark, mask, flags);
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1228
-40822e8f3f162d Amir Goldstein          2022-03-20  1229  out_unlock:
-c97476400d3b73 Jan Kara                2016-12-14  1230  	mutex_unlock(&group->mark_mutex);
-5e9c070ca08543 Lino Sanfilippo         2013-07-08  1231
-40822e8f3f162d Amir Goldstein          2022-03-20  1232  out:
-40822e8f3f162d Amir Goldstein          2022-03-20  1233  	if (fsn_mark)
-fa218ab98c31ee Lino Sanfilippo         2010-11-09  1234  		fsnotify_put_mark(fsn_mark);
-40822e8f3f162d Amir Goldstein          2022-03-20  1235  	if (prealloc_mark)
-40822e8f3f162d Amir Goldstein          2022-03-20  1236  		kmem_cache_free(fanotify_mark_cache, prealloc_mark);
-40822e8f3f162d Amir Goldstein          2022-03-20  1237  	if (prealloc_conn)
-40822e8f3f162d Amir Goldstein          2022-03-20  1238  		fsnotify_conn_free(prealloc_conn);
-40822e8f3f162d Amir Goldstein          2022-03-20  1239
-734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1240  	return ret;
-88826276dcaf4c Eric Paris              2009-12-17  1241  }
-88826276dcaf4c Eric Paris              2009-12-17  1242
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
