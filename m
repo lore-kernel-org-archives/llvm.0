@@ -1,41 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D24612C
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 19:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0EB612C
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 19:41:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647891032; x=1679427032;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0TYd6gMz9/UO7N5xndFl7v9dU6morw42GxdVe8VECUw=;
-  b=cxL5bvAy78y94HsTkNLqUKoF+Gh6ifpkeofwN5O4VTzIaIUYtL9p2d0/
-   BUwN9ZuICWjQwmbe72FqFfqPYkSE9YzvxeJiWuwOSwTcWOJk3acoTUGKX
-   p3kPFYo2Z43mAnskbcsOzJj1Uyhf1wIkkdAwEAitlrAA3H76QD7rokLWE
-   a6l51YVbAE7rdScBwTaJ8nVKW90rJRfXGThrpSIUI80+kCSbSwp4lMo5c
-   WO21q1wQE4oo4sdMvobBY7iwlZCSug6HFOBHZoTjgk6fzxeTFJQDTWpgt
-   oRAuptf6F+14y0b5LCllsJyZ5Mz/bKlkVCIvwzNDOH48cA3G+fEVFQmPh
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257351210"
+  t=1647891692; x=1679427692;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G2lX+Di8elGcwVO0jNQnrRc581eS2Rjk8badfCKQZLg=;
+  b=aEa/sCDHaTLKCz02AME2cAmNnMohKIkQtBYxvQ97ve9tilwRtbozdowH
+   nVMYMWFHRvI5MH6QInvfkOvcj+ZUIpZdkBQ4zx62STF4zTXZLQyFVeRDQ
+   bS912h8E+iZo48ikqMKbwVm+fb65WFl7/F3fw2eNfvChUuzNtGr+plNz+
+   AFW0DLkq/KvNts+/C68K3MEScAjSdoEdROSSx4AZtwKhwXexPkf37XMeo
+   bqQxMsbzW+40xpqurJgj0AWEsxn9vgdkKebIcu4QMMS93BxwyaknD4+A2
+   Uq3dnRNXviY4FD74bg4vs6HOxVIBwNSHcy9ZcNIokPhXuZ9i7JE2rNwXX
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257583573"
 X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="257351210"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 12:30:31 -0700
+   d="scan'208";a="257583573"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 12:41:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="716616948"
+   d="scan'208";a="543358439"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 21 Mar 2022 12:30:29 -0700
+  by orsmga007.jf.intel.com with ESMTP; 21 Mar 2022 12:41:30 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nWNjZ-000I5t-1Y; Mon, 21 Mar 2022 19:30:29 +0000
-Date: Tue, 22 Mar 2022 03:30:20 +0800
+	id 1nWNuD-000I67-AQ; Mon, 21 Mar 2022 19:41:29 +0000
+Date: Tue, 22 Mar 2022 03:40:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marcelo Tosatti <mtosatti@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: kernel/time/hrtimer.c:276:20: warning: unused function
- 'is_migration_base'
-Message-ID: <202203220318.lF1LF4vW-lkp@intel.com>
+To: Jani Nikula <jani.nikula@intel.com>, intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, jani.nikula@intel.com,
+	Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v2 5/7] drm/i915/dmc: abstract GPU error
+ state dump
+Message-ID: <202203220303.d9et6XXb-lkp@intel.com>
+References: <2600c34a1a295456ed87fa64953a4530b0c001d2.1647870374.git.jani.nikula@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,98 +46,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <2600c34a1a295456ed87fa64953a4530b0c001d2.1647870374.git.jani.nikula@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Marcelo,
+Hi Jani,
 
-FYI, the error/warning still remains.
+I love your patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f443e374ae131c168a065ea1748feac6b2e76613
-commit: 81d741d3460ca422843ce0ec8351083f259c6166 hrtimer: Avoid unnecessary SMP function calls in clock_was_set()
-date:   7 months ago
-config: mips-randconfig-r022-20220319 (https://download.01.org/0day-ci/archive/20220322/202203220318.lF1LF4vW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 217f267efe3082438e698e2f08566b9df8c530fa)
+[auto build test ERROR on drm-tip/drm-tip]
+[cannot apply to drm-intel/for-linux-next v5.17 next-20220321]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jani-Nikula/drm-i915-dmc-cleanups/20220321-215213
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a006-20220321 (https://download.01.org/0day-ci/archive/20220322/202203220303.d9et6XXb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d741d3460ca422843ce0ec8351083f259c6166
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 81d741d3460ca422843ce0ec8351083f259c6166
+        # https://github.com/0day-ci/linux/commit/1e23e4b2519941d741e3489536b37823cece69d8
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jani-Nikula/drm-i915-dmc-cleanups/20220321-215213
+        git checkout 1e23e4b2519941d741e3489536b37823cece69d8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iommu/ fs/ kernel/time/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_REALTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_MONOTONIC,
-   ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_BOOTTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_TAI,
-   ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
->> kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
-   static inline bool is_migration_base(struct hrtimer_clock_base
-   ^
->> kernel/time/hrtimer.c:1830:20: warning: unused function '__hrtimer_peek_ahead_timers'
-   static inline void __hrtimer_peek_ahead_timers(void) { }
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-85e9b2687a/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm scripts security sound source usr virt
+>> drivers/gpu/drm/i915/display/intel_dmc.c:822:2: error: implicit declaration of function 'i915_error_printf' [-Werror,-Wimplicit-function-declaration]
+           i915_error_printf(m, "DMC loaded: %s\n",
+           ^
+   1 error generated.
 
 
-vim +/is_migration_base +276 kernel/time/hrtimer.c
+vim +/i915_error_printf +822 drivers/gpu/drm/i915/display/intel_dmc.c
 
-c0a3132963db68 kernel/hrtimer.c      Thomas Gleixner           2006-01-09  275  
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04 @276  static inline bool is_migration_base(struct hrtimer_clock_base *base)
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  277  {
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  278  	return false;
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  279  }
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  280  
-
-:::::: The code at line 276 was first introduced by commit
-:::::: 5d2295f3a93b04986d069ebeaf5b07725f9096c1 hrtimer: Add a missing bracket and hide `migration_base' on !SMP
-
-:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+   813	
+   814	void intel_dmc_print_error_state(struct drm_i915_error_state_buf *m,
+   815					 struct drm_i915_private *i915)
+   816	{
+   817		struct intel_dmc *dmc = &i915->dmc;
+   818	
+   819		if (!HAS_DMC(i915))
+   820			return;
+   821	
+ > 822		i915_error_printf(m, "DMC loaded: %s\n",
+   823				  str_yes_no(intel_dmc_has_payload(i915)));
+   824		i915_error_printf(m, "DMC fw version: %d.%d\n",
+   825				  DMC_VERSION_MAJOR(dmc->version),
+   826				  DMC_VERSION_MINOR(dmc->version));
+   827	}
+   828	
 
 -- 
 0-DAY CI Kernel Test Service
