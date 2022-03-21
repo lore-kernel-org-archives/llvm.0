@@ -1,53 +1,42 @@
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC27857D0
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 15:24:33 +0000 (UTC)
-Received: by mail-oi1-f169.google.com with SMTP id e4so13502174oif.2
-        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 08:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8vnMa7QJYto3rUp2CNI3IroLa5v/hp5jnq+SU6YeAQo=;
-        b=oBP78Y9N08jETzPolQznEBXq3Uxd/XEb+yye2TG3+vbyfT33AK6uFhZBpLcMNe16q+
-         GglCnu2CKG73eZYghuFy0so04d+mdzcjU4Kv7QkEYidzH2H96h1AqO0/PuZcGuO9JgCG
-         MVd1c1MtN3Iv0PTPLiV04LcCTyMka/zZ5EpJiiYj3z5I1gjmK12qqV2XMduawUMO1aD5
-         E9gGv/7O75vqxHKpn8fCSuzHGwi4kEL6wFPLCo9m8Qmd1HbJNPvFV2qZVJhc+F3HvV/W
-         JSHonH18vIa6TjPsEEedwXC0LWVYt7ujBKv2NH3EiZmk3zXqoxznTth8WWXqk5IVrOCU
-         NQnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8vnMa7QJYto3rUp2CNI3IroLa5v/hp5jnq+SU6YeAQo=;
-        b=f7hgY0o5is+2L+6T739vhH3fyExEAhXcZ5SsuIxU4rolGSwFHDc4VZk9lIMHlq0LpD
-         N4F7VPkdcQD3HdMP7I74Q3uWmqro1gmcePvTguON/F45AC+5HprQqXA4mFeB0MWHNknr
-         bzcER8feF1ifbPWhAZwFuy1qBEwusaBDtssRGRg69ADrcPVU+ODGk0Ud6jGUx0ukpnBp
-         f6MoKvg7YdKBf/p2PRlX/lvP+Dn1miXJtxcHk55iRn+7E8dSdciEUAtQekY2nDxp7sSo
-         7QWcbUc2zrN7+2RdJ1ddQnlW7mZoSB8sCgfrZGu2cSh9Jc7l1fvE/qTuL5yQEJN0FSE8
-         B+1Q==
-X-Gm-Message-State: AOAM532z+7Fem3tqn9Gn0piXzw6gDTZ+fibTX6QgcBxP52PvtrgHIkKC
-	EEvUjYbWWJc9w4KcFZSY8XoHow==
-X-Google-Smtp-Source: ABdhPJxC6uT/rBzoCI8ifUy4cm0zSLKXkk2t+HK66PziQB2HByEqlpYQCCLQuHduP3ICCzWspKkvIA==
-X-Received: by 2002:a05:6808:3db:b0:2ec:cfe1:dfa0 with SMTP id o27-20020a05680803db00b002eccfe1dfa0mr13048421oie.127.1647876272900;
-        Mon, 21 Mar 2022 08:24:32 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id v8-20020a05683018c800b005cb39fc3e15sm5544170ote.13.2022.03.21.08.24.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 08:24:31 -0700 (PDT)
-Date: Mon, 21 Mar 2022 10:24:30 -0500
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
-To: Bill Wendling <morbo@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Andy Gross <agross@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-arm-msm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] soc: qcom: smem: use correct format characters
-Message-ID: <YjiYrj5euvidRKHM@builder.lan>
-References: <20220316213118.2352683-1-morbo@google.com>
- <YjTJRqlFOsXz7Ss7@dev-arch.thelio-3990X>
- <CAGG=3QUXDj1Bp1kDY2F0dqw=6f8iRqE4nRDyticUrWx-nTb-=A@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DED357D0
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 15:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647876968; x=1679412968;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=45BRElyQlnzf/S18fYMTUOtYkpVmV2cKz2ZBPWFwUqY=;
+  b=OOymeCJNC4PIdt1osSH9uMyhX90wWk+GnpB0TTGh+xkzyvNpZLB0mMyB
+   3t0UzGq3stiJUFEzxJ/fQP70QeIiAKyeEAYViTYs1nMXqbcHBw0AgLZy0
+   mXLgZK2xZvKQ5OP82ORfTxz/PGR30JbndkEmz497Rzh9TXD3Kudnb6A6O
+   X0k5CcAwtTEHYFkJLMPkX5rVoqMopbposDvCVuIZ0+cMyHaXrs+z8kpUJ
+   HvFFJNWGqPLsqQKbBJzo0rzK1iD+PEHCJQDsygAboAq9R2FMR72XPBC9p
+   Crl1tkub8XJ668gdUwxTnUwKwMM7YNTZLY4lusfvwdX3q0A4QrxIerUeg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257770196"
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="257770196"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 08:36:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="648606062"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2022 08:36:03 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nWK4g-000HwR-KK; Mon, 21 Mar 2022 15:36:02 +0000
+Date: Mon, 21 Mar 2022 23:35:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Song Liu <song@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
+Subject: [ammarfaizi2-block:bpf/bpf-next/master 251/258]
+ kernel/bpf/core.c:847:9: error: use of undeclared identifier 'PMD_SIZE'
+Message-ID: <202203212309.ifp4edvz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,99 +45,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGG=3QUXDj1Bp1kDY2F0dqw=6f8iRqE4nRDyticUrWx-nTb-=A@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri 18 Mar 13:27 CDT 2022, Bill Wendling wrote:
+tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf-next/master
+head:   7ada3787e91c89b0aa7abf47682e8e587b855c13
+commit: ef078600eec20f20eb7833cf597d4a5edf2953c1 [251/258] bpf: Select proper size for bpf_prog_pack
+config: arm-randconfig-c002-20220321 (https://download.01.org/0day-ci/archive/20220321/202203212309.ifp4edvz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/ef078600eec20f20eb7833cf597d4a5edf2953c1
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block bpf/bpf-next/master
+        git checkout ef078600eec20f20eb7833cf597d4a5edf2953c1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-> On Fri, Mar 18, 2022 at 11:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Wed, Mar 16, 2022 at 02:31:18PM -0700, Bill Wendling wrote:
-> > > When compiling with -Wformat, clang emits the following warnings:
-> > >
-> > > drivers/soc/qcom/smem.c:847:41: warning: format specifies type 'unsigned
-> > > short' but the argument has type 'unsigned int' [-Wformat]
-> > >                         dev_err(smem->dev, "bad host %hu\n", remote_host);
-> > >                                                      ~~~     ^~~~~~~~~~~
-> > >                                                      %u
-> > > ./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-> > >         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-> > >                                                                ~~~     ^~~~~~~~~~~
-> > > ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-> > >                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-> > >                              ~~~    ^~~~~~~~~~~
-> > > drivers/soc/qcom/smem.c:852:47: warning: format specifies type 'unsigned
-> > > short' but the argument has type 'unsigned int' [-Wformat]
-> > >                         dev_err(smem->dev, "duplicate host %hu\n", remote_host);
-> > >                                                            ~~~     ^~~~~~~~~~~
-> > >                                                            %u
-> > > ./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-> > >         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-> > >                                                                ~~~     ^~~~~~~~~~~
-> > > ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-> > >                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-> > >                              ~~~    ^~~~~~~~~~~
-> > >
-> > > The types of these arguments are unconditionally defined, so this patch
-> > > updates the format character to the correct ones for ints and unsigned
-> > > ints.
-> >
-> > Right. Alternatively, remote_host could be turned into a u16 to match
-> > host0 and host1, as those are the only values that will ever be assigned
-> > to it, which should have been done in commit 13a920ae7898 ("soc: qcom:
-> > smem: a few last cleanups") to avoid introducing this warning in the
-> > first place.
-> >
-> I'll be happy to redo the patch if the maintainers wish. :-)
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Forgive me, but I think that not mixing the unsigned int and u16 would
-look better. So if you're willing to respin this to change the type of
-remote_host, I'd be happy to merge that.
+All errors (new ones prefixed by >>):
 
-Thanks,
-Bjorn
+>> kernel/bpf/core.c:847:9: error: use of undeclared identifier 'PMD_SIZE'
+           size = PMD_SIZE * num_online_nodes();
+                  ^
+   kernel/bpf/core.c:1629:12: warning: no previous prototype for function 'bpf_probe_read_kernel' [-Wmissing-prototypes]
+   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
+              ^
+   kernel/bpf/core.c:1629:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
+   ^
+   static 
+   1 warning and 1 error generated.
 
-> > Probably does not matter though, unless the maintainers feel that is a
-> > better fix.
-> >
-> > > Link: ClangBuiltLinux/linux#378
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> >
-> > as discussed on other patches :)
-> >
-> Thanks! Copy-and-paste strikes again...
-> 
-> -bw
-> 
-> > > Signed-off-by: Bill Wendling <morbo@google.com>
-> >
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> > > ---
-> > >  drivers/soc/qcom/smem.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
-> > > index e2057d8f1eff..a98b5f395d15 100644
-> > > --- a/drivers/soc/qcom/smem.c
-> > > +++ b/drivers/soc/qcom/smem.c
-> > > @@ -844,12 +844,12 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
-> > >                       continue;
-> > >
-> > >               if (remote_host >= SMEM_HOST_COUNT) {
-> > > -                     dev_err(smem->dev, "bad host %hu\n", remote_host);
-> > > +                     dev_err(smem->dev, "bad host %u\n", remote_host);
-> > >                       return -EINVAL;
-> > >               }
-> > >
-> > >               if (smem->partitions[remote_host]) {
-> > > -                     dev_err(smem->dev, "duplicate host %hu\n", remote_host);
-> > > +                     dev_err(smem->dev, "duplicate host %u\n", remote_host);
-> > >                       return -EINVAL;
-> > >               }
-> > >
-> > > --
-> > > 2.35.1.723.g4982287a31-goog
-> > >
-> > >
+
+vim +/PMD_SIZE +847 kernel/bpf/core.c
+
+   841	
+   842	static size_t select_bpf_prog_pack_size(void)
+   843	{
+   844		size_t size;
+   845		void *ptr;
+   846	
+ > 847		size = PMD_SIZE * num_online_nodes();
+   848		ptr = module_alloc(size);
+   849	
+   850		/* Test whether we can get huge pages. If not just use PAGE_SIZE
+   851		 * packs.
+   852		 */
+   853		if (!ptr || !is_vm_area_hugepages(ptr))
+   854			size = PAGE_SIZE;
+   855	
+   856		vfree(ptr);
+   857		return size;
+   858	}
+   859	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
