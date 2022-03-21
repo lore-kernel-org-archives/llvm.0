@@ -1,49 +1,41 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD767A
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 05:04:29 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id n15so11744558plh.2
-        for <llvm@lists.linux.dev>; Sun, 20 Mar 2022 22:04:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rWn5lOEVKhm+FQ6md1T7NJaCwXARs2ppaRXQ0ISSujo=;
-        b=Z6CZCluY+X4TE/5PAqyM+8g2WPrypjmBsL4y9z7MyQq3tnZf1i78nZxX+Ig3SqfwVs
-         d3CkCW/Qzu2bBiDBkxAAE8BGkeTniraV8l7JRVXOYpd2umcmF8xuq3lyIr9zHM5pnmmA
-         ezJbzllMjrutcx6j0MQ+FFw6Ge/1ee7xP7BAkBI0fb1WvpjtQOpyvWPprZl2sdi2799w
-         sFHZRZbTeNZDsaFdReL81SbPcdaJuGm/MBF6sswlFx3SJ+//oI/mrFbA75jOxReJxtiU
-         9hDsg0vzu271i2j++j68tVZe3DHzbVM4LGX2AmeMNgTkLrUKfVdD3jJ2gJFTrCcMvSGH
-         V1/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rWn5lOEVKhm+FQ6md1T7NJaCwXARs2ppaRXQ0ISSujo=;
-        b=8NGsEIrxl3AXnMiLaXhRyckzQGIKhqYUPsmF1kcrhdHkECxMTi4S3oHUxYP88JfyQy
-         JUqp7lGVImKW2YpgsFyB0lFwKd9Pgnv/JCwuYsXJ11PPTZumDcDBoArluL/X0mTkiLeE
-         SYP/fkaLnv099Wp1ak+d6MGY/mRfH2IfXFhrHCJHsLCRGhBtjwiJl97wiKLH1NCp2qcc
-         +FgfmqGc67d7/QqdgTM9mG8E94Kqj+8I/qddUcPkHFDRRuiMztwtIE9sJVQEBkbIzsFT
-         6Crnya6cD8JslsBGfb3t4w+0oVoDq6EPPrshTEk3w3NXyFgQNq/J1LlF/qiJn9wL83Cy
-         9+Gg==
-X-Gm-Message-State: AOAM531Ss0uq79viwhf4ySv6WSK7Z75sMnQRbh1REyhsG7CWmC7hokg8
-	pPKMFteUzrN67sqHUAp1K2lu3QztKVU=
-X-Google-Smtp-Source: ABdhPJw3GsuYmAvFujOtsMEZmTIiI8Ukt+Rrq0Zw7bPrTEkxB9B36nuwkv85fIHGkT5k+pTveYeOEQ==
-X-Received: by 2002:a17:90b:4f92:b0:1bf:25e2:f6af with SMTP id qe18-20020a17090b4f9200b001bf25e2f6afmr24103584pjb.98.1647839068735;
-        Sun, 20 Mar 2022 22:04:28 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:31f6:c8f1:6f10:b2ec])
-        by smtp.gmail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm18659405pju.44.2022.03.20.22.04.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 22:04:28 -0700 (PDT)
-Date: Sun, 20 Mar 2022 22:04:25 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: linux-input@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] Input: adi: remove redundant variable z
-Message-ID: <YjgHWeTiAWRty3rK@google.com>
-References: <20220318002318.80519-1-colin.i.king@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBFB7A
+	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 05:16:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647839763; x=1679375763;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=szmX5mQ1irZlur5g+LvTvMsi9E1E7QaV9jSuI6zk0wU=;
+  b=Ho5iAdAUD1BzXpbKE84KEbiV2QgQ5LFxhawho4DJi1bmF5QWqn+DN5sw
+   k9jHJ7vIBJf5dW1NcrxjUpDdf6olCJj5QhLfAuBMkWI+pRF5ORos5gHg4
+   mGq7EtmnIFApF7Ww35HvNHet0yGObh3cQ+ekX5IjUvBThFyI/o8ww3QDP
+   OEBtOqGJ1aDg1h/KCP9hMB1seq7Q7pF3bqGxXCTixmSkcUMAcdAcFV3J8
+   F5/GWIIecH9SSTEGNigHJqaU0bby+YOqYWk4TFcfcVaF80Gz95lP5Q7p5
+   JdULkNA5JjmY0g0jU+zuoaQp6S+a69Kej1XWxkZAl5WfH4Sk1IYNdkRZK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257660773"
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="257660773"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 22:16:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="500042968"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 20 Mar 2022 22:16:00 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nWAOd-000HVJ-Qv; Mon, 21 Mar 2022 05:15:59 +0000
+Date: Mon, 21 Mar 2022 13:15:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 1895/2335] ./usr/include/linux/neighbour.h:5:10:
+ fatal error: 'uapi/linux/types.h' file not found
+Message-ID: <202203211317.61fjNukZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,20 +44,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318002318.80519-1-colin.i.king@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Mar 18, 2022 at 12:23:18AM +0000, Colin Ian King wrote:
-> Variable z is being assigned a value that is never read, the
-> variable is redundant and can be removed.
-> 
-> Cleans up clang scan build warning:
-> drivers/input/joystick/adi.c:139:6: warning: Although the
-> value stored to 'z' is used in the enclosing expression,
-> the value is never actually read from 'z' [deadcode.DeadStores]
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   85293bf3fca6d85608cff1447ce3097583f15fab
+commit: 8941ec82b6cca439dcb9fafcc1955ebf70746139 [1895/2335] headers/deps: net: Optimize <uapi/linux/neighbour.h> dependencies
+config: i386-randconfig-a012-20220314 (https://download.01.org/0day-ci/archive/20220321/202203211317.61fjNukZ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=8941ec82b6cca439dcb9fafcc1955ebf70746139
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout 8941ec82b6cca439dcb9fafcc1955ebf70746139
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Applied, thank you.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+>> ./usr/include/linux/neighbour.h:5:10: fatal error: 'uapi/linux/types.h' file not found
+   #include <uapi/linux/types.h>
+            ^~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 -- 
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp
