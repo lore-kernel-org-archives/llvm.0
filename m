@@ -1,76 +1,78 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48920C91
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 15:11:26 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-38-m6P3iw8WNlquIKDhm_nF4w-1; Tue, 22 Mar 2022 15:11:23 +0000
-X-MC-Unique: m6P3iw8WNlquIKDhm_nF4w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Tue, 22 Mar 2022 15:11:23 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Tue, 22 Mar 2022 15:11:23 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Alviro Iskandar Setiawan' <alviro.iskandar@gnuweeb.org>
-CC: Willy Tarreau <w@1wt.eu>, Ammar Faizi <ammarfaizi2@gnuweeb.org>, "Paul E.
- McKenney" <paulmck@kernel.org>, Nugraha <richiisei@gmail.com>, "Linux Kernel
- Mailing List" <linux-kernel@vger.kernel.org>, GNU/Weeb Mailing List
-	<gwml@vger.gnuweeb.org>, "x86@kernel.org" <x86@kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
- arguments
-Thread-Topic: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
- arguments
-Thread-Index: AQHYPdalMvftIu2CIkSH1LImoy2kmazLRP7AgAAL3z2AABVNYIAAFcoAgAAGBOA=
-Date: Tue, 22 Mar 2022 15:11:23 +0000
-Message-ID: <3d2cfdeecddc45dc8e4beada305b5948@AcuMS.aculab.com>
-References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
- <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
- <8653f6784a9b4272a59a75a530663567@AcuMS.aculab.com>
- <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
- <20220322121338.GD10306@1wt.eu>
- <22fd9709b3a64a548226741b682ca155@AcuMS.aculab.com>
- <CAOG64qP=Hn+Z6zO2pEafE4acLiGig79OCPQCAktb4bhV6DFBAg@mail.gmail.com>
-In-Reply-To: <CAOG64qP=Hn+Z6zO2pEafE4acLiGig79OCPQCAktb4bhV6DFBAg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70228C6A
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 15:29:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9FD2C340EC;
+	Tue, 22 Mar 2022 15:29:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1647962987;
+	bh=/wuEi/uvh9kikMVTzBLXcTmFI7rUcMU9g6h8WZNahOo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EVFcIZdn2T2OgMOmHo6W2hdIUGauN/2ICQ4guSLkCKzKzyqQ8WfXaCbRHHYww3TzJ
+	 mXgi7Xjp2AOvOzizJzkInSiM+Pbl2ujkBtKv91xa64shP83PfV7G5E6DI1ye9nN9sb
+	 tPUpA8lVMJTmg002dbHBLUXpg93+i4a90S6tlPYc6E3JucrZ311RnYqFqQASpxWnRA
+	 yl+iG/L6qhqHt7prt2uMj9r4hwDwQxAsv6UoGpxTazGxrMhU01QKAW7y5G6c25vKOJ
+	 Wy/VPs4MpT3QaCbvEc8ju8Zf5yAsCzZKwVbOAZHOyAT9cM8AYAswv90Wp57e0wl0MN
+	 q52QnKjboEpng==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] KVM: x86: Fix clang -Wimplicit-fallthrough in do_host_cpuid()
+Date: Tue, 22 Mar 2022 08:29:06 -0700
+Message-Id: <20220322152906.112164-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 
-RnJvbTogQWx2aXJvIElza2FuZGFyIFNldGlhd2FuDQo+IFNlbnQ6IDIyIE1hcmNoIDIwMjIgMTQ6
-NDgNCj4gDQo+IE9uIFR1ZSwgTWFyIDIyLCAyMDIyIGF0IDg6MzcgUE0gRGF2aWQgTGFpZ2h0IHdy
-b3RlOg0KPiA+IGR1bm5vLCAnYXNtJyByZWdpc3RlciB2YXJpYWJsZXMgYXJlIHJhdGhlciBtb3Jl
-IGhvcnJpZCBhbmQNCj4gPiBzaG91bGQgcHJvYmFibHkgb25seSBiZSB1c2VkIChmb3IgYXNtIHN0
-YXRlbWVudHMpIHdoZW4gdGhlcmUgYXJlbid0DQo+ID4gc3VpdGFibGUgcmVnaXN0ZXIgY29uc3Ry
-YWludHMuDQo+ID4NCj4gPiAoSSdtIHN1cmUgdGhlcmUgaXMgYSBjb21tZW50IGFib3V0IHRoYXQg
-aW4gdGhlIGdjYyBkb2NzLikNCj4gDQo+IEkgZG9uJ3QgZmluZCB0aGUgY29tbWVudCB0aGF0IHNh
-eXMgc28gaGVyZToNCj4gaHR0cHM6Ly9nY2MuZ251Lm9yZy9vbmxpbmVkb2NzL2djYy9Mb2NhbC1S
-ZWdpc3Rlci1WYXJpYWJsZXMuaHRtbA0KDQpJJ3ZlIHByb2JhYmx5IGluZmVycmVkIGl0IGZyb206
-DQogICAgIlRoZSBvbmx5IHN1cHBvcnRlZCB1c2UgZm9yIHRoaXMgZmVhdHVyZSBpcyB0byBzcGVj
-aWZ5IHJlZ2lzdGVycyBmb3INCiAgICBpbnB1dCBhbmQgb3V0cHV0IG9wZXJhbmRzIHdoZW4gY2Fs
-bGluZyBFeHRlbmRlZCBhc20gKHNlZSBFeHRlbmRlZCBBc20pLg0KICAgIFRoaXMgbWF5IGJlIG5l
-Y2Vzc2FyeSBpZiB0aGUgY29uc3RyYWludHMgZm9yIGEgcGFydGljdWxhciBtYWNoaW5lIGRvbuKA
-mXQNCiAgICBwcm92aWRlIHN1ZmZpY2llbnQgY29udHJvbCB0byBzZWxlY3QgdGhlIGRlc2lyZWQg
-cmVnaXN0ZXIuIg0KDQpIZXJlIGlzIGlzbid0IG5lY2Vzc2FyeSBiZWNhdXNlIHRoZSByZXF1aXJl
-ZCBjb25zdHJhaW50IGV4aXN0Lw0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
-a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
-IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Clang warns:
+
+  arch/x86/kvm/cpuid.c:739:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+          default:
+          ^
+  arch/x86/kvm/cpuid.c:739:2: note: insert 'break;' to avoid fall-through
+          default:
+          ^
+          break;
+  1 error generated.
+
+Clang is a little more pedantic than GCC, which does not warn when
+falling through to a case that is just break or return. Clang's version
+is more in line with the kernel's own stance in deprecated.rst, which
+states that all switch/case blocks must end in either break,
+fallthrough, continue, goto, or return. Add the missing break to silence
+the warning.
+
+Fixes: f144c49e8c39 ("KVM: x86: synthesize CPUID leaf 0x80000021h if useful")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/x86/kvm/cpuid.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 58b0b4e0263c..a3c87d2882ad 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -735,6 +735,7 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
+ 			if (function > READ_ONCE(max_cpuid_80000000))
+ 				return entry;
+ 		}
++		break;
+ 
+ 	default:
+ 		break;
+
+base-commit: c9b8fecddb5bb4b67e351bbaeaa648a6f7456912
+-- 
+2.35.1
 
