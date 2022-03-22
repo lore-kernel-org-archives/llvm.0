@@ -1,23 +1,23 @@
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9523C75
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 13:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE06CC75
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 13:56:51 +0000 (UTC)
 Received: from [192.168.12.80] (unknown [182.2.69.158])
-	by gnuweeb.org (Postfix) with ESMTPSA id DFC817E2DF;
-	Tue, 22 Mar 2022 13:54:58 +0000 (UTC)
+	by gnuweeb.org (Postfix) with ESMTPSA id 22E547E2DF;
+	Tue, 22 Mar 2022 13:56:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1647957302;
-	bh=FNwRWV5kyah147+Fd1oNM7w3nIsC4tpI18bVQxUMzMY=;
+	s=default; t=1647957411;
+	bh=PjMcysHt2dknFDp2J9SgqL6N1EYY0N4Y0Qnc7+5AWNU=;
 	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=k1WSchwHbTrWSBLb+Wde6AnOkCuyNqJItIJxQBp87k5SW1+4PeRmj7CXTVB4jMiuO
-	 iIb0CePwQOQjNwvnirqYeXNutxvJD2Cs88Dmycl6Wa0udgfjvuEbxxyctpiZJ/FdFt
-	 opmT0wrLFYP5DTPKUz4CFrs2mEy6FsIf42H3/90f4u8lwsXMCGO3lFxtdvaCQFIq+b
-	 RzLQINUqCUFmF+1HCgpP013KlmfSAzKp8iCQrcEKxy8ZKXBDtByRAY3hlA6NORCkwq
-	 md7kuXQRQZhRI+5pMFAL6/hQAUUioM+Zmqg5UORibCIY7XavLfOKhHNxu50UqzzueI
-	 +DFxrMv/mXrmA==
-Message-ID: <98304cd4-a443-5e5e-9764-654ecd1d458b@gnuweeb.org>
-Date: Tue, 22 Mar 2022 20:54:55 +0700
+	b=rXc5Yqn0rJPnMDmwFzT311hNYadKNDbfYhAXlKq1HdV4nFdHuj4d07ws2l6NaEKPu
+	 yjxuOTNcFslyG1L5AgvuqxyEMfDa8YGIZ3vSXSCoMdCcU629fqWOmQNHoq9gSf+KFS
+	 nb0YUhj7LC2xiNE0+zGXuTwBWAwd+ygrOQiEyKQnjZnCO63MwIFQHH9R4WvUkxrhSX
+	 qcZ+zi5Lu8FhxEfc0iyIFb87KMgI0M3sk1OIj82XNInUR2CaUCO3hKVoqqtjrr+ROI
+	 bnCvuabDEuA7dLmYawUJ/SOjEi1Jnd2uSr+6w5+7kfL0orpqEPglbfbckgQvusnH7c
+	 JnkAxD+Yv2+bw==
+Message-ID: <8f11bc01-4b63-eaf7-6da3-77556cfb0118@gnuweeb.org>
+Date: Tue, 22 Mar 2022 20:56:44 +0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,41 +49,43 @@ References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
  <3b8984ecfbcd4c93aeb468d01728cd74@AcuMS.aculab.com>
  <20220322134100.GH10306@1wt.eu>
  <9cfcb296-9dfe-aef1-4209-20a3a95c50ba@gnuweeb.org>
-In-Reply-To: <9cfcb296-9dfe-aef1-4209-20a3a95c50ba@gnuweeb.org>
+ <98304cd4-a443-5e5e-9764-654ecd1d458b@gnuweeb.org>
+In-Reply-To: <98304cd4-a443-5e5e-9764-654ecd1d458b@gnuweeb.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+On 3/22/22 8:54 PM, Ammar Faizi wrote:
+> 
+> Willy, something goes wrong here...
+> 
+> ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ taskset -c 0 gcc -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
+> /usr/bin/ld: /tmp/ccHiYiks.o: warning: relocation against `environ' in read-only section `.text'
+> /usr/bin/ld: /tmp/ccHiYiks.o: in function `getenv':
+> test.c:(.text+0x1f76): undefined reference to `environ'
+> /usr/bin/ld: test.c:(.text+0x1fc3): undefined reference to `environ'
+> /usr/bin/ld: test.c:(.text+0x1ffc): undefined reference to `environ'
+> /usr/bin/ld: test.c:(.text+0x2021): undefined reference to `environ'
+> /usr/bin/ld: test.c:(.text+0x2049): undefined reference to `environ'
+> /usr/bin/ld: warning: creating DT_TEXTREL in a PIE
+> collect2: error: ld returned 1 exit status
+> ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$
+> 
+> 
+> I suspect it's caused by commit:
+> 
+> commit c970abe796019b3d576fd154a54b94efb35c02b1
+> Author: Willy Tarreau <w@1wt.eu>
+> Date:   Mon Mar 21 18:33:08 2022 +0100
+> 
+>      tools/nolibc/stdlib: add a simple getenv() implementation
+>      This implementation relies on an extern definition of the environ
+>      variable, that the caller must declare and initialize from envp.
+>      Signed-off-by: Willy Tarreau <w@1wt.eu>
+>      Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> I will take a look deeper on this...
 
-Willy, something goes wrong here...
-
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ taskset -c 0 gcc -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
-/usr/bin/ld: /tmp/ccHiYiks.o: warning: relocation against `environ' in read-only section `.text'
-/usr/bin/ld: /tmp/ccHiYiks.o: in function `getenv':
-test.c:(.text+0x1f76): undefined reference to `environ'
-/usr/bin/ld: test.c:(.text+0x1fc3): undefined reference to `environ'
-/usr/bin/ld: test.c:(.text+0x1ffc): undefined reference to `environ'
-/usr/bin/ld: test.c:(.text+0x2021): undefined reference to `environ'
-/usr/bin/ld: test.c:(.text+0x2049): undefined reference to `environ'
-/usr/bin/ld: warning: creating DT_TEXTREL in a PIE
-collect2: error: ld returned 1 exit status
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$
-
-
-I suspect it's caused by commit:
-
-commit c970abe796019b3d576fd154a54b94efb35c02b1
-Author: Willy Tarreau <w@1wt.eu>
-Date:   Mon Mar 21 18:33:08 2022 +0100
-
-     tools/nolibc/stdlib: add a simple getenv() implementation
-     
-     This implementation relies on an extern definition of the environ
-     variable, that the caller must declare and initialize from envp.
-     
-     Signed-off-by: Willy Tarreau <w@1wt.eu>
-     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-I will take a look deeper on this...
+This bug only exists when compiling without optimization.
 
 -- 
 Ammar Faizi
