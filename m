@@ -1,106 +1,92 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31E2EC8
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 16:57:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647968268; x=1679504268;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=egWq09vSBflQS3iMEI+3yAMp3wMbpLCFyKpxXlRCRPQ=;
-  b=FlwOnKRNVc43RknSXDI9QnqnRGdVp4YKYi0QCsDydG87v3tysnZsn9Uc
-   yPvq1m3HDRa16qLMKkWOQ/Ld9LM9y/TwHj0GQomLm/kiEOOUV73k8Yxdv
-   JAuepJ/cDSXqYmlre8fH3vtEMRX2eQhpx37mDQEQPL8Kifm9tz4R7/E8J
-   tXuPIMPEjlfdtnYa8ueBdWkFPJLLpln72vXBZo9D5pzRdLgqCnSS0wtcx
-   EYMHhM6VXo1nev2CT60khWFtbQnUxh5vvZBjeDNTPdSQzJjMu9bpvakVh
-   iQOCbQe1LA+/efwyrqnbTMMbQAvMFFaXXVrmaPoKV2j3TuUn3ComG6twG
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="257822944"
-X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="257822944"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 09:57:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="515420690"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 22 Mar 2022 09:57:25 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nWhoy-000J1H-Tr; Tue, 22 Mar 2022 16:57:24 +0000
-Date: Wed, 23 Mar 2022 00:57:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Satya Tangirala <satyat@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Alistair Delva <adelva@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-trusty-5.4
- 1704/6879] drivers/scsi/ufs/ufshcd-crypto.c:250:26: warning: no previous
- prototype for function 'ufshcd_blk_crypto_mode_num_for_alg_dusize'
-Message-ID: <202203230002.OizN3iAm-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF4DEC8
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 17:02:36 +0000 (UTC)
+Received: by mail-lj1-f178.google.com with SMTP id b5so6213182ljf.13
+        for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 10:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eIBwyCFA8yu0ZwbObg31b7AuYcniAsjV38ZCEKNbmEs=;
+        b=eLZjTCnmz/MJskMW0Kx+WYB3YbOumPc4a5X5vE0tih1aCTVrAd15AW4a/LR/YaaAnj
+         DmZKFF4T2mmVHwy1yi6h3xezVUEJxEB8h7TCOGIf/WXVynxd8dyZbf2xG51ZbuNE8uCY
+         PsGMa75RvSN/Dk+hf2DCnaUb5U/LGy4iLRcjpauITH+wqbfRcvDR3Bcxi6ypKq7Ji16E
+         V3mNIFubUOJq3hX5giXxQVCDJuJB9b1AAFbtVYjcP58tL6nG5NAtSg60NCFOPwMxpov4
+         SEaRKk7aGFiKjpGi4E3+3futcITEJIpJ7XMhTwvw9hlabBqrZyO7c79WwRa7g1Af+Pkf
+         rJkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eIBwyCFA8yu0ZwbObg31b7AuYcniAsjV38ZCEKNbmEs=;
+        b=Ui/hBhPWmVJ25NZpHX68kz41oN0WI7pQJKoMBN/7mmDmHQmw0Hyr8Rfgdt4xVyCVk3
+         7ECxNjW9Y+SkaRVAa6SnxAOzqz34BEGJh86QWPrU1EfWpRvO4x37vllQMpiwi8f0SdrW
+         E12sL+hcGm0jfv5QMrOWJP/4sRGOVlpoA1uhqKwjsE/pl21w8Urt77eAngp5oGJdJvqQ
+         Lt3dUXsuGUA9zCOK+C/VtZHrjUtZYtqWKqyrxYi3TdNk+EzCpY8UZyQXw+NMMpy6WuhZ
+         KbBSWXLk5nduo8GGyWHyq2mx5TptKgWXIG/1En60e4L3PE8hJuRG1AymDWIwvzXVvMqw
+         dPgA==
+X-Gm-Message-State: AOAM533gORKXunJs/u0i3/adOx4UDCQpm78y7dFmDEEj75pecfQSrfBG
+	GYnZt9KqZoud1uR3fSUa3sVQb4QBaUzbXrDqez/YeQ==
+X-Google-Smtp-Source: ABdhPJz56XKTAMhxLOEhU4dMPRaQZpKutqbXKi+guc67m6Jv0gTpaFk3QWQR3g81THfjHOADVBK+pIn/W0HiBnTV7xM=
+X-Received: by 2002:a05:651c:1791:b0:243:94bd:d94c with SMTP id
+ bn17-20020a05651c179100b0024394bdd94cmr19231645ljb.468.1647968554603; Tue, 22
+ Mar 2022 10:02:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220316183833.1563139-1-arnd@kernel.org> <3b9cedd6-a084-5d87-2fdd-0da10146827b@arm.com>
+ <CAKwvOdnut8db1Z1FdZkkSXCvmggrzfKv9Y9GO3uz4ND=K5sB3g@mail.gmail.com>
+In-Reply-To: <CAKwvOdnut8db1Z1FdZkkSXCvmggrzfKv9Y9GO3uz4ND=K5sB3g@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 22 Mar 2022 10:02:23 -0700
+Message-ID: <CAKwvOdkyGumBcCWwNo+yBFZ_A9OOFgVCOecOgpcfEunNRqy_+w@mail.gmail.com>
+Subject: Re: [PATCH] arm64: fix clang warning about TRAMP_VALIAS
+To: Robin Murphy <robin.murphy@arm.com>
+Cc: Arnd Bergmann <arnd@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, James Morse <james.morse@arm.com>, 
+	Arnd Bergmann <arnd@arndb.de>, "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Satya,
+On Fri, Mar 18, 2022 at 12:52 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Fri, Mar 18, 2022 at 12:11 PM Robin Murphy <robin.murphy@arm.com> wrote:
+> >
+> > On 2022-03-16 18:38, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > >
+> > > The newly introduced TRAMP_VALIAS definition causes a build warning
+> > > with clang-14:
+> > >
+> > > arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
+> >
+> > Tangentially, all the other GNU extensions we depend on throughout Linux
+> > are also GNU extensions. Do we know what's special about this one?
+>
+> My first thought is that -Wnull-pointer-arithmetic should be in the
+> -Wgnu flag group, such that -Wno-gnu (as set by Kbuild) implies
+> -Wno-null-pointer-arithmetic.
+>
+> One issue seems to be that -Wnull-pointer-arithmetic seems to control
+> at least 2 different checks in clang.
+>
+> https://godbolt.org/z/hdYYejj3d
+>
+> So it's likely these two checks should have 2 distinct flags, such
+> that the warning we're observing can be grouped under -Wgnu.
+>
+> Filed: https://github.com/llvm/llvm-project/issues/54444
 
-FYI, the error/warning still remains.
-
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-trusty-5.4
-head:   d556bac5a4d65c759ce3c5a7529aef568f05f650
-commit: b7b3af961465d23a733bb44d4a49bb78d4d5b08f [1704/6879] BACKPORT: FROMLIST: Update Inline Encryption from v5 to v6 of patch series
-config: x86_64-randconfig-a006-20220321 (https://download.01.org/0day-ci/archive/20220323/202203230002.OizN3iAm-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/b7b3af961465d23a733bb44d4a49bb78d4d5b08f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-trusty-5.4
-        git checkout b7b3af961465d23a733bb44d4a49bb78d4d5b08f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/power/supply/charger-manager.ko drivers/scsi/ufs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/scsi/ufs/ufshcd-crypto.c:250:26: warning: no previous prototype for function 'ufshcd_blk_crypto_mode_num_for_alg_dusize' [-Wmissing-prototypes]
-   enum blk_crypto_mode_num ufshcd_blk_crypto_mode_num_for_alg_dusize(
-                            ^
-   drivers/scsi/ufs/ufshcd-crypto.c:250:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   enum blk_crypto_mode_num ufshcd_blk_crypto_mode_num_for_alg_dusize(
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/ufshcd_blk_crypto_mode_num_for_alg_dusize +250 drivers/scsi/ufs/ufshcd-crypto.c
-
-   249	
- > 250	enum blk_crypto_mode_num ufshcd_blk_crypto_mode_num_for_alg_dusize(
-   251						enum ufs_crypto_alg ufs_crypto_alg,
-   252						enum ufs_crypto_key_size key_size)
-   253	{
-   254		/*
-   255		 * This is currently the only mode that UFS and blk-crypto both support.
-   256		 */
-   257		if (ufs_crypto_alg == UFS_CRYPTO_ALG_AES_XTS &&
-   258			key_size == UFS_CRYPTO_KEY_SIZE_256)
-   259			return BLK_ENCRYPTION_MODE_AES_256_XTS;
-   260	
-   261		return BLK_ENCRYPTION_MODE_INVALID;
-   262	}
-   263	
+Fix should be landing shortly:
+https://reviews.llvm.org/D122224
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
