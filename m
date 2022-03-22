@@ -1,78 +1,254 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70228C6A
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 15:29:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9FD2C340EC;
-	Tue, 22 Mar 2022 15:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647962987;
-	bh=/wuEi/uvh9kikMVTzBLXcTmFI7rUcMU9g6h8WZNahOo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=EVFcIZdn2T2OgMOmHo6W2hdIUGauN/2ICQ4guSLkCKzKzyqQ8WfXaCbRHHYww3TzJ
-	 mXgi7Xjp2AOvOzizJzkInSiM+Pbl2ujkBtKv91xa64shP83PfV7G5E6DI1ye9nN9sb
-	 tPUpA8lVMJTmg002dbHBLUXpg93+i4a90S6tlPYc6E3JucrZ311RnYqFqQASpxWnRA
-	 yl+iG/L6qhqHt7prt2uMj9r4hwDwQxAsv6UoGpxTazGxrMhU01QKAW7y5G6c25vKOJ
-	 Wy/VPs4MpT3QaCbvEc8ju8Zf5yAsCzZKwVbOAZHOyAT9cM8AYAswv90Wp57e0wl0MN
-	 q52QnKjboEpng==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: kvm@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254A2C6A
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 15:57:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647964640; x=1679500640;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/ARhdtteEwaxQdr5SdKWh9n5s/BmVOP7qAMW6inUGBg=;
+  b=PtmHiQPbjdL3caWDv/oIxFK64RCHpDKTAKb6i5rVmqpXXtbj4HUu2urd
+   n2FbljuJ0sCf1ZhxpAvs49IejmCZ9Mh9OJUQrN1l/DLlKlLmtV0YOFywM
+   ZuKdYhJF+siD9QyemFOQlB4v/0NJSZzeqE5XOvWGdHEV3Kgo4PAG7r7rg
+   jetoqaB0stFgeaQ3mAnvekLzQUr0UXgoOOUZWhqX0WjGxXy5yinzfGYmL
+   8iHEZJp8WFMwekvxKgW+B3PhQ5Eq75SnJm7fAwT0Xbr25M4bEbwnP13Z1
+   ZpXcquWt1f7Z5Sf0bJDpen+gXWswaBwha0EUb+9Ge4WhwzIHKCMwy5zhs
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="282695738"
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="282695738"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 08:57:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="515395638"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 22 Mar 2022 08:57:10 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nWgsf-000Ixk-MF; Tue, 22 Mar 2022 15:57:09 +0000
+Date: Tue, 22 Mar 2022 23:56:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Walker Chen <walker.chen@starfivetech.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] KVM: x86: Fix clang -Wimplicit-fallthrough in do_host_cpuid()
-Date: Tue, 22 Mar 2022 08:29:06 -0700
-Message-Id: <20220322152906.112164-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Michael Yan <michael.yan@starfivetech.com>,
+	Jenny Zhang <jenny.zhang@starfivetech.com>
+Subject: [esmil:visionfive 46/61] sound/soc/starfive/pwmdac-pcm.c:84:6:
+ warning: variable 'substream' is used uninitialized whenever 'if' condition
+ is false
+Message-ID: <202203222347.77QCVbYU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Clang warns:
+tree:   https://github.com/esmil/linux visionfive
+head:   243ce759ed5821edf38bf93ce7325e232b805547
+commit: 7c3b27a272448a123087494f7ade3e84a92543c6 [46/61] ASoC: starfive: Add StarFive JH7100 audio drivers
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220322/202203222347.77QCVbYU-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/esmil/linux/commit/7c3b27a272448a123087494f7ade3e84a92543c6
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 7c3b27a272448a123087494f7ade3e84a92543c6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/starfive/
 
-  arch/x86/kvm/cpuid.c:739:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-          default:
-          ^
-  arch/x86/kvm/cpuid.c:739:2: note: insert 'break;' to avoid fall-through
-          default:
-          ^
-          break;
-  1 error generated.
-
-Clang is a little more pedantic than GCC, which does not warn when
-falling through to a case that is just break or return. Clang's version
-is more in line with the kernel's own stance in deprecated.rst, which
-states that all switch/case blocks must end in either break,
-fallthrough, continue, goto, or return. Add the missing break to silence
-the warning.
-
-Fixes: f144c49e8c39 ("KVM: x86: synthesize CPUID leaf 0x80000021h if useful")
+If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/kvm/cpuid.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 58b0b4e0263c..a3c87d2882ad 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -735,6 +735,7 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
- 			if (function > READ_ONCE(max_cpuid_80000000))
- 				return entry;
- 		}
-+		break;
- 
- 	default:
- 		break;
+All warnings (new ones prefixed by >>):
 
-base-commit: c9b8fecddb5bb4b67e351bbaeaa648a6f7456912
+>> sound/soc/starfive/pwmdac-pcm.c:84:6: warning: variable 'substream' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (push)
+               ^~~~
+   sound/soc/starfive/pwmdac-pcm.c:87:11: note: uninitialized use occurs here
+           active = substream && snd_pcm_running(substream);
+                    ^~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:84:2: note: remove the 'if' if its condition is always true
+           if (push)
+           ^~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:80:37: note: initialize the variable 'substream' to silence this warning
+           struct snd_pcm_substream *substream;
+                                              ^
+                                               = NULL
+>> sound/soc/starfive/pwmdac-pcm.c:92:7: warning: variable 'period_elapsed' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (push) {
+                       ^~~~
+   sound/soc/starfive/pwmdac-pcm.c:99:7: note: uninitialized use occurs here
+                   if (period_elapsed)
+                       ^~~~~~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:92:3: note: remove the 'if' if its condition is always true
+                   if (push) {
+                   ^~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:81:29: note: initialize the variable 'period_elapsed' to silence this warning
+           bool active, period_elapsed;
+                                      ^
+                                       = 0
+>> sound/soc/starfive/pwmdac-pcm.c:202:6: warning: variable 'pos' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:205:9: note: uninitialized use occurs here
+           return pos < runtime->buffer_size ? pos : 0;
+                  ^~~
+   sound/soc/starfive/pwmdac-pcm.c:202:2: note: remove the 'if' if its condition is always true
+           if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:200:23: note: initialize the variable 'pos' to silence this warning
+           snd_pcm_uframes_t pos;
+                                ^
+                                 = 0
+   3 warnings generated.
+
+
+vim +84 sound/soc/starfive/pwmdac-pcm.c
+
+    77	
+    78	static void sf_pcm_transfer(struct sf_pwmdac_dev *dev, bool push)
+    79	{
+    80		struct snd_pcm_substream *substream;
+    81		bool active, period_elapsed;
+    82	
+    83		rcu_read_lock();
+  > 84		if (push)
+    85			substream = rcu_dereference(dev->tx_substream);
+    86	
+    87		active = substream && snd_pcm_running(substream);
+    88		if (active) {
+    89			unsigned int ptr;
+    90			unsigned int new_ptr;
+    91	
+  > 92			if (push) {
+    93				ptr = READ_ONCE(dev->tx_ptr);
+    94				new_ptr = dev->tx_fn(dev, substream->runtime, ptr,
+    95						&period_elapsed);
+    96				cmpxchg(&dev->tx_ptr, ptr, new_ptr);
+    97			}
+    98	
+    99			if (period_elapsed)
+   100				snd_pcm_period_elapsed(substream);
+   101		}
+   102		rcu_read_unlock();
+   103	}
+   104	
+   105	void sf_pwmdac_pcm_push_tx(struct sf_pwmdac_dev *dev)
+   106	{
+   107		sf_pcm_transfer(dev, true);
+   108	}
+   109	
+   110	
+   111	static int sf_pcm_open(struct snd_soc_component *component,
+   112				struct snd_pcm_substream *substream)
+   113	{
+   114		struct snd_pcm_runtime *runtime = substream->runtime;
+   115		struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+   116		struct sf_pwmdac_dev *dev = snd_soc_dai_get_drvdata(asoc_rtd_to_cpu(rtd, 0));
+   117	
+   118		snd_soc_set_runtime_hwparams(substream, &sf_pcm_hardware);
+   119		snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS);
+   120		runtime->private_data = dev;
+   121	
+   122		return 0;
+   123	}
+   124	
+   125	
+   126	static int sf_pcm_close(struct snd_soc_component *component,
+   127				struct snd_pcm_substream *substream)
+   128	{
+   129		synchronize_rcu();
+   130		return 0;
+   131	}
+   132	
+   133	static int sf_pcm_hw_params(struct snd_soc_component *component,
+   134				struct snd_pcm_substream *substream,
+   135				struct snd_pcm_hw_params *hw_params)
+   136	{
+   137		struct snd_pcm_runtime *runtime = substream->runtime;
+   138		struct sf_pwmdac_dev *dev = runtime->private_data;
+   139	
+   140		switch (params_channels(hw_params)) {
+   141		case 2:
+   142			break;
+   143		default:
+   144			dev_err(dev->dev, "invalid channels number\n");
+   145			return -EINVAL;
+   146		}
+   147	
+   148		switch (params_format(hw_params)) {
+   149		case SNDRV_PCM_FORMAT_U8:
+   150		case SNDRV_PCM_FORMAT_S8:
+   151			dev->tx_fn = sf_pwmdac_pcm_tx_8;
+   152			break;
+   153		case SNDRV_PCM_FORMAT_S16_LE:
+   154			dev->tx_fn = sf_pwmdac_pcm_tx_16;
+   155			break;
+   156		default:
+   157			dev_err(dev->dev, "invalid format\n");
+   158			return -EINVAL;
+   159		}
+   160	
+   161			return 0;
+   162	}
+   163	
+   164	
+   165	static int sf_pcm_trigger(struct snd_soc_component *component,
+   166				struct snd_pcm_substream *substream, int cmd)
+   167	{
+   168		struct snd_pcm_runtime *runtime = substream->runtime;
+   169		struct sf_pwmdac_dev *dev = runtime->private_data;
+   170		int ret = 0;
+   171	
+   172		switch (cmd) {
+   173		case SNDRV_PCM_TRIGGER_START:
+   174		case SNDRV_PCM_TRIGGER_RESUME:
+   175		case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+   176			if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+   177				WRITE_ONCE(dev->tx_ptr, 0);
+   178				rcu_assign_pointer(dev->tx_substream, substream);
+   179			}
+   180			break;
+   181		case SNDRV_PCM_TRIGGER_STOP:
+   182		case SNDRV_PCM_TRIGGER_SUSPEND:
+   183		case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+   184			if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+   185				rcu_assign_pointer(dev->tx_substream, NULL);
+   186			break;
+   187		default:
+   188			ret = -EINVAL;
+   189			break;
+   190		}
+   191	
+   192		return ret;
+   193	}
+   194	
+   195	static snd_pcm_uframes_t sf_pcm_pointer(struct snd_soc_component *component,
+   196				struct snd_pcm_substream *substream)
+   197	{
+   198		struct snd_pcm_runtime *runtime = substream->runtime;
+   199		struct sf_pwmdac_dev *dev = runtime->private_data;
+   200		snd_pcm_uframes_t pos;
+   201	
+ > 202		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+   203			pos = READ_ONCE(dev->tx_ptr);
+   204	
+   205		return pos < runtime->buffer_size ? pos : 0;
+   206	}
+   207	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
