@@ -1,145 +1,97 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F8936F
-	for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 23:55:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647906915; x=1679442915;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rJEfyOReNJQTGn+tVBm2YXQgWt5h+CMA1eKwF0napew=;
-  b=kMqJYkmUQSfCSj/PAj2kvghxpaYBEVTCWAnnZWKJKCk99pZprEK31/o/
-   viZmyxdNJiHDLDCkTX/VFNXCiWd1GBQBix8m4f8ozb0rILa5iRpv9brJp
-   0L/XqPD7RY+bk1PA4/39+UXUpyloj5nJNuDIbtZYbhA6Dq8Yrbe+2wrZF
-   ZzbhRAD9t6dG7wdG7RdJKW5QwCGe/x9NIFZw045Wy05kWTg9zVBZVVF0q
-   fLbNb4DgvNIXPvNgr+/COoPSh+JAyAEIwdjcJK8eoUpnNe3dykUsrWJKS
-   QSmAa1qjK+beCyPo73hM2hqck1tGB/VusCmbkQRfzGTUCv/NJVP56Ohd1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="239836358"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="239836358"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 16:55:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="515120209"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 21 Mar 2022 16:55:13 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nWRrk-000IIN-Sg; Mon, 21 Mar 2022 23:55:12 +0000
-Date: Tue, 22 Mar 2022 07:54:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: kernel/time/hrtimer.c:650:19: warning: unused function
- 'hrtimer_hres_active'
-Message-ID: <202203220741.Ez9nK7eG-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE45C7A
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 01:26:21 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-2d07ae11467so138851037b3.12
+        for <llvm@lists.linux.dev>; Mon, 21 Mar 2022 18:26:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=Zcfus1hr4rL4+XSk7ZeSMnR2CKTg6P0EKLP3F7c9nb8=;
+        b=i8x6bw63C8CnBwNWToBn1ejwhs1I5sT+Qt9rGn8CdzD2q5bI6ajCe3oOQ78/3FZGIs
+         qmXDGKtcf8+1xdLslk9ffOSueyPzSySWMSsk5Yq8Ly0Wd5PeXu0lxN1YBt84AS2iny0Q
+         A0fzfbjqIHB/yamvOOvVSOO6Nx+KjZdAEe39VS4o1cjeZId+2Y0ZnFkqrcKqcS99Xlrs
+         Y79QpCoATrBt4sBO6s619f0NsNV3loVUEwp9wTNb0aPu41sSSH+jhAKIOjE1W9ELy2l3
+         Adh+H7EmKMo9H0/LyE/2qeSEKHxHjskBU9fCJeJ1yYdC3WyJDhOm4FnonjpV0MsT/W3m
+         vaXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=Zcfus1hr4rL4+XSk7ZeSMnR2CKTg6P0EKLP3F7c9nb8=;
+        b=gJ/1Ex25OqtYO62baKhViO6l1ujiacsPxRe3ZkKur1XZqJ0a5czDhnaR0cQXn6eNov
+         rgZCE3oiV4wz21boZjU2TW4lRqXCbF7yaz45K7jbdqvJA4grSMeOgQKJSrbnke9+aZxN
+         xY4G+k46Mz1pAydHADWMl3z0sy+S3clumLJoEuuznUK06SU3oCCfoSIyCwa982HmAeAL
+         ktuAqotlXxoCC1doORbb+CHNE5j5AELUpCWfG3Cz4dUQX+aw1z/JMxm+3bbdBgsSuu1K
+         F56+c088wqfdnvYUx0u0UN19lzaSZMeDsFJ8MkqxrtF8o05EeQ89N2g003wis5S/pgsJ
+         JkqQ==
+X-Gm-Message-State: AOAM531lcOkSORpF8RpgJ1UhqbLkGoIg8/66M4xA38qNByazW6OrP+B8
+	NMSDUXn780ZPTBxQ5WCXPLJEew2G77Xx
+X-Google-Smtp-Source: ABdhPJxWQf3SqgA1tT/yCHPjgY7eRo1TW3y0rLfi2WTbwvt3o1LIklSxiCpYdgBDhAGwzIqiHVsde/KU8+bJ
+X-Received: from maskray1.svl.corp.google.com ([2620:15c:2ce:200:b489:622a:ba50:950a])
+ (user=maskray job=sendgmr) by 2002:a25:dd87:0:b0:628:e822:bd with SMTP id
+ u129-20020a25dd87000000b00628e82200bdmr24014508ybg.505.1647912380832; Mon, 21
+ Mar 2022 18:26:20 -0700 (PDT)
+Date: Mon, 21 Mar 2022 18:26:17 -0700
+In-Reply-To: <mhng-7fe2c5d9-a8e6-4123-ac5c-0c9190792520@palmer-ri-x1c9>
+Message-Id: <20220322012617.3517297-1-maskray@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+References: <mhng-7fe2c5d9-a8e6-4123-ac5c-0c9190792520@palmer-ri-x1c9>
+Subject: [PATCH v2] riscv module: remove (NOLOAD)
+From: Fangrui Song <maskray@google.com>
+To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	linux-riscv@lists.infradead.org
+Cc: Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Thomas,
+On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+inappropriate for .plt, .got, and .got.plt sections which are always
+SHT_PROGBITS.
 
-FYI, the error/warning still remains.
+In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+and (NOLOAD) will be essentially ignored. In ld.lld, since
+https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+customize the output section type"), ld.lld will report a `section type
+mismatch` error (later changed to a warning). Just remove (NOLOAD) to
+fix the warning.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f443e374ae131c168a065ea1748feac6b2e76613
-commit: 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429 hrtimer: Use raw_cpu_ptr() in clock_was_set()
-date:   7 months ago
-config: mips-randconfig-r022-20220319 (https://download.01.org/0day-ci/archive/20220322/202203220741.Ez9nK7eG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 217f267efe3082438e698e2f08566b9df8c530fa)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iommu/ fs/ kernel/time/
+[1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+section should be marked as not loadable" on
+https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+outdated for ELF.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1597
+Fixes: ab1ef68e5401 ("RISC-V: Add sections of PLT and GOT for kernel module")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Fangrui Song <maskray@google.com>
+---
+ arch/riscv/include/asm/module.lds.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_REALTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_MONOTONIC,
-   ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_BOOTTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_TAI,
-   ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
-   static inline bool is_migration_base(struct hrtimer_clock_base
-   ^
->> kernel/time/hrtimer.c:650:19: warning: unused function 'hrtimer_hres_active'
-   static inline int hrtimer_hres_active(void)
-   ^
-   kernel/time/hrtimer.c:1887:20: warning: unused function '__hrtimer_peek_ahead_timers'
-   static inline void __hrtimer_peek_ahead_timers(void) { }
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-85e9b2687a/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm scripts security sound source usr virt
-
-
-vim +/hrtimer_hres_active +650 kernel/time/hrtimer.c
-
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  649  
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21 @650  static inline int hrtimer_hres_active(void)
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  651  {
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  652  	return __hrtimer_hres_active(this_cpu_ptr(&hrtimer_bases));
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  653  }
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  654  
-
-:::::: The code at line 650 was first introduced by commit
-:::::: 28bfd18bf3daa5db8bb3422ea7138c8b7d2444ac hrtimer: Make the hrtimer_cpu_base::hres_active field unconditional, to simplify the code
-
-:::::: TO: Anna-Maria Gleixner <anna-maria@linutronix.de>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
-
+diff --git a/arch/riscv/include/asm/module.lds.h b/arch/riscv/include/asm/module.lds.h
+index 4254ff2ff049..1075beae1ac6 100644
+--- a/arch/riscv/include/asm/module.lds.h
++++ b/arch/riscv/include/asm/module.lds.h
+@@ -2,8 +2,8 @@
+ /* Copyright (C) 2017 Andes Technology Corporation */
+ #ifdef CONFIG_MODULE_SECTIONS
+ SECTIONS {
+-	.plt (NOLOAD) : { BYTE(0) }
+-	.got (NOLOAD) : { BYTE(0) }
+-	.got.plt (NOLOAD) : { BYTE(0) }
++	.plt : { BYTE(0) }
++	.got : { BYTE(0) }
++	.got.plt : { BYTE(0) }
+ }
+ #endif
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1.894.gb6a874cedc-goog
+
