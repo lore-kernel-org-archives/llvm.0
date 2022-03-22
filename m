@@ -1,87 +1,123 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85A1A52
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 18:38:26 +0000 (UTC)
-Received: by mail-lf1-f53.google.com with SMTP id a26so13290794lfg.10
-        for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 11:38:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D80ySFmBsx3NNLCSuiS2ulSu3CzLkzhJu1O5d7Yeia0=;
-        b=BGj/qAj/CIZjHIYtdJd6+Vuiq1RG+X1DBLvxqqmbqp+eZgRVkx64QSB7iE2AqLihc/
-         mIgD+h83xKB1b+5Duw/CRkt07LklXvjiddGvPZsj/XVa/HzsUMtEDYlGVfRtYoWthzza
-         8sAmKfutzHNbnBxEmWXCPdyazYKMBzku/d4/iT2QYGQ9vRCuGE3/OtB7RiHRCC9JLdP+
-         ptxdeoKMQHbqBxGEHVz9eEW6M8W/3LRSN40liJ7dYZJB6jlNvdQOvj3My9Zz4c8AP8qh
-         6p25cq+oxZGzjke9g2A+n7agtk79KVWcpwtSjurvcgnQS2/GNvNtk94A+NxlxUkNRxDH
-         AfDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D80ySFmBsx3NNLCSuiS2ulSu3CzLkzhJu1O5d7Yeia0=;
-        b=QViTcm07CSpFlSmU1X527wHpNgMSzCPJbURPV0QEan7vspfpLZIhmY4PugYn64Zotv
-         WSSgfBDJ60S+QFcNCv6tg1UAMrAiRXZNbCuwZ60o1rDQW1mwpTRzbMArfLuvORraBUho
-         hotFpFhnSj3JIzlPGb0tgU6NVVYpPc8lFQXQkDnBFUiu3LK6PJHhjJkKtIqKNSkxwtHi
-         vqzE9s5gMCrAgw21jW2yqcARKDbhB6qd7jSnATmDJPGHubzkiSu9Z0C9zz92wbX4S2jw
-         1q6etnslkONXLLdhda4Hq3l1c4/VQ0YLfFyhSZ4tZG2GRwIcgREaakMMtNs6/D61Y/57
-         iXcQ==
-X-Gm-Message-State: AOAM530z8VRaDl+bWr7XaTfo4/uJXs0jpH4ORsJSqLKUBU81Q2jmHXvZ
-	JTD0OCDhT+jgKwimD+Ec2hgZLK7HOyo6/xham3Higw==
-X-Google-Smtp-Source: ABdhPJy672VvhyeIyIjAVRfF4mLRJODEUnGZ3/5feXX2ykQinqIawhClI7hj0L6LFSzncZK/EEQCc3xzA55//DF7J84=
-X-Received: by 2002:a05:6512:b9e:b0:44a:10eb:9607 with SMTP id
- b30-20020a0565120b9e00b0044a10eb9607mr13883136lfv.626.1647974304749; Tue, 22
- Mar 2022 11:38:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E261CA52
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 18:38:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647974311; x=1679510311;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9piiOb39Mfsnkfd30y8KCGK2Ts89xnMpnuyTFirQ5bc=;
+  b=CulJM9Y6Am8nLH/7aLxcpLsp7CUFbd5AzyvrYAj1mkTLVNWMUvP4AQNJ
+   yd6LCLlYw5O5OJDLFpNcVQ3krxHcDYTl1c+ecLxE91nYfT/qFs9x8xUQI
+   2J1qOgAUepuhVJfEq3by8+/Eljj2U14b9SVeaYHM5oxxqNqgOxkx9hIUc
+   SrigGp0UN5HN8X3m97EByxB2K68ABjwWsaOweX2qb5EhRqeT/BWLQgfUp
+   Us4ajKVSBOaWzHwzDpaQTDm+/AEQ8Cavq7xW0RJTDPKpBN24Ex5LqgNhy
+   v55xgrGl1c7MrQamR+PhrulAdRm9LvYSoy4yeXqJdlzYx0NNjiDtIQzAn
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="237858704"
+X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
+   d="scan'208";a="237858704"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 11:38:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
+   d="scan'208";a="519019156"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 22 Mar 2022 11:38:29 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nWjOm-000JAq-Jd; Tue, 22 Mar 2022 18:38:28 +0000
+Date: Wed, 23 Mar 2022 02:38:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tom <support@vamrs.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 29/61] drivers/soc/sifive/sifive_l2_cache.c:152:3:
+ error: implicit declaration of function 'writeq'
+Message-ID: <202203230258.Jcxld0wh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
- <20220322102115.186179-3-ammarfaizi2@gnuweeb.org> <CAKwvOdkEwkzT0uf9a5SokCScDTY4gbhNFZ+fLxsti9innaEZRQ@mail.gmail.com>
- <20220322172550.GL10306@1wt.eu> <CAKwvOdmr6u-zNynUDAg4pmwerQFUkG+eD0QhpzDED9eg+U2pfA@mail.gmail.com>
- <20220322175816.GN10306@1wt.eu> <CAKwvOd=LvBL4NTUWMc0rJ-3K+MU5rv-p+j2pfbuseGdiA2ccJw@mail.gmail.com>
- <20220322182448.GQ10306@1wt.eu>
-In-Reply-To: <20220322182448.GQ10306@1wt.eu>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 22 Mar 2022 11:38:13 -0700
-Message-ID: <CAKwvOdm1mVvVN1+c3gJEDz+__FF_yW484j8z7a+k=JVHC4FcKw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/8] tools/nolibc: Remove .global _start from the
- entry point code
-To: Willy Tarreau <w@1wt.eu>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	"GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Mar 22, 2022 at 11:24 AM Willy Tarreau <w@1wt.eu> wrote:
->
-> What I particularly like is that I don't need a full toolchain, so if
-> I can build a kernel with the bare-metal compilers from kernel.org then
-> I know I can also build my initramfs that's packaged in it using the
-> exact same compiler. This significantly simplifies the build process.
+tree:   https://github.com/esmil/linux visionfive
+head:   243ce759ed5821edf38bf93ce7325e232b805547
+commit: 5a2aff3930cd923322a7bcd0b50f9077166ec562 [29/61] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
+config: riscv-buildonly-randconfig-r006-20220320 (https://download.01.org/0day-ci/archive/20220323/202203230258.Jcxld0wh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/5a2aff3930cd923322a7bcd0b50f9077166ec562
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 5a2aff3930cd923322a7bcd0b50f9077166ec562
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/ drivers/soc/sifive/
 
-Neat; yeah that coincides a bit with my interest in having builds of
-llvm on kernel.org; having/needing a libc is a PITA and building a
-full cross toolchain is also more difficult than I think it needs to
-be.  The libc will depend on kernel headers, for each target.  LLVM
-currently has a WIP libc in its tree; I'm looking for something I can
-statically link into the toolchain images (even LTO them into the
-image).  Will probably pursue musl (if I ever get time for this,
-though maybe a project for my summer intern...).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-One thing I've been looking at is a utility called llvm-ifs [1]; it
-can generate .so stubs from a textual description that can be more
-easily read, diff'ed, and committed. These are much faster to build
-and reduce the chain of build dependencies (when dynamically linking).
-Last I checked it had issues with versioned symbols, and I'm not sure
-if/what it does for headers, which are still needed.  Within Android,
-libabigail is being used to dump+diff xml descriptions of parts of an
-ABI, it looks like llvm-ifs might be useful for that as well.  Not
-sure if it's interesting but thought I'd share.
+All error/warnings (new ones prefixed by >>):
 
-[1] https://www.youtube.com/watch?v=_pIorUFavc8
+>> drivers/soc/sifive/sifive_l2_cache.c:152:3: error: implicit declaration of function 'writeq' [-Werror,-Wimplicit-function-declaration]
+                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+                   ^
+>> drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +/writeq +152 drivers/soc/sifive/sifive_l2_cache.c
+
+   123	
+   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
+   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+   126	{
+   127		unsigned long line;
+   128	
+   129		if(!l2_base) {
+   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+   131			return;
+   132		}
+   133	
+   134		/* TODO: if (len == 0), skipping flush or going on? */
+   135		if(!len) {
+   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+   137			return;
+   138		}
+   139	
+   140		/* make sure the address is in the range */
+   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+ > 142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+   145				start, len);
+   146			return;
+   147		}
+   148	
+   149		mb();	/* sync */
+   150		for (line = start; line < start + len;
+   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+ > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+   153			mb();
+   154		}
+   155	}
+   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+   157	#endif
+   158	
+
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
