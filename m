@@ -1,23 +1,23 @@
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F3FC75
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 13:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9523C75
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 13:55:02 +0000 (UTC)
 Received: from [192.168.12.80] (unknown [182.2.69.158])
-	by gnuweeb.org (Postfix) with ESMTPSA id E54737E2FC;
-	Tue, 22 Mar 2022 13:46:01 +0000 (UTC)
+	by gnuweeb.org (Postfix) with ESMTPSA id DFC817E2DF;
+	Tue, 22 Mar 2022 13:54:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1647956770;
-	bh=HKgnPToOKuDtMd2JSw/Bl1HQmJatv90FvRD6l9jl9jY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pCTjxSUhL5rr31ViBmr/RMoiC2r2s4CGvgFgDjmMFypfINpuGHuLjS+2DNiJ2CiYu
-	 ahBjCo6pi3R3OngD0DX5g8J9yHOhi9iw5CxPs5eQPFtCh6R8K1v+ay7Nhpktm3b2Bn
-	 RxkI+I4Ylea+1tv9WjC9PSAHF3IpV+fJuQRNffqoJrNOS7jSApYEFCrBpKknwHp5AH
-	 VNL0U1x9VGzgXLRFiAINDchQKgTx09w0pcdMqJrGI3eWbSgoN6g5FASYimW2g1jSp4
-	 +NYHTsF+XIuEyOqqtb+fwpd6HYkXQ89udqUekqH32ASo0xTvV6JKKk1aBJWFCbMuCb
-	 Yr4IDbYt7jGPA==
-Message-ID: <9cfcb296-9dfe-aef1-4209-20a3a95c50ba@gnuweeb.org>
-Date: Tue, 22 Mar 2022 20:45:59 +0700
+	s=default; t=1647957302;
+	bh=FNwRWV5kyah147+Fd1oNM7w3nIsC4tpI18bVQxUMzMY=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=k1WSchwHbTrWSBLb+Wde6AnOkCuyNqJItIJxQBp87k5SW1+4PeRmj7CXTVB4jMiuO
+	 iIb0CePwQOQjNwvnirqYeXNutxvJD2Cs88Dmycl6Wa0udgfjvuEbxxyctpiZJ/FdFt
+	 opmT0wrLFYP5DTPKUz4CFrs2mEy6FsIf42H3/90f4u8lwsXMCGO3lFxtdvaCQFIq+b
+	 RzLQINUqCUFmF+1HCgpP013KlmfSAzKp8iCQrcEKxy8ZKXBDtByRAY3hlA6NORCkwq
+	 md7kuXQRQZhRI+5pMFAL6/hQAUUioM+Zmqg5UORibCIY7XavLfOKhHNxu50UqzzueI
+	 +DFxrMv/mXrmA==
+Message-ID: <98304cd4-a443-5e5e-9764-654ecd1d458b@gnuweeb.org>
+Date: Tue, 22 Mar 2022 20:54:55 +0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,6 +29,7 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
 Subject: Re: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
  arguments
 Content-Language: en-US
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To: Willy Tarreau <w@1wt.eu>, David Laight <David.Laight@aculab.com>
 Cc: "Paul E. McKenney" <paulmck@kernel.org>,
  Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
@@ -47,56 +48,42 @@ References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
  <58cb5455-d065-b508-b328-20b57c3a67a7@gnuweeb.org>
  <3b8984ecfbcd4c93aeb468d01728cd74@AcuMS.aculab.com>
  <20220322134100.GH10306@1wt.eu>
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220322134100.GH10306@1wt.eu>
+ <9cfcb296-9dfe-aef1-4209-20a3a95c50ba@gnuweeb.org>
+In-Reply-To: <9cfcb296-9dfe-aef1-4209-20a3a95c50ba@gnuweeb.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/22/22 8:41 PM, Willy Tarreau wrote:
-[...]
->>> When you pushl %ebp, the %esp changes, N(%esp) no longer points to the
->>> 6-th argument.
->>
->> Yep - that is why I wrote the 'push arg6'.
-> 
-> Got it and you're right indeed, sorry for the noise :-)
 
-Uggh... it seems I hit a GCC bug when playing with -m32 (32-bit code).
-I am on Linux x86-64. Compiling without optimization causing GCC stuck
-in an endless loop with 100% CPU usage.
+Willy, something goes wrong here...
 
-I will try to narrow it down and see if I can create a simple reproducer
-on this issue.
-
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ gcc --version
-gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0
-Copyright (C) 2021 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
-^C
-
-real	0m46.696s
-user	0m0.000s
-sys	0m0.002s
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -O1 -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
-
-real	0m0.054s
-user	0m0.046s
-sys	0m0.008s
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -O2 -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
-
-real	0m0.079s
-user	0m0.067s
-sys	0m0.012s
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -O3 -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
-
-real	0m0.110s
-user	0m0.097s
-sys	0m0.013s
+ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ taskset -c 0 gcc -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
+/usr/bin/ld: /tmp/ccHiYiks.o: warning: relocation against `environ' in read-only section `.text'
+/usr/bin/ld: /tmp/ccHiYiks.o: in function `getenv':
+test.c:(.text+0x1f76): undefined reference to `environ'
+/usr/bin/ld: test.c:(.text+0x1fc3): undefined reference to `environ'
+/usr/bin/ld: test.c:(.text+0x1ffc): undefined reference to `environ'
+/usr/bin/ld: test.c:(.text+0x2021): undefined reference to `environ'
+/usr/bin/ld: test.c:(.text+0x2049): undefined reference to `environ'
+/usr/bin/ld: warning: creating DT_TEXTREL in a PIE
+collect2: error: ld returned 1 exit status
 ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$
 
+
+I suspect it's caused by commit:
+
+commit c970abe796019b3d576fd154a54b94efb35c02b1
+Author: Willy Tarreau <w@1wt.eu>
+Date:   Mon Mar 21 18:33:08 2022 +0100
+
+     tools/nolibc/stdlib: add a simple getenv() implementation
+     
+     This implementation relies on an extern definition of the environ
+     variable, that the caller must declare and initialize from envp.
+     
+     Signed-off-by: Willy Tarreau <w@1wt.eu>
+     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+I will take a look deeper on this...
 
 -- 
 Ammar Faizi
