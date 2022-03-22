@@ -1,185 +1,160 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A77F7A
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 02:27:53 +0000 (UTC)
-X-UUID: 49498e92feac4b279bb7e926be589e25-20220322
-X-UUID: 49498e92feac4b279bb7e926be589e25-20220322
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-	(envelope-from <ck.hu@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 212373079; Tue, 22 Mar 2022 10:27:40 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 22 Mar 2022 10:27:38 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 22 Mar 2022 10:27:38 +0800
-Message-ID: <088784fbbe5b42a4dd9e796f0cf75a928a3b5a40.camel@mediatek.com>
-Subject: Re: [PATCH v16 09/22] soc: mediatek: add mtk-mutex support for
- mt8195 vdosys1
-From: CK Hu <ck.hu@mediatek.com>
-To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
-	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
-	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: <devicetree@vger.kernel.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <srv_heupstream@mediatek.com>, David Airlie
-	<airlied@linux.ie>, "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-	<singo.chang@mediatek.com>, <llvm@lists.linux.dev>, Nick Desaulniers
-	<ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
-Date: Tue, 22 Mar 2022 10:27:38 +0800
-In-Reply-To: <20220318142009.2796-10-nancy.lin@mediatek.com>
-References: <20220318142009.2796-1-nancy.lin@mediatek.com>
-	 <20220318142009.2796-10-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7297D622
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 02:35:55 +0000 (UTC)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KMw6f1gFxzfZW2;
+	Tue, 22 Mar 2022 10:14:50 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Mar 2022 10:16:22 +0800
+Subject: Re: [PATCH v2] mm/mempolicy: fix mpol_new leak in
+ shared_policy_replace
+To: kernel test robot <lkp@intel.com>, <akpm@linux-foundation.org>,
+	<mhocko@suse.com>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+	<kosaki.motohiro@jp.fujitsu.com>, <mgorman@suse.de>, <linux-mm@kvack.org>,
+	<linux-kernel@vger.kernel.org>
+References: <20220322083456.16563-1-linmiaohe@huawei.com>
+ <202203220336.VpfVL4ng-lkp@intel.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <1c2b6285-1404-4a80-73ec-4949f4eef09e@huawei.com>
+Date: Tue, 22 Mar 2022 10:16:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <202203220336.VpfVL4ng-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-MTK: N
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
 
-Hi, Nancy:
-
-On Fri, 2022-03-18 at 22:19 +0800, Nancy.Lin wrote:
-> Add mtk-mutex support for mt8195 vdosys1.
-> The vdosys1 path component contains ovl_adaptor, merge5,
-> and dp_intf1. Ovl_adaptor is composed of several sub-elements.
+On 2022/3/22 4:01, kernel test robot wrote:
+> Hi Miaohe,
 > 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/soc/mediatek/mtk-mutex.c | 54
-> ++++++++++++++++++++++++++++++++
->  1 file changed, 54 insertions(+)
+> Thank you for the patch! Yet something to improve:
 > 
-> diff --git a/drivers/soc/mediatek/mtk-mutex.c
-> b/drivers/soc/mediatek/mtk-mutex.c
-> index cb791671d751..70e6043e99df 100644
-> --- a/drivers/soc/mediatek/mtk-mutex.c
-> +++ b/drivers/soc/mediatek/mtk-mutex.c
-> @@ -129,6 +129,35 @@
->  #define MT8195_MUTEX_MOD_DISP_PWM0		BIT(27)
->  #define MT8195_MUTEX_MOD_DISP_PWM1		BIT(28)
->  
-> +#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA0	BIT(0)
-> +#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA1	BIT(1)
-> +#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA2	BIT(2)
-> +#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA3	BIT(3)
-> +#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA4	BIT(4)
-> +#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA5	BIT(5)
-> +#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA6	BIT(6)
-> +#define MT8195_MUTEX_MOD_DISP1_MDP_RDMA7	BIT(7)
-> +#define MT8195_MUTEX_MOD_DISP1_VPP_MERGE0	BIT(8)
-> +#define MT8195_MUTEX_MOD_DISP1_VPP_MERGE1	BIT(9)
-> +#define MT8195_MUTEX_MOD_DISP1_VPP_MERGE2	BIT(10)
-> +#define MT8195_MUTEX_MOD_DISP1_VPP_MERGE3	BIT(11)
-> +#define MT8195_MUTEX_MOD_DISP1_VPP_MERGE4	BIT(12)
-> +#define MT8195_MUTEX_MOD_DISP1_VPP2_DL_RELAY	BIT(13)
-> +#define MT8195_MUTEX_MOD_DISP1_VPP3_DL_RELAY	BIT(14)
-> +#define MT8195_MUTEX_MOD_DISP1_VDO0_DSC_DL_ASYNC	BIT(15)
-> +#define MT8195_MUTEX_MOD_DISP1_VDO0_MERGE_DL_ASYNC	BIT(16)
-> +#define MT8195_MUTEX_MOD_DISP1_VDO1_OUT_DL_RELAY	BIT(17)
-> +#define MT8195_MUTEX_MOD_DISP1_DISP_MIXER	BIT(18)
-> +#define MT8195_MUTEX_MOD_DISP1_HDR_VDO_FE0	BIT(19)
-> +#define MT8195_MUTEX_MOD_DISP1_HDR_VDO_FE1	BIT(20)
-> +#define MT8195_MUTEX_MOD_DISP1_HDR_GFX_FE0	BIT(21)
-> +#define MT8195_MUTEX_MOD_DISP1_HDR_GFX_FE1	BIT(22)
-> +#define MT8195_MUTEX_MOD_DISP1_HDR_VDO_BE0	BIT(23)
-> +#define MT8195_MUTEX_MOD_DISP1_HDR_MLOAD	BIT(24)
-> +#define MT8195_MUTEX_MOD_DISP1_DPI0		BIT(25)
-> +#define MT8195_MUTEX_MOD_DISP1_DPI1		BIT(26)
-> +#define MT8195_MUTEX_MOD_DISP1_DP_INTF0		BIT(27)
-> +
->  #define MT2712_MUTEX_MOD_DISP_PWM2		BIT(10)
->  #define MT2712_MUTEX_MOD_DISP_OVL0		BIT(11)
->  #define MT2712_MUTEX_MOD_DISP_OVL1		BIT(12)
-> @@ -332,6 +361,27 @@ static const u64
-> mt8195_mutex_mod[DDP_COMPONENT_ID_MAX] = {
->  	[DDP_COMPONENT_DSI0] = MT8195_MUTEX_MOD_DISP_DSI0,
->  	[DDP_COMPONENT_PWM0] = MT8195_MUTEX_MOD_DISP_PWM0,
->  	[DDP_COMPONENT_DP_INTF0] = MT8195_MUTEX_MOD_DISP_DP_INTF0,
-> +	[DDP_COMPONENT_OVL_ADAPTOR] = MT8195_MUTEX_MOD_DISP1_MDP_RDMA0
-> |
+> [auto build test ERROR on linux/master]
+> [also build test ERROR on linus/master v5.17]
+> [cannot apply to hnaz-mm/master next-20220321]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Miaohe-Lin/mm-mempolicy-fix-mpol_new-leak-in-shared_policy_replace/20220321-200100
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+> config: x86_64-randconfig-a002-20220321 (https://download.01.org/0day-ci/archive/20220322/202203220336.VpfVL4ng-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/0day-ci/linux/commit/9a91a8a7964a3af0b60f08dc38b7815e5118206a
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Miaohe-Lin/mm-mempolicy-fix-mpol_new-leak-in-shared_policy_replace/20220321-200100
+>         git checkout 9a91a8a7964a3af0b60f08dc38b7815e5118206a
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> mm/mempolicy.c:2745:15: error: incompatible pointer types passing 'atomic_t *' to parameter of type 'refcount_t *' (aka 'struct refcount_struct *') [-Werror,-Wincompatible-pointer-types]
+>            refcount_set(&mpol_new->refcnt, 1);
+>                         ^~~~~~~~~~~~~~~~~
+>    include/linux/refcount.h:134:45: note: passing argument to parameter 'r' here
+>    static inline void refcount_set(refcount_t *r, int n)
+>                                                ^
+>    1 error generated.
+> 
 
-I would like to expose each mod instead of ovl adaptor. ovl adaptor is
-an application that combine these mod to achieve ovl function, maybe
-another application would combine part of these mod to achieve another
-function. Let application to decide the combination.
+Many thanks for report. Commit 4fbd79de2889 ("mm/mempolicy: convert from atomic_t to refcount_t on mempolicy->refcnt") has
+changed mpol_new->refcnt from atomic_t to refcount_t. So we should use refcount_set instead of atomic_set here.
 
-Regards,
-CK
+Thanks.
 
-> +				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA1
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA2
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA3
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA4
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA5
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA6
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_MDP_RDMA7
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_VPP_MERGE0
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_VPP_MERGE1
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_VPP_MERGE2
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_VPP_MERGE3
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_HDR_VDO_FE
-> 0 |
-> +				      MT8195_MUTEX_MOD_DISP1_HDR_VDO_FE
-> 1 |
-> +				      MT8195_MUTEX_MOD_DISP1_HDR_GFX_FE
-> 0 |
-> +				      MT8195_MUTEX_MOD_DISP1_HDR_GFX_FE
-> 1 |
-> +				      MT8195_MUTEX_MOD_DISP1_HDR_VDO_BE
-> 0 |
-> +				      MT8195_MUTEX_MOD_DISP1_HDR_MLOAD
-> |
-> +				      MT8195_MUTEX_MOD_DISP1_DISP_MIXER
-> ,
-> +	[DDP_COMPONENT_MERGE5] = MT8195_MUTEX_MOD_DISP1_VPP_MERGE4,
-> +	[DDP_COMPONENT_DP_INTF1] = MT8195_MUTEX_MOD_DISP1_DP_INTF0,
->  };
->  
->  static const unsigned int mt2712_mutex_sof[DDP_MUTEX_SOF_MAX] = {
-> @@ -517,6 +567,9 @@ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
->  	case DDP_COMPONENT_DP_INTF0:
->  		sof_id = MUTEX_SOF_DP_INTF0;
->  		break;
-> +	case DDP_COMPONENT_DP_INTF1:
-> +		sof_id = MUTEX_SOF_DP_INTF1;
-> +		break;
->  	default:
->  		if (mtx->data->mutex_mod[id] <= BIT(31)) {
->  			offset = DISP_REG_MUTEX_MOD(mtx->data-
-> >mutex_mod_reg,
-> @@ -557,6 +610,7 @@ void mtk_mutex_remove_comp(struct mtk_mutex
-> *mutex,
->  	case DDP_COMPONENT_DPI0:
->  	case DDP_COMPONENT_DPI1:
->  	case DDP_COMPONENT_DP_INTF0:
-> +	case DDP_COMPONENT_DP_INTF1:
->  		writel_relaxed(MUTEX_SOF_SINGLE_MODE,
->  			       mtx->regs +
->  			       DISP_REG_MUTEX_SOF(mtx->data-
-> >mutex_sof_reg,
+> 
+> vim +2745 mm/mempolicy.c
+> 
+>   2681	
+>   2682	/* Replace a policy range. */
+>   2683	static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
+>   2684					 unsigned long end, struct sp_node *new)
+>   2685	{
+>   2686		struct sp_node *n;
+>   2687		struct sp_node *n_new = NULL;
+>   2688		struct mempolicy *mpol_new = NULL;
+>   2689		int ret = 0;
+>   2690	
+>   2691	restart:
+>   2692		write_lock(&sp->lock);
+>   2693		n = sp_lookup(sp, start, end);
+>   2694		/* Take care of old policies in the same range. */
+>   2695		while (n && n->start < end) {
+>   2696			struct rb_node *next = rb_next(&n->nd);
+>   2697			if (n->start >= start) {
+>   2698				if (n->end <= end)
+>   2699					sp_delete(sp, n);
+>   2700				else
+>   2701					n->start = end;
+>   2702			} else {
+>   2703				/* Old policy spanning whole new range. */
+>   2704				if (n->end > end) {
+>   2705					if (!n_new)
+>   2706						goto alloc_new;
+>   2707	
+>   2708					*mpol_new = *n->policy;
+>   2709					atomic_set(&mpol_new->refcnt, 1);
+>   2710					sp_node_init(n_new, end, n->end, mpol_new);
+>   2711					n->end = start;
+>   2712					sp_insert(sp, n_new);
+>   2713					n_new = NULL;
+>   2714					mpol_new = NULL;
+>   2715					break;
+>   2716				} else
+>   2717					n->end = start;
+>   2718			}
+>   2719			if (!next)
+>   2720				break;
+>   2721			n = rb_entry(next, struct sp_node, nd);
+>   2722		}
+>   2723		if (new)
+>   2724			sp_insert(sp, new);
+>   2725		write_unlock(&sp->lock);
+>   2726		ret = 0;
+>   2727	
+>   2728	err_out:
+>   2729		if (mpol_new)
+>   2730			mpol_put(mpol_new);
+>   2731		if (n_new)
+>   2732			kmem_cache_free(sn_cache, n_new);
+>   2733	
+>   2734		return ret;
+>   2735	
+>   2736	alloc_new:
+>   2737		write_unlock(&sp->lock);
+>   2738		ret = -ENOMEM;
+>   2739		n_new = kmem_cache_alloc(sn_cache, GFP_KERNEL);
+>   2740		if (!n_new)
+>   2741			goto err_out;
+>   2742		mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
+>   2743		if (!mpol_new)
+>   2744			goto err_out;
+>> 2745		refcount_set(&mpol_new->refcnt, 1);
+>   2746		goto restart;
+>   2747	}
+>   2748	
+> 
 
