@@ -1,102 +1,106 @@
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4122EC75
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 13:26:48 +0000 (UTC)
-Received: from [192.168.12.80] (unknown [182.2.69.158])
-	by gnuweeb.org (Postfix) with ESMTPSA id 27DA87E2DF;
-	Tue, 22 Mar 2022 13:26:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1647955607;
-	bh=SKM43D9jDBq+PWDOPBX3QtOzn+TW4kuM/fe+xnCwC/k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PbUywEleF/ZAh7d/Q0QM2FLLqGcJDHh3Bnp1FuuSZVHvDKGlnXorXzwiTk+H7QyFs
-	 5kXTKXnyoR7y00+wug7GGo/IiyaYuugAx4JpRBOsRp0pTyhMGjuMxxpcYMk3Lfeqqx
-	 0UZyJgqhH1yvH7EWrJDwLJ4V3+YiNVzXqYjermxXLrouTvY4OlwTBzOMApswMng4vh
-	 X4PC6leIptY6ORiiC3hpk1qICmTlOD+UkiyMFg0karoCZfuuxWlZe+alAYCL0xmsAX
-	 NRnP0WSKSLggQlIhUAZbE/i5GdP/a2KvfAFH6CtkMWUyx7thFLHnUj/RzwK0OmOJus
-	 5iwSpioO3BNYw==
-Message-ID: <81569a1c-a6d3-ceb2-a1f1-f229a024d684@gnuweeb.org>
-Date: Tue, 22 Mar 2022 20:26:37 +0700
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ABE9C75
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 13:34:24 +0000 (UTC)
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 22MDYDRu011026;
+	Tue, 22 Mar 2022 14:34:13 +0100
+Date: Tue, 22 Mar 2022 14:34:13 +0100
+From: Willy Tarreau <w@1wt.eu>
+To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: David Laight <David.Laight@ACULAB.COM>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Message-ID: <20220322133413.GG10306@1wt.eu>
+References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
+ <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
+ <8653f6784a9b4272a59a75a530663567@AcuMS.aculab.com>
+ <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
+ <20220322121338.GD10306@1wt.eu>
+ <81569a1c-a6d3-ceb2-a1f1-f229a024d684@gnuweeb.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
- arguments
-Content-Language: en-US
-To: Willy Tarreau <w@1wt.eu>
-Cc: David Laight <David.Laight@ACULAB.COM>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
- Nugraha <richiisei@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
- "x86@kernel.org" <x86@kernel.org>,
- "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
- <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
- <8653f6784a9b4272a59a75a530663567@AcuMS.aculab.com>
- <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
- <20220322121338.GD10306@1wt.eu>
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220322121338.GD10306@1wt.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <81569a1c-a6d3-ceb2-a1f1-f229a024d684@gnuweeb.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 3/22/22 7:13 PM, Willy Tarreau wrote:
-> On Tue, Mar 22, 2022 at 07:02:53PM +0700, Ammar Faizi wrote:
->> I propose the
->> following macro (this is not so much different with other my_syscall macro),
->> expect the 6th argument can be in reg or mem.
->>
->> The "rm" constraint here gives the opportunity for the compiler to use %ebp
->> instead of memory if -fomit-frame-pointer is turned on.
->>
->> #define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6) \
->> ({                                                         \
->>      long _ret;                                             \
->>      register long _num asm("eax") = (num);                 \
->>      register long _arg1 asm("ebx") = (long)(arg1);         \
->>      register long _arg2 asm("ecx") = (long)(arg2);         \
->>      register long _arg3 asm("edx") = (long)(arg3);         \
->>      register long _arg4 asm("esi") = (long)(arg4);         \
->>      register long _arg5 asm("edi") = (long)(arg5);         \
->>      long _arg6 = (long)(arg6); /* Might be in memory */    \
->>                                                             \
->>      asm volatile (                                         \
->>          "pushl  %[_arg6]\n\t"                              \
->>          "pushl  %%ebp\n\t"                                 \
->>          "movl   4(%%esp), %%ebp\n\t"                       \
->>          "int    $0x80\n\t"                                 \
->>          "popl   %%ebp\n\t"                                 \
->>          "addl   $4,%%esp\n\t"                              \
->>          : "=a"(_ret)                                       \
->>          : "r"(_num), "r"(_arg1), "r"(_arg2), "r"(_arg3),   \
->>            "r"(_arg4),"r"(_arg5), [_arg6]"rm"(_arg6)        \
->>          : "memory", "cc"                                   \
->>      );                                                     \
->>      _ret;                                                  \
->> })
->>
->> What do you think?
+On Tue, Mar 22, 2022 at 08:26:37PM +0700, Ammar Faizi wrote:
+> On 3/22/22 7:13 PM, Willy Tarreau wrote:
+> > On Tue, Mar 22, 2022 at 07:02:53PM +0700, Ammar Faizi wrote:
+> > > I propose the
+> > > following macro (this is not so much different with other my_syscall macro),
+> > > expect the 6th argument can be in reg or mem.
+> > > 
+> > > The "rm" constraint here gives the opportunity for the compiler to use %ebp
+> > > instead of memory if -fomit-frame-pointer is turned on.
+> > > 
+> > > #define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6) \
+> > > ({                                                         \
+> > >      long _ret;                                             \
+> > >      register long _num asm("eax") = (num);                 \
+> > >      register long _arg1 asm("ebx") = (long)(arg1);         \
+> > >      register long _arg2 asm("ecx") = (long)(arg2);         \
+> > >      register long _arg3 asm("edx") = (long)(arg3);         \
+> > >      register long _arg4 asm("esi") = (long)(arg4);         \
+> > >      register long _arg5 asm("edi") = (long)(arg5);         \
+> > >      long _arg6 = (long)(arg6); /* Might be in memory */    \
+> > >                                                             \
+> > >      asm volatile (                                         \
+> > >          "pushl  %[_arg6]\n\t"                              \
+> > >          "pushl  %%ebp\n\t"                                 \
+> > >          "movl   4(%%esp), %%ebp\n\t"                       \
+> > >          "int    $0x80\n\t"                                 \
+> > >          "popl   %%ebp\n\t"                                 \
+> > >          "addl   $4,%%esp\n\t"                              \
+> > >          : "=a"(_ret)                                       \
+> > >          : "r"(_num), "r"(_arg1), "r"(_arg2), "r"(_arg3),   \
+> > >            "r"(_arg4),"r"(_arg5), [_arg6]"rm"(_arg6)        \
+> > >          : "memory", "cc"                                   \
+> > >      );                                                     \
+> > >      _ret;                                                  \
+> > > })
+> > > 
+> > > What do you think?
+> > 
+> > Hmmm indeed that comes back to the existing constructs and is certainly
+> > more in line with the rest of the code (plus it will not be affected by
+> > -O0).
+> > 
+> > I seem to remember a register allocation issue which kept me away from
+> > implementing it this way on i386 back then, but given that my focus was
+> > not as much on i386 as it was on other platforms, it's likely that I have
+> > not insisted too much and not tried this one which looks like the way to
+> > go to me.
 > 
-> Hmmm indeed that comes back to the existing constructs and is certainly
-> more in line with the rest of the code (plus it will not be affected by
-> -O0).
-> 
-> I seem to remember a register allocation issue which kept me away from
-> implementing it this way on i386 back then, but given that my focus was
-> not as much on i386 as it was on other platforms, it's likely that I have
-> not insisted too much and not tried this one which looks like the way to
-> go to me.
+> I turned out GCC refuses to use "rm" if we compile without -fomit-frame-pointer
+> (e.g. without optimization / -O0). So I will still use "m" here.
 
-I turned out GCC refuses to use "rm" if we compile without -fomit-frame-pointer
-(e.g. without optimization / -O0). So I will still use "m" here.
+OK that's fine. then you can probably simplify it like this:
 
--- 
-Ammar Faizi
+      long _arg6 = (long)(arg6); /* Might be in memory */    \
+                                                             \
+      asm volatile (                                         \
+          "pushl  %%ebp\n\t"                                 \
+          "movl   %[_arg6], %%ebp\n\t"                       \
+          "int    $0x80\n\t"                                 \
+          "popl   %%ebp\n\t"                                 \
+          : "=a"(_ret)                                       \
+          : "r"(_num), "r"(_arg1), "r"(_arg2), "r"(_arg3),   \
+            "r"(_arg4),"r"(_arg5), [_arg6]"m"(_arg6)        \
+          : "memory", "cc"                                   \
+      );                                                     \
+
+See ? no more push, no more addl, direct load from memory.
+
+Willy
