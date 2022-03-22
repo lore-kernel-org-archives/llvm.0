@@ -1,133 +1,105 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47F2A54
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 11:39:09 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-38-lnX6-H1VMiaQvmmh42a07A-1; Tue, 22 Mar 2022 11:39:06 +0000
-X-MC-Unique: lnX6-H1VMiaQvmmh42a07A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Tue, 22 Mar 2022 11:39:07 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Tue, 22 Mar 2022 11:39:07 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Ammar Faizi' <ammarfaizi2@gnuweeb.org>, Willy Tarreau <w@1wt.eu>
-CC: "Paul E. McKenney" <paulmck@kernel.org>, Alviro Iskandar Setiawan
-	<alviro.iskandar@gnuweeb.org>, Nugraha <richiisei@gmail.com>, "Linux Kernel
- Mailing List" <linux-kernel@vger.kernel.org>, GNU/Weeb Mailing List
-	<gwml@vger.gnuweeb.org>, "x86@kernel.org" <x86@kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
- arguments
-Thread-Topic: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
- arguments
-Thread-Index: AQHYPdalMvftIu2CIkSH1LImoy2kmazLRP7A
-Date: Tue, 22 Mar 2022 11:39:06 +0000
-Message-ID: <8653f6784a9b4272a59a75a530663567@AcuMS.aculab.com>
-References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
- <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0110A54
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 11:57:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647950251; x=1679486251;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8lmWLMtQQqVzHQ2GYjY+dNrTc8+Hhgn6kGkLT+kIDwQ=;
+  b=LzEaPiRVMo8L8hQU/QdEGRcHiEkyLevfmSQlZcmS8QZyvg31OuF8Xf+w
+   YA+r5E/kaMMps+cVcvGqgYs3lB/J5X4Qm25cUMNUl4xPRLhpYgGmDnb3S
+   v6nODEKROcEZxlgKwuimWdyU3JdXQFKZ8GbQ0fIl8ioo7qfqXXzEGZYXk
+   sASrYJFw7U5rzSV/vxdE6BTstdcMu7Qb+zNtj+PIvoKNu+RP1CHAl++Q8
+   yHJkh9Weweoiwktnw272Q3Ux124meFL3R7UgoqCjMUkqpSYxhaAgSIZgW
+   aizkbSpuJhIPUbYTJ8G242kkW+YJolX/Jmh32qvyk2UfGO9vAC6m7incc
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257747548"
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="257747548"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 04:57:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="648958488"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 22 Mar 2022 04:57:27 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nWd8h-000Ijz-7e; Tue, 22 Mar 2022 11:57:27 +0000
+Date: Tue, 22 Mar 2022 19:56:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-gpio@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Chen-Yu Tsai <wenst@chromium.org>
+Subject: [linusw-pinctrl:for-next 72/78]
+ drivers/pinctrl/mediatek/pinctrl-mt8186.c:1254:39: error: too many arguments
+ to function call, expected single argument 'pdev', have 2 arguments
+Message-ID: <202203221951.it5LJ3eo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Ammar Faizi
-> Sent: 22 March 2022 10:21
-> On i386, the 6th argument of syscall goes in %ebp. However, both Clang
-> and GCC cannot use %ebp in the clobber list and in the "r" constraint
-> without using -fomit-frame-pointer. To make it always available for
-> any kind of compilation, the below workaround is implemented.
->=20
-...
-> diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch=
--i386.h
-> index 125a691fc631..9f4dc36e6ac2 100644
-> --- a/tools/include/nolibc/arch-i386.h
-> +++ b/tools/include/nolibc/arch-i386.h
-> @@ -167,6 +167,72 @@ struct sys_stat_struct {
->  =09_ret;                                                                =
- \
->  })
->=20
-> +
-> +/*
-> + * Both Clang and GCC cannot use %ebp in the clobber list and in the "r"
-> + * constraint without using -fomit-frame-pointer. To make it always
-> + * available for any kind of compilation, the below workaround is
-> + * implemented.
-> + *
-> + * For clang (the Assembly statement can't clobber %ebp):
-> + *   1) Push the 6-th argument.
-> + *   2) Push %ebp.
-> + *   3) Load the 6-th argument from 4(%esp) to %ebp.
-> + *   4) Do the syscall (int $0x80).
-> + *   5) Pop %ebp (restore the old value of %ebp).
-> + *   6) Add %esp by 4 (undo the stack pointer).
-> + *
-> + * For GCC, fortunately it has a #pragma that can force a specific funct=
-ion
-> + * to be compiled with -fomit-frame-pointer, so it can use "r"(var) wher=
-e
-> + * var is a variable bound to %ebp.
-> + *
-> + */
-> +#if defined(__clang__)
-> +static inline long ____do_syscall6(long eax, long ebx, long ecx, long ed=
-x,
-> +=09=09=09=09   long esi, long edi, long ebp)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git for-next
+head:   4d3a82e4ec28e7956db55487eeb480407a002c37
+commit: 78df7bba4ab88dd6f663335858b92f9cfa2cb850 [72/78] pinctrl: mediatek: paris: Unify probe function by using OF match data
+config: arm64-randconfig-r022-20220320 (https://download.01.org/0day-ci/archive/20220322/202203221951.it5LJ3eo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/commit/?id=78df7bba4ab88dd6f663335858b92f9cfa2cb850
+        git remote add linusw-pinctrl https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
+        git fetch --no-tags linusw-pinctrl for-next
+        git checkout 78df7bba4ab88dd6f663335858b92f9cfa2cb850
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pinctrl/mediatek/
 
-That should probably be:
-static inline long ____do_syscall6(long nr, long arg1, long arg2, long arg3=
-,
-=09=09=09=09   long arg4, long arg5, long arg6)
-and the input constraints changed to match.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +{
-> +=09__asm__ volatile (
-> +=09=09"pushl=09%[arg6]\n\t"
-> +=09=09"pushl=09%%ebp\n\t"
-> +=09=09"movl=094(%%esp), %%ebp\n\t"
-> +=09=09"int=09$0x80\n\t"
-> +=09=09"popl=09%%ebp\n\t"
-> +=09=09"addl=09$4,%%esp\n\t"
-> +=09=09: "=3Da"(eax)
-> +=09=09: "a"(eax), "b"(ebx), "c"(ecx), "d"(edx), "S"(esi), "D"(edi),
+All errors (new ones prefixed by >>):
 
-Does having "=3Da" for an output constraint and "a" for an input
-constraint actually DTRT?
-There is a special syntax for tying input and output to
-the same register.
-Or you could use "+a"(nr_rval) and 'return nr_rval'.
+>> drivers/pinctrl/mediatek/pinctrl-mt8186.c:1254:39: error: too many arguments to function call, expected single argument 'pdev', have 2 arguments
+           return mtk_paris_pinctrl_probe(pdev, &mt8186_data);
+                  ~~~~~~~~~~~~~~~~~~~~~~~       ^~~~~~~~~~~~
+   drivers/pinctrl/mediatek/pinctrl-paris.h:60:5: note: 'mtk_paris_pinctrl_probe' declared here
+   int mtk_paris_pinctrl_probe(struct platform_device *pdev);
+       ^
+   1 error generated.
 
-=09David
 
-> +=09=09  [arg6]"m"(ebp)
-> +=09=09: "memory", "cc"
-> +=09);
-> +=09return eax;
-> +}
+vim +/pdev +1254 drivers/pinctrl/mediatek/pinctrl-mt8186.c
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+8b483bda1e46604 Guodong Liu 2022-02-16  1247  
+8b483bda1e46604 Guodong Liu 2022-02-16  1248  static const struct of_device_id mt8186_pinctrl_of_match[] = {
+8b483bda1e46604 Guodong Liu 2022-02-16  1249  	{ .compatible = "mediatek,mt8186-pinctrl", },
+8b483bda1e46604 Guodong Liu 2022-02-16  1250  	{ }
+8b483bda1e46604 Guodong Liu 2022-02-16  1251  };
+8b483bda1e46604 Guodong Liu 2022-02-16  1252  static int mt8186_pinctrl_probe(struct platform_device *pdev)
+8b483bda1e46604 Guodong Liu 2022-02-16  1253  {
+8b483bda1e46604 Guodong Liu 2022-02-16 @1254  	return mtk_paris_pinctrl_probe(pdev, &mt8186_data);
+8b483bda1e46604 Guodong Liu 2022-02-16  1255  }
+8b483bda1e46604 Guodong Liu 2022-02-16  1256  
 
+:::::: The code at line 1254 was first introduced by commit
+:::::: 8b483bda1e4660411b24736e5fd6ddab472611bc pinctrl: add pinctrl driver on mt8186
+
+:::::: TO: Guodong Liu <guodong.liu@mediatek.com>
+:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
