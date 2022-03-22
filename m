@@ -1,24 +1,37 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4129EA31
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 09:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CE20EC340EE;
-	Tue, 22 Mar 2022 09:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647942610;
-	bh=p/usoSYbsmz0Jijh/9aah7ymyeDbRBze0vsgWTZqz5c=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=KosnwjP7goxB++402G2clmmDEql3S8ufYYUHatgjTJ3jIzTmCtT050fOfc+oSjaLm
-	 HESIH1k4mTysE5Aifj8OCxt7LnAcwalr80qLWcnnHb09uyfhx6bcVPHjKAFT05B/9T
-	 1NZSMPfvbdMnPXc5zvKIFZ2nYnPXr9/bseFw+Fv9HezwdJFDwk2rJvD5WWC1FoBbo7
-	 bsqbp9hda//foU1qHE/8evzxFo4OP8w77+EnJHlnEzDol/n4Ub2bsl7TyBGkGJVyA2
-	 Ia07RQYeJNEppRvjOTJUuUubsgnVpKYWTtQ5sWEOCqdVvqD7XoxA7kOwftfBL+hTsH
-	 HgoZlVD6h4fww==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B1CD1E6D402;
-	Tue, 22 Mar 2022 09:50:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C22FA31
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 10:21:41 +0000 (UTC)
+Received: from integral2.. (unknown [182.2.69.158])
+	by gnuweeb.org (Postfix) with ESMTPSA id 64C1B7E308;
+	Tue, 22 Mar 2022 10:21:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+	s=default; t=1647944500;
+	bh=Y2yOZug2HGJL8VFMD6EqH4ZMxTYA+8NhLWRdkoEiaiI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=iU1ZJPKJ6OWuXzbkmXhjXlHLVN4GyQDrbU48G2W/1KGHQV0QAHqrc1/z0dJ43rDql
+	 DfHracclBX+ZX2sAsx2bVZ+nI5wZO5CiVd/lcgfmiPB4hVFRPVg9ZxRoiXrOf5cOPF
+	 tfxJ0P4OFxBqLjee9lxqOl7Z9NMgFg3i3pw5w6ndmidjveU46MBw6M90u1KeF7Oo82
+	 KoNNkfr9Cor7zJ1DNim0nSE4qkxmHJ7wSN9QWAdcUAjOOk2T3LYyt4I/6MmwiUK3F8
+	 sYMykrXoqDE2mGkWynu80NPF+vZSOOHGfIuygTmQFmfMFlA1yqsTD7UQHR0hfnNGPE
+	 j6okpatS7+61A==
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To: Willy Tarreau <w@1wt.eu>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+	Nugraha <richiisei@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: [RFC PATCH v2 2/8] tools/nolibc: Remove .global _start from the entry point code
+Date: Tue, 22 Mar 2022 17:21:09 +0700
+Message-Id: <20220322102115.186179-3-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
+References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,43 +39,109 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bnx2x: truncate value to original sizing
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <164794261072.31108.16084505304692876635.git-patchwork-notify@kernel.org>
-Date: Tue, 22 Mar 2022 09:50:10 +0000
-References: <20220321023155.106066-1-morbo@google.com>
-In-Reply-To: <20220321023155.106066-1-morbo@google.com>
-To: Bill Wendling <morbo@google.com>
-Cc: aelior@marvell.com, skalluru@marvell.com, manishc@marvell.com,
- davem@davemloft.net, kuba@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-Hello:
+Building with clang yields the following error:
+```
+  <inline asm>:3:1: error: _start changed binding to STB_GLOBAL
+  .global _start
+  ^
+  1 error generated.
+```
+Make sure only specify one between `.global _start` and `.weak _start`.
+Removing `.global _start`.
 
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+Cc: llvm@lists.linux.dev
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
 
-On Sun, 20 Mar 2022 19:31:55 -0700 you wrote:
-> The original behavior was to print out unsigned short or unsigned char
-> values. The change in commit d65aea8e8298 ("bnx2x: use correct format
-> characters") prints out the whole value if not truncated. So truncate
-> the value to an unsigned {short|char} to retain the original behavior.
-> 
-> Fixes: d65aea8e8298 ("bnx2x: use correct format characters")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Bill Wendling <morbo@google.com>
-> 
-> [...]
+@@ Changelog:
 
-Here is the summary with links:
-  - bnx2x: truncate value to original sizing
-    https://git.kernel.org/netdev/net-next/c/4723832fa63f
+   Link RFC v1: https://lore.kernel.org/llvm/20220320093750.159991-3-ammarfaizi2@gnuweeb.org
+   RFC v1 -> RFC v2:
+    - Remove all `.global _start` for all build (GCC and Clang) instead of
+      removing all `.weak _start` for clang build (Comment from Willy).
+---
+ tools/include/nolibc/arch-aarch64.h | 1 -
+ tools/include/nolibc/arch-arm.h     | 1 -
+ tools/include/nolibc/arch-i386.h    | 1 -
+ tools/include/nolibc/arch-mips.h    | 1 -
+ tools/include/nolibc/arch-riscv.h   | 1 -
+ tools/include/nolibc/arch-x86_64.h  | 1 -
+ 6 files changed, 6 deletions(-)
 
-You are awesome, thank you!
+diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
+index 87d9e434820c..2dbd80d633cb 100644
+--- a/tools/include/nolibc/arch-aarch64.h
++++ b/tools/include/nolibc/arch-aarch64.h
+@@ -184,7 +184,6 @@ struct sys_stat_struct {
+ /* startup code */
+ asm(".section .text\n"
+     ".weak _start\n"
+-    ".global _start\n"
+     "_start:\n"
+     "ldr x0, [sp]\n"              // argc (x0) was in the stack
+     "add x1, sp, 8\n"             // argv (x1) = sp
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index 001a3c8c9ad5..1191395b5acd 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -177,7 +177,6 @@ struct sys_stat_struct {
+ /* startup code */
+ asm(".section .text\n"
+     ".weak _start\n"
+-    ".global _start\n"
+     "_start:\n"
+ #if defined(__THUMBEB__) || defined(__THUMBEL__)
+     /* We enter here in 32-bit mode but if some previous functions were in
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index d7e4d53325a3..125a691fc631 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
+@@ -176,7 +176,6 @@ struct sys_stat_struct {
+  */
+ asm(".section .text\n"
+     ".weak _start\n"
+-    ".global _start\n"
+     "_start:\n"
+     "pop %eax\n"                // argc   (first arg, %eax)
+     "mov %esp, %ebx\n"          // argv[] (second arg, %ebx)
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index c9a6aac87c6d..1a124790c99f 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -192,7 +192,6 @@ struct sys_stat_struct {
+ asm(".section .text\n"
+     ".weak __start\n"
+     ".set nomips16\n"
+-    ".global __start\n"
+     ".set    noreorder\n"
+     ".option pic0\n"
+     ".ent __start\n"
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index bc10b7b5706d..511d67fc534e 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -185,7 +185,6 @@ struct sys_stat_struct {
+ /* startup code */
+ asm(".section .text\n"
+     ".weak _start\n"
+-    ".global _start\n"
+     "_start:\n"
+     ".option push\n"
+     ".option norelax\n"
+diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+index a7b70ea51b68..84c174181425 100644
+--- a/tools/include/nolibc/arch-x86_64.h
++++ b/tools/include/nolibc/arch-x86_64.h
+@@ -199,7 +199,6 @@ struct sys_stat_struct {
+  */
+ asm(".section .text\n"
+     ".weak _start\n"
+-    ".global _start\n"
+     "_start:\n"
+     "pop %rdi\n"                // argc   (first arg, %rdi)
+     "mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Ammar Faizi
 
