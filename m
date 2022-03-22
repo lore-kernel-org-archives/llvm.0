@@ -1,160 +1,325 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7297D622
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 02:35:55 +0000 (UTC)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KMw6f1gFxzfZW2;
-	Tue, 22 Mar 2022 10:14:50 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 22 Mar 2022 10:16:22 +0800
-Subject: Re: [PATCH v2] mm/mempolicy: fix mpol_new leak in
- shared_policy_replace
-To: kernel test robot <lkp@intel.com>, <akpm@linux-foundation.org>,
-	<mhocko@suse.com>
-CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
-	<kosaki.motohiro@jp.fujitsu.com>, <mgorman@suse.de>, <linux-mm@kvack.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20220322083456.16563-1-linmiaohe@huawei.com>
- <202203220336.VpfVL4ng-lkp@intel.com>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <1c2b6285-1404-4a80-73ec-4949f4eef09e@huawei.com>
-Date: Tue, 22 Mar 2022 10:16:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE47622
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 03:13:39 +0000 (UTC)
+X-UUID: 843bd33b12e94a4ca2d13e7dad2390ee-20220322
+X-UUID: 843bd33b12e94a4ca2d13e7dad2390ee-20220322
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+	(envelope-from <ck.hu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 536648539; Tue, 22 Mar 2022 11:13:20 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 22 Mar 2022 11:13:06 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 22 Mar 2022 11:13:06 +0800
+Message-ID: <17ed6c2a5f40cabd8e39097213811a2149c37c90.camel@mediatek.com>
+Subject: Re: [PATCH v16 05/22] soc: mediatek: add mtk-mmsys config API for
+ mt8195 vdosys1
+From: CK Hu <ck.hu@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <srv_heupstream@mediatek.com>, David Airlie
+	<airlied@linux.ie>, "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+	<singo.chang@mediatek.com>, <llvm@lists.linux.dev>, Nick Desaulniers
+	<ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
+Date: Tue, 22 Mar 2022 11:13:06 +0800
+In-Reply-To: <20220318142009.2796-6-nancy.lin@mediatek.com>
+References: <20220318142009.2796-1-nancy.lin@mediatek.com>
+	 <20220318142009.2796-6-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202203220336.VpfVL4ng-lkp@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
+X-MTK: N
 
-On 2022/3/22 4:01, kernel test robot wrote:
-> Hi Miaohe,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on linux/master]
-> [also build test ERROR on linus/master v5.17]
-> [cannot apply to hnaz-mm/master next-20220321]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Miaohe-Lin/mm-mempolicy-fix-mpol_new-leak-in-shared_policy_replace/20220321-200100
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-> config: x86_64-randconfig-a002-20220321 (https://download.01.org/0day-ci/archive/20220322/202203220336.VpfVL4ng-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/9a91a8a7964a3af0b60f08dc38b7815e5118206a
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Miaohe-Lin/mm-mempolicy-fix-mpol_new-leak-in-shared_policy_replace/20220321-200100
->         git checkout 9a91a8a7964a3af0b60f08dc38b7815e5118206a
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> mm/mempolicy.c:2745:15: error: incompatible pointer types passing 'atomic_t *' to parameter of type 'refcount_t *' (aka 'struct refcount_struct *') [-Werror,-Wincompatible-pointer-types]
->            refcount_set(&mpol_new->refcnt, 1);
->                         ^~~~~~~~~~~~~~~~~
->    include/linux/refcount.h:134:45: note: passing argument to parameter 'r' here
->    static inline void refcount_set(refcount_t *r, int n)
->                                                ^
->    1 error generated.
-> 
+Hi, Nancy:
 
-Many thanks for report. Commit 4fbd79de2889 ("mm/mempolicy: convert from atomic_t to refcount_t on mempolicy->refcnt") has
-changed mpol_new->refcnt from atomic_t to refcount_t. So we should use refcount_set instead of atomic_set here.
+On Fri, 2022-03-18 at 22:19 +0800, Nancy.Lin wrote:
+> Add mmsys config API. The config API is used for config mmsys reg.
+> Some mmsys regs need to be setting according to the HW engine binding
+> to the mmsys simultaneously.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/soc/mediatek/mt8195-mmsys.h    | 62
+> ++++++++++++++++++++++++++
+>  drivers/soc/mediatek/mtk-mmsys.c       | 34 ++++++++++++++
+>  drivers/soc/mediatek/mtk-mmsys.h       | 10 +++++
+>  include/linux/soc/mediatek/mtk-mmsys.h | 16 +++++++
+>  4 files changed, 122 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
+> b/drivers/soc/mediatek/mt8195-mmsys.h
+> index 369fb0aab56d..8b7adbd22919 100644
+> --- a/drivers/soc/mediatek/mt8195-mmsys.h
+> +++ b/drivers/soc/mediatek/mt8195-mmsys.h
+> @@ -139,6 +139,21 @@
+>  #define MT8195_VDO1_MIXER_SOUT_SEL_IN				
+> 0xf68
+>  #define MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER			
+> 0
+>  
+> +#define MT8195_VDO1_MERGE0_ASYNC_CFG_WD	0xe30
+> +#define MT8195_VDO1_MERGE1_ASYNC_CFG_WD	0xe40
+> +#define MT8195_VDO1_MERGE2_ASYNC_CFG_WD	0xe50
+> +#define MT8195_VDO1_MERGE3_ASYNC_CFG_WD	0xe60
+> +#define MT8195_VDO1_HDRBE_ASYNC_CFG_WD	0xe70
+> +#define MT8195_VDO1_HDR_TOP_CFG		0xd00
+> +#define MT8195_VDO1_MIXER_IN1_ALPHA	0xd30
+> +#define MT8195_VDO1_MIXER_IN2_ALPHA	0xd34
+> +#define MT8195_VDO1_MIXER_IN3_ALPHA	0xd38
+> +#define MT8195_VDO1_MIXER_IN4_ALPHA	0xd3c
+> +#define MT8195_VDO1_MIXER_IN1_PAD	0xd40
+> +#define MT8195_VDO1_MIXER_IN2_PAD	0xd44
+> +#define MT8195_VDO1_MIXER_IN3_PAD	0xd48
+> +#define MT8195_VDO1_MIXER_IN4_PAD	0xd4c
+> +
+>  static const struct mtk_mmsys_routes mmsys_mt8195_routing_table[] =
+> {
+>  	{
+>  		DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
+> @@ -263,4 +278,51 @@ static const struct mtk_mmsys_routes
+> mmsys_mt8195_routing_table[] = {
+>  	}
+>  };
+>  
+> +/*
+> + * mtk_mmsys_config table is used for config mmsys reg in runtime.
+> + * MMSYS_CONFIG_MERGE_ASYNC_WIDTH: config merge async width
+> + * MMSYS_CONFIG_MERGE_ASYNC_HEIGHT: config merge async height
+> + * MMSYS_CONFIG_HDR_BE_ASYNC_WIDTH: config hdr_be async width
+> + * MMSYS_CONFIG_HDR_BE_ASYNC_HEIGHT: config hdr_be async height
+> + * MMSYS_CONFIG_MIXER_IN_ALPHA_ODD: config mixer odd channel 9bit
+> alpha value
+> + * MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN: config mixer even channel 9bit
+> alpha value
+> + * MMSYS_CONFIG_MIXER_IN_CH_SWAP: config mixer input RGB channel
+> swap
+> + * MMSYS_CONFIG_HDR_ALPHA_SEL: config alpha source
+> + * MMSYS_CONFIG_MIXER_IN_MODE: config mixer pad mode(bypass/even
+> extend mode)
+> + * MMSYS_CONFIG_MIXER_IN_BIWIDTH: config mixer pad width. formula:
+> width / 2 - 1
+> + */
+> +static const struct mtk_mmsys_config mmsys_mt8195_config_table[] = {
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_WIDTH, 0,
+> MT8195_VDO1_MERGE0_ASYNC_CFG_WD, GENMASK(13, 0), 0},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_HEIGHT, 0,
+> MT8195_VDO1_MERGE0_ASYNC_CFG_WD, GENMASK(29, 16), 16},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_WIDTH, 1,
+> MT8195_VDO1_MERGE1_ASYNC_CFG_WD, GENMASK(13, 0), 0},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_HEIGHT, 1,
+> MT8195_VDO1_MERGE1_ASYNC_CFG_WD, GENMASK(29, 16), 16},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_WIDTH, 2,
+> MT8195_VDO1_MERGE2_ASYNC_CFG_WD, GENMASK(13, 0), 0},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_HEIGHT, 2,
+> MT8195_VDO1_MERGE2_ASYNC_CFG_WD, GENMASK(29, 16), 16},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_WIDTH, 3,
+> MT8195_VDO1_MERGE3_ASYNC_CFG_WD, GENMASK(13, 0), 0},
+> +	{ MMSYS_CONFIG_MERGE_ASYNC_HEIGHT, 3,
+> MT8195_VDO1_MERGE3_ASYNC_CFG_WD, GENMASK(29, 16), 16},
 
-Thanks.
+I would like a function to set these value
 
-> 
-> vim +2745 mm/mempolicy.c
-> 
->   2681	
->   2682	/* Replace a policy range. */
->   2683	static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
->   2684					 unsigned long end, struct sp_node *new)
->   2685	{
->   2686		struct sp_node *n;
->   2687		struct sp_node *n_new = NULL;
->   2688		struct mempolicy *mpol_new = NULL;
->   2689		int ret = 0;
->   2690	
->   2691	restart:
->   2692		write_lock(&sp->lock);
->   2693		n = sp_lookup(sp, start, end);
->   2694		/* Take care of old policies in the same range. */
->   2695		while (n && n->start < end) {
->   2696			struct rb_node *next = rb_next(&n->nd);
->   2697			if (n->start >= start) {
->   2698				if (n->end <= end)
->   2699					sp_delete(sp, n);
->   2700				else
->   2701					n->start = end;
->   2702			} else {
->   2703				/* Old policy spanning whole new range. */
->   2704				if (n->end > end) {
->   2705					if (!n_new)
->   2706						goto alloc_new;
->   2707	
->   2708					*mpol_new = *n->policy;
->   2709					atomic_set(&mpol_new->refcnt, 1);
->   2710					sp_node_init(n_new, end, n->end, mpol_new);
->   2711					n->end = start;
->   2712					sp_insert(sp, n_new);
->   2713					n_new = NULL;
->   2714					mpol_new = NULL;
->   2715					break;
->   2716				} else
->   2717					n->end = start;
->   2718			}
->   2719			if (!next)
->   2720				break;
->   2721			n = rb_entry(next, struct sp_node, nd);
->   2722		}
->   2723		if (new)
->   2724			sp_insert(sp, new);
->   2725		write_unlock(&sp->lock);
->   2726		ret = 0;
->   2727	
->   2728	err_out:
->   2729		if (mpol_new)
->   2730			mpol_put(mpol_new);
->   2731		if (n_new)
->   2732			kmem_cache_free(sn_cache, n_new);
->   2733	
->   2734		return ret;
->   2735	
->   2736	alloc_new:
->   2737		write_unlock(&sp->lock);
->   2738		ret = -ENOMEM;
->   2739		n_new = kmem_cache_alloc(sn_cache, GFP_KERNEL);
->   2740		if (!n_new)
->   2741			goto err_out;
->   2742		mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
->   2743		if (!mpol_new)
->   2744			goto err_out;
->> 2745		refcount_set(&mpol_new->refcnt, 1);
->   2746		goto restart;
->   2747	}
->   2748	
-> 
+mtk_mmsys_merge_async_config(int idx, int width, int height)
+
+and describe what does the term 'async' mean.
+
+> +	{ MMSYS_CONFIG_HDR_BE_ASYNC_WIDTH, 0,
+> MT8195_VDO1_HDRBE_ASYNC_CFG_WD, GENMASK(13, 0), 0},
+> +	{ MMSYS_CONFIG_HDR_BE_ASYNC_HEIGHT, 0,
+> MT8195_VDO1_HDRBE_ASYNC_CFG_WD, GENMASK(29, 16), 16},
+
+mtk_mmsys_hdr_confing(int be_width, int be_height, bool alpha_en)
+
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_ODD, 1,
+> MT8195_VDO1_MIXER_IN1_ALPHA, GENMASK(8, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN, 1,
+> MT8195_VDO1_MIXER_IN1_ALPHA, GENMASK(24, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_ODD, 2,
+> MT8195_VDO1_MIXER_IN2_ALPHA, GENMASK(8, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN, 2,
+> MT8195_VDO1_MIXER_IN2_ALPHA, GENMASK(24, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_ODD, 3,
+> MT8195_VDO1_MIXER_IN3_ALPHA, GENMASK(8, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN, 3,
+> MT8195_VDO1_MIXER_IN3_ALPHA, GENMASK(24, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_ODD, 4,
+> MT8195_VDO1_MIXER_IN4_ALPHA, GENMASK(8, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN, 4,
+> MT8195_VDO1_MIXER_IN4_ALPHA, GENMASK(24, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_CH_SWAP, 4, MT8195_VDO1_MIXER_IN4_PAD,
+> GENMASK(4, 4), 4},
+> +	{ MMSYS_CONFIG_HDR_ALPHA_SEL, 1, MT8195_VDO1_HDR_TOP_CFG,
+> GENMASK(20, 20), 20},
+> +	{ MMSYS_CONFIG_HDR_ALPHA_SEL, 2, MT8195_VDO1_HDR_TOP_CFG,
+> GENMASK(21, 21), 21},
+> +	{ MMSYS_CONFIG_HDR_ALPHA_SEL, 3, MT8195_VDO1_HDR_TOP_CFG,
+> GENMASK(22, 22), 22},
+> +	{ MMSYS_CONFIG_HDR_ALPHA_SEL, 4, MT8195_VDO1_HDR_TOP_CFG,
+> GENMASK(23, 23), 23},
+> +	{ MMSYS_CONFIG_MIXER_IN_MODE, 1, MT8195_VDO1_MIXER_IN1_PAD,
+> GENMASK(1, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_MODE, 2, MT8195_VDO1_MIXER_IN2_PAD,
+> GENMASK(1, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_MODE, 3, MT8195_VDO1_MIXER_IN3_PAD,
+> GENMASK(1, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_MODE, 4, MT8195_VDO1_MIXER_IN4_PAD,
+> GENMASK(1, 0), 0},
+> +	{ MMSYS_CONFIG_MIXER_IN_BIWIDTH, 1, MT8195_VDO1_MIXER_IN1_PAD,
+> GENMASK(31, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_BIWIDTH, 2, MT8195_VDO1_MIXER_IN2_PAD,
+> GENMASK(31, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_BIWIDTH, 3, MT8195_VDO1_MIXER_IN3_PAD,
+> GENMASK(31, 16), 16},
+> +	{ MMSYS_CONFIG_MIXER_IN_BIWIDTH, 4, MT8195_VDO1_MIXER_IN4_PAD,
+> GENMASK(31, 16), 16},
+
+mtk_mmsys_mixer_in_config(int idx, u16 alpha, bool channel_swap, u8
+mode, u32 biwidth)
+
+Regards,
+CK
+
+> +};
+> +
+>  #endif /* __SOC_MEDIATEK_MT8195_MMSYS_H */
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+> b/drivers/soc/mediatek/mtk-mmsys.c
+> index 0b77624cf6ca..6dd68483012c 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -83,6 +83,8 @@ static const struct mtk_mmsys_driver_data
+> mt8195_vdosys1_driver_data = {
+>  	.clk_driver = "clk-mt8195-vdo1",
+>  	.routes = mmsys_mt8195_routing_table,
+>  	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
+> +	.config = mmsys_mt8195_config_table,
+> +	.num_configs = ARRAY_SIZE(mmsys_mt8195_config_table),
+>  };
+>  
+>  static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data =
+> {
+> @@ -187,6 +189,38 @@ static const struct reset_control_ops
+> mtk_mmsys_reset_ops = {
+>  	.reset = mtk_mmsys_reset,
+>  };
+>  
+> +void mtk_mmsys_ddp_config(struct device *dev, enum
+> mtk_mmsys_config_type config,
+> +			  u32 id, u32 val)
+> +{
+> +	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+> +	const struct mtk_mmsys_config *mmsys_config = mmsys->data-
+> >config;
+> +	u32 reg_val;
+> +	u32 mask;
+> +	u32 offset;
+> +	int i;
+> +	u32 tmp;
+> +
+> +	if (!mmsys->data->num_configs)
+> +		return;
+> +
+> +	for (i = 0; i < mmsys->data->num_configs; i++)
+> +		if (config == mmsys_config[i].config && id ==
+> mmsys_config[i].id)
+> +			break;
+> +
+> +	if (i == mmsys->data->num_configs)
+> +		return;
+> +
+> +	offset = mmsys_config[i].addr;
+> +	mask = mmsys_config[i].mask;
+> +	reg_val = val << mmsys_config[i].shift;
+> +
+> +	tmp = readl(mmsys->regs + offset);
+> +
+> +	tmp = (tmp & ~mask) | reg_val;
+> +	writel(tmp, mmsys->regs + offset);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_config);
+> +
+>  static int mtk_mmsys_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.h
+> b/drivers/soc/mediatek/mtk-mmsys.h
+> index 77f37f8c715b..78c7069bac0e 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.h
+> +++ b/drivers/soc/mediatek/mtk-mmsys.h
+> @@ -86,11 +86,21 @@ struct mtk_mmsys_routes {
+>  	u32 val;
+>  };
+>  
+> +struct mtk_mmsys_config {
+> +	enum mtk_mmsys_config_type config;
+> +	u32 id;
+> +	u32 addr;
+> +	u32 mask;
+> +	u32 shift;
+> +};
+> +
+>  struct mtk_mmsys_driver_data {
+>  	const char *clk_driver;
+>  	const struct mtk_mmsys_routes *routes;
+>  	const unsigned int num_routes;
+>  	const u16 sw0_rst_offset;
+> +	const struct mtk_mmsys_config *config;
+> +	const unsigned int num_configs;
+>  };
+>  
+>  /*
+> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h
+> b/include/linux/soc/mediatek/mtk-mmsys.h
+> index eaf7f7345519..b2d2310d7e7a 100644
+> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> @@ -56,6 +56,19 @@ enum mtk_ddp_comp_id {
+>  	DDP_COMPONENT_ID_MAX,
+>  };
+>  
+> +enum mtk_mmsys_config_type {
+> +	MMSYS_CONFIG_MERGE_ASYNC_WIDTH,
+> +	MMSYS_CONFIG_MERGE_ASYNC_HEIGHT,
+> +	MMSYS_CONFIG_HDR_BE_ASYNC_WIDTH,
+> +	MMSYS_CONFIG_HDR_BE_ASYNC_HEIGHT,
+> +	MMSYS_CONFIG_HDR_ALPHA_SEL,
+> +	MMSYS_CONFIG_MIXER_IN_ALPHA_ODD,
+> +	MMSYS_CONFIG_MIXER_IN_ALPHA_EVEN,
+> +	MMSYS_CONFIG_MIXER_IN_CH_SWAP,
+> +	MMSYS_CONFIG_MIXER_IN_MODE,
+> +	MMSYS_CONFIG_MIXER_IN_BIWIDTH,
+> +};
+> +
+>  void mtk_mmsys_ddp_connect(struct device *dev,
+>  			   enum mtk_ddp_comp_id cur,
+>  			   enum mtk_ddp_comp_id next);
+> @@ -64,4 +77,7 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>  			      enum mtk_ddp_comp_id cur,
+>  			      enum mtk_ddp_comp_id next);
+>  
+> +void mtk_mmsys_ddp_config(struct device *dev, enum
+> mtk_mmsys_config_type config,
+> +			  u32 id, u32 val);
+> +
+>  #endif /* __MTK_MMSYS_H */
 
