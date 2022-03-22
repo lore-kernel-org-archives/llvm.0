@@ -1,91 +1,175 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF4DEC8
-	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 17:02:36 +0000 (UTC)
-Received: by mail-lj1-f178.google.com with SMTP id b5so6213182ljf.13
-        for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 10:02:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1A2EC8
+	for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 17:09:32 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id p15so20172777lfk.8
+        for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 10:09:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=eIBwyCFA8yu0ZwbObg31b7AuYcniAsjV38ZCEKNbmEs=;
-        b=eLZjTCnmz/MJskMW0Kx+WYB3YbOumPc4a5X5vE0tih1aCTVrAd15AW4a/LR/YaaAnj
-         DmZKFF4T2mmVHwy1yi6h3xezVUEJxEB8h7TCOGIf/WXVynxd8dyZbf2xG51ZbuNE8uCY
-         PsGMa75RvSN/Dk+hf2DCnaUb5U/LGy4iLRcjpauITH+wqbfRcvDR3Bcxi6ypKq7Ji16E
-         V3mNIFubUOJq3hX5giXxQVCDJuJB9b1AAFbtVYjcP58tL6nG5NAtSg60NCFOPwMxpov4
-         SEaRKk7aGFiKjpGi4E3+3futcITEJIpJ7XMhTwvw9hlabBqrZyO7c79WwRa7g1Af+Pkf
-         rJkg==
+        bh=CU0h57ixsJaNn7CmDoDJ3QxhAmlE3j6WvVuArIM9L+Y=;
+        b=YJqmenmhOu3dyz1TZSzdMTWBurYvNX5FVzJSgwpuQhtv/tRrlehFQS32BblNEEX/5s
+         0ttFfA3+rc12taCLby6NEls81KI0LAOgd9Fj3z7cPD7yaEi+tybav9v3foweVEAjn4u7
+         wJv6pJl3ggexklkDRHq/kLcHMXEUBEo+fDFken9EB99/sO7+vXfXh/vri4QWq+UdH3Cp
+         ygdRclgFkERAo4houDtQrOrBpoyvJtX5Pbt8KrnZINiOiBLMhm6Wdh/r+AfPeay5BNXZ
+         urWvvfqyyl8YeHrADXAlz16QNR+JGEzA4mYH6dMBnE5wv/irc1pPSFMzmfGMpqBVmIHg
+         4EIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=eIBwyCFA8yu0ZwbObg31b7AuYcniAsjV38ZCEKNbmEs=;
-        b=Ui/hBhPWmVJ25NZpHX68kz41oN0WI7pQJKoMBN/7mmDmHQmw0Hyr8Rfgdt4xVyCVk3
-         7ECxNjW9Y+SkaRVAa6SnxAOzqz34BEGJh86QWPrU1EfWpRvO4x37vllQMpiwi8f0SdrW
-         E12sL+hcGm0jfv5QMrOWJP/4sRGOVlpoA1uhqKwjsE/pl21w8Urt77eAngp5oGJdJvqQ
-         Lt3dUXsuGUA9zCOK+C/VtZHrjUtZYtqWKqyrxYi3TdNk+EzCpY8UZyQXw+NMMpy6WuhZ
-         KbBSWXLk5nduo8GGyWHyq2mx5TptKgWXIG/1En60e4L3PE8hJuRG1AymDWIwvzXVvMqw
-         dPgA==
-X-Gm-Message-State: AOAM533gORKXunJs/u0i3/adOx4UDCQpm78y7dFmDEEj75pecfQSrfBG
-	GYnZt9KqZoud1uR3fSUa3sVQb4QBaUzbXrDqez/YeQ==
-X-Google-Smtp-Source: ABdhPJz56XKTAMhxLOEhU4dMPRaQZpKutqbXKi+guc67m6Jv0gTpaFk3QWQR3g81THfjHOADVBK+pIn/W0HiBnTV7xM=
-X-Received: by 2002:a05:651c:1791:b0:243:94bd:d94c with SMTP id
- bn17-20020a05651c179100b0024394bdd94cmr19231645ljb.468.1647968554603; Tue, 22
- Mar 2022 10:02:34 -0700 (PDT)
+        bh=CU0h57ixsJaNn7CmDoDJ3QxhAmlE3j6WvVuArIM9L+Y=;
+        b=h+nOkpG4SMmrwIJJ+DYlHXNHVHqOcTuQb3bUlsBKPPaqE67R6FTKOjli0tz1HIGXr5
+         Ev5C/p4oerrdqf6TefbTRt8S6vX64ihk8VkSwRXDobsysel8djrdkGkd3icmoFp97l/I
+         xbULczAM3eDfaxMIwoNNDKoKwTvayZETRfTxY4xixnFuu/T4NtGDu440z8Pfr8M7vcp+
+         N2aMLPl/xQqCezeUQf4u1yVrOQcuX253ck8CqNOu5qkzIfNzta7HObfnhte/hZNUijzk
+         uqjeAWkGO9i6u3NldA1V0zUpJg9FdXRH7yuMeI95CkytxgF8GA41XYrhZss+HTpRw+iF
+         hJxA==
+X-Gm-Message-State: AOAM530G+cjTnV5F1JrEf5KVpG3knmoeIyJc6KWL3U6oZ+1VG0QsmrTe
+	nJgoVfSV0SJvQgloIYsjzwhes23UFCu3dAvTPB9sqA==
+X-Google-Smtp-Source: ABdhPJwaDDLcbBydGEpc0aHpEu+biSIFTRbFf0a/cNU+963FH9m973Lokuwmwuo+LqUIes7nFCfessx4/wAXxIWtckw=
+X-Received: by 2002:a05:6512:308e:b0:448:3826:6d68 with SMTP id
+ z14-20020a056512308e00b0044838266d68mr19043569lfd.184.1647968970052; Tue, 22
+ Mar 2022 10:09:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220316183833.1563139-1-arnd@kernel.org> <3b9cedd6-a084-5d87-2fdd-0da10146827b@arm.com>
- <CAKwvOdnut8db1Z1FdZkkSXCvmggrzfKv9Y9GO3uz4ND=K5sB3g@mail.gmail.com>
-In-Reply-To: <CAKwvOdnut8db1Z1FdZkkSXCvmggrzfKv9Y9GO3uz4ND=K5sB3g@mail.gmail.com>
+References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org> <20220322102115.186179-3-ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220322102115.186179-3-ammarfaizi2@gnuweeb.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 22 Mar 2022 10:02:23 -0700
-Message-ID: <CAKwvOdkyGumBcCWwNo+yBFZ_A9OOFgVCOecOgpcfEunNRqy_+w@mail.gmail.com>
-Subject: Re: [PATCH] arm64: fix clang warning about TRAMP_VALIAS
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, James Morse <james.morse@arm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
+Date: Tue, 22 Mar 2022 10:09:18 -0700
+Message-ID: <CAKwvOdkEwkzT0uf9a5SokCScDTY4gbhNFZ+fLxsti9innaEZRQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/8] tools/nolibc: Remove .global _start from the
+ entry point code
+To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, Nugraha <richiisei@gmail.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	"GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Mar 18, 2022 at 12:52 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Tue, Mar 22, 2022 at 3:21 AM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
 >
-> On Fri, Mar 18, 2022 at 12:11 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> >
-> > On 2022-03-16 18:38, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > The newly introduced TRAMP_VALIAS definition causes a build warning
-> > > with clang-14:
-> > >
-> > > arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
-> >
-> > Tangentially, all the other GNU extensions we depend on throughout Linux
-> > are also GNU extensions. Do we know what's special about this one?
->
-> My first thought is that -Wnull-pointer-arithmetic should be in the
-> -Wgnu flag group, such that -Wno-gnu (as set by Kbuild) implies
-> -Wno-null-pointer-arithmetic.
->
-> One issue seems to be that -Wnull-pointer-arithmetic seems to control
-> at least 2 different checks in clang.
->
-> https://godbolt.org/z/hdYYejj3d
->
-> So it's likely these two checks should have 2 distinct flags, such
-> that the warning we're observing can be grouped under -Wgnu.
->
-> Filed: https://github.com/llvm/llvm-project/issues/54444
+> Building with clang yields the following error:
+> ```
+>   <inline asm>:3:1: error: _start changed binding to STB_GLOBAL
+>   .global _start
+>   ^
+>   1 error generated.
+> ```
+> Make sure only specify one between `.global _start` and `.weak _start`.
+> Removing `.global _start`.
 
-Fix should be landing shortly:
-https://reviews.llvm.org/D122224
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Yes, symbols should either be `.weak` or `.global`. The warning from
+Clang's integrated assembler is meant to flush out funny business.
+
+I assume there's a good reason _why_ _start is weak and not strong?
+Then again, I'm not familiar with nolibc.
+
+>
+> Cc: llvm@lists.linux.dev
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> ---
+>
+> @@ Changelog:
+>
+>    Link RFC v1: https://lore.kernel.org/llvm/20220320093750.159991-3-ammarfaizi2@gnuweeb.org
+>    RFC v1 -> RFC v2:
+>     - Remove all `.global _start` for all build (GCC and Clang) instead of
+>       removing all `.weak _start` for clang build (Comment from Willy).
+> ---
+>  tools/include/nolibc/arch-aarch64.h | 1 -
+>  tools/include/nolibc/arch-arm.h     | 1 -
+>  tools/include/nolibc/arch-i386.h    | 1 -
+>  tools/include/nolibc/arch-mips.h    | 1 -
+>  tools/include/nolibc/arch-riscv.h   | 1 -
+>  tools/include/nolibc/arch-x86_64.h  | 1 -
+>  6 files changed, 6 deletions(-)
+>
+> diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
+> index 87d9e434820c..2dbd80d633cb 100644
+> --- a/tools/include/nolibc/arch-aarch64.h
+> +++ b/tools/include/nolibc/arch-aarch64.h
+> @@ -184,7 +184,6 @@ struct sys_stat_struct {
+>  /* startup code */
+>  asm(".section .text\n"
+>      ".weak _start\n"
+> -    ".global _start\n"
+>      "_start:\n"
+>      "ldr x0, [sp]\n"              // argc (x0) was in the stack
+>      "add x1, sp, 8\n"             // argv (x1) = sp
+> diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+> index 001a3c8c9ad5..1191395b5acd 100644
+> --- a/tools/include/nolibc/arch-arm.h
+> +++ b/tools/include/nolibc/arch-arm.h
+> @@ -177,7 +177,6 @@ struct sys_stat_struct {
+>  /* startup code */
+>  asm(".section .text\n"
+>      ".weak _start\n"
+> -    ".global _start\n"
+>      "_start:\n"
+>  #if defined(__THUMBEB__) || defined(__THUMBEL__)
+>      /* We enter here in 32-bit mode but if some previous functions were in
+> diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+> index d7e4d53325a3..125a691fc631 100644
+> --- a/tools/include/nolibc/arch-i386.h
+> +++ b/tools/include/nolibc/arch-i386.h
+> @@ -176,7 +176,6 @@ struct sys_stat_struct {
+>   */
+>  asm(".section .text\n"
+>      ".weak _start\n"
+> -    ".global _start\n"
+>      "_start:\n"
+>      "pop %eax\n"                // argc   (first arg, %eax)
+>      "mov %esp, %ebx\n"          // argv[] (second arg, %ebx)
+> diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+> index c9a6aac87c6d..1a124790c99f 100644
+> --- a/tools/include/nolibc/arch-mips.h
+> +++ b/tools/include/nolibc/arch-mips.h
+> @@ -192,7 +192,6 @@ struct sys_stat_struct {
+>  asm(".section .text\n"
+>      ".weak __start\n"
+>      ".set nomips16\n"
+> -    ".global __start\n"
+>      ".set    noreorder\n"
+>      ".option pic0\n"
+>      ".ent __start\n"
+> diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+> index bc10b7b5706d..511d67fc534e 100644
+> --- a/tools/include/nolibc/arch-riscv.h
+> +++ b/tools/include/nolibc/arch-riscv.h
+> @@ -185,7 +185,6 @@ struct sys_stat_struct {
+>  /* startup code */
+>  asm(".section .text\n"
+>      ".weak _start\n"
+> -    ".global _start\n"
+>      "_start:\n"
+>      ".option push\n"
+>      ".option norelax\n"
+> diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+> index a7b70ea51b68..84c174181425 100644
+> --- a/tools/include/nolibc/arch-x86_64.h
+> +++ b/tools/include/nolibc/arch-x86_64.h
+> @@ -199,7 +199,6 @@ struct sys_stat_struct {
+>   */
+>  asm(".section .text\n"
+>      ".weak _start\n"
+> -    ".global _start\n"
+>      "_start:\n"
+>      "pop %rdi\n"                // argc   (first arg, %rdi)
+>      "mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
+> --
+> Ammar Faizi
+>
+
 
 -- 
 Thanks,
