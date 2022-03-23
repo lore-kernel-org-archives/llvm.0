@@ -1,34 +1,34 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F856AAE
-	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 22:06:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145E46AA0
+	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 22:06:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1648073215; x=1679609215;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VdC2wCMIl7ls0hCsy0jpp1vlgHKwG1FpPKmGZ2JXu8o=;
-  b=CZEwAO5sTsFS6PfqJWibKI1bRE0WX2IC2bMp3YJx65ibDEDtooT9W/qt
-   7gOj0cOj0DRj4TMgHe0gLEv4u0+xxwTVi2aGlGC1y97DRmKu1fQClfTwC
-   RgAR9n++EEb23dAADPVV/ToDHAZv5FFekXlJMIxLTdjAneV2TSfJnAXVY
-   oVAQuOIq40p4NJR9GccKXoDK/odceQ5HRMcQzJuQAo+7dkPZCz8Dpn4Jb
-   ckuHKwB7XE7I5sudAv78lGskaUcRhxGBzVhD1uXlvGKupK2meK3yl+SSJ
-   Vb2t5LE54VfqmpldnNSQO9Ii6vW2Pqnz9b2PWc64COEDc83crEwTpbE2D
+  bh=gjpECOL8hz2YgIzcvxE0a2MSg8tX7NN+YKikt6HZKiQ=;
+  b=VWNWBYgcivx4cwYlyxVjOtDNh6lETz5Zfo+hpy0bBHwI07vIihlecnvj
+   R3r1Vqye5mVCoaHGeG7E8KEQiQcenXi6d82niQPthWLkHhtIyLuWtzSck
+   o7aR0z8RtElzQ+8HG69rKr1nZsRi2vv79SmO72e0GQJIu0EVHvW7F9bkE
+   wCyxc3agoYNhO6M5v1J+dvAGIpKZdtgnwC3jt1zlVGXAPBJ370BcWKUdO
+   nAUXab/JyQbqPGbfLu4PC/k01n29A92X1dBqTEdVVi7Ma2lXaVH3tyBZt
+   AopjPK1uAL7Yn71sAHR5wVj1a/M0lHyJ2V6djThFllLvMWkl1kHI8MxMr
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="321433650"
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="245712685"
 X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
-   d="scan'208";a="321433650"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 15:06:54 -0700
+   d="scan'208";a="245712685"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 15:06:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
-   d="scan'208";a="515944777"
+   d="scan'208";a="519537889"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 23 Mar 2022 15:06:53 -0700
+  by orsmga006.jf.intel.com with ESMTP; 23 Mar 2022 15:06:52 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nX980-000KPM-9m; Wed, 23 Mar 2022 22:06:52 +0000
-Date: Thu, 24 Mar 2022 06:06:35 +0800
+	id 1nX980-000KPH-6s; Wed, 23 Mar 2022 22:06:52 +0000
+Date: Thu, 24 Mar 2022 06:06:38 +0800
 From: kernel test robot <lkp@intel.com>
 To: Allison Henderson <allison.henderson@oracle.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -36,7 +36,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 Subject: [allisonhenderson-xfs-work:delayed_attrs_v29_extended 24/31]
  fs/xfs/libxfs/xfs_parent.c:55:1: warning: no previous prototype for function
  'xfs_init_parent_name_rec'
-Message-ID: <202203240504.BKIg5zFL-lkp@intel.com>
+Message-ID: <202203240536.uAHhjNEb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,18 +50,20 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 tree:   https://github.com/allisonhenderson/xfs_work.git delayed_attrs_v29_extended
 head:   3106ffcd07787b3bed3ee019d3706c480477ee9c
 commit: 7db6d10716e92d4f101981304d1619b77acd569c [24/31] xfs: parent pointer attribute creation
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220324/202203240504.BKIg5zFL-lkp@intel.com/config)
+config: riscv-randconfig-r033-20220323 (https://download.01.org/0day-ci/archive/20220324/202203240536.uAHhjNEb-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
         # https://github.com/allisonhenderson/xfs_work/commit/7db6d10716e92d4f101981304d1619b77acd569c
         git remote add allisonhenderson-xfs-work https://github.com/allisonhenderson/xfs_work.git
         git fetch --no-tags allisonhenderson-xfs-work delayed_attrs_v29_extended
         git checkout 7db6d10716e92d4f101981304d1619b77acd569c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/xfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/xfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
