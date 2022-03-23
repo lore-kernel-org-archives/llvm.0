@@ -1,50 +1,42 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43852184E
-	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 12:17:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9561866
+	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 13:08:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648037855; x=1679573855;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PSHcI897D2zwxp8xEylKJ3SYcDP8lVWYEjAmdTs22kM=;
-  b=cDix+CWmfVXS886QJ115nqoWru4hPJ+q7NMZSdk07vJ6V/WU2tddpQgF
-   oLpT4bXyP7KttIgOx6W0TZKv3U99Z+e53fhySk8unhi5JWQNTjsYS11Al
-   Kx5wOmUw9MdN6Eps2eBnFHPWvYEFbUWXObTpRKMZmJ4HIAQsl6WHFXQd+
-   9ZieR4e87e4/WI7HWG08ADL3y26tR8BLU1N+yMPueArfA61ygvUns3xvD
-   LYXmitAV0FGyKfRDLcWpkN/A2cN32naPh1W87wEv74VtH45sO4GB4cJ+a
-   XJNZgInITDOBq03gpQ5on5p/f698ZWiRIuoXk5ATNvwEHSarnCm+pZZwF
+  t=1648040913; x=1679576913;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i1O7g1/0dKBggLIHefOqOvGFhlN5lRiK17nkgLtYtdE=;
+  b=V/jECGIljnhSLGowtvP/6VJUrvyaN5fCmzGHlGRNBaqgNSLhv21nCZQ3
+   X+bKDI4itf+95rsXeJiwWSPCu8r0f/l/u6Z9dW6N9LD8lGT3jN/ftN6Z4
+   H62mVRQ+unR2KJk0pM1TT6YIhwRYSA6rBJ2Z+oG9zsLkeTaFrNtGPjJJZ
+   7V4K5S1gvxUVnXtIZrDR1TLFCsXtGEeQhEV/QOsOLa64bJcKuzMal/f02
+   QWQ5aVv1dY+zPxUFoWm6kmd91Tc/CqXJfzNd8hZJw3SGZ+LUFXdBRCd4E
+   qVfnPTX5ROHifqOWLXZnKC/3NVR1Otci5Z6mT3ZMrImyY9bQNAyAAdPWq
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="240256920"
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="255667475"
 X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="240256920"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 05:17:31 -0700
+   d="scan'208";a="255667475"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 06:08:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="583669177"
+   d="scan'208";a="544186349"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 23 Mar 2022 05:17:28 -0700
+  by orsmga007.jf.intel.com with ESMTP; 23 Mar 2022 06:08:30 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nWzvb-000K2T-L6; Wed, 23 Mar 2022 12:17:27 +0000
-Date: Wed, 23 Mar 2022 20:17:22 +0800
+	id 1nX0iz-000K4n-Jw; Wed, 23 Mar 2022 13:08:29 +0000
+Date: Wed, 23 Mar 2022 21:08:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aswath Govindraju <a-govindraju@ti.com>
+To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Roger Quadros <rogerq@kernel.org>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Kishon Vijay Abraham I <kishon@ti.com>,
-	Aswath Govindraju <a-govindraju@ti.com>
-Subject: Re: [PATCH 2/2] drivers: usb: dwc3: Add AM62 USB wrapper driver
-Message-ID: <202203232002.K45zQUfY-lkp@intel.com>
-References: <20220323053524.7009-3-a-govindraju@ti.com>
+	linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+	Andi Kleen <ak@linux.intel.com>
+Subject: [intel-tdx:guest-rebased 5/83] ./usr/include/misc/tdx.h:39:2: error:
+ unknown type name 'size_t'
+Message-ID: <202203232011.Qp6mjB89-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,65 +45,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220323053524.7009-3-a-govindraju@ti.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Aswath,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on linux/master]
-[also build test ERROR on usb/usb-testing linus/master v5.17 next-20220323]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Aswath-Govindraju/AM62-Add-support-for-AM62-USB-wrapper-driver/20220323-133708
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: hexagon-buildonly-randconfig-r002-20220323 (https://download.01.org/0day-ci/archive/20220323/202203232002.K45zQUfY-lkp@intel.com/config)
+tree:   https://github.com/intel/tdx.git guest-rebased
+head:   2445b5e99855f3c241a44d2777a74a777f56048c
+commit: a7b0255d5b64842244f1957e33eb514d8f82866f [5/83] platform/x86: intel_tdx_attest: Add TDX Guest attestation interface driver
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220323/202203232011.Qp6mjB89-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/4ca423573f638454724a40416042d84552db81af
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Aswath-Govindraju/AM62-Add-support-for-AM62-USB-wrapper-driver/20220323-133708
-        git checkout 4ca423573f638454724a40416042d84552db81af
+        # https://github.com/intel/tdx/commit/a7b0255d5b64842244f1957e33eb514d8f82866f
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-rebased
+        git checkout a7b0255d5b64842244f1957e33eb514d8f82866f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/usb/dwc3/dwc3-am62.c:567:10: error: use of undeclared identifier 'dwc3_ti_pm_ops'; did you mean 'dwc3_ti_probe'?
-                   .pm     = &dwc3_ti_pm_ops,
-                              ^~~~~~~~~~~~~~
-                              dwc3_ti_probe
-   drivers/usb/dwc3/dwc3-am62.c:379:12: note: 'dwc3_ti_probe' declared here
-   static int dwc3_ti_probe(struct platform_device *pdev)
-              ^
->> drivers/usb/dwc3/dwc3-am62.c:567:9: error: incompatible pointer types initializing 'const struct dev_pm_ops *' with an expression of type 'int (*)(struct platform_device *)' [-Werror,-Wincompatible-pointer-types]
-                   .pm     = &dwc3_ti_pm_ops,
-                             ^~~~~~~~~~~~~~~
+   In file included from <built-in>:1:
+>> ./usr/include/misc/tdx.h:38:11: error: expected ';' at end of declaration list
+           void *buf __user;
+                    ^
+                    ;
+>> ./usr/include/misc/tdx.h:39:2: error: unknown type name 'size_t'
+           size_t len;
+           ^
    2 errors generated.
-
-
-vim +567 drivers/usb/dwc3/dwc3-am62.c
-
-   561	
-   562	static struct platform_driver dwc3_ti_driver = {
-   563		.probe		= dwc3_ti_probe,
-   564		.remove		= dwc3_ti_remove,
-   565		.driver		= {
-   566			.name	= "dwc3-am62",
- > 567			.pm	= &dwc3_ti_pm_ops,
-   568			.of_match_table = dwc3_ti_of_match,
-   569		},
-   570	};
-   571	
 
 -- 
 0-DAY CI Kernel Test Service
