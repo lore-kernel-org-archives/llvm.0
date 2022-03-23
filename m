@@ -1,101 +1,185 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E03DECD
-	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 03:21:30 +0000 (UTC)
-Received: by mail-qt1-f173.google.com with SMTP id c4so245669qtx.1
-        for <llvm@lists.linux.dev>; Tue, 22 Mar 2022 20:21:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TjGXNoNPeHTVLppn4GBStrAFhNsfJnPfAeYAzRe+rIQ=;
-        b=OfTBT36/JWxiCM5Q2GzR4OHl4SwKW1nITc/itLBuw0ykTMLAdZb5PxWQpyHonK96xp
-         kvW+M0FgFN6JiEwqptS86ib2RshLs9+qtT3EkkFCD0RVxfIz+9PLryi1QpsHwryvQUI9
-         6gfiQhE2qnJqVp78k20ShH7RaljUGX9PFX80q7h4VYd7dBotLmUDvSd7JbIa5sCZo3GW
-         BFzMGKWe4xe9RtbJqwGrFJjH7LEjblky4zcC9Nx05ELB54ifYTxgH+qI2cyhTeYHSMQw
-         aK6G2PNRX0W4iI7oaSSnM2SfArGcuq6H0GrGW5H8wAGxxtQOx6gRfaEqNlAa4Bq43jZ5
-         2f5g==
-X-Gm-Message-State: AOAM533Gpt2iYvTG54efD6HKiQT39Ko8Evvzcy+qPCg+qhzrMorJh5z1
-	2ZL/F0JgYX2YdTAgmhpWN1E=
-X-Google-Smtp-Source: ABdhPJwREaT8EIhjKSo80EaUzacQXlNrDBxDy3kVCH1nAdH1G2E1btewQjiiC+IPt9n0ZPA8epCYSQ==
-X-Received: by 2002:a05:622a:13d0:b0:2e1:cb3e:bb8a with SMTP id p16-20020a05622a13d000b002e1cb3ebb8amr23033116qtk.16.1648005689792;
-        Tue, 22 Mar 2022 20:21:29 -0700 (PDT)
-Received: from user-VirtualBox (c-73-132-53-127.hsd1.va.comcast.net. [73.132.53.127])
-        by smtp.gmail.com with ESMTPSA id a23-20020a05620a16d700b0067e98304705sm3725607qkn.89.2022.03.22.20.21.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 20:21:29 -0700 (PDT)
-Date: Tue, 22 Mar 2022 23:21:27 -0400
-From: David Vernet <void@manifault.com>
-To: Tom Rix <trix@redhat.com>
-Cc: Joe Lawrence <joe.lawrence@redhat.com>, jpoimboe@redhat.com,
-	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-	nathan@kernel.org, ndesaulniers@google.com,
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] livepatch: Reorder to use before freeing a pointer
-Message-ID: <20220323032127.3frjsh4iiclv4cys@user-VirtualBox>
-References: <20220320015143.2208591-1-trix@redhat.com>
- <3ee9826e-b770-d015-0251-e9770172d973@redhat.com>
- <b4b347ea-5b12-223a-86f5-c13aee714f08@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BDCBA40
+	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 04:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648010934; x=1679546934;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=e9j3SDuyNi13ugmnYweIETUnYu9zaonhx9Bo/kDo19w=;
+  b=eYHYvyArJ6yrXG4KWLilLik71rbGPIYHiRG9t/a+pfRONbDbzEyPSblZ
+   e0Ospj7+B4D9BCwu9mjjrMrA6gSWmcbjyqP4U46JXmH4ciAG9fYk98geo
+   vnf1tmzET2OKcxdMQO3/gNcNnmjXq6LfKxKz6uIBHBPnjdQtGWu66BpWn
+   hD102H7hoZOcxXu9SWgry+ryuq9I9KSGgQ+fZm/8aFhDY8EiP+nK55e+E
+   aplLDlncC6L2UZhJ4CeD+Oid5i2tqL2Hq5Urx9ggB3OP9zdIPAHetQV7N
+   CxByu289yI3PLFBXh5HmnUbwm76UQ11yTn3/TdLxHt8oessYkp2j1d+IL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="344453680"
+X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
+   d="scan'208";a="344453680"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 21:48:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
+   d="scan'208";a="500868506"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 22 Mar 2022 21:48:49 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nWsvQ-000JfJ-P8; Wed, 23 Mar 2022 04:48:48 +0000
+Date: Wed, 23 Mar 2022 12:48:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+	Florian Fainelli <f.fainelli@gmail.com>
+Subject: [linux-next:master 2075/14215]
+ drivers/net/dsa/realtek/realtek-smi.c:496:34: warning: unused variable
+ 'realtek_smi_of_match'
+Message-ID: <202203231233.Xx73Y40o-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b4b347ea-5b12-223a-86f5-c13aee714f08@redhat.com>
-User-Agent: NeoMutt/20191207
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-> > On 3/19/22 9:51 PM, trix@redhat.com wrote:
-> > > From: Tom Rix <trix@redhat.com>
-> > > 
-> > > Clang static analysis reports this issue
-> > > livepatch-shadow-fix1.c:113:2: warning: Use of
-> > >    memory after it is freed
-> > >    pr_info("%s: dummy @ %p, prevented leak @ %p\n",
-> > >    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > 
-> > > The pointer is freed in the previous statement.
-> > > Reorder the pr_info to report before the free.
-> > > 
-> > > Similar issue in livepatch-shadow-fix2.c
-> > > 
-> > > Signed-off-by: Tom Rix <trix@redhat.com>
-> > > ---
-> > > v2: Fix similar issue in livepatch-shadow-fix2.c
-> > > 
-> > >   samples/livepatch/livepatch-shadow-fix1.c | 2 +-
-> > >   samples/livepatch/livepatch-shadow-fix2.c | 2 +-
-> > >   2 files changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/samples/livepatch/livepatch-shadow-fix1.c b/samples/livepatch/livepatch-shadow-fix1.c
-> > > index 918ce17b43fda..6701641bf12d4 100644
-> > > --- a/samples/livepatch/livepatch-shadow-fix1.c
-> > > +++ b/samples/livepatch/livepatch-shadow-fix1.c
-> > > @@ -109,9 +109,9 @@ static void livepatch_fix1_dummy_leak_dtor(void *obj, void *shadow_data)
-> > >   	void *d = obj;
-> > >   	int **shadow_leak = shadow_data;
-> > > -	kfree(*shadow_leak);
-> > >   	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
-> > >   			 __func__, d, *shadow_leak);
-> > > +	kfree(*shadow_leak);
-> > >   }
-> > >   static void livepatch_fix1_dummy_free(struct dummy *d)
-> > > diff --git a/samples/livepatch/livepatch-shadow-fix2.c b/samples/livepatch/livepatch-shadow-fix2.c
-> > > index 29fe5cd420472..361046a4f10cf 100644
-> > > --- a/samples/livepatch/livepatch-shadow-fix2.c
-> > > +++ b/samples/livepatch/livepatch-shadow-fix2.c
-> > > @@ -61,9 +61,9 @@ static void livepatch_fix2_dummy_leak_dtor(void *obj, void *shadow_data)
-> > >   	void *d = obj;
-> > >   	int **shadow_leak = shadow_data;
-> > > -	kfree(*shadow_leak);
-> > >   	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
-> > >   			 __func__, d, *shadow_leak);
-> > > +	kfree(*shadow_leak);
-> > >   }
-> > >   static void livepatch_fix2_dummy_free(struct dummy *d)
+Hi Luiz,
 
-Acked-by: David Vernet <void@manifault.com>
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f8833a2b23562be2dae91775127c8014c44d8566
+commit: 765c39a4fafe6f7ea0d370aa5f30c811579cf8eb [2075/14215] net: dsa: realtek: convert subdrivers into modules
+config: s390-randconfig-r005-20220323 (https://download.01.org/0day-ci/archive/20220323/202203231233.Xx73Y40o-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=765c39a4fafe6f7ea0d370aa5f30c811579cf8eb
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 765c39a4fafe6f7ea0d370aa5f30c811579cf8eb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/realtek/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/dsa/realtek/realtek-smi.c:32:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/net/dsa/realtek/realtek-smi.c:32:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/net/dsa/realtek/realtek-smi.c:32:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/dsa/realtek/realtek-smi.c:496:34: warning: unused variable 'realtek_smi_of_match' [-Wunused-const-variable]
+   static const struct of_device_id realtek_smi_of_match[] = {
+                                    ^
+   13 warnings generated.
+
+
+vim +/realtek_smi_of_match +496 drivers/net/dsa/realtek/realtek-smi.c
+
+0650bf52b31ff35 drivers/net/dsa/realtek-smi-core.c    Vladimir Oltean           2021-09-17  495  
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14 @496  static const struct of_device_id realtek_smi_of_match[] = {
+765c39a4fafe6f7 drivers/net/dsa/realtek/realtek-smi.c Luiz Angelo Daros de Luca 2022-01-28  497  #if IS_ENABLED(CONFIG_NET_DSA_REALTEK_RTL8366RB)
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  498  	{
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  499  		.compatible = "realtek,rtl8366rb",
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  500  		.data = &rtl8366rb_variant,
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  501  	},
+765c39a4fafe6f7 drivers/net/dsa/realtek/realtek-smi.c Luiz Angelo Daros de Luca 2022-01-28  502  #endif
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  503  	{
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  504  		/* FIXME: add support for RTL8366S and more */
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  505  		.compatible = "realtek,rtl8366s",
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  506  		.data = NULL,
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  507  	},
+765c39a4fafe6f7 drivers/net/dsa/realtek/realtek-smi.c Luiz Angelo Daros de Luca 2022-01-28  508  #if IS_ENABLED(CONFIG_NET_DSA_REALTEK_RTL8365MB)
+4af2950c50c8634 drivers/net/dsa/realtek-smi-core.c    Alvin Šipraga             2021-10-18  509  	{
+4af2950c50c8634 drivers/net/dsa/realtek-smi-core.c    Alvin Šipraga             2021-10-18  510  		.compatible = "realtek,rtl8365mb",
+4af2950c50c8634 drivers/net/dsa/realtek-smi-core.c    Alvin Šipraga             2021-10-18  511  		.data = &rtl8365mb_variant,
+4af2950c50c8634 drivers/net/dsa/realtek-smi-core.c    Alvin Šipraga             2021-10-18  512  	},
+765c39a4fafe6f7 drivers/net/dsa/realtek/realtek-smi.c Luiz Angelo Daros de Luca 2022-01-28  513  #endif
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  514  	{ /* sentinel */ },
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  515  };
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  516  MODULE_DEVICE_TABLE(of, realtek_smi_of_match);
+d8652956cf37c5c drivers/net/dsa/realtek-smi.c         Linus Walleij             2018-07-14  517  
+
+:::::: The code at line 496 was first introduced by commit
+:::::: d8652956cf37c5caa8c19e0b99ce5ca235c6d5de net: dsa: realtek-smi: Add Realtek SMI driver
+
+:::::: TO: Linus Walleij <linus.walleij@linaro.org>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
