@@ -1,130 +1,129 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6673466C5
-	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 19:41:45 +0000 (UTC)
-Received: by mail-lj1-f175.google.com with SMTP id h11so3348874ljb.2
-        for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 12:41:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kQrBGFwucrBKBVfXucD62w2ROKP/3gosyL/mFvFuauw=;
-        b=SBbwCPeyER6bdPDyzhQl8Ssg5BBoNYoxM4wuCfgnDMBpBaTxeqvdt/O+JMNniz4Myr
-         AdkoKTp8pj5cEZ7B1s7i22BAAMAln1zN/s5LGOGGUaXqkEyoeXmpJZGsd41WBh8obao9
-         pYKhcJps1P+IYJoqKMNmjNrvkWb20OvKGDggaxBL0ZGg9vSo1RzjWYXyLsF1PerHnr2c
-         nsO8JOb+kjtiZDBdztqa00hyErV3EmCPRUTp3rN2xNNIbbqRgWpKrkDPz/uLFOdiCcjQ
-         jkNlTUj3B8eSsD8dx+YpoFkZcoeocthFtBuffFjS9zUnTUK3XTXSLwCp7gYoYqVSHr4R
-         5bkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kQrBGFwucrBKBVfXucD62w2ROKP/3gosyL/mFvFuauw=;
-        b=aWA7jXLm5rYakcLS+DLPKEAvsqkiDJzWGfjo+Zp6U6YI/xmvS16qyPCKMngsN/qJn/
-         WxCaYcnEHPFade3TCBFyxwPuMPwBaV4VFS9IjSe8h3WmxGLcmoWzk/qUfuGtxn3WpX9h
-         RbzvPmo4fMvttsSW7jxZS5cBEXrWFJ+62GuYOcflirFPgaiYVrRj3qMeSRWZTMsBraE/
-         6KGrw0HtLPr8+smPdTWlQ+M3qEwOL2DKNOTl6shiuDNe79apl/gHR2azucpBmfZMh0VI
-         NhgcNH/8Fke7DJhnd9V7P+LQYyYnFeBYH/XKZQvIsg1NdoY4I9EURtTBGyRsi6Lddbu2
-         /JZw==
-X-Gm-Message-State: AOAM532Tr7CkJbZvYQzf4BwrIMkOAqn/RYpMoYL0KUvVbUmJsok1ahGV
-	PcIbzs+pZoVhoqAYVU7PIVQd9d1Kxg1e9C8PCzgn1Q==
-X-Google-Smtp-Source: ABdhPJyPxaAkqjgQxr5Z0ufChFc+QxnVh2jtJFdKm1AViJ4raOtJ6ZSMiIycQXnGSjwQAoCxO1pVGEbNU+SzucsBVqo=
-X-Received: by 2002:a2e:904c:0:b0:23e:d7ad:3fdd with SMTP id
- n12-20020a2e904c000000b0023ed7ad3fddmr1318780ljg.239.1648064503179; Wed, 23
- Mar 2022 12:41:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F856AAE
+	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 22:06:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648073215; x=1679609215;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VdC2wCMIl7ls0hCsy0jpp1vlgHKwG1FpPKmGZ2JXu8o=;
+  b=CZEwAO5sTsFS6PfqJWibKI1bRE0WX2IC2bMp3YJx65ibDEDtooT9W/qt
+   7gOj0cOj0DRj4TMgHe0gLEv4u0+xxwTVi2aGlGC1y97DRmKu1fQClfTwC
+   RgAR9n++EEb23dAADPVV/ToDHAZv5FFekXlJMIxLTdjAneV2TSfJnAXVY
+   oVAQuOIq40p4NJR9GccKXoDK/odceQ5HRMcQzJuQAo+7dkPZCz8Dpn4Jb
+   ckuHKwB7XE7I5sudAv78lGskaUcRhxGBzVhD1uXlvGKupK2meK3yl+SSJ
+   Vb2t5LE54VfqmpldnNSQO9Ii6vW2Pqnz9b2PWc64COEDc83crEwTpbE2D
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="321433650"
+X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
+   d="scan'208";a="321433650"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 15:06:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
+   d="scan'208";a="515944777"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 23 Mar 2022 15:06:53 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nX980-000KPM-9m; Wed, 23 Mar 2022 22:06:52 +0000
+Date: Thu, 24 Mar 2022 06:06:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Allison Henderson <allison.henderson@oracle.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Dave Chinner <dchinner@redhat.com>
+Subject: [allisonhenderson-xfs-work:delayed_attrs_v29_extended 24/31]
+ fs/xfs/libxfs/xfs_parent.c:55:1: warning: no previous prototype for function
+ 'xfs_init_parent_name_rec'
+Message-ID: <202203240504.BKIg5zFL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAFGhKbyifH1a+nAMCvWM88TK6fpNPdzFtUXPmRGnnQeePV+1sw@mail.gmail.com>
-In-Reply-To: <CAFGhKbyifH1a+nAMCvWM88TK6fpNPdzFtUXPmRGnnQeePV+1sw@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 23 Mar 2022 12:41:31 -0700
-Message-ID: <CAKwvOdmSV3Nse+tGMBXvN=QvnOs6-ODZRJB0OF5Pd6BVb-scFw@mail.gmail.com>
-Subject: Re: [PATCH] x86: bug.h: merge annotate_reachable into _BUG_FLAGS for __WARN_FLAGS
-To: Charlemagne Lasse <charlemagnelasse@gmail.com>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, jpoimboe@redhat.com
-Cc: adobriyan@gmail.com, bp@alien8.de, dave.hansen@linux.intel.com, 
-	hpa@zytor.com, linux-kernel@vger.kernel.org, linux-sparse@vger.kernel.org, 
-	llvm@lists.linux.dev, luc.vanoostenryck@gmail.com, mingo@redhat.com, 
-	nathan@kernel.org, peterz@infradead.org, tglx@linutronix.de, x86@kernel.org, 
-	Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Mar 23, 2022 at 12:30 PM Charlemagne Lasse
-<charlemagnelasse@gmail.com> wrote:
->
-> > @@ -75,9 +77,9 @@ do {                                \
-> >   */
-> >  #define __WARN_FLAGS(flags)                    \
-> >  do {                                \
-> > +    __auto_type f = BUGFLAG_WARNING|(flags);        \
-> >      instrumentation_begin();                \
-> > -    _BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));        \
-> > -    annotate_reachable();                    \
-> > +    _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);            \
-> >      instrumentation_end();                    \
-> >  } while (0)
->
-> This causes following sparse warning on x86:
->
-> make allnoconfig && touch init/version.c && make CHECK="sparse
-> -Wshadow"  C=1 init/version.o
-> #
-> # No change to .config
-> #
->  CALL    scripts/checksyscalls.sh
->  CALL    scripts/atomic/check-atomics.sh
->  CHK     include/generated/compile.h
->  CC      init/version.o
->  CHECK   init/version.c
-> init/version.c: note: in included file (through
-> include/linux/rculist.h, include/linux/pid.h, include/linux/sched.h,
-> include/linux/utsname.h):
-> ./include/linux/rcupdate.h:1007:9: warning: symbol 'f' shadows an earlier one
-> ./include/linux/rcupdate.h:1001:47: originally declared here
+tree:   https://github.com/allisonhenderson/xfs_work.git delayed_attrs_v29_extended
+head:   3106ffcd07787b3bed3ee019d3706c480477ee9c
+commit: 7db6d10716e92d4f101981304d1619b77acd569c [24/31] xfs: parent pointer attribute creation
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220324/202203240504.BKIg5zFL-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/allisonhenderson/xfs_work/commit/7db6d10716e92d4f101981304d1619b77acd569c
+        git remote add allisonhenderson-xfs-work https://github.com/allisonhenderson/xfs_work.git
+        git fetch --no-tags allisonhenderson-xfs-work delayed_attrs_v29_extended
+        git checkout 7db6d10716e92d4f101981304d1619b77acd569c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/xfs/
 
-Thanks for the report. There was already a fix sent for this:
-https://lore.kernel.org/lkml/20220317065743.8467-1-mailhol.vincent@wanadoo.fr/
-but it doesn't mention that sparse is warning about this, too.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I think if Vincent sent a v3 that mentioned that sparse is warning
-about this, too, and cc'ed you, you could then supply
-signed-off/tested-by tags (or just do so on v2, though it doesn't
-mention sparse), and maybe Josh would be so kind as to pick that up?
+All warnings (new ones prefixed by >>):
 
->
->
-> Affected versions (from the ones on kernel.org):
->
-> * 5.17 - bfb1a7c91fb7 ("x86/bug: Merge annotate_reachable() into
-> _BUG_FLAGS() asm")
-> * 5.16.17 - fe0c95903a68 ("x86/bug: Merge annotate_reachable() into
-> _BUG_FLAGS() asm")
->
-> Cannot be seen when changing the variable name:
->
-> diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-> index bab883c0b6fe..cbd11e38252a 100644
-> --- a/arch/x86/include/asm/bug.h
-> +++ b/arch/x86/include/asm/bug.h
-> @@ -77,9 +77,9 @@ do {                                \
->   */
->  #define __WARN_FLAGS(flags)                    \
->  do {                                \
-> -    __auto_type f = BUGFLAG_WARNING|(flags);        \
-> +    __auto_type __f = BUGFLAG_WARNING|(flags);        \
->      instrumentation_begin();                \
-> -    _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);            \
-> +    _BUG_FLAGS(ASM_UD2, __f, ASM_REACHABLE);            \
->      instrumentation_end();                    \
->  } while (0)
+>> fs/xfs/libxfs/xfs_parent.c:55:1: warning: no previous prototype for function 'xfs_init_parent_name_rec' [-Wmissing-prototypes]
+   xfs_init_parent_name_rec(
+   ^
+   fs/xfs/libxfs/xfs_parent.c:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+>> fs/xfs/libxfs/xfs_parent.c:70:1: warning: no previous prototype for function 'xfs_init_parent_name_irec' [-Wmissing-prototypes]
+   xfs_init_parent_name_irec(
+   ^
+   fs/xfs/libxfs/xfs_parent.c:69:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   2 warnings generated.
 
 
+vim +/xfs_init_parent_name_rec +55 fs/xfs/libxfs/xfs_parent.c
+
+    35	
+    36	/*
+    37	 * Parent pointer attribute handling.
+    38	 *
+    39	 * Because the attribute value is a filename component, it will never be longer
+    40	 * than 255 bytes. This means the attribute will always be a local format
+    41	 * attribute as it is xfs_attr_leaf_entsize_local_max() for v5 filesystems will
+    42	 * always be larger than this (max is 75% of block size).
+    43	 *
+    44	 * Creating a new parent attribute will always create a new attribute - there
+    45	 * should never, ever be an existing attribute in the tree for a new inode.
+    46	 * ENOSPC behavior is problematic - creating the inode without the parent
+    47	 * pointer is effectively a corruption, so we allow parent attribute creation
+    48	 * to dip into the reserve block pool to avoid unexpected ENOSPC errors from
+    49	 * occurring.
+    50	 */
+    51	
+    52	
+    53	/* Initializes a xfs_parent_name_rec to be stored as an attribute name */
+    54	void
+  > 55	xfs_init_parent_name_rec(
+    56		struct xfs_parent_name_rec	*rec,
+    57		struct xfs_inode		*ip,
+    58		uint32_t			p_diroffset)
+    59	{
+    60		xfs_ino_t			p_ino = ip->i_ino;
+    61		uint32_t			p_gen = VFS_I(ip)->i_generation;
+    62	
+    63		rec->p_ino = cpu_to_be64(p_ino);
+    64		rec->p_gen = cpu_to_be32(p_gen);
+    65		rec->p_diroffset = cpu_to_be32(p_diroffset);
+    66	}
+    67	
+    68	/* Initializes a xfs_parent_name_irec from an xfs_parent_name_rec */
+    69	void
+  > 70	xfs_init_parent_name_irec(
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
