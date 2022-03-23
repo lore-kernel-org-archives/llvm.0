@@ -1,147 +1,116 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022CA1360
-	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 06:00:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648015223; x=1679551223;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GjEEWo6GnB9okYJh0yahqYzHf5yb/c33+/mD6aV6Kqk=;
-  b=dseGEq5h7qRpiKuvkq0BSMTgtctis4zl7sGuTYi+E+T9adbo3k0U9F7W
-   AVtXas7zyEKIV8r0hlMLF48/14s2LSMeP+zE2rxO9FhdY9+XCKVyOYiIk
-   VKnZ0vynNoFZR5V3ZwEgpWWl8zV7zLWTbHQ6mDqy3mcGsBpjxLra69HyO
-   VxrkV9ZN/JQ+YBWBWuYBVtoPD0+JNzSOfmSkrMuWXUydw2P9jGkFyvEyV
-   fP4I75XOzZ90S3p1p7hJNYqcG2QzFwW02J/kfg5Yn10UVwPavkUZMVmqq
-   79Ouwt/khYo05D88ZnfPxHrKocKTtOiDXcSntKxs9V59ihDRisbk55pQK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="344462246"
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="344462246"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 23:00:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="649306070"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 22 Mar 2022 23:00:19 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nWu2d-000Jj2-9r; Wed, 23 Mar 2022 06:00:19 +0000
-Date: Wed, 23 Mar 2022 13:59:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:palmer/linux/riscv-ftrace_mutex_fix 1/1]
- arch/riscv/kernel/ftrace.c:14:5: error: expected identifier or '('
-Message-ID: <202203231310.ymLzRrpb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9C51360
+	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 06:29:48 +0000 (UTC)
+Received: from [192.168.12.80] (unknown [182.2.71.26])
+	by gnuweeb.org (Postfix) with ESMTPSA id E2BE57E342;
+	Wed, 23 Mar 2022 06:29:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+	s=default; t=1648016987;
+	bh=rTYefPkm+7jh3YIcnrUKbBW9z+mAVw1UIN7o+WWdb6g=;
+	h=Date:From:To:Cc:References:Subject:In-Reply-To:From;
+	b=t0UH9wr/A8UAyjs5YliU2fVLk2EdDwauQN1d5rIafsqmJvmDsRIqhhUdBeyxEXGYB
+	 17688upkz47HJcZV9s8yT33VGgTByJHsdWQQE109w68t9w+TZYQRR8bcCgpFCLuUl2
+	 U7WUb03B/zgOdI2o+stWvpmqb8vDMcw06vCtQ6tQmZZ1hAiMhCtaSB8fNrczxSPU3a
+	 ejE6x6GxivbB9fX2evVsclML/a/z8TI2n/LC6ny5hCAA+tMSSxaO0X089WOKTWlXii
+	 wgABX5JvJuR3uvODbLh2B8fX81o79u71FZ23S2gPS2BmxSooy8D3bWJH0ppbrD1nz6
+	 l0CRZY4NiTgyQ==
+Message-ID: <2eba5687-6b63-ceb2-3fbd-3d236727ea11@gnuweeb.org>
+Date: Wed, 23 Mar 2022 13:29:39 +0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To: David Laight <David.Laight@ACULAB.COM>, 'Willy Tarreau' <w@1wt.eu>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+ Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+ Nugraha <richiisei@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+ "x86@kernel.org" <x86@kernel.org>,
+ "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
+ <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
+ <8653f6784a9b4272a59a75a530663567@AcuMS.aculab.com>
+ <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
+ <20220322121338.GD10306@1wt.eu>
+ <22fd9709b3a64a548226741b682ca155@AcuMS.aculab.com>
+Content-Language: en-US
+Subject: Re: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
+ arguments
+In-Reply-To: <22fd9709b3a64a548226741b682ca155@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-ftrace_mutex_fix
-head:   013eaa62130cd541cb2e7bf58303c509298701a8
-commit: 013eaa62130cd541cb2e7bf58303c509298701a8 [1/1] RISC-V: Don't check text_mutex during stop_machine
-config: riscv-randconfig-r032-20220323 (https://download.01.org/0day-ci/archive/20220323/202203231310.ymLzRrpb-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/013eaa62130cd541cb2e7bf58303c509298701a8
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-ftrace_mutex_fix
-        git checkout 013eaa62130cd541cb2e7bf58303c509298701a8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+On 3/22/22 8:37 PM, David Laight wrote:
+> dunno, 'asm' register variables are rather more horrid and
+> should probably only be used (for asm statements) when there aren't
+> suitable register constraints.
+> 
+> (I'm sure there is a comment about that in the gcc docs.)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+^ Hey David, yes you're right, that is very interesting...
 
-All errors (new ones prefixed by >>):
+I hit a GCC bug when playing with syscall6() implementation here.
 
-   In file included from arch/riscv/kernel/ftrace.c:8:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from arch/riscv/kernel/ftrace.c:8:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from arch/riscv/kernel/ftrace.c:8:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> arch/riscv/kernel/ftrace.c:14:5: error: expected identifier or '('
-   int riscv_ftrace_in_stop_machine;
-       ^
-   arch/riscv/include/asm/ftrace.h:90:38: note: expanded from macro 'riscv_ftrace_in_stop_machine'
-   #define riscv_ftrace_in_stop_machine 0
-                                        ^
-   7 warnings and 1 error generated.
+Using register variables for all inputs for syscall6() causing GCC 11.2
+stuck in an endless loop with 100% CPU usage. Reproducible with several
+versions of GCC.
 
+In GCC 6.3, the syscall6() implementation above yields ICE (Internal
+Compiler Error):
+```
+   <source>: In function '__sys_mmap':
+   <source>:35:1: error: unable to find a register to spill
+    }
+    ^
+   <source>:35:1: error: this is the insn:
+   (insn 14 13 30 2 (set (reg:SI 95 [92])
+           (mem/c:SI (plus:SI (reg/f:SI 16 argp)
+                   (const_int 28 [0x1c])) [1 offset+0 S4 A32])) <source>:33 86 {*movsi_internal}
+        (expr_list:REG_DEAD (reg:SI 16 argp)
+           (nil)))
+   <source>:35: confused by earlier errors, bailing out
+   Compiler returned: 1
+```
+See the full show here: https://godbolt.org/z/dYeKaYWY3
 
-vim +14 arch/riscv/kernel/ftrace.c
+Using the appropriate constraints, it compiles nicely, now it looks
+like this:
+```
+   #define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)	\
+   ({								\
+   	long _eax  = (long)(num);				\
+   	long _arg6 = (long)(arg6); /* Always be in memory */	\
+   	asm volatile (						\
+   		"pushl	%[_arg6]\n\t"				\
+   		"pushl	%%ebp\n\t"				\
+   		"movl	4(%%esp), %%ebp\n\t"			\
+   		"int	$0x80\n\t"				\
+   		"popl	%%ebp\n\t"				\
+   		"addl	$4,%%esp\n\t"				\
+   		: "+a"(_eax)		/* %eax */		\
+   		: "b"(arg1),		/* %ebx */		\
+   		  "c"(arg2),		/* %ecx */		\
+   		  "d"(arg3),		/* %edx */		\
+   		  "S"(arg4),		/* %esi */		\
+   		  "D"(arg5),		/* %edi */		\
+   		  [_arg6]"m"(_arg6)	/* memory */		\
+   		: "memory", "cc"				\
+   	);							\
+   	_eax;							\
+   })
+```
+Link: https://godbolt.org/z/ozGbYWbPY
 
-    13	
-  > 14	int riscv_ftrace_in_stop_machine;
-    15	
+Will use that in the next patchset version.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Ammar Faizi
+
