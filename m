@@ -1,23 +1,23 @@
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9C51360
-	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 06:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0E9A3F
+	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 06:32:40 +0000 (UTC)
 Received: from [192.168.12.80] (unknown [182.2.71.26])
-	by gnuweeb.org (Postfix) with ESMTPSA id E2BE57E342;
-	Wed, 23 Mar 2022 06:29:43 +0000 (UTC)
+	by gnuweeb.org (Postfix) with ESMTPSA id 3EE637E342;
+	Wed, 23 Mar 2022 06:32:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1648016987;
-	bh=rTYefPkm+7jh3YIcnrUKbBW9z+mAVw1UIN7o+WWdb6g=;
-	h=Date:From:To:Cc:References:Subject:In-Reply-To:From;
-	b=t0UH9wr/A8UAyjs5YliU2fVLk2EdDwauQN1d5rIafsqmJvmDsRIqhhUdBeyxEXGYB
-	 17688upkz47HJcZV9s8yT33VGgTByJHsdWQQE109w68t9w+TZYQRR8bcCgpFCLuUl2
-	 U7WUb03B/zgOdI2o+stWvpmqb8vDMcw06vCtQ6tQmZZ1hAiMhCtaSB8fNrczxSPU3a
-	 ejE6x6GxivbB9fX2evVsclML/a/z8TI2n/LC6ny5hCAA+tMSSxaO0X089WOKTWlXii
-	 wgABX5JvJuR3uvODbLh2B8fX81o79u71FZ23S2gPS2BmxSooy8D3bWJH0ppbrD1nz6
-	 l0CRZY4NiTgyQ==
-Message-ID: <2eba5687-6b63-ceb2-3fbd-3d236727ea11@gnuweeb.org>
-Date: Wed, 23 Mar 2022 13:29:39 +0700
+	s=default; t=1648017160;
+	bh=CF8WJ3FjZlYY48Kavdonn1NzDNE0CVAJZB201YjIl+k=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=OKk361GtmEZQqabD0dY5tgo97CpTUcjIhv9cnCHxq4NxknlUbUBz99iSH+QoF1vR9
+	 uJQOx2+N9SLSfyET4ZqkF+JZ8A26Z9PJZokZFNg0X6TskzIXd3roZoOlw7giLLZMV+
+	 6mdCqVh9kV8SHOkwMr7yVYPZo6Jazq4WNfYbZSdP6VgJpKQ9qhnX6/UUyW8qTHgAId
+	 e4Rrc3L83fkiEv6g95RcGDVlhiYX4+5h8NqON8Fgr9smapiXOyHkTKEtJ2ZYaojOOi
+	 G4Kan3MBmt/0sZBM5YtkDixMLi+LRppjS7EP7tSC0i0Kho4ry0kdx6RUjBa6WlA0Ch
+	 RMBczW1kTEmyw==
+Message-ID: <e7fc541c-224b-08ae-1a92-ad9a03e3d9b1@gnuweeb.org>
+Date: Wed, 23 Mar 2022 13:32:34 +0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,6 +26,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Content-Language: en-US
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To: David Laight <David.Laight@ACULAB.COM>, 'Willy Tarreau' <w@1wt.eu>
 Cc: "Paul E. McKenney" <paulmck@kernel.org>,
@@ -41,76 +44,14 @@ References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
  <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
  <20220322121338.GD10306@1wt.eu>
  <22fd9709b3a64a548226741b682ca155@AcuMS.aculab.com>
-Content-Language: en-US
-Subject: Re: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
- arguments
-In-Reply-To: <22fd9709b3a64a548226741b682ca155@AcuMS.aculab.com>
+ <2eba5687-6b63-ceb2-3fbd-3d236727ea11@gnuweeb.org>
+In-Reply-To: <2eba5687-6b63-ceb2-3fbd-3d236727ea11@gnuweeb.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/22/22 8:37 PM, David Laight wrote:
-> dunno, 'asm' register variables are rather more horrid and
-> should probably only be used (for asm statements) when there aren't
-> suitable register constraints.
-> 
-> (I'm sure there is a comment about that in the gcc docs.)
-
-^ Hey David, yes you're right, that is very interesting...
-
-I hit a GCC bug when playing with syscall6() implementation here.
-
-Using register variables for all inputs for syscall6() causing GCC 11.2
-stuck in an endless loop with 100% CPU usage. Reproducible with several
-versions of GCC.
-
-In GCC 6.3, the syscall6() implementation above yields ICE (Internal
-Compiler Error):
-```
-   <source>: In function '__sys_mmap':
-   <source>:35:1: error: unable to find a register to spill
-    }
-    ^
-   <source>:35:1: error: this is the insn:
-   (insn 14 13 30 2 (set (reg:SI 95 [92])
-           (mem/c:SI (plus:SI (reg/f:SI 16 argp)
-                   (const_int 28 [0x1c])) [1 offset+0 S4 A32])) <source>:33 86 {*movsi_internal}
-        (expr_list:REG_DEAD (reg:SI 16 argp)
-           (nil)))
-   <source>:35: confused by earlier errors, bailing out
-   Compiler returned: 1
-```
-See the full show here: https://godbolt.org/z/dYeKaYWY3
-
-Using the appropriate constraints, it compiles nicely, now it looks
-like this:
-```
-   #define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)	\
-   ({								\
-   	long _eax  = (long)(num);				\
-   	long _arg6 = (long)(arg6); /* Always be in memory */	\
-   	asm volatile (						\
-   		"pushl	%[_arg6]\n\t"				\
-   		"pushl	%%ebp\n\t"				\
-   		"movl	4(%%esp), %%ebp\n\t"			\
-   		"int	$0x80\n\t"				\
-   		"popl	%%ebp\n\t"				\
-   		"addl	$4,%%esp\n\t"				\
-   		: "+a"(_eax)		/* %eax */		\
-   		: "b"(arg1),		/* %ebx */		\
-   		  "c"(arg2),		/* %ecx */		\
-   		  "d"(arg3),		/* %edx */		\
-   		  "S"(arg4),		/* %esi */		\
-   		  "D"(arg5),		/* %edi */		\
-   		  [_arg6]"m"(_arg6)	/* memory */		\
-   		: "memory", "cc"				\
-   	);							\
-   	_eax;							\
-   })
-```
-Link: https://godbolt.org/z/ozGbYWbPY
-
-Will use that in the next patchset version.
+I have reported this bug to GNU people.
+   
+   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105032
 
 -- 
 Ammar Faizi
-
