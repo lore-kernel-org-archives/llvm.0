@@ -1,40 +1,53 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99EF8A28
-	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 14:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=NZieXrV52xxOwWM+2C++7uGR7V7p5CAJ1QVgA1I8UHQ=; b=SzATp9DTNoVTZVzAJu+HQRMkLv
-	XrzqSa/a3Ugtxcdt4lFg9lKr4hTKjrCKvp0V7R5wlAsYx1LiEfxWyV/ts1sEBsS6blqyo7VArvpzG
-	gjb/FaoWzTqmB/Dqg0ZO7FQvZIlG8m3um8wdcFIXcnAeY3dy3eEOl7bVSb++5OFyMUvaheqbNlKlb
-	HGdSpXTQTTWdv6Nsg0mr13TkHUqLpvLq2SpLUOljBh+Ep2iLgaIqOcvv1Ab/3POJE+H7bncGGdS3h
-	aP4a7YH/M+d6QkjYF4xQwUgzlC8/TybHMVkrmqvZZwApnuTHjSIIUemtHvqlgCah+lqNiTPnUYblO
-	GcmPHiqQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nX2En-003n45-6K; Wed, 23 Mar 2022 14:45:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 07E0E30007E;
-	Wed, 23 Mar 2022 15:45:22 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id D65E4200BC309; Wed, 23 Mar 2022 15:45:22 +0100 (CET)
-Date: Wed, 23 Mar 2022 15:45:22 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [peterz-queue:locking/core 17/19] arch/x86/kvm/x86.h:29:30:
- error: too many arguments to function call, expected 0, have 1
-Message-ID: <YjsygpbbKmraVol9@hirez.programming.kicks-ass.net>
-References: <202203191213.tC0sjaY7-lkp@intel.com>
- <CAKwvOdnEyGLi14b0qsc2=aSRafCrQD-Zyh+Oq+E-vx+c1viErg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F2E1B72
+	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 15:46:32 +0000 (UTC)
+Received: by mail-pl1-f176.google.com with SMTP id j13so1887857plj.8
+        for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 08:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xOiL2IfLtHJ36vMwZliYDCRzc17oZt5tTjd6We2oUPs=;
+        b=UIlACU9xyViEAEMb+LWZazjfQIQZ72L+YA+fuprsQuufl1YO3dJiXs476a2EBPOJ5D
+         uz+/vTdIoDtABCazC2o0C61DxSoRE008KpwIMn/TKiyTdmk45/Ra0zCJea1whDpnFmzn
+         6LcHNBGX/iRmNGrrn4J0IY2dZ4yu7DWgYQuEY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xOiL2IfLtHJ36vMwZliYDCRzc17oZt5tTjd6We2oUPs=;
+        b=NOp8iF9VNOEHT7op88YiJEVO2crPgvLPaHT6tGSWzROYVuHZlKjklaShSS7qmBUojf
+         SXk4mq9tQFjqIRdvROPDCIyF71ENSiMfF5UMN82YTxr0An2rVtpsxAYO6+mbmRjn5n0l
+         vUEuC8Z1fdFd2bN22t4d3cj5o0CjwPkba8dV+pxvgZLyDpfrUoIf/HGCohmjxgtV3XHq
+         3jOujkigaenROaFiWVphowAI6FP7riMYyLeMQ8F3fqn4OK5n18VFczvkfuP4NHnp4690
+         Q974yjcI81X5D6NHV//y+Yj2IizCDpfz1JkrkPMwM7P5Fy5j6Ud/q3e0yOjiySNdgVt2
+         WlNA==
+X-Gm-Message-State: AOAM532cqdJU9p0ddEe2/mJgYFd1xytul9yI0s452521tq5KnQRVWDLt
+	V6BTnLtqU9i1NHVwnBeJC9AyWQ==
+X-Google-Smtp-Source: ABdhPJz6Yvd8lbd/EYC+2ebO6g3u2YPP5AuLumW3lXbXAAvyq1KLB+vZcAM1bmRaOs9bbWRolPIKdA==
+X-Received: by 2002:a17:902:e9d4:b0:153:bd06:859c with SMTP id 20-20020a170902e9d400b00153bd06859cmr702714plk.8.1648050392261;
+        Wed, 23 Mar 2022 08:46:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v24-20020a634818000000b0036407db4728sm210630pga.26.2022.03.23.08.46.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 08:46:32 -0700 (PDT)
+Date: Wed, 23 Mar 2022 08:46:31 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: David Gow <davidgow@google.com>, Daniel Latypov <dlatypov@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	KUnit Development <kunit-dev@googlegroups.com>,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
+	linux-m68k <linux-m68k@lists.linux-m68k.org>
+Subject: Re: [PATCH] lib: stackinit: Convert to KUnit
+Message-ID: <202203230844.0B6C73765@keescook>
+References: <20220224055145.1853657-1-keescook@chromium.org>
+ <CAMuHMdX_g1tbiUL9PUQdqaegrEzCNN3GtbSvSBFYAL4TzvstFg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,43 +56,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdnEyGLi14b0qsc2=aSRafCrQD-Zyh+Oq+E-vx+c1viErg@mail.gmail.com>
+In-Reply-To: <CAMuHMdX_g1tbiUL9PUQdqaegrEzCNN3GtbSvSBFYAL4TzvstFg@mail.gmail.com>
 
-On Mon, Mar 21, 2022 at 10:51:29AM -0700, Nick Desaulniers wrote:
-> On Fri, Mar 18, 2022 at 9:10 PM kernel test robot <lkp@intel.com> wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-> > head:   200a79c670d24d4d9a75a6a9cbfd14af2f5d0ad9
-> > commit: 5c9f3806a4400c2957abeea9419547f856457a20 [17/19] lockdep: Fix -Wunused-parameter for _THIS_IP_
-> > config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220319/202203191213.tC0sjaY7-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=5c9f3806a4400c2957abeea9419547f856457a20
-> >         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-> >         git fetch --no-tags peterz-queue locking/core
-> >         git checkout 5c9f3806a4400c2957abeea9419547f856457a20
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    In file included from arch/x86/kvm/x86.c:22:
-> >    In file included from arch/x86/kvm/mmu.h:7:
-> >    In file included from arch/x86/kvm/cpuid.h:5:
-> > >> arch/x86/kvm/x86.h:29:30: error: too many arguments to function call, expected 0, have 1
-> >            lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-> >            ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~
+On Tue, Mar 22, 2022 at 03:30:22PM +0100, Geert Uytterhoeven wrote:
+> Hi Kees,
 > 
-> Peter, I think you dropped the hunk to include/linux/kvm_host.h when
-> applying this patch?
+> On Thu, Feb 24, 2022 at 9:12 AM Kees Cook <keescook@chromium.org> wrote:
+> > Convert to running under Kunit (and retain being able to run stand-alone
+> > too). Building under Clang (or GCC 12) with CONFIG_INIT_STACK_ALL_ZERO=y,
+> > this now passes as expected:
+> >
+> > $ ./tools/testing/kunit/kunit.py config --make_option LLVM=1
+> > $ ./tools/testing/kunit/kunit.py run overflow --make_option LLVM=1 \
+> >         --kconfig_add CONFIG_INIT_STACK_ALL_ZERO=y
+> > ...
 > 
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> Thanks for your patch, which is now commit 02788ebcf521fe78 ("lib:
+> stackinit: Convert to KUnit") upstream.
+> 
+> Out of curiosity, I gave this a try on m68k, and it still seems to
+> fail the same way of before[1]:
+> [...]
+> [1] https://lore.kernel.org/r/CAMuHMdW6N40+0gGQ+LSrN64Mo4A0-ELAm0pR3gWQ0mNanyBuUQ@mail.gmail.com
 
-Someone moved that function to arch/x86/kvm/x86.h which is why it went
-sideways when I resolved it. Should hopefully be fixed now, lemme go do
-a few builds before I push out.
+Ah yes! Thanks for the reminder. I will take a look at this. Clearly, it's
+an issue with memory layout assumptions that don't match on m68k, etc.
+
+-- 
+Kees Cook
