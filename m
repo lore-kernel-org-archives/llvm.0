@@ -1,126 +1,340 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CE91868
-	for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 22:38:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648075094; x=1679611094;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4jF+Df17MVvV0AjR2LNj1V6JQVFfLQcHMH5bdq2C90U=;
-  b=cwyR1l5QX1fX2qOknS6opgVIO2L5/wBif1IusguoIVusJNuOkgWxuBd6
-   emx/uU6NnmTRJS0Whn3+nU0wEl/S+/bbjmSyGDsnJoD0wg3UPsTKuo3pP
-   FEY9st0gzZCWiQ2l/o3CGs0qS0WD9faMxg4bg2ve+o6TyMwnOJ911QTp6
-   UHFy+BXPELZ6XXKKmiw6OR9vPMSi/rFYNsk/9epkOrnC/kuFKLaNue29F
-   CmLP5iets/+/8aXelBOHLKbSUKbeGGSwWOeM1rrPrT7KQroPc+Y3Kq05z
-   ePEDHBj+Dv+71UcXmJHVf5cdbq+a1Dhib6zBExTMdT6qGQqLWNOWNZZrL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="258429596"
-X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
-   d="scan'208";a="258429596"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 15:38:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
-   d="scan'208";a="501175344"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 23 Mar 2022 15:38:11 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nX9cI-000KRJ-Lw; Wed, 23 Mar 2022 22:38:10 +0000
-Date: Thu, 24 Mar 2022 06:37:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mike Snitzer <snitzer@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, dm-devel@redhat.com,
-	linux-kernel@vger.kernel.org
-Subject: [device-mapper-dm:dm-5.19 132/132] drivers/md/dm.c:1542:4: error:
- use of undeclared identifier 'result'
-Message-ID: <202203240618.diX27ri2-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3797A
+	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 01:05:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7653C340E8;
+	Thu, 24 Mar 2022 01:05:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1648083951;
+	bh=eT+uo3aj/NOTYApfefYr2IrTVvK0p3ziJpTCo8Q14bo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=rxhlDFNBFfUlArArBkoUJmJR3mvpnrSnWBAHVHVQPnweap0JJ2drbJbwaxvM9oqkN
+	 aY2bkkXRD2kvwsAohDR65YUyN9qlAPvQvBN+DAkbDdLrFN3YePRs+bG5Y9ivwElIQ2
+	 U5ZcJewRyRbkxgTuSDgyNUe1dX81mad3Z/Nw/hl+2d8vLUTOZ94DEdgqIwuPvfkmZT
+	 7kXt9SuVooM4HkNYeLvMksVLnrVHMpFeyDJ0Z3x+xvbonP0LHEkv1WGJs21uj6wpIT
+	 OavlQKpWMWjpD7z1RcH0gfLZVOyEX1EflQ2Tc8oqj2tCmUYSesFaxZxFu7cEVf1Gi4
+	 ABDL260kiv8iw==
+Date: Thu, 24 Mar 2022 10:05:46 +0900
+From: Masami Hiramatsu <mhiramat@kernel.org>
+To: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, LKML
+ <linux-kernel@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH v2 2/3] bootconfig: Support embedding a bootconfig file
+ in kernel
+Message-Id: <20220324100546.10137147938805e40352fab3@kernel.org>
+In-Reply-To: <20220323155618.GA11364@pswork>
+References: <164724890153.731226.1478494969800777757.stgit@devnote2>
+	<164724892075.731226.14103557516176115189.stgit@devnote2>
+	<20220316191649.GA11547@pswork>
+	<20220318101445.fdb151efe58c6c3a1c572500@kernel.org>
+	<20220321183500.GA4065@pswork>
+	<20220322120311.690f237b63ddfd9c0e4f78ec@kernel.org>
+	<20220322190219.GA26859@pswork>
+	<20220323091617.495bfdf5281a543b27f2656f@kernel.org>
+	<20220323155618.GA11364@pswork>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git dm-5.19
-head:   7f8ac95a6464b895e3d2b6175f7ee64a4c10fcfe
-commit: 7f8ac95a6464b895e3d2b6175f7ee64a4c10fcfe [132/132] dm: push error handling down to __split_and_process_bio
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220324/202203240618.diX27ri2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/commit/?id=7f8ac95a6464b895e3d2b6175f7ee64a4c10fcfe
-        git remote add device-mapper-dm https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git
-        git fetch --no-tags device-mapper-dm dm-5.19
-        git checkout 7f8ac95a6464b895e3d2b6175f7ee64a4c10fcfe
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/md/
+On Wed, 23 Mar 2022 16:56:18 +0100
+Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On Wed, Mar 23, 2022 at 09:16:17AM +0900, Masami Hiramatsu wrote:
+> > On Tue, 22 Mar 2022 20:02:19 +0100
+> > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
+> > 
+> > > Hello Masami Hiramatsu,
+> > > 
+> > > On Tue, Mar 22, 2022 at 12:03:11PM +0900, Masami Hiramatsu wrote:
+> > > > On Mon, 21 Mar 2022 19:35:00 +0100
+> > > > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
+> > > > 
+> > > > > Hello Masami Hiramatsu,
+> > > > > 
+> > > > > On Fri, Mar 18, 2022 at 10:14:45AM +0900, Masami Hiramatsu wrote:
+> > > > > > On Wed, 16 Mar 2022 20:16:49 +0100
+> > > > > > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
+> > > > > > 
+> > > > > > > Hello Masami Hiramatsu,
+> > > > > > > 
+> > > > > > > On Mon, Mar 14, 2022 at 06:08:41PM +0900, Masami Hiramatsu wrote:
+> > > > > > > > This allows kernel developer to embed a default bootconfig file in
+> > > > > > > > the kernel instead of embedding it in the initrd. This will be good
+> > > > > > > > for who are using the kernel without initrd, or who needs a default
+> > > > > > > > bootconfigs.
+> > > > > > > > This needs to set two kconfigs: CONFIG_EMBED_BOOT_CONFIG=y and set
+> > > > > > > > the file path to CONFIG_EMBED_BOOT_CONFIG_FILE.
+> > > > > > > > 
+> > > > > > > > Note that you still need 'bootconfig' command line option to load the
+> > > > > > > > embedded bootconfig. Also if you boot using an initrd with a different
+> > > > > > > > bootconfig, the kernel will use the bootconfig in the initrd, instead
+> > > > > > > > of the default bootconfig.
+> > > > > > > > 
+> > > > > > > > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > > > > > ---
+> > > > > > > >  include/linux/bootconfig.h |   10 ++++++++++
+> > > > > > > >  init/Kconfig               |   21 +++++++++++++++++++++
+> > > > > > > >  init/main.c                |   13 ++++++++-----
+> > > > > > > >  lib/.gitignore             |    1 +
+> > > > > > > >  lib/Makefile               |   12 ++++++++++++
+> > > > > > > >  lib/bootconfig.c           |   23 +++++++++++++++++++++++
+> > > > > > > >  6 files changed, 75 insertions(+), 5 deletions(-)
+> > > > > > > > 
+> > > > > > > > diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
+> > > > > > > > index a4665c7ab07c..5dbda5e3e9bb 100644
+> > > > > > > > --- a/include/linux/bootconfig.h
+> > > > > > > > +++ b/include/linux/bootconfig.h
+> > > > > > > > @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
+> > > > > > > >  /* XBC cleanup data structures */
+> > > > > > > >  void __init xbc_exit(void);
+> > > > > > > >  
+> > > > > > > > +/* XBC embedded bootconfig data in kernel */
+> > > > > > > > +#ifdef CONFIG_EMBED_BOOT_CONFIG
+> > > > > > > > +char * __init xbc_get_embedded_bootconfig(size_t *size);
+> > > > > > > > +#else
+> > > > > > > > +static inline char *xbc_get_embedded_bootconfig(size_t *size)
+> > > > > > > > +{
+> > > > > > > > +	return NULL;
+> > > > > > > > +}
+> > > > > > > > +#endif
+> > > > > > > > +
+> > > > > > > >  #endif
+> > > > > > > > diff --git a/init/Kconfig b/init/Kconfig
+> > > > > > > > index e9119bf54b1f..70440804874d 100644
+> > > > > > > > --- a/init/Kconfig
+> > > > > > > > +++ b/init/Kconfig
+> > > > > > > > @@ -1357,6 +1357,27 @@ config BOOT_CONFIG
+> > > > > > > >  
+> > > > > > > >  	  If unsure, say Y.
+> > > > > > > >  
+> > > > > > > > +config EMBED_BOOT_CONFIG
+> > > > > > > > +	bool "Embed bootconfig file in the kernel"
+> > > > > > > > +	depends on BOOT_CONFIG
+> > > > > > > > +	default n
+> > > > > > > > +	help
+> > > > > > > > +	  Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
+> > > > > > > > +	  kernel. Usually, the bootconfig file is loaded with the initrd
+> > > > > > > > +	  image. But if the system doesn't support initrd, this option will
+> > > > > > > > +	  help you by embedding a bootconfig file while building the kernel.
+> > > > > > > > +
+> > > > > > > > +	  If unsure, say N.
+> > > > > > > > +
+> > > > > > > > +config EMBED_BOOT_CONFIG_FILE
+> > > > > > > > +	string "Embedded bootconfig file path"
+> > > > > > > > +	default ""
+> > > > > > > > +	depends on EMBED_BOOT_CONFIG
+> > > > > > > > +	help
+> > > > > > > > +	  Specify a bootconfig file which will be embedded to the kernel.
+> > > > > > > > +	  This bootconfig will be used if there is no initrd or no other
+> > > > > > > > +	  bootconfig in the initrd.
+> > > > > > > > +
+> > > > > > > >  choice
+> > > > > > > >  	prompt "Compiler optimization level"
+> > > > > > > >  	default CC_OPTIMIZE_FOR_PERFORMANCE
+> > > > > > > > diff --git a/init/main.c b/init/main.c
+> > > > > > > > index 421050be5039..3803bf2e22ea 100644
+> > > > > > > > --- a/init/main.c
+> > > > > > > > +++ b/init/main.c
+> > > > > > > > @@ -265,7 +265,7 @@ static int __init loglevel(char *str)
+> > > > > > > >  early_param("loglevel", loglevel);
+> > > > > > > >  
+> > > > > > > >  #ifdef CONFIG_BLK_DEV_INITRD
+> > > > > > > > -static void * __init get_boot_config_from_initrd(u32 *_size)
+> > > > > > > > +static void * __init get_boot_config_from_initrd(size_t *_size)
+> > > > > > > >  {
+> > > > > > > >  	u32 size, csum;
+> > > > > > > >  	char *data;
+> > > > > > > > @@ -411,12 +411,15 @@ static void __init setup_boot_config(void)
+> > > > > > > >  	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
+> > > > > > > >  	const char *msg;
+> > > > > > > >  	int pos;
+> > > > > > > > -	u32 size;
+> > > > > > > > +	size_t size;
+> > > > > > > >  	char *data, *err;
+> > > > > > > >  	int ret;
+> > > > > > > >  
+> > > > > > > >  	/* Cut out the bootconfig data even if we have no bootconfig option */
+> > > > > > > >  	data = get_boot_config_from_initrd(&size);
+> > > > > > > > +	/* If there is no bootconfig in initrd, try embedded one. */
+> > > > > > > > +	if (!data)
+> > > > > > > > +		data = xbc_get_embedded_bootconfig(&size);
+> > > > > > > >  
+> > > > > > > >  	strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+> > > > > > > >  	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+> > > > > > > > @@ -435,8 +438,8 @@ static void __init setup_boot_config(void)
+> > > > > > > >  	}
+> > > > > > > >  
+> > > > > > > >  	if (size >= XBC_DATA_MAX) {
+> > > > > > > > -		pr_err("bootconfig size %d greater than max size %d\n",
+> > > > > > > > -			size, XBC_DATA_MAX);
+> > > > > > > > +		pr_err("bootconfig size %ld greater than max size %d\n",
+> > > > > > > > +			(long)size, XBC_DATA_MAX);
+> > > > > > > >  		return;
+> > > > > > > >  	}
+> > > > > > > >  
+> > > > > > > > @@ -449,7 +452,7 @@ static void __init setup_boot_config(void)
+> > > > > > > >  				msg, pos);
+> > > > > > > >  	} else {
+> > > > > > > >  		xbc_get_info(&ret, NULL);
+> > > > > > > > -		pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
+> > > > > > > > +		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
+> > > > > > > >  		/* keys starting with "kernel." are passed via cmdline */
+> > > > > > > >  		extra_command_line = xbc_make_cmdline("kernel");
+> > > > > > > >  		/* Also, "init." keys are init arguments */
+> > > > > > > > diff --git a/lib/.gitignore b/lib/.gitignore
+> > > > > > > > index e5e217b8307b..30a2a5db7033 100644
+> > > > > > > > --- a/lib/.gitignore
+> > > > > > > > +++ b/lib/.gitignore
+> > > > > > > > @@ -6,3 +6,4 @@
+> > > > > > > >  /oid_registry_data.c
+> > > > > > > >  /test_fortify.log
+> > > > > > > >  /test_fortify/*.log
+> > > > > > > > +/default.bconf
+> > > > > > > > diff --git a/lib/Makefile b/lib/Makefile
+> > > > > > > > index 300f569c626b..8183785ee99d 100644
+> > > > > > > > --- a/lib/Makefile
+> > > > > > > > +++ b/lib/Makefile
+> > > > > > > > @@ -279,6 +279,18 @@ $(foreach file, $(libfdt_files), \
+> > > > > > > >  	$(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
+> > > > > > > >  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
+> > > > > > > >  
+> > > > > > > > +ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
+> > > > > > > > +# Since the specified bootconfig file can be switched, we forcibly update the
+> > > > > > > > +# default.bconf file always.
+> > > > > > > > +$(obj)/default.bconf: FORCE
+> > > > > > > > +	$(call cmd,defbconf)
+> > > > > > > > +
+> > > > > > > > +quiet_cmd_defbconf = GEN     $@
+> > > > > > > > +      cmd_defbconf = cat < /dev/null $(CONFIG_EMBED_BOOT_CONFIG_FILE) > $@
+> > > > > > > > +clean-files	+= default.bconf
+> > > > > > > > +$(obj)/bootconfig.o: $(obj)/default.bconf
+> > > > > > > > +endif
+> > > > > > > > +
+> > > > > > > >  lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
+> > > > > > > >  
+> > > > > > > >  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
+> > > > > > > > diff --git a/lib/bootconfig.c b/lib/bootconfig.c
+> > > > > > > > index 74f3201ab8e5..3a3bf3a208e3 100644
+> > > > > > > > --- a/lib/bootconfig.c
+> > > > > > > > +++ b/lib/bootconfig.c
+> > > > > > > > @@ -12,6 +12,29 @@
+> > > > > > > >  #include <linux/kernel.h>
+> > > > > > > >  #include <linux/memblock.h>
+> > > > > > > >  #include <linux/string.h>
+> > > > > > > > +
+> > > > > > > > +#ifdef CONFIG_EMBED_BOOT_CONFIG
+> > > > > > > > +asm (
+> > > > > > > > +"	.pushsection .init.data, \"aw\"			\n"
+> > > > > > > > +"	.global embedded_bootconfig_data		\n"
+> > > > > > > > +"embedded_bootconfig_data:				\n"
+> > > > > > > > +"	.incbin \"lib/default.bconf\"			\n"
+> > > > > > > > +"	.global embedded_bootconfig_data_end		\n"
+> > > > > > > > +"embedded_bootconfig_data_end:				\n"
+> > > > > > > > +"	.popsection					\n"
+> > > > > > > > +);
+> > > > > > > > +
+> > > > > > > > +extern __visible char embedded_bootconfig_data[];
+> > > > > > > > +extern __visible char embedded_bootconfig_data_end[];
+> > > > > > > > +
+> > > > > > > > +char * __init xbc_get_embedded_bootconfig(size_t *size)
+> > > > > > > > +{
+> > > > > > > > +	*size = embedded_bootconfig_data_end - embedded_bootconfig_data;
+> > > > > > > > +	return (*size) ? embedded_bootconfig_data : NULL;
+> > > > > > > > +}
+> > > > > > > > +
+> > > > > > > > +#endif
+> > > > > > > > +
+> > > > > > > >  #else /* !__KERNEL__ */
+> > > > > > > >  /*
+> > > > > > > >   * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
+> > > > > > > >
+> > > > > > > 
+> > > > > > > Thanks tested the implemation, it works as expected.
+> > > > > > 
+> > > > > > Great!
+> > > > > > 
+> > > > > > > 
+> > > > > > > Also noted that a change in default.bconf requries a clean build, is it
+> > > > > > > expected behaviour?
+> > > > > > 
+> > > > > > default.bconf will be always updated if CONFIG_EMBED_BOOT_CONFIG=y. So you can
+> > > > > > do incremental build. (I tested it with the incremental build environment)
+> > > > > >
+> > > > > 
+> > > > > Thanks, your observation made me to further experiment ther incremental build.
+> > > > > 
+> > > > > Below are the observations I have:
+> > > > > 
+> > > > > When I use GCC for a build; yes, the modified default.conf was observed on
+> > > > > the target.
+> > > > > 
+> > > > > But when I use clang; either with FULL or THIN LTO, the modified
+> > > > > default.conf doesnt get reflected on the target.
+> > > > 
+> > > > Hmm, curious. So you just add 'CC=clang' on the make command line, right?
+> > > Yes, CC=clang ARCH=arm64 LLVM=1. As specified here:
+> > > https://docs.kernel.org/kbuild/llvm.html.
+> > > 
+> > > > Can you confirm that following line in your build log,
+> > > > 
+> > > >   GEN     lib/default.bconf
+> > > >
+> > > Yes, I do see above line. Indeed lib/default.bconf will get incremental
+> > > change.
+> > > 
+> > >   GEN     lib/default.bconf
+> > >   CC      lib/bootconfig.o
+> > >   AR      lib/lib.a
+> > > 
+> > > > and the timestamp of lib/bootconfig.o is built after lib/default.bconf file?
+> > > > 
+> > > Yes, verified timestamp for all above artifacts including vmlinux.o.
+> > > 
+> > > ex:
+> > > -rw-rw-r-- 1 psrinivasaia psrinivasaia 22K Mar 22 14:50
+> > > ../out/lib/bootconfig.o
+> > > -rw-rw-r-- 1 psrinivasaia psrinivasaia 355 Mar 22 14:50
+> > > ../out/lib/default.bconf
+> > > -rw-rw-r-- 1 psrinivasaia psrinivasaia 54M Mar 22 14:50 ../out/vmlinux.o
+> > > 
+> > > As said incremnetal change was refelected in artifact default.bconf.
+> > > But not in vmlinux.o/vmlinux, used below command to verify.
+> > 
+> > Interesting! This sounds clang's issue, because the make command rebuilds
+> > the object file including new default.bconf, but the linker (lld?)
+> > doesn't link it again correctly.
+> > 
+> > > 
+> > > llvm-objdump  -s -j .init.data ../out/vmlinux
+> > > 
+> > > On target too, /proc/bootconfig shows old data.
+> > > 
+> > > > And is that related to CONFIG_LTO? What happen if CONFIG_LTO=n?
+> > > > 
+> > > Yes;  CONFIG_LTO_NONE=y  issue not observed even with LLVM binutils.
+> > 
+> > And this issue is related to LTO. Maybe LTO ignores the '.init.data'
+> > section update. (Perhaps, LTO only checks the function code hash or
+> > something like that instead of the timestamp, and ignore whole object
+> > file if all of them are not updated.)
+> Thanks for the reasoning, seems to be. The same symptom observed with
+> /proc/config.gz too.
 
-All errors (new ones prefixed by >>):
+Thanks for confirmation of config.gz. Yes, that is also using ".incbin"
+directive in inline-asm. I think that is the key.
 
->> drivers/md/dm.c:1542:4: error: use of undeclared identifier 'result'
-                   *result = BLK_STS_NOTSUPP;
-                    ^
-   drivers/md/dm.c:1545:4: error: use of undeclared identifier 'result'
-                   *result = BLK_STS_OK;
-                    ^
-   2 errors generated.
+Thank you,
 
-
-vim +/result +1542 drivers/md/dm.c
-
-  1508	
-  1509	static bool __process_abnormal_io(struct clone_info *ci, struct dm_target *ti,
-  1510					  blk_status_t *status)
-  1511	{
-  1512		unsigned num_bios;
-  1513	
-  1514		if (!is_abnormal_io(ci->bio))
-  1515			return false;
-  1516	
-  1517		num_bios = 0;
-  1518		switch (bio_op(ci->bio)) {
-  1519		case REQ_OP_DISCARD:
-  1520			num_bios = ti->num_discard_bios;
-  1521			break;
-  1522		case REQ_OP_SECURE_ERASE:
-  1523			num_bios = ti->num_secure_erase_bios;
-  1524			break;
-  1525		case REQ_OP_WRITE_SAME:
-  1526			num_bios = ti->num_write_same_bios;
-  1527			break;
-  1528		case REQ_OP_WRITE_ZEROES:
-  1529			num_bios = ti->num_write_zeroes_bios;
-  1530			break;
-  1531		default:
-  1532			return false;
-  1533		}
-  1534	
-  1535		/*
-  1536		 * Even though the device advertised support for this type of
-  1537		 * request, that does not mean every target supports it, and
-  1538		 * reconfiguration might also have changed that since the
-  1539		 * check was performed.
-  1540		 */
-  1541		if (!num_bios)
-> 1542			*result = BLK_STS_NOTSUPP;
-  1543		else {
-  1544			__send_changing_extent_only(ci, ti, num_bios);
-  1545			*result = BLK_STS_OK;
-  1546		}
-  1547		return true;
-  1548	}
-  1549	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Masami Hiramatsu <mhiramat@kernel.org>
