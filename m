@@ -1,240 +1,285 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AB11FC0
-	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 13:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648129950; x=1679665950;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E/lsasjdV6rOhnGRnIeuOjq8RmX3nRQDlQ+MHVs/SOo=;
-  b=fsxQOsFCVjkK6C2JrroV01+4XLeclOQ6egaMMrrlT1wSFXP4k/7+mSP0
-   twhu+d2mzqgyCCcVAJYjkY/pwadzHILy0UYjjAaY3WQdao88xe2FpaYRT
-   o6aUv23jpXHIBxfUAxTZWzLJpAnUd5Poen30Xl60Nzmu2LINQ72OcAwDf
-   /ZrcII1Pqzfd6ldmCzaka++UcNg2lnuZqjYuo8TbD3xfz8zlnANw+8nnk
-   DXriKOROUto19y3zMg8xItlQAQN/cEkmh/VD76f/R6/hBTJ3OzZZbZ9uR
-   UqHjDCLdvV8QB24kdIkivf3vd4ILsakNRo8XP/Gt5LWPZzZN4T5PpBC4L
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="321579180"
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="321579180"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 06:52:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="717827088"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 24 Mar 2022 06:52:28 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nXNt5-000L7g-FP; Thu, 24 Mar 2022 13:52:27 +0000
-Date: Thu, 24 Mar 2022 21:52:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Felix Fietkau <nbd@nbd.name>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Johannes Berg <johannes.berg@intel.com>
-Subject: net/mac80211/rc80211_minstrel_ht.c:1495:6: warning: variable
- 'n_supported' set but not used
-Message-ID: <202203242101.6uCR7FWR-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F971FC0
+	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 13:53:44 +0000 (UTC)
+Received: by mail-wm1-f52.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so2611113wmp.5
+        for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 06:53:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:cc:message-id:subject:mime-version:list-id;
+        bh=fkap+xoLZ1YdoaWJuiDJoJBsTjje9cQ4mhLF6sIWwOo=;
+        b=tjMCcL1L4s28NEhi1ZFeKcnKXmAlODCT4tvkOIc2Erd4tBdrzQXyD1jzkUHzmZNo3h
+         EU1hV5DXNKDb7oigJJDfY5hi/PXAL5Sut5yimRYLa21zMUOmJkb50CXmMbE6q5anqVXd
+         RBM/tqL5A9qMipovMxwXnWdo2dcn1OejP+zHgp70EC2YmsQFJws7S1gpSX5gH9DE64ic
+         8YyLNffBgypp2dOxPbkcll1Vi3Q0xqyXfJVlvTsvdWBUF9KERgAUPRVy5xi5BJaw70ye
+         dZdm616gNuyGiTay9I/pe/UpNlfX62QrsJZMiJzOzHOCdXbdfyO4LhN08Yae3i5fSC6x
+         hgxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:message-id:subject:mime-version
+         :list-id;
+        bh=fkap+xoLZ1YdoaWJuiDJoJBsTjje9cQ4mhLF6sIWwOo=;
+        b=c3sl0PqIClTDF3DC9+L/b1JaHz9v+CxIvSbbLLsPnltQbPUKE55bd3WsZL2Ic2TSGc
+         yx5j91/E5v1CaV6lrPWf106VggPcxCCCo8KUgLe/B2jFbGBgNKHS5GRC1n7/Ac26FlRL
+         9dN9RUCUwK3ZghNreFulFzNVlITZFUZs1DNxheuzJMJZUt0QPPwcxLnppq1TYER9uW+l
+         UddLQiQF/LQq6IJEpXCNKhsPCCQfKGWHokAVr5VlovFp82srWHWQeEpZ1jCv0uMGTpB0
+         NBGeAZDBqdBj74Wy4V5hHToZQmO9p0uJWTfu7IJ3Z1o/NMrsYG1Fw9upQ6/HQYIgb8OD
+         MRCQ==
+X-Gm-Message-State: AOAM532sMO8sN+jwQZWEg/lahP5Y67cqOGInD7RaZFvG1k7FdW54TQPu
+	fYE+w4oWng6J2pg78R0dY+nAc4GuziVUp6ft
+X-Google-Smtp-Source: ABdhPJxzb6ebzMIyZhGGJWMnIU6cZ34t3MEdpM+ei0R4lwa2QRIrBtZ2iVtKxntYmV2oM36esQxkFw==
+X-Received: by 2002:a05:600c:1c20:b0:38c:ae37:c1ae with SMTP id j32-20020a05600c1c2000b0038cae37c1aemr4768628wms.203.1648130022402;
+        Thu, 24 Mar 2022 06:53:42 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id i10-20020a0560001aca00b00203daf3759asm2924622wry.68.2022.03.24.06.53.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 06:53:41 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Thu, 24 Mar 2022 13:53:40 +0000 (UTC)
+To: Sanjay Patel <spatel@rotateright.com>
+Cc: llvm@lists.linux.dev
+Message-ID: <1683551351.3080.1648130021654@jenkins.jenkins>
+Subject: [TCWG CI] Regression caused by llvm: [InstCombine] try to narrow
+ shifted bswap-of-zext
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_3079_903138791.1648130020493"
+X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-master-arm-lts-allyesconfig
+X-Jenkins-Result: SUCCESS
+List-ID: 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ed4643521e6af8ab8ed1e467630a85884d2696cf
-commit: a7844a53846017c34804b0a22bbda855cb08dd7c mac80211: minstrel_ht: add support for OFDM rates on non-HT clients
-date:   1 year, 2 months ago
-config: riscv-buildonly-randconfig-r002-20220324 (https://download.01.org/0day-ci/archive/20220324/202203242101.6uCR7FWR-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a7844a53846017c34804b0a22bbda855cb08dd7c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a7844a53846017c34804b0a22bbda855cb08dd7c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/mac80211/
+------=_Part_3079_903138791.1648130020493
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[TCWG CI] Regression caused by llvm: [InstCombine] try to narrow shifted bswap-of-zext:
+commit 9e9bda2e8f5b88715bad767a4b7740df32b040d2
+Author: Sanjay Patel <spatel@rotateright.com>
 
-All warnings (new ones prefixed by >>):
+    [InstCombine] try to narrow shifted bswap-of-zext
 
->> net/mac80211/rc80211_minstrel_ht.c:1495:6: warning: variable 'n_supported' set but not used [-Wunused-but-set-variable]
-           int n_supported = 0;
-               ^
-   1 warning generated.
+Results regressed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+19901
+# First few build errors in logs:
+# 00:03:41 arch/arm/lib/xor-neon.c:30:2: error: This code requires at least version 4.6 of GCC [-Werror,-W#warnings]
+# 00:03:41 make[1]: *** [scripts/Makefile.build:277: arch/arm/lib/xor-neon.o] Error 1
+# 00:03:42 make: *** [Makefile:1868: arch/arm/lib] Error 2
+# 00:04:49 crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+# 00:04:49 make[1]: *** [scripts/Makefile.build:277: crypto/wp512.o] Error 1
+# 00:06:52 make: *** [Makefile:1868: crypto] Error 2
+# 00:10:52 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size (1032) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
+# 00:10:53 make[4]: *** [scripts/Makefile.build:277: drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
+# 00:11:05 make[3]: *** [scripts/Makefile.build:540: drivers/gpu/drm/selftests] Error 2
+# 00:13:32 drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: error: stack frame size (1104) exceeds limit (1024) in 'cfi_intelext_writev' [-Werror,-Wframe-larger-than]
 
+from
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+19902
 
-vim +/n_supported +1495 net/mac80211/rc80211_minstrel_ht.c
+THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
 
-a7844a53846017 Felix Fietkau    2021-01-15  1480  
-ec8aa669b8393b Felix Fietkau    2010-05-13  1481  static void
-ec8aa669b8393b Felix Fietkau    2010-05-13  1482  minstrel_ht_update_caps(void *priv, struct ieee80211_supported_band *sband,
-3de805cf965d69 Simon Wunderlich 2013-07-08  1483  			struct cfg80211_chan_def *chandef,
-64f68e5d15bee4 Johannes Berg    2012-03-28  1484  			struct ieee80211_sta *sta, void *priv_sta)
-ec8aa669b8393b Felix Fietkau    2010-05-13  1485  {
-ec8aa669b8393b Felix Fietkau    2010-05-13  1486  	struct minstrel_priv *mp = priv;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1487  	struct minstrel_ht_sta_priv *msp = priv_sta;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1488  	struct minstrel_ht_sta *mi = &msp->ht;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1489  	struct ieee80211_mcs_info *mcs = &sta->ht_cap.mcs;
-f458e832ba510f Chaitanya T K    2018-10-06  1490  	u16 ht_cap = sta->ht_cap.cap;
-9208247d74bc52 Karl Beldan      2014-10-21  1491  	struct ieee80211_sta_vht_cap *vht_cap = &sta->vht_cap;
-f84de063985a6f Felix Fietkau    2021-01-15  1492  	const struct ieee80211_rate *ctl_rate;
-f84de063985a6f Felix Fietkau    2021-01-15  1493  	bool ldpc, erp;
-9208247d74bc52 Karl Beldan      2014-10-21  1494  	int use_vht;
-4dc217df68a17a Felix Fietkau    2011-03-25 @1495  	int n_supported = 0;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1496  	int ack_dur;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1497  	int stbc;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1498  	int i;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1499  
-8a0ee4fe1951af Karl Beldan      2014-10-20  1500  	BUILD_BUG_ON(ARRAY_SIZE(minstrel_mcs_groups) != MINSTREL_GROUPS_NB);
-ec8aa669b8393b Felix Fietkau    2010-05-13  1501  
-9208247d74bc52 Karl Beldan      2014-10-21  1502  	if (vht_cap->vht_supported)
-9208247d74bc52 Karl Beldan      2014-10-21  1503  		use_vht = vht_cap->vht_mcs.tx_mcs_map != cpu_to_le16(~0);
-9208247d74bc52 Karl Beldan      2014-10-21  1504  	else
-9208247d74bc52 Karl Beldan      2014-10-21  1505  		use_vht = 0;
-9208247d74bc52 Karl Beldan      2014-10-21  1506  
-ec8aa669b8393b Felix Fietkau    2010-05-13  1507  	memset(mi, 0, sizeof(*mi));
-a85666627b7f10 Felix Fietkau    2013-04-22  1508  
-a85666627b7f10 Felix Fietkau    2013-04-22  1509  	mi->sta = sta;
-a7844a53846017 Felix Fietkau    2021-01-15  1510  	mi->band = sband->band;
-9134073bc69363 Thomas Huehn     2015-03-24  1511  	mi->last_stats_update = jiffies;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1512  
-438b61b77082e7 Simon Wunderlich 2013-07-08  1513  	ack_dur = ieee80211_frame_duration(sband->band, 10, 60, 1, 1, 0);
-438b61b77082e7 Simon Wunderlich 2013-07-08  1514  	mi->overhead = ieee80211_frame_duration(sband->band, 0, 60, 1, 1, 0);
-438b61b77082e7 Simon Wunderlich 2013-07-08  1515  	mi->overhead += ack_dur;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1516  	mi->overhead_rtscts = mi->overhead + 2 * ack_dur;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1517  
-f84de063985a6f Felix Fietkau    2021-01-15  1518  	ctl_rate = &sband->bitrates[rate_lowest_index(sband, sta)];
-f84de063985a6f Felix Fietkau    2021-01-15  1519  	erp = ctl_rate->flags & IEEE80211_RATE_ERP_G;
-f84de063985a6f Felix Fietkau    2021-01-15  1520  	ack_dur = ieee80211_frame_duration(sband->band, 10,
-f84de063985a6f Felix Fietkau    2021-01-15  1521  					   ctl_rate->bitrate, erp, 1,
-f84de063985a6f Felix Fietkau    2021-01-15  1522  					   ieee80211_chandef_get_shift(chandef));
-f84de063985a6f Felix Fietkau    2021-01-15  1523  	mi->overhead_legacy = ack_dur;
-f84de063985a6f Felix Fietkau    2021-01-15  1524  	mi->overhead_legacy_rtscts = mi->overhead_legacy + 2 * ack_dur;
-f84de063985a6f Felix Fietkau    2021-01-15  1525  
-ec8aa669b8393b Felix Fietkau    2010-05-13  1526  	mi->avg_ampdu_len = MINSTREL_FRAC(1, 1);
-ec8aa669b8393b Felix Fietkau    2010-05-13  1527  
-ec8aa669b8393b Felix Fietkau    2010-05-13  1528  	/* When using MRR, sample more on the first attempt, without delay */
-ec8aa669b8393b Felix Fietkau    2010-05-13  1529  	if (mp->has_mrr) {
-ec8aa669b8393b Felix Fietkau    2010-05-13  1530  		mi->sample_count = 16;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1531  		mi->sample_wait = 0;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1532  	} else {
-ec8aa669b8393b Felix Fietkau    2010-05-13  1533  		mi->sample_count = 8;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1534  		mi->sample_wait = 8;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1535  	}
-ec8aa669b8393b Felix Fietkau    2010-05-13  1536  	mi->sample_tries = 4;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1537  
-9208247d74bc52 Karl Beldan      2014-10-21  1538  	if (!use_vht) {
-f458e832ba510f Chaitanya T K    2018-10-06  1539  		stbc = (ht_cap & IEEE80211_HT_CAP_RX_STBC) >>
-ec8aa669b8393b Felix Fietkau    2010-05-13  1540  			IEEE80211_HT_CAP_RX_STBC_SHIFT;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1541  
-f458e832ba510f Chaitanya T K    2018-10-06  1542  		ldpc = ht_cap & IEEE80211_HT_CAP_LDPC_CODING;
-f458e832ba510f Chaitanya T K    2018-10-06  1543  	} else {
-f458e832ba510f Chaitanya T K    2018-10-06  1544  		stbc = (vht_cap->cap & IEEE80211_VHT_CAP_RXSTBC_MASK) >>
-f458e832ba510f Chaitanya T K    2018-10-06  1545  			IEEE80211_VHT_CAP_RXSTBC_SHIFT;
-f458e832ba510f Chaitanya T K    2018-10-06  1546  
-f458e832ba510f Chaitanya T K    2018-10-06  1547  		ldpc = vht_cap->cap & IEEE80211_VHT_CAP_RXLDPC;
-9208247d74bc52 Karl Beldan      2014-10-21  1548  	}
-ec8aa669b8393b Felix Fietkau    2010-05-13  1549  
-f458e832ba510f Chaitanya T K    2018-10-06  1550  	mi->tx_flags |= stbc << IEEE80211_TX_CTL_STBC_SHIFT;
-f458e832ba510f Chaitanya T K    2018-10-06  1551  	if (ldpc)
-f458e832ba510f Chaitanya T K    2018-10-06  1552  		mi->tx_flags |= IEEE80211_TX_CTL_LDPC;
-f458e832ba510f Chaitanya T K    2018-10-06  1553  
-ec8aa669b8393b Felix Fietkau    2010-05-13  1554  	for (i = 0; i < ARRAY_SIZE(mi->groups); i++) {
-3ec373c421b6ef Karl Beldan      2014-10-20  1555  		u32 gflags = minstrel_mcs_groups[i].flags;
-9208247d74bc52 Karl Beldan      2014-10-21  1556  		int bw, nss;
-3ec373c421b6ef Karl Beldan      2014-10-20  1557  
-41d085835d3d22 Felix Fietkau    2016-12-14  1558  		mi->supported[i] = 0;
-a7844a53846017 Felix Fietkau    2021-01-15  1559  		if (minstrel_ht_is_legacy_group(i))
-a0497f9f57478c Felix Fietkau    2013-02-13  1560  			continue;
-a0497f9f57478c Felix Fietkau    2013-02-13  1561  
-3ec373c421b6ef Karl Beldan      2014-10-20  1562  		if (gflags & IEEE80211_TX_RC_SHORT_GI) {
-3ec373c421b6ef Karl Beldan      2014-10-20  1563  			if (gflags & IEEE80211_TX_RC_40_MHZ_WIDTH) {
-f458e832ba510f Chaitanya T K    2018-10-06  1564  				if (!(ht_cap & IEEE80211_HT_CAP_SGI_40))
-e1a0c6b3a4b27e Johannes Berg    2013-02-07  1565  					continue;
-e1a0c6b3a4b27e Johannes Berg    2013-02-07  1566  			} else {
-f458e832ba510f Chaitanya T K    2018-10-06  1567  				if (!(ht_cap & IEEE80211_HT_CAP_SGI_20))
-e1a0c6b3a4b27e Johannes Berg    2013-02-07  1568  					continue;
-e1a0c6b3a4b27e Johannes Berg    2013-02-07  1569  			}
-ec8aa669b8393b Felix Fietkau    2010-05-13  1570  		}
-ec8aa669b8393b Felix Fietkau    2010-05-13  1571  
-3ec373c421b6ef Karl Beldan      2014-10-20  1572  		if (gflags & IEEE80211_TX_RC_40_MHZ_WIDTH &&
-e1a0c6b3a4b27e Johannes Berg    2013-02-07  1573  		    sta->bandwidth < IEEE80211_STA_RX_BW_40)
-ec8aa669b8393b Felix Fietkau    2010-05-13  1574  			continue;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1575  
-9208247d74bc52 Karl Beldan      2014-10-21  1576  		nss = minstrel_mcs_groups[i].streams;
-9208247d74bc52 Karl Beldan      2014-10-21  1577  
-e9219779f943df Helmut Schaa     2012-03-09  1578  		/* Mark MCS > 7 as unsupported if STA is in static SMPS mode */
-9208247d74bc52 Karl Beldan      2014-10-21  1579  		if (sta->smps_mode == IEEE80211_SMPS_STATIC && nss > 1)
-e9219779f943df Helmut Schaa     2012-03-09  1580  			continue;
-e9219779f943df Helmut Schaa     2012-03-09  1581  
-9208247d74bc52 Karl Beldan      2014-10-21  1582  		/* HT rate */
-9208247d74bc52 Karl Beldan      2014-10-21  1583  		if (gflags & IEEE80211_TX_RC_MCS) {
-9ffe904405580f Karl Beldan      2014-10-24  1584  			if (use_vht && minstrel_vht_only)
-9208247d74bc52 Karl Beldan      2014-10-21  1585  				continue;
-b1c4f68337fa6b Felix Fietkau    2018-10-06  1586  
-41d085835d3d22 Felix Fietkau    2016-12-14  1587  			mi->supported[i] = mcs->rx_mask[nss - 1];
-41d085835d3d22 Felix Fietkau    2016-12-14  1588  			if (mi->supported[i])
-9208247d74bc52 Karl Beldan      2014-10-21  1589  				n_supported++;
-9208247d74bc52 Karl Beldan      2014-10-21  1590  			continue;
-9208247d74bc52 Karl Beldan      2014-10-21  1591  		}
-9208247d74bc52 Karl Beldan      2014-10-21  1592  
-9208247d74bc52 Karl Beldan      2014-10-21  1593  		/* VHT rate */
-9208247d74bc52 Karl Beldan      2014-10-21  1594  		if (!vht_cap->vht_supported ||
-9208247d74bc52 Karl Beldan      2014-10-21  1595  		    WARN_ON(!(gflags & IEEE80211_TX_RC_VHT_MCS)) ||
-9208247d74bc52 Karl Beldan      2014-10-21  1596  		    WARN_ON(gflags & IEEE80211_TX_RC_160_MHZ_WIDTH))
-9208247d74bc52 Karl Beldan      2014-10-21  1597  			continue;
-9208247d74bc52 Karl Beldan      2014-10-21  1598  
-9208247d74bc52 Karl Beldan      2014-10-21  1599  		if (gflags & IEEE80211_TX_RC_80_MHZ_WIDTH) {
-9208247d74bc52 Karl Beldan      2014-10-21  1600  			if (sta->bandwidth < IEEE80211_STA_RX_BW_80 ||
-9208247d74bc52 Karl Beldan      2014-10-21  1601  			    ((gflags & IEEE80211_TX_RC_SHORT_GI) &&
-9208247d74bc52 Karl Beldan      2014-10-21  1602  			     !(vht_cap->cap & IEEE80211_VHT_CAP_SHORT_GI_80))) {
-9208247d74bc52 Karl Beldan      2014-10-21  1603  				continue;
-9208247d74bc52 Karl Beldan      2014-10-21  1604  			}
-9208247d74bc52 Karl Beldan      2014-10-21  1605  		}
-9208247d74bc52 Karl Beldan      2014-10-21  1606  
-9208247d74bc52 Karl Beldan      2014-10-21  1607  		if (gflags & IEEE80211_TX_RC_40_MHZ_WIDTH)
-9208247d74bc52 Karl Beldan      2014-10-21  1608  			bw = BW_40;
-9208247d74bc52 Karl Beldan      2014-10-21  1609  		else if (gflags & IEEE80211_TX_RC_80_MHZ_WIDTH)
-9208247d74bc52 Karl Beldan      2014-10-21  1610  			bw = BW_80;
-9208247d74bc52 Karl Beldan      2014-10-21  1611  		else
-9208247d74bc52 Karl Beldan      2014-10-21  1612  			bw = BW_20;
-9208247d74bc52 Karl Beldan      2014-10-21  1613  
-41d085835d3d22 Felix Fietkau    2016-12-14  1614  		mi->supported[i] = minstrel_get_valid_vht_rates(bw, nss,
-9208247d74bc52 Karl Beldan      2014-10-21  1615  				vht_cap->vht_mcs.tx_mcs_map);
-4dc217df68a17a Felix Fietkau    2011-03-25  1616  
-41d085835d3d22 Felix Fietkau    2016-12-14  1617  		if (mi->supported[i])
-4dc217df68a17a Felix Fietkau    2011-03-25  1618  			n_supported++;
-ec8aa669b8393b Felix Fietkau    2010-05-13  1619  	}
-4dc217df68a17a Felix Fietkau    2011-03-25  1620  
-a7844a53846017 Felix Fietkau    2021-01-15  1621  	minstrel_ht_update_cck(mp, mi, sband, sta);
-a7844a53846017 Felix Fietkau    2021-01-15  1622  	minstrel_ht_update_ofdm(mp, mi, sband, sta);
-4dc217df68a17a Felix Fietkau    2011-03-25  1623  
-a85666627b7f10 Felix Fietkau    2013-04-22  1624  	/* create an initial rate table with the lowest supported rates */
-48cb39522a9d4d Felix Fietkau    2019-08-20  1625  	minstrel_ht_update_stats(mp, mi, true);
-a85666627b7f10 Felix Fietkau    2013-04-22  1626  	minstrel_ht_update_rates(mp, mi);
-ec8aa669b8393b Felix Fietkau    2010-05-13  1627  }
-ec8aa669b8393b Felix Fietkau    2010-05-13  1628  
+This commit has regressed these CI configurations:
+ - tcwg_kernel/llvm-master-arm-lts-allyesconfig
 
-:::::: The code at line 1495 was first introduced by commit
-:::::: 4dc217df68a17a57f8464c74c1b4785e40bddf77 mac80211: fix a crash in minstrel_ht in HT mode with no supported MCS rates
+First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/build-9e9bda2e8f5b88715bad767a4b7740df32b040d2/
+Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/build-c4f31d1da582232d206756b7246858f66ccdbd0c/
+Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/build-baseline/
+Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/
 
-:::::: TO: Felix Fietkau <nbd@openwrt.org>
-:::::: CC: John W. Linville <linville@tuxdriver.com>
+Reproduce builds:
+<cut>
+mkdir investigate-llvm-9e9bda2e8f5b88715bad767a4b7740df32b040d2
+cd investigate-llvm-9e9bda2e8f5b88715bad767a4b7740df32b040d2
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+# Fetch scripts
+git clone https://git.linaro.org/toolchain/jenkins-scripts
+
+# Fetch manifests and test.sh script
+mkdir -p artifacts/manifests
+curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/manifests/build-baseline.sh --fail
+curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/manifests/build-parameters.sh --fail
+curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/test.sh --fail
+chmod +x artifacts/test.sh
+
+# Reproduce the baseline build (build all pre-requisites)
+./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
+
+# Save baseline build state (which is then restored in artifacts/test.sh)
+mkdir -p ./bisect
+rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
+
+cd llvm
+
+# Reproduce first_bad build
+git checkout --detach 9e9bda2e8f5b88715bad767a4b7740df32b040d2
+../artifacts/test.sh
+
+# Reproduce last_good build
+git checkout --detach c4f31d1da582232d206756b7246858f66ccdbd0c
+../artifacts/test.sh
+
+cd ..
+</cut>
+
+Full commit (up to 1000 lines):
+<cut>
+commit 9e9bda2e8f5b88715bad767a4b7740df32b040d2
+Author: Sanjay Patel <spatel@rotateright.com>
+Date:   Tue Mar 22 07:52:39 2022 -0400
+
+    [InstCombine] try to narrow shifted bswap-of-zext
+    
+    This is the IR counterpart to 370ebc9d9a573d6
+    which provided a bswap narrowing fix for issue #53867.
+    
+    Here we can be more general (although I'm not sure yet
+    what would happen for illegal types in codegen - too
+    rare to worry about?):
+    https://alive2.llvm.org/ce/z/3-CPfo
+    
+    This will be more effective if we have moved the shift
+    after the bswap as proposed in D122010, but it is
+    independent of that patch.
+    
+    Differential Revision: https://reviews.llvm.org/D122166
+---
+ .../Transforms/InstCombine/InstCombineShifts.cpp   | 15 +++++++++++
+ llvm/test/Transforms/InstCombine/lshr.ll           | 31 +++++++++++-----------
+ 2 files changed, 31 insertions(+), 15 deletions(-)
+
+diff --git a/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp b/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp
+index 03214118a2cf..403979b4a6a3 100644
+--- a/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp
++++ b/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp
+@@ -1173,6 +1173,21 @@ Instruction *InstCombinerImpl::visitLShr(BinaryOperator &I) {
+         MulC->logBase2() == ShAmtC)
+       return BinaryOperator::CreateAnd(X, ConstantInt::get(Ty, *MulC - 2));
+ 
++    // Try to narrow a bswap:
++    // (bswap (zext X)) >> C --> zext (bswap X >> C')
++    // In the case where the shift amount equals the bitwidth difference, the
++    // shift is eliminated.
++    if (match(Op0, m_OneUse(m_Intrinsic<Intrinsic::bswap>(
++                       m_OneUse(m_ZExt(m_Value(X))))))) {
++      // TODO: If the shift amount is less than the zext, we could shift left.
++      unsigned WidthDiff = BitWidth - X->getType()->getScalarSizeInBits();
++      if (ShAmtC >= WidthDiff) {
++        Value *NarrowSwap = Builder.CreateUnaryIntrinsic(Intrinsic::bswap, X);
++        Value *NewShift = Builder.CreateLShr(NarrowSwap, ShAmtC - WidthDiff);
++        return new ZExtInst(NewShift, Ty);
++      }
++    }
++
+     // If the shifted-out value is known-zero, then this is an exact shift.
+     if (!I.isExact() &&
+         MaskedValueIsZero(Op0, APInt::getLowBitsSet(BitWidth, ShAmtC), 0, &I)) {
+diff --git a/llvm/test/Transforms/InstCombine/lshr.ll b/llvm/test/Transforms/InstCombine/lshr.ll
+index 175430189ce1..a46f3f460f5e 100644
+--- a/llvm/test/Transforms/InstCombine/lshr.ll
++++ b/llvm/test/Transforms/InstCombine/lshr.ll
+@@ -831,9 +831,8 @@ define i1 @icmp_sge(i32 %x, i32 %y) {
+ 
+ define i32 @narrow_bswap(i16 %x) {
+ ; CHECK-LABEL: @narrow_bswap(
+-; CHECK-NEXT:    [[Z:%.*]] = zext i16 [[X:%.*]] to i32
+-; CHECK-NEXT:    [[B:%.*]] = call i32 @llvm.bswap.i32(i32 [[Z]])
+-; CHECK-NEXT:    [[S:%.*]] = lshr exact i32 [[B]], 16
++; CHECK-NEXT:    [[TMP1:%.*]] = call i16 @llvm.bswap.i16(i16 [[X:%.*]])
++; CHECK-NEXT:    [[S:%.*]] = zext i16 [[TMP1]] to i32
+ ; CHECK-NEXT:    ret i32 [[S]]
+ ;
+   %z = zext i16 %x to i32
+@@ -844,9 +843,8 @@ define i32 @narrow_bswap(i16 %x) {
+ 
+ define i128 @narrow_bswap_extra_wide(i16 %x) {
+ ; CHECK-LABEL: @narrow_bswap_extra_wide(
+-; CHECK-NEXT:    [[Z:%.*]] = zext i16 [[X:%.*]] to i128
+-; CHECK-NEXT:    [[B:%.*]] = call i128 @llvm.bswap.i128(i128 [[Z]])
+-; CHECK-NEXT:    [[S:%.*]] = lshr exact i128 [[B]], 112
++; CHECK-NEXT:    [[TMP1:%.*]] = call i16 @llvm.bswap.i16(i16 [[X:%.*]])
++; CHECK-NEXT:    [[S:%.*]] = zext i16 [[TMP1]] to i128
+ ; CHECK-NEXT:    ret i128 [[S]]
+ ;
+   %z = zext i16 %x to i128
+@@ -855,6 +853,8 @@ define i128 @narrow_bswap_extra_wide(i16 %x) {
+   ret i128 %s
+ }
+ 
++; TODO: The bswap can be narrowed followed by shl.
++
+ define i32 @narrow_bswap_undershift(i16 %x) {
+ ; CHECK-LABEL: @narrow_bswap_undershift(
+ ; CHECK-NEXT:    [[Z:%.*]] = zext i16 [[X:%.*]] to i32
+@@ -870,9 +870,8 @@ define i32 @narrow_bswap_undershift(i16 %x) {
+ 
+ define <2 x i64> @narrow_bswap_splat(<2 x i16> %x) {
+ ; CHECK-LABEL: @narrow_bswap_splat(
+-; CHECK-NEXT:    [[Z:%.*]] = zext <2 x i16> [[X:%.*]] to <2 x i64>
+-; CHECK-NEXT:    [[B:%.*]] = call <2 x i64> @llvm.bswap.v2i64(<2 x i64> [[Z]])
+-; CHECK-NEXT:    [[S:%.*]] = lshr exact <2 x i64> [[B]], <i64 48, i64 48>
++; CHECK-NEXT:    [[TMP1:%.*]] = call <2 x i16> @llvm.bswap.v2i16(<2 x i16> [[X:%.*]])
++; CHECK-NEXT:    [[S:%.*]] = zext <2 x i16> [[TMP1]] to <2 x i64>
+ ; CHECK-NEXT:    ret <2 x i64> [[S]]
+ ;
+   %z = zext <2 x i16> %x to <2 x i64>
+@@ -881,6 +880,8 @@ define <2 x i64> @narrow_bswap_splat(<2 x i16> %x) {
+   ret <2 x i64> %s
+ }
+ 
++; TODO: poison/undef in the shift amount is ok to propagate.
++
+ define <2 x i64> @narrow_bswap_splat_poison_elt(<2 x i16> %x) {
+ ; CHECK-LABEL: @narrow_bswap_splat_poison_elt(
+ ; CHECK-NEXT:    [[Z:%.*]] = zext <2 x i16> [[X:%.*]] to <2 x i64>
+@@ -896,9 +897,9 @@ define <2 x i64> @narrow_bswap_splat_poison_elt(<2 x i16> %x) {
+ 
+ define <2 x i64> @narrow_bswap_overshift(<2 x i32> %x) {
+ ; CHECK-LABEL: @narrow_bswap_overshift(
+-; CHECK-NEXT:    [[Z:%.*]] = zext <2 x i32> [[X:%.*]] to <2 x i64>
+-; CHECK-NEXT:    [[B:%.*]] = call <2 x i64> @llvm.bswap.v2i64(<2 x i64> [[Z]])
+-; CHECK-NEXT:    [[S:%.*]] = lshr <2 x i64> [[B]], <i64 48, i64 48>
++; CHECK-NEXT:    [[TMP1:%.*]] = call <2 x i32> @llvm.bswap.v2i32(<2 x i32> [[X:%.*]])
++; CHECK-NEXT:    [[TMP2:%.*]] = lshr <2 x i32> [[TMP1]], <i32 16, i32 16>
++; CHECK-NEXT:    [[S:%.*]] = zext <2 x i32> [[TMP2]] to <2 x i64>
+ ; CHECK-NEXT:    ret <2 x i64> [[S]]
+ ;
+   %z = zext <2 x i32> %x to <2 x i64>
+@@ -909,9 +910,9 @@ define <2 x i64> @narrow_bswap_overshift(<2 x i32> %x) {
+ 
+ define i128 @narrow_bswap_overshift2(i96 %x) {
+ ; CHECK-LABEL: @narrow_bswap_overshift2(
+-; CHECK-NEXT:    [[Z:%.*]] = zext i96 [[X:%.*]] to i128
+-; CHECK-NEXT:    [[B:%.*]] = call i128 @llvm.bswap.i128(i128 [[Z]])
+-; CHECK-NEXT:    [[S:%.*]] = lshr i128 [[B]], 61
++; CHECK-NEXT:    [[TMP1:%.*]] = call i96 @llvm.bswap.i96(i96 [[X:%.*]])
++; CHECK-NEXT:    [[TMP2:%.*]] = lshr i96 [[TMP1]], 29
++; CHECK-NEXT:    [[S:%.*]] = zext i96 [[TMP2]] to i128
+ ; CHECK-NEXT:    ret i128 [[S]]
+ ;
+   %z = zext i96 %x to i128
+</cut>
+------=_Part_3079_903138791.1648130020493--
