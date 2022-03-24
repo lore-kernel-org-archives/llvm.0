@@ -1,42 +1,42 @@
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0567E
-	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 18:27:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FF67E
+	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 18:27:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648146445; x=1679682445;
+  t=1648146447; x=1679682447;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LQVT1/R9sJbfhTQ3tggVfCdT5T+z66mer2RyxWHndUk=;
-  b=QSo2psxmq3srZBNSQ/FPmKAOv4l95Jopmw+aEjSavNHyj8ekuFREBPGP
-   liLO5nJVCTcJJynh574OBPmLgK8JVp9M3/7B0Qepqp9HkqTOP2Uf5Lrmy
-   hGkkMG/RsvSYvKWt7v/hmpwIbXowm/LkV52o92I3FXUhJ+yOsdUZFu9Fq
-   P6OJqsIKO5M8Ck3jTxdpxMzF9etPmgDsnaWlbzg8W4yvTXc3Z8ZMMgIki
-   JvNrVvcFJ8/HNzktShdDC/UdDE/3NWCRUJcXxTsZZP1XHnybqba2UsFM3
-   DvkHIEYKfivO0b0c6Pf9de6CMlpSH6QfHxpDjpim+46r+/Jd8PeLpmQWK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="239059412"
+  bh=ufK9tZGDIrBNM7JdjRcaZZQj8aetI36gS2Cck1HaZ0U=;
+  b=kSOq4tnR7F0fFPKVuDfJO7IzuaGFFwS1jNpdxSwRN9PMhbC1mCqfOf4X
+   E+q//VRUCbZAsnKSaDlkeLzUI0KzWLHbbjrrrIlrdMq1ImpWxEulTAurH
+   akxVsZd2qWbYZWv8iq1u8zgWLTgdx61k3DBA3HsVcJNxqKBA89gLRPS0S
+   ZqOJWoI2J9BQcKcuA6t+myCUg3pX3gXKXdcvJKLYc0pin8KllCNsHYCEU
+   OSDK33fg+QjFUnB+mjS/eqko07df3+a5oOj9q4f98Pcop2soeLBKGpfOW
+   NCk5mp+/80Xrd1xnsN/rxfQ2m0DOztocvxQpxhTXcMB+CVo3odF9MdvVU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="239059413"
 X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
-   d="scan'208";a="239059412"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
+   d="scan'208";a="239059413"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 11:27:25 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
-   d="scan'208";a="717930093"
+   d="scan'208";a="501504436"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 24 Mar 2022 11:27:23 -0700
+  by orsmga003.jf.intel.com with ESMTP; 24 Mar 2022 11:27:23 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nXSB8-000LJG-Mz; Thu, 24 Mar 2022 18:27:22 +0000
-Date: Fri, 25 Mar 2022 02:27:11 +0800
+	id 1nXSB8-000LJI-NN; Thu, 24 Mar 2022 18:27:22 +0000
+Date: Fri, 25 Mar 2022 02:27:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
+To: YunQiang Su <yunqiang.su@cipunited.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [hare-scsi-devel:virtual_subsys 165/170]
- drivers/nvme/host/core.c:3759:44: error: too many arguments to function
- call, expected 2, have 3
-Message-ID: <202203250248.dKqDBgJ5-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous
+ prototype for function 'putc'
+Message-ID: <202203250200.mXHo7XPx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,85 +47,50 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git virtual_subsys
-head:   275f3eb0b76e4cbc9fddaf4187988481747bb456
-commit: e55421ca442930c9cc7606d8aa695ca85d485039 [165/170] nvme: use subsystem as argument in nvme_alloc_ns_head()
-config: riscv-randconfig-r042-20220324 (https://download.01.org/0day-ci/archive/20220325/202203250248.dKqDBgJ5-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ed4643521e6af8ab8ed1e467630a85884d2696cf
+commit: 31b2f3dc851c65fee288612432c4fc956f1a264e MIPS: enable both vmlinux.gz.itb and vmlinuz for generic
+date:   3 months ago
+config: mips-buildonly-randconfig-r006-20220324 (https://download.01.org/0day-ci/archive/20220325/202203250200.mXHo7XPx-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=e55421ca442930c9cc7606d8aa695ca85d485039
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel virtual_subsys
-        git checkout e55421ca442930c9cc7606d8aa695ca85d485039
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=31b2f3dc851c65fee288612432c4fc956f1a264e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 31b2f3dc851c65fee288612432c4fc956f1a264e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/nvme/host/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/nvme/host/core.c:3759:44: error: too many arguments to function call, expected 2, have 3
-           ret = nvme_mpath_alloc_disk(subsys, ctrl, head);
-                 ~~~~~~~~~~~~~~~~~~~~~               ^~~~
-   drivers/nvme/host/nvme.h:819:19: note: 'nvme_mpath_alloc_disk' declared here
-   static inline int nvme_mpath_alloc_disk(struct nvme_ctrl *ctrl,
-                     ^
-   1 error generated.
+>> arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous prototype for function 'putc' [-Wmissing-prototypes]
+   void putc(char c)
+        ^
+   arch/mips/boot/compressed/uart-16550.c:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void putc(char c)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +3759 drivers/nvme/host/core.c
+vim +/putc +44 arch/mips/boot/compressed/uart-16550.c
 
-  3735	
-  3736		head = kzalloc(size, GFP_KERNEL);
-  3737		if (!head)
-  3738			goto out;
-  3739		ret = ida_alloc_min(&subsys->ns_ida, 1, GFP_KERNEL);
-  3740		if (ret < 0)
-  3741			goto out_free_head;
-  3742		head->instance = ret;
-  3743		INIT_LIST_HEAD(&head->list);
-  3744		ret = init_srcu_struct(&head->srcu);
-  3745		if (ret)
-  3746			goto out_ida_remove;
-  3747		head->subsys = subsys;
-  3748		head->ns_id = nsid;
-  3749		head->ids = *ids;
-  3750		kref_init(&head->ref);
-  3751	
-  3752		if (head->ids.csi) {
-  3753			ret = nvme_get_effects_log(ctrl, head->ids.csi, &head->effects);
-  3754			if (ret)
-  3755				goto out_cleanup_srcu;
-  3756		} else
-  3757			head->effects = ctrl->effects;
-  3758	
-> 3759		ret = nvme_mpath_alloc_disk(subsys, ctrl, head);
-  3760		if (ret)
-  3761			goto out_cleanup_srcu;
-  3762	
-  3763		list_add_tail(&head->entry, &subsys->nsheads);
-  3764	
-  3765		kref_get(&subsys->ref);
-  3766	
-  3767		return head;
-  3768	out_cleanup_srcu:
-  3769		cleanup_srcu_struct(&head->srcu);
-  3770	out_ida_remove:
-  3771		ida_free(&subsys->ns_ida, head->instance);
-  3772	out_free_head:
-  3773		kfree(head);
-  3774	out:
-  3775		if (ret > 0)
-  3776			ret = blk_status_to_errno(nvme_error_status(ret));
-  3777		return ERR_PTR(ret);
-  3778	}
-  3779	
+1b93b3c3e94be26 Wu Zhangjin 2009-10-14  43  
+1b93b3c3e94be26 Wu Zhangjin 2009-10-14 @44  void putc(char c)
+
+:::::: The code at line 44 was first introduced by commit
+:::::: 1b93b3c3e94be2605759735a89fc935ba5f58dcf MIPS: Add support for GZIP / BZIP2 / LZMA compressed kernel images
+
+:::::: TO: Wu Zhangjin <wuzhangjin@gmail.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 -- 
 0-DAY CI Kernel Test Service
