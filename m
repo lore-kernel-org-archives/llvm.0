@@ -1,79 +1,82 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43C97E
-	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 22:39:37 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-2e644c76556so47126847b3.15
-        for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 15:39:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=YffvJKmqGnNOFrJNUBozqcvaEBhfok9GG307YN+iOis=;
-        b=rJBaV6pGwEOAZ5/DKw9WgYD8sOUIGzatpRwyLoMMfvhusF5BeyvsRwUwZWCNGuIDQ1
-         nQB8oCdC9bv1EZ+2GtysbZIqyvqAenpHbQez/WxBwBE3CGVb3xXwPXtQKDi9eaWQ6y7j
-         ZKrHVPDblW1plXoohNvFqYI+YSZ7lUzU+JDZLa+az53ILzpYvrYIYeB4+yyJZ67EEn+X
-         fen1X83tGjPFdNkCIFZgPgVXkkcmBf7dBg8tE2ndTF7IzTTWpZI4Ahz8CtlYV5thWf5L
-         xduypsO2tFYJpKt92zfyi3vjDV+lUkUnpditqzgfS6Zi5K3l63GEjp2/MNklpuAspxgA
-         4uIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=YffvJKmqGnNOFrJNUBozqcvaEBhfok9GG307YN+iOis=;
-        b=R9UbQ/0Tb1bW0w+mWO3vVV1l2+78Lp1Ewrh4FV5rqogZM2GO8FO2cuM6ZGHjN575oi
-         MDZCakRrM31lOCmXDsdGrYgssUsCwQN/BcYBykV29QOQX+oTf+LPgxnSSzz6yMmSpWnd
-         TX74lJbc5sJb9d8kIKga42KdHqKP7cM0z5nrDkyyWklBGXRyZDrO6MPe7+yN3g4kYtFo
-         sU5I8OMHb3lubFKoC/0ri5i41tWFQOOy6n/RV2WNnptywfIyD2sCd1jEDS1+ce7ZYRn1
-         x+lOW6rhJp8kWqcxhCvBN48E6cJQxJznKcpHe3bhGBFkFt9q+K5poEDt8RnutOvnZd9S
-         JU6Q==
-X-Gm-Message-State: AOAM531ZcbuFNho70ceN8RxPgiXSRC1obqN4D4xMmGckTsKsq2n3THJj
-	dftNZ6Q6ZiWSu7WKIeIIMRpkPBvvSAIg1buXr7MT
-X-Google-Smtp-Source: ABdhPJzQniIe8bkEpjEUmGcF7TUYcFhdcZfxtrsrsS9hsTOunibTFJjXrnGim1HZIuwmtVj5ERBh+6ALOnRpNeXOLmhR
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:9892:9f7f:2c27:2968])
- (user=axelrasmussen job=sendgmr) by 2002:a25:3f87:0:b0:633:bbe5:c9d9 with
- SMTP id m129-20020a253f87000000b00633bbe5c9d9mr6992182yba.115.1648161576861;
- Thu, 24 Mar 2022 15:39:36 -0700 (PDT)
-Date: Thu, 24 Mar 2022 15:39:29 -0700
-In-Reply-To: <20220324223929.1893741-1-axelrasmussen@google.com>
-Message-Id: <20220324223929.1893741-2-axelrasmussen@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8357E
+	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 22:54:08 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-231-THU0TZx9N2OyJfewrvht5w-1; Thu, 24 Mar 2022 22:54:05 +0000
+X-MC-Unique: THU0TZx9N2OyJfewrvht5w-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Thu, 24 Mar 2022 22:54:05 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Thu, 24 Mar 2022 22:54:05 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Nick Desaulniers' <ndesaulniers@google.com>, Borislav Petkov
+	<bp@alien8.de>
+CC: Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>, lkml
+	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra
+	<peterz@infradead.org>, Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: RE: clang memcpy calls
+Thread-Topic: clang memcpy calls
+Thread-Index: AQHYP68jFJQQj1SZ3U2APgeueTpytqzPHokA
+Date: Thu, 24 Mar 2022 22:54:04 +0000
+Message-ID: <7c95cb9c9255448bb74d1f1f694abffb@AcuMS.aculab.com>
+References: <YjxTt3pFIcV3lt8I@zn.tnic>
+ <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
+In-Reply-To: <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20220324223929.1893741-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH 2/2] selftests: fix an unused variable warning in pidfd selftest
-From: Axel Rasmussen <axelrasmussen@google.com>
-To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev, Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-I fixed a few warnings like this in commit e2aa5e650b07
-("selftests: fixup build warnings in pidfd / clone3 tests"), but I
-missed this one by mistake. Since this variable is unused, remove it.
-
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/pidfd/pidfd_wait.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-index 17999e082aa7..070c1c876df1 100644
---- a/tools/testing/selftests/pidfd/pidfd_wait.c
-+++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-@@ -95,7 +95,6 @@ TEST(wait_states)
- 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
- 		.exit_signal = SIGCHLD,
- 	};
--	int ret;
- 	pid_t pid;
- 	siginfo_t info = {
- 		.si_signo = 0,
--- 
-2.35.1.1021.g381101b075-goog
+RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAyNCBNYXJjaCAyMDIyIDE4OjQ0DQo+IA0K
+PiBPbiBUaHUsIE1hciAyNCwgMjAyMiBhdCA0OjE5IEFNIEJvcmlzbGF2IFBldGtvdiA8YnBAYWxp
+ZW44LmRlPiB3cm90ZToNCj4gPg0KPiA+IEhpIGZvbGtzLA0KPiA+DQo+ID4gc28gSSd2ZSBiZWVu
+IGxvb2tpbmcgYXQgYSByZWNlbnQgb2JqdG9vbCBub2luc3RyIHdhcm5pbmcgZnJvbSBjbGFuZw0K
+PiA+IGJ1aWxkczoNCj4gPg0KPiA+IHZtbGludXgubzogd2FybmluZzogb2JqdG9vbDogc3luY19y
+ZWdzKCkrMHgyMDogY2FsbCB0byBtZW1jcHkoKSBsZWF2ZXMgLm5vaW5zdHIudGV4dCBzZWN0aW9u
+DQo+ID4NCj4gPiBUaGUgaXNzdWUgaXMgdGhhdCBjbGFuZyBnZW5lcmF0ZXMgYSBtZW1jcHkoKSBj
+YWxsIHdoZW4gYSBzdHJ1Y3QgY29weQ0KPiA+IGhhcHBlbnM6DQo+ID4NCj4gPiAgICAgICAgIGlm
+IChyZWdzICE9IGVyZWdzKQ0KPiA+ICAgICAgICAgICAgICAgICAqcmVncyA9ICplcmVnczsNCj4g
+DQo+IFNwZWNpZmljYWxseSwgdGhpcyBpcyBjb3B5aW5nIG9uZSBzdHJ1Y3QgcHRfcmVncyB0byBh
+bm90aGVyLiBJdCBsb29rcw0KPiBsaWtlIHRoZSBzaXplb2Ygc3RydWN0IHB0X3JlZ3MgaXMganVz
+dCBsYXJnZSBlbm91Z2ggdG8gaGF2ZSBjbGFuZyBlbWl0DQo+IHRoZSBsaWJjYWxsLg0KPiBodHRw
+czovL2dvZGJvbHQub3JnL3ovc2N4NmFhOGpxDQo+IE90aGVyd2lzZSBjbGFuZyB3aWxsIGFsc28g
+dXNlIHJlcDsgbW92c3E7IHdoZW4gLW1uby1zc2UgLU8yIGlzIHNldCBhbmQNCj4gdGhlIHN0cnVj
+dHMgYXJlIGJlbG93IEFSQklUUkFSWV9USFJFU0hPTEQuICBTaG91bGQgQVJCSVRSQVJZX1RIUkVT
+SE9MRA0KPiBiZSByYWlzZWQgc28gdGhhdCB3ZSBjb250aW51ZSB0byBpbmxpbmUgdGhlIG1lbWNw
+eT8gKnNocnVnKg0KDQpJJ3ZlIGp1c3QgbG9va2VkIGF0IHNvbWUgaW5zdHJ1Y3Rpb24gdGltaW5n
+cy4NCkZvciAzMiBieXRlIGFsaWduZWQgY29waWVzIGl0IGFjdHVhbGx5IGxvb2tzIGxpa2UgJ3Jl
+cCBtb3ZzJw0KKHByb2JhYmx5IG1vdnNxKSBpcyBhY3R1YWxseSByZWFzb25hYmxlIGZvciBsYXJn
+ZSBidWZmZXJzDQpvbiBhbGwgbWFpbnN0cmVhbSBJbnRlbCBjcHUgc2luY2Ugc2FuZHkgYnJpZ2Uu
+DQpPbiB0aGUgbW9yZSByZWNlbnQgb25lcyBpdCBydW5zIGF0IDMyIGJ5dGVzL2Nsb2NrLg0KSXQg
+bWF5IG5vdCBiZSB0aGF0IGJhZCBmb3Igc2hvcnRlciBhbmQgbm9uIDMyIGJ5dGUgYWxpZ25lZA0K
+YnVmZmVycyBhcyB3ZWxsLg0KDQpDZXJ0YWlubHkgSSBjYW4ndCBzZWUgYSByZWFzb24gZm9yIGNh
+bGxpbmcgbWVtY3B5KCkgZm9yDQpsYXJnZSBjb3BpZXMhDQoNCkF0IGxlYXN0IG5vIG9uZSB1c2Vz
+IFA0IGFueSBtb3JlLCBzZXR1cCBsYXRlbmN5IHdhcyBzb21ldGhpbmcNCmxpa2UgMTg2IGNsb2Nr
+cyENCg0KSSB3YXMgdGhpbmtpbmcgdGhhdCAncmVwIG1vdnNxJyBvbmx5IG1hZGUgYW55IHNlbnNl
+IHdpdGggLU9zLg0KQnV0IGl0IHNlZW1zIHRvIGJlIGJldHRlciB0aGFuIEkgdGhvdWdodC4NCihJ
+IG1pZ2h0IGV2ZW4gaGF2ZSBtZWFzdXJlZCBpdCBydW5uaW5nICdmYXN0JyBvbiBJdnkgYnJpZGdl
+LikNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBS
+b2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9u
+IE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
