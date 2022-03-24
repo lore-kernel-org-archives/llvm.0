@@ -1,199 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A837A
-	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 01:10:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5579C340E8;
-	Thu, 24 Mar 2022 01:10:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648084253;
-	bh=CsZP5UnSAKxZK3a75AHDxNk3N6tA7qLD8H2KhkTJABQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=HJy7j2KmJIUPfXGjZpgJuLuo0cE1Na4spt86TjDCiY5dXQDs/1HONbDGUJz4m+zZ+
-	 Jr3J8MUDbMwKep69i59cAcfHAz+oW0lPrUxgEAU/++LQN2DiT4jxH3vby+3Imp9Ng0
-	 Uqqdn756Ar07iiSWUt5vHQxpdWX1rQPGLWmahEwMKZwC+bxnif9bxcNWV4NCBVVlfa
-	 wboCRx8yVXma7pXdL1Ns1zh1IF5xV0qgTOeYyM1Q5TqJ+Pd1Nor0uHMW5xd2Ij+DuZ
-	 3Sy6sQRMpBjr96dnryEl/lAF/zFIBboLzpPjJwTdphVutmqhORwtvX20RQaHhz8733
-	 +RIzPczgJVxsA==
-Date: Thu, 24 Mar 2022 10:10:48 +0900
-From: Masami Hiramatsu <mhiramat@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Padmanabha Srinivasaiah
- <treasure4paddy@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, LKML
- <linux-kernel@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>, Nathan
- Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, Masahiro Yamada
- <masahiroy@kernel.org>, Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] bootconfig: Support embedding a bootconfig file
- in kernel
-Message-Id: <20220324101048.c929020fd15bc14b50a3fff1@kernel.org>
-In-Reply-To: <CAKwvOdk8is=R2qhgKuS_CddvtZzgeJC1Uht84x--TcYykfaiHw@mail.gmail.com>
-References: <164724890153.731226.1478494969800777757.stgit@devnote2>
-	<164724892075.731226.14103557516176115189.stgit@devnote2>
-	<20220316191649.GA11547@pswork>
-	<20220318101445.fdb151efe58c6c3a1c572500@kernel.org>
-	<20220321183500.GA4065@pswork>
-	<20220322120311.690f237b63ddfd9c0e4f78ec@kernel.org>
-	<20220322190219.GA26859@pswork>
-	<20220323091617.495bfdf5281a543b27f2656f@kernel.org>
-	<CAKwvOdk8is=R2qhgKuS_CddvtZzgeJC1Uht84x--TcYykfaiHw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BAA210ED
+	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 02:37:56 +0000 (UTC)
+Received: by mail-pf1-f181.google.com with SMTP id w7so224179pfu.11
+        for <llvm@lists.linux.dev>; Wed, 23 Mar 2022 19:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Wp5DLQb+USFm7mzuZJGSy8PNZhZNB0xhhfYgseM1XQI=;
+        b=Iq9F7pdpJIivW9VGFcKIthMtHJeIrqCuPiUZWwhUpeM3nDHIzJsZ8KXXHmATPyZ8IT
+         MB081rIQWQlxRhCAs6oQBD7HPibkl4Tmbn8T8FCTlf6+qIwJwYbaPZGne14wl5lOrKeH
+         2HBef0bFJkBph0ruNxz/CEj6dEaz95PuOnL13IiUVtQ3WX/7WzriWsp5SVNLngf9OG7x
+         MTr7dsggYzGzkRfDc9+Z0bV+1k+5DxgUBadV5QdccnJI4GMpfANzJ8HKPi0R2jZSdDUV
+         MPkTgRXVD1/bEkvolILD8S8k47hy+YBhB6RF/oftMNaRHFMpDI5Q9lcjDzdT/7065OqP
+         NoBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=Wp5DLQb+USFm7mzuZJGSy8PNZhZNB0xhhfYgseM1XQI=;
+        b=xVoDLeFc9jA6rLcdO34CjUnD8V+D7HYCav7MTt0UTT51HksdneqwGuoMFAGn2thkBN
+         JNmUwAviKjc9WiC9x8wjTliGsVztFb8mABO/PQh6VfReuC5IlpebvSUxVTAqmttRR4I7
+         JQk9poRZ2LFQ6gVht58Yz9yqfTAdydu3MmxJEatSUX3dDysi0ydgqwNn+NeMZVAvnPC5
+         ZeIRZKtRGKBREpG7d/6YUrd2jUbtfHq7/xU9IhqJNpPGtPpxENpdL5s49N0UtbC3n4B5
+         0vrhBdLf6sRstjFIGRc5Dc8mMsK8X3ECcXhclHqfu5rvd+LmEjS7MJd6q4bsdaacE3kQ
+         8TEg==
+X-Gm-Message-State: AOAM532pZtM9PGC1vJjgxN6YqDms80czy/Wcy0pcfK7N/jpYzAwRVidr
+	TVdzhsrLrwCjcOp54Y71mOY=
+X-Google-Smtp-Source: ABdhPJyjo7cx/EkAukEQF0sa32DBVqkH9XFVWcb81TCaJxBAyWXF3vM7ONa0LG9uJNUZxW6A3shpuQ==
+X-Received: by 2002:a05:6a00:238f:b0:4f7:78b1:2f6b with SMTP id f15-20020a056a00238f00b004f778b12f6bmr2659743pfc.17.1648089476382;
+        Wed, 23 Mar 2022 19:37:56 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id k10-20020a056a00168a00b004f7e2a550ccsm1156587pfc.78.2022.03.23.19.37.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 19:37:55 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>
+Cc: linux-kernel@vger.kernel.org,
+	adobriyan@gmail.com,
+	jpoimboe@redhat.com,
+	linux-sparse@vger.kernel.org,
+	llvm@lists.linux.dev,
+	luc.vanoostenryck@gmail.com,
+	nathan@kernel.org,
+	peterz@infradead.org,
+	Sasha Levin <sashal@kernel.org>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Charlemagne Lasse <charlemagnelasse@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v3] x86/bug: __WARN_FLAGS: prevent shadowing by renaming local variable f to __flags
+Date: Thu, 24 Mar 2022 11:37:42 +0900
+Message-Id: <20220324023742.106546-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220303110755.24147-1-mailhol.vincent@wanadoo.fr>
+References: <20220303110755.24147-1-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hello Nick,
+The macro __WARN_FLAGS() uses a local variable named "f". This being a
+common name, there is a risk of shadowing other variables.
 
-On Wed, 23 Mar 2022 10:11:53 -0700
-Nick Desaulniers <ndesaulniers@google.com> wrote:
+For example, GCC would yield:
 
-> On Tue, Mar 22, 2022 at 5:16 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Tue, 22 Mar 2022 20:02:19 +0100
-> > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-> >
-> > > Hello Masami Hiramatsu,
-> > >
-> > > On Tue, Mar 22, 2022 at 12:03:11PM +0900, Masami Hiramatsu wrote:
-> > > > On Mon, 21 Mar 2022 19:35:00 +0100
-> > > > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-> > > >
-> > > > > Hello Masami Hiramatsu,
-> > > > >
-> > > > > On Fri, Mar 18, 2022 at 10:14:45AM +0900, Masami Hiramatsu wrote:
-> > > > > > On Wed, 16 Mar 2022 20:16:49 +0100
-> > > > > > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-> > > > > >
-> > > > > > > Hello Masami Hiramatsu,
-> > > > > > >
-> > > > > > > Also noted that a change in default.bconf requries a clean build, is it
-> > > > > > > expected behaviour?
-> > > > > >
-> > > > > > default.bconf will be always updated if CONFIG_EMBED_BOOT_CONFIG=y. So you can
-> > > > > > do incremental build. (I tested it with the incremental build environment)
-> > > > > >
-> > > > >
-> > > > > Thanks, your observation made me to further experiment ther incremental build.
-> > > > >
-> > > > > Below are the observations I have:
-> > > > >
-> > > > > When I use GCC for a build; yes, the modified default.conf was observed on
-> > > > > the target.
-> > > > >
-> > > > > But when I use clang; either with FULL or THIN LTO, the modified
-> > > > > default.conf doesnt get reflected on the target.
-> > > >
-> > > > Hmm, curious. So you just add 'CC=clang' on the make command line, right?
-> > > Yes, CC=clang ARCH=arm64 LLVM=1. As specified here:
-> > > https://docs.kernel.org/kbuild/llvm.html.
-> 
-> You should just need LLVM=1 (and ARCH=arm64) at this point. LLVM=1
-> implies CC=clang.
+| In file included from ./include/linux/bug.h:5,
+|                  from ./include/linux/cpumask.h:14,
+|                  from ./arch/x86/include/asm/cpumask.h:5,
+|                  from ./arch/x86/include/asm/msr.h:11,
+|                  from ./arch/x86/include/asm/processor.h:22,
+|                  from ./arch/x86/include/asm/timex.h:5,
+|                  from ./include/linux/timex.h:65,
+|                  from ./include/linux/time32.h:13,
+|                  from ./include/linux/time.h:60,
+|                  from ./include/linux/stat.h:19,
+|                  from ./include/linux/module.h:13,
+|                  from virt/lib/irqbypass.mod.c:1:
+| ./include/linux/rcupdate.h: In function 'rcu_head_after_call_rcu':
+| ./arch/x86/include/asm/bug.h:80:21: warning: declaration of 'f' shadows a parameter [-Wshadow]
+|    80 |         __auto_type f = BUGFLAG_WARNING|(flags);                \
+|       |                     ^
+| ./include/asm-generic/bug.h:106:17: note: in expansion of macro '__WARN_FLAGS'
+|   106 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+|       |                 ^~~~~~~~~~~~
+| ./include/linux/rcupdate.h:1007:9: note: in expansion of macro 'WARN_ON_ONCE'
+|  1007 |         WARN_ON_ONCE(func != (rcu_callback_t)~0L);
+|       |         ^~~~~~~~~~~~
+| In file included from ./include/linux/rbtree.h:24,
+|                  from ./include/linux/mm_types.h:11,
+|                  from ./include/linux/buildid.h:5,
+|                  from ./include/linux/module.h:14,
+|                  from virt/lib/irqbypass.mod.c:1:
+| ./include/linux/rcupdate.h:1001:62: note: shadowed declaration is here
+|  1001 | rcu_head_after_call_rcu(struct rcu_head *rhp, rcu_callback_t f)
+|       |                                               ~~~~~~~~~~~~~~~^
 
-OK.
+For reference, sparse also warns about it, c.f. [1].
 
-> 
-> Also, here's the start of the lore thread for folks:
-> https://lore.kernel.org/linux-doc/164724892075.731226.14103557516176115189.stgit@devnote2/
+This patch renames the variable from f to __flags (with two underscore
+prefixes as suggested in the Linux kernel coding style [2]) in order
+to prevent collisions.
 
-Thanks for the link!
+[1] https://lore.kernel.org/all/CAFGhKbyifH1a+nAMCvWM88TK6fpNPdzFtUXPmRGnnQeePV+1sw@mail.gmail.com/
 
-> 
-> > >
-> > > > Can you confirm that following line in your build log,
-> > > >
-> > > >   GEN     lib/default.bconf
-> > > >
-> > > Yes, I do see above line. Indeed lib/default.bconf will get incremental
-> > > change.
-> > >
-> > >   GEN     lib/default.bconf
-> > >   CC      lib/bootconfig.o
-> > >   AR      lib/lib.a
-> > >
-> > > > and the timestamp of lib/bootconfig.o is built after lib/default.bconf file?
-> > > >
-> > > Yes, verified timestamp for all above artifacts including vmlinux.o.
-> > >
-> > > ex:
-> > > -rw-rw-r-- 1 psrinivasaia psrinivasaia 22K Mar 22 14:50
-> > > ../out/lib/bootconfig.o
-> > > -rw-rw-r-- 1 psrinivasaia psrinivasaia 355 Mar 22 14:50
-> > > ../out/lib/default.bconf
-> > > -rw-rw-r-- 1 psrinivasaia psrinivasaia 54M Mar 22 14:50 ../out/vmlinux.o
-> > >
-> > > As said incremnetal change was refelected in artifact default.bconf.
-> > > But not in vmlinux.o/vmlinux, used below command to verify.
-> >
-> > Interesting! This sounds clang's issue, because the make command rebuilds
-> > the object file including new default.bconf, but the linker (lld?)
-> > doesn't link it again correctly.
-> 
-> Sounds like missing FORCE directives in the Makefiles, perhaps?
+[2] Linux kernel coding style, section 12) Macros, Enums and RTL,
+paragraph 5) namespace collisions when defining local variables in
+macros resembling functions
+https://www.kernel.org/doc/html/latest/process/coding-style.html#macros-enums-and-rtl
 
-Hmm, as you can see in my patch, the default.bconf (contents) already
-has the FORCE directive as below.
+CC: Charlemagne Lasse <charlemagnelasse@gmail.com>
+Fixes: bfb1a7c91fb7 ("x86/bug: Merge annotate_reachable() into_BUG_FLAGS() asm")
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+Changelog:
 
-+ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
-+# Since the specified bootconfig file can be switched, we forcibly update the
-+# default.bconf file always.
-+$(obj)/default.bconf: FORCE
-+       $(call cmd,defbconf)
-+
-+quiet_cmd_defbconf = GEN     $@
-+      cmd_defbconf = cat < /dev/null $(CONFIG_EMBED_BOOT_CONFIG_FILE) > $@
-+clean-files    += default.bconf
-+$(obj)/bootconfig.o: $(obj)/default.bconf
-+endif
+v2 -> v3:
 
-And since bootconfig.o depends on the default.bconf, it is at least compiled
-as Padmanabha reported above. If I missed something, please tell me.
+  * add a mention that sparse is warning about this too.
+  c.f. https://lore.kernel.org/all/CAKwvOdmSV3Nse+tGMBXvN=QvnOs6-ODZRJB0OF5Pd6BVb-scFw@mail.gmail.com/
 
-> 
-> Sami, do you recall any issues like this when implementing
-> commit dc5723b02e52 ("kbuild: add support for Clang LTO")
-> ?
-> 
-> >
-> > >
-> > > llvm-objdump  -s -j .init.data ../out/vmlinux
-> > >
-> > > On target too, /proc/bootconfig shows old data.
-> > >
-> > > > And is that related to CONFIG_LTO? What happen if CONFIG_LTO=n?
-> > > >
-> > > Yes;  CONFIG_LTO_NONE=y  issue not observed even with LLVM binutils.
-> >
-> > And this issue is related to LTO. Maybe LTO ignores the '.init.data'
-> > section update. (Perhaps, LTO only checks the function code hash or
-> > something like that instead of the timestamp, and ignore whole object
-> > file if all of them are not updated.)
-> 
-> Sounds like this is a result of the above issue?
+v1 -> v2:
 
-As I said above, I used FORCE for the default.bconf and confirmed that
-the bootconfig.c is compiled (updated). Thus I think FORCE correctly
-works.
+   * Update the reference link to the kernel documentation to latest version.
+   * Do not break the Fixes: tag to a new line.
+   * Added the Acked-by and Reviewed-by tags.
+---
+ arch/x86/include/asm/bug.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I'm not sure how LTO is implemented, but if the LTO works based on the
-intermediate representation(IR), I guess it doesn't handle inline asm
-".incbin" directive in IR. I mean if the linker only checks the inline
-asm as a "string" in the .c file, it will miss the update of the contents
-of .incbin directive, because inline asm code itself is not changed.
-However the object file itself is updated, since the .incbin directive
-embeds an external file to the object file.
-This is just my guess. I would like to ask LLVM maintainers to help
-checking the safeness of using ".incbin" directive with LTO.
-(Note that this is also affects other parts which uses .incbin, like
- /proc/config.gz)
-
-Thank you,
-
+diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+index bab883c0b6fe..66570e95af39 100644
+--- a/arch/x86/include/asm/bug.h
++++ b/arch/x86/include/asm/bug.h
+@@ -77,9 +77,9 @@ do {								\
+  */
+ #define __WARN_FLAGS(flags)					\
+ do {								\
+-	__auto_type f = BUGFLAG_WARNING|(flags);		\
++	__auto_type __flags = BUGFLAG_WARNING|(flags);		\
+ 	instrumentation_begin();				\
+-	_BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);			\
++	_BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);		\
+ 	instrumentation_end();					\
+ } while (0)
+ 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.34.1
+
