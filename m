@@ -1,137 +1,294 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9347B7E
-	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 16:46:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648140367; x=1679676367;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ey/ZpZ4ZKBA2rr8TRQXVVdoOdcy/gvnxkqL/RfDp3iQ=;
-  b=fOzzDh8mMALszkfAp1sNxmFhhToe/MISimhstBcgz4TDwyglXqtbaD7U
-   5Y2JlAGBAzEJ4g01pB83yUcb+vxBMqVsNhYGaHe6WWQVm+2BVcxoXQIYI
-   L4jDQTd4XZugjfLEQo77zcqhLKi+k0kPkt00rJOUmGCn30g1JhV7CjhFZ
-   H1v4iUGqjDgtEpyrwzgBDmzDPAqQYarGJcR6/WPBdJOyZSYTRWP+xc0Dj
-   8YFB5ouI3hCZY2VTlLKg8XyJv8vGt4Oym7Vv8xGyQxw/rUE0mym4CR+eY
-   TW/uzOwLUGhIi2+ayzSEcgDtGkiZNTkX0olWGvOJn5Yrlz4VZPYsyFFpr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="238370420"
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="238370420"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 09:46:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="519859778"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 24 Mar 2022 09:46:04 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nXQb5-000LFI-Iz; Thu, 24 Mar 2022 16:46:03 +0000
-Date: Fri, 25 Mar 2022 00:45:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shyam Sundar <ssundar@marvell.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Himanshu Madhani <himanshu.madhani@oracle.com>,
-	James Smart <james.smart@broadcom.com>,
-	Nilesh Javali <njavali@marvell.com>
-Subject: drivers/scsi/scsi_transport_fc.c:908:6: warning: variable 'desc_cnt'
- set but not used
-Message-ID: <202203250040.RHMqwHeT-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9307E
+	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 17:45:27 +0000 (UTC)
+Received: by mail-lj1-f176.google.com with SMTP id g24so7167520lja.7
+        for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 10:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YlFvGhTr4N2rdEUs3DH+inCZY0reGmKjCTJ9YSLtFQw=;
+        b=S9spAKr0MnvYYiGRWHEnoq+yh6Mo2QULVn0oZ8YmqwcBOvh9xTWCyZ4G2vAD1DnAVB
+         oyHdUTKL9egFwL18IzAiOLQl4a3Un5WToZg7iC/ocCb2ME+WSAbOYyMCjvDhPRQhO27t
+         aSU41QqGhdMmGitWYKO8W0fwkk6GcktEaoq+yxrxsZyw6+29vEtbkvYAJoqLh63Qu+qz
+         nuavi7J0ghOOh5Rmwwzw5FL64LazVEo0j5dv7s1JVDEcNUy6E5c7P8kHgckQ816FejYv
+         TYpCKzCrp+FtWuA7A9+p1sGg6E8EeLnI/EZKEjshdwA4PXz+ywaLnDYDWWWU+sq6e22b
+         Rs5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YlFvGhTr4N2rdEUs3DH+inCZY0reGmKjCTJ9YSLtFQw=;
+        b=ez0fYV1ium9GPppKsHVLF5gRyLXlYzLuZU2+Lzrkt/0nhTanXN7Rs7dYaI5RMDNCa/
+         jHQV8v4BpveLuqZuL7zvUP20WuKD6CD51xawd8FJGxgYqAmSizcBxXtIVHM6TbAiSv65
+         BAr15p2lAX1Hz7g60V+6ZIdSWYhYkThboCt0VA3w/VB7d4gFGu9PXRM/CoKGAEVzzcb+
+         w9Cusv3v6D++UVtjy/wKJjXhYeUTaXXLGG57beX1Vd7FYDWHWwdifIpX8prsrHd/Ag2j
+         k8LWormcNZGVyXvDmYskANqenkRyNr4UR2obprWzyRqO9bHIHtxOtBoka+OG9BRTDGl2
+         4ssA==
+X-Gm-Message-State: AOAM531yTElnHOM0pt72IwiA9wkKh3mmdQLmyRO/pYcwxTUPQ/rSdsRS
+	kUXNRbFXTQyYCiHfOhOwOMOUujGEheKg3DevppjYXB0kNQ444Gfy
+X-Google-Smtp-Source: ABdhPJzHKTehwuuUdAUtI5eFFAfhRPMTiW/29L4pOdYWif0nLjOcA9YqcSb+nFFQCj2cvnOFLP0oAR4cQEtZOblO0sU=
+X-Received: by 2002:a2e:904c:0:b0:23e:d7ad:3fdd with SMTP id
+ n12-20020a2e904c000000b0023ed7ad3fddmr4791968ljg.239.1648143925275; Thu, 24
+ Mar 2022 10:45:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1683551351.3080.1648130021654@jenkins.jenkins>
+In-Reply-To: <1683551351.3080.1648130021654@jenkins.jenkins>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 24 Mar 2022 10:45:13 -0700
+Message-ID: <CAKwvOd=5pP4s017ZYApf-dWY-V5B_3YDN2Twu3CssUu+ueWyHg@mail.gmail.com>
+Subject: Re: [TCWG CI] Regression caused by llvm: [InstCombine] try to narrow
+ shifted bswap-of-zext
+To: ci_notify@linaro.org
+Cc: Sanjay Patel <spatel@rotateright.com>, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ed4643521e6af8ab8ed1e467630a85884d2696cf
-commit: 3dcfe0de5a9752e646a61f4ce513ac059960c7c3 scsi: fc: Parse FPIN packets and update statistics
-date:   1 year, 5 months ago
-config: i386-randconfig-c001 (https://download.01.org/0day-ci/archive/20220325/202203250040.RHMqwHeT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3dcfe0de5a9752e646a61f4ce513ac059960c7c3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 3dcfe0de5a9752e646a61f4ce513ac059960c7c3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/scsi/
+Thanks for the report.
+Looks like Nathan reverted in
+https://github.com/llvm/llvm-project/commit/4e0008dcbe9fce99b9727e8bbeb129efc7bf2d80
+A test was added in
+https://github.com/llvm/llvm-project/commit/87f3ebd505864a4a28c476fa63fc38a334bec1f9
+then this was relanded in
+https://github.com/llvm/llvm-project/commit/0fcff69bcb3d589e1feef4cd4902a2b48b6c7435
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks Nathan for the revert and Sanjay for the quick fixes.
 
-All warnings (new ones prefixed by >>):
+On Thu, Mar 24, 2022 at 6:53 AM <ci_notify@linaro.org> wrote:
+>
+> [TCWG CI] Regression caused by llvm: [InstCombine] try to narrow shifted bswap-of-zext:
+> commit 9e9bda2e8f5b88715bad767a4b7740df32b040d2
+> Author: Sanjay Patel <spatel@rotateright.com>
+>
+>     [InstCombine] try to narrow shifted bswap-of-zext
+>
+> Results regressed to
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 19901
+> # First few build errors in logs:
+> # 00:03:41 arch/arm/lib/xor-neon.c:30:2: error: This code requires at least version 4.6 of GCC [-Werror,-W#warnings]
+> # 00:03:41 make[1]: *** [scripts/Makefile.build:277: arch/arm/lib/xor-neon.o] Error 1
+> # 00:03:42 make: *** [Makefile:1868: arch/arm/lib] Error 2
+> # 00:04:49 crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+> # 00:04:49 make[1]: *** [scripts/Makefile.build:277: crypto/wp512.o] Error 1
+> # 00:06:52 make: *** [Makefile:1868: crypto] Error 2
+> # 00:10:52 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size (1032) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
+> # 00:10:53 make[4]: *** [scripts/Makefile.build:277: drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
+> # 00:11:05 make[3]: *** [scripts/Makefile.build:540: drivers/gpu/drm/selftests] Error 2
+> # 00:13:32 drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: error: stack frame size (1104) exceeds limit (1024) in 'cfi_intelext_writev' [-Werror,-Wframe-larger-than]
+>
+> from
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 19902
+>
+> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+>
+> This commit has regressed these CI configurations:
+>  - tcwg_kernel/llvm-master-arm-lts-allyesconfig
+>
+> First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/build-9e9bda2e8f5b88715bad767a4b7740df32b040d2/
+> Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/build-c4f31d1da582232d206756b7246858f66ccdbd0c/
+> Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/build-baseline/
+> Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/
+>
+> Reproduce builds:
+> <cut>
+> mkdir investigate-llvm-9e9bda2e8f5b88715bad767a4b7740df32b040d2
+> cd investigate-llvm-9e9bda2e8f5b88715bad767a4b7740df32b040d2
+>
+> # Fetch scripts
+> git clone https://git.linaro.org/toolchain/jenkins-scripts
+>
+> # Fetch manifests and test.sh script
+> mkdir -p artifacts/manifests
+> curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/manifests/build-baseline.sh --fail
+> curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/manifests/build-parameters.sh --fail
+> curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-allyesconfig/11/artifact/artifacts/test.sh --fail
+> chmod +x artifacts/test.sh
+>
+> # Reproduce the baseline build (build all pre-requisites)
+> ./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
+>
+> # Save baseline build state (which is then restored in artifacts/test.sh)
+> mkdir -p ./bisect
+> rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
+>
+> cd llvm
+>
+> # Reproduce first_bad build
+> git checkout --detach 9e9bda2e8f5b88715bad767a4b7740df32b040d2
+> ../artifacts/test.sh
+>
+> # Reproduce last_good build
+> git checkout --detach c4f31d1da582232d206756b7246858f66ccdbd0c
+> ../artifacts/test.sh
+>
+> cd ..
+> </cut>
+>
+> Full commit (up to 1000 lines):
+> <cut>
+> commit 9e9bda2e8f5b88715bad767a4b7740df32b040d2
+> Author: Sanjay Patel <spatel@rotateright.com>
+> Date:   Tue Mar 22 07:52:39 2022 -0400
+>
+>     [InstCombine] try to narrow shifted bswap-of-zext
+>
+>     This is the IR counterpart to 370ebc9d9a573d6
+>     which provided a bswap narrowing fix for issue #53867.
+>
+>     Here we can be more general (although I'm not sure yet
+>     what would happen for illegal types in codegen - too
+>     rare to worry about?):
+>     https://alive2.llvm.org/ce/z/3-CPfo
+>
+>     This will be more effective if we have moved the shift
+>     after the bswap as proposed in D122010, but it is
+>     independent of that patch.
+>
+>     Differential Revision: https://reviews.llvm.org/D122166
+> ---
+>  .../Transforms/InstCombine/InstCombineShifts.cpp   | 15 +++++++++++
+>  llvm/test/Transforms/InstCombine/lshr.ll           | 31 +++++++++++-----------
+>  2 files changed, 31 insertions(+), 15 deletions(-)
+>
+> diff --git a/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp b/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp
+> index 03214118a2cf..403979b4a6a3 100644
+> --- a/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp
+> +++ b/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp
+> @@ -1173,6 +1173,21 @@ Instruction *InstCombinerImpl::visitLShr(BinaryOperator &I) {
+>          MulC->logBase2() == ShAmtC)
+>        return BinaryOperator::CreateAnd(X, ConstantInt::get(Ty, *MulC - 2));
+>
+> +    // Try to narrow a bswap:
+> +    // (bswap (zext X)) >> C --> zext (bswap X >> C')
+> +    // In the case where the shift amount equals the bitwidth difference, the
+> +    // shift is eliminated.
+> +    if (match(Op0, m_OneUse(m_Intrinsic<Intrinsic::bswap>(
+> +                       m_OneUse(m_ZExt(m_Value(X))))))) {
+> +      // TODO: If the shift amount is less than the zext, we could shift left.
+> +      unsigned WidthDiff = BitWidth - X->getType()->getScalarSizeInBits();
+> +      if (ShAmtC >= WidthDiff) {
+> +        Value *NarrowSwap = Builder.CreateUnaryIntrinsic(Intrinsic::bswap, X);
+> +        Value *NewShift = Builder.CreateLShr(NarrowSwap, ShAmtC - WidthDiff);
+> +        return new ZExtInst(NewShift, Ty);
+> +      }
+> +    }
+> +
+>      // If the shifted-out value is known-zero, then this is an exact shift.
+>      if (!I.isExact() &&
+>          MaskedValueIsZero(Op0, APInt::getLowBitsSet(BitWidth, ShAmtC), 0, &I)) {
+> diff --git a/llvm/test/Transforms/InstCombine/lshr.ll b/llvm/test/Transforms/InstCombine/lshr.ll
+> index 175430189ce1..a46f3f460f5e 100644
+> --- a/llvm/test/Transforms/InstCombine/lshr.ll
+> +++ b/llvm/test/Transforms/InstCombine/lshr.ll
+> @@ -831,9 +831,8 @@ define i1 @icmp_sge(i32 %x, i32 %y) {
+>
+>  define i32 @narrow_bswap(i16 %x) {
+>  ; CHECK-LABEL: @narrow_bswap(
+> -; CHECK-NEXT:    [[Z:%.*]] = zext i16 [[X:%.*]] to i32
+> -; CHECK-NEXT:    [[B:%.*]] = call i32 @llvm.bswap.i32(i32 [[Z]])
+> -; CHECK-NEXT:    [[S:%.*]] = lshr exact i32 [[B]], 16
+> +; CHECK-NEXT:    [[TMP1:%.*]] = call i16 @llvm.bswap.i16(i16 [[X:%.*]])
+> +; CHECK-NEXT:    [[S:%.*]] = zext i16 [[TMP1]] to i32
+>  ; CHECK-NEXT:    ret i32 [[S]]
+>  ;
+>    %z = zext i16 %x to i32
+> @@ -844,9 +843,8 @@ define i32 @narrow_bswap(i16 %x) {
+>
+>  define i128 @narrow_bswap_extra_wide(i16 %x) {
+>  ; CHECK-LABEL: @narrow_bswap_extra_wide(
+> -; CHECK-NEXT:    [[Z:%.*]] = zext i16 [[X:%.*]] to i128
+> -; CHECK-NEXT:    [[B:%.*]] = call i128 @llvm.bswap.i128(i128 [[Z]])
+> -; CHECK-NEXT:    [[S:%.*]] = lshr exact i128 [[B]], 112
+> +; CHECK-NEXT:    [[TMP1:%.*]] = call i16 @llvm.bswap.i16(i16 [[X:%.*]])
+> +; CHECK-NEXT:    [[S:%.*]] = zext i16 [[TMP1]] to i128
+>  ; CHECK-NEXT:    ret i128 [[S]]
+>  ;
+>    %z = zext i16 %x to i128
+> @@ -855,6 +853,8 @@ define i128 @narrow_bswap_extra_wide(i16 %x) {
+>    ret i128 %s
+>  }
+>
+> +; TODO: The bswap can be narrowed followed by shl.
+> +
+>  define i32 @narrow_bswap_undershift(i16 %x) {
+>  ; CHECK-LABEL: @narrow_bswap_undershift(
+>  ; CHECK-NEXT:    [[Z:%.*]] = zext i16 [[X:%.*]] to i32
+> @@ -870,9 +870,8 @@ define i32 @narrow_bswap_undershift(i16 %x) {
+>
+>  define <2 x i64> @narrow_bswap_splat(<2 x i16> %x) {
+>  ; CHECK-LABEL: @narrow_bswap_splat(
+> -; CHECK-NEXT:    [[Z:%.*]] = zext <2 x i16> [[X:%.*]] to <2 x i64>
+> -; CHECK-NEXT:    [[B:%.*]] = call <2 x i64> @llvm.bswap.v2i64(<2 x i64> [[Z]])
+> -; CHECK-NEXT:    [[S:%.*]] = lshr exact <2 x i64> [[B]], <i64 48, i64 48>
+> +; CHECK-NEXT:    [[TMP1:%.*]] = call <2 x i16> @llvm.bswap.v2i16(<2 x i16> [[X:%.*]])
+> +; CHECK-NEXT:    [[S:%.*]] = zext <2 x i16> [[TMP1]] to <2 x i64>
+>  ; CHECK-NEXT:    ret <2 x i64> [[S]]
+>  ;
+>    %z = zext <2 x i16> %x to <2 x i64>
+> @@ -881,6 +880,8 @@ define <2 x i64> @narrow_bswap_splat(<2 x i16> %x) {
+>    ret <2 x i64> %s
+>  }
+>
+> +; TODO: poison/undef in the shift amount is ok to propagate.
+> +
+>  define <2 x i64> @narrow_bswap_splat_poison_elt(<2 x i16> %x) {
+>  ; CHECK-LABEL: @narrow_bswap_splat_poison_elt(
+>  ; CHECK-NEXT:    [[Z:%.*]] = zext <2 x i16> [[X:%.*]] to <2 x i64>
+> @@ -896,9 +897,9 @@ define <2 x i64> @narrow_bswap_splat_poison_elt(<2 x i16> %x) {
+>
+>  define <2 x i64> @narrow_bswap_overshift(<2 x i32> %x) {
+>  ; CHECK-LABEL: @narrow_bswap_overshift(
+> -; CHECK-NEXT:    [[Z:%.*]] = zext <2 x i32> [[X:%.*]] to <2 x i64>
+> -; CHECK-NEXT:    [[B:%.*]] = call <2 x i64> @llvm.bswap.v2i64(<2 x i64> [[Z]])
+> -; CHECK-NEXT:    [[S:%.*]] = lshr <2 x i64> [[B]], <i64 48, i64 48>
+> +; CHECK-NEXT:    [[TMP1:%.*]] = call <2 x i32> @llvm.bswap.v2i32(<2 x i32> [[X:%.*]])
+> +; CHECK-NEXT:    [[TMP2:%.*]] = lshr <2 x i32> [[TMP1]], <i32 16, i32 16>
+> +; CHECK-NEXT:    [[S:%.*]] = zext <2 x i32> [[TMP2]] to <2 x i64>
+>  ; CHECK-NEXT:    ret <2 x i64> [[S]]
+>  ;
+>    %z = zext <2 x i32> %x to <2 x i64>
+> @@ -909,9 +910,9 @@ define <2 x i64> @narrow_bswap_overshift(<2 x i32> %x) {
+>
+>  define i128 @narrow_bswap_overshift2(i96 %x) {
+>  ; CHECK-LABEL: @narrow_bswap_overshift2(
+> -; CHECK-NEXT:    [[Z:%.*]] = zext i96 [[X:%.*]] to i128
+> -; CHECK-NEXT:    [[B:%.*]] = call i128 @llvm.bswap.i128(i128 [[Z]])
+> -; CHECK-NEXT:    [[S:%.*]] = lshr i128 [[B]], 61
+> +; CHECK-NEXT:    [[TMP1:%.*]] = call i96 @llvm.bswap.i96(i96 [[X:%.*]])
+> +; CHECK-NEXT:    [[TMP2:%.*]] = lshr i96 [[TMP1]], 29
+> +; CHECK-NEXT:    [[S:%.*]] = zext i96 [[TMP2]] to i128
+>  ; CHECK-NEXT:    ret i128 [[S]]
+>  ;
+>    %z = zext i96 %x to i128
+> </cut>
 
->> drivers/scsi/scsi_transport_fc.c:908:6: warning: variable 'desc_cnt' set but not used [-Wunused-but-set-variable]
-           u32 desc_cnt = 0, bytes_remain;
-               ^
-   1 warning generated.
 
-
-vim +/desc_cnt +908 drivers/scsi/scsi_transport_fc.c
-
-   893	
-   894	/**
-   895	 * fc_host_rcv_fpin - routine to process a received FPIN.
-   896	 * @shost:		host the FPIN was received on
-   897	 * @fpin_len:		length of FPIN payload, in bytes
-   898	 * @fpin_buf:		pointer to FPIN payload
-   899	 *
-   900	 * Notes:
-   901	 *	This routine assumes no locks are held on entry.
-   902	 */
-   903	void
-   904	fc_host_fpin_rcv(struct Scsi_Host *shost, u32 fpin_len, char *fpin_buf)
-   905	{
-   906		struct fc_els_fpin *fpin = (struct fc_els_fpin *)fpin_buf;
-   907		struct fc_tlv_desc *tlv;
- > 908		u32 desc_cnt = 0, bytes_remain;
-   909		u32 dtag;
-   910	
-   911		/* Update Statistics */
-   912		tlv = (struct fc_tlv_desc *)&fpin->fpin_desc[0];
-   913		bytes_remain = fpin_len - offsetof(struct fc_els_fpin, fpin_desc);
-   914		bytes_remain = min_t(u32, bytes_remain, be32_to_cpu(fpin->desc_len));
-   915	
-   916		while (bytes_remain >= FC_TLV_DESC_HDR_SZ &&
-   917		       bytes_remain >= FC_TLV_DESC_SZ_FROM_LENGTH(tlv)) {
-   918			dtag = be32_to_cpu(tlv->desc_tag);
-   919			switch (dtag) {
-   920			case ELS_DTAG_LNK_INTEGRITY:
-   921				fc_fpin_li_stats_update(shost, tlv);
-   922				break;
-   923			case ELS_DTAG_DELIVERY:
-   924				fc_fpin_delivery_stats_update(shost, tlv);
-   925				break;
-   926			case ELS_DTAG_PEER_CONGEST:
-   927				fc_fpin_peer_congn_stats_update(shost, tlv);
-   928				break;
-   929			case ELS_DTAG_CONGESTION:
-   930				fc_fpin_congn_stats_update(shost, tlv);
-   931			}
-   932	
-   933			desc_cnt++;
-   934			bytes_remain -= FC_TLV_DESC_SZ_FROM_LENGTH(tlv);
-   935			tlv = fc_tlv_next_desc(tlv);
-   936		}
-   937	
-   938		fc_host_post_fc_event(shost, fc_get_event_number(),
-   939					FCH_EVT_LINK_FPIN, fpin_len, fpin_buf, 0);
-   940	}
-   941	EXPORT_SYMBOL(fc_host_fpin_rcv);
-   942	
-   943	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
