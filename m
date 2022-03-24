@@ -1,116 +1,129 @@
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EAF11B60
-	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 07:31:12 +0000 (UTC)
-Received: from integral2.. (unknown [182.2.71.236])
-	by gnuweeb.org (Postfix) with ESMTPSA id 7F7B67E70D;
-	Thu, 24 Mar 2022 07:31:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1648107072;
-	bh=7Qv9rqJeI71GjuDbibmCUuv1gIB+xsY2a5HJtFAGzSs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=c2wjHqCEEFZBwwM/AnDUHRZ7THc3ZYWMO2IQGdjSZlJUx9OKGqCMGa6hRY7rhHZKy
-	 NuAfEBuK6szkDs8V1AEHY/homXOqmjWqmDamMyxjFw/ewWOFZlk9g7kUwy7MK+u4+D
-	 b/kTypmIgEiV6G1yMaSGgUZztnYeKXAQ0hTlhGfp/ghO8JwjROlYQnXA6E3OGB4JNi
-	 O2FSemAgJDeDmAFhhuIHG21kEYS4Tk6MHLri2c6OHb5kIbZ7eXKLiFGr0lcasmx9Iq
-	 hlysp6THpzOVv9HlUZo0qIsC5unxIbeiLav0Sjet7Gi7Ye5Mf7dmSsDANk5CrQ+hWt
-	 POnW7ZKIC2XFg==
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To: Willy Tarreau <w@1wt.eu>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
-	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-	Nugraha <richiisei@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	x86@kernel.org,
-	llvm@lists.linux.dev,
-	David Laight <David.Laight@ACULAB.COM>
-Subject: [PATCH v1 06/11] tools/nolibc: i386: Implement syscall with 6 arguments
-Date: Thu, 24 Mar 2022 14:30:34 +0700
-Message-Id: <20220324073039.140946-7-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220324073039.140946-1-ammarfaizi2@gnuweeb.org>
-References: <20220324073039.140946-1-ammarfaizi2@gnuweeb.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4121B60
+	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 07:35:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648107305; x=1679643305;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=W0JdFkTSRuOApKRgaNYpzLcmuy+UK2g+tWhFQJ7MWKw=;
+  b=I0Vj9tEc80KgmewIl+OAHAy3HzT5aAdDCz4jWs0IET6ZBPR2xXJUOmEF
+   KM+b+x6PPIiX6WiUAd4twqw0RcQHLazdctBAoe+o5y7NLCXQuA5ITjZcD
+   4doeROB9jLMnuKSowuuWMRiP2J1t3Lw3KgG9ZUjihWm4jne5Qsg4ZEG/Q
+   J3fkgu37XLVY4dRFlmdBDoIzn1lWERwDKZtl37npAqde0NC0yrHlNyUfs
+   MVF3WvBEMx+X2vDCRZRdNsb7h954dixquuUKFPVq5Q+OjeWn4iTDUWcyA
+   M1ynfTa9S/Xjjda3UoBDVsjCtvaCrevC6y2YXF5RqybSts5Gp4nvsgbhO
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="255874612"
+X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
+   d="scan'208";a="255874612"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 00:35:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
+   d="scan'208";a="544532929"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2022 00:35:02 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nXHzq-000Kou-0o; Thu, 24 Mar 2022 07:35:02 +0000
+Date: Thu, 24 Mar 2022 15:34:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [norov:bitmap 5/49]
+ drivers/net/ethernet/qlogic/qed/qed_rdma.c:338:11: warning: comparison of
+ distinct pointer types ('typeof (bmap->max_count - bit) *' (aka 'unsigned
+ int *') and 'typeof (512) *' (aka 'int *'))
+Message-ID: <202203241543.fPNu5JUu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On i386, the 6th argument of syscall goes in %ebp. However, both Clang
-and GCC cannot use %ebp in the clobber list and in the "r" constraint
-without using -fomit-frame-pointer. To make it always available for
-any kind of compilation, the below workaround is implemented.
+tree:   https://github.com/norov/linux bitmap
+head:   d56897e7da0ce165cd3f983526a76013dd4c1bc1
+commit: 4a18f9ef6b1ed1e87ca56f01d1f1a402809982e7 [5/49] qed: rework qed_rdma_bmap_free()
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220324/202203241543.fPNu5JUu-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/norov/linux/commit/4a18f9ef6b1ed1e87ca56f01d1f1a402809982e7
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bitmap
+        git checkout 4a18f9ef6b1ed1e87ca56f01d1f1a402809982e7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/i2c/busses/ drivers/net/ethernet/qlogic/qed/
 
-  1) Push the 6-th argument.
-  2) Push %ebp.
-  3) Load the 6-th argument from 4(%esp) to %ebp.
-  4) Do the syscall (int $0x80).
-  5) Pop %ebp (restore the old value of %ebp).
-  6) Add %esp by 4 (undo the stack pointer).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Cc: x86@kernel.org
-Cc: llvm@lists.linux.dev
-Link: https://lore.kernel.org/lkml/2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com
-Suggested-by: David Laight <David.Laight@ACULAB.COM>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
+All warnings (new ones prefixed by >>):
 
-@@ Changelog:
+>> drivers/net/ethernet/qlogic/qed/qed_rdma.c:338:11: warning: comparison of distinct pointer types ('typeof (bmap->max_count - bit) *' (aka 'unsigned int *') and 'typeof (512) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
+                   nbits = min(bmap->max_count - bit, 512);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
-   Link RFC v2: https://lore.kernel.org/lkml/20220322102115.186179-4-ammarfaizi2@gnuweeb.org
-   RFC v2 -> v1:
-    - Use the same pattern for syscall6, regardless using GCC or Clang
-      (comment from David).
-    - Use appropriate constraints for syscall6 instead of always using
-      register variables (comment from David).
 
-   Link RFC v1: https://lore.kernel.org/llvm/20220320093750.159991-4-ammarfaizi2@gnuweeb.org
-   RFC v1 -> RFC v2:
-    - Fix %ebp saving method. Don't use redzone, i386 doesn't have a redzone
-      (comment from David and Alviro).
----
- tools/include/nolibc/arch-i386.h | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+vim +338 drivers/net/ethernet/qlogic/qed/qed_rdma.c
 
-diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-index 6eb96ee8c4f7..cdffd99664ae 100644
---- a/tools/include/nolibc/arch-i386.h
-+++ b/tools/include/nolibc/arch-i386.h
-@@ -145,6 +145,29 @@ struct sys_stat_struct {
- 	_ret;						\
- })
- 
-+#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)	\
-+({								\
-+	long _eax  = (long)(num);				\
-+	long _arg6 = (long)(arg6); /* Always in memory */	\
-+	__asm__ volatile (					\
-+		"pushl	%[_arg6]\n\t"				\
-+		"pushl	%%ebp\n\t"				\
-+		"movl	4(%%esp),%%ebp\n\t"			\
-+		"int	$0x80\n\t"				\
-+		"popl	%%ebp\n\t"				\
-+		"addl	$4,%%esp\n\t"				\
-+		: "+a"(_eax)		/* %eax */		\
-+		: "b"(arg1),		/* %ebx */		\
-+		  "c"(arg2),		/* %ecx */		\
-+		  "d"(arg3),		/* %edx */		\
-+		  "S"(arg4),		/* %esi */		\
-+		  "D"(arg5),		/* %edi */		\
-+		  [_arg6]"m"(_arg6)	/* memory */		\
-+		: "memory", "cc"				\
-+	);							\
-+	_eax;							\
-+})
-+
- /* startup code */
- /*
-  * i386 System V ABI mandates:
+   318	
+   319	void qed_rdma_bmap_free(struct qed_hwfn *p_hwfn,
+   320				struct qed_bmap *bmap, bool check)
+   321	{
+   322		unsigned int bit, weight, nbits;
+   323		unsigned long *b;
+   324	
+   325		if (!check)
+   326			goto end;
+   327	
+   328		weight = bitmap_weight(bmap->bitmap, bmap->max_count);
+   329		if (!weight)
+   330			goto end;
+   331	
+   332		DP_NOTICE(p_hwfn,
+   333			  "%s bitmap not free - size=%d, weight=%d, 512 bits per line\n",
+   334			  bmap->name, bmap->max_count, weight);
+   335	
+   336		for (bit = 0; bit < bmap->max_count; bit += 512) {
+   337			b =  bmap->bitmap + BITS_TO_LONGS(bit);
+ > 338			nbits = min(bmap->max_count - bit, 512);
+   339	
+   340			if (!bitmap_empty(b, nbits))
+   341				DP_NOTICE(p_hwfn,
+   342					  "line 0x%04x: %*pb\n", bit / 512, nbits, b);
+   343		}
+   344	
+   345	end:
+   346		kfree(bmap->bitmap);
+   347		bmap->bitmap = NULL;
+   348	}
+   349	
+
 -- 
-Ammar Faizi
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
