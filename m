@@ -1,41 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7713D23BE
-	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 21:19:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0951723BE
+	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 21:51:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648156797; x=1679692797;
+  t=1648158664; x=1679694664;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=D8sPrOjiIKGdUQKHrNVyVsbnrKxhLjYhxLtXX7edhCI=;
-  b=Qgj/EadZRO1KmUv1TQS7iZUtfuOg7fRMqPLYdXuMZ0cXX1yUlgbp/rKW
-   qCD7H9kWnrYrwyL3kmdgzj/Ds8MPvtwCBk4cD/CXMy5BuMbaWPaLgbmBC
-   ilm9ZwwB9WJ4A0MlAJWaqy71gJfnPr2hiWjQG00ZVmyKzxErpA/jpKTqQ
-   7pG7aXF4DRxAUHbsLU9E2Cqm0cyN0ZwkVFXtQwqu3LwfACUHT4fOdR7zX
-   CBPg4HcUX4OIf2jjFvfGkOSaA5MIpo4S0qKn2t8E3vR1iBy7K9CrHzi1o
-   Eg5tzJvhuDYcDJ3i7ygixCuDmKUHOy97u31ymDImtk5huTg/GbhpuM6Vh
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="245968148"
+  bh=cz6HBthwW0nY24DRIJjypp9xMPbxdoGHo2l1mnA2Wxg=;
+  b=C5kjrsMJ1cgt6qapT8cRWPHpy/ElHFRm6cWwzLL0vTUUrqIevPOMYYX/
+   9CMOQvjGXQe9DJApd9C7aSKYjGXVeoBTGbz1dM1YsZ/p9ADp+CB7OWbLw
+   paz+6V8pKe8/2g6JQ6FZk9JgE7diil911fp11UtkTw7Q1Lo93TBwdO4zi
+   BoP7HcLzK6ROdpRUE8SGwEIhjaMfKrtG1PG/5Yq2R1XI7hPT/yAmD84X1
+   SyKkcFHH7rT/ownBz/EZpyEJKw7/Ms5hnOxU7IiFQpD0dSZ2ktmShChji
+   0h3KIr/d41YFe7r5jDG5sOvY+0R+oYhxgjxvFQ+KEL2lgDdG3TW07xrOl
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="321694822"
 X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
-   d="scan'208";a="245968148"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 14:19:57 -0700
+   d="scan'208";a="321694822"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 14:51:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
-   d="scan'208";a="717979796"
+   d="scan'208";a="650017140"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 24 Mar 2022 14:19:55 -0700
+  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2022 14:51:01 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nXUs6-000LRy-Cs; Thu, 24 Mar 2022 21:19:54 +0000
-Date: Fri, 25 Mar 2022 05:19:04 +0800
+	id 1nXVMD-000LTf-3j; Thu, 24 Mar 2022 21:51:01 +0000
+Date: Fri, 25 Mar 2022 05:49:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vlastimil Babka <vbabka@suse.cz>
+To: Jimmy Kizito <Jimmy.Kizito@amd.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Roman Gushchin <guro@fb.com>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: mm/slub.c:2142:15: warning: variable 'partial_slabs' set but not used
-Message-ID: <202203250552.DbRtnNEv-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>, Jun Lei <Jun.Lei@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_enc_cfg.c:416:6:
+ warning: variable 'matching_stream_ptrs' set but not used
+Message-ID: <202203250504.X4x0hoOe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,96 +49,49 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   ed4643521e6af8ab8ed1e467630a85884d2696cf
-commit: bb192ed9aa7191a5d65548f82c42b6750d65f569 mm/slub: Convert most struct page to struct slab by spatch
-date:   3 months ago
-config: mips-buildonly-randconfig-r004-20220324 (https://download.01.org/0day-ci/archive/20220325/202203250552.DbRtnNEv-lkp@intel.com/config)
+commit: b3492ed160768ad60ad6753269099213b6772a70 drm/amd/display: Fix concurrent dynamic encoder assignment
+date:   6 months ago
+config: arm64-randconfig-r013-20220324 (https://download.01.org/0day-ci/archive/20220325/202203250504.X4x0hoOe-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bb192ed9aa7191a5d65548f82c42b6750d65f569
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b3492ed160768ad60ad6753269099213b6772a70
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout bb192ed9aa7191a5d65548f82c42b6750d65f569
+        git checkout b3492ed160768ad60ad6753269099213b6772a70
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> mm/slub.c:2142:15: warning: variable 'partial_slabs' set but not used [-Wunused-but-set-variable]
-           unsigned int partial_slabs = 0;
-                        ^
-   mm/slub.c:1663:29: warning: unused function 'node_nr_slabs' [-Wunused-function]
-   static inline unsigned long node_nr_slabs(struct kmem_cache_node *n)
-                               ^
-   mm/slub.c:1681:21: warning: unused function 'kmalloc_large_node_hook' [-Wunused-function]
-   static inline void *kmalloc_large_node_hook(void *ptr, size_t size, gfp_t flags)
-                       ^
-   3 warnings generated.
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_enc_cfg.c:416:6: warning: variable 'matching_stream_ptrs' set but not used [-Wunused-but-set-variable]
+           int matching_stream_ptrs = 0;
+               ^
+   1 warning generated.
 
 
-vim +/partial_slabs +2142 mm/slub.c
+vim +/matching_stream_ptrs +416 drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_enc_cfg.c
 
-  2132	
-  2133	/*
-  2134	 * Try to allocate a partial slab from a specific node.
-  2135	 */
-  2136	static void *get_partial_node(struct kmem_cache *s, struct kmem_cache_node *n,
-  2137				      struct slab **ret_slab, gfp_t gfpflags)
-  2138	{
-  2139		struct slab *slab, *slab2;
-  2140		void *object = NULL;
-  2141		unsigned long flags;
-> 2142		unsigned int partial_slabs = 0;
-  2143	
-  2144		/*
-  2145		 * Racy check. If we mistakenly see no partial slabs then we
-  2146		 * just allocate an empty slab. If we mistakenly try to get a
-  2147		 * partial slab and there is none available then get_partial()
-  2148		 * will return NULL.
-  2149		 */
-  2150		if (!n || !n->nr_partial)
-  2151			return NULL;
-  2152	
-  2153		spin_lock_irqsave(&n->list_lock, flags);
-  2154		list_for_each_entry_safe(slab, slab2, &n->partial, slab_list) {
-  2155			void *t;
-  2156	
-  2157			if (!pfmemalloc_match(slab, gfpflags))
-  2158				continue;
-  2159	
-  2160			t = acquire_slab(s, n, slab, object == NULL);
-  2161			if (!t)
-  2162				break;
-  2163	
-  2164			if (!object) {
-  2165				*ret_slab = slab;
-  2166				stat(s, ALLOC_FROM_PARTIAL);
-  2167				object = t;
-  2168			} else {
-  2169				put_cpu_partial(s, slab, 0);
-  2170				stat(s, CPU_PARTIAL_NODE);
-  2171				partial_slabs++;
-  2172			}
-  2173	#ifdef CONFIG_SLUB_CPU_PARTIAL
-  2174			if (!kmem_cache_has_cpu_partial(s)
-  2175				|| partial_slabs > s->cpu_partial_slabs / 2)
-  2176				break;
-  2177	#else
-  2178			break;
-  2179	#endif
-  2180	
-  2181		}
-  2182		spin_unlock_irqrestore(&n->list_lock, flags);
-  2183		return object;
-  2184	}
-  2185	
+   404	
+   405	bool link_enc_cfg_validate(struct dc *dc, struct dc_state *state)
+   406	{
+   407		bool is_valid = false;
+   408		bool valid_entries = true;
+   409		bool valid_stream_ptrs = true;
+   410		bool valid_uniqueness = true;
+   411		bool valid_avail = true;
+   412		bool valid_streams = true;
+   413		int i, j;
+   414		uint8_t valid_count = 0;
+   415		uint8_t dig_stream_count = 0;
+ > 416		int matching_stream_ptrs = 0;
 
 -- 
 0-DAY CI Kernel Test Service
