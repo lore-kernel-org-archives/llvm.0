@@ -1,131 +1,130 @@
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D63F1B60
-	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 08:05:30 +0000 (UTC)
-Received: by mail-il1-f200.google.com with SMTP id h10-20020a92c26a000000b002c845c2b3d3so2351083ild.11
-        for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 01:05:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=lyJrSW4wDcuNfJrpcCLjJJ/Nl57jnLSCYWnrohs0+bE=;
-        b=S4hxv2iajxs0td77IK0nF/GIwVomUNmDpOLLHjscvboBRoHBm/YEaIhGdLNnzKOXgl
-         tx5V6Z+EGye8mTHUqzMH4MIUJ++Q4dtQfkWiPl3+CJF2GSO4/i3Tg16w+RhS5rsSTu8j
-         UQX+AGYGpyfG9jO4GXc5cH1v+K8ha7a2E1RhD2LBVyxuQp/3cjM5dcQQ5G4tKsYaz0eO
-         eBS3aCu4jP+E0zY/LXn6p29We2HpeSuBNrlsaloJ6NS0GNIbLacTEb3JF3MSyPb36EDL
-         70oZScRjfPN99ezSayb51tcTVTV256NoC7y2wH6BYTkaTSMR99rVT32d9mr2R8Jc0dv7
-         7bHw==
-X-Gm-Message-State: AOAM5333ikBKN3Qzex6nTGsXeEM5zvCs0lA5Wy3ikDI/HJteNPzrb991
-	WPOhKZDK90hA13MAcXBpWoee+U4D6YcGog3Hxmm29qZvMSCG
-X-Google-Smtp-Source: ABdhPJznQTZc0SUPRekIeKv/BvXmumJJNy6ZG1sLE03YPeaTySKbteBgI62ZjuExhSV9kujpfOv+zUFAYnSmJxfFGxjUjRyGzX6n
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E8A1B93
+	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 08:56:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648112183; x=1679648183;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C2952FGpo5poKrxvnx+hON8VkfkNKOtXpMXDlfWiN9M=;
+  b=hXD5U65RT63nbooiWltobfiht046ttuyiedHSHFV0BI1q0pRWgkARL1S
+   vADmbpUl0XREJMxrvOtZRTuswqPibfis7CgZ/Coc5alOQ0EJuZhq1e6cw
+   D6HAyk8HAPYrjvCR4bEXJKFtWsadMdSYRaurbVq2gTxJE6layUQOXk5/V
+   uC5lN50oFBWUJqoP5FptE385A5ABROU3wEsoVM+4wI4ttxDAE+X3I1pDN
+   3pVogPBcrHU6j4W8QKFidDmIaamMGfNuZmjTz4Fr8hmzP0aQGZNtqK4BS
+   2eQPDPsbTRKQLZAy0AnyUTYZZhLMv1IfDsSu6tOynvTlnINQNHsGl+aY8
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="283179643"
+X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
+   d="scan'208";a="283179643"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 01:56:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
+   d="scan'208";a="516096414"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 24 Mar 2022 01:56:19 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nXJGV-000Ktv-55; Thu, 24 Mar 2022 08:56:19 +0000
+Date: Thu, 24 Mar 2022 16:56:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: ryan_chen <ryan_chen@aspeedtech.com>, BMC-SW@aspeedtech.com,
+	Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Ryan Chen <ryan_chen@aspeedtech.com>
+Subject: Re: [PATCH 2/2] i2c:aspeed:support ast2600 i2c new register mode
+ driver
+Message-ID: <202203241617.RVjnwFdn-lkp@intel.com>
+References: <20220323004009.943298-3-ryan_chen@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:14c2:b0:319:d84d:e878 with SMTP id
- l2-20020a05663814c200b00319d84de878mr2118389jak.314.1648109129411; Thu, 24
- Mar 2022 01:05:29 -0700 (PDT)
-Date: Thu, 24 Mar 2022 01:05:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000035adf105daf24fba@google.com>
-Subject: [syzbot] upstream boot error: WARNING in blk_release_queue
-From: syzbot <syzbot+8e08dfd9ad607062fa1b@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220323004009.943298-3-ryan_chen@aspeedtech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hello,
+Hi ryan_chen,
 
-syzbot found the following issue on:
+Thank you for the patch! Perhaps something to improve:
 
-HEAD commit:    1bc191051dca Merge tag 'trace-v5.18' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12b7c1f9700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=70f8915481c02c4
-dashboard link: https://syzkaller.appspot.com/bug?extid=8e08dfd9ad607062fa1b
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+[auto build test WARNING on wsa/i2c/for-next]
+[also build test WARNING on robh/for-next pza/reset/next v5.17 next-20220323]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8e08dfd9ad607062fa1b@syzkaller.appspotmail.com
+url:    https://github.com/0day-ci/linux/commits/ryan_chen/Add-ASPEED-AST2600-I2C-new-controller-driver/20220323-084205
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220324/202203241617.RVjnwFdn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/4fa1d6c517dfca057852514880a8e52e5da51572
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review ryan_chen/Add-ASPEED-AST2600-I2C-new-controller-driver/20220323-084205
+        git checkout 4fa1d6c517dfca057852514880a8e52e5da51572
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/i2c/busses/
 
-------------[ cut here ]------------
-do not call blocking ops when !TASK_RUNNING; state=402 set at [<ffffffff81583637>] worker_thread+0xf57/0x1300 kernel/workqueue.c:2472
-WARNING: CPU: 1 PID: 10 at kernel/sched/core.c:9660 __might_sleep+0xb0/0xe0 kernel/sched/core.c:9656
-Modules linked in:
-CPU: 1 PID: 10 Comm: kworker/u4:1 Not tainted 5.17.0-syzkaller-02237-g1bc191051dca #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue:  0x0 (events_unbound)
-RIP: 0010:__might_sleep+0xb0/0xe0 kernel/sched/core.c:9656
-Code: af 0c 01 42 80 3c 23 00 74 08 48 89 ef e8 78 17 7a 00 48 8b 4d 00 48 c7 c7 60 c8 8e 8a 44 89 ee 48 89 ca 31 c0 e8 f0 90 f2 ff <0f> 0b eb b7 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 72 ff ff ff 48 89
-RSP: 0000:ffffc90000dd0b38 EFLAGS: 00010246
-RAX: e1fd253f302a1e00 RBX: 1ffff1100248367e RCX: ffff888012419d00
-RDX: 0000000080000101 RSI: 0000000080000101 RDI: 0000000000000000
-RBP: ffff88801241b3f0 R08: ffffffff816b7962 R09: fffffbfff1c40ac6
-R10: fffffbfff1c40ac6 R11: 0000000000000000 R12: dffffc0000000000
-R13: 0000000000000402 R14: 00000000000002ff R15: ffffffff8c6a6052
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- blk_release_queue+0x2e/0x2a0 block/blk-sysfs.c:767
- kobject_cleanup+0x1c0/0x280 lib/kobject.c:705
- blkg_free+0x2d0/0x320 block/blk-cgroup.c:86
- rcu_do_batch kernel/rcu/tree.c:2535 [inline]
- rcu_core+0xa85/0x1700 kernel/rcu/tree.c:2786
- __do_softirq+0x392/0x7a3 kernel/softirq.c:558
- __irq_exit_rcu+0xec/0x170 kernel/softirq.c:637
- irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
- sysvec_apic_timer_interrupt+0x91/0xb0 arch/x86/kernel/apic/apic.c:1097
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20
-RIP: 0010:__raw_spin_unlock_irq include/linux/spinlock_api_smp.h:160 [inline]
-RIP: 0010:_raw_spin_unlock_irq+0x25/0x40 kernel/locking/spinlock.c:202
-Code: 71 40 fd ff 90 53 48 89 fb 48 83 c7 18 48 8b 74 24 08 e8 be c8 41 f7 48 89 df e8 46 7a 43 f7 e8 31 2f 67 f7 fb bf 01 00 00 00 <e8> 46 dd 35 f7 65 8b 05 67 b7 dc 75 85 c0 74 02 5b c3 e8 7c a0 da
-RSP: 0000:ffffc90000cf7dd8 EFLAGS: 00000286
-RAX: e1fd253f302a1e00 RBX: ffff888011869800 RCX: ffffffff90e09903
-RDX: dffffc0000000000 RSI: 0000000000000001 RDI: 0000000000000001
-RBP: 0000000000000080 R08: ffffffff818ce770 R09: ffffed100230d301
-R10: ffffed100230d301 R11: 0000000000000000 R12: ffff8880119b3c00
-R13: ffff888011869858 R14: ffff888011869860 R15: dffffc0000000000
- worker_thread+0xfba/0x1300 kernel/workqueue.c:2474
- kthread+0x2a3/0x2d0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	71 40                	jno    0x42
-   2:	fd                   	std
-   3:	ff 90 53 48 89 fb    	callq  *-0x476b7ad(%rax)
-   9:	48 83 c7 18          	add    $0x18,%rdi
-   d:	48 8b 74 24 08       	mov    0x8(%rsp),%rsi
-  12:	e8 be c8 41 f7       	callq  0xf741c8d5
-  17:	48 89 df             	mov    %rbx,%rdi
-  1a:	e8 46 7a 43 f7       	callq  0xf7437a65
-  1f:	e8 31 2f 67 f7       	callq  0xf7672f55
-  24:	fb                   	sti
-  25:	bf 01 00 00 00       	mov    $0x1,%edi
-* 2a:	e8 46 dd 35 f7       	callq  0xf735dd75 <-- trapping instruction
-  2f:	65 8b 05 67 b7 dc 75 	mov    %gs:0x75dcb767(%rip),%eax        # 0x75dcb79d
-  36:	85 c0                	test   %eax,%eax
-  38:	74 02                	je     0x3c
-  3a:	5b                   	pop    %rbx
-  3b:	c3                   	retq
-  3c:	e8                   	.byte 0xe8
-  3d:	7c a0                	jl     0xffffffdf
-  3f:	da                   	.byte 0xda
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-new-aspeed.c:1407:19: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'void *' [-Wvoid-pointer-to-int-cast]
+           u8 i2c_count = (((u32)(i2c_bus->reg_base) & 0xFFF)/0x80);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +1407 drivers/i2c/busses/i2c-new-aspeed.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+  1402	
+  1403	static void aspeed_new_i2c_init(struct aspeed_new_i2c_bus *i2c_bus)
+  1404	{
+  1405		struct platform_device *pdev = to_platform_device(i2c_bus->dev);
+  1406		u32 fun_ctrl = AST_I2CC_BUS_AUTO_RELEASE | AST_I2CC_MASTER_EN;
+> 1407		u8 i2c_count = (((u32)(i2c_bus->reg_base) & 0xFFF)/0x80);
+  1408	
+  1409		/* I2C Reset */
+  1410		writel(0, i2c_bus->reg_base + AST_I2CC_FUN_CTRL);
+  1411	
+  1412		if (of_property_read_bool(pdev->dev.of_node, "multi-master"))
+  1413			i2c_bus->multi_master = true;
+  1414		else
+  1415			fun_ctrl |= AST_I2CC_MULTI_MASTER_DIS;
+  1416	
+  1417		/* AST2600 i2c10 need to overcome sda glich with is flag. */
+  1418		if (i2c_count == 0xA)
+  1419			fun_ctrl |= AST_I2CC_SDA_DRIVE_1T_EN;
+  1420	
+  1421		/* Enable Master Mode */
+  1422		writel(fun_ctrl, i2c_bus->reg_base + AST_I2CC_FUN_CTRL);
+  1423		/* disable slave address */
+  1424		writel(0, i2c_bus->reg_base + AST_I2CS_ADDR_CTRL);
+  1425	
+  1426		/* Set AC Timing */
+  1427		writel(aspeed_select_i2c_clock(i2c_bus), i2c_bus->reg_base + AST_I2CC_AC_TIMING);
+  1428	
+  1429		/* Clear Interrupt */
+  1430		writel(0xfffffff, i2c_bus->reg_base + AST_I2CM_ISR);
+  1431	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
