@@ -1,47 +1,51 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91D57E
-	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 22:39:35 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id w1-20020a5b08c1000000b00633be107f28so4670702ybq.4
-        for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 15:39:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43C97E
+	for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 22:39:37 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-2e644c76556so47126847b3.15
+        for <llvm@lists.linux.dev>; Thu, 24 Mar 2022 15:39:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=2UXOWK4H/ABoSS6KabIKT0cRAkKR0ZUPw5leAS4VA2Y=;
-        b=mFrw/DyLpphzNFV0Nr7i6+kDrT0/C9GU5c4FP6bzXJk/QsrgjgdsN5pw+Twz+s6tGi
-         qy25SacKdr9ipsWUo6trNsVmt+dTa/NxO3N5FT6aeXplL6+ZEw1LMGDWTo0PQCwb+Bvv
-         4GDi1sgE7Jd6QRrZP/c4HReJ6wxGKYe3J8j58vlNKNI0HzHCFnfQgsW07wf12tX5ifUO
-         PkWd0jUpPH/MCtF459clWjsDteS21Ykgbme/qNhmrt1Ttph7wf3EUSy9EX8Ao16PvJnO
-         QLKcOxdXbMcH953M7Bj/sxYtgU4u2dWspJAXKFL7VZLBu7hfRoPYI0AbX+uq/222BMVD
-         SSYw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=YffvJKmqGnNOFrJNUBozqcvaEBhfok9GG307YN+iOis=;
+        b=rJBaV6pGwEOAZ5/DKw9WgYD8sOUIGzatpRwyLoMMfvhusF5BeyvsRwUwZWCNGuIDQ1
+         nQB8oCdC9bv1EZ+2GtysbZIqyvqAenpHbQez/WxBwBE3CGVb3xXwPXtQKDi9eaWQ6y7j
+         ZKrHVPDblW1plXoohNvFqYI+YSZ7lUzU+JDZLa+az53ILzpYvrYIYeB4+yyJZ67EEn+X
+         fen1X83tGjPFdNkCIFZgPgVXkkcmBf7dBg8tE2ndTF7IzTTWpZI4Ahz8CtlYV5thWf5L
+         xduypsO2tFYJpKt92zfyi3vjDV+lUkUnpditqzgfS6Zi5K3l63GEjp2/MNklpuAspxgA
+         4uIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=2UXOWK4H/ABoSS6KabIKT0cRAkKR0ZUPw5leAS4VA2Y=;
-        b=rV3oWOubWdrpr1Tn6Ktw5cP0hcIsg7PyT2OGPXhOp6PQr1NUbWyh6ntwmTN9I5xh50
-         OFSUHulkwPjBSmr3RKyI1GcJAu8huG2CLJT/MXaJ8uxJbg1ag60/fM8pGUVuUiWp5ilZ
-         zTO2vv2oMQhTyHRs41+9akesOchYVZkNyL8vQtXeAL1XO2C1/orMB7Gk8bakNALRCR+3
-         To6ZcydwBoZ4kxLqAP23oJRrAbBrYbpmwcRmCEsA/xEeZ6KYuObd2K2MmtX2EGfNho3L
-         szqQ4EQpR0T3GLQgGjOe+cs7C1qZzqfRkPmGnisyjgKz6SXz0gaADMv6C6C3j7mdT7dl
-         uHng==
-X-Gm-Message-State: AOAM530b8MIlgrI7fBbPlKsr4b7dQQ2HLeM5dpNQPJ8IictZ8pxUJQGu
-	jm/IAoGA/4KsaYQLEqtjqofJ87Cy8bpFQQQVR8zj
-X-Google-Smtp-Source: ABdhPJw4BH07SPiQZUc2OcEknGn2R1/wKMDadrW5rM6fMHjf1XTNKTbDi8N9qPU+6gv6J5NGI8IQbzzmpbGwWUQn91RR
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=YffvJKmqGnNOFrJNUBozqcvaEBhfok9GG307YN+iOis=;
+        b=R9UbQ/0Tb1bW0w+mWO3vVV1l2+78Lp1Ewrh4FV5rqogZM2GO8FO2cuM6ZGHjN575oi
+         MDZCakRrM31lOCmXDsdGrYgssUsCwQN/BcYBykV29QOQX+oTf+LPgxnSSzz6yMmSpWnd
+         TX74lJbc5sJb9d8kIKga42KdHqKP7cM0z5nrDkyyWklBGXRyZDrO6MPe7+yN3g4kYtFo
+         sU5I8OMHb3lubFKoC/0ri5i41tWFQOOy6n/RV2WNnptywfIyD2sCd1jEDS1+ce7ZYRn1
+         x+lOW6rhJp8kWqcxhCvBN48E6cJQxJznKcpHe3bhGBFkFt9q+K5poEDt8RnutOvnZd9S
+         JU6Q==
+X-Gm-Message-State: AOAM531ZcbuFNho70ceN8RxPgiXSRC1obqN4D4xMmGckTsKsq2n3THJj
+	dftNZ6Q6ZiWSu7WKIeIIMRpkPBvvSAIg1buXr7MT
+X-Google-Smtp-Source: ABdhPJzQniIe8bkEpjEUmGcF7TUYcFhdcZfxtrsrsS9hsTOunibTFJjXrnGim1HZIuwmtVj5ERBh+6ALOnRpNeXOLmhR
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:9892:9f7f:2c27:2968])
- (user=axelrasmussen job=sendgmr) by 2002:a25:5f11:0:b0:633:ee0c:ab79 with
- SMTP id t17-20020a255f11000000b00633ee0cab79mr6599611ybb.491.1648161574585;
- Thu, 24 Mar 2022 15:39:34 -0700 (PDT)
-Date: Thu, 24 Mar 2022 15:39:28 -0700
-Message-Id: <20220324223929.1893741-1-axelrasmussen@google.com>
+ (user=axelrasmussen job=sendgmr) by 2002:a25:3f87:0:b0:633:bbe5:c9d9 with
+ SMTP id m129-20020a253f87000000b00633bbe5c9d9mr6992182yba.115.1648161576861;
+ Thu, 24 Mar 2022 15:39:36 -0700 (PDT)
+Date: Thu, 24 Mar 2022 15:39:29 -0700
+In-Reply-To: <20220324223929.1893741-1-axelrasmussen@google.com>
+Message-Id: <20220324223929.1893741-2-axelrasmussen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20220324223929.1893741-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH 1/2] selftests: fix header dependency for pid_namespace selftests
+Subject: [PATCH 2/2] selftests: fix an unused variable warning in pidfd selftest
 From: Axel Rasmussen <axelrasmussen@google.com>
 To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>, 
 	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
@@ -49,47 +53,27 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev, Axel Rasmussen <axelrasmussen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-The way the test target was defined before, when building with clang we
-get a command line like this:
-
-clang -Wall -Werror -g -I../../../../usr/include/ \
-	regression_enomem.c ../pidfd/pidfd.h  -o regression_enomem
-
-This yields an error, because clang thinks we want to produce both a *.o
-file, as well as a precompiled header:
-
-clang: error: cannot specify -o when generating multiple output files
-
-gcc, for whatever reason, doesn't exhibit the same behavior which I
-suspect is why the problem wasn't noticed before.
-
-This can be fixed simply by using the LOCAL_HDRS infrastructure the
-selftests lib.mk provides. It does the right think and marks the target
-as depending on the header (so if the header changes, we rebuild), but
-it filters the header out of the compiler command line, so we don't get
-the error described above.
+I fixed a few warnings like this in commit e2aa5e650b07
+("selftests: fixup build warnings in pidfd / clone3 tests"), but I
+missed this one by mistake. Since this variable is unused, remove it.
 
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- tools/testing/selftests/pid_namespace/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/pidfd/pidfd_wait.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/pid_namespace/Makefile b/tools/testing/selftests/pid_namespace/Makefile
-index dcaefa224ca0..edafaca1aeb3 100644
---- a/tools/testing/selftests/pid_namespace/Makefile
-+++ b/tools/testing/selftests/pid_namespace/Makefile
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS += -g -I../../../../usr/include/
- 
--TEST_GEN_PROGS := regression_enomem
-+TEST_GEN_PROGS = regression_enomem
- 
--include ../lib.mk
-+LOCAL_HDRS += $(selfdir)/pidfd/pidfd.h
- 
--$(OUTPUT)/regression_enomem: regression_enomem.c ../pidfd/pidfd.h
-+include ../lib.mk
+diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
+index 17999e082aa7..070c1c876df1 100644
+--- a/tools/testing/selftests/pidfd/pidfd_wait.c
++++ b/tools/testing/selftests/pidfd/pidfd_wait.c
+@@ -95,7 +95,6 @@ TEST(wait_states)
+ 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
+ 		.exit_signal = SIGCHLD,
+ 	};
+-	int ret;
+ 	pid_t pid;
+ 	siginfo_t info = {
+ 		.si_signo = 0,
 -- 
 2.35.1.1021.g381101b075-goog
 
