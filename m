@@ -1,48 +1,47 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4762C28E4
-	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 20:01:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648238469; x=1679774469;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6k+DJ48aVd7N/P40eA7ak4kwTvd6Fg58OSC9AHzaH94=;
-  b=YjJK/OC6C8h8Z8yEU5a5O/hyAhzfNn2JPFKg6YWJbW6ir57VQdC3iCWT
-   unpEMvLixHLSH6zX8os9ukLwRQyNMgl9nfkmbZIzIAEzq/9b+CFGdXXqX
-   4gPV02lPZlXNmfg6TKGVDuPpt3yzBO6LvsuX0oCEcfJJFO36onCm4rkWb
-   zETiL1UzPGqrbh/fTqb8ziW2pJD4uyYwktkoqQNL1vxcTqg/kpvrczn1P
-   2lxoEs/DQsFGnOI1xO+Vh0QpWX7iXLM+T0Llf4Y2bDWEgZuIQTdgkmNt8
-   Xfw8E2KYzUnW+bFeFTmV3qdqPvCPUZyhetKFDB60itGRo3g+qFOABRcVz
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="319414099"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="319414099"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 13:01:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="545205990"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 25 Mar 2022 13:01:06 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nXq7N-000MY6-Kz; Fri, 25 Mar 2022 20:01:05 +0000
-Date: Sat, 26 Mar 2022 04:01:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v1 1/1] Makefile.extrawarn: Turn off -Werror when extra
- warnings are enabled
-Message-ID: <202203260359.nhs6ZZb9-lkp@intel.com>
-References: <20220325131348.3995-1-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0526728E0
+	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 22:03:44 +0000 (UTC)
+Received: by mail-pj1-f52.google.com with SMTP id p4-20020a17090ad30400b001c7ca87c05bso4712362pju.1
+        for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 15:03:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=F1cl22dPfbgw4CHrs1SfUAlvbEdIMiTM5Jgl06wTsCQ=;
+        b=CmVO13C+dS/O6WM3blGDeY1sVqeF+gRrQrtu21YaYPFlA9Xa5dQqkV7L5Fm+vChYuJ
+         GdVaAqXKiY3OVou43Czv/goYDuWh2yPE2EeWGUoitMVojfySZdnWTHXFTyGJnU8/ctLW
+         re+MkkKvywOKV29zCA2sf8ltxdjYm7pTsrOpM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=F1cl22dPfbgw4CHrs1SfUAlvbEdIMiTM5Jgl06wTsCQ=;
+        b=1Tb1OiEM/3xoyNasF04JsLGbmzPZ8SN0/HNua05qRexdE5nDqgx8Opa32SzG8sgnhP
+         X+POnamxwQUFE1KssJbUwGJJ8iZ4hJKWB4BUJRK9CRfzAiKvw2WdQFmPlz5J3WDdq3Cv
+         DYB/xyhKplsbumLdm4VAoQSSyjrTTvRM+wnK64rD5kqoY6rCPmk7QZeB+kzwn/tvUOvs
+         OhzFVSwdHxStVDKBIG7D06s2DV2luAGzQHk6TGq+UT7p1dz9EXxZ5RNiYQdhHIMABmAH
+         jRa+y96uA14aKNMMBbNI5Lyjh2UAaOC4DL+6PJf5A8YoJDbHYXHADeS9RMq8ngu8/5vK
+         hw3w==
+X-Gm-Message-State: AOAM530XA9VOLUfx6HmPvq6NNmXB92+3wH3mvDxKM/ls370PO123dTbz
+	NN7J+HWRvEK3NUsqV+XIWVn5tw==
+X-Google-Smtp-Source: ABdhPJzDkiJrPUYM7qLN3Sj0nWpVkCZOULBiG9dPZTq3hhO/0HYRD8PEYshHQLol+XIg1yTjMTYl9Q==
+X-Received: by 2002:a17:902:d4cc:b0:154:3a3b:4172 with SMTP id o12-20020a170902d4cc00b001543a3b4172mr13611246plg.165.1648245824405;
+        Fri, 25 Mar 2022 15:03:44 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id cq13-20020a056a00330d00b004faa1fffd18sm7152444pfb.124.2022.03.25.15.03.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 15:03:44 -0700 (PDT)
+Date: Fri, 25 Mar 2022 15:03:43 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, George Burgess IV <gbiv@google.com>,
+	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: [GIT PULL] FORTIFY_SOURCE updates for v5.18-rc1
+Message-ID: <202203251443.9BBADFD98@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,41 +50,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325131348.3995-1-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Andy,
+Hi Linus,
 
-I love your patch! Perhaps something to improve:
+Please pull these FORTIFY_SOURCE updates for v5.18-rc1.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.17 next-20220325]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+This series consists of two halves:
 
-url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/Makefile-extrawarn-Turn-off-Werror-when-extra-warnings-are-enabled/20220325-211517
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 34af78c4e616c359ed428d79fe4758a35d2c5473
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220326/202203260359.nhs6ZZb9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/6b5eeef1471c693165f2bdec5fb19c2ba20e9345
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/Makefile-extrawarn-Turn-off-Werror-when-extra-warnings-are-enabled/20220325-211517
-        git checkout 6b5eeef1471c693165f2bdec5fb19c2ba20e9345
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+- strict compile-time buffer size checking under FORTIFY_SOURCE for
+  the memcpy()-family of functions (for extensive details and rationale,
+  see the first commit),
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+- enabling FORTIFY_SOURCE for Clang, which has had many overlapping bugs
+  that we've finally worked past.
 
-All warnings (new ones prefixed by >>):
+It looks like all the dependent trees with related buffer fixes have been
+merged (I was waiting for the scsi tree to get pulled). This has been
+in -next for almost 2 development cycles, and I did overnight build
+testing merged against your tree under the following combinations,
+with no new warnings (there is one Clang 14+ specific issue in
+drivers/net/ethernet/huawei/hinic that we're still tracking down as a
+likely compiler regression[1]):
 
->> clang-15: warning: 'x86_64' does not support '-mno-outline-atomics'; flag ignored [-Woption-ignored]
+gcc   11.2.1 (Fedora 35)    defconfig:    x86_64 i386 arm64
+gcc   11.2.1 (Fedora 35)    allmodconfig: x86_64 i386 arm64
+gcc   11.2.0 (Ubuntu 21.10) defconfig:    x86_64 i386 arm64
+gcc   11.2.0 (Ubuntu 21.10) allmodconfig: x86_64 i386 arm64
+gcc   10.3.0 (Ubuntu 21.10) defconfig:    x86_64 i386 arm64
+gcc   10.3.0 (Ubuntu 21.10) allmodconfig: x86_64 i386 arm64
+gcc    9.4.0 (Ubuntu 21.10) defconfig:    x86_64 i386 arm64
+gcc    9.4.0 (Ubuntu 21.10) allmodconfig: x86_64 i386 arm64
+gcc    8.5.0 (Ubuntu 21.10) defconfig:    x86_64 i386 arm64
+gcc    8.5.0 (Ubuntu 21.10) allmodconfig: x86_64 i386 arm64
+clang 15.0.0 (local build)  defconfig:    x86_64 i386 arm64
+clang 14.0.0 (Ubuntu 22.04) defconfig:    x86_64 i386 arm64
+clang 13.0.0 (Fedora 35)    defconfig:    x86_64 i386 arm64
+clang 12.0.1 (Ubuntu 21.10) defconfig:    x86_64 i386 arm64
+clang 13.0.0 (Ubuntu 21.10) allmodconfig: x86_64 i386
+clang 12.0.1 (Ubuntu 21.10) allmodconfig: x86_64 i386
+
+There is also still 1 runtime fix pending for the comedi driver's
+selftests[2], which is living in my "pending-fixes" tree (for fixes that
+maintainers appear to have picked up, but haven't appeared in -next yet).
+
+Beyond that, as far as I've been able to track, all the other architecture
+also build cleanly; we've been fixing any issues as they are reported
+by various builders, and when we find them in our builds.
+
+Thanks!
+
+-Kees
+
+[1] https://github.com/ClangBuiltLinux/linux/issues/1592
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=for-next/pending-fixes&id=77cc24d543c46076d753348b6178473eb16fc788
+
+The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+
+  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/memcpy-v5.18-rc1
+
+for you to fetch changes up to 281d0c962752fb40866dd8d4cade68656f34bd1f:
+
+  fortify: Add Clang support (2022-02-13 16:50:07 -0800)
+
+----------------------------------------------------------------
+memcpy updates for v5.18-rc1
+
+- Enable strict FORTIFY_SOURCE compile-time validation of memcpy buffers
+
+- Add Clang features needed for FORTIFY_SOURCE support
+
+- Enable FORTIFY_SOURCE for Clang where possible
+
+----------------------------------------------------------------
+Kees Cook (12):
+      fortify: Detect struct member overflows in memcpy() at compile-time
+      fortify: Detect struct member overflows in memmove() at compile-time
+      fortify: Detect struct member overflows in memset() at compile-time
+      fortify: Update compile-time tests for Clang 14
+      fortify: Replace open-coded __gnu_inline attribute
+      Compiler Attributes: Add __pass_object_size for Clang
+      Compiler Attributes: Add __overloadable for Clang
+      Compiler Attributes: Add __diagnose_as for Clang
+      fortify: Make pointer arguments const
+      fortify: Use __diagnose_as() for better diagnostic coverage
+      fortify: Make sure strlen() may still be used as a constant expression
+      fortify: Add Clang support
+
+ arch/x86/boot/compressed/misc.c                 |   3 +-
+ arch/x86/lib/memcpy_32.c                        |   1 +
+ include/linux/compiler_attributes.h             |  39 ++++
+ include/linux/fortify-string.h                  | 238 +++++++++++++++++++-----
+ lib/Makefile                                    |   3 +-
+ lib/string_helpers.c                            |   6 +
+ lib/test_fortify/read_overflow2_field-memcpy.c  |   5 +
+ lib/test_fortify/read_overflow2_field-memmove.c |   5 +
+ lib/test_fortify/write_overflow_field-memcpy.c  |   5 +
+ lib/test_fortify/write_overflow_field-memmove.c |   5 +
+ lib/test_fortify/write_overflow_field-memset.c  |   5 +
+ scripts/test_fortify.sh                         |   8 +-
+ security/Kconfig                                |   5 +-
+ 13 files changed, 272 insertions(+), 56 deletions(-)
+ create mode 100644 lib/test_fortify/read_overflow2_field-memcpy.c
+ create mode 100644 lib/test_fortify/read_overflow2_field-memmove.c
+ create mode 100644 lib/test_fortify/write_overflow_field-memcpy.c
+ create mode 100644 lib/test_fortify/write_overflow_field-memmove.c
+ create mode 100644 lib/test_fortify/write_overflow_field-memset.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kees Cook
