@@ -1,48 +1,23 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533A946B3
-	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 09:03:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648199028; x=1679735028;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WbskBVThk2A3f0bek82d4zhtf8YdkGCFyymR0cmcN2k=;
-  b=E0xe80mAvuASTI2yxsG/4YUOgSRmKHU50uJPDReoqGsbaj/WqZHtaPWa
-   p9FRWZMIMcxjgvB4J0SlPhrtocmgOJVgYQclGlkdhu387aoFFp/zNWIf5
-   nOrQw6q3ch9pD2yKhXFYJP94MSdh6DB36Dw5vReEH+7soFwD4Uu4GYJFB
-   SXBL5tHrFTA/vWx1dN61DNArpq81lmGKJC1dRRuNiAPs/0Ff1BuebyK/q
-   fl3OWT1wKD4s6Y/K+XpjnHQ0tFmw/XxfNR/y4FyQ+tc5j9ztTXOtouHlW
-   wWF6lqooi/LtyfWYNSUxaVnbRa6puQoD7TEoDNPTUDGGQXQiBG3ZsTgzI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="321786257"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="321786257"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 02:03:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="825977531"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Mar 2022 02:03:18 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nXfqo-000Lyi-70; Fri, 25 Mar 2022 09:03:18 +0000
-Date: Fri, 25 Mar 2022 17:02:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Howard Chiu <howard_chiu@aspeedtech.com>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>, "andrew@aj.id.au" <andrew@aj.id.au>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Troy Lee <troy_lee@aspeedtech.com>
-Subject: Re: [PATCH v2] ARM: dts: aspeed: ast2600-evb: Support KVM
-Message-ID: <202203251620.taj6u6mo-lkp@intel.com>
-References: <HK0PR06MB2307383743B9AE1D714A899BE61A9@HK0PR06MB2307.apcprd06.prod.outlook.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD7D27E
+	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 12:25:11 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 375B412FC;
+	Fri, 25 Mar 2022 05:15:35 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22AE33F73B;
+	Fri, 25 Mar 2022 05:15:34 -0700 (PDT)
+Date: Fri, 25 Mar 2022 12:15:28 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Borislav Petkov <bp@alien8.de>, Nathan Chancellor <nathan@kernel.org>,
+	x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev, Peter Zijlstra <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: clang memcpy calls
+Message-ID: <Yj2yYFloadFobRPx@lakrids>
+References: <YjxTt3pFIcV3lt8I@zn.tnic>
+ <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,44 +26,294 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <HK0PR06MB2307383743B9AE1D714A899BE61A9@HK0PR06MB2307.apcprd06.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
 
-Hi Howard,
+On Thu, Mar 24, 2022 at 11:43:46AM -0700, Nick Desaulniers wrote:
+> On Thu, Mar 24, 2022 at 4:19 AM Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > Hi folks,
+> >
+> > so I've been looking at a recent objtool noinstr warning from clang
+> > builds:
+> >
+> > vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves .noinstr.text section
+> >
+> > The issue is that clang generates a memcpy() call when a struct copy
+> > happens:
+> >
+> >         if (regs != eregs)
+> >                 *regs = *eregs;
+> 
+> Specifically, this is copying one struct pt_regs to another. It looks
+> like the sizeof struct pt_regs is just large enough to have clang emit
+> the libcall.
+> https://godbolt.org/z/scx6aa8jq
+> Otherwise clang will also use rep; movsq; when -mno-sse -O2 is set and
+> the structs are below ARBITRARY_THRESHOLD.  Should ARBITRARY_THRESHOLD
+> be raised so that we continue to inline the memcpy? *shrug*
+> 
+> Though, looking at the compiled memcpy (`llvm-objdump -D
+> --disassemble-symbols=memcpy vmlinux`), maybe we *should* try harder.
+> Filed
+> https://github.com/llvm/llvm-project/issues/54535.
+> 
+> > see below for asm output.
+> >
+> > While gcc does simply generate an actual "rep; movsq".
+> >
+> > So, how hard would it be to make clang do that too pls?
+> 
+> As Mark said in the sibling reply; I don't know of general ways to
+> inhibit libcall optimizations on the level you're looking for, short
+> of heavy handy methods of disabling optimizations entirely.  There's
+> games that can be played with -fno-builtin-*, but they're not super
+> portable, and I think there's a handful of *blessed* functions that
+> must exist in any env, freestanding or not: memcpy, memmove, memset,
+> and memcmp for which you cannot yet express "these do not exist."
 
-Thank you for the patch! Yet something to improve:
+Talking with Peter on IRC, I think there's an oversight on the compiler
+side here w.r.t. the expectations around these blessed functions, since
+either:
 
-[auto build test ERROR on v5.17]
-[cannot apply to joel-aspeed/for-next next-20220324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+a) The compiler expects the out-of-line implementations of functions
+   ARE NOT instrumented by address-sanitizer.
 
-url:    https://github.com/0day-ci/linux/commits/Howard-Chiu/ARM-dts-aspeed-ast2600-evb-Support-KVM/20220325-103839
-base:    f443e374ae131c168a065ea1748feac6b2e76613
-config: arm-aspeed_g4_defconfig (https://download.01.org/0day-ci/archive/20220325/202203251620.taj6u6mo-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/9037b86779cd7616b378b3bafd1f32b4c862f0bd
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Howard-Chiu/ARM-dts-aspeed-ast2600-evb-Support-KVM/20220325-103839
-        git checkout 9037b86779cd7616b378b3bafd1f32b4c862f0bd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+   If this is the case, then it's legitimate for the compiler to call
+   these functions anywhere, and we should NOT instrument the kernel
+   implementations of these. If the compiler wants those instrumented it
+   needs to add the instrumentation in the caller.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+b) The compiler expects the out-of-line implementations of functions
+   ARE instrumented by address-sanitizer.
 
-All errors (new ones prefixed by >>):
+   If this is the case, the compiler MUST NOT generate implicit calls to
+   these "blessed" functions from functions marked with:
 
->> Error: arch/arm/boot/dts/aspeed-ast2600-evb.dts:322.1-7 Label or path video not found
->> FATAL ERROR: Syntax error parsing input tree
+     __attribute__((no_sanitize_address)).
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+   ... or the compiler is violating the premise of that attribute.
+
+   AFAICT The two options for the compiler here are:
+
+   1) Always inline an uninstrumented form of the function in this case
+
+   2) Have distinct instrumented/uninstrumented out-of-line
+      implementations, and call the uninstrumented form in this case.
+
+To see what clang and GCC do today, I hacked the following in:
+
+| diff --git a/init/main.c b/init/main.c
+| index 65fa2e41a9c0..30406c472b5d 100644
+| --- a/init/main.c
+| +++ b/init/main.c
+| @@ -1637,3 +1637,31 @@ static noinline void __init kernel_init_freeable(void)
+|  
+|         integrity_load_keys();
+|  }
+| +
+| +void
+| +test_implicit_memcpy(struct task_struct *dest,
+| +                    const struct task_struct *src)
+| +{
+| +       *dest = *src;
+| +}
+| +
+| +void
+| +test_explicit_memcpy(struct task_struct *dest,
+| +                    const struct task_struct *src)
+| +{
+| +       memcpy(dest, src, sizeof(*dest));
+| +}
+| +
+| +void __no_sanitize_address
+| +test_implicit_memcpy_nokasan(struct task_struct *dest,
+| +                            const struct task_struct *src)
+| +{
+| +       *dest = *src;
+| +}
+| +
+| +void __no_sanitize_address
+| +test_explicit_memcpy_nokasan(struct task_struct *dest,
+| +                            const struct task_struct *src)
+| +{
+| +       memcpy(dest, src, sizeof(*dest));
+| +}
+
+
+For arm64, GCC 11.1.0, KASAN_OUTLINE I see:
+
+| <test_implicit_memcpy>:
+|        d503245f        bti     c
+|        d503233f        paciasp
+|        a9be7bfd        stp     x29, x30, [sp, #-32]!
+|        910003fd        mov     x29, sp
+|        a90153f3        stp     x19, x20, [sp, #16]
+|        aa0103f3        mov     x19, x1
+|        aa0003f4        mov     x20, x0
+|        d281c001        mov     x1, #0xe00                      // #3584
+|        940b9534        bl      ffff8000082f9d90 <__asan_storeN>
+|        aa1303e0        mov     x0, x19
+|        d281c001        mov     x1, #0xe00                      // #3584
+|        940b951e        bl      ffff8000082f9d44 <__asan_loadN>
+|        aa1303e1        mov     x1, x19
+|        aa1403e0        mov     x0, x20
+|        d281c002        mov     x2, #0xe00                      // #3584
+|        940b98c5        bl      ffff8000082fabf0 <memcpy>
+|        a94153f3        ldp     x19, x20, [sp, #16]
+|        a8c27bfd        ldp     x29, x30, [sp], #32
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_explicit_memcpy>:
+|        d503245f        bti     c
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        d281c002        mov     x2, #0xe00                      // #3584
+|        910003fd        mov     x29, sp
+|        940b98bb        bl      ffff8000082fabf0 <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_implicit_memcpy_nokasan>:
+|        d503245f        bti     c
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        d281c002        mov     x2, #0xe00                      // #3584
+|        910003fd        mov     x29, sp
+|        940b98b2        bl      ffff8000082fabf0 <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_explicit_memcpy_nokasan>:
+|        d503245f        bti     c
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        d281c002        mov     x2, #0xe00                      // #3584
+|        910003fd        mov     x29, sp
+|        940b98a7        bl      ffff8000082fabf0 <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+
+For x86_64, GCC 11.1.0, KASAN_OUTLINE I see:
+
+| <test_implicit_memcpy>:
+|        41 54                   push   %r12
+|        49 89 fc                mov    %rdi,%r12
+|        55                      push   %rbp
+|        48 89 f5                mov    %rsi,%rbp
+|        be 40 1c 00 00          mov    $0x1c40,%esi
+|        e8 0d 9a 32 00          call   ffffffff8132b0f0 <__asan_storeN>
+|        48 89 ef                mov    %rbp,%rdi
+|        be 40 1c 00 00          mov    $0x1c40,%esi
+|        e8 f0 99 32 00          call   ffffffff8132b0e0 <__asan_loadN>
+|        4c 89 e7                mov    %r12,%rdi
+|        48 89 ee                mov    %rbp,%rsi
+|        b9 88 03 00 00          mov    $0x388,%ecx
+|        f3 48 a5                rep movsq %ds:(%rsi),%es:(%rdi)
+|        5d                      pop    %rbp
+|        41 5c                   pop    %r12
+|        c3                      ret   
+| 
+| <test_explicit_memcpy>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e9 b6 9f 32 00          jmp    ffffffff8132b6d0 <memcpy>
+| 
+| 
+| <test_implicit_memcpy_nokasan>:
+|        b9 88 03 00 00          mov    $0x388,%ecx
+|        f3 48 a5                rep movsq %ds:(%rsi),%es:(%rdi)
+|        c3                      ret    
+| 
+| <test_explicit_memcpy_nokasan>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e9 96 9f 32 00          jmp    ffffffff8132b6d0 <memcpy>
+
+So from those examples it seems GCC falls into bucket (a), and assumes the
+blessed functions ARE NOT instrumented.
+
+We can make this noinstr-safe AND get instrumentation for the first two cases
+by removing the instrumentation from the out-of-line copies (always using
+noinstr asm implementations) and using ifdeffery to make the explicit calls
+target as distinct kasan_instrumented_memcpy() or similar...
+
+
+For arm64, clang 13.0.0, KASAN_OUTLINE I see:
+
+| <test_implicit_memcpy>:
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        910003fd        mov     x29, sp
+|        5281c002        mov     w2, #0xe00                      // #3584
+|        940c0f66        bl      ffff8000083185fc <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_explicit_memcpy>:
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        910003fd        mov     x29, sp
+|        5281c002        mov     w2, #0xe00                      // #3584
+|        940c0f5e        bl      ffff8000083185fc <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_implicit_memcpy_nokasan>:
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        910003fd        mov     x29, sp
+|        5281c002        mov     w2, #0xe00                      // #3584
+|        940c0f56        bl      ffff8000083185fc <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_explicit_memcpy_nokasan>:
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        910003fd        mov     x29, sp
+|        5281c002        mov     w2, #0xe00                      // #3584
+|        940c0f4e        bl      ffff8000083185fc <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+
+For x86_64, clang 13.0.0, KASAN_OUTLINE I see:
+
+| <test_implicit_memcpy>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e8 d6 94 36 00          call   ffffffff8136a830 <memcpy>
+|        c3                      ret  
+| 
+| <test_explicit_memcpy>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e8 c6 94 36 00          call   ffffffff8136a830 <memcpy>
+|        c3                      ret    
+| 
+| 
+| <test_implicit_memcpy_nokasan>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e9 b6 94 36 00          jmp    ffffffff8136a830 <memcpy>
+| 
+| 
+| <test_explicit_memcpy_nokasan>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e9 a6 94 36 00          jmp    ffffffff8136a830 <memcpy>
+
+... for which the first two suggests clang thinks the blessed functions *are*
+instrumented, which means that generating calls to those in the latter two
+cases is a bug.
+
+We can make this noinstr-safe as with the GCC case, but we'll lose the
+desirable instrumentation for the test_implicit_memcpy() case.
+
+I think something has to change on the compiler side here (e.g. as per
+options above), and we should align GCC and clang on the same
+approach...
+
+Thanks,
+Mark.
