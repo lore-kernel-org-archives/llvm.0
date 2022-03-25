@@ -1,42 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.184.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F557E
-	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 18:29:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648232946; x=1679768946;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+OHXq1tRfc9vF3xTFDyNPbaqv4svxDpHLDlNDMkhQzU=;
-  b=nsSoLbAUL3lZQG82GZAXQFHakzDomxWQzmlOEoN332nvxmx0golQD2iV
-   fcCny3scqG1wY3LsOc7TIYzaGLWPqYiSAMBgJvdVq7nfzZlKeqd7zPhpU
-   xMJcUroeBWTCvONCrjIPhHRDyA8wIZqI0bTxcDiUL+sbw5ibiX8KE6x4I
-   hoT0rTdlWFCl2PgKsPAus+jZao0w/ppWB7DWK/1QFEtBnZFfIWAdm8X2c
-   flcfwbKUTnz28uZXtUsYGDqvm8QiLLieTgCfqL6qqpU+mUPxJVLlGOVNk
-   jkFN3Bg7e0IsNXFpknMndOHwV9uCBk+IKb8wct9PZ6Y24/FX8ZSYU2yta
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="257522291"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="257522291"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 11:29:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="584550811"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 25 Mar 2022 11:29:04 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nXogJ-000MU8-G8; Fri, 25 Mar 2022 18:29:03 +0000
-Date: Sat, 26 Mar 2022 02:28:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johannes Berg <johannes@sipsolutions.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH] mac80211: mlme: Handle Puncturing information
- received from the AP
-Message-ID: <202203260259.DnrkqrVM-lkp@intel.com>
-References: <20220325140859.e48bf244f157.I3547481d49f958389f59dfeba3fcc75e72b0aa6e@changeid>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046BB28E4
+	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 18:52:35 +0000 (UTC)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+	by gateway30.websitewelcome.com (Postfix) with ESMTP id 4D774A57E
+	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 13:30:33 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with SMTP
+	id XohknhvkpRnrrXohlnyrin; Fri, 25 Mar 2022 13:30:33 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=80vh7X070gDeOIjK2REY7MHyqK0ws37UQzBUZts92ps=; b=1kOb/uFZzFE60JKhI8A9JlpPuO
+	mT9P0zueD1dmCLaMrvZOxC3Y1iT+N6JeZcuU86tJxvtwTDyU/At8hQP/TuUQT66bpab2QRFk+RbJW
+	VG33fP9l29+UsdymQNpkhdPL/0ua+0ekVjEQAhx+qeWvPdB025E/ZVDB3o9Cz5+Fgw2u1MEABOjD1
+	IRsRff2MvcBP3ZBadQ8pC97GvD0uCEXdEiE95LPpDEuMVSfGo1FDhGd/qAvXphGWNJ2qftldA/Jtr
+	7EhA8lZ31eB8fdGA+Eo0PqIk2LkcSRqW/gUHQGo5JVLB2JvyA+KtXnvZqlRqXbcs0vsX7ZP4uLAYL
+	2KX/ClTw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57662 helo=localhost)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <linux@roeck-us.net>)
+	id 1nXohk-0042ix-F5; Fri, 25 Mar 2022 18:30:32 +0000
+Date: Fri, 25 Mar 2022 11:30:31 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>, patches@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, Claudio Suarez <cssk@net-c.es>
+Subject: Re: [PATCH] drm/selftest: plane_helper: Put test structures in
+ static storage
+Message-ID: <20220325183031.GA1493950@roeck-us.net>
+References: <20220302235909.784935-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,73 +46,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325140859.e48bf244f157.I3547481d49f958389f59dfeba3fcc75e72b0aa6e@changeid>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220302235909.784935-1-nathan@kernel.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nXohk-0042ix-F5
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57662
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 5
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 
-Hi Johannes,
+On Wed, Mar 02, 2022 at 04:59:09PM -0700, Nathan Chancellor wrote:
+> Clang warns on certain 32-bit architectures:
+> 
+>   drivers/gpu/drm/selftests/test-drm_plane_helper.c:76:5: warning: stack frame size (1064) exceeds limit (1024) in 'igt_check_plane_state' [-Wframe-larger-than]
+>   int igt_check_plane_state(void *ignored)
+>       ^
+>   1 warning generated.
+> 
+> The structures in igt_check_plane_state() total 1008 bytes, so any small
+> amount of inlining will cause the stack frame to exceed the 32-bit limit
+> of 1024, triggering the warning.
+> 
+> Move these structures to static storage, which dramatically reduces the
+> amount of stack space in igt_check_plane_state(). There is no testing
+> impact, as igt_check_plane_state() is only called once in the driver.
+> 
+> Fixes: 943e6a8beeac ("mock a drm_plane in igt_check_plane_state to make the test more robust")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1600
+> Reported-by: kernel test robot <lkp@intel.com>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main next-20220325]
-[cannot apply to v5.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-url:    https://github.com/0day-ci/linux/commits/Johannes-Berg/mac80211-mlme-Handle-Puncturing-information-received-from-the-AP/20220325-210959
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-config: arm-mvebu_v5_defconfig (https://download.01.org/0day-ci/archive/20220326/202203260259.DnrkqrVM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/b248fa1a2c7cfef75823796440bf6fdd81090ac2
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Johannes-Berg/mac80211-mlme-Handle-Puncturing-information-received-from-the-AP/20220325-210959
-        git checkout b248fa1a2c7cfef75823796440bf6fdd81090ac2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/wireless/marvell/
+Note that the offending patch is now in mainline and results in test build
+failures there.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Building csky:allmodconfig ... failed
+--------------
+Error log:
+drivers/gpu/drm/selftests/test-drm_plane_helper.c: In function 'igt_check_plane_state':
+drivers/gpu/drm/selftests/test-drm_plane_helper.c:223:1: error: the frame size of 1072 bytes is larger than 1024 bytes
 
-All errors (new ones prefixed by >>):
+This is with gcc 11.2.
 
->> drivers/net/wireless/marvell/mwl8k.c:5618:22: error: incompatible function pointer types initializing 'void (*)(struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_bss_conf *, u64)' (aka 'void (*)(struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_bss_conf *, unsigned long long)') with an expression of type 'void (struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_bss_conf *, u32)' (aka 'void (struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_bss_conf *, unsigned int)') [-Werror,-Wincompatible-function-pointer-types]
-           .bss_info_changed       = mwl8k_bss_info_changed,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +5618 drivers/net/wireless/marvell/mwl8k.c
-
-4c924f42c9c9f6 drivers/net/wireless/mwl8k.c Yogesh Ashok Powar 2014-02-25  5610  
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5611  static const struct ieee80211_ops mwl8k_ops = {
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5612  	.tx			= mwl8k_tx,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5613  	.start			= mwl8k_start,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5614  	.stop			= mwl8k_stop,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5615  	.add_interface		= mwl8k_add_interface,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5616  	.remove_interface	= mwl8k_remove_interface,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5617  	.config			= mwl8k_config,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10 @5618  	.bss_info_changed	= mwl8k_bss_info_changed,
-3ac64beecd2740 drivers/net/wireless/mwl8k.c Johannes Berg      2009-08-17  5619  	.prepare_multicast	= mwl8k_prepare_multicast,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5620  	.configure_filter	= mwl8k_configure_filter,
-fcdc403c31ed5b drivers/net/wireless/mwl8k.c Nishant Sarmukadam 2010-12-30  5621  	.set_key                = mwl8k_set_key,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5622  	.set_rts_threshold	= mwl8k_set_rts_threshold,
-4a6967b88af02e drivers/net/wireless/mwl8k.c Johannes Berg      2010-02-19  5623  	.sta_add		= mwl8k_sta_add,
-4a6967b88af02e drivers/net/wireless/mwl8k.c Johannes Berg      2010-02-19  5624  	.sta_remove		= mwl8k_sta_remove,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5625  	.conf_tx		= mwl8k_conf_tx,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5626  	.get_stats		= mwl8k_get_stats,
-0d462bbb0e2086 drivers/net/wireless/mwl8k.c John W. Linville   2010-07-28  5627  	.get_survey		= mwl8k_get_survey,
-a2292d83b5dcb7 drivers/net/wireless/mwl8k.c Lennert Buytenhek  2010-01-04  5628  	.ampdu_action		= mwl8k_ampdu_action,
-4c924f42c9c9f6 drivers/net/wireless/mwl8k.c Yogesh Ashok Powar 2014-02-25  5629  	.sw_scan_start		= mwl8k_sw_scan_start,
-4c924f42c9c9f6 drivers/net/wireless/mwl8k.c Yogesh Ashok Powar 2014-02-25  5630  	.sw_scan_complete	= mwl8k_sw_scan_complete,
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5631  };
-a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5632  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guenter
