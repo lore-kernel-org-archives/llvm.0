@@ -1,44 +1,42 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B747E
-	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 18:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F557E
+	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 18:29:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648232346; x=1679768346;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4oz8FNc7VQZ9nJ5DanNmi5yvkvN37sM5PxJBCPDtsg0=;
-  b=Rd7Xe+235jpblICxIXYBqq13wysvmClWJv0PhMo9EcAV4RHgiEOvT6xS
-   tGqkErXw/kY86qkLfttw/YO6dDEGZVLZNqZWqbwvz41H6XdQpaHeN8JLL
-   vHVXV66/sSuzMyMZZzg0RsbFwxtGr1hhX4opAjteeIuWsISSVOtN3/SHO
-   hnHZ0/z9RsNarGrnv/X5Dp7N8ZOy1ANpNsjYtingP/s5Vg/MJB1vaIb5k
-   yAPBcQ8T0WYrtdoML4+/hISWH/2l/bl2jV/rMeEzzZU9qNWenFAlifAzr
-   29UY4zXNfJWIAJVutTmIOwwi9OaXGTLlRXdLHH3FxxMZ72HUXskVQVQCh
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="258407294"
+  t=1648232946; x=1679768946;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+OHXq1tRfc9vF3xTFDyNPbaqv4svxDpHLDlNDMkhQzU=;
+  b=nsSoLbAUL3lZQG82GZAXQFHakzDomxWQzmlOEoN332nvxmx0golQD2iV
+   fcCny3scqG1wY3LsOc7TIYzaGLWPqYiSAMBgJvdVq7nfzZlKeqd7zPhpU
+   xMJcUroeBWTCvONCrjIPhHRDyA8wIZqI0bTxcDiUL+sbw5ibiX8KE6x4I
+   hoT0rTdlWFCl2PgKsPAus+jZao0w/ppWB7DWK/1QFEtBnZFfIWAdm8X2c
+   flcfwbKUTnz28uZXtUsYGDqvm8QiLLieTgCfqL6qqpU+mUPxJVLlGOVNk
+   jkFN3Bg7e0IsNXFpknMndOHwV9uCBk+IKb8wct9PZ6Y24/FX8ZSYU2yta
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="257522291"
 X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="258407294"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 11:19:06 -0700
+   d="scan'208";a="257522291"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 11:29:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="650331665"
+   d="scan'208";a="584550811"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 25 Mar 2022 11:19:04 -0700
+  by orsmga001.jf.intel.com with ESMTP; 25 Mar 2022 11:29:04 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nXoWd-000MTl-83; Fri, 25 Mar 2022 18:19:03 +0000
-Date: Sat, 26 Mar 2022 02:18:29 +0800
+	id 1nXogJ-000MU8-G8; Fri, 25 Mar 2022 18:29:03 +0000
+Date: Sat, 26 Mar 2022 02:28:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rob Clark <robdclark@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Gerd Hoffmann <kraxel@redhat.com>,
-	Gurchetan Singh <gurchetansingh@chromium.org>
-Subject: [kraxel:drm-qemu-next 3/4]
- drivers/gpu/drm/virtio/virtgpu_ioctl.c:271:13: warning: unused variable
- 'ret'
-Message-ID: <202203260237.93aoZ8XS-lkp@intel.com>
+To: Johannes Berg <johannes@sipsolutions.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH] mac80211: mlme: Handle Puncturing information
+ received from the AP
+Message-ID: <202203260259.DnrkqrVM-lkp@intel.com>
+References: <20220325140859.e48bf244f157.I3547481d49f958389f59dfeba3fcc75e72b0aa6e@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,235 +45,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220325140859.e48bf244f157.I3547481d49f958389f59dfeba3fcc75e72b0aa6e@changeid>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kraxel.org/linux drm-qemu-next
-head:   718c903962a65c138303c8933f8cdb44947b66a5
-commit: c9940219406e5e5d0f449fc9dc1526806ec8683e [3/4] drm/virtio: Fix caps=
-et-id query size
-config: mips-buildonly-randconfig-r002-20220324 (https://download.01.org/0d=
-ay-ci/archive/20220326/202203260237.93aoZ8XS-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d95=
-01cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
+Hi Johannes,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main next-20220325]
+[cannot apply to v5.17]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Johannes-Berg/mac80211-mlme-Handle-Puncturing-information-received-from-the-AP/20220325-210959
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+config: arm-mvebu_v5_defconfig (https://download.01.org/0day-ci/archive/20220326/202203260259.DnrkqrVM-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        git remote add kraxel git://git.kraxel.org/linux
-        git fetch --no-tags kraxel drm-qemu-next
-        git checkout c9940219406e5e5d0f449fc9dc1526806ec8683e
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/b248fa1a2c7cfef75823796440bf6fdd81090ac2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Johannes-Berg/mac80211-mlme-Handle-Puncturing-information-received-from-the-AP/20220325-210959
+        git checkout b248fa1a2c7cfef75823796440bf6fdd81090ac2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash drivers/gpu/drm/virtio/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/wireless/marvell/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/virtio/virtgpu_ioctl.c:271:13: warning: unused variable =
-'ret'
-   int value, ret, sz =3D sizeof(int);
-   ^
-   fatal error: error in backend: Nested variants found in inline asm strin=
-g: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
-h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
-branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
-de/asm/atomic.h", .line =3D 156, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
-et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $1, $2 # atomic_fetch_sub
-   subu $0, $1, $3
-   sc $0, $2
-   beqz $0, 1b
-   .set pop
-   move $0, $1
-   '
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0. Program arguments: clang -Wp,-MMD,drivers/gpu/drm/virtio/.virtgpu_ioc=
-tl.o.d -nostdinc -Iarch/mips/include -I./arch/mips/include/generated -Iincl=
-ude -I./include -Iarch/mips/include/uapi -I./arch/mips/include/generated/ua=
-pi -Iinclude/uapi -I./include/generated/uapi -include include/linux/compile=
-r-version.h -include include/linux/kconfig.h -include include/linux/compile=
-r_types.h -D__KERNEL__ -DVMLINUX_LOAD_ADDRESS=3D0xffffffff80001000 -DLINKER=
-_LOAD_ADDRESS=3D0x80001000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-pref=
-ix-map=3D=3D -DKBUILD_EXTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes=
- -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -We=
-rror=3Dimplicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dretur=
-n-type -Wno-format-security -std=3Dgnu89 --target=3Dmipsel-linux -fintegrat=
-ed-as -Werror=3Dunknown-warning-option -Werror=3Dignored-optimization-argum=
-ent -mno-check-zero-division -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -=
-msoft-float -DGAS_HAS_SET_HARDFLOAT -Wa,-msoft-float -ffreestanding -EL -fn=
-o-stack-check -march=3Dmips32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/m=
-ips/include/asm/mach-bcm47xx -Iarch/mips/include/asm/mach-generic -fno-asyn=
-chronous-unwind-tables -fno-delete-null-pointer-checks -Wno-frame-address -=
-Wno-address-of-packed-member -Os -Wframe-larger-than=3D1024 -fno-stack-prot=
-ector -Wimplicit-fallthrough -Wno-gnu -mno-global-merge -Wno-unused-but-set=
--variable -Wno-unused-const-variable -ftrivial-auto-var-init=3Dpattern -fno=
--stack-clash-protection -pg -Wdeclaration-after-statement -Wvla -Wno-pointe=
-r-sign -Wcast-function-type -Wno-array-bounds -fno-strict-overflow -fno-sta=
-ck-check -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wextra -=
-Wunused -Wno-unused-parameter -Wmissing-declarations -Wmissing-format-attri=
-bute -Wmissing-prototypes -Wold-style-definition -Wmissing-include-dirs -Wu=
-nused-but-set-variable -Wunused-const-variable -Wno-missing-field-initializ=
-ers -Wno-sign-compare -Wno-type-limits -I drivers/gpu/drm/virtio -I ./drive=
-rs/gpu/drm/virtio -DKBUILD_MODFILE=3D"drivers/gpu/drm/virtio/virtio-gpu" -D=
-KBUILD_BASENAME=3D"virtgpu_ioctl" -DKBUILD_MODNAME=3D"virtio_gpu" -D__KBUIL=
-D_MODNAME=3Dkmod_virtio_gpu -c -o drivers/gpu/drm/virtio/virtgpu_ioctl.o dr=
-ivers/gpu/drm/virtio/virtgpu_ioctl.c
-   1. <eof> parser at end of file
-   2. Code generation
-   3. Running pass 'Function Pass Manager' on module 'drivers/gpu/drm/virti=
-o/virtgpu_ioctl.c'.
-   4. Running pass 'Mips Assembly Printer' on function '@virtio_gpu_execbuf=
-fer_ioctl'
-   #0 0x0000555bdad583af Signals.cpp:0:0
-   #1 0x0000555bdad561d4 llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
-oss/clang-0f6d9501cf/bin/clang-15+0x34aa1d4)
-   #2 0x0000555bdac95b87 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
-cross/clang-0f6d9501cf/bin/clang-15+0x33e9b87)
-   #3 0x0000555bdad4e80e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
-ang-0f6d9501cf/bin/clang-15+0x34a280e)
-   #4 0x0000555bd894b40b (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x109f40=
-b)
-   #5 0x0000555bdac9c6ac llvm::report_fatal_error(llvm::Twine const&, bool)=
- (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x33f06ac)
-   #6 0x0000555bdb9b8780 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
- const (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x410c780)
-   #7 0x0000555bdb9b46b4 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
-lang-0f6d9501cf/bin/clang-15+0x41086b4)
-   #8 0x0000555bd93c67f7 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
-achineFunction&) (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x1b1a7f7)
-   #9 0x0000555bda0973dd llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
-ction&) (.part.53) MachineFunctionPass.cpp:0:0
-   #10 0x0000555bda4def67 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x2c32f67)
-   #11 0x0000555bda4df0e1 llvm::FPPassManager::runOnModule(llvm::Module&) (=
-/opt/cross/clang-0f6d9501cf/bin/clang-15+0x2c330e1)
-   #12 0x0000555bda4dfc5f llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x2c33c5f)
-   #13 0x0000555bdb078777 clang::EmitBackendOutput(clang::DiagnosticsEngine=
-&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
-TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
-ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
-lvm::raw_pwrite_stream> >) (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x37cc=
-777)
-   #14 0x0000555bdbcd88d3 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x442c8d3)
-   #15 0x0000555bdc7faaa1 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
-ross/clang-0f6d9501cf/bin/clang-15+0x4f4eaa1)
-   #16 0x0000555bdbcd7fb5 clang::CodeGenAction::ExecuteAction() (/opt/cross=
-/clang-0f6d9501cf/bin/clang-15+0x442bfb5)
-   #17 0x0000555bdb6d1aa1 clang::FrontendAction::Execute() (/opt/cross/clan=
-g-0f6d9501cf/bin/clang-15+0x3e25aa1)
-   #18 0x0000555bdb66733a clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x3dbb33a)
-   #19 0x0000555bdb7976cb (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x3eeb6=
-cb)
-   #20 0x0000555bd894c9bc cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
-ng-0f6d9501cf/bin/clang-15+0x10a09bc)
-   #21 0x0000555bd894968b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
-cpp:0:0
-   #22 0x0000555bdb4fdf45 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
-ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
-tor<char> const::'lambda'()>(long) Job.cpp:0:0
-   #23 0x0000555bdac95a43 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x33e9a43)
-   #24 0x0000555bdb4fe83e clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
-har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
-   #25 0x0000555bdb4d3037 clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const (/opt/cross/clang-0f6=
-d9501cf/bin/clang-15+0x3c27037)
-   #26 0x0000555bdb4d3a17 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) const (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x3c27a17)
-   #27 0x0000555bdb4dd069 clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x3c31069)
-   #28 0x0000555bd889695f main (/opt/cross/clang-0f6d9501cf/bin/clang-15+0x=
-fea95f)
-   #29 0x00007f85b768bd0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x26d0a)
-   #30 0x0000555bd89491aa _start (/opt/cross/clang-0f6d9501cf/bin/clang-15+=
-0x109d1aa)
-   clang-15: error: clang frontend command failed with exit code 70 (use -v=
- to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project 0f6d9501cf49ce0293709=
-9350d08f20c4af86f3d)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-0f6d9501cf/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch drivers include kernel nr_bisected scripts source usr
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SSB_EMBEDDED
-   Depends on SSB && SSB_DRIVER_MIPS && SSB_PCICORE_HOSTMODE
-   Selected by
-   - BCM47XX_SSB && BCM47XX
+>> drivers/net/wireless/marvell/mwl8k.c:5618:22: error: incompatible function pointer types initializing 'void (*)(struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_bss_conf *, u64)' (aka 'void (*)(struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_bss_conf *, unsigned long long)') with an expression of type 'void (struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_bss_conf *, u32)' (aka 'void (struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_bss_conf *, unsigned int)') [-Werror,-Wincompatible-function-pointer-types]
+           .bss_info_changed       = mwl8k_bss_info_changed,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/ret +271 drivers/gpu/drm/virtio/virtgpu_ioctl.c
+vim +5618 drivers/net/wireless/marvell/mwl8k.c
 
-   265=09
-   266	static int virtio_gpu_getparam_ioctl(struct drm_device *dev, void *d=
-ata,
-   267					     struct drm_file *file)
-   268	{
-   269		struct virtio_gpu_device *vgdev =3D dev->dev_private;
-   270		struct drm_virtgpu_getparam *param =3D data;
- > 271		int value, ret, sz =3D sizeof(int);
-   272		uint64_t value64;
-   273=09
-   274		switch (param->param) {
-   275		case VIRTGPU_PARAM_3D_FEATURES:
-   276			value =3D vgdev->has_virgl_3d ? 1 : 0;
-   277			break;
-   278		case VIRTGPU_PARAM_CAPSET_QUERY_FIX:
-   279			value =3D 1;
-   280			break;
-   281		case VIRTGPU_PARAM_RESOURCE_BLOB:
-   282			value =3D vgdev->has_resource_blob ? 1 : 0;
-   283			break;
-   284		case VIRTGPU_PARAM_HOST_VISIBLE:
-   285			value =3D vgdev->has_host_visible ? 1 : 0;
-   286			break;
-   287		case VIRTGPU_PARAM_CROSS_DEVICE:
-   288			value =3D vgdev->has_resource_assign_uuid ? 1 : 0;
-   289			break;
-   290		case VIRTGPU_PARAM_CONTEXT_INIT:
-   291			value =3D vgdev->has_context_init ? 1 : 0;
-   292			break;
-   293		case VIRTGPU_PARAM_SUPPORTED_CAPSET_IDs:
-   294			value64 =3D vgdev->capset_id_mask;
-   295			sz =3D sizeof(value64);
-   296			break;
-   297		default:
-   298			return -EINVAL;
-   299		}
-   300=09
-   301		if (sz =3D=3D sizeof(int)) {
-   302			if (copy_to_user(u64_to_user_ptr(param->value), &value, sz))
-   303				return -EFAULT;
-   304		} else {
-   305			if (copy_to_user(u64_to_user_ptr(param->value), &value64, sz))
-   306				return -EFAULT;
-   307		}
-   308=09
-   309		return 0;
-   310	}
-   311=09
+4c924f42c9c9f6 drivers/net/wireless/mwl8k.c Yogesh Ashok Powar 2014-02-25  5610  
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5611  static const struct ieee80211_ops mwl8k_ops = {
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5612  	.tx			= mwl8k_tx,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5613  	.start			= mwl8k_start,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5614  	.stop			= mwl8k_stop,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5615  	.add_interface		= mwl8k_add_interface,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5616  	.remove_interface	= mwl8k_remove_interface,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5617  	.config			= mwl8k_config,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10 @5618  	.bss_info_changed	= mwl8k_bss_info_changed,
+3ac64beecd2740 drivers/net/wireless/mwl8k.c Johannes Berg      2009-08-17  5619  	.prepare_multicast	= mwl8k_prepare_multicast,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5620  	.configure_filter	= mwl8k_configure_filter,
+fcdc403c31ed5b drivers/net/wireless/mwl8k.c Nishant Sarmukadam 2010-12-30  5621  	.set_key                = mwl8k_set_key,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5622  	.set_rts_threshold	= mwl8k_set_rts_threshold,
+4a6967b88af02e drivers/net/wireless/mwl8k.c Johannes Berg      2010-02-19  5623  	.sta_add		= mwl8k_sta_add,
+4a6967b88af02e drivers/net/wireless/mwl8k.c Johannes Berg      2010-02-19  5624  	.sta_remove		= mwl8k_sta_remove,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5625  	.conf_tx		= mwl8k_conf_tx,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5626  	.get_stats		= mwl8k_get_stats,
+0d462bbb0e2086 drivers/net/wireless/mwl8k.c John W. Linville   2010-07-28  5627  	.get_survey		= mwl8k_get_survey,
+a2292d83b5dcb7 drivers/net/wireless/mwl8k.c Lennert Buytenhek  2010-01-04  5628  	.ampdu_action		= mwl8k_ampdu_action,
+4c924f42c9c9f6 drivers/net/wireless/mwl8k.c Yogesh Ashok Powar 2014-02-25  5629  	.sw_scan_start		= mwl8k_sw_scan_start,
+4c924f42c9c9f6 drivers/net/wireless/mwl8k.c Yogesh Ashok Powar 2014-02-25  5630  	.sw_scan_complete	= mwl8k_sw_scan_complete,
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5631  };
+a66098daacee2f drivers/net/wireless/mwl8k.c Lennert Buytenhek  2009-03-10  5632  
 
---=20
+-- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
