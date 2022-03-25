@@ -1,41 +1,42 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99B07E
-	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 05:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D0F7E
+	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 06:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648187519; x=1679723519;
+  t=1648188733; x=1679724733;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wCjOnQNuYkQUYKTMHmN25adLO3wauI/DfrgbjPXBgvA=;
-  b=kU3SL95AhYSToiGPp3caJeHFweYDBkFqLCZt7X3CiYeNBpXxszKuQm/k
-   FdpxDja6hmb+Bqnqsn/dtxEl9RKhHjebJo+O7p1Wg4SrUcD9Ga2vUY2OU
-   UbZc+rRVBL7cESLPZ1DsOPGhEY9gq7ZSQFCDQEApH9RF1rNf9BcjOESLE
-   oSlOSCEZqLOewwwMK8+hD1cQBbWGAgB689GvTup/s5XMGNb5p+F7R8BO8
-   C38qRmSnERnpSOzxQHpEYnQL0YKxLo9ankZEELgGIqbaFvoVsae7SIak6
-   zpXXLAGxHp9yb70Hq7BhQbP55WLZgaLRW1xwrola9z/ckJIzPjdhYAvR5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="258754191"
+  bh=98w6sMdP+2FfIe4ozGHLqlTOCPvrVJV1bokWt1E65vc=;
+  b=Tbrx3DTfDXhUjrZ1xVoqMTnU0NWk2Y3kaWvsau5kI7ozqY7+9izbHYxU
+   rMwMtwIdcVJU2pOtGl4AFr8rjagZPYomo4kWy4sK6vbGTiZuDnAx5ipYY
+   Lf9OyqCqzo9OJ7aXC9RFX/ZTVbtapz+v2Ew4wZ6ZpU5fHx512/I32a/s8
+   cQZHck/BRah18WWwrHNM36vH1ZeCNQa5bdCmiIHTvxUJzPaqrfpgBnCwg
+   CxXA61YzrIqdxCYjEbAfTZ9c12kiJFSF/SPl+M06R6MBjb8scwaSYV4K+
+   aMTUz5vTp9d66OY3oIXo7noXS4m9HG5y1RwIAYjuniqCqiYnZ5wow8XQW
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="321759518"
 X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="258754191"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 22:51:59 -0700
+   d="scan'208";a="321759518"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 23:12:13 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="718103164"
+   d="scan'208";a="544958397"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 24 Mar 2022 22:51:56 -0700
+  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2022 23:12:11 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nXcrc-000LqL-8u; Fri, 25 Mar 2022 05:51:56 +0000
-Date: Fri, 25 Mar 2022 13:50:52 +0800
+	id 1nXdBD-000LsK-1a; Fri, 25 Mar 2022 06:12:11 +0000
+Date: Fri, 25 Mar 2022 14:11:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alex Deucher <alexander.deucher@amd.com>
+To: Mark Brown <broonie@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Evan Quan <evan.quan@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:1355:6: warning:
- variable 'num_of_active_display' set but not used
-Message-ID: <202203251309.VJH4ngVX-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [broonie-misc:for-kernelci 6/7] sound/soc/codecs/wm8731.c:394:31:
+ warning: format specifies type 'int' but the argument has type 'unsigned
+ long'
+Message-ID: <202203251449.v2pavIsV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,72 +47,105 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   85c7000fda0029ec16569b1eec8fd3a8d026be73
-commit: 75145aab7a0d865b361de687b201e8c4b76425eb drm/amdgpu/swsmu: clean up a bunch of stale interfaces
-date:   1 year, 5 months ago
-config: arm64-randconfig-r013-20220324 (https://download.01.org/0day-ci/archive/20220325/202203251309.VJH4ngVX-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git for-kernelci
+head:   0265b10883453897a0ddcdbc21af5031ad5b4a7e
+commit: 94c6c005fd4c9113c44acb727292f0acd1434a11 [6/7] TEST - MCLK SETTING
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220325/202203251449.v2pavIsV-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=75145aab7a0d865b361de687b201e8c4b76425eb
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 75145aab7a0d865b361de687b201e8c4b76425eb
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=94c6c005fd4c9113c44acb727292f0acd1434a11
+        git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
+        git fetch --no-tags broonie-misc for-kernelci
+        git checkout 94c6c005fd4c9113c44acb727292f0acd1434a11
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/codecs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:1355:6: warning: variable 'num_of_active_display' set but not used [-Wunused-but-set-variable]
-           int num_of_active_display = 0;
-               ^
-   1 warning generated.
+>> sound/soc/codecs/wm8731.c:394:31: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+                           pr_crit("SET SYSCLK %d\n", clk_get_rate(wm8731->mclk));
+                                               ~~     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               %lu
+   include/linux/printk.h:479:34: note: expanded from macro 'pr_crit'
+           printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   sound/soc/codecs/wm8731.c:751:34: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+                   pr_crit("WM8731 MCLK IS %d\n", clk_get_rate(wm8731->mclk));
+                                           ~~     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                           %lu
+   include/linux/printk.h:479:34: note: expanded from macro 'pr_crit'
+           printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/num_of_active_display +1355 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c
+vim +394 sound/soc/codecs/wm8731.c
 
-137d63abbf6a085 drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2018-11-29  1350  
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1351  int smu_display_configuration_change(struct smu_context *smu,
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1352  				     const struct amd_pp_display_configuration *display_config)
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1353  {
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1354  	int index = 0;
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11 @1355  	int num_of_active_display = 0;
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1356  
-2b7ad277e96577e drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Evan Quan 2020-05-25  1357  	if (!smu->pm_enabled || !smu->adev->pm.dpm_enabled)
-2b7ad277e96577e drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Evan Quan 2020-05-25  1358  		return -EOPNOTSUPP;
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1359  
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1360  	if (!display_config)
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1361  		return -EINVAL;
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1362  
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1363  	mutex_lock(&smu->mutex);
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1364  
-ce63d8f8b55d28c drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Evan Quan 2020-06-08  1365  	smu_set_min_dcef_deep_sleep(smu,
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1366  				    display_config->min_dcef_deep_sleep_set_clk / 100);
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1367  
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1368  	for (index = 0; index < display_config->num_path_including_non_display; index++) {
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1369  		if (display_config->displays[index].controller_id != 0)
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1370  			num_of_active_display++;
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1371  	}
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1372  
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1373  	mutex_unlock(&smu->mutex);
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1374  
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1375  	return 0;
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1376  }
-94ed6d0cfdb867b drivers/gpu/drm/amd/powerplay/amdgpu_smu.c Huang Rui 2019-01-11  1377  
-
-:::::: The code at line 1355 was first introduced by commit
-:::::: 94ed6d0cfdb867be9bf05f03d682980bce5d0036 drm/amd/powerplay: add smu display configuration change function
-
-:::::: TO: Huang Rui <ray.huang@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+   380	
+   381	static int wm8731_set_dai_sysclk(struct snd_soc_dai *codec_dai,
+   382			int clk_id, unsigned int freq, int dir)
+   383	{
+   384		struct snd_soc_component *component = codec_dai->component;
+   385		struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
+   386		struct wm8731_priv *wm8731 = snd_soc_component_get_drvdata(component);
+   387	
+   388		switch (clk_id) {
+   389		case WM8731_SYSCLK_XTAL:
+   390		case WM8731_SYSCLK_MCLK:
+   391			if (wm8731->mclk && clk_set_rate(wm8731->mclk, freq))
+   392				return -EINVAL;
+   393			if (wm8731->mclk)
+ > 394				pr_crit("SET SYSCLK %d\n", clk_get_rate(wm8731->mclk));
+   395			wm8731->sysclk_type = clk_id;
+   396			break;
+   397		default:
+   398			return -EINVAL;
+   399		}
+   400	
+   401		switch (freq) {
+   402		case 0:
+   403			wm8731->constraints = NULL;
+   404			break;
+   405		case 12000000:
+   406			wm8731->constraints = &wm8731_constraints_12000000;
+   407			break;
+   408		case 12288000:
+   409		case 18432000:
+   410			wm8731->constraints = &wm8731_constraints_12288000_18432000;
+   411			break;
+   412		case 16934400:
+   413		case 11289600:
+   414			wm8731->constraints = &wm8731_constraints_11289600_16934400;
+   415			break;
+   416		default:
+   417			return -EINVAL;
+   418		}
+   419	
+   420		wm8731->sysclk = freq;
+   421	
+   422		snd_soc_dapm_sync(dapm);
+   423	
+   424		return 0;
+   425	}
+   426	
 
 -- 
 0-DAY CI Kernel Test Service
