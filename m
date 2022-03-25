@@ -1,80 +1,91 @@
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CAC28E4
-	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 19:50:49 +0000 (UTC)
-Received: by mail-oi1-f176.google.com with SMTP id j83so9283828oih.6
-        for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 12:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yhjO44+D0aYcdcE6np5+AvBqPKTyqdOVFrzIZ1noXSA=;
-        b=D1Z0ZOmohogqX9cY1Fn5MmdsU63Ql5MjmB2/cwbcNP79oqgulB9P5vq4095xzwX70F
-         mE8qYfHlBI1vzgfkPA+4TMRn67kB4oLbrgGT44kywmHKUL+nq2hWJCfeiRohpnj7PDhH
-         pAfuMXJuxOWD22YmZir2dZgsEwUI8KdXF3u78=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yhjO44+D0aYcdcE6np5+AvBqPKTyqdOVFrzIZ1noXSA=;
-        b=5QYR1ygPHM42SC1/U7sAZOkoKo+FNH91Yg/6duQsdoizFgSWRkpi04D6pVTy4ufZAk
-         ThGJzkY2XHIlrUIhmQ2f/6SSTl9Z2UPx3JEySKpP/FtB39rvLTo5WwzprHqF2Y71i/sw
-         Zoyv4c9XgeKeKB98XAXsVzd/eV+Uh2yUfys22InVrleNjBNLiujVQUNlT6dGcdicc5Ta
-         pU7w0e3h3C00ZwEQwtjz236pSxvEvlqC+7EZinH+S8os44pPW0/s3Mf6lGCe/pLhwTHS
-         nJvOif22laUHOk4aq6Ou7bI8YHTI3zDEfpzPQvi7FMX54OCV452BkeE0BjPZyz4qxoW4
-         VNcA==
-X-Gm-Message-State: AOAM533E+ZyJdK1zQpOGGx7RU66D4S2U1RE4ue4OrhEDomIfZwmQbTve
-	D6Ad/5ljMn9kfk+0wEN8CTqmXg==
-X-Google-Smtp-Source: ABdhPJzl0o/k3dhCX11aBLeVLMykkE17NaTFp2/mx4UDZ4KUorNcH1gIJsPkfFCAaagVqRtdWqBJRQ==
-X-Received: by 2002:a05:6808:d51:b0:2ec:b129:1197 with SMTP id w17-20020a0568080d5100b002ecb1291197mr834192oik.12.1648237848423;
-        Fri, 25 Mar 2022 12:50:48 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id g6-20020a056870a24600b000da0df8b3cesm2950982oai.20.2022.03.25.12.50.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 12:50:48 -0700 (PDT)
-Subject: Re: [PATCH 2/2] selftests: fix an unused variable warning in pidfd
- selftest
-To: Christian Brauner <brauner@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20220324223929.1893741-1-axelrasmussen@google.com>
- <20220324223929.1893741-2-axelrasmussen@google.com>
- <20220325152117.mxp35mdfxcgsow6a@wittgenstein>
-From: Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <5733cfff-d20e-7792-f809-14cc594a1afe@linuxfoundation.org>
-Date: Fri, 25 Mar 2022 13:50:47 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4762C28E4
+	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 20:01:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648238469; x=1679774469;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6k+DJ48aVd7N/P40eA7ak4kwTvd6Fg58OSC9AHzaH94=;
+  b=YjJK/OC6C8h8Z8yEU5a5O/hyAhzfNn2JPFKg6YWJbW6ir57VQdC3iCWT
+   unpEMvLixHLSH6zX8os9ukLwRQyNMgl9nfkmbZIzIAEzq/9b+CFGdXXqX
+   4gPV02lPZlXNmfg6TKGVDuPpt3yzBO6LvsuX0oCEcfJJFO36onCm4rkWb
+   zETiL1UzPGqrbh/fTqb8ziW2pJD4uyYwktkoqQNL1vxcTqg/kpvrczn1P
+   2lxoEs/DQsFGnOI1xO+Vh0QpWX7iXLM+T0Llf4Y2bDWEgZuIQTdgkmNt8
+   Xfw8E2KYzUnW+bFeFTmV3qdqPvCPUZyhetKFDB60itGRo3g+qFOABRcVz
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="319414099"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="319414099"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 13:01:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="545205990"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 25 Mar 2022 13:01:06 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nXq7N-000MY6-Kz; Fri, 25 Mar 2022 20:01:05 +0000
+Date: Sat, 26 Mar 2022 04:01:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v1 1/1] Makefile.extrawarn: Turn off -Werror when extra
+ warnings are enabled
+Message-ID: <202203260359.nhs6ZZb9-lkp@intel.com>
+References: <20220325131348.3995-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220325152117.mxp35mdfxcgsow6a@wittgenstein>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220325131348.3995-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 3/25/22 9:21 AM, Christian Brauner wrote:
-> On Thu, Mar 24, 2022 at 03:39:29PM -0700, Axel Rasmussen wrote:
->> I fixed a few warnings like this in commit e2aa5e650b07
->> ("selftests: fixup build warnings in pidfd / clone3 tests"), but I
->> missed this one by mistake. Since this variable is unused, remove it.
->>
->> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
->> ---
-> 
-> Looks good,
-> Reviewed-by: Christian Brauner <brauner@kernel.org>
-> 
+Hi Andy,
 
-Thank you both. Will apply it for Linux 5.18-rc2.
+I love your patch! Perhaps something to improve:
 
-thanks,
--- Shuah
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.17 next-20220325]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/Makefile-extrawarn-Turn-off-Werror-when-extra-warnings-are-enabled/20220325-211517
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 34af78c4e616c359ed428d79fe4758a35d2c5473
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220326/202203260359.nhs6ZZb9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/6b5eeef1471c693165f2bdec5fb19c2ba20e9345
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/Makefile-extrawarn-Turn-off-Werror-when-extra-warnings-are-enabled/20220325-211517
+        git checkout 6b5eeef1471c693165f2bdec5fb19c2ba20e9345
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> clang-15: warning: 'x86_64' does not support '-mno-outline-atomics'; flag ignored [-Woption-ignored]
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
