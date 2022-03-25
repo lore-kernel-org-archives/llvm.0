@@ -1,23 +1,42 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD7D27E
-	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 12:25:11 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 375B412FC;
-	Fri, 25 Mar 2022 05:15:35 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22AE33F73B;
-	Fri, 25 Mar 2022 05:15:34 -0700 (PDT)
-Date: Fri, 25 Mar 2022 12:15:28 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Borislav Petkov <bp@alien8.de>, Nathan Chancellor <nathan@kernel.org>,
-	x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev, Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: clang memcpy calls
-Message-ID: <Yj2yYFloadFobRPx@lakrids>
-References: <YjxTt3pFIcV3lt8I@zn.tnic>
- <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C47F46A9
+	for <llvm@lists.linux.dev>; Fri, 25 Mar 2022 12:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648212054; x=1679748054;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o2LFS03sDofrW+G9hmi3C61RnQvETQcPgiy633mrl5Y=;
+  b=XBP0VhFIhISsXV/4eF8KVaL26sErm4em/h0TZQk3vvewU1e0lut5r6br
+   dip6QeOvrpxJGNPlyoshQxWpit4QQXb0isBixPuXCLIeA5Z86Jx+LFhWf
+   GXRVc16Xftadscwp0yf+ukT5JbZKePrlcwtn1YZAZDWzYfos5MQgUqdvH
+   WL14IbTFZCkpgCWAKVPqo6EWcpVWF8MncKYradAy3qkmifVibSBXQbrAk
+   OPkj1fDI0zab0gPwEP7829GrKR9o4gmhnF/36MByb6X3628/tvBlx7QJG
+   x7fnbOhi9rkVVwOLoIECfda4+do4VIGH3e0H89ghSxaHC4saK4w+AnIkT
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="238565244"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="238565244"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 05:40:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="718197765"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 25 Mar 2022 05:40:51 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nXjFK-000MBc-Rk; Fri, 25 Mar 2022 12:40:50 +0000
+Date: Fri, 25 Mar 2022 20:40:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Cercueil <paul@crapouillou.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: arch/mips/crypto/crc32-mips.c:40:1: error: expected identifier or '('
+Message-ID: <202203252015.7q4sT1o2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,294 +45,152 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Mar 24, 2022 at 11:43:46AM -0700, Nick Desaulniers wrote:
-> On Thu, Mar 24, 2022 at 4:19 AM Borislav Petkov <bp@alien8.de> wrote:
-> >
-> > Hi folks,
-> >
-> > so I've been looking at a recent objtool noinstr warning from clang
-> > builds:
-> >
-> > vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves .noinstr.text section
-> >
-> > The issue is that clang generates a memcpy() call when a struct copy
-> > happens:
-> >
-> >         if (regs != eregs)
-> >                 *regs = *eregs;
-> 
-> Specifically, this is copying one struct pt_regs to another. It looks
-> like the sizeof struct pt_regs is just large enough to have clang emit
-> the libcall.
-> https://godbolt.org/z/scx6aa8jq
-> Otherwise clang will also use rep; movsq; when -mno-sse -O2 is set and
-> the structs are below ARBITRARY_THRESHOLD.  Should ARBITRARY_THRESHOLD
-> be raised so that we continue to inline the memcpy? *shrug*
-> 
-> Though, looking at the compiled memcpy (`llvm-objdump -D
-> --disassemble-symbols=memcpy vmlinux`), maybe we *should* try harder.
-> Filed
-> https://github.com/llvm/llvm-project/issues/54535.
-> 
-> > see below for asm output.
-> >
-> > While gcc does simply generate an actual "rep; movsq".
-> >
-> > So, how hard would it be to make clang do that too pls?
-> 
-> As Mark said in the sibling reply; I don't know of general ways to
-> inhibit libcall optimizations on the level you're looking for, short
-> of heavy handy methods of disabling optimizations entirely.  There's
-> games that can be played with -fno-builtin-*, but they're not super
-> portable, and I think there's a handful of *blessed* functions that
-> must exist in any env, freestanding or not: memcpy, memmove, memset,
-> and memcmp for which you cannot yet express "these do not exist."
+Hi Paul,
 
-Talking with Peter on IRC, I think there's an oversight on the compiler
-side here w.r.t. the expectations around these blessed functions, since
-either:
+FYI, the error/warning still remains.
 
-a) The compiler expects the out-of-line implementations of functions
-   ARE NOT instrumented by address-sanitizer.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   34af78c4e616c359ed428d79fe4758a35d2c5473
+commit: 67512a8cf5a730938fdb1e48de33edfef6015e03 MIPS: Avoid macro redefinitions
+date:   6 months ago
+config: mips-randconfig-r001-20220324 (https://download.01.org/0day-ci/archive/20220325/202203252015.7q4sT1o2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=67512a8cf5a730938fdb1e48de33edfef6015e03
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 67512a8cf5a730938fdb1e48de33edfef6015e03
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-   If this is the case, then it's legitimate for the compiler to call
-   these functions anywhere, and we should NOT instrument the kernel
-   implementations of these. If the compiler wants those instrumented it
-   needs to add the instrumentation in the caller.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-b) The compiler expects the out-of-line implementations of functions
-   ARE instrumented by address-sanitizer.
+All errors (new ones prefixed by >>):
 
-   If this is the case, the compiler MUST NOT generate implicit calls to
-   these "blessed" functions from functions marked with:
-
-     __attribute__((no_sanitize_address)).
-
-   ... or the compiler is violating the premise of that attribute.
-
-   AFAICT The two options for the compiler here are:
-
-   1) Always inline an uninstrumented form of the function in this case
-
-   2) Have distinct instrumented/uninstrumented out-of-line
-      implementations, and call the uninstrumented form in this case.
-
-To see what clang and GCC do today, I hacked the following in:
-
-| diff --git a/init/main.c b/init/main.c
-| index 65fa2e41a9c0..30406c472b5d 100644
-| --- a/init/main.c
-| +++ b/init/main.c
-| @@ -1637,3 +1637,31 @@ static noinline void __init kernel_init_freeable(void)
-|  
-|         integrity_load_keys();
-|  }
-| +
-| +void
-| +test_implicit_memcpy(struct task_struct *dest,
-| +                    const struct task_struct *src)
-| +{
-| +       *dest = *src;
-| +}
-| +
-| +void
-| +test_explicit_memcpy(struct task_struct *dest,
-| +                    const struct task_struct *src)
-| +{
-| +       memcpy(dest, src, sizeof(*dest));
-| +}
-| +
-| +void __no_sanitize_address
-| +test_implicit_memcpy_nokasan(struct task_struct *dest,
-| +                            const struct task_struct *src)
-| +{
-| +       *dest = *src;
-| +}
-| +
-| +void __no_sanitize_address
-| +test_explicit_memcpy_nokasan(struct task_struct *dest,
-| +                            const struct task_struct *src)
-| +{
-| +       memcpy(dest, src, sizeof(*dest));
-| +}
-
-
-For arm64, GCC 11.1.0, KASAN_OUTLINE I see:
-
-| <test_implicit_memcpy>:
-|        d503245f        bti     c
-|        d503233f        paciasp
-|        a9be7bfd        stp     x29, x30, [sp, #-32]!
-|        910003fd        mov     x29, sp
-|        a90153f3        stp     x19, x20, [sp, #16]
-|        aa0103f3        mov     x19, x1
-|        aa0003f4        mov     x20, x0
-|        d281c001        mov     x1, #0xe00                      // #3584
-|        940b9534        bl      ffff8000082f9d90 <__asan_storeN>
-|        aa1303e0        mov     x0, x19
-|        d281c001        mov     x1, #0xe00                      // #3584
-|        940b951e        bl      ffff8000082f9d44 <__asan_loadN>
-|        aa1303e1        mov     x1, x19
-|        aa1403e0        mov     x0, x20
-|        d281c002        mov     x2, #0xe00                      // #3584
-|        940b98c5        bl      ffff8000082fabf0 <memcpy>
-|        a94153f3        ldp     x19, x20, [sp, #16]
-|        a8c27bfd        ldp     x29, x30, [sp], #32
-|        d50323bf        autiasp
-|        d65f03c0        ret
-| 
-| <test_explicit_memcpy>:
-|        d503245f        bti     c
-|        d503233f        paciasp
-|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|        d281c002        mov     x2, #0xe00                      // #3584
-|        910003fd        mov     x29, sp
-|        940b98bb        bl      ffff8000082fabf0 <memcpy>
-|        a8c17bfd        ldp     x29, x30, [sp], #16
-|        d50323bf        autiasp
-|        d65f03c0        ret
-| 
-| <test_implicit_memcpy_nokasan>:
-|        d503245f        bti     c
-|        d503233f        paciasp
-|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|        d281c002        mov     x2, #0xe00                      // #3584
-|        910003fd        mov     x29, sp
-|        940b98b2        bl      ffff8000082fabf0 <memcpy>
-|        a8c17bfd        ldp     x29, x30, [sp], #16
-|        d50323bf        autiasp
-|        d65f03c0        ret
-| 
-| <test_explicit_memcpy_nokasan>:
-|        d503245f        bti     c
-|        d503233f        paciasp
-|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|        d281c002        mov     x2, #0xe00                      // #3584
-|        910003fd        mov     x29, sp
-|        940b98a7        bl      ffff8000082fabf0 <memcpy>
-|        a8c17bfd        ldp     x29, x30, [sp], #16
-|        d50323bf        autiasp
-|        d65f03c0        ret
-
-For x86_64, GCC 11.1.0, KASAN_OUTLINE I see:
-
-| <test_implicit_memcpy>:
-|        41 54                   push   %r12
-|        49 89 fc                mov    %rdi,%r12
-|        55                      push   %rbp
-|        48 89 f5                mov    %rsi,%rbp
-|        be 40 1c 00 00          mov    $0x1c40,%esi
-|        e8 0d 9a 32 00          call   ffffffff8132b0f0 <__asan_storeN>
-|        48 89 ef                mov    %rbp,%rdi
-|        be 40 1c 00 00          mov    $0x1c40,%esi
-|        e8 f0 99 32 00          call   ffffffff8132b0e0 <__asan_loadN>
-|        4c 89 e7                mov    %r12,%rdi
-|        48 89 ee                mov    %rbp,%rsi
-|        b9 88 03 00 00          mov    $0x388,%ecx
-|        f3 48 a5                rep movsq %ds:(%rsi),%es:(%rdi)
-|        5d                      pop    %rbp
-|        41 5c                   pop    %r12
-|        c3                      ret   
-| 
-| <test_explicit_memcpy>:
-|        ba 40 1c 00 00          mov    $0x1c40,%edx
-|        e9 b6 9f 32 00          jmp    ffffffff8132b6d0 <memcpy>
-| 
-| 
-| <test_implicit_memcpy_nokasan>:
-|        b9 88 03 00 00          mov    $0x388,%ecx
-|        f3 48 a5                rep movsq %ds:(%rsi),%es:(%rdi)
-|        c3                      ret    
-| 
-| <test_explicit_memcpy_nokasan>:
-|        ba 40 1c 00 00          mov    $0x1c40,%edx
-|        e9 96 9f 32 00          jmp    ffffffff8132b6d0 <memcpy>
-
-So from those examples it seems GCC falls into bucket (a), and assumes the
-blessed functions ARE NOT instrumented.
-
-We can make this noinstr-safe AND get instrumentation for the first two cases
-by removing the instrumentation from the out-of-line copies (always using
-noinstr asm implementations) and using ifdeffery to make the explicit calls
-target as distinct kasan_instrumented_memcpy() or similar...
+>> arch/mips/crypto/crc32-mips.c:40:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32b,  0, 0);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:41:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32h,  1, 0);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:42:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32w,  2, 0);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:43:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32d,  3, 0);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:44:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32cb, 0, 1);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:45:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32ch, 1, 1);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:46:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32cw, 2, 1);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:47:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32cd, 3, 1);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   8 errors generated.
 
 
-For arm64, clang 13.0.0, KASAN_OUTLINE I see:
+vim +40 arch/mips/crypto/crc32-mips.c
 
-| <test_implicit_memcpy>:
-|        d503233f        paciasp
-|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|        910003fd        mov     x29, sp
-|        5281c002        mov     w2, #0xe00                      // #3584
-|        940c0f66        bl      ffff8000083185fc <memcpy>
-|        a8c17bfd        ldp     x29, x30, [sp], #16
-|        d50323bf        autiasp
-|        d65f03c0        ret
-| 
-| <test_explicit_memcpy>:
-|        d503233f        paciasp
-|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|        910003fd        mov     x29, sp
-|        5281c002        mov     w2, #0xe00                      // #3584
-|        940c0f5e        bl      ffff8000083185fc <memcpy>
-|        a8c17bfd        ldp     x29, x30, [sp], #16
-|        d50323bf        autiasp
-|        d65f03c0        ret
-| 
-| <test_implicit_memcpy_nokasan>:
-|        d503233f        paciasp
-|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|        910003fd        mov     x29, sp
-|        5281c002        mov     w2, #0xe00                      // #3584
-|        940c0f56        bl      ffff8000083185fc <memcpy>
-|        a8c17bfd        ldp     x29, x30, [sp], #16
-|        d50323bf        autiasp
-|        d65f03c0        ret
-| 
-| <test_explicit_memcpy_nokasan>:
-|        d503233f        paciasp
-|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|        910003fd        mov     x29, sp
-|        5281c002        mov     w2, #0xe00                      // #3584
-|        940c0f4e        bl      ffff8000083185fc <memcpy>
-|        a8c17bfd        ldp     x29, x30, [sp], #16
-|        d50323bf        autiasp
-|        d65f03c0        ret
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  29  
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  30  #ifndef TOOLCHAIN_SUPPORTS_CRC
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  31  #define _ASM_MACRO_CRC32(OP, SZ, TYPE)					  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  32  _ASM_MACRO_3R(OP, rt, rs, rt2,						  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  33  	".ifnc	\\rt, \\rt2\n\t"					  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  34  	".error	\"invalid operands \\\"" #OP " \\rt,\\rs,\\rt2\\\"\"\n\t" \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  35  	".endif\n\t"							  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  36  	_ASM_INSN_IF_MIPS(0x7c00000f | (__rt << 16) | (__rs << 21) |	  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  37  			  ((SZ) <<  6) | ((TYPE) << 8))			  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  38  	_ASM_INSN32_IF_MM(0x00000030 | (__rs << 16) | (__rt << 21) |	  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  39  			  ((SZ) << 14) | ((TYPE) << 3)))
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09 @40  _ASM_MACRO_CRC32(crc32b,  0, 0);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  41  _ASM_MACRO_CRC32(crc32h,  1, 0);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  42  _ASM_MACRO_CRC32(crc32w,  2, 0);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  43  _ASM_MACRO_CRC32(crc32d,  3, 0);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  44  _ASM_MACRO_CRC32(crc32cb, 0, 1);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  45  _ASM_MACRO_CRC32(crc32ch, 1, 1);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  46  _ASM_MACRO_CRC32(crc32cw, 2, 1);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  47  _ASM_MACRO_CRC32(crc32cd, 3, 1);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  48  #define _ASM_SET_CRC ""
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  49  #else /* !TOOLCHAIN_SUPPORTS_CRC */
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  50  #define _ASM_SET_CRC ".set\tcrc\n\t"
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  51  #endif
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  52  
 
-For x86_64, clang 13.0.0, KASAN_OUTLINE I see:
+:::::: The code at line 40 was first introduced by commit
+:::::: 4a5dc51e93e80463010ab4d8d00fc9cb6bc936fa MIPS: crypto: Add crc32 and crc32c hw accelerated module
 
-| <test_implicit_memcpy>:
-|        ba 40 1c 00 00          mov    $0x1c40,%edx
-|        e8 d6 94 36 00          call   ffffffff8136a830 <memcpy>
-|        c3                      ret  
-| 
-| <test_explicit_memcpy>:
-|        ba 40 1c 00 00          mov    $0x1c40,%edx
-|        e8 c6 94 36 00          call   ffffffff8136a830 <memcpy>
-|        c3                      ret    
-| 
-| 
-| <test_implicit_memcpy_nokasan>:
-|        ba 40 1c 00 00          mov    $0x1c40,%edx
-|        e9 b6 94 36 00          jmp    ffffffff8136a830 <memcpy>
-| 
-| 
-| <test_explicit_memcpy_nokasan>:
-|        ba 40 1c 00 00          mov    $0x1c40,%edx
-|        e9 a6 94 36 00          jmp    ffffffff8136a830 <memcpy>
+:::::: TO: Marcin Nowakowski <marcin.nowakowski@mips.com>
+:::::: CC: James Hogan <jhogan@kernel.org>
 
-... for which the first two suggests clang thinks the blessed functions *are*
-instrumented, which means that generating calls to those in the latter two
-cases is a bug.
-
-We can make this noinstr-safe as with the GCC case, but we'll lose the
-desirable instrumentation for the test_implicit_memcpy() case.
-
-I think something has to change on the compiler side here (e.g. as per
-options above), and we should align GCC and clang on the same
-approach...
-
-Thanks,
-Mark.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
