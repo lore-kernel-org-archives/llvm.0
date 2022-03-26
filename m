@@ -1,43 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0918F23D9
-	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 00:59:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACBF2917
+	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 01:51:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648256345; x=1679792345;
+  t=1648259511; x=1679795511;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xP9brg8JEtm0qvZ+n/vXnaaaWmwsAHYZGTtSaqWz/hA=;
-  b=Dp/sWtXWIrL5Z3OYXLmKL3hatYaIC3Wl2N5H60HNaOPla1e5kqZ/OCy+
-   9F0xTFi0M/yAdpM5q3/u5A0yCl94GeqbZPBRqIeaAGQgKYSrepjZOtTwj
-   x4IQqfeaKEKf9D5CzcabPlviuUgtGZJswrXOIs7PN7hIuu1fE+VBk093D
-   8f8JZ75GskAfPT/CwLK60tecGSESZzpPIoMT2bvnCdJ2Cn/6dWfVprxns
-   f4y5alCVq1B2nFWQJuGpaqE7yvf72uqrcsSpG32jMttbwORqg4tvna+uq
-   HqyxNeL/GQG/qSUc4qq6a3OcBZmhnFZ4eXJl45EAMREQ5OhJJ98tmRhIj
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="257574343"
+  bh=S6P/CQ0wkhzL5Vune8foNB5LvsIHO4zHgoHvl/Uw4PM=;
+  b=PdgJbapnZs5v5FS5Qyc/j2KF1euzcur0b8N6TsKuHxn0QUQdBW5uA+N+
+   jYmszUMXvw4TWQpKRKCvR1O2vk2MoBi/4b+0Q+CYKo60/qkdOK/tnylCn
+   HltTZgz+LC98OvkV88zOIoxtaaUz3VuQ1a0tYLR26zggAmdaGjwCCVCXi
+   U6AXpgtJ/nGhns13JiOdLssMSBej4p/oYp00scYlcapHVhE/BWToOUMt/
+   3+p/mB0sxkdCFEYD7rCb47uiUxOE/jkl3mIR/nBfTtae72oLkqYfPbcUD
+   rgfCm/rHoJy4isavsrTUpo2/8ehb57rDgnqqNw6WJ141egE0FFMNYFtvO
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="321941381"
 X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="257574343"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 17:59:04 -0700
+   d="scan'208";a="321941381"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 18:51:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="602218052"
+   d="scan'208";a="584646340"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Mar 2022 17:59:02 -0700
+  by orsmga001.jf.intel.com with ESMTP; 25 Mar 2022 18:51:49 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nXulh-000MpE-VU; Sat, 26 Mar 2022 00:59:01 +0000
-Date: Sat, 26 Mar 2022 08:58:16 +0800
+	id 1nXvan-000MrG-34; Sat, 26 Mar 2022 01:51:49 +0000
+Date: Sat, 26 Mar 2022 09:50:47 +0800
 From: kernel test robot <lkp@intel.com>
 To: Andreas Gruenbacher <agruenba@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, cluster-devel@redhat.com,
 	linux-kernel@vger.kernel.org
 Subject: [gfs2:for-next 16/17] fs/gfs2/file.c:1073:14: warning: comparison of
- distinct pointer types ('typeof (((1UL) << 12) - ((unsigned
- long)(iocb->ki_pos) & ~(~(((1UL) << 12) - 1)))) *' (aka 'unsigned long *')
- and 'typeof (iov_iter_count(from)) *' (aka 'unsigned int *'))
-Message-ID: <202203260813.Hh1xKAN5-lkp@intel.com>
+ distinct pointer types ('typeof ((1UL << 18) - ((unsigned
+ long)(iocb->ki_pos) & ~(~((1 << 18) - 1)))) *' (aka 'unsigned long *') and
+ 'typeof (iov_iter_count(from)) *' (aka 'unsigned int *'))
+Message-ID: <202203260944.DMj6xxB2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,7 +51,7 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git for-next
 head:   3d7b481b8a996e68339268487c0d3c8e54a2c274
 commit: 32c8d6969d43c1bce394f75e9bcf32697146a773 [16/17] gfs2: Don't get stuck on partial buffered writes
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220326/202203260813.Hh1xKAN5-lkp@intel.com/config)
+config: hexagon-randconfig-r022-20220325 (https://download.01.org/0day-ci/archive/20220326/202203260944.DMj6xxB2-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -62,14 +62,14 @@ reproduce (this is a W=1 build):
         git checkout 32c8d6969d43c1bce394f75e9bcf32697146a773
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/gfs2/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/gfs2/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/gfs2/file.c:1073:14: warning: comparison of distinct pointer types ('typeof (((1UL) << 12) - ((unsigned long)(iocb->ki_pos) & ~(~(((1UL) << 12) - 1)))) *' (aka 'unsigned long *') and 'typeof (iov_iter_count(from)) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+>> fs/gfs2/file.c:1073:14: warning: comparison of distinct pointer types ('typeof ((1UL << 18) - ((unsigned long)(iocb->ki_pos) & ~(~((1 << 18) - 1)))) *' (aka 'unsigned long *') and 'typeof (iov_iter_count(from)) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
                    min_size = min(PAGE_SIZE - offset_in_page(iocb->ki_pos),
                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/minmax.h:45:19: note: expanded from macro 'min'
