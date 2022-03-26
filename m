@@ -1,188 +1,114 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACBF2917
-	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 01:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E1E2917
+	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 02:22:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648259511; x=1679795511;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=S6P/CQ0wkhzL5Vune8foNB5LvsIHO4zHgoHvl/Uw4PM=;
-  b=PdgJbapnZs5v5FS5Qyc/j2KF1euzcur0b8N6TsKuHxn0QUQdBW5uA+N+
-   jYmszUMXvw4TWQpKRKCvR1O2vk2MoBi/4b+0Q+CYKo60/qkdOK/tnylCn
-   HltTZgz+LC98OvkV88zOIoxtaaUz3VuQ1a0tYLR26zggAmdaGjwCCVCXi
-   U6AXpgtJ/nGhns13JiOdLssMSBej4p/oYp00scYlcapHVhE/BWToOUMt/
-   3+p/mB0sxkdCFEYD7rCb47uiUxOE/jkl3mIR/nBfTtae72oLkqYfPbcUD
-   rgfCm/rHoJy4isavsrTUpo2/8ehb57rDgnqqNw6WJ141egE0FFMNYFtvO
+  t=1648261335; x=1679797335;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=8JUqHs5t+dHXAq9hp5/Tp/GSsj948ANluTlXzjh6cbg=;
+  b=MIAXVB71dJMCWXAb21neW5R14VIuXG7UOGZL4mNhm4o6t1ZbXIt6Qu2Z
+   pQk8eVKfHpDLCS2L2jVMtj6LBMRohuhrxeQEyD7sGBiXViEC5HS6dXtn/
+   PJwdNC4Kc3+tx481/oIgTsEdL6UgPgWhFCelB1huIeyzuuMGyeIfuIsuz
+   g7BtHlhjBJAMXbuNOGU/fecHTaNL+rmC01mI8opZgIRecECmyaj48XxhQ
+   54KYXa5pcAEl+RFtaTGHk4kRctbR1ENVz95tDGBnVaJuvCDTUD9ePyrFL
+   sQ7PX1JKMn06Zk0G2ClRfreBtZ5d5zwCKYyBThHf3lmV2OaKi1tS6aOk8
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="321941381"
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="257580521"
 X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="321941381"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 18:51:51 -0700
+   d="scan'208";a="257580521"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 19:22:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="584646340"
+   d="scan'208";a="562051549"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 25 Mar 2022 18:51:49 -0700
+  by orsmga008.jf.intel.com with ESMTP; 25 Mar 2022 19:22:11 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nXvan-000MrG-34; Sat, 26 Mar 2022 01:51:49 +0000
-Date: Sat, 26 Mar 2022 09:50:47 +0800
+	id 1nXw4A-000Mti-87; Sat, 26 Mar 2022 02:22:10 +0000
+Date: Sat, 26 Mar 2022 10:21:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andreas Gruenbacher <agruenba@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, cluster-devel@redhat.com,
-	linux-kernel@vger.kernel.org
-Subject: [gfs2:for-next 16/17] fs/gfs2/file.c:1073:14: warning: comparison of
- distinct pointer types ('typeof ((1UL << 18) - ((unsigned
- long)(iocb->ki_pos) & ~(~((1 << 18) - 1)))) *' (aka 'unsigned long *') and
- 'typeof (iov_iter_count(from)) *' (aka 'unsigned int *'))
-Message-ID: <202203260944.DMj6xxB2-lkp@intel.com>
+To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Allan Nielsen <allan.nielsen@microchip.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Subject: Re: [net-next 5/5] net: mdio: mscc-miim: use
+ fwnode_mdiobus_register()
+Message-ID: <202203261006.uZruvRKb-lkp@intel.com>
+References: <20220325172234.1259667-6-clement.leger@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220325172234.1259667-6-clement.leger@bootlin.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git for-next
-head:   3d7b481b8a996e68339268487c0d3c8e54a2c274
-commit: 32c8d6969d43c1bce394f75e9bcf32697146a773 [16/17] gfs2: Don't get stuck on partial buffered writes
-config: hexagon-randconfig-r022-20220325 (https://download.01.org/0day-ci/archive/20220326/202203260944.DMj6xxB2-lkp@intel.com/config)
+Hi "Clément,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on net-next/master]
+
+url:    https://github.com/0day-ci/linux/commits/Cl-ment-L-ger/net-mdio-fwnode-add-fwnode_mdiobus_register/20220326-040146
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 89695196f0ba78a17453f9616355f2ca6b293402
+config: riscv-randconfig-r003-20220325 (https://download.01.org/0day-ci/archive/20220326/202203261006.uZruvRKb-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/commit/?id=32c8d6969d43c1bce394f75e9bcf32697146a773
-        git remote add gfs2 https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git
-        git fetch --no-tags gfs2 for-next
-        git checkout 32c8d6969d43c1bce394f75e9bcf32697146a773
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/24673ffe7514a73903a3bc49585846bce1de8748
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Cl-ment-L-ger/net-mdio-fwnode-add-fwnode_mdiobus_register/20220326-040146
+        git checkout 24673ffe7514a73903a3bc49585846bce1de8748
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/gfs2/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/mdio/ fs/gfs2/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/gfs2/file.c:1073:14: warning: comparison of distinct pointer types ('typeof ((1UL << 18) - ((unsigned long)(iocb->ki_pos) & ~(~((1 << 18) - 1)))) *' (aka 'unsigned long *') and 'typeof (iov_iter_count(from)) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   min_size = min(PAGE_SIZE - offset_in_page(iocb->ki_pos),
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   In file included from drivers/net/mdio/mdio-mscc-miim.c:10:
+>> include/linux/fwnode_mdio.h:27:5: warning: no previous prototype for function 'fwnode_mdiobus_phy_device_register' [-Wmissing-prototypes]
+   int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
+       ^
+   include/linux/fwnode_mdio.h:27:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
+   ^
+   static 
    1 warning generated.
 
 
-vim +1073 fs/gfs2/file.c
+vim +/fwnode_mdiobus_phy_device_register +27 include/linux/fwnode_mdio.h
 
-  1005	
-  1006	static ssize_t gfs2_file_buffered_write(struct kiocb *iocb,
-  1007						struct iov_iter *from,
-  1008						struct gfs2_holder *gh)
-  1009	{
-  1010		struct file *file = iocb->ki_filp;
-  1011		struct inode *inode = file_inode(file);
-  1012		struct gfs2_inode *ip = GFS2_I(inode);
-  1013		struct gfs2_sbd *sdp = GFS2_SB(inode);
-  1014		struct gfs2_holder *statfs_gh = NULL;
-  1015		size_t prev_count = 0, window_size = 0;
-  1016		size_t read = 0;
-  1017		ssize_t ret;
-  1018	
-  1019		/*
-  1020		 * In this function, we disable page faults when we're holding the
-  1021		 * inode glock while doing I/O.  If a page fault occurs, we indicate
-  1022		 * that the inode glock may be dropped, fault in the pages manually,
-  1023		 * and retry.
-  1024		 */
-  1025	
-  1026		if (inode == sdp->sd_rindex) {
-  1027			statfs_gh = kmalloc(sizeof(*statfs_gh), GFP_NOFS);
-  1028			if (!statfs_gh)
-  1029				return -ENOMEM;
-  1030		}
-  1031	
-  1032		gfs2_holder_init(ip->i_gl, LM_ST_EXCLUSIVE, 0, gh);
-  1033	retry:
-  1034		ret = gfs2_glock_nq(gh);
-  1035		if (ret)
-  1036			goto out_uninit;
-  1037	retry_under_glock:
-  1038		if (inode == sdp->sd_rindex) {
-  1039			struct gfs2_inode *m_ip = GFS2_I(sdp->sd_statfs_inode);
-  1040	
-  1041			ret = gfs2_glock_nq_init(m_ip->i_gl, LM_ST_EXCLUSIVE,
-  1042						 GL_NOCACHE, statfs_gh);
-  1043			if (ret)
-  1044				goto out_unlock;
-  1045		}
-  1046	
-  1047		current->backing_dev_info = inode_to_bdi(inode);
-  1048		pagefault_disable();
-  1049		ret = iomap_file_buffered_write(iocb, from, &gfs2_iomap_ops);
-  1050		pagefault_enable();
-  1051		current->backing_dev_info = NULL;
-  1052		if (ret > 0) {
-  1053			iocb->ki_pos += ret;
-  1054			read += ret;
-  1055		}
-  1056	
-  1057		if (inode == sdp->sd_rindex)
-  1058			gfs2_glock_dq_uninit(statfs_gh);
-  1059	
-  1060		if (should_fault_in_pages(ret, from, &prev_count, &window_size)) {
-  1061			size_t min_size, leftover;
-  1062	
-  1063			/*
-  1064			 * Make sure to fault in enough memory to fill at least one
-  1065			 * page cache page.  Otherwise, we could end up with a partial
-  1066			 * write that __iomap_write_end() treats as a zero-length
-  1067			 * write, and we would get stuck.
-  1068			 *
-  1069			 * Note that we assume that after fault_in_iov_iter_readable(),
-  1070			 * at least min_size bytes of memory will be readable.  This
-  1071			 * could change with sub-page pointer color probing.
-  1072			 */
-> 1073			min_size = min(PAGE_SIZE - offset_in_page(iocb->ki_pos),
-  1074				       iov_iter_count(from));
-  1075			if (window_size < min_size)
-  1076				window_size = min_size;
-  1077	
-  1078			gfs2_holder_allow_demote(gh);
-  1079			leftover = fault_in_iov_iter_readable(from, window_size);
-  1080			gfs2_holder_disallow_demote(gh);
-  1081			if (window_size - leftover >= min_size) {
-  1082				if (gfs2_holder_queued(gh))
-  1083					goto retry_under_glock;
-  1084				if (read && !(iocb->ki_flags & IOCB_DIRECT))
-  1085					goto out_uninit;
-  1086				goto retry;
-  1087			}
-  1088		}
-  1089	out_unlock:
-  1090		if (gfs2_holder_queued(gh))
-  1091			gfs2_glock_dq(gh);
-  1092	out_uninit:
-  1093		gfs2_holder_uninit(gh);
-  1094		if (statfs_gh)
-  1095			kfree(statfs_gh);
-  1096		return read ? read : ret;
-  1097	}
-  1098	
+8ed21cbab4f71b Clément Léger  2022-03-25  26  
+bc1bee3b87ee48 Calvin Johnson 2021-06-11 @27  int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
+bc1bee3b87ee48 Calvin Johnson 2021-06-11  28  				       struct phy_device *phy,
+bc1bee3b87ee48 Calvin Johnson 2021-06-11  29  				       struct fwnode_handle *child, u32 addr)
+bc1bee3b87ee48 Calvin Johnson 2021-06-11  30  {
+bc1bee3b87ee48 Calvin Johnson 2021-06-11  31  	return -EINVAL;
+bc1bee3b87ee48 Calvin Johnson 2021-06-11  32  }
+bc1bee3b87ee48 Calvin Johnson 2021-06-11  33  
 
 -- 
 0-DAY CI Kernel Test Service
