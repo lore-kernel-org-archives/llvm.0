@@ -1,78 +1,149 @@
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97672F25
-	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 09:33:31 +0000 (UTC)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id C6AFA1C0BB0; Sat, 26 Mar 2022 10:25:38 +0100 (CET)
-Date: Sat, 26 Mar 2022 10:25:37 +0100
-From: Pavel Machek <pavel@ucw.cz>
-To: kernel test robot <lkp@intel.com>,
-	kernel list <linux-kernel@vger.kernel.org>
-Cc: Andrew Jeffery <andrew@aj.id.au>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	=?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
-Subject: Unsigned emails from Intel robot was Re: [linux-next:master
- 9122/14381] drivers/leds/leds-pca955x.c:149:19: warning: unused function
- 'pca95xx_num_led_regs'
-Message-ID: <20220326092537.GA8704@amd>
-References: <202203260634.OFB2IPFf-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C843F2F25
+	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 09:53:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648288392; x=1679824392;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RC/ESacicPywX2KFEkD6jYIPwu1sanOiS6NhBr4WtfQ=;
+  b=TI94eYA9zgH3YMZv6/IZ5TVVdwE6RDD8+c0Ilz22O50zCaaak5JQm5Q4
+   9Zu4CPn3Kh7u/wOw45Ts/1PiWhhnhkUsMvW0BJB1fFbaGphU6ht9HZutQ
+   ChvAEyV/Ssu2C4y53lbtgVrvJVt+Gk/GRArm5GvZngfHGMI+H+gdSarUf
+   UhseyiAoZwdBnBY8XepXYpZ1+LePwGiDGwuRBdH2Z9cQuToPconEKbJv1
+   NJl99dcsdqMkzDr7u+imyTzSYgwv/Pr11uo6Cv/PLCSHaWVFuDp2Q7sw8
+   0zfDZI1A9jJmsSA1r8MT4jyMN9cbYGjtLX08N0lOge7C9WCHWsX668x+K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="256346707"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="256346707"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 02:53:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="693906603"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Mar 2022 02:53:10 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nY36c-000NFu-1k; Sat, 26 Mar 2022 09:53:10 +0000
+Date: Sat, 26 Mar 2022 17:52:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [bvanassche:ufs-for-next 30/30]
+ drivers/scsi/ufs-core/ufshcd-priv.h:32:20: error: redefinition of
+ 'ufs_hwmon_probe'
+Message-ID: <202203261702.CNhXkyrF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="/04w6evG8XlLl3ft"
-Content-Disposition: inline
-In-Reply-To: <202203260634.OFB2IPFf-lkp@intel.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-
-
---/04w6evG8XlLl3ft
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hey robot!
+tree:   https://github.com/bvanassche/linux ufs-for-next
+head:   0887a8d6392738ee048acd84471bf8c5c860fdab
+commit: 0887a8d6392738ee048acd84471bf8c5c860fdab [30/30] scsi: ufs: Split the drivers/scsi/ufs directory
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220326/202203261702.CNhXkyrF-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/bvanassche/linux/commit/0887a8d6392738ee048acd84471bf8c5c860fdab
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche ufs-for-next
+        git checkout 0887a8d6392738ee048acd84471bf8c5c860fdab
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> FYI, the error/warning still remains.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Could you please sign emails with real name of person responsible for
-this? Was there human writing this?
+All errors (new ones prefixed by >>):
 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+   In file included from drivers/scsi/ufs-core/ufshcd.c:36:
+   In file included from drivers/scsi/ufs-core/ufshcd-crypto.h:12:
+>> drivers/scsi/ufs-core/ufshcd-priv.h:32:20: error: redefinition of 'ufs_hwmon_probe'
+   static inline void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask) {}
+                      ^
+   include/scsi/ufshcd.h:1081:20: note: previous definition is here
+   static inline void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask) {}
+                      ^
+   In file included from drivers/scsi/ufs-core/ufshcd.c:36:
+   In file included from drivers/scsi/ufs-core/ufshcd-crypto.h:12:
+>> drivers/scsi/ufs-core/ufshcd-priv.h:33:20: error: redefinition of 'ufs_hwmon_remove'
+   static inline void ufs_hwmon_remove(struct ufs_hba *hba) {}
+                      ^
+   include/scsi/ufshcd.h:1082:20: note: previous definition is here
+   static inline void ufs_hwmon_remove(struct ufs_hba *hba) {}
+                      ^
+   In file included from drivers/scsi/ufs-core/ufshcd.c:36:
+   In file included from drivers/scsi/ufs-core/ufshcd-crypto.h:12:
+>> drivers/scsi/ufs-core/ufshcd-priv.h:34:20: error: redefinition of 'ufs_hwmon_notify_event'
+   static inline void ufs_hwmon_notify_event(struct ufs_hba *hba, u8 ee_mask) {}
+                      ^
+   include/scsi/ufshcd.h:1083:20: note: previous definition is here
+   static inline void ufs_hwmon_notify_event(struct ufs_hba *hba, u8 ee_mask) {}
+                      ^
+   drivers/scsi/ufs-core/ufshcd.c:9494:44: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
+                                                            ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 3 errors generated.
+--
+   In file included from drivers/scsi/ufs-core/ufs-sysfs.c:10:
+>> drivers/scsi/ufs-core/ufshcd-priv.h:32:20: error: redefinition of 'ufs_hwmon_probe'
+   static inline void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask) {}
+                      ^
+   include/scsi/ufshcd.h:1081:20: note: previous definition is here
+   static inline void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask) {}
+                      ^
+   In file included from drivers/scsi/ufs-core/ufs-sysfs.c:10:
+>> drivers/scsi/ufs-core/ufshcd-priv.h:33:20: error: redefinition of 'ufs_hwmon_remove'
+   static inline void ufs_hwmon_remove(struct ufs_hba *hba) {}
+                      ^
+   include/scsi/ufshcd.h:1082:20: note: previous definition is here
+   static inline void ufs_hwmon_remove(struct ufs_hba *hba) {}
+                      ^
+   In file included from drivers/scsi/ufs-core/ufs-sysfs.c:10:
+>> drivers/scsi/ufs-core/ufshcd-priv.h:34:20: error: redefinition of 'ufs_hwmon_notify_event'
+   static inline void ufs_hwmon_notify_event(struct ufs_hba *hba, u8 ee_mask) {}
+                      ^
+   include/scsi/ufshcd.h:1083:20: note: previous definition is here
+   static inline void ufs_hwmon_notify_event(struct ufs_hba *hba, u8 ee_mask) {}
+                      ^
+   3 errors generated.
 
-I'd preffer to credit human if human was involved.
 
-> >> drivers/leds/leds-pca955x.c:149:19: warning: unused function 'pca95xx_=
-num_led_regs'
->    static inline int pca95xx_num_led_regs(int bits)
->    ^
->    fatal error: error in backend: Nested variants found in inline asm str=
-ing: ' .set push
->    .set mips64r2
+vim +/ufs_hwmon_probe +32 drivers/scsi/ufs-core/ufshcd-priv.h
 
-This sounds like an compiler problem, not a kernel problem, right?
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21  26  
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21  27  #ifdef CONFIG_SCSI_UFS_HWMON
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21  28  void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask);
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21  29  void ufs_hwmon_remove(struct ufs_hba *hba);
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21  30  void ufs_hwmon_notify_event(struct ufs_hba *hba, u8 ee_mask);
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21  31  #else
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21 @32  static inline void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask) {}
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21 @33  static inline void ufs_hwmon_remove(struct ufs_hba *hba) {}
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21 @34  static inline void ufs_hwmon_notify_event(struct ufs_hba *hba, u8 ee_mask) {}
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21  35  #endif
+25d1c9ae8f23a80 drivers/scsi/ufs/ufshcd-priv.h Bart Van Assche 2022-03-21  36  
 
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+:::::: The code at line 32 was first introduced by commit
+:::::: 25d1c9ae8f23a80278721a9b66383128a51af746 scsi: ufs: Split the ufshcd.h header file
 
---/04w6evG8XlLl3ft
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+:::::: TO: Bart Van Assche <bvanassche@acm.org>
+:::::: CC: Bart Van Assche <bvanassche@acm.org>
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmI+3BEACgkQMOfwapXb+vIz3wCfTCgWpO4WqMqLtapjf0br4Pfl
-QI8AnRo7F+w0K3c41XdBy92riVz2L9Vu
-=PEiz
------END PGP SIGNATURE-----
-
---/04w6evG8XlLl3ft--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
