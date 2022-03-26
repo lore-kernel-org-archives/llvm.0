@@ -1,154 +1,88 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D669A3D61
-	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 19:25:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1648322699;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ykDXlOPk2TFsdn08fWycm9GIyujKbG9G/UkGWmpaTzI=;
-	b=O3XKspTKq8CKcwGRhuydvwYNCiXNxPmTTP6GxmTdH4EtheCcP+QJtNuc6CtMBhM2O9DBkk
-	ISupVAscrcq4D4JF+e29UV4mHQYHKTpr16/ole/Vvx+ySFycDUuoXzSTnQG2Ne0/4gIzG+
-	jqRYqkujGRdIpY8AaIT2NYACFu2YV4s=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-463-hOb7k2IFPpqdEzjx4mKNHA-1; Sat, 26 Mar 2022 15:24:58 -0400
-X-MC-Unique: hOb7k2IFPpqdEzjx4mKNHA-1
-Received: by mail-qv1-f70.google.com with SMTP id s14-20020ad4446e000000b00440d3810126so8353717qvt.5
-        for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 12:24:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114523D61
+	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 19:30:17 +0000 (UTC)
+Received: by mail-lj1-f169.google.com with SMTP id g24so14245440lja.7
+        for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 12:30:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FfLtMPKWOgtbixf5r664NcyfUg09ely2U/JmDYjA8BY=;
+        b=F+3ZVjB7BCSCLcZtwiPvR46BWAJVWdiaN3i439/aLf4lD0vcChmXZbsSzeMY76YnAP
+         RENdKWXQ/ux4mV+RSnrCv9PyYnLL2iFG+BKvgFzACMUl6/c2Z2wMhjk96WLCFrW6tOyb
+         ViEQgfC6S4WqObuYEM6u9bBkGdgNiFF6lCkqQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ykDXlOPk2TFsdn08fWycm9GIyujKbG9G/UkGWmpaTzI=;
-        b=V0k/hmsz1JaB/9tYjjMz31ANeILT07kCjS2ZVOVslcBB6c07h+vpVvbVSUL3DwOKXc
-         Yt6o6ftuEKoOxynwp5Xd3feP4aGNLBINgEerWv97CzG4rUqCGMlMMKaIAgjnQp5FfdXC
-         0hA7QmbbeA1OFyTnTUC0CT6RHxSK1LjbT96lS+lOvRJEVJJxnsQDzKQ81X/YW/svxvuF
-         rFxV8SwQSqQDbSgm4tynYQyb0I+sTwEDsFHTc3VzHBIjZKLe6ohmSTpAh7t8GLzyhz3J
-         /UfPPartSTdzIUQwtcVY4A+qVW1NG0CScXTT0qmVGv59XG/Dtc03BqI0paH/ld/2n7/C
-         +WcA==
-X-Gm-Message-State: AOAM532B81pfFh7057hkAMVEobfSDBnU/OP0q+Brc9kauildaMXSH4mq
-	e5hBfhBqEMO9P0YK2VRwYyMbkpXHLpODvoqEQdt6RNnRIGI+xXI0eAHw+8CZuVswEhXsub1BKj/
-	FGFEEm+hyxfxTpg==
-X-Received: by 2002:a05:620a:1539:b0:67d:45f2:f5bd with SMTP id n25-20020a05620a153900b0067d45f2f5bdmr11127662qkk.313.1648322697791;
-        Sat, 26 Mar 2022 12:24:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz5Bbhbe4fNmCCiw0bHclSMqD4b5ogUJimIEaOAuMXEpuJ39XeDHBrgaI1Pk8q6ZmT7kZe2ug==
-X-Received: by 2002:a05:620a:1539:b0:67d:45f2:f5bd with SMTP id n25-20020a05620a153900b0067d45f2f5bdmr11127653qkk.313.1648322697470;
-        Sat, 26 Mar 2022 12:24:57 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id b17-20020a05622a021100b002e1f86db385sm8064691qtx.68.2022.03.26.12.24.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 12:24:56 -0700 (PDT)
-From: trix@redhat.com
-To: mchehab@kernel.org,
-	sakari.ailus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	hverkuil-cisco@xs4all.nl,
-	vrzh@vrzh.net,
-	tomi.valkeinen@ideasonboard.com
-Cc: linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] media: staging: atomisp: rework reading the id and revision values
-Date: Sat, 26 Mar 2022 12:18:53 -0700
-Message-Id: <20220326191853.2914552-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FfLtMPKWOgtbixf5r664NcyfUg09ely2U/JmDYjA8BY=;
+        b=w6d/V4A5T03hahR7EOnAUSkJSQuANdjKEnzcvGt/WVHVCCp8YNzFxOpI4BGSj+jt6x
+         eRRet1K3Qr01xFdkkpxQveW4r53qwKywdUnnugTXCq+uMHvIPgy8NAllI/FeprsCqE6A
+         MZZLZwSVycakF5KihnFmv3g9ZDJjhoWvPZpSLPEyzRbSQwit3IiMIg5m86hCetJd0w7w
+         m41mXI3MR7HcQwanQnZy7H3gadD1UXQzu2kvT8Z4uTXgFojNYi0RAlhtWTYSY9KzlZxo
+         fgr429kli9iojg++L+axcDno8CLMjBeRNRbYa5V8DZ1WoNe6/RRG18iDVHjB8D0pSUe8
+         YQOA==
+X-Gm-Message-State: AOAM53246CnwR6YgP54EkFLHGkjSdEJRIbVCFyUMzzgZTRK8DHz+1tE8
+	aQOQFY78d7jgIY8RKKJB+CJ6FiAra+viGwzcFew=
+X-Google-Smtp-Source: ABdhPJyXApofqetjx1pX52GwNA0KwB25mptZUDBVl8K5R6CpaDde56Sxb59XatDQU9yhJVXZGm5vWg==
+X-Received: by 2002:a2e:2f06:0:b0:249:8f0e:cbcd with SMTP id v6-20020a2e2f06000000b002498f0ecbcdmr13230942ljv.145.1648323015635;
+        Sat, 26 Mar 2022 12:30:15 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id d25-20020a194f19000000b0044a2ad98dcasm1145973lfb.167.2022.03.26.12.30.14
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Mar 2022 12:30:14 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id h7so18571296lfl.2
+        for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 12:30:14 -0700 (PDT)
+X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
+ y3-20020ac24203000000b004488053d402mr12850936lfh.687.1648323013613; Sat, 26
+ Mar 2022 12:30:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+References: <202203251443.9BBADFD98@keescook>
+In-Reply-To: <202203251443.9BBADFD98@keescook>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 26 Mar 2022 12:29:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjeGc-BjkDWTYkXzyQu-vf9EEujuT-6=U7Od0DvCUfb8w@mail.gmail.com>
+Message-ID: <CAHk-=wjeGc-BjkDWTYkXzyQu-vf9EEujuT-6=U7Od0DvCUfb8w@mail.gmail.com>
+Subject: Re: [GIT PULL] FORTIFY_SOURCE updates for v5.18-rc1
+To: Kees Cook <keescook@chromium.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, George Burgess IV <gbiv@google.com>, 
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Tom Rix <trix@redhat.com>
+On Fri, Mar 25, 2022 at 3:03 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> It looks like all the dependent trees with related buffer fixes have been
+> merged (I was waiting for the scsi tree to get pulled). This has been
+> in -next for almost 2 development cycles, and I did overnight build
+> testing merged against your tree under the following combinations,
+> with no new warnings (there is one Clang 14+ specific issue in
+> drivers/net/ethernet/huawei/hinic that we're still tracking down as a
+> likely compiler regression[1]):
 
-Clang static analysis reports this representative issue
-atomisp-ov2722.c:920:3: warning: 3rd function call
-  argument is an uninitialized value
-  dev_err(&client->dev, "sensor_id_high = 0x%x\n", high);
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+So how much of this is _completely_ compile-time?
 
-high and low are only set when ov2722_read_reg() is successful.
-Reporting the high value when there is an error is not
-meaningful.  The later read for low is not checked.  high
-and low are or-ed together and checked against a non zero
-value.
+Right now it looks to me like FORTIFY_SOURCE ends up doing two things
 
-Remove the unneeded error reporting for high.  Initialize
-high and low to 0 and use the id check to determine if
-the reads were successful
+ - added runtime checking based on compile-time sizes
 
-The later read for revision is not checked.  If it
-fails the old high value will be used and the revision
-will be misreported.
+ - compile-time errors
 
-Since the revision is only reported and not checked or
-stored it is not necessary to return if the read with
-successful.  This makes the ret variable unnecessary
-so remove it.
+How hard would it be to separate the two issues out?
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- .../media/atomisp/i2c/atomisp-ov2722.c        | 20 ++++++++-----------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+Because if all the compiler issues and warnings have been sorted out,
+it sounds to me like the compile-time side could/should be done
+unconditionally if there are no runtime downsides.
 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-index da98094d7094a..d5d099ac1b707 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-@@ -906,22 +906,17 @@ static int ov2722_get_fmt(struct v4l2_subdev *sd,
- static int ov2722_detect(struct i2c_client *client)
- {
- 	struct i2c_adapter *adapter = client->adapter;
--	u16 high, low;
--	int ret;
-+	u16 high = 0, low = 0;
- 	u16 id;
- 	u8 revision;
- 
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_I2C))
- 		return -ENODEV;
- 
--	ret = ov2722_read_reg(client, OV2722_8BIT,
--			      OV2722_SC_CMMN_CHIP_ID_H, &high);
--	if (ret) {
--		dev_err(&client->dev, "sensor_id_high = 0x%x\n", high);
--		return -ENODEV;
--	}
--	ret = ov2722_read_reg(client, OV2722_8BIT,
--			      OV2722_SC_CMMN_CHIP_ID_L, &low);
-+	ov2722_read_reg(client, OV2722_8BIT,
-+			OV2722_SC_CMMN_CHIP_ID_H, &high);
-+	ov2722_read_reg(client, OV2722_8BIT,
-+			OV2722_SC_CMMN_CHIP_ID_L, &low);
- 	id = (high << 8) | low;
- 
- 	if ((id != OV2722_ID) && (id != OV2720_ID)) {
-@@ -929,8 +924,9 @@ static int ov2722_detect(struct i2c_client *client)
- 		return -ENODEV;
- 	}
- 
--	ret = ov2722_read_reg(client, OV2722_8BIT,
--			      OV2722_SC_CMMN_SUB_ID, &high);
-+	high = 0;
-+	ov2722_read_reg(client, OV2722_8BIT,
-+			OV2722_SC_CMMN_SUB_ID, &high);
- 	revision = (u8)high & 0x0f;
- 
- 	dev_dbg(&client->dev, "sensor_revision = 0x%x\n", revision);
--- 
-2.26.3
+Hmm?
 
+                Linus
