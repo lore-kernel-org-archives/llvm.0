@@ -1,75 +1,120 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97E63D61
-	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 19:40:38 +0000 (UTC)
-Received: by mail-lf1-f41.google.com with SMTP id m3so18546595lfj.11
-        for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 12:40:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Eo+NI/ZY6vwsGX0YbjboRUexcl2mfDPwhfiG8UnYnwk=;
-        b=BnS1v48fprKmSRXFjcrnsMCOkSZvYZQKHkA3LVRLp/DQnYYFla62uXIfXJRAbLMigi
-         bFCZxlifzHg0dE0dAEH4xtBlMhLSpHZdPD89nlH9F7pdl3UwkeWWhnSQ/WTlG5C7cq9x
-         p3SeW6+eqS57A/bUxi4swECZhDIttG9TD9X6Y=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6E73D61
+	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 19:42:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1648323764;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=azqELzyuB9oAQJF0V0iHBM8V3/Uqnp5/jPCm+apduZM=;
+	b=Y8uMqxR6Ro5bWRymT8F0knAXUQmV3lOcQ9QECgaJa3N1O52GtOAx7kBlNjg08wegtBhIAZ
+	dPaoI7rQYGVBDQXFO6YdUw0+Y31KW22+ynxrOxx0ZTj5wpMfXe6B+82VrHyYS2qQBlgNBU
+	qlBPmnYNm5SHFWCHgGghtaa9x1XQ6ws=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-116-AVehnThONNyDhZzhYE0rqw-1; Sat, 26 Mar 2022 15:42:43 -0400
+X-MC-Unique: AVehnThONNyDhZzhYE0rqw-1
+Received: by mail-qt1-f199.google.com with SMTP id t19-20020ac86a13000000b002e1fd2c4ce5so8557408qtr.5
+        for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 12:42:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Eo+NI/ZY6vwsGX0YbjboRUexcl2mfDPwhfiG8UnYnwk=;
-        b=x6Rj6MZ7M20oNewaVxVpqtQhj1slaBidbY//96xsP5UeCWkeWds92eRT1knxtZmG2J
-         dQp7MQV2Eht6XVRCOcVgO5ev5hGnU8A/kydVQMDeqzDJWjmyVgjm8LslDhSPLv0GUMQg
-         RZFEvIF11apxsLWY7yJWUBVVgxc+fyJ4i6RIEmctAdbp8A/GVaG57aBxyW3nKFRtpABt
-         +Mgh5vzUgTgz0GNplXuXjAjZ0UMIQ9E5jjhhe0ZRaKJK1lp87fTJhUEbiSkQCckQbyQl
-         5v8wTbr0CPIaaBZ8q07/j6HieU5d1B9ulsQGW4VqSFd8aOMlrp4ZvmZwkrYr+YddgxHz
-         vVMQ==
-X-Gm-Message-State: AOAM533iq0Jik6Zz1sLjIDi3TG/z0uBF1+/CaYmVbSFJg3OP98EeAaZg
-	0o/tle4Dt2lvWIhffZZRsEDQQllr7dGayjGOWas=
-X-Google-Smtp-Source: ABdhPJzhe7lVSZDU8E958ueGwHDN7EVlU1Xb9ZBLYLJhv41OcaeSiyP6xCAhShKEIAikD3lRCDkyJw==
-X-Received: by 2002:a05:6512:e9d:b0:44a:1169:7f89 with SMTP id bi29-20020a0565120e9d00b0044a11697f89mr12848703lfb.215.1648323636534;
-        Sat, 26 Mar 2022 12:40:36 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id g22-20020a0565123b9600b0044a20eb26dbsm1149369lfv.253.2022.03.26.12.40.35
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 12:40:35 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id h7so18596359lfl.2
-        for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 12:40:35 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr12881072lfh.687.1648323634830; Sat, 26
- Mar 2022 12:40:34 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=azqELzyuB9oAQJF0V0iHBM8V3/Uqnp5/jPCm+apduZM=;
+        b=yrRgHAUPn9FLa1Q/a+vIO3jemAhJBvYHy0r7JgJcw39PC4uKJPvazgBFtF35L86sX+
+         geQaYg7nVgGqADzaNd6+UHgX+xu1GFTje5TwTPMgCfcnyf9ybGcXT19IG4qARN9Naoeq
+         5MLzjWp8u+mAubbvnV/D63sdfkcnuvZEYL3xh7V5P533MliplODZhNAqpWjH5wfMkcE3
+         ghVJ8MhYWCOsB9Dyf/Qn1MzPflnQk79pj8bcBdZwX0njP1tMvWdJfmawXRKk1LH2d3Rm
+         POloxu6FSVo/JBY4eJbx5WfL4lz//dXaEQu0YM0EPVm/NZHbpVP5Q8zLhsAmLMaC5ffl
+         s3pA==
+X-Gm-Message-State: AOAM530rHwqsNgAeT+PtKCcyqULrlzXt3Bq4yDHmuuOyPIa68rZDTOuN
+	OrGqe/1FiK1XITUhuUKO3vDfxdoByZtkQAej4AbvKQ5wGR/XKgPtCXx9KUdVtgPEdr8TSpLzEXo
+	TbB+QAMPUOz4Kig==
+X-Received: by 2002:a05:622a:2d5:b0:2e1:ea60:231 with SMTP id a21-20020a05622a02d500b002e1ea600231mr14957961qtx.460.1648323762249;
+        Sat, 26 Mar 2022 12:42:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwiZjr3dpr/uR4Z7rNTTcx8g6KNr+3tArsL6c+HPu5J7FXrCb3tFzBBP0gPo+UTDziqlHWPdA==
+X-Received: by 2002:a05:622a:2d5:b0:2e1:ea60:231 with SMTP id a21-20020a05622a02d500b002e1ea600231mr14957948qtx.460.1648323762064;
+        Sat, 26 Mar 2022 12:42:42 -0700 (PDT)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id x19-20020a05622a001300b002e1e78062e3sm7741250qtw.84.2022.03.26.12.42.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 12:42:41 -0700 (PDT)
+From: trix@redhat.com
+To: a.zummo@towertech.it,
+	alexandre.belloni@bootlin.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	colin.king@intel.com
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] rtc: check if __rtc_read_time was successful
+Date: Sat, 26 Mar 2022 12:42:36 -0700
+Message-Id: <20220326194236.2916310-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202203251443.9BBADFD98@keescook> <CAHk-=wjeGc-BjkDWTYkXzyQu-vf9EEujuT-6=U7Od0DvCUfb8w@mail.gmail.com>
-In-Reply-To: <CAHk-=wjeGc-BjkDWTYkXzyQu-vf9EEujuT-6=U7Od0DvCUfb8w@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 26 Mar 2022 12:40:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wid1da7CONOA4ia++vKe5pCFda6gwdafjFP4HXJQcjcsA@mail.gmail.com>
-Message-ID: <CAHk-=wid1da7CONOA4ia++vKe5pCFda6gwdafjFP4HXJQcjcsA@mail.gmail.com>
-Subject: Re: [GIT PULL] FORTIFY_SOURCE updates for v5.18-rc1
-To: Kees Cook <keescook@chromium.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, George Burgess IV <gbiv@google.com>, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: application/octet-stream; x-default=true
 
-On Sat, Mar 26, 2022 at 12:29 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Because if all the compiler issues and warnings have been sorted out,
-> it sounds to me like the compile-time side could/should be done
-> unconditionally if there are no runtime downsides.
+From: Tom Rix <trix@redhat.com>
 
-.. or do the existing compiler warnings for the builtins already cover
-all cases, and the only reason the fortify-source code has
-compile-time warnings is that the option takes over the builtins?
+Clang static analysis reports this issue
+interface.c:810:8: warning: Passed-by-value struct
+  argument contains uninitialized data
+  now = rtc_tm_to_ktime(tm);
+      ^~~~~~~~~~~~~~~~~~~
 
-So maybe there's no upside to the fortify-source code for that case?
+tm is set by a successful call to __rtc_read_time()
+but its return status is not checked.  Check if
+it was successful before setting the enabled flag.
+Move the decl of err to function scope.
 
-              Linus
+Fixes: 2b2f5ff00f63 ("rtc: interface: ignore expired timers when enqueuing new timers")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/rtc/interface.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index d8e8357981537..9edd662c69ace 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -804,9 +804,13 @@ static int rtc_timer_enqueue(struct rtc_device *rtc, struct rtc_timer *timer)
+ 	struct timerqueue_node *next = timerqueue_getnext(&rtc->timerqueue);
+ 	struct rtc_time tm;
+ 	ktime_t now;
++	int err;
++
++	err = __rtc_read_time(rtc, &tm);
++	if (err)
++		return err;
+ 
+ 	timer->enabled = 1;
+-	__rtc_read_time(rtc, &tm);
+ 	now = rtc_tm_to_ktime(tm);
+ 
+ 	/* Skip over expired timers */
+@@ -820,7 +824,6 @@ static int rtc_timer_enqueue(struct rtc_device *rtc, struct rtc_timer *timer)
+ 	trace_rtc_timer_enqueue(timer);
+ 	if (!next || ktime_before(timer->node.expires, next->expires)) {
+ 		struct rtc_wkalrm alarm;
+-		int err;
+ 
+ 		alarm.time = rtc_ktime_to_tm(timer->node.expires);
+ 		alarm.enabled = 1;
+-- 
+2.26.3
+
