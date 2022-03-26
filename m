@@ -1,53 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7373D61
-	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 20:18:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2ABB8C340ED;
-	Sat, 26 Mar 2022 20:18:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AEF23D71
+	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 21:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AC3C1C34110;
+	Sat, 26 Mar 2022 21:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648325886;
-	bh=NQ8FcjPHpoMs5HGYXsG7Q0MuPKyxMlQXUhxEOE1x2o8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=cR+Naf/TIr3zYUxnbv5UeM//DJN9RRQUz9D7j4I64AGgRf+9QrJbB4j5UNL7PKBq/
-	 EPJIBgL/pI5RzVoHSKUTGE1vrqdkFtiOuJdn/wGw12PTUWclsrq7FI0il61u3BYXfw
-	 KPwgititsuZjXnQNnvO+JnZtOA+ZMNht2tbTlzDJAp0rCl6vz8k1bzTVDEWWv0V4Ki
-	 ZDGjNZ8CagPzvvjHzk6uI6zZs0Dc3MxXufUQLG8i9tppl8bGfoC5SLjcMoUhZBFzbO
-	 dLr3Y383vIPZr5E2Ndq/vumgoGHGkbDoNGVum82aPymyc6+7CVcGAIw4NCyNfBgE97
-	 l1o5KI6Usl2sA==
+	s=k20201202; t=1648329610;
+	bh=0uIKyawOLoHLm394PBEW9HSFN9iKeMVQMYPJNL5EEfo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=QRWtOB8X+n+tNJyT813j4O4KjEvNscKDBDZXoo+mVYdnNM06tWh2+qREZYbW+Jgwo
+	 98FMcDt87x2y8jvYiR44ERmIyvLRgV5SJUwLpSZteib35Ly56G98muBE6+2j54o2q4
+	 lkUnBzOe7fy9VTuQdWB9P2EPW13GUekfxG7LnfC/t85bAh8sK4oUcIUW6emXXcwcEf
+	 8DhqlYJocO5D5Hc3SFbSy7kd9n0ObT8mpVX1VD7dzlfZyOJEH0h6sPiBVaol/sMli6
+	 /4cO+to8It906fVj58HQuCdJYVqHvrQS7sCzUPIEms+0zaXmGychYv8GozYw02Tgoj
+	 796fDx+Ajla3w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 17BE6E6D44B;
-	Sat, 26 Mar 2022 20:18:06 +0000 (UTC)
-Subject: Re: [GIT PULL] FORTIFY_SOURCE updates for v5.18-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <202203251443.9BBADFD98@keescook>
-References: <202203251443.9BBADFD98@keescook>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <202203251443.9BBADFD98@keescook>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/memcpy-v5.18-rc1
-X-PR-Tracked-Commit-Id: 281d0c962752fb40866dd8d4cade68656f34bd1f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4be240b18aa67b1144af546bea2d7cad1b75c19b
-Message-Id: <164832588609.7233.7403778797821946356.pr-tracker-bot@kernel.org>
-Date: Sat, 26 Mar 2022 20:18:06 +0000
-To: Kees Cook <keescook@chromium.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, George Burgess IV <gbiv@google.com>, Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8B88AF03849;
+	Sat, 26 Mar 2022 21:20:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] octeontx2-af: initialize action variable
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <164832961056.3419.13458141974807020265.git-patchwork-notify@kernel.org>
+Date: Sat, 26 Mar 2022 21:20:10 +0000
+References: <20220326160306.2900822-1-trix@redhat.com>
+In-Reply-To: <20220326160306.2900822-1-trix@redhat.com>
+To: Tom Rix <trix@redhat.com>
+Cc: sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
+ jerinj@marvell.com, hkelam@marvell.com, sbhatta@marvell.com,
+ davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+ ndesaulniers@google.com, Sunil.Goutham@marvell.com, naveenm@marvell.com,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-The pull request you sent on Fri, 25 Mar 2022 15:03:43 -0700:
+Hello:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/memcpy-v5.18-rc1
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4be240b18aa67b1144af546bea2d7cad1b75c19b
+On Sat, 26 Mar 2022 09:03:06 -0700 you wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Clang static analysis reports this representative issue
+> rvu_npc.c:898:15: warning: Assigned value is garbage
+>   or undefined
+>   req.match_id = action.match_id;
+>                ^ ~~~~~~~~~~~~~~~
+> 
+> [...]
 
-Thank you!
+Here is the summary with links:
+  - octeontx2-af: initialize action variable
+    https://git.kernel.org/netdev/net/c/33b5bc9e7033
 
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
