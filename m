@@ -1,68 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AEF23D71
-	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 21:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AC3C1C34110;
-	Sat, 26 Mar 2022 21:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648329610;
-	bh=0uIKyawOLoHLm394PBEW9HSFN9iKeMVQMYPJNL5EEfo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=QRWtOB8X+n+tNJyT813j4O4KjEvNscKDBDZXoo+mVYdnNM06tWh2+qREZYbW+Jgwo
-	 98FMcDt87x2y8jvYiR44ERmIyvLRgV5SJUwLpSZteib35Ly56G98muBE6+2j54o2q4
-	 lkUnBzOe7fy9VTuQdWB9P2EPW13GUekfxG7LnfC/t85bAh8sK4oUcIUW6emXXcwcEf
-	 8DhqlYJocO5D5Hc3SFbSy7kd9n0ObT8mpVX1VD7dzlfZyOJEH0h6sPiBVaol/sMli6
-	 /4cO+to8It906fVj58HQuCdJYVqHvrQS7sCzUPIEms+0zaXmGychYv8GozYw02Tgoj
-	 796fDx+Ajla3w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8B88AF03849;
-	Sat, 26 Mar 2022 21:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E269D7E
+	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 23:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648336661; x=1679872661;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VVIOXsNAiUec6kUMxlkVMOpfok8ef399p3qrPosSQAI=;
+  b=YToHKEfGRXj/NJ2gTDjf4SF5/F9VFNM9n/ipW8R34HWNC5jwIze5lN6A
+   MTADXzsn8zDLOmTB/u3uFX7+FaqpIEGKI7rbxJ0wjY9O7mNYVLewAj5mW
+   u82HFnvbul+9vkZ8nGOFYrHxUxtA9kkWEQvSiIhscUlJZ10UEZ5DtXkXH
+   yMR96HGgwXcl4vmq+8RlAlf4VXwPCTMwOGBqFB1j86CnLu4sEiK+gcpMs
+   ocYjr9PV/gVRwJPEEOeHDgkfBoSkGNQghwOSBTwxz26qY8QtYy+boVmoT
+   TYEdr8rlWeTTK3GgfvrhYmYIy4UuWwVRxvNoBbNhlfx5UsANvzWJhu3S0
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="258777351"
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="258777351"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 16:17:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="650602565"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 26 Mar 2022 16:17:39 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nYFf9-0000Uc-6A; Sat, 26 Mar 2022 23:17:39 +0000
+Date: Sun, 27 Mar 2022 07:17:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Weinberger <richard@nod.at>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 14072/14381] WARNING: modpost:
+ vmlinux.o(.data+0x12018c): Section mismatch in reference from the variable
+ sensor_dev_attr_in5_alarm to the function .init.text:set_reset_devices()
+Message-ID: <202203270755.7IViqD3s-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] octeontx2-af: initialize action variable
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <164832961056.3419.13458141974807020265.git-patchwork-notify@kernel.org>
-Date: Sat, 26 Mar 2022 21:20:10 +0000
-References: <20220326160306.2900822-1-trix@redhat.com>
-In-Reply-To: <20220326160306.2900822-1-trix@redhat.com>
-To: Tom Rix <trix@redhat.com>
-Cc: sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
- jerinj@marvell.com, hkelam@marvell.com, sbhatta@marvell.com,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
- ndesaulniers@google.com, Sunil.Goutham@marvell.com, naveenm@marvell.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hello:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   fd4fbb998102ef7812d594121fbabd2b10dced1b
+commit: 7451caef08ff6fd043cd14079d4abfd0540609af [14072/14381] Merge branch 'fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git
+config: riscv-randconfig-r031-20220325 (https://download.01.org/0day-ci/archive/20220327/202203270755.7IViqD3s-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=7451caef08ff6fd043cd14079d4abfd0540609af
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 7451caef08ff6fd043cd14079d4abfd0540609af
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Sat, 26 Mar 2022 09:03:06 -0700 you wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Clang static analysis reports this representative issue
-> rvu_npc.c:898:15: warning: Assigned value is garbage
->   or undefined
->   req.match_id = action.match_id;
->                ^ ~~~~~~~~~~~~~~~
-> 
-> [...]
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-Here is the summary with links:
-  - octeontx2-af: initialize action variable
-    https://git.kernel.org/netdev/net/c/33b5bc9e7033
+>> WARNING: modpost: vmlinux.o(.data+0x12018c): Section mismatch in reference from the variable sensor_dev_attr_in5_alarm to the function .init.text:set_reset_devices()
+The variable sensor_dev_attr_in5_alarm references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
 
-You are awesome, thank you!
+--
+>> WARNING: modpost: vmlinux.o(.data+0x12020c): Section mismatch in reference from the variable sensor_dev_attr_in6_alarm to the function .init.text:set_reset_devices()
+The variable sensor_dev_attr_in6_alarm references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: vmlinux.o(.data+0x114fc8): Section mismatch in reference from the variable dev_attr_in2_max to the function .init.text:set_reset_devices()
+The variable dev_attr_in2_max references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0x1d33ffc): Section mismatch in reference from the function v4l2_prio_open() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x103a64): Section mismatch in reference from the variable sbsm_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110cd8): Section mismatch in reference from the variable sensor_dev_attr_temp3_fault to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110cf8): Section mismatch in reference from the variable sensor_dev_attr_temp3_min_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110d18): Section mismatch in reference from the variable sensor_dev_attr_temp3_max_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110d38): Section mismatch in reference from the variable sensor_dev_attr_temp3_crit_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110fb8): Section mismatch in reference from the variable sensor_dev_attr_power_state to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110ff8): Section mismatch in reference from the variable emc1402_alarms to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x11342c): Section mismatch in reference from the variable fxxxx_fan_attr to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x11368c): Section mismatch in reference from the variable fxxxx_fan_beep_attr to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1d33ffc): Section mismatch in reference from the function v4l2_prio_open() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x103a64): Section mismatch in reference from the variable sbsm_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110cd8): Section mismatch in reference from the variable sensor_dev_attr_temp3_fault to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110cf8): Section mismatch in reference from the variable sensor_dev_attr_temp3_min_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110d18): Section mismatch in reference from the variable sensor_dev_attr_temp3_max_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110d38): Section mismatch in reference from the variable sensor_dev_attr_temp3_crit_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110fb8): Section mismatch in reference from the variable sensor_dev_attr_power_state to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110ff8): Section mismatch in reference from the variable emc1402_alarms to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x11342c): Section mismatch in reference from the variable fxxxx_fan_attr to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x11368c): Section mismatch in reference from the variable fxxxx_fan_beep_attr to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1d33ffc): Section mismatch in reference from the function v4l2_prio_open() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x103a64): Section mismatch in reference from the variable sbsm_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110cd8): Section mismatch in reference from the variable sensor_dev_attr_temp3_fault to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110cf8): Section mismatch in reference from the variable sensor_dev_attr_temp3_min_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110d18): Section mismatch in reference from the variable sensor_dev_attr_temp3_max_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110d38): Section mismatch in reference from the variable sensor_dev_attr_temp3_crit_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110fb8): Section mismatch in reference from the variable sensor_dev_attr_power_state to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x110ff8): Section mismatch in reference from the variable emc1402_alarms to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x11342c): Section mismatch in reference from the variable fxxxx_fan_attr to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x11368c): Section mismatch in reference from the variable fxxxx_fan_beep_attr to the function .init.text:set_reset_devices()
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
