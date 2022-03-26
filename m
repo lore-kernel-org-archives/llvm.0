@@ -1,147 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2367E
-	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 17:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1648315215;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0gPCasSItm4Ex2ZMUQbF4T4OAP0GG+ryCRQM09Api5o=;
-	b=IqgY8ksP/meJbMBD2vByupbDtpRqfuBtu2uo3mk6X8LCXoGbwiaaHFCgZbOMBGZGeCJEht
-	5XpljQfu0v2pQZpzZIXGe7p9vfFrXlwy+zYB5GCCXk5q1gkG4t+HTJyoNnn1kRrvO0gKVE
-	IRkWqVFECuSmSDW7rcM0y/oIfuIl2bw=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-fivGHIgsOEmAhApFUGrBaA-1; Sat, 26 Mar 2022 13:20:14 -0400
-X-MC-Unique: fivGHIgsOEmAhApFUGrBaA-1
-Received: by mail-qt1-f199.google.com with SMTP id h11-20020ac87d4b000000b002e1c9a3ae51so8408813qtb.0
-        for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 10:20:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FBD7E
+	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 18:09:59 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id 5so18373390lfp.1
+        for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 11:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9m5Rd6cbLT+02hkj1gkPPi+4zyoAG3SHfMbdx9sHaQQ=;
+        b=lpZ2SUYFArgTTFpWmMDS0iV0G4tege7cbfpCXfu15B1Gnaq5SS0Ay2VePEdR3uuMYv
+         l3rVH0/ihLQ7tVB6GopPEGOjIwy9NLmzsrJbbRs55MLd5bNSoup3bJfVOAxw1wT/Grja
+         V3ZwQRdqj1siq1/Lb5yoE1EuEpUvGnSPSNgtUub9ZRaLWoT0wJDp14ypa/vk9lnozu+j
+         1gvdo5lLYz+m2Wqq7yZRhHOmjyz3TaNCEosDoJrk2mPJkP4ntOSBw+6KnC/n3FQax1nI
+         j8ss++ttpnhGeV8GOkkKhm0XrGO09BusemrSQjN7lCDuc3NU1BT1zi9kh41V4KWQvtNq
+         d2TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0gPCasSItm4Ex2ZMUQbF4T4OAP0GG+ryCRQM09Api5o=;
-        b=Tvt2gro0vFvBGy8JYNwa0rlJTItCbRiCpoErmDFxew5ksOfyHijIsPxhqvZAI7sthZ
-         czbTDGQKTZOOLQ2XdCcvTY5hkfE0jGL5olm5we4yWHeFTRVVanyJOmMRU1VsPEOXlilc
-         vPt4xtTutulyR3qVop883x3mQhlohoFspqhUnDjMsn3U6P0gbspOJNFeRyyuLau+zvvf
-         zJZesLxwPFA9XM+2mZ0vS+quAHxQP+JcgexOHuQnisHt911WsK+5UNUk+LlTT2SNiOwd
-         RhepnbUK1W7f6qJsAWxJ7V8X1SGtfFRn18enr6k9S2+hNtujB23OR++2+InT/6QmvHkE
-         f40g==
-X-Gm-Message-State: AOAM530E5byIC0ZOybgosWtolpOS19pk9ue9k7ieaMISvtL0Hq2EChW6
-	hH2K8KIZpUi3ql0wYOnqVmqygVSWlCPRVgIRAIQKB5ySZ7Jgr9ypoi4/zC5SrTigHBWvnwjS2JZ
-	aygMSP4D4quFRgQ==
-X-Received: by 2002:a05:620a:4047:b0:67d:6729:b241 with SMTP id i7-20020a05620a404700b0067d6729b241mr10750095qko.151.1648315213275;
-        Sat, 26 Mar 2022 10:20:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy7zW54pmYavrU4oBp5rsLnr4D2xBrbgGeijtC31l8eEaKfEuQDANgOphYIqyt4r41K+AKekA==
-X-Received: by 2002:a05:620a:4047:b0:67d:6729:b241 with SMTP id i7-20020a05620a404700b0067d6729b241mr10750077qko.151.1648315213068;
-        Sat, 26 Mar 2022 10:20:13 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id t13-20020a05622a148d00b002e22f105099sm8462282qtx.21.2022.03.26.10.20.10
+        bh=9m5Rd6cbLT+02hkj1gkPPi+4zyoAG3SHfMbdx9sHaQQ=;
+        b=rNeyapaNdy+8ZnhJ0t+qTD98fB5W0VdJNm7zJRLk2jRvTmdxZXW1huFXGyFWjm+Vv8
+         P62ECWIV0Aomgwh3IWuzpYF6meJLqlHCOI0jIiKJUr3CvkHwn7zS0mnsVChYBd2OdAFk
+         bGoSDhTVmzQE/1d08Pq3RTHQJnlroRfFOMQ3CjdjRI7QGfxD4oQUwGcufr5WapREWP62
+         Ypc6JZHW2O8a9AN4+4M6geMliSmewiH93Kf5izCssyr3zhv4/H2Nw3zS3+MgqsXdTfQn
+         HI4B3OqVXfvrC3SMDx0pzbez6TnZ6iADSQ6bP7jxChrqUBr1r4s7eIfdgqKpW60Bfazh
+         wYVw==
+X-Gm-Message-State: AOAM533LQtOEs70yhuXJ/aPTvcFcQuInLKG9n6CIh6Sv47Tq7GTGBs+X
+	JVrQHarlkKgkyjiO48uyg1U=
+X-Google-Smtp-Source: ABdhPJyG52BPqTv2glo4DLEnkeDLYwl5+yRDzvxOMFCaYjOorInwsOcpA8kDs+X4oogvWLNMmL6kVg==
+X-Received: by 2002:a05:6512:1382:b0:445:9536:903 with SMTP id p2-20020a056512138200b0044595360903mr12926829lfa.89.1648318197835;
+        Sat, 26 Mar 2022 11:09:57 -0700 (PDT)
+Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
+        by smtp.gmail.com with ESMTPSA id h2-20020a05651c124200b002492835aa87sm1107591ljh.118.2022.03.26.11.09.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 10:20:12 -0700 (PDT)
-From: trix@redhat.com
-To: shshaikh@marvell.com,
-	manishc@marvell.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	sucheta.chakraborty@qlogic.com
-Cc: GR-Linux-NIC-Dev@marvell.com,
-	netdev@vger.kernel.org,
+        Sat, 26 Mar 2022 11:09:57 -0700 (PDT)
+From: Michal Orzel <michalorzel.eng@gmail.com>
+To: Eric Biederman <ebiederm@xmission.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: Michal Orzel <michalorzel.eng@gmail.com>,
+	kexec@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] qlcnic: dcb: default to returning -EOPNOTSUPP
-Date: Sat, 26 Mar 2022 10:20:03 -0700
-Message-Id: <20220326172003.2906474-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	llvm@lists.linux.dev
+Subject: [PATCH] kexec: Remove redundant assignments
+Date: Sat, 26 Mar 2022 19:09:47 +0100
+Message-Id: <20220326180948.192154-1-michalorzel.eng@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-From: Tom Rix <trix@redhat.com>
+Get rid of redundant assignments which end up in values not being
+read either because they are overwritten or the function ends.
 
-Clang static analysis reports this issue
-qlcnic_dcb.c:382:10: warning: Assigned value is
-  garbage or undefined
-  mbx_out = *val;
-          ^ ~~~~
+Reported by clang-tidy [deadcode.DeadStores]
 
-val is set in the qlcnic_dcb_query_hw_capability() wrapper.
-If there is no query_hw_capability op in dcp, success is
-returned without setting the val.
-
-For this and similar wrappers, return -EOPNOTSUPP.
-
-Fixes: 14d385b99059 ("qlcnic: dcb: Query adapter DCB capabilities.")
-Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
 ---
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ kernel/kexec_core.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
-index 5d79ee4370bcd..7519773eaca6e 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
-@@ -51,7 +51,7 @@ static inline int qlcnic_dcb_get_hw_capability(struct qlcnic_dcb *dcb)
- 	if (dcb && dcb->ops->get_hw_capability)
- 		return dcb->ops->get_hw_capability(dcb);
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index 68480f731192..d08904a27362 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -768,7 +768,6 @@ static struct page *kimage_alloc_page(struct kimage *image,
+ 				kimage_free_pages(old_page);
+ 				continue;
+ 			}
+-			addr = old_addr;
+ 			page = old_page;
+ 			break;
+ 		}
+@@ -788,7 +787,6 @@ static int kimage_load_normal_segment(struct kimage *image,
+ 	unsigned char __user *buf = NULL;
+ 	unsigned char *kbuf = NULL;
  
--	return 0;
-+	return -EOPNOTSUPP;
- }
- 
- static inline void qlcnic_dcb_free(struct qlcnic_dcb *dcb)
-@@ -65,7 +65,7 @@ static inline int qlcnic_dcb_attach(struct qlcnic_dcb *dcb)
- 	if (dcb && dcb->ops->attach)
- 		return dcb->ops->attach(dcb);
- 
--	return 0;
-+	return -EOPNOTSUPP;
- }
- 
- static inline int
-@@ -74,7 +74,7 @@ qlcnic_dcb_query_hw_capability(struct qlcnic_dcb *dcb, char *buf)
- 	if (dcb && dcb->ops->query_hw_capability)
- 		return dcb->ops->query_hw_capability(dcb, buf);
- 
--	return 0;
-+	return -EOPNOTSUPP;
- }
- 
- static inline void qlcnic_dcb_get_info(struct qlcnic_dcb *dcb)
-@@ -89,7 +89,7 @@ qlcnic_dcb_query_cee_param(struct qlcnic_dcb *dcb, char *buf, u8 type)
- 	if (dcb && dcb->ops->query_cee_param)
- 		return dcb->ops->query_cee_param(dcb, buf, type);
- 
--	return 0;
-+	return -EOPNOTSUPP;
- }
- 
- static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
-@@ -97,7 +97,7 @@ static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
- 	if (dcb && dcb->ops->get_cee_cfg)
- 		return dcb->ops->get_cee_cfg(dcb);
- 
--	return 0;
-+	return -EOPNOTSUPP;
- }
- 
- static inline void qlcnic_dcb_aen_handler(struct qlcnic_dcb *dcb, void *msg)
+-	result = 0;
+ 	if (image->file_mode)
+ 		kbuf = segment->kbuf;
+ 	else
 -- 
-2.26.3
+2.25.1
 
