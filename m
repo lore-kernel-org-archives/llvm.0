@@ -1,35 +1,35 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2645D28E0
-	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 02:53:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3263C2F25
+	for <llvm@lists.linux.dev>; Sat, 26 Mar 2022 02:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1648263198; x=1679799198;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=DJNH6W+7LdBOCZcGma6QMCD5bEDfVfVMxATszIZfMvE=;
-  b=YCrQ7PjusJXPfOmOGMPe8N1usnFH2lHuyznzIkMxf9XZCNbZZFrla5ls
-   VKtxlYLz7T6yeDtBP6Q+PqZFOKR2FkYizrl0gXeJa0Tsjex8zIZEMW0Ty
-   LZxLZVzbPYlys5Xnsj14TQuIgYMTYyZAsDUZiqEOB2WgAZ2dRFsRsNCfK
-   RzKsHw5ufUa2NkeyeiVEK7GanAvmzJw/mqnurQ5f4N0cRCnN3vNQy9i5y
-   9yjy/YHpnUXOVhvaZyVk7iPzJ5OHZgXRTXmtK/RUXjiqrjrlvlJsQmzVc
-   X3mRrxByD13lxVeiJCkrRMJ+7mwHIJdzvPxw5vjrKlOYG46a8rTrkUqOb
+  bh=uI+S8wJngH0DegLJABgjbAsMLT1fPpAdxr5wiQNUH04=;
+  b=QUbUHBJCVMiOKtvEWNN5AWlYPS35yEh7x+zvt1vLK5OUtTTgwbOq/o61
+   2pxCb4cgIxP11yZSuEtreLLjpRqzDrr1l+9CM2EY7vm2ZJBZFMxUuyxle
+   913QLcc1zUm3h4r9NZ6Pu1Dj6AtH8GHMoIRFrLmAoIyfJTKdu+WhlfMBN
+   ZVVf+w7iUe2VoL22CFbJDmZNnXZpjtqP9eKYBECFc7Pz3IzF4ChcX+zaA
+   1CyTwNoMCPz2mj47pPKTg/PYM0t1BQPgUXPgMn8ZO8HFqeXtswPa056h1
+   PTI6nfqMzhfRQmlhsfsdlRI63l3JCTleshh0nvc/aEKDeJfCAWMzDfowe
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="321945223"
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="319456712"
 X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="321945223"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 19:53:17 -0700
+   d="scan'208";a="319456712"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 19:53:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="826203605"
+   d="scan'208";a="648456233"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Mar 2022 19:53:13 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 25 Mar 2022 19:53:13 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nXwYD-000MvO-4c; Sat, 26 Mar 2022 02:53:13 +0000
-Date: Sat, 26 Mar 2022 10:52:30 +0800
+	id 1nXwYD-000MvT-6Q; Sat, 26 Mar 2022 02:53:13 +0000
+Date: Sat, 26 Mar 2022 10:52:33 +0800
 From: kernel test robot <lkp@intel.com>
 To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
 	Andrew Lunn <andrew@lunn.ch>,
@@ -45,7 +45,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
 	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
 Subject: Re: [net-next 1/5] net: mdio: fwnode: add fwnode_mdiobus_register()
-Message-ID: <202203261037.wkZLCKMl-lkp@intel.com>
+Message-ID: <202203261007.nhIuHNPd-lkp@intel.com>
 References: <20220325172234.1259667-2-clement.leger@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -67,7 +67,7 @@ Thank you for the patch! Perhaps something to improve:
 
 url:    https://github.com/0day-ci/linux/commits/Cl-ment-L-ger/net-mdio-fwnode-add-fwnode_mdiobus_register/20220326-040146
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 89695196f0ba78a17453f9616355f2ca6b293402
-config: x86_64-randconfig-c007 (https://download.01.org/0day-ci/archive/20220326/202203261037.wkZLCKMl-lkp@intel.com/config)
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220326/202203261007.nhIuHNPd-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
