@@ -1,44 +1,47 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBEF03234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D777D3FC7
 	for <llvm@lists.linux.dev>; Sun, 27 Mar 2022 20:09:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1648411764; x=1679947764;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OFGRpi0f1J1SzA1qN8mE0eSCAl3coFwiCkY3bupdmYw=;
-  b=R3Oxcnx9ts+tgmJuoZn9t36aBCMyYgMafQXAM2/UivEBM3aeY+5N8V13
-   S/lj4wlVorvWA5LHEfjrwLksOttxDvz7EDz6uoYTDzy40fiPLtr8dsOHu
-   AE+Mz9z2B3DYUAFoZavk0Ofd4W9GTJnB30GI1gWmnVhtD+odZ4Su7QbRV
-   v4enH+vnLggHSVUJfS1niVCsj0wljfcbv1pAqUSsoC/dTLrZPIOoTP66r
-   iZbaBTFEbyanJjgo9rTyJRBkzQDNDLjvc+MAj3NrdQWjM+WxD3TdY6AFp
-   KuLcbwYgyrdUAG4qFb1REie8WbX1BGQBjJjQ6A/99B2GzYdwtBzOJkgh+
+  bh=4I12XJxDEhjAO25mTGvCioKhPW6W/xXzKDptJWUv0yo=;
+  b=gvzI39KeI3AM6V28jzqZrqeEFDYMyFeFxntNhbMSD6VW0O3BKVVKg2ss
+   5619EinksXpJlcooGBTY/b33UdpXxMvQEbTS6g9U1+Osn1s3KFV/adeUr
+   QKT5LjZxu248v+dtSeudmw9EeLiie+Hmlja3eje8DbBC/mX5UyQug6Mja
+   OHNzranELdWioqis+m/J6zZaVPFWmujAozMzoEiK7fiQYfq0bCS1jt5J2
+   uyklF4GAgasCKbvVzAS7pL0nBYdSBMuhZsImUWIKPjGmX2QY/W+bQ3bRB
+   tgx9nWbbrdweMs/lmFvTQTx2ZpPm8CUHAYPMZFY7ZQx9effHiiYtrFsrH
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="259060092"
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="258590187"
 X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="259060092"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 13:09:24 -0700
+   d="scan'208";a="258590187"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 13:09:24 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="502295651"
+   d="scan'208";a="638751067"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 27 Mar 2022 13:09:21 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Mar 2022 13:09:21 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nYZCS-0001OO-NZ; Sun, 27 Mar 2022 20:09:20 +0000
-Date: Mon, 28 Mar 2022 04:09:12 +0800
+	id 1nYZCS-0001OZ-Qe; Sun, 27 Mar 2022 20:09:20 +0000
+Date: Mon, 28 Mar 2022 04:09:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Terry Bowman <terry.bowman@amd.com>
+To: Saurabh Sengar <saurabh.singh@xilinx.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Robert Richter <rrichter@amd.com>, Jean Delvare <jdelvare@suse.de>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [watchdog-next:v5.18-rc1 12/13] drivers/watchdog/sp5100_tco.c:345:8:
- error: implicit declaration of function 'request_mem_region_muxed'
-Message-ID: <202203280401.mKXClwW5-lkp@intel.com>
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>, Syed Syed <syed.syed@xilinx.com>,
+	Priyadarshini Babu <priyadarshini.babu@xilinx.com>,
+	Ravali Potineni <ravali.potineni@xilinx.com>,
+	Pranavi Somisetty <pranavi.somisetty@xilinx.com>,
+	Swati Agarwal <swati.agarwal@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 231/1029]
+ drivers/net/ethernet/xilinx/xilinx_tsn_switch.c:597:13: warning: variable
+ 'pmap' is used uninitialized whenever 'if' condition is false
+Message-ID: <202203280456.kzjSjx7T-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,109 +52,91 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://www.linux-watchdog.org/linux-watchdog-next.git v5.18-rc1
-head:   826270373f17fd8ebd10753ca0a5fd2ceb1dc38e
-commit: 0578fff4aae5bce3f09875f58e68e9ffbab8daf5 [12/13] Watchdog: sp5100_tco: Add initialization using EFCH MMIO
-config: i386-randconfig-a014-20220328 (https://download.01.org/0day-ci/archive/20220328/202203280401.mKXClwW5-lkp@intel.com/config)
+Hi Saurabh,
+
+FYI, the error/warning still remains.
+
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
+head:   1870e0fa79a9d58c6748c34550f3ccea0b515933
+commit: a7ae7ddafe91c16d0f4bcd4d148c76318f3cfb06 [231/1029] net: xilinx: Add support for PL TSN IP features
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220328/202203280456.kzjSjx7T-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add watchdog-next git://www.linux-watchdog.org/linux-watchdog-next.git
-        git fetch --no-tags watchdog-next v5.18-rc1
-        git checkout 0578fff4aae5bce3f09875f58e68e9ffbab8daf5
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/Xilinx/linux-xlnx/commit/a7ae7ddafe91c16d0f4bcd4d148c76318f3cfb06
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
+        git checkout a7ae7ddafe91c16d0f4bcd4d148c76318f3cfb06
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/watchdog/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/watchdog/sp5100_tco.c:345:8: error: implicit declaration of function 'request_mem_region_muxed' [-Werror,-Wimplicit-function-declaration]
-           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-                 ^
->> drivers/watchdog/sp5100_tco.c:345:6: warning: incompatible integer to pointer conversion assigning to 'struct resource *' from 'int' [-Wint-conversion]
-           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+>> drivers/net/ethernet/xilinx/xilinx_tsn_switch.c:597:13: warning: variable 'pmap' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (num_q == 2) {
+                      ^~~~~~~~~~
+   drivers/net/ethernet/xilinx/xilinx_tsn_switch.c:602:36: note: uninitialized use occurs here
+           axienet_iow(&lp, XAS_PMAP_OFFSET, pmap);
+                                             ^~~~
+   drivers/net/ethernet/xilinx/xilinx_tsn_switch.c:597:9: note: remove the 'if' if its condition is always true
+           } else if (num_q == 2) {
+                  ^~~~~~~~~~~~~~~~
+   drivers/net/ethernet/xilinx/xilinx_tsn_switch.c:579:10: note: initialize the variable 'pmap' to silence this warning
+           u32 pmap;
+                   ^
+                    = 0
+   1 warning generated.
 
 
-vim +/request_mem_region_muxed +345 drivers/watchdog/sp5100_tco.c
+vim +597 drivers/net/ethernet/xilinx/xilinx_tsn_switch.c
 
-   333	
-   334	static int sp5100_tco_setupdevice_mmio(struct device *dev,
-   335					       struct watchdog_device *wdd)
-   336	{
-   337		struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
-   338		const char *dev_name = SB800_DEVNAME;
-   339		u32 mmio_addr = 0, alt_mmio_addr = 0;
-   340		struct resource *res;
-   341		void __iomem *addr;
-   342		int ret;
-   343		u32 val;
-   344	
- > 345		res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-   346					       EFCH_PM_ACPI_MMIO_PM_SIZE,
-   347					       "sp5100_tco");
-   348	
-   349		if (!res) {
-   350			dev_err(dev,
-   351				"Memory region 0x%08x already in use\n",
-   352				EFCH_PM_ACPI_MMIO_PM_ADDR);
-   353			return -EBUSY;
-   354		}
-   355	
-   356		addr = ioremap(EFCH_PM_ACPI_MMIO_PM_ADDR, EFCH_PM_ACPI_MMIO_PM_SIZE);
-   357		if (!addr) {
-   358			dev_err(dev, "Address mapping failed\n");
-   359			ret = -ENOMEM;
-   360			goto out;
-   361		}
-   362	
-   363		/*
-   364		 * EFCH_PM_DECODEEN_WDT_TMREN is dual purpose. This bitfield
-   365		 * enables sp5100_tco register MMIO space decoding. The bitfield
-   366		 * also starts the timer operation. Enable if not already enabled.
-   367		 */
-   368		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
-   369		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
-   370			efch_update_pm_reg8(addr, EFCH_PM_DECODEEN, 0xff,
-   371					    EFCH_PM_DECODEEN_WDT_TMREN);
-   372		}
-   373	
-   374		/* Error if the timer could not be enabled */
-   375		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
-   376		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
-   377			dev_err(dev, "Failed to enable the timer\n");
-   378			ret = -EFAULT;
-   379			goto out;
-   380		}
-   381	
-   382		mmio_addr = EFCH_PM_WDT_ADDR;
-   383	
-   384		/* Determine alternate MMIO base address */
-   385		val = efch_read_pm_reg8(addr, EFCH_PM_ISACONTROL);
-   386		if (val & EFCH_PM_ISACONTROL_MMIOEN)
-   387			alt_mmio_addr = EFCH_PM_ACPI_MMIO_ADDR +
-   388				EFCH_PM_ACPI_MMIO_WDT_OFFSET;
-   389	
-   390		ret = sp5100_tco_prepare_base(tco, mmio_addr, alt_mmio_addr, dev_name);
-   391		if (!ret) {
-   392			tco_timer_enable_mmio(addr);
-   393			ret = sp5100_tco_timer_init(tco);
-   394		}
-   395	
-   396	out:
-   397		if (addr)
-   398			iounmap(addr);
-   399	
-   400		release_resource(res);
-   401	
-   402		return ret;
-   403	}
-   404	
+   576	
+   577	static int tsn_switch_cam_init(u16 num_q)
+   578	{
+   579		u32 pmap;
+   580		u32 timeout = 20000;
+   581	
+   582		/* wait for switch init done */
+   583		while (!(axienet_ior(&lp, XAS_STATUS_OFFSET) &
+   584			SDL_CAM_WR_ENABLE) && timeout)
+   585			timeout--;
+   586	
+   587		if (!timeout)
+   588			pr_warn("Switch init took longer time!!");
+   589	
+   590		if (num_q == 3) {
+   591		/* map pcp = 2,3 to queue1
+   592		 *     pcp = 4 to queue2
+   593		 */
+   594			pmap = ((PMAP_EGRESS_QUEUE1_SELECT << PMAP_PRIORITY2_SHIFT) |
+   595				(PMAP_EGRESS_QUEUE1_SELECT << PMAP_PRIORITY3_SHIFT) |
+   596				(PMAP_EGRESS_QUEUE2_SELECT << PMAP_PRIORITY4_SHIFT));
+ > 597		} else if (num_q == 2) {
+   598			/*     pcp = 4 to queue1 */
+   599			pmap = (PMAP_EGRESS_QUEUE1_SELECT << PMAP_PRIORITY4_SHIFT);
+   600		}
+   601	
+   602		axienet_iow(&lp, XAS_PMAP_OFFSET, pmap);
+   603	
+   604		timeout = 20000;
+   605		/* wait for cam init done */
+   606		while (!(axienet_ior(&lp, XAS_SDL_CAM_STATUS_OFFSET) &
+   607			SDL_CAM_WR_ENABLE) && timeout)
+   608			timeout--;
+   609	
+   610		if (!timeout)
+   611			pr_warn("CAM init took longer time!!");
+   612	
+   613		return 0;
+   614	}
+   615	
 
 -- 
 0-DAY CI Kernel Test Service
