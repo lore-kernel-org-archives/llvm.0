@@ -1,156 +1,166 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879867E
-	for <llvm@lists.linux.dev>; Sun, 27 Mar 2022 00:19:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648340385; x=1679876385;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q2GnO8WW+PtoP/up/sromQvWqCUDnDLHSJ3SrxjPVhw=;
-  b=MrjLgeBx63gHx584a5moei5Mbp8I3PKZ6igH37D7kYaR+lnao20WBKVX
-   dvWKhrekSVkdF3gptPlWdl1omhrqzA8qqvU2sW3WNtzeWt48EMD1DEDdy
-   D0M4zg4RD7Ollofzls4qkgtHmizELKrWECmiyNllXu90bPUpL0923Xye6
-   UIRzrrVn/15zBUWqkrLo+6G2w1ncbFLpo1+uknCtqvXvMRMtHXj+yNxiD
-   0Ji3uKedBKjpjL2DzcuLTNAHIJ2L4yNDqXV2JxkyQC/bzFbIj8uPDHm5+
-   cgjt8OSifeFOVihkkBoZDWmv+WuwdwVfeutPkGJJtz0/a0wEyaTqsvqtX
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="345247937"
-X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
-   d="scan'208";a="345247937"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 17:19:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
-   d="scan'208";a="584816887"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 26 Mar 2022 17:19:41 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nYGdB-0000YJ-A1; Sun, 27 Mar 2022 00:19:41 +0000
-Date: Sun, 27 Mar 2022 08:18:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>,
-	Nava kishore Manne <nava.manne@xilinx.com>,
-	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 79/1029]
- drivers/of/configfs.c:134:9: warning: no previous prototype for function
- 'cfs_overlay_item_dtbo_read'
-Message-ID: <202203270826.aWqJcdaC-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAA615A4
+	for <llvm@lists.linux.dev>; Sun, 27 Mar 2022 02:55:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879D2C340E8;
+	Sun, 27 Mar 2022 02:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1648349731;
+	bh=NPWbAvL7cuLkuOpOb1ozj+CvWozFHnqgxcgdL9eIxEM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=KXZ4yBSETfpeuCbiDs/Eg4c8vd6dM7q/8f8f6ICue6C/PlIQQu/CscOlIInFuc76K
+	 mtG+Y9PPfoeoCpZkgMo4bzgX1qG1FbttNsaB/J8jVkZA+XIcg+pe/WWLobZ1HoZwk7
+	 ryhGkIO3cMFKwP+I0iC4JyL2vSXP0fE31y5uppAge+W29T6y70+wGgyO45aIlVx5GG
+	 A/3yQfcK/ro/rmLGtltu9JCNScYKDetw1p0IKLVQ6Ztj/FIN2S9+0M6fxkr0svVFUC
+	 2NB7NMs5hsqnb4lHEszaONO+7fvE6zr9gbqe1N/vuLMk+p+WzRpwleAgSRhj1RORfS
+	 a+5oNkkoXekvQ==
+Date: Sun, 27 Mar 2022 11:55:26 +0900
+From: Masami Hiramatsu <mhiramat@kernel.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Padmanabha Srinivasaiah
+ <treasure4paddy@gmail.com>, LKML <linux-kernel@vger.kernel.org>, Jonathan
+ Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, Randy Dunlap
+ <rdunlap@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, Sami
+ Tolvanen <samitolvanen@google.com>, Nathan Chancellor <nathan@kernel.org>,
+ llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>, Linux Kbuild
+ mailing list <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH v4 0/3] bootconfig: Support embedding a bootconfig in
+ kernel for non initrd boot
+Message-Id: <20220327115526.cc4b0ff55fc53c97683c3e4d@kernel.org>
+In-Reply-To: <164833878595.2575750.1483106296151574233.stgit@devnote2>
+References: <164833878595.2575750.1483106296151574233.stgit@devnote2>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Pantelis,
+Hi Padmanabha,
 
-FYI, the error/warning still remains.
+On Sun, 27 Mar 2022 08:53:06 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> 
+> KNOWN ISSUE:
+> 
+> According to the report from Padmanabha[3], the embedded bootconfig data may not
+> be updated if you do incremental build the kernel with CONFIG_LTO. This is
+> under investigation.
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
-head:   1870e0fa79a9d58c6748c34550f3ccea0b515933
-commit: 92450eff19894419e326623c7b720e83aeb57b96 [79/1029] OF: DT-Overlay configfs interface (v8)
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220327/202203270826.aWqJcdaC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/Xilinx/linux-xlnx/commit/92450eff19894419e326623c7b720e83aeb57b96
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
-        git checkout 92450eff19894419e326623c7b720e83aeb57b96
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+I tried to test this version with LTO_CLANG_FULL and LTO_CLANG_THIN with
+switching the embedded bootconfig file by CONFIG_EMBED_BOOT_CONFIG_FILE (on x86).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I found that when I use LTO_CLANG_FULL, the embedded bootconfig was updated
+correctly.
+But with the LTO_CLANG_THIN, the embedded bootconfig was *NOT* updated.
 
-All warnings (new ones prefixed by >>):
+I used the latest prebuild llvm 15.0.0 on x86 [4]. Padmanabha, can you confirm
+with this latest LLVM? I guess something wrong with your old LLVM.
 
->> drivers/of/configfs.c:134:9: warning: no previous prototype for function 'cfs_overlay_item_dtbo_read' [-Wmissing-prototypes]
-   ssize_t cfs_overlay_item_dtbo_read(struct config_item *item,
-           ^
-   drivers/of/configfs.c:134:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t cfs_overlay_item_dtbo_read(struct config_item *item,
-   ^
-   static 
->> drivers/of/configfs.c:156:9: warning: no previous prototype for function 'cfs_overlay_item_dtbo_write' [-Wmissing-prototypes]
-   ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
-           ^
-   drivers/of/configfs.c:156:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
-   ^
-   static 
-   2 warnings generated.
+[4] https://download.01.org/0day-ci/cross-package/clang-latest/clang-latest/clang.tar.xz
+
+Here is the test procedure.
+
+1. Prepare 2 different bootconfig files (bconf1, bconf2).
+2. Configure kernel with LTO_CLANG and setting the full path of bconf1 to
+   CONFIG_EMBED_BOOT_CONFIG_FILE.
+3. Build the kernel
+4. Boot the kernel with "bootconfig" in the kernel cmdline.
+5. Check the /proc/bootconfig is same as bconf1.
+6. Reconfigure kernel with the full path of *bconf2* to CONFIG_EMBED_BOOT_CONFIG_FILE.
+7. Rebuild the kernel (no cleanup)
+8. Boot the kernel with "bootconfig" in the kernel cmdline.
+9. Check the /proc/bootconfig is same as bconf2.
+
+So with LTO_CLANG_FULL, at the step 9 /proc/bootconfig shows bconf2, but with
+LTO_CLANG_THIN, it shows bconf1.
+
+In both cases, build log showed that the default.bconf was updated (I confirmed the
+lib/default.bconf is updated)
+
+  UPD     lib/default.bconf
+  CC      lib/bootconfig.o
+  AR      lib/lib.a
 
 
-vim +/cfs_overlay_item_dtbo_read +134 drivers/of/configfs.c
+Here is my guess. I found that when we enable LTO_CLANG, the compiler compiles
+C source file into LLVM IR bitcode.
 
-   133	
- > 134	ssize_t cfs_overlay_item_dtbo_read(struct config_item *item,
-   135					   void *buf, size_t max_count)
-   136	{
-   137		struct cfs_overlay_item *overlay = to_cfs_overlay_item(item);
-   138	
-   139		pr_debug("%s: buf=%p max_count=%zu\n", __func__, buf, max_count);
-   140	
-   141		if (!overlay->dtbo)
-   142			return 0;
-   143	
-   144		/* copy if buffer provided */
-   145		if (buf) {
-   146			/* the buffer must be large enough */
-   147			if (overlay->dtbo_size > max_count)
-   148				return -ENOSPC;
-   149	
-   150			memcpy(buf, overlay->dtbo, overlay->dtbo_size);
-   151		}
-   152	
-   153		return overlay->dtbo_size;
-   154	}
-   155	
- > 156	ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
-   157					    const void *buf, size_t count)
-   158	{
-   159		struct cfs_overlay_item *overlay = to_cfs_overlay_item(item);
-   160		int err;
-   161	
-   162		/* if it's set do not allow changes */
-   163		if (overlay->path[0] != '\0' || overlay->dtbo_size > 0)
-   164			return -EPERM;
-   165	
-   166		/* copy the contents */
-   167		overlay->dtbo = kmemdup(buf, count, GFP_KERNEL);
-   168		if (!overlay->dtbo)
-   169			return -ENOMEM;
-   170	
-   171		overlay->dtbo_size = count;
-   172	
-   173		err = create_overlay(overlay, overlay->dtbo);
-   174		if (err < 0)
-   175			goto out_err;
-   176	
-   177		return count;
-   178	
-   179	out_err:
-   180		kfree(overlay->dtbo);
-   181		overlay->dtbo = NULL;
-   182		overlay->dtbo_size = 0;
-   183	
-   184		return err;
-   185	}
-   186	
+$ file work/linux/build-x86_64/lib/bootconfig.o 
+work/linux/build-x86_64/lib/bootconfig.o: LLVM IR bitcode
+
+This means at this point the object file doesn't include the lib/default.bconf
+because it will be embedded by assembler. The bitcode seems only have the
+inline asm code (which only has an .incbin directive) as a constatns block[5].
+
+[5]
+  Block ID #11 (CONSTANTS_BLOCK):
+      Num Instances: 32
+         Total Size: 54305b/6788.12B/1697W
+    Percent of file: 19.9792%
+       Average Size: 1697.03/212.13B/53W
+  Tot/Avg SubBlocks: 0/0.000000e+00
+    Tot/Avg Abbrevs: 4/1.250000e-01
+    Tot/Avg Records: 486/1.518750e+01
+    Percent Abbrevs: 80.8642%
+
+        Record Histogram:
+                  Count    # Bits     b/Rec   % Abv  Record Kind
+                    219      4860      22.2  100.00  INTEGER
+                    144      1728      12.0  100.00  SETTYPE
+                     41       656      16.0          NULL
+                     39      2970      76.2          CE_INBOUNDS_GEP
+                     26      3504     134.8  100.00  CSTRING
+                     10     37720    3772.0          INLINEASM
+                      4        96      24.0  100.00  CE_CAST
+                      1        58                    CE_CMP
+                      1        52                    CE_SELECT
+                      1        46                    CE_BINOP
+
+And when the LLVM runs LTO with THIN mode, it might not update (not rebuild to
+machine code) that inline asm code block because that block is not updated.
+I confirmed that the block (bootconfig.o) is not updated after rebuilding
+the kernel as below.
+
+After step 3.
+$ llvm-bcanalyzer work/linux/build-x86_64/lib/bootconfig.o > bconf.dump1
+After step 7.
+$ llvm-bcanalyzer work/linux/build-x86_64/lib/bootconfig.o > bconf.dump2
+$ diff bconf.dump*
+(No difference)
+
+Thank you,
+
+> 
+> [3] https://lore.kernel.org/all/20220321183500.GA4065@pswork/T/#u
+> 
+> Thank you,
+> 
+> ---
+> 
+> Masami Hiramatsu (3):
+>       bootconfig: Check the checksum before removing the bootconfig from initrd
+>       bootconfig: Support embedding a bootconfig file in kernel
+>       docs: bootconfig: Add how to embed the bootconfig into kernel
+> 
+> 
+>  Documentation/admin-guide/bootconfig.rst |   30 ++++++++++++++++++++++++++---
+>  include/linux/bootconfig.h               |   10 ++++++++++
+>  init/Kconfig                             |   21 ++++++++++++++++++++
+>  init/main.c                              |   31 +++++++++++++++---------------
+>  lib/.gitignore                           |    1 +
+>  lib/Makefile                             |   10 ++++++++++
+>  lib/bootconfig.c                         |   23 ++++++++++++++++++++++
+>  7 files changed, 108 insertions(+), 18 deletions(-)
+> 
+> --
+> Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Masami Hiramatsu <mhiramat@kernel.org>
