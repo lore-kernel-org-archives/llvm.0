@@ -1,49 +1,44 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D2217F4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C0A17E7
 	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 22:36:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1648506995; x=1680042995;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=afYqVHwiHVNSeLXUeEU0q+YnDh0ucsP8xpVz/aFfAqM=;
-  b=Bg54M+NwP0JxtedEsdJJfdpXljr+mi8RW5G353Yd2Xb8/m5mGRPLRoIt
-   yk3Fd3Fx+Vf7YbRwvb9IO1IAaCJ7m9dLAcKkafSjLTHURjMftDg7w9vfb
-   fnj18iz/l/KhmMpAjEfP68k8Ps3Q1oCJrQhvHD1WXri7m6pfOqVL9krJ4
-   lCPQoqvb53eXHp2FVnFOP41LgWEC0JrYR0z6X6H+uy4gja5kJ1YxYem+V
-   tgYX/CoVb9PJQik4aWX/FhGAUH+mAYpNnd26WIUQA2NW0YzhpIi2vmjVa
-   8Gl/E+HXHkr2GIsFGhc++BFzQY4YOM3tyP7F1M7hpfS6x3cOldtHeCytE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="258830373"
+  bh=kxHtyv1OvHfrvSGyJvFYbtAiABXBZhmuk/LYZY9JqYU=;
+  b=iw5Q3uMUjqN69j8LpuT8/KBECCMZh4lnDHtN0ejGKlstPpxg11TTWMzd
+   NkzZVE4gZjqkCH6WOUhJfyrhp9MEoTEIS4QKn/t27QhnkpwOYxKwUpOpo
+   zrVLg/Aam1B/kfdNu84F0yMRS2jPFj4lv76hEo/Nf6g+ppVtS3g7HhbZf
+   XqvQb7CLSH2BLRMOamyJDpAee4EiGdsUrXKZSZLnRIKdDHG79e/X88GfW
+   uq6cSmpijZ+cf0JE2PERq4tH5q3zApQOQqi/CwwHWPMyghyPDWolf8KJB
+   f+NXUoWxdOPQofXTgooExFhumlppdKlrAtLrUStez64qstJU3mbWYyxMX
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="257944074"
 X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="258830373"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 15:36:34 -0700
+   d="scan'208";a="257944074"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 15:36:34 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="652411975"
+   d="scan'208";a="546138651"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 28 Mar 2022 15:36:31 -0700
+  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2022 15:36:31 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nYxyQ-0002N8-VQ; Mon, 28 Mar 2022 22:36:30 +0000
-Date: Tue, 29 Mar 2022 06:36:14 +0800
+	id 1nYxyQ-0002N6-Ub; Mon, 28 Mar 2022 22:36:30 +0000
+Date: Tue, 29 Mar 2022 06:36:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	Hans de Goede <hdegoede@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-	Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-	Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 05/21] ata: libahci_platform: Convert to using devm bulk
- clocks API
-Message-ID: <202203290643.0ExdJphD-lkp@intel.com>
-References: <20220324001628.13028-6-Sergey.Semin@baikalelectronics.ru>
+To: Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org,
+	Stanislav Fomichev <sdf@google.com>
+Subject: Re: [PATCH bpf-next 2/7] bpf: per-cgroup lsm flavor
+Message-ID: <202203290637.4bOtec7I-lkp@intel.com>
+References: <20220328181644.1748789-3-sdf@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,99 +47,249 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220324001628.13028-6-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220328181644.1748789-3-sdf@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Serge,
+Hi Stanislav,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on v5.17]
-[also build test ERROR on next-20220328]
-[cannot apply to axboe-block/for-next robh/for-next linus/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/ata-ahci-Add-DWC-Baikal-T1-AHCI-SATA-support/20220328-234809
-base:    f443e374ae131c168a065ea1748feac6b2e76613
-config: arm-buildonly-randconfig-r005-20220327 (https://download.01.org/0day-ci/archive/20220329/202203290643.0ExdJphD-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Fomichev/bpf-cgroup_sock-lsm-flavor/20220329-021809
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: riscv-randconfig-r042-20220328 (https://download.01.org/0day-ci/archive/20220329/202203290637.4bOtec7I-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/28cf1dcfb31bfca35af403a8774d0d880923fab3
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/cf70645346b1affcc956902a44671c1d0eaa451a
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Serge-Semin/ata-ahci-Add-DWC-Baikal-T1-AHCI-SATA-support/20220328-234809
-        git checkout 28cf1dcfb31bfca35af403a8774d0d880923fab3
+        git fetch --no-tags linux-review Stanislav-Fomichev/bpf-cgroup_sock-lsm-flavor/20220329-021809
+        git checkout cf70645346b1affcc956902a44671c1d0eaa451a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/ata/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/ata/ahci_dm816.c:72:6: error: invalid argument type 'struct clk_bulk_data' to unary expression
-           if (!hpriv->clks[1]) {
-               ^~~~~~~~~~~~~~~
->> drivers/ata/ahci_dm816.c:77:29: error: passing 'struct clk_bulk_data' to parameter of incompatible type 'struct clk *'
-           refclk_rate = clk_get_rate(hpriv->clks[1]);
-                                      ^~~~~~~~~~~~~~
-   include/linux/clk.h:584:40: note: passing argument to parameter 'clk' here
-   unsigned long clk_get_rate(struct clk *clk);
-                                          ^
-   2 errors generated.
+   In file included from kernel/bpf/cgroup.c:10:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/bpf/cgroup.c:10:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/bpf/cgroup.c:10:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+   In file included from kernel/bpf/cgroup.c:11:
+   In file included from include/linux/filter.h:9:
+   include/linux/bpf.h:878:2: error: void function 'bpf_trampoline_unlink_cgroup_shim' should not return a value [-Wreturn-type]
+           return -EOPNOTSUPP;
+           ^      ~~~~~~~~~~~
+>> kernel/bpf/cgroup.c:499:12: error: use of undeclared identifier 'CGROUP_LSM_START'
+                           atype = CGROUP_LSM_START + bpf_lsm_hook_idx(p->aux->attach_btf_id);
+                                   ^
+   7 warnings and 2 errors generated.
 
 
-vim +72 drivers/ata/ahci_dm816.c
+vim +/CGROUP_LSM_START +499 kernel/bpf/cgroup.c
 
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   60  
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   61  static int ahci_dm816_phy_init(struct ahci_host_priv *hpriv, struct device *dev)
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   62  {
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   63  	unsigned long refclk_rate;
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   64  	int mpy;
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   65  	u32 val;
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   66  
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   67  	/*
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   68  	 * We should have been supplied two clocks: the functional and
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   69  	 * keep-alive clock and the external reference clock. We need the
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   70  	 * rate of the latter to calculate the correct value of MPY bits.
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   71  	 */
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14  @72  	if (!hpriv->clks[1]) {
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   73  		dev_err(dev, "reference clock not supplied\n");
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   74  		return -EINVAL;
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   75  	}
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   76  
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14  @77  	refclk_rate = clk_get_rate(hpriv->clks[1]);
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   78  	if ((refclk_rate % 100) != 0) {
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   79  		dev_err(dev, "reference clock rate must be divisible by 100\n");
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   80  		return -EINVAL;
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   81  	}
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   82  
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   83  	mpy = ahci_dm816_get_mpy_bits(refclk_rate);
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   84  	if (mpy < 0) {
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   85  		dev_err(dev, "can't calculate the MPY bits value\n");
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   86  		return -EINVAL;
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   87  	}
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   88  
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   89  	/* Enable the PHY and configure the first HBA port. */
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   90  	val = AHCI_DM816_PHY_MPY(mpy) | AHCI_DM816_PHY_LOS(1) |
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   91  	      AHCI_DM816_PHY_RXCDR(4) | AHCI_DM816_PHY_RXEQ(1) |
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   92  	      AHCI_DM816_PHY_TXSWING(3) | AHCI_DM816_PHY_ENPLL(1);
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   93  	writel(val, hpriv->mmio + AHCI_DM816_P0PHYCR_REG);
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   94  
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   95  	/* Configure the second HBA port. */
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   96  	val = AHCI_DM816_PHY_LOS(1) | AHCI_DM816_PHY_RXCDR(4) |
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   97  	      AHCI_DM816_PHY_RXEQ(1) | AHCI_DM816_PHY_TXSWING(3);
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   98  	writel(val, hpriv->mmio + AHCI_DM816_P1PHYCR_REG);
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14   99  
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14  100  	return 0;
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14  101  }
-df46e6a4c06c89 Bartosz Golaszewski 2017-03-14  102  
+   445	
+   446	/**
+   447	 * __cgroup_bpf_attach() - Attach the program or the link to a cgroup, and
+   448	 *                         propagate the change to descendants
+   449	 * @cgrp: The cgroup which descendants to traverse
+   450	 * @prog: A program to attach
+   451	 * @link: A link to attach
+   452	 * @replace_prog: Previously attached program to replace if BPF_F_REPLACE is set
+   453	 * @type: Type of attach operation
+   454	 * @flags: Option flags
+   455	 *
+   456	 * Exactly one of @prog or @link can be non-null.
+   457	 * Must be called with cgroup_mutex held.
+   458	 */
+   459	static int __cgroup_bpf_attach(struct cgroup *cgrp,
+   460				       struct bpf_prog *prog, struct bpf_prog *replace_prog,
+   461				       struct bpf_cgroup_link *link,
+   462				       enum bpf_attach_type type, u32 flags)
+   463	{
+   464		u32 saved_flags = (flags & (BPF_F_ALLOW_OVERRIDE | BPF_F_ALLOW_MULTI));
+   465		struct bpf_prog *old_prog = NULL;
+   466		struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+   467		struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+   468		struct bpf_attach_target_info tgt_info = {};
+   469		enum cgroup_bpf_attach_type atype;
+   470		struct bpf_prog_list *pl;
+   471		struct list_head *progs;
+   472		int err;
+   473	
+   474		if (((flags & BPF_F_ALLOW_OVERRIDE) && (flags & BPF_F_ALLOW_MULTI)) ||
+   475		    ((flags & BPF_F_REPLACE) && !(flags & BPF_F_ALLOW_MULTI)))
+   476			/* invalid combination */
+   477			return -EINVAL;
+   478		if (link && (prog || replace_prog))
+   479			/* only either link or prog/replace_prog can be specified */
+   480			return -EINVAL;
+   481		if (!!replace_prog != !!(flags & BPF_F_REPLACE))
+   482			/* replace_prog implies BPF_F_REPLACE, and vice versa */
+   483			return -EINVAL;
+   484	
+   485		if (type == BPF_LSM_CGROUP) {
+   486			struct bpf_prog *p = prog ? : link->link.prog;
+   487	
+   488			if (replace_prog) {
+   489				/* Reusing shim from the original program.
+   490				 */
+   491				atype = replace_prog->aux->cgroup_atype;
+   492			} else {
+   493				err = bpf_check_attach_target(NULL, p, NULL,
+   494							      p->aux->attach_btf_id,
+   495							      &tgt_info);
+   496				if (err)
+   497					return -EINVAL;
+   498	
+ > 499				atype = CGROUP_LSM_START + bpf_lsm_hook_idx(p->aux->attach_btf_id);
+   500			}
+   501	
+   502			p->aux->cgroup_atype = atype;
+   503		} else {
+   504			atype = to_cgroup_bpf_attach_type(type);
+   505			if (atype < 0)
+   506				return -EINVAL;
+   507		}
+   508	
+   509		progs = &cgrp->bpf.progs[atype];
+   510	
+   511		if (!hierarchy_allows_attach(cgrp, atype))
+   512			return -EPERM;
+   513	
+   514		if (!list_empty(progs) && cgrp->bpf.flags[atype] != saved_flags)
+   515			/* Disallow attaching non-overridable on top
+   516			 * of existing overridable in this cgroup.
+   517			 * Disallow attaching multi-prog if overridable or none
+   518			 */
+   519			return -EPERM;
+   520	
+   521		if (prog_list_length(progs) >= BPF_CGROUP_MAX_PROGS)
+   522			return -E2BIG;
+   523	
+   524		pl = find_attach_entry(progs, prog, link, replace_prog,
+   525				       flags & BPF_F_ALLOW_MULTI);
+   526		if (IS_ERR(pl))
+   527			return PTR_ERR(pl);
+   528	
+   529		if (bpf_cgroup_storages_alloc(storage, new_storage, type,
+   530					      prog ? : link->link.prog, cgrp))
+   531			return -ENOMEM;
+   532	
+   533		if (pl) {
+   534			old_prog = pl->prog;
+   535		} else {
+   536			pl = kmalloc(sizeof(*pl), GFP_KERNEL);
+   537			if (!pl) {
+   538				bpf_cgroup_storages_free(new_storage);
+   539				return -ENOMEM;
+   540			}
+   541			list_add_tail(&pl->node, progs);
+   542		}
+   543	
+   544		pl->prog = prog;
+   545		pl->link = link;
+   546		bpf_cgroup_storages_assign(pl->storage, storage);
+   547		cgrp->bpf.flags[atype] = saved_flags;
+   548	
+   549		err = update_effective_progs(cgrp, atype);
+   550		if (err)
+   551			goto cleanup;
+   552	
+   553		bpf_cgroup_storages_link(new_storage, cgrp, type);
+   554	
+   555		if (type == BPF_LSM_CGROUP && !old_prog) {
+   556			struct bpf_prog *p = prog ? : link->link.prog;
+   557			int err;
+   558	
+   559			err = bpf_trampoline_link_cgroup_shim(p, &tgt_info);
+   560			if (err)
+   561				goto cleanup_trampoline;
+   562		}
+   563	
+   564		if (old_prog)
+   565			bpf_prog_put(old_prog);
+   566		else
+   567			static_branch_inc(&cgroup_bpf_enabled_key[atype]);
+   568	
+   569		return 0;
+   570	
+   571	cleanup_trampoline:
+   572		bpf_cgroup_storages_unlink(new_storage);
+   573	
+   574	cleanup:
+   575		if (old_prog) {
+   576			pl->prog = old_prog;
+   577			pl->link = NULL;
+   578		}
+   579		bpf_cgroup_storages_free(new_storage);
+   580		if (!old_prog) {
+   581			list_del(&pl->node);
+   582			kfree(pl);
+   583		}
+   584		return err;
+   585	}
+   586	
 
 -- 
 0-DAY CI Kernel Test Service
