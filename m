@@ -1,32 +1,39 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D418B7C
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 21:53:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DFDC34100;
-	Mon, 28 Mar 2022 21:53:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648504385;
-	bh=oNs0fACiFDhDkycLiYXHQaGNFojDAo6v1AQHrYGCu2c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AHpsLaobXbTDIEC9UlU7FeCro6s04ki/GTaTC4isZ1IWnqRP64A5mrdUXa9SW0W4g
-	 p5beKLeP5sC+e5P7DnSaN6lUYQtDf7WwWGfVPeAGwaigqcmMPwbbevsDxl3aj0uzxV
-	 k6Xtf88KB2UI7zCUzeM/L4NZQKfIOyJzJp5U/oixBMbKXQPOjFEA+ckYxCX8XWi7Yg
-	 arCAFU7rp2lE5YvvIarvIWfgo8ELcZxnl3rN9Bwvq1q7xoU9ZnJjwmOVuReck7RfG4
-	 9wtmv2QOD4KNYksX8bPVDg3kkMEPcyeNg/nxQFHUnRSaAzGf8HvdS5b4uvDcSFhjZd
-	 yuEQ6mLBnDDsg==
-Date: Mon, 28 Mar 2022 14:52:58 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	linux-s390@vger.kernel.org, linux-next@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: s390 defconfig fails to build after
- 4afeb670710efa5cd5ed8b1d9f2d22d6ce332bcc
-Message-ID: <YkIuOnd6SWBYuKLz@dev-arch.thelio-3990X>
-References: <YkH/rRikE2CilpqU@dev-arch.thelio-3990X>
- <your-ad-here.call-01648503866-ext-8764@work.hours>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7C27C
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 22:26:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648506393; x=1680042393;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=eoZASWtwFG9UmTEvN6I46WyMlTUK9wqVGJctj9qaURM=;
+  b=R+XaFmsEUa/6I9DQ9Km8QYs16IymeqHCsW5GY9jEpLGVFVfAV5Di+Puz
+   d4aNBPn7Zvwn90hywkTGPOPZHkqlrF+h/7jUmRCXx7dsF/wmFkTBr6/U5
+   0YlIhp+wIsJuBvtgetGG00dgIyYwHpMl8e39+xkQinEBHTOI5QMyAgYRl
+   UCxvafiGxa1O6NWmbMIz9/VlinwcVnjgIhdoet68CiXRE70s2e0y0mXeA
+   +L9CGY+X8321TNWHqbtHOX0MC5tZMnNcKI6qzMR9stBnPwD4aBfIdQ9Xa
+   6k0P0+4OtmCuJh4fFwHAbHjMzZ87Ntn9gkwc0ZduCEpyOZP/Nuw7jV2jS
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="284007123"
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="284007123"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 15:26:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="546136170"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2022 15:26:31 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nYxok-0002Mj-O3; Mon, 28 Mar 2022 22:26:30 +0000
+Date: Tue, 29 Mar 2022 06:25:48 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: clang-15: error: linker command failed with exit code 1 (use -v to
+ see invocation)
+Message-ID: <202203290634.QGzqGiaj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,40 +42,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <your-ad-here.call-01648503866-ext-8764@work.hours>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Mar 28, 2022 at 11:44:26PM +0200, Vasily Gorbik wrote:
-> On Mon, Mar 28, 2022 at 11:34:21AM -0700, Nathan Chancellor wrote:
-> > Hi all,
-> > 
-> > Apologies if this has been reported or fixed already, I did not see a
-> > report when searching lore.kernel.org and it is reproducible as of
-> > commit 7dcfe50f58d2 ("s390/pci: rename get_zdev_by_bus() to
-> > zdev_from_bus()") in s390/linux.git.
-> > 
-> > Our continuous integration noticed a build failure on next-20220328 in
-> > arch/s390/kernel/entry.S, which does not appear to be compiler specific,
-> > as I can reproduce this with GCC easily:
-> > 
-> > https://builds.tuxbuild.com/2716QwFVG9408TJ43vkEc7trVCI/build.log
-> > 
-> > $ make -skj"$(nproc)" ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- defconfig arch/s390/kernel/entry.o
-> > arch/s390/kernel/entry.S: Assembler messages:
-> > arch/s390/kernel/entry.S:335: Error: Unrecognized opcode: `jgnop'
-> > arch/s390/kernel/entry.S:493: Error: Unrecognized opcode: `jgnop'
-> > arch/s390/kernel/entry.S:494: Error: Unrecognized opcode: `jgnop'
-> 
-> Thank you for reporting this!
-> 
-> jgnop mnemonic has been introduced with binutils commit
-> b10b530a4566 ("IBM Z: Add support for HLASM extended mnemonics")
-> 
-> and is part of binutils-2_36 and newer.
-> 
-> I fixed it by using old "brcl 0,0" alternative here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=features&id=faf79934e65aff90284725518a5ec3c2241c65ae
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Daniel Axtens <dja@axtens.net>
+CC: Michael Ellerman <mpe@ellerman.id.au>
+CC: Alexey Kardashevskiy <aik@ozlabs.ru>
 
-Awesome, thank you a lot for the quick fix!
+Hi Daniel,
 
-Cheers,
-Nathan
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ae085d7f9365de7da27ab5c0d16b12d51ea7fca9
+commit: f5140cab448e4819ca6f158cb4130352f73c92e4 powerpc: check for support for -Wa,-m{power4,any}
+date:   3 months ago
+config: powerpc64-randconfig-r035-20220327 (https://download.01.org/0day-ci/archive/20220329/202203290634.QGzqGiaj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f5140cab448e4819ca6f158cb4130352f73c92e4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f5140cab448e4819ca6f158cb4130352f73c92e4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#warnings]
+   #warning syscall futex_waitv not implemented
+    ^
+   1 warning generated.
+   /usr/bin/ld: unrecognised emulation mode: elf64ppc
+   Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
+>> clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso64/Makefile:44: arch/powerpc/kernel/vdso64/vdso64.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso64-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:424: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
