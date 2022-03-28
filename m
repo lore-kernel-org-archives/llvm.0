@@ -1,42 +1,55 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F754366;
-	Mon, 28 Mar 2022 18:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815077C
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 21:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648492955; x=1680028955;
+  t=1648503357; x=1680039357;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MoMV6xIVX0o/Wb7VPFeBj8yjhoY98e3aEmNSMGAAsQo=;
-  b=MCqhkkuxmeuu9TdrKoILGJJZpMVrqHkDx/18RICm2kVp3HtrXhLZedx6
-   j7zqQO8o5VLwClEStL9uRDqCF3Z8QfG9fvUowNUSY8Ec0bTzgk07X03na
-   GYZRzsujyDHKZF5bMNJfiu0xuUNfEI9NhPNNHpRnwdEYzYoo6LoPwvzG7
-   SlEVlp7+kGUcFEu3zSL9YzWSzejkj67EW5EPbgYCSaUGOOwJkq//6ZL7G
-   QDFo13a+r2KytfznOrzqetOIK7iIiVsP9IfOOepINc76vf/ja8OZNAkgD
-   ZabBiD85Re2aLITJiJxUtQrPi4vVP/AR9dzHplhShMFp9fShMa1+yJ5Gp
+  bh=Go8oxxC6Pe7H7dirXGB5IDnB7EGjXVoNw/QrYHUiyLg=;
+  b=VASrmGdGXbyGYImUy41ZdduEZvIKb10pXXXtq1ch8Gp1/xwSDOu4vwX7
+   9Q0tsqM6QULCzPDYBJ3SZ2lzJFuJWsjsHn4f9jQmjcmB+6mF5InuIgvJb
+   8zH1AbuW7x+PPOwGTrP1D6PEyj95EJadDWkS9q9KZHiNJpR3ZShfdGAAQ
+   0ahEOH3MzWfLy7Oo7l9OT9M04w0i1qeNmkNlHlXKdf5791E4Lx/hj6gm3
+   wd2jwBF4j8TOR58zIr8bdlJMBhJM3s7MUjit4Qzlxrnhd2tnwQ1275F1K
+   nWt17rFc4ps/bXTPkSBb8hIfZaw8vsF+J5e8SDyaWnPfrmtjSyfmxxlBY
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="259265759"
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="258822661"
 X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="259265759"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 11:42:34 -0700
+   d="scan'208";a="258822661"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 14:35:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="719224792"
+   d="scan'208";a="564024528"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 28 Mar 2022 11:42:33 -0700
+  by orsmga008.jf.intel.com with ESMTP; 28 Mar 2022 14:35:51 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nYuK0-0002F9-2Z; Mon, 28 Mar 2022 18:42:32 +0000
-Date: Tue, 29 Mar 2022 02:42:02 +0800
+	id 1nYx1j-0002Kz-6r; Mon, 28 Mar 2022 21:35:51 +0000
+Date: Tue, 29 Mar 2022 05:34:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Florian Westphal <fw@strlen.de>, mptcp@lists.linux.dev
+To: Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Kishon Vijay Abraham I <kishon@ti.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Florian Westphal <fw@strlen.de>
-Subject: Re: [PATCH mptcp-next v2 3/3] mptcp: listen diag dump support
-Message-ID: <202203290201.H3kHXAzz-lkp@intel.com>
-References: <20220328124913.29768-4-fw@strlen.de>
+	Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+	Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+	Frank Li <Frank.Li@nxp.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/12] PCI: dwc: Add unroll iATU space support to the
+ regions disable method
+Message-ID: <202203290533.uObikFCd-lkp@intel.com>
+References: <20220324012524.16784-4-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,122 +58,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220328124913.29768-4-fw@strlen.de>
+In-Reply-To: <20220324012524.16784-4-Sergey.Semin@baikalelectronics.ru>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Florian,
+Hi Serge,
 
 I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on mptcp/export]
-[also build test WARNING on linus/master v5.17 next-20220328]
+[auto build test WARNING on helgaas-pci/next]
+[also build test WARNING on v5.17 next-20220328]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Westphal/mptcp-inet-diag-listen-dump-support/20220328-205028
-base:   https://github.com/multipath-tcp/mptcp_net-next.git export
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220329/202203290201.H3kHXAzz-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/PCI-dwc-Various-fixes-and-cleanups/20220328-231112
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: arm64-buildonly-randconfig-r004-20220327 (https://download.01.org/0day-ci/archive/20220329/202203290533.uObikFCd-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6ef1c5326220cfa09c48f9f9c6e02ec914250e3e
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/fb5c4386b8af12124d1e7b48bd7f538c12d85100
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Florian-Westphal/mptcp-inet-diag-listen-dump-support/20220328-205028
-        git checkout 6ef1c5326220cfa09c48f9f9c6e02ec914250e3e
+        git fetch --no-tags linux-review Serge-Semin/PCI-dwc-Various-fixes-and-cleanups/20220328-231112
+        git checkout fb5c4386b8af12124d1e7b48bd7f538c12d85100
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/mptcp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pci/controller/dwc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/mptcp/mptcp_diag.c:121:39: warning: variable 'bc' is uninitialized when used here [-Wuninitialized]
-                           ret = sk_diag_dump(sk, skb, cb, r, bc, net_admin);
-                                                              ^~
-   net/mptcp/mptcp_diag.c:82:19: note: initialize the variable 'bc' to silence this warning
-           struct nlattr *bc;
-                            ^
-                             = NULL
+>> drivers/pci/controller/dwc/pcie-designware.c:508:14: warning: result of comparison of constant 2147483648 with expression of type 'int' is always false [-Wtautological-constant-out-of-range-compare]
+                   if (region == PCIE_ATU_REGION_INBOUND) {
+                       ~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~
    1 warning generated.
 
 
-vim +/bc +121 net/mptcp/mptcp_diag.c
+vim +/int +508 drivers/pci/controller/dwc/pcie-designware.c
 
-    75	
-    76	static void mptcp_diag_dump_listeners(struct sk_buff *skb, struct netlink_callback *cb,
-    77					      const struct inet_diag_req_v2 *r,
-    78					      bool net_admin)
-    79	{
-    80		struct mptcp_diag_ctx *diag_ctx = (void *)cb->ctx;
-    81		struct net *net = sock_net(skb->sk);
-    82		struct nlattr *bc;
-    83		int i;
-    84	
-    85		for (i = diag_ctx->l_slot; i < INET_LHTABLE_SIZE; i++) {
-    86			struct inet_listen_hashbucket *ilb;
-    87			struct hlist_nulls_node *node;
-    88			struct sock *sk;
-    89			int num = 0;
-    90	
-    91			ilb = &tcp_hashinfo.listening_hash[i];
-    92	
-    93			rcu_read_lock();
-    94			spin_lock(&ilb->lock);
-    95			sk_nulls_for_each(sk, node, &ilb->nulls_head) {
-    96				const struct mptcp_subflow_context *ctx = mptcp_subflow_ctx(sk);
-    97				struct inet_sock *inet = inet_sk(sk);
-    98				int ret;
-    99	
-   100				if (num < diag_ctx->l_num)
-   101					goto next_listen;
-   102	
-   103				if (!ctx || strcmp(inet_csk(sk)->icsk_ulp_ops->name, "mptcp"))
-   104					goto next_listen;
-   105	
-   106				sk = ctx->conn;
-   107				if (!sk || !net_eq(sock_net(sk), net))
-   108					goto next_listen;
-   109	
-   110				if (r->sdiag_family != AF_UNSPEC &&
-   111				    sk->sk_family != r->sdiag_family)
-   112					goto next_listen;
-   113	
-   114				if (r->id.idiag_sport != inet->inet_sport &&
-   115				    r->id.idiag_sport)
-   116					goto next_listen;
-   117	
-   118				if (!refcount_inc_not_zero(&sk->sk_refcnt))
-   119					goto next_listen;
-   120	
- > 121				ret = sk_diag_dump(sk, skb, cb, r, bc, net_admin);
-   122						   sock_put(sk);
-   123				if (ret < 0) {
-   124					spin_unlock(&ilb->lock);
-   125					rcu_read_unlock();
-   126					diag_ctx->l_slot = i;
-   127					diag_ctx->l_num = num;
-   128					return;
-   129				}
-   130				diag_ctx->l_num = num + 1;
-   131				num = 0;
-   132	next_listen:
-   133				++num;
-   134			}
-   135			spin_unlock(&ilb->lock);
-   136			rcu_read_unlock();
-   137	
-   138			cond_resched();
-   139			diag_ctx->l_num = 0;
-   140		}
-   141	
-   142		diag_ctx->l_num = 0;
-   143		diag_ctx->l_slot = i;
-   144	}
-   145	
+   490	
+   491	void dw_pcie_disable_atu(struct dw_pcie *pci, int index,
+   492				 enum dw_pcie_region_type type)
+   493	{
+   494		int region;
+   495	
+   496		switch (type) {
+   497		case DW_PCIE_REGION_INBOUND:
+   498			region = PCIE_ATU_REGION_INBOUND;
+   499			break;
+   500		case DW_PCIE_REGION_OUTBOUND:
+   501			region = PCIE_ATU_REGION_OUTBOUND;
+   502			break;
+   503		default:
+   504			return;
+   505		}
+   506	
+   507		if (pci->iatu_unroll_enabled) {
+ > 508			if (region == PCIE_ATU_REGION_INBOUND) {
+   509				dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
+   510							 ~(u32)PCIE_ATU_ENABLE);
+   511			} else {
+   512				dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
+   513							 ~(u32)PCIE_ATU_ENABLE);
+   514			}
+   515		} else {
+   516			dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, region | index);
+   517			dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, ~(u32)PCIE_ATU_ENABLE);
+   518		}
+   519	}
+   520	
 
 -- 
 0-DAY CI Kernel Test Service
