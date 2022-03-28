@@ -1,112 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3AAE7C
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 14:30:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92418C004DD;
-	Mon, 28 Mar 2022 14:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648477827;
-	bh=0fJAVjmpmWefISZQ/CbYY4ljN8LhkUpwEfBUSoXFz/o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Q8zOPgsibK2EPWrixhHmPrrsyfIIk1vXGGUX4UZPseQI8k2V40kOCDhMYgf0VUJGR
-	 UYhNvemk7Iy8rpsOc/X+s+xFW1CgxLztCugnh5d8wPkMH5zoj/ZahjFE29nto9KXuH
-	 VeCiHgQ6IInNTVlrwgFCE0c6drf6NLhKNt6ie4DBpLMfRVc7oXZ7AwitTVJJWp2Wdq
-	 M5j5kzDgZFq4WzSp62Dh6ogLVerIPjqs6u1tMw6jQfwu2Mv/6QG6Ur+nD22lmO2YgU
-	 cDcwX2z29hmohmMdNlMgfN6l9Rftnp5UVjuBI1DNSWtT2Kr9I3ZJuvbjRvYB8YOq1o
-	 zUgMva6949LJw==
-From: Masami Hiramatsu <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
-	Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org,
-	Randy Dunlap <rdunlap@infradead.org>,
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2CB37C
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 14:58:17 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09F86D6E;
+	Mon, 28 Mar 2022 07:58:17 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B75763F73B;
+	Mon, 28 Mar 2022 07:58:15 -0700 (PDT)
+Date: Mon, 28 Mar 2022 15:58:10 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Segher Boessenkool <segher@kernel.crashing.org>
+Cc: Peter Zijlstra <peterz@infradead.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	llvm@lists.linux.dev,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Subject: [PATCH v5 3/3] docs: bootconfig: Add how to embed the bootconfig into kernel
-Date: Mon, 28 Mar 2022 23:30:22 +0900
-Message-Id: <164847782202.3060675.17704713855690661713.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164847778869.3060675.8115416881394543419.stgit@devnote2>
-References: <164847778869.3060675.8115416881394543419.stgit@devnote2>
-User-Agent: StGit/0.19
+	Borislav Petkov <bp@alien8.de>,
+	Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	linux-toolchains@vger.kernel.org
+Subject: Re: clang memcpy calls
+Message-ID: <YkHNArCbWUEojGjL@lakrids>
+References: <YjxTt3pFIcV3lt8I@zn.tnic>
+ <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
+ <Yj2yYFloadFobRPx@lakrids>
+ <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
+ <20220325151238.GB614@gate.crashing.org>
+ <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
+ <20220328142220.GI614@gate.crashing.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220328142220.GI614@gate.crashing.org>
 
-Add a description how to embed the bootconfig file into kernel.
+On Mon, Mar 28, 2022 at 09:22:20AM -0500, Segher Boessenkool wrote:
+> Hi!
+> 
+> On Mon, Mar 28, 2022 at 10:52:54AM +0100, Mark Rutland wrote:
+> > On Fri, Mar 25, 2022 at 10:12:38AM -0500, Segher Boessenkool wrote:
+> > > The compiler isn't assuming anything about asan.  The compiler generates
+> > > its code without any consideration of what asan will or will not do.
+> > > The burden of making things work is on asan.
+> > 
+> > I think we're talking past each other here, so let me be more precise. :)
+> > 
+> > The key thing is that when the user passes `-fsantize=address`, instrumentation
+> > is added by (a part of) the compiler. That instrumentation is added under some
+> > assumptions as to how the compiler as a whole will behave.
+> > 
+> > With that in mind, the question is how is __attribute__((no_sanitize_address))
+> > intended to work when considering all the usual expectations around how the
+> > compiler can play with memcpy and similar?
+> 
+> The attribute is about how the *current* function is instrumented, not
+> about anything called by this function.  This is clearly documented:
+> 'no_sanitize_address'
+> 'no_address_safety_analysis'
+>      The 'no_sanitize_address' attribute on functions is used to inform
+>      the compiler that it should not instrument memory accesses in the
+>      function when compiling with the '-fsanitize=address' option.  The
+>      'no_address_safety_analysis' is a deprecated alias of the
+>      'no_sanitize_address' attribute, new code should use
+>      'no_sanitize_address'.
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- Changes in v5:
-  - Update CONFIG_EMBED_BOOT_CONFIG_FILE which can accept relative path.
- Changes in v3:
-  - Fix typos.
- Changes in v2:
-  - Corrected the text accoding to Randy's suggestion.
-  - Do not reccomend to use relative path for CONFIG_EMBED_BOOT_CONFIG_FILE.
----
- Documentation/admin-guide/bootconfig.rst |   31 +++++++++++++++++++++++++++---
- 1 file changed, 28 insertions(+), 3 deletions(-)
+I understand this, and I have read the documentation.
 
-diff --git a/Documentation/admin-guide/bootconfig.rst b/Documentation/admin-guide/bootconfig.rst
-index a1860fc0ca88..83a2a0cc9afa 100644
---- a/Documentation/admin-guide/bootconfig.rst
-+++ b/Documentation/admin-guide/bootconfig.rst
-@@ -158,9 +158,15 @@ Each key-value pair is shown in each line with following style::
- Boot Kernel With a Boot Config
- ==============================
- 
--Since the boot configuration file is loaded with initrd, it will be added
--to the end of the initrd (initramfs) image file with padding, size,
--checksum and 12-byte magic word as below.
-+There are two options to boot the kernel with bootconfig: attaching the
-+bootconfig to the initrd image or embedding it in the kernel itself.
-+
-+Attaching a Boot Config to Initrd
-+---------------------------------
-+
-+Since the boot configuration file is loaded with initrd by default,
-+it will be added to the end of the initrd (initramfs) image file with
-+padding, size, checksum and 12-byte magic word as below.
- 
- [initrd][bootconfig][padding][size(le32)][checksum(le32)][#BOOTCONFIG\n]
- 
-@@ -196,6 +202,25 @@ To remove the config from the image, you can use -d option as below::
- Then add "bootconfig" on the normal kernel command line to tell the
- kernel to look for the bootconfig at the end of the initrd file.
- 
-+Embedding a Boot Config into Kernel
-+-----------------------------------
-+
-+If you can not use initrd, you can also embed the bootconfig file in the
-+kernel by Kconfig options. In this case, you need to recompile the kernel
-+with the following configs::
-+
-+ CONFIG_EMBED_BOOT_CONFIG=y
-+ CONFIG_EMBED_BOOT_CONFIG_FILE="/PATH/TO/BOOTCONFIG/FILE"
-+
-+``CONFIG_EMBED_BOOT_CONFIG_FILE`` requires an absolute path or a relative
-+path to the bootconfig file from source tree or object tree.
-+The kernel will embed it as the default bootconfig.
-+
-+Just as when attaching the bootconfig to the initrd, you need ``bootconfig``
-+option on the kernel command line to enable the embedded bootconfig.
-+
-+Note that even if you set this option, you can override the embedded
-+bootconfig by another bootconfig which attached to the initrd.
- 
- Kernel parameters via Boot Config
- =================================
+I'm not claiming any *individual* semantic is wrong, just that in
+combination this doesn't provide what people *need* (even if it strictly
+matches what is documented).
 
+My argument is: if the compiler is permitted to implictly and
+arbitrarily add calls to instrumented functions within a function marked
+with `no_sanitize_address`, the `no_sanitize_address` attribute is
+effectively useless, and therefore *something* needs to change.
+
+> > > The compiler should not do anything differently here if it uses asan.
+> > > The address sanitizer and the memcpy function implementation perhaps
+> > > have to cooperate somehow, or asan needs more smarts.  This needs to
+> > > happen no matter what, to support other things calling memcpy, say,
+> > > assembler code.
+> > 
+> > I appreciate where you're coming from here, but I think you're approaching the
+> > problem sideways.
+> 
+> I am stating facts, I am not trying to solve your problem there.  It
+> seemed to me (and still does) that you didn't grasp all facts here.
+
+Sorry, but I think you're reading my replies uncharitably if you think
+that.
+
+> > We need to define *what the semantics are* so that we can actually solve the
+> > problem, e.g. is a memcpy implementation expected to be instrumented or not?
+> 
+> That is up to the memcpy implementation itself, of course.
+
+Sorry, but that doesn't make sense to me. When the compiler instruments
+a function with AddressSanitizer, it must have *some* assumption about
+whether memcpy() itself will be instrumented, such that it won't miss
+some necessary instrumentation (and ideally, for performance reasons
+doesn't have redundant instrumentation).
+
+If the story is "memcpy may or may not be instrumented", then the only
+way to guarantee necessary instrumentation is for the compiler to
+*always* place it in the caller (unless forbidden by
+`no_sanitize_address`). If that were the case, the kernel can make
+things work by simply not instrumenting memcpy and friends.
+
+IIUC today those assumptions are not documented. Is the behaviour
+consistent?
+
+> > > GCC *requires* memcpy to be the standard memcpy always (i.e. to have the
+> > > standard-specified semantics).  This means that it will have the same
+> > > semantics as __builtin_memcpy always, and either or not be a call to an
+> > > external function.  It can also create calls to it out of thin air.
+> > 
+> > I understand all of that.
+> 
+> And still you want us to do something that is impossible under those
+> existing constraints :-(
+
+If that's truly impossible, that's very unfortunate.
+
+FWIW, I can believe this would require tremendous effort to change, even
+if it's not truly impossible.
+
+If that is the case, it means that kernel side we have to never
+instrument our implementation of memcpy and friends for correctness
+reasons, which has the unfortunate property of losing coverage in the
+cases we *would* like to use an instrumented memcpy.
+
+> If you want the external memcpy called by modules A, B, C to not be
+> instrumented, you have to link A, B, and C against an uninstrumented
+> memcpy.  This is something the kernel will have to do, the compiler has
+> no say in how the kernel is linked together.
+
+Unfortunately that options doesn't really fix the `no_sanitize_address`
+semantic, and forces us to move *all* uninstrumentable code out into
+separate compilation units, etc.
+
+This isn't *impossible*, but is *very* painful.
+
+Thanks,
+Mark.
