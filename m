@@ -1,112 +1,315 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB477C
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 10:20:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1648462850;
-	h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=Laf/K1cWVWhxaqqakxKFWK3semcWDCO2R58wSsFAsPU=;
-	b=dRvvkklQDLGudeTy/3Z5Xt/Hx0bHFc9mwXGhPsvUiBHgyarEMvRRAGG8cso0EHxt/WaiUD
-	yyR80r+xwv3nZUX3YR9qGjftISBTw3RaoDLsYqP0US1l1h1Hye1wGrRfQY7dn7FZriaGeW
-	27kFrdOvvC+dFqzH0Exqqodm0IoRGqs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-580-zmpxLUDzPtyjxwC4iX_jRQ-1; Mon, 28 Mar 2022 06:20:47 -0400
-X-MC-Unique: zmpxLUDzPtyjxwC4iX_jRQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4DEB2185A794;
-	Mon, 28 Mar 2022 10:20:46 +0000 (UTC)
-Received: from tucnak.zalov.cz (unknown [10.39.192.15])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id DB590C15D40;
-	Mon, 28 Mar 2022 10:20:45 +0000 (UTC)
-Received: from tucnak.zalov.cz (localhost [127.0.0.1])
-	by tucnak.zalov.cz (8.16.1/8.16.1) with ESMTPS id 22SAKfDe3603422
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 28 Mar 2022 12:20:42 +0200
-Received: (from jakub@localhost)
-	by tucnak.zalov.cz (8.16.1/8.16.1/Submit) id 22SAKdAM3603421;
-	Mon, 28 Mar 2022 12:20:39 +0200
-Date: Mon, 28 Mar 2022 12:20:39 +0200
-From: Jakub Jelinek <jakub@redhat.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Segher Boessenkool <segher@kernel.crashing.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Borislav Petkov <bp@alien8.de>, Nathan Chancellor <nathan@kernel.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-toolchains@vger.kernel.org
-Subject: Re: clang memcpy calls
-Message-ID: <YkGL929QoFiTfMK7@tucnak>
-Reply-To: Jakub Jelinek <jakub@redhat.com>
-References: <YjxTt3pFIcV3lt8I@zn.tnic>
- <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
- <Yj2yYFloadFobRPx@lakrids>
- <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
- <20220325151238.GB614@gate.crashing.org>
- <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D72435A
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 11:16:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B358AC340EC;
+	Mon, 28 Mar 2022 11:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1648466189;
+	bh=SEGKAv2y0LvSw8+qA9ED5lVRRO6x9HRUKOz3nmtGoC8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=tUTV/QOq7dDA4kcmIkSHlLL/Hr9M04Fs6Vl5W5VQmjdsYu270n5hz/mijUUoBCylW
+	 RyysfIlXK7NXFCbLPvxou3Rv/NxGZhCanIVqXYkk1C+xyRGK4VwJGH3PrXY9tHNPTc
+	 reOczTlpUZSom/wyacm3f2vHkjY1t++RgYCFKu2IzJxjEJKhWV4F5wvgZbbcTbc1hC
+	 044fBGw9JLpSB6LhU+ye76Spr+A37VSsQvcxKkyB0fWpE80MQlGOOhjZsskkHYZhbY
+	 5wmKVwR3jKiwjfmAxTg8LdL7sdqj9YsjPQuWPTyl8OF4jgTO11Qvf4gThlBKtpRqyS
+	 kIq7WJRMN83ZQ==
+Date: Mon, 28 Mar 2022 20:16:22 +0900
+From: Masami Hiramatsu <mhiramat@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Padmanabha Srinivasaiah
+ <treasure4paddy@gmail.com>, LKML <linux-kernel@vger.kernel.org>, Jonathan
+ Corbet <corbet@lwn.net>, "open list:DOCUMENTATION"
+ <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Sami Tolvanen
+ <samitolvanen@google.com>, Nathan Chancellor <nathan@kernel.org>,
+ llvm@lists.linux.dev, Linux Kbuild mailing list
+ <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH v4 2/3] bootconfig: Support embedding a bootconfig file
+ in kernel
+Message-Id: <20220328201622.c0b06c599b2f3dfc971f48eb@kernel.org>
+In-Reply-To: <CAK7LNATv8aHMPazZ1TrLjT4T6SfFSpFJcQNJOVFdc4_noO61Kw@mail.gmail.com>
+References: <164833878595.2575750.1483106296151574233.stgit@devnote2>
+	<164833880897.2575750.113875316750095499.stgit@devnote2>
+	<CAK7LNATv8aHMPazZ1TrLjT4T6SfFSpFJcQNJOVFdc4_noO61Kw@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 28, 2022 at 10:52:54AM +0100, Mark Rutland wrote:
-> I think we're talking past each other here, so let me be more precise. :)
+On Mon, 28 Mar 2022 15:27:43 +0900
+Masahiro Yamada <masahiroy@kernel.org> wrote:
+
+> On Sun, Mar 27, 2022 at 8:53 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > This allows kernel developer to embed a default bootconfig file in
+> > the kernel instead of embedding it in the initrd. This will be good
+> > for who are using the kernel without initrd, or who needs a default
+> > bootconfigs.
+> > This needs to set two kconfigs: CONFIG_EMBED_BOOT_CONFIG=y and set
+> > the file path to CONFIG_EMBED_BOOT_CONFIG_FILE.
+> >
+> > Note that you still need 'bootconfig' command line option to load the
+> > embedded bootconfig. Also if you boot using an initrd with a different
+> > bootconfig, the kernel will use the bootconfig in the initrd, instead
+> > of the default bootconfig.
+> >
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > ---
+> >  Changes in v3:
+> >   - Avoid updating the default.bconf if the file is not changed.
+> > ---
+> >  include/linux/bootconfig.h |   10 ++++++++++
+> >  init/Kconfig               |   21 +++++++++++++++++++++
+> >  init/main.c                |   13 ++++++++-----
+> >  lib/.gitignore             |    1 +
+> >  lib/Makefile               |   10 ++++++++++
+> >  lib/bootconfig.c           |   23 +++++++++++++++++++++++
+> >  6 files changed, 73 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
+> > index a4665c7ab07c..5dbda5e3e9bb 100644
+> > --- a/include/linux/bootconfig.h
+> > +++ b/include/linux/bootconfig.h
+> > @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
+> >  /* XBC cleanup data structures */
+> >  void __init xbc_exit(void);
+> >
+> > +/* XBC embedded bootconfig data in kernel */
+> > +#ifdef CONFIG_EMBED_BOOT_CONFIG
+> > +char * __init xbc_get_embedded_bootconfig(size_t *size);
+> > +#else
+> > +static inline char *xbc_get_embedded_bootconfig(size_t *size)
+> > +{
+> > +       return NULL;
+> > +}
+> > +#endif
+> > +
+> >  #endif
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index beb5b866c318..bff308a782f8 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -1357,6 +1357,27 @@ config BOOT_CONFIG
+> >
+> >           If unsure, say Y.
+> >
+> > +config EMBED_BOOT_CONFIG
+> > +       bool "Embed bootconfig file in the kernel"
+> > +       depends on BOOT_CONFIG
+> > +       default n
+> > +       help
+> > +         Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
+> > +         kernel. Usually, the bootconfig file is loaded with the initrd
+> > +         image. But if the system doesn't support initrd, this option will
+> > +         help you by embedding a bootconfig file while building the kernel.
+> > +
+> > +         If unsure, say N.
+> > +
+> > +config EMBED_BOOT_CONFIG_FILE
+> > +       string "Embedded bootconfig file path"
+> > +       default ""
+> > +       depends on EMBED_BOOT_CONFIG
+> > +       help
+> > +         Specify a bootconfig file which will be embedded to the kernel.
+> > +         This bootconfig will be used if there is no initrd or no other
+> > +         bootconfig in the initrd.
+> > +
+> >  choice
+> >         prompt "Compiler optimization level"
+> >         default CC_OPTIMIZE_FOR_PERFORMANCE
+> > diff --git a/init/main.c b/init/main.c
+> > index 4f3ba3b84e34..180511324c95 100644
+> > --- a/init/main.c
+> > +++ b/init/main.c
+> > @@ -265,7 +265,7 @@ static int __init loglevel(char *str)
+> >  early_param("loglevel", loglevel);
+> >
+> >  #ifdef CONFIG_BLK_DEV_INITRD
+> > -static void * __init get_boot_config_from_initrd(u32 *_size)
+> > +static void * __init get_boot_config_from_initrd(size_t *_size)
+> >  {
+> >         u32 size, csum;
+> >         char *data;
+> > @@ -411,12 +411,15 @@ static void __init setup_boot_config(void)
+> >         static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
+> >         const char *msg;
+> >         int pos;
+> > -       u32 size;
+> > +       size_t size;
+> >         char *data, *err;
+> >         int ret;
+> >
+> >         /* Cut out the bootconfig data even if we have no bootconfig option */
+> >         data = get_boot_config_from_initrd(&size);
+> > +       /* If there is no bootconfig in initrd, try embedded one. */
+> > +       if (!data)
+> > +               data = xbc_get_embedded_bootconfig(&size);
+> >
+> >         strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+> >         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+> > @@ -435,8 +438,8 @@ static void __init setup_boot_config(void)
+> >         }
+> >
+> >         if (size >= XBC_DATA_MAX) {
+> > -               pr_err("bootconfig size %d greater than max size %d\n",
+> > -                       size, XBC_DATA_MAX);
+> > +               pr_err("bootconfig size %ld greater than max size %d\n",
+> > +                       (long)size, XBC_DATA_MAX);
+> >                 return;
+> >         }
+> >
+> > @@ -449,7 +452,7 @@ static void __init setup_boot_config(void)
+> >                                 msg, pos);
+> >         } else {
+> >                 xbc_get_info(&ret, NULL);
+> > -               pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
+> > +               pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
+> >                 /* keys starting with "kernel." are passed via cmdline */
+> >                 extra_command_line = xbc_make_cmdline("kernel");
+> >                 /* Also, "init." keys are init arguments */
+> > diff --git a/lib/.gitignore b/lib/.gitignore
+> > index e5e217b8307b..30a2a5db7033 100644
+> > --- a/lib/.gitignore
+> > +++ b/lib/.gitignore
+> > @@ -6,3 +6,4 @@
+> >  /oid_registry_data.c
+> >  /test_fortify.log
+> >  /test_fortify/*.log
+> > +/default.bconf
 > 
-> The key thing is that when the user passes `-fsantize=address`, instrumentation
-> is added by (a part of) the compiler. That instrumentation is added under some
-> assumptions as to how the compiler as a whole will behave.
 > 
-> With that in mind, the question is how is __attribute__((no_sanitize_address))
-> intended to work when considering all the usual expectations around how the
-> compiler can play with memcpy and similar?
-
-no_sanitize_address or lack thereof is whether the current function
-shouldn't be or should be ASan instrumented, not on whether other functions
-it calls are instrumented or not.  memcpy/memmove/memset are just a tiny bit
-special case because the compiler can add them on their own even if they
-aren't present in the source (there are a few others the compiler can
-pattern match too) and various builtins can be on the other side expanded
-inline instead of called, so one then gets the sanitization status of the
-function in which it is used rather than whether the out of line
-implementation of the function is sanitized.
-
-If coexistence of instrumented and non-instrumented memcpy etc. was the goal
-(it clearly wasn't), then the sanitizer libraries wouldn't be overriding
-memcpy calls, but instead the compiler would redirect calls to memcpy in
-instrumented functions to say __asan_memcpy which then would be
-instrumented.
-
-> Given the standard doesn't say *anything* about instrumentation, what does GCC
-> *require* instrumentation-wise of the memcpy implementation? What happens *in
-> practice* today?
+> I think lib/.gitignore is alphabetically sorted.
 > 
-> For example, is the userspace implementation of memcpy() instrumented for
-> AddressSanitizer, or not?
+> Please insert the new one
+> to the proper line.
 
-It is, for all functions, whether compiled with -fsanitize=address or not,
-if user app is linked with -fsanitize=address, libasan is linked in and
-overrides the libc memcpy with its instrumented version.
+Ah, OK. Let me fix that.
 
-Note that the default shadow memory value is 0 which means accessible,
-so even when memcpy is instrumented, when called from non-instrumented code
-often it will not do anything beyond normal behavior, as non-instrumented
-functions don't poison the paddings in between variable (there even doesn't
-have to be any) etc.  But e.g. malloc/operator new etc. is also overridden,
-so buffer overflows/underflows on memory allocated that way from
-uninstrumented code using memcpy etc. will be diagnosed.
+> > diff --git a/lib/Makefile b/lib/Makefile
+> > index 353bc09ce38d..dd9f3ebb62ca 100644
+> > --- a/lib/Makefile
+> > +++ b/lib/Makefile
+> > @@ -276,6 +276,16 @@ $(foreach file, $(libfdt_files), \
+> >         $(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
+> >  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
+> >
+> > +ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
+> > +$(obj)/bootconfig.o: $(obj)/default.bconf
+> > +
+> > +targets += default.bconf
+> 
+> 
+> I did not test this patch, but presumably
+> "make clean" will miss to clean up default.bconf
+> 
+> The 'targets' must exist outside the ifeq-block.
+> Move the 'endif' up.
+> 
+> 
+> ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
+> $(obj)/bootconfig.o: $(obj)/default.bconf
+> endif
+> 
+> targets += default.bconf
+> 
+> ...
 
-	Jakub
+You're right! I didn't know this behavior. Thanks for the notice.
+I misunderstood that the files in targets always be built...
 
+After moving the 'targets' out of ifeq-block, I confirmed that the
+default.bconf was not generated when CONFIG_EMBED_BOOT_CONFIG is not
+set, and it is cleaned up when CONFIG_EMBED_BOOT_CONFIG=y.
+Thanks!
+
+> 
+> > +filechk_defbconf = cat /dev/null $(CONFIG_EMBED_BOOT_CONFIG_FILE)
+> > +$(obj)/default.bconf: FORCE
+> > +       $(call filechk,defbconf)
+> 
+> 
+> This will work, but users will be confused when they
+> try to build out-of-tree with the O= option.
+> 
+> If CONFIG_EMBED_BOOT_CONFIG_FILE is a relative path,
+> it is actually relative to the object tree, not the source tree.
+
+Yes, that's right. I would like to fix this issue.
+
+> I am not sure if that is the expected behavior, but it is not documented
+> anywhere.
+> 
+> 
+> If you want to search both in the objtree and srctree,
+> you can write like follows:   [UNTESTED]
+> 
+> 
+> filechk_defbconf = cat $(or $(real-prereqs), /dev/null)
+> $(obj)/default.bconf: $(CONFIG_EMBED_BOOT_CONFIG_FILE) FORCE
+>         $(call filechk,defbconf)
+
+Great! let me check it works.
+
+Thank you,
+
+> 
+> 
+> 
+> 
+> > +
+> > +endif
+> > +
+> >  lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
+> >
+> >  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
+> > diff --git a/lib/bootconfig.c b/lib/bootconfig.c
+> > index 74f3201ab8e5..3a3bf3a208e3 100644
+> > --- a/lib/bootconfig.c
+> > +++ b/lib/bootconfig.c
+> > @@ -12,6 +12,29 @@
+> >  #include <linux/kernel.h>
+> >  #include <linux/memblock.h>
+> >  #include <linux/string.h>
+> > +
+> > +#ifdef CONFIG_EMBED_BOOT_CONFIG
+> > +asm (
+> > +"      .pushsection .init.data, \"aw\"                 \n"
+> > +"      .global embedded_bootconfig_data                \n"
+> > +"embedded_bootconfig_data:                             \n"
+> > +"      .incbin \"lib/default.bconf\"                   \n"
+> > +"      .global embedded_bootconfig_data_end            \n"
+> > +"embedded_bootconfig_data_end:                         \n"
+> > +"      .popsection                                     \n"
+> > +);
+> > +
+> > +extern __visible char embedded_bootconfig_data[];
+> > +extern __visible char embedded_bootconfig_data_end[];
+> > +
+> > +char * __init xbc_get_embedded_bootconfig(size_t *size)
+> > +{
+> > +       *size = embedded_bootconfig_data_end - embedded_bootconfig_data;
+> > +       return (*size) ? embedded_bootconfig_data : NULL;
+> > +}
+> > +
+> > +#endif
+> > +
+> >  #else /* !__KERNEL__ */
+> >  /*
+> >   * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
+> >
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
