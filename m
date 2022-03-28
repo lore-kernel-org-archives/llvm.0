@@ -1,194 +1,307 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052FF17D0
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 05:38:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648445909; x=1679981909;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yNGqs5UQKpnEQwK+7b2EzmfdzXgeEkQtJEt+djm9eTA=;
-  b=hEZAoNQgsEYPxelDWm1cL7RecF9c3zie2K/jnjl8QBAu25kGnuDVYvyh
-   mBaJgehvte0vUyPmvJGDjt8RyYHt0QPs5wsavLdSA+WQOckND47iKzjhG
-   VWxpj/yA5eXovdwwK8LyT6ed7uYH4mC9+QEE+E41t1muwloMkTntoQ+if
-   rd9THyF5WOUDyJu6d890DFw0BoyCPwCBy49xqB54w0x4ZMZ1P3OBwCanB
-   nLfDmWbMznLjBVME/SWcYxjkf3hwTSqq+Ia+Ey7aYsbdqNBd7dC1VJcRy
-   pYSI62FoQr6b7j3agNitsArEBzO5kT0C8I+kSvrxu20DVDFw4MMdZsuHG
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="259102260"
-X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
-   d="scan'208";a="259102260"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 22:38:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
-   d="scan'208";a="520876292"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 27 Mar 2022 22:38:26 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nYi5B-0001kg-LY; Mon, 28 Mar 2022 05:38:25 +0000
-Date: Mon, 28 Mar 2022 13:37:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Haowen Bai <baihaowen@meizu.com>, hca@linux.ibm.com, gor@linux.ibm.com,
-	agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-	svens@linux.ibm.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Haowen Bai <baihaowen@meizu.com>
-Subject: Re: [PATCH] s390: Simplify the calculation of variables
-Message-ID: <202203281319.E0AKjDcq-lkp@intel.com>
-References: <1648434982-28862-1-git-send-email-baihaowen@meizu.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EAD182
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 06:41:43 +0000 (UTC)
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-09.nifty.com with ESMTP id 22S6Sb8d029105
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 15:28:37 +0900
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171]) (authenticated)
+	by conssluserg-04.nifty.com with ESMTP id 22S6SR8s000706
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 15:28:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 22S6SR8s000706
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1648448908;
+	bh=K8VIBxox/wo7+85R/mKEH3OnsLngjJEfU+Eg7MUbWec=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=1J8JDAUGdI/Jfd0dh7B1/5tLwR3T5+cGzvo6daSsxtoe97jq0ZY24EWl1FW8Is6at
+	 ie30zfUK/RzioJTAPjMovX4SZd2DhMiJNFJPF6LT6khPPKjbTQybN0ULNYCmnXqk8F
+	 7hQ7dI9citoNuMRktTJhYpQ9vwQosAoU32VUofGxKju+8ji2wEAq2ZS8yox7ywAT4Q
+	 sNRequLeKmjyQWcilD4fesSvFWrPSN1Tjru/sP+osf5kP7jnukD0d8kxfwvCKpSSEG
+	 bEsggvFvNVPJ9Uzi2wxFHcjNkdhn3ht9nVh3M6GPXMN+UnNOa0wbqvUGg19ClURtTu
+	 HzT+y6FfAxIVQ==
+X-Nifty-SrcIP: [209.85.214.171]
+Received: by mail-pl1-f171.google.com with SMTP id w4so13926503ply.13
+        for <llvm@lists.linux.dev>; Sun, 27 Mar 2022 23:28:27 -0700 (PDT)
+X-Gm-Message-State: AOAM53067Vmr21sUrOc0GlJy4flV1QonNYvJy5oPCEI5ZtxMoDeqzEbs
+	jbQpPvwqFKu0UyRz15Y5zodPKVl2fa5QyPH/dUo=
+X-Google-Smtp-Source: ABdhPJyC1NVt/dBwHO7m1cIHzShj0yluWOyX5dVnlVGxbHzsukb5MUghc6aV+ODXzFf0BTMGuJAasS50SYPVIIy6bZQ=
+X-Received: by 2002:a17:902:b68c:b0:153:bd06:85ad with SMTP id
+ c12-20020a170902b68c00b00153bd0685admr24643000pls.99.1648448906891; Sun, 27
+ Mar 2022 23:28:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1648434982-28862-1-git-send-email-baihaowen@meizu.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <164833878595.2575750.1483106296151574233.stgit@devnote2> <164833880897.2575750.113875316750095499.stgit@devnote2>
+In-Reply-To: <164833880897.2575750.113875316750095499.stgit@devnote2>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 28 Mar 2022 15:27:43 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATv8aHMPazZ1TrLjT4T6SfFSpFJcQNJOVFdc4_noO61Kw@mail.gmail.com>
+Message-ID: <CAK7LNATv8aHMPazZ1TrLjT4T6SfFSpFJcQNJOVFdc4_noO61Kw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] bootconfig: Support embedding a bootconfig file in kernel
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Haowen,
+On Sun, Mar 27, 2022 at 8:53 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> This allows kernel developer to embed a default bootconfig file in
+> the kernel instead of embedding it in the initrd. This will be good
+> for who are using the kernel without initrd, or who needs a default
+> bootconfigs.
+> This needs to set two kconfigs: CONFIG_EMBED_BOOT_CONFIG=y and set
+> the file path to CONFIG_EMBED_BOOT_CONFIG_FILE.
+>
+> Note that you still need 'bootconfig' command line option to load the
+> embedded bootconfig. Also if you boot using an initrd with a different
+> bootconfig, the kernel will use the bootconfig in the initrd, instead
+> of the default bootconfig.
+>
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  Changes in v3:
+>   - Avoid updating the default.bconf if the file is not changed.
+> ---
+>  include/linux/bootconfig.h |   10 ++++++++++
+>  init/Kconfig               |   21 +++++++++++++++++++++
+>  init/main.c                |   13 ++++++++-----
+>  lib/.gitignore             |    1 +
+>  lib/Makefile               |   10 ++++++++++
+>  lib/bootconfig.c           |   23 +++++++++++++++++++++++
+>  6 files changed, 73 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
+> index a4665c7ab07c..5dbda5e3e9bb 100644
+> --- a/include/linux/bootconfig.h
+> +++ b/include/linux/bootconfig.h
+> @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
+>  /* XBC cleanup data structures */
+>  void __init xbc_exit(void);
+>
+> +/* XBC embedded bootconfig data in kernel */
+> +#ifdef CONFIG_EMBED_BOOT_CONFIG
+> +char * __init xbc_get_embedded_bootconfig(size_t *size);
+> +#else
+> +static inline char *xbc_get_embedded_bootconfig(size_t *size)
+> +{
+> +       return NULL;
+> +}
+> +#endif
+> +
+>  #endif
+> diff --git a/init/Kconfig b/init/Kconfig
+> index beb5b866c318..bff308a782f8 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1357,6 +1357,27 @@ config BOOT_CONFIG
+>
+>           If unsure, say Y.
+>
+> +config EMBED_BOOT_CONFIG
+> +       bool "Embed bootconfig file in the kernel"
+> +       depends on BOOT_CONFIG
+> +       default n
+> +       help
+> +         Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
+> +         kernel. Usually, the bootconfig file is loaded with the initrd
+> +         image. But if the system doesn't support initrd, this option will
+> +         help you by embedding a bootconfig file while building the kernel.
+> +
+> +         If unsure, say N.
+> +
+> +config EMBED_BOOT_CONFIG_FILE
+> +       string "Embedded bootconfig file path"
+> +       default ""
+> +       depends on EMBED_BOOT_CONFIG
+> +       help
+> +         Specify a bootconfig file which will be embedded to the kernel.
+> +         This bootconfig will be used if there is no initrd or no other
+> +         bootconfig in the initrd.
+> +
+>  choice
+>         prompt "Compiler optimization level"
+>         default CC_OPTIMIZE_FOR_PERFORMANCE
+> diff --git a/init/main.c b/init/main.c
+> index 4f3ba3b84e34..180511324c95 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -265,7 +265,7 @@ static int __init loglevel(char *str)
+>  early_param("loglevel", loglevel);
+>
+>  #ifdef CONFIG_BLK_DEV_INITRD
+> -static void * __init get_boot_config_from_initrd(u32 *_size)
+> +static void * __init get_boot_config_from_initrd(size_t *_size)
+>  {
+>         u32 size, csum;
+>         char *data;
+> @@ -411,12 +411,15 @@ static void __init setup_boot_config(void)
+>         static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
+>         const char *msg;
+>         int pos;
+> -       u32 size;
+> +       size_t size;
+>         char *data, *err;
+>         int ret;
+>
+>         /* Cut out the bootconfig data even if we have no bootconfig option */
+>         data = get_boot_config_from_initrd(&size);
+> +       /* If there is no bootconfig in initrd, try embedded one. */
+> +       if (!data)
+> +               data = xbc_get_embedded_bootconfig(&size);
+>
+>         strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+>         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+> @@ -435,8 +438,8 @@ static void __init setup_boot_config(void)
+>         }
+>
+>         if (size >= XBC_DATA_MAX) {
+> -               pr_err("bootconfig size %d greater than max size %d\n",
+> -                       size, XBC_DATA_MAX);
+> +               pr_err("bootconfig size %ld greater than max size %d\n",
+> +                       (long)size, XBC_DATA_MAX);
+>                 return;
+>         }
+>
+> @@ -449,7 +452,7 @@ static void __init setup_boot_config(void)
+>                                 msg, pos);
+>         } else {
+>                 xbc_get_info(&ret, NULL);
+> -               pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
+> +               pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
+>                 /* keys starting with "kernel." are passed via cmdline */
+>                 extra_command_line = xbc_make_cmdline("kernel");
+>                 /* Also, "init." keys are init arguments */
+> diff --git a/lib/.gitignore b/lib/.gitignore
+> index e5e217b8307b..30a2a5db7033 100644
+> --- a/lib/.gitignore
+> +++ b/lib/.gitignore
+> @@ -6,3 +6,4 @@
+>  /oid_registry_data.c
+>  /test_fortify.log
+>  /test_fortify/*.log
+> +/default.bconf
 
-Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on s390/features]
-[also build test ERROR on v5.17 next-20220325]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I think lib/.gitignore is alphabetically sorted.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Haowen-Bai/s390-Simplify-the-calculation-of-variables/20220328-103807
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git features
-config: s390-randconfig-r044-20220328 (https://download.01.org/0day-ci/archive/20220328/202203281319.E0AKjDcq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/7356660d5a4a5dc70f5e18b63125c43d218885f3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Haowen-Bai/s390-Simplify-the-calculation-of-variables/20220328-103807
-        git checkout 7356660d5a4a5dc70f5e18b63125c43d218885f3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/nfc/nfcmrvl/main.c:9:
-   In file included from include/linux/gpio.h:62:
-   In file included from include/asm-generic/gpio.h:11:
-   In file included from include/linux/gpio/driver.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/nfc/nfcmrvl/main.c:9:
-   In file included from include/linux/gpio.h:62:
-   In file included from include/asm-generic/gpio.h:11:
-   In file included from include/linux/gpio/driver.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/nfc/nfcmrvl/main.c:9:
-   In file included from include/linux/gpio.h:62:
-   In file included from include/asm-generic/gpio.h:11:
-   In file included from include/linux/gpio/driver.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from drivers/nfc/nfcmrvl/main.c:9:
-   In file included from include/linux/gpio.h:62:
-   In file included from include/asm-generic/gpio.h:11:
-   In file included from include/linux/gpio/driver.h:7:
-   In file included from include/linux/irq.h:592:
-   In file included from arch/s390/include/asm/hw_irq.h:6:
-   In file included from include/linux/pci.h:1901:
-   In file included from arch/s390/include/asm/pci.h:12:
-   In file included from arch/s390/include/asm/sclp.h:20:
-   In file included from arch/s390/include/asm/chpid.h:10:
-   In file included from arch/s390/include/asm/cio.h:18:
->> arch/s390/include/asm/scsw.h:695:47: error: expected ';' after return statement
-                  (scsw->tm.actl & SCSW_ACTL_SUSPENDED))
-                                                        ^
-                                                        ;
-   12 warnings and 1 error generated.
+Please insert the new one
+to the proper line.
 
 
-vim +695 arch/s390/include/asm/scsw.h
 
-   682	
-   683	/**
-   684	 * scsw_tm_is_valid_pno - check pno field validity
-   685	 * @scsw: pointer to scsw
-   686	 *
-   687	 * Return non-zero if the pno field of the specified transport mode scsw is
-   688	 * valid, zero otherwise.
-   689	 */
-   690	static inline int scsw_tm_is_valid_pno(union scsw *scsw)
-   691	{
-   692		return (scsw->tm.fctl != 0) &&
-   693		       (scsw->tm.stctl & SCSW_STCTL_STATUS_PEND) &&
-   694		       (!(scsw->tm.stctl & SCSW_STCTL_INTER_STATUS) ||
- > 695		       (scsw->tm.actl & SCSW_ACTL_SUSPENDED))
-   696	}
-   697	
+
+
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 353bc09ce38d..dd9f3ebb62ca 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -276,6 +276,16 @@ $(foreach file, $(libfdt_files), \
+>         $(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
+>  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
+>
+> +ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
+> +$(obj)/bootconfig.o: $(obj)/default.bconf
+> +
+> +targets += default.bconf
+
+
+I did not test this patch, but presumably
+"make clean" will miss to clean up default.bconf
+
+The 'targets' must exist outside the ifeq-block.
+Move the 'endif' up.
+
+
+ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
+$(obj)/bootconfig.o: $(obj)/default.bconf
+endif
+
+targets += default.bconf
+
+...
+
+
+
+
+
+> +filechk_defbconf = cat /dev/null $(CONFIG_EMBED_BOOT_CONFIG_FILE)
+> +$(obj)/default.bconf: FORCE
+> +       $(call filechk,defbconf)
+
+
+This will work, but users will be confused when they
+try to build out-of-tree with the O= option.
+
+If CONFIG_EMBED_BOOT_CONFIG_FILE is a relative path,
+it is actually relative to the object tree, not the source tree.
+I am not sure if that is the expected behavior, but it is not documented
+anywhere.
+
+
+If you want to search both in the objtree and srctree,
+you can write like follows:   [UNTESTED]
+
+
+filechk_defbconf = cat $(or $(real-prereqs), /dev/null)
+$(obj)/default.bconf: $(CONFIG_EMBED_BOOT_CONFIG_FILE) FORCE
+        $(call filechk,defbconf)
+
+
+
+
+> +
+> +endif
+> +
+>  lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
+>
+>  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
+> diff --git a/lib/bootconfig.c b/lib/bootconfig.c
+> index 74f3201ab8e5..3a3bf3a208e3 100644
+> --- a/lib/bootconfig.c
+> +++ b/lib/bootconfig.c
+> @@ -12,6 +12,29 @@
+>  #include <linux/kernel.h>
+>  #include <linux/memblock.h>
+>  #include <linux/string.h>
+> +
+> +#ifdef CONFIG_EMBED_BOOT_CONFIG
+> +asm (
+> +"      .pushsection .init.data, \"aw\"                 \n"
+> +"      .global embedded_bootconfig_data                \n"
+> +"embedded_bootconfig_data:                             \n"
+> +"      .incbin \"lib/default.bconf\"                   \n"
+> +"      .global embedded_bootconfig_data_end            \n"
+> +"embedded_bootconfig_data_end:                         \n"
+> +"      .popsection                                     \n"
+> +);
+> +
+> +extern __visible char embedded_bootconfig_data[];
+> +extern __visible char embedded_bootconfig_data_end[];
+> +
+> +char * __init xbc_get_embedded_bootconfig(size_t *size)
+> +{
+> +       *size = embedded_bootconfig_data_end - embedded_bootconfig_data;
+> +       return (*size) ? embedded_bootconfig_data : NULL;
+> +}
+> +
+> +#endif
+> +
+>  #else /* !__KERNEL__ */
+>  /*
+>   * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
+>
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+Masahiro Yamada
