@@ -1,132 +1,104 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FADC4358
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 12:55:46 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F150D6E;
-	Mon, 28 Mar 2022 05:55:45 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E1623F718;
-	Mon, 28 Mar 2022 05:55:44 -0700 (PDT)
-Date: Mon, 28 Mar 2022 13:55:38 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Jakub Jelinek <jakub@redhat.com>
-Cc: Segher Boessenkool <segher@kernel.crashing.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	linux-toolchains@vger.kernel.org
-Subject: Re: clang memcpy calls
-Message-ID: <YkGwSsXLBjReBhMf@lakrids>
-References: <YjxTt3pFIcV3lt8I@zn.tnic>
- <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
- <Yj2yYFloadFobRPx@lakrids>
- <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
- <20220325151238.GB614@gate.crashing.org>
- <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
- <YkGL929QoFiTfMK7@tucnak>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105093D95
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 13:03:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1648472587;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/u9IbKTaxd7JfWbYIumOYCvcuDGJC1EVRBB8DOZNjec=;
+	b=YQkJ2FyFG74ohtl/7NGCvPx+eIyWBSfssGd9IJSSeR4yInudoXo75+R/NJRCN5lH6YNA0o
+	8ftwh0TA0cu8xhPNR9lBoo6lzfV0+PgY0S9Qvgc8AJkn/rvC2IJLwFoQvH1wJCuj8wge89
+	uEPtSoEM4A26aoJreY8kXW1l35uShYI=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-461--AO3SOLaNG6i9Nciw0eoQg-1; Mon, 28 Mar 2022 09:03:06 -0400
+X-MC-Unique: -AO3SOLaNG6i9Nciw0eoQg-1
+Received: by mail-qk1-f199.google.com with SMTP id 207-20020a3706d8000000b0067b322bef9eso8346028qkg.3
+        for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 06:03:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/u9IbKTaxd7JfWbYIumOYCvcuDGJC1EVRBB8DOZNjec=;
+        b=e2UKNeO1OCNamxkVRBiqxOVETBAcBOLlJjOeCYnmz6hi76uyowvC1HMAz10+MPWdCr
+         f7PViUaBNnFcKHNR7eAFl048ELu4cyq9SkOO84MqOTbTePaQ/bY1Vns/ho4x3m3UcGTe
+         dOWdiee7rRg4likkd215PwBNgyOpHOBvaT7RejwxDjN535nbYqBuNxPyfQKa3bgoGnPn
+         bn9r1HoX5Vrcf6j6em2vnA2h0n6b1i10z99J/2MZC53ohj0K3YtMxvBI+6cRub02nyEC
+         sFeHwtjhYPH92GRBQliTF8bqgU/NA72fP+HRYdNGpvTDG8RASBlibss2hNj45ZrX3YG4
+         43Bw==
+X-Gm-Message-State: AOAM532xs2tCCzfQTNFzUE00IamQ87aBXfDMdHHdTScB24NGQCyKZWSD
+	DQoV5dbHAKITDEyIMOAr0efy0e49h9fFJh1of9Fm17GhKrnOfDYZMhFkuXgNBMCNyhkaFASJFsW
+	sSTz0WmbxZXPDpQ==
+X-Received: by 2002:a05:6214:c4a:b0:441:2c0e:1cb4 with SMTP id r10-20020a0562140c4a00b004412c0e1cb4mr20295999qvj.98.1648472585599;
+        Mon, 28 Mar 2022 06:03:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwwc0BWvMkauz8RL1WHra/Cyzf5posV9J1/75Ci8EjT4n+fT/8/G2vr6453bVFQNKYlS5HK8A==
+X-Received: by 2002:a05:6214:c4a:b0:441:2c0e:1cb4 with SMTP id r10-20020a0562140c4a00b004412c0e1cb4mr20295947qvj.98.1648472585197;
+        Mon, 28 Mar 2022 06:03:05 -0700 (PDT)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id m16-20020a05620a24d000b0067ecf605ef5sm8576234qkn.105.2022.03.28.06.03.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 06:03:04 -0700 (PDT)
+From: trix@redhat.com
+To: sfrench@samba.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] cifs: fix enum usage
+Date: Mon, 28 Mar 2022 06:03:00 -0700
+Message-Id: <20220328130300.3090213-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkGL929QoFiTfMK7@tucnak>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-On Mon, Mar 28, 2022 at 12:20:39PM +0200, Jakub Jelinek wrote:
-> On Mon, Mar 28, 2022 at 10:52:54AM +0100, Mark Rutland wrote:
-> > I think we're talking past each other here, so let me be more precise. :)
-> > 
-> > The key thing is that when the user passes `-fsantize=address`, instrumentation
-> > is added by (a part of) the compiler. That instrumentation is added under some
-> > assumptions as to how the compiler as a whole will behave.
-> > 
-> > With that in mind, the question is how is __attribute__((no_sanitize_address))
-> > intended to work when considering all the usual expectations around how the
-> > compiler can play with memcpy and similar?
-> 
-> no_sanitize_address or lack thereof is whether the current function
-> shouldn't be or should be ASan instrumented, not on whether other functions
-> it calls are instrumented or not.
+From: Tom Rix <trix@redhat.com>
 
-I understand this. :)
+Clang build fails with
+cifsfs.c:709:18: error: implicit conversion from enumeration
+  type 'enum statusEnum' to different enumeration
+  type 'enum tid_status_enum'
+  tcon->status = CifsExiting;
+               ~ ^~~~~~~~~~~
 
-> memcpy/memmove/memset are just a tiny bit special case because the
-> compiler can add them on their own even if they aren't present in the
-> source (there are a few others the compiler can pattern match too) and
-> various builtins can be on the other side expanded inline instead of
-> called, so one then gets the sanitization status of the function in
-> which it is used rather than whether the out of line implementation of
-> the function is sanitized.
+The type of the element status changed, so enum needed to change.
+Replace CifsExiting with TID_EXITING.
 
-Yep, and this is the point I'm getting at. If the compiler *implicitly*
-generates a call to one of these from a function which was marked with
-__attribute__((no_sanitize_address)), then either:
+Fixes: 7e5c8c02911b ("smb3: cleanup and clarify status of tree connections")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ fs/cifs/cifsfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-1) This renders __attribute__((no_sanitize_address)) useless, since
-   instrumentation is being added in a way the code author cannot
-   reliably prevent. If so, I'd argue that this is a compiler bug, and
-   that the transformation of inserting the call is unsound.
+diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+index 0789bf1496c74..a47fa44b6d52b 100644
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -706,7 +706,7 @@ static void cifs_umount_begin(struct super_block *sb)
+ 		spin_unlock(&cifs_tcp_ses_lock);
+ 		return;
+ 	} else if (tcon->tc_count == 1)
+-		tcon->status = CifsExiting;
++		tcon->status = TID_EXITING;
+ 	spin_unlock(&cifs_tcp_ses_lock);
+ 
+ 	/* cancel_brl_requests(tcon); */ /* BB mark all brl mids as exiting */
+-- 
+2.26.3
 
-2) There's an expectation that those out-of-line implementations are
-   *NOT* instrumented, and this is fine so long as those are not
-   instrumented.
-
-I appreciate that this isn't necessarily something which was considered
-when the feature was originally designed, and maybe this is fine for
-userspace, but for kernel usage we need to be able to reliably prevent
-instrumentation.
-
-> If coexistence of instrumented and non-instrumented memcpy etc. was the goal
-> (it clearly wasn't), then the sanitizer libraries wouldn't be overriding
-> memcpy calls, but instead the compiler would redirect calls to memcpy in
-> instrumented functions to say __asan_memcpy which then would be
-> instrumented.
-
-FWIW, I think that approach would be fine for kernel usage.
-
-> > Given the standard doesn't say *anything* about instrumentation, what does GCC
-> > *require* instrumentation-wise of the memcpy implementation? What happens *in
-> > practice* today?
-> > 
-> > For example, is the userspace implementation of memcpy() instrumented for
-> > AddressSanitizer, or not?
-> 
-> It is, for all functions, whether compiled with -fsanitize=address or not,
-> if user app is linked with -fsanitize=address, libasan is linked in and
-> overrides the libc memcpy with its instrumented version.
-
-Thanks for confirming! Just to check, how does libasan prevent recursing
-within itself on implicitly generated calls to memcpy and friends? Is
-anything special done to build the libasan code, is that all asm, or
-something else?
-
-> Note that the default shadow memory value is 0 which means accessible,
-> so even when memcpy is instrumented, when called from non-instrumented code
-> often it will not do anything beyond normal behavior
-
-That might be true in userspace, but is not the case within the kernel
-as the shadow might not be mapped (and is one reason we need to inhibit
-instrumentation in the first place).
-
-For example, consider the code which *creates* the page tables for the
-shadow memory. Until that's run, accessing the shadow will result in a
-(fatal) fault, and while the compilation unit with that code is compiled
-*without* `-fsantize=address`, it may call into the common
-implementation of memcpy() and friends shared by all kernel code.
-
-Thanks,
-Mark.
-
-> , as non-instrumented
-> functions don't poison the paddings in between variable (there even doesn't
-> have to be any) etc.  But e.g. malloc/operator new etc. is also overridden,
-> so buffer overflows/underflows on memory allocated that way from
-> uninstrumented code using memcpy etc. will be diagnosed.
-> 
-> 	Jakub
-> 
