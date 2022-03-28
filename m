@@ -1,130 +1,96 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3FA4366
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 13:44:53 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6D6941FB;
-	Mon, 28 Mar 2022 06:44:53 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D43C3F718;
-	Mon, 28 Mar 2022 06:44:51 -0700 (PDT)
-Date: Mon, 28 Mar 2022 14:44:46 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Jakub Jelinek <jakub@redhat.com>
-Cc: Segher Boessenkool <segher@kernel.crashing.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	linux-toolchains@vger.kernel.org
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C10544366
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 14:25:54 +0000 (UTC)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22SEMLX6009684;
+	Mon, 28 Mar 2022 09:22:21 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 22SEMKu7009683;
+	Mon, 28 Mar 2022 09:22:20 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Mon, 28 Mar 2022 09:22:20 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>, Nathan Chancellor <nathan@kernel.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
 Subject: Re: clang memcpy calls
-Message-ID: <YkG7zqwFRtmUKVFc@lakrids>
-References: <YjxTt3pFIcV3lt8I@zn.tnic>
- <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
- <Yj2yYFloadFobRPx@lakrids>
- <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
- <20220325151238.GB614@gate.crashing.org>
- <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
- <YkGL929QoFiTfMK7@tucnak>
- <YkGwSsXLBjReBhMf@lakrids>
- <YkG0LqWoBRqQ9Jxu@tucnak>
+Message-ID: <20220328142220.GI614@gate.crashing.org>
+References: <YjxTt3pFIcV3lt8I@zn.tnic> <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com> <Yj2yYFloadFobRPx@lakrids> <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net> <20220325151238.GB614@gate.crashing.org> <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkG0LqWoBRqQ9Jxu@tucnak>
+In-Reply-To: <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
+User-Agent: Mutt/1.4.2.3i
 
-On Mon, Mar 28, 2022 at 03:12:14PM +0200, Jakub Jelinek wrote:
-> On Mon, Mar 28, 2022 at 01:55:38PM +0100, Mark Rutland wrote:
-> > > If coexistence of instrumented and non-instrumented memcpy etc. was the goal
-> > > (it clearly wasn't), then the sanitizer libraries wouldn't be overriding
-> > > memcpy calls, but instead the compiler would redirect calls to memcpy in
-> > > instrumented functions to say __asan_memcpy which then would be
-> > > instrumented.
-> > 
-> > FWIW, I think that approach would be fine for kernel usage.
-> > 
-> > > > Given the standard doesn't say *anything* about instrumentation, what does GCC
-> > > > *require* instrumentation-wise of the memcpy implementation? What happens *in
-> > > > practice* today?
-> > > > 
-> > > > For example, is the userspace implementation of memcpy() instrumented for
-> > > > AddressSanitizer, or not?
-> > > 
-> > > It is, for all functions, whether compiled with -fsanitize=address or not,
-> > > if user app is linked with -fsanitize=address, libasan is linked in and
-> > > overrides the libc memcpy with its instrumented version.
-> > 
-> > Thanks for confirming! Just to check, how does libasan prevent recursing
-> > within itself on implicitly generated calls to memcpy and friends? Is
-> > anything special done to build the libasan code, is that all asm, or
-> > something else?
+Hi!
+
+On Mon, Mar 28, 2022 at 10:52:54AM +0100, Mark Rutland wrote:
+> On Fri, Mar 25, 2022 at 10:12:38AM -0500, Segher Boessenkool wrote:
+> > The compiler isn't assuming anything about asan.  The compiler generates
+> > its code without any consideration of what asan will or will not do.
+> > The burden of making things work is on asan.
 > 
-> Generally, most of the libasan wrappers look like
->   do something
->   call the original libc function (address from dlsym/dlvsym)
->   do something
-> and the "do something" code isn't that complicated.  
-
-I see; thanks!
-
-> The compiler doesn't add calls to memcpy/memset etc. just to screw up
-> users, they are added for a reason, such as copying or clearing very
-> large aggregates (including for passing them by value), without -Os it
-> will rarely use calls for smaller sizes and will instead expand them
-> inline.
-
-Sure; I understand that and (from my side at least) I'm not arguing that
-there's malice or so on, just that I don't think we currently have the
-tools for the kernel to be able to do the right thing reliably and
-robustly. Thanks for helping! :)
-
-> For malloc and the like wrappers I think it uses some TLS recursion
-> counters so that say malloc called from dlsym doesn't cause problems.
+> I think we're talking past each other here, so let me be more precise. :)
 > 
-> Now, one way for the kernel to make kasan work (more) reliably even with
-> existing compilers without special tweaks for this might be if those
-> calls to no_sanitize_address code aren't mixed with sanitized code all the
-> time might be set some per-thread flag when starting a "no sanitized" code
-> execution and clear it at the end of the region (or vice versa) and test
-> those flags in the kernel's memcpy/memset etc. implementation to decide if
-> they should be sanitized or not.
+> The key thing is that when the user passes `-fsantize=address`, instrumentation
+> is added by (a part of) the compiler. That instrumentation is added under some
+> assumptions as to how the compiler as a whole will behave.
+> 
+> With that in mind, the question is how is __attribute__((no_sanitize_address))
+> intended to work when considering all the usual expectations around how the
+> compiler can play with memcpy and similar?
 
-Unfortunately, I don't think the setting a flag is workable, since e.g.
-we need to ensure the flag is set before any implicitly-generated calls,
-and I don't think we have a reliable way to do that from C. There's also
-a number of portions of uninstrumentable code, so from a maintainability
-and robustness PoV this option isn't great.
+The attribute is about how the *current* function is instrumented, not
+about anything called by this function.  This is clearly documented:
+'no_sanitize_address'
+'no_address_safety_analysis'
+     The 'no_sanitize_address' attribute on functions is used to inform
+     the compiler that it should not instrument memory accesses in the
+     function when compiling with the '-fsanitize=address' option.  The
+     'no_address_safety_analysis' is a deprecated alias of the
+     'no_sanitize_address' attribute, new code should use
+     'no_sanitize_address'.
 
-For `noinstr` code specifically (which gets placed into a distinct
-section and can be identified by virtual address) we could have the
-out-of-line functions look at their return address, but that's not going
-to cover the general case of `__attribute__((no_sanitize_address))` or
-compilation units built without `-fsanitize=address`.
+> > The compiler should not do anything differently here if it uses asan.
+> > The address sanitizer and the memcpy function implementation perhaps
+> > have to cooperate somehow, or asan needs more smarts.  This needs to
+> > happen no matter what, to support other things calling memcpy, say,
+> > assembler code.
+> 
+> I appreciate where you're coming from here, but I think you're approaching the
+> problem sideways.
 
-From my PoV, distinguishing instrumentable/uninstrumentable calls at
-compile time would be ideal. That, or placing the instrumentation into
-the caller (omitting it when instrumentation is disabled for that
-caller), and expecting the out-of-line forms are never instrumented. I
-appreciate that latter option may not be workable due to potential size
-bloat, though.
+I am stating facts, I am not trying to solve your problem there.  It
+seemed to me (and still does) that you didn't grasp all facts here.
 
-Similar will apply to TSAN, MSAN, etc, and I'm not sure whether those
-are mutually exclusive from the compiler's PoV.
+> We need to define *what the semantics are* so that we can actually solve the
+> problem, e.g. is a memcpy implementation expected to be instrumented or not?
 
-> As KASAN is (hopefully) just a kernel debugging aid and not something meant
-> for production (in the userspace at least GCC strongly recommends against
-> using the sanitizers in production), perhaps allocating one per-thread bool
-> or int and changing it in a few spots and testing in the library functions
-> might be acceptable.
+That is up to the memcpy implementation itself, of course.
 
-I'm not sure whether folk are using KASAN in production, but IIRC there
-was a desire to do so.
+> > GCC *requires* memcpy to be the standard memcpy always (i.e. to have the
+> > standard-specified semantics).  This means that it will have the same
+> > semantics as __builtin_memcpy always, and either or not be a call to an
+> > external function.  It can also create calls to it out of thin air.
+> 
+> I understand all of that.
 
-Thanks,
-Mark.
+And still you want us to do something that is impossible under those
+existing constraints :-(
+
+If you want the external memcpy called by modules A, B, C to not be
+instrumented, you have to link A, B, and C against an uninstrumented
+memcpy.  This is something the kernel will have to do, the compiler has
+no say in how the kernel is linked together.
+
+
+Segher
