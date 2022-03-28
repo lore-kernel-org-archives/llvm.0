@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF68435A
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 11:19:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B6B0C36AE2;
-	Mon, 28 Mar 2022 11:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705D6435A
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 11:20:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF36BC36AE2;
+	Mon, 28 Mar 2022 11:20:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648466348;
+	s=k20201202; t=1648466440;
 	bh=YCzwUFyhUEJ/GM5eR1opJD1pGTH09ZAKXiiX9wurdYo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=B/pDG7YF/6yFeNYGUdn+b7N9mOp7ecRXHta6DsLffU4wyk/BEDUIn0ML7zJJ81KDh
-	 yzj1jkr7iidazwHxKCK/R0MWGORKx1CuTO8cZ3t3t46ZFVJ9Oc6/7BK1uBUBww9yL7
-	 TBrblK+Qrje5YGNP2KGjZD/oyxUS0eLNZgK8ZfgnIzBVQ/1bCO1vZrXj5t8tJW5v+y
-	 vK7y+AucdVSprNnpkC2DGY3GSvmhdnMY94T26HWJF7SL5vZhBLPzxxfTvSDBYi66+K
-	 XP4ONi/c6xxu94j6w5OwNDVqA/FeA85Uac0/eJwitYDjgXSw+YHdtsn76XNZFNx4oO
-	 o8QmFhkO1CmQw==
+	b=q349NkGz5NDen8ED33I9Ov7ONQoBEkJ96K5XOnQv04FljAS95H55Gl1J1VG7qDgH/
+	 Mf6Qt1JQhGeX4xvR7bUiS2Ejq96bQbjJiCd3xpXu9bIdTIhdyKXF8RJ56qv7unvBbp
+	 wZFuOiYajjbRFYim72fkG3peKYwMTzwofwHtuPKrJxYp+2l45/KZLFXgwZEmQr9bqu
+	 huLiZbbJFJNRsQd1WnfpbuurYVeBXEZ8kkUxkag2irYtfOOLSH2lxd/Xlh8tTO1Zt9
+	 GNXsUSuRMyfHSP7BitG5WAkRWpb3WfBbtrOGmBi+nY7g4WwaVA/OqEoFnxMQeZbeld
+	 KXLJx8QbFZV+A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -25,16 +25,17 @@ Cc: Fangrui Song <maskray@google.com>,
 	Sasha Levin <sashal@kernel.org>,
 	catalin.marinas@arm.com,
 	ndesaulniers@google.com,
-	mark.rutland@arm.com,
 	pcc@google.com,
+	andreyknvl@gmail.com,
+	mark.rutland@arm.com,
 	linux-arm-kernel@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.17 21/43] arm64: module: remove (NOLOAD) from linker script
-Date: Mon, 28 Mar 2022 07:18:05 -0400
-Message-Id: <20220328111828.1554086-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.16 16/35] arm64: module: remove (NOLOAD) from linker script
+Date: Mon, 28 Mar 2022 07:19:52 -0400
+Message-Id: <20220328112011.1555169-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220328111828.1554086-1-sashal@kernel.org>
-References: <20220328111828.1554086-1-sashal@kernel.org>
+In-Reply-To: <20220328112011.1555169-1-sashal@kernel.org>
+References: <20220328112011.1555169-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
