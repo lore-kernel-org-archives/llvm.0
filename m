@@ -1,315 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D72435A
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 11:16:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B358AC340EC;
-	Mon, 28 Mar 2022 11:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF68435A
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 11:19:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B6B0C36AE2;
+	Mon, 28 Mar 2022 11:19:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648466189;
-	bh=SEGKAv2y0LvSw8+qA9ED5lVRRO6x9HRUKOz3nmtGoC8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=tUTV/QOq7dDA4kcmIkSHlLL/Hr9M04Fs6Vl5W5VQmjdsYu270n5hz/mijUUoBCylW
-	 RyysfIlXK7NXFCbLPvxou3Rv/NxGZhCanIVqXYkk1C+xyRGK4VwJGH3PrXY9tHNPTc
-	 reOczTlpUZSom/wyacm3f2vHkjY1t++RgYCFKu2IzJxjEJKhWV4F5wvgZbbcTbc1hC
-	 044fBGw9JLpSB6LhU+ye76Spr+A37VSsQvcxKkyB0fWpE80MQlGOOhjZsskkHYZhbY
-	 5wmKVwR3jKiwjfmAxTg8LdL7sdqj9YsjPQuWPTyl8OF4jgTO11Qvf4gThlBKtpRqyS
-	 kIq7WJRMN83ZQ==
-Date: Mon, 28 Mar 2022 20:16:22 +0900
-From: Masami Hiramatsu <mhiramat@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Padmanabha Srinivasaiah
- <treasure4paddy@gmail.com>, LKML <linux-kernel@vger.kernel.org>, Jonathan
- Corbet <corbet@lwn.net>, "open list:DOCUMENTATION"
- <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Sami Tolvanen
- <samitolvanen@google.com>, Nathan Chancellor <nathan@kernel.org>,
- llvm@lists.linux.dev, Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH v4 2/3] bootconfig: Support embedding a bootconfig file
- in kernel
-Message-Id: <20220328201622.c0b06c599b2f3dfc971f48eb@kernel.org>
-In-Reply-To: <CAK7LNATv8aHMPazZ1TrLjT4T6SfFSpFJcQNJOVFdc4_noO61Kw@mail.gmail.com>
-References: <164833878595.2575750.1483106296151574233.stgit@devnote2>
-	<164833880897.2575750.113875316750095499.stgit@devnote2>
-	<CAK7LNATv8aHMPazZ1TrLjT4T6SfFSpFJcQNJOVFdc4_noO61Kw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	s=k20201202; t=1648466348;
+	bh=YCzwUFyhUEJ/GM5eR1opJD1pGTH09ZAKXiiX9wurdYo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=B/pDG7YF/6yFeNYGUdn+b7N9mOp7ecRXHta6DsLffU4wyk/BEDUIn0ML7zJJ81KDh
+	 yzj1jkr7iidazwHxKCK/R0MWGORKx1CuTO8cZ3t3t46ZFVJ9Oc6/7BK1uBUBww9yL7
+	 TBrblK+Qrje5YGNP2KGjZD/oyxUS0eLNZgK8ZfgnIzBVQ/1bCO1vZrXj5t8tJW5v+y
+	 vK7y+AucdVSprNnpkC2DGY3GSvmhdnMY94T26HWJF7SL5vZhBLPzxxfTvSDBYi66+K
+	 XP4ONi/c6xxu94j6w5OwNDVqA/FeA85Uac0/eJwitYDjgXSw+YHdtsn76XNZFNx4oO
+	 o8QmFhkO1CmQw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Fangrui Song <maskray@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	catalin.marinas@arm.com,
+	ndesaulniers@google.com,
+	mark.rutland@arm.com,
+	pcc@google.com,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.17 21/43] arm64: module: remove (NOLOAD) from linker script
+Date: Mon, 28 Mar 2022 07:18:05 -0400
+Message-Id: <20220328111828.1554086-21-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220328111828.1554086-1-sashal@kernel.org>
+References: <20220328111828.1554086-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-On Mon, 28 Mar 2022 15:27:43 +0900
-Masahiro Yamada <masahiroy@kernel.org> wrote:
+From: Fangrui Song <maskray@google.com>
 
-> On Sun, Mar 27, 2022 at 8:53 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > This allows kernel developer to embed a default bootconfig file in
-> > the kernel instead of embedding it in the initrd. This will be good
-> > for who are using the kernel without initrd, or who needs a default
-> > bootconfigs.
-> > This needs to set two kconfigs: CONFIG_EMBED_BOOT_CONFIG=y and set
-> > the file path to CONFIG_EMBED_BOOT_CONFIG_FILE.
-> >
-> > Note that you still need 'bootconfig' command line option to load the
-> > embedded bootconfig. Also if you boot using an initrd with a different
-> > bootconfig, the kernel will use the bootconfig in the initrd, instead
-> > of the default bootconfig.
-> >
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > ---
-> >  Changes in v3:
-> >   - Avoid updating the default.bconf if the file is not changed.
-> > ---
-> >  include/linux/bootconfig.h |   10 ++++++++++
-> >  init/Kconfig               |   21 +++++++++++++++++++++
-> >  init/main.c                |   13 ++++++++-----
-> >  lib/.gitignore             |    1 +
-> >  lib/Makefile               |   10 ++++++++++
-> >  lib/bootconfig.c           |   23 +++++++++++++++++++++++
-> >  6 files changed, 73 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-> > index a4665c7ab07c..5dbda5e3e9bb 100644
-> > --- a/include/linux/bootconfig.h
-> > +++ b/include/linux/bootconfig.h
-> > @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
-> >  /* XBC cleanup data structures */
-> >  void __init xbc_exit(void);
-> >
-> > +/* XBC embedded bootconfig data in kernel */
-> > +#ifdef CONFIG_EMBED_BOOT_CONFIG
-> > +char * __init xbc_get_embedded_bootconfig(size_t *size);
-> > +#else
-> > +static inline char *xbc_get_embedded_bootconfig(size_t *size)
-> > +{
-> > +       return NULL;
-> > +}
-> > +#endif
-> > +
-> >  #endif
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index beb5b866c318..bff308a782f8 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1357,6 +1357,27 @@ config BOOT_CONFIG
-> >
-> >           If unsure, say Y.
-> >
-> > +config EMBED_BOOT_CONFIG
-> > +       bool "Embed bootconfig file in the kernel"
-> > +       depends on BOOT_CONFIG
-> > +       default n
-> > +       help
-> > +         Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
-> > +         kernel. Usually, the bootconfig file is loaded with the initrd
-> > +         image. But if the system doesn't support initrd, this option will
-> > +         help you by embedding a bootconfig file while building the kernel.
-> > +
-> > +         If unsure, say N.
-> > +
-> > +config EMBED_BOOT_CONFIG_FILE
-> > +       string "Embedded bootconfig file path"
-> > +       default ""
-> > +       depends on EMBED_BOOT_CONFIG
-> > +       help
-> > +         Specify a bootconfig file which will be embedded to the kernel.
-> > +         This bootconfig will be used if there is no initrd or no other
-> > +         bootconfig in the initrd.
-> > +
-> >  choice
-> >         prompt "Compiler optimization level"
-> >         default CC_OPTIMIZE_FOR_PERFORMANCE
-> > diff --git a/init/main.c b/init/main.c
-> > index 4f3ba3b84e34..180511324c95 100644
-> > --- a/init/main.c
-> > +++ b/init/main.c
-> > @@ -265,7 +265,7 @@ static int __init loglevel(char *str)
-> >  early_param("loglevel", loglevel);
-> >
-> >  #ifdef CONFIG_BLK_DEV_INITRD
-> > -static void * __init get_boot_config_from_initrd(u32 *_size)
-> > +static void * __init get_boot_config_from_initrd(size_t *_size)
-> >  {
-> >         u32 size, csum;
-> >         char *data;
-> > @@ -411,12 +411,15 @@ static void __init setup_boot_config(void)
-> >         static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
-> >         const char *msg;
-> >         int pos;
-> > -       u32 size;
-> > +       size_t size;
-> >         char *data, *err;
-> >         int ret;
-> >
-> >         /* Cut out the bootconfig data even if we have no bootconfig option */
-> >         data = get_boot_config_from_initrd(&size);
-> > +       /* If there is no bootconfig in initrd, try embedded one. */
-> > +       if (!data)
-> > +               data = xbc_get_embedded_bootconfig(&size);
-> >
-> >         strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
-> >         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-> > @@ -435,8 +438,8 @@ static void __init setup_boot_config(void)
-> >         }
-> >
-> >         if (size >= XBC_DATA_MAX) {
-> > -               pr_err("bootconfig size %d greater than max size %d\n",
-> > -                       size, XBC_DATA_MAX);
-> > +               pr_err("bootconfig size %ld greater than max size %d\n",
-> > +                       (long)size, XBC_DATA_MAX);
-> >                 return;
-> >         }
-> >
-> > @@ -449,7 +452,7 @@ static void __init setup_boot_config(void)
-> >                                 msg, pos);
-> >         } else {
-> >                 xbc_get_info(&ret, NULL);
-> > -               pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
-> > +               pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
-> >                 /* keys starting with "kernel." are passed via cmdline */
-> >                 extra_command_line = xbc_make_cmdline("kernel");
-> >                 /* Also, "init." keys are init arguments */
-> > diff --git a/lib/.gitignore b/lib/.gitignore
-> > index e5e217b8307b..30a2a5db7033 100644
-> > --- a/lib/.gitignore
-> > +++ b/lib/.gitignore
-> > @@ -6,3 +6,4 @@
-> >  /oid_registry_data.c
-> >  /test_fortify.log
-> >  /test_fortify/*.log
-> > +/default.bconf
-> 
-> 
-> I think lib/.gitignore is alphabetically sorted.
-> 
-> Please insert the new one
-> to the proper line.
+[ Upstream commit 4013e26670c590944abdab56c4fa797527b74325 ]
 
-Ah, OK. Let me fix that.
+On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+inappropriate for .plt and .text.* sections which are always
+SHT_PROGBITS.
 
-> > diff --git a/lib/Makefile b/lib/Makefile
-> > index 353bc09ce38d..dd9f3ebb62ca 100644
-> > --- a/lib/Makefile
-> > +++ b/lib/Makefile
-> > @@ -276,6 +276,16 @@ $(foreach file, $(libfdt_files), \
-> >         $(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
-> >  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
-> >
-> > +ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
-> > +$(obj)/bootconfig.o: $(obj)/default.bconf
-> > +
-> > +targets += default.bconf
-> 
-> 
-> I did not test this patch, but presumably
-> "make clean" will miss to clean up default.bconf
-> 
-> The 'targets' must exist outside the ifeq-block.
-> Move the 'endif' up.
-> 
-> 
-> ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
-> $(obj)/bootconfig.o: $(obj)/default.bconf
-> endif
-> 
-> targets += default.bconf
-> 
-> ...
+In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+and (NOLOAD) will be essentially ignored. In ld.lld, since
+https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+customize the output section type"), ld.lld will report a `section type
+mismatch` error. Just remove (NOLOAD) to fix the error.
 
-You're right! I didn't know this behavior. Thanks for the notice.
-I misunderstood that the files in targets always be built...
+[1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+section should be marked as not loadable" on
+https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+outdated for ELF.
 
-After moving the 'targets' out of ifeq-block, I confirmed that the
-default.bconf was not generated when CONFIG_EMBED_BOOT_CONFIG is not
-set, and it is cleaned up when CONFIG_EMBED_BOOT_CONFIG=y.
-Thanks!
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Fangrui Song <maskray@google.com>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Link: https://lore.kernel.org/r/20220218081209.354383-1-maskray@google.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/arm64/include/asm/module.lds.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> 
-> > +filechk_defbconf = cat /dev/null $(CONFIG_EMBED_BOOT_CONFIG_FILE)
-> > +$(obj)/default.bconf: FORCE
-> > +       $(call filechk,defbconf)
-> 
-> 
-> This will work, but users will be confused when they
-> try to build out-of-tree with the O= option.
-> 
-> If CONFIG_EMBED_BOOT_CONFIG_FILE is a relative path,
-> it is actually relative to the object tree, not the source tree.
-
-Yes, that's right. I would like to fix this issue.
-
-> I am not sure if that is the expected behavior, but it is not documented
-> anywhere.
-> 
-> 
-> If you want to search both in the objtree and srctree,
-> you can write like follows:   [UNTESTED]
-> 
-> 
-> filechk_defbconf = cat $(or $(real-prereqs), /dev/null)
-> $(obj)/default.bconf: $(CONFIG_EMBED_BOOT_CONFIG_FILE) FORCE
->         $(call filechk,defbconf)
-
-Great! let me check it works.
-
-Thank you,
-
-> 
-> 
-> 
-> 
-> > +
-> > +endif
-> > +
-> >  lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
-> >
-> >  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
-> > diff --git a/lib/bootconfig.c b/lib/bootconfig.c
-> > index 74f3201ab8e5..3a3bf3a208e3 100644
-> > --- a/lib/bootconfig.c
-> > +++ b/lib/bootconfig.c
-> > @@ -12,6 +12,29 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/memblock.h>
-> >  #include <linux/string.h>
-> > +
-> > +#ifdef CONFIG_EMBED_BOOT_CONFIG
-> > +asm (
-> > +"      .pushsection .init.data, \"aw\"                 \n"
-> > +"      .global embedded_bootconfig_data                \n"
-> > +"embedded_bootconfig_data:                             \n"
-> > +"      .incbin \"lib/default.bconf\"                   \n"
-> > +"      .global embedded_bootconfig_data_end            \n"
-> > +"embedded_bootconfig_data_end:                         \n"
-> > +"      .popsection                                     \n"
-> > +);
-> > +
-> > +extern __visible char embedded_bootconfig_data[];
-> > +extern __visible char embedded_bootconfig_data_end[];
-> > +
-> > +char * __init xbc_get_embedded_bootconfig(size_t *size)
-> > +{
-> > +       *size = embedded_bootconfig_data_end - embedded_bootconfig_data;
-> > +       return (*size) ? embedded_bootconfig_data : NULL;
-> > +}
-> > +
-> > +#endif
-> > +
-> >  #else /* !__KERNEL__ */
-> >  /*
-> >   * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
-> >
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
-
-
+diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
+index a11ccadd47d2..094701ec5500 100644
+--- a/arch/arm64/include/asm/module.lds.h
++++ b/arch/arm64/include/asm/module.lds.h
+@@ -1,8 +1,8 @@
+ SECTIONS {
+ #ifdef CONFIG_ARM64_MODULE_PLTS
+-	.plt 0 (NOLOAD) : { BYTE(0) }
+-	.init.plt 0 (NOLOAD) : { BYTE(0) }
+-	.text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
++	.plt 0 : { BYTE(0) }
++	.init.plt 0 : { BYTE(0) }
++	.text.ftrace_trampoline 0 : { BYTE(0) }
+ #endif
+ 
+ #ifdef CONFIG_KASAN_SW_TAGS
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.34.1
+
