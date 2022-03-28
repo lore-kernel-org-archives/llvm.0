@@ -1,161 +1,81 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B5CD7C
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 16:03:20 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22SFxw1v015812;
-	Mon, 28 Mar 2022 10:59:58 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 22SFxwpE015811;
-	Mon, 28 Mar 2022 10:59:58 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Mon, 28 Mar 2022 10:59:57 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Borislav Petkov <bp@alien8.de>, Nathan Chancellor <nathan@kernel.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-toolchains@vger.kernel.org
-Subject: Re: clang memcpy calls
-Message-ID: <20220328155957.GK614@gate.crashing.org>
-References: <YjxTt3pFIcV3lt8I@zn.tnic> <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com> <Yj2yYFloadFobRPx@lakrids> <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net> <20220325151238.GB614@gate.crashing.org> <YkGFdtn0yDIPqXRl@FVFF77S0Q05N> <20220328142220.GI614@gate.crashing.org> <YkHNArCbWUEojGjL@lakrids>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8D37C
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 16:07:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E3C8C004DD;
+	Mon, 28 Mar 2022 16:07:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1648483632;
+	bh=qZVkUhdYVaRCKeRsrsBh1vhZfOiBsQqWGLWkaspWtwI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LTq1BNj7zsS+xlAqljn7dFEkiKHxQ/XlkkYtq9n85qHygOWFP8AGfnFQDi72wOv7A
+	 XK6XvHBSgKn8eBdBZC8MJ9F5EeUlDrOD3alotytztzw1+V2DJ6rM+pl1h1shpmUbJ0
+	 ShvKtLShfmTR/+e0g0eJ09i1IIGUdTbHrtrl0p/rtgiXaWD2uMDxdFodatVSPz4Y6H
+	 Kau7CTFHNJLA9ssUK9vMAp02adYqYiQ3CkkM2mwnI9xUfNmBr8JQYttyQaQ1KmuaW8
+	 6laQ5sTmkDpHBvtK70ngzBXyyZ+9ngiK0U2mbH/vjMSgYWNih1H2BBMJb8UOQeluN9
+	 2t0pkMBTlv+wQ==
+Date: Mon, 28 Mar 2022 09:07:05 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: trix@redhat.com
+Cc: sfrench@samba.org, ndesaulniers@google.com, linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] cifs: fix enum usage
+Message-ID: <YkHdKQ8TlhXTv1FP@dev-arch.thelio-3990X>
+References: <20220328130300.3090213-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkHNArCbWUEojGjL@lakrids>
-User-Agent: Mutt/1.4.2.3i
+In-Reply-To: <20220328130300.3090213-1-trix@redhat.com>
 
-On Mon, Mar 28, 2022 at 03:58:10PM +0100, Mark Rutland wrote:
-> On Mon, Mar 28, 2022 at 09:22:20AM -0500, Segher Boessenkool wrote:
-> > The attribute is about how the *current* function is instrumented, not
-> > about anything called by this function.  This is clearly documented:
-> > 'no_sanitize_address'
-> > 'no_address_safety_analysis'
-> >      The 'no_sanitize_address' attribute on functions is used to inform
-> >      the compiler that it should not instrument memory accesses in the
-> >      function when compiling with the '-fsanitize=address' option.  The
-> >      'no_address_safety_analysis' is a deprecated alias of the
-> >      'no_sanitize_address' attribute, new code should use
-> >      'no_sanitize_address'.
+On Mon, Mar 28, 2022 at 06:03:00AM -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 > 
-> I understand this, and I have read the documentation.
+> Clang build fails with
+> cifsfs.c:709:18: error: implicit conversion from enumeration
+>   type 'enum statusEnum' to different enumeration
+>   type 'enum tid_status_enum'
+>   tcon->status = CifsExiting;
+>                ~ ^~~~~~~~~~~
 > 
-> I'm not claiming any *individual* semantic is wrong, just that in
-> combination this doesn't provide what people *need* (even if it strictly
-> matches what is documented).
+> The type of the element status changed, so enum needed to change.
+> Replace CifsExiting with TID_EXITING.
+
+Right, this was clearly missed by the below commit, as every other
+instance of tidStatus was changed to status plus the value from
+enum tid_status_enum, except this one.
+
+> Fixes: 7e5c8c02911b ("smb3: cleanup and clarify status of tree connections")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+
+Thanks for sending the patch!
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  fs/cifs/cifsfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> My argument is: if the compiler is permitted to implictly and
-> arbitrarily add calls to instrumented functions within a function marked
-> with `no_sanitize_address`, the `no_sanitize_address` attribute is
-> effectively useless, and therefore *something* needs to change.
-
-I do not see how that follows.  Maybe that is obvious from how you look
-at your use case, but it is not from the viewpoint of people who just
-want to do sanitation.  So what is the goal here?  Why do you need to
-prevent sanitation on anything called from this function, at all cost?
-
-> > > I appreciate where you're coming from here, but I think you're approaching the
-> > > problem sideways.
-> > 
-> > I am stating facts, I am not trying to solve your problem there.  It
-> > seemed to me (and still does) that you didn't grasp all facts here.
+> diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+> index 0789bf1496c74..a47fa44b6d52b 100644
+> --- a/fs/cifs/cifsfs.c
+> +++ b/fs/cifs/cifsfs.c
+> @@ -706,7 +706,7 @@ static void cifs_umount_begin(struct super_block *sb)
+>  		spin_unlock(&cifs_tcp_ses_lock);
+>  		return;
+>  	} else if (tcon->tc_count == 1)
+> -		tcon->status = CifsExiting;
+> +		tcon->status = TID_EXITING;
+>  	spin_unlock(&cifs_tcp_ses_lock);
+>  
+>  	/* cancel_brl_requests(tcon); */ /* BB mark all brl mids as exiting */
+> -- 
+> 2.26.3
 > 
-> Sorry, but I think you're reading my replies uncharitably if you think
-> that.
-
-Not at all.  I just don't see what your problem is, and what you try to
-achieve.  I do know what you say you want, but that is clearly
-impossible to do: the compiler cannot put restrictions on what some
-external function will or won't do!
-
-> > > We need to define *what the semantics are* so that we can actually solve the
-> > > problem, e.g. is a memcpy implementation expected to be instrumented or not?
-> > 
-> > That is up to the memcpy implementation itself, of course.
 > 
-> Sorry, but that doesn't make sense to me. When the compiler instruments
-> a function with AddressSanitizer, it must have *some* assumption about
-> whether memcpy() itself will be instrumented, such that it won't miss
-> some necessary instrumentation (and ideally, for performance reasons
-> doesn't have redundant instrumentation).
-
-Yes.  It sets things up with an external memcpy that is sanitized.  But
-that happens at the linking stage: it is fine in general for user space,
-but for kasan you need to do something similar manually.
-
-> If the story is "memcpy may or may not be instrumented", then the only
-> way to guarantee necessary instrumentation is for the compiler to
-> *always* place it in the caller (unless forbidden by
-> `no_sanitize_address`). If that were the case, the kernel can make
-> things work by simply not instrumenting memcpy and friends.
-
-It is *impossible* (in general) to put this in the caller, and it is not
-how this stuff is designed either (of course).
-
-> IIUC today those assumptions are not documented. Is the behaviour
-> consistent?
-
-The documentation I quoted above is simple and clear enough I hope.
-
-Consistent?  Consistent with what?
-
-> > > > GCC *requires* memcpy to be the standard memcpy always (i.e. to have the
-> > > > standard-specified semantics).  This means that it will have the same
-> > > > semantics as __builtin_memcpy always, and either or not be a call to an
-> > > > external function.  It can also create calls to it out of thin air.
-> > > 
-> > > I understand all of that.
-> > 
-> > And still you want us to do something that is impossible under those
-> > existing constraints :-(
-> 
-> If that's truly impossible, that's very unfortunate.
-> 
-> FWIW, I can believe this would require tremendous effort to change, even
-> if it's not truly impossible.
-
-No.  Truly and trivially impossible.  You must want something else than
-what you say, but I cannot figure out what.
-
-To implement what you ask for we will have to build every function
-twice, once with and once without instrumentation, and emit both
-somewhere, somehow.  This requires either some ABI extensions, or file
-format extensions ("fat objects"), or at the minimum some copperation
-between the app (the kernel here), the compiler, and the linker (and
-more tools in general, but, kernel :-) )
-
-> If that is the case, it means that kernel side we have to never
-> instrument our implementation of memcpy and friends for correctness
-> reasons, which has the unfortunate property of losing coverage in the
-> cases we *would* like to use an instrumented memcpy.
-
-What correctness reasons are that?
-
-> > If you want the external memcpy called by modules A, B, C to not be
-> > instrumented, you have to link A, B, and C against an uninstrumented
-> > memcpy.  This is something the kernel will have to do, the compiler has
-> > no say in how the kernel is linked together.
-> 
-> Unfortunately that options doesn't really fix the `no_sanitize_address`
-> semantic, and forces us to move *all* uninstrumentable code out into
-> separate compilation units, etc.
-
-Yes.  Which follows directly from you not wanting to call anything
-instrumented from anything marked with such an attribute: you have to
-divide the world into two parts, if you want the world to be divided
-into two parts.
-
-> This isn't *impossible*, but is *very* painful.
-
-Yes.  It is doable if there is just a handful of things that you do not
-want instrumented.  Like low-level interrupt handlers.  Luckily those
-things are generally written in assembler language for other reasons.
-
-
-Segher
