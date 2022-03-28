@@ -1,29 +1,56 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2065A7C
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 09:53:10 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1405D6E;
-	Mon, 28 Mar 2022 02:53:03 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.8.66])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0BE283F66F;
-	Mon, 28 Mar 2022 02:53:01 -0700 (PDT)
-Date: Mon, 28 Mar 2022 10:52:54 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	linux-toolchains@vger.kernel.org
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB477C
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 10:20:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1648462850;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
+	bh=Laf/K1cWVWhxaqqakxKFWK3semcWDCO2R58wSsFAsPU=;
+	b=dRvvkklQDLGudeTy/3Z5Xt/Hx0bHFc9mwXGhPsvUiBHgyarEMvRRAGG8cso0EHxt/WaiUD
+	yyR80r+xwv3nZUX3YR9qGjftISBTw3RaoDLsYqP0US1l1h1Hye1wGrRfQY7dn7FZriaGeW
+	27kFrdOvvC+dFqzH0Exqqodm0IoRGqs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-580-zmpxLUDzPtyjxwC4iX_jRQ-1; Mon, 28 Mar 2022 06:20:47 -0400
+X-MC-Unique: zmpxLUDzPtyjxwC4iX_jRQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4DEB2185A794;
+	Mon, 28 Mar 2022 10:20:46 +0000 (UTC)
+Received: from tucnak.zalov.cz (unknown [10.39.192.15])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id DB590C15D40;
+	Mon, 28 Mar 2022 10:20:45 +0000 (UTC)
+Received: from tucnak.zalov.cz (localhost [127.0.0.1])
+	by tucnak.zalov.cz (8.16.1/8.16.1) with ESMTPS id 22SAKfDe3603422
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 28 Mar 2022 12:20:42 +0200
+Received: (from jakub@localhost)
+	by tucnak.zalov.cz (8.16.1/8.16.1/Submit) id 22SAKdAM3603421;
+	Mon, 28 Mar 2022 12:20:39 +0200
+Date: Mon, 28 Mar 2022 12:20:39 +0200
+From: Jakub Jelinek <jakub@redhat.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Segher Boessenkool <segher@kernel.crashing.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>, Nathan Chancellor <nathan@kernel.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
 Subject: Re: clang memcpy calls
-Message-ID: <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
+Message-ID: <YkGL929QoFiTfMK7@tucnak>
+Reply-To: Jakub Jelinek <jakub@redhat.com>
 References: <YjxTt3pFIcV3lt8I@zn.tnic>
  <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
  <Yj2yYFloadFobRPx@lakrids>
  <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
  <20220325151238.GB614@gate.crashing.org>
+ <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,95 +59,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325151238.GB614@gate.crashing.org>
+In-Reply-To: <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
 
-On Fri, Mar 25, 2022 at 10:12:38AM -0500, Segher Boessenkool wrote:
-> Hi!
+On Mon, Mar 28, 2022 at 10:52:54AM +0100, Mark Rutland wrote:
+> I think we're talking past each other here, so let me be more precise. :)
 > 
-> On Fri, Mar 25, 2022 at 03:13:36PM +0100, Peter Zijlstra wrote:
-> > 
-> > +linux-toolchains
-> > 
-> > On Fri, Mar 25, 2022 at 12:15:28PM +0000, Mark Rutland wrote:
-
-> > > a) The compiler expects the out-of-line implementations of functions
-> > >    ARE NOT instrumented by address-sanitizer.
-> > > 
-> > >    If this is the case, then it's legitimate for the compiler to call
-> > >    these functions anywhere, and we should NOT instrument the kernel
-> > >    implementations of these. If the compiler wants those instrumented it
-> > >    needs to add the instrumentation in the caller.
+> The key thing is that when the user passes `-fsantize=address`, instrumentation
+> is added by (a part of) the compiler. That instrumentation is added under some
+> assumptions as to how the compiler as a whole will behave.
 > 
-> The compiler isn't assuming anything about asan.  The compiler generates
-> its code without any consideration of what asan will or will not do.
-> The burden of making things work is on asan.
+> With that in mind, the question is how is __attribute__((no_sanitize_address))
+> intended to work when considering all the usual expectations around how the
+> compiler can play with memcpy and similar?
 
-I think we're talking past each other here, so let me be more precise. :)
+no_sanitize_address or lack thereof is whether the current function
+shouldn't be or should be ASan instrumented, not on whether other functions
+it calls are instrumented or not.  memcpy/memmove/memset are just a tiny bit
+special case because the compiler can add them on their own even if they
+aren't present in the source (there are a few others the compiler can
+pattern match too) and various builtins can be on the other side expanded
+inline instead of called, so one then gets the sanitization status of the
+function in which it is used rather than whether the out of line
+implementation of the function is sanitized.
 
-The key thing is that when the user passes `-fsantize=address`, instrumentation
-is added by (a part of) the compiler. That instrumentation is added under some
-assumptions as to how the compiler as a whole will behave.
+If coexistence of instrumented and non-instrumented memcpy etc. was the goal
+(it clearly wasn't), then the sanitizer libraries wouldn't be overriding
+memcpy calls, but instead the compiler would redirect calls to memcpy in
+instrumented functions to say __asan_memcpy which then would be
+instrumented.
 
-With that in mind, the question is how is __attribute__((no_sanitize_address))
-intended to work when considering all the usual expectations around how the
-compiler can play with memcpy and similar?
-
-I think the answer to that is "this hasn't been thought about in great detail",
-which leads to the question of "how could/should this be made to work?", which
-is what I'm on about below.
-
-> It is legitimate to call (or not call!) memcpy anywhere.  memcpy always
-> is __builtin_memcpy, which either or not does a function call.
+> Given the standard doesn't say *anything* about instrumentation, what does GCC
+> *require* instrumentation-wise of the memcpy implementation? What happens *in
+> practice* today?
 > 
-> > >    AFAICT The two options for the compiler here are:
-> > > 
-> > >    1) Always inline an uninstrumented form of the function in this case
-> > > 
-> > >    2) Have distinct instrumented/uninstrumented out-of-line
-> > >       implementations, and call the uninstrumented form in this case.
-> 
-> The compiler should not do anything differently here if it uses asan.
-> The address sanitizer and the memcpy function implementation perhaps
-> have to cooperate somehow, or asan needs more smarts.  This needs to
-> happen no matter what, to support other things calling memcpy, say,
-> assembler code.
+> For example, is the userspace implementation of memcpy() instrumented for
+> AddressSanitizer, or not?
 
-I appreciate where you're coming from here, but I think you're approaching the
-problem sideways.
+It is, for all functions, whether compiled with -fsanitize=address or not,
+if user app is linked with -fsanitize=address, libasan is linked in and
+overrides the libc memcpy with its instrumented version.
 
-> > > So from those examples it seems GCC falls into bucket (a), and assumes the
-> > > blessed functions ARE NOT instrumented.
-> 
-> No, it doesn't show GCC assumes anything.  No testing of this kind can
-> show anything alike.
+Note that the default shadow memory value is 0 which means accessible,
+so even when memcpy is instrumented, when called from non-instrumented code
+often it will not do anything beyond normal behavior, as non-instrumented
+functions don't poison the paddings in between variable (there even doesn't
+have to be any) etc.  But e.g. malloc/operator new etc. is also overridden,
+so buffer overflows/underflows on memory allocated that way from
+uninstrumented code using memcpy etc. will be diagnosed.
 
-I appreciate that; hence "it seems".
+	Jakub
 
-What I'm getting at is that the *instrumentation* is added under some
-assumptions (those of whoever wrote the instrumentation code), and those
-assumptions might not match the behaviour of the compiler, or the behaviour we
-expect for __attribute__((no_sanitize_address)).
-
-We need to define *what the semantics are* so that we can actually solve the
-problem, e.g. is a memcpy implementation expected to be instrumented or not?
-
-> > > I think something has to change on the compiler side here (e.g. as per
-> > > options above), and we should align GCC and clang on the same
-> > > approach...
-> 
-> GCC *requires* memcpy to be the standard memcpy always (i.e. to have the
-> standard-specified semantics).  This means that it will have the same
-> semantics as __builtin_memcpy always, and either or not be a call to an
-> external function.  It can also create calls to it out of thin air.
-
-I understand all of that.
-
-Given the standard doesn't say *anything* about instrumentation, what does GCC
-*require* instrumentation-wise of the memcpy implementation? What happens *in
-practice* today?
-
-For example, is the userspace implementation of memcpy() instrumented for
-AddressSanitizer, or not?
-
-Thanks,
-Mark.
