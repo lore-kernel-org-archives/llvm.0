@@ -1,96 +1,112 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C10544366
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 14:25:54 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22SEMLX6009684;
-	Mon, 28 Mar 2022 09:22:21 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 22SEMKu7009683;
-	Mon, 28 Mar 2022 09:22:20 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Mon, 28 Mar 2022 09:22:20 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Borislav Petkov <bp@alien8.de>, Nathan Chancellor <nathan@kernel.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-toolchains@vger.kernel.org
-Subject: Re: clang memcpy calls
-Message-ID: <20220328142220.GI614@gate.crashing.org>
-References: <YjxTt3pFIcV3lt8I@zn.tnic> <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com> <Yj2yYFloadFobRPx@lakrids> <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net> <20220325151238.GB614@gate.crashing.org> <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFD34366
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 14:29:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD272C004DD;
+	Mon, 28 Mar 2022 14:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1648477794;
+	bh=byiE8FZ883BrjGw8gfIztJdTINfyzJFcS+KRzQJss3M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=rrgEezYG/4cPc4oou3FM0jWLFHkwN45btCIqU4Bx0pGbjxjngdZuXXlLPbcdE8Rq7
+	 FmBtEZfNY+CLpzWy99qk17y3bvylWiF3OCR/eO6ZZAT0yj1J26QSr3vowekLj91s+X
+	 QzZV2tq5M6WB3LxDG+Yk+Ywoxv3W25S+eOoKtAxqTKZXjp2KU+LD6uptY17KiWnK9I
+	 U2zM0IMs3ODG9gesiN/d3xglAwNrfMo0UI4/Ordt6O8SH4T2/mcmAybZa4wVhW6++e
+	 H+6eMQFTG+wkv6EV4zd2Uu1X7gi0EJmrl4txArc+Bbt2oFdBYsOErx5Syw25UQuutr
+	 /5fBWENqK7hkA==
+From: Masami Hiramatsu <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+	Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	llvm@lists.linux.dev,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Subject: [PATCH v5 0/3] bootconfig: Support embedding a bootconfig in kernel for non initrd boot
+Date: Mon, 28 Mar 2022 23:29:49 +0900
+Message-Id: <164847778869.3060675.8115416881394543419.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
-User-Agent: Mutt/1.4.2.3i
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi!
+Hi,
 
-On Mon, Mar 28, 2022 at 10:52:54AM +0100, Mark Rutland wrote:
-> On Fri, Mar 25, 2022 at 10:12:38AM -0500, Segher Boessenkool wrote:
-> > The compiler isn't assuming anything about asan.  The compiler generates
-> > its code without any consideration of what asan will or will not do.
-> > The burden of making things work is on asan.
-> 
-> I think we're talking past each other here, so let me be more precise. :)
-> 
-> The key thing is that when the user passes `-fsantize=address`, instrumentation
-> is added by (a part of) the compiler. That instrumentation is added under some
-> assumptions as to how the compiler as a whole will behave.
-> 
-> With that in mind, the question is how is __attribute__((no_sanitize_address))
-> intended to work when considering all the usual expectations around how the
-> compiler can play with memcpy and similar?
+Here are the 5th version of the patchset to enable kernel embedded bootconfig
+for non-initrd kernel boot environment. This version fixes to sort .gitignore
+and fixes lib/Makefile to cleanup default.bconf correctly and to allow user
+to specify a relative path to CONFIG_EMBED_BOOT_CONFIG_FILE. (Thanks Masahiro!)
+Also this update the document patch about the relative path.
+Here is the previous thread [1].
 
-The attribute is about how the *current* function is instrumented, not
-about anything called by this function.  This is clearly documented:
-'no_sanitize_address'
-'no_address_safety_analysis'
-     The 'no_sanitize_address' attribute on functions is used to inform
-     the compiler that it should not instrument memory accesses in the
-     function when compiling with the '-fsanitize=address' option.  The
-     'no_address_safety_analysis' is a deprecated alias of the
-     'no_sanitize_address' attribute, new code should use
-     'no_sanitize_address'.
+[1] https://lore.kernel.org/all/164833878595.2575750.1483106296151574233.stgit@devnote2/T/#u
 
-> > The compiler should not do anything differently here if it uses asan.
-> > The address sanitizer and the memcpy function implementation perhaps
-> > have to cooperate somehow, or asan needs more smarts.  This needs to
-> > happen no matter what, to support other things calling memcpy, say,
-> > assembler code.
-> 
-> I appreciate where you're coming from here, but I think you're approaching the
-> problem sideways.
+You can embed a bootconfig file into the kernel as a default bootconfig,
+which will be used if there is no initrd or no bootconfig is attached to initrd. 
 
-I am stating facts, I am not trying to solve your problem there.  It
-seemed to me (and still does) that you didn't grasp all facts here.
+This needs 2 options: CONFIG_EMBED_BOOT_CONFIG=y and set the file
+path to CONFIG_EMBED_BOOT_CONFIG_FILE. Even if you embed the bootconfig file
+to the kernel, it will not be enabled unless you pass "bootconfig" kernel
+command line option at boot. Moreover, since this is just a "default"
+bootconfig, you can override it with a new bootconfig if you attach another
+bootconfig to the initrd (if possible).
+CONFIG_EMBED_BOOT_CONFIG_FILE can take both absolute and relative path, but
+to simplify and make it independent from the build environment, I recommend
+you to use an absolute path for that.
 
-> We need to define *what the semantics are* so that we can actually solve the
-> problem, e.g. is a memcpy implementation expected to be instrumented or not?
+This is requested by Padmanabha at the below thread[2];
 
-That is up to the memcpy implementation itself, of course.
-
-> > GCC *requires* memcpy to be the standard memcpy always (i.e. to have the
-> > standard-specified semantics).  This means that it will have the same
-> > semantics as __builtin_memcpy always, and either or not be a call to an
-> > external function.  It can also create calls to it out of thin air.
-> 
-> I understand all of that.
-
-And still you want us to do something that is impossible under those
-existing constraints :-(
-
-If you want the external memcpy called by modules A, B, C to not be
-instrumented, you have to link A, B, and C against an uninstrumented
-memcpy.  This is something the kernel will have to do, the compiler has
-no say in how the kernel is linked together.
+[2] https://lore.kernel.org/all/20220307184011.GA2570@pswork/T/#u
 
 
-Segher
+KNOWN ISSUE:
+
+According to the report from Padmanabha[3] and my analysis [4], the embedded
+bootconfig data may not be updated if you do incremental build the kernel
+with CONFIG_LTO_CLANG_THIN.
+
+[3] https://lore.kernel.org/all/20220321183500.GA4065@pswork/T/#u
+[4] https://lore.kernel.org/all/20220327115526.cc4b0ff55fc53c97683c3e4d@kernel.org/
+
+This seems like clang's LTO Thin mode issue. It may not detect the inline
+asm depends on external files.
+
+I think the possible workaround is to split the inline asm which includes
+'.incbin' directive into an asm file. But this should be done in another
+seires because there are other features which uses '.incbin'. (e.g.
+/proc/config.gz)
+
+Thank you,
+
+---
+
+Masami Hiramatsu (3):
+      bootconfig: Check the checksum before removing the bootconfig from initrd
+      bootconfig: Support embedding a bootconfig file in kernel
+      docs: bootconfig: Add how to embed the bootconfig into kernel
+
+
+ Documentation/admin-guide/bootconfig.rst |   31 +++++++++++++++++++++++++++---
+ include/linux/bootconfig.h               |   10 ++++++++++
+ init/Kconfig                             |   21 ++++++++++++++++++++
+ init/main.c                              |   31 +++++++++++++++---------------
+ lib/.gitignore                           |    1 +
+ lib/Makefile                             |    9 +++++++++
+ lib/bootconfig.c                         |   23 ++++++++++++++++++++++
+ 7 files changed, 108 insertions(+), 18 deletions(-)
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
