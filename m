@@ -1,88 +1,85 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FFD7C
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 16:16:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=d8/rOot+Zn55BsrOys3cwi/OQAonRbrHF4qbQtyFPfU=; b=JRielGlYIbDlpiEeEs8rRgK6zA
-	+iV4zrteozIT6NLmADRqsFe5zcve5qm4T5rCYDyc6YBiF8OGbBJUiSa2my6KzdC/WFLPuHNXAaT0C
-	aFX6+I361AWOIQCVILyke8MjVC+Js88koDB7pC63zgy3aGNx2tUleY7pMpLVdYRBS7YBQ3rhsFD9X
-	lAZJJLfB3qd3GuFw79iWTLoIbflDYmYYKcMBeBZen1I/RtMrLTkcP0cF+J78efEDfC23R3y6yNq5T
-	ojRfHpR65zd5cEuEM87bOpvoOC4qnhiNX29H4xsVIc2JY/p75TfSAqo+iSwgj8zDbmHvPdgHJ29UX
-	1KyYwb4A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nYs2p-00H4I6-Ii; Mon, 28 Mar 2022 16:16:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 77C9F30026E;
-	Mon, 28 Mar 2022 18:16:37 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 56EEB209909C8; Mon, 28 Mar 2022 18:16:37 +0200 (CEST)
-Date: Mon, 28 Mar 2022 18:16:37 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Segher Boessenkool <segher@kernel.crashing.org>
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A238161
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 17:01:45 +0000 (UTC)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22SGwOb6019521;
+	Mon, 28 Mar 2022 11:58:24 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 22SGwL89019520;
+	Mon, 28 Mar 2022 11:58:21 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Mon, 28 Mar 2022 11:58:21 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: Mark Rutland <mark.rutland@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	linux-toolchains@vger.kernel.org
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>, Nathan Chancellor <nathan@kernel.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
 Subject: Re: clang memcpy calls
-Message-ID: <YkHfZbCE0ycVWyxz@hirez.programming.kicks-ass.net>
-References: <YjxTt3pFIcV3lt8I@zn.tnic>
- <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
- <Yj2yYFloadFobRPx@lakrids>
- <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
- <20220325151238.GB614@gate.crashing.org>
- <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
- <20220328142220.GI614@gate.crashing.org>
- <YkHNArCbWUEojGjL@lakrids>
- <20220328155957.GK614@gate.crashing.org>
+Message-ID: <20220328165821.GL614@gate.crashing.org>
+References: <YjxTt3pFIcV3lt8I@zn.tnic> <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com> <Yj2yYFloadFobRPx@lakrids> <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net> <20220325151238.GB614@gate.crashing.org> <YkGFdtn0yDIPqXRl@FVFF77S0Q05N> <20220328142220.GI614@gate.crashing.org> <YkHNArCbWUEojGjL@lakrids> <20220328155957.GK614@gate.crashing.org> <YkHfZbCE0ycVWyxz@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220328155957.GK614@gate.crashing.org>
+In-Reply-To: <YkHfZbCE0ycVWyxz@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.4.2.3i
 
-On Mon, Mar 28, 2022 at 10:59:57AM -0500, Segher Boessenkool wrote:
+On Mon, Mar 28, 2022 at 06:16:37PM +0200, Peter Zijlstra wrote:
+> On Mon, Mar 28, 2022 at 10:59:57AM -0500, Segher Boessenkool wrote:
 
-> I do not see how that follows.  Maybe that is obvious from how you look
-> at your use case, but it is not from the viewpoint of people who just
-> want to do sanitation. 
+[ Context added back: ]
+> > > My argument is: if the compiler is permitted to implictly and
+> > > arbitrarily add calls to instrumented functions within a function marked
+> > > with `no_sanitize_address`, the `no_sanitize_address` attribute is
+> > > effectively useless, and therefore *something* needs to change.
 
-It's a substitution issue:
+ > I do not see how that follows.  Maybe that is obvious from how you look
+> > at your use case, but it is not from the viewpoint of people who just
+> > want to do sanitation. 
+> 
+> It's a substitution issue:
+> 
+> either:
+> 
+>   memcpy() equals: "asan instrumentation" + "memcpy implementation"
+> 
+> or:
+> 
+>   memcpy() equals: "memcpy implementation"
+> 
+> It can not be both, since they're not equivalent.
 
-either:
+Equivalent in what sense?  ASAN (like any other sanitizer) does not
+change the semantics of valid programs *at all*.  And invalid programs
+do not have semantics, of course.
 
-  memcpy() equals: "asan instrumentation" + "memcpy implementation"
+> So if the compiler does the substitution, it needs some sense of
+> equivalence. All we're asking is that it be consistent (my preference is
+> for the latter).
 
-or:
+If you want to never do sanitation, there is -fno-sanitize=all.  But
+that obviously is not what you want either.
 
-  memcpy() equals: "memcpy implementation"
+> > So what is the goal here?  Why do you need to
+> > prevent sanitation on anything called from this function, at all cost?
+> 
+> Kernel entry code might not have reached a point where instrumentation
+> assumptions are valid yet. Consider calling into C before the kernel
+> page-tables are swapped in. KASAN instrumentation would insta-explode
+> simply because the environment it expects (the shadow data etc..) isn't
+> there.
 
-It can not be both, since they're not equivalent.
+Ah.  Something like the proposed global boolean flag would work fine for
+that, afaics?  Have all the asan implementation functions just return
+until the "I am ready now" flag is set.  This is trivial overhead,
+compared to having asan at all!
 
-So if the compiler does the substitution, it needs some sense of
-equivalence. All we're asking is that it be consistent (my preference is
-for the latter).
 
-> So what is the goal here?  Why do you need to
-> prevent sanitation on anything called from this function, at all cost?
-
-Kernel entry code might not have reached a point where instrumentation
-assumptions are valid yet. Consider calling into C before the kernel
-page-tables are swapped in. KASAN instrumentation would insta-explode
-simply because the environment it expects (the shadow data etc..) isn't
-there.
-
+Segher
