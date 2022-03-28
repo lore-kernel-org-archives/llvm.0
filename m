@@ -1,104 +1,119 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105093D95
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 13:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FAE63D95
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 13:12:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1648472587;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/u9IbKTaxd7JfWbYIumOYCvcuDGJC1EVRBB8DOZNjec=;
-	b=YQkJ2FyFG74ohtl/7NGCvPx+eIyWBSfssGd9IJSSeR4yInudoXo75+R/NJRCN5lH6YNA0o
-	8ftwh0TA0cu8xhPNR9lBoo6lzfV0+PgY0S9Qvgc8AJkn/rvC2IJLwFoQvH1wJCuj8wge89
-	uEPtSoEM4A26aoJreY8kXW1l35uShYI=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+	s=mimecast20190719; t=1648473149;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
+	bh=P4ec5zFj3ALGsTbbZVKM3kY6LLLTSnINme02bmLCl/c=;
+	b=dQHc2QL6xP+/JCQYHRWO2T8S+L45YMbNTtec8wwJ+EtcOlWSGtRtwXXqv/qdgvPRCqO0Hx
+	uhDN0HWSCL3HszOV9g7CROlHd7q4moB1aTPw/tnr4M/tz+zuZW+aZJTjLLGzQSm3Utm0CH
+	QuDGQ0hFOJLbeiwv585Vx6ckq2pEhlw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-461--AO3SOLaNG6i9Nciw0eoQg-1; Mon, 28 Mar 2022 09:03:06 -0400
-X-MC-Unique: -AO3SOLaNG6i9Nciw0eoQg-1
-Received: by mail-qk1-f199.google.com with SMTP id 207-20020a3706d8000000b0067b322bef9eso8346028qkg.3
-        for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 06:03:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/u9IbKTaxd7JfWbYIumOYCvcuDGJC1EVRBB8DOZNjec=;
-        b=e2UKNeO1OCNamxkVRBiqxOVETBAcBOLlJjOeCYnmz6hi76uyowvC1HMAz10+MPWdCr
-         f7PViUaBNnFcKHNR7eAFl048ELu4cyq9SkOO84MqOTbTePaQ/bY1Vns/ho4x3m3UcGTe
-         dOWdiee7rRg4likkd215PwBNgyOpHOBvaT7RejwxDjN535nbYqBuNxPyfQKa3bgoGnPn
-         bn9r1HoX5Vrcf6j6em2vnA2h0n6b1i10z99J/2MZC53ohj0K3YtMxvBI+6cRub02nyEC
-         sFeHwtjhYPH92GRBQliTF8bqgU/NA72fP+HRYdNGpvTDG8RASBlibss2hNj45ZrX3YG4
-         43Bw==
-X-Gm-Message-State: AOAM532xs2tCCzfQTNFzUE00IamQ87aBXfDMdHHdTScB24NGQCyKZWSD
-	DQoV5dbHAKITDEyIMOAr0efy0e49h9fFJh1of9Fm17GhKrnOfDYZMhFkuXgNBMCNyhkaFASJFsW
-	sSTz0WmbxZXPDpQ==
-X-Received: by 2002:a05:6214:c4a:b0:441:2c0e:1cb4 with SMTP id r10-20020a0562140c4a00b004412c0e1cb4mr20295999qvj.98.1648472585599;
-        Mon, 28 Mar 2022 06:03:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwwc0BWvMkauz8RL1WHra/Cyzf5posV9J1/75Ci8EjT4n+fT/8/G2vr6453bVFQNKYlS5HK8A==
-X-Received: by 2002:a05:6214:c4a:b0:441:2c0e:1cb4 with SMTP id r10-20020a0562140c4a00b004412c0e1cb4mr20295947qvj.98.1648472585197;
-        Mon, 28 Mar 2022 06:03:05 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id m16-20020a05620a24d000b0067ecf605ef5sm8576234qkn.105.2022.03.28.06.03.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 06:03:04 -0700 (PDT)
-From: trix@redhat.com
-To: sfrench@samba.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] cifs: fix enum usage
-Date: Mon, 28 Mar 2022 06:03:00 -0700
-Message-Id: <20220328130300.3090213-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+ us-mta-671-eZAiO-zZMzWLX6p6FCHO4g-1; Mon, 28 Mar 2022 09:12:24 -0400
+X-MC-Unique: eZAiO-zZMzWLX6p6FCHO4g-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A60B85A5BE;
+	Mon, 28 Mar 2022 13:12:23 +0000 (UTC)
+Received: from tucnak.zalov.cz (unknown [10.39.192.15])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 8A664432470;
+	Mon, 28 Mar 2022 13:12:22 +0000 (UTC)
+Received: from tucnak.zalov.cz (localhost [127.0.0.1])
+	by tucnak.zalov.cz (8.16.1/8.16.1) with ESMTPS id 22SDCIUs3605583
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 28 Mar 2022 15:12:18 +0200
+Received: (from jakub@localhost)
+	by tucnak.zalov.cz (8.16.1/8.16.1/Submit) id 22SDCF9K3605582;
+	Mon, 28 Mar 2022 15:12:15 +0200
+Date: Mon, 28 Mar 2022 15:12:14 +0200
+From: Jakub Jelinek <jakub@redhat.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Segher Boessenkool <segher@kernel.crashing.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>, Nathan Chancellor <nathan@kernel.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
+Subject: Re: clang memcpy calls
+Message-ID: <YkG0LqWoBRqQ9Jxu@tucnak>
+Reply-To: Jakub Jelinek <jakub@redhat.com>
+References: <YjxTt3pFIcV3lt8I@zn.tnic>
+ <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
+ <Yj2yYFloadFobRPx@lakrids>
+ <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
+ <20220325151238.GB614@gate.crashing.org>
+ <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
+ <YkGL929QoFiTfMK7@tucnak>
+ <YkGwSsXLBjReBhMf@lakrids>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkGwSsXLBjReBhMf@lakrids>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
 
-From: Tom Rix <trix@redhat.com>
+On Mon, Mar 28, 2022 at 01:55:38PM +0100, Mark Rutland wrote:
+> > If coexistence of instrumented and non-instrumented memcpy etc. was the goal
+> > (it clearly wasn't), then the sanitizer libraries wouldn't be overriding
+> > memcpy calls, but instead the compiler would redirect calls to memcpy in
+> > instrumented functions to say __asan_memcpy which then would be
+> > instrumented.
+> 
+> FWIW, I think that approach would be fine for kernel usage.
+> 
+> > > Given the standard doesn't say *anything* about instrumentation, what does GCC
+> > > *require* instrumentation-wise of the memcpy implementation? What happens *in
+> > > practice* today?
+> > > 
+> > > For example, is the userspace implementation of memcpy() instrumented for
+> > > AddressSanitizer, or not?
+> > 
+> > It is, for all functions, whether compiled with -fsanitize=address or not,
+> > if user app is linked with -fsanitize=address, libasan is linked in and
+> > overrides the libc memcpy with its instrumented version.
+> 
+> Thanks for confirming! Just to check, how does libasan prevent recursing
+> within itself on implicitly generated calls to memcpy and friends? Is
+> anything special done to build the libasan code, is that all asm, or
+> something else?
 
-Clang build fails with
-cifsfs.c:709:18: error: implicit conversion from enumeration
-  type 'enum statusEnum' to different enumeration
-  type 'enum tid_status_enum'
-  tcon->status = CifsExiting;
-               ~ ^~~~~~~~~~~
+Generally, most of the libasan wrappers look like
+  do something
+  call the original libc function (address from dlsym/dlvsym)
+  do something
+and the "do something" code isn't that complicated.  The compiler doesn't
+add calls to memcpy/memset etc. just to screw up users, they are added
+for a reason, such as copying or clearing very large aggregates (including
+for passing them by value), without -Os it will rarely use calls for smaller
+sizes and will instead expand them inline.
+For malloc and the like wrappers I think it uses some TLS
+recursion counters so that say malloc called from dlsym doesn't cause
+problems.
 
-The type of the element status changed, so enum needed to change.
-Replace CifsExiting with TID_EXITING.
+Now, one way for the kernel to make kasan work (more) reliably even with
+existing compilers without special tweaks for this might be if those
+calls to no_sanitize_address code aren't mixed with sanitized code all the
+time might be set some per-thread flag when starting a "no sanitized" code
+execution and clear it at the end of the region (or vice versa) and test
+those flags in the kernel's memcpy/memset etc. implementation to decide if
+they should be sanitized or not.
+As KASAN is (hopefully) just a kernel debugging aid and not something meant
+for production (in the userspace at least GCC strongly recommends against
+using the sanitizers in production), perhaps allocating one per-thread bool
+or int and changing it in a few spots and testing in the library functions
+might be acceptable.
 
-Fixes: 7e5c8c02911b ("smb3: cleanup and clarify status of tree connections")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- fs/cifs/cifsfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index 0789bf1496c74..a47fa44b6d52b 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -706,7 +706,7 @@ static void cifs_umount_begin(struct super_block *sb)
- 		spin_unlock(&cifs_tcp_ses_lock);
- 		return;
- 	} else if (tcon->tc_count == 1)
--		tcon->status = CifsExiting;
-+		tcon->status = TID_EXITING;
- 	spin_unlock(&cifs_tcp_ses_lock);
- 
- 	/* cancel_brl_requests(tcon); */ /* BB mark all brl mids as exiting */
--- 
-2.26.3
+	Jakub
 
