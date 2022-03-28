@@ -1,101 +1,101 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060187C
-	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 21:44:42 +0000 (UTC)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-	by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22SIoBSJ022626;
-	Mon, 28 Mar 2022 21:44:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=NnyKKtxu4F/uRqTniTyXZXQEPsrsBOiKJquWbfplKjU=;
- b=UgJPFOZOqqrh5V3eC37/2lYWrF20vzq8imS+3r8KNdMzDCAtnxpZ4mLyclvc1dE+qTS/
- u4F0g6S2V/g688teMV4y3IUrrbv8Epfdj/Mz9K8OfQ1zvBMKIAfZQYnVjdgH5j3dMgMx
- hnqdK8yp6bbC70ouEdejO56PIZaSGGazw5UHk9dShfLOZtCfb2xZHzNNKkBecheCB1TY
- PF1YzQqPjdnGyDz6+mxb8Dtt0mKb3TIYvKzQSnzNu9P0JdPoR8afG5x2gcNG/G73Su0J
- 90YGP6Zyd8oehcCjiMyCwrpkv8X2/G/MEyeN0KMoFjJlN4AurX2m3eLzIcB0s3DVTdOQ Fw== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-	by mx0b-001b2d01.pphosted.com with ESMTP id 3f3j6pumfn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Mar 2022 21:44:33 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-	by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22SLhVBJ027436;
-	Mon, 28 Mar 2022 21:44:32 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-	by ppma05fra.de.ibm.com with ESMTP id 3f1tf8v1q7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Mar 2022 21:44:32 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-	by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22SLiS6q32965062
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 28 Mar 2022 21:44:28 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9BA02A4051;
-	Mon, 28 Mar 2022 21:44:28 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 473E8A404D;
-	Mon, 28 Mar 2022 21:44:28 +0000 (GMT)
-Received: from localhost (unknown [9.171.75.40])
-	by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-	Mon, 28 Mar 2022 21:44:28 +0000 (GMT)
-Date: Mon, 28 Mar 2022 23:44:26 +0200
-From: Vasily Gorbik <gor@linux.ibm.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-next@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: s390 defconfig fails to build after
- 4afeb670710efa5cd5ed8b1d9f2d22d6ce332bcc
-Message-ID: <your-ad-here.call-01648503866-ext-8764@work.hours>
-References: <YkH/rRikE2CilpqU@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YkH/rRikE2CilpqU@dev-arch.thelio-3990X>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 53qM4UR7Q3VuN8sDrnYgv1aTgYu-X5lx
-X-Proofpoint-ORIG-GUID: 53qM4UR7Q3VuN8sDrnYgv1aTgYu-X5lx
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCF47C
+	for <llvm@lists.linux.dev>; Mon, 28 Mar 2022 21:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648503955; x=1680039955;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6hdtn/cv3bUvibd136rsVzvZJNMwDdiT1cnrYzEnG64=;
+  b=KpN1Zwj7DzOR/pbYsVwfKphr4Z7hKnqe2LraDkFgd6r30Tj3IYlj8wqP
+   yjbSgOvc8lNt+b7+P8nEm521oZl7tMyHNhFSQhtNMKABghXwYy9WjciaN
+   mdSsg1dYn0s6JnRL/E+nVNybozKmRx5mD+wt2GeKK5bnZN3C94pYmj46d
+   gRZISIZUOd99Ng4KtScGzp1LGmQ3a3K6ZpH9FzeGDdU/rYtnlSB10ZpnY
+   zuNSGO1SwjwmctTl841iF3R8nkBX44j0S4LD/jyp/AYsBz9QZkxNSdENz
+   LjRyh05yqENunc7MfLh3pj6ZALnVLeg2dm7IogMTs6eG9jrf5Mzq6ZiDn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="319808606"
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="319808606"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 14:45:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="564031153"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 28 Mar 2022 14:45:52 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nYxBP-0002Lv-Cg; Mon, 28 Mar 2022 21:45:51 +0000
+Date: Tue, 29 Mar 2022 05:45:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Saurabh Sengar <saurabh.singh@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>, Syed Syed <syed.syed@xilinx.com>,
+	Priyadarshini Babu <priyadarshini.babu@xilinx.com>,
+	Ravali Potineni <ravali.potineni@xilinx.com>,
+	Pranavi Somisetty <pranavi.somisetty@xilinx.com>,
+	Swati Agarwal <swati.agarwal@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 234/1039]
+ drivers/net/ethernet/xilinx/xilinx_tsn_cb.c:85: warning: expecting prototype
+ for config_stream_filter(). Prototype was for config_ingress_filter()
+ instead
+Message-ID: <202203290553.VbtP230C-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-28_10,2022-03-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=756
- mlxscore=0 malwarescore=0 clxscore=1011 adultscore=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 impostorscore=0 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203280116
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Mar 28, 2022 at 11:34:21AM -0700, Nathan Chancellor wrote:
-> Hi all,
-> 
-> Apologies if this has been reported or fixed already, I did not see a
-> report when searching lore.kernel.org and it is reproducible as of
-> commit 7dcfe50f58d2 ("s390/pci: rename get_zdev_by_bus() to
-> zdev_from_bus()") in s390/linux.git.
-> 
-> Our continuous integration noticed a build failure on next-20220328 in
-> arch/s390/kernel/entry.S, which does not appear to be compiler specific,
-> as I can reproduce this with GCC easily:
-> 
-> https://builds.tuxbuild.com/2716QwFVG9408TJ43vkEc7trVCI/build.log
-> 
-> $ make -skj"$(nproc)" ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- defconfig arch/s390/kernel/entry.o
-> arch/s390/kernel/entry.S: Assembler messages:
-> arch/s390/kernel/entry.S:335: Error: Unrecognized opcode: `jgnop'
-> arch/s390/kernel/entry.S:493: Error: Unrecognized opcode: `jgnop'
-> arch/s390/kernel/entry.S:494: Error: Unrecognized opcode: `jgnop'
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
+head:   ea33365bd1a8cf667a122498e8f551df05609f92
+commit: 263fc2f4cc2eb862df696baa57738c5047a7ed38 [234/1039] net: xilinx: Add Support for CB/FRER feature of PL TSN IP
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220329/202203290553.VbtP230C-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/Xilinx/linux-xlnx/commit/263fc2f4cc2eb862df696baa57738c5047a7ed38
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
+        git checkout 263fc2f4cc2eb862df696baa57738c5047a7ed38
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Thank you for reporting this!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-jgnop mnemonic has been introduced with binutils commit
-b10b530a4566 ("IBM Z: Add support for HLASM extended mnemonics")
+All warnings (new ones prefixed by >>):
 
-and is part of binutils-2_36 and newer.
+>> drivers/net/ethernet/xilinx/xilinx_tsn_cb.c:85: warning: expecting prototype for config_stream_filter(). Prototype was for config_ingress_filter() instead
 
-I fixed it by using old "brcl 0,0" alternative here:
-https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=features&id=faf79934e65aff90284725518a5ec3c2241c65ae
+
+vim +85 drivers/net/ethernet/xilinx/xilinx_tsn_cb.c
+
+    79	
+    80	/**
+    81	 * config_stream_filter -  Configure Ingress Filter Configuration
+    82	 * @data:	Value to be programmed
+    83	 */
+    84	void config_ingress_filter(struct in_fltr data)
+  > 85	{
+    86		u32 mask = 0;
+    87	
+    88		mask = ((data.in_port_id & IN_PORTID_MASK) << IN_PORTID_SHIFT) |
+    89						(data.max_seq_id & MAX_SEQID_MASK);
+    90		axienet_iow(&lp, INGRESS_FILTER_OFFSET, mask);
+    91	}
+    92	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
