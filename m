@@ -1,192 +1,107 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C25320FF
-	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 22:40:01 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-2dc7bdd666fso155509657b3.7
-        for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 15:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=55JjpPbk3Y7WOpykUyXt7wH1TGQR1/LtZdMUbAvIVMs=;
-        b=qX3i/Nw/HqKEYHup8amZuE+i2wPURXKr/5BAcB7jIFF0+msEMixUa3UgLAJ50Se7OV
-         uyr1nQ6tC+OzNsJhFFNKJpFlRYQEOdfrdmiIWYryZa9U+Oubgo07ryvepE9B6ETZ1VoG
-         UgCgRUKM31ncZtpopbDAkAKfN/EYCNoCtyOncNGFR1OywMDt0C/fRIEKMz658xXY3sXz
-         rSCP5IEfR/m1/WpN3EHDf6KpUXvKTWPuCkcrboqxZxIzmtVZ70BVZAu4gwl4Usln/kv1
-         nnP/oWRnTdxeamBSk6xxLsmD1wCbX6Qj0YN0PFJL5eqJ/dKthgzcbg5NZVw8Qz3vRyo1
-         Fraw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=55JjpPbk3Y7WOpykUyXt7wH1TGQR1/LtZdMUbAvIVMs=;
-        b=hK4DdziMHOBCrTSOskfk+KnI39x2Ih0RKrw81zi+aFhOhzMETXPnxl6aD0ed/aIy7g
-         SKX26f5uSoRBnm9XdJYVJNGQB8ZCxuALY2N5mY1gkRLZDtzUj00YMRg2sQ8AQEGI8VVj
-         fiFDyIaeMdEdyg5ycSE0ixcLac0KTze267cso+4DeCNfuqwWFCbUzSe+EyiQxsBZjPiA
-         BzcfHr7/C7v2ioJrjpYkEK5wgYbxAZvbIc6J1SXx3R4akTdym8wIfZ5X0Ts1rwHqsFYr
-         p97prjauHUaZoOr2boXOynPbaR5iyAag5DSl7IMF9F1vR2s80D93QSZcLxcKg9EKo107
-         MVag==
-X-Gm-Message-State: AOAM533FcjHq6hwaDAlJ3fd5nxripBVq1zTYytRFmk9zwKQ4gIL2TsK/
-	Kg6aodiDWNMrBfupae6ADD4FojXJmCX+A8VOCRA=
-X-Google-Smtp-Source: ABdhPJySXpfYyG6+zVpTR4IIDEDIftMPbYNbI9MH3Y4DgnMswi8Vyagy7p0fxXZFTK+T6UpIhTF2rkLIX8Tq2/alwxU=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:75a:7c26:987c:fd71])
- (user=ndesaulniers job=sendgmr) by 2002:a25:26c4:0:b0:633:64d4:2b84 with SMTP
- id m187-20020a2526c4000000b0063364d42b84mr29292732ybm.428.1648593600139; Tue,
- 29 Mar 2022 15:40:00 -0700 (PDT)
-Date: Tue, 29 Mar 2022 15:39:56 -0700
-In-Reply-To: <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
-Message-Id: <20220329223956.486608-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D22029A1
+	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 23:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92AABC340ED;
+	Tue, 29 Mar 2022 23:01:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1648594899;
+	bh=M4ahqdUbNWZpu1zTE+ecLAol/Y3a7KqezwczG/uULOk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=f+mm77ouLiZBy2ItFKplfL6uqyJ3Xq6THOxS2sIVYbuj9wVH8YyV67MSW35GGgL+n
+	 DjwxNulZuP4nFyW7LcdSmmMeFHzN/TqK6pCvutyV2M4EIE8MzNcX3eaGT2qglgZXHy
+	 oEhLaFt1PeKJYmrncUzypm0/i+ue7r8DVdbHz2wMszBxDKhBKyrg1p2VBhlKUvgmZZ
+	 n4rSV/F5K7P71TZ7j2kglQ+l+teFX3zbYwTqZaqKVdkAE8PJJfUjRcc68QaCn4Xc/I
+	 kUw7reKurJkdW37dBs+0TEC3be5tWZUrKCVpY0tr1AL3hgyt4xcJoM7GkWqNQFxDpQ
+	 JaUkejUExDjmw==
+Date: Tue, 29 Mar 2022 16:01:37 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>, Arnd
+ Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>, David
+ Howells <dhowells@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
+ netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] net, uapi: remove inclusion of arpa/inet.h
+Message-ID: <20220329160137.0708b1ef@kernel.org>
+In-Reply-To: <20220329223956.486608-1-ndesaulniers@google.com>
+References: <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
+	<20220329223956.486608-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648593596; l=4543;
- s=20211004; h=from:subject; bh=5slE50Y/sReDbpFV50LnX2HSeC48C/EwsulabxEX2AY=;
- b=qrVKmwgB+c+z+CeXQOhS6rjRIAZu/2Wrsrlcq7EKGqSdZjeyWxrfJNKXWI3wHnZmJLb/M85Dploc
- 41bx/78uD5Tx5oHMxesWB1z9dYo+509XZkUz0pdnf8rnJ9/hmR+r
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2] net, uapi: remove inclusion of arpa/inet.h
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>, 
-	David Howells <dhowells@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
-	tipc-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Testing out CONFIG_UAPI_HEADER_TEST=y with a prebuilt Bionic sysroot
-from Android's SDK, I encountered an error:
+On Tue, 29 Mar 2022 15:39:56 -0700 Nick Desaulniers wrote:
+> Testing out CONFIG_UAPI_HEADER_TEST=y with a prebuilt Bionic sysroot
+> from Android's SDK, I encountered an error:
+> 
+>   HDRTEST usr/include/linux/fsi.h
+> In file included from <built-in>:1:
+> In file included from ./usr/include/linux/tipc_config.h:46:
+> prebuilts/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/arpa/inet.h:39:1:
+> error: unknown type name 'in_addr_t'
+> in_addr_t inet_addr(const char* __s);
+> ^
+> 
+> This is because Bionic has a bug in its inclusion chain. I sent a patch
+> to fix that, but looking closer at include/uapi/linux/tipc_config.h,
+> there's a comment that it includes arpa/inet.h for ntohs;
+> but ntohs is not defined in any UAPI header. For now, reuse the
+> definitions from include/linux/byteorder/generic.h, since the various
+> conversion functions do exist in UAPI headers:
+> include/uapi/linux/byteorder/big_endian.h
+> include/uapi/linux/byteorder/little_endian.h
+> 
+> Link: https://android-review.googlesource.com/c/platform/bionic/+/2048127
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  include/uapi/linux/tipc_config.h | 32 ++++++++++++++++----------------
+>  1 file changed, 16 insertions(+), 16 deletions(-)
+> 
+> diff --git a/include/uapi/linux/tipc_config.h b/include/uapi/linux/tipc_config.h
+> index 4dfc05651c98..2c494b7ae008 100644
+> --- a/include/uapi/linux/tipc_config.h
+> +++ b/include/uapi/linux/tipc_config.h
+> @@ -43,10 +43,6 @@
+>  #include <linux/tipc.h>
+>  #include <asm/byteorder.h>
+>  
+> -#ifndef __KERNEL__
+> -#include <arpa/inet.h> /* for ntohs etc. */
+> -#endif
 
-  HDRTEST usr/include/linux/fsi.h
-In file included from <built-in>:1:
-In file included from ./usr/include/linux/tipc_config.h:46:
-prebuilts/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/arpa/inet.h:39:1:
-error: unknown type name 'in_addr_t'
-in_addr_t inet_addr(const char* __s);
-^
+Hm, how do we know no user space depends on this include?
 
-This is because Bionic has a bug in its inclusion chain. I sent a patch
-to fix that, but looking closer at include/uapi/linux/tipc_config.h,
-there's a comment that it includes arpa/inet.h for ntohs;
-but ntohs is not defined in any UAPI header. For now, reuse the
-definitions from include/linux/byteorder/generic.h, since the various
-conversion functions do exist in UAPI headers:
-include/uapi/linux/byteorder/big_endian.h
-include/uapi/linux/byteorder/little_endian.h
+If nobody screams at us we can try, but then it needs to go into -next,
+and net-next is closed ATM, you'll need to repost once the merge window
+is over.
 
-Link: https://android-review.googlesource.com/c/platform/bionic/+/2048127
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- include/uapi/linux/tipc_config.h | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+>  /*
+>   * Configuration
+>   *
+> @@ -257,6 +253,10 @@ struct tlv_desc {
+>  #define TLV_SPACE(datalen) (TLV_ALIGN(TLV_LENGTH(datalen)))
+>  #define TLV_DATA(tlv) ((void *)((char *)(tlv) + TLV_LENGTH(0)))
+>  
+> +#define __htonl(x) __cpu_to_be32(x)
+> +#define __htons(x) __cpu_to_be16(x)
+> +#define __ntohs(x) __be16_to_cpu(x)
+> +
+>  static inline int TLV_OK(const void *tlv, __u16 space)
+>  {
+>  	/*
+> @@ -269,33 +269,33 @@ static inline int TLV_OK(const void *tlv, __u16 space)
+>  	 */
+>  
+>  	return (space >= TLV_SPACE(0)) &&
+> -		(ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
+> +		(__ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
 
-diff --git a/include/uapi/linux/tipc_config.h b/include/uapi/linux/tipc_config.h
-index 4dfc05651c98..2c494b7ae008 100644
---- a/include/uapi/linux/tipc_config.h
-+++ b/include/uapi/linux/tipc_config.h
-@@ -43,10 +43,6 @@
- #include <linux/tipc.h>
- #include <asm/byteorder.h>
- 
--#ifndef __KERNEL__
--#include <arpa/inet.h> /* for ntohs etc. */
--#endif
--
- /*
-  * Configuration
-  *
-@@ -257,6 +253,10 @@ struct tlv_desc {
- #define TLV_SPACE(datalen) (TLV_ALIGN(TLV_LENGTH(datalen)))
- #define TLV_DATA(tlv) ((void *)((char *)(tlv) + TLV_LENGTH(0)))
- 
-+#define __htonl(x) __cpu_to_be32(x)
-+#define __htons(x) __cpu_to_be16(x)
-+#define __ntohs(x) __be16_to_cpu(x)
-+
- static inline int TLV_OK(const void *tlv, __u16 space)
- {
- 	/*
-@@ -269,33 +269,33 @@ static inline int TLV_OK(const void *tlv, __u16 space)
- 	 */
- 
- 	return (space >= TLV_SPACE(0)) &&
--		(ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
-+		(__ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
- }
- 
- static inline int TLV_CHECK(const void *tlv, __u16 space, __u16 exp_type)
- {
- 	return TLV_OK(tlv, space) &&
--		(ntohs(((struct tlv_desc *)tlv)->tlv_type) == exp_type);
-+		(__ntohs(((struct tlv_desc *)tlv)->tlv_type) == exp_type);
- }
- 
- static inline int TLV_GET_LEN(struct tlv_desc *tlv)
- {
--	return ntohs(tlv->tlv_len);
-+	return __ntohs(tlv->tlv_len);
- }
- 
- static inline void TLV_SET_LEN(struct tlv_desc *tlv, __u16 len)
- {
--	tlv->tlv_len = htons(len);
-+	tlv->tlv_len = __htons(len);
- }
- 
- static inline int TLV_CHECK_TYPE(struct tlv_desc *tlv,  __u16 type)
- {
--	return (ntohs(tlv->tlv_type) == type);
-+	return (__ntohs(tlv->tlv_type) == type);
- }
- 
- static inline void TLV_SET_TYPE(struct tlv_desc *tlv, __u16 type)
- {
--	tlv->tlv_type = htons(type);
-+	tlv->tlv_type = __htons(type);
- }
- 
- static inline int TLV_SET(void *tlv, __u16 type, void *data, __u16 len)
-@@ -305,8 +305,8 @@ static inline int TLV_SET(void *tlv, __u16 type, void *data, __u16 len)
- 
- 	tlv_len = TLV_LENGTH(len);
- 	tlv_ptr = (struct tlv_desc *)tlv;
--	tlv_ptr->tlv_type = htons(type);
--	tlv_ptr->tlv_len  = htons(tlv_len);
-+	tlv_ptr->tlv_type = __htons(type);
-+	tlv_ptr->tlv_len  = __htons(tlv_len);
- 	if (len && data) {
- 		memcpy(TLV_DATA(tlv_ptr), data, len);
- 		memset((char *)TLV_DATA(tlv_ptr) + len, 0, TLV_SPACE(len) - tlv_len);
-@@ -348,7 +348,7 @@ static inline void *TLV_LIST_DATA(struct tlv_list_desc *list)
- 
- static inline void TLV_LIST_STEP(struct tlv_list_desc *list)
- {
--	__u16 tlv_space = TLV_ALIGN(ntohs(list->tlv_ptr->tlv_len));
-+	__u16 tlv_space = TLV_ALIGN(__ntohs(list->tlv_ptr->tlv_len));
- 
- 	list->tlv_ptr = (struct tlv_desc *)((char *)list->tlv_ptr + tlv_space);
- 	list->tlv_space -= tlv_space;
-@@ -404,9 +404,9 @@ static inline int TCM_SET(void *msg, __u16 cmd, __u16 flags,
- 
- 	msg_len = TCM_LENGTH(data_len);
- 	tcm_hdr = (struct tipc_cfg_msg_hdr *)msg;
--	tcm_hdr->tcm_len   = htonl(msg_len);
--	tcm_hdr->tcm_type  = htons(cmd);
--	tcm_hdr->tcm_flags = htons(flags);
-+	tcm_hdr->tcm_len   = __htonl(msg_len);
-+	tcm_hdr->tcm_type  = __htons(cmd);
-+	tcm_hdr->tcm_flags = __htons(flags);
- 	if (data_len && data) {
- 		memcpy(TCM_DATA(msg), data, data_len);
- 		memset((char *)TCM_DATA(msg) + data_len, 0, TCM_SPACE(data_len) - msg_len);
-
-base-commit: 5efabdadcf4a5b9a37847ecc85ba71cf2eff0fcf
--- 
-2.35.1.1021.g381101b075-goog
-
+Also why add the defines / macros? 
+We could switch to __cpu_to_be16() etc. directly, it seems.
