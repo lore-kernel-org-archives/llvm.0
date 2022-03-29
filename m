@@ -1,43 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0136020F4
-	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 06:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1C3181
+	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 06:33:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648534981; x=1680070981;
+  t=1648535582; x=1680071582;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jH8lK4wm4s104d0EZM6nlnG5qbED2yGtvQreJbYlw/M=;
-  b=lKvflQjPY4eQVJJNZTJ/qiqvQ2WE3iJblK5ul6CHmz9LfoNNCRvIBW74
-   a4yUaH63L679/LkvVGOwXCq/P9UwCw1tvwRKTtFkaxzN7272fNvldK3dD
-   W7RAXLjLEndx4VAHC7aWzR8U/coqZIarPPvJMCgPtXQIlo4H4gxyzXQQ5
-   vWneu7n3Qs1lPTTIuvkY27gG5ar/pAAhmdZxQmrtC2AVpYdgM1CkCoZNh
-   pp5q026KKK2HFkw8y6/Uhjj7tSytZJFumgQCnF0uBF6c2Sa+KsgT76mt6
-   /IHneYMUXjJ7wjk3lcfW9vqeSZFnIDvnQP8z8Aytg0JTV3OMZHqvChuaI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="258888014"
+  bh=b+xsrYYgRj8ZI/u2pSfAOvTw9v5HYhv+7RXB8v+73lk=;
+  b=U10WWqMXKw+Keou4ZJt7kdYJPBbleiteIDTGVZNsk68OF153RzWKKvwL
+   Gemx3v3tlErLIqBN8cYyIYAqEBUCh/zex1TSEf9Id42Fw/oLFxDNdDv9h
+   DvTtBYNe/UmQRuJCcbngYPJhRLVgkWPmj5uDJj0HMXLhOgzgyNSzXugpv
+   GGZ/mSmWTQe5M7taz0Rx0CF0wf9ZRBhWbRatkL5ITtEpW0Scnx9GMPnF6
+   /jpzJAEdPYdMSPWr3dbW1orHk8CGeuVJeqsoNG3qabKBm9hgPmCdeT0yp
+   6QUviakOBMWr7r0dbSs3jHyOz7w8JIeFbY66n787WEQ1uBL7ODaaGFWro
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="319873529"
 X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="258888014"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 23:23:00 -0700
+   d="scan'208";a="319873529"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 23:33:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="719402093"
+   d="scan'208";a="585457295"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 28 Mar 2022 23:22:58 -0700
+  by orsmga001.jf.intel.com with ESMTP; 28 Mar 2022 23:32:59 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nZ5Fq-0002jo-3C; Tue, 29 Mar 2022 06:22:58 +0000
-Date: Tue, 29 Mar 2022 14:22:07 +0800
+	id 1nZ5PW-0002kX-IA; Tue, 29 Mar 2022 06:32:58 +0000
+Date: Tue, 29 Mar 2022 14:32:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rick Yiu <rickyiu@google.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
- 9999/9999] kernel/sched/pelt.c:220:5: warning: no previous prototype for
- function '___update_load_sum'
-Message-ID: <202203291453.o1x3SHpH-lkp@intel.com>
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/kspp-stringop-overflow 5/5]
+ arch/x86/mm/pgtable.c:442:27: warning: variable 'pmds' is uninitialized when
+ used here
+Message-ID: <202203291404.IHkCx1AG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,167 +48,94 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
-head:   e3356ca0a6c24e1ccdde6e9f80875701218ab090
-commit: e3356ca0a6c24e1ccdde6e9f80875701218ab090 [9999/9999] ANDROID: sched: Add vendor hook for util-update related functions
-config: arm64-randconfig-r032-20220327 (https://download.01.org/0day-ci/archive/20220329/202203291453.o1x3SHpH-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/kspp-stringop-overflow
+head:   d3becb16bbfe48ca524e4489b6c6c4fb1ccafa1a
+commit: d3becb16bbfe48ca524e4489b6c6c4fb1ccafa1a [5/5] mm/pgtable: Fix Wstringop-overflow warnings in pgd_alloc()
+config: i386-randconfig-a012-20220328 (https://download.01.org/0day-ci/archive/20220329/202203291404.IHkCx1AG-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/e3356ca0a6c24e1ccdde6e9f80875701218ab090
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
-        git checkout e3356ca0a6c24e1ccdde6e9f80875701218ab090
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=d3becb16bbfe48ca524e4489b6c6c4fb1ccafa1a
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/kspp-stringop-overflow
+        git checkout d3becb16bbfe48ca524e4489b6c6c4fb1ccafa1a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/sched/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> kernel/sched/pelt.c:220:5: warning: no previous prototype for function '___update_load_sum' [-Wmissing-prototypes]
-   int ___update_load_sum(u64 now, struct sched_avg *sa,
-       ^
-   kernel/sched/pelt.c:220:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ___update_load_sum(u64 now, struct sched_avg *sa,
-   ^
-   static 
->> kernel/sched/pelt.c:297:6: warning: no previous prototype for function '___update_load_avg' [-Wmissing-prototypes]
-   void ___update_load_avg(struct sched_avg *sa, unsigned long load)
-        ^
-   kernel/sched/pelt.c:297:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void ___update_load_avg(struct sched_avg *sa, unsigned long load)
-   ^
-   static 
+>> arch/x86/mm/pgtable.c:442:27: warning: variable 'pmds' is uninitialized when used here [-Wuninitialized]
+           if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
+                                    ^~~~
+   arch/x86/mm/pgtable.c:432:14: note: initialize the variable 'pmds' to silence this warning
+           pmd_t **pmds;
+                       ^
+                        = NULL
+>> arch/x86/mm/pgtable.c:445:27: warning: variable 'u_pmds' is uninitialized when used here [-Wuninitialized]
+           if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
+                                    ^~~~~~
+   arch/x86/mm/pgtable.c:431:16: note: initialize the variable 'u_pmds' to silence this warning
+           pmd_t **u_pmds;
+                         ^
+                          = NULL
    2 warnings generated.
 
 
-vim +/___update_load_sum +220 kernel/sched/pelt.c
+vim +/pmds +442 arch/x86/mm/pgtable.c
 
-   191	
-   192	/*
-   193	 * We can represent the historical contribution to runnable average as the
-   194	 * coefficients of a geometric series.  To do this we sub-divide our runnable
-   195	 * history into segments of approximately 1ms (1024us); label the segment that
-   196	 * occurred N-ms ago p_N, with p_0 corresponding to the current period, e.g.
-   197	 *
-   198	 * [<- 1024us ->|<- 1024us ->|<- 1024us ->| ...
-   199	 *      p0            p1           p2
-   200	 *     (now)       (~1ms ago)  (~2ms ago)
-   201	 *
-   202	 * Let u_i denote the fraction of p_i that the entity was runnable.
-   203	 *
-   204	 * We then designate the fractions u_i as our co-efficients, yielding the
-   205	 * following representation of historical load:
-   206	 *   u_0 + u_1*y + u_2*y^2 + u_3*y^3 + ...
-   207	 *
-   208	 * We choose y based on the with of a reasonably scheduling period, fixing:
-   209	 *   y^32 = 0.5
-   210	 *
-   211	 * This means that the contribution to load ~32ms ago (u_32) will be weighted
-   212	 * approximately half as much as the contribution to load within the last ms
-   213	 * (u_0).
-   214	 *
-   215	 * When a period "rolls over" and we have new u_0`, multiplying the previous
-   216	 * sum again by y is sufficient to update:
-   217	 *   load_avg = u_0` + y*(u_0 + u_1*y + u_2*y^2 + ... )
-   218	 *            = u_0 + u_1*y + u_2*y^2 + ... [re-labeling u_i --> u_{i+1}]
-   219	 */
- > 220	int ___update_load_sum(u64 now, struct sched_avg *sa,
-   221			       unsigned long load, unsigned long runnable, int running)
-   222	{
-   223		u64 delta;
-   224	
-   225		delta = now - sa->last_update_time;
-   226		/*
-   227		 * This should only happen when time goes backwards, which it
-   228		 * unfortunately does during sched clock init when we swap over to TSC.
-   229		 */
-   230		if ((s64)delta < 0) {
-   231			sa->last_update_time = now;
-   232			return 0;
-   233		}
-   234	
-   235		/*
-   236		 * Use 1024ns as the unit of measurement since it's a reasonable
-   237		 * approximation of 1us and fast to compute.
-   238		 */
-   239		delta >>= 10;
-   240		if (!delta)
-   241			return 0;
-   242	
-   243		sa->last_update_time += delta << 10;
-   244	
-   245		/*
-   246		 * running is a subset of runnable (weight) so running can't be set if
-   247		 * runnable is clear. But there are some corner cases where the current
-   248		 * se has been already dequeued but cfs_rq->curr still points to it.
-   249		 * This means that weight will be 0 but not running for a sched_entity
-   250		 * but also for a cfs_rq if the latter becomes idle. As an example,
-   251		 * this happens during idle_balance() which calls
-   252		 * update_blocked_averages().
-   253		 *
-   254		 * Also see the comment in accumulate_sum().
-   255		 */
-   256		if (!load)
-   257			runnable = running = 0;
-   258	
-   259		/*
-   260		 * Now we know we crossed measurement unit boundaries. The *_avg
-   261		 * accrues by two steps:
-   262		 *
-   263		 * Step 1: accumulate *_sum since last_update_time. If we haven't
-   264		 * crossed period boundaries, finish.
-   265		 */
-   266		if (!accumulate_sum(delta, sa, load, runnable, running))
-   267			return 0;
-   268	
-   269		return 1;
-   270	}
-   271	EXPORT_SYMBOL_GPL(___update_load_sum);
-   272	
-   273	/*
-   274	 * When syncing *_avg with *_sum, we must take into account the current
-   275	 * position in the PELT segment otherwise the remaining part of the segment
-   276	 * will be considered as idle time whereas it's not yet elapsed and this will
-   277	 * generate unwanted oscillation in the range [1002..1024[.
-   278	 *
-   279	 * The max value of *_sum varies with the position in the time segment and is
-   280	 * equals to :
-   281	 *
-   282	 *   LOAD_AVG_MAX*y + sa->period_contrib
-   283	 *
-   284	 * which can be simplified into:
-   285	 *
-   286	 *   LOAD_AVG_MAX - 1024 + sa->period_contrib
-   287	 *
-   288	 * because LOAD_AVG_MAX*y == LOAD_AVG_MAX-1024
-   289	 *
-   290	 * The same care must be taken when a sched entity is added, updated or
-   291	 * removed from a cfs_rq and we need to update sched_avg. Scheduler entities
-   292	 * and the cfs rq, to which they are attached, have the same position in the
-   293	 * time segment because they use the same clock. This means that we can use
-   294	 * the period_contrib of cfs_rq when updating the sched_avg of a sched_entity
-   295	 * if it's more convenient.
-   296	 */
- > 297	void ___update_load_avg(struct sched_avg *sa, unsigned long load)
-   298	{
-   299		u32 divider = get_pelt_divider(sa);
-   300	
-   301		/*
-   302		 * Step 2: update *_avg.
-   303		 */
-   304		sa->load_avg = div_u64(load * sa->load_sum, divider);
-   305		sa->runnable_avg = div_u64(sa->runnable_sum, divider);
-   306		WRITE_ONCE(sa->util_avg, sa->util_sum / divider);
-   307	}
-   308	EXPORT_SYMBOL_GPL(___update_load_avg);
-   309	
+1ec1fe73dfb711 Ingo Molnar         2008-03-19  434  
+1db491f77b6ed0 Fenghua Yu          2015-01-15  435  	pgd = _pgd_alloc();
+1ec1fe73dfb711 Ingo Molnar         2008-03-19  436  
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  437  	if (pgd == NULL)
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  438  		goto out;
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  439  
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  440  	mm->pgd = pgd;
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  441  
+f59dbe9ca6707e Joerg Roedel        2018-07-18 @442  	if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  443  		goto out_free_pgd;
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  444  
+f59dbe9ca6707e Joerg Roedel        2018-07-18 @445  	if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  446  		goto out_free_pmds;
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  447  
+f59dbe9ca6707e Joerg Roedel        2018-07-18  448  	if (paravirt_pgd_alloc(mm) != 0)
+f59dbe9ca6707e Joerg Roedel        2018-07-18  449  		goto out_free_user_pmds;
+f59dbe9ca6707e Joerg Roedel        2018-07-18  450  
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  451  	/*
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  452  	 * Make sure that pre-populating the pmds is atomic with
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  453  	 * respect to anything walking the pgd_list, so that they
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  454  	 * never see a partially populated pgd.
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  455  	 */
+a79e53d85683c6 Andrea Arcangeli    2011-02-16  456  	spin_lock(&pgd_lock);
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  457  
+617d34d9e5d832 Jeremy Fitzhardinge 2010-09-21  458  	pgd_ctor(mm, pgd);
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  459  	pgd_prepopulate_pmd(mm, pgd, pmds);
+f59dbe9ca6707e Joerg Roedel        2018-07-18  460  	pgd_prepopulate_user_pmd(mm, pgd, u_pmds);
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  461  
+a79e53d85683c6 Andrea Arcangeli    2011-02-16  462  	spin_unlock(&pgd_lock);
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  463  
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  464  	return pgd;
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  465  
+f59dbe9ca6707e Joerg Roedel        2018-07-18  466  out_free_user_pmds:
+f59dbe9ca6707e Joerg Roedel        2018-07-18  467  	free_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS);
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  468  out_free_pmds:
+f59dbe9ca6707e Joerg Roedel        2018-07-18  469  	free_pmds(mm, pmds, PREALLOCATED_PMDS);
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  470  out_free_pgd:
+1db491f77b6ed0 Fenghua Yu          2015-01-15  471  	_pgd_free(pgd);
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  472  out:
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  473  	return NULL;
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  474  }
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  475  
+
+:::::: The code at line 442 was first introduced by commit
+:::::: f59dbe9ca6707eb7ffd0e24359085651c2d7df48 x86/pgtable/pae: Use separate kernel PMDs for user page-table
+
+:::::: TO: Joerg Roedel <jroedel@suse.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 -- 
 0-DAY CI Kernel Test Service
