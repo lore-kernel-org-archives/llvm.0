@@ -1,119 +1,94 @@
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7998020E5
-	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 10:18:07 +0000 (UTC)
-Received: from integral2.. (unknown [182.2.70.161])
-	by gnuweeb.org (Postfix) with ESMTPSA id 632E27E72A;
-	Tue, 29 Mar 2022 10:17:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1648549081;
-	bh=sOa5bTrQEKERvFJedlayh1Unbt9LOKPwsCzeI50Bj1k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lx/7IuFTk6fAH3rYLwr/TJtsTaUHd3qTJqK3lcjI/hhU25WOBbGYuKY+Mj8ceN5r9
-	 rokZey+MbRFLdlrhTRRWlmeJS4uX3W41mpW/z5cNbO74neTuvt2hHNNEqWCcuw56nS
-	 AdbA0hKG4w7mjEtBtJloml4CGj8b9N6IdAvEIMz+7/m2h7tbq+d1kSMmUfHo9fBJo0
-	 BTd0yG2LtbHaaNTVdBo2IcvtDE8cRCH1Kg2CIuIQ+a0COLQOrxORp/xmVZqTQ5TgsN
-	 xTEBIWaqDWvCTOV2N+UyIQ9IDxTUUsIJ+pRkhnKO2lY6sr4/NGjUq7iypI17bKvJWJ
-	 N3kZ5duH8YYuA==
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To: Willy Tarreau <w@1wt.eu>
-Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-	Nugraha <richiisei@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	x86@kernel.org,
-	llvm@lists.linux.dev,
-	David Laight <David.Laight@ACULAB.COM>
-Subject: [PATCH v2 4/9] tools/nolibc: i386: Implement syscall with 6 arguments
-Date: Tue, 29 Mar 2022 17:17:32 +0700
-Message-Id: <20220329101737.58985-5-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220329101737.58985-1-ammarfaizi2@gnuweeb.org>
-References: <20220329101737.58985-1-ammarfaizi2@gnuweeb.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37AB7C
+	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 10:39:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648550373; x=1680086373;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=76q5UM/XuK4nZJcvhUc9bRKEWO2ut3E6FwhD+m1RkwE=;
+  b=hBRBQEtJ96MdNV8TzLtPBEq/8sLI/rjriQOE9zDwktnVT15KDtwkj/bh
+   lCdDI3O9QSCZDexYtS3QTcrF7bcB932wgLe6pZ4ZMF8IUIxMgcyYMNMQd
+   f+FuYpWaWziKlCwR4A1RRqi6yGk9cE27XL7ZO/0oh1YmLl2KjjPDnFf3A
+   9dec94VGbQUssqHo6vpbYeMskQwIaAwTUCUxfDIqWPpfhh+B97x0hVK3r
+   Z4XjPPjzwPR9vJAeSF6u6HesavVmEhsSvC27u4uqFhxufxJjNzYCMJAMJ
+   xBDEgzkgSgjZcikadYY7UDsai+OQfRzGaoA2GK631ns79BxCmVeneTzyL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="322402746"
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="322402746"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 03:39:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="546337916"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 29 Mar 2022 03:39:31 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nZ9G7-00007l-0C; Tue, 29 Mar 2022 10:39:31 +0000
+Date: Tue, 29 Mar 2022 18:38:41 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: clang-15: error: linker command failed with exit code 1 (use -v to
+ see invocation)
+Message-ID: <202203291816.tZgWF63Z-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On i386, the 6th argument of syscall goes in %ebp. However, both Clang
-and GCC cannot use %ebp in the clobber list and in the "r" constraint
-without using -fomit-frame-pointer. To make it always available for
-any kind of compilation, the below workaround is implemented.
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Christophe Leroy <christophe.leroy@csgroup.eu>
+CC: Michael Ellerman <mpe@ellerman.id.au>
 
-  1) Push the 6-th argument.
-  2) Push %ebp.
-  3) Load the 6-th argument from 4(%esp) to %ebp.
-  4) Do the syscall (int $0x80).
-  5) Pop %ebp (restore the old value of %ebp).
-  6) Add %esp by 4 (undo the stack pointer).
+Hi Christophe,
 
-Cc: x86@kernel.org
-Cc: llvm@lists.linux.dev
-Link: https://lore.kernel.org/lkml/2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com
-Suggested-by: David Laight <David.Laight@ACULAB.COM>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-===
-@@ Changelog:
+FYI, the error/warning still remains.
 
-   Link v1: https://lore.gnuweeb.org/gwml/20220324073039.140946-7-ammarfaizi2@gnuweeb.org
-   v1 -> v2:
-    * No changes *
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1930a6e739c4b4a654a69164dbe39e554d228915
+commit: 12318163737cd8808d13faa6e2393774191a6182 powerpc/32: Remove remaining .stabs annotations
+date:   7 weeks ago
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220329/202203291816.tZgWF63Z-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=12318163737cd8808d13faa6e2393774191a6182
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 12318163737cd8808d13faa6e2393774191a6182
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
-   Link RFC v2: https://lore.kernel.org/lkml/20220322102115.186179-4-ammarfaizi2@gnuweeb.org
-   RFC v2 -> v1:
-    - Use the same pattern for syscall6, regardless using GCC or Clang
-      (comment from David).
-    - Use appropriate constraints for syscall6 instead of always using
-      register variables (comment from David).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-   Link RFC v1: https://lore.kernel.org/llvm/20220320093750.159991-4-ammarfaizi2@gnuweeb.org
-   RFC v1 -> RFC v2:
-    - Fix %ebp saving method. Don't use redzone, i386 doesn't have a redzone
-      (comment from David and Alviro).
----
- tools/include/nolibc/arch-i386.h | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+All errors (new ones prefixed by >>):
 
-diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-index 10aada40680d..d7e7212346e2 100644
---- a/tools/include/nolibc/arch-i386.h
-+++ b/tools/include/nolibc/arch-i386.h
-@@ -167,6 +167,29 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
-+#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)	\
-+({								\
-+	long _eax  = (long)(num);				\
-+	long _arg6 = (long)(arg6); /* Always in memory */	\
-+	__asm__ volatile (					\
-+		"pushl	%[_arg6]\n\t"				\
-+		"pushl	%%ebp\n\t"				\
-+		"movl	4(%%esp),%%ebp\n\t"			\
-+		"int	$0x80\n\t"				\
-+		"popl	%%ebp\n\t"				\
-+		"addl	$4,%%esp\n\t"				\
-+		: "+a"(_eax)		/* %eax */		\
-+		: "b"(arg1),		/* %ebx */		\
-+		  "c"(arg2),		/* %ecx */		\
-+		  "d"(arg3),		/* %edx */		\
-+		  "S"(arg4),		/* %esi */		\
-+		  "D"(arg5),		/* %edi */		\
-+		  [_arg6]"m"(_arg6)	/* memory */		\
-+		: "memory", "cc"				\
-+	);							\
-+	_eax;							\
-+})
-+
- /* startup code */
- /*
-  * i386 System V ABI mandates:
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   /usr/bin/ld: unrecognised emulation mode: elf32ppclinux
+   Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
+>> clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso32/Makefile:51: arch/powerpc/kernel/vdso32/vdso32.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:423: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
 -- 
-Ammar Faizi
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
