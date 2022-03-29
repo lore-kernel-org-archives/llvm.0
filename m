@@ -1,188 +1,148 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D4C29A1
-	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 23:04:11 +0000 (UTC)
-Received: by mail-lj1-f181.google.com with SMTP id r22so25427349ljd.4
-        for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 16:04:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463D129A1
+	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 23:13:09 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id bu29so32978285lfb.0
+        for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 16:13:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aV7bYKXOhFJMu6k5FXuul13yfeXxFkntHqAD2t+w5yg=;
-        b=CJkmnCsJ9AGD+pl0V8nBCojZTCyw8e9iJy5XKL0P7rh1ZSykGTZYpsvzXHC7zh7r/u
-         Uc8hRbh/caTjJFQTqQVPyqgIFac92sdgNo8WOuuWEXeM/IwzJEHcDUCwD2Mg2RpReV2P
-         1NkFp4Bx5kED5TzzJMSZH+87hi+IO62KNp1jpbDREafeHczHaEEwX91NA/UprW6BvTK1
-         BYl3u3DiTOa637U6v63WdLf+IwHuL+qS3NV4p+PLaAZRsdl+KHTrLl542O6H/+4hlT6g
-         bCHBMDYZ0gkt9adaAlMED1RZBuFiXVexSR3RXeTfHxCFAA7f24V94lclMDMHiXtcNlBT
-         9QAw==
+        bh=lix+Cn9dLRv5V2E2a0f9nB/0OmFi21urXU4sSbZfBWU=;
+        b=sZlEFLJPvaRLE0Rk3RMPGJKferH2Yz3zSwUzew6rdkAv4L0stLWlB/V6CTH0gRoaQS
+         ZDYhZkrHmU8oTwVMdLuZ4n+d8ONA6gyWwrTQwJC4SbiGDxMerlEbjplV5lyVgK/Fr7cZ
+         LBDJU2HsuC0mCfuCgcSw2KhfondlIVL7gnysBbSNFBnQDWiyIFxmZBcqgBzkl1Tvws/J
+         GjCb6qL8nUObrCmsxVVtdQPI4TQlyDZJ5fjXfwagWSAlO3OnXFdVSqYwZpx7iBW/1HgP
+         Mh84r7udN27JJB+YWlgq6++1hEFlx3fH1hkIdJO2uGluNjaTp8Nia71nTH3ZhnUrc3Am
+         9ONQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aV7bYKXOhFJMu6k5FXuul13yfeXxFkntHqAD2t+w5yg=;
-        b=t/vVW2KU+oBx/E5uahNzhzHaRT2/oTdrrv0IET15hdXw2YhNy+ljqUsuaDdFIKEfPF
-         sVRHzwSQTtwT75kWrwFpXVuqbOopOEzgddRzb/bssjlCJIOwN/sgXWQu7LqOCk0WNdL+
-         bqZnkJurSdAtLHhkdCxylaMVWVrxPFKFf/eRHuJwrQLVUaxMWjnnQjRReFiSTkMFJkXU
-         u+ff3D2DJRu1QyCqwUBDGtUGZLcaLootKI9UUVx9MzD2eF1Iys9NSAkdNNoQUnaYG+gH
-         rPb4lzCXwG8tSLgamuJjYHGjMEAXI3NJAvT5+5ogeCUWEMClpV7SfowLmXLggXHUHu7N
-         eRQA==
-X-Gm-Message-State: AOAM533qWObqJakw4dYUtsAQwagWWlIykhMYw3zH6D50Z+YqPwaK2d48
-	3k+pGS/lxFiqd7oRZI+ONBXvRupzq6z1RGNnGJOzYg==
-X-Google-Smtp-Source: ABdhPJx0I1Ld/2LwgEGvX7iZJMPdwA0nv3oOokgiFpErvc7ckacA6/4louyesMOYZwvDcBgiBEqgp/0KN+xEidKoAsI=
-X-Received: by 2002:a2e:8692:0:b0:249:a0b1:3c77 with SMTP id
- l18-20020a2e8692000000b00249a0b13c77mr4524471lji.235.1648595048944; Tue, 29
- Mar 2022 16:04:08 -0700 (PDT)
+        bh=lix+Cn9dLRv5V2E2a0f9nB/0OmFi21urXU4sSbZfBWU=;
+        b=bLtuOPGQyl4t/mbwVf7zE9VZPRHHTR8SY1bNTtpC1SyHkK2YaJu8nWa1Sw/gj4oMR3
+         nfzGp9zEr+4fBr7gglc3+rTJyy8YiFaj2xEvU8TwbLVL8zRzF1qHLnYz/LtaAbxHkyl9
+         4I5eHYTBgn+F3tCugNL5sDbsjqCI8y+0jv194Fe+kL8IbGiFEk3gVZk6D2ZfLj/8kBjl
+         cUmzql62QQ7hPt+HO35mfLD1R5y6mxQC2EHvCunsd4cuIu6uoNsZG4TJWOa+mgi4WRRi
+         LNw+yZsMcpGkck/+I0JjLBKjOm8/rGF/AYVbI/d9ah3YyZ672evlTrPAkJqqOW0H90YX
+         xjKw==
+X-Gm-Message-State: AOAM533/qDrsz16/eRHuAr/kRYkEvKvLICt3Z+6T60EJqyz23NY+P1XU
+	6UIbJClnQahCV6JP21LT29jskiawUW3d+h9ALQ84aA==
+X-Google-Smtp-Source: ABdhPJwOZ3jcZwojGyojTgZxiJdEWLTpoM34ZLQKkLJD2E5imcrvKmtcCfFFNQKvBg/DEaUepLQmvQJzoCy+tY7Axlg=
+X-Received: by 2002:a05:6512:b9e:b0:44a:10eb:9607 with SMTP id
+ b30-20020a0565120b9e00b0044a10eb9607mr4583964lfv.626.1648595587152; Tue, 29
+ Mar 2022 16:13:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220329212946.2861648-1-ndesaulniers@google.com>
- <CAKwvOdmsnVsW46pTZYCNu-bx5c-aJ8ARMCOsYeMmQHpAw3PtPg@mail.gmail.com> <CAKwvOdnJB5u96fm1w-R-VUayvhq58EQeqZst32NDRscK17Z8pQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdnJB5u96fm1w-R-VUayvhq58EQeqZst32NDRscK17Z8pQ@mail.gmail.com>
+References: <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
+ <20220329223956.486608-1-ndesaulniers@google.com> <20220329160137.0708b1ef@kernel.org>
+In-Reply-To: <20220329160137.0708b1ef@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 29 Mar 2022 16:03:57 -0700
-Message-ID: <CAKwvOdn-riuzXJWTL08J+qbQkYVzCgBG=XGM9G2TSmA_Kg=hWQ@mail.gmail.com>
-Subject: Re: [PATCH] net, uapi: remove inclusion of arpa/inet.h
-To: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
+Date: Tue, 29 Mar 2022 16:12:55 -0700
+Message-ID: <CAKwvOdnNqHOvFSqzhS+0wrPfKVvrz2VymAkZatyFTBwRsQtQnw@mail.gmail.com>
+Subject: Re: [PATCH v2] net, uapi: remove inclusion of arpa/inet.h
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>, 
+	David Howells <dhowells@redhat.com>, Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
 	tipc-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, David Howells <dhowells@redhat.com>, 
-	Ying Xue <ying.xue@windriver.com>, Jon Maloy <jmaloy@redhat.com>, 
-	David Woodhouse <dwmw2@infradead.org>, Greg KH <gregkh@linuxfoundation.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>
+	llvm@lists.linux.dev, Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 29, 2022 at 3:09 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Tue, Mar 29, 2022 at 4:01 PM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> On Tue, Mar 29, 2022 at 2:50 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
+> On Tue, 29 Mar 2022 15:39:56 -0700 Nick Desaulniers wrote:
+> > Testing out CONFIG_UAPI_HEADER_TEST=y with a prebuilt Bionic sysroot
+> > from Android's SDK, I encountered an error:
 > >
-> > On Tue, Mar 29, 2022 at 2:29 PM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > Testing out CONFIG_UAPI_HEADER_TEST=y with a prebuilt Bionic sysroot
-> > > from Android's SDK, I encountered an error:
-> > >
-> > >   HDRTEST usr/include/linux/fsi.h
-> > > In file included from <built-in>:1:
-> > > In file included from ./usr/include/linux/tipc_config.h:46:
-> > > prebuilts/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/arpa/inet.h:39:1:
-> > > error: unknown type name 'in_addr_t'
-> > > in_addr_t inet_addr(const char* __s);
-> > > ^
-> >
-> > Oh, this might not quite be the correct fix for this particular issue.
-> >
-> > Cherry picking this diff back into my Android kernel tree, I now observe:
-> >   HDRTEST usr/include/linux/tipc_config.h
+> >   HDRTEST usr/include/linux/fsi.h
 > > In file included from <built-in>:1:
-> > ./usr/include/linux/tipc_config.h:268:4: error: implicit declaration
-> > of function 'ntohs' [-Werror,-Wimplicit-function-declaration]
-> >                 (ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
-> >                  ^
+> > In file included from ./usr/include/linux/tipc_config.h:46:
+> > prebuilts/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/arpa/inet.h:39:1:
+> > error: unknown type name 'in_addr_t'
+> > in_addr_t inet_addr(const char* __s);
+> > ^
 > >
-> > Is there more than one byteorder.h? Oh, I see what I did; ntohs is defined in
-> > linux/byteorder/generic.h
-> > not
-> > usr/include/asm/byteorder.h
-> > Sorry, I saw `byteorder` and mixed up the path with the filename.
+> > This is because Bionic has a bug in its inclusion chain. I sent a patch
+> > to fix that, but looking closer at include/uapi/linux/tipc_config.h,
+> > there's a comment that it includes arpa/inet.h for ntohs;
+> > but ntohs is not defined in any UAPI header. For now, reuse the
+> > definitions from include/linux/byteorder/generic.h, since the various
+> > conversion functions do exist in UAPI headers:
+> > include/uapi/linux/byteorder/big_endian.h
+> > include/uapi/linux/byteorder/little_endian.h
 > >
-> > So rather than just remove the latter, I should additionally be adding
-> > the former. Though that then produces
+> > Link: https://android-review.googlesource.com/c/platform/bionic/+/2048127
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > ---
+> >  include/uapi/linux/tipc_config.h | 32 ++++++++++++++++----------------
+> >  1 file changed, 16 insertions(+), 16 deletions(-)
 > >
-> > common/include/linux/byteorder/generic.h:146:9: error: implicit
-> > declaration of function '__cpu_to_le16'
-> > [-Werror,-Wimplicit-function-declaration]
-> >         *var = cpu_to_le16(le16_to_cpu(*var) + val);
-> >                ^
+> > diff --git a/include/uapi/linux/tipc_config.h b/include/uapi/linux/tipc_config.h
+> > index 4dfc05651c98..2c494b7ae008 100644
+> > --- a/include/uapi/linux/tipc_config.h
+> > +++ b/include/uapi/linux/tipc_config.h
+> > @@ -43,10 +43,6 @@
+> >  #include <linux/tipc.h>
+> >  #include <asm/byteorder.h>
 > >
-> > Oh?
+> > -#ifndef __KERNEL__
+> > -#include <arpa/inet.h> /* for ntohs etc. */
+> > -#endif
 >
-> Should there be a definition of ntohs (and friends) under
-> include/uapi/linux/ somewhere, rather than have the kernel header
-> include/uapi/linux/tipc_config.h depend on the libc header
-> arpa/inet.h?
->
-> It looks like we already have
-> include/uapi/linux/byteorder/{big|little}_endian.h to define
-> __be16_to_cpu and friends, just no definition of ntohs under
-> include/uapi/linux/.
->
-> Also, it looks like include/uapi/linux/ has definitions for
-> __constant_ntohs in
-> include/uapi/linux/byteorder/{big|little}_endian.h.  Should those 2
-> headers also define ntohs (and friends) unprefixed, i.e. the versions
-> that don't depend on constant expressions?
->
-> (I wish there was an entry in MAINTAINERS for UAPI questions like this...)
+> Hm, how do we know no user space depends on this include?
 
-I also think that Documentation/kbuild/headers_install.rst should
-probably include text from
-https://lore.kernel.org/all/Pine.LNX.4.58.0411281710490.22796@ppc970.osdl.org/
-or something along the lines of "kernel headers MUST NOT depend on
-userspace headers; any instance of that in tree is a bug that should
-be fixed."
+Without the ability to scan all source code in existence, I guess I
+can't prove or disprove that either way.
 
-For people I just cc'ed, here's the lore link to this thread:
-https://lore.kernel.org/lkml/20220329212946.2861648-1-ndesaulniers@google.com/
+If this is a reference to "thou shall not break userspace," I don't
+think that was in reference to UAPI headers, libc's, or inclusion
+chains.
+
+Worst case, someone might have to #include <arpa/inet.h> if they were
+relying on transitive dependencies from <linux/tipc_config.h>.  I
+don't think we should be helping people write bad code with such
+transitive dependencies though.
 
 >
-> >
-> > >
-> > > This is because Bionic has a bug in its inclusion chain. I sent a patch
-> > > to fix that, but looking closer at include/uapi/linux/tipc_config.h,
-> > > there's a comment that it includes arpa/inet.h for ntohs; but ntohs is
-> > > already defined in include/linux/byteorder/generic.h which is already
-> > > included in include/uapi/linux/tipc_config.h. There are no __KERNEL__
-> > > guards on include/linux/byteorder/generic.h's definition of ntohs. So
-> > > besides fixing Bionic, it looks like we can additionally remove this
-> > > unnecessary header inclusion.
-> > >
-> > > Link: https://android-review.googlesource.com/c/platform/bionic/+/2048127
-> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > ---
-> > >  include/uapi/linux/tipc_config.h | 4 ----
-> > >  1 file changed, 4 deletions(-)
-> > >
-> > > diff --git a/include/uapi/linux/tipc_config.h b/include/uapi/linux/tipc_config.h
-> > > index 4dfc05651c98..b38374d5f192 100644
-> > > --- a/include/uapi/linux/tipc_config.h
-> > > +++ b/include/uapi/linux/tipc_config.h
-> > > @@ -43,10 +43,6 @@
-> > >  #include <linux/tipc.h>
-> > >  #include <asm/byteorder.h>
-> > >
-> > > -#ifndef __KERNEL__
-> > > -#include <arpa/inet.h> /* for ntohs etc. */
-> > > -#endif
-> > > -
-> > >  /*
-> > >   * Configuration
-> > >   *
-> > >
-> > > base-commit: 5efabdadcf4a5b9a37847ecc85ba71cf2eff0fcf
-> > > prerequisite-patch-id: 0c2abf2af8051f4b37a70ef11b7d2fc2a3ec7181
-> > > --
-> > > 2.35.1.1021.g381101b075-goog
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+> If nobody screams at us we can try, but then it needs to go into -next,
+> and net-next is closed ATM, you'll need to repost once the merge window
+> is over.
 
+Ack.
 
+>
+> >  /*
+> >   * Configuration
+> >   *
+> > @@ -257,6 +253,10 @@ struct tlv_desc {
+> >  #define TLV_SPACE(datalen) (TLV_ALIGN(TLV_LENGTH(datalen)))
+> >  #define TLV_DATA(tlv) ((void *)((char *)(tlv) + TLV_LENGTH(0)))
+> >
+> > +#define __htonl(x) __cpu_to_be32(x)
+> > +#define __htons(x) __cpu_to_be16(x)
+> > +#define __ntohs(x) __be16_to_cpu(x)
+> > +
+> >  static inline int TLV_OK(const void *tlv, __u16 space)
+> >  {
+> >       /*
+> > @@ -269,33 +269,33 @@ static inline int TLV_OK(const void *tlv, __u16 space)
+> >        */
+> >
+> >       return (space >= TLV_SPACE(0)) &&
+> > -             (ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
+> > +             (__ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
+>
+> Also why add the defines / macros?
+> We could switch to __cpu_to_be16() etc. directly, it seems.
 
+Sure, I thought they might be more readable, but whatever you all
+prefer.  Will send a v3 once the merge window closes.
 -- 
 Thanks,
 ~Nick Desaulniers
