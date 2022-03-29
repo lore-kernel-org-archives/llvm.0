@@ -1,47 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E399F20E5
-	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 02:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919CA7C
+	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 02:36:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648519545; x=1680055545;
+  t=1648521406; x=1680057406;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MWNSes+po7qtmcKL2eyYw8+6EKH/dTSQvuKMYY4CxYQ=;
-  b=K3ZoTezA3GxTjx4yoxPtl2bZxpmzUYS3eIyEiZjRZ0BY8Xxg/s5HM7F+
-   ShFTBOM1tiLm7aWmjzkynH6z5/iM2xGFylVFmo4q38zDnPcJ9eS/kZWyO
-   3xS5dXLyc8JVK8kOjqQqF/oTyZmiH/fgSRLM7PILJdUpZACK2EpRLiivb
-   TlcDZvwhy0SbRzYTTB95gTpelTbA8gMhGKtnCdP561K109JCsNh4VTttE
-   o+wQUsdGO1QO7FIJ0YrfSh6OoZXPoVsA/xQbf1zD7c1KABTYXueUINwXI
-   sJpkES3es3qYr0hW5HdmuN/osqk9byVI/UGqPusZrtgGqthDi7QVBgmXA
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="257970551"
+  bh=hKt6d2gb7C5Xj7sEPjiRMEby7aQRFsTCoe/7eiQAtkk=;
+  b=VYfQTafTNqHgJc1P7vyLD8NHPS1fmUw5rL5kr9MKBGk+QFqpxq7NuOFQ
+   Ihr2g8v381F7EeTmiAGj6UFOsYp6NfKaK5WZ7KgArYJnPN9MMRD4He0Qj
+   z6gChKx6w8LF6ZGGw8en5lKZnrSAAY1GWY3Ky5dBjFiW1QmFnX9sxBuJZ
+   vY5huNofyf7H/pa3su8qpIMdgZGoch+USoWfGXGRj0lElVrjMhppB7mwA
+   9hnoukdqPEKjhRcnYh15m4FrxC+NtVI5PwZx9eEc85musOMyTu8JJUnvo
+   ys/E/JzgqJKu8xoEUYABqhPzD6/NiQXH46wxwRWIolmI9IDC1amQSzaEO
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="239741243"
 X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="257970551"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 19:05:45 -0700
+   d="scan'208";a="239741243"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 19:36:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="521248155"
+   d="scan'208";a="833078951"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 28 Mar 2022 19:05:42 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 28 Mar 2022 19:36:43 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nZ1Er-0002WM-OE; Tue, 29 Mar 2022 02:05:41 +0000
-Date: Tue, 29 Mar 2022 10:05:14 +0800
+	id 1nZ1is-0002Xz-GX; Tue, 29 Mar 2022 02:36:42 +0000
+Date: Tue, 29 Mar 2022 10:35:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marek Vasut <marex@denx.de>, dri-devel@lists.freedesktop.org
+To: Pablo Ceballos <pceballos@google.com>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Marek Vasut <marex@denx.de>,
-	Neil Armstrong <narmstrong@baylibre.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Sam Ravnborg <sam@ravnborg.org>, Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH v4 10/11] drm/bridge: tc358767: Split tc_set_video_mode()
- into common and (e)DP part
-Message-ID: <202203290924.MYL8dU7I-lkp@intel.com>
-References: <20220328214324.252472-11-marex@denx.de>
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	Pablo Ceballos <pceballos@google.com>
+Subject: Re: [PATCH] HID: Add driver for Google Hangouts Meet Speakermic
+Message-ID: <202203291010.fiuSQRtm-lkp@intel.com>
+References: <20220328185704.1.I7a855580ce9f43fc2f598bdccf088c978d4af822@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,135 +47,466 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220328214324.252472-11-marex@denx.de>
+In-Reply-To: <20220328185704.1.I7a855580ce9f43fc2f598bdccf088c978d4af822@changeid>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Marek,
+Hi Pablo,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.17 next-20220328]
-[cannot apply to airlied/drm-next]
+[auto build test ERROR on hid/for-next]
+[also build test ERROR on jikos-trivial/for-next v5.17]
+[cannot apply to jikos-hid/for-next next-20220328]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Vasut/drm-bridge-tc358767-Add-DSI-to-DPI-mode-support/20220329-054627
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: hexagon-randconfig-r045-20220327 (https://download.01.org/0day-ci/archive/20220329/202203290924.MYL8dU7I-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pablo-Ceballos/HID-Add-driver-for-Google-Hangouts-Meet-Speakermic/20220329-070802
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+config: hexagon-randconfig-r035-20220327
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/294c331d772539772ae87613ae1990860bbbc6ff
+        # https://github.com/intel-lab-lkp/linux/commit/6a3e0c4274593e5033b3698b8e45011e52b1fa69
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Marek-Vasut/drm-bridge-tc358767-Add-DSI-to-DPI-mode-support/20220329-054627
-        git checkout 294c331d772539772ae87613ae1990860bbbc6ff
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/bridge/
+        git fetch --no-tags linux-review Pablo-Ceballos/HID-Add-driver-for-Google-Hangouts-Meet-Speakermic/20220329-070802
+        git checkout 6a3e0c4274593e5033b3698b8e45011e52b1fa69
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon  randconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/bridge/tc358767.c:741:6: warning: variable 'max_tu_symbol' set but not used [-Wunused-but-set-variable]
-           int max_tu_symbol;
-               ^
-   1 warning generated.
+>> drivers/hid/Kconfig:412: syntax error
+   drivers/hid/Kconfig:411: unknown statement "---help---"
+   drivers/hid/Kconfig:412:warning: ignoring unsupported character '.'
+   drivers/hid/Kconfig:412: unknown statement "This"
+   drivers/hid/Kconfig:414: unknown statement "This"
+   drivers/hid/Kconfig:415:warning: ignoring unsupported character '.'
+   drivers/hid/Kconfig:415: unknown statement "device"
+   drivers/hid/Kconfig:416:warning: ignoring unsupported character '.'
+   drivers/hid/Kconfig:416: unknown statement "for"
+   drivers/hid/Kconfig:418:warning: ignoring unsupported character '.'
+   drivers/hid/Kconfig:418: unknown statement "Say"
+   make[2]: *** [scripts/kconfig/Makefile:77: oldconfig] Error 1
+   make[1]: *** [Makefile:619: oldconfig] Error 2
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'oldconfig' not remade because of errors.
+--
+>> drivers/hid/Kconfig:412: syntax error
+   drivers/hid/Kconfig:411: unknown statement "---help---"
+   drivers/hid/Kconfig:412:warning: ignoring unsupported character '.'
+   drivers/hid/Kconfig:412: unknown statement "This"
+   drivers/hid/Kconfig:414: unknown statement "This"
+   drivers/hid/Kconfig:415:warning: ignoring unsupported character '.'
+   drivers/hid/Kconfig:415: unknown statement "device"
+   drivers/hid/Kconfig:416:warning: ignoring unsupported character '.'
+   drivers/hid/Kconfig:416: unknown statement "for"
+   drivers/hid/Kconfig:418:warning: ignoring unsupported character '.'
+   drivers/hid/Kconfig:418: unknown statement "Say"
+   make[2]: *** [scripts/kconfig/Makefile:77: olddefconfig] Error 1
+   make[1]: *** [Makefile:619: olddefconfig] Error 2
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'olddefconfig' not remade because of errors.
 
 
-vim +/max_tu_symbol +741 drivers/gpu/drm/bridge/tc358767.c
+vim +412 drivers/hid/Kconfig
 
-7caff0fc4296eb Andrey Gusakov   2016-07-13  736  
-294c331d772539 Marek Vasut      2022-03-28  737  static int tc_set_common_video_mode(struct tc_data *tc,
-63f8f3badf799c Laurent Pinchart 2018-04-06  738  				    const struct drm_display_mode *mode)
-7caff0fc4296eb Andrey Gusakov   2016-07-13  739  {
-7caff0fc4296eb Andrey Gusakov   2016-07-13  740  	int ret;
-7caff0fc4296eb Andrey Gusakov   2016-07-13 @741  	int max_tu_symbol;
-7caff0fc4296eb Andrey Gusakov   2016-07-13  742  
-7caff0fc4296eb Andrey Gusakov   2016-07-13  743  	int left_margin = mode->htotal - mode->hsync_end;
-7caff0fc4296eb Andrey Gusakov   2016-07-13  744  	int right_margin = mode->hsync_start - mode->hdisplay;
-7caff0fc4296eb Andrey Gusakov   2016-07-13  745  	int hsync_len = mode->hsync_end - mode->hsync_start;
-7caff0fc4296eb Andrey Gusakov   2016-07-13  746  	int upper_margin = mode->vtotal - mode->vsync_end;
-7caff0fc4296eb Andrey Gusakov   2016-07-13  747  	int lower_margin = mode->vsync_start - mode->vdisplay;
-7caff0fc4296eb Andrey Gusakov   2016-07-13  748  	int vsync_len = mode->vsync_end - mode->vsync_start;
-fd70c7755bf017 Tomi Valkeinen   2019-09-24  749  	u32 bits_per_pixel = 24;
-fd70c7755bf017 Tomi Valkeinen   2019-09-24  750  	u32 in_bw, out_bw;
-7caff0fc4296eb Andrey Gusakov   2016-07-13  751  
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  752  	/*
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  753  	 * Recommended maximum number of symbols transferred in a transfer unit:
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  754  	 * DIV_ROUND_UP((input active video bandwidth in bytes) * tu_size,
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  755  	 *              (output active video bandwidth in bytes))
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  756  	 * Must be less than tu_size.
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  757  	 */
-fd70c7755bf017 Tomi Valkeinen   2019-09-24  758  
-fd70c7755bf017 Tomi Valkeinen   2019-09-24  759  	in_bw = mode->clock * bits_per_pixel / 8;
-e7dc8d40eea400 Thierry Reding   2019-10-21  760  	out_bw = tc->link.num_lanes * tc->link.rate;
-fd70c7755bf017 Tomi Valkeinen   2019-09-24  761  	max_tu_symbol = DIV_ROUND_UP(in_bw * TU_SIZE_RECOMMENDED, out_bw);
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  762  
-7caff0fc4296eb Andrey Gusakov   2016-07-13  763  	dev_dbg(tc->dev, "set mode %dx%d\n",
-7caff0fc4296eb Andrey Gusakov   2016-07-13  764  		mode->hdisplay, mode->vdisplay);
-7caff0fc4296eb Andrey Gusakov   2016-07-13  765  	dev_dbg(tc->dev, "H margin %d,%d sync %d\n",
-7caff0fc4296eb Andrey Gusakov   2016-07-13  766  		left_margin, right_margin, hsync_len);
-7caff0fc4296eb Andrey Gusakov   2016-07-13  767  	dev_dbg(tc->dev, "V margin %d,%d sync %d\n",
-7caff0fc4296eb Andrey Gusakov   2016-07-13  768  		upper_margin, lower_margin, vsync_len);
-7caff0fc4296eb Andrey Gusakov   2016-07-13  769  	dev_dbg(tc->dev, "total: %dx%d\n", mode->htotal, mode->vtotal);
-7caff0fc4296eb Andrey Gusakov   2016-07-13  770  
-7caff0fc4296eb Andrey Gusakov   2016-07-13  771  
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  772  	/*
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  773  	 * LCD Ctl Frame Size
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  774  	 * datasheet is not clear of vsdelay in case of DPI
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  775  	 * assume we do not need any delay when DPI is a source of
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  776  	 * sync signals
-66d1c3b94d5d59 Andrey Gusakov   2017-11-07  777  	 */
-6d0c38315915d4 Andrey Smirnov   2019-06-18  778  	ret = regmap_write(tc->regmap, VPCTRL0,
-3f072c304c0a7e Andrey Smirnov   2019-06-18  779  			   FIELD_PREP(VSDELAY, 0) |
-7caff0fc4296eb Andrey Gusakov   2016-07-13  780  			   OPXLFMT_RGB888 | FRMSYNC_DISABLED | MSF_DISABLED);
-6d0c38315915d4 Andrey Smirnov   2019-06-18  781  	if (ret)
-6d0c38315915d4 Andrey Smirnov   2019-06-18  782  		return ret;
-6d0c38315915d4 Andrey Smirnov   2019-06-18  783  
-6d0c38315915d4 Andrey Smirnov   2019-06-18  784  	ret = regmap_write(tc->regmap, HTIM01,
-3f072c304c0a7e Andrey Smirnov   2019-06-18  785  			   FIELD_PREP(HBPR, ALIGN(left_margin, 2)) |
-3f072c304c0a7e Andrey Smirnov   2019-06-18  786  			   FIELD_PREP(HPW, ALIGN(hsync_len, 2)));
-6d0c38315915d4 Andrey Smirnov   2019-06-18  787  	if (ret)
-6d0c38315915d4 Andrey Smirnov   2019-06-18  788  		return ret;
-6d0c38315915d4 Andrey Smirnov   2019-06-18  789  
-6d0c38315915d4 Andrey Smirnov   2019-06-18  790  	ret = regmap_write(tc->regmap, HTIM02,
-3f072c304c0a7e Andrey Smirnov   2019-06-18  791  			   FIELD_PREP(HDISPR, ALIGN(mode->hdisplay, 2)) |
-3f072c304c0a7e Andrey Smirnov   2019-06-18  792  			   FIELD_PREP(HFPR, ALIGN(right_margin, 2)));
-6d0c38315915d4 Andrey Smirnov   2019-06-18  793  	if (ret)
-6d0c38315915d4 Andrey Smirnov   2019-06-18  794  		return ret;
-6d0c38315915d4 Andrey Smirnov   2019-06-18  795  
-6d0c38315915d4 Andrey Smirnov   2019-06-18  796  	ret = regmap_write(tc->regmap, VTIM01,
-3f072c304c0a7e Andrey Smirnov   2019-06-18  797  			   FIELD_PREP(VBPR, upper_margin) |
-3f072c304c0a7e Andrey Smirnov   2019-06-18  798  			   FIELD_PREP(VSPR, vsync_len));
-6d0c38315915d4 Andrey Smirnov   2019-06-18  799  	if (ret)
-6d0c38315915d4 Andrey Smirnov   2019-06-18  800  		return ret;
-6d0c38315915d4 Andrey Smirnov   2019-06-18  801  
-6d0c38315915d4 Andrey Smirnov   2019-06-18  802  	ret = regmap_write(tc->regmap, VTIM02,
-3f072c304c0a7e Andrey Smirnov   2019-06-18  803  			   FIELD_PREP(VFPR, lower_margin) |
-3f072c304c0a7e Andrey Smirnov   2019-06-18  804  			   FIELD_PREP(VDISPR, mode->vdisplay));
-6d0c38315915d4 Andrey Smirnov   2019-06-18  805  	if (ret)
-6d0c38315915d4 Andrey Smirnov   2019-06-18  806  		return ret;
-6d0c38315915d4 Andrey Smirnov   2019-06-18  807  
-6d0c38315915d4 Andrey Smirnov   2019-06-18  808  	ret = regmap_write(tc->regmap, VFUEN0, VFUEN); /* update settings */
-6d0c38315915d4 Andrey Smirnov   2019-06-18  809  	if (ret)
-6d0c38315915d4 Andrey Smirnov   2019-06-18  810  		return ret;
-7caff0fc4296eb Andrey Gusakov   2016-07-13  811  
-7caff0fc4296eb Andrey Gusakov   2016-07-13  812  	/* Test pattern settings */
-6d0c38315915d4 Andrey Smirnov   2019-06-18  813  	ret = regmap_write(tc->regmap, TSTCTL,
-3f072c304c0a7e Andrey Smirnov   2019-06-18  814  			   FIELD_PREP(COLOR_R, 120) |
-3f072c304c0a7e Andrey Smirnov   2019-06-18  815  			   FIELD_PREP(COLOR_G, 20) |
-3f072c304c0a7e Andrey Smirnov   2019-06-18  816  			   FIELD_PREP(COLOR_B, 99) |
-3f072c304c0a7e Andrey Smirnov   2019-06-18  817  			   ENI2CFILTER |
-3f072c304c0a7e Andrey Smirnov   2019-06-18  818  			   FIELD_PREP(COLOR_BAR_MODE, COLOR_BAR_MODE_BARS));
-294c331d772539 Marek Vasut      2022-03-28  819  
-6d0c38315915d4 Andrey Smirnov   2019-06-18  820  	return ret;
-294c331d772539 Marek Vasut      2022-03-28  821  }
-294c331d772539 Marek Vasut      2022-03-28  822  
+    28	
+    29	config HID_BATTERY_STRENGTH
+    30		bool "Battery level reporting for HID devices"
+    31		depends on HID
+    32		select POWER_SUPPLY
+    33		default n
+    34		help
+    35		This option adds support of reporting battery strength (for HID devices
+    36		that support this feature) through power_supply class so that userspace
+    37		tools, such as upower, can display it.
+    38	
+    39	config HIDRAW
+    40		bool "/dev/hidraw raw HID device support"
+    41		depends on HID
+    42		help
+    43		Say Y here if you want to support HID devices (from the USB
+    44		specification standpoint) that aren't strictly user interface
+    45		devices, like monitor controls and Uninterruptible Power Supplies.
+    46	
+    47		This module supports these devices separately using a separate
+    48		event interface on /dev/hidraw.
+    49	
+    50		There is also a /dev/hiddev configuration option in the USB HID
+    51		configuration menu. In comparison to hiddev, this device does not process
+    52		the hid events at all (no parsing, no lookups). This lets applications
+    53		to work on raw hid events when they want to, and avoid using transport-specific
+    54		userspace libhid/libusb libraries.
+    55	
+    56		If unsure, say Y.
+    57	
+    58	config UHID
+    59		tristate "User-space I/O driver support for HID subsystem"
+    60		depends on HID
+    61		default n
+    62		help
+    63		Say Y here if you want to provide HID I/O Drivers from user-space.
+    64		This allows to write I/O drivers in user-space and feed the data from
+    65		the device into the kernel. The kernel parses the HID reports, loads the
+    66		corresponding HID Device Driver or provides input devices on top of your
+    67		user-space device.
+    68	
+    69		This driver cannot be used to parse HID-reports in user-space and write
+    70		special HID-drivers. You should use hidraw for that.
+    71		Instead, this driver allows to write the transport-layer driver in
+    72		user-space like USB-HID and Bluetooth-HID do in kernel-space.
+    73	
+    74		If unsure, say N.
+    75	
+    76		To compile this driver as a module, choose M here: the
+    77		module will be called uhid.
+    78	
+    79	config HID_GENERIC
+    80		tristate "Generic HID driver"
+    81		depends on HID
+    82		default HID
+    83		help
+    84		Support for generic devices on the HID bus. This includes most
+    85		keyboards and mice, joysticks, tablets and digitizers.
+    86	
+    87		To compile this driver as a module, choose M here: the module
+    88		will be called hid-generic.
+    89	
+    90		If unsure, say Y.
+    91	
+    92	menu "Special HID drivers"
+    93		depends on HID
+    94	
+    95	config HID_A4TECH
+    96		tristate "A4TECH mice"
+    97		depends on HID
+    98		default !EXPERT
+    99		help
+   100		Support for some A4TECH mice with two scroll wheels.
+   101	
+   102	config HID_ACCUTOUCH
+   103		tristate "Accutouch touch device"
+   104		depends on USB_HID
+   105		help
+   106		  This selects a driver for the Accutouch 2216 touch controller.
+   107	
+   108		  The driver works around a problem in the reported device capabilities
+   109		  which causes userspace to detect the device as a mouse rather than
+   110	          a touchscreen.
+   111	
+   112		  Say Y here if you have a Accutouch 2216 touch controller.
+   113	
+   114	config HID_ACRUX
+   115		tristate "ACRUX game controller support"
+   116		depends on HID
+   117		help
+   118		Say Y here if you want to enable support for ACRUX game controllers.
+   119	
+   120	config HID_ACRUX_FF
+   121		bool "ACRUX force feedback support"
+   122		depends on HID_ACRUX
+   123		select INPUT_FF_MEMLESS
+   124		help
+   125		Say Y here if you want to enable force feedback support for ACRUX
+   126		game controllers.
+   127	
+   128	config HID_APPLE
+   129		tristate "Apple {i,Power,Mac}Books"
+   130		depends on HID
+   131		depends on LEDS_CLASS
+   132		depends on NEW_LEDS
+   133		default !EXPERT
+   134		help
+   135		Support for some Apple devices which less or more break
+   136		HID specification.
+   137	
+   138		Say Y here if you want support for keyboards of	Apple iBooks, PowerBooks,
+   139		MacBooks, MacBook Pros and Apple Aluminum.
+   140	
+   141	config HID_APPLEIR
+   142		tristate "Apple infrared receiver"
+   143		depends on (USB_HID)
+   144		help
+   145		Support for Apple infrared remote control. All the Apple computers from
+   146		  2005 onwards include such a port, except the unibody Macbook (2009),
+   147		  and Mac Pros. This receiver is also used in the Apple TV set-top box
+   148		  prior to the 2010 model.
+   149	
+   150		Say Y here if you want support for Apple infrared remote control.
+   151	
+   152	config HID_ASUS
+   153		tristate "Asus"
+   154		depends on USB_HID
+   155		depends on LEDS_CLASS
+   156		depends on ASUS_WMI || ASUS_WMI=n
+   157		select POWER_SUPPLY
+   158		help
+   159		Support for Asus notebook built-in keyboard and touchpad via i2c, and
+   160		the Asus Republic of Gamers laptop keyboard special keys.
+   161	
+   162		Supported devices:
+   163		- EeeBook X205TA
+   164		- VivoBook E200HA
+   165		- GL553V series
+   166		- GL753V series
+   167	
+   168	config HID_AUREAL
+   169		tristate "Aureal"
+   170		depends on HID
+   171		help
+   172		Support for Aureal Cy se W-01RN Remote Controller and other Aureal derived remotes.
+   173	
+   174	config HID_BELKIN
+   175		tristate "Belkin Flip KVM and Wireless keyboard"
+   176		depends on HID
+   177		default !EXPERT
+   178		help
+   179		Support for Belkin Flip KVM and Wireless keyboard.
+   180	
+   181	config HID_BETOP_FF
+   182		tristate "Betop Production Inc. force feedback support"
+   183		depends on USB_HID
+   184		select INPUT_FF_MEMLESS
+   185		help
+   186		Say Y here if you want to enable force feedback support for devices by
+   187		BETOP Production Ltd.
+   188		Currently the following devices are known to be supported:
+   189		 - BETOP 2185 PC & BFM MODE
+   190	
+   191	config HID_BIGBEN_FF
+   192		tristate "BigBen Interactive Kids' gamepad support"
+   193		depends on USB_HID
+   194		depends on NEW_LEDS
+   195		depends on LEDS_CLASS
+   196		select INPUT_FF_MEMLESS
+   197		help
+   198		  Support for the "Kid-friendly Wired Controller" PS3OFMINIPAD
+   199		  gamepad made by BigBen Interactive, originally sold as a PS3
+   200		  accessory. This driver fixes input mapping and adds support for
+   201		  force feedback effects and LEDs on the device.
+   202	
+   203	config HID_CHERRY
+   204		tristate "Cherry Cymotion keyboard"
+   205		depends on HID
+   206		default !EXPERT
+   207		help
+   208		Support for Cherry Cymotion keyboard.
+   209	
+   210	config HID_CHICONY
+   211		tristate "Chicony devices"
+   212		depends on USB_HID
+   213		default !EXPERT
+   214		help
+   215		Support for Chicony Tactical pad and special keys on Chicony keyboards.
+   216	
+   217	config HID_CORSAIR
+   218		tristate "Corsair devices"
+   219		depends on USB_HID && LEDS_CLASS
+   220		help
+   221		Support for Corsair devices that are not fully compliant with the
+   222		HID standard.
+   223	
+   224		Supported devices:
+   225		- Vengeance K90
+   226		- Scimitar PRO RGB
+   227	
+   228	config HID_COUGAR
+   229		tristate "Cougar devices"
+   230		depends on HID
+   231		help
+   232		Support for Cougar devices that are not fully compliant with the
+   233		HID standard.
+   234	
+   235		Supported devices:
+   236		- Cougar 500k Gaming Keyboard
+   237	
+   238	config HID_MACALLY
+   239		tristate "Macally devices"
+   240		depends on HID
+   241		help
+   242		Support for Macally devices that are not fully compliant with the
+   243		HID standard.
+   244	
+   245		supported devices:
+   246		- Macally ikey keyboard
+   247	
+   248	config HID_PRODIKEYS
+   249		tristate "Prodikeys PC-MIDI Keyboard support"
+   250		depends on USB_HID && SND
+   251		select SND_RAWMIDI
+   252		help
+   253		Support for Prodikeys PC-MIDI Keyboard device support.
+   254		Say Y here to enable support for this device.
+   255		- Prodikeys PC-MIDI keyboard.
+   256		  The Prodikeys PC-MIDI acts as a USB Audio device, with one MIDI
+   257		  input and one MIDI output. These MIDI jacks appear as
+   258		  a sound "card" in the ALSA sound system.
+   259		  Note: if you say N here, this device will still function as a basic
+   260		  multimedia keyboard, but will lack support for the musical keyboard
+   261		  and some additional multimedia keys.
+   262	
+   263	config HID_CMEDIA
+   264		tristate "CMedia audio chips"
+   265		depends on HID
+   266		help
+   267		Support for CMedia CM6533 HID audio jack controls
+   268	        and HS100B mute buttons.
+   269	
+   270	config HID_CP2112
+   271		tristate "Silicon Labs CP2112 HID USB-to-SMBus Bridge support"
+   272		depends on USB_HID && HIDRAW && I2C && GPIOLIB
+   273		select GPIOLIB_IRQCHIP
+   274		help
+   275		Support for Silicon Labs CP2112 HID USB to SMBus Master Bridge.
+   276		This is a HID device driver which registers as an i2c adapter
+   277		and gpiochip to expose these functions of the CP2112. The
+   278		customizable USB descriptor fields are exposed as sysfs attributes.
+   279	
+   280	config HID_CREATIVE_SB0540
+   281		tristate "Creative SB0540 infrared receiver"
+   282		depends on USB_HID
+   283		help
+   284		Support for Creative infrared SB0540-compatible remote controls, such
+   285		as the RM-1500 and RM-1800 remotes.
+   286	
+   287		Say Y here if you want support for Creative SB0540 infrared receiver.
+   288	
+   289	config HID_CYPRESS
+   290		tristate "Cypress mouse and barcode readers"
+   291		depends on HID
+   292		default !EXPERT
+   293		help
+   294		Support for cypress mouse and barcode readers.
+   295	
+   296	config HID_DRAGONRISE
+   297		tristate "DragonRise Inc. game controller"
+   298		depends on HID
+   299		help
+   300		Say Y here if you have DragonRise Inc. game controllers.
+   301		These might be branded as:
+   302		- Tesun USB-703
+   303		- Media-tech MT1504 "Rogue"
+   304		- DVTech JS19 "Gear"
+   305		- Defender Game Master
+   306	
+   307	config DRAGONRISE_FF
+   308		bool "DragonRise Inc. force feedback"
+   309		depends on HID_DRAGONRISE
+   310		select INPUT_FF_MEMLESS
+   311		help
+   312		Say Y here if you want to enable force feedback support for DragonRise Inc.
+   313		game controllers.
+   314	
+   315	config HID_EMS_FF
+   316		tristate "EMS Production Inc. force feedback support"
+   317		depends on HID
+   318		select INPUT_FF_MEMLESS
+   319		help
+   320		Say Y here if you want to enable force feedback support for devices by
+   321		EMS Production Ltd.
+   322		Currently the following devices are known to be supported:
+   323		 - Trio Linker Plus II
+   324	
+   325	config HID_ELAN
+   326		tristate "ELAN USB Touchpad Support"
+   327		depends on LEDS_CLASS && USB_HID
+   328		help
+   329		Say Y to enable support for the USB ELAN touchpad
+   330		Currently the following devices are known to be supported:
+   331		 - HP Pavilion X2 10-p0XX.
+   332	
+   333	config HID_ELECOM
+   334		tristate "ELECOM HID devices"
+   335		depends on HID
+   336		help
+   337		Support for ELECOM devices:
+   338		  - BM084 Bluetooth Mouse
+   339		  - EX-G Trackballs (M-XT3DRBK, M-XT3URBK)
+   340		  - DEFT Trackballs (M-DT1DRBK, M-DT1URBK, M-DT2DRBK, M-DT2URBK)
+   341		  - HUGE Trackballs (M-HT1DRBK, M-HT1URBK)
+   342	
+   343	config HID_ELO
+   344		tristate "ELO USB 4000/4500 touchscreen"
+   345		depends on USB_HID
+   346		help
+   347		Support for the ELO USB 4000/4500 touchscreens. Note that this is for
+   348		different devices than those handled by CONFIG_TOUCHSCREEN_USB_ELO.
+   349	
+   350	config HID_EZKEY
+   351		tristate "Ezkey BTC 8193 keyboard"
+   352		depends on HID
+   353		default !EXPERT
+   354		help
+   355		Support for Ezkey BTC 8193 keyboard.
+   356	
+   357	config HID_FT260
+   358		tristate "FTDI FT260 USB HID to I2C host support"
+   359		depends on USB_HID && HIDRAW && I2C
+   360		help
+   361		  Provides I2C host adapter functionality over USB-HID through FT260
+   362		  device. The customizable USB descriptor fields are exposed as sysfs
+   363		  attributes.
+   364	
+   365		  To compile this driver as a module, choose M here: the module
+   366		  will be called hid-ft260.
+   367	
+   368	config HID_GEMBIRD
+   369		tristate "Gembird Joypad"
+   370		depends on HID
+   371		help
+   372		Support for Gembird JPD-DualForce 2.
+   373	
+   374	config HID_GFRM
+   375		tristate "Google Fiber TV Box remote control support"
+   376		depends on HID
+   377		help
+   378		Support for Google Fiber TV Box remote controls
+   379	
+   380	config HID_GLORIOUS
+   381		tristate "Glorious PC Gaming Race mice"
+   382		depends on HID
+   383		help
+   384		  Support for Glorious PC Gaming Race mice such as
+   385		  the Glorious Model O, O- and D.
+   386	
+   387	config HID_HOLTEK
+   388		tristate "Holtek HID devices"
+   389		depends on USB_HID
+   390		help
+   391		Support for Holtek based devices:
+   392		  - Holtek On Line Grip based game controller
+   393		  - Trust GXT 18 Gaming Keyboard
+   394		  - Sharkoon Drakonia / Perixx MX-2000 gaming mice
+   395		  - Tracer Sniper TRM-503 / NOVA Gaming Slider X200 /
+   396		    Zalman ZM-GM1
+   397		  - SHARKOON DarkGlider Gaming mouse
+   398		  - LEETGION Hellion Gaming Mouse
+   399	
+   400	config HOLTEK_FF
+   401		bool "Holtek On Line Grip force feedback support"
+   402		depends on HID_HOLTEK
+   403		select INPUT_FF_MEMLESS
+   404		help
+   405		  Say Y here if you have a Holtek On Line Grip based game controller
+   406		  and want to have force feedback support for it.
+   407	
+   408	config HID_GOOGLE_ATRUS
+   409		tristate "Google Hangouts Meet Speakermic"
+   410		depends on USB_HID
+   411		---help---
+ > 412		This selects a driver for the Google Hangouts Meet Speakermic.
+   413	
+   414		This driver works around a problem with the HID usage sent by this
+   415		device for the mute button. It prevents key events from being generated
+   416		for that HID usage since they would be incorrect.
+   417	
+   418		Say Y here if you have a Google Hangouts Meet Speakermic.
+   419	
 
 -- 
 0-DAY CI Kernel Test Service
