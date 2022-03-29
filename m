@@ -1,142 +1,165 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B728B29A2
-	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 22:02:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648591353; x=1680127353;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kE4i7O3iNpfpPPdlilDl2xcDaCDRhO5Bp1CRJr/0xDg=;
-  b=iTEWGHnyYr36wrV/cOV0/Vr66genhsCYB306kE/eY8i6Sfe9drV8sntX
-   1HGX3Hx92SbZaMizsgBj3wzIIFvwz1UEMXszZWKQrD3HNNX1SaawcEp8G
-   2C2Ofw4FCP4Uk9RmTGyHx/Bw7kh0p6MHIZrEukvHTEJx2tW9OOgQiWc/Q
-   wnVCspUJRY1plqEA90o+5l/82VcgODbSC+QY/ls/3BltFWtEnsODHyiU4
-   1XtWQLYZiZNkmOsPZ1JIdXiaoJdNjLWsj1GFiaDy+4Q4RRP70Qqyg7kBc
-   HGkT3bbB7EUW9HmwbnTYHYg1QiqHhF+U585ZJA+UTh7iHPDQnPmF9l515
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="258212069"
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="258212069"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 15:02:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="503070367"
-Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 29 Mar 2022 15:02:29 -0700
-Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nZJv2-0000iU-Ts; Tue, 29 Mar 2022 22:02:28 +0000
-Date: Wed, 30 Mar 2022 06:02:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Leon Romanovsky <leonro@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Raed Salem <raeds@nvidia.com>
-Subject: [ammarfaizi2-block:mellanox/linux/queue-next 58/75]
- drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_fs.c:133:38: warning:
- variable 'ft' is uninitialized when used here
-Message-ID: <202203300512.PH9IjvZr-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589B729A2
+	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 22:10:13 +0000 (UTC)
+Received: by mail-lj1-f180.google.com with SMTP id h11so25279057ljb.2
+        for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 15:10:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/LvBYeYfBoZJc79yYSPnS826rdgV+cPYE10MJAFxYNM=;
+        b=dOVvQA7kSwT12KogfeblNCFZmeDnP0NcO+zbV7mdC0pzrgfwwE1wjt+N4N+67ecJe6
+         6fwZ3iHx48LSpVSsdXdq2LUiLOuQvq608Q+dmRZOKB3y3Hf6H8b0vGCa7no/JxyksZ2w
+         dXedeMsxaKKschQxtL/GLo//4AK3cX+O2t43NEc+ADNU3OF2WqpKYYkUh7NPsOWqoLUm
+         Q28Ir3ot5WZd9ccsvFza8pd5KSDfPbmV5pbvX6rc+PKB8TqXi0eJX7JUZF3PRaLcjdGL
+         Gb686CapS849MYx4C7mP738nht8RYJ4mm545HfK9Yz4JVK2aNYXa+VITjf8f67tmPj/7
+         hTAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/LvBYeYfBoZJc79yYSPnS826rdgV+cPYE10MJAFxYNM=;
+        b=qjq5c4w89u+Xf4D3sZMVn/N30gpU6/P5CWyKzesZ2qoOSyNnje1eIQuPaTp3lHV7X0
+         WJBkweRxkBksiC4qzOxCGNiukHbmq1x59xovtANbERXWVYu5icX7o2T0NIZTfth0ydFz
+         vVb8pYgpBlyyEY6mwyQaEwnqJ2jcjX1A+v9wDIGp0MCkbMGmq/7dMPkJiImmFC/NKk42
+         RUucLVvRjpxp3gLPljwPd/HHO4ryHpf/qcBg3gfD4rZk2NQ+d5HdihbjOSMQ4mzXFM+H
+         blBDb+Jtn5xDfafFi+pgVAfFToROt8Tt11N0DKO+XptdQGAM6gQozRNqNYiCTmGAKN8j
+         QMjQ==
+X-Gm-Message-State: AOAM532b3LxlSHuYLRJeMis/g7gEzEVGK5KyCDqN40m9U/oR1xw8iqA9
+	X6U/+vJB2csJ+HlcGxq8dH1pCNjqBR9AwytdJo2f6g==
+X-Google-Smtp-Source: ABdhPJwcmlQ2nui24j4yCidYZBTwVR2xC8LhRv9e0j02XK2Dd2nYOdr7NuZ5Mz3G4K6ccst2RQl5G043wQTyuqLjXys=
+X-Received: by 2002:a2e:7808:0:b0:24a:eacb:ab9f with SMTP id
+ t8-20020a2e7808000000b0024aeacbab9fmr7505ljc.468.1648591811035; Tue, 29 Mar
+ 2022 15:10:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220329212946.2861648-1-ndesaulniers@google.com> <CAKwvOdmsnVsW46pTZYCNu-bx5c-aJ8ARMCOsYeMmQHpAw3PtPg@mail.gmail.com>
+In-Reply-To: <CAKwvOdmsnVsW46pTZYCNu-bx5c-aJ8ARMCOsYeMmQHpAw3PtPg@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 29 Mar 2022 15:09:59 -0700
+Message-ID: <CAKwvOdnJB5u96fm1w-R-VUayvhq58EQeqZst32NDRscK17Z8pQ@mail.gmail.com>
+Subject: Re: [PATCH] net, uapi: remove inclusion of arpa/inet.h
+To: Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
+	tipc-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, David Howells <dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/ammarfaizi2/linux-block mellanox/linux/queue-next
-head:   e38dcd0822f6663f12798eb3b0273a0a77f3c286
-commit: 75f668fca4309df2dd7c1bf49d9489fbb7b049f6 [58/75] net/mlx5: Make sure that no dangling IPsec FS pointers exist
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220330/202203300512.PH9IjvZr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/75f668fca4309df2dd7c1bf49d9489fbb7b049f6
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block mellanox/linux/queue-next
-        git checkout 75f668fca4309df2dd7c1bf49d9489fbb7b049f6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/ net/netfilter/
+On Tue, Mar 29, 2022 at 2:50 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Tue, Mar 29, 2022 at 2:29 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > Testing out CONFIG_UAPI_HEADER_TEST=y with a prebuilt Bionic sysroot
+> > from Android's SDK, I encountered an error:
+> >
+> >   HDRTEST usr/include/linux/fsi.h
+> > In file included from <built-in>:1:
+> > In file included from ./usr/include/linux/tipc_config.h:46:
+> > prebuilts/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/arpa/inet.h:39:1:
+> > error: unknown type name 'in_addr_t'
+> > in_addr_t inet_addr(const char* __s);
+> > ^
+>
+> Oh, this might not quite be the correct fix for this particular issue.
+>
+> Cherry picking this diff back into my Android kernel tree, I now observe:
+>   HDRTEST usr/include/linux/tipc_config.h
+> In file included from <built-in>:1:
+> ./usr/include/linux/tipc_config.h:268:4: error: implicit declaration
+> of function 'ntohs' [-Werror,-Wimplicit-function-declaration]
+>                 (ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
+>                  ^
+>
+> Is there more than one byteorder.h? Oh, I see what I did; ntohs is defined in
+> linux/byteorder/generic.h
+> not
+> usr/include/asm/byteorder.h
+> Sorry, I saw `byteorder` and mixed up the path with the filename.
+>
+> So rather than just remove the latter, I should additionally be adding
+> the former. Though that then produces
+>
+> common/include/linux/byteorder/generic.h:146:9: error: implicit
+> declaration of function '__cpu_to_le16'
+> [-Werror,-Wimplicit-function-declaration]
+>         *var = cpu_to_le16(le16_to_cpu(*var) + val);
+>                ^
+>
+> Oh?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Should there be a definition of ntohs (and friends) under
+include/uapi/linux/ somewhere, rather than have the kernel header
+include/uapi/linux/tipc_config.h depend on the libc header
+arpa/inet.h?
 
-All warnings (new ones prefixed by >>):
+It looks like we already have
+include/uapi/linux/byteorder/{big|little}_endian.h to define
+__be16_to_cpu and friends, just no definition of ntohs under
+include/uapi/linux/.
 
->> drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_fs.c:133:38: warning: variable 'ft' is uninitialized when used here [-Wuninitialized]
-           miss_group = mlx5_create_flow_group(ft, flow_group_in);
-                                               ^~
-   drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_fs.c:119:28: note: initialize the variable 'ft' to silence this warning
-           struct mlx5_flow_table *ft;
-                                     ^
-                                      = NULL
-   1 warning generated.
+Also, it looks like include/uapi/linux/ has definitions for
+__constant_ntohs in
+include/uapi/linux/byteorder/{big|little}_endian.h.  Should those 2
+headers also define ntohs (and friends) unprefixed, i.e. the versions
+that don't depend on constant expressions?
+
+(I wish there was an entry in MAINTAINERS for UAPI questions like this...)
+
+>
+> >
+> > This is because Bionic has a bug in its inclusion chain. I sent a patch
+> > to fix that, but looking closer at include/uapi/linux/tipc_config.h,
+> > there's a comment that it includes arpa/inet.h for ntohs; but ntohs is
+> > already defined in include/linux/byteorder/generic.h which is already
+> > included in include/uapi/linux/tipc_config.h. There are no __KERNEL__
+> > guards on include/linux/byteorder/generic.h's definition of ntohs. So
+> > besides fixing Bionic, it looks like we can additionally remove this
+> > unnecessary header inclusion.
+> >
+> > Link: https://android-review.googlesource.com/c/platform/bionic/+/2048127
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > ---
+> >  include/uapi/linux/tipc_config.h | 4 ----
+> >  1 file changed, 4 deletions(-)
+> >
+> > diff --git a/include/uapi/linux/tipc_config.h b/include/uapi/linux/tipc_config.h
+> > index 4dfc05651c98..b38374d5f192 100644
+> > --- a/include/uapi/linux/tipc_config.h
+> > +++ b/include/uapi/linux/tipc_config.h
+> > @@ -43,10 +43,6 @@
+> >  #include <linux/tipc.h>
+> >  #include <asm/byteorder.h>
+> >
+> > -#ifndef __KERNEL__
+> > -#include <arpa/inet.h> /* for ntohs etc. */
+> > -#endif
+> > -
+> >  /*
+> >   * Configuration
+> >   *
+> >
+> > base-commit: 5efabdadcf4a5b9a37847ecc85ba71cf2eff0fcf
+> > prerequisite-patch-id: 0c2abf2af8051f4b37a70ef11b7d2fc2a3ec7181
+> > --
+> > 2.35.1.1021.g381101b075-goog
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
 
-vim +/ft +133 drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_fs.c
-
-5e466345291a91 Huy Nguyen      2020-06-05  110  
-5e466345291a91 Huy Nguyen      2020-06-05  111  static int rx_fs_create(struct mlx5e_priv *priv,
-5e466345291a91 Huy Nguyen      2020-06-05  112  			struct mlx5e_accel_fs_esp_prot *fs_prot)
-5e466345291a91 Huy Nguyen      2020-06-05  113  {
-5e466345291a91 Huy Nguyen      2020-06-05  114  	int inlen = MLX5_ST_SZ_BYTES(create_flow_group_in);
-5e466345291a91 Huy Nguyen      2020-06-05  115  	struct mlx5_flow_group *miss_group;
-5e466345291a91 Huy Nguyen      2020-06-05  116  	struct mlx5_flow_handle *miss_rule;
-5e466345291a91 Huy Nguyen      2020-06-05  117  	MLX5_DECLARE_FLOW_ACT(flow_act);
-5e466345291a91 Huy Nguyen      2020-06-05  118  	struct mlx5_flow_spec *spec;
-5e466345291a91 Huy Nguyen      2020-06-05  119  	struct mlx5_flow_table *ft;
-5e466345291a91 Huy Nguyen      2020-06-05  120  	u32 *flow_group_in;
-75f668fca4309d Leon Romanovsky 2022-03-10  121  	int err;
-5e466345291a91 Huy Nguyen      2020-06-05  122  
-5e466345291a91 Huy Nguyen      2020-06-05  123  	flow_group_in = kvzalloc(inlen, GFP_KERNEL);
-5e466345291a91 Huy Nguyen      2020-06-05  124  	spec = kvzalloc(sizeof(*spec), GFP_KERNEL);
-5e466345291a91 Huy Nguyen      2020-06-05  125  	if (!flow_group_in || !spec) {
-5e466345291a91 Huy Nguyen      2020-06-05  126  		err = -ENOMEM;
-75f668fca4309d Leon Romanovsky 2022-03-10  127  		goto err_alloc;
-5e466345291a91 Huy Nguyen      2020-06-05  128  	}
-5e466345291a91 Huy Nguyen      2020-06-05  129  
-5e466345291a91 Huy Nguyen      2020-06-05  130  	/* Create miss_group */
-5e466345291a91 Huy Nguyen      2020-06-05  131  	MLX5_SET(create_flow_group_in, flow_group_in, start_flow_index, ft->max_fte - 1);
-5e466345291a91 Huy Nguyen      2020-06-05  132  	MLX5_SET(create_flow_group_in, flow_group_in, end_flow_index, ft->max_fte - 1);
-5e466345291a91 Huy Nguyen      2020-06-05 @133  	miss_group = mlx5_create_flow_group(ft, flow_group_in);
-5e466345291a91 Huy Nguyen      2020-06-05  134  	if (IS_ERR(miss_group)) {
-5e466345291a91 Huy Nguyen      2020-06-05  135  		err = PTR_ERR(miss_group);
-5e466345291a91 Huy Nguyen      2020-06-05  136  		netdev_err(priv->netdev, "fail to create ipsec rx miss_group err=%d\n", err);
-75f668fca4309d Leon Romanovsky 2022-03-10  137  		goto err_alloc;
-5e466345291a91 Huy Nguyen      2020-06-05  138  	}
-5e466345291a91 Huy Nguyen      2020-06-05  139  	fs_prot->miss_group = miss_group;
-5e466345291a91 Huy Nguyen      2020-06-05  140  
-5e466345291a91 Huy Nguyen      2020-06-05  141  	/* Create miss rule */
-5e466345291a91 Huy Nguyen      2020-06-05  142  	miss_rule = mlx5_add_flow_rules(ft, spec, &flow_act, &fs_prot->default_dest, 1);
-5e466345291a91 Huy Nguyen      2020-06-05  143  	if (IS_ERR(miss_rule)) {
-5e466345291a91 Huy Nguyen      2020-06-05  144  		err = PTR_ERR(miss_rule);
-5e466345291a91 Huy Nguyen      2020-06-05  145  		netdev_err(priv->netdev, "fail to create ipsec rx miss_rule err=%d\n", err);
-75f668fca4309d Leon Romanovsky 2022-03-10  146  		goto err_add_rule;
-5e466345291a91 Huy Nguyen      2020-06-05  147  	}
-5e466345291a91 Huy Nguyen      2020-06-05  148  	fs_prot->miss_rule = miss_rule;
-75f668fca4309d Leon Romanovsky 2022-03-10  149  	return 0;
-5e466345291a91 Huy Nguyen      2020-06-05  150  
-75f668fca4309d Leon Romanovsky 2022-03-10  151  err_add_rule:
-75f668fca4309d Leon Romanovsky 2022-03-10  152  	mlx5_destroy_flow_group(fs_prot->miss_group);
-75f668fca4309d Leon Romanovsky 2022-03-10  153  err_alloc:
-22db4c24452a66 Denis Efremov   2020-09-21  154  	kvfree(flow_group_in);
-22db4c24452a66 Denis Efremov   2020-09-21  155  	kvfree(spec);
-5e466345291a91 Huy Nguyen      2020-06-05  156  	return err;
-5e466345291a91 Huy Nguyen      2020-06-05  157  }
-5e466345291a91 Huy Nguyen      2020-06-05  158  
-
-:::::: The code at line 133 was first introduced by commit
-:::::: 5e466345291a91d1722e7198497198becda29e22 net/mlx5e: IPsec: Add IPsec steering in local NIC RX
-
-:::::: TO: Huy Nguyen <huyn@mellanox.com>
-:::::: CC: Saeed Mahameed <saeedm@mellanox.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
