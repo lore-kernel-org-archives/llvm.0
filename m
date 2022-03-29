@@ -1,42 +1,47 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF06917C9
-	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 01:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E399F20E5
+	for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 02:05:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648517083; x=1680053083;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Mu17qYsjkCHyz1+QOh7SLV+fK9EV9Jl13PPWrJf+Dmk=;
-  b=c5CneQSLlHDWPYZD25jmiZKRrKlVvT2SFZkubN6RDpnkxFhuxI/NR+/c
-   FH9PtB408Z+Dof/JA42PiaFeihmJ8SusdcQ8/56k5iApP+puibUqeGW6m
-   hd/icPqfMGk5CiNLz8l4/U5+UapoVoUmtzEdxMRvlgYNp48Ymgx0f8/L6
-   BRJpTnOspyVLGe4f3t0a0zKWlWRtXRcnUF0FZRKJYxTWpmJs4vV6WBOfG
-   SouvtSzM/wYyIXTSCTADWIwb0xb/tE9VWAzQ79ZW9wK3hECa8W0lSbHai
-   XxftdwVQkI2a2M77z98LQVSMAO6t6DeH/ykjCW/rdGoiBd6nrMbUuqtdZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="258851494"
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="258851494"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 18:24:42 -0700
+  t=1648519545; x=1680055545;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MWNSes+po7qtmcKL2eyYw8+6EKH/dTSQvuKMYY4CxYQ=;
+  b=K3ZoTezA3GxTjx4yoxPtl2bZxpmzUYS3eIyEiZjRZ0BY8Xxg/s5HM7F+
+   ShFTBOM1tiLm7aWmjzkynH6z5/iM2xGFylVFmo4q38zDnPcJ9eS/kZWyO
+   3xS5dXLyc8JVK8kOjqQqF/oTyZmiH/fgSRLM7PILJdUpZACK2EpRLiivb
+   TlcDZvwhy0SbRzYTTB95gTpelTbA8gMhGKtnCdP561K109JCsNh4VTttE
+   o+wQUsdGO1QO7FIJ0YrfSh6OoZXPoVsA/xQbf1zD7c1KABTYXueUINwXI
+   sJpkES3es3qYr0hW5HdmuN/osqk9byVI/UGqPusZrtgGqthDi7QVBgmXA
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="257970551"
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="257970551"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 19:05:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="546179180"
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="521248155"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2022 18:24:41 -0700
+  by orsmga006.jf.intel.com with ESMTP; 28 Mar 2022 19:05:42 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nZ0bA-0002UR-IL; Tue, 29 Mar 2022 01:24:40 +0000
-Date: Tue, 29 Mar 2022 09:24:17 +0800
+	id 1nZ1Er-0002WM-OE; Tue, 29 Mar 2022 02:05:41 +0000
+Date: Tue, 29 Mar 2022 10:05:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Pirko <jiri@nvidia.com>
+To: Marek Vasut <marex@denx.de>, dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_linecards 84/97]
- drivers/net/netdevsim/dev.c:638:14: error: too many arguments to function
- call, expected 3, have 4
-Message-ID: <202203290946.i4BOVfVX-lkp@intel.com>
+	Marek Vasut <marex@denx.de>,
+	Neil Armstrong <narmstrong@baylibre.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Sam Ravnborg <sam@ravnborg.org>, Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH v4 10/11] drm/bridge: tc358767: Split tc_set_video_mode()
+ into common and (e)DP part
+Message-ID: <202203290924.MYL8dU7I-lkp@intel.com>
+References: <20220328214324.252472-11-marex@denx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,93 +50,135 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220328214324.252472-11-marex@denx.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
-head:   7acc15a4d5cd40bc4ab8bafe3f376adacd6f4bb2
-commit: 9f172debd1c3d2de76650ee4e20aaa1bc31bb79e [84/97] netdevsim: allow port objects to be linked with line cards
-config: i386-randconfig-a014-20220328 (https://download.01.org/0day-ci/archive/20220329/202203290946.i4BOVfVX-lkp@intel.com/config)
+Hi Marek,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.17 next-20220328]
+[cannot apply to airlied/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Vasut/drm-bridge-tc358767-Add-DSI-to-DPI-mode-support/20220329-054627
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: hexagon-randconfig-r045-20220327 (https://download.01.org/0day-ci/archive/20220329/202203290924.MYL8dU7I-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/9f172debd1c3d2de76650ee4e20aaa1bc31bb79e
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
-        git checkout 9f172debd1c3d2de76650ee4e20aaa1bc31bb79e
+        # https://github.com/intel-lab-lkp/linux/commit/294c331d772539772ae87613ae1990860bbbc6ff
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Marek-Vasut/drm-bridge-tc358767-Add-DSI-to-DPI-mode-support/20220329-054627
+        git checkout 294c331d772539772ae87613ae1990860bbbc6ff
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/netdevsim/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/bridge/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/netdevsim/dev.c:638:14: error: too many arguments to function call, expected 3, have 4
-                                             NULL, i);
-                                                   ^
-   drivers/net/netdevsim/dev.c:612:1: note: '__nsim_dev_port_add' declared here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
->> drivers/net/netdevsim/dev.c:651:39: error: too many arguments to function call, expected single argument 'nsim_dev_port', have 3 arguments
-                           __nsim_dev_port_del(nsim_dev_port, NULL, i);
-                           ~~~~~~~~~~~~~~~~~~~                ^~~~~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^
-   drivers/net/netdevsim/dev.c:614:13: note: '__nsim_dev_port_del' declared here
-   static void __nsim_dev_port_del(struct nsim_dev_port *nsim_dev_port);
+>> drivers/gpu/drm/bridge/tc358767.c:741:6: warning: variable 'max_tu_symbol' set but not used [-Wunused-but-set-variable]
+           int max_tu_symbol;
                ^
->> drivers/net/netdevsim/dev.c:1393:12: error: conflicting types for '__nsim_dev_port_add'
-   static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-              ^
-   drivers/net/netdevsim/dev.c:612:1: note: previous declaration is here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
-   drivers/net/netdevsim/dev.c:1503:14: error: too many arguments to function call, expected 3, have 4
-                                             NULL, i);
-                                                   ^
-   drivers/net/netdevsim/dev.c:612:1: note: '__nsim_dev_port_add' declared here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
-   drivers/net/netdevsim/dev.c:1839:27: error: too many arguments to function call, expected 3, have 4
-                                             nsim_dev_linecard, port_index);
-                                                                ^~~~~~~~~~
-   drivers/net/netdevsim/dev.c:612:1: note: '__nsim_dev_port_add' declared here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
-   5 errors generated.
+   1 warning generated.
 
 
-vim +638 drivers/net/netdevsim/dev.c
+vim +/max_tu_symbol +741 drivers/gpu/drm/bridge/tc358767.c
 
-   629	
-   630	static int nsim_esw_switchdev_enable(struct nsim_dev *nsim_dev,
-   631					     struct netlink_ext_ack *extack)
-   632	{
-   633		struct nsim_dev_port *nsim_dev_port, *tmp;
-   634		int i, err;
-   635	
-   636		for (i = 0; i < nsim_dev_get_vfs(nsim_dev); i++) {
-   637			err = __nsim_dev_port_add(nsim_dev, NSIM_DEV_PORT_TYPE_VF,
- > 638						  NULL, i);
-   639			if (err) {
-   640				NL_SET_ERR_MSG_MOD(extack, "Failed to initialize VFs' netdevsim ports");
-   641				pr_err("Failed to initialize VF id=%d. %d.\n", i, err);
-   642				goto err_port_add_vfs;
-   643			}
-   644		}
-   645		nsim_dev->esw_mode = DEVLINK_ESWITCH_MODE_SWITCHDEV;
-   646		return 0;
-   647	
-   648	err_port_add_vfs:
-   649		list_for_each_entry_safe(nsim_dev_port, tmp, &nsim_dev->port_list, list)
-   650			if (nsim_dev_port_is_vf(nsim_dev_port))
- > 651				__nsim_dev_port_del(nsim_dev_port, NULL, i);
-   652		return err;
-   653	}
-   654	
+7caff0fc4296eb Andrey Gusakov   2016-07-13  736  
+294c331d772539 Marek Vasut      2022-03-28  737  static int tc_set_common_video_mode(struct tc_data *tc,
+63f8f3badf799c Laurent Pinchart 2018-04-06  738  				    const struct drm_display_mode *mode)
+7caff0fc4296eb Andrey Gusakov   2016-07-13  739  {
+7caff0fc4296eb Andrey Gusakov   2016-07-13  740  	int ret;
+7caff0fc4296eb Andrey Gusakov   2016-07-13 @741  	int max_tu_symbol;
+7caff0fc4296eb Andrey Gusakov   2016-07-13  742  
+7caff0fc4296eb Andrey Gusakov   2016-07-13  743  	int left_margin = mode->htotal - mode->hsync_end;
+7caff0fc4296eb Andrey Gusakov   2016-07-13  744  	int right_margin = mode->hsync_start - mode->hdisplay;
+7caff0fc4296eb Andrey Gusakov   2016-07-13  745  	int hsync_len = mode->hsync_end - mode->hsync_start;
+7caff0fc4296eb Andrey Gusakov   2016-07-13  746  	int upper_margin = mode->vtotal - mode->vsync_end;
+7caff0fc4296eb Andrey Gusakov   2016-07-13  747  	int lower_margin = mode->vsync_start - mode->vdisplay;
+7caff0fc4296eb Andrey Gusakov   2016-07-13  748  	int vsync_len = mode->vsync_end - mode->vsync_start;
+fd70c7755bf017 Tomi Valkeinen   2019-09-24  749  	u32 bits_per_pixel = 24;
+fd70c7755bf017 Tomi Valkeinen   2019-09-24  750  	u32 in_bw, out_bw;
+7caff0fc4296eb Andrey Gusakov   2016-07-13  751  
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  752  	/*
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  753  	 * Recommended maximum number of symbols transferred in a transfer unit:
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  754  	 * DIV_ROUND_UP((input active video bandwidth in bytes) * tu_size,
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  755  	 *              (output active video bandwidth in bytes))
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  756  	 * Must be less than tu_size.
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  757  	 */
+fd70c7755bf017 Tomi Valkeinen   2019-09-24  758  
+fd70c7755bf017 Tomi Valkeinen   2019-09-24  759  	in_bw = mode->clock * bits_per_pixel / 8;
+e7dc8d40eea400 Thierry Reding   2019-10-21  760  	out_bw = tc->link.num_lanes * tc->link.rate;
+fd70c7755bf017 Tomi Valkeinen   2019-09-24  761  	max_tu_symbol = DIV_ROUND_UP(in_bw * TU_SIZE_RECOMMENDED, out_bw);
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  762  
+7caff0fc4296eb Andrey Gusakov   2016-07-13  763  	dev_dbg(tc->dev, "set mode %dx%d\n",
+7caff0fc4296eb Andrey Gusakov   2016-07-13  764  		mode->hdisplay, mode->vdisplay);
+7caff0fc4296eb Andrey Gusakov   2016-07-13  765  	dev_dbg(tc->dev, "H margin %d,%d sync %d\n",
+7caff0fc4296eb Andrey Gusakov   2016-07-13  766  		left_margin, right_margin, hsync_len);
+7caff0fc4296eb Andrey Gusakov   2016-07-13  767  	dev_dbg(tc->dev, "V margin %d,%d sync %d\n",
+7caff0fc4296eb Andrey Gusakov   2016-07-13  768  		upper_margin, lower_margin, vsync_len);
+7caff0fc4296eb Andrey Gusakov   2016-07-13  769  	dev_dbg(tc->dev, "total: %dx%d\n", mode->htotal, mode->vtotal);
+7caff0fc4296eb Andrey Gusakov   2016-07-13  770  
+7caff0fc4296eb Andrey Gusakov   2016-07-13  771  
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  772  	/*
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  773  	 * LCD Ctl Frame Size
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  774  	 * datasheet is not clear of vsdelay in case of DPI
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  775  	 * assume we do not need any delay when DPI is a source of
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  776  	 * sync signals
+66d1c3b94d5d59 Andrey Gusakov   2017-11-07  777  	 */
+6d0c38315915d4 Andrey Smirnov   2019-06-18  778  	ret = regmap_write(tc->regmap, VPCTRL0,
+3f072c304c0a7e Andrey Smirnov   2019-06-18  779  			   FIELD_PREP(VSDELAY, 0) |
+7caff0fc4296eb Andrey Gusakov   2016-07-13  780  			   OPXLFMT_RGB888 | FRMSYNC_DISABLED | MSF_DISABLED);
+6d0c38315915d4 Andrey Smirnov   2019-06-18  781  	if (ret)
+6d0c38315915d4 Andrey Smirnov   2019-06-18  782  		return ret;
+6d0c38315915d4 Andrey Smirnov   2019-06-18  783  
+6d0c38315915d4 Andrey Smirnov   2019-06-18  784  	ret = regmap_write(tc->regmap, HTIM01,
+3f072c304c0a7e Andrey Smirnov   2019-06-18  785  			   FIELD_PREP(HBPR, ALIGN(left_margin, 2)) |
+3f072c304c0a7e Andrey Smirnov   2019-06-18  786  			   FIELD_PREP(HPW, ALIGN(hsync_len, 2)));
+6d0c38315915d4 Andrey Smirnov   2019-06-18  787  	if (ret)
+6d0c38315915d4 Andrey Smirnov   2019-06-18  788  		return ret;
+6d0c38315915d4 Andrey Smirnov   2019-06-18  789  
+6d0c38315915d4 Andrey Smirnov   2019-06-18  790  	ret = regmap_write(tc->regmap, HTIM02,
+3f072c304c0a7e Andrey Smirnov   2019-06-18  791  			   FIELD_PREP(HDISPR, ALIGN(mode->hdisplay, 2)) |
+3f072c304c0a7e Andrey Smirnov   2019-06-18  792  			   FIELD_PREP(HFPR, ALIGN(right_margin, 2)));
+6d0c38315915d4 Andrey Smirnov   2019-06-18  793  	if (ret)
+6d0c38315915d4 Andrey Smirnov   2019-06-18  794  		return ret;
+6d0c38315915d4 Andrey Smirnov   2019-06-18  795  
+6d0c38315915d4 Andrey Smirnov   2019-06-18  796  	ret = regmap_write(tc->regmap, VTIM01,
+3f072c304c0a7e Andrey Smirnov   2019-06-18  797  			   FIELD_PREP(VBPR, upper_margin) |
+3f072c304c0a7e Andrey Smirnov   2019-06-18  798  			   FIELD_PREP(VSPR, vsync_len));
+6d0c38315915d4 Andrey Smirnov   2019-06-18  799  	if (ret)
+6d0c38315915d4 Andrey Smirnov   2019-06-18  800  		return ret;
+6d0c38315915d4 Andrey Smirnov   2019-06-18  801  
+6d0c38315915d4 Andrey Smirnov   2019-06-18  802  	ret = regmap_write(tc->regmap, VTIM02,
+3f072c304c0a7e Andrey Smirnov   2019-06-18  803  			   FIELD_PREP(VFPR, lower_margin) |
+3f072c304c0a7e Andrey Smirnov   2019-06-18  804  			   FIELD_PREP(VDISPR, mode->vdisplay));
+6d0c38315915d4 Andrey Smirnov   2019-06-18  805  	if (ret)
+6d0c38315915d4 Andrey Smirnov   2019-06-18  806  		return ret;
+6d0c38315915d4 Andrey Smirnov   2019-06-18  807  
+6d0c38315915d4 Andrey Smirnov   2019-06-18  808  	ret = regmap_write(tc->regmap, VFUEN0, VFUEN); /* update settings */
+6d0c38315915d4 Andrey Smirnov   2019-06-18  809  	if (ret)
+6d0c38315915d4 Andrey Smirnov   2019-06-18  810  		return ret;
+7caff0fc4296eb Andrey Gusakov   2016-07-13  811  
+7caff0fc4296eb Andrey Gusakov   2016-07-13  812  	/* Test pattern settings */
+6d0c38315915d4 Andrey Smirnov   2019-06-18  813  	ret = regmap_write(tc->regmap, TSTCTL,
+3f072c304c0a7e Andrey Smirnov   2019-06-18  814  			   FIELD_PREP(COLOR_R, 120) |
+3f072c304c0a7e Andrey Smirnov   2019-06-18  815  			   FIELD_PREP(COLOR_G, 20) |
+3f072c304c0a7e Andrey Smirnov   2019-06-18  816  			   FIELD_PREP(COLOR_B, 99) |
+3f072c304c0a7e Andrey Smirnov   2019-06-18  817  			   ENI2CFILTER |
+3f072c304c0a7e Andrey Smirnov   2019-06-18  818  			   FIELD_PREP(COLOR_BAR_MODE, COLOR_BAR_MODE_BARS));
+294c331d772539 Marek Vasut      2022-03-28  819  
+6d0c38315915d4 Andrey Smirnov   2019-06-18  820  	return ret;
+294c331d772539 Marek Vasut      2022-03-28  821  }
+294c331d772539 Marek Vasut      2022-03-28  822  
 
 -- 
 0-DAY CI Kernel Test Service
