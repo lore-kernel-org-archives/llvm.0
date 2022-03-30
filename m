@@ -1,122 +1,96 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C0E2F46
-	for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 22:14:04 +0000 (UTC)
-Received: by mail-yb1-f181.google.com with SMTP id f23so8733502ybj.7
-        for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 15:14:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ohUWdk6Jv4uJ7zckc+ZPE6o/UzyPHrqVidE3nB9Y/io=;
-        b=PogmDeYUl/eypsEXkLeet0WhRAoDMh6f38F2N76vij2zPAC8y90JL9MU4vcDEV9LjF
-         7ih2jUnRHHnGY3igDrZvZNMIQb6ywhQZO8ImF9am0UByH4BY+qudLWX6eBGZXg2bds1f
-         fSsvgqRHXHIa61wLRKQXVypCg7kUehZBDuoiRiutFmRQDkqlPty5aYaam5L+NKkLWSYx
-         Fu3345HdTsFJwz/LN3pO76LHXodqtrj0+ZNF9ss24Z+pcaLebrXVVZxaSBuMXYNdO9cL
-         BLeMQoXdPFjyGDPMlCXLQrlMWX4t8q7xcvfuAOox++5c/0xdx9gv+1KfFdQuXhb54SCd
-         L8BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ohUWdk6Jv4uJ7zckc+ZPE6o/UzyPHrqVidE3nB9Y/io=;
-        b=Z5lZUr83lvlK0+iUr9S8vuTMt8K3t5/jhwJ5BEqL/W5/s5PhUefRLnUDcdpgJ8NddV
-         xtROl60V3t3qXuBtvTzQQ3CsvYiMh7lfUfhS/oCnDS6BUpxuSNuyl50ZxVJ7kYtJrYhq
-         +r+DCuMsU8pS4KQvEvjKaQ7s6EQAc5CeK55qa/8k4Y/snTvC0WhFK62HOrSs8tLrQlUd
-         rc1LcTGKFOy/LsRh7w1B5+g5FD1SnAO5AzrlZ26vFEuPbc9PexvD/i1efezT+/RNRiMw
-         U9s2R64zGYsroBNGssmPDl/h20epc1NDtyrHKJrjh+CmO7OY+hD/nfmSdhfMLNBfGN3/
-         SeaA==
-X-Gm-Message-State: AOAM533DPGHEgUEbe8iXSnxBmm17jUi/LyWhD7Mnf/beHIECms6Azv+q
-	bAvjBQoLlHKPiX8IhXznVbK+sa3N6wUw+CPPv69ZVQ==
-X-Google-Smtp-Source: ABdhPJyF7b99kJY78kD00gUjvcpr8Yge4gTbtMxUjw2qC+5vXXsI2OytH/lZhWGiymk5czKjtKawMEb+KwlUc7JzHks=
-X-Received: by 2002:a05:6902:389:b0:633:31c1:d0f7 with SMTP id
- f9-20020a056902038900b0063331c1d0f7mr1766360ybs.543.1648678443446; Wed, 30
- Mar 2022 15:14:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0842F46
+	for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 22:23:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648679026; x=1680215026;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cdyV6ni5B0R2HoQiSpWxTiLJCHRmm/nefjUnGqeXvcU=;
+  b=JzVsoxFOPh/s09VZx0cblv+yocUTzv4hKesfgD/IGtwXgUCnbLyKmFzH
+   N+LEl/g9l45CuoJPF21Qczko5tYTzpgGMFVWYW4aA3qyuWoiMnaNl949C
+   YWXSUeodB0/64UruDTdY6LoxDzCU94dy/FM2Fr9vPWfoL3uLguF0AtDvA
+   XTwimLJUp5wVcA2lW7BEzkiGxRWwowD2n8UaiqwXkVBj77L+H7LiJk+6o
+   tqSVjo9z3YPjTpD9QRo0vnxeQMsTjHBc0xFG8+uydkwbS61pi2RKekDi3
+   qXC2YXJfjH79N/J4y7MrKcX+RMyvzOwR+K3q/qXPVNJBAdB5rqC8G5scM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="241812560"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="241812560"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 15:23:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="586168694"
+Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 30 Mar 2022 15:23:44 -0700
+Received: from kbuild by 56431612eabd with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nZgj9-0000Zo-LY;
+	Wed, 30 Mar 2022 22:23:43 +0000
+Date: Thu, 31 Mar 2022 06:22:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:rostedt/linux-trace/ftrace/core 1/5]
+ include/trace/trace_custom_events.h:38:10: fatal error:
+ 'stages/stage1_defines.h' file not found
+Message-ID: <202203310653.AMWJCqi6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202203301416.uykWxBeR-lkp@intel.com>
-In-Reply-To: <202203301416.uykWxBeR-lkp@intel.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 30 Mar 2022 15:13:52 -0700
-Message-ID: <CAJuCfpG_em1O+11oE0fC4htmKd11ygT_phF5hOjbyfxw68Xq1A@mail.gmail.com>
-Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 5835/5872] mm/compaction.c:766:15: error: redefinition of 'isolate_and_split_free_page'
-To: kernel test robot <lkp@intel.com>
-Cc: Charan Teja Reddy <charante@codeaurora.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	"GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Mar 29, 2022 at 11:32 PM kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
-> head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
-> commit: 8cd9aa93b7269460e8d5e4407738f21fe5d6e720 [5835/5872] ANDROID: implement wrapper for reverse migration
-> config: arm64-randconfig-r036-20220327 (https://download.01.org/0day-ci/archive/20220330/202203301416.uykWxBeR-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://github.com/ammarfaizi2/linux-block/commit/8cd9aa93b7269460e8d5e4407738f21fe5d6e720
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
->         git checkout 8cd9aa93b7269460e8d5e4407738f21fe5d6e720
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> mm/compaction.c:766:15: error: redefinition of 'isolate_and_split_free_page'
->    unsigned long isolate_and_split_free_page(struct page *page,
->                  ^
->    include/linux/compaction.h:241:22: note: previous definition is here
->    static unsigned long isolate_and_split_free_page(struct page *page,
->                         ^
->    1 error generated.
->
+tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/ftrace/core
+head:   025833e54d2b7b031c44642a14df39a67a524b9a
+commit: 7ebdde13050a7d880ef7403fd10c30f5167b6f0b [1/5] tracing: Rename the staging files for trace_events
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220331/202203310653.AMWJCqi6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/7ebdde13050a7d880ef7403fd10c30f5167b6f0b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/ftrace/core
+        git checkout 7ebdde13050a7d880ef7403fd10c30f5167b6f0b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash samples/trace_events/
 
-This issue has been fixed by
-https://android-review.googlesource.com/c/kernel/common/+/1685698
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from samples/trace_events/trace_custom_sched.c:24:
+   In file included from samples/trace_events/./trace_custom_sched.h:96:
+   In file included from include/trace/define_custom_trace.h:55:
+>> include/trace/trace_custom_events.h:38:10: fatal error: 'stages/stage1_defines.h' file not found
+   #include "stages/stage1_defines.h"
+            ^~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
->
-> vim +/isolate_and_split_free_page +766 mm/compaction.c
->
->    765
->  > 766  unsigned long isolate_and_split_free_page(struct page *page,
->    767                                                  struct list_head *list)
->    768  {
->    769          unsigned long isolated;
->    770          unsigned int order;
->    771
->    772          if (!PageBuddy(page))
->    773                  return 0;
->    774
->    775          order = buddy_order(page);
->    776          isolated = __isolate_free_page(page, order);
->    777          if (!isolated)
->    778                  return 0;
->    779
->    780          set_page_private(page, order);
->    781          list_add(&page->lru, list);
->    782
->    783          split_map_pages(list);
->    784
->    785          return isolated;
->    786  }
->    787  EXPORT_SYMBOL_GPL(isolate_and_split_free_page);
->    788
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+vim +38 include/trace/trace_custom_events.h
+
+3a73333fb370f7 Steven Rostedt (Google  2022-03-03  37) 
+3a73333fb370f7 Steven Rostedt (Google  2022-03-03 @38) #include "stages/stage1_defines.h"
+3a73333fb370f7 Steven Rostedt (Google  2022-03-03  39) 
+
+:::::: The code at line 38 was first introduced by commit
+:::::: 3a73333fb370f7b65de9d94c53df503642bda789 tracing: Add TRACE_CUSTOM_EVENT() macro
+
+:::::: TO: Steven Rostedt (Google) <rostedt@goodmis.org>
+:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
