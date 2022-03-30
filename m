@@ -1,43 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0AC52C80
-	for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 21:00:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A892C2F46
+	for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 21:41:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648674017; x=1680210017;
+  t=1648676511; x=1680212511;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8FC2FPhKtM0mTtO05j8fjDdgfsYLuSdSZPWEuv5HJBk=;
-  b=cl6tVKfyz/Nq/n9BohMtbzTKCYG7JZls1ZrH/Htcov0U0074/yKqyqpK
-   P9/Q3CgBvtELKKdVaZiUBMwfa/s0BWbl19ZS7LAb7w+EqxdDuEvv/dQz/
-   urj+tfPxQ9vwbGXjay7Xh9WOo1ynXisYUlCk/rGq1VgWmUXFs3ndbXlb6
-   +XLSNvSWE809mSXVRfkTf9z5TSdXj16orzmVoFWjWvA3+bn+5idxlc5gV
-   lx8LrCSwr9O0HKSD2e6zgGqc6SN7P8h8Z4XT5lv2TK57E45bf4NlWlnid
-   /Pa0wCuABy0bg6YEtflmnJdt7/g1EVH0IlBQaraEeW/C4yYoH9BBP1v4J
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="322827436"
+  bh=f5s+xzgDBJONZVtRIXVk5+pVqalThtgSX+lwS4QrAhg=;
+  b=ZlYaIlYcXiLA0eafeLb51+jFZzp26yZmt+vs/ihSohUkuaJ4tgyq1nSP
+   3GoekUPzUboHXWwJwuYzJGUWk1Z9kii3EAEiq13VoBnBuJHwCah43jJNf
+   iv5QMrQWVs177segDnSxkeiAmXBZwZByDOBgFERFhMhWzkibhhivLowIl
+   TU4Y10nU6zoTB2fJo48S8HwOJacxqrmCq9wgd6TVnQ5PmZ38ccacAa8aC
+   exb3Kt++TBLR4qCc0hEu2P6CxCxPIadPJpIhZADmoGT6Tp8HPtPHcBlJ2
+   OEkJnIF+sPdIeSnqqWfgcCxSuEEIQBFrbefIgCEhmtpf33/BPL4hDb8+B
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="257233802"
 X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="322827436"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 14:00:17 -0700
+   d="scan'208";a="257233802"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 14:41:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="503460985"
+   d="scan'208";a="654131417"
 Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2022 14:00:15 -0700
+  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2022 14:41:49 -0700
 Received: from kbuild by 56431612eabd with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nZfQN-0000V2-4A;
-	Wed, 30 Mar 2022 21:00:15 +0000
-Date: Thu, 31 Mar 2022 04:59:23 +0800
+	id 1nZg4a-0000Wm-8A;
+	Wed, 30 Mar 2022 21:41:48 +0000
+Date: Thu, 31 Mar 2022 05:41:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6:
- warning: no previous prototype for function
- 'fimc_isp_video_device_unregister'
-Message-ID: <202203310447.czIadBgz-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Subject: arch/arm/mach-iop32x/cp6.c:10:6: warning: no previous prototype for
+ function 'iop_enable_cp6'
+Message-ID: <202203310512.uBfXEXYW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,56 +47,69 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
+Hi Arnd,
+
+FYI, the error/warning still remains.
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   d888c83fcec75194a8a48ccd283953bdba7b2550
-commit: 238c84f71120f41c45301359902a912a19370f3d media: platform: rename exynos4-is/ to samsung/exynos4-is/
-date:   13 days ago
-config: riscv-randconfig-r003-20220330 (https://download.01.org/0day-ci/archive/20220331/202203310447.czIadBgz-lkp@intel.com/config)
+commit: 6f5d248d05db9c4991366154f1a657a630faa583 ARM: iop32x: use GENERIC_IRQ_MULTI_HANDLER
+date:   4 months ago
+config: arm-randconfig-r024-20220330 (https://download.01.org/0day-ci/archive/20220331/202203310512.uBfXEXYW-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=238c84f71120f41c45301359902a912a19370f3d
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6f5d248d05db9c4991366154f1a657a630faa583
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 238c84f71120f41c45301359902a912a19370f3d
+        git checkout 6f5d248d05db9c4991366154f1a657a630faa583
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/media/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/media/platform/samsung/exynos4-is/fimc-isp.c:25:
->> drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6: warning: no previous prototype for function 'fimc_isp_video_device_unregister' [-Wmissing-prototypes]
-   void fimc_isp_video_device_unregister(struct fimc_isp *isp,
+>> arch/arm/mach-iop32x/cp6.c:10:6: warning: no previous prototype for function 'iop_enable_cp6' [-Wmissing-prototypes]
+   void iop_enable_cp6(void)
         ^
-   drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void fimc_isp_video_device_unregister(struct fimc_isp *isp,
+   arch/arm/mach-iop32x/cp6.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void iop_enable_cp6(void)
    ^
    static 
-   1 warning generated.
+   arch/arm/mach-iop32x/cp6.c:43:13: warning: no previous prototype for function 'iop_init_cp6_handler' [-Wmissing-prototypes]
+   void __init iop_init_cp6_handler(void)
+               ^
+   arch/arm/mach-iop32x/cp6.c:43:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init iop_init_cp6_handler(void)
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +/fimc_isp_video_device_unregister +35 drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h
+vim +/iop_enable_cp6 +10 arch/arm/mach-iop32x/cp6.c
 
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  34  
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20 @35  void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  36  				enum v4l2_buf_type type)
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  37  {
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  38  }
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  39  #endif /* !CONFIG_VIDEO_EXYNOS4_ISP_DMA_CAPTURE */
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  40  
-
-:::::: The code at line 35 was first introduced by commit
-:::::: 34947b8aebe3f2d4eceb65fceafa92bf8dc97d96 [media] exynos4-is: Add the FIMC-IS ISP capture DMA driver
-
-:::::: TO: Sylwester Nawrocki <s.nawrocki@samsung.com>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+     9	
+  > 10	void iop_enable_cp6(void)
+    11	{
+    12		u32 temp;
+    13	
+    14	        /* enable cp6 access */
+    15	        asm volatile (
+    16			"mrc	p15, 0, %0, c15, c1, 0\n\t"
+    17			"orr	%0, %0, #(1 << 6)\n\t"
+    18			"mcr	p15, 0, %0, c15, c1, 0\n\t"
+    19			"mrc	p15, 0, %0, c15, c1, 0\n\t"
+    20			"mov	%0, %0\n\t"
+    21			"sub	pc, pc, #4  @ cp_wait\n\t"
+    22			: "=r"(temp));
+    23	}
+    24	
 
 -- 
 0-DAY CI Kernel Test Service
