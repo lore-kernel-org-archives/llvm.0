@@ -1,128 +1,122 @@
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D532F46
-	for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 21:53:48 +0000 (UTC)
-Date: Wed, 30 Mar 2022 14:47:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1648676870;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=u50nsqdeeBmYB/R6zpuCDe6/0f9hKHC+dYk7Osp22B8=;
-	b=esB9gPcXanFP8h8Jau49wEJcr2aePFSQXvdWM3ScOwueNHpuO9xw3L4Lc0I11tTH8YtN26
-	ikSsXB/CMvCjN8SwU72l1N8T9+ZB/y6UJSDV7LApG7gM5OxG93T/DUHdB+ZDlQ9aeWg55F
-	OW5fP/S3Wy/hhLyvjDSAQuV6Rn7f5qg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Roman Gushchin <roman.gushchin@linux.dev>
-To: Mike Rapoport <rppt@linux.ibm.com>, kernel test robot <lkp@intel.com>
-Cc: Roman Gushchin <guro@fb.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org,
-	Suren Baghdasaryan <surenb@google.com>,
-	Mike Rapoport <rppt@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Minchan Kim <minchan@google.com>
-Subject: Re:
- [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 4036/5872] WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in
- reference from the function memblock_bottom_up() to the variable
- .meminit.data:memblock
-Message-ID: <YkTP/+jhhAX6xlAQ@carbon.dhcp.thefacebook.com>
-References: <202203301412.MZ7wQvQz-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C0E2F46
+	for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 22:14:04 +0000 (UTC)
+Received: by mail-yb1-f181.google.com with SMTP id f23so8733502ybj.7
+        for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 15:14:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ohUWdk6Jv4uJ7zckc+ZPE6o/UzyPHrqVidE3nB9Y/io=;
+        b=PogmDeYUl/eypsEXkLeet0WhRAoDMh6f38F2N76vij2zPAC8y90JL9MU4vcDEV9LjF
+         7ih2jUnRHHnGY3igDrZvZNMIQb6ywhQZO8ImF9am0UByH4BY+qudLWX6eBGZXg2bds1f
+         fSsvgqRHXHIa61wLRKQXVypCg7kUehZBDuoiRiutFmRQDkqlPty5aYaam5L+NKkLWSYx
+         Fu3345HdTsFJwz/LN3pO76LHXodqtrj0+ZNF9ss24Z+pcaLebrXVVZxaSBuMXYNdO9cL
+         BLeMQoXdPFjyGDPMlCXLQrlMWX4t8q7xcvfuAOox++5c/0xdx9gv+1KfFdQuXhb54SCd
+         L8BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ohUWdk6Jv4uJ7zckc+ZPE6o/UzyPHrqVidE3nB9Y/io=;
+        b=Z5lZUr83lvlK0+iUr9S8vuTMt8K3t5/jhwJ5BEqL/W5/s5PhUefRLnUDcdpgJ8NddV
+         xtROl60V3t3qXuBtvTzQQ3CsvYiMh7lfUfhS/oCnDS6BUpxuSNuyl50ZxVJ7kYtJrYhq
+         +r+DCuMsU8pS4KQvEvjKaQ7s6EQAc5CeK55qa/8k4Y/snTvC0WhFK62HOrSs8tLrQlUd
+         rc1LcTGKFOy/LsRh7w1B5+g5FD1SnAO5AzrlZ26vFEuPbc9PexvD/i1efezT+/RNRiMw
+         U9s2R64zGYsroBNGssmPDl/h20epc1NDtyrHKJrjh+CmO7OY+hD/nfmSdhfMLNBfGN3/
+         SeaA==
+X-Gm-Message-State: AOAM533DPGHEgUEbe8iXSnxBmm17jUi/LyWhD7Mnf/beHIECms6Azv+q
+	bAvjBQoLlHKPiX8IhXznVbK+sa3N6wUw+CPPv69ZVQ==
+X-Google-Smtp-Source: ABdhPJyF7b99kJY78kD00gUjvcpr8Yge4gTbtMxUjw2qC+5vXXsI2OytH/lZhWGiymk5czKjtKawMEb+KwlUc7JzHks=
+X-Received: by 2002:a05:6902:389:b0:633:31c1:d0f7 with SMTP id
+ f9-20020a056902038900b0063331c1d0f7mr1766360ybs.543.1648678443446; Wed, 30
+ Mar 2022 15:14:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202203301412.MZ7wQvQz-lkp@intel.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+References: <202203301416.uykWxBeR-lkp@intel.com>
+In-Reply-To: <202203301416.uykWxBeR-lkp@intel.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 30 Mar 2022 15:13:52 -0700
+Message-ID: <CAJuCfpG_em1O+11oE0fC4htmKd11ygT_phF5hOjbyfxw68Xq1A@mail.gmail.com>
+Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 5835/5872] mm/compaction.c:766:15: error: redefinition of 'isolate_and_split_free_page'
+To: kernel test robot <lkp@intel.com>
+Cc: Charan Teja Reddy <charante@codeaurora.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	"GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Mar 30, 2022 at 02:53:14PM +0800, kbuild test robot wrote:
-> Hi Roman,
-> 
-> FYI, the error/warning still remains.
-> 
+On Tue, Mar 29, 2022 at 11:32 PM kernel test robot <lkp@intel.com> wrote:
+>
 > tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
 > head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
-> commit: 0e0bfc41fdf4d79d39ebe929844cdee44f97366d [4036/5872] UPSTREAM: mm: cma: allocate cma areas bottom-up
-> config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220330/202203301412.MZ7wQvQz-lkp@intel.com/config)
+> commit: 8cd9aa93b7269460e8d5e4407738f21fe5d6e720 [5835/5872] ANDROID: implement wrapper for reverse migration
+> config: arm64-randconfig-r036-20220327 (https://download.01.org/0day-ci/archive/20220330/202203301416.uykWxBeR-lkp@intel.com/config)
 > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 > reproduce (this is a W=1 build):
 >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
 >         chmod +x ~/bin/make.cross
->         # https://github.com/ammarfaizi2/linux-block/commit/0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/ammarfaizi2/linux-block/commit/8cd9aa93b7269460e8d5e4407738f21fe5d6e720
 >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
 >         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
->         git checkout 0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+>         git checkout 8cd9aa93b7269460e8d5e4407738f21fe5d6e720
 >         # save the config file to linux build tree
 >         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> 
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+>
 > If you fix the issue, kindly add following tag as appropriate
 > Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> >> WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the variable .meminit.data:memblock
-> The function memblock_bottom_up() references
-> the variable __meminitdata memblock.
-> This is often because memblock_bottom_up lacks a __meminitdata
-> annotation or the annotation of memblock is wrong.
+>
+> All errors (new ones prefixed by >>):
+>
+> >> mm/compaction.c:766:15: error: redefinition of 'isolate_and_split_free_page'
+>    unsigned long isolate_and_split_free_page(struct page *page,
+>                  ^
+>    include/linux/compaction.h:241:22: note: previous definition is here
+>    static unsigned long isolate_and_split_free_page(struct page *page,
+>                         ^
+>    1 error generated.
+>
 
-I guess this patch should fix it, however I fail to reproduce the original issue.
-Maybe it's up to the specific compiler version.
+This issue has been fixed by
+https://android-review.googlesource.com/c/kernel/common/+/1685698
 
---
 
-From b55a8dd19f4156d7e24ec39b18ede06965ce1c4f Mon Sep 17 00:00:00 2001
-From: Roman Gushchin <roman.gushchin@linux.dev>
-Date: Wed, 30 Mar 2022 14:42:12 -0700
-Subject: [PATCH] memblock: fix memblock_bottom_up() and
- memblock_set_bottom_up() annotations
-
-memblock_bottom_up() and memblock_set_bottom_up() lack __meminitdata
-annotations causing compiler warnings like:
-  WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the
-  variable .meminit.data:memblock
-
-Fix it by adding the missing annotation and removing the wrong
-__meminit annotation.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
----
- include/linux/memblock.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-index 50ad19662a32..536bc2fc31e6 100644
---- a/include/linux/memblock.h
-+++ b/include/linux/memblock.h
-@@ -460,7 +460,7 @@ static inline void *memblock_alloc_node(phys_addr_t size,
- /*
-  * Set the allocation direction to bottom-up or top-down.
-  */
--static inline __init_memblock void memblock_set_bottom_up(bool enable)
-+static inline __initdata_memblock void memblock_set_bottom_up(bool enable)
- {
- 	memblock.bottom_up = enable;
- }
-@@ -470,7 +470,7 @@ static inline __init_memblock void memblock_set_bottom_up(bool enable)
-  * if this is true, that said, memblock will allocate memory
-  * in bottom-up direction.
-  */
--static inline __init_memblock bool memblock_bottom_up(void)
-+static inline __initdata_memblock bool memblock_bottom_up(void)
- {
- 	return memblock.bottom_up;
- }
--- 
-2.30.2
-
+>
+> vim +/isolate_and_split_free_page +766 mm/compaction.c
+>
+>    765
+>  > 766  unsigned long isolate_and_split_free_page(struct page *page,
+>    767                                                  struct list_head *list)
+>    768  {
+>    769          unsigned long isolated;
+>    770          unsigned int order;
+>    771
+>    772          if (!PageBuddy(page))
+>    773                  return 0;
+>    774
+>    775          order = buddy_order(page);
+>    776          isolated = __isolate_free_page(page, order);
+>    777          if (!isolated)
+>    778                  return 0;
+>    779
+>    780          set_page_private(page, order);
+>    781          list_add(&page->lru, list);
+>    782
+>    783          split_map_pages(list);
+>    784
+>    785          return isolated;
+>    786  }
+>    787  EXPORT_SYMBOL_GPL(isolate_and_split_free_page);
+>    788
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
