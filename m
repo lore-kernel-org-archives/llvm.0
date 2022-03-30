@@ -1,79 +1,113 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41D836E
-	for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 06:13:55 +0000 (UTC)
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N0X0U-1nwJzC27S0-00wXKS for <llvm@lists.linux.dev>; Wed, 30 Mar 2022
- 08:08:42 +0200
-Received: by mail-wr1-f48.google.com with SMTP id w4so27667196wrg.12
-        for <llvm@lists.linux.dev>; Tue, 29 Mar 2022 23:08:42 -0700 (PDT)
-X-Gm-Message-State: AOAM532JSAijIWYcoyjdF4ZQ3yqcca5rZ9rl7AxhEQd434DRNNFD1Qyr
-	CqJR61pGWM0YI250lIm5YMKfzvyXV8mtOaKpzcc=
-X-Google-Smtp-Source: ABdhPJxb3ayTdwP7GbKNqgnIvGjF8ohxETPSVjrIT/ae8J5nVyT7Tv5Q0wb9WsBju9Q+yhSNMby/JlkVM5NhGe611Ew=
-X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
- k10-20020a5d66ca000000b00203fb72a223mr33812160wrw.12.1648620522122; Tue, 29
- Mar 2022 23:08:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C4736C
+	for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 06:32:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648621964; x=1680157964;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bnpQGFzpq9naOkvNK34rDVJEaDIOw4S3tixJfFa+j8w=;
+  b=ctoHhCaEPr7zOzpZTM/daIke62Q5LDcc7aSiH0HduvrZtUyAjujDrXsn
+   O1EsrUfnlxctO2bH7esRLJmmG7O8QNcqfbrpSWfxjfULmAFXsNQIPDbky
+   p9eXGwijSzQINuxjNyJj9mnrzLvriuzy1aVtUHo/gSYRLscFrjye76yhR
+   KoNRhfRydBn+RMn2ZfauVEtcLVcr+Qs1CW3hE9K/4U8XK1ghjgv+8lo6m
+   AHCnCdaTUMUUK73+UCKzEJPUGEt8Q5dl/n2CJP5qY2JHgO3mTLUnOUwJO
+   y0GEv9P0aj7EExkU45nMM8Cep8f+rYeE/bscR2WMf0+lVFdklRfvdumUx
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="345894859"
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="345894859"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 23:32:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="605275046"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Mar 2022 23:32:42 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nZRsn-00013d-S8; Wed, 30 Mar 2022 06:32:41 +0000
+Date: Wed, 30 Mar 2022 14:32:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Charan Teja Reddy <charante@codeaurora.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org,
+	Suren Baghdasaryan <surenb@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 5835/5872] mm/compaction.c:766:15: error: redefinition of
+ 'isolate_and_split_free_page'
+Message-ID: <202203301416.uykWxBeR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220329212946.2861648-1-ndesaulniers@google.com>
- <CAKwvOdmsnVsW46pTZYCNu-bx5c-aJ8ARMCOsYeMmQHpAw3PtPg@mail.gmail.com>
- <CAKwvOdnJB5u96fm1w-R-VUayvhq58EQeqZst32NDRscK17Z8pQ@mail.gmail.com> <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 30 Mar 2022 08:08:25 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a37gvycJ4zbeVvD_=6Npuep52VEP7CrgS-_8y6OXK_U3Q@mail.gmail.com>
-Message-ID: <CAK8P3a37gvycJ4zbeVvD_=6Npuep52VEP7CrgS-_8y6OXK_U3Q@mail.gmail.com>
-Subject: Re: [PATCH] net, uapi: remove inclusion of arpa/inet.h
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Networking <netdev@vger.kernel.org>, 
-	tipc-discussion@lists.sourceforge.net, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	David Howells <dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:AYnq0lVMo10u9cLVnz+Lc2lKJRC8ZlRTL+iC1GBE/gM3X3y9XrC
- 5vzhuhfLOjp/WN/Qi3JrK0/sUgXm/JU1sUQl6wqMVO7R9jlIxBsOBgmxJyIugbGhv3p4P53
- w26uETLYv8m8R7pESU/geZ+p2x6xCwiGFoJVZEklQMIFVfoJviZmNQl3fV9VeWsOeXdehRb
- SZq0F5jEF8tdMaTUVsjTA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IjhtMaDFZqA=:jYEPK/JnuHdBdNL9nCKFiK
- 5k7f8L0N0g6QN7MCVdhKL8xS4vvEkFWQ+4YslRAB1Y/LEQCh2lnKAHh+/0iqfxma5eYyvIHNx
- yAaST3U4uKNga83joTCsh7oKsT+Cp7Y0qZlkoneZwCV5D7LoLGnYVqBAiFIbAc2S0pvKGC0+u
- 0YxFwhRVKDnx3peu2s7qPNm0keXrRMlvUMMUX+3KX69l2fJgZXwYGbuVKGmeVaY5R9kGr/tAz
- y2nb0eX++Wv+f/AzRk3lc3Vp/eyqpb2JA6tkIehZ7FtkshQbQbOYHgd3aMrf8aBwZExmeEtPT
- Ugr76/BaTc/QU/EnAcz9tUUVvXjutONndh5sWZWjdKwP789h9DBXuWDYLQYsFTdRjM8mjR151
- qVAijc0bZ9gHhqGf2MTFfNw202x2jvFhCmsCud6nJn9q1Fz9mGiPkmrHFVjfe0ZIvk06XteDp
- EvjpO6C/D0Qd87KKYq6Df/AsCqn/hNs3ls061zs3KT8DGTzAau+fAXR1jTmpYvrafd1aBuO8D
- u60KcYBEadMrLE93voYGtxLyIvNqXb96oOcqMVNTig9puvwU8VjixH1Xxq5ysLLwvw3lLIVYe
- bOw2EccGsNZeY8IHbN2sin4/14xEtef8vOm2yINyo9jaD4uNTUZpEe0VUTVcPa6zG1dVQObeQ
- f7cKPByOEQhII/1SCxjl1NwJ579muQx7i0rt4AszX8qKDof8v3mtPs6YRwiWNIS7dCdU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Mar 30, 2022 at 12:26 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
-> On Tue, Mar 29, 2022 at 3:09 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
-> ```
-> diff --git a/include/uapi/linux/byteorder/little_endian.h
-> b/include/uapi/linux/byteorder/little_endian.h
-> index cd98982e7523..c14f2c3728e2 100644
-> --- a/include/uapi/linux/byteorder/little_endian.h
-> +++ b/include/uapi/linux/byteorder/little_endian.h
-> @@ -103,5 +103,8 @@ static __always_inline __u16 __be16_to_cpup(const __be16 *p)
->  #define __cpu_to_be16s(x) __swab16s((x))
->  #define __be16_to_cpus(x) __swab16s((x))
->
-> +#define htonl(x) __cpu_to_be32(x)
-> +#define htons(x) __cpu_to_be16(x)
-> +#define ntohs(x) __be16_to_cpu(x)
->
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+commit: 8cd9aa93b7269460e8d5e4407738f21fe5d6e720 [5835/5872] ANDROID: implement wrapper for reverse migration
+config: arm64-randconfig-r036-20220327 (https://download.01.org/0day-ci/archive/20220330/202203301416.uykWxBeR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/8cd9aa93b7269460e8d5e4407738f21fe5d6e720
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout 8cd9aa93b7269460e8d5e4407738f21fe5d6e720
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-This is unfortunately a namespace violation, you can't define things in uapi
-headers that conflict with standard library interfaces.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-         Arnd
+All errors (new ones prefixed by >>):
+
+>> mm/compaction.c:766:15: error: redefinition of 'isolate_and_split_free_page'
+   unsigned long isolate_and_split_free_page(struct page *page,
+                 ^
+   include/linux/compaction.h:241:22: note: previous definition is here
+   static unsigned long isolate_and_split_free_page(struct page *page,
+                        ^
+   1 error generated.
+
+
+vim +/isolate_and_split_free_page +766 mm/compaction.c
+
+   765	
+ > 766	unsigned long isolate_and_split_free_page(struct page *page,
+   767							struct list_head *list)
+   768	{
+   769		unsigned long isolated;
+   770		unsigned int order;
+   771	
+   772		if (!PageBuddy(page))
+   773			return 0;
+   774	
+   775		order = buddy_order(page);
+   776		isolated = __isolate_free_page(page, order);
+   777		if (!isolated)
+   778			return 0;
+   779	
+   780		set_page_private(page, order);
+   781		list_add(&page->lru, list);
+   782	
+   783		split_map_pages(list);
+   784	
+   785		return isolated;
+   786	}
+   787	EXPORT_SYMBOL_GPL(isolate_and_split_free_page);
+   788	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
