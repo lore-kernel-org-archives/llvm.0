@@ -1,42 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D06366
-	for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 01:46:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6EE366
+	for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 02:16:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648604799; x=1680140799;
+  t=1648606601; x=1680142601;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qbyCDmYtPUSUSQF/ImiQwGKuEEb49FyM1MQ7n7XgOJ4=;
-  b=LXnlb7tqXD4LNQNeoegwlXuolIPpNgiWZ90a+udH/YL7xTaHs8/jBNiw
-   Dp6Hyna/IqgeN0SiKu+R0fVWZFnT2DdLexGXIj6ZoDIwyqtEkP+XTiWo5
-   osCU9xXhlDNIl/imrubE6GGxlpF+izCAnLtqhNoKW9gtlIG12sI1AhdeH
-   /U5x7GbLn6PwGhR50ZNI20jiva2u/iF5wun2rYtQlGEWKubKUzD4IN9zs
-   NMNXL1uDVP7nJ9ZYxloqWA8E5oDsyPbpHeptNVxS3zcjrEjZVO/xxgkzH
-   lZO8brCOqbS2BfCLryn15r8mWoYE7I36nwzKGL6f5jhE+i4lPNmvf95iV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="241578985"
+  bh=A6QC8MjjgpND1r7D4JwXhogTe2+CIKA4+PtJmMkZLDo=;
+  b=JOi79Ing+r3j1tcDaVUXF9bS3VoF9FsMtTms+Jv0ER3mWyNXeTxjPHRI
+   t8HBeI5Dxk9baBN24yNxMm16QNrU6QIY1RHR089ziqgusqSvg3XcPNZ8C
+   ZUVpFh8+DBxaUY87ZUoWxl9a2UV+frOO2OrLUZuLjeXHoBE3tmscQOw65
+   ezfZWaIU2sKYME/wqCydC0dPCGl7SHM4XkgnzeyMiOjq3xZFpn1/EiAMn
+   MJEz9oeVAR0wnDq2x0hg3JFIP2XaAyXk0cw2dFWXPVoKU3O3BlqCMdxx/
+   m5ykKRQo+OP6ewD9/DQzYJNs2EGq93T3Vi4Horg41XDGSOtyMGUn7Of9j
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="240022189"
 X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="241578985"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 18:46:39 -0700
+   d="scan'208";a="240022189"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 19:16:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="585815499"
+   d="scan'208";a="719789554"
 Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 29 Mar 2022 18:46:37 -0700
+  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2022 19:16:38 -0700
 Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nZNPw-0000sL-QU; Wed, 30 Mar 2022 01:46:36 +0000
-Date: Wed, 30 Mar 2022 09:45:42 +0800
+	id 1nZNsz-0000ta-Aq; Wed, 30 Mar 2022 02:16:37 +0000
+Date: Wed, 30 Mar 2022 10:16:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
+To: Georgi Djakov <quic_c_gdjako@quicinc.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-	Mark Brown <broonie@kernel.org>
-Subject: arch/arm64/kernel/elfcore.c:25:12: warning: stack frame size (2144)
- exceeds limit (2048) in 'mte_dump_tag_range'
-Message-ID: <202203300903.AceWJDUu-lkp@intel.com>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 5839/5872] kernel/sched/psi.c:538:3: error: implicit declaration of function
+ 'trace_android_vh_psi_event'
+Message-ID: <202203301037.L3FMfBJj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,83 +48,94 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Catalin,
+Hi Georgi,
 
 FYI, the error/warning still remains.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1c24a186398f59c80adb9a967486b65c1423a59d
-commit: 6dd8b1a0b6cb3ed93d24110e02e67ff9d006610a arm64: mte: Dump the MTE tags in the core file
-date:   6 weeks ago
-config: arm64-randconfig-r002-20220330 (https://download.01.org/0day-ci/archive/20220330/202203300903.AceWJDUu-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+commit: b79d1815c400c3929bb78a209b6e51a38d6ffcb2 [5839/5872] ANDROID: psi: Add vendor hooks for PSI tracing
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220330/202203301037.L3FMfBJj-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6dd8b1a0b6cb3ed93d24110e02e67ff9d006610a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6dd8b1a0b6cb3ed93d24110e02e67ff9d006610a
+        # https://github.com/ammarfaizi2/linux-block/commit/b79d1815c400c3929bb78a209b6e51a38d6ffcb2
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout b79d1815c400c3929bb78a209b6e51a38d6ffcb2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/arm64/kernel/elfcore.c:25:12: warning: stack frame size (2144) exceeds limit (2048) in 'mte_dump_tag_range' [-Wframe-larger-than]
-   static int mte_dump_tag_range(struct coredump_params *cprm,
-              ^
-   1 warning generated.
+>> kernel/sched/psi.c:538:3: error: implicit declaration of function 'trace_android_vh_psi_event' [-Werror,-Wimplicit-function-declaration]
+                   trace_android_vh_psi_event(t);
+                   ^
+>> kernel/sched/psi.c:546:2: error: implicit declaration of function 'trace_android_vh_psi_group' [-Werror,-Wimplicit-function-declaration]
+           trace_android_vh_psi_group(group);
+           ^
+   2 errors generated.
 
 
-vim +/mte_dump_tag_range +25 arch/arm64/kernel/elfcore.c
+vim +/trace_android_vh_psi_event +538 kernel/sched/psi.c
 
-    23	
-    24	/* Derived from dump_user_range(); start/end must be page-aligned */
-  > 25	static int mte_dump_tag_range(struct coredump_params *cprm,
-    26				      unsigned long start, unsigned long end)
-    27	{
-    28		unsigned long addr;
-    29	
-    30		for (addr = start; addr < end; addr += PAGE_SIZE) {
-    31			char tags[MTE_PAGE_TAG_STORAGE];
-    32			struct page *page = get_dump_page(addr);
-    33	
-    34			/*
-    35			 * get_dump_page() returns NULL when encountering an empty
-    36			 * page table entry that would otherwise have been filled with
-    37			 * the zero page. Skip the equivalent tag dump which would
-    38			 * have been all zeros.
-    39			 */
-    40			if (!page) {
-    41				dump_skip(cprm, MTE_PAGE_TAG_STORAGE);
-    42				continue;
-    43			}
-    44	
-    45			/*
-    46			 * Pages mapped in user space as !pte_access_permitted() (e.g.
-    47			 * PROT_EXEC only) may not have the PG_mte_tagged flag set.
-    48			 */
-    49			if (!test_bit(PG_mte_tagged, &page->flags)) {
-    50				put_page(page);
-    51				dump_skip(cprm, MTE_PAGE_TAG_STORAGE);
-    52				continue;
-    53			}
-    54	
-    55			mte_save_page_tags(page_address(page), tags);
-    56			put_page(page);
-    57			if (!dump_emit(cprm, tags, MTE_PAGE_TAG_STORAGE))
-    58				return 0;
-    59		}
-    60	
-    61		return 1;
-    62	}
-    63	
+   503	
+   504	static u64 update_triggers(struct psi_group *group, u64 now)
+   505	{
+   506		struct psi_trigger *t;
+   507		bool new_stall = false;
+   508		u64 *total = group->total[PSI_POLL];
+   509	
+   510		/*
+   511		 * On subsequent updates, calculate growth deltas and let
+   512		 * watchers know when their specified thresholds are exceeded.
+   513		 */
+   514		list_for_each_entry(t, &group->triggers, node) {
+   515			u64 growth;
+   516	
+   517			/* Check for stall activity */
+   518			if (group->polling_total[t->state] == total[t->state])
+   519				continue;
+   520	
+   521			/*
+   522			 * Multiple triggers might be looking at the same state,
+   523			 * remember to update group->polling_total[] once we've
+   524			 * been through all of them. Also remember to extend the
+   525			 * polling time if we see new stall activity.
+   526			 */
+   527			new_stall = true;
+   528	
+   529			/* Calculate growth since last update */
+   530			growth = window_update(&t->win, now, total[t->state]);
+   531			if (growth < t->threshold)
+   532				continue;
+   533	
+   534			/* Limit event signaling to once per window */
+   535			if (now < t->last_event_time + t->win.size)
+   536				continue;
+   537	
+ > 538			trace_android_vh_psi_event(t);
+   539	
+   540			/* Generate an event */
+   541			if (cmpxchg(&t->event, 0, 1) == 0)
+   542				wake_up_interruptible(&t->event_wait);
+   543			t->last_event_time = now;
+   544		}
+   545	
+ > 546		trace_android_vh_psi_group(group);
+   547	
+   548		if (new_stall)
+   549			memcpy(group->polling_total, total,
+   550					sizeof(group->polling_total));
+   551	
+   552		return now + group->poll_min_period;
+   553	}
+   554	
 
 -- 
 0-DAY CI Kernel Test Service
