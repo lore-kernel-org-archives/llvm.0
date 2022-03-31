@@ -1,136 +1,158 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D42DA4C
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 21:56:57 +0000 (UTC)
-Received: by mail-lf1-f46.google.com with SMTP id bt26so1578672lfb.3
-        for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 14:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C5/V3Ppw/qitPursR+7CAkeFCCgQmdXdvGMRe0ZnPWU=;
-        b=e1FFrPkG1ZIU2AnelJMZJj26kfEzrzR5n811c5f5YJue2DqnotZS7FtJ4wIuEDJj48
-         nX9VHMGo+Nb9F5OzpYx2GZ5mmUmz6YOCPx6ms//qFi3D5PLCAGdSry589Q1lr1wtc5Xr
-         A1vLmhtsrSYo0k0QTOShbXCE0PqeKdtJKEAE7nmhdbeBOy60FjRMOAvMTs81PvFMT4dX
-         cobkI6Al2+i6DkCHhSDYA5Ec884E+ld7PvoMIXWdDyFrYI0xCZRU2y6ATzWjeEXvEaDx
-         YJOa35UeitLPhclE2stlTQHTZl5lLtWQcgl4BiTRl0S+V+OoWVsS8yigFCfr+ecg0TYX
-         I7hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C5/V3Ppw/qitPursR+7CAkeFCCgQmdXdvGMRe0ZnPWU=;
-        b=tLftmeqdvb/6R8p0lTSI10VMcBmgonks4UEFI2lrkTrbBlNMTNRW+HlNGkdgpKzh7g
-         LDn5o1KpKEXmN7y6Zf15QZGHZTgQmuC6KvtgHKCTunobSXA04vNAQY/kQLT9WVwY5kaR
-         Akz4nPiDJnB4shudmo76cX4o0kgs3A0fE8/OZSqlvJM3GdOapGEb9n0A7L2y4Ezqfqk/
-         QIzCsIrrim2SFDiUjXINsczgZg/oKhhQt8UBfXhcjeTt5OU0xcZ7XkHEUOOkk1fPxQpe
-         +pCiJv3uVKFa1gPmNUZPQYFugTdulKmq/5C66HSKankd8OpSlf+4D8NTK8yb6meAcssF
-         534w==
-X-Gm-Message-State: AOAM530LFgZNYVRCuxR57yTkKJyo+xfpdBXYAu+EaxcKhDPOpS9ZYMkZ
-	6znCt/zjp+6WDMhU+4JS9Lc=
-X-Google-Smtp-Source: ABdhPJzy4Bqt3mhcetavw7lWOhsd6LFjmLJaxselo/aO+36hXhoXXJBjdmcJCVeE8bZDC8IkH3JXTQ==
-X-Received: by 2002:a05:6512:2214:b0:44a:348a:d72 with SMTP id h20-20020a056512221400b0044a348a0d72mr12190683lfu.416.1648763815000;
-        Thu, 31 Mar 2022 14:56:55 -0700 (PDT)
-Received: from noname.. ([2a02:2698:8c2a:31b:6d9:f5ff:fecb:a8ab])
-        by smtp.googlemail.com with ESMTPSA id u2-20020a2e9f02000000b0024af5f27771sm38800ljk.32.2022.03.31.14.56.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 14:56:54 -0700 (PDT)
-From: Grigory Vasilyev <h0tc0d3@gmail.com>
-To: 
-Cc: Grigory Vasilyev <h0tc0d3@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0C3A4C
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 22:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99132C340F0;
+	Thu, 31 Mar 2022 22:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1648764526;
+	bh=qUwqbyrT79WFFwJHFexh9R65/YdUtP4GEs6ZjNLnytc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ivHaOR3SU+xG0hlCfmksPSwx6cgrL0akm2HENyGok/ev8xYDzfQ0Ephky0FBwjRG5
+	 H9chOBfH6+fIGiJQ3vqu1kZ23Zi5mHhb6eWMOLwNnW1C09oHZyAJmAUSGdWEwOOxI6
+	 /AeVkZo69AoczAQzIcnAjWTKOKnzM6+V985WalYEHcSmbDndNeI6ozaYGPniLDhOVZ
+	 85Ch+3rnf1eDx4hKh/iHeiI+RVXT6kOZ08Fb28Sg6X5BGQw/crtVn4HSbdp7jqlM92
+	 RPOWCH5z16O47nr3CSKISPlDhg/4MhqNBT5/Pb2zfJgWn1eoXPcIs/UOmawOuLA/BR
+	 oJscVqyBeLYYQ==
+Date: Thu, 31 Mar 2022 15:08:43 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Grigory Vasilyev <h0tc0d3@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Michal Marek <michal.lkml@markovi.net>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
+	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
 	Jean-Philippe Brucker <jean-philippe@linaro.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Yury Norov <yury.norov@gmail.com>,
-	Yonghong Song <yhs@fb.com>,
+	Yury Norov <yury.norov@gmail.com>, Yonghong Song <yhs@fb.com>,
 	Adrian Ratiu <adrian.ratiu@collabora.com>,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] Fix kernel build with LLVM=1
-Date: Fri,  1 Apr 2022 00:56:58 +0300
-Message-Id: <20220331215659.3800-1-h0tc0d3@gmail.com>
-X-Mailer: git-send-email 2.35.1
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] Fix kernel build with LLVM=1
+Message-ID: <YkYma7wwps8LZJnH@dev-arch.thelio-3990X>
+References: <20220331215659.3800-1-h0tc0d3@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331215659.3800-1-h0tc0d3@gmail.com>
 
-The wrong logic is using 1 as a suffix instead of -1.
-So the build script tries to find clang1 file instead of clang.
+Hi Grigory,
 
-GEN     Makefile
-HOSTCC  scripts/basic/fixdep
-/bin/sh: line 1: clang1: command not found
-make[2]: *** [/build/linux/scripts/Makefile.host:95: scripts/basic/fixdep] Error 127
-make[1]: *** [/build/linux/Makefile:564: scripts_basic] Error 2
-make: *** [Makefile:219: __sub-make] Error 2
+On Fri, Apr 01, 2022 at 12:56:58AM +0300, Grigory Vasilyev wrote:
+> The wrong logic is using 1 as a suffix instead of -1.
+> So the build script tries to find clang1 file instead of clang.
+> 
+> GEN     Makefile
+> HOSTCC  scripts/basic/fixdep
+> /bin/sh: line 1: clang1: command not found
+> make[2]: *** [/build/linux/scripts/Makefile.host:95: scripts/basic/fixdep] Error 127
+> make[1]: *** [/build/linux/Makefile:564: scripts_basic] Error 2
+> make: *** [Makefile:219: __sub-make] Error 2
 
-Fixes: b8321ed4a40c("Merge tag 'kbuild-v5.18-v2'")
+I am confused by this error, what is your build command? The supported
+uses of LLVM= are:
 
-Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
-Reported-by: Grigory Vasilyev <h0tc0d3@gmail.com>
----
- Makefile                       | 4 ++--
- tools/scripts/Makefile.include | 4 ++--
- tools/testing/selftests/lib.mk | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+$ make LLVM=1
 
-diff --git a/Makefile b/Makefile
-index 18ecb49f1af6..efca890d4ea3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -426,8 +426,8 @@ HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
- ifneq ($(LLVM),)
- ifneq ($(filter %/,$(LLVM)),)
- LLVM_PREFIX := $(LLVM)
--else ifneq ($(filter -%,$(LLVM)),)
--LLVM_SUFFIX := $(LLVM)
-+else ifneq (,$(findstring -, $(LLVM)))
-+LLVM_SUFFIX := $(filter -%, $(LLVM))
- endif
- 
- HOSTCC	= $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-index 0efb8f2b33ce..c7a56d7f0bad 100644
---- a/tools/scripts/Makefile.include
-+++ b/tools/scripts/Makefile.include
-@@ -54,8 +54,8 @@ endef
- ifneq ($(LLVM),)
- ifneq ($(filter %/,$(LLVM)),)
- LLVM_PREFIX := $(LLVM)
--else ifneq ($(filter -%,$(LLVM)),)
--LLVM_SUFFIX := $(LLVM)
-+else ifneq (,$(findstring -, $(LLVM)))
-+LLVM_SUFFIX := $(filter -%, $(LLVM))
- endif
- 
- $(call allow-override,CC,$(LLVM_PREFIX)clang$(LLVM_SUFFIX))
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 2a2d240cdc1b..42af066cf39e 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -3,8 +3,8 @@
- ifneq ($(LLVM),)
- ifneq ($(filter %/,$(LLVM)),)
- LLVM_PREFIX := $(LLVM)
--else ifneq ($(filter -%,$(LLVM)),)
--LLVM_SUFFIX := $(LLVM)
-+else ifneq (,$(findstring -, $(LLVM)))
-+LLVM_SUFFIX := $(filter -%, $(LLVM))
- endif
- 
- CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
--- 
-2.35.1
+to use clang, ld.lld, etc.
 
+$ make LLVM=-1
+
+to use clang-1, ld.lld-1, etc.
+
+$ make LLVM=/path/to/
+
+to use /path/to/clang, /path/to/ld.lld, etc.
+
+I do not really understand how based on the current logic you are ending
+up with clang1.
+
+$ make -skj"$(nproc)" LLVM=1 distclean defconfig all
+
+works for me here:
+
+$ git show -s --format='%h ("%s")'
+478f74a3d808 ("Merge tag 'random-5.18-rc1-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/crng/random")
+
+$ head -1 init/.main.o.cmd
+cmd_init/main.o := clang -Wp,-MMD,init/.main.o.d ...
+
+Please provide more information, as this change should not be necessary.
+
+It could be GNU make related?
+
+$ make --version
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+> Fixes: b8321ed4a40c("Merge tag 'kbuild-v5.18-v2'")
+> 
+> Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
+> Reported-by: Grigory Vasilyev <h0tc0d3@gmail.com>
+
+Normally, you do not add a "Reported-by" for a patch you send, just for
+the future.
+
+> ---
+>  Makefile                       | 4 ++--
+>  tools/scripts/Makefile.include | 4 ++--
+>  tools/testing/selftests/lib.mk | 4 ++--
+>  3 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 18ecb49f1af6..efca890d4ea3 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -426,8 +426,8 @@ HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
+>  ifneq ($(LLVM),)
+>  ifneq ($(filter %/,$(LLVM)),)
+>  LLVM_PREFIX := $(LLVM)
+> -else ifneq ($(filter -%,$(LLVM)),)
+> -LLVM_SUFFIX := $(LLVM)
+> +else ifneq (,$(findstring -, $(LLVM)))
+> +LLVM_SUFFIX := $(filter -%, $(LLVM))
+>  endif
+>  
+>  HOSTCC	= $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+> index 0efb8f2b33ce..c7a56d7f0bad 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -54,8 +54,8 @@ endef
+>  ifneq ($(LLVM),)
+>  ifneq ($(filter %/,$(LLVM)),)
+>  LLVM_PREFIX := $(LLVM)
+> -else ifneq ($(filter -%,$(LLVM)),)
+> -LLVM_SUFFIX := $(LLVM)
+> +else ifneq (,$(findstring -, $(LLVM)))
+> +LLVM_SUFFIX := $(filter -%, $(LLVM))
+>  endif
+>  
+>  $(call allow-override,CC,$(LLVM_PREFIX)clang$(LLVM_SUFFIX))
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 2a2d240cdc1b..42af066cf39e 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -3,8 +3,8 @@
+>  ifneq ($(LLVM),)
+>  ifneq ($(filter %/,$(LLVM)),)
+>  LLVM_PREFIX := $(LLVM)
+> -else ifneq ($(filter -%,$(LLVM)),)
+> -LLVM_SUFFIX := $(LLVM)
+> +else ifneq (,$(findstring -, $(LLVM)))
+> +LLVM_SUFFIX := $(filter -%, $(LLVM))
+>  endif
+>  
+>  CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+> -- 
+> 2.35.1
+> 
