@@ -1,83 +1,108 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D54EA2D
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 17:31:16 +0000 (UTC)
-Received: by mail-lj1-f174.google.com with SMTP id s13so718102ljd.5
-        for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 10:31:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EDAA2D
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 17:34:23 +0000 (UTC)
+Received: by mail-lj1-f176.google.com with SMTP id q14so674848ljc.12
+        for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 10:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=37DeCDWlzdqkrXbAxfAuhXVMiTsGHz0hz+oO3LlsSAk=;
-        b=OpXbfuoWXGtoVCxlYREjKa12nC/ZS5c6WIcrnkI8eccbmu5/uLBWGYimttqpYS8VW3
-         +7YGiaqEFrS3FpnuX2EDtUfr5SLVwwJS16vOz9O1xs7VQoRsqwXQVyTm2DHS+HBbUKJW
-         JcnKmGiKnrrFpcQsKy0swpAqSluMvhVusfDjp7x4US+WiiiWR7htYGSSYN9BMjK+PNzB
-         3bDKkdDzBq8iD1v2ploXFNsOGBgurGnmJmFODojEuOx7h5IJv9a3ZyGps5XW+zm3ZwP3
-         IyNp8IubOAJdKp98Y8byqVMwum46U2PVLc0kWpI3Dx2X+rTq5WlWvdzZTZ10/09brYbh
-         5/SQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tYr4+A2I2sUXVhAjEZBjGiVViPde2R3/QXl/MeRC92k=;
+        b=nFEALaQDRJK+KYEsH461dOhzve4fxNfkmMgo2fIBhtDhWjGq0/3pAHjjbmI72dHdKd
+         E57CD6qP4N+xshQ6kiTp0V++2vdUEE6yPY+Lwfte6OlmKHuxAP0q4xR8onHZKKbRjnyP
+         1X4KLDGOxDAYU8dswNf3x1cXwqYWocH9gPc1Hvgl1js90EDGvkt97oi23edz7BpbetBc
+         sBWMo38844VINbgHx5UjWdVta1PoZujZiteBXWSTNYc/+tZW4hFV21oX9M56nu4AhLrX
+         ZrAsBxU+N+9XQcFK+nJ8pFa0AIAxNdNlpljSex+gsfl34KTktL8AqKESMI4eXWvY9WEv
+         /vdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=37DeCDWlzdqkrXbAxfAuhXVMiTsGHz0hz+oO3LlsSAk=;
-        b=Z62G5YVNettq6ntzvaKDBuD2+vMvmr8hEsn/kYATBKg+EdT983bltL8R65hGrt1UN6
-         mKiFOPKqaiZbN3+i7U/wGuzHTA7ZNNQKvD2jYZr1rEPNixOwlwIzsx2pyCo07H42glgI
-         nMshAi1TE62Brh6bLfdR3pSh8SU9cZ9XDJ7tAsgtkU5qYugm7oi/G4FquY1zBb35Jj5r
-         Ld9uu9IoebCmk9AsjX5em/DSfc/fPCxOvonFb2WunSDYAtgtVEbx4wBU851wEsNe9oi+
-         G1r6qPp/bSAorTNUlninXYBJNxWN4+7ICTJTmmTYl/TOzn4m40NpnIqyZE+pBLf62+Cg
-         mTzg==
-X-Gm-Message-State: AOAM531+62Z8jpRA0Z9eh0HA/6cFyZovTp4KrG3wyaMC5/DdIDEX6WAK
-	IdjwPvhNpzwPRNlxrb2c5XCPpVccFmxZiAnTEMgzRA==
-X-Google-Smtp-Source: ABdhPJyIrADojlxnjoJbjHABCl+RY1oRMepIxM5nb9mo2vXqxPk9ksIqJg+9gS8ogRsiwQgdyPv54GWhmXZP85nX5oI=
-X-Received: by 2002:a05:651c:1508:b0:249:b843:208f with SMTP id
- e8-20020a05651c150800b00249b843208fmr11115015ljf.239.1648747874376; Thu, 31
- Mar 2022 10:31:14 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tYr4+A2I2sUXVhAjEZBjGiVViPde2R3/QXl/MeRC92k=;
+        b=NobHycdUigZDf00mBlLOzJ9nAuSoaKXEWRUJAZMaUuUlnzNzRPEsF/Mlq0/IYSr9QN
+         sEzdsvbj7RxWTkd/fjJYHc0iIttee2Rp/BtfMMF0O2T/wK1zpHd/izjJetipwvpnRU8k
+         s8pSk2x75nC2NkMxbr8u1M2mISUr6rc2rTq3VaIE1QTCjrh8mo7HQFQ9v7Pof7vOaQMS
+         G9U+zG2zuACe4TiOaoT3zy6CmsNUkMvM5IeUBaKC4EW9Pfih59SdinGkA6yRYB0DJBTF
+         VBqWIxWt/dl48NeTwzfaVN9eVpSSXAHI7UKCLA/Rl4dqBvsjJU3JxafzhjYDck1gtHnL
+         4osg==
+X-Gm-Message-State: AOAM531GozgIB3m+K7YMF0PoEHl9LeyQOCLPqgqM0afBs6F+WDS9Fzxd
+	mQ4YqyeKrEDY/KWJzbxPcIM=
+X-Google-Smtp-Source: ABdhPJzWR7AdVufxiLU93gc6byk6FCl+NoBdPVzob1NRulTJGAMUnxBz1CXzXgQEFQo/gHGjPZU+cg==
+X-Received: by 2002:a2e:9003:0:b0:24a:c3a5:849c with SMTP id h3-20020a2e9003000000b0024ac3a5849cmr11159595ljg.68.1648748061620;
+        Thu, 31 Mar 2022 10:34:21 -0700 (PDT)
+Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
+        by smtp.gmail.com with ESMTPSA id bd10-20020a05651c168a00b00247fe29d83csm2746992ljb.73.2022.03.31.10.34.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 10:34:21 -0700 (PDT)
+From: Michal Orzel <michalorzel.eng@gmail.com>
+To: John Johansen <john.johansen@canonical.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: Michal Orzel <michalorzel.eng@gmail.com>,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 1/5] apparmor: Remove redundant assignments
+Date: Thu, 31 Mar 2022 19:33:54 +0200
+Message-Id: <20220331173358.40939-1-michalorzel.eng@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <164847778869.3060675.8115416881394543419.stgit@devnote2>
- <CAKwvOdmAYQZtzGudBjmiRZNjT+VixTdNbJmYmxc7-gQNCsHfrA@mail.gmail.com> <20220331104531.81d0edf9a85a4f69020a9f13@kernel.org>
-In-Reply-To: <20220331104531.81d0edf9a85a4f69020a9f13@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 31 Mar 2022 10:31:02 -0700
-Message-ID: <CAKwvOdmbMPBOGvcZNURK6qMx8gm7dGFiWmtX_yXheEqQ8CNLsA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/3] bootconfig: Support embedding a bootconfig in
- kernel for non initrd boot
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Padmanabha Srinivasaiah <treasure4paddy@gmail.com>, 
-	LKML <linux-kernel@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, 
-	Randy Dunlap <rdunlap@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	Masahiro Yamada <masahiroy@kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 30, 2022 at 6:45 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> Hi Nick,
->
-> On Wed, 30 Mar 2022 11:04:50 -0700
-> Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> >
-> > Any chance we can use
-> >
-> > CFLAGS_REMOVE_<file>.o := $(CC_FLAGS_LTO)
-> >
-> > a la
-> > commit d2dcd3e37475 ("x86, cpu: disable LTO for cpu.c")
->
-> Hm, this looks good to me. Let me confirm that works.
-> (Does this mean the bootconfig.o will be compiled to elf binary?)
+Get rid of redundant assignments which end up in values not being
+read either because they are overwritten or the function ends.
 
-I know we went with Masahiro's suggestion, which is clever and better,
-but to answer this question; yes, under LTO, the linker can link
-together inputs that are a mix of ELF object files (basically, no LTO
-optimizations) with LLVM IR (w/ LTO optimizations between such files).
+Reported by clang-tidy [deadcode.DeadStores]
+
+Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
+---
+ security/apparmor/domain.c | 3 +--
+ security/apparmor/label.c  | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
+index a29e69d2c300..77724acd9d8a 100644
+--- a/security/apparmor/domain.c
++++ b/security/apparmor/domain.c
+@@ -627,7 +627,6 @@ static struct aa_label *profile_transition(struct aa_profile *profile,
+ {
+ 	struct aa_label *new = NULL;
+ 	const char *info = NULL, *name = NULL, *target = NULL;
+-	unsigned int state = profile->file.start;
+ 	struct aa_perms perms = {};
+ 	bool nonewprivs = false;
+ 	int error = 0;
+@@ -661,7 +660,7 @@ static struct aa_label *profile_transition(struct aa_profile *profile,
+ 	}
+ 
+ 	/* find exec permissions for name */
+-	state = aa_str_perms(profile->file.dfa, state, name, cond, &perms);
++	aa_str_perms(profile->file.dfa, profile->file.start, name, cond, &perms);
+ 	if (perms.allow & MAY_EXEC) {
+ 		/* exec permission determine how to transition */
+ 		new = x_to_label(profile, bprm, name, perms.xindex, &target,
+diff --git a/security/apparmor/label.c b/security/apparmor/label.c
+index 0b0265da1926..ce9ae9b6b303 100644
+--- a/security/apparmor/label.c
++++ b/security/apparmor/label.c
+@@ -807,7 +807,7 @@ bool aa_label_replace(struct aa_label *old, struct aa_label *new)
+ 		struct aa_labelset *ls = labels_set(old);
+ 
+ 		write_lock_irqsave(&ls->lock, flags);
+-		res = __label_remove(old, new);
++		__label_remove(old, new);
+ 		if (labels_ns(old) != labels_ns(new)) {
+ 			write_unlock_irqrestore(&ls->lock, flags);
+ 			ls = labels_set(new);
 -- 
-Thanks,
-~Nick Desaulniers
+2.25.1
+
