@@ -1,305 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB40D7B
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 07:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15669C340F2;
-	Thu, 31 Mar 2022 07:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648711261;
-	bh=qjNjEbUBrdLs50AHIuc+pd6M1krGCKQ6Ip1cy6iwHWM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cLxzl+StS0GApIA6tVj8R/amrIY1/eqVHyDcFyTx1qZDTekUha1tlKUyt377hKxml
-	 LRXOqNf92I/iBmZXDOW1emtp0qOMueBXJa1vgpPNcO1OX+rApl2oLTlUYXIawQ7Jl9
-	 MORHzeg+ykN3SL+xfIxPWQ4ezyfuUVP3XSk73jpbytd7JX/UokapAzraI+7Vpj/bFf
-	 idem8sKH1EsrIjkMJSrbPEffKaW4j3CWLt5a5f5Zha4bb+sCMSteGzTxQoezmYqTiK
-	 +cwOuU7ZsBQ5zcOF/8Ps1fF/Ub92v/Yxax9GRSl27GT3v3zDh2U1UinqaqLJGwqID9
-	 Qm9VgESYj+ldA==
-Date: Thu, 31 Mar 2022 16:20:56 +0900
-From: Masami Hiramatsu <mhiramat@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Padmanabha Srinivasaiah
- <treasure4paddy@gmail.com>, LKML <linux-kernel@vger.kernel.org>, Jonathan
- Corbet <corbet@lwn.net>, "open list:DOCUMENTATION"
- <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Sami Tolvanen
- <samitolvanen@google.com>, Nathan Chancellor <nathan@kernel.org>,
- llvm@lists.linux.dev, Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH v6 3/4] bootconfig: Support embedding a bootconfig file
- in kernel
-Message-Id: <20220331162056.43b06415962bc116daa260db@kernel.org>
-In-Reply-To: <CAK7LNARvO2i7k7bSgCiE944yUXvK=J3bo_=MiDa6TZuqY87p_A@mail.gmail.com>
-References: <164870615889.127053.9055569952366814752.stgit@devnote2>
-	<164870619150.127053.3677457860116913262.stgit@devnote2>
-	<CAK7LNARfcVt9L=BBmB7N8GNBHHU_LZx7mjMF9zW0ozfW3WNfeg@mail.gmail.com>
-	<20220331154918.67fdd2b2c18262631588e07c@kernel.org>
-	<CAK7LNARvO2i7k7bSgCiE944yUXvK=J3bo_=MiDa6TZuqY87p_A@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD2A7B
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 08:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648715029; x=1680251029;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ftF6awFwKVzY4WYzM6LsHPF8KxWYcWnWJu1WHI3Nf7E=;
+  b=RLfSajBjMyJZJWkUHF73AaXAzOeiCZBUt3ocfnk/wtZZARmYhvF8jvw8
+   bmnPE9bpGPr7XCbyDIEAOjdN6F6L3KDbu1F6WaqhAm9RCgiCvsT5rb3+L
+   HZqTwI91l1bkxpMnpvniIdq54jEo3oJR9/SNS2UBfimvU+DftRJPguu89
+   lYRMqtvsM69hHzMC1Zs+DBiKwwNcBgRvEvJLCqNSNbx5ciEKFg9Z3d5u3
+   1qntYaWm25CVpyxMSBhq7p2x7FBKZ8RepmiE/3zFBZaV7EZ/vmjuzOgQH
+   ek6E2rn8hOfoK16td8jXTWFVqX1WBotiGx4IBCMsartXC+0JEwbF7a5kz
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259466216"
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="259466216"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 01:23:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="654537022"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 31 Mar 2022 01:23:47 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nZq5q-00005I-AJ;
+	Thu, 31 Mar 2022 08:23:46 +0000
+Date: Thu, 31 Mar 2022 16:23:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matteo Croce <mcroce@microsoft.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 2/62] mm/kasan/shadow.c:63:7: warning: no previous
+ prototype for function 'memcpy'
+Message-ID: <202203311615.JMeQnjS4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, 31 Mar 2022 15:54:40 +0900
-Masahiro Yamada <masahiroy@kernel.org> wrote:
+tree:   https://github.com/esmil/linux visionfive
+head:   6c7cd35771680c033c40b4af48cbe7e3093eab3d
+commit: 773046cb2a6e3e2339353f64646d0625484c87e1 [2/62] riscv: optimized memcpy
+config: riscv-randconfig-r042-20220331 (https://download.01.org/0day-ci/archive/20220331/202203311615.JMeQnjS4-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 22a95dd3e6c911c2854dd75f42ba32d34840a61a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/773046cb2a6e3e2339353f64646d0625484c87e1
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 773046cb2a6e3e2339353f64646d0625484c87e1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash mm/kasan/
 
-> On Thu, Mar 31, 2022 at 3:49 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Thu, 31 Mar 2022 15:27:56 +0900
-> > Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > > On Thu, Mar 31, 2022 at 2:56 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > >
-> > > > This allows kernel developer to embed a default bootconfig file in
-> > > > the kernel instead of embedding it in the initrd. This will be good
-> > > > for who are using the kernel without initrd, or who needs a default
-> > > > bootconfigs.
-> > > > This needs to set two kconfigs: CONFIG_EMBED_BOOT_CONFIG=y and set
-> > > > the file path to CONFIG_EMBED_BOOT_CONFIG_FILE.
-> > > >
-> > > > Note that you still need 'bootconfig' command line option to load the
-> > > > embedded bootconfig. Also if you boot using an initrd with a different
-> > > > bootconfig, the kernel will use the bootconfig in the initrd, instead
-> > > > of the default bootconfig.
-> > > >
-> > > > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > > ---
-> > > >  Changes in v6:
-> > > >   - Split out the .incbin asm part as bootconfig-data.S according to
-> > > >     Masahiro's comment.
-> > > >  Changes in v5:
-> > > >   - Fix .gitignore to be sorted alphabetically.
-> > > >   - Make default.bconf is cleaned up correctly.
-> > > >   - Allow user to specify relative path to CONFIG_EMBED_BOOT_CONFIG_FILE.
-> > > >     (Thanks Masahiro!)
-> > > >  Changes in v4:
-> > > >   - Avoid updating the default.bconf if the file is not changed.
-> > > > ---
-> > > >  MAINTAINERS                |    1 +
-> > > >  include/linux/bootconfig.h |   10 ++++++++++
-> > > >  init/Kconfig               |   21 +++++++++++++++++++++
-> > > >  init/main.c                |   13 ++++++++-----
-> > > >  lib/.gitignore             |    1 +
-> > > >  lib/Makefile               |    8 ++++++++
-> > > >  lib/bootconfig-data.S      |   11 +++++++++++
-> > > >  lib/bootconfig.c           |   13 +++++++++++++
-> > > >  8 files changed, 73 insertions(+), 5 deletions(-)
-> > > >  create mode 100644 lib/bootconfig-data.S
-> > > >
-> > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > index b555a5e8704f..9b4910685412 100644
-> > > > --- a/MAINTAINERS
-> > > > +++ b/MAINTAINERS
-> > > > @@ -7350,6 +7350,7 @@ S:        Maintained
-> > > >  F:     Documentation/admin-guide/bootconfig.rst
-> > > >  F:     fs/proc/bootconfig.c
-> > > >  F:     include/linux/bootconfig.h
-> > > > +F:     lib/bootconfig-data.S
-> > > >  F:     lib/bootconfig.c
-> > > >  F:     tools/bootconfig/*
-> > > >  F:     tools/bootconfig/scripts/*
-> > > > diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-> > > > index a4665c7ab07c..5dbda5e3e9bb 100644
-> > > > --- a/include/linux/bootconfig.h
-> > > > +++ b/include/linux/bootconfig.h
-> > > > @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
-> > > >  /* XBC cleanup data structures */
-> > > >  void __init xbc_exit(void);
-> > > >
-> > > > +/* XBC embedded bootconfig data in kernel */
-> > > > +#ifdef CONFIG_EMBED_BOOT_CONFIG
-> > > > +char * __init xbc_get_embedded_bootconfig(size_t *size);
-> > > > +#else
-> > > > +static inline char *xbc_get_embedded_bootconfig(size_t *size)
-> > > > +{
-> > > > +       return NULL;
-> > > > +}
-> > > > +#endif
-> > > > +
-> > > >  #endif
-> > > > diff --git a/init/Kconfig b/init/Kconfig
-> > > > index 97463a33baa7..f5d14a78cfce 100644
-> > > > --- a/init/Kconfig
-> > > > +++ b/init/Kconfig
-> > > > @@ -1361,6 +1361,27 @@ config BOOT_CONFIG
-> > > >
-> > > >           If unsure, say Y.
-> > > >
-> > > > +config EMBED_BOOT_CONFIG
-> > > > +       bool "Embed bootconfig file in the kernel"
-> > > > +       depends on BOOT_CONFIG
-> > > > +       default n
-> > > > +       help
-> > > > +         Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
-> > > > +         kernel. Usually, the bootconfig file is loaded with the initrd
-> > > > +         image. But if the system doesn't support initrd, this option will
-> > > > +         help you by embedding a bootconfig file while building the kernel.
-> > > > +
-> > > > +         If unsure, say N.
-> > > > +
-> > > > +config EMBED_BOOT_CONFIG_FILE
-> > > > +       string "Embedded bootconfig file path"
-> > > > +       default ""
-> > > > +       depends on EMBED_BOOT_CONFIG
-> > > > +       help
-> > > > +         Specify a bootconfig file which will be embedded to the kernel.
-> > > > +         This bootconfig will be used if there is no initrd or no other
-> > > > +         bootconfig in the initrd.
-> > > > +
-> > > >  choice
-> > > >         prompt "Compiler optimization level"
-> > > >         default CC_OPTIMIZE_FOR_PERFORMANCE
-> > > > diff --git a/init/main.c b/init/main.c
-> > > > index 266d61bc67b0..a5db3e36b809 100644
-> > > > --- a/init/main.c
-> > > > +++ b/init/main.c
-> > > > @@ -266,7 +266,7 @@ static int __init loglevel(char *str)
-> > > >  early_param("loglevel", loglevel);
-> > > >
-> > > >  #ifdef CONFIG_BLK_DEV_INITRD
-> > > > -static void * __init get_boot_config_from_initrd(u32 *_size)
-> > > > +static void * __init get_boot_config_from_initrd(size_t *_size)
-> > > >  {
-> > > >         u32 size, csum;
-> > > >         char *data;
-> > > > @@ -412,12 +412,15 @@ static void __init setup_boot_config(void)
-> > > >         static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
-> > > >         const char *msg;
-> > > >         int pos;
-> > > > -       u32 size;
-> > > > +       size_t size;
-> > > >         char *data, *err;
-> > > >         int ret;
-> > > >
-> > > >         /* Cut out the bootconfig data even if we have no bootconfig option */
-> > > >         data = get_boot_config_from_initrd(&size);
-> > > > +       /* If there is no bootconfig in initrd, try embedded one. */
-> > > > +       if (!data)
-> > > > +               data = xbc_get_embedded_bootconfig(&size);
-> > > >
-> > > >         strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
-> > > >         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-> > > > @@ -436,8 +439,8 @@ static void __init setup_boot_config(void)
-> > > >         }
-> > > >
-> > > >         if (size >= XBC_DATA_MAX) {
-> > > > -               pr_err("bootconfig size %d greater than max size %d\n",
-> > > > -                       size, XBC_DATA_MAX);
-> > > > +               pr_err("bootconfig size %ld greater than max size %d\n",
-> > > > +                       (long)size, XBC_DATA_MAX);
-> > > >                 return;
-> > > >         }
-> > > >
-> > > > @@ -450,7 +453,7 @@ static void __init setup_boot_config(void)
-> > > >                                 msg, pos);
-> > > >         } else {
-> > > >                 xbc_get_info(&ret, NULL);
-> > > > -               pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
-> > > > +               pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
-> > > >                 /* keys starting with "kernel." are passed via cmdline */
-> > > >                 extra_command_line = xbc_make_cmdline("kernel");
-> > > >                 /* Also, "init." keys are init arguments */
-> > > > diff --git a/lib/.gitignore b/lib/.gitignore
-> > > > index e5e217b8307b..54596b634ecb 100644
-> > > > --- a/lib/.gitignore
-> > > > +++ b/lib/.gitignore
-> > > > @@ -1,6 +1,7 @@
-> > > >  # SPDX-License-Identifier: GPL-2.0-only
-> > > >  /crc32table.h
-> > > >  /crc64table.h
-> > > > +/default.bconf
-> > > >  /gen_crc32table
-> > > >  /gen_crc64table
-> > > >  /oid_registry_data.c
-> > > > diff --git a/lib/Makefile b/lib/Makefile
-> > > > index 08053df16c7c..2a82cc324f91 100644
-> > > > --- a/lib/Makefile
-> > > > +++ b/lib/Makefile
-> > > > @@ -280,6 +280,14 @@ $(foreach file, $(libfdt_files), \
-> > > >  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
-> > > >
-> > > >  obj-$(CONFIG_BOOT_CONFIG) += bootconfig.o
-> > > > +obj-$(CONFIG_EMBED_BOOT_CONFIG) += bootconfig-data.o
-> > > > +
-> > > > +$(obj)/bootconfig-data.o: $(obj)/default.bconf
-> > > > +
-> > > > +targets += default.bconf
-> > > > +filechk_defbconf = cat $(or $(real-prereqs), /dev/null)
-> > > > +$(obj)/default.bconf: $(CONFIG_EMBED_BOOT_CONFIG_FILE) FORCE
-> > > > +       $(call filechk,defbconf)
-> > > >
-> > > >  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
-> > > >  obj-$(CONFIG_INTERVAL_TREE_TEST) += interval_tree_test.o
-> > > > diff --git a/lib/bootconfig-data.S b/lib/bootconfig-data.S
-> > > > new file mode 100644
-> > > > index 000000000000..df674ea7d8be
-> > > > --- /dev/null
-> > > > +++ b/lib/bootconfig-data.S
-> > > > @@ -0,0 +1,11 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > > +/*
-> > > > + * Embed default bootconfig in the kernel.
-> > > > + */
-> > > > +       .pushsection .init.data, "aw"
-> > > > +       .global embedded_bootconfig_data
-> > > > +embedded_bootconfig_data:
-> > > > +       .incbin "lib/default.bconf"
-> > > > +       .global embedded_bootconfig_data_end
-> > > > +embedded_bootconfig_data_end:
-> > > > +       .popsection
-> > >
-> > >
-> > >
-> > > You used  .pushsection / .popsection because it was
-> > > previously located in bootconfig.c, where there are
-> > > functions, which should go to the ".text" section.
-> >
-> > Oops, yes. I have made a dumb copy from the inline asm...
-> >
-> > > Now that you split this into a separate compilation unit,
-> > > there is only one ".init.data" section in the file.
-> > >
-> > >
-> > >      .section  .init.data, "aw"
-> > >
-> > > should be enough.
-> >
-> > OK.
-> >
-> > > BTW, is it reasonable/possible to make it explicitly read-only?
-> > >
-> > > I have not tested this patch at all. Nor do I have enough insight.
-> > >
-> > >      .section  .init.rodata, "a"
-> > >
-> > > I am not sure whether this is possible or not.
-> >
-> > Yes, it can be. The data is passed via 'const char *'.
-> 
-> But, you didn't add "const" in the C code:
-> 
-> extern __visible char embedded_bootconfig_data[];
-> extern __visible char embedded_bootconfig_data_end[];
-> 
-> 
-> Is it possible to use "const char" ?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yes, I need to update C part too, and that is not a problem. :)
+All warnings (new ones prefixed by >>):
 
-Thank you!
+>> mm/kasan/shadow.c:63:7: warning: no previous prototype for function 'memcpy' [-Wmissing-prototypes]
+   void *memcpy(void *dest, const void *src, size_t len)
+         ^
+   mm/kasan/shadow.c:63:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *memcpy(void *dest, const void *src, size_t len)
+   ^
+   static 
+   1 warning generated.
 
-> 
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
 
+vim +/memcpy +63 mm/kasan/shadow.c
+
+bb359dbcb70085a Andrey Konovalov 2020-12-22  61  
+bb359dbcb70085a Andrey Konovalov 2020-12-22  62  #undef memcpy
+bb359dbcb70085a Andrey Konovalov 2020-12-22 @63  void *memcpy(void *dest, const void *src, size_t len)
+bb359dbcb70085a Andrey Konovalov 2020-12-22  64  {
+f00748bfa0246c4 Andrey Konovalov 2021-02-24  65  	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
+f00748bfa0246c4 Andrey Konovalov 2021-02-24  66  	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
+bb359dbcb70085a Andrey Konovalov 2020-12-22  67  		return NULL;
+bb359dbcb70085a Andrey Konovalov 2020-12-22  68  
+bb359dbcb70085a Andrey Konovalov 2020-12-22  69  	return __memcpy(dest, src, len);
+bb359dbcb70085a Andrey Konovalov 2020-12-22  70  }
+bb359dbcb70085a Andrey Konovalov 2020-12-22  71  
+
+:::::: The code at line 63 was first introduced by commit
+:::::: bb359dbcb70085a63e8bdbf14837a900750f0cf7 kasan: split out shadow.c from common.c
+
+:::::: TO: Andrey Konovalov <andreyknvl@google.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+0-DAY CI Kernel Test Service
+https://01.org/lkp
