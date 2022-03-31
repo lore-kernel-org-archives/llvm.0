@@ -1,95 +1,130 @@
-Received: from sonic313-15.consmr.mail.ne1.yahoo.com (sonic313-15.consmr.mail.ne1.yahoo.com [66.163.185.38])
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2E37C
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 18:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1648752264; bh=S0ikuEGsksL6QEKgy7sSSBTRKMTS3ahAMlEJon0Rvvg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=VS245s8fIy5iEQmFdShsxEg6S3szR/3SbAyYw8uyJTs09aQlPxBMYATVzvoXhhUXNf2Yk8ehLfaXzyG6QcW0zfjhqbEt045qegTly8wqpS8CvpUpuvB/baBYw4tN72BAESW837pPylxiQfYWRdkJ6uWtrf3Uac50a59PD+PC8XWGOkQno3mMpwnjSDqf0S1fgY4KVF78Qc5iU1UpTHl/Yif3lBzNXprJKERRtwdiTBzYbN3UOlZFbIjTm6PRNa9+S5pZQMiRDqaT35esjQxzcFikxYjMqcbjgPZBYTPDDdOkKXXWqjmrxY1nTgov4lYTEgCrPN0aax4PT7Iymvhu/w==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1648752264; bh=ZQ7jenPmEAfPsjdQbdIA6ipzzy6g4DVPxeWJY3I6AlY=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=layue1XgrBZhXQEvqX7wQY7/zO1xGnHjNaQ3OuuzJagIT1rsp0fRjFVwYVGzUWI4cteWbK2g7/sYN54M3LyhPduLZpMjjUTqf+4/VcAN//SYxdKJUMUmnfdmKuxuLe4Mh2h3ipeLfuqHpIZZh24Zio0nVyg1ofOJY9c9DhqhOT5zE825wGMYiCrgrXGQRTf0GKPotAooS+LsKrU3HfnrPsJhnXo/9KkKlfrkBHsNaAlg5IdA0Qs9CtuJj6YmY2AATOwwavzWLQb7jNKz280jUrvq7xo78sYYRCCIPPr4G92jncUZGzU+xaRNSMzO/0JHhv2CqJclRDhMU4senwQiog==
-X-YMail-OSG: bejsCwQVM1lTTK.NjCoKG2fU0t.Hs4sSJEGFgswbFk1Scos27ld1BbbcS7lTL6v
- eba7XIDhoqZh2PEz2pvut7RBt0triZMp3l3eIUEI_7vkUOtjhrMEvclVOQB3jBiitJa5Scg7uxpA
- cPycnu.7uWgWZferQkqDKCbexMjiMw6snPuDqH3mredIPMu9nEkFhz6tV2Ri83LV6qX..sf65rNx
- ycW7KG.fLLysuU7s7KMMYW3unizaRc1cGTTmcf9Ve4gAp97HPkNzTzwIp_Rj2hxgMHMhaPlMnGpA
- FRFWoQO6NTaKwva85XXmu8xP31nKtMlPbxdzaD_Tf4LKYDgGtLfxXg5LE_Znzz4sAlNCKocXOT8K
- 7i1kcAovFHqHOSm9ccNKy1VM9JmaYD_84n7rCLSraCJjpXzfwFj7Sl2IecIN8TGz2gKfJ7fWEvdB
- 3_FV4b0OFQc_mNBb2LMAzNIwiSNGY3Isf4LrFX87CRZI5TyJG_cPEp7IUxcqx3fvQ81QikWIhZcx
- dge.f_BdPDaDoUZ4ixDoCJo.LDVW2WaR20ONQmBtFQkVeWsNHFtgKyA3RBtguZyUF2HlRUDPi6bP
- AZHfXb81va.IruSrcQAXw.uIBgAdeneC_vbFOaG0wBTCqLQGdrqwFkP6IKwI8vSIzb3qojkjSzA2
- Zc3wTQ6bDvGqgmbBBlmOljfPFfLdcc6ccdn5TSKti6VJzUYnOeu3ITn3mIy8PxQl_j_ytENdxmva
- YxuhZi2ZyJ372SV.8NBfCQCN3Nh0K93PFHGW2.EhBv10gXU.eT38ElzlCG6cW75KvmRmaRYk0zgU
- a01EUvrwyuEG0dFmwKFEBmnkQtu8gBXHRGMnZJANoUnxAZnWadCa78TnIUh951EFKdR3Ud4CAwep
- SJM3p1N6DBb8AzDZGehUyKu__.5XXIZEMFb.K85Ewg8Lajfm9pfV2ZS_muP41KmxPvwZMQ9wvIO.
- o_yvXBlpzYYYAUGkM72RkSQpFM8QNDhmB770_DDuDYAfcYgdMcYzdltTNXbbcuwk2wrg4.52Ou8C
- RCOf2Vh94F0.wOW31vh5KeJUeXYiocqKxxV3rcXxkkzJWAfRR8A2fFsk4HHGWMMH3KaM_JEUqhpv
- hf8k5QwtGRwzWofQomuvqa5qfA3GDkz7AayeARQB9Yl20LEjGslVkPw5D4W_0bKa3MRtl0tGQ9Ka
- _Iqwh55G9lJbdWs6QjdzJn3JwyZ_c.QcgEE71.f3hTLgrg3sCUul.FM2pFeKQaPigJFUV8Sx.S8b
- radjMyRC7aF4hA19mE1BBq_jS0G6ablI2fnNOAxwV18zTPr7qq12kSKuTp_h1sGyIROdzsCDEDKO
- aC.HImdR9FQ4S6MfPzXNtFmmNHk_ycutFuxB8TYBGRI4h.o3ASbC4OMFsnxkx9mLjxDKX2lDGZfi
- 1LOeKjAkabrT4oqeYJjAb59TwLWEbM7Rkp5reYQSgQ6hU0B8sS5XIniCVvM9CzrH07jijgeh4vKo
- q115kl28U979oL0e.UU11BPmdBdrDdzlHhBzjfZ4Uyn_HyUsfT79wWyUGXeeyEandCkfOhyV1Azq
- BHLqaET9RgIOVgsr2MkBnTBEzrJdZMsf4Gsf4lclIa_Kn8McfWsioFuQvo4rAPmC3BXfym7iAJxS
- hRyklPZ5F1D1VkaaXrvO4126Z1ph3QMi_KU8vdblLKWNrQlPyyG4fd6gg_vmYhuBuqZIseT8wVyc
- Rm8bFmodWa31zr8N0L3VEFHu.MiboJK4YUwBnRQYuV3cYGto5WzzvQpr1fINisrAcce2T1uX90ZZ
- Ue25qpBNct4UaDv7GG5KwjL_3MNkGAyme6Tt5kx.ViEpl3E0QyJ7loSwxC9R5UbjCRhl4r78ZfHU
- yGy8Ce9KRd93Ws0NcMwjKK0ikymwekFK_aXeUkg0SX68gZ8jJs7wJE9tqefVay_7LdypJmY4LOvr
- VIDxlMvS2iDjeGAQ86xtXMYIa_iqw9dIv4tAzx6KTC0SKqUuwBCPMa2JHFKahTOK7Fsp.rzDJwGs
- D2A20NT3lDVO4yZF_BlqoSaBJ68buy4sOLLRguPHRVVgDMZLF9P1LrMnyJzoB9LPm6AMJdhGD3Ld
- qkmpbW6ypzDfikOYMtCIQfGLYL6o9FBE05xq5_UoUjgNu3mORo4mrxBg.g9k20BeeTH1FmPPMA1C
- Jv9AwX.WJj89c5qzv85vHXq0qLq2BpU5EC53SrjuwgRncLrF3uLSIorfXWkhuRKjXBQ11vb5iS5r
- s_tafD5L4IaQnhbzSU0qJPBZPCOxlkcmlOPJ1t1RMaVfQLMGg1U_CoyXfixASkKPCNxGiVR0vgF_
- ztEk-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Thu, 31 Mar 2022 18:44:24 +0000
-Received: by hermes--canary-production-bf1-665cdb9985-85ftg (VZM Hermes SMTP Server) with ESMTPA ID a52cdcf988e0124571774a6608f154ea;
-          Thu, 31 Mar 2022 18:44:22 +0000 (UTC)
-Message-ID: <9b521078-5809-7c59-9c58-b71ee406ee29@schaufler-ca.com>
-Date: Thu, 31 Mar 2022 11:44:19 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1027C;
+	Thu, 31 Mar 2022 18:53:32 +0000 (UTC)
+Received: by mail-io1-f43.google.com with SMTP id k25so568343iok.8;
+        Thu, 31 Mar 2022 11:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=fjHiw3tSlF8xzWdnfkDJb8f7xRlTsPnt1EO5+A/JUI0=;
+        b=IJG/vzXBHrQid5Fx+EDcVAs9Ne8QV4eyVw+Gp8x1ezIxrePb1NplYbLGAZrcslz9xJ
+         6StX0CKnZb5FjBqMF0yZG48YfddNonUtscxgadjdMcB+ky+3dVsLffJK4f4n4PsXGCge
+         dGfmSz8FNMr6ywgtj6OLg/GWLFAhMg7hyzZK8GZTISwvsdFhihDtzoBwGuVodwGAs2lG
+         SpKvZvIjnCrs/B8+AZwhiQXtl/+iPu1vMfm+qErDh6YtYbOQUi/6Lp7MR7XhVxakyavj
+         FqEUuKMab98QbGcLdsdF6vywmlSYTBsrbmbYDSxin/S73pPROkkMZPjuF3mMfrV7BVQU
+         qqdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=fjHiw3tSlF8xzWdnfkDJb8f7xRlTsPnt1EO5+A/JUI0=;
+        b=FQipDet6frZ8i00Pu5LgnjuY1h02z+iEwdImffw0l6O1oSuuxir8arZkqvAQcTIhFq
+         kypAhsnQOhLh8o3UFj3XcN2+4VlQeXHg+chV4DKBsVXrP7GmAYraE5pTGAq0vAQayy1Q
+         vCv8kED0eBJfoIsIZS4jLEZWm3poeZM69owNipQWJaSFy+WAcWOwP6hHF3uXX88opCQg
+         UuwhvdC4JaXuA3orYR8sgxzaixsZGCPBRDo7+ZuFl+rn6lw0a821Eox4wQUxo8I//4fK
+         W8Na69X/WFNnAYDQrUGkeNT7nGSWfaX+l9EMWNJVV8OatG1RIBnBqdfu4X8tuaVRBvOl
+         cnwQ==
+X-Gm-Message-State: AOAM53306m6byk4kUUHvigyxh3LlwOElfzDTeduxfuQ9H7Qd8aD68Mk5
+	hO7sCEEksZUSmw08ld7Cp2L5/LboUgE2i9G4cEn/OK2OtQg5Jg==
+X-Google-Smtp-Source: ABdhPJwPysv+BsKwur5Dvxd4Qoxgl32o1LBJWqaDmMm7KgBE0tN7H8IfFeGziEZ59jhgHpSE7+2K37QOmZhQmxtuhnI=
+X-Received: by 2002:a05:6638:a3a:b0:323:5c6d:ae20 with SMTP id
+ 26-20020a0566380a3a00b003235c6dae20mr3877699jao.80.1648752811797; Thu, 31 Mar
+ 2022 11:53:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5/5] smack: Remove redundant assignments
-Content-Language: en-US
-To: Michal Orzel <michalorzel.eng@gmail.com>, James Morris
- <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Casey Schaufler <casey@schaufler-ca.com>
-References: <20220331173358.40939-1-michalorzel.eng@gmail.com>
- <20220331173358.40939-5-michalorzel.eng@gmail.com>
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20220331173358.40939-5-michalorzel.eng@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+References: <20220330234528.1426991-1-nathan@kernel.org> <20220330234528.1426991-2-nathan@kernel.org>
+ <CA+icZUXrVgGyaujA1iQEw5P3nJHVwMtbFxpE2gKktaxW0Xg-wg@mail.gmail.com> <YkXKnRwvbMdvOtlJ@thelio-3990X>
+In-Reply-To: <YkXKnRwvbMdvOtlJ@thelio-3990X>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Thu, 31 Mar 2022 20:52:55 +0200
+Message-ID: <CA+icZUV-pHn0mWCnHr2x9SrcbaQos=M=Eg7p2KOaca829DmN_w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kbuild: Remove '-mno-global-merge'
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Kees Cook <keescook@chromium.org>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-um@lists.infradead.org, llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 3/31/2022 10:33 AM, Michal Orzel wrote:
-> Get rid of redundant assignments which end up in values not being
-> read either because they are overwritten or the function ends.
+On Thu, Mar 31, 2022 at 5:37 PM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> Reported by clang-tidy [deadcode.DeadStores]
+> On Thu, Mar 31, 2022 at 09:11:12AM +0200, Sedat Dilek wrote:
+> > On Thu, Mar 31, 2022 at 5:27 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > This flag is specific to clang, where it is only used by the 32-bit and
+> > > 64-bit ARM backends. In certain situations, the presence of this flag
+> > > will cause a warning, as shown by commit 6580c5c18fb3 ("um: clang: Strip
+> > > out -mno-global-merge from USER_CFLAGS").
+> > >
+> > > Since commit 61163efae020 ("kbuild: LLVMLinux: Add Kbuild support for
+> > > building kernel with Clang") that added this flag back in 2014, there
+> > > have been quite a few changes to the GlobalMerge pass in LLVM. Building
+> > > several different ARCH=arm and ARCH=arm64 configurations with LLVM 11
+> > > (minimum) and 15 (current main version) with this flag removed (i.e.,
+> > > with the default of '-mglobal-merge') reveals no modpost warnings, so it
+> > > is likely that the issue noted in the comment is no longer relevant due
+> > > to changes in LLVM or modpost, meaning this flag can be removed.
+> > >
+> > > If any new warnings show up that are a result of the removal of this
+> > > flag, it can be added back under arch/arm{,64}/Makefile to avoid
+> > > warnings on other architectures.
+> > >
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > ---
+> > >  Makefile | 4 ----
+> > >  1 file changed, 4 deletions(-)
+> > >
+> > > diff --git a/Makefile b/Makefile
+> > > index daeb5c88b50b..f2723d9bfca4 100644
+> > > --- a/Makefile
+> > > +++ b/Makefile
+> > > @@ -784,10 +784,6 @@ ifdef CONFIG_CC_IS_CLANG
+> > >  KBUILD_CPPFLAGS += -Qunused-arguments
+> > >  # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
+> > >  KBUILD_CFLAGS += -Wno-gnu
+> > > -# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
+> > > -# source of a reference will be _MergedGlobals and not on of the whitelisted names.
+> > > -# See modpost pattern 2
+> > > -KBUILD_CFLAGS += -mno-global-merge
+> > >  else
+> > >
+> > >  # gcc inanely warns about local variables called 'main'
+> > > --
+> > > 2.35.1
+> > >
+> >
+> > I have tested this several times and was able to boot into bar metal -
+> > no problems with building and/or booting my kernel-modules.
+> >
+> > Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> > Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
 >
-> Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
+> I would be very concerned if you did see any impact, given this flag is
+> ARM specific :) thanks as always for verifying!
+>
+> > Just as a side-note:
+> > As with Linux v5.18-rc1 and -std=gnu11 we change the above comment ...?
+> >
+> > # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
+> > KBUILD_CFLAGS += -Wno-gnu
+>
+> It was updated as part of the shift to '-std=gnu11':
+>
+> https://git.kernel.org/linus/e8c07082a810fbb9db303a2b66b66b8d7e588b53
+>
+> The UML tree is based on 5.17-rc6, which does not have that change.
+> There should not be a merge conflict though.
+>
 
-Thank you. I will take this via the Smack tree.
+Ah OK, a different base for UML.
 
-> ---
->   security/smack/smackfs.c | 1 -
->   1 file changed, 1 deletion(-)
->
-> diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-> index 658eab05599e..9e61014073cc 100644
-> --- a/security/smack/smackfs.c
-> +++ b/security/smack/smackfs.c
-> @@ -1192,7 +1192,6 @@ static ssize_t smk_write_net4addr(struct file *file, const char __user *buf,
->   			rc = -EINVAL;
->   			goto free_out;
->   		}
-> -		m = BEBITS;
->   		masks = 32;
->   	}
->   	if (masks > BEBITS) {
+- Sedat -
