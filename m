@@ -1,185 +1,708 @@
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E085FA2D
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 17:08:49 +0000 (UTC)
-Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1648745960;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bhGsRCUFCEYULPL/omreK/3n0ZicJpzKa59O2/FBKhU=;
-	b=Bk7hlmTlyQb1whvg1ngnlc1ZCMtSU8R4ZbIEDeeyxkBqnvXEGMRr+jU3RzyehyCKyCP5p4
-	HjOACtAyBR3kYT0mJ2V4MSYbwItBz59DeW0Xr+gMO3kR9ZQ6BJcFDibO8PcaSzViOR/yN/
-	6wbI0RsWvjbrsD0EeoOo+FbxUENmGYs=
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3251EA2D
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 17:16:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648746962; x=1680282962;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J9J6CKu3v/HzBzaULcyq4s0dv8N0ucEqoB5pI+k+KxQ=;
+  b=Kawco1duvajC83iycFakZOV221mNIMaTJUuKeIYJ2EXo8H+TZFQB1/vw
+   A9cGnx8j4quWrcsm2M92savfxWbkV2fcvPKp0Wmq/oksxrTZUlz8Q0yAI
+   lPcv2FChwGz+6etYfJnqnAw0MQX+XlGHTJaqizapFNWfsVTDBjceHA0yA
+   WPWB/L+wgriHyK0jPbnrtglRjsQ13HrSvtr8rjC8LfkP7SmVXCEvNI82S
+   K3ubafKHIr0DUwXEvvxWsHNEOl1+jocKmoAyWHXyDtOfkT1gejkB6N/7c
+   /A11tCaLsOKQrt3PIbEV2vxCqV+bFEIMydsPJ1UpqXsBnPb5Pib7tDdNZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="242051434"
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="242051434"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 10:16:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="720543722"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 31 Mar 2022 10:15:59 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nZyOs-0000TP-M8;
+	Thu, 31 Mar 2022 17:15:58 +0000
+Date: Fri, 1 Apr 2022 01:15:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [palmer:riscv-d1 7/14] arch/riscv/include/asm/tlbflush.h:23:2:
+ error: expected assembly-time absolute expression
+Message-ID: <202204010144.HDTt8y5n-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10 4036/5872] WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the variable .meminit.data:memblock
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Roman Gushchin <roman.gushchin@linux.dev>
-In-Reply-To: <YkXSv8exRRUbT/oM@dev-arch.thelio-3990X>
-Date: Thu, 31 Mar 2022 09:59:17 -0700
-Cc: Mike Rapoport <rppt@linux.ibm.com>, kernel test robot <lkp@intel.com>,
- Roman Gushchin <guro@fb.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org,
- GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
- linux-kernel@vger.kernel.org, Suren Baghdasaryan <surenb@google.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Linux Memory Management List <linux-mm@kvack.org>,
- Minchan Kim <minchan@google.com>,
- Nick Desaulniers <ndesaulniers@google.com>
-Message-Id: <7A4F3379-CC71-4F44-94C0-E47115C14917@linux.dev>
-References: <YkXSv8exRRUbT/oM@dev-arch.thelio-3990X>
-To: Nathan Chancellor <nathan@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git riscv-d1
+head:   f705a2550d38971a0ad596ebe02c083ec163722f
+commit: 59cf8769c28e188d7590449072c4a0a6f4ddf00a [7/14] riscv: prevent compressed instructions in alternatives
+config: riscv-randconfig-r042-20220331 (https://download.01.org/0day-ci/archive/20220401/202204010144.HDTt8y5n-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 22a95dd3e6c911c2854dd75f42ba32d34840a61a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?id=59cf8769c28e188d7590449072c4a0a6f4ddf00a
+        git remote add palmer https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git
+        git fetch --no-tags palmer riscv-d1
+        git checkout 59cf8769c28e188d7590449072c4a0a6f4ddf00a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:94:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:25:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:95:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:26:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:94:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:25:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:95:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:26:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:94:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:25:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:95:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:26:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:94:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:25:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:95:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:26:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:94:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:25:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:95:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:26:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:94:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:25:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:95:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:26:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:94:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:25:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:95:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:26:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:94:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:25:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:95:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:26:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:94:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:25:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:95:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:26:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:108:
+>> arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+           ^
+   arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:173:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:109:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:106:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:94:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:25:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
+..
 
 
-> On Mar 31, 2022, at 9:11 AM, Nathan Chancellor <nathan@kernel.org> wrote:
->=20
-> =EF=BB=BFOn Thu, Mar 31, 2022 at 12:42:04PM +0300, Mike Rapoport wrote:
->> (added llvm folks)
->>=20
->> Hi,
->>=20
->>> On Wed, Mar 30, 2022 at 02:47:43PM -0700, Roman Gushchin wrote:
->>> On Wed, Mar 30, 2022 at 02:53:14PM +0800, kbuild test robot wrote:
->>>> Hi Roman,
->>>>=20
->>>> FYI, the error/warning still remains.
->>>>=20
->>>> tree:   https://github.com/ammarfaizi2/linux-block google/android/kerne=
-l/common/android12-trusty-5.10
->>>> head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
->>>> commit: 0e0bfc41fdf4d79d39ebe929844cdee44f97366d [4036/5872] UPSTREAM: m=
-m: cma: allocate cma areas bottom-up
->>>> config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive=
-/20220330/202203301412.MZ7wQvQz-lkp@intel.com/config)
->>>> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f=
-6d9501cf49ce02937099350d08f20c4af86f3d)
->>>> reproduce (this is a W=3D1 build):
->>>>        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sb=
-in/make.cross -O ~/bin/make.cross
->>>>        chmod +x ~/bin/make.cross
->>>>        # https://github.com/ammarfaizi2/linux-block/commit/0e0bfc41fdf4=
-d79d39ebe929844cdee44f97366d
->>>>        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/=
-linux-block
->>>>        git fetch --no-tags ammarfaizi2-block google/android/kernel/comm=
-on/android12-trusty-5.10
->>>>        git checkout 0e0bfc41fdf4d79d39ebe929844cdee44f97366d
->>>>        # save the config file to linux build tree
->>>>        mkdir build_dir
->>>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash
->>>>=20
->>>> If you fix the issue, kindly add following tag as appropriate
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>=20
->>>> All warnings (new ones prefixed by >>, old ones prefixed by <<):
->>>>=20
->>>>>> WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in refe=
-rence from the function memblock_bottom_up() to the variable .meminit.data:m=
-emblock
->>>> The function memblock_bottom_up() references
->>>> the variable __meminitdata memblock.
->>>> This is often because memblock_bottom_up lacks a __meminitdata
->>>> annotation or the annotation of memblock is wrong.
->>>=20
->>> I guess this patch should fix it, however I fail to reproduce the origin=
-al issue.
->>> Maybe it's up to the specific compiler version.
->>>=20
->>> --
->>>=20
->>> =46rom b55a8dd19f4156d7e24ec39b18ede06965ce1c4f Mon Sep 17 00:00:00 2001=
+vim +23 arch/riscv/include/asm/tlbflush.h
 
->>> From: Roman Gushchin <roman.gushchin@linux.dev>
->>> Date: Wed, 30 Mar 2022 14:42:12 -0700
->>> Subject: [PATCH] memblock: fix memblock_bottom_up() and
->>> memblock_set_bottom_up() annotations
->>>=20
->>> memblock_bottom_up() and memblock_set_bottom_up() lack __meminitdata
->>> annotations causing compiler warnings like:
->>>  WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in refere=
-nce from the function memblock_bottom_up() to the
->>>  variable .meminit.data:memblock
->>>=20
->>> Fix it by adding the missing annotation and removing the wrong
->>> __meminit annotation.
->>>=20
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
->>> ---
->>> include/linux/memblock.h | 4 ++--
->>> 1 file changed, 2 insertions(+), 2 deletions(-)
->>>=20
->>> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
->>> index 50ad19662a32..536bc2fc31e6 100644
->>> --- a/include/linux/memblock.h
->>> +++ b/include/linux/memblock.h
->>> @@ -460,7 +460,7 @@ static inline void *memblock_alloc_node(phys_addr_t s=
-ize,
->>> /*
->>>  * Set the allocation direction to bottom-up or top-down.
->>>  */
->>> -static inline __init_memblock void memblock_set_bottom_up(bool enable)
->>> +static inline __initdata_memblock void memblock_set_bottom_up(bool enab=
-le)
->>=20
->> I think putting __initdata_memlock won't help here, because there should b=
-e
->> nothing wrong with __meminit function accessing __meminitdata data.
->>=20
->> My guesstimate would be that the compiler decided not to inline this and
->> still dropped section attribute because of 'inline'.
->>=20
->> If this is the case we I think we should=20
->>=20
->>    s/inline __init_memblock/__always_inline/
->>=20
->>> {
->>>    memblock.bottom_up =3D enable;
->>> }
->>> @@ -470,7 +470,7 @@ static inline __init_memblock void memblock_set_bott=
-om_up(bool enable)
->>>  * if this is true, that said, memblock will allocate memory
->>>  * in bottom-up direction.
->>>  */
->>> -static inline __init_memblock bool memblock_bottom_up(void)
->>> +static inline __initdata_memblock bool memblock_bottom_up(void)
->>> {
->>>    return memblock.bottom_up;
->>> }
->>> --=20
->>> 2.30.2
->>>=20
->>=20
->=20
-> For the record, I cannot reproduce this on mainline, which has commits
-> 34dc2efb39a2 ("memblock: fix section mismatch warning") and a024b7c2850d
-> ("mm: memblock: fix section mismatch warning again"). That first commit
-> has the same exact warning as this report, which is against an Android
-> tree (android12-trusty-5.10).
->=20
-> While I do not see the commit that 34dc2efb39a2 claims to fix in
-> android12-trusty-5.10, I do see the three commits in android12-5.10:
->=20
-> a46e3fa13968 ("UPSTREAM: mm: memblock: drop __init from memblock functions=
- to make it inline")
-> 5f7ec0f4c383 ("UPSTREAM: memblock: fix section mismatch warning")
-> 8cf5bb6946a2 ("UPSTREAM: mm: memblock: fix section mismatch warning again"=
-)
->=20
-> I think we can just discard this report for now, unless someone from
-> Google's trusty team wants to address it in that branch.
+fab957c11efe2f Palmer Dabbelt    2017-07-10  19  
+fab957c11efe2f Palmer Dabbelt    2017-07-10  20  /* Flush one page from local TLB */
+fab957c11efe2f Palmer Dabbelt    2017-07-10  21  static inline void local_flush_tlb_page(unsigned long addr)
+fab957c11efe2f Palmer Dabbelt    2017-07-10  22  {
+bff3ff525460b4 Vincent Chen      2021-03-22 @23  	ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+fab957c11efe2f Palmer Dabbelt    2017-07-10  24  }
+6bd33e1ece528f Christoph Hellwig 2019-10-28  25  #else /* CONFIG_MMU */
+6bd33e1ece528f Christoph Hellwig 2019-10-28  26  #define local_flush_tlb_all()			do { } while (0)
+6bd33e1ece528f Christoph Hellwig 2019-10-28  27  #define local_flush_tlb_page(addr)		do { } while (0)
+6bd33e1ece528f Christoph Hellwig 2019-10-28  28  #endif /* CONFIG_MMU */
+fab957c11efe2f Palmer Dabbelt    2017-07-10  29  
 
-I agree. Or at least help us with the testing of the proposed fixes.
+:::::: The code at line 23 was first introduced by commit
+:::::: bff3ff525460b492dca1d1665e821d2b5816ebdb riscv: sifive: Apply errata "cip-1200" patch
 
-Thanks!=
+:::::: TO: Vincent Chen <vincent.chen@sifive.com>
+:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
