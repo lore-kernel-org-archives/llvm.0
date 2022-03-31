@@ -1,73 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F08F7B;
-	Wed, 30 Mar 2022 23:46:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90909C340F3;
-	Wed, 30 Mar 2022 23:46:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648683968;
-	bh=GgLh9GaXBFfzZFvigI/FoQkf3w02HRSkun2SLU+RGKw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VOLS35aUbOhsV8s0ZpKxFUrs8U+D1Hh4dgnhfk3eufxMR5GOnL0m8sNkoUExtfZpZ
-	 QXKOyJGaa0Ni2jFx6uH/hDmbzujyhPdi7CSZ5rc3X55EuMXIitMZDo9eELAvYbw7v5
-	 ItxhzHRnWaEB4TjILQhK/bBc1AuuUq6OU53og5uQ52cjVlb31tO2pvr0DIQNplJSz2
-	 xMihUHpU9ldtX7V91wFu9BqLYGjEJ+8uiTyigeix4zPJ+FQ4PUsqPDn/4GqWi3QOfk
-	 f3iLZXjvlrD3MYFVlCHjUUJDL45Z+1vGc5N3UIUTs7iLVWMFFtZ/9C6v2pJ8KZtTx+
-	 zpaY4C11rSbuw==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A6F7B
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 00:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648685714; x=1680221714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6sTWKjK3HZDhhjYP5GjlhZRnGY31f0fAoCQWWzN3SAE=;
+  b=gTrvsMIH8hFBGbkBBnhJbF6UuhzknJ7VxOTsAmiHRRCLVlo5/cdQIbrC
+   GMANFT3xB1ylKW9uo0B+CnZMwZbW8wvX/XbQrEwyruDQV9YO+Sv8Z6xRI
+   wdQFy2gnHKyQ9nN2xznsoDSJ2RBIaePBWlYf43vtthww0loaNUZlU2EY+
+   W8YhOOL4XfnsyoH8ukqgqO8LDJuUlyuw182QfNb1h4Jy1ATqcPBx7zSQU
+   Fu/J6TXyyjU1w0a6UsofXH4GutFfcMCdCgouvhsF++8+OPmq0V4WXX33C
+   MRwsXinkbL5FR+c7pY2Qi6FHqgGQlK1T8kqGNeq/8zfCL1j4ZQCwYlqM7
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="346112237"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="346112237"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 17:15:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="605734246"
+Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Mar 2022 17:15:11 -0700
+Received: from kbuild by 56431612eabd with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nZiT1-0000gi-60;
+	Thu, 31 Mar 2022 00:15:11 +0000
+Date: Thu, 31 Mar 2022 08:14:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jean-Marc Eurin <jmeurin@google.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
 	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Kees Cook <keescook@chromium.org>
-Cc: linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	llvm@lists.linux.dev,
-	patches@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 2/2] Revert "um: clang: Strip out -mno-global-merge from USER_CFLAGS"
-Date: Wed, 30 Mar 2022 16:45:28 -0700
-Message-Id: <20220330234528.1426991-3-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220330234528.1426991-1-nathan@kernel.org>
-References: <20220330234528.1426991-1-nathan@kernel.org>
+	Vignesh Raghavendra <vigneshr@ti.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Jean-Marc Eurin <jmeurin@google.com>
+Subject: Re: [PATCH v2 2/2] mtd: mtdoops: Create a header structure for the
+ saved mtdoops.
+Message-ID: <202203310819.kOiVSg8W-lkp@intel.com>
+References: <20220330182816.1177341-4-jmeurin@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330182816.1177341-4-jmeurin@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-This reverts commit 6580c5c18fb3df2b11c5e0452372f815deeff895.
+Hi Jean-Marc,
 
-This patch is buggy, as noted in the patch linked below. The root cause
-has been solved by removing '-mno-global-merge' for the entire kernel.
+Thank you for the patch! Perhaps something to improve:
 
-Link: https://lore.kernel.org/r/20220322173547.677760-1-nathan@kernel.org/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/um/Makefile | 4 ----
- 1 file changed, 4 deletions(-)
+[auto build test WARNING on mtd/mtd/next]
+[also build test WARNING on mtd/mtd/fixes linux/master linus/master v5.17 next-20220330]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/arch/um/Makefile b/arch/um/Makefile
-index 320b09cd513c..f2fe63bfd819 100644
---- a/arch/um/Makefile
-+++ b/arch/um/Makefile
-@@ -75,10 +75,6 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
- 		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
- 		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
- 
--ifdef CONFIG_CC_IS_CLANG
--USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
--endif
--
- #This will adjust *FLAGS accordingly to the platform.
- include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Jean-Marc-Eurin/mtd-mtdoops-Structure-the-header-of-the-dumped-oops/20220331-023808
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220331/202203310819.kOiVSg8W-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0d39801219fd826554caf69402424346799810d5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jean-Marc-Eurin/mtd-mtdoops-Structure-the-header-of-the-dumped-oops/20220331-023808
+        git checkout 0d39801219fd826554caf69402424346799810d5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mtd/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/mtd/mtdoops.c:244:39: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+                                  page * record_size, retlen, sizeof(hdr), ret);
+                                                              ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +244 drivers/mtd/mtdoops.c
+
+   225	
+   226	static void find_next_position(struct mtdoops_context *cxt)
+   227	{
+   228		struct mtd_info *mtd = cxt->mtd;
+   229		struct mtdoops_hdr hdr;
+   230		int ret, page, maxpos = 0;
+   231		u32 maxcount = 0xffffffff;
+   232		size_t retlen;
+   233	
+   234		for (page = 0; page < cxt->oops_pages; page++) {
+   235			if (mtd_block_isbad(mtd, page * record_size))
+   236				continue;
+   237			/* Assume the page is used */
+   238			mark_page_used(cxt, page);
+   239			ret = mtd_read(mtd, page * record_size, sizeof(hdr),
+   240				       &retlen, (u_char *)&hdr);
+   241			if (retlen != sizeof(hdr) ||
+   242					(ret < 0 && !mtd_is_bitflip(ret))) {
+   243				printk(KERN_ERR "mtdoops: read failure at %ld (%td of %d read), err %d\n",
+ > 244				       page * record_size, retlen, sizeof(hdr), ret);
+   245				continue;
+   246			}
+   247	
+   248			if (hdr.seq == 0xffffffff && hdr.magic == 0xffffffff)
+   249				mark_page_unused(cxt, page);
+   250			if (hdr.seq == 0xffffffff || hdr.magic != MTDOOPS_KERNMSG_MAGIC)
+   251				continue;
+   252			if (maxcount == 0xffffffff) {
+   253				maxcount = hdr.seq;
+   254				maxpos = page;
+   255			} else if (hdr.seq < 0x40000000 && maxcount > 0xc0000000) {
+   256				maxcount = hdr.seq;
+   257				maxpos = page;
+   258			} else if (hdr.seq > maxcount && hdr.seq < 0xc0000000) {
+   259				maxcount = hdr.seq;
+   260				maxpos = page;
+   261			} else if (hdr.seq > maxcount && hdr.seq > 0xc0000000
+   262						&& maxcount > 0x80000000) {
+   263				maxcount = hdr.seq;
+   264				maxpos = page;
+   265			}
+   266		}
+   267		if (maxcount == 0xffffffff) {
+   268			cxt->nextpage = cxt->oops_pages - 1;
+   269			cxt->nextcount = 0;
+   270		}
+   271		else {
+   272			cxt->nextpage = maxpos;
+   273			cxt->nextcount = maxcount;
+   274		}
+   275	
+   276		mtdoops_inc_counter(cxt);
+   277	}
+   278	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
