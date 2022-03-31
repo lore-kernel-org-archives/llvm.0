@@ -1,191 +1,112 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0FFD7F6
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 09:42:24 +0000 (UTC)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22V8sGQL020599;
-	Thu, 31 Mar 2022 09:42:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=WPCIEKOGOxbgD3kRwImprKgQzLng/m2SyAvJQuPp6V4=;
- b=iq/8IpTboNsw2qrshfSjmWvbiW/ChVW5VK8GTfUr4yBVXwKcHBzwly0lvM1NcHlKfc8b
- crlU0UayNPnKy6iLwR26VGzhvtqTP+HFzmvxR4KksAPPkLCMG/VI4NJBVmV6LSKNoT4I
- xKb0n7dd0zuDw7Gp4HMhZaHnUoFP9fQmYNMqV+6ji9OeEYtvezvShnrUyX8oKt0pbarI
- +rqI4VfqrZzNvQcpMguscR1iOnR5pGbNJGb5t7exPVxWTwQa7DSiHb0xlwT0eGJtzanp
- f70ukiKl2+Bv0AE+Of960gyZWaSPG/ITouJ7gfKWo0vnFKNNxLMRKAlQVKsD1Th+ZT3b tA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3f562rmw73-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 31 Mar 2022 09:42:14 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22V9b8Nx014636;
-	Thu, 31 Mar 2022 09:42:13 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3f562rmw6d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 31 Mar 2022 09:42:13 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-	by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22V9fSpf025701;
-	Thu, 31 Mar 2022 09:42:10 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-	by ppma04fra.de.ibm.com with ESMTP id 3f1tf90uyx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 31 Mar 2022 09:42:10 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-	by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22V9gE3C42336748
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 31 Mar 2022 09:42:14 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 65952A405B;
-	Thu, 31 Mar 2022 09:42:08 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0F4FCA4054;
-	Thu, 31 Mar 2022 09:42:07 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.144.204])
-	by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-	Thu, 31 Mar 2022 09:42:06 +0000 (GMT)
-Date: Thu, 31 Mar 2022 12:42:04 +0300
-From: Mike Rapoport <rppt@linux.ibm.com>
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: kernel test robot <lkp@intel.com>, Roman Gushchin <guro@fb.com>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Suren Baghdasaryan <surenb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Minchan Kim <minchan@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re:
- [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 4036/5872] WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in
- reference from the function memblock_bottom_up() to the variable
- .meminit.data:memblock
-Message-ID: <YkV3bCqtLaVH+mC7@linux.ibm.com>
-References: <202203301412.MZ7wQvQz-lkp@intel.com>
- <YkTP/+jhhAX6xlAQ@carbon.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkTP/+jhhAX6xlAQ@carbon.dhcp.thefacebook.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ihh56QH7Def_i5PNnurIYBjwTTybEFOK
-X-Proofpoint-ORIG-GUID: KFDrNZ5oYnuEr9lVqDjlhUbjbVbEtXWT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937E87F6
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 10:06:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648721163; x=1680257163;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BKmwz0x2Ie7JP3uu3Xw1GYBWKuuPY8Av3iPGXzko/gE=;
+  b=RFtnHewoN2he3tRF0YPK3fITgooY7KcqUZu0UUAcNYH3WoocG+0u14Tt
+   3iC2m8UuL0pEgIoLWpTOcresbdzVH7DQs5Ue8UbpbVTPwAm3gLbGCAGYi
+   b3IVReLiHt57bgkBzoJSEc4H5KuucO204C2z4qw4iNO0xuNItrX5kHk1v
+   dTkdl0XyQX4tEsSIXxIAexKHZzS94B3gpXhW8Bw863q6gZwEF6asp5uwJ
+   6dLKDRDUKv+oUkbxGQ377odX88L9xhtNsSjaPr5xWtsFUGU0bFP5EKq04
+   ZgR3TB0M1w+HmJlwaf5S7BReiOCLAMkhPUtvn7Qo3420FP56+uaHXG2oZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="284702167"
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="284702167"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 03:06:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="522278085"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 31 Mar 2022 03:06:01 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nZrgm-00009I-Gg;
+	Thu, 31 Mar 2022 10:06:00 +0000
+Date: Thu, 31 Mar 2022 18:05:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matteo Croce <mcroce@microsoft.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 4/62] mm/kasan/shadow.c:42:7: warning: no previous
+ prototype for function 'memset'
+Message-ID: <202203311721.E2WjyRUE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-31_03,2022-03-30_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 adultscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0
- priorityscore=1501 clxscore=1011 mlxscore=0 spamscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203310052
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-(added llvm folks)
+tree:   https://github.com/esmil/linux visionfive
+head:   6c7cd35771680c033c40b4af48cbe7e3093eab3d
+commit: 25b1ed58675d7210b11e3492dcd5785f983d2b4a [4/62] riscv: optimized memset
+config: riscv-randconfig-r042-20220331 (https://download.01.org/0day-ci/archive/20220331/202203311721.E2WjyRUE-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 22a95dd3e6c911c2854dd75f42ba32d34840a61a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/25b1ed58675d7210b11e3492dcd5785f983d2b4a
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 25b1ed58675d7210b11e3492dcd5785f983d2b4a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash mm/kasan/
 
-Hi,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Wed, Mar 30, 2022 at 02:47:43PM -0700, Roman Gushchin wrote:
-> On Wed, Mar 30, 2022 at 02:53:14PM +0800, kbuild test robot wrote:
-> > Hi Roman,
-> > 
-> > FYI, the error/warning still remains.
-> > 
-> > tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
-> > head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
-> > commit: 0e0bfc41fdf4d79d39ebe929844cdee44f97366d [4036/5872] UPSTREAM: mm: cma: allocate cma areas bottom-up
-> > config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220330/202203301412.MZ7wQvQz-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/ammarfaizi2/linux-block/commit/0e0bfc41fdf4d79d39ebe929844cdee44f97366d
-> >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-> >         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
-> >         git checkout 0e0bfc41fdf4d79d39ebe929844cdee44f97366d
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> > 
-> > >> WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the variable .meminit.data:memblock
-> > The function memblock_bottom_up() references
-> > the variable __meminitdata memblock.
-> > This is often because memblock_bottom_up lacks a __meminitdata
-> > annotation or the annotation of memblock is wrong.
-> 
-> I guess this patch should fix it, however I fail to reproduce the original issue.
-> Maybe it's up to the specific compiler version.
-> 
-> --
-> 
-> From b55a8dd19f4156d7e24ec39b18ede06965ce1c4f Mon Sep 17 00:00:00 2001
-> From: Roman Gushchin <roman.gushchin@linux.dev>
-> Date: Wed, 30 Mar 2022 14:42:12 -0700
-> Subject: [PATCH] memblock: fix memblock_bottom_up() and
->  memblock_set_bottom_up() annotations
-> 
-> memblock_bottom_up() and memblock_set_bottom_up() lack __meminitdata
-> annotations causing compiler warnings like:
->   WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the
->   variable .meminit.data:memblock
-> 
-> Fix it by adding the missing annotation and removing the wrong
-> __meminit annotation.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> ---
->  include/linux/memblock.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index 50ad19662a32..536bc2fc31e6 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -460,7 +460,7 @@ static inline void *memblock_alloc_node(phys_addr_t size,
->  /*
->   * Set the allocation direction to bottom-up or top-down.
->   */
-> -static inline __init_memblock void memblock_set_bottom_up(bool enable)
-> +static inline __initdata_memblock void memblock_set_bottom_up(bool enable)
+All warnings (new ones prefixed by >>):
 
-I think putting __initdata_memlock won't help here, because there should be
-nothing wrong with __meminit function accessing __meminitdata data.
+>> mm/kasan/shadow.c:42:7: warning: no previous prototype for function 'memset' [-Wmissing-prototypes]
+   void *memset(void *addr, int c, size_t len)
+         ^
+   mm/kasan/shadow.c:42:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *memset(void *addr, int c, size_t len)
+   ^
+   static 
+   mm/kasan/shadow.c:63:7: warning: no previous prototype for function 'memcpy' [-Wmissing-prototypes]
+   void *memcpy(void *dest, const void *src, size_t len)
+         ^
+   mm/kasan/shadow.c:63:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *memcpy(void *dest, const void *src, size_t len)
+   ^
+   static 
+   2 warnings generated.
 
-My guesstimate would be that the compiler decided not to inline this and
-still dropped section attribute because of 'inline'.
 
-If this is the case we I think we should 
+vim +/memset +42 mm/kasan/shadow.c
 
-	s/inline __init_memblock/__always_inline/
+bb359dbcb70085a Andrey Konovalov 2020-12-22  40  
+bb359dbcb70085a Andrey Konovalov 2020-12-22  41  #undef memset
+bb359dbcb70085a Andrey Konovalov 2020-12-22 @42  void *memset(void *addr, int c, size_t len)
+bb359dbcb70085a Andrey Konovalov 2020-12-22  43  {
+f00748bfa0246c4 Andrey Konovalov 2021-02-24  44  	if (!kasan_check_range((unsigned long)addr, len, true, _RET_IP_))
+bb359dbcb70085a Andrey Konovalov 2020-12-22  45  		return NULL;
+bb359dbcb70085a Andrey Konovalov 2020-12-22  46  
+bb359dbcb70085a Andrey Konovalov 2020-12-22  47  	return __memset(addr, c, len);
+bb359dbcb70085a Andrey Konovalov 2020-12-22  48  }
+bb359dbcb70085a Andrey Konovalov 2020-12-22  49  
 
->  {
->  	memblock.bottom_up = enable;
->  }
-> @@ -470,7 +470,7 @@ static inline __init_memblock void memblock_set_bottom_up(bool enable)
->   * if this is true, that said, memblock will allocate memory
->   * in bottom-up direction.
->   */
-> -static inline __init_memblock bool memblock_bottom_up(void)
-> +static inline __initdata_memblock bool memblock_bottom_up(void)
->  {
->  	return memblock.bottom_up;
->  }
-> -- 
-> 2.30.2
-> 
+:::::: The code at line 42 was first introduced by commit
+:::::: bb359dbcb70085a63e8bdbf14837a900750f0cf7 kasan: split out shadow.c from common.c
+
+:::::: TO: Andrey Konovalov <andreyknvl@google.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
-Sincerely yours,
-Mike.
+0-DAY CI Kernel Test Service
+https://01.org/lkp
