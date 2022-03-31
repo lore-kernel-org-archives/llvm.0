@@ -1,45 +1,53 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78027C
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 02:57:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648695473; x=1680231473;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/WJjZChIo8N1c8iyIkTk+sLE9BhLskWf4w/kKr8E+fU=;
-  b=GzfEqAgY3Q1FfX4N1+aoGdITa2+WZWG0dY3mvU9PEZ5qFvECcKbfMsFJ
-   S7HhCATeVAlKqfGYyeFqAiVAPI2Fn/1gCrUTTg9RcHrEvgWf+pX6WsBmg
-   7hDy0l89yUymIBgZY/BbYamKoGM+khdB/kVikg6Jb+e4pGigUgFQ0j2Zs
-   rCvihTjQTkrTN+iuMEVbUsydYzqoWa/haUDP2BIScHMQQ71GaUMbIzy7s
-   UCG1DmOjRmgoT4vB2GoRxj6CJuwgV+YdcXNklqjXSF9urqQLjoSz3Q9kl
-   JQPU3EIrc/QAlGu6zP5aMoJ4VbUdlzaRu650SxqvAbnXJR8+i6dJXqLkU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259419525"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="259419525"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 19:57:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="520138912"
-Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 30 Mar 2022 19:57:50 -0700
-Received: from kbuild by 56431612eabd with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nZl0P-0000mi-SJ;
-	Thu, 31 Mar 2022 02:57:49 +0000
-Date: Thu, 31 Mar 2022 10:57:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yi Wang <wang.yi59@zte.com.cn>, djwong@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-	xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
-	wang.liang82@zte.com.cn, Cheng Lin <cheng.lin130@zte.com.cn>
-Subject: Re: [PATCH] xfs: getattr ignore blocks beyond eof
-Message-ID: <202203311017.dWBicGOM-lkp@intel.com>
-References: <20220331080256.1874-1-wang.yi59@zte.com.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E907E0
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 04:57:45 +0000 (UTC)
+Received: by mail-pl1-f175.google.com with SMTP id p17so22378907plo.9
+        for <llvm@lists.linux.dev>; Wed, 30 Mar 2022 21:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RdZk9i6x3JUMXUMZExcnmZQSoLNlGLPED3J5A3uwvzA=;
+        b=AouGX65RPyNIzjTOwJsTyIqO0ld7tKqu63LKiO4H4YaTnus5DJqytPEigiB578vhkK
+         XmFHTMTc4O9rBt+kTr1fnDN3YuObyEDhKu+m884aWlNIJHX+XMjLiREYCay8fAkw6Kv8
+         tqah5zQ70EEIBChOv3Ivtq/GLvXlS9MpjIYt8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RdZk9i6x3JUMXUMZExcnmZQSoLNlGLPED3J5A3uwvzA=;
+        b=JEebpnlxFPmvpp9AD7y++XgfPVduZ5mK4BVAHqXVFicAXiDfymLx5p6Whr2WTSbUqE
+         xkP+R6dBbEGhyOrx/WsSDKbihlZN8c/+0z6B5/5qSFxGZYlJNrD0yUMazpHLPhfEphdj
+         t+yq94TrAn9bWaoTryVcNgacImQoszHZDFqR5ozyJ+whfkMBbeYHiplDf5IxGbCbeS2/
+         vG9S46lIdljKF1lIYVPZ0dflGIkZMectUYvJTslI6bYzQNJ4ig/1isYWZbnDp6pUVQ39
+         15vImedweGEsk+IL52UtHV3cPJhYyWQPCDBs0JSXLBlmE5gcvZyOd9tXzdQuStVR/6ef
+         HKJw==
+X-Gm-Message-State: AOAM531Lfyt77TE3zckkbS3lm9OuKCHqvKyPN6DFWVs4qHBSoYH0Zqs0
+	Dho3hRD6XoQDgzDwNrJWtfkiyg==
+X-Google-Smtp-Source: ABdhPJzfIRpnfEt5n0GvvQSkKx3DziOK9JbR3UnlvHqsQcFI/ZcBzRB0/k/lBwMSJdHfPCI5q3+6wg==
+X-Received: by 2002:a17:902:be14:b0:14f:ce67:d0a1 with SMTP id r20-20020a170902be1400b0014fce67d0a1mr3162210pls.29.1648702664441;
+        Wed, 30 Mar 2022 21:57:44 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z9-20020a63b909000000b003823389e47csm20850546pge.9.2022.03.30.21.57.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 21:57:44 -0700 (PDT)
+Date: Wed, 30 Mar 2022 21:57:43 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH 1/2] kbuild: Remove '-mno-global-merge'
+Message-ID: <202203302156.87918948B8@keescook>
+References: <20220330234528.1426991-1-nathan@kernel.org>
+ <20220330234528.1426991-2-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,111 +56,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220331080256.1874-1-wang.yi59@zte.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220330234528.1426991-2-nathan@kernel.org>
 
-Hi Yi,
+On Wed, Mar 30, 2022 at 04:45:27PM -0700, Nathan Chancellor wrote:
+> This flag is specific to clang, where it is only used by the 32-bit and
+> 64-bit ARM backends. In certain situations, the presence of this flag
+> will cause a warning, as shown by commit 6580c5c18fb3 ("um: clang: Strip
+> out -mno-global-merge from USER_CFLAGS").
+> 
+> Since commit 61163efae020 ("kbuild: LLVMLinux: Add Kbuild support for
+> building kernel with Clang") that added this flag back in 2014, there
+> have been quite a few changes to the GlobalMerge pass in LLVM. Building
+> several different ARCH=arm and ARCH=arm64 configurations with LLVM 11
+> (minimum) and 15 (current main version) with this flag removed (i.e.,
+> with the default of '-mglobal-merge') reveals no modpost warnings, so it
+> is likely that the issue noted in the comment is no longer relevant due
+> to changes in LLVM or modpost, meaning this flag can be removed.
+> 
+> If any new warnings show up that are a result of the removal of this
+> flag, it can be added back under arch/arm{,64}/Makefile to avoid
+> warnings on other architectures.
+> 
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Thank you for the patch! Yet something to improve:
+Yeah, this looks right -- the history of this option seems to show it
+is no longer needed.
 
-[auto build test ERROR on xfs-linux/for-next]
-[also build test ERROR on v5.17 next-20220330]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yi-Wang/xfs-getattr-ignore-blocks-beyond-eof/20220331-082944
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-config: s390-randconfig-r002-20220330 (https://download.01.org/0day-ci/archive/20220331/202203311017.dWBicGOM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/e560188227f8fed285a1bd736e5708de984f0596
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yi-Wang/xfs-getattr-ignore-blocks-beyond-eof/20220331-082944
-        git checkout e560188227f8fed285a1bd736e5708de984f0596
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> fs/xfs/xfs_bmap_util.c:756:19: error: use of undeclared identifier 'end_fsb'
-           ip->i_last_fsb = end_fsb;
-                            ^
-   1 error generated.
-
-
-vim +/end_fsb +756 fs/xfs/xfs_bmap_util.c
-
-   710	
-   711	/*
-   712	 * This is called to free any blocks beyond eof. The caller must hold
-   713	 * IOLOCK_EXCL unless we are in the inode reclaim path and have the only
-   714	 * reference to the inode.
-   715	 */
-   716	int
-   717	xfs_free_eofblocks(
-   718		struct xfs_inode	*ip)
-   719	{
-   720		struct xfs_trans	*tp;
-   721		struct xfs_mount	*mp = ip->i_mount;
-   722		int			error;
-   723	
-   724		/* Attach the dquots to the inode up front. */
-   725		error = xfs_qm_dqattach(ip);
-   726		if (error)
-   727			return error;
-   728	
-   729		/* Wait on dio to ensure i_size has settled. */
-   730		inode_dio_wait(VFS_I(ip));
-   731	
-   732		error = xfs_trans_alloc(mp, &M_RES(mp)->tr_itruncate, 0, 0, 0, &tp);
-   733		if (error) {
-   734			ASSERT(xfs_is_shutdown(mp));
-   735			return error;
-   736		}
-   737	
-   738		xfs_ilock(ip, XFS_ILOCK_EXCL);
-   739		xfs_trans_ijoin(tp, ip, 0);
-   740	
-   741		/*
-   742		 * Do not update the on-disk file size.  If we update the on-disk file
-   743		 * size and then the system crashes before the contents of the file are
-   744		 * flushed to disk then the files may be full of holes (ie NULL files
-   745		 * bug).
-   746		 */
-   747		error = xfs_itruncate_extents_flags(&tp, ip, XFS_DATA_FORK,
-   748					XFS_ISIZE(ip), XFS_BMAPI_NODISCARD);
-   749		if (error)
-   750			goto err_cancel;
-   751	
-   752		error = xfs_trans_commit(tp);
-   753		if (error)
-   754			goto out_unlock;
-   755	
- > 756		ip->i_last_fsb = end_fsb;
-   757		xfs_inode_clear_eofblocks_tag(ip);
-   758		goto out_unlock;
-   759	
-   760	err_cancel:
-   761		/*
-   762		 * If we get an error at this point we simply don't
-   763		 * bother truncating the file.
-   764		 */
-   765		xfs_trans_cancel(tp);
-   766	out_unlock:
-   767		xfs_iunlock(ip, XFS_ILOCK_EXCL);
-   768		return error;
-   769	}
-   770	
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kees Cook
