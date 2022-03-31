@@ -1,36 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0C3A4C
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 22:08:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99132C340F0;
-	Thu, 31 Mar 2022 22:08:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648764526;
-	bh=qUwqbyrT79WFFwJHFexh9R65/YdUtP4GEs6ZjNLnytc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ivHaOR3SU+xG0hlCfmksPSwx6cgrL0akm2HENyGok/ev8xYDzfQ0Ephky0FBwjRG5
-	 H9chOBfH6+fIGiJQ3vqu1kZ23Zi5mHhb6eWMOLwNnW1C09oHZyAJmAUSGdWEwOOxI6
-	 /AeVkZo69AoczAQzIcnAjWTKOKnzM6+V985WalYEHcSmbDndNeI6ozaYGPniLDhOVZ
-	 85Ch+3rnf1eDx4hKh/iHeiI+RVXT6kOZ08Fb28Sg6X5BGQw/crtVn4HSbdp7jqlM92
-	 RPOWCH5z16O47nr3CSKISPlDhg/4MhqNBT5/Pb2zfJgWn1eoXPcIs/UOmawOuLA/BR
-	 oJscVqyBeLYYQ==
-Date: Thu, 31 Mar 2022 15:08:43 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Grigory Vasilyev <h0tc0d3@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Yury Norov <yury.norov@gmail.com>, Yonghong Song <yhs@fb.com>,
-	Adrian Ratiu <adrian.ratiu@collabora.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] Fix kernel build with LLVM=1
-Message-ID: <YkYma7wwps8LZJnH@dev-arch.thelio-3990X>
-References: <20220331215659.3800-1-h0tc0d3@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DB1A4C
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 22:21:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648765290; x=1680301290;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SmAhzdczCQr2mFfZTR4WT2nndIx1sPUm8+3tEgqCMwk=;
+  b=TYIltZU6Ts98gej7X5E8SF+EwwiFqZ7k7IGKdL5+GlM/0+W8xqEXOoSp
+   GR6HZiwlScXqV+uXOusdarOPR/QUNNGvina7ED1FX6D5EGKNbYLl4pfIU
+   nreMDx6b19Sgbeo7t9cbxG+3/ZDCmk8uq4FCJ/RUvyKa6JbacJrUcfERu
+   3Vg/UN508L4xKQa6UjqR8Nj/9xP+oeeBpgH5Uqb566V/QjA2CJS+fOU7Q
+   ExFpXaq+zzknvuy4byTJAXcFMyNkA+JihB0v+bTzNHc1Gy2MBst/g2cPo
+   xmNCV1rkMs/hNxkBR5TXEBFbIEVIWD0Hk4XAWLLKxsFWi5MUDHEfmAkWR
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="260158006"
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="260158006"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 15:21:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="788586084"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Mar 2022 15:21:28 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1na3AV-0000hZ-Q5;
+	Thu, 31 Mar 2022 22:21:27 +0000
+Date: Fri, 1 Apr 2022 06:20:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Youghandhar Chintala <youghand@codeaurora.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Johannes Berg <johannes.berg@intel.com>
+Subject: ld.lld: error: undefined symbol: ieee80211_sta_restart
+Message-ID: <202204010615.CBtHI0Bf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,120 +45,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220331215659.3800-1-h0tc0d3@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Grigory,
+Hi Youghandhar,
 
-On Fri, Apr 01, 2022 at 12:56:58AM +0300, Grigory Vasilyev wrote:
-> The wrong logic is using 1 as a suffix instead of -1.
-> So the build script tries to find clang1 file instead of clang.
-> 
-> GEN     Makefile
-> HOSTCC  scripts/basic/fixdep
-> /bin/sh: line 1: clang1: command not found
-> make[2]: *** [/build/linux/scripts/Makefile.host:95: scripts/basic/fixdep] Error 127
-> make[1]: *** [/build/linux/Makefile:564: scripts_basic] Error 2
-> make: *** [Makefile:219: __sub-make] Error 2
+FYI, the error/warning still remains.
 
-I am confused by this error, what is your build command? The supported
-uses of LLVM= are:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e729dbe8ea1c6145ae7b9efd6a00a5613746d3b0
+commit: 7d352ccf1e9935b5222ca84e8baeb07a0c8f94b9 mac80211: Add support to trigger sta disconnect on hardware restart
+date:   3 weeks ago
+config: hexagon-randconfig-r045-20220331 (https://download.01.org/0day-ci/archive/20220401/202204010615.CBtHI0Bf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 881350a92d821d4f8e4fa648443ed1d17e251188)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7d352ccf1e9935b5222ca84e8baeb07a0c8f94b9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7d352ccf1e9935b5222ca84e8baeb07a0c8f94b9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-$ make LLVM=1
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-to use clang, ld.lld, etc.
+All errors (new ones prefixed by >>):
 
-$ make LLVM=-1
+>> ld.lld: error: undefined symbol: ieee80211_sta_restart
+   >>> referenced by util.c
+   >>>               mac80211/util.o:(ieee80211_reconfig) in archive net/built-in.a
+   >>> referenced by util.c
+   >>>               mac80211/util.o:(ieee80211_reconfig) in archive net/built-in.a
 
-to use clang-1, ld.lld-1, etc.
-
-$ make LLVM=/path/to/
-
-to use /path/to/clang, /path/to/ld.lld, etc.
-
-I do not really understand how based on the current logic you are ending
-up with clang1.
-
-$ make -skj"$(nproc)" LLVM=1 distclean defconfig all
-
-works for me here:
-
-$ git show -s --format='%h ("%s")'
-478f74a3d808 ("Merge tag 'random-5.18-rc1-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/crng/random")
-
-$ head -1 init/.main.o.cmd
-cmd_init/main.o := clang -Wp,-MMD,init/.main.o.d ...
-
-Please provide more information, as this change should not be necessary.
-
-It could be GNU make related?
-
-$ make --version
-GNU Make 4.3
-Built for x86_64-pc-linux-gnu
-Copyright (C) 1988-2020 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-
-> Fixes: b8321ed4a40c("Merge tag 'kbuild-v5.18-v2'")
-> 
-> Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
-> Reported-by: Grigory Vasilyev <h0tc0d3@gmail.com>
-
-Normally, you do not add a "Reported-by" for a patch you send, just for
-the future.
-
-> ---
->  Makefile                       | 4 ++--
->  tools/scripts/Makefile.include | 4 ++--
->  tools/testing/selftests/lib.mk | 4 ++--
->  3 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 18ecb49f1af6..efca890d4ea3 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -426,8 +426,8 @@ HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
->  ifneq ($(LLVM),)
->  ifneq ($(filter %/,$(LLVM)),)
->  LLVM_PREFIX := $(LLVM)
-> -else ifneq ($(filter -%,$(LLVM)),)
-> -LLVM_SUFFIX := $(LLVM)
-> +else ifneq (,$(findstring -, $(LLVM)))
-> +LLVM_SUFFIX := $(filter -%, $(LLVM))
->  endif
->  
->  HOSTCC	= $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> index 0efb8f2b33ce..c7a56d7f0bad 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -54,8 +54,8 @@ endef
->  ifneq ($(LLVM),)
->  ifneq ($(filter %/,$(LLVM)),)
->  LLVM_PREFIX := $(LLVM)
-> -else ifneq ($(filter -%,$(LLVM)),)
-> -LLVM_SUFFIX := $(LLVM)
-> +else ifneq (,$(findstring -, $(LLVM)))
-> +LLVM_SUFFIX := $(filter -%, $(LLVM))
->  endif
->  
->  $(call allow-override,CC,$(LLVM_PREFIX)clang$(LLVM_SUFFIX))
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 2a2d240cdc1b..42af066cf39e 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -3,8 +3,8 @@
->  ifneq ($(LLVM),)
->  ifneq ($(filter %/,$(LLVM)),)
->  LLVM_PREFIX := $(LLVM)
-> -else ifneq ($(filter -%,$(LLVM)),)
-> -LLVM_SUFFIX := $(LLVM)
-> +else ifneq (,$(findstring -, $(LLVM)))
-> +LLVM_SUFFIX := $(filter -%, $(LLVM))
->  endif
->  
->  CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-> -- 
-> 2.35.1
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
