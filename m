@@ -1,44 +1,44 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1A07C
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 12:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2747E0
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 13:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648728548; x=1680264548;
+  t=1648731614; x=1680267614;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eVXwslGG5mJmBH7F1YzsQY4BUv8l5EsLgz96S/tfYb4=;
-  b=FmsIEOLLidN0Uwx96dCUw3foMXmu7lMSeVtKYCe+eG0vqsJ3DmBBh5Pg
-   rbYz+blUvZidkUYQlaVli+4Pb/ye/IWlaUnGMs+xxVhK65gJMCJ1EV9vN
-   2B8rur9CRNoYSpf3EbduMc8OPdeGqeDMmRIRzpuJ3aKKjfFWs4oQpzYm4
-   OiETNmiI7U2FnY5q7xpFSI/xL0rtVKXNon/fIhwLpb5fIeUvtwDA1JIKE
-   D8fMMZTR0aexUi16YCzkxBuoUbUufb2lW4O3SybcOeUOL1/OSm6jQAE0Y
-   dHfSrv+SFZv746tw0WUHPlwcKKcamRRq0R4ry1A4QAqNGnx2ye5CKUife
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="247314160"
+  bh=NrbE2Fu6qin+cBpDb/9/JkXlaserqB+2eKhtL+f1T/4=;
+  b=T6cjzXx202DUYirDtwm4RoioSIxlVoipErXEZ2Aut8VGwSeWTAQ/g8Oi
+   BomJKmg2IGLllmaYQVrbJ4y05fGHO3fzCoDZsRX2LO7Z9ZX124I9u082R
+   31SXa3xiu16LCKYV4SzZie8c7URoH2Mnsdcmx/Knk/epdnw8XCWsx30xh
+   q5Kp5u1XumOor1rE3clhTWxMRVsNHi07dTedX2q+VtaJWMuQQcbYIz9v+
+   M/iSap6zkq6gbk9rBOJGL7cCa2czEZ/1kfeQ7ZItst8wJIhBnquFrI12a
+   sWJML5pF+mnXlsk5HXarJv3njM6kCjSyINSkNUPaQHi9p8u4x4AVnSS+P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="257411335"
 X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="247314160"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 05:09:08 -0700
+   d="scan'208";a="257411335"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 06:00:13 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="654693052"
+   d="scan'208";a="522335459"
 Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 31 Mar 2022 05:09:05 -0700
+  by orsmga006.jf.intel.com with ESMTP; 31 Mar 2022 06:00:10 -0700
 Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nZtbt-0000Ee-1A;
-	Thu, 31 Mar 2022 12:09:05 +0000
-Date: Thu, 31 Mar 2022 20:08:44 +0800
+	id 1nZuPK-0000Gm-5P;
+	Thu, 31 Mar 2022 13:00:10 +0000
+Date: Thu, 31 Mar 2022 20:59:49 +0800
 From: kernel test robot <lkp@intel.com>
 To: Andrey Konovalov <andreyknvl@google.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [hnaz-mm:master 28/122] arch/arm64/kernel/irq.c:44:11: error: use of
- undeclared identifier 'irq_shadow_call_stack_ptr'
-Message-ID: <202203312036.a74e2QM9-lkp@intel.com>
+Subject: [hnaz-mm:master 29/122] arch/arm64/kernel/stacktrace.c:289:13:
+ error: implicit declaration of function 'task_scs' is invalid in C99
+Message-ID: <202203312049.zLjHyetm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,18 +51,18 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://github.com/hnaz/linux-mm master
 head:   074b4ea9811e2c47ae1ecada177629c19fa56d59
-commit: da4561bd9c6b23e9579b85ffaced3f3b0b8dcd4c [28/122] arm64, scs: save scs_sp values per-cpu when switching stacks
-config: arm64-randconfig-r012-20220331 (https://download.01.org/0day-ci/archive/20220331/202203312036.a74e2QM9-lkp@intel.com/config)
+commit: 8cdc580c5ca2ffecb0db4f84a99167ef763a21cc [29/122] arm64: implement stack_trace_save_shadow
+config: arm64-randconfig-r012-20220331 (https://download.01.org/0day-ci/archive/20220331/202203312049.zLjHyetm-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 881350a92d821d4f8e4fa648443ed1d17e251188)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm64 cross compiling tool for clang build
         # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/hnaz/linux-mm/commit/da4561bd9c6b23e9579b85ffaced3f3b0b8dcd4c
+        # https://github.com/hnaz/linux-mm/commit/8cdc580c5ca2ffecb0db4f84a99167ef763a21cc
         git remote add hnaz-mm https://github.com/hnaz/linux-mm
         git fetch --no-tags hnaz-mm master
-        git checkout da4561bd9c6b23e9579b85ffaced3f3b0b8dcd4c
+        git checkout 8cdc580c5ca2ffecb0db4f84a99167ef763a21cc
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
@@ -70,50 +70,49 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> arch/arm64/kernel/irq.c:44:11: error: use of undeclared identifier 'irq_shadow_call_stack_ptr'
-                   per_cpu(irq_shadow_call_stack_ptr, cpu) =
-                           ^
->> arch/arm64/kernel/irq.c:44:11: error: use of undeclared identifier 'irq_shadow_call_stack_ptr'
->> arch/arm64/kernel/irq.c:44:11: error: use of undeclared identifier 'irq_shadow_call_stack_ptr'
->> arch/arm64/kernel/irq.c:44:3: error: indirection requires pointer operand ('void' invalid)
-                   per_cpu(irq_shadow_call_stack_ptr, cpu) =
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:269:28: note: expanded from macro 'per_cpu'
-   #define per_cpu(var, cpu)       (*per_cpu_ptr(&(var), cpu))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/irq.c:105:13: warning: no previous prototype for function 'init_IRQ' [-Wmissing-prototypes]
-   void __init init_IRQ(void)
-               ^
-   arch/arm64/kernel/irq.c:105:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init init_IRQ(void)
-   ^
-   static 
-   1 warning and 4 errors generated.
+>> arch/arm64/kernel/stacktrace.c:289:13: error: implicit declaration of function 'task_scs' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           scs_base = task_scs(current);
+                      ^
+>> arch/arm64/kernel/stacktrace.c:289:11: warning: incompatible integer to pointer conversion assigning to 'unsigned long *' from 'int' [-Wint-conversion]
+           scs_base = task_scs(current);
+                    ^ ~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +/irq_shadow_call_stack_ptr +44 arch/arm64/kernel/irq.c
+vim +/task_scs +289 arch/arm64/kernel/stacktrace.c
 
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  35  
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  36  static void init_irq_scs(void)
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  37  {
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  38  	int cpu;
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  39  
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  40  	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK))
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  41  		return;
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  42  
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  43  	for_each_possible_cpu(cpu)
-ac20ffbb0279aa Sami Tolvanen 2020-11-30 @44  		per_cpu(irq_shadow_call_stack_ptr, cpu) =
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  45  			scs_alloc(cpu_to_node(cpu));
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  46  }
-ac20ffbb0279aa Sami Tolvanen 2020-11-30  47  
-
-:::::: The code at line 44 was first introduced by commit
-:::::: ac20ffbb0279aae7be48567fb734eae7d050769e arm64: scs: use vmapped IRQ and SDEI shadow stacks
-
-:::::: TO: Sami Tolvanen <samitolvanen@google.com>
-:::::: CC: Will Deacon <will@kernel.org>
+   260	
+   261	noinline notrace int arch_stack_walk_shadow(unsigned long *store,
+   262						    unsigned int size,
+   263						    unsigned int skipnr)
+   264	{
+   265		unsigned long *scs_top, *scs_base, *scs_next;
+   266		unsigned int len = 0, part;
+   267	
+   268		preempt_disable();
+   269	
+   270		/* Get the SCS pointer. */
+   271		asm volatile("mov %0, x18" : "=&r" (scs_top));
+   272	
+   273		/* The top SCS slot is empty. */
+   274		scs_top -= 1;
+   275	
+   276		/* Handle SDEI and hardirq frames. */
+   277		for (part = 0; part < ARRAY_SIZE(scs_parts); part++) {
+   278			scs_next = *this_cpu_ptr(scs_parts[part].saved);
+   279			if (scs_next) {
+   280				scs_base = *this_cpu_ptr(scs_parts[part].base);
+   281				if (walk_shadow_stack_part(scs_top, scs_base, store,
+   282							   size, &skipnr, &len))
+   283					goto out;
+   284				scs_top = scs_next;
+   285			}
+   286		}
+   287	
+   288		/* Handle task and softirq frames. */
+ > 289		scs_base = task_scs(current);
 
 -- 
 0-DAY CI Kernel Test Service
