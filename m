@@ -1,44 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2747E0
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 13:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D877E0
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 13:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648731614; x=1680267614;
+  t=1648732874; x=1680268874;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NrbE2Fu6qin+cBpDb/9/JkXlaserqB+2eKhtL+f1T/4=;
-  b=T6cjzXx202DUYirDtwm4RoioSIxlVoipErXEZ2Aut8VGwSeWTAQ/g8Oi
-   BomJKmg2IGLllmaYQVrbJ4y05fGHO3fzCoDZsRX2LO7Z9ZX124I9u082R
-   31SXa3xiu16LCKYV4SzZie8c7URoH2Mnsdcmx/Knk/epdnw8XCWsx30xh
-   q5Kp5u1XumOor1rE3clhTWxMRVsNHi07dTedX2q+VtaJWMuQQcbYIz9v+
-   M/iSap6zkq6gbk9rBOJGL7cCa2czEZ/1kfeQ7ZItst8wJIhBnquFrI12a
-   sWJML5pF+mnXlsk5HXarJv3njM6kCjSyINSkNUPaQHi9p8u4x4AVnSS+P
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="257411335"
+  bh=YphCyCDyYB++FjBDTmWfkqYVyu71VV0RtubYJYXU9co=;
+  b=hTMKSKZD3NbIuR6+xuPR6O73Iaut50aTuYhYntCVBzBrA5wIBlgr7XXo
+   5G96yacIz46XXALqjvOud/TxWmmR1sOh2hO0DimTBucDXhRQ7BCfC2gkp
+   R++9KnSVliupu5pKwTtPEQjuj7H2Fk9+18KKqdlAXeZZYpHr5OUOE2Qz/
+   n6L2OIj56sjc/47e+4vgSNz5Jt4GHGwbr0j5mcO/juZT5Wupadots6Dwd
+   yWKBFcCIMPI0t96dUHyMHXxQ0Pr7Y5ZVy8PDzA8B+TIZXvXskfx4NUcRw
+   1mXTp0+lBBUXnkiqHMOoAwCPqxlzSdqqWTevAXiU8boZjsxWPkUZFHN6g
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="241986004"
 X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="257411335"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 06:00:13 -0700
+   d="scan'208";a="241986004"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 06:21:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="522335459"
+   d="scan'208";a="654742857"
 Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 31 Mar 2022 06:00:10 -0700
+  by orsmga004.jf.intel.com with ESMTP; 31 Mar 2022 06:21:12 -0700
 Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nZuPK-0000Gm-5P;
-	Thu, 31 Mar 2022 13:00:10 +0000
-Date: Thu, 31 Mar 2022 20:59:49 +0800
+	id 1nZujf-0000Hg-UM;
+	Thu, 31 Mar 2022 13:21:11 +0000
+Date: Thu, 31 Mar 2022 21:20:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrey Konovalov <andreyknvl@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [hnaz-mm:master 29/122] arch/arm64/kernel/stacktrace.c:289:13:
- error: implicit declaration of function 'task_scs' is invalid in C99
-Message-ID: <202203312049.zLjHyetm-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [jgunthorpe:vfio_v5.18 16/25]
+ drivers/vfio/pci/vfio_pci_zdev.c:112:5: warning: no previous prototype for
+ function 'vfio_pci_info_zdev_add_caps'
+Message-ID: <202203312150.HOgKwSSc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,70 +48,109 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/hnaz/linux-mm master
-head:   074b4ea9811e2c47ae1ecada177629c19fa56d59
-commit: 8cdc580c5ca2ffecb0db4f84a99167ef763a21cc [29/122] arm64: implement stack_trace_save_shadow
-config: arm64-randconfig-r012-20220331 (https://download.01.org/0day-ci/archive/20220331/202203312049.zLjHyetm-lkp@intel.com/config)
+tree:   https://github.com/jgunthorpe/linux vfio_v5.18
+head:   2af6f07c2b38e8b37c41347ff9bd2b2e8b32a8d6
+commit: cbf96a0bc2aeb156e3bedee832c2c336953d8df2 [16/25] vfio/pci: Split linux/vfio_pci_core.h
+config: s390-randconfig-r025-20220331 (https://download.01.org/0day-ci/archive/20220331/202203312150.HOgKwSSc-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 881350a92d821d4f8e4fa648443ed1d17e251188)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/hnaz/linux-mm/commit/8cdc580c5ca2ffecb0db4f84a99167ef763a21cc
-        git remote add hnaz-mm https://github.com/hnaz/linux-mm
-        git fetch --no-tags hnaz-mm master
-        git checkout 8cdc580c5ca2ffecb0db4f84a99167ef763a21cc
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/jgunthorpe/linux/commit/cbf96a0bc2aeb156e3bedee832c2c336953d8df2
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe vfio_v5.18
+        git checkout cbf96a0bc2aeb156e3bedee832c2c336953d8df2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kernel/ arch/s390/lib/ drivers/vfio/pci/ kernel/locking/ kernel/trace/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/arm64/kernel/stacktrace.c:289:13: error: implicit declaration of function 'task_scs' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           scs_base = task_scs(current);
-                      ^
->> arch/arm64/kernel/stacktrace.c:289:11: warning: incompatible integer to pointer conversion assigning to 'unsigned long *' from 'int' [-Wint-conversion]
-           scs_base = task_scs(current);
-                    ^ ~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+   In file included from drivers/vfio/pci/vfio_pci_zdev.c:9:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/vfio/pci/vfio_pci_zdev.c:9:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/vfio/pci/vfio_pci_zdev.c:9:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/vfio/pci/vfio_pci_zdev.c:112:5: warning: no previous prototype for function 'vfio_pci_info_zdev_add_caps' [-Wmissing-prototypes]
+   int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+       ^
+   drivers/vfio/pci/vfio_pci_zdev.c:112:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+   ^
+   static 
+   13 warnings generated.
 
 
-vim +/task_scs +289 arch/arm64/kernel/stacktrace.c
+vim +/vfio_pci_info_zdev_add_caps +112 drivers/vfio/pci/vfio_pci_zdev.c
 
-   260	
-   261	noinline notrace int arch_stack_walk_shadow(unsigned long *store,
-   262						    unsigned int size,
-   263						    unsigned int skipnr)
-   264	{
-   265		unsigned long *scs_top, *scs_base, *scs_next;
-   266		unsigned int len = 0, part;
-   267	
-   268		preempt_disable();
-   269	
-   270		/* Get the SCS pointer. */
-   271		asm volatile("mov %0, x18" : "=&r" (scs_top));
-   272	
-   273		/* The top SCS slot is empty. */
-   274		scs_top -= 1;
-   275	
-   276		/* Handle SDEI and hardirq frames. */
-   277		for (part = 0; part < ARRAY_SIZE(scs_parts); part++) {
-   278			scs_next = *this_cpu_ptr(scs_parts[part].saved);
-   279			if (scs_next) {
-   280				scs_base = *this_cpu_ptr(scs_parts[part].base);
-   281				if (walk_shadow_stack_part(scs_top, scs_base, store,
-   282							   size, &skipnr, &len))
-   283					goto out;
-   284				scs_top = scs_next;
-   285			}
-   286		}
-   287	
-   288		/* Handle task and softirq frames. */
- > 289		scs_base = task_scs(current);
+e6b817d4b8217a Matthew Rosato 2020-10-07  108  
+e6b817d4b8217a Matthew Rosato 2020-10-07  109  /*
+e6b817d4b8217a Matthew Rosato 2020-10-07  110   * Add all supported capabilities to the VFIO_DEVICE_GET_INFO capability chain.
+e6b817d4b8217a Matthew Rosato 2020-10-07  111   */
+536475109c8284 Max Gurtovoy   2021-08-26 @112  int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+
+:::::: The code at line 112 was first introduced by commit
+:::::: 536475109c82841126ca341ef0f138e7298880c1 vfio/pci: Rename vfio_pci_device to vfio_pci_core_device
+
+:::::: TO: Max Gurtovoy <mgurtovoy@nvidia.com>
+:::::: CC: Alex Williamson <alex.williamson@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
