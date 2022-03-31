@@ -1,43 +1,47 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D877E0
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 13:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797227E0
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 13:52:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648732874; x=1680268874;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YphCyCDyYB++FjBDTmWfkqYVyu71VV0RtubYJYXU9co=;
-  b=hTMKSKZD3NbIuR6+xuPR6O73Iaut50aTuYhYntCVBzBrA5wIBlgr7XXo
-   5G96yacIz46XXALqjvOud/TxWmmR1sOh2hO0DimTBucDXhRQ7BCfC2gkp
-   R++9KnSVliupu5pKwTtPEQjuj7H2Fk9+18KKqdlAXeZZYpHr5OUOE2Qz/
-   n6L2OIj56sjc/47e+4vgSNz5Jt4GHGwbr0j5mcO/juZT5Wupadots6Dwd
-   yWKBFcCIMPI0t96dUHyMHXxQ0Pr7Y5ZVy8PDzA8B+TIZXvXskfx4NUcRw
-   1mXTp0+lBBUXnkiqHMOoAwCPqxlzSdqqWTevAXiU8boZjsxWPkUZFHN6g
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="241986004"
+  t=1648734756; x=1680270756;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Cea9BIXvxQfSFyXleL4Gt1pWuuhgt62Aif3PCu7C/tw=;
+  b=C4wIXz+vbMjVff8IaIJabk8kvlDw8C8yRnPlj+FlIiUt9iJ9pfJOaQZO
+   hGY3CboG86KQGHZ1KRlcZucBNmtYXlg/wxNYErLFVhZNM/shX5+Ea07f0
+   ZMxKAxGmZrrhaY4r3K9NM9m94xEw8Q8BPiM02/5pRZ2ttXzb90CE1a5e5
+   TBe9HBG3fxDaqzmMdQmvuXulSjxZkt4YPDfRuqyr84m9fnPiN9ZNs09wA
+   Ber0qDBhmZhRkgeheAY918CC1glNpw/2FUmqydG+MgoUoydHm50WlWCS6
+   lhLz4vj4b0+oELHd3qRKM5cT3QqPA6r91amgQtfPkO/QclEaniYT3ZX/l
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="260024545"
 X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="241986004"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 06:21:14 -0700
+   d="scan'208";a="260024545"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 06:52:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="654742857"
+   d="scan'208";a="720471387"
 Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 31 Mar 2022 06:21:12 -0700
+  by orsmga005.jf.intel.com with ESMTP; 31 Mar 2022 06:52:32 -0700
 Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nZujf-0000Hg-UM;
-	Thu, 31 Mar 2022 13:21:11 +0000
-Date: Thu, 31 Mar 2022 21:20:15 +0800
+	id 1nZvDz-0000JM-Bt;
+	Thu, 31 Mar 2022 13:52:31 +0000
+Date: Thu, 31 Mar 2022 21:51:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:vfio_v5.18 16/25]
- drivers/vfio/pci/vfio_pci_zdev.c:112:5: warning: no previous prototype for
- function 'vfio_pci_info_zdev_add_caps'
-Message-ID: <202203312150.HOgKwSSc-lkp@intel.com>
+To: Alistair Francis <alistair.francis@opensource.wdc.com>,
+	aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+	palmer@dabbelt.com, paul.walmsley@sifive.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, atishp@rivosinc.com,
+	anup@brainfault.org, guoren@kernel.org, alistair23@gmail.com,
+	linux-kernel@vger.kernel.org,
+	Alistair Francis <alistair.francis@wdc.com>
+Subject: Re: [PATCH v3] riscv: Ensure only ASIDLEN is used for sfence.vma
+Message-ID: <202203312110.VamttjhO-lkp@intel.com>
+References: <20220331055906.3552337-1-alistair.francis@opensource.wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,111 +50,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220331055906.3552337-1-alistair.francis@opensource.wdc.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/jgunthorpe/linux vfio_v5.18
-head:   2af6f07c2b38e8b37c41347ff9bd2b2e8b32a8d6
-commit: cbf96a0bc2aeb156e3bedee832c2c336953d8df2 [16/25] vfio/pci: Split linux/vfio_pci_core.h
-config: s390-randconfig-r025-20220331 (https://download.01.org/0day-ci/archive/20220331/202203312150.HOgKwSSc-lkp@intel.com/config)
+Hi Alistair,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17 next-20220331]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Francis/riscv-Ensure-only-ASIDLEN-is-used-for-sfence-vma/20220331-140116
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 787af64d05cd528aac9ad16752d11bb1c6061bb9
+config: riscv-randconfig-c006-20220331 (https://download.01.org/0day-ci/archive/20220331/202203312110.VamttjhO-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 881350a92d821d4f8e4fa648443ed1d17e251188)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/jgunthorpe/linux/commit/cbf96a0bc2aeb156e3bedee832c2c336953d8df2
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe vfio_v5.18
-        git checkout cbf96a0bc2aeb156e3bedee832c2c336953d8df2
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/162147030f410152d028af446a7383e3c9410f55
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Alistair-Francis/riscv-Ensure-only-ASIDLEN-is-used-for-sfence-vma/20220331-140116
+        git checkout 162147030f410152d028af446a7383e3c9410f55
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kernel/ arch/s390/lib/ drivers/vfio/pci/ kernel/locking/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/vfio/pci/vfio_pci_zdev.c:9:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/vfio/pci/vfio_pci_zdev.c:9:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/vfio/pci/vfio_pci_zdev.c:9:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/vfio/pci/vfio_pci_zdev.c:112:5: warning: no previous prototype for function 'vfio_pci_info_zdev_add_caps' [-Wmissing-prototypes]
-   int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
-       ^
-   drivers/vfio/pci/vfio_pci_zdev.c:112:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
-   ^
-   static 
-   13 warnings generated.
+>> arch/riscv/mm/context.c:307:39: error: no member named 'id' in 'mm_context_t'
+           return atomic_long_read(&mm->context.id) & asid_mask;
+                                    ~~~~~~~~~~~ ^
+>> arch/riscv/mm/context.c:307:45: error: use of undeclared identifier 'asid_mask'
+           return atomic_long_read(&mm->context.id) & asid_mask;
+                                                      ^
+   2 errors generated.
 
 
-vim +/vfio_pci_info_zdev_add_caps +112 drivers/vfio/pci/vfio_pci_zdev.c
+vim +307 arch/riscv/mm/context.c
 
-e6b817d4b8217a Matthew Rosato 2020-10-07  108  
-e6b817d4b8217a Matthew Rosato 2020-10-07  109  /*
-e6b817d4b8217a Matthew Rosato 2020-10-07  110   * Add all supported capabilities to the VFIO_DEVICE_GET_INFO capability chain.
-e6b817d4b8217a Matthew Rosato 2020-10-07  111   */
-536475109c8284 Max Gurtovoy   2021-08-26 @112  int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
-
-:::::: The code at line 112 was first introduced by commit
-:::::: 536475109c82841126ca341ef0f138e7298880c1 vfio/pci: Rename vfio_pci_device to vfio_pci_core_device
-
-:::::: TO: Max Gurtovoy <mgurtovoy@nvidia.com>
-:::::: CC: Alex Williamson <alex.williamson@redhat.com>
+   304	
+   305	unsigned long get_mm_asid(struct mm_struct *mm)
+   306	{
+ > 307		return atomic_long_read(&mm->context.id) & asid_mask;
+   308	}
+   309	
 
 -- 
 0-DAY CI Kernel Test Service
