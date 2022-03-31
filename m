@@ -1,158 +1,109 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A6F7B
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 00:15:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648685714; x=1680221714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6sTWKjK3HZDhhjYP5GjlhZRnGY31f0fAoCQWWzN3SAE=;
-  b=gTrvsMIH8hFBGbkBBnhJbF6UuhzknJ7VxOTsAmiHRRCLVlo5/cdQIbrC
-   GMANFT3xB1ylKW9uo0B+CnZMwZbW8wvX/XbQrEwyruDQV9YO+Sv8Z6xRI
-   wdQFy2gnHKyQ9nN2xznsoDSJ2RBIaePBWlYf43vtthww0loaNUZlU2EY+
-   W8YhOOL4XfnsyoH8ukqgqO8LDJuUlyuw182QfNb1h4Jy1ATqcPBx7zSQU
-   Fu/J6TXyyjU1w0a6UsofXH4GutFfcMCdCgouvhsF++8+OPmq0V4WXX33C
-   MRwsXinkbL5FR+c7pY2Qi6FHqgGQlK1T8kqGNeq/8zfCL1j4ZQCwYlqM7
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="346112237"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="346112237"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 17:15:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="605734246"
-Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Mar 2022 17:15:11 -0700
-Received: from kbuild by 56431612eabd with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nZiT1-0000gi-60;
-	Thu, 31 Mar 2022 00:15:11 +0000
-Date: Thu, 31 Mar 2022 08:14:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jean-Marc Eurin <jmeurin@google.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Jean-Marc Eurin <jmeurin@google.com>
-Subject: Re: [PATCH v2 2/2] mtd: mtdoops: Create a header structure for the
- saved mtdoops.
-Message-ID: <202203310819.kOiVSg8W-lkp@intel.com>
-References: <20220330182816.1177341-4-jmeurin@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5DF373
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 01:45:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE09C340EC;
+	Thu, 31 Mar 2022 01:45:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1648691136;
+	bh=Jimtgh3p6x6lop7aLuuAmOqnI7ccoKcZs8IHWD2GpGc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=qNC+DM/cW/6WVIsIxQtRAC3fhgtL3MuaGT/uJg7dje1cwn9dAYJfJ9BduTQlqjc+R
+	 x0cHOdSyhnBtxOJiI3RKoPDdKjvDg/Mg1QHfkcSagCDzoSt2oRVgMPPUWS0lsQEKXJ
+	 uenpSQuyZlFPmW0MOrG7b8Bfv845s8vzFSqNIh0I9vnS6tcAAQsq4G42ooiHajlJxR
+	 6tUjp1E3UrtdHBX4VDqAY95nlJmm4CpsliW+17gmxB3Y5DgGEbmbC7pTIAru6vEgU/
+	 6G/S+8dnDUioKP9PJcdpVH7K+Hq93j9wXJ0jznGsfd3GTHpASuTgmd/0o+nLESGRuD
+	 b+cISJGyX/1gQ==
+Date: Thu, 31 Mar 2022 10:45:31 +0900
+From: Masami Hiramatsu <mhiramat@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Padmanabha Srinivasaiah
+ <treasure4paddy@gmail.com>, LKML <linux-kernel@vger.kernel.org>, Jonathan
+ Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, Randy Dunlap
+ <rdunlap@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, Nathan
+ Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, Masahiro Yamada
+ <masahiroy@kernel.org>, Linux Kbuild mailing list
+ <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH v5 0/3] bootconfig: Support embedding a bootconfig in
+ kernel for non initrd boot
+Message-Id: <20220331104531.81d0edf9a85a4f69020a9f13@kernel.org>
+In-Reply-To: <CAKwvOdmAYQZtzGudBjmiRZNjT+VixTdNbJmYmxc7-gQNCsHfrA@mail.gmail.com>
+References: <164847778869.3060675.8115416881394543419.stgit@devnote2>
+	<CAKwvOdmAYQZtzGudBjmiRZNjT+VixTdNbJmYmxc7-gQNCsHfrA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330182816.1177341-4-jmeurin@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Jean-Marc,
+Hi Nick,
 
-Thank you for the patch! Perhaps something to improve:
+On Wed, 30 Mar 2022 11:04:50 -0700
+Nick Desaulniers <ndesaulniers@google.com> wrote:
 
-[auto build test WARNING on mtd/mtd/next]
-[also build test WARNING on mtd/mtd/fixes linux/master linus/master v5.17 next-20220330]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> On Mon, Mar 28, 2022 at 7:29 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > KNOWN ISSUE:
+> >
+> > According to the report from Padmanabha[3] and my analysis [4], the embedded
+> > bootconfig data may not be updated if you do incremental build the kernel
+> > with CONFIG_LTO_CLANG_THIN.
+> >
+> > [3] https://lore.kernel.org/all/20220321183500.GA4065@pswork/T/#u
+> > [4] https://lore.kernel.org/all/20220327115526.cc4b0ff55fc53c97683c3e4d@kernel.org/
+> >
+> > This seems like clang's LTO Thin mode issue. It may not detect the inline
+> > asm depends on external files.
+> >
+> > I think the possible workaround is to split the inline asm which includes
+> > '.incbin' directive into an asm file. But this should be done in another
+> > seires because there are other features which uses '.incbin'. (e.g.
+> > /proc/config.gz)
+> 
+> Hi Masami,
+> I saw Padmanabha's report (thanks for the report); sorry for not
+> responding sooner, I've been traveling recently for a funeral.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jean-Marc-Eurin/mtd-mtdoops-Structure-the-header-of-the-dumped-oops/20220331-023808
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220331/202203310819.kOiVSg8W-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0d39801219fd826554caf69402424346799810d5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jean-Marc-Eurin/mtd-mtdoops-Structure-the-header-of-the-dumped-oops/20220331-023808
-        git checkout 0d39801219fd826554caf69402424346799810d5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mtd/
+Oh, sorry about that. I think this is not so hurry. 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Any chance we can use
+> 
+> CFLAGS_REMOVE_<file>.o := $(CC_FLAGS_LTO)
+> 
+> a la
+> commit d2dcd3e37475 ("x86, cpu: disable LTO for cpu.c")
 
-All warnings (new ones prefixed by >>):
+Hm, this looks good to me. Let me confirm that works.
+(Does this mean the bootconfig.o will be compiled to elf binary?)
 
->> drivers/mtd/mtdoops.c:244:39: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
-                                  page * record_size, retlen, sizeof(hdr), ret);
-                                                              ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+> 
+> with a comment linking to
+> https://github.com/ClangBuiltLinux/linux/issues/1618
 
+Thanks for reporting!
 
-vim +244 drivers/mtd/mtdoops.c
+> 
+> for the Translation Units using .incbin, until we have had more time
+> to triage+fix?
 
-   225	
-   226	static void find_next_position(struct mtdoops_context *cxt)
-   227	{
-   228		struct mtd_info *mtd = cxt->mtd;
-   229		struct mtdoops_hdr hdr;
-   230		int ret, page, maxpos = 0;
-   231		u32 maxcount = 0xffffffff;
-   232		size_t retlen;
-   233	
-   234		for (page = 0; page < cxt->oops_pages; page++) {
-   235			if (mtd_block_isbad(mtd, page * record_size))
-   236				continue;
-   237			/* Assume the page is used */
-   238			mark_page_used(cxt, page);
-   239			ret = mtd_read(mtd, page * record_size, sizeof(hdr),
-   240				       &retlen, (u_char *)&hdr);
-   241			if (retlen != sizeof(hdr) ||
-   242					(ret < 0 && !mtd_is_bitflip(ret))) {
-   243				printk(KERN_ERR "mtdoops: read failure at %ld (%td of %d read), err %d\n",
- > 244				       page * record_size, retlen, sizeof(hdr), ret);
-   245				continue;
-   246			}
-   247	
-   248			if (hdr.seq == 0xffffffff && hdr.magic == 0xffffffff)
-   249				mark_page_unused(cxt, page);
-   250			if (hdr.seq == 0xffffffff || hdr.magic != MTDOOPS_KERNMSG_MAGIC)
-   251				continue;
-   252			if (maxcount == 0xffffffff) {
-   253				maxcount = hdr.seq;
-   254				maxpos = page;
-   255			} else if (hdr.seq < 0x40000000 && maxcount > 0xc0000000) {
-   256				maxcount = hdr.seq;
-   257				maxpos = page;
-   258			} else if (hdr.seq > maxcount && hdr.seq < 0xc0000000) {
-   259				maxcount = hdr.seq;
-   260				maxpos = page;
-   261			} else if (hdr.seq > maxcount && hdr.seq > 0xc0000000
-   262						&& maxcount > 0x80000000) {
-   263				maxcount = hdr.seq;
-   264				maxpos = page;
-   265			}
-   266		}
-   267		if (maxcount == 0xffffffff) {
-   268			cxt->nextpage = cxt->oops_pages - 1;
-   269			cxt->nextcount = 0;
-   270		}
-   271		else {
-   272			cxt->nextpage = maxpos;
-   273			cxt->nextcount = maxcount;
-   274		}
-   275	
-   276		mtdoops_inc_counter(cxt);
-   277	}
-   278	
+Yes. For this series, I can update with above one, but it doesn't cover the
+other parts. And since this issue is independent from the bootconfig, 
+I think we need a wider patch series to mitigate this issue on config.gz
+(and other .incbin users) too.
+
+Thank you,
+
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Masami Hiramatsu <mhiramat@kernel.org>
