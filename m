@@ -1,238 +1,95 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic313-15.consmr.mail.ne1.yahoo.com (sonic313-15.consmr.mail.ne1.yahoo.com [66.163.185.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9ACA2D
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 18:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648750635; x=1680286635;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LyjlgspTz5M7nOVapvHG9O4t2fb4YR+n80TSxzPPRIw=;
-  b=FheW0hwsfxWbq0/50EHDLaqt7H3DiZggvJGi1h0CKjOujV6cA6p1WSFr
-   58ahTgInH8Q8oPjg3zeTgSa42CkVp7Ps1mOIegl4Ke+WEWUuBiVDkq3YM
-   GHXVE8CuCMvFFhY07droselsKZS8NoDHdt315U8KueIsi4LsrqMWu0XIg
-   DINitWQ8Gu4fkeTDWaO/hsvKpoDs1u53KABAMWBO8a3LNgnvb1Dojj1hd
-   PSslJZ3Ty4Ah2ynWkh0LJx3TSAk9PEsHBMpCYG3yWSIHvq4m+EC7kqPo6
-   52qiPycdv+eVm1OBA5/TJR7PkoWbhZTQTWS2/k63I2jrE4cITthCBANw3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259893877"
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="259893877"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 11:17:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="606227575"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 31 Mar 2022 11:17:07 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nZzM2-0000XQ-BO;
-	Thu, 31 Mar 2022 18:17:06 +0000
-Date: Fri, 1 Apr 2022 02:16:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Qianggui Song <qianggui.song@amlogic.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Fabien Dessenne <fabien.dessenne@foss.st.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-	openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Neil Armstrong <narmstrong@baylibre.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Tomasz Figa <tomasz.figa@gmail.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>
-Subject: Re: [PATCH v3 05/13] pinctrl: samsung: Switch to use
- for_each_gpiochip_node() helper
-Message-ID: <202204010248.AB6ZnOyw-lkp@intel.com>
-References: <20220330145030.1562-6-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2E37C
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 18:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1648752264; bh=S0ikuEGsksL6QEKgy7sSSBTRKMTS3ahAMlEJon0Rvvg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=VS245s8fIy5iEQmFdShsxEg6S3szR/3SbAyYw8uyJTs09aQlPxBMYATVzvoXhhUXNf2Yk8ehLfaXzyG6QcW0zfjhqbEt045qegTly8wqpS8CvpUpuvB/baBYw4tN72BAESW837pPylxiQfYWRdkJ6uWtrf3Uac50a59PD+PC8XWGOkQno3mMpwnjSDqf0S1fgY4KVF78Qc5iU1UpTHl/Yif3lBzNXprJKERRtwdiTBzYbN3UOlZFbIjTm6PRNa9+S5pZQMiRDqaT35esjQxzcFikxYjMqcbjgPZBYTPDDdOkKXXWqjmrxY1nTgov4lYTEgCrPN0aax4PT7Iymvhu/w==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1648752264; bh=ZQ7jenPmEAfPsjdQbdIA6ipzzy6g4DVPxeWJY3I6AlY=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=layue1XgrBZhXQEvqX7wQY7/zO1xGnHjNaQ3OuuzJagIT1rsp0fRjFVwYVGzUWI4cteWbK2g7/sYN54M3LyhPduLZpMjjUTqf+4/VcAN//SYxdKJUMUmnfdmKuxuLe4Mh2h3ipeLfuqHpIZZh24Zio0nVyg1ofOJY9c9DhqhOT5zE825wGMYiCrgrXGQRTf0GKPotAooS+LsKrU3HfnrPsJhnXo/9KkKlfrkBHsNaAlg5IdA0Qs9CtuJj6YmY2AATOwwavzWLQb7jNKz280jUrvq7xo78sYYRCCIPPr4G92jncUZGzU+xaRNSMzO/0JHhv2CqJclRDhMU4senwQiog==
+X-YMail-OSG: bejsCwQVM1lTTK.NjCoKG2fU0t.Hs4sSJEGFgswbFk1Scos27ld1BbbcS7lTL6v
+ eba7XIDhoqZh2PEz2pvut7RBt0triZMp3l3eIUEI_7vkUOtjhrMEvclVOQB3jBiitJa5Scg7uxpA
+ cPycnu.7uWgWZferQkqDKCbexMjiMw6snPuDqH3mredIPMu9nEkFhz6tV2Ri83LV6qX..sf65rNx
+ ycW7KG.fLLysuU7s7KMMYW3unizaRc1cGTTmcf9Ve4gAp97HPkNzTzwIp_Rj2hxgMHMhaPlMnGpA
+ FRFWoQO6NTaKwva85XXmu8xP31nKtMlPbxdzaD_Tf4LKYDgGtLfxXg5LE_Znzz4sAlNCKocXOT8K
+ 7i1kcAovFHqHOSm9ccNKy1VM9JmaYD_84n7rCLSraCJjpXzfwFj7Sl2IecIN8TGz2gKfJ7fWEvdB
+ 3_FV4b0OFQc_mNBb2LMAzNIwiSNGY3Isf4LrFX87CRZI5TyJG_cPEp7IUxcqx3fvQ81QikWIhZcx
+ dge.f_BdPDaDoUZ4ixDoCJo.LDVW2WaR20ONQmBtFQkVeWsNHFtgKyA3RBtguZyUF2HlRUDPi6bP
+ AZHfXb81va.IruSrcQAXw.uIBgAdeneC_vbFOaG0wBTCqLQGdrqwFkP6IKwI8vSIzb3qojkjSzA2
+ Zc3wTQ6bDvGqgmbBBlmOljfPFfLdcc6ccdn5TSKti6VJzUYnOeu3ITn3mIy8PxQl_j_ytENdxmva
+ YxuhZi2ZyJ372SV.8NBfCQCN3Nh0K93PFHGW2.EhBv10gXU.eT38ElzlCG6cW75KvmRmaRYk0zgU
+ a01EUvrwyuEG0dFmwKFEBmnkQtu8gBXHRGMnZJANoUnxAZnWadCa78TnIUh951EFKdR3Ud4CAwep
+ SJM3p1N6DBb8AzDZGehUyKu__.5XXIZEMFb.K85Ewg8Lajfm9pfV2ZS_muP41KmxPvwZMQ9wvIO.
+ o_yvXBlpzYYYAUGkM72RkSQpFM8QNDhmB770_DDuDYAfcYgdMcYzdltTNXbbcuwk2wrg4.52Ou8C
+ RCOf2Vh94F0.wOW31vh5KeJUeXYiocqKxxV3rcXxkkzJWAfRR8A2fFsk4HHGWMMH3KaM_JEUqhpv
+ hf8k5QwtGRwzWofQomuvqa5qfA3GDkz7AayeARQB9Yl20LEjGslVkPw5D4W_0bKa3MRtl0tGQ9Ka
+ _Iqwh55G9lJbdWs6QjdzJn3JwyZ_c.QcgEE71.f3hTLgrg3sCUul.FM2pFeKQaPigJFUV8Sx.S8b
+ radjMyRC7aF4hA19mE1BBq_jS0G6ablI2fnNOAxwV18zTPr7qq12kSKuTp_h1sGyIROdzsCDEDKO
+ aC.HImdR9FQ4S6MfPzXNtFmmNHk_ycutFuxB8TYBGRI4h.o3ASbC4OMFsnxkx9mLjxDKX2lDGZfi
+ 1LOeKjAkabrT4oqeYJjAb59TwLWEbM7Rkp5reYQSgQ6hU0B8sS5XIniCVvM9CzrH07jijgeh4vKo
+ q115kl28U979oL0e.UU11BPmdBdrDdzlHhBzjfZ4Uyn_HyUsfT79wWyUGXeeyEandCkfOhyV1Azq
+ BHLqaET9RgIOVgsr2MkBnTBEzrJdZMsf4Gsf4lclIa_Kn8McfWsioFuQvo4rAPmC3BXfym7iAJxS
+ hRyklPZ5F1D1VkaaXrvO4126Z1ph3QMi_KU8vdblLKWNrQlPyyG4fd6gg_vmYhuBuqZIseT8wVyc
+ Rm8bFmodWa31zr8N0L3VEFHu.MiboJK4YUwBnRQYuV3cYGto5WzzvQpr1fINisrAcce2T1uX90ZZ
+ Ue25qpBNct4UaDv7GG5KwjL_3MNkGAyme6Tt5kx.ViEpl3E0QyJ7loSwxC9R5UbjCRhl4r78ZfHU
+ yGy8Ce9KRd93Ws0NcMwjKK0ikymwekFK_aXeUkg0SX68gZ8jJs7wJE9tqefVay_7LdypJmY4LOvr
+ VIDxlMvS2iDjeGAQ86xtXMYIa_iqw9dIv4tAzx6KTC0SKqUuwBCPMa2JHFKahTOK7Fsp.rzDJwGs
+ D2A20NT3lDVO4yZF_BlqoSaBJ68buy4sOLLRguPHRVVgDMZLF9P1LrMnyJzoB9LPm6AMJdhGD3Ld
+ qkmpbW6ypzDfikOYMtCIQfGLYL6o9FBE05xq5_UoUjgNu3mORo4mrxBg.g9k20BeeTH1FmPPMA1C
+ Jv9AwX.WJj89c5qzv85vHXq0qLq2BpU5EC53SrjuwgRncLrF3uLSIorfXWkhuRKjXBQ11vb5iS5r
+ s_tafD5L4IaQnhbzSU0qJPBZPCOxlkcmlOPJ1t1RMaVfQLMGg1U_CoyXfixASkKPCNxGiVR0vgF_
+ ztEk-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Thu, 31 Mar 2022 18:44:24 +0000
+Received: by hermes--canary-production-bf1-665cdb9985-85ftg (VZM Hermes SMTP Server) with ESMTPA ID a52cdcf988e0124571774a6608f154ea;
+          Thu, 31 Mar 2022 18:44:22 +0000 (UTC)
+Message-ID: <9b521078-5809-7c59-9c58-b71ee406ee29@schaufler-ca.com>
+Date: Thu, 31 Mar 2022 11:44:19 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330145030.1562-6-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5/5] smack: Remove redundant assignments
+Content-Language: en-US
+To: Michal Orzel <michalorzel.eng@gmail.com>, James Morris
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Casey Schaufler <casey@schaufler-ca.com>
+References: <20220331173358.40939-1-michalorzel.eng@gmail.com>
+ <20220331173358.40939-5-michalorzel.eng@gmail.com>
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220331173358.40939-5-michalorzel.eng@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-Hi Andy,
+On 3/31/2022 10:33 AM, Michal Orzel wrote:
+> Get rid of redundant assignments which end up in values not being
+> read either because they are overwritten or the function ends.
+>
+> Reported by clang-tidy [deadcode.DeadStores]
+>
+> Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
 
-I love your patch! Yet something to improve:
+Thank you. I will take this via the Smack tree.
 
-[auto build test ERROR on a67ba3cf9551f8c92d5ec9d7eae1aadbb9127b57]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/gpiolib-Two-new-helpers-and-way-toward-fwnode/20220330-225341
-base:   a67ba3cf9551f8c92d5ec9d7eae1aadbb9127b57
-config: riscv-randconfig-c006-20220331 (https://download.01.org/0day-ci/archive/20220401/202204010248.AB6ZnOyw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 881350a92d821d4f8e4fa648443ed1d17e251188)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3539d23dd289ca77a85d66fe8721e4febfc50ea4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/gpiolib-Two-new-helpers-and-way-toward-fwnode/20220330-225341
-        git checkout 3539d23dd289ca77a85d66fe8721e4febfc50ea4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/pinctrl/samsung/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/pinctrl/samsung/pinctrl-s3c64xx.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/pinctrl/samsung/pinctrl-s3c64xx.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/pinctrl/samsung/pinctrl-s3c64xx.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/pinctrl/samsung/pinctrl-s3c64xx.c:474:50: error: no member named 'of_node' in 'struct samsung_pin_bank'; did you mean 'fwnode'?
-                   bank->irq_domain = irq_domain_add_linear(bank->of_node,
-                                                                  ^~~~~~~
-                                                                  fwnode
-   drivers/pinctrl/samsung/pinctrl-samsung.h:168:24: note: 'fwnode' declared here
-           struct fwnode_handle *fwnode;
-                                 ^
-   drivers/pinctrl/samsung/pinctrl-s3c64xx.c:746:50: error: no member named 'of_node' in 'struct samsung_pin_bank'; did you mean 'fwnode'?
-                   bank->irq_domain = irq_domain_add_linear(bank->of_node,
-                                                                  ^~~~~~~
-                                                                  fwnode
-   drivers/pinctrl/samsung/pinctrl-samsung.h:168:24: note: 'fwnode' declared here
-           struct fwnode_handle *fwnode;
-                                 ^
-   7 warnings and 2 errors generated.
-
-
-vim +474 drivers/pinctrl/samsung/pinctrl-s3c64xx.c
-
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  444  
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  445  /**
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  446   * s3c64xx_eint_gpio_init() - setup handling of external gpio interrupts.
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  447   * @d: driver data of samsung pinctrl driver.
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  448   */
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  449  static int s3c64xx_eint_gpio_init(struct samsung_pinctrl_drv_data *d)
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  450  {
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  451  	struct s3c64xx_eint_gpio_data *data;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  452  	struct samsung_pin_bank *bank;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  453  	struct device *dev = d->dev;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  454  	unsigned int nr_domains;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  455  	unsigned int i;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  456  
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  457  	if (!d->irq) {
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  458  		dev_err(dev, "irq number not available\n");
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  459  		return -EINVAL;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  460  	}
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  461  
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  462  	nr_domains = 0;
-1bf00d7a6dbff0 drivers/pinctrl/samsung/pinctrl-s3c64xx.c Tomasz Figa      2014-09-23  463  	bank = d->pin_banks;
-1bf00d7a6dbff0 drivers/pinctrl/samsung/pinctrl-s3c64xx.c Tomasz Figa      2014-09-23  464  	for (i = 0; i < d->nr_banks; ++i, ++bank) {
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  465  		unsigned int nr_eints;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  466  		unsigned int mask;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  467  
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  468  		if (bank->eint_type != EINT_TYPE_GPIO)
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  469  			continue;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  470  
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  471  		mask = bank->eint_mask;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  472  		nr_eints = fls(mask);
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  473  
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18 @474  		bank->irq_domain = irq_domain_add_linear(bank->of_node,
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  475  					nr_eints, &s3c64xx_gpio_irqd_ops, bank);
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  476  		if (!bank->irq_domain) {
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  477  			dev_err(dev, "gpio irq domain add failed\n");
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  478  			return -ENXIO;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  479  		}
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  480  
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  481  		++nr_domains;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  482  	}
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  483  
-0ed2dd03b94b7b drivers/pinctrl/samsung/pinctrl-s3c64xx.c Kees Cook        2018-05-08  484  	data = devm_kzalloc(dev, struct_size(data, domains, nr_domains),
-0ed2dd03b94b7b drivers/pinctrl/samsung/pinctrl-s3c64xx.c Kees Cook        2018-05-08  485  			    GFP_KERNEL);
-fa5c0f46e2b9a1 drivers/pinctrl/samsung/pinctrl-s3c64xx.c Marek Szyprowski 2017-01-19  486  	if (!data)
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  487  		return -ENOMEM;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  488  	data->drvdata = d;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  489  
-1bf00d7a6dbff0 drivers/pinctrl/samsung/pinctrl-s3c64xx.c Tomasz Figa      2014-09-23  490  	bank = d->pin_banks;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  491  	nr_domains = 0;
-1bf00d7a6dbff0 drivers/pinctrl/samsung/pinctrl-s3c64xx.c Tomasz Figa      2014-09-23  492  	for (i = 0; i < d->nr_banks; ++i, ++bank) {
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  493  		if (bank->eint_type != EINT_TYPE_GPIO)
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  494  			continue;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  495  
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  496  		data->domains[nr_domains++] = bank->irq_domain;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  497  	}
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  498  
-623a650ebc886f drivers/pinctrl/samsung/pinctrl-s3c64xx.c Thomas Gleixner  2015-06-21  499  	irq_set_chained_handler_and_data(d->irq, s3c64xx_eint_gpio_irq, data);
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  500  
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  501  	return 0;
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  502  }
-61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  503  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>   security/smack/smackfs.c | 1 -
+>   1 file changed, 1 deletion(-)
+>
+> diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+> index 658eab05599e..9e61014073cc 100644
+> --- a/security/smack/smackfs.c
+> +++ b/security/smack/smackfs.c
+> @@ -1192,7 +1192,6 @@ static ssize_t smk_write_net4addr(struct file *file, const char __user *buf,
+>   			rc = -EINVAL;
+>   			goto free_out;
+>   		}
+> -		m = BEBITS;
+>   		masks = 32;
+>   	}
+>   	if (masks > BEBITS) {
