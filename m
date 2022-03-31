@@ -1,114 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A097B
-	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 08:25:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C1E4C340ED;
-	Thu, 31 Mar 2022 08:25:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648715109;
-	bh=2MxGsdREcZcC5dPhVe4pegMYaaOwE0pzgrqWpuXtrGc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=A1lgvRIuimSfgiCzSsPqrqzPyqJ/Ts6QNUpz89s8ANThoeoFMFD3+ixQA727+HWOq
-	 REuBOInQOtfZoLxQGzi1HT1fAoN63Fcit+so0ojLvQ3R/HUlvNitTG8lnnYQ8h2VG4
-	 EVguk8Nk4AnfSV4RKvcwqVp0qg56pDWvHDwKSIT3eIDgeMUjmC5fCwLuZEc4gc6MgE
-	 Lt/ifHthtHVcalu9xui4rO+kozd/ZER98FqzuTcfHNdUWqxMtGAc7FeE8lOeakOegP
-	 /N2iVe/5PHy066XlyX+NS5o2NF2W9CsvPYLQpvsCKCMdKTcKDTxgdT4v5D0pm0YP/V
-	 /8ayKrr16WUaw==
-From: Masami Hiramatsu <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
-	Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	llvm@lists.linux.dev,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Subject: [PATCH v7 4/4] docs: bootconfig: Add how to embed the bootconfig into kernel
-Date: Thu, 31 Mar 2022 17:25:03 +0900
-Message-Id: <164871510350.178991.10848731777317835399.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164871505771.178991.7870442736805590948.stgit@devnote2>
-References: <164871505771.178991.7870442736805590948.stgit@devnote2>
-User-Agent: StGit/0.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0FFD7F6
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 09:42:24 +0000 (UTC)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22V8sGQL020599;
+	Thu, 31 Mar 2022 09:42:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=WPCIEKOGOxbgD3kRwImprKgQzLng/m2SyAvJQuPp6V4=;
+ b=iq/8IpTboNsw2qrshfSjmWvbiW/ChVW5VK8GTfUr4yBVXwKcHBzwly0lvM1NcHlKfc8b
+ crlU0UayNPnKy6iLwR26VGzhvtqTP+HFzmvxR4KksAPPkLCMG/VI4NJBVmV6LSKNoT4I
+ xKb0n7dd0zuDw7Gp4HMhZaHnUoFP9fQmYNMqV+6ji9OeEYtvezvShnrUyX8oKt0pbarI
+ +rqI4VfqrZzNvQcpMguscR1iOnR5pGbNJGb5t7exPVxWTwQa7DSiHb0xlwT0eGJtzanp
+ f70ukiKl2+Bv0AE+Of960gyZWaSPG/ITouJ7gfKWo0vnFKNNxLMRKAlQVKsD1Th+ZT3b tA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3f562rmw73-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 31 Mar 2022 09:42:14 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22V9b8Nx014636;
+	Thu, 31 Mar 2022 09:42:13 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3f562rmw6d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 31 Mar 2022 09:42:13 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+	by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22V9fSpf025701;
+	Thu, 31 Mar 2022 09:42:10 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+	by ppma04fra.de.ibm.com with ESMTP id 3f1tf90uyx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 31 Mar 2022 09:42:10 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+	by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22V9gE3C42336748
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 31 Mar 2022 09:42:14 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 65952A405B;
+	Thu, 31 Mar 2022 09:42:08 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0F4FCA4054;
+	Thu, 31 Mar 2022 09:42:07 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.144.204])
+	by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+	Thu, 31 Mar 2022 09:42:06 +0000 (GMT)
+Date: Thu, 31 Mar 2022 12:42:04 +0300
+From: Mike Rapoport <rppt@linux.ibm.com>
+To: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: kernel test robot <lkp@intel.com>, Roman Gushchin <guro@fb.com>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Minchan Kim <minchan@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re:
+ [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 4036/5872] WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in
+ reference from the function memblock_bottom_up() to the variable
+ .meminit.data:memblock
+Message-ID: <YkV3bCqtLaVH+mC7@linux.ibm.com>
+References: <202203301412.MZ7wQvQz-lkp@intel.com>
+ <YkTP/+jhhAX6xlAQ@carbon.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkTP/+jhhAX6xlAQ@carbon.dhcp.thefacebook.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ihh56QH7Def_i5PNnurIYBjwTTybEFOK
+X-Proofpoint-ORIG-GUID: KFDrNZ5oYnuEr9lVqDjlhUbjbVbEtXWT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-31_03,2022-03-30_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0
+ priorityscore=1501 clxscore=1011 mlxscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203310052
 
-Add a description how to embed the bootconfig file into kernel.
+(added llvm folks)
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- Changes in v7:
-  - Rename CONFIG_EMBED_BOOT_CONFIG* to CONFIG_BOOT_CONFIG_EMBED*.
- Changes in v5:
-  - Update CONFIG_EMBED_BOOT_CONFIG_FILE which can accept relative path.
- Changes in v3:
-  - Fix typos.
- Changes in v2:
-  - Corrected the text accoding to Randy's suggestion.
-  - Do not reccomend to use relative path for CONFIG_EMBED_BOOT_CONFIG_FILE.
----
- Documentation/admin-guide/bootconfig.rst |   31 +++++++++++++++++++++++++++---
- 1 file changed, 28 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/Documentation/admin-guide/bootconfig.rst b/Documentation/admin-guide/bootconfig.rst
-index a1860fc0ca88..d99994345d41 100644
---- a/Documentation/admin-guide/bootconfig.rst
-+++ b/Documentation/admin-guide/bootconfig.rst
-@@ -158,9 +158,15 @@ Each key-value pair is shown in each line with following style::
- Boot Kernel With a Boot Config
- ==============================
- 
--Since the boot configuration file is loaded with initrd, it will be added
--to the end of the initrd (initramfs) image file with padding, size,
--checksum and 12-byte magic word as below.
-+There are two options to boot the kernel with bootconfig: attaching the
-+bootconfig to the initrd image or embedding it in the kernel itself.
-+
-+Attaching a Boot Config to Initrd
-+---------------------------------
-+
-+Since the boot configuration file is loaded with initrd by default,
-+it will be added to the end of the initrd (initramfs) image file with
-+padding, size, checksum and 12-byte magic word as below.
- 
- [initrd][bootconfig][padding][size(le32)][checksum(le32)][#BOOTCONFIG\n]
- 
-@@ -196,6 +202,25 @@ To remove the config from the image, you can use -d option as below::
- Then add "bootconfig" on the normal kernel command line to tell the
- kernel to look for the bootconfig at the end of the initrd file.
- 
-+Embedding a Boot Config into Kernel
-+-----------------------------------
-+
-+If you can not use initrd, you can also embed the bootconfig file in the
-+kernel by Kconfig options. In this case, you need to recompile the kernel
-+with the following configs::
-+
-+ CONFIG_BOOT_CONFIG_EMBED=y
-+ CONFIG_BOOT_CONFIG_EMBED_FILE="/PATH/TO/BOOTCONFIG/FILE"
-+
-+``CONFIG_BOOT_CONFIG_EMBED_FILE`` requires an absolute path or a relative
-+path to the bootconfig file from source tree or object tree.
-+The kernel will embed it as the default bootconfig.
-+
-+Just as when attaching the bootconfig to the initrd, you need ``bootconfig``
-+option on the kernel command line to enable the embedded bootconfig.
-+
-+Note that even if you set this option, you can override the embedded
-+bootconfig by another bootconfig which attached to the initrd.
- 
- Kernel parameters via Boot Config
- =================================
+On Wed, Mar 30, 2022 at 02:47:43PM -0700, Roman Gushchin wrote:
+> On Wed, Mar 30, 2022 at 02:53:14PM +0800, kbuild test robot wrote:
+> > Hi Roman,
+> > 
+> > FYI, the error/warning still remains.
+> > 
+> > tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+> > head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+> > commit: 0e0bfc41fdf4d79d39ebe929844cdee44f97366d [4036/5872] UPSTREAM: mm: cma: allocate cma areas bottom-up
+> > config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220330/202203301412.MZ7wQvQz-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://github.com/ammarfaizi2/linux-block/commit/0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+> >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+> >         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+> >         git checkout 0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> > 
+> > >> WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the variable .meminit.data:memblock
+> > The function memblock_bottom_up() references
+> > the variable __meminitdata memblock.
+> > This is often because memblock_bottom_up lacks a __meminitdata
+> > annotation or the annotation of memblock is wrong.
+> 
+> I guess this patch should fix it, however I fail to reproduce the original issue.
+> Maybe it's up to the specific compiler version.
+> 
+> --
+> 
+> From b55a8dd19f4156d7e24ec39b18ede06965ce1c4f Mon Sep 17 00:00:00 2001
+> From: Roman Gushchin <roman.gushchin@linux.dev>
+> Date: Wed, 30 Mar 2022 14:42:12 -0700
+> Subject: [PATCH] memblock: fix memblock_bottom_up() and
+>  memblock_set_bottom_up() annotations
+> 
+> memblock_bottom_up() and memblock_set_bottom_up() lack __meminitdata
+> annotations causing compiler warnings like:
+>   WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the
+>   variable .meminit.data:memblock
+> 
+> Fix it by adding the missing annotation and removing the wrong
+> __meminit annotation.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> ---
+>  include/linux/memblock.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> index 50ad19662a32..536bc2fc31e6 100644
+> --- a/include/linux/memblock.h
+> +++ b/include/linux/memblock.h
+> @@ -460,7 +460,7 @@ static inline void *memblock_alloc_node(phys_addr_t size,
+>  /*
+>   * Set the allocation direction to bottom-up or top-down.
+>   */
+> -static inline __init_memblock void memblock_set_bottom_up(bool enable)
+> +static inline __initdata_memblock void memblock_set_bottom_up(bool enable)
 
+I think putting __initdata_memlock won't help here, because there should be
+nothing wrong with __meminit function accessing __meminitdata data.
+
+My guesstimate would be that the compiler decided not to inline this and
+still dropped section attribute because of 'inline'.
+
+If this is the case we I think we should 
+
+	s/inline __init_memblock/__always_inline/
+
+>  {
+>  	memblock.bottom_up = enable;
+>  }
+> @@ -470,7 +470,7 @@ static inline __init_memblock void memblock_set_bottom_up(bool enable)
+>   * if this is true, that said, memblock will allocate memory
+>   * in bottom-up direction.
+>   */
+> -static inline __init_memblock bool memblock_bottom_up(void)
+> +static inline __initdata_memblock bool memblock_bottom_up(void)
+>  {
+>  	return memblock.bottom_up;
+>  }
+> -- 
+> 2.30.2
+> 
+
+-- 
+Sincerely yours,
+Mike.
