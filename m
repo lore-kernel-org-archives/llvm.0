@@ -1,36 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C9B7B;
-	Thu, 31 Mar 2022 15:37:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01886C340ED;
-	Thu, 31 Mar 2022 15:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F647B
+	for <llvm@lists.linux.dev>; Thu, 31 Mar 2022 16:11:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA79C340ED;
+	Thu, 31 Mar 2022 16:11:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648741028;
-	bh=1WPwzaVch64w0jPi0NN43I4/H8/WTq+VtwzIW+KkQKA=;
+	s=k20201202; t=1648743111;
+	bh=N3LF6qL3b+AkuR6hIqMLAR3Jr6PiseXe5qT4PBdX+mk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RNmWiGT+crMQsM0b3tQ+NN/NzxNDX8/ABeNcRPmBNkdmXt7kmIb3hVQ0nHMHWfWku
-	 9/l2fK1sHy2Elc7UGMtooY/262uX9gkPe2CLYRb1T5z5pfjHi+L0R2Sok2wSRI+4KN
-	 xiGlR3mUDFoYPoY0uH6ttuz0i19W5JoJGKAD7XV5RT6lzlKEafCkzoKcOkqzcGhZ7b
-	 OfRl/2UvC3QgSmYnSrjhdfvfiMTuCv0O3wj5VlqlXEK61YjhnCQ5jw9AXee1W/nMqO
-	 N91d5dq9OkpWt2sQahIYVpKw/gHr48+8zOlpB0wh0ysz9+XjG/KI4Fbu5u0qKb7hvx
-	 zZuxrPq+apX9Q==
-Date: Thu, 31 Mar 2022 08:37:01 -0700
+	b=cHfUUa5H1XS1LBoFh5E8Jikj/qoyrYRNDxg4FxjCbK9VCt2f+nL+GLh8YFk5BoDhi
+	 xp6K6VaXd4V/JL1ql466k8YK825gx23O8sqGKj2tyD+FnNrOnjsV17IcLs7ntVMaHJ
+	 8/9k9DK7S3+1bqsM4V/XAqNUp8qc0JIHcAIW5Mlz9wykzwBj3DaG+R/0LDqWCAwQx6
+	 BBYcWChgmbjyOEFD8DalFTFexLrYv/9tYLnpLNdt6DySthBFcbrzM8LDK4Cp78TiU7
+	 c8pWDc9PzUsduolTp74jYtn8fYfFGoSR9wKjta9pJJOLLAMJbTcdGye7Qi0Cw692vZ
+	 LZOA9egyyLrrw==
+Date: Thu, 31 Mar 2022 09:11:43 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Kees Cook <keescook@chromium.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH 1/2] kbuild: Remove '-mno-global-merge'
-Message-ID: <YkXKnRwvbMdvOtlJ@thelio-3990X>
-References: <20220330234528.1426991-1-nathan@kernel.org>
- <20220330234528.1426991-2-nathan@kernel.org>
- <CA+icZUXrVgGyaujA1iQEw5P3nJHVwMtbFxpE2gKktaxW0Xg-wg@mail.gmail.com>
+To: Mike Rapoport <rppt@linux.ibm.com>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>,
+	kernel test robot <lkp@intel.com>, Roman Gushchin <guro@fb.com>,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org,
+	Suren Baghdasaryan <surenb@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Minchan Kim <minchan@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re:
+ [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 4036/5872] WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in
+ reference from the function memblock_bottom_up() to the variable
+ .meminit.data:memblock
+Message-ID: <YkXSv8exRRUbT/oM@dev-arch.thelio-3990X>
+References: <202203301412.MZ7wQvQz-lkp@intel.com>
+ <YkTP/+jhhAX6xlAQ@carbon.dhcp.thefacebook.com>
+ <YkV3bCqtLaVH+mC7@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,74 +45,124 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+icZUXrVgGyaujA1iQEw5P3nJHVwMtbFxpE2gKktaxW0Xg-wg@mail.gmail.com>
+In-Reply-To: <YkV3bCqtLaVH+mC7@linux.ibm.com>
 
-On Thu, Mar 31, 2022 at 09:11:12AM +0200, Sedat Dilek wrote:
-> On Thu, Mar 31, 2022 at 5:27 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > This flag is specific to clang, where it is only used by the 32-bit and
-> > 64-bit ARM backends. In certain situations, the presence of this flag
-> > will cause a warning, as shown by commit 6580c5c18fb3 ("um: clang: Strip
-> > out -mno-global-merge from USER_CFLAGS").
-> >
-> > Since commit 61163efae020 ("kbuild: LLVMLinux: Add Kbuild support for
-> > building kernel with Clang") that added this flag back in 2014, there
-> > have been quite a few changes to the GlobalMerge pass in LLVM. Building
-> > several different ARCH=arm and ARCH=arm64 configurations with LLVM 11
-> > (minimum) and 15 (current main version) with this flag removed (i.e.,
-> > with the default of '-mglobal-merge') reveals no modpost warnings, so it
-> > is likely that the issue noted in the comment is no longer relevant due
-> > to changes in LLVM or modpost, meaning this flag can be removed.
-> >
-> > If any new warnings show up that are a result of the removal of this
-> > flag, it can be added back under arch/arm{,64}/Makefile to avoid
-> > warnings on other architectures.
-> >
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >  Makefile | 4 ----
-> >  1 file changed, 4 deletions(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index daeb5c88b50b..f2723d9bfca4 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -784,10 +784,6 @@ ifdef CONFIG_CC_IS_CLANG
-> >  KBUILD_CPPFLAGS += -Qunused-arguments
-> >  # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
-> >  KBUILD_CFLAGS += -Wno-gnu
-> > -# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
-> > -# source of a reference will be _MergedGlobals and not on of the whitelisted names.
-> > -# See modpost pattern 2
-> > -KBUILD_CFLAGS += -mno-global-merge
-> >  else
-> >
-> >  # gcc inanely warns about local variables called 'main'
+On Thu, Mar 31, 2022 at 12:42:04PM +0300, Mike Rapoport wrote:
+> (added llvm folks)
+> 
+> Hi,
+> 
+> On Wed, Mar 30, 2022 at 02:47:43PM -0700, Roman Gushchin wrote:
+> > On Wed, Mar 30, 2022 at 02:53:14PM +0800, kbuild test robot wrote:
+> > > Hi Roman,
+> > > 
+> > > FYI, the error/warning still remains.
+> > > 
+> > > tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+> > > head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+> > > commit: 0e0bfc41fdf4d79d39ebe929844cdee44f97366d [4036/5872] UPSTREAM: mm: cma: allocate cma areas bottom-up
+> > > config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220330/202203301412.MZ7wQvQz-lkp@intel.com/config)
+> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+> > > reproduce (this is a W=1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://github.com/ammarfaizi2/linux-block/commit/0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+> > >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+> > >         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+> > >         git checkout 0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+> > >         # save the config file to linux build tree
+> > >         mkdir build_dir
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> > > 
+> > > If you fix the issue, kindly add following tag as appropriate
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> > > 
+> > > >> WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the variable .meminit.data:memblock
+> > > The function memblock_bottom_up() references
+> > > the variable __meminitdata memblock.
+> > > This is often because memblock_bottom_up lacks a __meminitdata
+> > > annotation or the annotation of memblock is wrong.
+> > 
+> > I guess this patch should fix it, however I fail to reproduce the original issue.
+> > Maybe it's up to the specific compiler version.
+> > 
 > > --
-> > 2.35.1
-> >
+> > 
+> > From b55a8dd19f4156d7e24ec39b18ede06965ce1c4f Mon Sep 17 00:00:00 2001
+> > From: Roman Gushchin <roman.gushchin@linux.dev>
+> > Date: Wed, 30 Mar 2022 14:42:12 -0700
+> > Subject: [PATCH] memblock: fix memblock_bottom_up() and
+> >  memblock_set_bottom_up() annotations
+> > 
+> > memblock_bottom_up() and memblock_set_bottom_up() lack __meminitdata
+> > annotations causing compiler warnings like:
+> >   WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the
+> >   variable .meminit.data:memblock
+> > 
+> > Fix it by adding the missing annotation and removing the wrong
+> > __meminit annotation.
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> > ---
+> >  include/linux/memblock.h | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> > index 50ad19662a32..536bc2fc31e6 100644
+> > --- a/include/linux/memblock.h
+> > +++ b/include/linux/memblock.h
+> > @@ -460,7 +460,7 @@ static inline void *memblock_alloc_node(phys_addr_t size,
+> >  /*
+> >   * Set the allocation direction to bottom-up or top-down.
+> >   */
+> > -static inline __init_memblock void memblock_set_bottom_up(bool enable)
+> > +static inline __initdata_memblock void memblock_set_bottom_up(bool enable)
 > 
-> I have tested this several times and was able to boot into bar metal -
-> no problems with building and/or booting my kernel-modules.
+> I think putting __initdata_memlock won't help here, because there should be
+> nothing wrong with __meminit function accessing __meminitdata data.
 > 
-> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
-> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
-
-I would be very concerned if you did see any impact, given this flag is
-ARM specific :) thanks as always for verifying!
-
-> Just as a side-note:
-> As with Linux v5.18-rc1 and -std=gnu11 we change the above comment ...?
+> My guesstimate would be that the compiler decided not to inline this and
+> still dropped section attribute because of 'inline'.
 > 
-> # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
-> KBUILD_CFLAGS += -Wno-gnu
+> If this is the case we I think we should 
+> 
+> 	s/inline __init_memblock/__always_inline/
+> 
+> >  {
+> >  	memblock.bottom_up = enable;
+> >  }
+> > @@ -470,7 +470,7 @@ static inline __init_memblock void memblock_set_bottom_up(bool enable)
+> >   * if this is true, that said, memblock will allocate memory
+> >   * in bottom-up direction.
+> >   */
+> > -static inline __init_memblock bool memblock_bottom_up(void)
+> > +static inline __initdata_memblock bool memblock_bottom_up(void)
+> >  {
+> >  	return memblock.bottom_up;
+> >  }
+> > -- 
+> > 2.30.2
+> > 
+> 
 
-It was updated as part of the shift to '-std=gnu11':
+For the record, I cannot reproduce this on mainline, which has commits
+34dc2efb39a2 ("memblock: fix section mismatch warning") and a024b7c2850d
+("mm: memblock: fix section mismatch warning again"). That first commit
+has the same exact warning as this report, which is against an Android
+tree (android12-trusty-5.10).
 
-https://git.kernel.org/linus/e8c07082a810fbb9db303a2b66b66b8d7e588b53
+While I do not see the commit that 34dc2efb39a2 claims to fix in
+android12-trusty-5.10, I do see the three commits in android12-5.10:
 
-The UML tree is based on 5.17-rc6, which does not have that change.
-There should not be a merge conflict though.
+a46e3fa13968 ("UPSTREAM: mm: memblock: drop __init from memblock functions to make it inline")
+5f7ec0f4c383 ("UPSTREAM: memblock: fix section mismatch warning")
+8cf5bb6946a2 ("UPSTREAM: mm: memblock: fix section mismatch warning again")
+
+I think we can just discard this report for now, unless someone from
+Google's trusty team wants to address it in that branch.
 
 Cheers,
 Nathan
