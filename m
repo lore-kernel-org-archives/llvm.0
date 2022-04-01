@@ -1,95 +1,119 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022407B
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 23:34:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648856044; x=1680392044;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KtWDZBoZ9HU0GQJUhsn93GzpAZmBgdqKwRs7SJ1Z7S8=;
-  b=RisqZWzOvPBTPyj3RPHxE/rlv2EXPnZcEhKpjcU81pUAVrGt/MvqkPDS
-   kQREu6Jp4IxpDnYvtHQdGUJtSYUIL0FGjCL3PUEl5MDjxN5ucaAe++K7J
-   X/egP5Wf85ABUyLR/0GZp3wfNHFZIP0VRxlUsZN4TzyfGKqMp5a81XpvB
-   WUylIwc/cq7gVsPH6ont+M0tyvfTh6C0Bvk5mYEEr/3WDIim6ZDD6x3ov
-   a6t6PPMeMd425e79usfq8PhAgX+az5DbWEBf8Fkub4h/4eB/zy+lzzyho
-   DPa+ohmj9nCYU50l93zCVNRf0W8G0362r48KRHdK64dht6VmzWM+7ntBA
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="257832269"
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="257832269"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 16:34:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="721050141"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 01 Apr 2022 16:34:01 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1naQmG-0001b4-TK;
-	Fri, 01 Apr 2022 23:34:00 +0000
-Date: Sat, 2 Apr 2022 07:33:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dafna Hirschfeld <dhirschfeld@habana.ai>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Oded Gabbay <ogabbay@kernel.org>
-Subject: [ogabbay:habanalabs-next 25/28]
- drivers/misc/habanalabs/goya/goya.c:4265:5: warning: no previous prototype
- for function 'goya_debugfs_read_dma'
-Message-ID: <202204020715.RF7P32XV-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B307B
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 23:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1648856290;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pzVHxoX5/TWOSCvHDrWIJIS9FyjyMwnU9Qnf7hNn4W4=;
+	b=PHpWcp910hSBxsCcZvggg3DwjKS5oxEPwsF0q0Nn/ikYHxCHsOrQ6ztvHL17sD7puj4w5z
+	2ZIP2GGNfm6Vz0tznUU6pcuIdzh+jMNSnsz8km+CJ3ItHPcJuH1xzN1uGnlUrVPMnDN3dZ
+	wsaJ7f+MD8/FhF6G7GkF2+C/zaLGIsA=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-29-OPZY-irXM4uTWB3ULXyvWQ-1; Fri, 01 Apr 2022 19:38:09 -0400
+X-MC-Unique: OPZY-irXM4uTWB3ULXyvWQ-1
+Received: by mail-qk1-f199.google.com with SMTP id bk23-20020a05620a1a1700b0067b32f93b90so2844751qkb.16
+        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 16:38:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pzVHxoX5/TWOSCvHDrWIJIS9FyjyMwnU9Qnf7hNn4W4=;
+        b=ohcOu51WB2ymvErDpbPRjz72rxd4IrlFEny2srHDmQUp4PXoEbfFzFtkwtx5cOsDD7
+         Q/J6wD3XUt8+XRMTB3JCF1SL4AXZXxSN7nm4vVz7Or19MS6gsjojYLYu3phB66V2kwa4
+         HZL9V2N7KopPdBFAHLL0B8F+CcIozOVKCsjInR/CdpjDBrhjlx7mXa0wFMzm7MGUCcaX
+         w+tJrWaj6sAdTDMkrE3XXvR/+mbZHVD2nsNNMrENPrjLSEOShJLYLPRTpRwrXBvFIhBX
+         hg8OzqCYYfj3OJHWqTzPDc2TKFAxWt+gwKl+hfNomgQnmG5VwtjA336ALP6fsDWf6aM4
+         kOOQ==
+X-Gm-Message-State: AOAM533zVoE7xBqz5x9b1mnVAw6vHWsFsUhlPDdFd5oMnfV6SGL+ekga
+	WLqf78NxGuzbJ+bAyKIuUY28mTerz+4aVIwwx7Cbwr0gkC87H/r2OEwWup41FGxatnOCUHlweX8
+	3yxiMffdYYmsqHw==
+X-Received: by 2002:a37:65c5:0:b0:67b:3232:8cc8 with SMTP id z188-20020a3765c5000000b0067b32328cc8mr8108191qkb.170.1648856289269;
+        Fri, 01 Apr 2022 16:38:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzbWdGn+H26OktJUd2PLi1j3y1cCH3LU+ahvL7e+ZzRQY1FZAfw60USIHvnPTHEoQ8KuF5wsQ==
+X-Received: by 2002:a37:65c5:0:b0:67b:3232:8cc8 with SMTP id z188-20020a3765c5000000b0067b32328cc8mr8108185qkb.170.1648856289078;
+        Fri, 01 Apr 2022 16:38:09 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id v18-20020a05622a189200b002e22e09d77fsm2883002qtc.59.2022.04.01.16.38.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 16:38:08 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: luciano.coelho@intel.com,
+	kvalo@kernel.org,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	johannes.berg@intel.com,
+	mukesh.sisodiya@intel.com,
+	mordechay.goodstein@intel.com,
+	matti.gottlieb@intel.com,
+	rotem.saado@intel.com
+Cc: linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] iwlwifi: fw: move memset before early return
+Date: Fri,  1 Apr 2022 19:38:02 -0400
+Message-Id: <20220401233802.1710547-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
-head:   fa59c43c5c906277ab3b753d782488ef4fd3ba62
-commit: cb162eee0d9f31c21860a9f454563abde2ff30aa [25/28] habanalabs: remove debugfs read/write callbacks
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220402/202204020715.RF7P32XV-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=cb162eee0d9f31c21860a9f454563abde2ff30aa
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay habanalabs-next
-        git checkout cb162eee0d9f31c21860a9f454563abde2ff30aa
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/
+Clang static analysis reports this representative issue
+dbg.c:1455:6: warning: Branch condition evaluates to
+a garbage value
+  if (!rxf_data.size)
+       ^~~~~~~~~~~~~~
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This check depends on iwl_ini_get_rxf_data() to clear
+rxf_data but the function can return early without
+doing the clear.  So move the memset before the early
+return.
 
-All warnings (new ones prefixed by >>):
+Fixes: cc9b6012d34b ("iwlwifi: yoyo: use hweight_long instead of bit manipulating")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/intel/iwlwifi/fw/dbg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->> drivers/misc/habanalabs/goya/goya.c:4265:5: warning: no previous prototype for function 'goya_debugfs_read_dma' [-Wmissing-prototypes]
-   int goya_debugfs_read_dma(struct hl_device *hdev, u64 addr, u32 size,
-       ^
-   drivers/misc/habanalabs/goya/goya.c:4265:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int goya_debugfs_read_dma(struct hl_device *hdev, u64 addr, u32 size,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/goya_debugfs_read_dma +4265 drivers/misc/habanalabs/goya/goya.c
-
-  4264	
-> 4265	int goya_debugfs_read_dma(struct hl_device *hdev, u64 addr, u32 size,
-  4266					void *blob_addr)
-  4267	{
-  4268		dev_err(hdev->dev, "Reading via DMA is unimplemented yet\n");
-  4269		return -EPERM;
-  4270	}
-  4271	
-
+diff --git a/drivers/net/wireless/intel/iwlwifi/fw/dbg.c b/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
+index abf49022edbe..666de922af61 100644
+--- a/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
++++ b/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
+@@ -1388,13 +1388,13 @@ static void iwl_ini_get_rxf_data(struct iwl_fw_runtime *fwrt,
+ 	if (!data)
+ 		return;
+ 
++	memset(data, 0, sizeof(*data));
++
+ 	/* make sure only one bit is set in only one fid */
+ 	if (WARN_ONCE(hweight_long(fid1) + hweight_long(fid2) != 1,
+ 		      "fid1=%x, fid2=%x\n", fid1, fid2))
+ 		return;
+ 
+-	memset(data, 0, sizeof(*data));
+-
+ 	if (fid1) {
+ 		fifo_idx = ffs(fid1) - 1;
+ 		if (WARN_ONCE(fifo_idx >= MAX_NUM_LMAC, "fifo_idx=%d\n",
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+
