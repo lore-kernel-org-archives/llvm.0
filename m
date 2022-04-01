@@ -1,42 +1,42 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823957C
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 20:19:24 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-2eadd524e72so35492577b3.6
-        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 13:19:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3DE7C
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 20:19:26 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id y193-20020a25dcca000000b00636d788e549so3062434ybe.5
+        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 13:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ATcdLAiyB0HmFVQDg4Xl7rvZSmepnr+daM3v/Y+LeMI=;
-        b=EoyjCfGV3FCQpOkbXV+W3kTnXGO1Evzvf/ZY38A9M1NFlrIqtx1VS6qnTsGBd7BwjX
-         WoMjEr/RMAn4q8VmBMj6mKCCSJYHInMMKdfBk6wZQvwoBizwF+NZ8BoF/h/iCTmyVqoC
-         G7HNo6/dYJ2gtGhM3NTwMeNao+r+TProu7GExptuAVxeL/kk3ZIkTTOekXFAtNjuD2NU
-         ma1hWOS5qp5Duz30EY9BFcZJwxIWP8vW/FC5lCWqXj8YNzw5RVfVB8q0U357R2cNp4mw
-         hIbFGaH0dJMNrmMTAzN7dJIn2fB0mcgwx8f4VQjnqYm/fpUcfe0YQqEExQvrwoLFRu3/
-         Rs/g==
+        bh=0tGuel8F0TPZ4i19LuuPjmtXqje2ywWglhe/oIdo5VQ=;
+        b=DvT1jTf5TrMmdo+R/peAXWEcfaqI0CTKicq9NuxiQwsvogqT0Q7+PBVGIhAGw7TCNy
+         XA1nEIo1hupZyhsJi7y7q+P4m0gAF8th3hcbD65r/heuupKFyJDtGA12HtiIjbdav1ey
+         sVWYyVhWomxLYHu+i7sugSFeoTNYJEOmyG5m6bTQ6seZzFdlEpk1qzvgrstj0l0TVQFF
+         tN9WCc0YVeZxkyot8V/nyOPv5ANKSaRz7nai4h+sm6dg0N6lPkfTE3H3tlzoPg1I9Rpn
+         uWDSC6HUsm6sS1p7G+wlB+eFzpwqTg/wqs6qP7IZwULuwoda474t5/bUAv5m+YSl1wVs
+         lrMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ATcdLAiyB0HmFVQDg4Xl7rvZSmepnr+daM3v/Y+LeMI=;
-        b=PU1pbi7pCvkX9xRcDUMjq73WW2oWBi0C7gSz3nUIATs1Fatqy2m8PEmJ1BPpsALbAn
-         BhWc4Wqkv40rEXdA7sNO1lcCtCJsNiQY9UtqbfZ6Idx37smG6rBVk/6LUncYjbsH0TZy
-         n/IyL03cjV6ewFMlTjyc3Mo9MmYkdIgZeU9+Wh+N9tGCvCY49LEjB71mi4nGsII5OrFA
-         8VS+SH/26aLGvpbIWIJPB5zRih7H1FWCFHZ7mNnJ5YaqmXIuAQ3fIgEgl33qFh7dErid
-         cV8ldFrAfUWRY3p8EYzr0Km1MWfwg3XTFNNiblv31mvw2g6zyQia8qwT/fd8gWzws987
-         Q1iQ==
-X-Gm-Message-State: AOAM530dNrcFlHbLGQMr9iki+8wIADajKqzvIg/B3Icqm7875v5Bc/ND
-	/gDjvfZMd0Wg/368DOPICbFZrrBxWOvUmDBpiOA=
-X-Google-Smtp-Source: ABdhPJyew2kq+WRmdfIe6euP7IdAfz4Lf1J4a3hpbhDfzorQRebEdIXVNDbDfQueKfPJDVocv/gDvOOrkxzODDApak4=
+        bh=0tGuel8F0TPZ4i19LuuPjmtXqje2ywWglhe/oIdo5VQ=;
+        b=apfFKXNZZMT+KnsXvkpOB225ZntAG3kfoZz1MF6K88fUlgdzoHOjU54bUSsTUjz68R
+         qb/lQw6K7yfR8XE+9tKPzgn2sLE7fIF0pPT9JcpcW8EZg2vazDNw4sH/YAPTEMv8VPwp
+         QXI8sWGNs4mVLw8HmX4nYXqSnUZ5sq/G23Ycll0R1YIOiRqVbCkWkaZtF61YlSQciceN
+         vw9c3YePY1I1urXlm7tN3t1bB+tMYM81I+FxX9La1kdjFiafIeQSyMrgP9H5WuL6zvqL
+         ssOT8l+qrhB0kTNcsaQKsv2LzLMskNW32R95rytpMnaF6zG/DGlZCJTDGlqiZ5Z/+61X
+         pVkw==
+X-Gm-Message-State: AOAM531S8oyR4ZyjN5mSDyJSvlY7w2NgXewh2JzIZUPZdgfpPpFZwH/n
+	TSd2H+XQnmXM/zSV0DnnjjOM1VNDXqekhTx3uQ4=
+X-Google-Smtp-Source: ABdhPJyczPJlHMZJ5SsOuDzCQ5Zx+moZV8jK12RncbXJNK4fa4a+uQlY5m3JXXqTHzfRGUCmkCBHysLhBLexKAAxzfU=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:ebe8:1acf:913c:f19e])
- (user=samitolvanen job=sendgmr) by 2002:a5b:90a:0:b0:634:15f3:871b with SMTP
- id a10-20020a5b090a000000b0063415f3871bmr10173555ybq.306.1648844363642; Fri,
- 01 Apr 2022 13:19:23 -0700 (PDT)
-Date: Fri,  1 Apr 2022 13:19:15 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a05:6902:1546:b0:63b:7960:ca83 with
+ SMTP id r6-20020a056902154600b0063b7960ca83mr10524407ybu.52.1648844366067;
+ Fri, 01 Apr 2022 13:19:26 -0700 (PDT)
+Date: Fri,  1 Apr 2022 13:19:16 -0700
 In-Reply-To: <20220401201916.1487500-1-samitolvanen@google.com>
-Message-Id: <20220401201916.1487500-3-samitolvanen@google.com>
+Message-Id: <20220401201916.1487500-4-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,18 +45,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220401201916.1487500-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1056; h=from:subject;
- bh=TxU5yU7eF6HnJJtCowWe9icJOHczcBwSXoiV/s/cDrI=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBiR15CugMAC3++WEpyG4vENztHvLXakUUYXOQsyeYl
- rVPXFE2JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYkdeQgAKCRBMtfaEi7xW7gliC/
- 9FfQ7TZrKMqndhgdzS0eK9T5tspAJnIZpf3oeBTdH1yAeQIwZvHzFf76rSoqV6LrbI+gqMeIdHKr08
- UIVlKWpl6xs1zdEc+NvkBalo7cGuCVrQhcVyGSCHyr4qFrtFKg3hA4cA134xfBCef2dRq4OlcjlxyW
- noFvvInv0CUwZj+cCNYqM5+PjO39zKKvvYF0L6VlWVNn7Fa3UCbymDa6AcmA7O6TO7t+SExVQ1nE8W
- vTxJKJBAKAt1rgs3KjEFPVgalAUFnfhfNCCPeh/SC6LF5++tnbSJCjTFzzpyehcjyrrPscjSrGh7yZ
- pwQxCsuHKH3E7frUwQXCr1167ogQen62ZBUZKyJA3stmJfOtSXlUGXDLPyuNpWNM5SiuQxTE3I9b01
- ptlVlMGTab3Tl/kHLSb2PvyQA2hVbrgske+Vc7c0KZGmn1zs1kS+LUgKIU9z5d0Hu0XyCrg3psuddv
- BDIDadUv7bfb+ZZXkjWwR/kblPiEkSPZWT/MZkK6KiBf0=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1278; h=from:subject;
+ bh=NtSOtkaS5YpGAma/5363kop1E6xEpoqT3+yVgUVR148=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBiR15Duaw2orP2Ch7LgRIVD7zbYKWzx4lyqqoSUycA
+ 4hFov6yJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYkdeQwAKCRBMtfaEi7xW7kgxC/
+ 94YUjQ86qg2QNFo0zOZpLNhNoZrYE9N6UoYuptrK2s5ExRrYLkKkCJoTnZNYg0eD7UR34ThbeM4glC
+ bbR7KAIpU4pqZdu44ILdIuLEloNjk8r8i73R/bhhkGEL3DIwo/9qH0kSgPuP7DEN+IKySjZ97vyS1z
+ NyepXAChV+OV4sD49Id45jxlRHS5iSZdqpYbxBAulqyymOJq33VhikVIpQkJYEwNqyXhNVoLm42hc8
+ Oxo6tsOZhVOPg3XajU/BUx3V/Em7l2Nn31FA/kc0g58a4tBA6JdFV2WjVKUysyRkoL6X0PthHKB09I
+ wrp0dKq+MSBAbBfCz/OSVubvE9y0n1Lk+HjUqw8GoGvbbETpcUKMLIzlGucOC6W1bvqy+50alyII+c
+ T84eYNyRKv1EoVYra6OF4ul6fnhwOsGJ54+HHdXF81AiQD3jDyKVI/0ZiOYm8KYfa1FSKYzdmfoIby
+ tfiURTStJhv2wmBp9Mpjwe7Qbno/3uqLiRsfcLEBiWiPQ=
 X-Mailer: git-send-email 2.35.0
-Subject: [PATCH 2/3] linux/compiler-clang.h: define function_nocfi
+Subject: [PATCH 3/3] arm64: Drop the inline assembly implementation of function_nocfi
 From: Sami Tolvanen <samitolvanen@google.com>
 To: Kees Cook <keescook@chromium.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>, Mark Rutland <mark.rutland@arm.com>, 
@@ -66,35 +66,41 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>, Mark Rutland <mark.rutland@arm.co
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Use __builtin_function_start() to implement the function_nocfi() macro
-when CONFIG_CFI_CLANG is selected.
+Drop the inline assembly version of function_nocfi() now that
+CONFIG_CFI_CLANG depends on __builtin_function_start(), which allows
+this macro to be implemented more cleanly and in a way that works also
+with static initializers.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- include/linux/compiler-clang.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ arch/arm64/include/asm/compiler.h | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-index babb1347148c..c84fec767445 100644
---- a/include/linux/compiler-clang.h
-+++ b/include/linux/compiler-clang.h
-@@ -69,6 +69,16 @@
- #define __nocfi		__attribute__((__no_sanitize__("cfi")))
- #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
+diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
+index dc3ea4080e2e..6fb2e6bcc392 100644
+--- a/arch/arm64/include/asm/compiler.h
++++ b/arch/arm64/include/asm/compiler.h
+@@ -23,20 +23,4 @@
+ #define __builtin_return_address(val)					\
+ 	(void *)(ptrauth_clear_pac((unsigned long)__builtin_return_address(val)))
  
-+#if defined(CONFIG_CFI_CLANG)
-+/*
-+ * With CONFIG_CFI_CLANG, the compiler replaces function address
-+ * references with the address of the function's CFI jump table
-+ * entry. The function_nocfi macro always returns the address of the
-+ * actual function instead.
-+ */
-+#define function_nocfi(x)	__builtin_function_start(x)
-+#endif
-+
- /*
-  * Turn individual warnings and errors on and off locally, depending
-  * on version.
+-#ifdef CONFIG_CFI_CLANG
+-/*
+- * With CONFIG_CFI_CLANG, the compiler replaces function address
+- * references with the address of the function's CFI jump table
+- * entry. The function_nocfi macro always returns the address of the
+- * actual function instead.
+- */
+-#define function_nocfi(x) ({						\
+-	void *addr;							\
+-	asm("adrp %0, " __stringify(x) "\n\t"				\
+-	    "add  %0, %0, :lo12:" __stringify(x)			\
+-	    : "=r" (addr));						\
+-	addr;								\
+-})
+-#endif
+-
+ #endif /* __ASM_COMPILER_H */
 -- 
 2.35.0
 
