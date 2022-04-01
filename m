@@ -1,139 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2D87B
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 14:42:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D52C3410F;
-	Fri,  1 Apr 2022 14:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648824174;
-	bh=qSxE45/KB1zk5sPSpkB12y4d3k586cm6HLGM5tiiVlo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BEeFrcxREMSHCd0JzL8MGCcRycyi//iLdw6XVtCs81gvkCSeBYo9n8r54mzxs9a3j
-	 /XUpKLZ7MnK4nZch0AwLAMY7va1uwurPa/TCaENHk5+4rP/me93OXbwhWBATtrbczr
-	 sH78zvZPGVl5vO7Otx+QnlBUT6oFuBwbzWRcAik5Lm3/zfUGUm7byBg9xImrbcItZu
-	 LgAi2w0jzrVOlXoREh5iZH3Ilvab/a2Wm2a9TAX2AnESC4D49OOHFvJzZ/9i24ptYu
-	 jVKNvS9r2bvSwT1ffH+8vKRDaElKl98Cod1qIEWEfo7hDC+VU7HWk2l9+El3CfD5jm
-	 sui6UEe9rkLKA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Yonghong Song <yhs@fb.com>,
-	Delyan Kratunov <delyank@fb.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 17/65] libbpf: Fix build issue with llvm-readelf
-Date: Fri,  1 Apr 2022 10:41:18 -0400
-Message-Id: <20220401144206.1953700-17-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401144206.1953700-1-sashal@kernel.org>
-References: <20220401144206.1953700-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2504A137F
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 17:07:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648832848; x=1680368848;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=X9pZUBJSvbFzmKurm5Z+IihTAQDm6O0pF0BrGUtyqiA=;
+  b=myzMrroX2r7d3mI2KmHzZtKh9tqtktq0xzZNu9sKfBniPdAsDhOOSjeJ
+   k+5+5eCfWr3ONIwGs+qguSPBSQMZFQzNIxWtrX5wec5YhOOecPdKy8dVD
+   lykdY0/gsrykk/o7hV+Y8agI9hX8dBF5r4eMjtdMm+xSwVDZOxQCVZ7oa
+   N9n/kfrYbSjYIL4ZgjXyZkIVF/pI9nOQ+iGkhD1DMJyfpOFPQ78H7RGMX
+   Ca7SWUKlwygFrBEhP1yXOKklV0HS3g7OpPT8Zt6D24fRvXq7WzdUDmRau
+   iaAfkTWKL9w1k26ZngJ1HtEzslH2rS6mf7zehmIkMU1pvtBJ1ZsnU661y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="259889296"
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="259889296"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 10:07:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="522846177"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Apr 2022 10:07:25 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1naKk9-0001Ou-1R;
+	Fri, 01 Apr 2022 17:07:25 +0000
+Date: Sat, 2 Apr 2022 01:07:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Douglas Anderson <dianders@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	=?iso-8859-1?Q?Jos=E9?= Roberto de Souza <jose.souza@intel.com>
+Subject: [drm-tip:drm-tip 4/8]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gtt_mgr.c:200:33: error: no member named
+ 'tbo' in 'struct ttm_range_mgr_node'
+Message-ID: <202204020126.nuHKg49N-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Yonghong Song <yhs@fb.com>
+tree:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+head:   e797b8d09704b91463456234efdf04dc8f8c385d
+commit: edc1a46d62b7a03d53067f598db831092f9e1b05 [4/8] Merge remote-tracking branch 'drm-misc/drm-misc-next' into drm-tip
+config: arm-randconfig-r033-20220401 (https://download.01.org/0day-ci/archive/20220402/202204020126.nuHKg49N-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add drm-tip git://anongit.freedesktop.org/drm/drm-tip
+        git fetch --no-tags drm-tip drm-tip
+        git checkout edc1a46d62b7a03d53067f598db831092f9e1b05
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-[ Upstream commit 0908a66ad1124c1634c33847ac662106f7f2c198 ]
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-There are cases where clang compiler is packaged in a way
-readelf is a symbolic link to llvm-readelf. In such cases,
-llvm-readelf will be used instead of default binutils readelf,
-and the following error will appear during libbpf build:
+All errors (new ones prefixed by >>):
 
-  Warning: Num of global symbols in
-   /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/sharedobjs/libbpf-in.o (367)
-   does NOT match with num of versioned symbols in
-   /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/libbpf.so libbpf.map (383).
-   Please make sure all LIBBPF_API symbols are versioned in libbpf.map.
-  --- /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/libbpf_global_syms.tmp ...
-  +++ /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/libbpf_versioned_syms.tmp ...
-  @@ -324,6 +324,22 @@
-   btf__str_by_offset
-   btf__type_by_id
-   btf__type_cnt
-  +LIBBPF_0.0.1
-  +LIBBPF_0.0.2
-  +LIBBPF_0.0.3
-  +LIBBPF_0.0.4
-  +LIBBPF_0.0.5
-  +LIBBPF_0.0.6
-  +LIBBPF_0.0.7
-  +LIBBPF_0.0.8
-  +LIBBPF_0.0.9
-  +LIBBPF_0.1.0
-  +LIBBPF_0.2.0
-  +LIBBPF_0.3.0
-  +LIBBPF_0.4.0
-  +LIBBPF_0.5.0
-  +LIBBPF_0.6.0
-  +LIBBPF_0.7.0
-   libbpf_attach_type_by_name
-   libbpf_find_kernel_btf
-   libbpf_find_vmlinux_btf_id
-  make[2]: *** [Makefile:184: check_abi] Error 1
-  make[1]: *** [Makefile:140: all] Error 2
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_gtt_mgr.c:200:33: error: no member named 'tbo' in 'struct ttm_range_mgr_node'
+                   amdgpu_ttm_recover_gart(node->tbo);
+                                           ~~~~  ^
+   1 error generated.
 
-The above failure is due to different printouts for some ABS
-versioned symbols. For example, with the same libbpf.so,
-  $ /bin/readelf --dyn-syms --wide tools/lib/bpf/libbpf.so | grep "LIBBPF" | grep ABS
-     134: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS LIBBPF_0.5.0
-     202: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS LIBBPF_0.6.0
-     ...
-  $ /opt/llvm/bin/readelf --dyn-syms --wide tools/lib/bpf/libbpf.so | grep "LIBBPF" | grep ABS
-     134: 0000000000000000     0 OBJECT  GLOBAL DEFAULT   ABS LIBBPF_0.5.0@@LIBBPF_0.5.0
-     202: 0000000000000000     0 OBJECT  GLOBAL DEFAULT   ABS LIBBPF_0.6.0@@LIBBPF_0.6.0
-     ...
-The binutils readelf doesn't print out the symbol LIBBPF_* version and llvm-readelf does.
-Such a difference caused libbpf build failure with llvm-readelf.
 
-The proposed fix filters out all ABS symbols as they are not part of the comparison.
-This works for both binutils readelf and llvm-readelf.
+vim +200 drivers/gpu/drm/amd/amdgpu/amdgpu_gtt_mgr.c
 
-Reported-by: Delyan Kratunov <delyank@fb.com>
-Signed-off-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220204214355.502108-1-yhs@fb.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/lib/bpf/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+bb990bb09235a3 Christian König 2016-09-09  182  
+a614b336f1c16d Christian König 2021-02-11  183  /**
+a614b336f1c16d Christian König 2021-02-11  184   * amdgpu_gtt_mgr_recover - re-init gart
+a614b336f1c16d Christian König 2021-02-11  185   *
+1dd8b1b987fad9 Nirmoy Das      2022-01-07  186   * @mgr: amdgpu_gtt_mgr pointer
+a614b336f1c16d Christian König 2021-02-11  187   *
+a614b336f1c16d Christian König 2021-02-11  188   * Re-init the gart for each known BO in the GTT.
+a614b336f1c16d Christian König 2021-02-11  189   */
+1b08dfb889b2c5 Christian König 2022-01-18  190  void amdgpu_gtt_mgr_recover(struct amdgpu_gtt_mgr *mgr)
+c1c7ce8f5687bb Christian König 2017-10-16  191  {
+77ef271faee9c3 Christian König 2021-07-16  192  	struct ttm_range_mgr_node *node;
+c1c7ce8f5687bb Christian König 2017-10-16  193  	struct drm_mm_node *mm_node;
+1dd8b1b987fad9 Nirmoy Das      2022-01-07  194  	struct amdgpu_device *adev;
+c1c7ce8f5687bb Christian König 2017-10-16  195  
+19a1d9350be632 Nirmoy Das      2021-05-28  196  	adev = container_of(mgr, typeof(*adev), mman.gtt_mgr);
+c1c7ce8f5687bb Christian König 2017-10-16  197  	spin_lock(&mgr->lock);
+c1c7ce8f5687bb Christian König 2017-10-16  198  	drm_mm_for_each_node(mm_node, &mgr->mm) {
+77ef271faee9c3 Christian König 2021-07-16  199  		node = container_of(mm_node, typeof(*node), mm_nodes[0]);
+1b08dfb889b2c5 Christian König 2022-01-18 @200  		amdgpu_ttm_recover_gart(node->tbo);
+c1c7ce8f5687bb Christian König 2017-10-16  201  	}
+c1c7ce8f5687bb Christian König 2017-10-16  202  	spin_unlock(&mgr->lock);
+c1c7ce8f5687bb Christian König 2017-10-16  203  
+19a1d9350be632 Nirmoy Das      2021-05-28  204  	amdgpu_gart_invalidate_tlb(adev);
+c1c7ce8f5687bb Christian König 2017-10-16  205  }
+c1c7ce8f5687bb Christian König 2017-10-16  206  
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 154b75fc1373..f2a353bba25f 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -147,7 +147,7 @@ GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
- 			   sort -u | wc -l)
- VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
- 			      sed 's/\[.*\]//' | \
--			      awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}' | \
-+			      awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
- 			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
- 
- CMD_TARGETS = $(LIB_TARGET) $(PC_FILE)
-@@ -216,7 +216,7 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
- 		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
- 		readelf --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
- 		    sed 's/\[.*\]//' |					 \
--		    awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
-+		    awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}'|  \
- 		    grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |		 \
- 		    sort -u > $(OUTPUT)libbpf_versioned_syms.tmp; 	 \
- 		diff -u $(OUTPUT)libbpf_global_syms.tmp			 \
+:::::: The code at line 200 was first introduced by commit
+:::::: 1b08dfb889b2c584b444538c9500af24ba0a6dc7 drm/amdgpu: remove gart.ready flag
+
+:::::: TO: Christian König <christian.koenig@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
