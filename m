@@ -1,43 +1,46 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9613F802
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 02:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDDF7C
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 02:45:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648778690; x=1680314690;
+  t=1648781158; x=1680317158;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HzK1MMfJoMOf9bbpzJWarOeRxa/1dSYPnYhJ4sTbEaY=;
-  b=mkwBhUTIoafD0kTDvx/yJBOxPW+g+C4uHoncfmcZN17uj1Cf4Ux/Jkf6
-   /sXu4dJ3ld1Ra5rDnXgVIKLTzg75sIFSJgk9wbCGcXMZ5GOf/7Ow8aFK6
-   J+phvHCbmZrUJCJic7Yb3SaQQfhFd7rdPOJFj8LERAlc3Tyc0XksTmnQF
-   2MBNO6GEHQiG7jYqzMAuAVEqwi3fiJ/OL9HBBz3ottZEiDoFhAYpnT1Qj
-   XncUnEts997fXuvU+kt4FSpNGR2rfBdoHE+ocwzu1GT9ZN+PahFasvgHN
-   YW40kUGSfROUOrOmxyedyu+t/52z6AGCmYJx1a81HcaBRtwMdyHvCPIEk
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="260202008"
+  bh=6ndinEXXOHNGpGQlprrrDXd/7g7WQ+qlsYIVKR04pRU=;
+  b=EMo7SR8K/JixunWOTVZR5xlc690PtXPkFyCDsNZUGMkP9VYxCOUfyY8s
+   Nd4c41waEK34QkAUftfSdZvJw4mZmCyGHku02GIJqXjFrFWdfheBg36gt
+   v6i+BxWC7DJ5BmACtB11lqLlvaOmmoT6RPwTar9W59qX19B8MGK83tGng
+   NFcC+Oy5M56YXssJw2uzpSHTE7jSNB1FyWQpHOmOz++7Rd/cPHzegXHqp
+   GocIw0BPgAH3cfpSDtIPlvTsixHWfiG9ZXNYdIXssMK3O8ROKSZRIrAuz
+   nNp33DMCJ94TeFgeyYbsricxSYVF+QaEnI1JVGUKSWlTi8+8jP+qfGWAC
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="240618200"
 X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="260202008"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 19:04:49 -0700
+   d="scan'208";a="240618200"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 19:45:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="655283555"
+   d="scan'208";a="547614251"
 Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 31 Mar 2022 19:04:47 -0700
+  by orsmga007.jf.intel.com with ESMTP; 31 Mar 2022 19:45:54 -0700
 Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1na6ed-0000qN-5x;
-	Fri, 01 Apr 2022 02:04:47 +0000
-Date: Fri, 1 Apr 2022 10:04:33 +0800
+	id 1na7IP-0000rc-So;
+	Fri, 01 Apr 2022 02:45:53 +0000
+Date: Fri, 1 Apr 2022 10:45:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+To: Walker Chen <walker.chen@starfivetech.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-	Andi Kleen <ak@linux.intel.com>
-Subject: [intel-tdx:guest-attest 5/6] ./usr/include/misc/tdx.h:39:2: error:
- unknown type name 'size_t'
-Message-ID: <202204011037.5M42EV06-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Michael Yan <michael.yan@starfivetech.com>,
+	Jenny Zhang <jenny.zhang@starfivetech.com>
+Subject: [esmil:visionfive 46/62] sound/soc/starfive/pwmdac-pcm.c:84:6:
+ warning: variable 'substream' is used uninitialized whenever 'if' condition
+ is false
+Message-ID: <202204011048.3Gw5aqvg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,36 +51,208 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/intel/tdx.git guest-attest
-head:   9247fade9db5ae6eb183b2f92fdedb898282376a
-commit: 054b22e81e88379a5a8459c19e89a335531c1bdd [5/6] platform/x86: intel_tdx_attest: Add TDX Guest attestation interface driver
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220401/202204011037.5M42EV06-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 881350a92d821d4f8e4fa648443ed1d17e251188)
+Hi Walker,
+
+FYI, the error/warning still remains.
+
+tree:   https://github.com/esmil/linux visionfive
+head:   6c7cd35771680c033c40b4af48cbe7e3093eab3d
+commit: 7c3b27a272448a123087494f7ade3e84a92543c6 [46/62] ASoC: starfive: Add StarFive JH7100 audio drivers
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220401/202204011048.3Gw5aqvg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/054b22e81e88379a5a8459c19e89a335531c1bdd
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-attest
-        git checkout 054b22e81e88379a5a8459c19e89a335531c1bdd
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/esmil/linux/commit/7c3b27a272448a123087494f7ade3e84a92543c6
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 7c3b27a272448a123087494f7ade3e84a92543c6
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/ sound/soc/starfive/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/misc/tdx.h:38:11: error: expected ';' at end of declaration list
-           void *buf __user;
-                    ^
-                    ;
->> ./usr/include/misc/tdx.h:39:2: error: unknown type name 'size_t'
-           size_t len;
-           ^
-   2 errors generated.
+>> sound/soc/starfive/pwmdac-pcm.c:84:6: warning: variable 'substream' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (push)
+               ^~~~
+   sound/soc/starfive/pwmdac-pcm.c:87:11: note: uninitialized use occurs here
+           active = substream && snd_pcm_running(substream);
+                    ^~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:84:2: note: remove the 'if' if its condition is always true
+           if (push)
+           ^~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:80:37: note: initialize the variable 'substream' to silence this warning
+           struct snd_pcm_substream *substream;
+                                              ^
+                                               = NULL
+>> sound/soc/starfive/pwmdac-pcm.c:92:7: warning: variable 'period_elapsed' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (push) {
+                       ^~~~
+   sound/soc/starfive/pwmdac-pcm.c:99:7: note: uninitialized use occurs here
+                   if (period_elapsed)
+                       ^~~~~~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:92:3: note: remove the 'if' if its condition is always true
+                   if (push) {
+                   ^~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:81:29: note: initialize the variable 'period_elapsed' to silence this warning
+           bool active, period_elapsed;
+                                      ^
+                                       = 0
+>> sound/soc/starfive/pwmdac-pcm.c:202:6: warning: variable 'pos' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:205:9: note: uninitialized use occurs here
+           return pos < runtime->buffer_size ? pos : 0;
+                  ^~~
+   sound/soc/starfive/pwmdac-pcm.c:202:2: note: remove the 'if' if its condition is always true
+           if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:200:23: note: initialize the variable 'pos' to silence this warning
+           snd_pcm_uframes_t pos;
+                                ^
+                                 = 0
+   3 warnings generated.
+
+
+vim +84 sound/soc/starfive/pwmdac-pcm.c
+
+    77	
+    78	static void sf_pcm_transfer(struct sf_pwmdac_dev *dev, bool push)
+    79	{
+    80		struct snd_pcm_substream *substream;
+    81		bool active, period_elapsed;
+    82	
+    83		rcu_read_lock();
+  > 84		if (push)
+    85			substream = rcu_dereference(dev->tx_substream);
+    86	
+    87		active = substream && snd_pcm_running(substream);
+    88		if (active) {
+    89			unsigned int ptr;
+    90			unsigned int new_ptr;
+    91	
+  > 92			if (push) {
+    93				ptr = READ_ONCE(dev->tx_ptr);
+    94				new_ptr = dev->tx_fn(dev, substream->runtime, ptr,
+    95						&period_elapsed);
+    96				cmpxchg(&dev->tx_ptr, ptr, new_ptr);
+    97			}
+    98	
+    99			if (period_elapsed)
+   100				snd_pcm_period_elapsed(substream);
+   101		}
+   102		rcu_read_unlock();
+   103	}
+   104	
+   105	void sf_pwmdac_pcm_push_tx(struct sf_pwmdac_dev *dev)
+   106	{
+   107		sf_pcm_transfer(dev, true);
+   108	}
+   109	
+   110	
+   111	static int sf_pcm_open(struct snd_soc_component *component,
+   112				struct snd_pcm_substream *substream)
+   113	{
+   114		struct snd_pcm_runtime *runtime = substream->runtime;
+   115		struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+   116		struct sf_pwmdac_dev *dev = snd_soc_dai_get_drvdata(asoc_rtd_to_cpu(rtd, 0));
+   117	
+   118		snd_soc_set_runtime_hwparams(substream, &sf_pcm_hardware);
+   119		snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS);
+   120		runtime->private_data = dev;
+   121	
+   122		return 0;
+   123	}
+   124	
+   125	
+   126	static int sf_pcm_close(struct snd_soc_component *component,
+   127				struct snd_pcm_substream *substream)
+   128	{
+   129		synchronize_rcu();
+   130		return 0;
+   131	}
+   132	
+   133	static int sf_pcm_hw_params(struct snd_soc_component *component,
+   134				struct snd_pcm_substream *substream,
+   135				struct snd_pcm_hw_params *hw_params)
+   136	{
+   137		struct snd_pcm_runtime *runtime = substream->runtime;
+   138		struct sf_pwmdac_dev *dev = runtime->private_data;
+   139	
+   140		switch (params_channels(hw_params)) {
+   141		case 2:
+   142			break;
+   143		default:
+   144			dev_err(dev->dev, "invalid channels number\n");
+   145			return -EINVAL;
+   146		}
+   147	
+   148		switch (params_format(hw_params)) {
+   149		case SNDRV_PCM_FORMAT_U8:
+   150		case SNDRV_PCM_FORMAT_S8:
+   151			dev->tx_fn = sf_pwmdac_pcm_tx_8;
+   152			break;
+   153		case SNDRV_PCM_FORMAT_S16_LE:
+   154			dev->tx_fn = sf_pwmdac_pcm_tx_16;
+   155			break;
+   156		default:
+   157			dev_err(dev->dev, "invalid format\n");
+   158			return -EINVAL;
+   159		}
+   160	
+   161			return 0;
+   162	}
+   163	
+   164	
+   165	static int sf_pcm_trigger(struct snd_soc_component *component,
+   166				struct snd_pcm_substream *substream, int cmd)
+   167	{
+   168		struct snd_pcm_runtime *runtime = substream->runtime;
+   169		struct sf_pwmdac_dev *dev = runtime->private_data;
+   170		int ret = 0;
+   171	
+   172		switch (cmd) {
+   173		case SNDRV_PCM_TRIGGER_START:
+   174		case SNDRV_PCM_TRIGGER_RESUME:
+   175		case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+   176			if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+   177				WRITE_ONCE(dev->tx_ptr, 0);
+   178				rcu_assign_pointer(dev->tx_substream, substream);
+   179			}
+   180			break;
+   181		case SNDRV_PCM_TRIGGER_STOP:
+   182		case SNDRV_PCM_TRIGGER_SUSPEND:
+   183		case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+   184			if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+   185				rcu_assign_pointer(dev->tx_substream, NULL);
+   186			break;
+   187		default:
+   188			ret = -EINVAL;
+   189			break;
+   190		}
+   191	
+   192		return ret;
+   193	}
+   194	
+   195	static snd_pcm_uframes_t sf_pcm_pointer(struct snd_soc_component *component,
+   196				struct snd_pcm_substream *substream)
+   197	{
+   198		struct snd_pcm_runtime *runtime = substream->runtime;
+   199		struct sf_pwmdac_dev *dev = runtime->private_data;
+   200		snd_pcm_uframes_t pos;
+   201	
+ > 202		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+   203			pos = READ_ONCE(dev->tx_ptr);
+   204	
+   205		return pos < runtime->buffer_size ? pos : 0;
+   206	}
+   207	
 
 -- 
 0-DAY CI Kernel Test Service
