@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4127B
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 14:34:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82414C340EE;
-	Fri,  1 Apr 2022 14:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9483D7B
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 14:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB127C340F2;
+	Fri,  1 Apr 2022 14:38:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648823660;
-	bh=ytgvF2ewlNI9S2LJEK7C6w/ZlZCx2WMRDz9D+04cNy4=;
+	s=k20201202; t=1648823937;
+	bh=2KYdkVbYweu2jPFBk8vsmW6eEaxUvJvz5ZstF43+gYk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=c98k1rfJJMl7ZO0bMkeLnYbIk+IpmQ/o6qDSvl1jtEpwqZGSF0LKvbM0iiwYvBPNe
-	 I47JIctDaWIdPtSMsCGttdF09QquUwnMbFuYv5ToIt54B+loVfiBI3he5sypu+HWWX
-	 pRc8fk/g02ePxJeyoB50qAt5Kdyvzyj1/SbNrmTbQT2PfoDIInvAFK/ilkjB32lI6z
-	 R/LriiokagAhXJ61VFwwk/wQmGBuxwjoX1rbwGHRjV1bgdqyAW+IAGfklgnkf7LVjg
-	 333AlJbg5eWX10qg7fXrWsGIZta9z3+SWKRNXHDMCR6msB/yJwD5FlwQmoOSEqS91M
-	 bTyqnoxrooOkA==
+	b=N4pEpLqdLFGvsq2FCcAJL8Dh3wiA6dJbw5LTgXf9mEQdHuzArBqi3TGilHp6Jqlep
+	 0BtSlIGFgNb0jWanxrEQdm8YODRKxmhc1hsOnXQc8hRS8OoM1R5EaUi8kQNgJZylvH
+	 AodexiNHqZrECuLhi4UDt7VCQoTG0wKUw/LiRGs7qnunl4sLIScz7G4ENJDbjcSQ/t
+	 DXSrpVdzZ03wnyDlWMFOjcxD4uxnFQMWSycGou+fFif/8wdd/DSwwoHWnyCDaYJRy8
+	 CsdCaWCuw9WNtOelv8sdl7pZtqWQgZ+BRaE1OeyjZfh0XZ2OfpX1kNb8GczscaTxBJ
+	 qpNl7AwoJDPqA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -29,12 +29,12 @@ Cc: Yonghong Song <yhs@fb.com>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.16 032/109] libbpf: Fix build issue with llvm-readelf
-Date: Fri,  1 Apr 2022 10:31:39 -0400
-Message-Id: <20220401143256.1950537-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 26/98] libbpf: Fix build issue with llvm-readelf
+Date: Fri,  1 Apr 2022 10:36:30 -0400
+Message-Id: <20220401143742.1952163-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401143256.1950537-1-sashal@kernel.org>
-References: <20220401143256.1950537-1-sashal@kernel.org>
+In-Reply-To: <20220401143742.1952163-1-sashal@kernel.org>
+References: <20220401143742.1952163-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -113,10 +113,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index b393b5e82380..d1b474f3c586 100644
+index 74c3b73a5fbe..089b73b3cb37 100644
 --- a/tools/lib/bpf/Makefile
 +++ b/tools/lib/bpf/Makefile
-@@ -129,7 +129,7 @@ GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
+@@ -126,7 +126,7 @@ GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
  			   sort -u | wc -l)
  VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
  			      sed 's/\[.*\]//' | \
@@ -125,7 +125,7 @@ index b393b5e82380..d1b474f3c586 100644
  			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
  
  CMD_TARGETS = $(LIB_TARGET) $(PC_FILE)
-@@ -192,7 +192,7 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
+@@ -195,7 +195,7 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
  		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
  		readelf --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
  		    sed 's/\[.*\]//' |					 \
