@@ -1,118 +1,76 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2504A137F
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 17:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648832848; x=1680368848;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=X9pZUBJSvbFzmKurm5Z+IihTAQDm6O0pF0BrGUtyqiA=;
-  b=myzMrroX2r7d3mI2KmHzZtKh9tqtktq0xzZNu9sKfBniPdAsDhOOSjeJ
-   k+5+5eCfWr3ONIwGs+qguSPBSQMZFQzNIxWtrX5wec5YhOOecPdKy8dVD
-   lykdY0/gsrykk/o7hV+Y8agI9hX8dBF5r4eMjtdMm+xSwVDZOxQCVZ7oa
-   N9n/kfrYbSjYIL4ZgjXyZkIVF/pI9nOQ+iGkhD1DMJyfpOFPQ78H7RGMX
-   Ca7SWUKlwygFrBEhP1yXOKklV0HS3g7OpPT8Zt6D24fRvXq7WzdUDmRau
-   iaAfkTWKL9w1k26ZngJ1HtEzslH2rS6mf7zehmIkMU1pvtBJ1ZsnU661y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="259889296"
-X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
-   d="scan'208";a="259889296"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 10:07:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
-   d="scan'208";a="522846177"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 01 Apr 2022 10:07:25 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1naKk9-0001Ou-1R;
-	Fri, 01 Apr 2022 17:07:25 +0000
-Date: Sat, 2 Apr 2022 01:07:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Douglas Anderson <dianders@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	=?iso-8859-1?Q?Jos=E9?= Roberto de Souza <jose.souza@intel.com>
-Subject: [drm-tip:drm-tip 4/8]
- drivers/gpu/drm/amd/amdgpu/amdgpu_gtt_mgr.c:200:33: error: no member named
- 'tbo' in 'struct ttm_range_mgr_node'
-Message-ID: <202204020126.nuHKg49N-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C26137F
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 17:07:43 +0000 (UTC)
+Received: by mail-pj1-f50.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso3096227pjh.3
+        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 10:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jtEot92E1tB29snoZI4bxj37j8h8fzOPgNXWBl3sd1o=;
+        b=srp5aSyzBqCFGgsTM9653BR8R/cCjRg5uEvYnKYG1U7R4R7CU4DF9T8VZdSsZH7PVH
+         oVaiOLEH44dHGuCt7omnSC9gHFk6Hy+mBkb0nIMxm09/0s73kgJwoW1jU9NRFZygN69Q
+         8gbc8DaMZzWirihOqTRxO5JXFzs/3A4sSsxWVcAYOBLAFLIAmmCSOccC2lEp9uVM2W5A
+         oyiisH+Gufp0gkmwvzlEr+bdseazfCbJferl5JoAcqBmWbiCZv+/hQjtlJpQUtdgkdKR
+         NGeN5lZgvutPsjRxkO9SBUO8zP09eZtUXaqqKwA15tBb2lZtvUbKQwhcqRKwtx61wxY4
+         rRow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jtEot92E1tB29snoZI4bxj37j8h8fzOPgNXWBl3sd1o=;
+        b=BZXQMrevAXTy5gvmPwFBtXyzmt1fnE7QZHNgVqybBphachVswNG7o8RZXWq4p7YSFJ
+         jve5wR9dTLoNaMonpkerTGeX5MMoSGSuSjiSCwtvxCF1fuuXtWNYx0ybK5nuds8VQQU1
+         3oVqCNA7xkcNxlkoxsKuEjmA2ocT+9N/WcUdDSZddPCGUDftq2unUucoVG5ZKRhplco9
+         T6Ely2HiILoG67j8oUh7g1AEOnmzozWIQnJDiArCa5iUwV5hhC4EVwajb+zlyqvaHBdP
+         k9sZp6hL/sg7fdo1FZGEQ3dyD+bYXxSrbzRKemr+SLUE1Ru5ig4OxBFxWiB3gtVBCPAO
+         I+aA==
+X-Gm-Message-State: AOAM530Ym3JL6OJe+1BwooPpkmYVe4PEBW6/G+58765UEb7oF5X8V8nW
+	p0yJkwNVaivz4AR6y3HOqII4jg==
+X-Google-Smtp-Source: ABdhPJzZ+hsGY9FdceFKLN1LfHliorxPb2CTKJTjB/Qs06ibri0zwUxPCfJGWYORWkUYy1HpipvhCw==
+X-Received: by 2002:a17:902:9043:b0:14f:aa08:8497 with SMTP id w3-20020a170902904300b0014faa088497mr11396034plz.109.1648832862452;
+        Fri, 01 Apr 2022 10:07:42 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id w4-20020a056a0014c400b004fb0c7b3813sm3775518pfu.134.2022.04.01.10.07.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 10:07:42 -0700 (PDT)
+Message-ID: <73ef2cba-706a-0b75-4b72-65fda595d1aa@linaro.org>
+Date: Fri, 1 Apr 2022 10:07:41 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 0/5] x86: uaccess CMPXCHG + KVM bug fixes
+Content-Language: en-US
+To: Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Vitaly Kuznetsov <vkuznets@redhat.com>, Wanpeng Li <wanpengli@tencent.com>,
+ Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>,
+ kvm@vger.kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Peter Zijlstra <peterz@infradead.org>,
+ syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+References: <20220401075311.707166-1-pbonzini@redhat.com>
+From: Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <20220401075311.707166-1-pbonzini@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-head:   e797b8d09704b91463456234efdf04dc8f8c385d
-commit: edc1a46d62b7a03d53067f598db831092f9e1b05 [4/8] Merge remote-tracking branch 'drm-misc/drm-misc-next' into drm-tip
-config: arm-randconfig-r033-20220401 (https://download.01.org/0day-ci/archive/20220402/202204020126.nuHKg49N-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add drm-tip git://anongit.freedesktop.org/drm/drm-tip
-        git fetch --no-tags drm-tip drm-tip
-        git checkout edc1a46d62b7a03d53067f598db831092f9e1b05
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/amdgpu_gtt_mgr.c:200:33: error: no member named 'tbo' in 'struct ttm_range_mgr_node'
-                   amdgpu_ttm_recover_gart(node->tbo);
-                                           ~~~~  ^
-   1 error generated.
-
-
-vim +200 drivers/gpu/drm/amd/amdgpu/amdgpu_gtt_mgr.c
-
-bb990bb09235a3 Christian König 2016-09-09  182  
-a614b336f1c16d Christian König 2021-02-11  183  /**
-a614b336f1c16d Christian König 2021-02-11  184   * amdgpu_gtt_mgr_recover - re-init gart
-a614b336f1c16d Christian König 2021-02-11  185   *
-1dd8b1b987fad9 Nirmoy Das      2022-01-07  186   * @mgr: amdgpu_gtt_mgr pointer
-a614b336f1c16d Christian König 2021-02-11  187   *
-a614b336f1c16d Christian König 2021-02-11  188   * Re-init the gart for each known BO in the GTT.
-a614b336f1c16d Christian König 2021-02-11  189   */
-1b08dfb889b2c5 Christian König 2022-01-18  190  void amdgpu_gtt_mgr_recover(struct amdgpu_gtt_mgr *mgr)
-c1c7ce8f5687bb Christian König 2017-10-16  191  {
-77ef271faee9c3 Christian König 2021-07-16  192  	struct ttm_range_mgr_node *node;
-c1c7ce8f5687bb Christian König 2017-10-16  193  	struct drm_mm_node *mm_node;
-1dd8b1b987fad9 Nirmoy Das      2022-01-07  194  	struct amdgpu_device *adev;
-c1c7ce8f5687bb Christian König 2017-10-16  195  
-19a1d9350be632 Nirmoy Das      2021-05-28  196  	adev = container_of(mgr, typeof(*adev), mman.gtt_mgr);
-c1c7ce8f5687bb Christian König 2017-10-16  197  	spin_lock(&mgr->lock);
-c1c7ce8f5687bb Christian König 2017-10-16  198  	drm_mm_for_each_node(mm_node, &mgr->mm) {
-77ef271faee9c3 Christian König 2021-07-16  199  		node = container_of(mm_node, typeof(*node), mm_nodes[0]);
-1b08dfb889b2c5 Christian König 2022-01-18 @200  		amdgpu_ttm_recover_gart(node->tbo);
-c1c7ce8f5687bb Christian König 2017-10-16  201  	}
-c1c7ce8f5687bb Christian König 2017-10-16  202  	spin_unlock(&mgr->lock);
-c1c7ce8f5687bb Christian König 2017-10-16  203  
-19a1d9350be632 Nirmoy Das      2021-05-28  204  	amdgpu_gart_invalidate_tlb(adev);
-c1c7ce8f5687bb Christian König 2017-10-16  205  }
-c1c7ce8f5687bb Christian König 2017-10-16  206  
-
-:::::: The code at line 200 was first introduced by commit
-:::::: 1b08dfb889b2c584b444538c9500af24ba0a6dc7 drm/amdgpu: remove gart.ready flag
-
-:::::: TO: Christian König <christian.koenig@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+On 4/1/22 00:53, Paolo Bonzini wrote:
+> Queued, thanks.
+> 
+Hi Paolo,
+Where is that queued on? https://git.kernel.org/pub/scm/virt/kvm/kvm.git/ ?
+I don't see it there.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Tadeusz
