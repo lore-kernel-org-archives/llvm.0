@@ -1,42 +1,42 @@
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428D17C
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 20:19:22 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-2e689dfe112so35257907b3.20
-        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 13:19:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823957C
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 20:19:24 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-2eadd524e72so35492577b3.6
+        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 13:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=/q7CSXnA5KcPyL6yvbN6hU0mEK4VcrEfa9P7QXrPsno=;
-        b=MiUIX6Azw4gtG61M0EgrFRKBvKyEQG/EVx3WfKgmJCOI1WbmZ3eVKWqXHsyJQizrwO
-         USaqcbRG7X4MWf/4x5Ve8SrkgTr/4V2UhQq3N2IQIMVdXHwNBnNAm2md2xBbdiT2Or5i
-         NArObT1io+WzbF1BzSRhOSHleYpxWaYGeh5J662TxIu/K7csviLub03/q2ALUH1dXwOD
-         Jl2v0JTgK+Q1pKSweNXTYQNT267O7Y2usHG8mfxwatq/qiIYsfbMIxAPJJG/YmJwjp8/
-         5mKaqSQNCOUhwgnL0G+iZqwgO/GywEELBAMnyqunFHlcgc1DJVMqgY1dilqcYoQtv5W+
-         UQTw==
+         :cc;
+        bh=ATcdLAiyB0HmFVQDg4Xl7rvZSmepnr+daM3v/Y+LeMI=;
+        b=EoyjCfGV3FCQpOkbXV+W3kTnXGO1Evzvf/ZY38A9M1NFlrIqtx1VS6qnTsGBd7BwjX
+         WoMjEr/RMAn4q8VmBMj6mKCCSJYHInMMKdfBk6wZQvwoBizwF+NZ8BoF/h/iCTmyVqoC
+         G7HNo6/dYJ2gtGhM3NTwMeNao+r+TProu7GExptuAVxeL/kk3ZIkTTOekXFAtNjuD2NU
+         ma1hWOS5qp5Duz30EY9BFcZJwxIWP8vW/FC5lCWqXj8YNzw5RVfVB8q0U357R2cNp4mw
+         hIbFGaH0dJMNrmMTAzN7dJIn2fB0mcgwx8f4VQjnqYm/fpUcfe0YQqEExQvrwoLFRu3/
+         Rs/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=/q7CSXnA5KcPyL6yvbN6hU0mEK4VcrEfa9P7QXrPsno=;
-        b=gGyM1fssHrJqkXjtxZYZOzjIoDl4cFW+ilXUMMLwAAohIyNqAJRAKpOwhn6QtPgM9T
-         I+bi4JNwDNKZogSOWQLi1iGkSphRC9GXChv9s9e1MeIQi8TC7Vyhb5REb4HD6Q+qS/+V
-         yPzbozIfrYXXtAmvLDnqrAtKLCFMck9ztBVski95wKrDvRK16nZ4JkGGqH+UkE6jEINw
-         9EX9kMu38I35TGG6YA6sO6ATOQ7kFWMgdgh911hLTD8u3ELFCyvPGvwITvOquTJ1twiX
-         0fl9My5BsTXIYVukQTP/jFHjowkGxidYxocxUyWq+94Tskw0WFIlbuSAIGmjekppRboK
-         IVPA==
-X-Gm-Message-State: AOAM533ezQwm/UoAfZ/L1j2HbRUN0k0i5hAE72Dxl1psYt85oaVnyt3J
-	s7hUT2TWzGh7FhZmd94bogXKXtK+vQWVcFdpz/k=
-X-Google-Smtp-Source: ABdhPJw1ufmCshm6xs5eFuvDkNHp0Doc5sHO9vZ7rTZ1C8L0VyRYzptcT0FB0O89vN84xvPmEeWDU2ZW5AP0eMggI8c=
+         :references:subject:from:to:cc;
+        bh=ATcdLAiyB0HmFVQDg4Xl7rvZSmepnr+daM3v/Y+LeMI=;
+        b=PU1pbi7pCvkX9xRcDUMjq73WW2oWBi0C7gSz3nUIATs1Fatqy2m8PEmJ1BPpsALbAn
+         BhWc4Wqkv40rEXdA7sNO1lcCtCJsNiQY9UtqbfZ6Idx37smG6rBVk/6LUncYjbsH0TZy
+         n/IyL03cjV6ewFMlTjyc3Mo9MmYkdIgZeU9+Wh+N9tGCvCY49LEjB71mi4nGsII5OrFA
+         8VS+SH/26aLGvpbIWIJPB5zRih7H1FWCFHZ7mNnJ5YaqmXIuAQ3fIgEgl33qFh7dErid
+         cV8ldFrAfUWRY3p8EYzr0Km1MWfwg3XTFNNiblv31mvw2g6zyQia8qwT/fd8gWzws987
+         Q1iQ==
+X-Gm-Message-State: AOAM530dNrcFlHbLGQMr9iki+8wIADajKqzvIg/B3Icqm7875v5Bc/ND
+	/gDjvfZMd0Wg/368DOPICbFZrrBxWOvUmDBpiOA=
+X-Google-Smtp-Source: ABdhPJyew2kq+WRmdfIe6euP7IdAfz4Lf1J4a3hpbhDfzorQRebEdIXVNDbDfQueKfPJDVocv/gDvOOrkxzODDApak4=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:ebe8:1acf:913c:f19e])
- (user=samitolvanen job=sendgmr) by 2002:a05:6902:150b:b0:639:f81:8179 with
- SMTP id q11-20020a056902150b00b006390f818179mr10164917ybu.31.1648844361283;
- Fri, 01 Apr 2022 13:19:21 -0700 (PDT)
-Date: Fri,  1 Apr 2022 13:19:14 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a5b:90a:0:b0:634:15f3:871b with SMTP
+ id a10-20020a5b090a000000b0063415f3871bmr10173555ybq.306.1648844363642; Fri,
+ 01 Apr 2022 13:19:23 -0700 (PDT)
+Date: Fri,  1 Apr 2022 13:19:15 -0700
 In-Reply-To: <20220401201916.1487500-1-samitolvanen@google.com>
-Message-Id: <20220401201916.1487500-2-samitolvanen@google.com>
+Message-Id: <20220401201916.1487500-3-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,18 +45,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220401201916.1487500-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1684; h=from:subject;
- bh=7zO5jJOOB5O810+rUoHeiZO9VlITzF/f1cuVxYGtJV0=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBiR15CwOu77U++A+3akTihXXW47Ey1dwrsZdUhek8n
- HbC7HU+JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYkdeQgAKCRBMtfaEi7xW7jNgC/
- 9u4/tNF4JQ7D+noTqrl303CNHQm8GorY6FyAjWC07rJJryaMuFL93yb4bU75GxFtKpxj/fYIaSRV+X
- wS6AXBxfZQV6xonkBpPqmByjTDCB/eDPaoMPmqUkR6nmVE6lBybl2qQVu4UzjyV7SBwJI6CGxsM9cO
- K+CdjLl1ipQ+Xo+8OZ/t9jmcJsRCFRZxYv3oxFqZTVedEUxIMw01FsL0jQA/k1SYp9FCPwdMf5rDc/
- zCB8uqtggLCeBngSQ9wQlRpgnWxPt5lRvHO9UjTMUahmckUN+3F1FtKKVJYldjNtyAuXnpj21iZa9U
- ij3720OXjljPinXx1V7PMtX/wRkF8jvCX2jwyCLDKPpJQlGH+2yhDfSEoIcKlG9MWKB3m2k5hKh9pS
- wdaRKf5xbLUm3xS1j57Wlaeaei7EHSYPqj1WqVK0/svo+rz3g8XdXDfRHdhTbcqWvudqz1GYwMraNs
- klzsxlsrlC9LFSbv6jPvlcUA0QsjcyKwKpwZ3jgK1mn24=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1056; h=from:subject;
+ bh=TxU5yU7eF6HnJJtCowWe9icJOHczcBwSXoiV/s/cDrI=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBiR15CugMAC3++WEpyG4vENztHvLXakUUYXOQsyeYl
+ rVPXFE2JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYkdeQgAKCRBMtfaEi7xW7gliC/
+ 9FfQ7TZrKMqndhgdzS0eK9T5tspAJnIZpf3oeBTdH1yAeQIwZvHzFf76rSoqV6LrbI+gqMeIdHKr08
+ UIVlKWpl6xs1zdEc+NvkBalo7cGuCVrQhcVyGSCHyr4qFrtFKg3hA4cA134xfBCef2dRq4OlcjlxyW
+ noFvvInv0CUwZj+cCNYqM5+PjO39zKKvvYF0L6VlWVNn7Fa3UCbymDa6AcmA7O6TO7t+SExVQ1nE8W
+ vTxJKJBAKAt1rgs3KjEFPVgalAUFnfhfNCCPeh/SC6LF5++tnbSJCjTFzzpyehcjyrrPscjSrGh7yZ
+ pwQxCsuHKH3E7frUwQXCr1167ogQen62ZBUZKyJA3stmJfOtSXlUGXDLPyuNpWNM5SiuQxTE3I9b01
+ ptlVlMGTab3Tl/kHLSb2PvyQA2hVbrgske+Vc7c0KZGmn1zs1kS+LUgKIU9z5d0Hu0XyCrg3psuddv
+ BDIDadUv7bfb+ZZXkjWwR/kblPiEkSPZWT/MZkK6KiBf0=
 X-Mailer: git-send-email 2.35.0
-Subject: [PATCH 1/3] kbuild: Change CFI_CLANG to depend on __builtin_function_start
+Subject: [PATCH 2/3] linux/compiler-clang.h: define function_nocfi
 From: Sami Tolvanen <samitolvanen@google.com>
 To: Kees Cook <keescook@chromium.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>, Mark Rutland <mark.rutland@arm.com>, 
@@ -65,52 +65,36 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>, Mark Rutland <mark.rutland@arm.co
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Clang 14 added support for the __builtin_function_start()
-built-in function, which allows us to implement function_nocfi()
-without architecture-specific inline assembly. This patch changes
-CONFIG_CFI_CLANG to depend on the built-in and effectively upgrades
-the minimum supported compiler version for CFI to Clang 14.
+Use __builtin_function_start() to implement the function_nocfi() macro
+when CONFIG_CFI_CLANG is selected.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- arch/Kconfig | 5 +----
- init/Kconfig | 3 +++
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ include/linux/compiler-clang.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 29b0167c088b..eecfc2809781 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -723,10 +723,7 @@ config ARCH_SUPPORTS_CFI_CLANG
- config CFI_CLANG
- 	bool "Use Clang's Control Flow Integrity (CFI)"
- 	depends on LTO_CLANG && ARCH_SUPPORTS_CFI_CLANG
--	# Clang >=3D 12:
--	# - https://bugs.llvm.org/show_bug.cgi?id=3D46258
--	# - https://bugs.llvm.org/show_bug.cgi?id=3D47479
--	depends on CLANG_VERSION >=3D 120000
-+	depends on CC_HAS_BUILTIN_FUNCTION_START
- 	select KALLSYMS
- 	help
- 	  This option enables Clang=E2=80=99s forward-edge Control Flow Integrity
-diff --git a/init/Kconfig b/init/Kconfig
-index ddcbefe535e9..f024fd353373 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -86,6 +86,9 @@ config CC_HAS_ASM_INLINE
- config CC_HAS_NO_PROFILE_FN_ATTR
- 	def_bool $(success,echo '__attribute__((no_profile_instrument_function)) =
-int x();' | $(CC) -x c - -c -o /dev/null -Werror)
-=20
-+config CC_HAS_BUILTIN_FUNCTION_START
-+	def_bool $(success,echo 'void f(void) {}; void *p =3D __builtin_function_=
-start(f);' | $(CC) -x c - -c -o /dev/null)
+diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+index babb1347148c..c84fec767445 100644
+--- a/include/linux/compiler-clang.h
++++ b/include/linux/compiler-clang.h
+@@ -69,6 +69,16 @@
+ #define __nocfi		__attribute__((__no_sanitize__("cfi")))
+ #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
+ 
++#if defined(CONFIG_CFI_CLANG)
++/*
++ * With CONFIG_CFI_CLANG, the compiler replaces function address
++ * references with the address of the function's CFI jump table
++ * entry. The function_nocfi macro always returns the address of the
++ * actual function instead.
++ */
++#define function_nocfi(x)	__builtin_function_start(x)
++#endif
 +
- config PAHOLE_VERSION
- 	int
- 	default $(shell,$(srctree)/scripts/pahole-version.sh $(PAHOLE))
---=20
+ /*
+  * Turn individual warnings and errors on and off locally, depending
+  * on version.
+-- 
 2.35.0
 
