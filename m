@@ -1,80 +1,84 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FC3137F
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 18:28:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648837716; x=1680373716;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FCXhvLj/rZeuTgz+OK7rFnFpMayJa+RLG2mvzZ6RhRo=;
-  b=YL3AxC9ucgELFJk/gAeZ7lRHKrFKq+34xzYMwG189prL2jR2UzFG/1B+
-   jzbvL96UstA1tNenowJzP8rBDPiU6UNzGZUzqfErdHKgH9cSHUkOUzkOE
-   heUdmmZo55Q1mq9Cm7VhLGORX2zOl5WvZrx9VypdLWqHynBqU5fbLv1La
-   yYviJy0wPosfUBfRQIyRCcv7iXTJtQ4c+WBB1A5Bjj6wjOq2ROWKfyYxC
-   ofu1jCLkHhN1WBM5K9lVj/07qrqcW37GSoOFxFqxHpdiqyEFsfJ47SIZn
-   pAV+buiRdoQOKUwI8E6xWWw9oi3NOEbKTTOz3UPkzzl9b5Zyo/DXLtehE
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="260385201"
-X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
-   d="scan'208";a="260385201"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 11:28:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
-   d="scan'208";a="655924746"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 01 Apr 2022 11:28:33 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1naM0e-0001SW-Vl;
-	Fri, 01 Apr 2022 18:28:32 +0000
-Date: Sat, 2 Apr 2022 02:28:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrey Konovalov <andreyknvl@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: [linux-next:master 14920/15002] ld.lld: error: undefined symbol:
- arch_stack_walk_shadow
-Message-ID: <202204020202.BdSj29hd-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B146A7C
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 20:19:19 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id h8-20020a25e208000000b00628c0565607so3101375ybe.0
+        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 13:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=MzDAtS181K28awKeVRl3qYn1BJqlBjys5Tr9TP3rlP4=;
+        b=QOgDbsi0Jkp536F8U3evqUrA5teUQPwd1J3oZVmL+ceW77Te9PiOo30oFh5I+Cfnhk
+         JRSBlrE2TEWRY9lp5O1ExdJ3rZ9tfHfrX12HIXnDBsywa2HTxTYfrUExdO5O8Mc+CXYr
+         +VcSZEAIn2TgQuCpwRPrZzCk6qPTjQeOMd0ydmwzGr9JKJ2gcUkb9xCkMMam9FGwIlcX
+         I33j6enXrKAymZJ+EdW0R1h5SNan1gb07PokkU/kScowj+gVxDmYYzu/QgCPhjm0q8EV
+         IKcE5cJMHuqqlrQzg5mj8ST5/OrbGo/QFKGmOIxcvChc3wGvv2gW5KJlZfG0TNiGur72
+         8KFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=MzDAtS181K28awKeVRl3qYn1BJqlBjys5Tr9TP3rlP4=;
+        b=K/83azO0g9wea85Q50kALv1LL8eSWAUZR3Y3l/GWcHemv/cY9XAFZhKhBNKUDTlX7y
+         VmM9ZQOJ6UuYCrJj9VCl0DBIIcVR0teAvMGU0J0JKqYc5MECjmVYwSWTLA1FN3DvPGps
+         CX6EVvjmJL8ust+Ujdo1bHy6kkcVmn3V3gmlXxZY6OKVVzVnuZepY1gRe6G6N7F4MfDo
+         ANtGAT+3hOKgJ8xlTV46DNLznfkYVt+3J+POwhHoMRDv4sQTzIxp5xN7ZXbiIydEdxEy
+         DfWAEyIouhj5bAOHDghCMujXg8aKm9Ee+e0AgW4nXN6E/feGw8JhfpI1MhpSqRBR8tVq
+         i2sg==
+X-Gm-Message-State: AOAM5324r5xFnYSJrzxdec41EhfqAnk8gtHxCe+8yS9S2B68LwEPI34v
+	pJAojWaLpi4k3cUMWYKGksAVI4N2eiYGlc+6PvM=
+X-Google-Smtp-Source: ABdhPJzVa2+iD5w2wZiAll+bNYAh4Woiw4BvSeE/HM1A5wWyO8tbc7KvmBfTDvYoGqyu9lJ2HX/YyH0IRTBMNj5XBOQ=
+X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:ebe8:1acf:913c:f19e])
+ (user=samitolvanen job=sendgmr) by 2002:a81:4754:0:b0:2e5:9447:b1a0 with SMTP
+ id u81-20020a814754000000b002e59447b1a0mr12543646ywa.66.1648844358691; Fri,
+ 01 Apr 2022 13:19:18 -0700 (PDT)
+Date: Fri,  1 Apr 2022 13:19:13 -0700
+Message-Id: <20220401201916.1487500-1-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=755; h=from:subject;
+ bh=WH/8OyJEi9p/hM5wZbbTiaLpH/4ppY4IMtyv+KlnWGQ=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBiR15CtFhTIHqRjcowQZaTOrS5xpFZwIuWGKgZH9QY
+ 9U9tLmuJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYkdeQgAKCRBMtfaEi7xW7nC8C/
+ 9PyrDAAwDUSsKHBXM2cS1o2I7dEFr0YXswqSVooDhekKHMqQvLQ36MLEJKCXvGOq4Hp4BEeyFauzi2
+ gVFFOC8aM0YY+vuiYObacWitVa/ZXz91yRIIRdFKsrvSdMalN+Nei37wUcBtyaoleFlwe/kP4jwCxr
+ ap9Mwf152DR57HwdQAwfJNXDPk2l+xkGh43Bsw4Bvkc5JZHl7q68+SvHZuYnTySOhdfE1x2NJo2o9a
+ g+BYwOVTkyQv3ktPgnCIPmwmj1JNKQXrYcoDOTfvRd5RmFKIzA/zYXypH/FEb3D3EY76bkdIuNg44S
+ 30bclKxDr7N/BgTQFumcNdOVgnvgm9ZcDNkT7xT/NpdvfM1HyHHW72wwtWmT5e1aZARYcVTsCdY0Wh
+ GqEJoMP3nQuyozhUqhU3WKFtKjvO5PYkGimKFod4mrEl4hJ/mUu5YFzJC4UVJ1xYqXrWa/K+oScIl9
+ dq8P2Qvs08jBmPDSxm8nEE8HlUHh+7VC6SIgRPcXP2F/8=
+X-Mailer: git-send-email 2.35.0
+Subject: [PATCH 0/3] cfi: Use __builtin_function_start
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Will Deacon <will@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   e5071887cd2296a7704dbcd10c1cedf0f11cdbd5
-commit: e63b15ad51960e4e7970612849391859be30d63f [14920/15002] arm64: implement stack_trace_save_shadow
-config: arm64-randconfig-r025-20220331 (https://download.01.org/0day-ci/archive/20220402/202204020202.BdSj29hd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=e63b15ad51960e4e7970612849391859be30d63f
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout e63b15ad51960e4e7970612849391859be30d63f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Clang 14 introduced the __builtin_function_start intrinsic, which
+makes it possible to cleanly implement the function_nocfi() macro in a
+way that also works with static initializers. Add a default
+function_nocfi() implementation and drop the arm64 inline assembly
+version.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sami Tolvanen (3):
+  kbuild: Change CFI_CLANG to depend on __builtin_function_start
+  linux/compiler-clang.h: define function_nocfi
+  arm64: Drop the inline assembly implementation of function_nocfi
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: arch_stack_walk_shadow
-   >>> referenced by stacktrace.c:257 (kernel/stacktrace.c:257)
-   >>>               stacktrace.o:(stack_trace_save_shadow) in archive kernel/built-in.a
+ arch/Kconfig                      |  5 +----
+ arch/arm64/include/asm/compiler.h | 16 ----------------
+ include/linux/compiler-clang.h    | 10 ++++++++++
+ init/Kconfig                      |  3 +++
+ 4 files changed, 14 insertions(+), 20 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.0
+
