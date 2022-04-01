@@ -1,114 +1,139 @@
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D8C1367
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 13:11:14 +0000 (UTC)
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42]) (authenticated)
-	by conssluserg-01.nifty.com with ESMTP id 231DB4nv028930
-	for <llvm@lists.linux.dev>; Fri, 1 Apr 2022 22:11:05 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 231DB4nv028930
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1648818665;
-	bh=/kI3lQPTgEygcI7vmBN005HvGRQcbjUBTIDFX8fCsok=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=vlVvQCkO5HP+kKJ2zs9SP8MYR167xK8MnHYtRrF8iD825i5ZfWXP5RezshrudtHAV
-	 ekNu4WL0lCFYRrEgYQEJeIxhAcgstnWdT9D9JoO1wOrJuNKjkOsfXvX3+ERh+ReWR5
-	 HQ6BMJ7JIXAWqsB8Yykil5Ju8sWVTrjS5e0MguhbWdw1vpXoHDwmu1P+gdVoBe5E5s
-	 0KGsc1Of/ErmaSOaQXa9+bic1VtjolCwhJx7rPrHAI4Pk7TUadqCdN87UPnCV04gVq
-	 p7QtxVnt43izdvv7CyDDopnwkCa2mkAlsq7wwOzgO+BjeLvZ0oQUmZtjdBYXoDiCm6
-	 Lms+rHpPPX9YA==
-X-Nifty-SrcIP: [209.85.216.42]
-Received: by mail-pj1-f42.google.com with SMTP id gb19so2397185pjb.1
-        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 06:11:04 -0700 (PDT)
-X-Gm-Message-State: AOAM531JDOiR0Txv49SRHMWbNtVvfF/fWGriRZNJl0+D8NWNm6UxiwS7
-	y1mE0PcliLIJWzTdVsnUiWSf4fkAQtQMqibR2+4=
-X-Google-Smtp-Source: ABdhPJxIay5Z8UU92lADQCkERH4RVzsDhwr+Hx1SjiWIoiMOqBVc5jaSrmPEqdxc4cMxCGnuhdAN/qfPy2s6hzVNF1M=
-X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
- s7-20020a170902988700b001516e1c7082mr10211008plp.162.1648818664197; Fri, 01
- Apr 2022 06:11:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE67C1367
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 14:27:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAFF6C2BBE4;
+	Fri,  1 Apr 2022 14:27:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1648823273;
+	bh=wdk/Jscln/9rXFA/A3zK1dslfarO0A7QtJ3dSbvKtIc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=P01fwDDbnmA8t5wFKSGCnk3evLWzRCK6NPmHYhlWPms4BeM9NcugfCPXWYoakgfwA
+	 //LLI+LjIFu8hTcc2IBNjq5WMepEXOPfll4vdNC9ng6OsgvTfZr7tZiGC/BN5Nbjug
+	 sDubxtyPAvJJxmBeoRR3cc6e6Hn9v/erQ9UQat4e6XbU70i0R+XyiHGJVbxsw8VIf+
+	 Bb4gZ4CtdwA35dFkGxRfeC1Su2H84J8hfZL1Q85wmfZAUd2J5AQvfcyEjBpAEW+j1E
+	 yh3u6W0OSGPxN8l2T5JSBsYdQqOE6AU2oKO0l3oC3pm6hls6bplK6y4w2SFr5yo0Fb
+	 iTIXbqbKnZ5dg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Yonghong Song <yhs@fb.com>,
+	Delyan Kratunov <delyank@fb.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.17 043/149] libbpf: Fix build issue with llvm-readelf
+Date: Fri,  1 Apr 2022 10:23:50 -0400
+Message-Id: <20220401142536.1948161-43-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220401142536.1948161-1-sashal@kernel.org>
+References: <20220401142536.1948161-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220322173547.677760-1-nathan@kernel.org> <CAK7LNAT8TcDy=iKaWZ7_+MbT84vOVEBzHxJY8Bx54Ju5fur8-w@mail.gmail.com>
- <Yj9wyNwZWkilNbJM@dev-arch.thelio-3990X>
-In-Reply-To: <Yj9wyNwZWkilNbJM@dev-arch.thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 1 Apr 2022 22:10:17 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASKg87aZTTF7heXnh1sWFm9Stxsu5unRw_rSbKB=jCr9g@mail.gmail.com>
-Message-ID: <CAK7LNASKg87aZTTF7heXnh1sWFm9Stxsu5unRw_rSbKB=jCr9g@mail.gmail.com>
-Subject: Re: [PATCH] um: Fix filtering '-mno-global-merge'
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-On Sun, Mar 27, 2022 at 5:00 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Sat, Mar 26, 2022 at 12:29:55PM +0900, Masahiro Yamada wrote:
-> > On Wed, Mar 23, 2022 at 2:39 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > When booting a clang compiled UML kernel, the kernel panics when trying
-> > > to run init:
-> > >
-> > >   wait_stub_done : failed to wait for SIGTRAP, pid = 651294, n = 651294, errno = 0, status = 0xb7f
-> > >   Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> > >
-> > > After the commit in Fixes, many flags from KBUILD_CFLAGS do not appear
-> > > in USER_CFLAGS, likely due to USER_CFLAGS initially being a recursive
-> > > variable ("VAR =") then being switched to a simple ("VAR :=") variable.
-> > > For example, diffing arch/x86/um/.ptrace_user.o.cmd shows flags such as
-> > > '-Os' and '-fno-delete-null-pointer-checks' getting dropped, which both
-> > > impact code generation.
-> > >
-> > > Rework the filtering to use filter-out instead of patsubst, which allows
-> > > all the patterns that USER_CFLAGS cares about to be excluded in one
-> > > command and ensures all flags from KBUILD_CFLAGS are transferred over to
-> > > USER_CFLAGS properly, which resolves the boot issue noted above.
-> > >
-> > > Fixes: 6580c5c18fb3 ("um: clang: Strip out -mno-global-merge from USER_CFLAGS")
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> >
-> >
-> > Can we remove -mno-global-merge entirely?
-> >
-> >
-> > 61163efae02040f66a95 was a very old commit,
-> > without enough explanation.
-> >
-> > Shall we remove  -mno-global-merge, and do compile-tests.
-> > If we are hit by problems for arm/arm64, we can re-add it.
->
-> Yes, I think that was the conversation that we had on the commit that
-> this fixes:
->
-> https://lore.kernel.org/r/YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X/
->
-> I can test that on my Raspberry Pi 3 and 4 on Monday, although I would
-> like for this patch to be picked up in the meantime so that it is
-> possible to test UML on -next with clang. We can remove
-> -mno-global-merge in a follow up change, if you do not have any
-> objections?
->
-> Cheers,
-> Nathano
+From: Yonghong Song <yhs@fb.com>
 
+[ Upstream commit 0908a66ad1124c1634c33847ac662106f7f2c198 ]
 
-This patch is unneeded now
-because I picked up the alternative:
+There are cases where clang compiler is packaged in a way
+readelf is a symbolic link to llvm-readelf. In such cases,
+llvm-readelf will be used instead of default binutils readelf,
+and the following error will appear during libbpf build:
 
-https://lore.kernel.org/all/CAK7LNAS6C6Uj9cCQ0o=bYF1F-EVD=VgdR8YYx-1PJc9toX_HZA@mail.gmail.com/
+  Warning: Num of global symbols in
+   /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/sharedobjs/libbpf-in.o (367)
+   does NOT match with num of versioned symbols in
+   /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/libbpf.so libbpf.map (383).
+   Please make sure all LIBBPF_API symbols are versioned in libbpf.map.
+  --- /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/libbpf_global_syms.tmp ...
+  +++ /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/libbpf_versioned_syms.tmp ...
+  @@ -324,6 +324,22 @@
+   btf__str_by_offset
+   btf__type_by_id
+   btf__type_cnt
+  +LIBBPF_0.0.1
+  +LIBBPF_0.0.2
+  +LIBBPF_0.0.3
+  +LIBBPF_0.0.4
+  +LIBBPF_0.0.5
+  +LIBBPF_0.0.6
+  +LIBBPF_0.0.7
+  +LIBBPF_0.0.8
+  +LIBBPF_0.0.9
+  +LIBBPF_0.1.0
+  +LIBBPF_0.2.0
+  +LIBBPF_0.3.0
+  +LIBBPF_0.4.0
+  +LIBBPF_0.5.0
+  +LIBBPF_0.6.0
+  +LIBBPF_0.7.0
+   libbpf_attach_type_by_name
+   libbpf_find_kernel_btf
+   libbpf_find_vmlinux_btf_id
+  make[2]: *** [Makefile:184: check_abi] Error 1
+  make[1]: *** [Makefile:140: all] Error 2
 
+The above failure is due to different printouts for some ABS
+versioned symbols. For example, with the same libbpf.so,
+  $ /bin/readelf --dyn-syms --wide tools/lib/bpf/libbpf.so | grep "LIBBPF" | grep ABS
+     134: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS LIBBPF_0.5.0
+     202: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS LIBBPF_0.6.0
+     ...
+  $ /opt/llvm/bin/readelf --dyn-syms --wide tools/lib/bpf/libbpf.so | grep "LIBBPF" | grep ABS
+     134: 0000000000000000     0 OBJECT  GLOBAL DEFAULT   ABS LIBBPF_0.5.0@@LIBBPF_0.5.0
+     202: 0000000000000000     0 OBJECT  GLOBAL DEFAULT   ABS LIBBPF_0.6.0@@LIBBPF_0.6.0
+     ...
+The binutils readelf doesn't print out the symbol LIBBPF_* version and llvm-readelf does.
+Such a difference caused libbpf build failure with llvm-readelf.
 
+The proposed fix filters out all ABS symbols as they are not part of the comparison.
+This works for both binutils readelf and llvm-readelf.
 
+Reported-by: Delyan Kratunov <delyank@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220204214355.502108-1-yhs@fb.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/lib/bpf/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index f947b61b2107..b8b37fe76006 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -131,7 +131,7 @@ GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
+ 			   sort -u | wc -l)
+ VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
+ 			      sed 's/\[.*\]//' | \
+-			      awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}' | \
++			      awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
+ 			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
+ 
+ CMD_TARGETS = $(LIB_TARGET) $(PC_FILE)
+@@ -194,7 +194,7 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
+ 		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
+ 		readelf --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
+ 		    sed 's/\[.*\]//' |					 \
+-		    awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
++		    awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}'|  \
+ 		    grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |		 \
+ 		    sort -u > $(OUTPUT)libbpf_versioned_syms.tmp; 	 \
+ 		diff -u $(OUTPUT)libbpf_global_syms.tmp			 \
 -- 
-Best Regards
-Masahiro Yamada
+2.34.1
+
