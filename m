@@ -1,107 +1,95 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CFC7B
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 23:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1648854415;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=jNUDi778AJUhlrN3PBTxwa1i48FL+T4gzIs+ukoa52k=;
-	b=D+ZvN87IQvQpKLFIbGeToRW/kr8fwGRWHBVv/HYVY9d1XNMISIUW6/EaWhS29nSHRtYB92
-	fa9KJ2AcckosnsSYfHk6T7x13S5wAJYPaj53T8DqDdFP+WRsShbKF9gMKklZjFmtSBLspA
-	UjmSDrKSKP7M3w6Og2Dr42gP8o9Vx0E=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-428-yoFnhPspMCmRbQmCguHVBg-1; Fri, 01 Apr 2022 19:06:54 -0400
-X-MC-Unique: yoFnhPspMCmRbQmCguHVBg-1
-Received: by mail-qv1-f69.google.com with SMTP id k20-20020ad44714000000b00440fd2c4a0aso3042035qvz.20
-        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 16:06:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jNUDi778AJUhlrN3PBTxwa1i48FL+T4gzIs+ukoa52k=;
-        b=LwPo26o4mA1RnS3UKyMxN4ru5SOF1o60wjUFUMCSwO7a1rLtGzi9s5t/OvzkdhPgnl
-         z7jQzFqnphd/udXPPz/DqKIli7NMpPk0unNMQUuwhclwz+O58stqeNtLwODnwmtl0bj7
-         WipgVdVbnQ1X1TSplhzIQR1zaoykot80OpOiPoIdCZrXb1TkGkN9UJP29DycyAiq84jL
-         8bbGUSQVAr3ejS1uOQnrvPLv68p1HgkT4/xDPnQIMQTd9rtJNtTP9cUuGfvD2ys9c+R1
-         Dsng+PbIQ57BMIriCO4UnzQxmliJdCHF+r5gbDUip9xy+rJ/8ddbKrXhlsFH1XcrpPSq
-         BBsg==
-X-Gm-Message-State: AOAM53056ANv1PKoZt1ZyQyYXniMK2SrqUCqrRLbP+CknsZnrMX5vG8k
-	7xJMtU7UB63H/1rsK2FccULT+k9vGdrALTRscRLsFW4eTXmQ+VPAnFsiAc12KXuXpEyEiDpQ3RM
-	uMNUq7w7ME+b9pA==
-X-Received: by 2002:a0c:fc46:0:b0:440:f78f:f4c4 with SMTP id w6-20020a0cfc46000000b00440f78ff4c4mr40795357qvp.108.1648854413665;
-        Fri, 01 Apr 2022 16:06:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw/F5Dq6Hq/AtU56gvFP3PTl65Ek+RzTn9Hp1ejEDvmMZTNZW0XxrZQHMh6L/ecLIyTztZc5A==
-X-Received: by 2002:a0c:fc46:0:b0:440:f78f:f4c4 with SMTP id w6-20020a0cfc46000000b00440f78ff4c4mr40795338qvp.108.1648854413437;
-        Fri, 01 Apr 2022 16:06:53 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id y11-20020ac85f4b000000b002e1e038a8fdsm2712923qta.13.2022.04.01.16.06.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 16:06:52 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: luciano.coelho@intel.com,
-	kvalo@kernel.org,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	johannes.berg@intel.com,
-	emmanuel.grumbach@intel.com,
-	dan.carpenter@oracle.com
-Cc: linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] iwlwifi: mvm: initialize seq variable
-Date: Fri,  1 Apr 2022 19:06:40 -0400
-Message-Id: <20220401230640.3196196-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022407B
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 23:34:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648856044; x=1680392044;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KtWDZBoZ9HU0GQJUhsn93GzpAZmBgdqKwRs7SJ1Z7S8=;
+  b=RisqZWzOvPBTPyj3RPHxE/rlv2EXPnZcEhKpjcU81pUAVrGt/MvqkPDS
+   kQREu6Jp4IxpDnYvtHQdGUJtSYUIL0FGjCL3PUEl5MDjxN5ucaAe++K7J
+   X/egP5Wf85ABUyLR/0GZp3wfNHFZIP0VRxlUsZN4TzyfGKqMp5a81XpvB
+   WUylIwc/cq7gVsPH6ont+M0tyvfTh6C0Bvk5mYEEr/3WDIim6ZDD6x3ov
+   a6t6PPMeMd425e79usfq8PhAgX+az5DbWEBf8Fkub4h/4eB/zy+lzzyho
+   DPa+ohmj9nCYU50l93zCVNRf0W8G0362r48KRHdK64dht6VmzWM+7ntBA
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="257832269"
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="257832269"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 16:34:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="721050141"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 01 Apr 2022 16:34:01 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1naQmG-0001b4-TK;
+	Fri, 01 Apr 2022 23:34:00 +0000
+Date: Sat, 2 Apr 2022 07:33:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dafna Hirschfeld <dhirschfeld@habana.ai>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Oded Gabbay <ogabbay@kernel.org>
+Subject: [ogabbay:habanalabs-next 25/28]
+ drivers/misc/habanalabs/goya/goya.c:4265:5: warning: no previous prototype
+ for function 'goya_debugfs_read_dma'
+Message-ID: <202204020715.RF7P32XV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Clang static analysis reports this issue
-d3.c:567:22: warning: The left operand of '>' is
-  a garbage value
-  if (seq.tkip.iv32 > cur_rx_iv32)
-      ~~~~~~~~~~~~~ ^
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
+head:   fa59c43c5c906277ab3b753d782488ef4fd3ba62
+commit: cb162eee0d9f31c21860a9f454563abde2ff30aa [25/28] habanalabs: remove debugfs read/write callbacks
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220402/202204020715.RF7P32XV-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=cb162eee0d9f31c21860a9f454563abde2ff30aa
+        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
+        git fetch --no-tags ogabbay habanalabs-next
+        git checkout cb162eee0d9f31c21860a9f454563abde2ff30aa
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/
 
-seq is never initialized. Call ieee80211_get_key_rx_seq() to
-initialize seq.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: 0419e5e672d6 ("iwlwifi: mvm: d3: separate TKIP data from key iteration")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/wireless/intel/iwlwifi/mvm/d3.c | 1 +
- 1 file changed, 1 insertion(+)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
-index a995bba0ba81..9b190b3ce6c1 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
-@@ -563,6 +563,7 @@ static void iwl_mvm_wowlan_get_tkip_data(struct ieee80211_hw *hw,
- 		}
- 
- 		for (i = 0; i < IWL_NUM_RSC; i++) {
-+			ieee80211_get_key_rx_seq(key, i, &seq);
- 			/* wrapping isn't allowed, AP must rekey */
- 			if (seq.tkip.iv32 > cur_rx_iv32)
- 				cur_rx_iv32 = seq.tkip.iv32;
+>> drivers/misc/habanalabs/goya/goya.c:4265:5: warning: no previous prototype for function 'goya_debugfs_read_dma' [-Wmissing-prototypes]
+   int goya_debugfs_read_dma(struct hl_device *hdev, u64 addr, u32 size,
+       ^
+   drivers/misc/habanalabs/goya/goya.c:4265:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int goya_debugfs_read_dma(struct hl_device *hdev, u64 addr, u32 size,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/goya_debugfs_read_dma +4265 drivers/misc/habanalabs/goya/goya.c
+
+  4264	
+> 4265	int goya_debugfs_read_dma(struct hl_device *hdev, u64 addr, u32 size,
+  4266					void *blob_addr)
+  4267	{
+  4268		dev_err(hdev->dev, "Reading via DMA is unimplemented yet\n");
+  4269		return -EPERM;
+  4270	}
+  4271	
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
