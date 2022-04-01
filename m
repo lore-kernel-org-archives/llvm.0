@@ -1,80 +1,107 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3681363
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 21:00:36 +0000 (UTC)
-Received: by mail-wm1-f46.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso4328977wma.0
-        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 14:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8Nfe9G6FAXY/E/AbmQAdSvRU9IORQQkMBI1TaVXtl0I=;
-        b=ehFx1CZeNauNPlFJDPhsoGXqJb3EGKznWsNWXmYtJm2Na6JRkBguhTA52xhCey8Ejx
-         CUvRZmh9SWpsgjDc3W0Y/ZBS79AbiCQvaq+2UHKJuudI3ZnZstW5wGzAI+qPtEe5XD07
-         drxVG8g1aUPzVzzSPdP6+Ve+glSHGap368kgnS5tW3VYzFiF3PG555f4nfT1Tu91P2jx
-         vs9p24XHMfSd7lAUvzqqOFK9Zh6WCBNciTwnR6sZvTv2xVHwJrXS/96HvBN/ku8Nknkw
-         iRriKxEMXLdWFKmnL5Nc9QVS5bCTovfNobAt5dVkY9epn/pEzxZUGlD2n3GLA4BS5vp/
-         ZZHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8Nfe9G6FAXY/E/AbmQAdSvRU9IORQQkMBI1TaVXtl0I=;
-        b=0nqssiXqp85VjtQ9NGTS2054L/67PBSuPIVeDDW8XL348Nalamq8Lc3aoARK2XStGy
-         +CvYG+ub1+NGKxcG0j9N+hGQI0uLGZ5d+YILDvKV63CHX8yy3Sr94iCYnKj1s23LB1/F
-         a4aVJemcaPScfiqhekI+g4PU4mxuG4H4eVD3TQsLd2nJ7IibJUIMAbR4ZRc54w5k4ULb
-         X0CTOqVi6HpC+k6viJ77+4QWtWIjcMbSmWeD0dFQpI3O8HbyXO6ZuqLX70QuJo2X8jCM
-         CqHS/ID2pAey1AG7SAUVQSN7CpYieEpL07iDoy2GfD6xlboeR51f1z+iylWX9GnuQWVW
-         9MaA==
-X-Gm-Message-State: AOAM531RVECVzF3Eh27yzXA/3gULZOdpHgqvuasKgYuS7HiGL0ZaIu/Y
-	hzWFYTjWwOFWiJgFBLpj7sYPBA==
-X-Google-Smtp-Source: ABdhPJylXTtpK692bqz4KfNgI5xyVNjcHc+ugaJ2/3bPUryjXJPVzLcLU12s/iWShAy+/1hfqoWlbw==
-X-Received: by 2002:a05:600c:5106:b0:38e:38f8:858 with SMTP id o6-20020a05600c510600b0038e38f80858mr10027515wms.109.1648846834887;
-        Fri, 01 Apr 2022 14:00:34 -0700 (PDT)
-Received: from localhost.localdomain (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
-        by smtp.gmail.com with ESMTPSA id r15-20020a5d6c6f000000b002040552e88esm3479405wrz.29.2022.04.01.14.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 14:00:34 -0700 (PDT)
-From: Phillip Potter <phil@philpotter.co.uk>
-To: lienze@kylinos.cn
-Cc: nathan@kernel.org,
-	ndesaulniers@google.com,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-block@vger.kernel.org
-Subject: Re: [PATCH] cdrom: remove unused variable
-Date: Fri,  1 Apr 2022 22:00:33 +0100
-Message-Id: <20220401210033.2078426-1-phil@philpotter.co.uk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220401032623.293666-1-lienze@kylinos.cn>
-References: <20220401032623.293666-1-lienze@kylinos.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DAE1363
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 21:01:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648846910; x=1680382910;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cKcCfyZaX2ebaqIidbudxyTk7cz1d/YbhISg/+p0fd4=;
+  b=ht9RHefJX630jGnI9HlYXxOjHpfb9zRZmNtigyN+ofACMJXk8uwH7yRZ
+   pXDN/oIHLwBjaI2Wy+f7DIGVlUaknOjhFS5WBgK6ZikjgUEG/yj+S0xjv
+   dJEYmaTG9JsDK10gMGwfs9nMep+H0M4PVtLNpo5241tstUsbfMryYM6d1
+   ruV2SJVvkxa7jZ6+Gw7vbN5t3XpIJNwgnHZXmg+wfmGEVZ9E7TufNOD7Y
+   Yb42zcdg4BRSoa3JWqwNzQLWI+91MqJvaoephu5OgvkBT1m6uyarKuccB
+   x5kaxZuYYk5e076MDgEm/behbkDlNQdEoRrHj29gHbuSuC6dS0VPqzca9
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="240819432"
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="240819432"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 14:01:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="656022710"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 01 Apr 2022 14:01:48 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1naOOx-0001Wu-E4;
+	Fri, 01 Apr 2022 21:01:47 +0000
+Date: Sat, 2 Apr 2022 05:01:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [bvanassche:ufs-for-next 29/29]
+ drivers/scsi/ufs-drivers/tc-dwc-g210-pltfrm.c:35:34: warning: unused
+ variable 'tc_dwc_g210_pltfm_match'
+Message-ID: <202204020544.mMJWuYeq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-> The clang static analyzer reports the following warning,
->
-> File: drivers/cdrom/cdrom.c
-> Warning: line 1380, column 7
-> 	 Although the value stored to 'status' is used in enclosing
-> 	 expression, the value is never actually read from 'status'
-> 
-> Remove the unused variable to eliminate the warning.
-> 
-> Signed-off-by: Enze Li <lienze@kylinos.cn>
-> ---
->  drivers/cdrom/cdrom.c | 3 +--
-> 1 file changed, 1 insertion(+), 2 deletions(-)
+Hi Bart,
 
-Looks good to me, thanks for the patch, will send on for inclusion in
-5.18.
+First bad commit (maybe != root cause):
 
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+tree:   https://github.com/bvanassche/linux ufs-for-next
+head:   ca6c8ebd0669820aa5d1bc9432e9e78638e7f264
+commit: ca6c8ebd0669820aa5d1bc9432e9e78638e7f264 [29/29] scsi: ufs: Split the drivers/scsi/ufs directory
+config: hexagon-randconfig-r001-20220331 (https://download.01.org/0day-ci/archive/20220402/202204020544.mMJWuYeq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/bvanassche/linux/commit/ca6c8ebd0669820aa5d1bc9432e9e78638e7f264
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche ufs-for-next
+        git checkout ca6c8ebd0669820aa5d1bc9432e9e78638e7f264
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs-drivers/
 
-Regards,
-Phil
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/ufs-drivers/tc-dwc-g210-pltfrm.c:35:34: warning: unused variable 'tc_dwc_g210_pltfm_match' [-Wunused-const-variable]
+   static const struct of_device_id tc_dwc_g210_pltfm_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/tc_dwc_g210_pltfm_match +35 drivers/scsi/ufs-drivers/tc-dwc-g210-pltfrm.c
+
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  34  
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11 @35  static const struct of_device_id tc_dwc_g210_pltfm_match[] = {
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  36  	{
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  37  		.compatible = "snps,g210-tc-6.00-20bit",
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  38  		.data = &tc_dwc_g210_20bit_pltfm_hba_vops,
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  39  	},
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  40  	{
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  41  		.compatible = "snps,g210-tc-6.00-40bit",
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  42  		.data = &tc_dwc_g210_40bit_pltfm_hba_vops,
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  43  	},
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  44  	{ },
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  45  };
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  46  MODULE_DEVICE_TABLE(of, tc_dwc_g210_pltfm_match);
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  47  
+
+:::::: The code at line 35 was first introduced by commit
+:::::: fc040a3fc47cad038f774275ea61fe6d5b57d7cc ufs: add TC G210 platform driver
+
+:::::: TO: Joao Pinto <Joao.Pinto@synopsys.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
