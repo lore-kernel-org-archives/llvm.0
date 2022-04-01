@@ -1,94 +1,80 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0772D137F
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 18:09:00 +0000 (UTC)
-Received: by mail-lf1-f52.google.com with SMTP id e16so6283165lfc.13
-        for <llvm@lists.linux.dev>; Fri, 01 Apr 2022 11:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cDwjoGJB3uaHFuAIBFbR4ek7hmngZ+0lbW3f3iNsO5k=;
-        b=GSubB+1cDMGFa8yKeGrtGxfDBtDuMLQAGjk23JJoJ8aNs5sdavXaOgYkSf/nf0GHYu
-         T9cmC9jS25/yY25NF38vMALmGDwCJ4OVHfJHfTZ/KP+xOnuVkTFKAdOU0x9OOAth1IDD
-         F7pkjyySGx9Kd0WmrQXZqoLAgSvKETCQlJvFe2R1OuUhJhc3r5BceFZmAnGcp1NFvIME
-         G35+vdrr/R2UCa6wL0kPI+JDPrY+s7TI4B2059nKBXAWcKfZ5JmWcN69TSZYzNhuTHab
-         NuOoLpLawmcoMZ0QLtXzAljTxtHGoS7Xbt33pfpqz/DnqzObRgzsHnjj/tPgwV5ZZawn
-         wzWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cDwjoGJB3uaHFuAIBFbR4ek7hmngZ+0lbW3f3iNsO5k=;
-        b=NRehlK3+/0gvx0L5teAxL8EZnt3ftEJeyF6lxfUVAKpc4TF+uZ9mXIboNPifW9IM3E
-         G/QBD60OswFEdswDqvd5f70HejJW0N1Ynjv9uTn2Gm8Iv44zfSd3nAa6LGRSqv1aVKMF
-         bhamkUAlkIE0Nlt7UqLO27nCGDXOn0ojNmegsqGXoEmiQwExr9HWY09sUTy453/oVy9C
-         njU51KXv3Og2FlpQGwwhb6meZuqpieFBWpNhR5MEU33fNcA5iBZaFQydOqE/LYmQ30nH
-         V47Laum1tDbp4JLUSsZmcQEX42+hSE5ibiEt1AuAJzZfibMyYAAcfRRvXcz2VSXO8Mwb
-         UY7g==
-X-Gm-Message-State: AOAM530n0OZEAv/OzrtOjxpItlXXVAnQiZnaIjMy4kGOwkB8c9LJ2qoW
-	h16bo1U9tZ5QVAYpFA+LcdWFwE8p7doTZU5djD6mCUdPQejvuw==
-X-Google-Smtp-Source: ABdhPJwlceMkrvjvasAE/t3p76pX3YxX+dVr/Cqg/gCq9YskmR4L43rIg+qa98Dz12LmyDojixnBFAbHA5wej0zSUq0=
-X-Received: by 2002:a05:6512:33d4:b0:44a:9971:de48 with SMTP id
- d20-20020a05651233d400b0044a9971de48mr14666255lfg.392.1648836538854; Fri, 01
- Apr 2022 11:08:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FC3137F
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 18:28:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648837716; x=1680373716;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FCXhvLj/rZeuTgz+OK7rFnFpMayJa+RLG2mvzZ6RhRo=;
+  b=YL3AxC9ucgELFJk/gAeZ7lRHKrFKq+34xzYMwG189prL2jR2UzFG/1B+
+   jzbvL96UstA1tNenowJzP8rBDPiU6UNzGZUzqfErdHKgH9cSHUkOUzkOE
+   heUdmmZo55Q1mq9Cm7VhLGORX2zOl5WvZrx9VypdLWqHynBqU5fbLv1La
+   yYviJy0wPosfUBfRQIyRCcv7iXTJtQ4c+WBB1A5Bjj6wjOq2ROWKfyYxC
+   ofu1jCLkHhN1WBM5K9lVj/07qrqcW37GSoOFxFqxHpdiqyEFsfJ47SIZn
+   pAV+buiRdoQOKUwI8E6xWWw9oi3NOEbKTTOz3UPkzzl9b5Zyo/DXLtehE
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="260385201"
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="260385201"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 11:28:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="655924746"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 01 Apr 2022 11:28:33 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1naM0e-0001SW-Vl;
+	Fri, 01 Apr 2022 18:28:32 +0000
+Date: Sat, 2 Apr 2022 02:28:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrey Konovalov <andreyknvl@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [linux-next:master 14920/15002] ld.lld: error: undefined symbol:
+ arch_stack_walk_shadow
+Message-ID: <202204020202.BdSj29hd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <e04d5fa.21259.17fe40edf13.Coremail.sunch20@lzu.edu.cn>
-In-Reply-To: <e04d5fa.21259.17fe40edf13.Coremail.sunch20@lzu.edu.cn>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 1 Apr 2022 11:08:47 -0700
-Message-ID: <CAKwvOd=UuF_PuVNUchmeUDiuupf+-11cpAm_R8NhFi2JDHCLqA@mail.gmail.com>
-Subject: Re: Inquiry about how Clang supports the kernel
-To: =?UTF-8?B?5a2Z6ZOW?= <sunch20@lzu.edu.cn>
-Cc: clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-+ our public mailing list
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   e5071887cd2296a7704dbcd10c1cedf0f11cdbd5
+commit: e63b15ad51960e4e7970612849391859be30d63f [14920/15002] arm64: implement stack_trace_save_shadow
+config: arm64-randconfig-r025-20220331 (https://download.01.org/0day-ci/archive/20220402/202204020202.BdSj29hd-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=e63b15ad51960e4e7970612849391859be30d63f
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout e63b15ad51960e4e7970612849391859be30d63f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-On Fri, Apr 1, 2022 at 12:37 AM =E5=AD=99=E9=93=96 <sunch20@lzu.edu.cn> wro=
-te:
->
->     Hello=EF=BC=8CI am a graduate student at Lanzhou University in China,=
- Sun Cheng. We now have a small RTOS that is compiled with GCC by default, =
-and we want to get the Clang/LLVM compiler to support it as well. But I don=
-'t have any idea about how to implement it, so I am sending you an email an=
-d hope I can get some advice from you.
->     I would be very grateful for your help!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Hi and thanks for reaching out!
+All errors (new ones prefixed by >>):
 
-Clang is designed to be a drop in replacement for GCC (and CL.exe) in
-terms of command line arguments and supported language extensions.
-It's not a perfect substitute, but it does rely on LLVM for
-competitive codegen and compile time with contemporary compilers.
-LLVM also features substitutes for most of GNU Binutils command line
-utilities, which we generally use when building the Linux kernel.
+>> ld.lld: error: undefined symbol: arch_stack_walk_shadow
+   >>> referenced by stacktrace.c:257 (kernel/stacktrace.c:257)
+   >>>               stacktrace.o:(stack_trace_save_shadow) in archive kernel/built-in.a
 
-One of the first things to check for your RTOS is see if the build
-system allows you to specify the compiler that's invoked.  For
-instance, rather than hardcoding `gcc` in a bunch of places, if your
-build system uses a placeholder or variable with default value that
-can be overridden, then you would be able to specify `clang` perhaps.
-From there, you might find that some command line arguments are not
-supported by clang, or some code might have portability issues and
-won't compile. Once it builds, code reliant on UB or unspecified
-behavior might not run as expected.  But being to build+run code built
-from 2 different toolchains generally leads to higher quality
-implementations.
-
-Another thing you can to to verify that you've wired up your build
-system correctly is to see if you can build with clang in an
-environment that does not have GCC installed. We call that a hermetic
-build system, in which build dependencies have to be fully specified,
-and aren't implicit based on the host.  That also helps improve
-portability of the build.
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
