@@ -1,28 +1,50 @@
-Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E217C
-	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 03:32:04 +0000 (UTC)
-X-UUID: 438f6c0acb9049eeaaae242dc69b407f-20220401
-X-UUID: 438f6c0acb9049eeaaae242dc69b407f-20220401
-Received: from cs2c.com.cn [(172.17.111.24)] by nksmu.kylinos.cn
-	(envelope-from <lienze@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 936776392; Fri, 01 Apr 2022 11:25:55 +0800
-X-ns-mid: postfix-624670F9-8008223520
-Received: from localhost.localdomain (unknown [172.30.60.63])
-	by cs2c.com.cn (NSMail) with ESMTPSA id BC6DC384867B;
-	Fri,  1 Apr 2022 03:26:49 +0000 (UTC)
-From: Enze Li <lienze@kylinos.cn>
-To: phil@philpotter.co.uk,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] cdrom: remove unused variable
-Date: Fri,  1 Apr 2022 11:26:23 +0800
-Message-Id: <20220401032623.293666-1-lienze@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E907B
+	for <llvm@lists.linux.dev>; Fri,  1 Apr 2022 07:53:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1648799600;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+	b=QJsIC7gy5N478OH2tg+cfLMOfflMCYZh0K0e+Jlah0YYIe0ju96zWN1D5lCaBRnwvlL6jY
+	bnR3cx00lRAcR++p6uI4m4Cj/qDfbMhWN9dBAQCAl6e1Wg9mAIltq0Hwf0YsCFULatqCQN
+	46ewVEvd/W+BVjA6x0bLApd2YMcr0Qo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-203-c6f2-0tUOhCSb8lAAtXhnQ-1; Fri, 01 Apr 2022 03:53:17 -0400
+X-MC-Unique: c6f2-0tUOhCSb8lAAtXhnQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6DD4985A5BC;
+	Fri,  1 Apr 2022 07:53:16 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 989A540CF8F4;
+	Fri,  1 Apr 2022 07:53:15 +0000 (UTC)
+From: Paolo Bonzini <pbonzini@redhat.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Wanpeng Li <wanpengli@tencent.com>,
+	Jim Mattson <jmattson@google.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	kvm@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Tadeusz Struk <tadeusz.struk@linaro.org>,
+	syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2 0/5] x86: uaccess CMPXCHG + KVM bug fixes
+Date: Fri,  1 Apr 2022 03:53:11 -0400
+Message-Id: <20220401075311.707166-1-pbonzini@redhat.com>
+In-Reply-To: <20220202004945.2540433-1-seanjc@google.com>
+References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -30,42 +52,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
 
-The clang static analyzer reports the following warning,
+Queued, thanks.
 
-File: drivers/cdrom/cdrom.c
-Warning: line 1380, column 7
-	 Although the value stored to 'status' is used in enclosing
-	 expression, the value is never actually read from 'status'
+Paolo
 
-Remove the unused variable to eliminate the warning.
-
-Signed-off-by: Enze Li <lienze@kylinos.cn>
----
- drivers/cdrom/cdrom.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-index 7bd10d63ddbe..2dc9da683a13 100644
---- a/drivers/cdrom/cdrom.c
-+++ b/drivers/cdrom/cdrom.c
-@@ -1365,7 +1365,6 @@ static int cdrom_slot_status(struct cdrom_device_info *cdi, int slot)
-  */
- int cdrom_number_of_slots(struct cdrom_device_info *cdi) 
- {
--	int status;
- 	int nslots = 1;
- 	struct cdrom_changer_info *info;
- 
-@@ -1377,7 +1376,7 @@ int cdrom_number_of_slots(struct cdrom_device_info *cdi)
- 	if (!info)
- 		return -ENOMEM;
- 
--	if ((status = cdrom_read_mech_status(cdi, info)) == 0)
-+	if (cdrom_read_mech_status(cdi, info) == 0)
- 		nslots = info->hdr.nslots;
- 
- 	kfree(info);
--- 
-2.25.1
 
