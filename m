@@ -1,108 +1,201 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD67B7C
-	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 20:04:16 +0000 (UTC)
-Received: by mail-wm1-f46.google.com with SMTP id n35so3593041wms.5
-        for <llvm@lists.linux.dev>; Sat, 02 Apr 2022 13:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=yQeqwIeqI5CMAgG8hDfKbZn0Debf8w0vr8QNNYkJmUI=;
-        b=rg468YkTGw4qq+7BTqNb+9e2AW7798nZyQsEw7APtpHfEScIn4mAxPp40epSJ/DqqM
-         FW1ukFdIVMS8churmP06RZyQPTzPyQdeidOkNAX+hpVRYnSNHIas4ePrAYUdilNlEtP6
-         yhnuvRTNyZSAysfMJPll2xZUF3wAuxL6zspWSXz5gwdt66ugNBr5eNsZNqbFT3zYWfIS
-         xF11MED8ko9Bbk+x/u3f9nXO5nIl3PYMXVFAdWugobCvQR8MjCmx7qd9kQCp38gnhfrO
-         fC+b2Ptuhb93WvKGvSwgJ6rFJy4o9pM7VSVPTbWuBDCRyrqbelhElQJYJEsZnujnWVO5
-         McYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=yQeqwIeqI5CMAgG8hDfKbZn0Debf8w0vr8QNNYkJmUI=;
-        b=I8H2uM67jl7I8QBCUFWDONog3WcOsyt97PUQq4w7b7LxWmQkpefhJI8e37owuubGn7
-         DC4dpR04YKi7x0Ds46kt9EFAqITeVJwKWwHkEdPimv94s0YU2/DpFx5oYyjXNj7donyC
-         tdf1NyKSvefdJTw9j8K7MCoE4kmwPbsgWdPEJc3icj3pJdwp91qPrAUeDMSHGB6KdKE9
-         FIl44EWRZF2sKcYdBgSOVyYS0R4yTiAbvhKgLOSo6UOS95vUofCKUVp0L23InAbrnW8m
-         o/S2fJrdjIf0j2Ew4JY1Pup6C1xN4GxeR+lVpbJU8s6nPluSiV+DCg0uJi7EkyEsmRvv
-         j99A==
-X-Gm-Message-State: AOAM532fF+YCGGCyITBPAnoUhErqaT6F1AM2vKpKy43DAc/oipDh0QhY
-	d+d5pkJObsKPlslgyRKHkqhMNQ==
-X-Google-Smtp-Source: ABdhPJy6NaiDP7v3t/VgL9bpERiXPtZ6xlytZQf5riyEAwmfhgWKXXpEcvulkX/plHpsKoVk6W8Z4A==
-X-Received: by 2002:a05:600c:5029:b0:38c:9768:b4c with SMTP id n41-20020a05600c502900b0038c97680b4cmr13117148wmr.123.1648929854661;
-        Sat, 02 Apr 2022 13:04:14 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id h10-20020a05600c144a00b0038ccc75a6adsm13008386wmi.37.2022.04.02.13.04.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 13:04:13 -0700 (PDT)
-Date: Sat, 2 Apr 2022 22:04:11 +0200
-From: LABBE Corentin <clabbe@baylibre.com>
-To: kernel test robot <lkp@intel.com>
-Cc: heiko@sntech.de, herbert@gondor.apana.org.au, krzk+dt@kernel.org,
-	robh+dt@kernel.org, llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v4 10/33] crypto: rockchip: rework by using crypto_engine
-Message-ID: <YkisOxklZgCejfad@Red>
-References: <20220401201804.2867154-11-clabbe@baylibre.com>
- <202204021634.IhyHrjoT-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE227C
+	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 20:16:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648930566; x=1680466566;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ib7WTqsW5hmbR83QY71o0sMyTEz8J1m9kJbfAmng+o0=;
+  b=ikng/XlcKEB5V5xHK+JIVq/JGkKPHudPa00iBChyzqdyD2Uild21tSs/
+   40gEjV3uQA8SyF8jDH11Y/D1Hbv6PMdGSPrXPDm4PupMraLZ69R04G8Cc
+   54Tl/b+fD9jrnHGeNatlt4UBvhOUwuU0R6dep633C4OIgU4MmLjnsOo06
+   BxjgzduOByGOgyKwpMI94XMBVZIvlCisMo3VXPcnHppfqWBY6UQseryvQ
+   jLVBmguePYbsFyhnTZUwAWUCf7UmxdqoZtmCdeLJhFokhEbRvxmO6KmkY
+   3Cn8rWSF69frFXgJoZOJsB7zBPyKaDN5yo10N+8Dy428SKMJtihXOBF+2
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="323510489"
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="323510489"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 13:16:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="523154473"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 02 Apr 2022 13:16:03 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nakAF-0000ON-3Q;
+	Sat, 02 Apr 2022 20:16:03 +0000
+Date: Sun, 3 Apr 2022 04:15:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>
+Subject: <inline asm>:18:8: error: unexpected token in '.rept' directive
+Message-ID: <202204030434.f5uEqs4t-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202204021634.IhyHrjoT-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Le Sat, Apr 02, 2022 at 04:22:56PM +0800, kernel test robot a écrit :
-> Hi Corentin,
-> 
-> I love your patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on next-20220331]
-> [also build test WARNING on v5.17]
-> [cannot apply to rockchip/for-next herbert-cryptodev-2.6/master herbert-crypto-2.6/master v5.17 v5.17-rc8 v5.17-rc7]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220402-042221
-> base:    fdcbcd1348f4ef713668bae1b0fa9774e1811205
-> config: arm64-buildonly-randconfig-r001-20220402 (https://download.01.org/0day-ci/archive/20220402/202204021634.IhyHrjoT-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://github.com/intel-lab-lkp/linux/commit/be381eb03ba20a6e06f0e880a9929d14a1e13064
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220402-042221
->         git checkout be381eb03ba20a6e06f0e880a9929d14a1e13064
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/crypto/rockchip/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/crypto/rockchip/rk3288_crypto_skcipher.c:21:46: error: use of undeclared identifier 'tfm'
->            unsigned int bs = crypto_skcipher_blocksize(tfm);
->                                                        ^
-> >> drivers/crypto/rockchip/rk3288_crypto_skcipher.c:328:6: warning: variable 'n' set but not used [-Wunused-but-set-variable]
->            int n = 0;
->                ^
->    1 warning and 1 error generated.
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6f34f8c3d6178527d4c02aa3a53c370cc70cb91e
+commit: 4afeb670710efa5cd5ed8b1d9f2d22d6ce332bcc s390/alternatives: use instructions instead of byte patterns
+date:   6 days ago
+config: s390-randconfig-r044-20220403 (https://download.01.org/0day-ci/archive/20220403/202204030434.f5uEqs4t-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4afeb670710efa5cd5ed8b1d9f2d22d6ce332bcc
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4afeb670710efa5cd5ed8b1d9f2d22d6ce332bcc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/message/fusion/
 
-Argh, I didnt retry to compile this serie one patch by one.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks, I will fix that in v5.
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/message/fusion/mptctl.c:54:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/message/fusion/mptctl.c:54:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/message/fusion/mptctl.c:54:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   drivers/message/fusion/mptctl.c:2337:8: warning: variable 'retval' set but not used [-Wunused-but-set-variable]
+           int                     retval;
+                                   ^
+   drivers/message/fusion/mptctl.c:2887:6: warning: variable 'where' set but not used [-Wunused-but-set-variable]
+           int where = 1;
+               ^
+   <inline asm>:5:5: error: expected absolute expression
+   .if 6651b-6641b > 254
+       ^
+   <inline asm>:6:2: error: cpu alternatives does not support instructions blocks > 254 bytes
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   <inline asm>:8:5: error: expected absolute expression
+   .if (6651b-6641b) % 2
+       ^
+   <inline asm>:9:2: error: cpu alternatives instructions length is odd
+           .error "cpu alternatives instructions length is odd"
+           ^
+   <inline asm>:15:5: error: expected absolute expression
+   .if -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) > 6
+       ^
+>> <inline asm>:18:8: error: unexpected token in '.rept' directive
+           .rept (-(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) - (6620b-662b)) / 2
+                 ^
+   <inline asm>:21:8: error: unexpected token in '.rept' directive
+           .rept -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) / 6
+                 ^
+>> <inline asm>:22:2: error: unknown directive
+           .jgnop .
+           ^
+>> <inline asm>:23:7: error: unmatched '.endr' directive
+           .endr
+                ^
+   <inline asm>:24:8: error: unexpected token in '.rept' directive
+           .rept -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) % 6 / 4
+                 ^
+   <inline asm>:26:7: error: unmatched '.endr' directive
+           .endr
+                ^
+   <inline asm>:27:8: error: unexpected token in '.rept' directive
+           .rept -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) % 6 % 4 / 2
+                 ^
+   <inline asm>:29:6: error: unmatched '.endr' directive
+   .endr
+        ^
+   <inline asm>:32:5: error: expected absolute expression
+   .if 662b-661b > 254
+       ^
+   <inline asm>:33:2: error: cpu alternatives does not support instructions blocks > 254 bytes
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   <inline asm>:35:5: error: expected absolute expression
+   .if (662b-661b) % 2
+       ^
+   <inline asm>:36:2: error: cpu alternatives instructions length is odd
+           .error "cpu alternatives instructions length is odd"
+           ^
+   <inline asm>:5:5: error: expected absolute expression
+   .if 6651b-6641b > 254
+       ^
+   <inline asm>:6:2: error: cpu alternatives does not support instructions blocks > 254 bytes
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   14 warnings and 20 errors generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
