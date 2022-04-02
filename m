@@ -1,85 +1,103 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53E110E9
-	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 08:47:54 +0000 (UTC)
-Received: by mail-qt1-f176.google.com with SMTP id t2so3985653qtw.9
-        for <llvm@lists.linux.dev>; Sat, 02 Apr 2022 01:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Fsubz5SlxAuGM72VzibPMlOmxFez1kWGrcQSufu8qOM=;
-        b=IsmaR8ABleRm+6oVe1mXzrlLfe3Bw4vh73ABlIp1KaXMC5Nwfxn+4XU94FiEQnS3gI
-         AiINyw49kmdfDR9pziKbUf3jP4S/0Mlk03KDKQUCajsPA/wyw9JBAyg9EqkWQ+0AXKWs
-         MbVNgVM/JU9d/d+N/VAJ0giIHkUX7ry1WaqZpCxy5+dsxxiribXc3jjyrXQCsIAlIHPh
-         yP204MCS660glqc2IV4YfZ8ywvLwkcN9AxhlolvokhB27PlL4iQltqUaC2MjLGZRNssf
-         hS05niVcV0jZT7nPnoC4Ns/hfENGD6CVO2Iv804tMpeSkVlXUeVtjDhIy+gyW5Br10tU
-         B+Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Fsubz5SlxAuGM72VzibPMlOmxFez1kWGrcQSufu8qOM=;
-        b=c/+Syf0jErb6YB+BayPY/csw5ly15VVp2B4UkEyqRIYuRsFyPOev7sJZpDI5cUvHUp
-         /dVbvHjThTgkRcMFC3Ge2LIq49VB7HCyxa9LMh7oIuI5xuAortSwsKoEfVhWfLPYefcn
-         BV9WWoN0UYAktkkSfxlDzERlzbEP/52TErTA50+9UHM0gRH/dado49jdgDwufTZpFbEE
-         cYHnVTxnJZhQ70HiSq4gk8um9Cf0VRnY771nh8zl7e8sDOsCfaPIjSDBJu+bd0coPZKu
-         JmPvgAMmJi3/WQPgv06n5OhxJ44XsMC26ioOkzui8lT6AonBDgwchbN/CVwSMopE/oq/
-         Uixg==
-X-Gm-Message-State: AOAM533Mf8ETFljlkvm8pz3Fn5hcF2yc9o7B/T2ePKcI2s2LZ0zwK3uc
-	un6+O0I9sdxC6SqA3L4pfMc=
-X-Google-Smtp-Source: ABdhPJw5YqJ8EEi0P5ochvddolehJ2oQojL0Sdm9i1qI8ofY4WUdoMNRhtyAS63jEvr8ZfyD7WIG5A==
-X-Received: by 2002:ac8:4417:0:b0:2e1:a82c:1a6f with SMTP id j23-20020ac84417000000b002e1a82c1a6fmr11148476qtn.375.1648889273627;
-        Sat, 02 Apr 2022 01:47:53 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id x12-20020a05620a12ac00b0067d4bfffc59sm2510938qki.118.2022.04.02.01.47.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 01:47:53 -0700 (PDT)
-From: cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To: viro@zeniv.linux.org.uk
-Cc: nathan@kernel.org,
-	ndesaulniers@google.com,
-	linux-fsdevel@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16A91366
+	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 09:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D4F9C340EC;
+	Sat,  2 Apr 2022 09:38:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1648892304;
+	bh=2ak9OZ9f5R7OEQWeox4qMrQ22mVIHcwU/KEeeTEMFWo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=VRrkgaBZm+exp4RB9Pdnp7d84qLLSaRdpb5zb4iqW6LvKHekkoJ52t33JvI9GhFky
+	 erGlKZvMHNF5y1EVrl5rHfDpfLvdB5FpW+2MU1EJryRqhoyXHLGzSkE0jgdGGhfBMK
+	 6jx3swPL18k3+0fzTxMDJE79gUa1cNvdmwRrUK7XfEjdYTlzmVjifmwQXoxpyVWE47
+	 f/MgQ/tOp8/v1ZtpzKUw+Rhd8/mJ3sMJBgBeGVi/e56Pg4DG87BshSlffGVaeUIp+p
+	 fIHP4Hrq0Kujlfe983SdeKecse9Qm1U2jlRJRWrlYmGxoInMERp+zaNw4bWRkIH6LY
+	 pY+0ocvYpc4vg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <maz@kernel.org>)
+	id 1naaD8-0010b2-4J; Sat, 02 Apr 2022 10:38:22 +0100
+Date: Sat, 02 Apr 2022 10:38:21 +0100
+Message-ID: <87r16fbzaq.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev,
+	kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Lv Ruyi <lv.ruyi@zte.com.cn>,
-	Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] fs/buffer.c: remove unneeded code
-Date: Sat,  2 Apr 2022 08:47:46 +0000
-Message-Id: <20220402084746.2413549-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+	Quentin Perret <qperret@google.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Will Deacon <willdeacon@google.com>
+Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2022-03 199/9999] arch/arm64/kvm/perf.c:58:36: error: implicit declaration of function 'perf_num_counters'
+In-Reply-To: <202204021112.ErKMELRr-lkp@intel.com>
+References: <202204021112.ErKMELRr-lkp@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lkp@intel.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, gwml@vger.gnuweeb.org, linux-kernel@vger.kernel.org, qperret@google.com, alexandru.elisei@arm.com, willdeacon@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+Hi Robot,
 
-fix clang warning: Value stored to 'err' is never read in line 2944.
+On Sat, 02 Apr 2022 04:47:04 +0100,
+kernel test robot <lkp@intel.com> wrote:
+> 
+> Hi Marc,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2022-03
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- fs/buffer.c | 1 -
- 1 file changed, 1 deletion(-)
+Oh look, a random Android tree based on ... 5.10.
 
-diff --git a/fs/buffer.c b/fs/buffer.c
-index bfc566de36e5..b2045871e81c 100644
---- a/fs/buffer.c
-+++ b/fs/buffer.c
-@@ -2941,7 +2941,6 @@ int block_truncate_page(struct address_space *mapping,
- 		pos += blocksize;
- 	}
- 
--	err = 0;
- 	if (!buffer_mapped(bh)) {
- 		WARN_ON(bh->b_size != blocksize);
- 		err = get_block(inode, iblock, bh, 0);
+> head:   64099431c232d4a95f621411747a3972cc1c8061
+> commit: 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf [199/9999] FROMGIT: KVM: arm64: Turn kvm_arm_support_pmu_v3() into a static key
+> config: arm64-randconfig-r024-20220331 (https://download.01.org/0day-ci/archive/20220402/202204021112.ErKMELRr-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/ammarfaizi2/linux-block/commit/13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
+>         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2022-03
+>         git checkout 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> arch/arm64/kvm/perf.c:58:36: error: implicit declaration of function 'perf_num_counters' [-Werror,-Wimplicit-function-declaration]
+>            if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
+>                                              ^
+>    1 error generated.
+
+$ ls -l arch/arm64/kvm/perf.c
+ls: cannot access 'arch/arm64/kvm/perf.c': No such file or directory
+
+What is the point of testing trees that have no resemblance with
+upstream?
+
+Thanks,
+
+	M.
+
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.
