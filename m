@@ -1,99 +1,122 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8321856
-	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 13:16:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1648905368;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/bNqj01PYPYrfBUFqkn6y8gBVFdLyZ2mPT7ZyJEILzc=;
-	b=gMy3x+5czcZ9qnnDZ1s66S/mTQeLliKhSeti02tMpdHMeZ5xKXaaBqRV1YTMZpo1CJfHOi
-	xaq0EuwVlJ9KEG+Gl+CnseFnbevXwz7IG5SJCO7UijOYfs+S2jjuDyrd9Voej8NHwZHMUA
-	Qi3gcEmcqdAxTFlF6rzLMLzhz3IwZLE=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-527-Z2nCsuLOMXi-9D39rj7YQQ-1; Sat, 02 Apr 2022 09:16:07 -0400
-X-MC-Unique: Z2nCsuLOMXi-9D39rj7YQQ-1
-Received: by mail-qk1-f198.google.com with SMTP id i2-20020a05620a248200b0067b51fa1269so3433954qkn.19
-        for <llvm@lists.linux.dev>; Sat, 02 Apr 2022 06:16:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/bNqj01PYPYrfBUFqkn6y8gBVFdLyZ2mPT7ZyJEILzc=;
-        b=wqpMAUTk2HCxfej54AfFXa6181zEbCT6wuieTGgJNLxglq2nyYAhisoIqFIrqp71vo
-         hzIZ5iKxFTHSthBVEyC1foSQzYo2gQ1Fa20Ku9j/V6SjtGy1hhrmVPQzazuddudQUnhS
-         sLHzTqMpgov/XUndcDwxP7DtqYGcRc98WLKWbxx+5GwzR8jnhwccWpC/6X8wonW9bFPh
-         /fuZEA+yxbfZS9s5c0GetWL8Jmzd59U1CB845MG9a3oeHj6vxDrtLRQzH0YhqzVaq58r
-         s7Dy5e+Ul7wgs+uSo7bONJjkJzMPhUiIOkCyWCLHVb5LAA7v+42cBNWETccfvfFzBaOh
-         7pAA==
-X-Gm-Message-State: AOAM530OOq6r151JtuWKleqGNx81pfz4uhQRpxOQg26QJ3Qa6RoRnJxu
-	noG4bK3UgcTD+gMUnWGWvFfCiGtGUD6IyfFk25pjhHFSX0TlMFLtsop6x4x2RAxBOMPqMbmSv5j
-	mQ+R2CXp1bRRliQ==
-X-Received: by 2002:a05:6214:1d0e:b0:441:4e6c:c7f with SMTP id e14-20020a0562141d0e00b004414e6c0c7fmr11653651qvd.78.1648905367413;
-        Sat, 02 Apr 2022 06:16:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzVznE0k9l0iCCjXjdbHfE/d0rsDri4V+m2CaMGJLMVMv82dD8YSmDIuzB8BIhgb57cTu/NTA==
-X-Received: by 2002:a05:6214:1d0e:b0:441:4e6c:c7f with SMTP id e14-20020a0562141d0e00b004414e6c0c7fmr11653631qvd.78.1648905367164;
-        Sat, 02 Apr 2022 06:16:07 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j28-20020a05620a147c00b0067e765e6c0asm2880735qkl.21.2022.04.02.06.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 06:16:06 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] lib: remove back_str initialization
-Date: Sat,  2 Apr 2022 09:15:46 -0400
-Message-Id: <20220402131546.3383578-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62831856
+	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 13:38:12 +0000 (UTC)
+Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-04.nifty.com with ESMTP id 232DW1sM023341
+	for <llvm@lists.linux.dev>; Sat, 2 Apr 2022 22:32:01 +0900
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174]) (authenticated)
+	by conssluserg-02.nifty.com with ESMTP id 232DVpXO010107
+	for <llvm@lists.linux.dev>; Sat, 2 Apr 2022 22:31:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 232DVpXO010107
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1648906312;
+	bh=xOOUq32hUTZwQ6PgJmve8CWFa41o5uzRkpcTqar04RU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=vCXu70nRSHY2Lv6Bw5iUYKQi4NgIBNGXSOv3tNAM7uIraCCo4LTa/ywLh+ye+shXb
+	 nyeay6O+48FKit5/DNX5BWey6iI40BfoR2CRvJ9EJ5+1MXt/oOmH7AiGeFkXQ0CPLj
+	 overa1Km8ueTLcpp80BLIQS5+ythR9TwB7nORO0unED0bJyMNbIeDnSvXjmiPGLNNy
+	 rtWiVaxJCRfc+6O8PQvVYCjXyi9cVfCo2OyOiU1mPuDeADIf6nNevP14XZ80czHeJc
+	 j3n6MCL+YEvGPHblicFd6wB/EgXap3UVRfAnQwGa7ymZI7mzsiAUubppy7IoR+dbuJ
+	 oanKvBFDQVSfg==
+X-Nifty-SrcIP: [209.85.210.174]
+Received: by mail-pf1-f174.google.com with SMTP id p8so4968314pfh.8
+        for <llvm@lists.linux.dev>; Sat, 02 Apr 2022 06:31:51 -0700 (PDT)
+X-Gm-Message-State: AOAM530FzKGI/HgZGfQ1HLAjQ+n5YCDLQ3d8Y3hceOvWk9r8lDd+uAhE
+	xPHZTkm/pjonyWxW2XND7qHTgCyy5HViT5eKQ0A=
+X-Google-Smtp-Source: ABdhPJx4YYmusrB0Z5GeyAsnegUTZrEgkZTlTfMYeabO5lynAPEH3l4SbNCZnBVbE/nGUhMGQfWBqXQSL4kqhRfqwvQ=
+X-Received: by 2002:a63:ec47:0:b0:382:692a:dc04 with SMTP id
+ r7-20020a63ec47000000b00382692adc04mr18906915pgj.352.1648906311008; Sat, 02
+ Apr 2022 06:31:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+References: <20220401201916.1487500-1-samitolvanen@google.com> <20220401201916.1487500-2-samitolvanen@google.com>
+In-Reply-To: <20220401201916.1487500-2-samitolvanen@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 2 Apr 2022 22:31:03 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQoJWUscyxXVnOQ9924MYZwaZGgfBYSzmjJxKH_UC0Pkw@mail.gmail.com>
+Message-ID: <CAK7LNAQoJWUscyxXVnOQ9924MYZwaZGgfBYSzmjJxKH_UC0Pkw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kbuild: Change CFI_CLANG to depend on __builtin_function_start
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Kees Cook <keescook@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Clang static analysis reports this false positive
-glob.c:48:32: warning: Assigned value is garbage
-  or undefined
-  char const *back_pat = NULL, *back_str = back_str;
-                                ^~~~~~~~   ~~~~~~~~
+On Sat, Apr 2, 2022 at 5:19 AM Sami Tolvanen <samitolvanen@google.com> wrot=
+e:
+>
+> Clang 14 added support for the __builtin_function_start()
+> built-in function, which allows us to implement function_nocfi()
+> without architecture-specific inline assembly. This patch changes
+> CONFIG_CFI_CLANG to depend on the built-in and effectively upgrades
+> the minimum supported compiler version for CFI to Clang 14.
 
-back_str is set after back_pat and it's use is
-protected by the !back_pat check.  It is not
-necessary to initialize back_str, so remove
-the initialization.
+From this description, I think the straight-forward change would be:
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- lib/glob.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+    depends on CLANG_VERSION >=3D 120000
+-->
+    depends on CLANG_VERSION >=3D 140000
 
-diff --git a/lib/glob.c b/lib/glob.c
-index 85ecbda45cd8..15b73f490720 100644
---- a/lib/glob.c
-+++ b/lib/glob.c
-@@ -45,7 +45,7 @@ bool __pure glob_match(char const *pat, char const *str)
- 	 * (no exception for /), it can be easily proved that there's
- 	 * never a need to backtrack multiple levels.
- 	 */
--	char const *back_pat = NULL, *back_str = back_str;
-+	char const *back_pat = NULL, *back_str;
- 
- 	/*
- 	 * Loop over each token (character or class) in pat, matching
--- 
-2.27.0
+Any reason to avoid this?
 
+
+>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> ---
+>  arch/Kconfig | 5 +----
+>  init/Kconfig | 3 +++
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 29b0167c088b..eecfc2809781 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -723,10 +723,7 @@ config ARCH_SUPPORTS_CFI_CLANG
+>  config CFI_CLANG
+>         bool "Use Clang's Control Flow Integrity (CFI)"
+>         depends on LTO_CLANG && ARCH_SUPPORTS_CFI_CLANG
+> -       # Clang >=3D 12:
+> -       # - https://bugs.llvm.org/show_bug.cgi?id=3D46258
+> -       # - https://bugs.llvm.org/show_bug.cgi?id=3D47479
+> -       depends on CLANG_VERSION >=3D 120000
+> +       depends on CC_HAS_BUILTIN_FUNCTION_START
+>         select KALLSYMS
+>         help
+>           This option enables Clang=E2=80=99s forward-edge Control Flow I=
+ntegrity
+> diff --git a/init/Kconfig b/init/Kconfig
+> index ddcbefe535e9..f024fd353373 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -86,6 +86,9 @@ config CC_HAS_ASM_INLINE
+>  config CC_HAS_NO_PROFILE_FN_ATTR
+>         def_bool $(success,echo '__attribute__((no_profile_instrument_fun=
+ction)) int x();' | $(CC) -x c - -c -o /dev/null -Werror)
+>
+> +config CC_HAS_BUILTIN_FUNCTION_START
+> +       def_bool $(success,echo 'void f(void) {}; void *p =3D __builtin_f=
+unction_start(f);' | $(CC) -x c - -c -o /dev/null)
+> +
+>  config PAHOLE_VERSION
+>         int
+>         default $(shell,$(srctree)/scripts/pahole-version.sh $(PAHOLE))
+> --
+> 2.35.0
+>
+
+
+--
+Best Regards
+Masahiro Yamada
