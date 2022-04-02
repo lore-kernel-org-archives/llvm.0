@@ -1,230 +1,85 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB3D7A
-	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 08:23:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648887833; x=1680423833;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Gnc7Vq8A0AMWRP1SecSxWIcpYauRkoVdUdGm+VQNnk4=;
-  b=IX/G6zEz1qzhXNMY22Xpsdpu2uU0a48uSYEQ3oELiDYmDqplvsdN2ib+
-   UgOOimYRSItO9PRLZQLeOQGE9x5OTse6SKsvIJ+G6+UN+bkTMsq95kZDG
-   MNSPk/IihmpNOMFo5csCeAy1rqbUL+I0CYDouBrORFzhTIgYqEez4jFAS
-   KwV/mGnyqP00/k6zmVm/8yCtOuOrykdZufWTVs+O4nqyozQ+Ln4zISNAG
-   eQRENExaXXJlSBUIwocO9O1bpmIpSGS149APlcp3qFkynHqXtJpcgF9nc
-   JMaIaDxQtuNgIuydGWHYJwRCJBoCVOxwlpPgp5RJ2lkix2tgVrebzrldr
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="257868871"
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="257868871"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 01:23:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="587101927"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 02 Apr 2022 01:23:50 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1naZ2z-00025L-9v;
-	Sat, 02 Apr 2022 08:23:49 +0000
-Date: Sat, 2 Apr 2022 16:22:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
-	herbert@gondor.apana.org.au, krzk+dt@kernel.org, robh+dt@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	Corentin Labbe <clabbe@baylibre.com>
-Subject: Re: [PATCH v4 10/33] crypto: rockchip: rework by using crypto_engine
-Message-ID: <202204021634.IhyHrjoT-lkp@intel.com>
-References: <20220401201804.2867154-11-clabbe@baylibre.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53E110E9
+	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 08:47:54 +0000 (UTC)
+Received: by mail-qt1-f176.google.com with SMTP id t2so3985653qtw.9
+        for <llvm@lists.linux.dev>; Sat, 02 Apr 2022 01:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fsubz5SlxAuGM72VzibPMlOmxFez1kWGrcQSufu8qOM=;
+        b=IsmaR8ABleRm+6oVe1mXzrlLfe3Bw4vh73ABlIp1KaXMC5Nwfxn+4XU94FiEQnS3gI
+         AiINyw49kmdfDR9pziKbUf3jP4S/0Mlk03KDKQUCajsPA/wyw9JBAyg9EqkWQ+0AXKWs
+         MbVNgVM/JU9d/d+N/VAJ0giIHkUX7ry1WaqZpCxy5+dsxxiribXc3jjyrXQCsIAlIHPh
+         yP204MCS660glqc2IV4YfZ8ywvLwkcN9AxhlolvokhB27PlL4iQltqUaC2MjLGZRNssf
+         hS05niVcV0jZT7nPnoC4Ns/hfENGD6CVO2Iv804tMpeSkVlXUeVtjDhIy+gyW5Br10tU
+         B+Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fsubz5SlxAuGM72VzibPMlOmxFez1kWGrcQSufu8qOM=;
+        b=c/+Syf0jErb6YB+BayPY/csw5ly15VVp2B4UkEyqRIYuRsFyPOev7sJZpDI5cUvHUp
+         /dVbvHjThTgkRcMFC3Ge2LIq49VB7HCyxa9LMh7oIuI5xuAortSwsKoEfVhWfLPYefcn
+         BV9WWoN0UYAktkkSfxlDzERlzbEP/52TErTA50+9UHM0gRH/dado49jdgDwufTZpFbEE
+         cYHnVTxnJZhQ70HiSq4gk8um9Cf0VRnY771nh8zl7e8sDOsCfaPIjSDBJu+bd0coPZKu
+         JmPvgAMmJi3/WQPgv06n5OhxJ44XsMC26ioOkzui8lT6AonBDgwchbN/CVwSMopE/oq/
+         Uixg==
+X-Gm-Message-State: AOAM533Mf8ETFljlkvm8pz3Fn5hcF2yc9o7B/T2ePKcI2s2LZ0zwK3uc
+	un6+O0I9sdxC6SqA3L4pfMc=
+X-Google-Smtp-Source: ABdhPJw5YqJ8EEi0P5ochvddolehJ2oQojL0Sdm9i1qI8ofY4WUdoMNRhtyAS63jEvr8ZfyD7WIG5A==
+X-Received: by 2002:ac8:4417:0:b0:2e1:a82c:1a6f with SMTP id j23-20020ac84417000000b002e1a82c1a6fmr11148476qtn.375.1648889273627;
+        Sat, 02 Apr 2022 01:47:53 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id x12-20020a05620a12ac00b0067d4bfffc59sm2510938qki.118.2022.04.02.01.47.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Apr 2022 01:47:53 -0700 (PDT)
+From: cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To: viro@zeniv.linux.org.uk
+Cc: nathan@kernel.org,
+	ndesaulniers@google.com,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Lv Ruyi <lv.ruyi@zte.com.cn>,
+	Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] fs/buffer.c: remove unneeded code
+Date: Sat,  2 Apr 2022 08:47:46 +0000
+Message-Id: <20220402084746.2413549-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401201804.2867154-11-clabbe@baylibre.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Corentin,
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-I love your patch! Perhaps something to improve:
+fix clang warning: Value stored to 'err' is never read in line 2944.
 
-[auto build test WARNING on next-20220331]
-[also build test WARNING on v5.17]
-[cannot apply to rockchip/for-next herbert-cryptodev-2.6/master herbert-crypto-2.6/master v5.17 v5.17-rc8 v5.17-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ fs/buffer.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220402-042221
-base:    fdcbcd1348f4ef713668bae1b0fa9774e1811205
-config: arm64-buildonly-randconfig-r001-20220402 (https://download.01.org/0day-ci/archive/20220402/202204021634.IhyHrjoT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/be381eb03ba20a6e06f0e880a9929d14a1e13064
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220402-042221
-        git checkout be381eb03ba20a6e06f0e880a9929d14a1e13064
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/crypto/rockchip/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/crypto/rockchip/rk3288_crypto_skcipher.c:21:46: error: use of undeclared identifier 'tfm'
-           unsigned int bs = crypto_skcipher_blocksize(tfm);
-                                                       ^
->> drivers/crypto/rockchip/rk3288_crypto_skcipher.c:328:6: warning: variable 'n' set but not used [-Wunused-but-set-variable]
-           int n = 0;
-               ^
-   1 warning and 1 error generated.
-
-
-vim +/n +328 drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-
-   319	
-   320	static int rk_cipher_run(struct crypto_engine *engine, void *async_req)
-   321	{
-   322		struct skcipher_request *areq = container_of(async_req, struct skcipher_request, base);
-   323		struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(areq);
-   324		struct rk_cipher_ctx *ctx = crypto_skcipher_ctx(tfm);
-   325		struct rk_cipher_rctx *rctx = skcipher_request_ctx(areq);
-   326		struct scatterlist *sgs, *sgd;
-   327		int err = 0;
- > 328		int n = 0;
-   329		int ivsize = crypto_skcipher_ivsize(tfm);
-   330		int offset;
-   331		u8 iv[AES_BLOCK_SIZE];
-   332		u8 biv[AES_BLOCK_SIZE];
-   333		u8 *ivtouse = areq->iv;
-   334		unsigned int len = areq->cryptlen;
-   335		unsigned int todo;
-   336	
-   337		ivsize = crypto_skcipher_ivsize(tfm);
-   338		if (areq->iv && crypto_skcipher_ivsize(tfm) > 0) {
-   339			if (rctx->mode & RK_CRYPTO_DEC) {
-   340				offset = areq->cryptlen - ivsize;
-   341				scatterwalk_map_and_copy(rctx->backup_iv, areq->src,
-   342							 offset, ivsize, 0);
-   343			}
-   344		}
-   345	
-   346		sgs = areq->src;
-   347		sgd = areq->dst;
-   348	
-   349		while (sgs && sgd && len) {
-   350			if (!sgs->length) {
-   351				sgs = sg_next(sgs);
-   352				sgd = sg_next(sgd);
-   353				continue;
-   354			}
-   355			if (rctx->mode & RK_CRYPTO_DEC) {
-   356				/* we backup last block of source to be used as IV at next step */
-   357				offset = sgs->length - ivsize;
-   358				scatterwalk_map_and_copy(biv, sgs, offset, ivsize, 0);
-   359			}
-   360			if (sgs == sgd) {
-   361				err = dma_map_sg(ctx->dev->dev, sgs, 1, DMA_BIDIRECTIONAL);
-   362				if (err <= 0) {
-   363					err = -EINVAL;
-   364					goto theend_iv;
-   365				}
-   366			} else {
-   367				err = dma_map_sg(ctx->dev->dev, sgs, 1, DMA_TO_DEVICE);
-   368				if (err <= 0) {
-   369					err = -EINVAL;
-   370					goto theend_iv;
-   371				}
-   372				err = dma_map_sg(ctx->dev->dev, sgd, 1, DMA_FROM_DEVICE);
-   373				if (err <= 0) {
-   374					err = -EINVAL;
-   375					goto theend_sgs;
-   376				}
-   377			}
-   378			err = 0;
-   379			rk_ablk_hw_init(ctx->dev, areq);
-   380			if (ivsize) {
-   381				if (ivsize == DES_BLOCK_SIZE)
-   382					memcpy_toio(ctx->dev->reg + RK_CRYPTO_TDES_IV_0, ivtouse, ivsize);
-   383				else
-   384					memcpy_toio(ctx->dev->reg + RK_CRYPTO_AES_IV_0, ivtouse, ivsize);
-   385			}
-   386			reinit_completion(&ctx->dev->complete);
-   387			ctx->dev->status = 0;
-   388	
-   389			todo = min(sg_dma_len(sgs), len);
-   390			len -= todo;
-   391			crypto_dma_start(ctx->dev, sgs, sgd, todo / 4);
-   392			wait_for_completion_interruptible_timeout(&ctx->dev->complete,
-   393								  msecs_to_jiffies(2000));
-   394			if (!ctx->dev->status) {
-   395				dev_err(ctx->dev->dev, "DMA timeout\n");
-   396				err = -EFAULT;
-   397				goto theend;
-   398			}
-   399			if (sgs == sgd) {
-   400				dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_BIDIRECTIONAL);
-   401			} else {
-   402				dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_TO_DEVICE);
-   403				dma_unmap_sg(ctx->dev->dev, sgd, 1, DMA_FROM_DEVICE);
-   404			}
-   405			if (rctx->mode & RK_CRYPTO_DEC) {
-   406				memcpy(iv, biv, ivsize);
-   407				ivtouse = iv;
-   408			} else {
-   409				offset = sgd->length - ivsize;
-   410				scatterwalk_map_and_copy(iv, sgd, offset, ivsize, 0);
-   411				ivtouse = iv;
-   412			}
-   413			sgs = sg_next(sgs);
-   414			sgd = sg_next(sgd);
-   415			n++;
-   416		}
-   417	
-   418		if (areq->iv && ivsize > 0) {
-   419			offset = areq->cryptlen - ivsize;
-   420			if (rctx->mode & RK_CRYPTO_DEC) {
-   421				memcpy(areq->iv, rctx->backup_iv, ivsize);
-   422				memzero_explicit(rctx->backup_iv, ivsize);
-   423			} else {
-   424				scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
-   425							 ivsize, 0);
-   426			}
-   427		}
-   428	
-   429	theend:
-   430		local_bh_disable();
-   431		crypto_finalize_skcipher_request(engine, areq, err);
-   432		local_bh_enable();
-   433		return 0;
-   434	
-   435	theend_sgs:
-   436		if (sgs == sgd) {
-   437			dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_BIDIRECTIONAL);
-   438		} else {
-   439			dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_TO_DEVICE);
-   440			dma_unmap_sg(ctx->dev->dev, sgd, 1, DMA_FROM_DEVICE);
-   441		}
-   442	theend_iv:
-   443		return err;
-   444	}
-   445	
-
+diff --git a/fs/buffer.c b/fs/buffer.c
+index bfc566de36e5..b2045871e81c 100644
+--- a/fs/buffer.c
++++ b/fs/buffer.c
+@@ -2941,7 +2941,6 @@ int block_truncate_page(struct address_space *mapping,
+ 		pos += blocksize;
+ 	}
+ 
+-	err = 0;
+ 	if (!buffer_mapped(bh)) {
+ 		WARN_ON(bh->b_size != blocksize);
+ 		err = get_block(inode, iblock, bh, 0);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
