@@ -1,134 +1,102 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2401FA2
-	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 21:41:22 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NF50/VXVhGvpUQCUsKhJi0/tERH/AK3TgYKK29xAjThbXBI8QVekjNqRl4I8NF6wr8XP8wwdBl7dmalvtrY4wtfSug9wHUEUSIEAc3eN1Jha+UH5tDvNC8GCoa1J1qIye8+awtAIj2GyjqVUyNyE0sUZHITgQswTPeZujwYfCdjO0j1/udf+Bm+Wz7oufpbLo81815bpCgbTkYprqBU8mtlrJ1qs0EO/WFj9hDbulazsi7DbgpMNeWYi8QJgVSYc6rwn6HnPFRExXyKGTzmgdyz3IY2eLjz/IJJmgjGsgarLP0xWsMwnroxR25mkpNVWGww8z+DnnrD/jVO5XNhh5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R08YZ935yb1P+a6p111svTa2naMVsBjs6UKU0qvMTvo=;
- b=D6zR21CmMm4U7Hntx9v7GJo3BCg3qHGaW9spmYfSqDoIxj5R98N/HPWsvnpG6mobEcvrGRvJZrQeFk0PiEbJZhUwyBxVu74VNILHEhCA/+HSe0jGvS6mmvfiQV2HScan4a0WLyThRAGBICubz1n14n11U8lmkTomvHrVS8bAeltzBKiOSE97M7Arpl31xEB/Ur3X/+TiGvijzsd8jDuy1sgA5sXo/AV+JgC482YJe1GTf1z5ypeXkKEyqFD8dbxV0UO01wHR64jJeKSRRyH8/6vC9QD4L4CWGd7yOu3V0AVn8OF/4A8PHnQkMVICz51FBOvK9tmitfKBHFUFbz1V/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R08YZ935yb1P+a6p111svTa2naMVsBjs6UKU0qvMTvo=;
- b=HaK6byHVzlusi9mr77AUip+COdHEpEIlcK3feFB7SEJFgwJkz0NfySq/B9+IeApYGxsUmDteOZczyu4b1wSDz16xsQA1X8HVB1PYTUOTKrpyl220mWWlaHuYE04BkjsMF8cDXYonHiS1Y7XYnIwNBUUve+9VhPcCNYlubYGOqe/LfB/JOdegBIAn/brVKYgD218FnnKbkYIbD/9XaYQkw0/3EObqYOwyG2QdChlZJic5oKoJd5XtiS/v2v9AxeWTNaVeQGr5xu9+Ljg3Gj/M4Z93/oRh4vRVRNNWqZYZXRlOliOx5Oe5ZWnxQKTqFv47R8ueymN7L2Xa2AFLewOi+Q==
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by BYAPR12MB2662.namprd12.prod.outlook.com (2603:10b6:a03:61::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.30; Sat, 2 Apr
- 2022 21:41:19 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::3dbb:6c2c:eecf:a279]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::3dbb:6c2c:eecf:a279%6]) with mapi id 15.20.5123.030; Sat, 2 Apr 2022
- 21:41:19 +0000
-From: Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To: "cgel.zte@gmail.com" <cgel.zte@gmail.com>, "viro@zeniv.linux.org.uk"
-	<viro@zeniv.linux.org.uk>
-CC: "nathan@kernel.org" <nathan@kernel.org>, "ndesaulniers@google.com"
-	<ndesaulniers@google.com>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot
-	<zealci@zte.com.cn>
-Subject: Re: [PATCH] fs/buffer.c: remove unneeded code
-Thread-Topic: [PATCH] fs/buffer.c: remove unneeded code
-Thread-Index: AQHYRm5dSk9Wv1pxAkujd7iYrhrtDqzdJ+mA
-Date: Sat, 2 Apr 2022 21:41:19 +0000
-Message-ID: <1235fa07-8a29-069a-34c2-dadcfa5e3be5@nvidia.com>
-References: <20220402084746.2413549-1-lv.ruyi@zte.com.cn>
-In-Reply-To: <20220402084746.2413549-1-lv.ruyi@zte.com.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 57311ca8-5bd0-46f9-3d20-08da14f18651
-x-ms-traffictypediagnostic: BYAPR12MB2662:EE_
-x-microsoft-antispam-prvs:
- <BYAPR12MB2662C222813B8DF782821E0AA3E39@BYAPR12MB2662.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- tdSlidSOibyUtG38iXlNEunCQCNNZPkBsFkbEzI5Vh/mrEwH7fafeSxvB/h9vvcz8OJIj1BSzhsgI5pZgZcvxWYHHrHzdXEL561m4K/doKFhusrDAG/OxkjbYQB6FdiGS2yzsHhblCKvF/zscXnD248AB8bR5SLgdwFf3XkJE1HAa3n2e4f7j/liUdDQMpeW+1KtNn3zW8FPDASF0n+75kZOQsrcCAr5IJFI1HUH8EQFB0xqhvKdXlDmaTo9aeSSIzWlqiaqgrdsXpRU16KdLoPOyy3EgBctY/yT5Tut6oDUH/XdQIH/JxmnTHb/UbNrUD4bK2Ux7VX34Nzo+Utu1r4miByWALZhkh6Mf3zzlJC+NRiM8zEeKm/RAEW30xELXpSvQX736X3dO80cU1hRy3Ahg6+/us8QtmvkjzaUPjSIU3VpVNhLQDkBpgfS0NAHkOTMIxhSwzQVRxK+3V7DotdJhcBtE1MGhsVH/JQ1+HHO/S778UHdBJtWMFHclMSM493Cmen9EJ1FQABe/QWjQi3CmPQTvN2X6z7FQoVWspUGSNhHxCKMxaqMdr8zBzLYK6jHNsMJvj6J3yvqjPbIFugjYNkUAL/5xQw3NTTdeT4ZRMOyrn250Vycb3nk9OyiWGsbJceEEvIv+rQN0mbmByAMLIAdZ3tDjexKWt25Y7sLCVp3wDe36zpAQVoaEHVZE7ncfpcLSMTSCbzM17QU5e/RbnBGYXkLe4a6IKLJMKNQhMKMJtp8NtpDm6TTUwv+JHSK2XxnrxwHRe2ddDuBNA==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(2906002)(86362001)(508600001)(31696002)(76116006)(91956017)(6486002)(83380400001)(36756003)(558084003)(110136005)(316002)(54906003)(66946007)(5660300002)(186003)(4326008)(66556008)(66446008)(64756008)(66476007)(2616005)(8676002)(38100700002)(6506007)(6512007)(71200400001)(31686004)(38070700005)(53546011)(122000001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?L3pwcnJiMzlTZjd4WTltd2hheGZiVldzTEZWUXhGVXJ1V1owUUgyNmEzc2lV?=
- =?utf-8?B?QlNVNEs0Sm5NQ0VlL1hxdStNTTdnZXp3Y3hzM2R6Y09ZYU80Vk5QOHJQTWsy?=
- =?utf-8?B?a29YUjZmVVE2VkpMU3hlMlpJenVCQUkwdDIrQlRNWmJnR1l6cHhOaEVkbVk0?=
- =?utf-8?B?OGdEWGlFcmNnYlV3bFRDaU9pN2JZU0ZSV3IxY3pjZHpnb1F4aTNyNmZBdmFZ?=
- =?utf-8?B?amJYdyt4WklaNndvV2N0aC85NmlBZFE2YUNsei9kYTlBTk5iOWZZQ1VmMUdN?=
- =?utf-8?B?cHBTQXByc2xMWUVGbWdVc2RqYWd0RTJ0aFJQNlBYbGxOSXQ3M2pkMndVWlll?=
- =?utf-8?B?bFpyTzZpQXcwTWt2d1hGWXlQR1c4a1Mxb0FSQTFtV3VrUFdTZHpJd29SaDU0?=
- =?utf-8?B?Qjl1WkpMUXd5SnZZUU16cU5SdktKTW9rZEgwSVFiVzl2VWI0U3pQTkQ2YWFH?=
- =?utf-8?B?SDY2Y293ZjhMWndmRU95N0I0SlRhaXRqODBVRnNGSXRXaDZMZXhDQVJyYmYw?=
- =?utf-8?B?QUpPWHhJOUZGVm9hYzdXeU5ZcjRTd2FuQ1F1RmtxSFl6MEpOS0dNQW1MUkVC?=
- =?utf-8?B?ajhxcElJcysvRFJnSVkwZmxUSTZuZ3VMcXFYeXFKUVNyNGc4SUJMeWh5RmFM?=
- =?utf-8?B?OXhlNHprUVBuSkFqNmNtUzU0dmxCQXhNQzVtbHBPZUVFcE1hU3B1WGF0Q2dY?=
- =?utf-8?B?Ry95azFwUElXbXpabUtHQ3lIalFkY0dQT1QzVzZsK3k0MHRSN0hmam9JTzVX?=
- =?utf-8?B?MzArSzI0VEdhOXJGVU9KMFVGTys5UUZUVUxxc1JaU09Pa1NkQzYrdWpYMHRw?=
- =?utf-8?B?aTFwd0dQNGxBd0lEYmpjdkFyaVZqMHRBazFiWUxXTnZlM0V1cnZWb1RhUmxJ?=
- =?utf-8?B?ckRIRGx0Z2xSeTB4UU9RRENIRkEwc3haSWJQeHZUalFDNVpuQW82bENYM1No?=
- =?utf-8?B?aTFWRS9aMTFnNzlKc3ZuRytna1lFdWkxL0JoYm80UDh1N0dneE5GeXFKTnMz?=
- =?utf-8?B?Z3ZvbEp0SzJOc0hwSUxsV0JrdzlmeUhHa3BuaFF2UmF4aWJFZnV0c0hnRko3?=
- =?utf-8?B?Sll0VGxXL0txNmtpTGY3M2xJWEJ0cm5LZWVIaW1jYSs0M3FuNFBFczhUZDho?=
- =?utf-8?B?MnM2dU03WUpVbGYxNEFTZUlRb2FmbVJkelR6eUdVOUZOZktHb1lBMnd3Snky?=
- =?utf-8?B?eEUrcVFEYmxHQW5qaE53WDlhYThWaG04dzdZNG5seWZydSs1cUxjaHhrMzhp?=
- =?utf-8?B?Zm0vQ1pNdncxczdubUhyMmF1UThSOWhNRXdra0lzcUE2eSs3UTB6b0g4VU03?=
- =?utf-8?B?c2FYL1lPMEFZV3JDWDEwdnN6NXdjb0EydUwrL0EwTmoxL0lhUFY3KzlDNm52?=
- =?utf-8?B?TFdkL2tZcnRIcU1iMUJwdjNISUNWZEJCTTdhUk5BYUdkSmVVTy9IeTR6bFFW?=
- =?utf-8?B?L05LKzFPRGNHeEhMZVpETEpiRzNsVEtWbTIxR2VYN3haaksyWUJoaklvUU9x?=
- =?utf-8?B?c3VkaEwyc3JDMllGNS9udHJOcmY4dTJIb2VtVkFIVHVFYllham5WeE5ITVNK?=
- =?utf-8?B?SkN1VEt6OU9RdmRyRmlQOE16RjBJNENrL2NpcTE2U2k4ZFZFWTF4V0psL2Z4?=
- =?utf-8?B?blJUcjBxR2NYWk5VZnpvbWxIdGtUWG9UOHB6ZGttb2tlMjJjQkwrdk1Eckc5?=
- =?utf-8?B?WmY0dlpQcFZzVUQ5OEducWNOYnRzWkVLUFA4bm9JYTAvY0pzQWFCNXBiRTJi?=
- =?utf-8?B?K3pxSkt4WERkcTlKb0dNdkJKanZGZ2x0YmFIUGM3VUpTakxnMGVMQW9hWGxE?=
- =?utf-8?B?RlhTUXlibUpiblRyNGpNbEkvWmJYMkthdU1BV3JJMXJtQ09vTmtBdlNmU2NB?=
- =?utf-8?B?VlNUMXllZkFuYXVGSU5nbHhUSlRWVEJ6cjFOcDg3OThBSG1sSHc0NjQ0b1dJ?=
- =?utf-8?B?WHV4WlhPc1VHNVpJSisrNzZCMFhnS3gydG9QM09Ib2RncnpieE1rRVdMM2tk?=
- =?utf-8?B?bzM4bUY2Q3U5ZFlBVEgzRUhsRXdLckpjN3VWSVlTUkZ0a0k0ankrQzVpMmhS?=
- =?utf-8?B?UDN2MERTZCtZVVdPOVl4NXNveUpZb2I2T1lJellzRCt3RUhGaGRRb0hGOTB4?=
- =?utf-8?B?Qk0zaG1HaHNEM1A5cC9ZenhDWmV2WGQ5NHFZMWV5YWZpK1pDOE1BazBBanp5?=
- =?utf-8?B?SHkwVUNkZmZqTW9QdnNXd1JSZlZsZDNjMG9paSt1MWt6eWw4Q0FJTUQ1dWlm?=
- =?utf-8?B?NFN5NXNybmhPdVZDTUJIUEhFUElyS1ZNU3Vvd2V5OWdKSk80dWE1MmZibVAw?=
- =?utf-8?B?Mnh3L3p0Y2RRcktkOEM5dy9qZTNZNVV5SWV6am1nSTZYaE9Tb0dMdEoyWG8y?=
- =?utf-8?Q?vg72JitFF7L/VnPo=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <777BFE1D13F39043A0D5A279317196A4@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C721FA2
+	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 22:09:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648937349; x=1680473349;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GR69wVybUrA6BpZhcqORZcBO2/sOkwsgCc2qxcc+y+k=;
+  b=V8ZLuzw2Ro7d61qbjLlRqEWMhk7sXCuxsvcauL82l/Kwb8bGeYAzqos6
+   jRF6b+D1qwFkV67X1fpRNkqX728FjaVBKBe4MetxtMZpkD0S0JhKnJTHQ
+   YceO9BTxO3aX4q1SdnfM1nocwrrB0ViEZ3ZCWyljsUAAsOZxONf6Wyke/
+   927OlwcA7wfCXa4quoRieAymGPINZYWw6zqbwDQQbZyimROoo2lB+lUVa
+   qFsLXM1XRF2L3se5xAS5nNsIqtAGgM2w/XhLBUCN7qzPyL9ad4t5x4xFX
+   YnXuiAtW0iiJ9eDxfYgccv+VLBPcYFuLQyDbUBq3+YAhQKwYtXYTYSEgF
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="323514843"
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="323514843"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 15:09:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="504527877"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 02 Apr 2022 15:09:06 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nalvd-0000Sl-QN;
+	Sat, 02 Apr 2022 22:09:05 +0000
+Date: Sun, 3 Apr 2022 06:08:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Michael Ellerman <mpe@ellerman.id.au>
+Subject: [linux-next:master 14270/15002] ld.lld: error:
+ init/built-in.a(initramfs.o):(function wait_for_initramfs: .text+0x24):
+ relocation R_RISCV_HI20 out of range: 530109 is not in [-524288, 524287];
+ references initramfs_cookie
+Message-ID: <202204030606.gML0qvDb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57311ca8-5bd0-46f9-3d20-08da14f18651
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Apr 2022 21:41:19.8553
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: k0PAlXzsWj5cOkkWVrpCr3AE80F8hI0zo/g9rwgVuS5SnkhempzsSyETtzSj74V9C0k56TPXWCtk//x+czQbIw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2662
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-T24gNC8yLzIyIDAxOjQ3LCBjZ2VsLnp0ZUBnbWFpbC5jb20gd3JvdGU6DQo+IEZyb206IEx2IFJ1
-eWkgPGx2LnJ1eWlAenRlLmNvbS5jbj4NCj4gDQo+IGZpeCBjbGFuZyB3YXJuaW5nOiBWYWx1ZSBz
-dG9yZWQgdG8gJ2VycicgaXMgbmV2ZXIgcmVhZCBpbiBsaW5lIDI5NDQuDQo+IA0KPiBSZXBvcnRl
-ZC1ieTogWmVhbCBSb2JvdCA8emVhbGNpQHp0ZS5jb20uY24+DQo+IFNpZ25lZC1vZmYtYnk6IEx2
-IFJ1eWkgPGx2LnJ1eWlAenRlLmNvbS5jbj4NCg0KDQpMb29rcyBnb29kLg0KDQpSZXZpZXdlZC1i
-eTogQ2hhaXRhbnlhIEt1bGthcm5pIDxrY2hAbnZpZGlhLmNvbT4NCg0KLWNrDQoNCg0K
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   e5071887cd2296a7704dbcd10c1cedf0f11cdbd5
+commit: af41d2866f7d75bbb38d487f6ec7770425d70e45 [14270/15002] powerpc/64: Fix build failure with allyesconfig in book3s_64_entry.S
+config: riscv-randconfig-r022-20220403 (https://download.01.org/0day-ci/archive/20220403/202204030606.gML0qvDb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=af41d2866f7d75bbb38d487f6ec7770425d70e45
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout af41d2866f7d75bbb38d487f6ec7770425d70e45
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: init/built-in.a(initramfs.o):(function wait_for_initramfs: .text+0x24): relocation R_RISCV_HI20 out of range: 530109 is not in [-524288, 524287]; references initramfs_cookie
+   >>> referenced by initramfs.c
+   >>> defined in init/built-in.a(initramfs.o)
+--
+>> ld.lld: error: arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_processor_hartid: .text+0x2c): relocation R_RISCV_HI20 out of range: 530099 is not in [-524288, 524287]; references .LCPI0_0
+   >>> referenced by cpu.c
+   >>> defined in arch/riscv/built-in.a(kernel/cpu.o)
+--
+>> ld.lld: error: arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_parent_hartid: .text+0x160): relocation R_RISCV_HI20 out of range: 529283 is not in [-524288, 524287]; references .L.str
+   >>> referenced by cpu.c
+   >>> defined in arch/riscv/built-in.a(kernel/cpu.o)
+--
+>> ld.lld: error: arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_parent_hartid: .text+0x19c): relocation R_RISCV_HI20 out of range: 530099 is not in [-524288, 524287]; references .LCPI1_0
+   >>> referenced by cpu.c
+   >>> defined in arch/riscv/built-in.a(kernel/cpu.o)
+--
+>> ld.lld: error: init/built-in.a(initramfs.o):(function wait_for_initramfs: .text+0x3c): relocation R_RISCV_HI20 out of range: 529437 is not in [-524288, 524287]; references initramfs_domain
+   >>> referenced by initramfs.c
+   >>> defined in init/built-in.a(initramfs.o)
+--
+>> ld.lld: error: init/built-in.a(initramfs.o):(function panic_show_mem: .text+0xa8): relocation R_RISCV_HI20 out of range: 530099 is not in [-524288, 524287]; references .LCPI8_0
+   >>> referenced by initramfs.c
+   >>> defined in init/built-in.a(initramfs.o)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
