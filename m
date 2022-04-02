@@ -1,101 +1,105 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6EC10E9
-	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 01:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDF67C
+	for <llvm@lists.linux.dev>; Sat,  2 Apr 2022 03:47:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648861510; x=1680397510;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=7jVlny9eKCOZGz+JpaTeaYkMxEayrQ2fC9IOPYubG+0=;
-  b=msQm7KYT0C19/SEpgN8lRvHoDMfFKL354E+m7acRmO+BpigNJ/nUssBr
-   GXh5NAsPBn0aZNx/tT+DOYdWNvz7nQoUbdVEHUOEdKvw62S3sygApBQaq
-   4j2NNZOkoWRCBuIFEnTGAU8xdKjuwO84eJ4CrpQM8rnumMGCbK6saQzMn
-   CMpafYsB3N+s5RreQ4SA1iI/TsAVsUJP/N+z2TAQrAs0NC3qABlKIUX2r
-   ZPG4P7Ko8SSGRSgYni14Hv5jgBRMvWiZpR/NmKKXXicXIEpIO6RYh/LG6
-   2sjsjaHm7e0PtBtl63FJTi14VxMhQp2o4eQfktqszOqBdSl1hBy9ZgQ8p
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="320961739"
+  t=1648871249; x=1680407249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=A+GukEuzxsNgXQg5OiqZVWnBj8YCzhgWRSUf1ag8iRk=;
+  b=L5xJskTPA0ggLSvZ9QR042f3w1wbLEH318dl5fgf0Z2AkX+BFK00LBC7
+   8Jo4RYTPjHkFsYJa3l9eDdg/lFCFvIIBIdi/94dmZVCRi1HV2svKzi0In
+   V4XDVUkRSF0wpO2PjCgEMgiEMZaRh3TXMMdfbwRdmFCYGQus1llRkO2fT
+   47ljBFw2xvQ7p8nnK932ac0mhZn8Ok4sNeceoRc3VH9pJfaAvMLUeHwR1
+   vvfYOkI54v7fIcdOvHGorjAkTjm2s6MouRYbq40BI3KRTqm6stg/sMYOD
+   OwmEGe47Nv0rkqMm4jrwmG0dO7LnBk3ov4waz5C8f8EW4cmpHuDOOVpZc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="260451990"
 X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="320961739"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 18:05:10 -0700
+   d="scan'208";a="260451990"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 20:47:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="567973947"
+   d="scan'208";a="721097660"
 Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 01 Apr 2022 18:05:09 -0700
+  by orsmga005.jf.intel.com with ESMTP; 01 Apr 2022 20:47:26 -0700
 Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1naSCS-0001e8-9L;
-	Sat, 02 Apr 2022 01:05:08 +0000
-Date: Sat, 2 Apr 2022 09:04:48 +0800
+	id 1naUjW-0001im-3P;
+	Sat, 02 Apr 2022 03:47:26 +0000
+Date: Sat, 2 Apr 2022 11:47:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Jos=E9?= Roberto de Souza <jose.souza@intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [Intel-gfx] [PATCH 2/3] drm/i915/display/psr: Lock and unlock
- PSR around pipe updates
-Message-ID: <202204020818.P5BApjRe-lkp@intel.com>
-References: <20220401222911.199284-2-jose.souza@intel.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Will Deacon <willdeacon@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2022-03
+ 199/9999] arch/arm64/kvm/perf.c:58:36: error: implicit declaration of
+ function 'perf_num_counters'
+Message-ID: <202204021112.ErKMELRr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220401222911.199284-2-jose.souza@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi "José,
+Hi Marc,
 
-Thank you for the patch! Perhaps something to improve:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on drm-tip/drm-tip]
-[also build test WARNING on v5.17 next-20220401]
-[cannot apply to drm-intel/for-linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Roberto-de-Souza/drm-i915-display-psr-Set-partial-frame-enable-when-forcing-full-frame-fetch/20220402-062837
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220402/202204020818.P5BApjRe-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2022-03
+head:   64099431c232d4a95f621411747a3972cc1c8061
+commit: 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf [199/9999] FROMGIT: KVM: arm64: Turn kvm_arm_support_pmu_v3() into a static key
+config: arm64-randconfig-r024-20220331 (https://download.01.org/0day-ci/archive/20220402/202204021112.ErKMELRr-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/955b4bf1a2fd2e6652980814983464f3db8f955f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jos-Roberto-de-Souza/drm-i915-display-psr-Set-partial-frame-enable-when-forcing-full-frame-fetch/20220402-062837
-        git checkout 955b4bf1a2fd2e6652980814983464f3db8f955f
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2022-03
+        git checkout 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_psr.c:2485: warning: expecting prototype for intel_psr_lock(). Prototype was for intel_psr_unlock() instead
+>> arch/arm64/kvm/perf.c:58:36: error: implicit declaration of function 'perf_num_counters' [-Werror,-Wimplicit-function-declaration]
+           if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
+                                             ^
+   1 error generated.
 
 
-vim +2485 drivers/gpu/drm/i915/display/intel_psr.c
+vim +/perf_num_counters +58 arch/arm64/kvm/perf.c
 
-  2477	
-  2478	/**
-  2479	 * intel_psr_lock - grab psr.lock mutex
-  2480	 * @crtc_state: the crtc state
-  2481	 *
-  2482	 * Release the PSR lock that was held during pipe update.
-  2483	 */
-  2484	void intel_psr_unlock(const struct intel_crtc_state *crtc_state)
-> 2485	{
+    50	
+    51	int kvm_perf_init(void)
+    52	{
+    53		/*
+    54		 * Check if HW_PERF_EVENTS are supported by checking the number of
+    55		 * hardware performance counters. This could ensure the presence of
+    56		 * a physical PMU and CONFIG_PERF_EVENT is selected.
+    57		 */
+  > 58		if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
+    59			static_branch_enable(&kvm_arm_pmu_available);
+    60	
+    61		return perf_register_guest_info_callbacks(&kvm_guest_cbs);
+    62	}
+    63	
 
 -- 
 0-DAY CI Kernel Test Service
