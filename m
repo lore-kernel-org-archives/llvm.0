@@ -1,42 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 230C7186A
-	for <llvm@lists.linux.dev>; Sun,  3 Apr 2022 01:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AA5468B
+	for <llvm@lists.linux.dev>; Sun,  3 Apr 2022 01:35:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648948455; x=1680484455;
+  t=1648949715; x=1680485715;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vi4lWGBphbiq3mXQmN5cdScjROFXvEE9SMLUR5oGi20=;
-  b=nKBQa14IAGYPMjwpxQRqN62eYlFr4ij0C4dl3M8T/eM8Vf5jwmVHNNSJ
-   SKj/A4lwH8sdSIVXH3Xl+BXJv1lmciHgAqgQMauXPNJCaZwNSaoAOVRQ1
-   3TyBGWh3f4z7Cb05AMr7OddAc5n+CBeqnOBcj3n5b8qpzNqrVFnU11Ffw
-   SRvRNoomU+snKR0qPc+fCBiH+MNmJMcmKFkAYXUPUAwqdzOuE0dAoM7OL
-   IJkQlpaAjN+IcieIMHcKcO68kQ5AsZ8KImv+8pwh/WGttifsIIn5NgQnA
-   IVe8YZA8DKusTwZqoEqpAXS71mgHLBCW1xITB0EhQjVy9SJGw0kQaRZDo
+  bh=A8HJbntzu5cdc5e0l+WDDZIdPnA/GixLfm7YcmrJla0=;
+  b=ZPodj0gvszDbrt5FQXHM14pPN1HUDrGMLx8fL8biX5/V+lmS2/ocJ7j7
+   ph8fYgMXusxa75V6BEf21xw57fVf2UZdcvL/KkaRmGB4miTya6dVPMCYv
+   y/IjQaCKoPtHvpFJJY6fdLyAoHBq17U05l5+B0UDbyQ8JRBbvqi3fNRgo
+   NFtwu0vhUR3iLA5dNjkgQ22cWjNp1IjdOD72x+NdzcWWsi4Sqgzmsy7hn
+   6VDFiJzvv58hoSGpKhj0eX4jpk6k5Q9pqALaLQwI2wY5lDy91aROapUrz
+   HOeW5Ubmn64VQvXB3Z+77AB8rF6lvyw3HvRBT3IlJuGnK3+i8ZQofVtY9
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="260526093"
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="240285087"
 X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="260526093"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 18:14:14 -0700
+   d="scan'208";a="240285087"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 18:35:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="522328655"
+   d="scan'208";a="721280408"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 02 Apr 2022 18:14:12 -0700
+  by orsmga005.jf.intel.com with ESMTP; 02 Apr 2022 18:35:13 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1naoom-0000bk-2n;
-	Sun, 03 Apr 2022 01:14:12 +0000
-Date: Sun, 3 Apr 2022 09:14:03 +0800
+	id 1nap96-0000cl-QE;
+	Sun, 03 Apr 2022 01:35:12 +0000
+Date: Sun, 3 Apr 2022 09:34:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
+To: Kees Cook <keescook@chromium.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [lunn:v5.17-rc8-mdio-c45 2/12] drivers/net/phy/phylink.c:2371:50:
- warning: variable 'prtad' is uninitialized when used here
-Message-ID: <202204030904.n5cYsrRU-lkp@intel.com>
+Subject: drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within
+ 'struct htt_tx_fetch_ind' is less aligned than 'union
+ htt_tx_fetch_ind::(anonymous at
+ drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct
+ htt_tx_fetch_ind' being...
+Message-ID: <202204030906.gxzheF5s-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,81 +50,113 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/lunn/linux.git v5.17-rc8-mdio-c45
-head:   21ffc4381ec731f5e9521dec8925c0089b14920b
-commit: 3e1cf3cbc07f3be863192a3cbdfe2b5f8cb14cd5 [2/12] net: phylink: Convert to mdiobus_c45_{read|write}
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220403/202204030904.n5cYsrRU-lkp@intel.com/config)
+Hi Kees,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
+commit: fa7845cfd53f3b1d3f60efa55db89805595bc045 treewide: Replace open-coded flex arrays in unions
+date:   6 months ago
+config: arm-randconfig-c002-20220403 (https://download.01.org/0day-ci/archive/20220403/202204030906.gxzheF5s-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/lunn/linux/commit/3e1cf3cbc07f3be863192a3cbdfe2b5f8cb14cd5
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v5.17-rc8-mdio-c45
-        git checkout 3e1cf3cbc07f3be863192a3cbdfe2b5f8cb14cd5
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa7845cfd53f3b1d3f60efa55db89805595bc045
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fa7845cfd53f3b1d3f60efa55db89805595bc045
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/phy/phylink.c:2371:50: warning: variable 'prtad' is uninitialized when used here [-Wuninitialized]
-                   return mdiobus_c45_write(pl->phydev->mdio.bus, prtad, devad,
-                                                                  ^~~~~
-   drivers/net/phy/phylink.c:2341:11: note: initialize the variable 'prtad' to silence this warning
-           int prtad, devad;
-                    ^
-                     = 0
-   1 warning generated.
+   In file included from drivers/net/wireless/ath/ath10k/mac.c:8:
+   In file included from drivers/net/wireless/ath/ath10k/mac.h:11:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/mac.c:5942:22: warning: parameter 'changed_flags' set but not used [-Wunused-but-set-parameter]
+                                       unsigned int changed_flags,
+                                                    ^
+   5 warnings generated.
+--
+   In file included from drivers/net/wireless/ath/ath10k/debug.c:14:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   4 warnings generated.
+--
+   In file included from drivers/net/wireless/ath/ath10k/ce.c:8:
+   In file included from drivers/net/wireless/ath/ath10k/hif.h:11:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/ce.c:127:1: warning: unused function 'ath10k_get_ring_byte' [-Wunused-function]
+   ath10k_get_ring_byte(unsigned int offset,
+   ^
+   drivers/net/wireless/ath/ath10k/ce.c:212:1: warning: unused function 'ath10k_ce_shadow_dest_ring_write_index_set' [-Wunused-function]
+   ath10k_ce_shadow_dest_ring_write_index_set(struct ath10k *ar,
+   ^
+   drivers/net/wireless/ath/ath10k/ce.c:449:20: warning: unused function 'ath10k_ce_error_intr_enable' [-Wunused-function]
+   static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
+                      ^
+   7 warnings generated.
 
 
-vim +/prtad +2371 drivers/net/phy/phylink.c
+vim +1677 drivers/net/wireless/ath/ath10k/htt.h
 
-  2336	
-  2337	static int phylink_phy_write(struct phylink *pl, unsigned int phy_id,
-  2338				     unsigned int reg, unsigned int val)
-  2339	{
-  2340		struct phy_device *phydev = pl->phydev;
-  2341		int prtad, devad;
-  2342	
-  2343		if (mdio_phy_id_is_c45(phy_id)) {
-  2344			prtad = mdio_phy_id_prtad(phy_id);
-  2345			devad = mdio_phy_id_devad(phy_id);
-  2346			return mdiobus_c45_write(pl->phydev->mdio.bus, prtad, devad,
-  2347						 reg, val);
-  2348		}
-  2349	
-  2350		if (phydev->is_c45) {
-  2351			switch (reg) {
-  2352			case MII_BMCR:
-  2353			case MII_BMSR:
-  2354			case MII_PHYSID1:
-  2355			case MII_PHYSID2:
-  2356				devad = __ffs(phydev->c45_ids.mmds_present);
-  2357				break;
-  2358			case MII_ADVERTISE:
-  2359			case MII_LPA:
-  2360				if (!(phydev->c45_ids.mmds_present & MDIO_DEVS_AN))
-  2361					return -EINVAL;
-  2362				devad = MDIO_MMD_AN;
-  2363				if (reg == MII_ADVERTISE)
-  2364					reg = MDIO_AN_ADVERTISE;
-  2365				else
-  2366					reg = MDIO_AN_LPA;
-  2367				break;
-  2368			default:
-  2369				return -EINVAL;
-  2370			}
-> 2371			return mdiobus_c45_write(pl->phydev->mdio.bus, prtad, devad,
-  2372						 reg, val);
-  2373		}
-  2374	
-  2375		return mdiobus_write(phydev->mdio.bus, phy_id, reg, val);
-  2376	}
-  2377	
+  1670	
+  1671	struct htt_tx_fetch_ind {
+  1672		u8 pad0;
+  1673		__le16 fetch_seq_num;
+  1674		__le32 token;
+  1675		__le16 num_resp_ids;
+  1676		__le16 num_records;
+> 1677		union {
+  1678			/* ath10k_htt_get_tx_fetch_ind_resp_ids() */
+  1679			DECLARE_FLEX_ARRAY(__le32, resp_ids);
+  1680			DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
+  1681		};
+  1682	} __packed;
+  1683	
 
 -- 
 0-DAY CI Kernel Test Service
