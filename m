@@ -1,78 +1,58 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D60A3200
-	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 19:41:23 +0000 (UTC)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2e68c95e0f9so112975057b3.0
-        for <llvm@lists.linux.dev>; Mon, 04 Apr 2022 12:41:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34BC3200
+	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 19:51:31 +0000 (UTC)
+Received: by mail-ej1-f50.google.com with SMTP id bg10so22254122ejb.4
+        for <llvm@lists.linux.dev>; Mon, 04 Apr 2022 12:51:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eAwv7CFZ3JOlEcNj8j8D2/v921PTmZNLQHl33SWwbZQ=;
-        b=pMdBBCRgdJWrkxOB7Vi/srVNde9bJufkX4hVHEeS+pFF8yy6ccmz7kB+1UwHKEIDFa
-         JDg37ysNC2VzPqSfgLQnu7iYkS3/sbzzt9U66P4qidAB+SU4mTF1PntYeWGtGxMrXI94
-         c7VlnLx3YhtB0XEymV2HzG/wPESttE7jFSEYKhmWuLId0C4CdBpHGprn+S1rZ+skseYr
-         R5O2AESDpF9Nha3NUhigFuCto1zYZ+Q5FUlSL9jPB/joOa9jbDMtEx1Y2YhBi+lkRwGp
-         DyTmqM/Fr5UV5yGB2tMELqq9tO6uUup/Raugo78JKi2NLR+3NMDswAsxgK2+Xfgbv0HL
-         ywZg==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=lFAH71l5hLiHoLrZZzcQ02KILOzB/xZrhEV5P4Wdld0=;
+        b=Qtgc6aj81PF27HwqIjmLraR6kbD2g1Edk4JH8jLfIYET3iNb8qoEFoYXBH7BjQQ4GM
+         8tI8gHZon9drp8BlL8xeRuAcE5a116BvXuPVakbHx/K7tjVwbPt2Iv0EgfnkErFL7ZKb
+         GNPkfF0lafnWM+sKawmBrReiH9Tf1xoDFXKhOshkxy3PvO+49x7jxaf+NtrpcqbqDN0u
+         HF9O5wopaviUM8YsGqJWOON5RVGwN4Hc+4xtI+iR3JwhkL3kDBu86Vv5xOpzCU2D+Oi6
+         xN8IfSCARpRBNSNax9wqlfP4rVBgL6u1JtzjiRUMQAoOcFfi1RpuPbk7nXbPj+R2zLB6
+         Z+KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eAwv7CFZ3JOlEcNj8j8D2/v921PTmZNLQHl33SWwbZQ=;
-        b=G4tfX6ullXPEWK/LVH3wBuUKyOM88t2B4YGSvvOvMVmdOM5x2nfgwE+5rbGTGmc4mZ
-         wDgKyfdA8yJNgyd3sUcDnjwVOE0XFzhuFdqY7dCTfJnK1zdifmDW/JaY82bZHwz1KNQy
-         1CPfr4Idn00FO8SgU8hgY8SaqxgJBEENX0ljeCFZNZHYQXECmTCXHXiWc7XxgU1lhS26
-         JGlbpWwNUdvDpwkXCuNE/Syrs/Sq6s7CAMb657ZH85mfqV2t7Yv09+VcnqXnSu2SdGnr
-         dnSadM7IrIqEbI0xyH2F5zNqcJGDxrIZbIuoqhvcQxklfJoQY49vLUQv7xtEZVMi0LP3
-         VK9w==
-X-Gm-Message-State: AOAM532lGJGjdlsVxDtScfyOveEt23ZPVjV2mYTP4N1g1smJAq1pOito
-	qQonqmzEr4WCFG3C0e+iCgtCTD4oJ0IGMMjteRf9fA==
-X-Google-Smtp-Source: ABdhPJx7D6TDafv3kiS/i/Qp7m7WK4qbRCfugunFo5wbxlDRV34SM1qNDg9LlBTyO66YQQqmXk6cb/7CTestETLhn4E=
-X-Received: by 2002:a81:3a4a:0:b0:2e5:a9e9:f43c with SMTP id
- h71-20020a813a4a000000b002e5a9e9f43cmr1490010ywa.243.1649101281897; Mon, 04
- Apr 2022 12:41:21 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=lFAH71l5hLiHoLrZZzcQ02KILOzB/xZrhEV5P4Wdld0=;
+        b=l7WjK4nnrJlea4NpomwullB7zDTL/3KArwtVh6nyJMcEbbf6tKs7LJUjdlHbrDP+be
+         4mnJtXlCueB2kofTeAVDXgFSRtOgHXJQkmYvxqbyRHZdxtZudWOEJ539JKR+CQpjPVug
+         sTqi5jSWQ/Y4Q9aeOtvRNr+ZYYXzIgesvDhxoWBWPcGPwXQkxwvyXhVtZTo/jaVnhTGW
+         bNrLC+bQRlfGln2XzZdfCwqODsKuG4ALIu6FpXs0QmOYWPlWeLCBfAkJnnOPIbkmTSU5
+         w4uJCzo1O50imeMnbxvMW1LHPG7GvNy0NNdKitf6h6ECyvSN/yNr9ShbKiYnvIaS8iBA
+         grcA==
+X-Gm-Message-State: AOAM5325mHxnGFPon0M98tYPN+NnUsfnyPibDEQbeaGAa6hxvvhjUXl8
+	wMOfmrINAC4mBMU4UR1CSO01UXYNoSgSXUQYqShH
+X-Google-Smtp-Source: ABdhPJzZaJUJ9iytdCtow0Lr48mbggrWmuIS5YY0v6kb4vhoY/DawljwRSvPi9PvR8qF8W/yV7rYMKSCXNkibAXEfJE=
+X-Received: by 2002:a17:907:216f:b0:6ce:d85f:35cf with SMTP id
+ rl15-20020a170907216f00b006ced85f35cfmr1720054ejb.517.1649101889842; Mon, 04
+ Apr 2022 12:51:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220401201916.1487500-1-samitolvanen@google.com>
- <20220401201916.1487500-2-samitolvanen@google.com> <CAK7LNAQoJWUscyxXVnOQ9924MYZwaZGgfBYSzmjJxKH_UC0Pkw@mail.gmail.com>
-In-Reply-To: <CAK7LNAQoJWUscyxXVnOQ9924MYZwaZGgfBYSzmjJxKH_UC0Pkw@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 4 Apr 2022 12:40:46 -0700
-Message-ID: <CABCJKudaQJ0_e290gD+rG8SwEembd33ua1MG-w2OKRq3es8Kjw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] kbuild: Change CFI_CLANG to depend on __builtin_function_start
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Will Deacon <will@kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 4 Apr 2022 15:51:19 -0400
+Message-ID: <CAHC9VhT2fgrZ5Kcv=-xizUnv0kpr0x+v827YsHYGfos88LjkcQ@mail.gmail.com>
+Subject: Re: [PATCH 4/5] selinux: Remove redundant assignments
+To: michalorzel.eng@gmail.com
+Cc: Eric Paris <eparis@parisplace.org>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Paul Moore <paul@paul-moore.com>, selinux@vger.kernel.org, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Apr 2, 2022 at 6:32 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Sat, Apr 2, 2022 at 5:19 AM Sami Tolvanen <samitolvanen@google.com> wrote:
-> >
-> > Clang 14 added support for the __builtin_function_start()
-> > built-in function, which allows us to implement function_nocfi()
-> > without architecture-specific inline assembly. This patch changes
-> > CONFIG_CFI_CLANG to depend on the built-in and effectively upgrades
-> > the minimum supported compiler version for CFI to Clang 14.
->
-> From this description, I think the straight-forward change would be:
->
->     depends on CLANG_VERSION >= 120000
-> -->
->     depends on CLANG_VERSION >= 140000
->
-> Any reason to avoid this?
+For some reason this patch never hit my inbox, despite all the other
+patches in this series arriving ... who knows ... ?
 
-I thought testing for the compiler feature was preferred, but I can
-certainly just increase the minimum version number here too.
+Regardless, it looks good to me so I've just merged it into
+selinux/next, thanks!
 
-Sami
+-- 
+paul-moore.com
