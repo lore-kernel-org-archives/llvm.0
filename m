@@ -1,46 +1,53 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 231652F21
-	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 13:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754EA2F21
+	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 13:15:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649077547; x=1680613547;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KpMYCfde85sh/66ugKEnZNtNPom49Jb6tJDgfq2nsdk=;
-  b=HgJxH9fHVnfSArrW+T5IZOz0Fi0n3a1v2kRN89bj6LmAdlF/u4hweCJh
-   hz7wkt0oP3qkrTHW8YdwmeSMODQ75DeAJMr3Fp+n3bdhF2k87bHrn6hbQ
-   NSGkG9KZ+abcOSQ0Lx2QoStWwKHCytZEjx1oB7kqSnqbznPstTNjYBD2C
-   lKwxZVJQgiRduIkEWbfLllZRShFXaE9nI+XbTUesINbb4CfNDnRpzhOq1
-   lKcuacrsFVQymUUMRsysAHTGpCOEBQb1HNLf7AxSGrkoQDm10MFzAllVg
-   QlIxrZY7jWc6N8fgimjH46MU8TDScBy9JhHbFYz/1HlVxSwxcCs1O9vx5
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="260497190"
+  t=1649078119; x=1680614119;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DzYh2TT2DOKLLMChVIhAuZom8iBz7Y6etMyMErPF8Hk=;
+  b=dbOp9/PyMs/+YaTkn+Zk0MQV1p0NvNG45O6XzvYsDS+33ngs3IzC5VNm
+   LjL9x+X+/N7nbsHN7np29JE8QPTm/psXVxzzVFNpZ4zwEbR7ZbP0uxzep
+   Ecgt11DRSCvUxLkSX5PjGRbxdqrZLNjC6dVgJmRX3g/ldBpfqblezXovU
+   wUDC8252irj0AsD8JkckuwzI/6N0epn/sjOQMPvNc2BzPmq4o9MfZzdKG
+   4Ft060mfTSVK5UnM9HJIyQdWox16+6bWEx3l0nEKoZ8FuiJAKn4zTXOwD
+   CNkg418N+j4/+uSLT0Z7PHmda5QcFUfnUkci/180AXbKAJXFpk8jPMczy
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="242652090"
 X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="260497190"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 06:05:17 -0700
+   d="scan'208";a="242652090"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 06:15:19 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="721639506"
+   d="scan'208";a="850033258"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 04 Apr 2022 06:05:14 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 04 Apr 2022 06:15:14 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nbMOQ-00024D-2b;
-	Mon, 04 Apr 2022 13:05:14 +0000
-Date: Mon, 4 Apr 2022 21:04:20 +0800
+	id 1nbMY6-00024n-Ar;
+	Mon, 04 Apr 2022 13:15:14 +0000
+Date: Mon, 4 Apr 2022 21:14:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org
+To: Miguel Ojeda <ojeda@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH 7/8] posix_types.h: add __kernel_uintptr_t to UAPI
- posix_types.h
-Message-ID: <202204042058.5Kr6q6YX-lkp@intel.com>
-References: <20220404061948.2111820-8-masahiroy@kernel.org>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Finn Behrens <me@kloenk.de>,
+	Adam Bratschi-Kaye <ark.email@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@google.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Sven Van Asbroeck <thesven73@gmail.com>,
+	Gary Guo <gary@garyguo.net>, Boris-Chengbiao Zhou <bobo1239@web.de>,
+	Boqun Feng <boqun.feng@gmail.com>, Douglas Su <d0u9.su@outlook.com>,
+	Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+	Antonio Terceiro <antonio.terceiro@linaro.org>,
+	Daniel Xu <dxu@dxuuu.xyz>, Miguel Cano <macanroj@gmail.com>
+Subject: [linux-next:master 1141/1176] include/asm-generic/io.h:464:31:
+ warning: performing pointer arithmetic on a null pointer has undefined
+ behavior err: false
+Message-ID: <202204042148.V5rM3bkT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,129 +56,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220404061948.2111820-8-masahiroy@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Masahiro,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on linux/master v5.18-rc1 next-20220404]
-[cannot apply to soc/for-next drm/drm-next powerpc/next uclinux-h8/h8300-next s390/features arnd-asm-generic/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
-config: arm-randconfig-r016-20220404 (https://download.01.org/0day-ci/archive/20220404/202204042058.5Kr6q6YX-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   696206280c5e5c028caf9fd259999cb72b1f6127
+commit: 241608fc4d70999563abc1ad52e5114f0021af88 [1141/1176] Kbuild: add Rust support
+config: riscv-randconfig-c006-20220404 (https://download.01.org/0day-ci/archive/20220404/202204042148.V5rM3bkT-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/e8154d995f34b79843e473d85645fb543d554e7f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
-        git checkout e8154d995f34b79843e473d85645fb543d554e7f
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=241608fc4d70999563abc1ad52e5114f0021af88
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 241608fc4d70999563abc1ad52e5114f0021af88
         # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/misc/ sound/soc/fsl/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/misc/fastrpc.c:1639:43: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
-                   dev_dbg(dev, "unmmap\tpt 0x%09lx OK\n", buf->raddr);
-                                              ~~~~~        ^~~~~~~~~~
-                                              %09x
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
-   drivers/misc/fastrpc.c:1645:46: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
-                   dev_err(dev, "unmmap\tpt 0x%09lx ERROR\n", buf->raddr);
-                                              ~~~~~           ^~~~~~~~~~
-                                              %09x
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/misc/fastrpc.c:1737:3: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
-                   buf->raddr, buf->size);
-                   ^~~~~~~~~~
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
-   3 warnings generated.
---
->> sound/soc/fsl/imx-audmux.c:148:40: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
-                   snprintf(buf, sizeof(buf), "ssi%lu", i);
-                                                  ~~~   ^
-                                                  %u
-   1 warning generated.
+>> include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+>> include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior err: false
+   cannot find function `iounmap` in module `bindings`
+   --> rust/kernel/io_mem.rs:235:28
+   |
+   235 | unsafe { bindings::iounmap(self.ptr as _) };
+   | ^^^^^^^ help: a function with a similar name exists: `ioremap`
+   |
+   ::: rust/bindings_helpers_generated.rs:40:5
+   |
+   40 | / pub fn ioremap(
+   41 | | offset: resource_size_t,
+   42 | | size: c_types::c_ulong,
+   43 | | ) -> c_types::c_void;
+   | |______________________________- similarly named function `ioremap` defined here
 
 
-vim +1639 drivers/misc/fastrpc.c
+vim +464 include/asm-generic/io.h
 
-6c16fd8bdd4058 Jeya R              2022-02-14  1604  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1605  static int fastrpc_req_munmap_impl(struct fastrpc_user *fl,
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1606  				   struct fastrpc_req_munmap *req)
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1607  {
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1608  	struct fastrpc_invoke_args args[1] = { [0] = { 0 } };
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1609  	struct fastrpc_buf *buf, *b;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1610  	struct fastrpc_munmap_req_msg req_msg;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1611  	struct device *dev = fl->sctx->dev;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1612  	int err;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1613  	u32 sc;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1614  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1615  	spin_lock(&fl->lock);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1616  	list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1617  		if ((buf->raddr == req->vaddrout) && (buf->size == req->size))
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1618  			break;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1619  		buf = NULL;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1620  	}
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1621  	spin_unlock(&fl->lock);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1622  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1623  	if (!buf) {
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1624  		dev_err(dev, "mmap not in list\n");
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1625  		return -EINVAL;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1626  	}
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1627  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1628  	req_msg.pgid = fl->tgid;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1629  	req_msg.size = buf->size;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1630  	req_msg.vaddr = buf->raddr;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1631  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1632  	args[0].ptr = (u64) (uintptr_t) &req_msg;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1633  	args[0].length = sizeof(req_msg);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1634  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1635  	sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_MUNMAP, 1, 0);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1636  	err = fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE, sc,
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1637  				      &args[0]);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1638  	if (!err) {
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09 @1639  		dev_dbg(dev, "unmmap\tpt 0x%09lx OK\n", buf->raddr);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1640  		spin_lock(&fl->lock);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1641  		list_del(&buf->node);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1642  		spin_unlock(&fl->lock);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1643  		fastrpc_buf_free(buf);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1644  	} else {
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1645  		dev_err(dev, "unmmap\tpt 0x%09lx ERROR\n", buf->raddr);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1646  	}
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1647  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1648  	return err;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1649  }
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1650  
+3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
+9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
+9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
+9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
+9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
+9216efafc52ff9 Thierry Reding 2014-10-01  455   */
+9216efafc52ff9 Thierry Reding 2014-10-01  456  
+f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
+f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
+214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
+9216efafc52ff9 Thierry Reding 2014-10-01  460  {
+87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
+87fe2d543f8173 Sinan Kaya     2018-04-05  462  
+87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
+87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
+abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
+87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
+9216efafc52ff9 Thierry Reding 2014-10-01  467  }
+9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
+9216efafc52ff9 Thierry Reding 2014-10-01  469  
+
+:::::: The code at line 464 was first introduced by commit
+:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
+
+:::::: TO: Sinan Kaya <okaya@codeaurora.org>
+:::::: CC: Arnd Bergmann <arnd@arndb.de>
 
 -- 
 0-DAY CI Kernel Test Service
