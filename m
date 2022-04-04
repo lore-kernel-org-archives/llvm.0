@@ -1,36 +1,51 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D587C
-	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 09:03:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D3D7C340F3;
-	Mon,  4 Apr 2022 09:03:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1649062995;
-	bh=bc9dhJ25NRgwnJv552m6vx+WUsOE7TY5Mhjhgf+DSOo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A+mzOMUOX7/dVRw0BiZUbyGk3kEDYVlm2X9fuRp2IHwXCkNOcesJVKMgdz01b3zf3
-	 Otp8wIOXtW6663J6Gde6vqftmjaaTHPkWIWFl0y35wVT6bKhJ1uSdNuIPZqW44srWq
-	 UEePwddtQA7Y8gcTQPqAK4IXAIPYDec8NI4paNkh85CNrpkTBw+zZ2Rjkrqqxh+6X1
-	 TEIBycWYjt83Jo0CxZ5r0kArid12vmPnnjGxsuGMiGKtvplXwnxWwFKvG6vGSThjh9
-	 KaYjHEHdTZl6jRXoHx1TQ0n2qdlNGfYXxYKTX/SRnuJYFFbgix5oJ1BdEtTsxc/Jgh
-	 wzfkBR39eGo4w==
-Date: Mon, 4 Apr 2022 10:03:09 +0100
-From: Will Deacon <will@kernel.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3] arm64: Drop the inline assembly implementation of
- function_nocfi
-Message-ID: <20220404090309.GA22649@willie-the-truck>
-References: <20220401201916.1487500-1-samitolvanen@google.com>
- <20220401201916.1487500-4-samitolvanen@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC97C7C
+	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 09:19:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649063954; x=1680599954;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PRmUoYnR9ObRGY4bAzNyOUan5LivX4ITkvO/QgDSiUo=;
+  b=H0AVWNdbn3dmcfPAp7gOdxGxdQO3/635iL/ovuzNiCKNNaul19y/qO5Z
+   FVq0Ed/YGPCvx2SLZTXg9JIceJx/hakKLlWMTG0M+BBVcobz1wSFXQjcT
+   2JHZ5gu+ruYcBlGC3c0uVigNwRYrYD8XzVdTo2rl7GK+z6g7sae+sCCX1
+   K2fmcFwzLkcg13IO40VAVLz+BIo3INOWgMCtKvD4Hte98qOJzUXGpgKyN
+   candbFhyJ2yMdze6gzpJsIX5R5FqQUheFbDIBeSgqO4lzGUV82bCf3sP/
+   1xgfGb+R6lqyqeOVhzBVe4OlFKn7hSRUOkD9Cnc1n70rkb0CsBq0NghzB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="346912469"
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="346912469"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 02:19:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="657429136"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 04 Apr 2022 02:19:10 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nbIrd-0001wT-Os;
+	Mon, 04 Apr 2022 09:19:09 +0000
+Date: Mon, 4 Apr 2022 17:18:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mattias Forsblad <mattias.forsblad@gmail.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Andrew Lunn <andrew@lunn.ch>,
+	Vivien Didelot <vivien.didelot@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Tobias Waldekranz <tobias@waldekranz.com>,
+	Mattias Forsblad <mattias.forsblad@gmail.com>
+Subject: Re: [PATCH v2 net-next 1/2] net: tc: dsa: Add the matchall filter
+ with drop action for bridged DSA ports.
+Message-ID: <202204041711.z39NxDjM-lkp@intel.com>
+References: <20220404063327.1017157-2-mattias.forsblad@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,46 +54,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220401201916.1487500-4-samitolvanen@google.com>
+In-Reply-To: <20220404063327.1017157-2-mattias.forsblad@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Apr 01, 2022 at 01:19:16PM -0700, Sami Tolvanen wrote:
-> Drop the inline assembly version of function_nocfi() now that
-> CONFIG_CFI_CLANG depends on __builtin_function_start(), which allows
-> this macro to be implemented more cleanly and in a way that works also
-> with static initializers.
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->  arch/arm64/include/asm/compiler.h | 16 ----------------
->  1 file changed, 16 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
-> index dc3ea4080e2e..6fb2e6bcc392 100644
-> --- a/arch/arm64/include/asm/compiler.h
-> +++ b/arch/arm64/include/asm/compiler.h
-> @@ -23,20 +23,4 @@
->  #define __builtin_return_address(val)					\
->  	(void *)(ptrauth_clear_pac((unsigned long)__builtin_return_address(val)))
->  
-> -#ifdef CONFIG_CFI_CLANG
-> -/*
-> - * With CONFIG_CFI_CLANG, the compiler replaces function address
-> - * references with the address of the function's CFI jump table
-> - * entry. The function_nocfi macro always returns the address of the
-> - * actual function instead.
-> - */
-> -#define function_nocfi(x) ({						\
-> -	void *addr;							\
-> -	asm("adrp %0, " __stringify(x) "\n\t"				\
-> -	    "add  %0, %0, :lo12:" __stringify(x)			\
-> -	    : "=r" (addr));						\
-> -	addr;								\
-> -})
-> -#endif
-> -
->  #endif /* __ASM_COMPILER_H */
+Hi Mattias,
 
-Acked-by: Will Deacon <will@kernel.org>
+Thank you for the patch! Perhaps something to improve:
 
-Will
+[auto build test WARNING on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mattias-Forsblad/net-tc-dsa-Implement-offload-of-matchall-for-bridged-DSA-ports/20220404-143446
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 89695196f0ba78a17453f9616355f2ca6b293402
+config: arm-randconfig-r021-20220404 (https://download.01.org/0day-ci/archive/20220404/202204041711.z39NxDjM-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/6781e2f5653edf4eeab1aa2996a250b942f2b19b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mattias-Forsblad/net-tc-dsa-Implement-offload-of-matchall-for-bridged-DSA-ports/20220404-143446
+        git checkout 6781e2f5653edf4eeab1aa2996a250b942f2b19b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/dsa/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/dsa/slave.c:1307:9: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
+           return err;
+                  ^~~
+   net/dsa/slave.c:1289:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MICREL_PHY
+   Depends on NETDEVICES && PHYLIB && PTP_1588_CLOCK_OPTIONAL
+   Selected by
+   - KS8851_MLL && NETDEVICES && ETHERNET && NET_VENDOR_MICREL && HAS_IOMEM
+
+
+vim +/err +1307 net/dsa/slave.c
+
+  1278	
+  1279	static int
+  1280	dsa_slave_add_cls_matchall_drop(struct net_device *dev,
+  1281					struct tc_cls_matchall_offload *cls,
+  1282					bool ingress)
+  1283	{
+  1284		struct dsa_port *dp = dsa_slave_to_port(dev);
+  1285		struct dsa_slave_priv *p = netdev_priv(dev);
+  1286		struct dsa_mall_tc_entry *mall_tc_entry;
+  1287		struct dsa_mall_drop_tc_entry *drop;
+  1288		struct dsa_switch *ds = dp->ds;
+  1289		int err;
+  1290	
+  1291		if (!ds->ops->bridge_local_rcv)
+  1292			return -EOPNOTSUPP;
+  1293	
+  1294		mall_tc_entry = kzalloc(sizeof(*mall_tc_entry), GFP_KERNEL);
+  1295		if (!mall_tc_entry)
+  1296			return -ENOMEM;
+  1297	
+  1298		mall_tc_entry->cookie = cls->cookie;
+  1299		mall_tc_entry->type = DSA_PORT_MALL_DROP;
+  1300		drop = &mall_tc_entry->drop;
+  1301		drop->enable = true;
+  1302		dp->bridge->local_rcv = 0;
+  1303		dsa_slave_bridge_foreign_if_check(dp->bridge->dev, drop);
+  1304	
+  1305		list_add_tail(&mall_tc_entry->list, &p->mall_tc_list);
+  1306	
+> 1307		return err;
+  1308	}
+  1309	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
