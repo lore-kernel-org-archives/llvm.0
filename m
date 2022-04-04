@@ -1,58 +1,135 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34BC3200
-	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 19:51:31 +0000 (UTC)
-Received: by mail-ej1-f50.google.com with SMTP id bg10so22254122ejb.4
-        for <llvm@lists.linux.dev>; Mon, 04 Apr 2022 12:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=lFAH71l5hLiHoLrZZzcQ02KILOzB/xZrhEV5P4Wdld0=;
-        b=Qtgc6aj81PF27HwqIjmLraR6kbD2g1Edk4JH8jLfIYET3iNb8qoEFoYXBH7BjQQ4GM
-         8tI8gHZon9drp8BlL8xeRuAcE5a116BvXuPVakbHx/K7tjVwbPt2Iv0EgfnkErFL7ZKb
-         GNPkfF0lafnWM+sKawmBrReiH9Tf1xoDFXKhOshkxy3PvO+49x7jxaf+NtrpcqbqDN0u
-         HF9O5wopaviUM8YsGqJWOON5RVGwN4Hc+4xtI+iR3JwhkL3kDBu86Vv5xOpzCU2D+Oi6
-         xN8IfSCARpRBNSNax9wqlfP4rVBgL6u1JtzjiRUMQAoOcFfi1RpuPbk7nXbPj+R2zLB6
-         Z+KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=lFAH71l5hLiHoLrZZzcQ02KILOzB/xZrhEV5P4Wdld0=;
-        b=l7WjK4nnrJlea4NpomwullB7zDTL/3KArwtVh6nyJMcEbbf6tKs7LJUjdlHbrDP+be
-         4mnJtXlCueB2kofTeAVDXgFSRtOgHXJQkmYvxqbyRHZdxtZudWOEJ539JKR+CQpjPVug
-         sTqi5jSWQ/Y4Q9aeOtvRNr+ZYYXzIgesvDhxoWBWPcGPwXQkxwvyXhVtZTo/jaVnhTGW
-         bNrLC+bQRlfGln2XzZdfCwqODsKuG4ALIu6FpXs0QmOYWPlWeLCBfAkJnnOPIbkmTSU5
-         w4uJCzo1O50imeMnbxvMW1LHPG7GvNy0NNdKitf6h6ECyvSN/yNr9ShbKiYnvIaS8iBA
-         grcA==
-X-Gm-Message-State: AOAM5325mHxnGFPon0M98tYPN+NnUsfnyPibDEQbeaGAa6hxvvhjUXl8
-	wMOfmrINAC4mBMU4UR1CSO01UXYNoSgSXUQYqShH
-X-Google-Smtp-Source: ABdhPJzZaJUJ9iytdCtow0Lr48mbggrWmuIS5YY0v6kb4vhoY/DawljwRSvPi9PvR8qF8W/yV7rYMKSCXNkibAXEfJE=
-X-Received: by 2002:a17:907:216f:b0:6ce:d85f:35cf with SMTP id
- rl15-20020a170907216f00b006ced85f35cfmr1720054ejb.517.1649101889842; Mon, 04
- Apr 2022 12:51:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3F328F3;
+	Mon,  4 Apr 2022 21:08:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58EE7C340F3;
+	Mon,  4 Apr 2022 21:08:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1649106511;
+	bh=lMFZzJK3d7b7zCNL7PVAqXkEUtWjmCH9N34EDxdccbc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=bVbvEY29tdsfqT/5ETEFVDzbQ12LdDJo1+j+PrvKJA2Vvlera/X/BqrspOXXgONOL
+	 r0u/ZV0rcxAmNgs8dxItcaluZwy+eMg4VcT1ix24MXSIyBT3s2qVgIrd3K5LiXHuBR
+	 gRRA+DXvABmxagsDWSXMsGS3B21HI0xY7Ao8OZgTS5QD/86Ubu7/d9S2EI5bmsxCUL
+	 jU2Ov8h1iH2g4ihtAHV8eMUPdDYs5jqs8sMNQ23pHMDar+RKy7FRslRQfuUz4fqfJz
+	 dAWLtN9q1K0hxmJ5f+rx091lsztNv+7tTi5CBf6MnLJKSnMLDE5NaUgGpYOJuyVKgm
+	 9+x3xsOvqRH6w==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] lib/raid6: Add -Wno-declaration-after-statement to NEON_FLAGS for clang < 14.0.1
+Date: Mon,  4 Apr 2022 14:08:05 -0700
+Message-Id: <20220404210804.3537324-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 4 Apr 2022 15:51:19 -0400
-Message-ID: <CAHC9VhT2fgrZ5Kcv=-xizUnv0kpr0x+v827YsHYGfos88LjkcQ@mail.gmail.com>
-Subject: Re: [PATCH 4/5] selinux: Remove redundant assignments
-To: michalorzel.eng@gmail.com
-Cc: Eric Paris <eparis@parisplace.org>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Paul Moore <paul@paul-moore.com>, selinux@vger.kernel.org, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-For some reason this patch never hit my inbox, despite all the other
-patches in this series arriving ... who knows ... ?
+After commit e8c07082a810 ("Kbuild: move to -std=gnu11"), there is a
+spew of warnings in lib/raid6/ when building arm64 defconfig plus
+CONFIG_CPU_BIG_ENDIAN=y with clang 14.0.0, which come from its
+arm_neon.h header:
 
-Regardless, it looks good to me so I've just merged it into
-selinux/next, thanks!
+lib/raid6/recov_neon_inner.c:55:8: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                vy = vshrq_n_u8(vx, 4);
+                     ^
+.../lib/clang/14.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+  uint8x16_t __ret; \
+             ^
 
+Looking at the header, the big endian version does mix declarations and
+code, due to the reversal of the first argument:
+
+  #ifdef __LITTLE_ENDIAN__
+  #define vshrq_n_u8(__p0, __p1) __extension__ ({ \
+    uint8x16_t __s0 = __p0; \
+    uint8x16_t __ret; \
+    __ret = (uint8x16_t) __builtin_neon_vshrq_n_v((int8x16_t)__s0, __p1, 48); \
+    __ret; \
+  })
+  #else
+  #define vshrq_n_u8(__p0, __p1) __extension__ ({ \
+    uint8x16_t __s0 = __p0; \
+    uint8x16_t __rev0;  __rev0 = __builtin_shufflevector(__s0, __s0, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0); \
+    uint8x16_t __ret; \
+    __ret = (uint8x16_t) __builtin_neon_vshrq_n_v((int8x16_t)__rev0, __p1, 48); \
+    __ret = __builtin_shufflevector(__ret, __ret, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0); \
+    __ret; \
+  })
+  #endif
+
+It was initially surprising that clang warned about a macro that
+originates from a system header, as this deviates from GCC. The
+machinery in clang to ignore warnings in macros from system headers is
+relatively new in clang (January 2022). When that change was landed, the
+code owner of clang was not confident that clang's diagnostic system
+provided enough information to avoid falsely disabling warnings that
+originated from user controlled code that was mixed with system macros,
+so the default behavior of warning within system macros remained
+unchanged. This deficiency is unlikely to further impact the kernel, as
+it does not use any system headers aside from SIMD intrinsic headers
+after commit 04e85bbf71c9 ("isystem: delete global -isystem compile
+option").
+
+Another interesting aspect of this warning's appearance is how it only
+appeared when moving from gnu89 to gnu11, as the above problem has
+always been relevant for clang, regardless of the C standard version
+used to build the kernel. In clang 14.0.0, -Wdeclaration-after-statement
+was made available under newer C standard versions; prior to that
+change, it was only available for C standard versions older than C99.
+
+https://github.com/llvm/llvm-project/commit/118f966b46cfb60897b56a9878e1c68fd0e2afa4
+
+When compiling for a C standard older than C99,
+-Wdeclaration-after-statement is an extension warning, which means it
+can be silenced with '__extension__', as the macro above does. However,
+starting with C99, using '__extension__' to silence the warning does not
+work, as mixing declarations and code is no longer an extension, which
+is why the warning appears for gnu11 and gnu89.
+
+Ultimately, this issue is resolved in clang 14.0.1 and 15.0.0 by making
+arm_neon.h fully compliant with -Wdeclaration-after-statement for all C
+standard versions. For older versions of clang, hide this warning for
+32-bit and 64-bit ARM big endian in files that use arm_neon.h.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+Link: https://github.com/llvm/llvm-project/issues/54062
+Link: https://github.com/llvm/llvm-project/commit/5a2e56b70e2fa7ad0d82e54bc4c741b16f05e475
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ lib/raid6/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/lib/raid6/Makefile b/lib/raid6/Makefile
+index 45e17619422b..f0a17bc7bd1d 100644
+--- a/lib/raid6/Makefile
++++ b/lib/raid6/Makefile
+@@ -41,6 +41,12 @@ NEON_FLAGS += -isystem $(shell $(CC) -print-file-name=include)
+ ifeq ($(ARCH),arm)
+ NEON_FLAGS += -march=armv7-a -mfloat-abi=softfp -mfpu=neon
+ endif
++# https://github.com/ClangBuiltLinux/linux/issues/1603
++ifdef CONFIG_CPU_BIG_ENDIAN
++ifeq ($(shell test $(CONFIG_CLANG_VERSION) -lt 140001; echo $$?),0)
++NEON_FLAGS += -Wno-declaration-after-statement
++endif
++endif
+ CFLAGS_recov_neon_inner.o += $(NEON_FLAGS)
+ ifeq ($(ARCH),arm64)
+ CFLAGS_REMOVE_recov_neon_inner.o += -mgeneral-regs-only
+
+base-commit: 3123109284176b1532874591f7c81f3837bbdc17
 -- 
-paul-moore.com
+2.35.1
+
