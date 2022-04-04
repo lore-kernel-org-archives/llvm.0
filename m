@@ -1,44 +1,39 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562E228F3
-	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 22:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649109758; x=1680645758;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=f3aUY8VWtCtPPO75paDxdZ+k3UL8z8cSAIdhYWxANt8=;
-  b=YkLUY05s+l94XKVLaczRDZdFdkHn/Zhujo4EJ9RejEWgxILfq1w3/23V
-   eHtF4hAOpiWEF99zWLprvEIl0pGr24kAEL156Q6dY0cnq95Ktqvx2T1Rk
-   cYs9if9CdhVLODvK7YJR55PCkJc5iabKmYOJRX8xPNLj8ri69KTrww0Rn
-   +zy08SnHsjVEwfeJ0X2DEloVz3i1EklN6XRSL/rzAzL6j8uMY3Sv40rl8
-   OSExdVgTWSatcSBhUU1KwFMghoPuNq8Ubi1MCZIxBQ2BVIBU9SwQnIu1P
-   g0zE+uuCshP/jHrsbm4mfiSkgNvaaDAffCP8RNMQjWbZ0k/vGGm3zNYv8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260605581"
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="260605581"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 15:02:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="721809578"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 04 Apr 2022 15:02:35 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nbUmR-0002OQ-5x;
-	Mon, 04 Apr 2022 22:02:35 +0000
-Date: Tue, 5 Apr 2022 06:02:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Becle Lee <becle.lee@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Hersen Wu <hersenxs.wu@amd.com>, Aric Cyr <Aric.Cyr@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hubp.c:1319:6:
- warning: no previous prototype for function 'hubp1_wait_pipe_read_start'
-Message-ID: <202204050538.gofpqsjw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9EC07A
+	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 22:52:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFCC6C2BBE4;
+	Mon,  4 Apr 2022 22:52:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1649112733;
+	bh=54rQNEoc5ehhks896JDl4yq3WCx9/eYdhiBhR9iefCc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bF3QJRnbcjc8y6fPNoXkVkRgf5gEx3NVFnuts+9skTbjtP9eot8cnBXlFI8pw4fuE
+	 GDxPaF9NNC+WKlfDsnXfLMOEPfRc4SbvvzHprSmilCsuJiNcMP9TXgJX0wirB2EJU0
+	 1jt2jv3o/4kcckKRO0ZLqHFrWfTjDbf8Uy9BGbXRYBZHFHKIj0GPlWBKZvOJgZqbm9
+	 5c2ejL+9CkNE5w62Iy313yMgPWNfOLxHEqB+RZKw2gQBiiajiu/lpyCo/x+BlNMkoK
+	 HVm2lhF8OwyNiL9R63NGAXx12znc6NTHCGZABalsH/d85DkPbOIyGTj3JVExakaPjy
+	 Smyk9vwpAPC8Q==
+Date: Mon, 4 Apr 2022 15:52:11 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/3] kbuild: Change CFI_CLANG to depend on
+ __builtin_function_start
+Message-ID: <Ykt2mz3gBTAyu9pL@dev-arch.thelio-3990X>
+References: <20220401201916.1487500-1-samitolvanen@google.com>
+ <20220401201916.1487500-2-samitolvanen@google.com>
+ <CAK7LNAQoJWUscyxXVnOQ9924MYZwaZGgfBYSzmjJxKH_UC0Pkw@mail.gmail.com>
+ <CABCJKudaQJ0_e290gD+rG8SwEembd33ua1MG-w2OKRq3es8Kjw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,58 +42,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CABCJKudaQJ0_e290gD+rG8SwEembd33ua1MG-w2OKRq3es8Kjw@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3123109284176b1532874591f7c81f3837bbdc17
-commit: dd15640bcee5a5fa74fc52557dd6220f48b01116 drm/amd/display: Wait for hubp read line for Pollock
-date:   3 weeks ago
-config: x86_64-buildonly-randconfig-r004-20220404 (https://download.01.org/0day-ci/archive/20220405/202204050538.gofpqsjw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd15640bcee5a5fa74fc52557dd6220f48b01116
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dd15640bcee5a5fa74fc52557dd6220f48b01116
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/
+On Mon, Apr 04, 2022 at 12:40:46PM -0700, Sami Tolvanen wrote:
+> On Sat, Apr 2, 2022 at 6:32 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Sat, Apr 2, 2022 at 5:19 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+> > >
+> > > Clang 14 added support for the __builtin_function_start()
+> > > built-in function, which allows us to implement function_nocfi()
+> > > without architecture-specific inline assembly. This patch changes
+> > > CONFIG_CFI_CLANG to depend on the built-in and effectively upgrades
+> > > the minimum supported compiler version for CFI to Clang 14.
+> >
+> > From this description, I think the straight-forward change would be:
+> >
+> >     depends on CLANG_VERSION >= 120000
+> > -->
+> >     depends on CLANG_VERSION >= 140000
+> >
+> > Any reason to avoid this?
+> 
+> I thought testing for the compiler feature was preferred, but I can
+> certainly just increase the minimum version number here too.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I think we have been somewhat inconsistent with feature versus version
+checking. It might be nice to hash out when a feature check should be
+done instead of a version one.
 
-All warnings (new ones prefixed by >>):
+Generally, I think we tend to prefer version checks, as they are
+"cheaper" since we do not have to call the compiler again because we
+already cached the version code. When adding version checks, our policy
+has always been use the upstream version of LLVM that the feature in
+question shipped in, even if it is a top of tree version, as people who
+are using prereleased versions of LLVM should be frequently updating
+them.
 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hubp.c:1319:6: warning: no previous prototype for function 'hubp1_wait_pipe_read_start' [-Wmissing-prototypes]
-   void hubp1_wait_pipe_read_start(struct hubp *hubp)
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hubp.c:1319:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void hubp1_wait_pipe_read_start(struct hubp *hubp)
-   ^
-   static 
-   1 warning generated.
+Unfortunately, that does not always match reality. For example,
+Android's LLVM tracks the main branch but they are almost always behind
+by a few months. For example, the latest release is 14.0.4, based on a
+version of LLVM from January 28th:
 
+https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+/ab73cd180863dbd17fdb8f20e39b33ab38030cf9/clang-r450784b/clang_source_info.md
+https://github.com/llvm/llvm-project/commits/282c83c32384cb2f37030c28650fef4150a8b67c
 
-vim +/hubp1_wait_pipe_read_start +1319 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hubp.c
+Normally, I would say "who cares?" but Android's LLVM is used by the
+Android kernel team both downstream and upstream, so I would argue it is
+important to take that into account when deciding to do a feature check
+versus a version check. In other words, by moving to a version check,
+will we knowingly break a version of clang that is relatively widely
+used?
 
-  1313	
-  1314	/**
-  1315	 * hubp1_wait_pipe_read_start - wait for hubp ret path starting read.
-  1316	 *
-  1317	 * @hubp: hubp struct reference.
-  1318	 */
-> 1319	void hubp1_wait_pipe_read_start(struct hubp *hubp)
-  1320	{
-  1321		struct dcn10_hubp *hubp1 = TO_DCN10_HUBP(hubp);
-  1322	
-  1323		REG_WAIT(HUBPRET_READ_LINE_STATUS,
-  1324			PIPE_READ_VBLANK, 0,
-  1325			 1, 1000);
-  1326	}
-  1327	
+In this case, 14.0.4 has __builtin_function_start(), so I think it is
+okay to use a version check instead of a feature one.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+There are times where feature or problem checking is not always
+possible:
+
+https://lore.kernel.org/r/20220318230747.3900772-1-nathan@kernel.org/
+
+In cases like these, we can work to upgrade the compiler before changing
+the feature check ot a version one, which helps minimize the window for
+breakage.
+
+Another aspect of feature versus version checks is that it is easier to
+clean up stale versions checks when we bump the minimum supported
+version of the compiler (as we can just look for "CLANG_VERSION" across
+the tree) compared to stale feature checks. We could fix this by adding
+some sort of common keyword, like
+
+Compiler check: <compiler> <comparison> <version>
+
+like
+
+Compiler check: clang <= 14.0.0
+
+Cheers,
+Nathan
