@@ -1,136 +1,142 @@
-Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBCA02917
-	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 11:59:26 +0000 (UTC)
-Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-10.nifty.com with ESMTP id 234Br1bd012547
-	for <llvm@lists.linux.dev>; Mon, 4 Apr 2022 20:53:01 +0900
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182]) (authenticated)
-	by conssluserg-06.nifty.com with ESMTP id 234BqaCY029840
-	for <llvm@lists.linux.dev>; Mon, 4 Apr 2022 20:52:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 234BqaCY029840
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1649073157;
-	bh=o0CEGSP1e2YYpsGI9az2WVUOPk6c9w9P3gfAdmyO7Uc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=E8MfobFZVK8ZZQxYLzbKJ6zp1q6Sz3Uw800RrK88o11Qk16QEHemyg9CKKKiQ7uiT
-	 1xHRg/FRY6+WKeEHsJ92EGpEpOKsnckht/eN4Sd7ErsOcsEukYbtIBE/lsjz1YXatz
-	 HcsUkX2qUeTRSLUVFUyGEjeWIt1q8aTP4hWd0neGzjB2EqNEXYckgH1qDxCobLninL
-	 ma7XvS47Hejkma4NhSSHb24Gg3mz3+SntT7tic0co7uxiaI5ZRJMqZVpAD9yErVv7r
-	 xaFewky1AfsFFiOFFhK+rJf5Bna5NDr5tqxgtIOOUr+MOrsS+Ud/xcZpGR5JFWwAYl
-	 rvWzFtp+CBsBQ==
-X-Nifty-SrcIP: [209.85.215.182]
-Received: by mail-pg1-f182.google.com with SMTP id t4so8151865pgc.1
-        for <llvm@lists.linux.dev>; Mon, 04 Apr 2022 04:52:37 -0700 (PDT)
-X-Gm-Message-State: AOAM531BNs/4Ezl7adRq+G+UUQOkecMTYL/msm/iKdhdS0idLZatFkhF
-	5wPSolJLzx1prGGpkLt3hmpSKli1JN+4taTBGRI=
-X-Google-Smtp-Source: ABdhPJxpAflZ1zo/RzYQsDKbvL0aW1WHiC5n5tXhyZV4CBgRWCQ+qf1g/lRvJc/P5xo9O9x3afv09Iky27mpQ0iF8RA=
-X-Received: by 2002:a05:6a00:a02:b0:4fd:f9dd:5494 with SMTP id
- p2-20020a056a000a0200b004fdf9dd5494mr6135238pfh.68.1649073156402; Mon, 04 Apr
- 2022 04:52:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753672917
+	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 12:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649073752; x=1680609752;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wyMYjzXV6+0+TVWShJ+QuSmrkdWB2HoclgKdHoctNEk=;
+  b=NqHQZqvr+4eNQDTwy8wVOZ4cFEJ/sMqbQa2Cew9HtbuxY51Y9O6/lO2G
+   o0rspg/gkEnrCVeCGZ8MvaNbbS0O1kBuxwrtqqCFwfeSGcKeuVNWvGWtQ
+   GdODfnphhr+1hUiwwJ02d5rCICOpzpXqJ92lXPzdtPL7iaNcm4NpbluAK
+   4YOg4pnssCafeygTOHXcuNk+wj1/yqfNtyYp109HxbWVqq28qaoxt2vqt
+   cgmwLbvB+rY85qXNLq2pm/ssmnyVkeYH9cQThguFrSllWbj2MdYicImfv
+   29+Ry1TDMk4rFPAAp17OXgppwP3w43tU5GGTuagLsad0kRUEW2lbiBI9T
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="248010568"
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="248010568"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 05:02:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="587546022"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 04 Apr 2022 05:02:14 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nbLPQ-00021p-QQ;
+	Mon, 04 Apr 2022 12:02:12 +0000
+Date: Mon, 4 Apr 2022 20:02:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sven Peter <sven@svenpeter.dev>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [asahilinux:nvme-v2 5/6] drivers/soc/apple/rtkit.c:591:21: warning:
+ no previous prototype for function 'apple_rtkit_init'
+Message-ID: <202204041952.mbL4QEVS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220404061948.2111820-8-masahiroy@kernel.org> <202204041919.bIUKxOch-lkp@intel.com>
-In-Reply-To: <202204041919.bIUKxOch-lkp@intel.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 4 Apr 2022 20:51:47 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASGcNZx9Ec5jxn-Dy9YA1oVrHvnHs5Yp9r1DWbEZ=MVQA@mail.gmail.com>
-Message-ID: <CAK7LNASGcNZx9Ec5jxn-Dy9YA1oVrHvnHs5Yp9r1DWbEZ=MVQA@mail.gmail.com>
-Subject: Re: [PATCH 7/8] posix_types.h: add __kernel_uintptr_t to UAPI posix_types.h
-To: kernel test robot <lkp@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Apr 4, 2022 at 8:31 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Masahiro,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on linus/master]
-> [also build test WARNING on linux/master v5.18-rc1 next-20220404]
-> [cannot apply to soc/for-next drm/drm-next powerpc/next uclinux-h8/h8300-next s390/features arnd-asm-generic/master]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
-> config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220404/202204041919.bIUKxOch-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/e8154d995f34b79843e473d85645fb543d554e7f
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
->         git checkout e8154d995f34b79843e473d85645fb543d554e7f
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/fsl/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> sound/soc/fsl/imx-audmux.c:148:40: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
->                    snprintf(buf, sizeof(buf), "ssi%lu", i);
->                                                   ~~~   ^
->                                                   %u
->    1 warning generated.
->
+tree:   https://github.com/AsahiLinux/linux nvme-v2
+head:   76835054c23e3e3505f5967d8580d86618aca6ec
+commit: 689dd69e59bb68b19066104c34670d5dc272c946 [5/6] soc: apple: Add RTKit IPC library
+config: arm64-randconfig-r005-20220404 (https://download.01.org/0day-ci/archive/20220404/202204041952.mbL4QEVS-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/689dd69e59bb68b19066104c34670d5dc272c946
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux nvme-v2
+        git checkout 689dd69e59bb68b19066104c34670d5dc272c946
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/apple/
 
-Hmm, we highly relied on the fact that the pointer size and
-the 'long' size are the same.
-(for both 32-bit and 64-bit).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So,  using %lu specifier for printing 'uintptr_t' seems correct.
+All warnings (new ones prefixed by >>):
 
-  typedef   unsigned long    __kernel_uintptr_t;
+>> drivers/soc/apple/rtkit.c:591:21: warning: no previous prototype for function 'apple_rtkit_init' [-Wmissing-prototypes]
+   struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+                       ^
+   drivers/soc/apple/rtkit.c:591:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+   ^
+   static 
+>> drivers/soc/apple/rtkit.c:805:6: warning: no previous prototype for function 'apple_rtkit_free' [-Wmissing-prototypes]
+   void apple_rtkit_free(struct apple_rtkit *rtk)
+        ^
+   drivers/soc/apple/rtkit.c:805:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void apple_rtkit_free(struct apple_rtkit *rtk)
+   ^
+   static 
+   2 warnings generated.
 
-is OK from the kernel space perspective,
-but I do not know the impact to the userspace.
-
-Arnd, any thoughts?
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for VIDEO_V4L2_SUBDEV_API
+   Depends on MEDIA_SUPPORT && VIDEO_DEV && MEDIA_CONTROLLER
+   Selected by
+   - VIDEO_IMX_MIPI_CSIS && MEDIA_SUPPORT && MEDIA_PLATFORM_SUPPORT && MEDIA_PLATFORM_DRIVERS && (ARCH_MXC || COMPILE_TEST
 
 
+vim +/apple_rtkit_init +591 drivers/soc/apple/rtkit.c
 
-
-
-
-> vim +148 sound/soc/fsl/imx-audmux.c
->
-> 7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  139
-> b8909783a22b4f sound/soc/fsl/imx-audmux.c    Lars-Peter Clausen 2014-04-24  140  static void audmux_debugfs_init(void)
-> 7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  141  {
-> e5f89768e9bc1f sound/soc/fsl/imx-audmux.c    Mark Brown         2014-08-01  142         uintptr_t i;
-> 7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  143         char buf[20];
-> 7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  144
-> 7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  145         audmux_debugfs_root = debugfs_create_dir("audmux", NULL);
-> 7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  146
-> 409b78cc17a4a3 sound/soc/fsl/imx-audmux.c    Torben Hohn        2012-07-18  147         for (i = 0; i < MX31_AUDMUX_PORT7_SSI_PINS_7 + 1; i++) {
-> e5f89768e9bc1f sound/soc/fsl/imx-audmux.c    Mark Brown         2014-08-01 @148                 snprintf(buf, sizeof(buf), "ssi%lu", i);
-> 227ab8baa15bdd sound/soc/fsl/imx-audmux.c    Greg Kroah-Hartman 2019-06-14  149                 debugfs_create_file(buf, 0444, audmux_debugfs_root,
-> 227ab8baa15bdd sound/soc/fsl/imx-audmux.c    Greg Kroah-Hartman 2019-06-14  150                                     (void *)i, &audmux_debugfs_fops);
-> 7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  151         }
-> 7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  152  }
-> 3bc34a6143359d arch/arm/plat-mxc/audmux.c    Richard Zhao       2012-03-05  153
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
-
-
+   590	
+ > 591	struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+   592					     const char *mbox_name, int mbox_idx,
+   593					     const struct apple_rtkit_ops *ops)
+   594	{
+   595		struct apple_rtkit *rtk;
+   596		int ret;
+   597	
+   598		if (!ops)
+   599			return ERR_PTR(-EINVAL);
+   600	
+   601		rtk = kzalloc(sizeof(*rtk), GFP_KERNEL);
+   602		if (!rtk)
+   603			return ERR_PTR(-ENOMEM);
+   604	
+   605		rtk->dev = dev;
+   606		rtk->cookie = cookie;
+   607		rtk->ops = ops;
+   608	
+   609		init_completion(&rtk->epmap_completion);
+   610		init_completion(&rtk->reinit_completion);
+   611		init_completion(&rtk->iop_pwr_ack_completion);
+   612		init_completion(&rtk->ap_pwr_ack_completion);
+   613	
+   614		bitmap_zero(rtk->endpoints, APPLE_RTKIT_MAX_ENDPOINTS);
+   615		set_bit(APPLE_RTKIT_EP_MGMT, rtk->endpoints);
+   616	
+   617		rtk->mbox_name = mbox_name;
+   618		rtk->mbox_idx = mbox_idx;
+   619		rtk->mbox_cl.dev = dev;
+   620		rtk->mbox_cl.tx_block = true;
+   621		rtk->mbox_cl.knows_txdone = false;
+   622		rtk->mbox_cl.rx_callback = &apple_rtkit_rx_callback;
+   623	
+   624		ret = apple_rtkit_request_mbox_chan(rtk);
+   625		if (ret)
+   626			return (struct apple_rtkit *)ERR_PTR(ret);
+   627	
+   628		return rtk;
+   629	}
+   630	
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
