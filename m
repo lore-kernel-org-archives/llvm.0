@@ -1,51 +1,46 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC97C7C
-	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 09:19:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC832917
+	for <llvm@lists.linux.dev>; Mon,  4 Apr 2022 11:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649063954; x=1680599954;
+  t=1649071875; x=1680607875;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=PRmUoYnR9ObRGY4bAzNyOUan5LivX4ITkvO/QgDSiUo=;
-  b=H0AVWNdbn3dmcfPAp7gOdxGxdQO3/635iL/ovuzNiCKNNaul19y/qO5Z
-   FVq0Ed/YGPCvx2SLZTXg9JIceJx/hakKLlWMTG0M+BBVcobz1wSFXQjcT
-   2JHZ5gu+ruYcBlGC3c0uVigNwRYrYD8XzVdTo2rl7GK+z6g7sae+sCCX1
-   K2fmcFwzLkcg13IO40VAVLz+BIo3INOWgMCtKvD4Hte98qOJzUXGpgKyN
-   candbFhyJ2yMdze6gzpJsIX5R5FqQUheFbDIBeSgqO4lzGUV82bCf3sP/
-   1xgfGb+R6lqyqeOVhzBVe4OlFKn7hSRUOkD9Cnc1n70rkb0CsBq0NghzB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="346912469"
+  bh=ErXKJwnxX8hclXQqvYKDIF2ZZ3KufEcKMWs1slKVfPY=;
+  b=aqWWVANRfW6tRnubDWdO6j7jy0kxKl8xbvrBYM3sb5UJWB9VkrF7AeTM
+   rSxVJ8PFembyJom9T3RiOFtLPXdAiZoGxZ5MUeEhRPoyAPz5bkGwuI4ht
+   Ijev9M+w2dM2ZFTkRyrJ9cjxeJLJnMtvnbKYrJyLurkEAZBE169fIVe77
+   R9313lQ1DcxqcDW3FdJIwpUaCkkBZ/6Y/IRsOFz5oc6mw2GLJ/qkpx66y
+   TX9qUwnC4CWqob1avAVXWWoU7Twdt9muazRRpVX6kGf5esjDWrEfchcJe
+   uLvwuduWMgTV7Q5PEJ6gL6UC96wRMEt7KvO+L1vKxPqiSpptUmbj7QyEO
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="259323971"
 X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="346912469"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 02:19:13 -0700
+   d="scan'208";a="259323971"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 04:31:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="657429136"
+   d="scan'208";a="556127945"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 04 Apr 2022 02:19:10 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 04 Apr 2022 04:31:12 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nbIrd-0001wT-Os;
-	Mon, 04 Apr 2022 09:19:09 +0000
-Date: Mon, 4 Apr 2022 17:18:30 +0800
+	id 1nbKvP-00020N-Ri;
+	Mon, 04 Apr 2022 11:31:11 +0000
+Date: Mon, 4 Apr 2022 19:30:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mattias Forsblad <mattias.forsblad@gmail.com>, netdev@vger.kernel.org
+To: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Andrew Lunn <andrew@lunn.ch>,
-	Vivien Didelot <vivien.didelot@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Tobias Waldekranz <tobias@waldekranz.com>,
-	Mattias Forsblad <mattias.forsblad@gmail.com>
-Subject: Re: [PATCH v2 net-next 1/2] net: tc: dsa: Add the matchall filter
- with drop action for bridged DSA ports.
-Message-ID: <202204041711.z39NxDjM-lkp@intel.com>
-References: <20220404063327.1017157-2-mattias.forsblad@gmail.com>
+	linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH 7/8] posix_types.h: add __kernel_uintptr_t to UAPI
+ posix_types.h
+Message-ID: <202204041919.bIUKxOch-lkp@intel.com>
+References: <20220404061948.2111820-8-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,87 +49,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220404063327.1017157-2-mattias.forsblad@gmail.com>
+In-Reply-To: <20220404061948.2111820-8-masahiroy@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Mattias,
+Hi Masahiro,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on net-next/master]
+[auto build test WARNING on linus/master]
+[also build test WARNING on linux/master v5.18-rc1 next-20220404]
+[cannot apply to soc/for-next drm/drm-next powerpc/next uclinux-h8/h8300-next s390/features arnd-asm-generic/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mattias-Forsblad/net-tc-dsa-Implement-offload-of-matchall-for-bridged-DSA-ports/20220404-143446
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 89695196f0ba78a17453f9616355f2ca6b293402
-config: arm-randconfig-r021-20220404 (https://download.01.org/0day-ci/archive/20220404/202204041711.z39NxDjM-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220404/202204041919.bIUKxOch-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/6781e2f5653edf4eeab1aa2996a250b942f2b19b
+        # https://github.com/intel-lab-lkp/linux/commit/e8154d995f34b79843e473d85645fb543d554e7f
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mattias-Forsblad/net-tc-dsa-Implement-offload-of-matchall-for-bridged-DSA-ports/20220404-143446
-        git checkout 6781e2f5653edf4eeab1aa2996a250b942f2b19b
+        git fetch --no-tags linux-review Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
+        git checkout e8154d995f34b79843e473d85645fb543d554e7f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/dsa/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/fsl/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/dsa/slave.c:1307:9: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-           return err;
-                  ^~~
-   net/dsa/slave.c:1289:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
+>> sound/soc/fsl/imx-audmux.c:148:40: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
+                   snprintf(buf, sizeof(buf), "ssi%lu", i);
+                                                  ~~~   ^
+                                                  %u
    1 warning generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MICREL_PHY
-   Depends on NETDEVICES && PHYLIB && PTP_1588_CLOCK_OPTIONAL
-   Selected by
-   - KS8851_MLL && NETDEVICES && ETHERNET && NET_VENDOR_MICREL && HAS_IOMEM
 
+vim +148 sound/soc/fsl/imx-audmux.c
 
-vim +/err +1307 net/dsa/slave.c
-
-  1278	
-  1279	static int
-  1280	dsa_slave_add_cls_matchall_drop(struct net_device *dev,
-  1281					struct tc_cls_matchall_offload *cls,
-  1282					bool ingress)
-  1283	{
-  1284		struct dsa_port *dp = dsa_slave_to_port(dev);
-  1285		struct dsa_slave_priv *p = netdev_priv(dev);
-  1286		struct dsa_mall_tc_entry *mall_tc_entry;
-  1287		struct dsa_mall_drop_tc_entry *drop;
-  1288		struct dsa_switch *ds = dp->ds;
-  1289		int err;
-  1290	
-  1291		if (!ds->ops->bridge_local_rcv)
-  1292			return -EOPNOTSUPP;
-  1293	
-  1294		mall_tc_entry = kzalloc(sizeof(*mall_tc_entry), GFP_KERNEL);
-  1295		if (!mall_tc_entry)
-  1296			return -ENOMEM;
-  1297	
-  1298		mall_tc_entry->cookie = cls->cookie;
-  1299		mall_tc_entry->type = DSA_PORT_MALL_DROP;
-  1300		drop = &mall_tc_entry->drop;
-  1301		drop->enable = true;
-  1302		dp->bridge->local_rcv = 0;
-  1303		dsa_slave_bridge_foreign_if_check(dp->bridge->dev, drop);
-  1304	
-  1305		list_add_tail(&mall_tc_entry->list, &p->mall_tc_list);
-  1306	
-> 1307		return err;
-  1308	}
-  1309	
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  139  
+b8909783a22b4f sound/soc/fsl/imx-audmux.c    Lars-Peter Clausen 2014-04-24  140  static void audmux_debugfs_init(void)
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  141  {
+e5f89768e9bc1f sound/soc/fsl/imx-audmux.c    Mark Brown         2014-08-01  142  	uintptr_t i;
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  143  	char buf[20];
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  144  
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  145  	audmux_debugfs_root = debugfs_create_dir("audmux", NULL);
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  146  
+409b78cc17a4a3 sound/soc/fsl/imx-audmux.c    Torben Hohn        2012-07-18  147  	for (i = 0; i < MX31_AUDMUX_PORT7_SSI_PINS_7 + 1; i++) {
+e5f89768e9bc1f sound/soc/fsl/imx-audmux.c    Mark Brown         2014-08-01 @148  		snprintf(buf, sizeof(buf), "ssi%lu", i);
+227ab8baa15bdd sound/soc/fsl/imx-audmux.c    Greg Kroah-Hartman 2019-06-14  149  		debugfs_create_file(buf, 0444, audmux_debugfs_root,
+227ab8baa15bdd sound/soc/fsl/imx-audmux.c    Greg Kroah-Hartman 2019-06-14  150  				    (void *)i, &audmux_debugfs_fops);
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  151  	}
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  152  }
+3bc34a6143359d arch/arm/plat-mxc/audmux.c    Richard Zhao       2012-03-05  153  
 
 -- 
 0-DAY CI Kernel Test Service
