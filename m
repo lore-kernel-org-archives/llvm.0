@@ -1,97 +1,93 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D21321B
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 17:53:30 +0000 (UTC)
-Received: by mail-lj1-f179.google.com with SMTP id m12so6414065ljp.8
-        for <llvm@lists.linux.dev>; Tue, 05 Apr 2022 10:53:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E32321B
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 17:57:21 +0000 (UTC)
+Received: by mail-lf1-f41.google.com with SMTP id d5so24595112lfj.9
+        for <llvm@lists.linux.dev>; Tue, 05 Apr 2022 10:57:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MYJtsikWi9hIB8NHNY8S76MVB/wVdm4tXnry+6+yiEo=;
-        b=ijwBLjjh6lk3Bb+x9kE21mGPVSMbJnI+Yi/zPHj8mem2U9fEgN+edh+EmjEqa+XZcD
-         n/lfaXf0Tweh9j3vMEvYaRq5AnA39APG5yQv6NKxIshzQR69mp6t6YhwSPfx9qs+WETe
-         qzbk+Vb7I8DycQ3I99Ja5mziLFXJ/cQUDqh9BmEFPMUrEBXvhlToOea+VAhw6cZbQC74
-         NLoIe5lNwslTIQJXZenzM6298KtFhaCaJ7H2Dofx9iOBYLBqokApBi/5kHOVzBOSha+8
-         N0ViNXCPr1zN2Xi1NpaNTckkmR0R5uQew58xTxPUq6A6fCfWeEH1Zr8aSDV8F7XJ0RBt
-         zqUw==
+        bh=hBgkgZVxUFaHHWVT8MJPRfMm0CbtM8C9QcwHO150roA=;
+        b=cikBVFVsqfHRfiS3Za+lqvw+SF2Z6x/1MAsZHBWiKm3TYeQxJz3Y0V9vvb2Vr+8BwK
+         Jn1ZJp1uro8v3++kb/aq9ZfjZVI6oa3qIicCw98cuFEYl/dIeN/oj/xmGC4g2dqmIZqm
+         GU6YFirBWWt7ZxKJZRVr7StDOW++mx3rKhSt9xa1tOiTMyk7a+nTs04xo1uxfG6hIxBI
+         GOHsndkoLejoUUhZfN2WHf48bDJKSJQKfeGOyi6KSg4cZaKaVNFoY9HZ/jDgCuSjRyqh
+         Ls/cOFBuFDhnoL/DtPqxcNbIKqg9dVW60GggP6esN5jq3IZPfcDGEh5dDc4zL/J2B6rJ
+         ptow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MYJtsikWi9hIB8NHNY8S76MVB/wVdm4tXnry+6+yiEo=;
-        b=cajmBVlChqfOajPirrUYYc5sPh1J2vxti0tJKIhpywyePJ+Bp3jmn4TAsQNps+f701
-         undFNq8y0/RKU+x+2vj5b2x2GPLORvnepKiu8Ulok07NUAuOBamY2Abn1sTjwy5bXHJe
-         n86cLpZP5fm/yadBWIs2GRT9vkTbwOfqi57oNp3RLyA+pVFXwtFBQMX6HG4SJuWCR7Kh
-         oexNf72JpFhMlshzhy5dhj1/XXq8EkFY3u2gnFEwrkJXMhTmDadCqADQ+08ntGo0urFN
-         lak75nP24StfT8pA++CkqF868ra7Dk0tO5lL/EYcZo1MPhWE/XY0Qm0c2rp/KGT93HT7
-         /PYw==
-X-Gm-Message-State: AOAM532BHD6Lt8LauqSanxkMxoTdWkIKTPKG5O0Aqb3BppUKBcVkSb3r
-	adx2pgXF0bPKAfD/Ep43B9TfZXcWFFxXXXz11BGtuA==
-X-Google-Smtp-Source: ABdhPJxkfZhW0np+6HFZguzcslyOvUzoSGSv9BMWk5pjhEH5IyVC6Lb8xm3p/2a9i36EyTCg1IFq70K2lSb/IBVbZTs=
-X-Received: by 2002:a2e:9ec4:0:b0:24b:115c:aedb with SMTP id
- h4-20020a2e9ec4000000b0024b115caedbmr2807694ljk.235.1649181208750; Tue, 05
- Apr 2022 10:53:28 -0700 (PDT)
+        bh=hBgkgZVxUFaHHWVT8MJPRfMm0CbtM8C9QcwHO150roA=;
+        b=ZEb/wkJXWEmuswa6Xa1i5q3u+Kw9W9tuGDMmkeJS6XQsnHwQvaOyWCuZgByBjH7SGP
+         h5Z1WPLhKjXvhXGzmCiwrGiwFmOrzLweVZX72hoXIBAfPRNZHRReMUDVOr2qus8I6LNg
+         E5a+e4s+S1+bvgE9Rsyk5dKQdF3pNgnrhF4lYgD8Rhai9uKjrwdsGSEH+uJL1QsmVowT
+         xXFb8yhR8wzUZaWzfMWFKmjbU2Uuj9SVb35hTrnxRHbO4HiI15KGpEIFu4sL4K09ec6N
+         kzfj2KI0d/ebUHby/I7Bztqe2LzJBnv0Izz4JCaFOju1NM+iY6EFm8Wja0nML2vxxite
+         bvIQ==
+X-Gm-Message-State: AOAM530a04TlQYddzFjYfua37qzzlhdWlVNaMHqHQYFtkBt7gPRW9HKB
+	0vIGVWKCpP9skR7l03AzQRs6zyF05fivHiwzuYY2Ig==
+X-Google-Smtp-Source: ABdhPJz2VaFmMYt5PGtt9rPGIZ+g8Of7B0s0umeXy0XDUFW7BCfGgvKZYRvQKJox0fPHoaedJxkrhq2IosfOwyw+srk=
+X-Received: by 2002:a05:6512:33d4:b0:44a:9971:de48 with SMTP id
+ d20-20020a05651233d400b0044a9971de48mr3392619lfg.392.1649181439072; Tue, 05
+ Apr 2022 10:57:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220319143456.2159540-1-trix@redhat.com>
-In-Reply-To: <20220319143456.2159540-1-trix@redhat.com>
+References: <20220401230640.3196196-1-trix@redhat.com>
+In-Reply-To: <20220401230640.3196196-1-trix@redhat.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 5 Apr 2022 10:53:17 -0700
-Message-ID: <CAKwvOdkEnDBFUtio2+UVeV1J3QUwAJOc-YgcubDEUXHWMF5gbw@mail.gmail.com>
-Subject: Re: [PATCH] media: platform: return early if the iface is not handled
-To: trix@redhat.com
-Cc: laurent.pinchart@ideasonboard.com, mchehab@kernel.org, nathan@kernel.org, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
+Date: Tue, 5 Apr 2022 10:57:07 -0700
+Message-ID: <CAKwvOdng7CbqGrDH+WYwY0aAkjpW8mT428m4p=K8VTTD8ddV0Q@mail.gmail.com>
+Subject: Re: [PATCH] iwlwifi: mvm: initialize seq variable
+To: Tom Rix <trix@redhat.com>
+Cc: luciano.coelho@intel.com, kvalo@kernel.org, davem@davemloft.net, 
+	kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org, 
+	johannes.berg@intel.com, emmanuel.grumbach@intel.com, 
+	dan.carpenter@oracle.com, linux-wireless@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Mar 19, 2022 at 7:35 AM <trix@redhat.com> wrote:
->
-> From: Tom Rix <trix@redhat.com>
+On Fri, Apr 1, 2022 at 4:06 PM Tom Rix <trix@redhat.com> wrote:
 >
 > Clang static analysis reports this issue
-> ispcsiphy.c:63:14: warning: The left operand of '<<'
->   is a garbage value
->         reg |= mode << shift;
->                ~~~~ ^
-> The iface switch-statement default case falls through
-> to ISP_INTERFACE_CCP2B_PHY1.  Which is later checked
-> to set the mode.  Since the default case is left out
-> of this check mode is never set.  Instead of falling
-> through and assuming a ISP_INTERFACE_CCP2B_PHY1
-> iface, return.
+> d3.c:567:22: warning: The left operand of '>' is
+>   a garbage value
+>   if (seq.tkip.iv32 > cur_rx_iv32)
+>       ~~~~~~~~~~~~~ ^
 >
+> seq is never initialized. Call ieee80211_get_key_rx_seq() to
+> initialize seq.
+>
+> Fixes: 0419e5e672d6 ("iwlwifi: mvm: d3: separate TKIP data from key iteration")
 > Signed-off-by: Tom Rix <trix@redhat.com>
 
 Thanks for the patch!
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 > ---
->  drivers/media/platform/ti/omap3isp/ispcsiphy.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/net/wireless/intel/iwlwifi/mvm/d3.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/media/platform/ti/omap3isp/ispcsiphy.c b/drivers/media/platform/ti/omap3isp/ispcsiphy.c
-> index 6dc7359c5131d..1bde76c0adbee 100644
-> --- a/drivers/media/platform/ti/omap3isp/ispcsiphy.c
-> +++ b/drivers/media/platform/ti/omap3isp/ispcsiphy.c
-> @@ -31,7 +31,8 @@ static void csiphy_routing_cfg_3630(struct isp_csiphy *phy,
+> diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
+> index a995bba0ba81..9b190b3ce6c1 100644
+> --- a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
+> +++ b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
+> @@ -563,6 +563,7 @@ static void iwl_mvm_wowlan_get_tkip_data(struct ieee80211_hw *hw,
+>                 }
 >
->         switch (iface) {
->         default:
-> -       /* Should not happen in practice, but let's keep the compiler happy. */
-> +               /* Should not happen in practice, but let's keep the compiler happy. */
-> +               return;
->         case ISP_INTERFACE_CCP2B_PHY1:
->                 reg &= ~OMAP3630_CONTROL_CAMERA_PHY_CTRL_CSI1_RX_SEL_PHY2;
->                 shift = OMAP3630_CONTROL_CAMERA_PHY_CTRL_CAMMODE_PHY1_SHIFT;
+>                 for (i = 0; i < IWL_NUM_RSC; i++) {
+> +                       ieee80211_get_key_rx_seq(key, i, &seq);
+>                         /* wrapping isn't allowed, AP must rekey */
+>                         if (seq.tkip.iv32 > cur_rx_iv32)
+>                                 cur_rx_iv32 = seq.tkip.iv32;
 > --
-> 2.26.3
+> 2.27.0
 >
 
 
