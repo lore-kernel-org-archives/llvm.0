@@ -1,58 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE3E3216
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 21:26:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC823216
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 21:57:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649194000; x=1680730000;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+oTJs1jfnV9NW0n9SL3+E3IODEjehGaO0faXtMV5Vvo=;
-  b=VvzFjshKwVt8HbO4E6ampP1kvh4i+rvp9MvYnqsMnB0TrgnOY7Xrj5Y1
-   pl3MISi7ZWehi36ny7uBsjL0mwhQYLP8kZ0xL3xWYV+XOCqbP6SNz1UHV
-   yxBJYt5zrJiIon17YWiY0VDEhD8C9o3K7Jpjw1oFSRr4oGV2Xy4mwGmdO
-   0WFqg4wGDEaLZZn36YS7QJODa5yJUuPEGtAOQDegVfzj7dMstmxYdjz90
-   ZYknWZUui8ybqBHGfRc/y5SrM/pfbKguQAkt4+OO+i6r+V/2Nuxn7H7+H
-   dHVtu7RiowEeoHFz3oNx+yeP+fcCMaw6+Y5tZqSw47ByDSo6bQav4MIBq
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="285829202"
+  t=1649195859; x=1680731859;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0w8O0Vd1TQMF4m2IKNfcg2j0Z1CYEGhYwuFP/DSTEKM=;
+  b=WIJFwd5HdMav4jKQaut6IZhR428hmCroh7QyAGXLnwSUYmnyspAogXcZ
+   2iRWQx6fJYajMZ5Y+HUkFEwXneWkOZl/2actCs5vJtWpUCKKUCFQEj336
+   XloMto0eQH3TgGmh6MNZDNXP0akmktCV/8h3e8PZYnzaAhXrW4RcP+o21
+   tdhx9eD2ZdPaarax/aYaB5LYFUt6s2acDTPvPBlxJZuiPq/7ryz7mVRnb
+   9Ep6fZURHs6RSTCsarPALHHtlvSzoma4FfiWV1roI0DN5w15QepbM+yVC
+   AaRs7reLcAsVa2g18jamKEHyYpGLYLcXrMaw4/ZsSYfUgD32VogW0SKUg
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="321567126"
 X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="285829202"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:26:39 -0700
+   d="scan'208";a="321567126"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:57:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="641773595"
+   d="scan'208";a="608621905"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Apr 2022 14:26:34 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 05 Apr 2022 14:57:36 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nbqh8-0003ly-3e;
-	Tue, 05 Apr 2022 21:26:34 +0000
-Date: Wed, 6 Apr 2022 05:25:49 +0800
+	id 1nbrBA-0003np-2h;
+	Tue, 05 Apr 2022 21:57:36 +0000
+Date: Wed, 6 Apr 2022 05:56:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Masami Hiramatsu <mhiramat@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>
+To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Shubham Bansal <illusionist.neo@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
-	kernel-team@fb.com, Jiri Olsa <jolsa@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-	Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH bpf 4/4] arm64: rethook: Replace kretprobe trampoline
- with rethook
-Message-ID: <202204060512.Pzw5bnTd-lkp@intel.com>
-References: <164915126392.982637.10302202550404803304.stgit@devnote2>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-ringless 4/9]
+ net/rxrpc/local_object.c:172:24: warning: format specifies type 'unsigned
+ short' but the argument has type 'int'
+Message-ID: <202204060503.2pTsIRTu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,57 +47,209 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <164915126392.982637.10302202550404803304.stgit@devnote2>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Masami,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on bpf/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu/kprobes-rethook-ARM-arm64-Replace-kretprobe-trampoline-with-rethook/20220405-195153
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-config: arm64-randconfig-r022-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060512.Pzw5bnTd-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-ringless
+head:   a4b855ffcf1d116e65df68fa6f5df04878bc0083
+commit: 569092d7590362c7148ac768a923783886248c3b [4/9] rxrpc: Don't use a ring buffer for call Tx queue
+config: riscv-randconfig-r042-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060503.2pTsIRTu-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/74084aa7903f112b1c3df1f864d49b15d8aba270
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Masami-Hiramatsu/kprobes-rethook-ARM-arm64-Replace-kretprobe-trampoline-with-rethook/20220405-195153
-        git checkout 74084aa7903f112b1c3df1f864d49b15d8aba270
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/569092d7590362c7148ac768a923783886248c3b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-ringless
+        git checkout 569092d7590362c7148ac768a923783886248c3b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/rxrpc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm64/kernel/rethook.c:11:22: warning: no previous prototype for function 'arch_rethook_trampoline_callback' [-Wmissing-prototypes]
-   unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-                        ^
-   arch/arm64/kernel/rethook.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-   ^
-   static 
-   1 warning generated.
+   In file included from net/rxrpc/local_object.c:12:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from net/rxrpc/local_object.c:12:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from net/rxrpc/local_object.c:12:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> net/rxrpc/local_object.c:172:24: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                                     "krxrpctxd/%hu", ntohs(udp_conf.local_udp_port));
+                                                ~~~   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                %d
+   include/linux/kthread.h:54:48: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                                                    ~~~~~~~     ^~~~~~~~~~~
+   include/linux/kthread.h:28:66: note: expanded from macro 'kthread_create'
+           kthread_create_on_node(threadfn, data, NUMA_NO_NODE, namefmt, ##arg)
+                                                                ~~~~~~~    ^~~
+   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                    ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                       ^~~~~~~~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:43:26: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/rxrpc/local_object.c:246:23: warning: unused variable 'c' [-Wunused-variable]
+                   struct rxrpc_local *c = hlist_entry(cursor, struct rxrpc_local, link);
+                                       ^
+   9 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
+   Depends on HAS_IOMEM && DRM && MMU
+   Selected by
+   - DRM_SSD130X && HAS_IOMEM && DRM
 
 
-vim +/arch_rethook_trampoline_callback +11 arch/arm64/kernel/rethook.c
+vim +172 net/rxrpc/local_object.c
 
-     9	
-    10	/* This is called from arch_rethook_trampoline() */
-  > 11	unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-    12	{
-    13		return rethook_trampoline_handler(regs, regs->regs[29]);
-    14	}
-    15	NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-    16	
+   105	
+   106	/*
+   107	 * create the local socket
+   108	 * - must be called with rxrpc_local_mutex locked
+   109	 */
+   110	static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
+   111	{
+   112		struct udp_tunnel_sock_cfg tuncfg = {NULL};
+   113		struct sockaddr_rxrpc *srx = &local->srx;
+   114		struct udp_port_cfg udp_conf = {0};
+   115		struct task_struct *transmitter;
+   116		struct sock *usk;
+   117		int ret;
+   118	
+   119		_enter("%p{%d,%d}",
+   120		       local, srx->transport_type, srx->transport.family);
+   121	
+   122		udp_conf.family = srx->transport.family;
+   123		if (udp_conf.family == AF_INET) {
+   124			udp_conf.local_ip = srx->transport.sin.sin_addr;
+   125			udp_conf.local_udp_port = srx->transport.sin.sin_port;
+   126	#if IS_ENABLED(CONFIG_AF_RXRPC_IPV6)
+   127		} else {
+   128			udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
+   129			udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
+   130	#endif
+   131		}
+   132		ret = udp_sock_create(net, &udp_conf, &local->socket);
+   133		if (ret < 0) {
+   134			_leave(" = %d [socket]", ret);
+   135			return ret;
+   136		}
+   137	
+   138		tuncfg.encap_type = UDP_ENCAP_RXRPC;
+   139		tuncfg.encap_rcv = rxrpc_input_packet;
+   140		tuncfg.sk_user_data = local;
+   141		setup_udp_tunnel_sock(net, local->socket, &tuncfg);
+   142	
+   143		/* set the socket up */
+   144		usk = local->socket->sk;
+   145		usk->sk_error_report = rxrpc_error_report;
+   146	
+   147		switch (srx->transport.family) {
+   148		case AF_INET6:
+   149			/* we want to receive ICMPv6 errors */
+   150			ip6_sock_set_recverr(usk);
+   151	
+   152			/* Fall through and set IPv4 options too otherwise we don't get
+   153			 * errors from IPv4 packets sent through the IPv6 socket.
+   154			 */
+   155			fallthrough;
+   156		case AF_INET:
+   157			/* we want to receive ICMP errors */
+   158			ip_sock_set_recverr(usk);
+   159	
+   160			/* we want to set the don't fragment bit */
+   161			ip_sock_set_mtu_discover(usk, IP_PMTUDISC_DO);
+   162	
+   163			/* We want receive timestamps. */
+   164			sock_enable_timestamps(usk);
+   165			break;
+   166	
+   167		default:
+   168			BUG();
+   169		}
+   170	
+   171		transmitter = kthread_run(rxrpc_transmitter, local,
+ > 172					  "krxrpctxd/%hu", ntohs(udp_conf.local_udp_port));
+   173		if (IS_ERR(transmitter)) {
+   174			ret = PTR_ERR(transmitter);
+   175			goto error_sock;
+   176		}
+   177	
+   178		local->transmitter = transmitter;
+   179		_leave(" = 0");
+   180		return 0;
+   181	
+   182	error_sock:
+   183		kernel_sock_shutdown(local->socket, SHUT_RDWR);
+   184		local->socket->sk->sk_user_data = NULL;
+   185		sock_release(local->socket);
+   186		local->socket = NULL;
+   187		return ret;
+   188	}
+   189	
 
 -- 
 0-DAY CI Kernel Test Service
