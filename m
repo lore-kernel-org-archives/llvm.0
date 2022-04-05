@@ -1,103 +1,91 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38060321B
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 18:01:46 +0000 (UTC)
-Received: by mail-lj1-f172.google.com with SMTP id h11so69220ljb.2
-        for <llvm@lists.linux.dev>; Tue, 05 Apr 2022 11:01:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4270321B
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 18:05:41 +0000 (UTC)
+Received: by mail-lf1-f53.google.com with SMTP id e16so24620869lfc.13
+        for <llvm@lists.linux.dev>; Tue, 05 Apr 2022 11:05:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UtPjO+bxq+tkrbVKUaDcJXid+W/QeCc20ZhEe/m6WHk=;
-        b=Xq6IZspRICfswBPKfRG9/rkA8zzqUrYc8AEaIS7BqLjxD8XxrJt/TSd6TeV+PoOh+x
-         TWLTo87XR/66DLc3P6r3wOUKYiKC5VWuBkx+6ER1S5fqR8uVVLbE/Mnt/gH1EKOF0zMl
-         EMq7iQ4CLUD2xX1/ZT+FGVsskv4zGNk9k0kI+FnwBzf1dA/sQfweLGYAVlAZk6QClzZ1
-         nobRJrADpU/Tz+gYnl+iHQu9q539LiyMt0IlZ6xFi6lJArxzxWE3TK8eslO84swXM4xa
-         I4CGW7Vw9/WAuQl2A2SW1HyL4qebDsG468bz3mFPIUYcQxmjKImFm9B12ojvWxmqxxY5
-         SfIQ==
+        bh=X0ND6VwIEZwinAToHYv1JdQDzPnywveE91KVWFTQSKU=;
+        b=RBo9gfw+D1FKrMZUzQe7qcOB2qaHge7l/8AZd+/yufIzV5iTwW+v7Gjmkr/gKOAcNR
+         I2VGdF2YwGb7Zle/dZok5Yyl2CtHHebkp9lEYidiaJhOvNRNDTRQVF7A8nfj401cpygQ
+         FO2NhbyaeDO4GmHuxCFSiKMxVLVZMBk0GflYWXitt5FIktd0zIcCKMjhsaq2+XV96aWQ
+         ynP4oGJx6nvLzcrAbZ7wzwjeuf2QjqP3JYzssIEKsY4U3nzMObksFK1B2lE2y5EpJaSQ
+         fBPtz7EBAjtN5TKpS5F13PNhDk+urTpeI9xzG4SuKlQa2s11FC4PGryTK0PeQ5RBbjZ/
+         u4AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UtPjO+bxq+tkrbVKUaDcJXid+W/QeCc20ZhEe/m6WHk=;
-        b=2XaMVQRAaSgJGwJeVCoqg+tqX2pUQt0ebzg+xPM8vv9g7xSxJ9ux+E0HftbG+mK/Wm
-         I0O1R1OzhYf3ZbVgJjsew94menXRBzWDjm4+xL4nMhA5D0Vpb7DhNn4uqj4X2VbgyMsK
-         R703pHl4frsBcHpDIqkGT560DxA71hFeI+7bb+ewsDvgh50EPJulvjeRzw2SmIxnI+kx
-         M3QYcQHbiYp/amNbQKAIuB6kRlu0EwDYhRY3+EPeYx/X3+tsWmBJvgiJUNlMPkSiHYEn
-         P9YFUjLVFMR9EyrgtDx+hxtWscTl/+H+0uKSP2Au/ZhUpGOW89WApTu1CV/K8Ps4Dr3n
-         6Ssg==
-X-Gm-Message-State: AOAM533DwoTNaQXJpz/zwXn/lfUMOHlB+BIUjGePiVdCDaWk9e222Oo/
-	XLf+8BQsVs+ollcF8gDNwyurfUj/dfD8Y9XPFArWgw==
-X-Google-Smtp-Source: ABdhPJxmwIX/bZD6HHeBC8Mgm7SLI3AbupPtrtLQAue+dvE6QpFk1/V9rIQtTW8xUGyHm5vacR8kUrbKGxc6La1y6Es=
-X-Received: by 2002:a2e:b70d:0:b0:24b:11d8:8e63 with SMTP id
- j13-20020a2eb70d000000b0024b11d88e63mr2819981ljo.472.1649181704075; Tue, 05
- Apr 2022 11:01:44 -0700 (PDT)
+        bh=X0ND6VwIEZwinAToHYv1JdQDzPnywveE91KVWFTQSKU=;
+        b=kte8kBsXFiMvT9NTASvv4RRHxYpLfb3/Eaf3hqLD6EedKyjhs4Kl2A/pg2waVrvKhR
+         62w/6DyartXwCbgSXm/R7WpaGLa4sA54ngj0uh+G5T/S7rKz+VBW7nX0/gcWGLczw7iY
+         lnXLpFMKobKwow08KDt/06bVqvLPx6VfIPaVXbE5Gs56mlJ5e7EyCZ5BIWybQTmywOzx
+         aPd5HqDxqoMbVHCXQGZyCZmS0cHIvDjdDaQxGh7RR7GMgxa9LZelOXjVGSZyrbSa1awe
+         oy+V7VVcACPDL7chwWdo6XQUJOi8bGPnchickv6kGAKeQVgXFz7sccsyn0Z0HIp1ALHw
+         h6Ag==
+X-Gm-Message-State: AOAM533q40VKyepG7JFjWTi5MKFg6eGuyxABMmP8GN06WtszIFKVgohb
+	rKQjhd6Pmq4Y1mUHGze+ihU0dthh2QKKOTVOxFqSTA==
+X-Google-Smtp-Source: ABdhPJz8Ob2IFSJ2xU2SEyque7PyMmTt1CuxsFgqOZW+PCOTKSh0Ys9Ztyvr9JrHOENxXbwRXkEU1ITLIiTlI2b9UYE=
+X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id
+ i3-20020ac25223000000b004485100e427mr3474419lfl.87.1649181939752; Tue, 05 Apr
+ 2022 11:05:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220401233802.1710547-1-trix@redhat.com>
-In-Reply-To: <20220401233802.1710547-1-trix@redhat.com>
+References: <20220402131546.3383578-1-trix@redhat.com>
+In-Reply-To: <20220402131546.3383578-1-trix@redhat.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 5 Apr 2022 11:01:32 -0700
-Message-ID: <CAKwvOdkkfdjuNLzWimi+Q_PSD9T4ZxumBb+28g1vDbUX0VQVcg@mail.gmail.com>
-Subject: Re: [PATCH] iwlwifi: fw: move memset before early return
-To: Tom Rix <trix@redhat.com>
-Cc: luciano.coelho@intel.com, kvalo@kernel.org, davem@davemloft.net, 
-	kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org, 
-	johannes.berg@intel.com, mukesh.sisodiya@intel.com, 
-	mordechay.goodstein@intel.com, matti.gottlieb@intel.com, 
-	rotem.saado@intel.com, linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Tue, 5 Apr 2022 11:05:28 -0700
+Message-ID: <CAKwvOdnVcXgJtJsVujXpEVOLrY_BU5BPHN4tW_ziXNB-xnZPkw@mail.gmail.com>
+Subject: Re: [PATCH] lib: remove back_str initialization
+To: Tom Rix <trix@redhat.com>, Andrew Morton <akpm@linux-foundation.org>
+Cc: nathan@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Apr 1, 2022 at 4:38 PM Tom Rix <trix@redhat.com> wrote:
+On Sat, Apr 2, 2022 at 6:16 AM Tom Rix <trix@redhat.com> wrote:
 >
-> Clang static analysis reports this representative issue
-> dbg.c:1455:6: warning: Branch condition evaluates to
-> a garbage value
->   if (!rxf_data.size)
->        ^~~~~~~~~~~~~~
+> Clang static analysis reports this false positive
+> glob.c:48:32: warning: Assigned value is garbage
+>   or undefined
+>   char const *back_pat = NULL, *back_str = back_str;
+>                                 ^~~~~~~~   ~~~~~~~~
 >
-> This check depends on iwl_ini_get_rxf_data() to clear
-> rxf_data but the function can return early without
-> doing the clear.  So move the memset before the early
-> return.
+> back_str is set after back_pat and it's use is
+> protected by the !back_pat check.  It is not
+> necessary to initialize back_str, so remove
+> the initialization.
 >
-> Fixes: cc9b6012d34b ("iwlwifi: yoyo: use hweight_long instead of bit manipulating")
+
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Andrew, would you mind picking this up for us, please?
+
 > Signed-off-by: Tom Rix <trix@redhat.com>
-
-Conditional initialization in a helper is a pretty dangerous pattern.
-How about we move the memset to the two callers of
-iwl_ini_get_rxf_data?
-
 > ---
->  drivers/net/wireless/intel/iwlwifi/fw/dbg.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  lib/glob.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/net/wireless/intel/iwlwifi/fw/dbg.c b/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
-> index abf49022edbe..666de922af61 100644
-> --- a/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
-> +++ b/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
-> @@ -1388,13 +1388,13 @@ static void iwl_ini_get_rxf_data(struct iwl_fw_runtime *fwrt,
->         if (!data)
->                 return;
+> diff --git a/lib/glob.c b/lib/glob.c
+> index 85ecbda45cd8..15b73f490720 100644
+> --- a/lib/glob.c
+> +++ b/lib/glob.c
+> @@ -45,7 +45,7 @@ bool __pure glob_match(char const *pat, char const *str)
+>          * (no exception for /), it can be easily proved that there's
+>          * never a need to backtrack multiple levels.
+>          */
+> -       char const *back_pat = NULL, *back_str = back_str;
+> +       char const *back_pat = NULL, *back_str;
 >
-> +       memset(data, 0, sizeof(*data));
-> +
->         /* make sure only one bit is set in only one fid */
->         if (WARN_ONCE(hweight_long(fid1) + hweight_long(fid2) != 1,
->                       "fid1=%x, fid2=%x\n", fid1, fid2))
->                 return;
->
-> -       memset(data, 0, sizeof(*data));
-> -
->         if (fid1) {
->                 fifo_idx = ffs(fid1) - 1;
->                 if (WARN_ONCE(fifo_idx >= MAX_NUM_LMAC, "fifo_idx=%d\n",
+>         /*
+>          * Loop over each token (character or class) in pat, matching
 > --
 > 2.27.0
 >
