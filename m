@@ -1,39 +1,37 @@
-Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323062F3A
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 14:08:11 +0000 (UTC)
-Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-04.nifty.com with ESMTP id 235E43YN000625
-	for <llvm@lists.linux.dev>; Tue, 5 Apr 2022 23:04:03 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A042F3A
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 14:15:13 +0000 (UTC)
+Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-05.nifty.com with ESMTP id 235E3GVH008586
+	for <llvm@lists.linux.dev>; Tue, 5 Apr 2022 23:03:16 +0900
 Received: from grover.. (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-09.nifty.com with ESMTP id 235E2k8I021295;
-	Tue, 5 Apr 2022 23:02:46 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 235E2k8I021295
+	by conuserg-09.nifty.com with ESMTP id 235E2k8R021295;
+	Tue, 5 Apr 2022 23:02:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 235E2k8R021295
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1649167367;
-	bh=tlKllE+DeH+owxkSzZkT6wnBC6VcqxWAXsQhSEB8rk0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Uv4X9S8slbNYOacfNha8LhvGPEryM5kYHXmLEzvdr5IAfZaDURgz9esyRoB04c+5C
-	 hz1jkmpqUz+Ip3IV6aRBsB7/5c86PqqNgWgMijMJ0EdLZ3i2xMZoJZ1xXSqgcT6lKs
-	 ugNv2u7eEhu0EDi7YKN9ckmLl7vZnWW0x2mhEqtxgqv4zUsRWlam8hVy463NOjyUlf
-	 YmUqw4UJdABGIlAouutEFUA87PdtTb1qjRCFPWOGlPm8T5S7MBsTfsKLTyRBb3BNEw
-	 lefAHmSe4tGn9E2m39rmd8awrAPSD3hTlaxaAD+LT2E3/95Qmfmvmgh4WNANJMxMRP
-	 y7oEPJRf2fs4A==
+	s=dec2015msa; t=1649167373;
+	bh=dJWl8ojIyORclruErwON0RrHfXvcLP2fynkVmPN0hbY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=0gPpYwVK3J78cPN2gVBns4jH7jWVZYSc3UX75CeziI7H3kVcfTCd8d9UHrS/AdBae
+	 ZjdDIG4ThuMP/PenHWe53+DuMJ1vUlJsIzZyQK0jplBYNLwifcPme7ytjhd2VYj96Y
+	 HpSQiqEGJA8j1M9xB8pOccIuC8iFKLr1i/mGfJLeHdONBDVjEf6EO6/oY80iIVUgPY
+	 b9klvh05rqNnGODj03He6bxOfJRd8UnRFsW32Ce9CKFZhDm22zQfBy6ZXMLxPuaZdc
+	 yIv3Drz+jwjir8DnjfWtU3JSiMMqGPZ3jH+medfqTAS7QS8V/SwjK8sGTE2vxJx02K
+	 haYbgFw0TtIfA==
 X-Nifty-SrcIP: [133.32.177.133]
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Lobakin <alobakin@pm.me>,
         Michal Marek <michal.lkml@markovi.net>,
         Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <n.schier@avm.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev
-Subject: [PATCH v2 00/10] kbuild: misc cleanups
-Date: Tue,  5 Apr 2022 23:02:19 +0900
-Message-Id: <20220405140229.2895394-1-masahiroy@kernel.org>
+        Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Subject: [PATCH v2 09/10] kbuild: refactor cmd_modversions_c
+Date: Tue,  5 Apr 2022 23:02:28 +0900
+Message-Id: <20220405140229.2895394-10-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220405140229.2895394-1-masahiroy@kernel.org>
+References: <20220405140229.2895394-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,32 +40,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
+cmd_modversions_c implements two parts; run genksyms to calculate CRCs
+of exported symbols, run $(LD) to update the object with the CRCs. The
+latter is not executed for CONFIG_LTO_CLANG=y since the object is not
+ELF but LLVM bit code at this point.
 
-This is a series of prerequisite cleanups of my next work.
+The first part can be unified because we can always use $(NM) instead
+of "$(OBJDUMP) -h" to dump the symbols.
 
+Split the code into the two macros, cmd_gen_symversions_c and
+cmd_modversions.
 
-Masahiro Yamada (10):
-  kbuild: factor out genksyms command from cmd_gensymtypes_{c,S}
-  kbuild: do not remove empty *.symtypes explicitly
-  modpost: remove useless export_from_sec()
-  modpost: move export_from_secname() call to more relevant place
-  modpost: remove redundant initializes for static variables
-  modpost: remove annoying namespace_from_kstrtabns()
-  kbuild: get rid of duplication in the first line of *.mod files
-  kbuild: split the second line of *.mod into *.usyms
-  kbuild: refactor cmd_modversions_c
-  kbuild: refactor cmd_modversions_S
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
- .gitignore                  |  1 +
- Makefile                    |  2 +-
- scripts/Makefile.build      | 86 ++++++++++++++++---------------------
- scripts/adjust_autoksyms.sh |  2 +-
- scripts/gen_autoksyms.sh    | 18 +++++---
- scripts/mod/modpost.c       | 49 ++++++---------------
- scripts/mod/modpost.h       |  4 --
- scripts/mod/sumversion.c    | 11 +----
- 8 files changed, 64 insertions(+), 109 deletions(-)
+Changes in v2:
+ - new
 
+ scripts/Makefile.build | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
+
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index d934bdf84de4..ba2be555f942 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -169,29 +169,25 @@ ifdef CONFIG_MODVERSIONS
+ #   the actual value of the checksum generated by genksyms
+ # o remove .tmp_<file>.o to <file>.o
+ 
+-ifdef CONFIG_LTO_CLANG
+ # Generate .o.symversions files for each .o with exported symbols, and link these
+ # to the kernel and/or modules at the end.
+-cmd_modversions_c =								\
++gen_symversions =								\
+ 	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
+-		$(call cmd_gensymtypes_c,$(KBUILD_SYMTYPES),$(@:.o=.symtypes))	\
++		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
+ 		    > $@.symversions;						\
+ 	else									\
+ 		rm -f $@.symversions;						\
+-	fi;
+-else
+-cmd_modversions_c =								\
+-	if $(OBJDUMP) -h $@ | grep -q __ksymtab; then				\
+-		$(call cmd_gensymtypes_c,$(KBUILD_SYMTYPES),$(@:.o=.symtypes))	\
+-		    > $(@D)/.tmp_$(@F:.o=.ver);					\
+-										\
++	fi
++
++cmd_gen_symversions_c =	$(call gen_symversions,c)
++
++cmd_modversions =								\
++	if [ -r $@.symversions ]; then						\
+ 		$(LD) $(KBUILD_LDFLAGS) -r -o $(@D)/.tmp_$(@F) $@ 		\
+-			-T $(@D)/.tmp_$(@F:.o=.ver);				\
++			-T $@.symversions;					\
+ 		mv -f $(@D)/.tmp_$(@F) $@;					\
+-		rm -f $(@D)/.tmp_$(@F:.o=.ver);					\
+ 	fi
+ endif
+-endif
+ 
+ ifdef CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
+ # compiler will not generate __mcount_loc use recordmcount or recordmcount.pl
+@@ -269,7 +265,8 @@ define rule_cc_o_c
+ 	$(call cmd,checksrc)
+ 	$(call cmd,checkdoc)
+ 	$(call cmd,gen_objtooldep)
+-	$(call cmd,modversions_c)
++	$(call cmd,gen_symversions_c)
++	$(if $(CONFIG_LTO_CLANG),,$(call cmd,modversions))
+ 	$(call cmd,record_mcount)
+ endef
+ 
 -- 
 2.32.0
 
