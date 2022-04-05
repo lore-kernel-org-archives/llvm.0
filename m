@@ -1,137 +1,97 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FCA7C
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 16:42:50 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id b17so16598745lfv.3
-        for <llvm@lists.linux.dev>; Tue, 05 Apr 2022 09:42:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D21321B
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 17:53:30 +0000 (UTC)
+Received: by mail-lj1-f179.google.com with SMTP id m12so6414065ljp.8
+        for <llvm@lists.linux.dev>; Tue, 05 Apr 2022 10:53:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aVM16YtaCx1dYir94c9sxYwusYmuTqkX1MFty8IIFQk=;
-        b=YtUkRUgQkrt4P9V69iJ32ka9iOIb/+ccGqqjKVsR0c1fQHRSqVXLh76rhQPtxYrQCD
-         5DaXMJOw2MWRhGn1MeMzYEpTNeRWYll4CT4rEwHMH0TxvHSr8B/3jPBrSjhoSQsirJmi
-         5aurdwzxud7rt4lGs2usfaHCr6txQI9A5WPlLs4NQ76cD/Fr9W23PUOTZhnP2omqEYCD
-         XRjiG4ekyp3R1/pKvDVhTm60f8jrwkqmXZkc22HTTUcUCURHBcw5vuNRMd1IWJF8Efn6
-         sUCQOWPkg0lN6dhJ8q06t3ztFR/uwcovxLZMbX5d3v/1PewPUohAn9mFXYCWyoQvXpds
-         YRsg==
+        bh=MYJtsikWi9hIB8NHNY8S76MVB/wVdm4tXnry+6+yiEo=;
+        b=ijwBLjjh6lk3Bb+x9kE21mGPVSMbJnI+Yi/zPHj8mem2U9fEgN+edh+EmjEqa+XZcD
+         n/lfaXf0Tweh9j3vMEvYaRq5AnA39APG5yQv6NKxIshzQR69mp6t6YhwSPfx9qs+WETe
+         qzbk+Vb7I8DycQ3I99Ja5mziLFXJ/cQUDqh9BmEFPMUrEBXvhlToOea+VAhw6cZbQC74
+         NLoIe5lNwslTIQJXZenzM6298KtFhaCaJ7H2Dofx9iOBYLBqokApBi/5kHOVzBOSha+8
+         N0ViNXCPr1zN2Xi1NpaNTckkmR0R5uQew58xTxPUq6A6fCfWeEH1Zr8aSDV8F7XJ0RBt
+         zqUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aVM16YtaCx1dYir94c9sxYwusYmuTqkX1MFty8IIFQk=;
-        b=c3BEbWIpz+AIoEvsIV5Ol52pW2nv5q7UPbdabwxyI9tESJWJDhf0n2GlROi8kmibQ+
-         ojNFJoEGtXvCCFUFCpTUJsiaD+inAazbAPY6vNYHXrO0jHS4Xlr1gmllhMhZqOTD6+Pi
-         dzesocrt77j1IP8lItM91Yro/+7M864fNaHz2p513vFgFLCmWKwysXqViAOLw3bBezyF
-         srj0ZpEsSe+K5VszSvZUIHVqxwGHrMuSmx1BSarrW+y7Gp0MekBiuRKSjkGJ2yNTpsbo
-         Pb+V3eU6T4C6EfEWsAmyY3oxjiw98loRp5zmMG09289XeBUMDtpyJc42jUHLPYBt0snA
-         nSpQ==
-X-Gm-Message-State: AOAM533+SRsS4/o7ILbKQm8xRhbUw1AuoWRijjoUNwGBfawM+Pc8OsSi
-	8jkzW8tT76OXVKanRDESgzrW3h2xicKZHH5tKzGc1w==
-X-Google-Smtp-Source: ABdhPJz3jBIQ7EkEmj+tI9A+lIIYlFEORto6nxVAIbaEAMf4GKZe+IPBCCzl9LE/xhd2lQpRB76SurWFw5kPGx38Ono=
-X-Received: by 2002:a19:651d:0:b0:44a:b88a:b0b1 with SMTP id
- z29-20020a19651d000000b0044ab88ab0b1mr3373569lfb.380.1649176968442; Tue, 05
- Apr 2022 09:42:48 -0700 (PDT)
+        bh=MYJtsikWi9hIB8NHNY8S76MVB/wVdm4tXnry+6+yiEo=;
+        b=cajmBVlChqfOajPirrUYYc5sPh1J2vxti0tJKIhpywyePJ+Bp3jmn4TAsQNps+f701
+         undFNq8y0/RKU+x+2vj5b2x2GPLORvnepKiu8Ulok07NUAuOBamY2Abn1sTjwy5bXHJe
+         n86cLpZP5fm/yadBWIs2GRT9vkTbwOfqi57oNp3RLyA+pVFXwtFBQMX6HG4SJuWCR7Kh
+         oexNf72JpFhMlshzhy5dhj1/XXq8EkFY3u2gnFEwrkJXMhTmDadCqADQ+08ntGo0urFN
+         lak75nP24StfT8pA++CkqF868ra7Dk0tO5lL/EYcZo1MPhWE/XY0Qm0c2rp/KGT93HT7
+         /PYw==
+X-Gm-Message-State: AOAM532BHD6Lt8LauqSanxkMxoTdWkIKTPKG5O0Aqb3BppUKBcVkSb3r
+	adx2pgXF0bPKAfD/Ep43B9TfZXcWFFxXXXz11BGtuA==
+X-Google-Smtp-Source: ABdhPJxkfZhW0np+6HFZguzcslyOvUzoSGSv9BMWk5pjhEH5IyVC6Lb8xm3p/2a9i36EyTCg1IFq70K2lSb/IBVbZTs=
+X-Received: by 2002:a2e:9ec4:0:b0:24b:115c:aedb with SMTP id
+ h4-20020a2e9ec4000000b0024b115caedbmr2807694ljk.235.1649181208750; Tue, 05
+ Apr 2022 10:53:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220405113359.2880241-1-masahiroy@kernel.org> <20220405113359.2880241-10-masahiroy@kernel.org>
-In-Reply-To: <20220405113359.2880241-10-masahiroy@kernel.org>
+References: <20220319143456.2159540-1-trix@redhat.com>
+In-Reply-To: <20220319143456.2159540-1-trix@redhat.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 5 Apr 2022 09:42:36 -0700
-Message-ID: <CAKwvOd=oCivWGHLFLCuPeH1R-gKGRmsvg=NV5ZbSVhd13cqgSw@mail.gmail.com>
-Subject: Re: [PATCH v2 09/10] kbuild: refactor cmd_modversions_c
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>
+Date: Tue, 5 Apr 2022 10:53:17 -0700
+Message-ID: <CAKwvOdkEnDBFUtio2+UVeV1J3QUwAJOc-YgcubDEUXHWMF5gbw@mail.gmail.com>
+Subject: Re: [PATCH] media: platform: return early if the iface is not handled
+To: trix@redhat.com
+Cc: laurent.pinchart@ideasonboard.com, mchehab@kernel.org, nathan@kernel.org, 
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Apr 5, 2022 at 4:34 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Sat, Mar 19, 2022 at 7:35 AM <trix@redhat.com> wrote:
 >
-> cmd_modversions_c implements two parts; run genksyms to calculate CRCs
-> of exported symbols, run $(LD) to update the object with the CRCs. The
-> latter is not executed for CONFIG_LTO_CLANG=y since the object is not
-> ELF but LLVM bit code at this point.
+> From: Tom Rix <trix@redhat.com>
 >
-> The first part can be unified because we can always use $(NM) instead
-> of "$(OBJDUMP) -h" to dump the symbols.
+> Clang static analysis reports this issue
+> ispcsiphy.c:63:14: warning: The left operand of '<<'
+>   is a garbage value
+>         reg |= mode << shift;
+>                ~~~~ ^
+> The iface switch-statement default case falls through
+> to ISP_INTERFACE_CCP2B_PHY1.  Which is later checked
+> to set the mode.  Since the default case is left out
+> of this check mode is never set.  Instead of falling
+> through and assuming a ISP_INTERFACE_CCP2B_PHY1
+> iface, return.
 >
-> Split the code into the two macros, cmd_gen_symversions_c and
-> cmd_modversions.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
 Thanks for the patch!
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 > ---
+>  drivers/media/platform/ti/omap3isp/ispcsiphy.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> Changes in v2:
->  - new
+> diff --git a/drivers/media/platform/ti/omap3isp/ispcsiphy.c b/drivers/media/platform/ti/omap3isp/ispcsiphy.c
+> index 6dc7359c5131d..1bde76c0adbee 100644
+> --- a/drivers/media/platform/ti/omap3isp/ispcsiphy.c
+> +++ b/drivers/media/platform/ti/omap3isp/ispcsiphy.c
+> @@ -31,7 +31,8 @@ static void csiphy_routing_cfg_3630(struct isp_csiphy *phy,
 >
->  scripts/Makefile.build | 25 +++++++++++--------------
->  1 file changed, 11 insertions(+), 14 deletions(-)
->
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index d934bdf84de4..ba2be555f942 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -169,29 +169,25 @@ ifdef CONFIG_MODVERSIONS
->  #   the actual value of the checksum generated by genksyms
->  # o remove .tmp_<file>.o to <file>.o
->
-> -ifdef CONFIG_LTO_CLANG
->  # Generate .o.symversions files for each .o with exported symbols, and link these
->  # to the kernel and/or modules at the end.
-> -cmd_modversions_c =                                                            \
-> +gen_symversions =                                                              \
->         if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then                       \
-> -               $(call cmd_gensymtypes_c,$(KBUILD_SYMTYPES),$(@:.o=.symtypes))  \
-> +               $(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
->                     > $@.symversions;                                           \
->         else                                                                    \
->                 rm -f $@.symversions;                                           \
-> -       fi;
-> -else
-> -cmd_modversions_c =                                                            \
-> -       if $(OBJDUMP) -h $@ | grep -q __ksymtab; then                           \
-> -               $(call cmd_gensymtypes_c,$(KBUILD_SYMTYPES),$(@:.o=.symtypes))  \
-> -                   > $(@D)/.tmp_$(@F:.o=.ver);                                 \
-> -                                                                               \
-> +       fi
-> +
-> +cmd_gen_symversions_c =        $(call gen_symversions,c)
-> +
-> +cmd_modversions =                                                              \
-> +       if [ -r $@.symversions ]; then                                          \
->                 $(LD) $(KBUILD_LDFLAGS) -r -o $(@D)/.tmp_$(@F) $@               \
-> -                       -T $(@D)/.tmp_$(@F:.o=.ver);                            \
-> +                       -T $@.symversions;                                      \
->                 mv -f $(@D)/.tmp_$(@F) $@;                                      \
-> -               rm -f $(@D)/.tmp_$(@F:.o=.ver);                                 \
->         fi
->  endif
-> -endif
->
->  ifdef CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
->  # compiler will not generate __mcount_loc use recordmcount or recordmcount.pl
-> @@ -269,7 +265,8 @@ define rule_cc_o_c
->         $(call cmd,checksrc)
->         $(call cmd,checkdoc)
->         $(call cmd,gen_objtooldep)
-> -       $(call cmd,modversions_c)
-> +       $(call cmd,gen_symversions_c)
-> +       $(if $(CONFIG_LTO_CLANG),,$(call cmd,modversions))
->         $(call cmd,record_mcount)
->  endef
->
+>         switch (iface) {
+>         default:
+> -       /* Should not happen in practice, but let's keep the compiler happy. */
+> +               /* Should not happen in practice, but let's keep the compiler happy. */
+> +               return;
+>         case ISP_INTERFACE_CCP2B_PHY1:
+>                 reg &= ~OMAP3630_CONTROL_CAMERA_PHY_CTRL_CSI1_RX_SEL_PHY2;
+>                 shift = OMAP3630_CONTROL_CAMERA_PHY_CTRL_CAMMODE_PHY1_SHIFT;
 > --
-> 2.32.0
+> 2.26.3
 >
 
 
