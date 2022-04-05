@@ -1,99 +1,215 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99EC928F3
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 12:43:46 +0000 (UTC)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 235CHRJQ031859;
-	Tue, 5 Apr 2022 12:43:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=rAI9DPKAHICQe84g8ES6PkP9uqydWYaPLKbh1T19Tr0=;
- b=jm9CKIIDw+ylnY+3dqie/JNknZ7iFvIwf+cj4UfmTH+obobIK3jgH3ez322A/xBOQTpJ
- k6nz3XGWFVCCgd2gSw7OulGgS7GTgquO9163seD3RFfQeedStWjTeghOrrdwi8+iIQMt
- coNSK3eBB3g9eCVn4R0ONQIqp4hSqU1s3gvH63OIRMBdQNEbWAz6iRo9vKHJg/CYZkt5
- Ou/rm3BsXjr/yvjj76sTXpf71NPIPaxrjdTD29PC43e6IsyuEyOxJ96JmL8+etSRg0So
- DSNLyTFbwDKnw1po8UTsl9+NT1ynuzPZAn3v1YpfQ2QbBQg8APnSrfpSt/Ndjmg1pNu1 JA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3f87jtt1kp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Apr 2022 12:43:31 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 235Cfk2f005049;
-	Tue, 5 Apr 2022 12:43:31 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3f87jtt1k4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Apr 2022 12:43:30 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-	by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 235CdCvV024714;
-	Tue, 5 Apr 2022 12:43:28 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-	by ppma01fra.de.ibm.com with ESMTP id 3f6e48vqu2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Apr 2022 12:43:28 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-	by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 235ChPdt46268926
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 5 Apr 2022 12:43:26 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DFB6D4C04E;
-	Tue,  5 Apr 2022 12:43:25 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B09F74C046;
-	Tue,  5 Apr 2022 12:43:24 +0000 (GMT)
-Received: from sig-9-65-85-150.ibm.com (unknown [9.65.85.150])
-	by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Tue,  5 Apr 2022 12:43:24 +0000 (GMT)
-Message-ID: <6a74d717535179188606dea3c68f56d35a86bac8.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: remove redundant initialization of pointer 'file'.
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Colin Ian King <colin.i.king@gmail.com>,
-        Dmitry Kasatkin
-	 <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E .
-	Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Date: Tue, 05 Apr 2022 08:43:24 -0400
-In-Reply-To: <20220301120732.670168-1-colin.i.king@gmail.com>
-References: <20220301120732.670168-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9EF28E5
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 13:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649165504; x=1680701504;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BVyUMAMp/1gi+XuYF2KWBsy3RtdVLgZsq6bNlEQfsuY=;
+  b=I1IjxSUiaMV3Z1ch2lTocyKFVkTu0AHAVqgtEFIQUrAxWe3l2p3+tu9F
+   b61PD7GZvVaRQFI/o6hTSIO2Wy349X4KWnhL5NgfTk9unqa48eceIkbLY
+   H2fKkViGp7p8TSPlWcPOuY/yKmsqJnrWwB7a605BpuTI/KgYnuNWj9jo5
+   HNyZkhT9WQxVEmn4pRJ50P91zbwm0uXUhrcrn/ElVOcu2sc6B6V1mYqBJ
+   K0SLhaXTfRBc5BNmrGnzymCa59/9rmxIEY1Zj2FZIbi4QYUUMQ8TFi1kA
+   SesQZIN0TfQXBFFJTo40KwIsEe2ROXS5l9O3T7YOBY1RNNmg9+vEB/67F
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="347189328"
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="347189328"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:31:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="620358854"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Apr 2022 06:31:30 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nbjHN-0003KM-Js;
+	Tue, 05 Apr 2022 13:31:29 +0000
+Date: Tue, 5 Apr 2022 21:31:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 39/40]
+ fs/afs/write.c:347:6: warning: variable 'ret' is used uninitialized whenever
+ 'if' condition is true
+Message-ID: <202204052142.PgHNENti-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: NsdwNJRoZr6aEmaX6tRdtRFfzIvI9b2W
-X-Proofpoint-ORIG-GUID: XZKPOxOY116lUQMtlqbIdsA1H3GZh2A1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-05_02,2022-04-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 phishscore=0 suspectscore=0 clxscore=1011 bulkscore=0
- priorityscore=1501 mlxscore=0 impostorscore=0 mlxlogscore=643 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204050074
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, 2022-03-01 at 12:07 +0000, Colin Ian King wrote:
-> The pointer 'file' is being initialized with a value that is never read,
-> it is being re-assigned the same value later on closer to where it is
-> being first used. The initialization is redundant and can be removed.
-> 
-> Cleans up clang scan build warning:
-> security/integrity/ima/ima_main.c:434:15: warning: Value stored to 'file'
-> during its initialization is never read [deadcode.DeadStores]
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   674eea41fc70a740ff83ec590f9833f805852464
+commit: e3f5aec34955d83f706c49c395274da333dd726d [39/40] afs: [DON'T MERGE] Implement trivial content crypto for testing purposes
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220405/202204052142.PgHNENti-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/e3f5aec34955d83f706c49c395274da333dd726d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout e3f5aec34955d83f706c49c395274da333dd726d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/afs/
 
-thanks,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Mimi
+All warnings (new ones prefixed by >>):
 
+>> fs/afs/write.c:347:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!buf)
+               ^~~~
+   fs/afs/write.c:417:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   fs/afs/write.c:347:2: note: remove the 'if' if its condition is always false
+           if (!buf)
+           ^~~~~~~~~
+   fs/afs/write.c:329:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   fs/afs/write.c:454:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!buf)
+               ^~~~
+   fs/afs/write.c:524:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   fs/afs/write.c:454:2: note: remove the 'if' if its condition is always false
+           if (!buf)
+           ^~~~~~~~~
+   fs/afs/write.c:436:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   2 warnings generated.
+
+
+vim +347 fs/afs/write.c
+
+   312	
+   313	/*
+   314	 * Encrypt part of a write for fscrypt.  The caller reserved an extra
+   315	 * scatterlist element before each of source_sg and dest_sg for our purposes,
+   316	 * should we need them.
+   317	 */
+   318	int afs_encrypt_block(struct netfs_io_request *wreq, loff_t pos, size_t len,
+   319			      struct scatterlist *source_sg, unsigned int n_source,
+   320			      struct scatterlist *dest_sg, unsigned int n_dest)
+   321	{
+   322		struct crypto_sync_skcipher *ci;
+   323		struct skcipher_request *req;
+   324		struct crypto_skcipher *tfm;
+   325		struct sha256_state *sha;
+   326		void *buf = NULL;
+   327		__be64 *session_key;
+   328		u8 *iv, *b0;
+   329		int ret;
+   330	
+   331		ci = crypto_alloc_sync_skcipher("cts(cbc(aes))", 0, 0);
+   332		if (IS_ERR(ci)) {
+   333			ret = PTR_ERR(ci);
+   334			pr_err("Can't allocate cipher: %d\n", ret);
+   335			goto error;
+   336		}
+   337		tfm = &ci->base;
+   338	
+   339		if (crypto_sync_skcipher_ivsize(ci) > 16 &&
+   340		    crypto_sync_skcipher_blocksize(ci) > 16) {
+   341			pr_err("iv wrong size: %u\n", crypto_sync_skcipher_ivsize(ci));
+   342			ret = -EINVAL;
+   343			goto error_ci;
+   344		}
+   345	
+   346		buf = kzalloc(4 * 16 + sizeof(*sha), GFP_KERNEL);
+ > 347		if (!buf)
+   348			goto error_ci;
+   349		b0 = buf;
+   350		iv = buf + 32;
+   351		session_key = buf + 48;
+   352		session_key[0] = cpu_to_be64(pos);
+   353		session_key[1] = cpu_to_le64(pos);
+   354		sha = buf + 64;
+   355	
+   356		*(__be64 *)iv = pos;
+   357	
+   358		ret = crypto_sync_skcipher_setkey(ci, (u8 *)session_key, 16);
+   359		if (ret < 0) {
+   360			pr_err("Setkey failed: %d\n", ret);
+   361			goto error_ci;
+   362		}
+   363	
+   364		ret = -ENOMEM;
+   365		req = skcipher_request_alloc(tfm, GFP_NOFS);
+   366		if (!req)
+   367			goto error_ci;
+   368	
+   369		skcipher_request_set_sync_tfm(req, ci);
+   370		skcipher_request_set_callback(req, 0, NULL, NULL);
+   371	
+   372		/* If the length is so short that the CTS algorithm will refuse to
+   373		 * handle it, prepend a predictable block on the front and discard the
+   374		 * output.  Since CTS does draw data backwards, we can regenerate the
+   375		 * encryption on just that block at decryption time.
+   376		 */
+   377		if (len < 16) {
+   378			unsigned int i;
+   379			u8 *p = buf + 16;
+   380	
+   381			kdebug("preblock %16phN", iv);
+   382			sha256_init(sha);
+   383			sha256_update(sha, iv, 32); /* iv and session key */
+   384			sha256_final(sha, b0);
+   385			kdebug("preblock %16phN", b0);
+   386	
+   387			netfs_dump_sg("SRC", source_sg, n_source);
+   388			if (sg_copy_to_buffer(source_sg, n_source, p, len) != len) {
+   389				ret = -EIO;
+   390				goto error_req;
+   391			}
+   392	
+   393			for (i = 0; i < len; i++)
+   394				p[i] += b0[i];
+   395	
+   396			if (sg_copy_from_buffer(dest_sg, n_dest, p, len) != len) {
+   397				ret = -EIO;
+   398				goto error_req;
+   399			}
+   400			netfs_dump_sg("DST", source_sg, n_source);
+   401			ret = 0;
+   402		} else {
+   403			netfs_dump_sg("SRC", source_sg, n_source);
+   404			netfs_dump_sg("DST", dest_sg, n_dest);
+   405			skcipher_request_set_crypt(req, source_sg, dest_sg, len, iv);
+   406			ret = crypto_skcipher_encrypt(req);
+   407			if (ret < 0)
+   408				pr_err("Encrypt failed: %d\n", ret);
+   409		}
+   410	
+   411	error_req:
+   412		skcipher_request_free(req);
+   413	error_ci:
+   414		kfree(buf);
+   415		crypto_free_sync_skcipher(ci);
+   416	error:
+   417		return ret;
+   418	}
+   419	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
