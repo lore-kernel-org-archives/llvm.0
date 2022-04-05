@@ -1,123 +1,156 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B233E17C8
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 18:48:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=C5VgPld09iYiqC751h87aH+aMCuoBzx6fK1WSSESdHU=; b=SwViTp0djw63Y6CABGQ1kgy1MK
-	Sg10F6y4NOV61Rir++P/63S/FDRiwka1up4YV6y051CJP7shE80m6qmKXXDsczK1vX8f2WKP/NjCZ
-	Cj66jHxR6zi9Xx8507YAx1+F5xPyMjjvkV4J0t4jYmx3bfR2Nz3lFYHw3dSljv0jje09m/E2KkB4w
-	KHtNtxVR8Q9eDKh1MccF4Ajd8SFB4xWUzBDuxTtApOaQSxvv9qe81W32p0JJbHPTK2GYyA8NRnJr8
-	X91FZOL/Wbc8LXLnP4xXbiBpQszZNSdqgvbDwdqVx1MrEZxRwek7RYcv2W7/G6w8x/Z0oc3fG4TXA
-	T0Spj4cQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nbnsY-006x9i-PI; Tue, 05 Apr 2022 18:26:11 +0000
-Message-ID: <019baa48-a594-ba00-67a9-b0eb62b32ac0@infradead.org>
-Date: Tue, 5 Apr 2022 11:26:05 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D102B17C8
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 19:13:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649186010; x=1680722010;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BNf83Q5/1PWslvUKwhpqfDSkCkwhO7rU7ZNMZq/zkYQ=;
+  b=Nt2ugVq6ZqMblcRfnRhyCnAxy015M6MbzzTPNbCb/H01NrCxC4uk/jyq
+   fTEuDmhHr+quQtYAmqZ4BxshifjuQsS+SuTJxihfGuuJAVixuGGAF+0o4
+   HH/8Lybx4V9Thi3oZUOfc2RoWJ+Cz9j1CydcV4ercgQmxthp8izNPxrlr
+   iZSsxGLiFqo2E7DnEUIQkaxrPlpDDoqn1MrKHkTcEYQQF+GwvbbeVY0CX
+   hX6AJrEHJIF2OwyluXlj+f6+N9yhwBkI6gzIRDoIxZncBLmCb7KZ6Bevy
+   7OES3n4SCWpv73ibtRG9yMv0yFVscSQlTSzm/GuDL9SYqv91ZfrEWD8PP
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="321538510"
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="321538510"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 12:13:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="789979762"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 05 Apr 2022 12:13:27 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nbocI-0003gn-FR;
+	Tue, 05 Apr 2022 19:13:26 +0000
+Date: Wed, 6 Apr 2022 03:12:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Jonathan Marek <jonathan@marek.ca>, David Airlie <airlied@linux.ie>,
+	linux-arm-msm@vger.kernel.org,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	dri-devel@lists.freedesktop.org,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 14/14] drm/msm/dsi: Add support for DSC configuration
+Message-ID: <202204060308.OkAS3XG3-lkp@intel.com>
+References: <20220404163436.956875-15-vkoul@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: drivers/cpuidle/cpuidle-riscv-sbi.c:79:16: error: variable has
- incomplete type 'struct sbiret'
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, Anup Patel <anup.patel@wdc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-References: <202204051441.dQ4w35Ga-lkp@intel.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202204051441.dQ4w35Ga-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404163436.956875-15-vkoul@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi,
+Hi Vinod,
 
-On 4/4/22 23:11, kernel test robot wrote:
-> Hi Anup,
-> 
-> First bad commit (maybe != root cause):
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   3123109284176b1532874591f7c81f3837bbdc17
-> commit: c5179ef1ca0c39dab6955be6b0e3c034cc4164c8 RISC-V: Enable RISC-V SBI CPU Idle driver for QEMU virt machine
-> date:   4 weeks ago
-> config: riscv-randconfig-r022-20220405 (https://download.01.org/0day-ci/archive/20220405/202204051441.dQ4w35Ga-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c5179ef1ca0c39dab6955be6b0e3c034cc4164c8
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout c5179ef1ca0c39dab6955be6b0e3c034cc4164c8
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
+I love your patch! Perhaps something to improve:
 
-[delete many build warnings and errors]
+[auto build test WARNING on 05241de1f69eb7f56b0a5e0bec96a7752fad1b2f]
 
->    3 warnings and 17 errors generated.
-> 
-> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for RISCV_SBI_CPUIDLE
->    Depends on CPU_IDLE && RISCV && RISCV_SBI
->    Selected by
->    - SOC_VIRT && CPU_IDLE
+url:    https://github.com/intel-lab-lkp/linux/commits/Vinod-Koul/drm-msm-Add-Display-Stream-Compression-Support/20220405-003745
+base:   05241de1f69eb7f56b0a5e0bec96a7752fad1b2f
+config: hexagon-randconfig-r004-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060308.OkAS3XG3-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6c54db3ee1e02d639e568c37121f797ac586af3d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vinod-Koul/drm-msm-Add-Display-Stream-Compression-Support/20220405-003745
+        git checkout 6c54db3ee1e02d639e568c37121f797ac586af3d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/
 
-This Kconfig warning is the root of the problem. All of the build errors
-and warnings can be fixed by something like so. Is it OK?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
----
- arch/riscv/Kconfig.socs |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+All warnings (new ones prefixed by >>):
 
---- linux-next-20220404.orig/arch/riscv/Kconfig.socs
-+++ linux-next-20220404/arch/riscv/Kconfig.socs
-@@ -38,7 +38,7 @@ config SOC_VIRT
- 	select SIFIVE_PLIC
- 	select PM_GENERIC_DOMAINS if PM
- 	select PM_GENERIC_DOMAINS_OF if PM && OF
--	select RISCV_SBI_CPUIDLE if CPU_IDLE
-+	select RISCV_SBI_CPUIDLE if CPU_IDLE && RISCV_SBI
- 	help
- 	  This enables support for QEMU Virt Machine.
- 
-[snip]
+>> drivers/gpu/drm/msm/dsi/dsi_host.c:918:23: warning: variable 'reg_ctrl' set but not used [-Wunused-but-set-variable]
+           u32 reg, intf_width, reg_ctrl, reg_ctrl2;
+                                ^
+   1 warning generated.
 
-Also, to the @bot:
 
-Why does the reported Kconfig warning look like it was generated
-by some older kconfig software?  Current Kconfig reports more info:
+vim +/reg_ctrl +918 drivers/gpu/drm/msm/dsi/dsi_host.c
 
-WARNING: unmet direct dependencies detected for RISCV_SBI_CPUIDLE
-  Depends on [n]: CPU_IDLE [=y] && RISCV [=y] && RISCV_SBI [=n]
-  Selected by [y]:
-  - SOC_VIRT [=y] && CPU_IDLE [=y]
-
-Thanks.
-> 
-> :::::: The code at line 79 was first introduced by commit
-> :::::: 6abf32f1d9c5009dcccded2c1e7ca899a4ab587b cpuidle: Add RISC-V SBI CPU idle driver
-> 
-> :::::: TO: Anup Patel <anup.patel@wdc.com>
-> :::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
-> 
+   914	
+   915	static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mode, u32 hdisplay)
+   916	{
+   917		struct msm_display_dsc_config *dsc = msm_host->dsc;
+ > 918		u32 reg, intf_width, reg_ctrl, reg_ctrl2;
+   919		u32 slice_per_intf, total_bytes_per_intf;
+   920		u32 pkt_per_line;
+   921		u32 bytes_in_slice;
+   922		u32 eol_byte_num;
+   923	
+   924		/* first calculate dsc parameters and then program
+   925		 * compress mode registers
+   926		 */
+   927		intf_width = hdisplay;
+   928		slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
+   929	
+   930		/* If slice_per_pkt is greater than slice_per_intf
+   931		 * then default to 1. This can happen during partial
+   932		 * update.
+   933		 */
+   934		if (slice_per_intf > dsc->drm->slice_count)
+   935			dsc->drm->slice_count = 1;
+   936	
+   937		slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
+   938		bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * dsc->drm->bits_per_pixel, 8);
+   939	
+   940		dsc->drm->slice_chunk_size = bytes_in_slice;
+   941	
+   942		total_bytes_per_intf = bytes_in_slice * slice_per_intf;
+   943	
+   944		eol_byte_num = total_bytes_per_intf % 3;
+   945		pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+   946	
+   947		if (is_cmd_mode) /* packet data type */
+   948			reg = DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE(MIPI_DSI_DCS_LONG_WRITE);
+   949		else
+   950			reg = DSI_VIDEO_COMPRESSION_MODE_CTRL_DATATYPE(MIPI_DSI_COMPRESSED_PIXEL_STREAM);
+   951	
+   952		/* DSI_VIDEO_COMPRESSION_MODE & DSI_COMMAND_COMPRESSION_MODE
+   953		 * registers have similar offsets, so for below common code use
+   954		 * DSI_VIDEO_COMPRESSION_MODE_XXXX for setting bits
+   955		 */
+   956		reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_PKT_PER_LINE(pkt_per_line >> 1);
+   957		reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_EOL_BYTE_NUM(eol_byte_num);
+   958		reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_EN;
+   959	
+   960		if (is_cmd_mode) {
+   961			reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
+   962			reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
+   963	
+   964			reg_ctrl |= reg;
+   965			reg_ctrl2 |= DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM0_SLICE_WIDTH(bytes_in_slice);
+   966	
+   967			dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL, reg);
+   968			dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2, reg_ctrl2);
+   969		} else {
+   970			dsi_write(msm_host, REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
+   971		}
+   972	}
+   973	
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://01.org/lkp
