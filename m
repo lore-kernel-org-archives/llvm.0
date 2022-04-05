@@ -1,109 +1,312 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AF87A
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 14:47:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649170032; x=1680706032;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GKZ1Ay9v3QQaaOBw5he1lVcsKdKzLvRprZT+72sHRgE=;
-  b=SvQn9dbaejMy+mmFTABSOMmTiIblMLjb5zAbLtCOZR1oO8PhfdUynM6N
-   mlRh0HG6EVC7Qw1Z7QmnlYbYJ6PhhI3nCUOPMb0bOl9YST2WeeUZY4ObN
-   OrfqcLoUmCpGQ6CEu6bAqf4X9b5DpR97nhqvtROPgJ3PUxRGs/w96X5r2
-   TA2+e7vznl/5lbRU4QBCfOfZKVqJ4fMfw9hJ5wSa+/N27Mo1FLGZTQsif
-   5M6xDZU0u9dFAZTAJbHdv/Z22M1nxcDOpLSxlsFtvDUEmVcY7FzssJwmw
-   c1XzRLtYNMGaUv+WfWLERe5hR8Is69bFhtgucNwH0pEjC3d2HvVtAdsmC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="242907693"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="242907693"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 07:47:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="587952167"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 05 Apr 2022 07:47:10 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nbkSb-0003Qn-O0;
-	Tue, 05 Apr 2022 14:47:09 +0000
-Date: Tue, 5 Apr 2022 22:46:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org, arm@kernel.org
-Subject: [soc:multiplatform-misc-5.18 1/13]
- arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype
- for function 'mmc_status'
-Message-ID: <202204052254.Ubh7pVDq-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B16F7A
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 14:55:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC47C385A0;
+	Tue,  5 Apr 2022 14:55:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1649170553;
+	bh=+wsa2KupAHEAkaJ6uGblvMqbej2o+NeI2jwDd8b2QR8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=d6d9V8yW4T+WsjbhuU0OTx8kSn0SLRe3XsjGeKmKK46+wPxSrj3/QRhEEV6ZDWfLz
+	 7wPYjp8irrCdZLmD/iIXH5LHr+7ctzP8IvPnW32MYfGBuQus3t+cIlRhF+JFFQeFTn
+	 Mmf6MKd49IAGmTNg5lf8Ojd98dtZDUEzb3H4JVLDlwnbcSYwVKQ/8Z0TZhL/UtjR5Q
+	 tiJMr9+5Wu4n0HQ3EsgMoYIA6dVndFdfsXn2oX0/MEtbELNDgDtvg6Dv8DucmFtLIQ
+	 M7VwJEQn5z3mDqGpTcK1YC+spTHrnmexvHpd8lbgVABLJE1dJLk1YvEib8KNZIa3ke
+	 xIs/sLUtztryg==
+Date: Tue, 5 Apr 2022 23:55:48 +0900
+From: Masami Hiramatsu <mhiramat@kernel.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Padmanabha Srinivasaiah
+ <treasure4paddy@gmail.com>, LKML <linux-kernel@vger.kernel.org>, Jonathan
+ Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, Randy Dunlap
+ <rdunlap@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, Sami
+ Tolvanen <samitolvanen@google.com>, Nathan Chancellor <nathan@kernel.org>,
+ llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>, Linux Kbuild
+ mailing list <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH v7 3/4] bootconfig: Support embedding a bootconfig file
+ in kernel
+Message-Id: <20220405235548.38344aba5a7fcb059924c367@kernel.org>
+In-Reply-To: <164871509158.178991.12705786877340857725.stgit@devnote2>
+References: <164871505771.178991.7870442736805590948.stgit@devnote2>
+	<164871509158.178991.12705786877340857725.stgit@devnote2>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git multiplatform-misc-5.18
-head:   a2677c00b0f03b8cad961f785941ca257f454df3
-commit: d7445676e86900f8dc363825033ff62416c216e0 [1/13] ARM: versatile: move integrator/realview/vexpress to versatile
-config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20220405/202204052254.Ubh7pVDq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=d7445676e86900f8dc363825033ff62416c216e0
-        git remote add soc https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-        git fetch --no-tags soc multiplatform-misc-5.18
-        git checkout d7445676e86900f8dc363825033ff62416c216e0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Hi Steve,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Have you already picked this series?
 
-All warnings (new ones prefixed by >>):
+Actually, kernel test robot reported an issue in this patch today.
+Here is the patch. Should I send v8 including this?
 
->> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
-   unsigned int mmc_status(struct device *dev)
-                ^
-   arch/arm/mach-versatile/versatile.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned int mmc_status(struct device *dev)
-   ^
-   static 
-   1 warning generated.
+Thank you,
 
+diff --git a/init/main.c b/init/main.c
+index 62dddc4206b4..f7fe7cbb1df8 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -313,7 +313,7 @@ static void * __init get_boot_config_from_initrd(size_t *_size)
+ 	return data;
+ }
+ #else
+-static void * __init get_boot_config_from_initrd(u32 *_size)
++static void * __init get_boot_config_from_initrd(size_t *_size)
+ {
+ 	return NULL;
+ }
 
-vim +/mmc_status +56 arch/arm/mach-versatile/versatile.c
+On Thu, 31 Mar 2022 17:24:51 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  55  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08 @56  unsigned int mmc_status(struct device *dev)
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  57  {
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  58  	struct amba_device *adev = container_of(dev, struct amba_device, dev);
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  59  	u32 mask;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  60  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  61  	if (adev->res.start == VERSATILE_MMCI0_BASE)
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  62  		mask = 1;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  63  	else
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  64  		mask = 2;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  65  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  66  	return readl(versatile_sys_base + VERSATILE_SYS_MCI_OFFSET) & mask;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  67  }
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  68  
+> This allows kernel developer to embed a default bootconfig file in
+> the kernel instead of embedding it in the initrd. This will be good
+> for who are using the kernel without initrd, or who needs a default
+> bootconfigs.
+> This needs to set two kconfigs: CONFIG_BOOT_CONFIG_EMBED=y and set
+> the file path to CONFIG_BOOT_CONFIG_EMBED_FILE.
+> 
+> Note that you still need 'bootconfig' command line option to load the
+> embedded bootconfig. Also if you boot using an initrd with a different
+> bootconfig, the kernel will use the bootconfig in the initrd, instead
+> of the default bootconfig.
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  Changes in v7:
+>   - Change kconfig option name to share the common prefix so that
+>     we can search it easier.
+>   - Make embedded_bootconfig_data readonly.
+>   - Select CONFIG_BLK_DEV_INITRD only if CONFIG_BOOT_CONFIG_EMBED=n
+>   - Remove redundant default settings for new Kconfig options.
+>  Changes in v6:
+>   - Split out the .incbin asm part as bootconfig-data.S according to
+>     Masahiro's comment.
+>  Changes in v5:
+>   - Fix .gitignore to be sorted alphabetically.
+>   - Make default.bconf is cleaned up correctly.
+>   - Allow user to specify relative path to CONFIG_EMBED_BOOT_CONFIG_FILE.
+>     (Thanks Masahiro!)
+>  Changes in v4:
+>   - Avoid updating the default.bconf if the file is not changed.
+> ---
+>  MAINTAINERS                |    1 +
+>  include/linux/bootconfig.h |   10 ++++++++++
+>  init/Kconfig               |   21 ++++++++++++++++++++-
+>  init/main.c                |   20 +++++++++++---------
+>  lib/.gitignore             |    1 +
+>  lib/Makefile               |    8 ++++++++
+>  lib/bootconfig-data.S      |   10 ++++++++++
+>  lib/bootconfig.c           |   13 +++++++++++++
+>  8 files changed, 74 insertions(+), 10 deletions(-)
+>  create mode 100644 lib/bootconfig-data.S
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index b555a5e8704f..9b4910685412 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7350,6 +7350,7 @@ S:	Maintained
+>  F:	Documentation/admin-guide/bootconfig.rst
+>  F:	fs/proc/bootconfig.c
+>  F:	include/linux/bootconfig.h
+> +F:	lib/bootconfig-data.S
+>  F:	lib/bootconfig.c
+>  F:	tools/bootconfig/*
+>  F:	tools/bootconfig/scripts/*
+> diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
+> index a4665c7ab07c..1611f9db878e 100644
+> --- a/include/linux/bootconfig.h
+> +++ b/include/linux/bootconfig.h
+> @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
+>  /* XBC cleanup data structures */
+>  void __init xbc_exit(void);
+>  
+> +/* XBC embedded bootconfig data in kernel */
+> +#ifdef CONFIG_BOOT_CONFIG_EMBED
+> +const char * __init xbc_get_embedded_bootconfig(size_t *size);
+> +#else
+> +static inline const char *xbc_get_embedded_bootconfig(size_t *size)
+> +{
+> +	return NULL;
+> +}
+> +#endif
+> +
+>  #endif
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 97463a33baa7..756872d17fe1 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1351,7 +1351,7 @@ endif
+>  
+>  config BOOT_CONFIG
+>  	bool "Boot config support"
+> -	select BLK_DEV_INITRD
+> +	select BLK_DEV_INITRD if !BOOT_CONFIG_EMBED
+>  	help
+>  	  Extra boot config allows system admin to pass a config file as
+>  	  complemental extension of kernel cmdline when booting.
+> @@ -1361,6 +1361,25 @@ config BOOT_CONFIG
+>  
+>  	  If unsure, say Y.
+>  
+> +config BOOT_CONFIG_EMBED
+> +	bool "Embed bootconfig file in the kernel"
+> +	depends on BOOT_CONFIG
+> +	help
+> +	  Embed a bootconfig file given by BOOT_CONFIG_EMBED_FILE in the
+> +	  kernel. Usually, the bootconfig file is loaded with the initrd
+> +	  image. But if the system doesn't support initrd, this option will
+> +	  help you by embedding a bootconfig file while building the kernel.
+> +
+> +	  If unsure, say N.
+> +
+> +config BOOT_CONFIG_EMBED_FILE
+> +	string "Embedded bootconfig file path"
+> +	depends on BOOT_CONFIG_EMBED
+> +	help
+> +	  Specify a bootconfig file which will be embedded to the kernel.
+> +	  This bootconfig will be used if there is no initrd or no other
+> +	  bootconfig in the initrd.
+> +
+>  choice
+>  	prompt "Compiler optimization level"
+>  	default CC_OPTIMIZE_FOR_PERFORMANCE
+> diff --git a/init/main.c b/init/main.c
+> index 266d61bc67b0..62dddc4206b4 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -266,7 +266,7 @@ static int __init loglevel(char *str)
+>  early_param("loglevel", loglevel);
+>  
+>  #ifdef CONFIG_BLK_DEV_INITRD
+> -static void * __init get_boot_config_from_initrd(u32 *_size)
+> +static void * __init get_boot_config_from_initrd(size_t *_size)
+>  {
+>  	u32 size, csum;
+>  	char *data;
+> @@ -410,14 +410,16 @@ static int __init warn_bootconfig(char *str)
+>  static void __init setup_boot_config(void)
+>  {
+>  	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
+> -	const char *msg;
+> -	int pos;
+> -	u32 size;
+> -	char *data, *err;
+> -	int ret;
+> +	const char *msg, *data;
+> +	int pos, ret;
+> +	size_t size;
+> +	char *err;
+>  
+>  	/* Cut out the bootconfig data even if we have no bootconfig option */
+>  	data = get_boot_config_from_initrd(&size);
+> +	/* If there is no bootconfig in initrd, try embedded one. */
+> +	if (!data)
+> +		data = xbc_get_embedded_bootconfig(&size);
+>  
+>  	strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+>  	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+> @@ -436,8 +438,8 @@ static void __init setup_boot_config(void)
+>  	}
+>  
+>  	if (size >= XBC_DATA_MAX) {
+> -		pr_err("bootconfig size %d greater than max size %d\n",
+> -			size, XBC_DATA_MAX);
+> +		pr_err("bootconfig size %ld greater than max size %d\n",
+> +			(long)size, XBC_DATA_MAX);
+>  		return;
+>  	}
+>  
+> @@ -450,7 +452,7 @@ static void __init setup_boot_config(void)
+>  				msg, pos);
+>  	} else {
+>  		xbc_get_info(&ret, NULL);
+> -		pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
+> +		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
+>  		/* keys starting with "kernel." are passed via cmdline */
+>  		extra_command_line = xbc_make_cmdline("kernel");
+>  		/* Also, "init." keys are init arguments */
+> diff --git a/lib/.gitignore b/lib/.gitignore
+> index e5e217b8307b..54596b634ecb 100644
+> --- a/lib/.gitignore
+> +++ b/lib/.gitignore
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  /crc32table.h
+>  /crc64table.h
+> +/default.bconf
+>  /gen_crc32table
+>  /gen_crc64table
+>  /oid_registry_data.c
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 08053df16c7c..95268d6c75b7 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -280,6 +280,14 @@ $(foreach file, $(libfdt_files), \
+>  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
+>  
+>  obj-$(CONFIG_BOOT_CONFIG) += bootconfig.o
+> +obj-$(CONFIG_BOOT_CONFIG_EMBED) += bootconfig-data.o
+> +
+> +$(obj)/bootconfig-data.o: $(obj)/default.bconf
+> +
+> +targets += default.bconf
+> +filechk_defbconf = cat $(or $(real-prereqs), /dev/null)
+> +$(obj)/default.bconf: $(CONFIG_BOOT_CONFIG_EMBED_FILE) FORCE
+> +	$(call filechk,defbconf)
+>  
+>  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
+>  obj-$(CONFIG_INTERVAL_TREE_TEST) += interval_tree_test.o
+> diff --git a/lib/bootconfig-data.S b/lib/bootconfig-data.S
+> new file mode 100644
+> index 000000000000..ef85ba1a82f4
+> --- /dev/null
+> +++ b/lib/bootconfig-data.S
+> @@ -0,0 +1,10 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Embed default bootconfig in the kernel.
+> + */
+> +	.section .init.rodata, "aw"
+> +	.global embedded_bootconfig_data
+> +embedded_bootconfig_data:
+> +	.incbin "lib/default.bconf"
+> +	.global embedded_bootconfig_data_end
+> +embedded_bootconfig_data_end:
+> diff --git a/lib/bootconfig.c b/lib/bootconfig.c
+> index 74f3201ab8e5..c59d26068a64 100644
+> --- a/lib/bootconfig.c
+> +++ b/lib/bootconfig.c
+> @@ -12,6 +12,19 @@
+>  #include <linux/kernel.h>
+>  #include <linux/memblock.h>
+>  #include <linux/string.h>
+> +
+> +#ifdef CONFIG_BOOT_CONFIG_EMBED
+> +/* embedded_bootconfig_data is defined in bootconfig-data.S */
+> +extern __visible const char embedded_bootconfig_data[];
+> +extern __visible const char embedded_bootconfig_data_end[];
+> +
+> +const char * __init xbc_get_embedded_bootconfig(size_t *size)
+> +{
+> +	*size = embedded_bootconfig_data_end - embedded_bootconfig_data;
+> +	return (*size) ? embedded_bootconfig_data : NULL;
+> +}
+> +#endif
+> +
+>  #else /* !__KERNEL__ */
+>  /*
+>   * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
+> 
 
-:::::: The code at line 56 was first introduced by commit
-:::::: a70967892111934e292485ce84f1bab38cc55380 ARM: versatile: merge mach code into a single file
-
-:::::: TO: Rob Herring <robh@kernel.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Masami Hiramatsu <mhiramat@kernel.org>
