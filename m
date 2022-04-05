@@ -1,256 +1,163 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC823216
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 21:57:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649195859; x=1680731859;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0w8O0Vd1TQMF4m2IKNfcg2j0Z1CYEGhYwuFP/DSTEKM=;
-  b=WIJFwd5HdMav4jKQaut6IZhR428hmCroh7QyAGXLnwSUYmnyspAogXcZ
-   2iRWQx6fJYajMZ5Y+HUkFEwXneWkOZl/2actCs5vJtWpUCKKUCFQEj336
-   XloMto0eQH3TgGmh6MNZDNXP0akmktCV/8h3e8PZYnzaAhXrW4RcP+o21
-   tdhx9eD2ZdPaarax/aYaB5LYFUt6s2acDTPvPBlxJZuiPq/7ryz7mVRnb
-   9Ep6fZURHs6RSTCsarPALHHtlvSzoma4FfiWV1roI0DN5w15QepbM+yVC
-   AaRs7reLcAsVa2g18jamKEHyYpGLYLcXrMaw4/ZsSYfUgD32VogW0SKUg
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="321567126"
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="321567126"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:57:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="608621905"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Apr 2022 14:57:36 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nbrBA-0003np-2h;
-	Tue, 05 Apr 2022 21:57:36 +0000
-Date: Wed, 6 Apr 2022 05:56:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-ringless 4/9]
- net/rxrpc/local_object.c:172:24: warning: format specifies type 'unsigned
- short' but the argument has type 'int'
-Message-ID: <202204060503.2pTsIRTu-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C013216
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 22:16:21 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id o81-20020a257354000000b0063d95dd2c83so348814ybc.11
+        for <llvm@lists.linux.dev>; Tue, 05 Apr 2022 15:16:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=NTGx3vO8sq1dXtBCR5+TJJ5C7vnKyf9ljgD3Rl3d4sc=;
+        b=h8iz4EugNtzHw+TkxpZpBYCGCCOw0O9FMz2im/z0uUrLEs+1T52HjzmQ59g+6fbKtW
+         DKg7PkBnEW/HsKPM93MnIaFOO4AJeFN+m4VQiDY9nglhzeWUyn99nm3Y+Tfj00E6o1LV
+         clW7XpypS22Xo9AG8ovaE+We/efPkEUIcnfi3gTtLrw3lQfMfztiIjqMECCWvzHOrY5a
+         mrkFMxmIFvKclS6MRmCe9hcPjAj1px/J8E40FJt/mK7p3ItlwQNHAdg7tKwEalQSnFhZ
+         BCqc5MBXlrTwZkAHrKMfLBINPchgzD+FarD1hUAIYdqXoj3yR4SBE9MF9IJLHrUOiWek
+         /2AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=NTGx3vO8sq1dXtBCR5+TJJ5C7vnKyf9ljgD3Rl3d4sc=;
+        b=Sq8Y9z47Bnuof07y0QYCO3gHWw3t4OM+TlsbewRd9LcZLjSk3R1lZXSVg4aFY8XUD+
+         480ikIdVa4R6rWsbTIxapRU8CzHxa/JisUyLN7l1fFS8SZnUPDkfsWrJMVntBOCKGLVZ
+         FfMwkcXgKO7Y+JjmrlVMY99lxqPDA4cqPG4wOrNn9uBa7KvJK0GhgE3R9ko7R+NO4As9
+         iUWP1lvmmub9TVLVq3UsOq66+IK4zPizHcQKB+keFTZFL1YEYCclJ8LCr0fVYjpsxh9X
+         t5OCExXFbtYktROrwBzDxxZIOX/8e9w2Q1g1hZdb/oz7m1OBM9KvApZxX+Ila49T6Xfs
+         ixzQ==
+X-Gm-Message-State: AOAM532Bnpvq/hcVHimqOtJXIOjnY9+2TC00avtpoxM+0f5+qvW0/mSQ
+	mfqipMbLlnELnuqBRUU8ryzyJP3HWzsw0a5WCxs=
+X-Google-Smtp-Source: ABdhPJyBrG2/HD25BUflFAr/K23ubnstDkiGKDaIC/pKd8iPOdfQRe4MLYYSwsJVi03d+N4cc1D11pTqqJBArQ1QSb8=
+X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:1397:2ffa:35b2:9631])
+ (user=samitolvanen job=sendgmr) by 2002:a5b:ed1:0:b0:634:15f0:9e87 with SMTP
+ id a17-20020a5b0ed1000000b0063415f09e87mr4349556ybs.392.1649196980591; Tue,
+ 05 Apr 2022 15:16:20 -0700 (PDT)
+Date: Tue,  5 Apr 2022 15:16:18 -0700
+Message-Id: <20220405221618.633743-1-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3441; h=from:subject;
+ bh=/iQgT6IkB64+WL3JrTtJZgkW5s5WmdKdm+zLHBU/Yj8=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBiTL+vZsW7RO18a8xqCkt9rrmxEyA4NPySbVUngQFI
+ GoRLlPeJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYky/rwAKCRBMtfaEi7xW7sxGC/
+ 9fJkMV8Rpp0ZqAPvqv/HJc8HUBS0A0GaV+mAW1Mc7A/GfLHYuxGAej4UZCoReOA/39x6QJvaKX14D2
+ 6EJpSZDjN7cCi5wI7Py/0keVybKhdtWT0wR/jSk/ghcj8JNx+j2HCzCJPr8McUGQRKSv4wFDd7Tsk0
+ ZdP7Dh0reCxpBtYULYfuOxSepm1RVcsazYCtw+k1eMzCIIhswdU6blnr0WS9KS1a2yf/uNNx/O9ZUb
+ MSgPXA8pLH8iZAI4kGZgpRtsGwKiglvWb7mxA4vEgUrL8A0rt8hmLGuWH+AaPVVnBqKymT6/Rz9tFF
+ RDm/syXq8piAt3sbjdYRww/3twDWf/rt99fVORCBV16i73UCi4U6+LTgTGUjQwZ1sOmenzX7TFuNmi
+ SZAY9dsGF809rREBiSpK7NF8Yefj2T+I8Oa9mEHDhUBMD3kM4xi8lEffuaRaFuZAQSY6Ndjsgof+y8
+ PjuLLtAIB6ZoKCYxhWWWWARBW6r8eWL0dW48vsLMceES8=
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH v2] cfi: Use __builtin_function_start
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Will Deacon <will@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-ringless
-head:   a4b855ffcf1d116e65df68fa6f5df04878bc0083
-commit: 569092d7590362c7148ac768a923783886248c3b [4/9] rxrpc: Don't use a ring buffer for call Tx queue
-config: riscv-randconfig-r042-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060503.2pTsIRTu-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/569092d7590362c7148ac768a923783886248c3b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-ringless
-        git checkout 569092d7590362c7148ac768a923783886248c3b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/rxrpc/
+Clang 14 added support for the __builtin_function_start function,
+which allows us to implement the function_nocfi macro without
+architecture-specific inline assembly and in a way that also works
+with static initializers.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Change CONFIG_CFI_CLANG to depend on Clang >=3D 14, define
+function_nocfi using __builtin_function_start, and remove the arm64
+inline assembly implementation.
 
-All warnings (new ones prefixed by >>):
+Link: https://github.com/llvm/llvm-project/commit/ec2e26eaf63558934f5b73a6e=
+530edc453cf9508
+Link: https://github.com/ClangBuiltLinux/linux/issues/1353
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Will Deacon <will@kernel.org> # arm64
+---
+v2:
+- Changed CFI_CLANG to depend on Clang 14 instead of
+  __builtin_function_start.
+- Squashed all three patches into one.
 
-   In file included from net/rxrpc/local_object.c:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from net/rxrpc/local_object.c:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from net/rxrpc/local_object.c:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> net/rxrpc/local_object.c:172:24: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                                     "krxrpctxd/%hu", ntohs(udp_conf.local_udp_port));
-                                                ~~~   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                                %d
-   include/linux/kthread.h:54:48: note: expanded from macro 'kthread_run'
-                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
-                                                    ~~~~~~~     ^~~~~~~~~~~
-   include/linux/kthread.h:28:66: note: expanded from macro 'kthread_create'
-           kthread_create_on_node(threadfn, data, NUMA_NO_NODE, namefmt, ##arg)
-                                                                ~~~~~~~    ^~~
-   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
-   #define ntohs(x) ___ntohs(x)
-                    ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
-   #define ___ntohs(x) __be16_to_cpu(x)
-                       ^~~~~~~~~~~~~~~~
-   include/uapi/linux/byteorder/little_endian.h:43:26: note: expanded from macro '__be16_to_cpu'
-   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
-           (__builtin_constant_p((__u16)(x)) ?     \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/rxrpc/local_object.c:246:23: warning: unused variable 'c' [-Wunused-variable]
-                   struct rxrpc_local *c = hlist_entry(cursor, struct rxrpc_local, link);
-                                       ^
-   9 warnings generated.
+---
+ arch/Kconfig                      |  5 +----
+ arch/arm64/include/asm/compiler.h | 16 ----------------
+ include/linux/compiler-clang.h    | 10 ++++++++++
+ 3 files changed, 11 insertions(+), 20 deletions(-)
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_SSD130X && HAS_IOMEM && DRM
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 29b0167c088b..c1627bce4a3a 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -723,10 +723,7 @@ config ARCH_SUPPORTS_CFI_CLANG
+ config CFI_CLANG
+ 	bool "Use Clang's Control Flow Integrity (CFI)"
+ 	depends on LTO_CLANG && ARCH_SUPPORTS_CFI_CLANG
+-	# Clang >=3D 12:
+-	# - https://bugs.llvm.org/show_bug.cgi?id=3D46258
+-	# - https://bugs.llvm.org/show_bug.cgi?id=3D47479
+-	depends on CLANG_VERSION >=3D 120000
++	depends on CLANG_VERSION >=3D 140000
+ 	select KALLSYMS
+ 	help
+ 	  This option enables Clang=E2=80=99s forward-edge Control Flow Integrity
+diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/com=
+piler.h
+index dc3ea4080e2e..6fb2e6bcc392 100644
+--- a/arch/arm64/include/asm/compiler.h
++++ b/arch/arm64/include/asm/compiler.h
+@@ -23,20 +23,4 @@
+ #define __builtin_return_address(val)					\
+ 	(void *)(ptrauth_clear_pac((unsigned long)__builtin_return_address(val)))
+=20
+-#ifdef CONFIG_CFI_CLANG
+-/*
+- * With CONFIG_CFI_CLANG, the compiler replaces function address
+- * references with the address of the function's CFI jump table
+- * entry. The function_nocfi macro always returns the address of the
+- * actual function instead.
+- */
+-#define function_nocfi(x) ({						\
+-	void *addr;							\
+-	asm("adrp %0, " __stringify(x) "\n\t"				\
+-	    "add  %0, %0, :lo12:" __stringify(x)			\
+-	    : "=3Dr" (addr));						\
+-	addr;								\
+-})
+-#endif
+-
+ #endif /* __ASM_COMPILER_H */
+diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.=
+h
+index babb1347148c..c84fec767445 100644
+--- a/include/linux/compiler-clang.h
++++ b/include/linux/compiler-clang.h
+@@ -69,6 +69,16 @@
+ #define __nocfi		__attribute__((__no_sanitize__("cfi")))
+ #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
+=20
++#if defined(CONFIG_CFI_CLANG)
++/*
++ * With CONFIG_CFI_CLANG, the compiler replaces function address
++ * references with the address of the function's CFI jump table
++ * entry. The function_nocfi macro always returns the address of the
++ * actual function instead.
++ */
++#define function_nocfi(x)	__builtin_function_start(x)
++#endif
++
+ /*
+  * Turn individual warnings and errors on and off locally, depending
+  * on version.
+--=20
+2.35.1.1094.g7c7d902a7c-goog
 
-
-vim +172 net/rxrpc/local_object.c
-
-   105	
-   106	/*
-   107	 * create the local socket
-   108	 * - must be called with rxrpc_local_mutex locked
-   109	 */
-   110	static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
-   111	{
-   112		struct udp_tunnel_sock_cfg tuncfg = {NULL};
-   113		struct sockaddr_rxrpc *srx = &local->srx;
-   114		struct udp_port_cfg udp_conf = {0};
-   115		struct task_struct *transmitter;
-   116		struct sock *usk;
-   117		int ret;
-   118	
-   119		_enter("%p{%d,%d}",
-   120		       local, srx->transport_type, srx->transport.family);
-   121	
-   122		udp_conf.family = srx->transport.family;
-   123		if (udp_conf.family == AF_INET) {
-   124			udp_conf.local_ip = srx->transport.sin.sin_addr;
-   125			udp_conf.local_udp_port = srx->transport.sin.sin_port;
-   126	#if IS_ENABLED(CONFIG_AF_RXRPC_IPV6)
-   127		} else {
-   128			udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
-   129			udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
-   130	#endif
-   131		}
-   132		ret = udp_sock_create(net, &udp_conf, &local->socket);
-   133		if (ret < 0) {
-   134			_leave(" = %d [socket]", ret);
-   135			return ret;
-   136		}
-   137	
-   138		tuncfg.encap_type = UDP_ENCAP_RXRPC;
-   139		tuncfg.encap_rcv = rxrpc_input_packet;
-   140		tuncfg.sk_user_data = local;
-   141		setup_udp_tunnel_sock(net, local->socket, &tuncfg);
-   142	
-   143		/* set the socket up */
-   144		usk = local->socket->sk;
-   145		usk->sk_error_report = rxrpc_error_report;
-   146	
-   147		switch (srx->transport.family) {
-   148		case AF_INET6:
-   149			/* we want to receive ICMPv6 errors */
-   150			ip6_sock_set_recverr(usk);
-   151	
-   152			/* Fall through and set IPv4 options too otherwise we don't get
-   153			 * errors from IPv4 packets sent through the IPv6 socket.
-   154			 */
-   155			fallthrough;
-   156		case AF_INET:
-   157			/* we want to receive ICMP errors */
-   158			ip_sock_set_recverr(usk);
-   159	
-   160			/* we want to set the don't fragment bit */
-   161			ip_sock_set_mtu_discover(usk, IP_PMTUDISC_DO);
-   162	
-   163			/* We want receive timestamps. */
-   164			sock_enable_timestamps(usk);
-   165			break;
-   166	
-   167		default:
-   168			BUG();
-   169		}
-   170	
-   171		transmitter = kthread_run(rxrpc_transmitter, local,
- > 172					  "krxrpctxd/%hu", ntohs(udp_conf.local_udp_port));
-   173		if (IS_ERR(transmitter)) {
-   174			ret = PTR_ERR(transmitter);
-   175			goto error_sock;
-   176		}
-   177	
-   178		local->transmitter = transmitter;
-   179		_leave(" = 0");
-   180		return 0;
-   181	
-   182	error_sock:
-   183		kernel_sock_shutdown(local->socket, SHUT_RDWR);
-   184		local->socket->sk->sk_user_data = NULL;
-   185		sock_release(local->socket);
-   186		local->socket = NULL;
-   187		return ret;
-   188	}
-   189	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
