@@ -1,83 +1,140 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D387A
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 16:25:26 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B5B41424;
-	Tue,  5 Apr 2022 09:16:13 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.8.234])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 85FD93F73B;
-	Tue,  5 Apr 2022 09:16:11 -0700 (PDT)
-Date: Tue, 5 Apr 2022 17:16:02 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/3] linux/compiler-clang.h: define function_nocfi
-Message-ID: <YkxrQl4zDe6YSoNO@FVFF77S0Q05N>
-References: <20220401201916.1487500-1-samitolvanen@google.com>
- <20220401201916.1487500-3-samitolvanen@google.com>
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FCA7C
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 16:42:50 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id b17so16598745lfv.3
+        for <llvm@lists.linux.dev>; Tue, 05 Apr 2022 09:42:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aVM16YtaCx1dYir94c9sxYwusYmuTqkX1MFty8IIFQk=;
+        b=YtUkRUgQkrt4P9V69iJ32ka9iOIb/+ccGqqjKVsR0c1fQHRSqVXLh76rhQPtxYrQCD
+         5DaXMJOw2MWRhGn1MeMzYEpTNeRWYll4CT4rEwHMH0TxvHSr8B/3jPBrSjhoSQsirJmi
+         5aurdwzxud7rt4lGs2usfaHCr6txQI9A5WPlLs4NQ76cD/Fr9W23PUOTZhnP2omqEYCD
+         XRjiG4ekyp3R1/pKvDVhTm60f8jrwkqmXZkc22HTTUcUCURHBcw5vuNRMd1IWJF8Efn6
+         sUCQOWPkg0lN6dhJ8q06t3ztFR/uwcovxLZMbX5d3v/1PewPUohAn9mFXYCWyoQvXpds
+         YRsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aVM16YtaCx1dYir94c9sxYwusYmuTqkX1MFty8IIFQk=;
+        b=c3BEbWIpz+AIoEvsIV5Ol52pW2nv5q7UPbdabwxyI9tESJWJDhf0n2GlROi8kmibQ+
+         ojNFJoEGtXvCCFUFCpTUJsiaD+inAazbAPY6vNYHXrO0jHS4Xlr1gmllhMhZqOTD6+Pi
+         dzesocrt77j1IP8lItM91Yro/+7M864fNaHz2p513vFgFLCmWKwysXqViAOLw3bBezyF
+         srj0ZpEsSe+K5VszSvZUIHVqxwGHrMuSmx1BSarrW+y7Gp0MekBiuRKSjkGJ2yNTpsbo
+         Pb+V3eU6T4C6EfEWsAmyY3oxjiw98loRp5zmMG09289XeBUMDtpyJc42jUHLPYBt0snA
+         nSpQ==
+X-Gm-Message-State: AOAM533+SRsS4/o7ILbKQm8xRhbUw1AuoWRijjoUNwGBfawM+Pc8OsSi
+	8jkzW8tT76OXVKanRDESgzrW3h2xicKZHH5tKzGc1w==
+X-Google-Smtp-Source: ABdhPJz3jBIQ7EkEmj+tI9A+lIIYlFEORto6nxVAIbaEAMf4GKZe+IPBCCzl9LE/xhd2lQpRB76SurWFw5kPGx38Ono=
+X-Received: by 2002:a19:651d:0:b0:44a:b88a:b0b1 with SMTP id
+ z29-20020a19651d000000b0044ab88ab0b1mr3373569lfb.380.1649176968442; Tue, 05
+ Apr 2022 09:42:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401201916.1487500-3-samitolvanen@google.com>
+References: <20220405113359.2880241-1-masahiroy@kernel.org> <20220405113359.2880241-10-masahiroy@kernel.org>
+In-Reply-To: <20220405113359.2880241-10-masahiroy@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 5 Apr 2022 09:42:36 -0700
+Message-ID: <CAKwvOd=oCivWGHLFLCuPeH1R-gKGRmsvg=NV5ZbSVhd13cqgSw@mail.gmail.com>
+Subject: Re: [PATCH v2 09/10] kbuild: refactor cmd_modversions_c
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
+	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Apr 01, 2022 at 01:19:15PM -0700, Sami Tolvanen wrote:
-> Use __builtin_function_start() to implement the function_nocfi() macro
-> when CONFIG_CFI_CLANG is selected.
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+On Tue, Apr 5, 2022 at 4:34 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> cmd_modversions_c implements two parts; run genksyms to calculate CRCs
+> of exported symbols, run $(LD) to update the object with the CRCs. The
+> latter is not executed for CONFIG_LTO_CLANG=y since the object is not
+> ELF but LLVM bit code at this point.
+>
+> The first part can be unified because we can always use $(NM) instead
+> of "$(OBJDUMP) -h" to dump the symbols.
+>
+> Split the code into the two macros, cmd_gen_symversions_c and
+> cmd_modversions.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
 > ---
->  include/linux/compiler-clang.h | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-> index babb1347148c..c84fec767445 100644
-> --- a/include/linux/compiler-clang.h
-> +++ b/include/linux/compiler-clang.h
-> @@ -69,6 +69,16 @@
->  #define __nocfi		__attribute__((__no_sanitize__("cfi")))
->  #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
->  
-> +#if defined(CONFIG_CFI_CLANG)
-> +/*
-> + * With CONFIG_CFI_CLANG, the compiler replaces function address
-> + * references with the address of the function's CFI jump table
-> + * entry. The function_nocfi macro always returns the address of the
-> + * actual function instead.
-> + */
-> +#define function_nocfi(x)	__builtin_function_start(x)
-> +#endif
+>
+> Changes in v2:
+>  - new
+>
+>  scripts/Makefile.build | 25 +++++++++++--------------
+>  1 file changed, 11 insertions(+), 14 deletions(-)
+>
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index d934bdf84de4..ba2be555f942 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -169,29 +169,25 @@ ifdef CONFIG_MODVERSIONS
+>  #   the actual value of the checksum generated by genksyms
+>  # o remove .tmp_<file>.o to <file>.o
+>
+> -ifdef CONFIG_LTO_CLANG
+>  # Generate .o.symversions files for each .o with exported symbols, and link these
+>  # to the kernel and/or modules at the end.
+> -cmd_modversions_c =                                                            \
+> +gen_symversions =                                                              \
+>         if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then                       \
+> -               $(call cmd_gensymtypes_c,$(KBUILD_SYMTYPES),$(@:.o=.symtypes))  \
+> +               $(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
+>                     > $@.symversions;                                           \
+>         else                                                                    \
+>                 rm -f $@.symversions;                                           \
+> -       fi;
+> -else
+> -cmd_modversions_c =                                                            \
+> -       if $(OBJDUMP) -h $@ | grep -q __ksymtab; then                           \
+> -               $(call cmd_gensymtypes_c,$(KBUILD_SYMTYPES),$(@:.o=.symtypes))  \
+> -                   > $(@D)/.tmp_$(@F:.o=.ver);                                 \
+> -                                                                               \
+> +       fi
+> +
+> +cmd_gen_symversions_c =        $(call gen_symversions,c)
+> +
+> +cmd_modversions =                                                              \
+> +       if [ -r $@.symversions ]; then                                          \
+>                 $(LD) $(KBUILD_LDFLAGS) -r -o $(@D)/.tmp_$(@F) $@               \
+> -                       -T $(@D)/.tmp_$(@F:.o=.ver);                            \
+> +                       -T $@.symversions;                                      \
+>                 mv -f $(@D)/.tmp_$(@F) $@;                                      \
+> -               rm -f $(@D)/.tmp_$(@F:.o=.ver);                                 \
+>         fi
+>  endif
+> -endif
+>
+>  ifdef CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
+>  # compiler will not generate __mcount_loc use recordmcount or recordmcount.pl
+> @@ -269,7 +265,8 @@ define rule_cc_o_c
+>         $(call cmd,checksrc)
+>         $(call cmd,checkdoc)
+>         $(call cmd,gen_objtooldep)
+> -       $(call cmd,modversions_c)
+> +       $(call cmd,gen_symversions_c)
+> +       $(if $(CONFIG_LTO_CLANG),,$(call cmd,modversions))
+>         $(call cmd,record_mcount)
+>  endef
+>
+> --
+> 2.32.0
+>
 
-As a heads-up, with patches 1 and 2 applied (but not patch 3), we have two
-definitions of function_nocfi(), which casues the compiler to scream for every
-object:
 
-| In file included from <built-in>:3:
-| In file included from ././include/linux/compiler_types.h:107:
-| ./arch/arm64/include/asm/compiler.h:33:9: warning: 'function_nocfi' macro redefined [-Wmacro-redefined]
-| #define function_nocfi(x) ({                                            \
-|         ^
-| ./include/linux/compiler-clang.h:79:9: note: previous definition is here
-| #define function_nocfi(x)       __builtin_function_start(x)
-|         ^
-| 1 warning generated.
-
-... which would be painful for bisection.
-
-I suspect It's probably worth folding patches 2 and 3 together to avoid that?
-
-Arguably we could fold the entire series together into one commit at that
-point.
-
+-- 
 Thanks,
-Mark.
+~Nick Desaulniers
