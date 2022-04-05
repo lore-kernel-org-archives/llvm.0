@@ -1,44 +1,45 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6737E15A3
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 05:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30A615A3
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 05:30:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649135406; x=1680671406;
+  t=1649136648; x=1680672648;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uml1BPu3EYtTMbgd2WGuq3w4iq6M/GD0ogJulQUKtjY=;
-  b=G9upJ4DVUkaWiJgZnoC96qpVl3FpZFRlhZ8lznE8eBMrtwNn+r/annnU
-   4Y1aSC11d7/oeRh46cVhrWmcbI/Pt2BssQikRYdeZdyCb7Q6d9WTSBN12
-   ZnJ2omBXQ4Ntpb2rjZ5x4wE9VxlKIS0cQDien3tY+xjrhG+3VPmtDJcZl
-   IHC9f4OkFJxSGUcWRQKUHT+uWnJsXoecFde2B7CSJGesZiBOU5/7RQRx1
-   A7ZtwTeYZ27wllBZODqMapy8ZoVCpewXNhj5vr91dxLXGmLl+/ymM3lab
-   y7OxKZoVES8IrI/iICs4sHJA/g01tPkHOYscXG0I9HKVT1vVVYS0FUDVU
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="258250408"
+  bh=wr0t0OxiTw1dr3KGDsnSLL5RHoD0HJbe/XDmPV7OUWw=;
+  b=QFNK06xf7GsSvQR/4xKVn3UFtwYp2fsv7/MVdGITIftLF9qCf6KtF+By
+   3E5zqGo3jtLEidC6Hl8bWOkUQTj20IlSxAdE7f8e8FrSH2ID78mw5yB3Y
+   NUPGfNDtc61dwfZ8yRH7NK1ikHbVTfoyRhjbiw9wxcCXpdk3SXv/TenD9
+   iWxwfEbb27t6CTyE091ONNgj0zxauFuMSPWbCytPSTgfDd/slThiqnk+N
+   CjV0Ugt/M9nqxnNeKk4HD4a4wTDZHcPTBYeD36QoR3KUCuEO4KOHWXXcP
+   qolcrrH9lsFGyYoFPrEyDCEAMn5VDJlQm2+fkq925pG74tgETX8snBDu0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="241254069"
 X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="258250408"
+   d="scan'208";a="241254069"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 22:09:50 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 22:30:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="721909358"
+   d="scan'208";a="721914924"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 04 Apr 2022 22:09:45 -0700
+  by orsmga005.jf.intel.com with ESMTP; 04 Apr 2022 22:30:46 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nbbRo-0002eh-L6;
-	Tue, 05 Apr 2022 05:09:44 +0000
-Date: Tue, 5 Apr 2022 13:09:14 +0800
+	id 1nbbm9-0002gF-Fu;
+	Tue, 05 Apr 2022 05:30:45 +0000
+Date: Tue, 5 Apr 2022 13:30:19 +0800
 From: kernel test robot <lkp@intel.com>
 To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 8/40]
- fs/netfs/misc.c:18:46: warning: format specifies type 'unsigned long' but
- the argument has type 'size_t' (aka 'unsigned int')
-Message-ID: <202204051354.4g0Q01jJ-lkp@intel.com>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 26/40]
+ fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types
+ ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) -
+ offset) *' (aka 'unsigned long *'))
+Message-ID: <202204051324.imdBXJD9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,76 +52,100 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
 head:   674eea41fc70a740ff83ec590f9833f805852464
-commit: cae8dd85733f703374474ed433b8263263d4fa7f [8/40] netfs: Provide invalidatepage and releasepage calls
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220405/202204051354.4g0Q01jJ-lkp@intel.com/config)
+commit: fc693b2e39df6567a0312f21bb9004e1d7983286 [26/40] netfs: Perform content encryption
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220405/202204051324.imdBXJD9-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/cae8dd85733f703374474ed433b8263263d4fa7f
+        # https://github.com/ammarfaizi2/linux-block/commit/fc693b2e39df6567a0312f21bb9004e1d7983286
         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
         git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout cae8dd85733f703374474ed433b8263263d4fa7f
+        git checkout fc693b2e39df6567a0312f21bb9004e1d7983286
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/afs/ fs/netfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/misc.c:18:46: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-           _enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
-                         ~~~                           ^~~~~~
-                         %zx
-   fs/netfs/internal.h:164:65: note: expanded from macro '_enter'
-   #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
-                                               ~~~                 ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   fs/netfs/misc.c:18:54: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-           _enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
-                             ~~~                               ^~~~~~
-                             %zx
-   fs/netfs/internal.h:164:65: note: expanded from macro '_enter'
-   #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
-                                               ~~~                 ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   2 warnings generated.
+>> fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                           seg = min(len, PAGE_SIZE - offset);
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +18 fs/netfs/misc.c
+vim +76 fs/netfs/crypto.c
 
-    10	
-    11	/*
-    12	 * Invalidate part or all of a folio
-    13	 * - release a folio and clean up its private data if offset is 0 (indicating
-    14	 *   the entire folio)
-    15	 */
-    16	void netfs_invalidate_folio(struct folio *folio, size_t offset, size_t length)
-    17	{
-  > 18		_enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
-    19	
-    20		folio_wait_fscache(folio);
-    21	}
-    22	EXPORT_SYMBOL(netfs_invalidate_folio);
-    23	
+    45	
+    46	/*
+    47	 * Populate a scatterlist from folios in an xarray.
+    48	 */
+    49	static int netfs_xarray_to_sglist(struct xarray *xa, loff_t pos, size_t len,
+    50					  struct scatterlist *sg, unsigned int n_sg)
+    51	{
+    52		struct scatterlist *p = sg;
+    53		struct folio *folio = NULL;
+    54		size_t seg, offset, skip = 0;
+    55		loff_t start = pos;
+    56		pgoff_t index = start >> PAGE_SHIFT;
+    57		int j;
+    58	
+    59		XA_STATE(xas, xa, index);
+    60	
+    61		sg_init_table(sg, n_sg);
+    62	
+    63		rcu_read_lock();
+    64	
+    65		xas_for_each(&xas, folio, ULONG_MAX) {
+    66			if (xas_retry(&xas, folio))
+    67				continue;
+    68			if (WARN_ON(xa_is_value(folio)) || WARN_ON(folio_test_hugetlb(folio)))
+    69				break;
+    70			for (j = (folio_index(folio) < index) ? index - folio_index(folio) : 0;
+    71			     j < folio_nr_pages(folio); j++
+    72			     ) {
+    73				struct page *subpage = folio_file_page(folio, j);
+    74	
+    75				offset = (pos + skip) & ~PAGE_MASK;
+  > 76				seg = min(len, PAGE_SIZE - offset);
+    77	
+    78				sg_set_page(p++, subpage, seg, offset);
+    79	
+    80				len -= seg;
+    81				skip += seg;
+    82				if (len == 0)
+    83					break;
+    84			}
+    85			if (len == 0)
+    86				break;
+    87		}
+    88	
+    89		rcu_read_unlock();
+    90		if (len > 0) {
+    91			kdebug("*** Insufficient source (%zx)", len);
+    92			//WARN_ON(len > 0);
+    93			return -EIO;
+    94		}
+    95	
+    96		sg_mark_end(p - 1);
+    97		return p - sg;
+    98	}
+    99	
 
 -- 
 0-DAY CI Kernel Test Service
