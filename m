@@ -1,43 +1,45 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DADF17D3
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 10:57:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6DD417D3
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 11:07:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649156238; x=1680692238;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/g7xwU4Od61FxWYq6/31BNxSyoS4u3oD4iiAqSBY1bo=;
-  b=hclRDn9LdirtcAzmF5nOjL5xYVXIafx2Ejn7PHjEp2yEquYpQPJ9keCC
-   6nEIcv+DueEePXEJ4euQ1E5NVyNDXzAErYa8dWrLREI9pIV38gSlNLmun
-   2NVAP3j/YfcH5bCSzyCJWtNf5BpAG50+H4LC3c1qkYSrsIkoFMzE5wZUQ
-   nwqsi4UIabCjZ15wPS0s4xOXXlMhAaShT8UcccX/uLZB3PPcVAVQwjcnb
-   /eEks4nz4S7nXqsTquqnf8eZ0OOF5Dl4JoOD//F7TJKcuqJ0aICZflEHo
-   uJStyK8CLvOHdj6h6iCBXxrZwXcPFkh31eTaTC4YMWtrI/JYWHywkJD//
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260709664"
+  t=1649156828; x=1680692828;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3S+PBrgR8OHideRbXJqAx4mt56NEYAVf+7QjssQLc6g=;
+  b=LJUNKfcZf9ltqgnEL22xyySsEOCeLA4BAtcfKb4RKlCI4ws6axt0hGu2
+   OpiGLxz08jns2Xb3yyrPSkavK7EyD0jUnl1xgF18/HlCOax8+rF0MmQ9P
+   4Sk7EcO1V14B6gD3MW7kd3Zsln+dKCn2ca4oyK6txHh+KssKjGb2o7a4u
+   XImS2AsNEqxsEKdhB1zYaym3rU2UCTlbwIjF3YKnbeqc85spGvg3LCpmf
+   SbDvfEqu+gYqTb/vmNGzMQxotOoZ+Nc2lkSooOwnfn7Ff6yB+nt4ClK96
+   RXN6JZEVDH30MZVlYqK+BpeARvc6ytFK0ZSDSOwDV5TFhAWB+id4buYjW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="259553566"
 X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="260709664"
+   d="scan'208";a="259553566"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 03:57:06 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:07:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="657891723"
+   d="scan'208";a="657895181"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 05 Apr 2022 03:57:05 -0700
+  by orsmga004.jf.intel.com with ESMTP; 05 Apr 2022 04:07:05 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nbgrw-000361-FI;
-	Tue, 05 Apr 2022 10:57:04 +0000
-Date: Tue, 5 Apr 2022 18:56:27 +0800
+	id 1nbh1c-00036Z-RE;
+	Tue, 05 Apr 2022 11:07:04 +0000
+Date: Tue, 5 Apr 2022 19:06:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] tracing: Move user_events.h temporarily out of
- include/uapi
-Message-ID: <202204051857.bpezRujI-lkp@intel.com>
-References: <20220401143903.188384f3@gandalf.local.home>
+To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 19/40]
+ lib/maple_tree.c:3863:19: warning: stack frame size (1040) exceeds limit
+ (1024) in 'mas_wr_spanning_store'
+Message-ID: <202204051823.Dzc2jr6L-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,111 +48,226 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220401143903.188384f3@gandalf.local.home>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Steven,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on rostedt-trace/for-next]
-[cannot apply to horms-ipvs/master linus/master linux/master v5.18-rc1 next-20220405]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-Move-user_events-h-temporarily-out-of-include-uapi/20220402-024026
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: s390-randconfig-r012-20220405 (https://download.01.org/0day-ci/archive/20220405/202204051857.bpezRujI-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   674eea41fc70a740ff83ec590f9833f805852464
+commit: 51b63e667ad83864c161cf2b8ef462e907536070 [19/40] Maple Tree: Add new data structure
+config: arm-lpc32xx_defconfig (https://download.01.org/0day-ci/archive/20220405/202204051823.Dzc2jr6L-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/16163677044a657fe714d351f679a0d2600c77ce
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Steven-Rostedt/tracing-Move-user_events-h-temporarily-out-of-include-uapi/20220402-024026
-        git checkout 16163677044a657fe714d351f679a0d2600c77ce
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/51b63e667ad83864c161cf2b8ef462e907536070
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 51b63e667ad83864c161cf2b8ef462e907536070
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/trace/trace_events_user.c:13:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/trace/trace_events_user.c:13:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/trace/trace_events_user.c:13:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/trace/trace_events_user.c:25:10: fatal error: 'uapi/linux/user_events.h' file not found
-   #include <uapi/linux/user_events.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   12 warnings and 1 error generated.
+   lib/maple_tree.c:758:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           case maple_dense:
+           ^
+   lib/maple_tree.c:758:2: note: insert 'break;' to avoid fall-through
+           case maple_dense:
+           ^
+           break; 
+   lib/maple_tree.c:5556:6: warning: no previous prototype for function 'mas_wr_store_setup' [-Wmissing-prototypes]
+   void mas_wr_store_setup(struct ma_wr_state *wr_mas)
+        ^
+   lib/maple_tree.c:5556:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mas_wr_store_setup(struct ma_wr_state *wr_mas)
+   ^
+   static 
+   lib/maple_tree.c:6184:5: warning: no previous prototype for function 'mtree_alloc_range' [-Wmissing-prototypes]
+   int mtree_alloc_range(struct maple_tree *mt, unsigned long *startp,
+       ^
+   lib/maple_tree.c:6184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int mtree_alloc_range(struct maple_tree *mt, unsigned long *startp,
+   ^
+   static 
+   lib/maple_tree.c:6219:5: warning: no previous prototype for function 'mtree_alloc_rrange' [-Wmissing-prototypes]
+   int mtree_alloc_rrange(struct maple_tree *mt, unsigned long *startp,
+       ^
+   lib/maple_tree.c:6219:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int mtree_alloc_rrange(struct maple_tree *mt, unsigned long *startp,
+   ^
+   static 
+   lib/maple_tree.c:76:28: warning: unused variable 'mt_max' [-Wunused-const-variable]
+   static const unsigned long mt_max[] = {
+                              ^
+   lib/maple_tree.c:317:20: warning: unused function 'mte_set_full' [-Wunused-function]
+   static inline void mte_set_full(const struct maple_enode *node)
+                      ^
+   lib/maple_tree.c:322:20: warning: unused function 'mte_clear_full' [-Wunused-function]
+   static inline void mte_clear_full(const struct maple_enode *node)
+                      ^
+   lib/maple_tree.c:832:35: warning: unused function 'mas_get_slot' [-Wunused-function]
+   static inline struct maple_enode *mas_get_slot(struct ma_state *mas,
+                                     ^
+   lib/maple_tree.c:4608:19: warning: unused function 'mas_dead_node' [-Wunused-function]
+   static inline int mas_dead_node(struct ma_state *mas, unsigned long index)
+                     ^
+   lib/maple_tree.c:4630:21: warning: unused function 'mas_first_entry' [-Wunused-function]
+   static inline void *mas_first_entry(struct ma_state *mas, struct maple_node *mn,
+                       ^
+>> lib/maple_tree.c:3863:19: warning: stack frame size (1040) exceeds limit (1024) in 'mas_wr_spanning_store' [-Wframe-larger-than]
+   static inline int mas_wr_spanning_store(struct ma_wr_state *wr_mas)
+                     ^
+   lib/maple_tree.c:4203:20: warning: stack frame size (1288) exceeds limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+   static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
+                      ^
+   12 warnings generated.
 
 
-vim +25 kernel/trace/trace_events_user.c
+vim +/mas_wr_spanning_store +3863 lib/maple_tree.c
 
-7f5a08c79df35e Beau Belgrave           2022-01-18 @25  #include <uapi/linux/user_events.h>
-16163677044a65 Steven Rostedt (Google  2022-04-01  26) #endif
-7f5a08c79df35e Beau Belgrave           2022-01-18  27  #include "trace.h"
-7f5a08c79df35e Beau Belgrave           2022-01-18  28  #include "trace_dynevent.h"
-7f5a08c79df35e Beau Belgrave           2022-01-18  29  
+  3805	
+  3806	/*
+  3807	 * mas_new_root() - Create a new root node that only contains the entry passed
+  3808	 * in.
+  3809	 * @mas: The maple state
+  3810	 * @entry: The entry to store.
+  3811	 *
+  3812	 * Only valid when the index == 0 and the last == ULONG_MAX
+  3813	 *
+  3814	 * Return 0 on error, 1 on success.
+  3815	 */
+  3816	static inline int mas_new_root(struct ma_state *mas, void *entry)
+  3817	{
+  3818		struct maple_enode *root = mas_root_locked(mas);
+  3819		enum maple_type type = maple_leaf_64;
+  3820		struct maple_node *node;
+  3821		void __rcu **slots;
+  3822		unsigned long *pivots;
+  3823	
+  3824		if (!entry && !mas->index && mas->last == ULONG_MAX) {
+  3825			mas->depth = 0;
+  3826			mas_set_height(mas);
+  3827			rcu_assign_pointer(mas->tree->ma_root, entry);
+  3828			mas->node = MAS_START;
+  3829			goto done;
+  3830		}
+  3831	
+  3832		mas_node_count(mas, 1);
+  3833		if (mas_is_err(mas))
+  3834			return 0;
+  3835	
+  3836		node = mas_pop_node(mas);
+  3837		pivots = ma_pivots(node, type);
+  3838		slots = ma_slots(node, type);
+  3839		node->parent = ma_parent_ptr(
+  3840			      ((unsigned long)mas->tree | MA_ROOT_PARENT));
+  3841		mas->node = mt_mk_node(node, type);
+  3842		rcu_assign_pointer(slots[0], entry);
+  3843		pivots[0] = mas->last;
+  3844		mas->depth = 1;
+  3845		mas_set_height(mas);
+  3846		rcu_assign_pointer(mas->tree->ma_root, mte_mk_root(mas->node));
+  3847	
+  3848	done:
+  3849		if (xa_is_node(root))
+  3850			mte_destroy_walk(root, mas->tree);
+  3851	
+  3852		return 1;
+  3853	}
+  3854	/*
+  3855	 * mas_spanning_store() - Create a subtree with the store operation completed
+  3856	 * and new nodes where necessary, then place the sub-tree in the actual tree.
+  3857	 * Note that mas is expected to point to the node which caused the store to
+  3858	 * span.
+  3859	 * @wr_mas: The maple write state
+  3860	 *
+  3861	 * Return: 0 on error, positive on success.
+  3862	 */
+> 3863	static inline int mas_wr_spanning_store(struct ma_wr_state *wr_mas)
+  3864	{
+  3865		struct maple_subtree_state mast;
+  3866		struct maple_big_node b_node;
+  3867		struct ma_state *mas;
+  3868		unsigned char height;
+  3869	
+  3870		/* Left and Right side of spanning store */
+  3871		MA_STATE(l_mas, NULL, 0, 0);
+  3872		MA_STATE(r_mas, NULL, 0, 0);
+  3873	
+  3874		MA_WR_STATE(r_wr_mas, &r_mas, wr_mas->entry);
+  3875		MA_WR_STATE(l_wr_mas, &l_mas, wr_mas->entry);
+  3876	
+  3877		/*
+  3878		 * A store operation that spans multiple nodes is called a spanning
+  3879		 * store and is handled early in the store call stack by the function
+  3880		 * mas_is_span_wr().  When a spanning store is identified, the maple
+  3881		 * state is duplicated.  The first maple state walks the left tree path
+  3882		 * to ``index``, the duplicate walks the right tree path to ``last``.
+  3883		 * The data in the two nodes are combined into a single node, two nodes,
+  3884		 * or possibly three nodes (see the 3-way split above).  A ``NULL``
+  3885		 * written to the last entry of a node is considered a spanning store as
+  3886		 * a rebalance is required for the operation to complete and an overflow
+  3887		 * of data may happen.
+  3888		 */
+  3889		mas = wr_mas->mas;
+  3890		trace_ma_op(__func__, mas);
+  3891	
+  3892		if (unlikely(!mas->index && mas->last == ULONG_MAX))
+  3893			return mas_new_root(mas, wr_mas->entry);
+  3894		/*
+  3895		 * Node rebalancing may occur due to this store, so there may be two new
+  3896		 * entries per level plus a new root.
+  3897		 */
+  3898		height = mas_mt_height(mas);
+  3899		mas_node_count(mas, 1 + height * 3);
+  3900		if (mas_is_err(mas))
+  3901			return 0;
+  3902	
+  3903		/*
+  3904		 * Set up right side.  Need to get to the next offset after the spanning
+  3905		 * store to ensure it's not NULL and to combine both the next node and
+  3906		 * the node with the start together.
+  3907		 */
+  3908		r_mas = *mas;
+  3909		/* Avoid overflow, walk to next slot in the tree. */
+  3910		if (r_mas.last + 1)
+  3911			r_mas.last++;
+  3912	
+  3913		r_mas.index = r_mas.last;
+  3914		mas_wr_walk_index(&r_wr_mas);
+  3915		r_mas.last = r_mas.index = mas->last;
+  3916	
+  3917		/* Set up left side. */
+  3918		l_mas = *mas;
+  3919		mas_wr_walk_index(&l_wr_mas);
+  3920	
+  3921		if (!wr_mas->entry) {
+  3922			mas_extend_spanning_null(&l_wr_mas, &r_wr_mas);
+  3923			mas->offset = l_mas.offset;
+  3924			mas->index = l_mas.index;
+  3925			mas->last = l_mas.last = r_mas.last;
+  3926		}
+  3927	
+  3928		/* Copy l_mas and store the value in b_node. */
+  3929		b_node.b_end = mas_store_b_node(&l_wr_mas, &b_node, l_wr_mas.node_end);
+  3930		/* Copy r_mas into b_node. */
+  3931		mas_mab_cp(&r_mas, r_mas.offset, r_wr_mas.node_end,
+  3932			   &b_node, b_node.b_end + 1);
+  3933		/* Stop spanning searches by searching for just index. */
+  3934		l_mas.index = l_mas.last = mas->index;
+  3935	
+  3936		mast.bn = &b_node;
+  3937		mast.orig_l = &l_mas;
+  3938		mast.orig_r = &r_mas;
+  3939		/* Combine l_mas and r_mas and split them up evenly again. */
+  3940		return mas_spanning_rebalance(mas, &mast, height + 1);
+  3941	}
+  3942	
 
 -- 
 0-DAY CI Kernel Test Service
