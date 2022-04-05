@@ -1,44 +1,47 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9EF28E5
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 13:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF1E2F3A
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 14:06:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649165504; x=1680701504;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BVyUMAMp/1gi+XuYF2KWBsy3RtdVLgZsq6bNlEQfsuY=;
-  b=I1IjxSUiaMV3Z1ch2lTocyKFVkTu0AHAVqgtEFIQUrAxWe3l2p3+tu9F
-   b61PD7GZvVaRQFI/o6hTSIO2Wy349X4KWnhL5NgfTk9unqa48eceIkbLY
-   H2fKkViGp7p8TSPlWcPOuY/yKmsqJnrWwB7a605BpuTI/KgYnuNWj9jo5
-   HNyZkhT9WQxVEmn4pRJ50P91zbwm0uXUhrcrn/ElVOcu2sc6B6V1mYqBJ
-   K0SLhaXTfRBc5BNmrGnzymCa59/9rmxIEY1Zj2FZIbi4QYUUMQ8TFi1kA
-   SesQZIN0TfQXBFFJTo40KwIsEe2ROXS5l9O3T7YOBY1RNNmg9+vEB/67F
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="347189328"
+  t=1649167572; x=1680703572;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CFa5A1SPasxdt/faFPNQMzhbyj0FQCps6LoEV//jNAc=;
+  b=gB0h8A2ET2bChIXSXnws/J6KxfoebkBHYYjr9Vc7co6wu7I3DJ6qnxHS
+   hO1tDWaxR+dH6xk8EPXNc+J2+UUxrmhHTAlQP85P6qis4pUOyIej4zdQ3
+   hkpZXndYo5OAmvCaoftCOOITjQ1/xHdC0a/aedHCJFn6y4RS/csHLyvkt
+   9PEceEw4Ylk3rllDweyQ3/40eaC0nai/0LQ3By81OUKukNr2OPmjzyAu+
+   l94MXcHNFyOaNEA5a5tDyY6jZItoi8x44ARXSVvN9U0lvAy5apL0rXg/7
+   XweLcIGe73xSKGbENHqpHx9gPJUT9YL07/88TdLF0ZVvNklMgU+GXd1K4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260451467"
 X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="347189328"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:31:32 -0700
+   d="scan'208";a="260451467"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 07:06:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="620358854"
+   d="scan'208";a="523471853"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Apr 2022 06:31:30 -0700
+  by orsmga002.jf.intel.com with ESMTP; 05 Apr 2022 07:06:08 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nbjHN-0003KM-Js;
-	Tue, 05 Apr 2022 13:31:29 +0000
-Date: Tue, 5 Apr 2022 21:31:07 +0800
+	id 1nbjot-0003Mn-HR;
+	Tue, 05 Apr 2022 14:06:07 +0000
+Date: Tue, 5 Apr 2022 22:05:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Sascha Hauer <s.hauer@pengutronix.de>, alsa-devel@alsa-project.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 39/40]
- fs/afs/write.c:347:6: warning: variable 'ret' is used uninitialized whenever
- 'if' condition is true
-Message-ID: <202204052142.PgHNENti-lkp@intel.com>
+	Xiubo Li <Xiubo.Lee@gmail.com>, Fabio Estevam <festevam@gmail.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Vinod Koul <vkoul@kernel.org>, NXP Linux Team <linux-imx@nxp.com>,
+	kernel@pengutronix.de, dmaengine@vger.kernel.org,
+	Shengjiu Wang <shengjiu.wang@gmail.com>
+Subject: Re: [PATCH v3 12/20] ASoC: fsl_micfil: add multi fifo support
+Message-ID: <202204052146.aQF1Px8G-lkp@intel.com>
+References: <20220405075959.2744803-13-s.hauer@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,168 +50,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220405075959.2744803-13-s.hauer@pengutronix.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   674eea41fc70a740ff83ec590f9833f805852464
-commit: e3f5aec34955d83f706c49c395274da333dd726d [39/40] afs: [DON'T MERGE] Implement trivial content crypto for testing purposes
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220405/202204052142.PgHNENti-lkp@intel.com/config)
+Hi Sascha,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on shawnguo/for-next vkoul-dmaengine/next linus/master v5.18-rc1 next-20220405]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sascha-Hauer/ASoC-fsl_micfil-Driver-updates/20220405-161030
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: x86_64-randconfig-c007 (https://download.01.org/0day-ci/archive/20220405/202204052146.aQF1Px8G-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/e3f5aec34955d83f706c49c395274da333dd726d
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout e3f5aec34955d83f706c49c395274da333dd726d
+        # https://github.com/intel-lab-lkp/linux/commit/05755df1cf507c46e44c4742bed6090e546b2905
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sascha-Hauer/ASoC-fsl_micfil-Driver-updates/20220405-161030
+        git checkout 05755df1cf507c46e44c4742bed6090e546b2905
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/afs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/fsl/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/afs/write.c:347:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!buf)
-               ^~~~
-   fs/afs/write.c:417:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   fs/afs/write.c:347:2: note: remove the 'if' if its condition is always false
-           if (!buf)
-           ^~~~~~~~~
-   fs/afs/write.c:329:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   fs/afs/write.c:454:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!buf)
-               ^~~~
-   fs/afs/write.c:524:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   fs/afs/write.c:454:2: note: remove the 'if' if its condition is always false
-           if (!buf)
-           ^~~~~~~~~
-   fs/afs/write.c:436:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   2 warnings generated.
+>> sound/soc/fsl/fsl_micfil.c:19:10: fatal error: 'linux/platform_data/dma-imx.h' file not found
+   #include <linux/platform_data/dma-imx.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +347 fs/afs/write.c
+vim +19 sound/soc/fsl/fsl_micfil.c
 
-   312	
-   313	/*
-   314	 * Encrypt part of a write for fscrypt.  The caller reserved an extra
-   315	 * scatterlist element before each of source_sg and dest_sg for our purposes,
-   316	 * should we need them.
-   317	 */
-   318	int afs_encrypt_block(struct netfs_io_request *wreq, loff_t pos, size_t len,
-   319			      struct scatterlist *source_sg, unsigned int n_source,
-   320			      struct scatterlist *dest_sg, unsigned int n_dest)
-   321	{
-   322		struct crypto_sync_skcipher *ci;
-   323		struct skcipher_request *req;
-   324		struct crypto_skcipher *tfm;
-   325		struct sha256_state *sha;
-   326		void *buf = NULL;
-   327		__be64 *session_key;
-   328		u8 *iv, *b0;
-   329		int ret;
-   330	
-   331		ci = crypto_alloc_sync_skcipher("cts(cbc(aes))", 0, 0);
-   332		if (IS_ERR(ci)) {
-   333			ret = PTR_ERR(ci);
-   334			pr_err("Can't allocate cipher: %d\n", ret);
-   335			goto error;
-   336		}
-   337		tfm = &ci->base;
-   338	
-   339		if (crypto_sync_skcipher_ivsize(ci) > 16 &&
-   340		    crypto_sync_skcipher_blocksize(ci) > 16) {
-   341			pr_err("iv wrong size: %u\n", crypto_sync_skcipher_ivsize(ci));
-   342			ret = -EINVAL;
-   343			goto error_ci;
-   344		}
-   345	
-   346		buf = kzalloc(4 * 16 + sizeof(*sha), GFP_KERNEL);
- > 347		if (!buf)
-   348			goto error_ci;
-   349		b0 = buf;
-   350		iv = buf + 32;
-   351		session_key = buf + 48;
-   352		session_key[0] = cpu_to_be64(pos);
-   353		session_key[1] = cpu_to_le64(pos);
-   354		sha = buf + 64;
-   355	
-   356		*(__be64 *)iv = pos;
-   357	
-   358		ret = crypto_sync_skcipher_setkey(ci, (u8 *)session_key, 16);
-   359		if (ret < 0) {
-   360			pr_err("Setkey failed: %d\n", ret);
-   361			goto error_ci;
-   362		}
-   363	
-   364		ret = -ENOMEM;
-   365		req = skcipher_request_alloc(tfm, GFP_NOFS);
-   366		if (!req)
-   367			goto error_ci;
-   368	
-   369		skcipher_request_set_sync_tfm(req, ci);
-   370		skcipher_request_set_callback(req, 0, NULL, NULL);
-   371	
-   372		/* If the length is so short that the CTS algorithm will refuse to
-   373		 * handle it, prepend a predictable block on the front and discard the
-   374		 * output.  Since CTS does draw data backwards, we can regenerate the
-   375		 * encryption on just that block at decryption time.
-   376		 */
-   377		if (len < 16) {
-   378			unsigned int i;
-   379			u8 *p = buf + 16;
-   380	
-   381			kdebug("preblock %16phN", iv);
-   382			sha256_init(sha);
-   383			sha256_update(sha, iv, 32); /* iv and session key */
-   384			sha256_final(sha, b0);
-   385			kdebug("preblock %16phN", b0);
-   386	
-   387			netfs_dump_sg("SRC", source_sg, n_source);
-   388			if (sg_copy_to_buffer(source_sg, n_source, p, len) != len) {
-   389				ret = -EIO;
-   390				goto error_req;
-   391			}
-   392	
-   393			for (i = 0; i < len; i++)
-   394				p[i] += b0[i];
-   395	
-   396			if (sg_copy_from_buffer(dest_sg, n_dest, p, len) != len) {
-   397				ret = -EIO;
-   398				goto error_req;
-   399			}
-   400			netfs_dump_sg("DST", source_sg, n_source);
-   401			ret = 0;
-   402		} else {
-   403			netfs_dump_sg("SRC", source_sg, n_source);
-   404			netfs_dump_sg("DST", dest_sg, n_dest);
-   405			skcipher_request_set_crypt(req, source_sg, dest_sg, len, iv);
-   406			ret = crypto_skcipher_encrypt(req);
-   407			if (ret < 0)
-   408				pr_err("Encrypt failed: %d\n", ret);
-   409		}
-   410	
-   411	error_req:
-   412		skcipher_request_free(req);
-   413	error_ci:
-   414		kfree(buf);
-   415		crypto_free_sync_skcipher(ci);
-   416	error:
-   417		return ret;
-   418	}
-   419	
+     3	
+     4	#include <linux/bitfield.h>
+     5	#include <linux/clk.h>
+     6	#include <linux/device.h>
+     7	#include <linux/interrupt.h>
+     8	#include <linux/kobject.h>
+     9	#include <linux/kernel.h>
+    10	#include <linux/module.h>
+    11	#include <linux/of.h>
+    12	#include <linux/of_address.h>
+    13	#include <linux/of_irq.h>
+    14	#include <linux/of_platform.h>
+    15	#include <linux/pm_runtime.h>
+    16	#include <linux/regmap.h>
+    17	#include <linux/sysfs.h>
+    18	#include <linux/types.h>
+  > 19	#include <linux/platform_data/dma-imx.h>
+    20	#include <sound/dmaengine_pcm.h>
+    21	#include <sound/pcm.h>
+    22	#include <sound/soc.h>
+    23	#include <sound/tlv.h>
+    24	#include <sound/core.h>
+    25	
 
 -- 
 0-DAY CI Kernel Test Service
