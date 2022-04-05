@@ -1,13 +1,13 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F1E67A
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 16:23:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D387A
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 16:25:26 +0000 (UTC)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB32C23A;
-	Tue,  5 Apr 2022 09:23:18 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B5B41424;
+	Tue,  5 Apr 2022 09:16:13 -0700 (PDT)
 Received: from FVFF77S0Q05N (unknown [10.57.8.234])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B3C23F718;
-	Tue,  5 Apr 2022 09:23:16 -0700 (PDT)
-Date: Tue, 5 Apr 2022 17:23:13 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 85FD93F73B;
+	Tue,  5 Apr 2022 09:16:11 -0700 (PDT)
+Date: Tue, 5 Apr 2022 17:16:02 +0100
 From: Mark Rutland <mark.rutland@arm.com>
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: Kees Cook <keescook@chromium.org>,
@@ -17,11 +17,10 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3] arm64: Drop the inline assembly implementation of
- function_nocfi
-Message-ID: <Ykxs8YmNBtst8DM5@FVFF77S0Q05N>
+Subject: Re: [PATCH 2/3] linux/compiler-clang.h: define function_nocfi
+Message-ID: <YkxrQl4zDe6YSoNO@FVFF77S0Q05N>
 References: <20220401201916.1487500-1-samitolvanen@google.com>
- <20220401201916.1487500-4-samitolvanen@google.com>
+ <20220401201916.1487500-3-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -30,63 +29,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220401201916.1487500-4-samitolvanen@google.com>
+In-Reply-To: <20220401201916.1487500-3-samitolvanen@google.com>
 
-On Fri, Apr 01, 2022 at 01:19:16PM -0700, Sami Tolvanen wrote:
-> Drop the inline assembly version of function_nocfi() now that
-> CONFIG_CFI_CLANG depends on __builtin_function_start(), which allows
-> this macro to be implemented more cleanly and in a way that works also
-> with static initializers.
+On Fri, Apr 01, 2022 at 01:19:15PM -0700, Sami Tolvanen wrote:
+> Use __builtin_function_start() to implement the function_nocfi() macro
+> when CONFIG_CFI_CLANG is selected.
 > 
 > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 > ---
->  arch/arm64/include/asm/compiler.h | 16 ----------------
->  1 file changed, 16 deletions(-)
+>  include/linux/compiler-clang.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+> index babb1347148c..c84fec767445 100644
+> --- a/include/linux/compiler-clang.h
+> +++ b/include/linux/compiler-clang.h
+> @@ -69,6 +69,16 @@
+>  #define __nocfi		__attribute__((__no_sanitize__("cfi")))
+>  #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
+>  
+> +#if defined(CONFIG_CFI_CLANG)
+> +/*
+> + * With CONFIG_CFI_CLANG, the compiler replaces function address
+> + * references with the address of the function's CFI jump table
+> + * entry. The function_nocfi macro always returns the address of the
+> + * actual function instead.
+> + */
+> +#define function_nocfi(x)	__builtin_function_start(x)
+> +#endif
 
-It's very nice to see the asm go here!
+As a heads-up, with patches 1 and 2 applied (but not patch 3), we have two
+definitions of function_nocfi(), which casues the compiler to scream for every
+object:
 
-I grabbed the LLVM 14.0.0 binary release from llvm.org and gave this a spin. I
-tested with ThinLTO and CFI_CLANG, and verified that CPU hotplug and ftrace
-worked as expected (given those rely on function_nocfi()), and that the LKDTM
-CFI_FORWARD_PROTO caught the mismatched prototype as expected.
+| In file included from <built-in>:3:
+| In file included from ././include/linux/compiler_types.h:107:
+| ./arch/arm64/include/asm/compiler.h:33:9: warning: 'function_nocfi' macro redefined [-Wmacro-redefined]
+| #define function_nocfi(x) ({                                            \
+|         ^
+| ./include/linux/compiler-clang.h:79:9: note: previous definition is here
+| #define function_nocfi(x)       __builtin_function_start(x)
+|         ^
+| 1 warning generated.
 
-FWIW:
+... which would be painful for bisection.
 
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Tested-by: Mark Rutland <mark.rutland@arm.com>
+I suspect It's probably worth folding patches 2 and 3 together to avoid that?
 
-As noted on patch 2 I think we should squash the series together, but those
-tags apply either way.
+Arguably we could fold the entire series together into one commit at that
+point.
 
 Thanks,
 Mark.
-
-> 
-> diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
-> index dc3ea4080e2e..6fb2e6bcc392 100644
-> --- a/arch/arm64/include/asm/compiler.h
-> +++ b/arch/arm64/include/asm/compiler.h
-> @@ -23,20 +23,4 @@
->  #define __builtin_return_address(val)					\
->  	(void *)(ptrauth_clear_pac((unsigned long)__builtin_return_address(val)))
->  
-> -#ifdef CONFIG_CFI_CLANG
-> -/*
-> - * With CONFIG_CFI_CLANG, the compiler replaces function address
-> - * references with the address of the function's CFI jump table
-> - * entry. The function_nocfi macro always returns the address of the
-> - * actual function instead.
-> - */
-> -#define function_nocfi(x) ({						\
-> -	void *addr;							\
-> -	asm("adrp %0, " __stringify(x) "\n\t"				\
-> -	    "add  %0, %0, :lo12:" __stringify(x)			\
-> -	    : "=r" (addr));						\
-> -	addr;								\
-> -})
-> -#endif
-> -
->  #endif /* __ASM_COMPILER_H */
-> -- 
-> 2.35.0
-> 
