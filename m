@@ -1,118 +1,109 @@
-Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A042F3A
-	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 14:15:13 +0000 (UTC)
-Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-05.nifty.com with ESMTP id 235E3GVH008586
-	for <llvm@lists.linux.dev>; Tue, 5 Apr 2022 23:03:16 +0900
-Received: from grover.. (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-09.nifty.com with ESMTP id 235E2k8R021295;
-	Tue, 5 Apr 2022 23:02:52 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 235E2k8R021295
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1649167373;
-	bh=dJWl8ojIyORclruErwON0RrHfXvcLP2fynkVmPN0hbY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=0gPpYwVK3J78cPN2gVBns4jH7jWVZYSc3UX75CeziI7H3kVcfTCd8d9UHrS/AdBae
-	 ZjdDIG4ThuMP/PenHWe53+DuMJ1vUlJsIzZyQK0jplBYNLwifcPme7ytjhd2VYj96Y
-	 HpSQiqEGJA8j1M9xB8pOccIuC8iFKLr1i/mGfJLeHdONBDVjEf6EO6/oY80iIVUgPY
-	 b9klvh05rqNnGODj03He6bxOfJRd8UnRFsW32Ce9CKFZhDm22zQfBy6ZXMLxPuaZdc
-	 yIv3Drz+jwjir8DnjfWtU3JSiMMqGPZ3jH+medfqTAS7QS8V/SwjK8sGTE2vxJx02K
-	 haYbgFw0TtIfA==
-X-Nifty-SrcIP: [133.32.177.133]
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Subject: [PATCH v2 09/10] kbuild: refactor cmd_modversions_c
-Date: Tue,  5 Apr 2022 23:02:28 +0900
-Message-Id: <20220405140229.2895394-10-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220405140229.2895394-1-masahiroy@kernel.org>
-References: <20220405140229.2895394-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AF87A
+	for <llvm@lists.linux.dev>; Tue,  5 Apr 2022 14:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649170032; x=1680706032;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GKZ1Ay9v3QQaaOBw5he1lVcsKdKzLvRprZT+72sHRgE=;
+  b=SvQn9dbaejMy+mmFTABSOMmTiIblMLjb5zAbLtCOZR1oO8PhfdUynM6N
+   mlRh0HG6EVC7Qw1Z7QmnlYbYJ6PhhI3nCUOPMb0bOl9YST2WeeUZY4ObN
+   OrfqcLoUmCpGQ6CEu6bAqf4X9b5DpR97nhqvtROPgJ3PUxRGs/w96X5r2
+   TA2+e7vznl/5lbRU4QBCfOfZKVqJ4fMfw9hJ5wSa+/N27Mo1FLGZTQsif
+   5M6xDZU0u9dFAZTAJbHdv/Z22M1nxcDOpLSxlsFtvDUEmVcY7FzssJwmw
+   c1XzRLtYNMGaUv+WfWLERe5hR8Is69bFhtgucNwH0pEjC3d2HvVtAdsmC
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="242907693"
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="242907693"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 07:47:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="587952167"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 05 Apr 2022 07:47:10 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nbkSb-0003Qn-O0;
+	Tue, 05 Apr 2022 14:47:09 +0000
+Date: Tue, 5 Apr 2022 22:46:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org, arm@kernel.org
+Subject: [soc:multiplatform-misc-5.18 1/13]
+ arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype
+ for function 'mmc_status'
+Message-ID: <202204052254.Ubh7pVDq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-cmd_modversions_c implements two parts; run genksyms to calculate CRCs
-of exported symbols, run $(LD) to update the object with the CRCs. The
-latter is not executed for CONFIG_LTO_CLANG=y since the object is not
-ELF but LLVM bit code at this point.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git multiplatform-misc-5.18
+head:   a2677c00b0f03b8cad961f785941ca257f454df3
+commit: d7445676e86900f8dc363825033ff62416c216e0 [1/13] ARM: versatile: move integrator/realview/vexpress to versatile
+config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20220405/202204052254.Ubh7pVDq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=d7445676e86900f8dc363825033ff62416c216e0
+        git remote add soc https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+        git fetch --no-tags soc multiplatform-misc-5.18
+        git checkout d7445676e86900f8dc363825033ff62416c216e0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-The first part can be unified because we can always use $(NM) instead
-of "$(OBJDUMP) -h" to dump the symbols.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Split the code into the two macros, cmd_gen_symversions_c and
-cmd_modversions.
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+>> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
+   unsigned int mmc_status(struct device *dev)
+                ^
+   arch/arm/mach-versatile/versatile.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned int mmc_status(struct device *dev)
+   ^
+   static 
+   1 warning generated.
 
-Changes in v2:
- - new
 
- scripts/Makefile.build | 25 +++++++++++--------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+vim +/mmc_status +56 arch/arm/mach-versatile/versatile.c
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index d934bdf84de4..ba2be555f942 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -169,29 +169,25 @@ ifdef CONFIG_MODVERSIONS
- #   the actual value of the checksum generated by genksyms
- # o remove .tmp_<file>.o to <file>.o
- 
--ifdef CONFIG_LTO_CLANG
- # Generate .o.symversions files for each .o with exported symbols, and link these
- # to the kernel and/or modules at the end.
--cmd_modversions_c =								\
-+gen_symversions =								\
- 	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
--		$(call cmd_gensymtypes_c,$(KBUILD_SYMTYPES),$(@:.o=.symtypes))	\
-+		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
- 		    > $@.symversions;						\
- 	else									\
- 		rm -f $@.symversions;						\
--	fi;
--else
--cmd_modversions_c =								\
--	if $(OBJDUMP) -h $@ | grep -q __ksymtab; then				\
--		$(call cmd_gensymtypes_c,$(KBUILD_SYMTYPES),$(@:.o=.symtypes))	\
--		    > $(@D)/.tmp_$(@F:.o=.ver);					\
--										\
-+	fi
-+
-+cmd_gen_symversions_c =	$(call gen_symversions,c)
-+
-+cmd_modversions =								\
-+	if [ -r $@.symversions ]; then						\
- 		$(LD) $(KBUILD_LDFLAGS) -r -o $(@D)/.tmp_$(@F) $@ 		\
--			-T $(@D)/.tmp_$(@F:.o=.ver);				\
-+			-T $@.symversions;					\
- 		mv -f $(@D)/.tmp_$(@F) $@;					\
--		rm -f $(@D)/.tmp_$(@F:.o=.ver);					\
- 	fi
- endif
--endif
- 
- ifdef CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
- # compiler will not generate __mcount_loc use recordmcount or recordmcount.pl
-@@ -269,7 +265,8 @@ define rule_cc_o_c
- 	$(call cmd,checksrc)
- 	$(call cmd,checkdoc)
- 	$(call cmd,gen_objtooldep)
--	$(call cmd,modversions_c)
-+	$(call cmd,gen_symversions_c)
-+	$(if $(CONFIG_LTO_CLANG),,$(call cmd,modversions))
- 	$(call cmd,record_mcount)
- endef
- 
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  55  
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08 @56  unsigned int mmc_status(struct device *dev)
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  57  {
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  58  	struct amba_device *adev = container_of(dev, struct amba_device, dev);
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  59  	u32 mask;
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  60  
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  61  	if (adev->res.start == VERSATILE_MMCI0_BASE)
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  62  		mask = 1;
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  63  	else
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  64  		mask = 2;
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  65  
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  66  	return readl(versatile_sys_base + VERSATILE_SYS_MCI_OFFSET) & mask;
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  67  }
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  68  
+
+:::::: The code at line 56 was first introduced by commit
+:::::: a70967892111934e292485ce84f1bab38cc55380 ARM: versatile: merge mach code into a single file
+
+:::::: TO: Rob Herring <robh@kernel.org>
+:::::: CC: Arnd Bergmann <arnd@arndb.de>
+
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
