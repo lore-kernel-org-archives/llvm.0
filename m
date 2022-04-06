@@ -1,257 +1,141 @@
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2884D18D
-	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 01:53:32 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V9JJspu_1649209690;
-Received: from 192.168.193.179(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V9JJspu_1649209690)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 06 Apr 2022 09:48:11 +0800
-Message-ID: <2bda020e-cc1b-ecf2-be23-9b7ed5d61945@linux.alibaba.com>
-Date: Tue, 5 Apr 2022 18:48:09 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C6518D
+	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 02:02:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649210567; x=1680746567;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=q9HJ/wMoqCq/bvozt3SgFYGtUgCsUPN2Y8mufFhHYxg=;
+  b=fS/37ow91/wRlVvtYeosAM+jHpFDMittLfAqCcsAwAPNlYyvjZfyl5SR
+   AkmyzL2jCU6wHrx8Ud0K8FwRs683nMZHxbZzFF2tOdgzUYyEU2fvG8+AN
+   0vv+pleFZdHnG5cMWsu5UNZO8FZ732z+9ygce5OLygpDpro0rXnCkxAEe
+   qU9aky5mYfhx44t/mffsk2gxXpOQw98eZG005oO09BEpAIJsEcZ+UyXFK
+   ol5gGzPRyNBbKSXb1G1MZRxSH9PAvun3tiDhaDN4qAMY3P/ySGnCsur1r
+   v68rR5G9oDIS+8Mac976qye8SukWAssHGtrkP/PXNz7372a0J07pvHQtK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="243065680"
+X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
+   d="scan'208";a="243065680"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 19:02:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
+   d="scan'208";a="608701778"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Apr 2022 19:02:45 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nbv0O-0003yv-GN;
+	Wed, 06 Apr 2022 02:02:44 +0000
+Date: Wed, 6 Apr 2022 10:01:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rob Herring <robh@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:robh/linux/dt/pop-pci-nodes 2/2]
+ drivers/pci/of.c:29:6: warning: no previous prototype for function
+ 'add_bus_props'
+Message-ID: <202204060919.ixlG0hLi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-From: Dan Li <ashimida@linux.alibaba.com>
-Subject: Re: [PATCH v4 2/2] lkdtm: Add Shadow Call Stack tests
-To: catalin.marinas@arm.com, will@kernel.org, keescook@chromium.org,
- arnd@arndb.de, gregkh@linuxfoundation.org, nathan@kernel.org,
- ndesaulniers@google.com, shuah@kernel.org, mark.rutland@arm.com,
- ojeda@kernel.org, akpm@linux-foundation.org, elver@google.com,
- luc.vanoostenryck@gmail.com, samitolvanen@google.com
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-kselftest@vger.kernel.org,
- linux-hardening@vger.kernel.org, Dan Li <ashimida@linux.alibaba.com>
-References: <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <20220314135329.80621-1-ashimida@linux.alibaba.com>
-Content-Language: en-US
-In-Reply-To: <20220314135329.80621-1-ashimida@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Kees,
+tree:   https://github.com/ammarfaizi2/linux-block robh/linux/dt/pop-pci-nodes
+head:   b9198a9525a97d05b0bb2a7282fede92d7d2d93d
+commit: b9198a9525a97d05b0bb2a7282fede92d7d2d93d [2/2] PCI: Create DT nodes if they don't exist
+config: mips-buildonly-randconfig-r002-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060919.ixlG0hLi-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/b9198a9525a97d05b0bb2a7282fede92d7d2d93d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block robh/linux/dt/pop-pci-nodes
+        git checkout b9198a9525a97d05b0bb2a7282fede92d7d2d93d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pci/
 
-Gentile ping for this :).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I also saw the discussion on llvm-project, use address of labels as a
-parameter doesn't seem to be stable.
+All warnings (new ones prefixed by >>):
 
-Do we need to split it into two cases here?
+   drivers/pci/of.c:18:21: warning: no previous prototype for function 'make_node' [-Wmissing-prototypes]
+   struct device_node *make_node(void)
+                       ^
+   drivers/pci/of.c:18:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct device_node *make_node(void)
+   ^
+   static 
+>> drivers/pci/of.c:29:6: warning: no previous prototype for function 'add_bus_props' [-Wmissing-prototypes]
+   void add_bus_props(struct device_node *node)
+        ^
+   drivers/pci/of.c:29:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void add_bus_props(struct device_node *node)
+   ^
+   static 
+   drivers/pci/of.c:60:6: warning: no previous prototype for function 'make_dev_node' [-Wmissing-prototypes]
+   void make_dev_node(struct pci_dev *dev)
+        ^
+   drivers/pci/of.c:60:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void make_dev_node(struct pci_dev *dev)
+   ^
+   static 
+   drivers/pci/of.c:88:21: warning: no previous prototype for function 'make_bus_node' [-Wmissing-prototypes]
+   struct device_node *make_bus_node(struct pci_bus *bus)
+                       ^
+   drivers/pci/of.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct device_node *make_bus_node(struct pci_bus *bus)
+   ^
+   static 
+   4 warnings generated.
 
-Link: https://github.com/llvm/llvm-project/issues/54328
 
-Thanks,
-Dan
+vim +/add_bus_props +29 drivers/pci/of.c
 
+    28	
+  > 29	void add_bus_props(struct device_node *node)
+    30	{
+    31		struct property *prop;
+    32		__be32 *val;
+    33	
+    34		prop = kzalloc(sizeof(*prop), GFP_KERNEL);
+    35		prop->name = "ranges";
+    36		prop->value = prop + 1;
+    37		prop->next = node->properties;
+    38		node->properties = prop;
+    39	
+    40		prop = kzalloc(sizeof(*prop) + sizeof(__be32), GFP_KERNEL);
+    41		prop->name = "#address-cells";
+    42		prop->value = prop + 1;
+    43		prop->length = sizeof(__be32);
+    44		val = prop->value;
+    45		val[0] = __cpu_to_be32(3);
+    46		prop->next = node->properties;
+    47		node->properties = prop;
+    48	
+    49		prop = kzalloc(sizeof(*prop) + sizeof(__be32), GFP_KERNEL);
+    50		prop->name = "#size-cells";
+    51		prop->value = prop + 1;
+    52		prop->length = sizeof(__be32);
+    53		val = prop->value;
+    54		val[0] = __cpu_to_be32(2);
+    55		prop->next = node->properties;
+    56		node->properties = prop;
+    57	
 
-On 3/14/22 06:53, Dan Li wrote:
-> Add tests for SCS (Shadow Call Stack) based backward CFI.
-> 
-> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
-> ---
->   arch/arm64/include/asm/compiler.h       | 18 ++++++
->   drivers/misc/lkdtm/cfi.c                | 84 +++++++++++++++++++++++++
->   drivers/misc/lkdtm/core.c               |  1 +
->   drivers/misc/lkdtm/lkdtm.h              |  1 +
->   include/linux/compiler-clang.h          |  1 +
->   include/linux/compiler-gcc.h            |  2 +
->   include/linux/compiler_types.h          |  4 ++
->   tools/testing/selftests/lkdtm/tests.txt |  1 +
->   8 files changed, 112 insertions(+)
-> 
-> diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
-> index dc3ea4080e2e..96590fb4a8de 100644
-> --- a/arch/arm64/include/asm/compiler.h
-> +++ b/arch/arm64/include/asm/compiler.h
-> @@ -8,6 +8,24 @@
->   #define ARM64_ASM_PREAMBLE
->   #endif
->   
-> +#ifndef __ASSEMBLY__
-> +#ifdef __KERNEL__
-> +
-> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
-> +
-> +#ifdef CONFIG_ARM64_BTI_KERNEL
-> +# define __no_ptrauth __attribute__((target("branch-protection=bti")))
-> +#elif defined(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET)
-> +# define __no_ptrauth __attribute__((target("branch-protection=none")))
-> +#elif defined(CONFIG_CC_HAS_SIGN_RETURN_ADDRESS)
-> +# define __no_ptrauth __attribute__((target("sign-return-address=none")))
-> +#endif
-> +
-> +#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
-> +
-> +#endif /* __KERNEL__ */
-> +#endif /* __ASSEMBLY__ */
-> +
->   /*
->    * The EL0/EL1 pointer bits used by a pointer authentication code.
->    * This is dependent on TBI0/TBI1 being enabled, or bits 63:56 would also apply.
-> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
-> index c9aeddef1044..468ba2f26f74 100644
-> --- a/drivers/misc/lkdtm/cfi.c
-> +++ b/drivers/misc/lkdtm/cfi.c
-> @@ -41,3 +41,87 @@ void lkdtm_CFI_FORWARD_PROTO(void)
->   	pr_err("FAIL: survived mismatched prototype function call!\n");
->   	pr_expected_config(CONFIG_CFI_CLANG);
->   }
-> +
-> +#ifdef CONFIG_ARM64
-> +/*
-> + * This function is used to modify its return address. The PAC needs to be turned
-> + * off here to ensure that the modification of the return address will not be blocked.
-> + */
-> +static noinline __no_ptrauth
-> +void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr)
-> +{
-> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> +
-> +	/* Make sure we've found the right place on the stack before writing it. */
-> +	if (*ret_addr == expected)
-> +		*ret_addr = addr;
-> +}
-> +
-> +/* Function with __noscs attribute attempts to modify its return address. */
-> +static noinline __no_ptrauth __noscs
-> +void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr)
-> +{
-> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> +
-> +	/* Make sure we've found the right place on the stack before writing it. */
-> +	if (*ret_addr == expected)
-> +		*ret_addr = addr;
-> +}
-> +#else
-> +static inline void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr) { }
-> +static inline void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr) { }
-> +#endif
-> +
-> +static volatile unsigned int force_label;
-> +
-> +/*
-> + * This first checks whether a function with the __noscs attribute under
-> + * the current platform can directly modify its return address, and if so,
-> + * checks whether scs takes effect.
-> + */
-> +void __no_optimize lkdtm_CFI_BACKWARD_SHADOW(void)
-> +{
-> +	void *array[] = {&&unexpected, &&expected, &&good_scs, &&bad_scs};
-> +
-> +	if (force_label && (force_label < sizeof(array))) {
-> +		/*
-> +		 * Call them with "NULL" first to avoid
-> +		 * arguments being treated as constants in -02.
-> +		 */
-> +		lkdtm_noscs_set_lr(NULL, NULL);
-> +		lkdtm_scs_set_lr(NULL, NULL);
-> +		goto *array[force_label];
-> +	}
-> +
-> +	/* Keep labels in scope to avoid compiler warnings. */
-> +	do {
-> +		/* Verify the "normal" condition of LR corruption working. */
-> +		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
-> +		lkdtm_noscs_set_lr(&&unexpected, &&expected);
-> +
-> +unexpected:
-> +		/*
-> +		 * If lr cannot be modified, the following check is meaningless,
-> +		 * returns directly.
-> +		 */
-> +		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
-> +		break;
-> +
-> +expected:
-> +		pr_info("ok: lr corruption redirected without scs.\n");
-> +
-> +		/* Verify that SCS is in effect. */
-> +		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-> +		lkdtm_scs_set_lr(&&good_scs, &&bad_scs);
-> +
-> +good_scs:
-> +		pr_info("ok: scs takes effect.\n");
-> +		break;
-> +
-> +bad_scs:
-> +		pr_err("FAIL: return address rewritten!\n");
-> +		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
-> +	} while (0);
-> +}
-> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-> index f69b964b9952..7af7268b82e4 100644
-> --- a/drivers/misc/lkdtm/core.c
-> +++ b/drivers/misc/lkdtm/core.c
-> @@ -178,6 +178,7 @@ static const struct crashtype crashtypes[] = {
->   	CRASHTYPE(USERCOPY_KERNEL),
->   	CRASHTYPE(STACKLEAK_ERASING),
->   	CRASHTYPE(CFI_FORWARD_PROTO),
-> +	CRASHTYPE(CFI_BACKWARD_SHADOW),
->   	CRASHTYPE(FORTIFIED_OBJECT),
->   	CRASHTYPE(FORTIFIED_SUBOBJECT),
->   	CRASHTYPE(FORTIFIED_STRSCPY),
-> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-> index d6137c70ebbe..a66fba949ab5 100644
-> --- a/drivers/misc/lkdtm/lkdtm.h
-> +++ b/drivers/misc/lkdtm/lkdtm.h
-> @@ -157,6 +157,7 @@ void lkdtm_STACKLEAK_ERASING(void);
->   
->   /* cfi.c */
->   void lkdtm_CFI_FORWARD_PROTO(void);
-> +void lkdtm_CFI_BACKWARD_SHADOW(void);
->   
->   /* fortify.c */
->   void lkdtm_FORTIFIED_OBJECT(void);
-> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-> index 3c4de9b6c6e3..2db37db36651 100644
-> --- a/include/linux/compiler-clang.h
-> +++ b/include/linux/compiler-clang.h
-> @@ -68,3 +68,4 @@
->   
->   #define __nocfi		__attribute__((__no_sanitize__("cfi")))
->   #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
-> +#define __no_optimize	__attribute__((optnone))
-> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> index deff5b308470..28d1b0ec6656 100644
-> --- a/include/linux/compiler-gcc.h
-> +++ b/include/linux/compiler-gcc.h
-> @@ -162,3 +162,5 @@
->   #if GCC_VERSION < 90100
->   #undef __alloc_size__
->   #endif
-> +
-> +#define __no_optimize	__attribute__((optimize("-O0")))
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 3c1795fdb568..f5ad83f7ea2f 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -257,6 +257,10 @@ struct ftrace_likely_data {
->   # define __nocfi
->   #endif
->   
-> +#ifndef __no_ptrauth
-> +# define __no_ptrauth
-> +#endif
-> +
->   #ifndef __cficanonical
->   # define __cficanonical
->   #endif
-> diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-> index 6b36b7f5dcf9..12df67a3b419 100644
-> --- a/tools/testing/selftests/lkdtm/tests.txt
-> +++ b/tools/testing/selftests/lkdtm/tests.txt
-> @@ -73,6 +73,7 @@ USERCOPY_STACK_BEYOND
->   USERCOPY_KERNEL
->   STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
->   CFI_FORWARD_PROTO
-> +CFI_BACKWARD_SHADOW ok: scs takes effect
->   FORTIFIED_STRSCPY
->   FORTIFIED_OBJECT
->   FORTIFIED_SUBOBJECT
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
