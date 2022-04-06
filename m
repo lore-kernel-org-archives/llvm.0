@@ -1,45 +1,42 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F39433CB
-	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 11:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352BC33CB
+	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 12:04:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649244243; x=1680780243;
+  t=1649246646; x=1680782646;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uNoUd5cBdwRj0mH2oEvIrN6RW+fASFoNNEfnU9Civ+Y=;
-  b=IC7rXSHABKFTtIN2j9z2XL97OJcOzBt4CCHsUry0XujJ7z/hasE+ooEF
-   iw8hXKOF4toZn+IQs6WwhG2zryDUg/pNZQOV2ZRjIqizmjoY8plLHtseQ
-   BrBtPyexBkek4MO/3nqpqWCJQPAu8NfyE77SYuh4GO7/zhWnDs8NwyK8l
-   bTyvwQgshB80vIVhGV9yUxFiLZQPZZLYSK3Xm6mC26qfhEUd5NbSw/SVf
-   etvYdXDA4I6CHx34qIFtoy0JEnt3FMz8Yzr1cKaCRpJZ5afdD4rLqooWh
-   asYz5OOlPbeB7F5EtEabjebPkZBq7N3u4ZRrqW+yxUOj9WwMg067PUqj6
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="347463877"
+  bh=qjd3E9oaefZi4G89Xe8n5LQfk2srs+ghT6tlVcucH4o=;
+  b=cyDKivkUMNzfNAFoeTBgqLFg20Bojw+no+tp38M4LcOi/uqMRBSqBK7I
+   wugplDGAn0DXhOgEqHXe8fHmWQTX3HCyQPcwQZ4IxpspD8Lyn/DgkBPzi
+   cCObVLbhmcLv4OTRyxPU8IRbNVsEG+0n1OGA/drFw35cmOrpOyoUaObWn
+   p73nztjtFIhJd26pajyWHuUIVUozANBCiN5jNu1q7AG6RZz6xxMkgSHWq
+   Zn7T+Okanq46+ukPoWDXsDfm01KvPj6c3kcWYCNVtIJT/xEBSPzTYvLrI
+   gQxHzjfa3Me06UisqO61AZoa4LZ5o7G2IGQ41QGF+DPmrfN1hSbfuGUO0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="243166609"
 X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="347463877"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:24:02 -0700
+   d="scan'208";a="243166609"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 05:04:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="523889287"
+   d="scan'208";a="608867666"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 06 Apr 2022 04:24:00 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 06 Apr 2022 05:04:00 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nc3lX-0004MF-Fz;
-	Wed, 06 Apr 2022 11:23:59 +0000
-Date: Wed, 6 Apr 2022 19:23:00 +0800
+	id 1nc4OG-0004O5-Al;
+	Wed, 06 Apr 2022 12:04:00 +0000
+Date: Wed, 6 Apr 2022 20:03:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/rcu/next 109/110] WARNING:
- modpost: vmlinux.o(.text+0x9dc07c): Section mismatch in reference from the
- function scsi_device_dev_release_usercontext() to the function
- .exit.text:exit_ntfs_fs()
-Message-ID: <202204061911.n6Uo7ofC-lkp@intel.com>
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
+ warning: unused variable 'samsung_jpeg_match'
+Message-ID: <202204061912.zNf42JUP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,206 +47,129 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/rcu/next
-head:   d0c78768fd9c838d9c4f1965a33ce7f51f16a319
-commit: ec583e2e8d0934891c976402ec1f7ed144539e7c [109/110] rcu: Add polled expedited grace-period primitives
-config: riscv-buildonly-randconfig-r004-20220405 (https://download.01.org/0day-ci/archive/20220406/202204061911.n6Uo7ofC-lkp@intel.com/config)
+Hi Mauro,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
+commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
+date:   3 weeks ago
+config: s390-randconfig-r004-20220406 (https://download.01.org/0day-ci/archive/20220406/202204061912.zNf42JUP-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/ec583e2e8d0934891c976402ec1f7ed144539e7c
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/rcu/next
-        git checkout ec583e2e8d0934891c976402ec1f7ed144539e7c
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> WARNING: modpost: vmlinux.o(.text+0x9dc07c): Section mismatch in reference from the function scsi_device_dev_release_usercontext() to the function .exit.text:exit_ntfs_fs()
-The function scsi_device_dev_release_usercontext() references a function in an exit section.
-Often the function exit_ntfs_fs() has valid usage outside the exit section
-and the fix is to remove the __exit annotation of exit_ntfs_fs.
---
->> WARNING: modpost: vmlinux.o(.text+0x9f94c4): Section mismatch in reference from the function iscsi_nop_out_rsp() to the variable .init.text:.LBB1_24
-The function iscsi_nop_out_rsp() references
-the variable __init .LBB1_24.
-This is often because iscsi_nop_out_rsp lacks a __init
-annotation or the annotation of .LBB1_24 is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x9f97a2): Section mismatch in reference from the function iscsi_queuecommand() to the function .init.text:set_reset_devices()
-The function iscsi_queuecommand() references
-the function __init set_reset_devices().
-This is often because iscsi_queuecommand lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x9fbf08): Section mismatch in reference from the function iscsi_session_setup() to the variable .init.text:.LBB1_20
-The function iscsi_session_setup() references
-the variable __init .LBB1_20.
-This is often because iscsi_session_setup lacks a __init
-annotation or the annotation of .LBB1_20 is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x9fc2f8): Section mismatch in reference from the function iscsi_session_teardown() to the variable .init.text:.LBB1_22
-The function iscsi_session_teardown() references
-the variable __init .LBB1_22.
-This is often because iscsi_session_teardown lacks a __init
-annotation or the annotation of .LBB1_22 is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x9fc334): Section mismatch in reference from the function iscsi_conn_setup() to the function .init.text:set_reset_devices()
-The function iscsi_conn_setup() references
-the function __init set_reset_devices().
-This is often because iscsi_conn_setup lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x9fca86): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_23
-The function iscsi_conn_teardown() references
-the variable __init .LBB1_23.
-This is often because iscsi_conn_teardown lacks a __init
-annotation or the annotation of .LBB1_23 is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x9fcb8e): Section mismatch in reference from the function iscsi_conn_teardown() to the function .init.text:set_reset_devices()
-The function iscsi_conn_teardown() references
-the function __init set_reset_devices().
-This is often because iscsi_conn_teardown lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0xa2a88c): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_28
-The function ses_intf_add() references
-the variable __init .LBB1_28.
-This is often because ses_intf_add lacks a __init
-annotation or the annotation of .LBB1_28 is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0xa2c158): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_47
-The function hisi_sas_scan_finished() references
-the variable __init .LBB1_47.
-This is often because hisi_sas_scan_finished lacks a __init
-annotation or the annotation of .LBB1_47 is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0xa2cbd4): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the variable .init.text:.LBB1_48
-The function hisi_sas_bytes_dmaed() references
-the variable __init .LBB1_48.
-This is often because hisi_sas_bytes_dmaed lacks a __init
-annotation or the annotation of .LBB1_48 is wrong.
-..
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
+   static const struct of_device_id samsung_jpeg_match[] = {
+                                    ^
+   13 warnings generated.
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x9deee2): Section mismatch in reference from the function spi_dv_device_work_wrapper() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9e0b30): Section mismatch in reference from the function child_iter() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x9eb04e): Section mismatch in reference from the function sas_try_ata_reset() to the variable .init.text:.LBB1_41
-<< WARNING: modpost: vmlinux.o(.text+0x9fc074): Section mismatch in reference from the function iscsi_conn_setup() to the variable .init.text:.LBB1_21
-<< WARNING: modpost: vmlinux.o(.text+0x9fc7c6): Section mismatch in reference from the function iscsi_conn_teardown() to the variable .init.text:.LBB1_22
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5c0): Section mismatch in reference from the function ses_intf_add() to the variable .init.text:.LBB1_36
-<< WARNING: modpost: vmlinux.o(.text+0xa2a5cc): Section mismatch in reference from the function ses_intf_add() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2be98): Section mismatch in reference from the function hisi_sas_scan_finished() to the variable .init.text:.LBB1_45
-<< WARNING: modpost: vmlinux.o(.text+0xa2c70a): Section mismatch in reference from the function hisi_sas_phy_down() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xa2c852): Section mismatch in reference from the function hisi_sas_bytes_dmaed() to the function .init.text:set_reset_devices()
+
+vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
+
+:::::: The code at line 3126 was first introduced by commit
+:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
+
+:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
 
 -- 
 0-DAY CI Kernel Test Service
