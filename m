@@ -1,261 +1,845 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83A219D
-	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 02:02:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649210567; x=1680746567;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qw4BWEinEx3D+pI/Y4QH6KOMzTg4JbRJZI+r3M+rlxQ=;
-  b=IGn3a2ldP/R74uHH3PmFpHBpImGNbRpL07aLoKw04iWos8sSZS+LROJS
-   r1QlIjiTR+7RginBPcXAgcMYH8oJLps5Xj/MNuexOVRwghBGoOzJiczyw
-   8OKyw28E5cNoQH0RM1MyO4TiIPOqnBCJLUYMpOHF6Kxm9NwCFTYHDG46j
-   BQK6KnQemBajxFniy+Tu4JIn0B2kTjquc2q0SBPlW0Ek06Hr5GwLeAaL/
-   sypDJYYsGxzoGUBCbMNhw/a/gHOvgK/nioemrqiB+5O7F5fq2Jmpmulnc
-   gUTf2IEyL0uT/Jdh7HY6jDDnVRfS1M3Zd+1CohJlrWX+SD/LagzHga1x3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="261101662"
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="261101662"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 19:02:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="505534342"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 05 Apr 2022 19:02:45 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nbv0O-0003yt-Fx;
-	Wed, 06 Apr 2022 02:02:44 +0000
-Date: Wed, 6 Apr 2022 10:01:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 01/10] mm/slab: Decouple ARCH_KMALLOC_MINALIGN from
- ARCH_DMA_MINALIGN
-Message-ID: <202204060957.sHGvCxYf-lkp@intel.com>
-References: <20220405135758.774016-2-catalin.marinas@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA4318D
+	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 02:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1649211594;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dDBFpw6jrt8XzgTS7oeuQF62WuE6ZfaYuKgyt69y6jw=;
+	b=WDOfTRqKDJKiET6J8WlaQOdx7qzQCd1avlerSjFERgjgKjUFqIkBggLH6u4MHvNt5CFKVr
+	/CqstPkDDVwACsVt5nui0Xbchd7my1mSoS67vlirPykEhQHjvHLE3sC7VkLA/TUenemZKW
+	acbOj0Up+MwaAT0VYu8TxEzHcRaONco=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-362--dq8syIQNZmhV_CYM2jDdQ-1; Tue, 05 Apr 2022 22:19:53 -0400
+X-MC-Unique: -dq8syIQNZmhV_CYM2jDdQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F53A1010421
+	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 02:19:53 +0000 (UTC)
+Received: from [172.64.5.57] (unknown [10.30.32.252])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D15C740C1241;
+	Wed,  6 Apr 2022 02:19:52 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405135758.774016-2-catalin.marinas@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From: CKI Project <cki-project@redhat.com>
+To: skt-results-master@redhat.com, llvm@lists.linux.dev
+Subject: =?utf-8?q?=F0=9F=92=A5?= PANICKED: Test report for kernel 5.18.0-rc1
+ (mainline.kernel.org-clang, 3e732ebf)
+Date: Wed, 06 Apr 2022 02:19:50 -0000
+CC: Memory Management <mm-qe@redhat.com>, Li Wang <liwang@redhat.com>,
+ Jan Stancek <jstancek@redhat.com>, Zorro Lang <zlang@redhat.com>,
+ Guangwu Zhang <guazhang@redhat.com>, Changhui Zhong <czhong@redhat.com>,
+ Yi Zhang <yizhan@redhat.com>, Fendy Tjahjadi <ftjahjad@redhat.com>,
+ Xiaowu Wu <xiawu@redhat.com>, Baoquan He <bhe@redhat.com>,
+ Filip Suba <fsuba@redhat.com>, Xiong Zhou <xzhou@redhat.com>,
+ Jeff Bastian <jbastian@redhat.com>, Jiri Dluhos <jdluhos@redhat.com>,
+ Jianlin Shi <jishi@redhat.com>
+Message-ID: <cki.MXVYPAKI6YN25FTF93ZU@redhat.com>
+X-Gitlab-Pipeline-ID: 509694070
+X-Gitlab-Url: https://gitlab.com
+X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
+ =?utf-8?q?nes/cki-trusted-contributors/pipelines/509694070?=
+X-DataWarehouse-Checkout-IID: 37929
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Catalin,
 
-I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on hnaz-mm/master]
+Check out this report and any autotriaged failures in our web dashboard:
+    https://datawarehouse.cki-project.org/kcidb/checkouts/37929
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Catalin-Marinas/mm-arm64-Reduce-ARCH_KMALLOC_MINALIGN-below-the-cache-line-size/20220405-220827
-base:   https://github.com/hnaz/linux-mm master
-config: riscv-buildonly-randconfig-r004-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060957.sHGvCxYf-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/4b3dfcfcd58dc57d321559e467e85ce909539755
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Catalin-Marinas/mm-arm64-Reduce-ARCH_KMALLOC_MINALIGN-below-the-cache-line-size/20220405-220827
-        git checkout 4b3dfcfcd58dc57d321559e467e85ce909539755
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+We ran automated tests on a recent commit from this kernel tree:
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
+s/linux.git
+            Commit: 3e732ebf7316 - Merge tag 'for_linus' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/mst/vhost
 
->> WARNING: modpost: vmlinux.o(.text+0xf8244): Section mismatch in reference from the function perf_swevent_set_period() to the function .init.text:set_reset_devices()
-The function perf_swevent_set_period() references
-the function __init set_reset_devices().
-This is often because perf_swevent_set_period lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x18d1dc): Section mismatch in reference from the function generic_update_time() to the function .init.text:set_reset_devices()
-The function generic_update_time() references
-the function __init set_reset_devices().
-This is often because generic_update_time lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x29fd1e): Section mismatch in reference from the function fat_remove_entries() to the function .init.text:set_reset_devices()
-The function fat_remove_entries() references
-the function __init set_reset_devices().
-This is often because fat_remove_entries lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x2a46b0): Section mismatch in reference from the function fat_fill_inode() to the function .init.text:set_reset_devices()
-The function fat_fill_inode() references
-the function __init set_reset_devices().
-This is often because fat_fill_inode lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x2a5e8a): Section mismatch in reference from the function fat_read_root() to the function .init.text:set_reset_devices()
-The function fat_read_root() references
-the function __init set_reset_devices().
-This is often because fat_read_root lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x2a740e): Section mismatch in reference from the function fat_update_time() to the function .init.text:set_reset_devices()
-The function fat_update_time() references
-the function __init set_reset_devices().
-This is often because fat_update_time lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x2a82aa): Section mismatch in reference from the function msdos_rename() to the function .init.text:set_reset_devices()
-The function msdos_rename() references
-the function __init set_reset_devices().
-This is often because msdos_rename lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x2a8a1a): Section mismatch in reference from the function inode_inc_iversion() to the function .init.text:set_reset_devices()
-The function inode_inc_iversion() references
-the function __init set_reset_devices().
-This is often because inode_inc_iversion lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x2aa83c): Section mismatch in reference from the function exfat_lookup() to the function .init.text:set_reset_devices()
-The function exfat_lookup() references
-the function __init set_reset_devices().
-This is often because exfat_lookup lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x2aacd4): Section mismatch in reference from the function exfat_create() to the function .init.text:set_reset_devices()
-The function exfat_create() references
-the function __init set_reset_devices().
-This is often because exfat_create lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x228148): Section mismatch in reference from the function ext4_readdir() to the function .init.text:set_reset_devices()
-The function ext4_readdir() references
-the function __init set_reset_devices().
-This is often because ext4_readdir lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
-..
+The results of these automated tests are provided below.
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb2412): Section mismatch in reference from the function bpf_check_uarg_tail_zero() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb24b8): Section mismatch in reference from the function bpf_map_area_alloc() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b16): Section mismatch in reference from the function bpf_obj_pin() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5b54): Section mismatch in reference from the function bpf_obj_get() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5ba4): Section mismatch in reference from the function bpf_prog_attach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5d2e): Section mismatch in reference from the function bpf_prog_detach() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5db8): Section mismatch in reference from the function bpf_prog_query() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5e38): Section mismatch in reference from the function bpf_prog_test_run() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5f1c): Section mismatch in reference from the function bpf_obj_get_next_id() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0xb5fba): Section mismatch in reference from the function bpf_prog_get_fd_by_id() to the function .init.text:set_reset_devices()
+    Overall result: FAILED (see details below)
+             Merge: OK
+           Compile: OK
+ Selftests compile: FAILED
+             Tests: PANICKED
+    Targeted tests: NO
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+All kernel binaries, config files, and logs are available for download here=
+:
+
+  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
+fix=3Ddatawarehouse-public/2022/04/05/509694070
+
+One or more kernel tests failed:
+
+    s390x:
+     =E2=9D=8C LTP - syscalls
+     =E2=9D=8C POSIX pjd-fstest suites
+     =E2=9D=8C storage: dm/common
+     =E2=9D=8C Storage blktests - blk
+
+    aarch64:
+     =E2=9D=8C LTP - syscalls
+     =E2=9D=8C kdump - sysrq-c
+
+    x86_64 (debug):
+     =E2=9D=8C xfstests - xfs
+     =E2=9D=8C LTP - syscalls
+     =F0=9F=92=A5 LTP - fs
+
+    x86_64:
+     =E2=9D=8C kdump - sysrq-c
+     =E2=9D=8C xfstests - xfs
+     =E2=9D=8C Storage blktests - blk
+     =F0=9F=92=A5 stress: stress-ng - cpu
+     =E2=9D=8C LTP - syscalls
+     =E2=9D=8C POSIX pjd-fstest suites
+     =E2=9D=8C storage: dm/common
+     =E2=9D=8C kdump - kexec_boot
+
+We hope that these logs can help you find the problem quickly. For the full
+detail on our testing procedures, please scroll to the bottom of this messa=
+ge.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
+Compile testing
+---------------
+
+We compiled the kernel for 5 architectures:
+
+    aarch64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    ppc64le:
+      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
+ targz-pkg
+
+    s390x:
+      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
+ targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+
+We built the following selftests:
+
+  x86_64:
+      net: OK
+      bpf: fail
+      seccomp: OK
+      lkdtm: OK
+      install and packaging: OK
+
+You can find the full log (build-selftests.log) in the artifact storage abo=
+ve.
+
+
+Hardware testing
+----------------
+We booted each kernel and ran the following tests:
+
+  aarch64:
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - storage fio=
+ numa
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 ACPI enabled test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking MACsec: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformance test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
+t
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking vnic: ipvlan/basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
+est
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd compres=
+sion test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd smoke t=
+est
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec-file-load
+
+    Host 3:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 Networking bridge: sanity - mlx5
+       =E2=9C=85 Ethernet drivers sanity - mlx5
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+    Host 5:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9D=8C kdump - sysrq-c
+
+    Host 6:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
+p
+
+    Host 7:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - storage fio=
+ numa
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+    Host 8:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+  ppc64le:
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+
+    Host 3:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking MACsec: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking vnic: ipvlan/basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
+est
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =F0=9F=92=A5 lvm cache test
+
+    Host 5:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+  s390x:
+    Host 1:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+
+    Host 2:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 kdump - sysrq-c
+       =E2=9C=85 kdump - file-load
+
+    Host 3:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 LTP: openposix test suite
+       =E2=9C=85 CIFS Connectathon
+       =E2=9D=8C POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking MACsec: sanity
+       =E2=9C=85 Networking sctp-auth: sockopts test
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking ipsec: basic netns - transport
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Networking vnic: ipvlan/basic
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9D=8C storage: dm/common
+       =E2=9C=85 lvm snapper test
+       =E2=9C=85 trace: ftrace/tracer
+       =E2=9C=85 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 Networking tunnel: permtest
+       =F0=9F=9A=A7 =E2=9C=85 Networking VRF: sanity
+       =F0=9F=9A=A7 =E2=9C=85 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9D=8C Storage: block zstd compression test
+       =F0=9F=9A=A7 =E2=9C=85 Storage: block zstd smoke test
+       =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
+
+    Host 4:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9D=8C Storage blktests - blk
+       =E2=9C=85 Storage: swraid mdadm raid_module test
+       =E2=9C=85 stress: stress-ng - interrupt
+       =E2=9C=85 stress: stress-ng - cpu
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
+       =F0=9F=9A=A7 =E2=9C=85 Podman system test - as user
+       =F0=9F=9A=A7 =E2=9D=8C Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9C=85 lvm thinp stqe test
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
+
+  x86_64 (debug):
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 CPU: Die Test
+       =E2=9C=85 xfstests - ext4
+       =E2=9D=8C xfstests - xfs
+       =E2=9C=85 xfstests - nfsv4.2
+       =E2=9C=85 xfstests - cifsv3.11
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9C=85 lvm thinp sanity
+       =E2=9C=85 storage: software RAID testing
+       =E2=9C=85 Storage: swraid mdadm raid_module test
+       =E2=9C=85 stress: stress-ng - interrupt
+       =E2=9C=85 stress: stress-ng - cpu
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9C=85 CPU: Idle Test
+       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9C=85 lvm thinp stqe test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+    Host 2:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =F0=9F=92=A5 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformance test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - net
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - forwa=
+rding
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - tc
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf_t=
+est_progs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
+
+  x86_64:
+    Host 1:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9D=8C kdump - sysrq-c
+       =E2=9C=85 kdump - file-load
+
+    Host 2:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 CPU: Die Test
+       =E2=9C=85 xfstests - ext4
+       =E2=9D=8C xfstests - xfs
+       =E2=9C=85 xfstests - nfsv4.2
+       =E2=9C=85 xfstests - cifsv3.11
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9D=8C Storage blktests - blk
+       =E2=9C=85 Storage block - filesystem fio test
+       =E2=9C=85 Storage block - queue scheduler test
+       =E2=9C=85 lvm thinp sanity
+       =E2=9C=85 storage: software RAID testing
+       =E2=9C=85 Storage: swraid mdadm raid_module test
+       =E2=9C=85 stress: stress-ng - interrupt
+       =F0=9F=92=A5 stress: stress-ng - cpu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Idle Test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - storage fio=
+ numa
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+    Host 3:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 LTP: openposix test suite
+       =E2=9C=85 CIFS Connectathon
+       =E2=9D=8C POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking MACsec: sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking sctp-auth: sockopts test
+       =E2=9C=85 Networking: igmp conformance test
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking ipsec: basic netns - transport
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Networking vnic: ipvlan/basic
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: sanity smoke test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9C=85 ALSA PCM loopback test
+       =E2=9C=85 ALSA Control (mixer) Userspace Element test
+       =E2=9D=8C storage: dm/common
+       =E2=9C=85 lvm snapper test
+       =E2=9C=85 storage: SCSI VPD
+       =E2=9C=85 trace: ftrace/tracer
+       =E2=9D=8C kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9D=8C xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9C=85 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
+       =F0=9F=9A=A7 =E2=9D=8C Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9D=8C Networking tunnel: permtest
+       =F0=9F=9A=A7 =E2=9C=85 Networking VRF: sanity
+       =F0=9F=9A=A7 =E2=9C=85 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9C=85 Usex - version 1.9-29
+       =F0=9F=9A=A7 =E2=9D=8C Storage: block zstd compression test
+       =F0=9F=9A=A7 =E2=9C=85 Storage: block zstd smoke test
+       =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
+
+    Host 4:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+
+    Host 5:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+  Test sources: https://gitlab.com/cki-project/kernel-tests
+    =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
+ existing tests!
+
+Aborted tests
+-------------
+Tests that didn't complete running successfully are marked with =E2=9A=A1=
+=E2=9A=A1=E2=9A=A1.
+If this was caused by an infrastructure issue, we try to mark that
+explicitly in the report.
+
+Waived tests
+------------
+If the test run included waived tests, they are marked with =F0=9F=9A=A7. S=
+uch tests are
+executed but their results are not taken into account. Tests are waived whe=
+n
+their results are not reliable enough, e.g. when they're just introduced or=
+ are
+being fixed.
+
+Testing timeout
+---------------
+We aim to provide a report within reasonable timeframe. Tests that haven't
+finished running yet are marked with =E2=8F=B1.
+Targeted tests
+--------------
+Test runs for patches always include a set of base tests, plus some
+tests chosen based on the file paths modified by the patch. The latter
+are called "targeted tests". If no targeted tests are run, that means
+no patch-specific tests are available. Please, consider contributing a
+targeted test for related patches to increase test coverage. See
+https://docs.engineering.redhat.com/x/_wEZB for more details.
+
