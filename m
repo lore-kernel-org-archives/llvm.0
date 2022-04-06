@@ -1,43 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53633226
-	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 20:46:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CACC3226
+	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 21:17:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649278005; x=1680814005;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fvqODK3ztO62zOAA8u1/PyrlpBqIrBsKoDcGqSej0RU=;
-  b=WFJw+Ekc2kM5ev7HRIJqJxwOqSRcPiLLUbQib/+lJ36VTwcgltu1ELmy
-   dHXbR2chl7fRBEIabrOfPyTOoUB9cDf7/8gn+2O0t5EyhX6K9tt2N5YCl
-   oVvfbFTW/g0xbBGpi+p5ibFPfCt2G2zMy7Tc0vyyJMmgXrUICJs98J0qB
-   nddD9Y2sh3y3GCFe+8HxiUa7QqfpoJ44NCObT2DWJ3cgGR10QOg4jGePa
-   cs44D0ymFcxVQA9jNESzZyS44pAffVTISD8KYSUcxB9hX8MkE5F1YEl3w
-   1xx6K7bX1dc7Upr+y1n8Pp9DNGp7ut9o2QRF8DQE5SFEOdC5mJFmDMnFE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="248674349"
+  t=1649279867; x=1680815867;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e7NB/jyDh6ObkyNkaCVTmiqVbgN7jMbRu+evRCIN1VM=;
+  b=DQBSux2AfWmV5m7ZqoVVlEwHV2TRP/ZN9+F+OBoMFh3NRIoggrYm5Dgs
+   Ox2e1i8haRJJ9XeVNGY7muBVKwqs53lwXh6ffzz3L5TRaTNLiqW/RsxkT
+   o1EYmQrHzGqnJztP7GbJb+gS/3rHK8+P1lMdYtmFm5QqJXa3HiHKbciHl
+   acslfVcygZb+96ISread/LdPVK0YvVtG8/fxe5XlCI1WwBcYNY32jEsSD
+   5E8wHTO5kxAeBkqRAUNFJTEVbu/P30i+9VUos2yOEjP+l5EedRa7SMNjV
+   3s7BaukK0lYCtvX2SWkZcBj8ebocmIymvyDwvFY3hs7hCARP4EMnK8QeD
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="259992526"
 X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="248674349"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 13:46:45 -0700
+   d="scan'208";a="259992526"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 14:17:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="658683636"
+   d="scan'208";a="524642907"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 06 Apr 2022 13:46:43 -0700
+  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2022 14:17:45 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ncCY7-0004jp-7C;
-	Wed, 06 Apr 2022 20:46:43 +0000
-Date: Thu, 7 Apr 2022 04:46:05 +0800
+	id 1ncD28-0004m1-7k;
+	Wed, 06 Apr 2022 21:17:44 +0000
+Date: Thu, 7 Apr 2022 05:16:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/fscache-ceph 22/22]
- fs/ceph/addr.c:1047:9: error: use of undeclared identifier 'skips'
-Message-ID: <202204070429.h8hMgEQm-lkp@intel.com>
+To: Jiaqi Yan <jiaqiyan@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC v2 1/2] mm: khugepaged: recover from poisoned anonymous
+ memory
+Message-ID: <202204070554.j055zHGv-lkp@intel.com>
+References: <20220405205146.411595-2-jiaqiyan@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,130 +46,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220405205146.411595-2-jiaqiyan@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/fscache-ceph
-head:   3eaf3110a87879d1fdaf472fd14885c99aa919a0
-commit: 3eaf3110a87879d1fdaf472fd14885c99aa919a0 [22/22] ceph: Pass an iter down from writepages
-config: hexagon-randconfig-r014-20220406 (https://download.01.org/0day-ci/archive/20220407/202204070429.h8hMgEQm-lkp@intel.com/config)
+Hi Jiaqi,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on v5.17]
+[cannot apply to hnaz-mm/master linus/master v5.18-rc1 next-20220406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiaqi-Yan/Memory-poison-recovery-in-khugepaged-collapsing/20220406-045440
+base:    f443e374ae131c168a065ea1748feac6b2e76613
+config: arm64-randconfig-r036-20220406 (https://download.01.org/0day-ci/archive/20220407/202204070554.j055zHGv-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/3eaf3110a87879d1fdaf472fd14885c99aa919a0
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/fscache-ceph
-        git checkout 3eaf3110a87879d1fdaf472fd14885c99aa919a0
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/e2c6963af941ef8a75c397d2c911113d59bfef75
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jiaqi-Yan/Memory-poison-recovery-in-khugepaged-collapsing/20220406-045440
+        git checkout e2c6963af941ef8a75c397d2c911113d59bfef75
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ceph/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> fs/ceph/addr.c:1047:9: error: use of undeclared identifier 'skips'
-                                   if (skips >= 5 || need_resched())
-                                       ^
-   fs/ceph/addr.c:1049:5: error: use of undeclared identifier 'skips'
-                                   skips++;
-                                   ^
-   2 errors generated.
+>> mm/khugepaged.c:785:8: error: implicit declaration of function 'copy_highpage_mc' [-Werror,-Wimplicit-function-declaration]
+                           if (copy_highpage_mc(page, src_page)) {
+                               ^
+   mm/khugepaged.c:785:8: note: did you mean 'copy_highpage'?
+   arch/arm64/include/asm/page.h:29:6: note: 'copy_highpage' declared here
+   void copy_highpage(struct page *to, struct page *from);
+        ^
+   1 error generated.
 
 
-vim +/skips +1047 fs/ceph/addr.c
+vim +/copy_highpage_mc +785 mm/khugepaged.c
 
-   982	
-   983	/*
-   984	 * write a region of pages back to the server
-   985	 */
-   986	static int ceph_writepages_region(struct address_space *mapping,
-   987					  struct writeback_control *wbc,
-   988					  struct ceph_snap_context *snapc,
-   989					  struct ceph_writeback_ctl *ceph_wbc,
-   990					  loff_t start, loff_t end, loff_t *_next)
-   991	{
-   992		struct folio *folio;
-   993		ssize_t ret;
-   994	
-   995		printk("%s(%llx,%llx)", __func__, start, end);
-   996	
-   997		do {
-   998			pgoff_t index = start / PAGE_SIZE;
-   999			pgoff_t end = end / PAGE_SIZE;
-  1000	
-  1001			folio = ceph_scan_for_writeable_page(mapping, snapc, index, end);
-  1002			if (!folio)
-  1003				break;
-  1004	
-  1005			start = folio_pos(folio); /* May regress with THPs */
-  1006	
-  1007			printk("wback %lx\n", folio_index(folio));
-  1008	
-  1009			/* At this point we hold neither the i_pages lock nor the
-  1010			 * page lock: the page may be truncated or invalidated
-  1011			 * (changing page->mapping to NULL), or even swizzled
-  1012			 * back from swapper_space to tmpfs file mapping
-  1013			 */
-  1014			if (wbc->sync_mode != WB_SYNC_NONE) {
-  1015				ret = folio_lock_killable(folio);
-  1016				if (ret < 0) {
-  1017					folio_put(folio);
-  1018					return ret;
-  1019				}
-  1020			} else {
-  1021				if (!folio_trylock(folio)) {
-  1022					folio_put(folio);
-  1023					return 0;
-  1024				}
-  1025			}
-  1026	
-  1027			if (folio_mapping(folio) != mapping ||
-  1028			    folio_get_private(folio) != snapc ||
-  1029			    !folio_test_dirty(folio)) {
-  1030				start += folio_size(folio);
-  1031				folio_unlock(folio);
-  1032				folio_put(folio);
-  1033				continue;
-  1034			}
-  1035	
-  1036			if (folio_test_writeback(folio) ||
-  1037			    folio_test_fscache(folio)) {
-  1038				folio_unlock(folio);
-  1039				if (wbc->sync_mode != WB_SYNC_NONE) {
-  1040					folio_wait_writeback(folio);
-  1041					folio_wait_fscache(folio);
-  1042				} else {
-  1043					start += folio_size(folio);
-  1044				}
-  1045				folio_put(folio);
-  1046				if (wbc->sync_mode == WB_SYNC_NONE) {
-> 1047					if (skips >= 5 || need_resched())
-  1048						break;
-  1049					skips++;
-  1050				}
-  1051				continue;
-  1052			}
-  1053	
-  1054			if (!folio_clear_dirty_for_io(folio))
-  1055				BUG();
-  1056			ret = ceph_write_back_from_locked_folio(mapping, wbc, snapc, ceph_wbc,
-  1057								folio, start, end);
-  1058			folio_put(folio);
-  1059			if (ret < 0)
-  1060				return ret;
-  1061	
-  1062			start += ret;
-  1063	
-  1064			cond_resched();
-  1065		} while (wbc->nr_to_write > 0);
-  1066	
-  1067		*_next = start;
-  1068		printk("%s() = 0 [%llx]\n", __func__, *_next);
-  1069		return 0;
-  1070	}
-  1071	
+   742	
+   743	/*
+   744	 * __collapse_huge_page_copy - attempts to copy memory contents from normal
+   745	 * pages to a hugepage. Cleanup the normal pages if copy succeeds;
+   746	 * otherwise restore the original pmd page table. Returns true if copy
+   747	 * succeeds, otherwise returns false.
+   748	 *
+   749	 * @pte: starting of the PTEs to copy from
+   750	 * @page: the new hugepage to copy contents to
+   751	 * @pmd: pointer to the new hugepage's PMD
+   752	 * @rollback: the original normal PTEs' PMD
+   753	 * @address: starting address to copy
+   754	 * @pte_ptl: lock on normal pages' PTEs
+   755	 * @compound_pagelist: list that stores compound pages
+   756	 */
+   757	static bool __collapse_huge_page_copy(pte_t *pte,
+   758					struct page *page,
+   759					pmd_t *pmd,
+   760					pmd_t rollback,
+   761					struct vm_area_struct *vma,
+   762					unsigned long address,
+   763					spinlock_t *pte_ptl,
+   764					struct list_head *compound_pagelist)
+   765	{
+   766		struct page *src_page, *tmp;
+   767		pte_t *_pte;
+   768		pte_t pteval;
+   769		unsigned long _address;
+   770		spinlock_t *pmd_ptl;
+   771		bool copy_succeeded = true;
+   772	
+   773		/*
+   774		 * Copying pages' contents is subject to memory poison at any iteration.
+   775		 */
+   776		for (_pte = pte, _address = address;
+   777				_pte < pte + HPAGE_PMD_NR;
+   778				_pte++, page++, _address += PAGE_SIZE) {
+   779			pteval = *_pte;
+   780	
+   781			if (pte_none(pteval) || is_zero_pfn(pte_pfn(pteval)))
+   782				clear_user_highpage(page, address);
+   783			else {
+   784				src_page = pte_page(pteval);
+ > 785				if (copy_highpage_mc(page, src_page)) {
+   786					copy_succeeded = false;
+   787					break;
+   788				}
+   789			}
+   790		}
+   791	
+   792		if (!copy_succeeded) {
+   793			/*
+   794			 * Copying failed, re-establish the regular PMD that
+   795			 * points to regular page table. Since PTEs are still
+   796			 * isolated and locked, acquiring anon_vma_lock is unnecessary.
+   797			 */
+   798			pmd_ptl = pmd_lock(vma->vm_mm, pmd);
+   799			pmd_populate(vma->vm_mm, pmd, pmd_pgtable(rollback));
+   800			spin_unlock(pmd_ptl);
+   801		}
+   802	
+   803		for (_pte = pte, _address = address; _pte < pte + HPAGE_PMD_NR;
+   804				_pte++, _address += PAGE_SIZE) {
+   805			pteval = *_pte;
+   806			if (pte_none(pteval) || is_zero_pfn(pte_pfn(pteval))) {
+   807				if (copy_succeeded) {
+   808					add_mm_counter(vma->vm_mm, MM_ANONPAGES, 1);
+   809					if (is_zero_pfn(pte_pfn(pteval))) {
+   810						/*
+   811						 * ptl mostly unnecessary.
+   812						 */
+   813						spin_lock(pte_ptl);
+   814						pte_clear(vma->vm_mm, _address, _pte);
+   815						spin_unlock(pte_ptl);
+   816					}
+   817				}
+   818			} else {
+   819				src_page = pte_page(pteval);
+   820				if (!PageCompound(src_page))
+   821					release_pte_page(src_page);
+   822	
+   823				if (copy_succeeded) {
+   824					/*
+   825					 * ptl mostly unnecessary, but preempt has to
+   826					 * be disabled to update the per-cpu stats
+   827					 * inside page_remove_rmap().
+   828					 */
+   829					spin_lock(pte_ptl);
+   830					pte_clear(vma->vm_mm, _address, _pte);
+   831					page_remove_rmap(src_page, false);
+   832					spin_unlock(pte_ptl);
+   833					free_page_and_swap_cache(src_page);
+   834				}
+   835			}
+   836		}
+   837	
+   838		list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
+   839			list_del(&src_page->lru);
+   840			release_pte_page(src_page);
+   841		}
+   842	
+   843		return copy_succeeded;
+   844	}
+   845	
 
 -- 
 0-DAY CI Kernel Test Service
