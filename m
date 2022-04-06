@@ -1,44 +1,36 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mx02.puc.rediris.es (outbound2sev.lav.puc.rediris.es [130.206.19.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16547E
-	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 05:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649221551; x=1680757551;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eV54akyHGKuAFjoV5dc7eN0JPzBZbl8aFLdXfqqArbw=;
-  b=Inbl1S+AZiAFnxnvt/9X/PO7EW2H6P8trN5QsE1wNIcbymvwLOoGrl6h
-   IzjM0Kv8R+iGnSvClD6THJ/eUpBKRMaGJ1SutgbAF+GSVjRX8CzHdW19j
-   A2G49E2wbE8ZDxkoZySrHTG+4tuU2Iv+XXiuYdVSNrB5OAOxvSqnbdLyy
-   vaFESo5LO77SaTTsbc2RCaquby+2Xd+dWntRJ7BNQKzrJJ5eMPUs8/AbL
-   D7EKBTJahNrBPYLoHinkSN8Ma7khAFidNu5p3wD8g2V4ICGW5OwdLsZXb
-   /fRM5jgpoQSimDRDQ6MsRJqH6Bkot3wEQX24jL/aOhMPYEhDKCLTO2Ct8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="259784954"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="259784954"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 22:05:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="588226626"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 05 Apr 2022 22:05:48 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nbxrY-00044t-6S;
-	Wed, 06 Apr 2022 05:05:48 +0000
-Date: Wed, 6 Apr 2022 13:04:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [krzk-github:n/qcom-ufs-opp-v2 15/15]
- drivers/scsi/ufs/ufshcd-pltfrm.c:383:44: error: passing 'char *[32]' to
- parameter of type 'const char *const *' discards qualifiers in nested
- pointer types
-Message-ID: <202204061323.ynOnjrOZ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4BD7E
+	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 05:09:28 +0000 (UTC)
+Received: from mta-out02.sim.rediris.es (mta-out02.sim.rediris.es [130.206.24.44])
+	by mx02.puc.rediris.es  with ESMTP id 2364wOJZ016331-2364wOJb016331
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Wed, 6 Apr 2022 06:58:24 +0200
+Received: from mta-out02.sim.rediris.es (localhost.localdomain [127.0.0.1])
+	by mta-out02.sim.rediris.es (Postfix) with ESMTPS id 73FC8C15F93;
+	Wed,  6 Apr 2022 06:58:23 +0200 (CEST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mta-out02.sim.rediris.es (Postfix) with ESMTP id E633EC15F94;
+	Wed,  6 Apr 2022 06:58:22 +0200 (CEST)
+X-Amavis-Modified: Mail body modified (using disclaimer) -
+	mta-out02.sim.rediris.es
+Received: from mta-out02.sim.rediris.es ([127.0.0.1])
+	by localhost (mta-out02.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Yq8Lz7YkYewq; Wed,  6 Apr 2022 06:58:22 +0200 (CEST)
+Received: from lt-gp.iram.es (haproxy02.sim.rediris.es [130.206.24.70])
+	by mta-out02.sim.rediris.es (Postfix) with ESMTPA id 4F869C15F93;
+	Wed,  6 Apr 2022 06:58:19 +0200 (CEST)
+Date: Wed, 6 Apr 2022 06:58:15 +0200
+From: Gabriel Paubert <paubert@iram.es>
+To: Alexey Kardashevskiy <aik@ozlabs.ru>
+Cc: linuxppc-dev@lists.ozlabs.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>, llvm@lists.linux.dev
+Subject: Re: [PATCH kernel v2] powerpc/boot: Stop using RELACOUNT
+Message-ID: <Yk0d54t8MPn3ocrO@lt-gp.iram.es>
+References: <20220406040148.3608400-1-aik@ozlabs.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,164 +39,168 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220406040148.3608400-1-aik@ozlabs.ru>
+X-FE-Policy-ID: 23:8:0:SYSTEM
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=iram.es; s=DKIM; c=relaxed/relaxed;
+ h=date:from:to:cc:subject:message-id:references:mime-version:content-type;
+ bh=iWLqBKm0QxOTSuxivAHOgQWWkkPWqas6w3uyIKhAa28=;
+ b=Jqc7dBJQbhcx4JS7THPEOkmV2hwtcCyR+OHlDv/w6Q0DRK0Wa+XFNrMdHYDrqfQRvIMvnoSeY0WO
+	W/q8ntnajzYC9L4XYDXzQ8F+g93j06wGODR6tjgpnl4Vfilq/OGzih6YNIIuuaqr8DXEm/Wbvn+m
+	7u3dSMvwi6vuJBCCzbtbaR5HGr/szqS0S+KDBGTxf/mHaXaVLkVHay/MCjgMQayMpYuax258jwvE
+	/5lntfRvFtcdUB+86A8pS+IDEWXrjPkgOHU1EWmccFuuKc+T3laRwBHJ20J4RGfkNMKsfUzm67Qd
+	1VHyUwXm8NGvEAQORXG9Y4ZSMrfDGv9fXmwEYQ==
 
-tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v2
-head:   fff8a3e9335a828deb502bbcf983c4316d27c74e
-commit: fff8a3e9335a828deb502bbcf983c4316d27c74e [15/15] pm wip
-config: hexagon-randconfig-r045-20220405 (https://download.01.org/0day-ci/archive/20220406/202204061323.ynOnjrOZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/krzk/linux/commit/fff8a3e9335a828deb502bbcf983c4316d27c74e
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/qcom-ufs-opp-v2
-        git checkout fff8a3e9335a828deb502bbcf983c4316d27c74e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs/
+On Wed, Apr 06, 2022 at 02:01:48PM +1000, Alexey Kardashevskiy wrote:
+> So far the RELACOUNT tag from the ELF header was containing the exact
+> number of R_PPC_RELATIVE/R_PPC64_RELATIVE relocations. However the LLVM's
+> recent change [1] make it equal-or-less than the actual number which
+> makes it useless.
+> 
+> This replaces RELACOUNT in zImage loader with a pair of RELASZ and RELAENT.
+> The vmlinux relocation code is fixed in commit d79976918852
+> ("powerpc/64: Add UADDR64 relocation support").
+> 
+> To make it more future proof, this walks through the entire .rela.dyn
+> section instead of assuming that the section is sorter by a relocation
+> type. Unlike d79976918852, this does not add unaligned UADDR/UADDR64
+> relocations as we are likely not to see those in practice - the zImage
+> is small and very arch specific so there is a smaller chance that some
+> generic feature (such as PRINK_INDEX) triggers unaligned relocations.
+> 
+> [1] https://github.com/llvm/llvm-project/commit/da0e5b885b25cf4
+> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+> ---
+> Changes:
+> v2:
+> * s/divd/divwu/ for ppc32
+> * updated the commit log
+> * named all new labels instead of numbering them
+> (s/101f/.Lcheck_for_relaent/ and so on)
+> ---
+>  arch/powerpc/boot/crt0.S | 45 ++++++++++++++++++++++++++--------------
+>  1 file changed, 29 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/powerpc/boot/crt0.S b/arch/powerpc/boot/crt0.S
+> index feadee18e271..e9306d862f8d 100644
+> --- a/arch/powerpc/boot/crt0.S
+> +++ b/arch/powerpc/boot/crt0.S
+> @@ -8,7 +8,8 @@
+>  #include "ppc_asm.h"
+>  
+>  RELA = 7
+> -RELACOUNT = 0x6ffffff9
+> +RELASZ = 8
+> +RELAENT = 9
+>  
+>  	.data
+>  	/* A procedure descriptor used when booting this as a COFF file.
+> @@ -75,34 +76,39 @@ p_base:	mflr	r10		/* r10 now points to runtime addr of p_base */
+>  	bne	11f
+>  	lwz	r9,4(r12)	/* get RELA pointer in r9 */
+>  	b	12f
+> -11:	addis	r8,r8,(-RELACOUNT)@ha
+> -	cmpwi	r8,RELACOUNT@l
+> +11:	cmpwi	r8,RELASZ
+> +	bne	.Lcheck_for_relaent
+> +	lwz	r0,4(r12)       /* get RELASZ value in r0 */
+> +	b	12f
+> +.Lcheck_for_relaent:
+> +	cmpwi	r8,RELAENT
+>  	bne	12f
+> -	lwz	r0,4(r12)	/* get RELACOUNT value in r0 */
+> +	lwz     r14,4(r12)      /* get RELAENT value in r14 */
+>  12:	addi	r12,r12,8
+>  	b	9b
+>  
+>  	/* The relocation section contains a list of relocations.
+>  	 * We now do the R_PPC_RELATIVE ones, which point to words
+> -	 * which need to be initialized with addend + offset.
+> -	 * The R_PPC_RELATIVE ones come first and there are RELACOUNT
+> -	 * of them. */
+> +	 * which need to be initialized with addend + offset */
+>  10:	/* skip relocation if we don't have both */
+>  	cmpwi	r0,0
+>  	beq	3f
+>  	cmpwi	r9,0
+>  	beq	3f
+> +	cmpwi	r14,0
+> +	beq	3f
+>  
+>  	add	r9,r9,r11	/* Relocate RELA pointer */
+> +	divwu   r0,r0,r14       /* RELASZ / RELAENT */
+>  	mtctr	r0
+>  2:	lbz	r0,4+3(r9)	/* ELF32_R_INFO(reloc->r_info) */
+>  	cmpwi	r0,22		/* R_PPC_RELATIVE */
+> -	bne	3f
+> +	bne	.Lnext
+>  	lwz	r12,0(r9)	/* reloc->r_offset */
+>  	lwz	r0,8(r9)	/* reloc->r_addend */
+>  	add	r0,r0,r11
+>  	stwx	r0,r11,r12
+> -	addi	r9,r9,12
+> +.Lnext:	add	r9,r9,r14
+>  	bdnz	2b
+>  
+>  	/* Do a cache flush for our text, in case the loader didn't */
+> @@ -160,32 +166,39 @@ p_base:	mflr	r10		/* r10 now points to runtime addr of p_base */
+>  	bne	10f
+>  	ld	r13,8(r11)       /* get RELA pointer in r13 */
+>  	b	11f
+> -10:	addis	r12,r12,(-RELACOUNT)@ha
+> -	cmpdi	r12,RELACOUNT@l
+> -	bne	11f
+> -	ld	r8,8(r11)       /* get RELACOUNT value in r8 */
+> +10:	cmpwi   r12,RELASZ
+> +	bne	.Lcheck_for_relaent
+> +	lwz	r8,8(r11)	/* get RELASZ pointer in r8 */
+> +	b	11f
+> +.Lcheck_for_relaent:
+> +	cmpwi	r12,RELAENT
+> +	bne     11f
+> +	lwz     r14,8(r11)      /* get RELAENT pointer in r14 */
+>  11:	addi	r11,r11,16
+>  	b	9b
+>  12:
+> -	cmpdi	r13,0            /* check we have both RELA and RELACOUNT */
+> +	cmpdi	r13,0            /* check we have both RELA, RELASZ, RELAENT*/
+>  	cmpdi	cr1,r8,0
+>  	beq	3f
+>  	beq	cr1,3f
+> +	cmpdi	r14,0
+> +	beq	3f
+>  
+>  	/* Calcuate the runtime offset. */
+>  	subf	r13,r13,r9
+>  
+>  	/* Run through the list of relocations and process the
+>  	 * R_PPC64_RELATIVE ones. */
+> +	divd    r8,r8,r14       /* RELASZ / RELAENT */
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+While you are at it, this one should also be divdu.
 
-All errors (new ones prefixed by >>):
-
-   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
-                   list_for_each_entry(clki, head, list) {
-                                       ^
-   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
-   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
-   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
-   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
-   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
-   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
-   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
-   drivers/scsi/ufs/ufshcd-pltfrm.c:373:23: error: use of undeclared identifier 'clki'
-   drivers/scsi/ufs/ufshcd-pltfrm.c:374:24: error: use of undeclared identifier 'clki'
-                           if (!IS_ERR_OR_NULL(clki->clk)) {
-                                               ^
-   drivers/scsi/ufs/ufshcd-pltfrm.c:379:18: error: use of undeclared identifier 'clki'
-                                   names[i++] = clki->name;
-                                                ^
->> drivers/scsi/ufs/ufshcd-pltfrm.c:383:44: error: passing 'char *[32]' to parameter of type 'const char *const *' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                   opp_table = dev_pm_opp_set_clknames(dev, names, i);
-                                                            ^~~~~
-   include/linux/pm_opp.h:178:27: note: passing argument to parameter 'names' here
-                                             const char * const names[],
-                                                                ^
-   drivers/scsi/ufs/ufshcd-pltfrm.c:385:4: error: use of undeclared identifier 'ret'
-                           ret = PTR_ERR(opp_table);
-                           ^
-   13 errors generated.
+I really wished IBM had used explicit signed/unsigned indication in the
+mnemonics (divds, divdu, divws, divwu) instead. Fortunately very little
+assemby code uses these instructions nowadays.
 
 
-vim +383 drivers/scsi/ufs/ufshcd-pltfrm.c
+>  	mtctr	r8
+>  13:	ld	r0,8(r9)        /* ELF64_R_TYPE(reloc->r_info) */
+>  	cmpdi	r0,22           /* R_PPC64_RELATIVE */
+> -	bne	3f
+> +	bne	.Lnext
+>  	ld	r12,0(r9)        /* reloc->r_offset */
+>  	ld	r0,16(r9)       /* reloc->r_addend */
+>  	add	r0,r0,r13
+>  	stdx	r0,r13,r12
+> -	addi	r9,r9,24
+> +.Lnext:	add	r9,r9,r14
+>  	bdnz	13b
+>  
+>  	/* Do a cache flush for our text, in case the loader didn't */
+> -- 
+> 2.30.2
 
-65858014ee20c84 Stanley Chu         2020-11-16  314  
-03b1781aa978aab Vinayak Holikatti   2013-02-26  315  /**
-47555a5c8a11a42 Yaniv Gardi         2015-10-28  316   * ufshcd_pltfrm_init - probe routine of the driver
-03b1781aa978aab Vinayak Holikatti   2013-02-26  317   * @pdev: pointer to Platform device handle
-47555a5c8a11a42 Yaniv Gardi         2015-10-28  318   * @vops: pointer to variant ops
-03b1781aa978aab Vinayak Holikatti   2013-02-26  319   *
-03b1781aa978aab Vinayak Holikatti   2013-02-26  320   * Returns 0 on success, non-zero value on failure
-03b1781aa978aab Vinayak Holikatti   2013-02-26  321   */
-47555a5c8a11a42 Yaniv Gardi         2015-10-28  322  int ufshcd_pltfrm_init(struct platform_device *pdev,
-176eb927744201b Arnd Bergmann       2019-03-04  323  		       const struct ufs_hba_variant_ops *vops)
-03b1781aa978aab Vinayak Holikatti   2013-02-26  324  {
-03b1781aa978aab Vinayak Holikatti   2013-02-26  325  	struct ufs_hba *hba;
-03b1781aa978aab Vinayak Holikatti   2013-02-26  326  	void __iomem *mmio_base;
-2953f850c3b80bd Seungwon Jeon       2013-06-27  327  	int irq, err;
-03b1781aa978aab Vinayak Holikatti   2013-02-26  328  	struct device *dev = &pdev->dev;
-03b1781aa978aab Vinayak Holikatti   2013-02-26  329  
-0b27555166241cb YueHaibing          2019-09-04  330  	mmio_base = devm_platform_ioremap_resource(pdev, 0);
-645b8ef5943f95b Tomas Winkler       2017-03-14  331  	if (IS_ERR(mmio_base)) {
-645b8ef5943f95b Tomas Winkler       2017-03-14  332  		err = PTR_ERR(mmio_base);
-2953f850c3b80bd Seungwon Jeon       2013-06-27  333  		goto out;
-03b1781aa978aab Vinayak Holikatti   2013-02-26  334  	}
-03b1781aa978aab Vinayak Holikatti   2013-02-26  335  
-2953f850c3b80bd Seungwon Jeon       2013-06-27  336  	irq = platform_get_irq(pdev, 0);
-2953f850c3b80bd Seungwon Jeon       2013-06-27  337  	if (irq < 0) {
-339c9b63cc7ce77 Sergey Shtylyov     2021-03-29  338  		err = irq;
-2953f850c3b80bd Seungwon Jeon       2013-06-27  339  		goto out;
-03b1781aa978aab Vinayak Holikatti   2013-02-26  340  	}
-03b1781aa978aab Vinayak Holikatti   2013-02-26  341  
-5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  342  	err = ufshcd_alloc_host(dev, &hba);
-5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  343  	if (err) {
-f0cbb6efa2cf4b2 Krzysztof Kozlowski 2022-03-31  344  		dev_err(dev, "Allocation failed\n");
-5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  345  		goto out;
-5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  346  	}
-5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  347  
-47555a5c8a11a42 Yaniv Gardi         2015-10-28  348  	hba->vops = vops;
-5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  349  
-c6e79dacd86fd7d Sujit Reddy Thumma  2014-09-25  350  	err = ufshcd_parse_clock_info(hba);
-c6e79dacd86fd7d Sujit Reddy Thumma  2014-09-25  351  	if (err) {
-f0cbb6efa2cf4b2 Krzysztof Kozlowski 2022-03-31  352  		dev_err(dev, "%s: clock parse failed %d\n",
-c6e79dacd86fd7d Sujit Reddy Thumma  2014-09-25  353  				__func__, err);
-47555a5c8a11a42 Yaniv Gardi         2015-10-28  354  		goto dealloc_host;
-c6e79dacd86fd7d Sujit Reddy Thumma  2014-09-25  355  	}
-aa497613093412e Sujit Reddy Thumma  2014-09-25  356  	err = ufshcd_parse_regulator_info(hba);
-aa497613093412e Sujit Reddy Thumma  2014-09-25  357  	if (err) {
-f0cbb6efa2cf4b2 Krzysztof Kozlowski 2022-03-31  358  		dev_err(dev, "%s: regulator init failed %d\n",
-aa497613093412e Sujit Reddy Thumma  2014-09-25  359  				__func__, err);
-47555a5c8a11a42 Yaniv Gardi         2015-10-28  360  		goto dealloc_host;
-aa497613093412e Sujit Reddy Thumma  2014-09-25  361  	}
-aa497613093412e Sujit Reddy Thumma  2014-09-25  362  
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  363  	if (devm_pm_opp_of_add_table(dev)) {
-c56c108a9c3ae79 Krzysztof Kozlowski 2022-04-01  364  		dev_dbg(dev, "no OPP table (%d), no performance state control\n",
-c56c108a9c3ae79 Krzysztof Kozlowski 2022-04-01  365  			err);
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  366  	} else {
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  367  		struct list_head *head = &hba->clk_list_head;
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  368  		char *names[32];
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  369  		unsigned int i = 0;
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  370  		struct opp_table *opp_table;
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  371  
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  372  		pr_err("AAA USING OPP\n");
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  373  		list_for_each_entry(clki, head, list) {
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  374  			if (!IS_ERR_OR_NULL(clki->clk)) {
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  375  				if (i == ARRAY_SIZE(names)) {
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  376  					pr_err("AAA BBBB too many\n");
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  377  					goto dealloc_host;
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  378  				}
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  379  				names[i++] = clki->name;
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  380  			}
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  381  		}
-c56c108a9c3ae79 Krzysztof Kozlowski 2022-04-01  382  		hba->use_pm_opp = true;
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05 @383  		opp_table = dev_pm_opp_set_clknames(dev, names, i);
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  384  		if (IS_ERR(opp_table)) {
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  385  			ret = PTR_ERR(opp_table);
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  386  			goto dealloc_host;
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  387  		}
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  388  		// FIXME: put table
-ae883f49d1137ae Krzysztof Kozlowski 2022-04-05  389  	}
-c56c108a9c3ae79 Krzysztof Kozlowski 2022-04-01  390  
-54b879b76ea2531 Yaniv Gardi         2016-03-10  391  	ufshcd_init_lanes_per_dir(hba);
-54b879b76ea2531 Yaniv Gardi         2016-03-10  392  
-5c0c28a84af9f9b Sujit Reddy Thumma  2014-09-25  393  	err = ufshcd_init(hba, mmio_base, irq);
-03b1781aa978aab Vinayak Holikatti   2013-02-26  394  	if (err) {
-bad9764cfaaa15b Colin Ian King      2015-11-28  395  		dev_err(dev, "Initialization failed\n");
-24e2e7a19f7e4b8 Stanley Chu         2019-06-12  396  		goto dealloc_host;
-03b1781aa978aab Vinayak Holikatti   2013-02-26  397  	}
-03b1781aa978aab Vinayak Holikatti   2013-02-26  398  
-f0cbb6efa2cf4b2 Krzysztof Kozlowski 2022-03-31  399  	pm_runtime_set_active(dev);
-f0cbb6efa2cf4b2 Krzysztof Kozlowski 2022-03-31  400  	pm_runtime_enable(dev);
-24e2e7a19f7e4b8 Stanley Chu         2019-06-12  401  
-62694735ca95c74 Sujit Reddy Thumma  2013-07-30  402  	return 0;
-62694735ca95c74 Sujit Reddy Thumma  2013-07-30  403  
-47555a5c8a11a42 Yaniv Gardi         2015-10-28  404  dealloc_host:
-47555a5c8a11a42 Yaniv Gardi         2015-10-28  405  	ufshcd_dealloc_host(hba);
-2953f850c3b80bd Seungwon Jeon       2013-06-27  406  out:
-03b1781aa978aab Vinayak Holikatti   2013-02-26  407  	return err;
-03b1781aa978aab Vinayak Holikatti   2013-02-26  408  }
-47555a5c8a11a42 Yaniv Gardi         2015-10-28  409  EXPORT_SYMBOL_GPL(ufshcd_pltfrm_init);
-03b1781aa978aab Vinayak Holikatti   2013-02-26  410  
+	Cheers,
+	Gabriel
+ 
 
-:::::: The code at line 383 was first introduced by commit
-:::::: ae883f49d1137ae5f4997c5287dbf35f9bdd0272 ufs wip
-
-:::::: TO: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-:::::: CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
