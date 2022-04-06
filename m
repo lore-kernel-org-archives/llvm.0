@@ -1,114 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4305E182
-	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 02:31:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48457C385A1;
-	Wed,  6 Apr 2022 02:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E062182
+	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 02:31:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92DAAC385A4;
+	Wed,  6 Apr 2022 02:31:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1649212296;
-	bh=2MxGsdREcZcC5dPhVe4pegMYaaOwE0pzgrqWpuXtrGc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GXwGW062YdKL8+Jg+FwAV0W7WDkdIVsTVXDAEN7aXQNujZ35ZW3r/eAzX8retscRF
-	 R9mIWL8TtQRblz9fugeEJb203dMObcn5oNScGIeR3sTZoFengiBixG5/iVNGpYi/dU
-	 YhfsDDCZNrWTtqSUw78W6s1gQ9MH/u+xK5aE2Yiw/E+8AKSdcDiG/GAPzXuSu1RhLK
-	 lZ3q7+NR6Mvqb45MbN5emzUF4tUofgGHUgTqXZNN1GqMSi3+iIeRHrwmvyY3osNY8n
-	 KCqwT+BFAEC12NbbDkLtWy4gB1UYTjQ8Pj/h6lX4HUnT5sKKAgmF5yeqtbSj64VBMZ
-	 jf7B1pxWVkXmg==
+	s=k20201202; t=1649212300;
+	bh=f5hf7D5TOW99iCnwO8kt6lFjR6zeUwXI7tLm2to12Qo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=A+0wVCvFuyDGt9jDtBmmeUHHtOs4eMMxrROWP8voKqq9/5n9bVhy1nR5JnT0Tu9ue
+	 NihknhiDf8bs9x8ouLFYDNZM0ki3+RoegUSj1Y1hNom9q5DgolipUBaA7Nz59JswNK
+	 m4UXP6gyZOrjoAcA22v8+obrSs93/5IBvSuqi3y15QeBjlnXcZ0HYAVhy0jiBEUBeb
+	 RJ7snLY3RS3JFoEpkQXgVVMVJgDFwqCi+j9oC206Ql/4/rgzt/rsq6iXYxepex3YbA
+	 HT8PsRsvbxlKai2UHs5BYItHx8JyytVt6S7BdVHbUKmcYpBG5Gp9i+Yruu5UjksmrL
+	 M0JJBIZ3WzGrg==
+Date: Wed, 6 Apr 2022 11:31:35 +0900
 From: Masami Hiramatsu <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
-	Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	llvm@lists.linux.dev,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Subject: [PATCH v8 4/4] docs: bootconfig: Add how to embed the bootconfig into kernel
-Date: Wed,  6 Apr 2022 11:31:30 +0900
-Message-Id: <164921228987.1090670.16843569536974147213.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164921224829.1090670.9700650651725930602.stgit@devnote2>
-References: <164921224829.1090670.9700650651725930602.stgit@devnote2>
-User-Agent: StGit/0.19
+Cc: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>, LKML
+ <linux-kernel@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Sami Tolvanen
+ <samitolvanen@google.com>, Nathan Chancellor <nathan@kernel.org>,
+ llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>, Linux Kbuild
+ mailing list <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH v7 3/4] bootconfig: Support embedding a bootconfig file
+ in kernel
+Message-Id: <20220406113135.ce40e165654dbafcb78f980f@kernel.org>
+In-Reply-To: <20220405110243.21cdee07@gandalf.local.home>
+References: <164871505771.178991.7870442736805590948.stgit@devnote2>
+	<164871509158.178991.12705786877340857725.stgit@devnote2>
+	<20220405235548.38344aba5a7fcb059924c367@kernel.org>
+	<20220405110243.21cdee07@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add a description how to embed the bootconfig file into kernel.
+On Tue, 5 Apr 2022 11:02:43 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- Changes in v7:
-  - Rename CONFIG_EMBED_BOOT_CONFIG* to CONFIG_BOOT_CONFIG_EMBED*.
- Changes in v5:
-  - Update CONFIG_EMBED_BOOT_CONFIG_FILE which can accept relative path.
- Changes in v3:
-  - Fix typos.
- Changes in v2:
-  - Corrected the text accoding to Randy's suggestion.
-  - Do not reccomend to use relative path for CONFIG_EMBED_BOOT_CONFIG_FILE.
----
- Documentation/admin-guide/bootconfig.rst |   31 +++++++++++++++++++++++++++---
- 1 file changed, 28 insertions(+), 3 deletions(-)
+> On Tue, 5 Apr 2022 23:55:48 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> > Have you already picked this series?
+> 
+> No I haven't. I do not add any patches until after the merge window, which
+> just ended Sunday.
+> 
+> > 
+> > Actually, kernel test robot reported an issue in this patch today.
+> > Here is the patch. Should I send v8 including this?
+> 
+> Yes, please send a v8.
 
-diff --git a/Documentation/admin-guide/bootconfig.rst b/Documentation/admin-guide/bootconfig.rst
-index a1860fc0ca88..d99994345d41 100644
---- a/Documentation/admin-guide/bootconfig.rst
-+++ b/Documentation/admin-guide/bootconfig.rst
-@@ -158,9 +158,15 @@ Each key-value pair is shown in each line with following style::
- Boot Kernel With a Boot Config
- ==============================
- 
--Since the boot configuration file is loaded with initrd, it will be added
--to the end of the initrd (initramfs) image file with padding, size,
--checksum and 12-byte magic word as below.
-+There are two options to boot the kernel with bootconfig: attaching the
-+bootconfig to the initrd image or embedding it in the kernel itself.
-+
-+Attaching a Boot Config to Initrd
-+---------------------------------
-+
-+Since the boot configuration file is loaded with initrd by default,
-+it will be added to the end of the initrd (initramfs) image file with
-+padding, size, checksum and 12-byte magic word as below.
- 
- [initrd][bootconfig][padding][size(le32)][checksum(le32)][#BOOTCONFIG\n]
- 
-@@ -196,6 +202,25 @@ To remove the config from the image, you can use -d option as below::
- Then add "bootconfig" on the normal kernel command line to tell the
- kernel to look for the bootconfig at the end of the initrd file.
- 
-+Embedding a Boot Config into Kernel
-+-----------------------------------
-+
-+If you can not use initrd, you can also embed the bootconfig file in the
-+kernel by Kconfig options. In this case, you need to recompile the kernel
-+with the following configs::
-+
-+ CONFIG_BOOT_CONFIG_EMBED=y
-+ CONFIG_BOOT_CONFIG_EMBED_FILE="/PATH/TO/BOOTCONFIG/FILE"
-+
-+``CONFIG_BOOT_CONFIG_EMBED_FILE`` requires an absolute path or a relative
-+path to the bootconfig file from source tree or object tree.
-+The kernel will embed it as the default bootconfig.
-+
-+Just as when attaching the bootconfig to the initrd, you need ``bootconfig``
-+option on the kernel command line to enable the embedded bootconfig.
-+
-+Note that even if you set this option, you can override the embedded
-+bootconfig by another bootconfig which attached to the initrd.
- 
- Kernel parameters via Boot Config
- =================================
+OK, thanks for the confirmation!
+Let me send v8.
 
+Thanks!
+
+> 
+> Thanks!
+> 
+> -- Steve
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
