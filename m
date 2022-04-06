@@ -1,36 +1,43 @@
-Received: from mx02.puc.rediris.es (outbound2sev.lav.puc.rediris.es [130.206.19.171])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4BD7E
-	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 05:09:28 +0000 (UTC)
-Received: from mta-out02.sim.rediris.es (mta-out02.sim.rediris.es [130.206.24.44])
-	by mx02.puc.rediris.es  with ESMTP id 2364wOJZ016331-2364wOJb016331
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Wed, 6 Apr 2022 06:58:24 +0200
-Received: from mta-out02.sim.rediris.es (localhost.localdomain [127.0.0.1])
-	by mta-out02.sim.rediris.es (Postfix) with ESMTPS id 73FC8C15F93;
-	Wed,  6 Apr 2022 06:58:23 +0200 (CEST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mta-out02.sim.rediris.es (Postfix) with ESMTP id E633EC15F94;
-	Wed,  6 Apr 2022 06:58:22 +0200 (CEST)
-X-Amavis-Modified: Mail body modified (using disclaimer) -
-	mta-out02.sim.rediris.es
-Received: from mta-out02.sim.rediris.es ([127.0.0.1])
-	by localhost (mta-out02.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Yq8Lz7YkYewq; Wed,  6 Apr 2022 06:58:22 +0200 (CEST)
-Received: from lt-gp.iram.es (haproxy02.sim.rediris.es [130.206.24.70])
-	by mta-out02.sim.rediris.es (Postfix) with ESMTPA id 4F869C15F93;
-	Wed,  6 Apr 2022 06:58:19 +0200 (CEST)
-Date: Wed, 6 Apr 2022 06:58:15 +0200
-From: Gabriel Paubert <paubert@iram.es>
-To: Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc: linuxppc-dev@lists.ozlabs.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>, llvm@lists.linux.dev
-Subject: Re: [PATCH kernel v2] powerpc/boot: Stop using RELACOUNT
-Message-ID: <Yk0d54t8MPn3ocrO@lt-gp.iram.es>
-References: <20220406040148.3608400-1-aik@ozlabs.ru>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AF07E
+	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 05:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649223412; x=1680759412;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Vfg10iVRd5W+kiXO3Ssd8ncZ/ubfKh1O5PfYGQDGXFk=;
+  b=Z41oq9WnNxgxiZ1FsfVU7HQn5T31IIQtEAef6Lh7isUlIGaSZHEZyuQB
+   UZBReH0Tb4wZ4+s0sgiggiQdiAdEubqZApHwDC7dsiW/uOCFAlhHRpwC/
+   Mmdm5/RxjXnW0ogWGRR7xOYFNMkOiqPs25bx9Np+Rw1OHEza16oAHLUip
+   hYvTFG1IrG14yWiySgoJhdSQp91mdmgwP5vskEENB+Gh1J/KvoW0vpiNV
+   IqrybpK9F9UL3Iq0azgNGn3wkw84LOz0g048jiRLLQIIAJ28TWmwtS2gv
+   jCZaqgcoDbpJtJ6xEG5kE+yZhIAFyb0M59fyYMQzTjDLjVoCkiOSexDHw
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="285920474"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="285920474"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 22:36:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="549389677"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 05 Apr 2022 22:36:49 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nbyLZ-00046z-7U;
+	Wed, 06 Apr 2022 05:36:49 +0000
+Date: Wed, 6 Apr 2022 13:35:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 09/10] mm/slab: Simplify create_kmalloc_cache() args and
+ make it static
+Message-ID: <202204061348.mo7QK7AD-lkp@intel.com>
+References: <20220405135758.774016-10-catalin.marinas@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,168 +46,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220406040148.3608400-1-aik@ozlabs.ru>
-X-FE-Policy-ID: 23:8:0:SYSTEM
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=iram.es; s=DKIM; c=relaxed/relaxed;
- h=date:from:to:cc:subject:message-id:references:mime-version:content-type;
- bh=iWLqBKm0QxOTSuxivAHOgQWWkkPWqas6w3uyIKhAa28=;
- b=Jqc7dBJQbhcx4JS7THPEOkmV2hwtcCyR+OHlDv/w6Q0DRK0Wa+XFNrMdHYDrqfQRvIMvnoSeY0WO
-	W/q8ntnajzYC9L4XYDXzQ8F+g93j06wGODR6tjgpnl4Vfilq/OGzih6YNIIuuaqr8DXEm/Wbvn+m
-	7u3dSMvwi6vuJBCCzbtbaR5HGr/szqS0S+KDBGTxf/mHaXaVLkVHay/MCjgMQayMpYuax258jwvE
-	/5lntfRvFtcdUB+86A8pS+IDEWXrjPkgOHU1EWmccFuuKc+T3laRwBHJ20J4RGfkNMKsfUzm67Qd
-	1VHyUwXm8NGvEAQORXG9Y4ZSMrfDGv9fXmwEYQ==
+In-Reply-To: <20220405135758.774016-10-catalin.marinas@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Apr 06, 2022 at 02:01:48PM +1000, Alexey Kardashevskiy wrote:
-> So far the RELACOUNT tag from the ELF header was containing the exact
-> number of R_PPC_RELATIVE/R_PPC64_RELATIVE relocations. However the LLVM's
-> recent change [1] make it equal-or-less than the actual number which
-> makes it useless.
-> 
-> This replaces RELACOUNT in zImage loader with a pair of RELASZ and RELAENT.
-> The vmlinux relocation code is fixed in commit d79976918852
-> ("powerpc/64: Add UADDR64 relocation support").
-> 
-> To make it more future proof, this walks through the entire .rela.dyn
-> section instead of assuming that the section is sorter by a relocation
-> type. Unlike d79976918852, this does not add unaligned UADDR/UADDR64
-> relocations as we are likely not to see those in practice - the zImage
-> is small and very arch specific so there is a smaller chance that some
-> generic feature (such as PRINK_INDEX) triggers unaligned relocations.
-> 
-> [1] https://github.com/llvm/llvm-project/commit/da0e5b885b25cf4
-> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-> ---
-> Changes:
-> v2:
-> * s/divd/divwu/ for ppc32
-> * updated the commit log
-> * named all new labels instead of numbering them
-> (s/101f/.Lcheck_for_relaent/ and so on)
-> ---
->  arch/powerpc/boot/crt0.S | 45 ++++++++++++++++++++++++++--------------
->  1 file changed, 29 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/powerpc/boot/crt0.S b/arch/powerpc/boot/crt0.S
-> index feadee18e271..e9306d862f8d 100644
-> --- a/arch/powerpc/boot/crt0.S
-> +++ b/arch/powerpc/boot/crt0.S
-> @@ -8,7 +8,8 @@
->  #include "ppc_asm.h"
->  
->  RELA = 7
-> -RELACOUNT = 0x6ffffff9
-> +RELASZ = 8
-> +RELAENT = 9
->  
->  	.data
->  	/* A procedure descriptor used when booting this as a COFF file.
-> @@ -75,34 +76,39 @@ p_base:	mflr	r10		/* r10 now points to runtime addr of p_base */
->  	bne	11f
->  	lwz	r9,4(r12)	/* get RELA pointer in r9 */
->  	b	12f
-> -11:	addis	r8,r8,(-RELACOUNT)@ha
-> -	cmpwi	r8,RELACOUNT@l
-> +11:	cmpwi	r8,RELASZ
-> +	bne	.Lcheck_for_relaent
-> +	lwz	r0,4(r12)       /* get RELASZ value in r0 */
-> +	b	12f
-> +.Lcheck_for_relaent:
-> +	cmpwi	r8,RELAENT
->  	bne	12f
-> -	lwz	r0,4(r12)	/* get RELACOUNT value in r0 */
-> +	lwz     r14,4(r12)      /* get RELAENT value in r14 */
->  12:	addi	r12,r12,8
->  	b	9b
->  
->  	/* The relocation section contains a list of relocations.
->  	 * We now do the R_PPC_RELATIVE ones, which point to words
-> -	 * which need to be initialized with addend + offset.
-> -	 * The R_PPC_RELATIVE ones come first and there are RELACOUNT
-> -	 * of them. */
-> +	 * which need to be initialized with addend + offset */
->  10:	/* skip relocation if we don't have both */
->  	cmpwi	r0,0
->  	beq	3f
->  	cmpwi	r9,0
->  	beq	3f
-> +	cmpwi	r14,0
-> +	beq	3f
->  
->  	add	r9,r9,r11	/* Relocate RELA pointer */
-> +	divwu   r0,r0,r14       /* RELASZ / RELAENT */
->  	mtctr	r0
->  2:	lbz	r0,4+3(r9)	/* ELF32_R_INFO(reloc->r_info) */
->  	cmpwi	r0,22		/* R_PPC_RELATIVE */
-> -	bne	3f
-> +	bne	.Lnext
->  	lwz	r12,0(r9)	/* reloc->r_offset */
->  	lwz	r0,8(r9)	/* reloc->r_addend */
->  	add	r0,r0,r11
->  	stwx	r0,r11,r12
-> -	addi	r9,r9,12
-> +.Lnext:	add	r9,r9,r14
->  	bdnz	2b
->  
->  	/* Do a cache flush for our text, in case the loader didn't */
-> @@ -160,32 +166,39 @@ p_base:	mflr	r10		/* r10 now points to runtime addr of p_base */
->  	bne	10f
->  	ld	r13,8(r11)       /* get RELA pointer in r13 */
->  	b	11f
-> -10:	addis	r12,r12,(-RELACOUNT)@ha
-> -	cmpdi	r12,RELACOUNT@l
-> -	bne	11f
-> -	ld	r8,8(r11)       /* get RELACOUNT value in r8 */
-> +10:	cmpwi   r12,RELASZ
-> +	bne	.Lcheck_for_relaent
-> +	lwz	r8,8(r11)	/* get RELASZ pointer in r8 */
-> +	b	11f
-> +.Lcheck_for_relaent:
-> +	cmpwi	r12,RELAENT
-> +	bne     11f
-> +	lwz     r14,8(r11)      /* get RELAENT pointer in r14 */
->  11:	addi	r11,r11,16
->  	b	9b
->  12:
-> -	cmpdi	r13,0            /* check we have both RELA and RELACOUNT */
-> +	cmpdi	r13,0            /* check we have both RELA, RELASZ, RELAENT*/
->  	cmpdi	cr1,r8,0
->  	beq	3f
->  	beq	cr1,3f
-> +	cmpdi	r14,0
-> +	beq	3f
->  
->  	/* Calcuate the runtime offset. */
->  	subf	r13,r13,r9
->  
->  	/* Run through the list of relocations and process the
->  	 * R_PPC64_RELATIVE ones. */
-> +	divd    r8,r8,r14       /* RELASZ / RELAENT */
+Hi Catalin,
 
-While you are at it, this one should also be divdu.
+I love your patch! Perhaps something to improve:
 
-I really wished IBM had used explicit signed/unsigned indication in the
-mnemonics (divds, divdu, divws, divwu) instead. Fortunately very little
-assemby code uses these instructions nowadays.
+[auto build test WARNING on hnaz-mm/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Catalin-Marinas/mm-arm64-Reduce-ARCH_KMALLOC_MINALIGN-below-the-cache-line-size/20220405-220827
+base:   https://github.com/hnaz/linux-mm master
+config: riscv-buildonly-randconfig-r004-20220405 (https://download.01.org/0day-ci/archive/20220406/202204061348.mo7QK7AD-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/594fc15f21ce6de4d37971f717ff4223ab271823
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Catalin-Marinas/mm-arm64-Reduce-ARCH_KMALLOC_MINALIGN-below-the-cache-line-size/20220405-220827
+        git checkout 594fc15f21ce6de4d37971f717ff4223ab271823
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: vmlinux.o(.data+0x2836c8): Section mismatch in reference from the variable sctp_prot to the variable .init.text:.LBB19_63
+The variable sctp_prot references
+the variable __init .LBB19_63
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
 
 
->  	mtctr	r8
->  13:	ld	r0,8(r9)        /* ELF64_R_TYPE(reloc->r_info) */
->  	cmpdi	r0,22           /* R_PPC64_RELATIVE */
-> -	bne	3f
-> +	bne	.Lnext
->  	ld	r12,0(r9)        /* reloc->r_offset */
->  	ld	r0,16(r9)       /* reloc->r_addend */
->  	add	r0,r0,r13
->  	stdx	r0,r13,r12
-> -	addi	r9,r9,24
-> +.Lnext:	add	r9,r9,r14
->  	bdnz	13b
->  
->  	/* Do a cache flush for our text, in case the loader didn't */
-> -- 
-> 2.30.2
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0xf8244): Section mismatch in reference from the function perf_swevent_set_period() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x18d1e0): Section mismatch in reference from the function generic_update_time() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x29fd22): Section mismatch in reference from the function fat_remove_entries() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x2a46b4): Section mismatch in reference from the function fat_fill_inode() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x2a5e8e): Section mismatch in reference from the function fat_read_root() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x2a7412): Section mismatch in reference from the function fat_update_time() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x2a82ae): Section mismatch in reference from the function msdos_rename() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x2a8a1e): Section mismatch in reference from the function inode_inc_iversion() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x2aa840): Section mismatch in reference from the function exfat_lookup() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x2aacd8): Section mismatch in reference from the function exfat_create() to the function .init.text:set_reset_devices()
 
-	Cheers,
-	Gabriel
- 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
