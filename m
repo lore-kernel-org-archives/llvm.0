@@ -1,43 +1,43 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB6833EA
-	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 20:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53633226
+	for <llvm@lists.linux.dev>; Wed,  6 Apr 2022 20:46:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649276835; x=1680812835;
+  t=1649278005; x=1680814005;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OBKT+pkSxKYxEufXcN1rqUjEhRZcAM7HPyli/Ncj5Hs=;
-  b=IJvrXMw1fduob2IvRjzXuX/kXkErMXLAz/niXwJkcWs0o0rStxdyQwcf
-   tE4Y2fVxK0ghwCfVwpKOXUzhnAVzfhgI/E+PNlyj3a/WmKFUEgMXVE0WP
-   XksH6dLer098XHAknQXwG8KHLsBDza2QMckOjCUprzxCzcoVsLi367CUf
-   HDGhkrnU23JwX5EsBgdBx/FdvNN1WQvsFmbmpRnaL68B1AiQPY6/ZjeZ2
-   vK1Ws7Dn3KMuZUvgRZ11lo7P0P2GGKclqvfYPAQBfqJ3IHwAeizLLP3ao
-   rCkyqAuvC320PRqRKU5jJjyXNAf10Smtgdw/G0r7InPtjZy9HfDVu3Szd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241735582"
+  bh=fvqODK3ztO62zOAA8u1/PyrlpBqIrBsKoDcGqSej0RU=;
+  b=WFJw+Ekc2kM5ev7HRIJqJxwOqSRcPiLLUbQib/+lJ36VTwcgltu1ELmy
+   dHXbR2chl7fRBEIabrOfPyTOoUB9cDf7/8gn+2O0t5EyhX6K9tt2N5YCl
+   oVvfbFTW/g0xbBGpi+p5ibFPfCt2G2zMy7Tc0vyyJMmgXrUICJs98J0qB
+   nddD9Y2sh3y3GCFe+8HxiUa7QqfpoJ44NCObT2DWJ3cgGR10QOg4jGePa
+   cs44D0ymFcxVQA9jNESzZyS44pAffVTISD8KYSUcxB9hX8MkE5F1YEl3w
+   1xx6K7bX1dc7Upr+y1n8Pp9DNGp7ut9o2QRF8DQE5SFEOdC5mJFmDMnFE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="248674349"
 X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="241735582"
+   d="scan'208";a="248674349"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 13:26:44 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 13:46:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,240,1643702400"; 
-   d="scan'208";a="658678638"
+   d="scan'208";a="658683636"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 06 Apr 2022 13:26:42 -0700
+  by orsmga004.jf.intel.com with ESMTP; 06 Apr 2022 13:46:43 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ncCEj-0004ix-Ag;
-	Wed, 06 Apr 2022 20:26:41 +0000
-Date: Thu, 7 Apr 2022 04:25:40 +0800
+	id 1ncCY7-0004jp-7C;
+	Wed, 06 Apr 2022 20:46:43 +0000
+Date: Thu, 7 Apr 2022 04:46:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chuck Lever <chuck.lever@oracle.com>
+To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 2296/2385] WARNING: modpost:
- vmlinux.o(.text+0x14bb816): Section mismatch in reference from the function
- wiphy_sysfs_init() to the function .init.text:set_reset_devices()
-Message-ID: <202204070437.p3EkHIfz-lkp@intel.com>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/fscache-ceph 22/22]
+ fs/ceph/addr.c:1047:9: error: use of undeclared identifier 'skips'
+Message-ID: <202204070429.h8hMgEQm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,63 +48,128 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   109f6d10ec17302c4666f7df3dfa0e31d8589d41
-commit: bc1dcf8421ef30e35015ca2d4271f8c2c90e0bc4 [2296/2385] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-config: riscv-buildonly-randconfig-r004-20220405 (https://download.01.org/0day-ci/archive/20220407/202204070437.p3EkHIfz-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/fscache-ceph
+head:   3eaf3110a87879d1fdaf472fd14885c99aa919a0
+commit: 3eaf3110a87879d1fdaf472fd14885c99aa919a0 [22/22] ceph: Pass an iter down from writepages
+config: hexagon-randconfig-r014-20220406 (https://download.01.org/0day-ci/archive/20220407/202204070429.h8hMgEQm-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=bc1dcf8421ef30e35015ca2d4271f8c2c90e0bc4
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout bc1dcf8421ef30e35015ca2d4271f8c2c90e0bc4
+        # https://github.com/ammarfaizi2/linux-block/commit/3eaf3110a87879d1fdaf472fd14885c99aa919a0
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/fscache-ceph
+        git checkout 3eaf3110a87879d1fdaf472fd14885c99aa919a0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ceph/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> WARNING: modpost: vmlinux.o(.text+0x14bb816): Section mismatch in reference from the function wiphy_sysfs_init() to the function .init.text:set_reset_devices()
-The function wiphy_sysfs_init() references
-the function __init set_reset_devices().
-This is often because wiphy_sysfs_init lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.data+0x284f5c): Section mismatch in reference from the variable ieee80211_class to the function .init.text:set_reset_devices()
-The variable ieee80211_class references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+>> fs/ceph/addr.c:1047:9: error: use of undeclared identifier 'skips'
+                                   if (skips >= 5 || need_resched())
+                                       ^
+   fs/ceph/addr.c:1049:5: error: use of undeclared identifier 'skips'
+                                   skips++;
+                                   ^
+   2 errors generated.
 
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x13e72fa): Section mismatch in reference from the function br_mrp_del_impl() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x13e7a36): Section mismatch in reference from the function br_mrp_rcv() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.data+0x28101c): Section mismatch in reference from the variable raw_notifier_lock to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x284c88): Section mismatch in reference from the variable rds_trans_sem to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x284c90): Section mismatch in reference from the variable rds_trans_sem to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x2851e8): Section mismatch in reference from the variable reg_check_chans to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(__ex_table+0x2220): Section mismatch in reference from the (unknown reference) (unknown) to the (unknown reference) .debug_str:(unknown)
-<< WARNING: modpost: vmlinux.o(.text+0x13e7e04): Section mismatch in reference from the function br_mrp_mrm_process() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x13e7eac): Section mismatch in reference from the function br_mrp_mim_process() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x13eb240): Section mismatch in reference from the function aarp_send_ddp() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x13e72fa): Section mismatch in reference from the function br_mrp_del_impl() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x13e7a36): Section mismatch in reference from the function br_mrp_rcv() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.data+0x28101c): Section mismatch in reference from the variable raw_notifier_lock to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x284c88): Section mismatch in reference from the variable rds_trans_sem to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x284c90): Section mismatch in reference from the variable rds_trans_sem to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x2851e8): Section mismatch in reference from the variable reg_check_chans to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(__ex_table+0x2220): Section mismatch in reference from the (unknown reference) (unknown) to the (unknown reference) .debug_str:(unknown)
-<< WARNING: modpost: vmlinux.o(.text+0x13e7e04): Section mismatch in reference from the function br_mrp_mrm_process() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x13e7eac): Section mismatch in reference from the function br_mrp_mim_process() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x13eb240): Section mismatch in reference from the function aarp_send_ddp() to the function .exit.text:test_ww_mutex_exit()
+vim +/skips +1047 fs/ceph/addr.c
+
+   982	
+   983	/*
+   984	 * write a region of pages back to the server
+   985	 */
+   986	static int ceph_writepages_region(struct address_space *mapping,
+   987					  struct writeback_control *wbc,
+   988					  struct ceph_snap_context *snapc,
+   989					  struct ceph_writeback_ctl *ceph_wbc,
+   990					  loff_t start, loff_t end, loff_t *_next)
+   991	{
+   992		struct folio *folio;
+   993		ssize_t ret;
+   994	
+   995		printk("%s(%llx,%llx)", __func__, start, end);
+   996	
+   997		do {
+   998			pgoff_t index = start / PAGE_SIZE;
+   999			pgoff_t end = end / PAGE_SIZE;
+  1000	
+  1001			folio = ceph_scan_for_writeable_page(mapping, snapc, index, end);
+  1002			if (!folio)
+  1003				break;
+  1004	
+  1005			start = folio_pos(folio); /* May regress with THPs */
+  1006	
+  1007			printk("wback %lx\n", folio_index(folio));
+  1008	
+  1009			/* At this point we hold neither the i_pages lock nor the
+  1010			 * page lock: the page may be truncated or invalidated
+  1011			 * (changing page->mapping to NULL), or even swizzled
+  1012			 * back from swapper_space to tmpfs file mapping
+  1013			 */
+  1014			if (wbc->sync_mode != WB_SYNC_NONE) {
+  1015				ret = folio_lock_killable(folio);
+  1016				if (ret < 0) {
+  1017					folio_put(folio);
+  1018					return ret;
+  1019				}
+  1020			} else {
+  1021				if (!folio_trylock(folio)) {
+  1022					folio_put(folio);
+  1023					return 0;
+  1024				}
+  1025			}
+  1026	
+  1027			if (folio_mapping(folio) != mapping ||
+  1028			    folio_get_private(folio) != snapc ||
+  1029			    !folio_test_dirty(folio)) {
+  1030				start += folio_size(folio);
+  1031				folio_unlock(folio);
+  1032				folio_put(folio);
+  1033				continue;
+  1034			}
+  1035	
+  1036			if (folio_test_writeback(folio) ||
+  1037			    folio_test_fscache(folio)) {
+  1038				folio_unlock(folio);
+  1039				if (wbc->sync_mode != WB_SYNC_NONE) {
+  1040					folio_wait_writeback(folio);
+  1041					folio_wait_fscache(folio);
+  1042				} else {
+  1043					start += folio_size(folio);
+  1044				}
+  1045				folio_put(folio);
+  1046				if (wbc->sync_mode == WB_SYNC_NONE) {
+> 1047					if (skips >= 5 || need_resched())
+  1048						break;
+  1049					skips++;
+  1050				}
+  1051				continue;
+  1052			}
+  1053	
+  1054			if (!folio_clear_dirty_for_io(folio))
+  1055				BUG();
+  1056			ret = ceph_write_back_from_locked_folio(mapping, wbc, snapc, ceph_wbc,
+  1057								folio, start, end);
+  1058			folio_put(folio);
+  1059			if (ret < 0)
+  1060				return ret;
+  1061	
+  1062			start += ret;
+  1063	
+  1064			cond_resched();
+  1065		} while (wbc->nr_to_write > 0);
+  1066	
+  1067		*_next = start;
+  1068		printk("%s() = 0 [%llx]\n", __func__, *_next);
+  1069		return 0;
+  1070	}
+  1071	
 
 -- 
 0-DAY CI Kernel Test Service
