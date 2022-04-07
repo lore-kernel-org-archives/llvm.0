@@ -1,98 +1,167 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954FB2563
-	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 15:58:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649347119; x=1680883119;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=lBjUlFacV2tITWvhD1ZcXZJ/j4AwM5LnJdHFu3jsiIA=;
-  b=DiOmh/CnE0Mk+pFipkM/CfhqGRqHOj9YIuv1hu1MhPnWCjUHM+4jgzfz
-   EX6m58axnEwnlPdpkTEeNO1SvJKnxE1/JLF8ee3Jx8OrufVIo0NNzBahc
-   qZLejoYx5yMdixYtCQ3OBAUziHMWGZKWuHpGGL41683A4F80EyaqaKtEZ
-   IU3iEs888NxXLjMmpyKW8D/Li9cpQ+dvaA4IQ0hJC8FJQM8TSpI10I/Gt
-   5l8nP9/q3lOtVMcNnEeerBKhfKGixMySTajc9glkS7R/pu9r6vbpKlF1X
-   IOT1RfvhnDupz/qezogGYphiI8Y/pHGR8cI48tXLbxmpdu4FhqEoyvdBb
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="241958854"
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="241958854"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 08:57:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="524979215"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 07 Apr 2022 08:57:55 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ncUWA-0005Yp-MX;
-	Thu, 07 Apr 2022 15:57:54 +0000
-Date: Thu, 7 Apr 2022 23:57:24 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: ld.lld: error: kernel/built-in.a(kallsyms.o):(function
- kallsyms_expand_symbol: .text+0x118): relocation R_RISCV_PCREL_HI20 out of
- range: -524499 is not in [-524288, 524287]; references kallsyms_names
-Message-ID: <202204072353.ggsEE8FQ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9A22570
+	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 17:01:46 +0000 (UTC)
+Received: by mail-lf1-f44.google.com with SMTP id i38so2433323lfv.3
+        for <llvm@lists.linux.dev>; Thu, 07 Apr 2022 10:01:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u4JoFgaKGIZUP7KITjsD6hBXU6fdMuUm3RdP1CdyCDI=;
+        b=OVFCZOWIp5y7/AJi9Et7KmPBLKPHMI36qDMx5PqDxixFE7nKxAFB4GSkDvapVcKwGH
+         hShmwrmClVvsoJYj+aqXjS6WHYq2lAvRR5bEboyWL6hSdQJSsAB+KOoAjgIi3nB2qHia
+         6tawm+6J/soBtpu0v0pGCB7uzMjqWRG0XLO3MyYn03zz1YGGFDHmvQayo952zlNCCStr
+         VkAHZrpMYryTpsRSpfaJqvthwMPf+SNbYWs6OIKZ8haYg/CiABHZ8Yrg5i3YN7LSnibd
+         ft1X7aZ1nxm8gfF5nNruiegzqRvvl5pnUDObIXjdV4uzRHVvlQWihHVPrpMG1/IIwaUv
+         WEuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u4JoFgaKGIZUP7KITjsD6hBXU6fdMuUm3RdP1CdyCDI=;
+        b=npAZZFAes+xVkTwBGB+6xaXW1zBGFyQKCMVQqbgLVRrwUJGQ4RPGNm/AgBHDzqdO12
+         IoMdQLG4xxO0djnDVSEWUU1Z9p9NzKsj6B6UpJ8TjmK8LpWP1Z0m8Sk5jgWw2C0g0LFL
+         LqO7Iu/kcXkWXSHALsUa9yewBEOVdtGaHtTXQdXUPyiigNNK/J8NJyWa4vPYgQJr9sw/
+         YMICRDENY+ARsUJ0Mg10JBUPm0YWlSQ/nNRPvHfZqsJAqb8j3oKMR/eQNATwJYfKSdG0
+         tF3w6liX2N/tbH3rfklHgTiBW0hE7z0hy7WBsSbm9kRcmgGLj2H1316RtlQalZ29aNlZ
+         U9yg==
+X-Gm-Message-State: AOAM533Q7fluDDf469NVVEHn6qJGKM5HwzMFMSz5VtdWsAkvCp1bRZQx
+	wHnZS1zP30UwMvZ7MLLcbOpzfM6z8mFjO3Dyux+N5g==
+X-Google-Smtp-Source: ABdhPJz5Gl+jcfh45pqIcsLd1pUzNDfnV5X1gA02I46jcuJRZaLI6bp0IsMOb1+4qK0VYSbp88a6e+tw52az3MO8Pb8=
+X-Received: by 2002:a05:6512:3092:b0:44a:e7bb:e961 with SMTP id
+ z18-20020a056512309200b0044ae7bbe961mr10059124lfd.190.1649350904021; Thu, 07
+ Apr 2022 10:01:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200817220212.338670-5-ndesaulniers@google.com> <164934565464.389.2546833245037255032.tip-bot2@tip-bot2>
+In-Reply-To: <164934565464.389.2546833245037255032.tip-bot2@tip-bot2>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 7 Apr 2022 10:01:32 -0700
+Message-ID: <CAKwvOdkQeSx3uy25KaTrX=ywc26wDEefXHbCB_ifGot+yXGvHQ@mail.gmail.com>
+Subject: Re: [tip: x86/build] x86/build: Don't build CONFIG_X86_32 as -ffreestanding
+To: linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>, 
+	Kees Cook <keescook@chromium.org>
+Cc: linux-tip-commits@vger.kernel.org, Arvind Sankar <nivedita@alum.mit.edu>, 
+	Fangrui Song <maskray@google.com>, x86@kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Mel Gorman <mgorman@suse.de>
+On Thu, Apr 7, 2022 at 8:34 AM tip-bot2 for Nick Desaulniers
+<tip-bot2@linutronix.de> wrote:
+>
+> The following commit has been merged into the x86/build branch of tip:
+>
+> Commit-ID:     9b2687f29bc1a050ffd63b425129aa9db987e4f3
+> Gitweb:        https://git.kernel.org/tip/9b2687f29bc1a050ffd63b425129aa9db987e4f3
+> Author:        Nick Desaulniers <ndesaulniers@google.com>
+> AuthorDate:    Thu, 03 Feb 2022 12:40:25 -08:00
+> Committer:     Borislav Petkov <bp@suse.de>
+> CommitterDate: Thu, 07 Apr 2022 11:55:42 +02:00
+>
+> x86/build: Don't build CONFIG_X86_32 as -ffreestanding
+>
+> -ffreestanding typically inhibits "libcall optimizations" where calls to
+> certain library functions can be replaced by the compiler in certain
+> cases to calls to other library functions that may be more efficient.
+> This can be problematic for embedded targets that don't provide full
+> libc implementations.
+>
+> -ffreestanding inhibits all such optimizations, which is the safe
+> choice, but generally we want the optimizations that are performed. The
+> Linux kernel does implement a fair amount of libc routines. Instead of
+> -ffreestanding (which makes more sense in smaller images like kexec's
+> purgatory image), prefer -fno-builtin-* flags to disable the compiler
+> from emitting calls to functions which may not be defined.
+>
+> If you see a linkage failure due to a missing symbol that's typically
+> defined in a libc, and not explicitly called from the source code, then
+> the compiler may have done such a transform. You can either implement
+> such a function (i.e. in lib/string.c) or disable the transform outright
+> via -fno-builtin-* flag (where * is the name of the library routine,
+> i.e. -fno-builtin-bcmp).
+>
+> i386_defconfig build+boot tested with GCC and Clang. Removes a pretty
+> old TODO from the code base.
+>
+> [kees: These libcall optimizations are specifically needed to allow Clang
+> to correctly optimize the string functions under CONFIG_FORTIFY_SOURCE.]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
-commit: 66d9282523b3228183b14d9f812872dd2620704d mm/page_alloc: Correct return value of populated elements if bulk array is populated
-date:   9 months ago
-config: riscv-randconfig-r005-20220406 (https://download.01.org/0day-ci/archive/20220407/202204072353.ggsEE8FQ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=66d9282523b3228183b14d9f812872dd2620704d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 66d9282523b3228183b14d9f812872dd2620704d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Right, but...
+I think we found that doing so leads to a boot regression for i386
+when built w/ clang because:
+https://github.com/ClangBuiltLinux/linux/issues/1583
+https://github.com/llvm/llvm-project/issues/53645
+TL;DR
+In doing such libcall optimizations, LLVM drops the -mregparm=3
+calling convention...on the caller's side and not the callee's.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Boris, Can I send you a patch to replace this one (with a guard for
+clang) or a patch on top? i.e. what base would you prefer me to use.
 
-All errors (new ones prefixed by >>):
+Using mainline:
 
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_expand_symbol: .text+0x118): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_names
-   >>> referenced by kallsyms.c
-   >>> defined in kernel/built-in.a(kallsyms.o)
---
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_expand_symbol: .text+0x134): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_token_index
-   >>> referenced by kallsyms.c
-   >>> defined in kernel/built-in.a(kallsyms.o)
---
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_expand_symbol: .text+0x13c): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_token_table
-   >>> referenced by kallsyms.c
-   >>> defined in kernel/built-in.a(kallsyms.o)
+```
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 63d50f65b828..c94de779e334 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -100,8 +100,13 @@ ifeq ($(CONFIG_X86_32),y)
+         include $(srctree)/arch/x86/Makefile_32.cpu
+         KBUILD_CFLAGS += $(cflags-y)
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for LOCKDEP
-   Depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && (FRAME_POINTER || MIPS || PPC || S390 || MICROBLAZE || ARM || ARC || X86)
-   Selected by
-   - PROVE_LOCKING && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
-   - DEBUG_LOCK_ALLOC && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
+-        # temporary until string.h is fixed
++        # LLVM is dropping -mregparm=3 from callers when doing libcall
++        # optimization.
++        # https://github.com/ClangBuiltLinux/linux/issues/1583
++        # https://github.com/llvm/llvm-project/issues/53645
++        ifndef CONFIG_CC_IS_CLANG
+         KBUILD_CFLAGS += -ffreestanding
++        endif
+
+        ifeq ($(CONFIG_STACKPROTECTOR),y)
+                ifeq ($(CONFIG_SMP),y)
+```
+
+but happy to rebase onto whichever and put a commit message on that.
+We'll bump up the priority on getting that fixed.
+
+>
+> Fixes: 6edfba1b33c7 ("[PATCH] x86_64: Don't define string functions to builtin")
+> Suggested-by: Arvind Sankar <nivedita@alum.mit.edu>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Reviewed-by: Fangrui Song <maskray@google.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Link: https://lore.kernel.org/r/20200817220212.338670-5-ndesaulniers@google.com
+> Link: https://lore.kernel.org/r/20220203204025.1153397-1-keescook@chromium.org
+> ---
+>  arch/x86/Makefile | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 1abd7cc..670fe40 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -100,9 +100,6 @@ ifeq ($(CONFIG_X86_32),y)
+>          include $(srctree)/arch/x86/Makefile_32.cpu
+>          KBUILD_CFLAGS += $(cflags-y)
+>
+> -        # temporary until string.h is fixed
+> -        KBUILD_CFLAGS += -ffreestanding
+> -
+>         ifeq ($(CONFIG_STACKPROTECTOR),y)
+>                 ifeq ($(CONFIG_SMP),y)
+>                         KBUILD_CFLAGS += -mstack-protector-guard-reg=fs -mstack-protector-guard-symbol=__stack_chk_guard
+
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
