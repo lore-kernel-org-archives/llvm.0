@@ -1,167 +1,102 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9A22570
-	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 17:01:46 +0000 (UTC)
-Received: by mail-lf1-f44.google.com with SMTP id i38so2433323lfv.3
-        for <llvm@lists.linux.dev>; Thu, 07 Apr 2022 10:01:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u4JoFgaKGIZUP7KITjsD6hBXU6fdMuUm3RdP1CdyCDI=;
-        b=OVFCZOWIp5y7/AJi9Et7KmPBLKPHMI36qDMx5PqDxixFE7nKxAFB4GSkDvapVcKwGH
-         hShmwrmClVvsoJYj+aqXjS6WHYq2lAvRR5bEboyWL6hSdQJSsAB+KOoAjgIi3nB2qHia
-         6tawm+6J/soBtpu0v0pGCB7uzMjqWRG0XLO3MyYn03zz1YGGFDHmvQayo952zlNCCStr
-         VkAHZrpMYryTpsRSpfaJqvthwMPf+SNbYWs6OIKZ8haYg/CiABHZ8Yrg5i3YN7LSnibd
-         ft1X7aZ1nxm8gfF5nNruiegzqRvvl5pnUDObIXjdV4uzRHVvlQWihHVPrpMG1/IIwaUv
-         WEuw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035B52570
+	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 17:54:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1649354061;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CK9Z5mVDe4mgBGspYQzzn8gJDiHvz3qCsQ86FE3l+us=;
+	b=WFuKJUxC/QlIZxFskVRYmxu/ZS2lQvl5tt7F6EJ7aDHBFaMVjdZ6+UsOM4SYQi9XlAJp+Y
+	BjDOQRe0otrRrQf1HGPg/PwQt1YnRW1JcwzrYtgZvT7OPZZebXMPECTtLHMNzZjFuthFLM
+	n51XWYJeAyDcaf+m9KOEEIYkTgQTDTs=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-145-wKcF4bW-PvynTDA0e60osA-1; Thu, 07 Apr 2022 13:54:13 -0400
+X-MC-Unique: wKcF4bW-PvynTDA0e60osA-1
+Received: by mail-pj1-f70.google.com with SMTP id x3-20020a17090a6c0300b001cab7230b41so3920184pjj.9
+        for <llvm@lists.linux.dev>; Thu, 07 Apr 2022 10:54:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u4JoFgaKGIZUP7KITjsD6hBXU6fdMuUm3RdP1CdyCDI=;
-        b=npAZZFAes+xVkTwBGB+6xaXW1zBGFyQKCMVQqbgLVRrwUJGQ4RPGNm/AgBHDzqdO12
-         IoMdQLG4xxO0djnDVSEWUU1Z9p9NzKsj6B6UpJ8TjmK8LpWP1Z0m8Sk5jgWw2C0g0LFL
-         LqO7Iu/kcXkWXSHALsUa9yewBEOVdtGaHtTXQdXUPyiigNNK/J8NJyWa4vPYgQJr9sw/
-         YMICRDENY+ARsUJ0Mg10JBUPm0YWlSQ/nNRPvHfZqsJAqb8j3oKMR/eQNATwJYfKSdG0
-         tF3w6liX2N/tbH3rfklHgTiBW0hE7z0hy7WBsSbm9kRcmgGLj2H1316RtlQalZ29aNlZ
-         U9yg==
-X-Gm-Message-State: AOAM533Q7fluDDf469NVVEHn6qJGKM5HwzMFMSz5VtdWsAkvCp1bRZQx
-	wHnZS1zP30UwMvZ7MLLcbOpzfM6z8mFjO3Dyux+N5g==
-X-Google-Smtp-Source: ABdhPJz5Gl+jcfh45pqIcsLd1pUzNDfnV5X1gA02I46jcuJRZaLI6bp0IsMOb1+4qK0VYSbp88a6e+tw52az3MO8Pb8=
-X-Received: by 2002:a05:6512:3092:b0:44a:e7bb:e961 with SMTP id
- z18-20020a056512309200b0044ae7bbe961mr10059124lfd.190.1649350904021; Thu, 07
- Apr 2022 10:01:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CK9Z5mVDe4mgBGspYQzzn8gJDiHvz3qCsQ86FE3l+us=;
+        b=ONxwwWnjKpzOHQ2ec1qJdEvVeunc4BbSNPd6lBgz12+a6yRV3vWAvo8H4Flh9iLX24
+         VxXyoHk4wHbm7uv1iaXUc3c9+J49Vl8CuA7v4WvfGzfXm/NTRwOXRCostBvkwsLeKpSL
+         j7UjWr45Y4Sj562ZJXprjea9tyGdXas27VXQufn4if+H5Coc16ceX5VbkaBCfjqqwIlw
+         HlupK3sOwFQg8RgVOkG4juxrA5CaOY0PA8nb7DBmwPl2b0LapD5h/cvIbJMXfMSpc0b5
+         OXGK9Cqdtz0QRN4Q+ASurfHLcGBnww+8CfJ5iXk8iKreYtH7FIRGdr0Ic0xTmLp+U0BJ
+         xQ2g==
+X-Gm-Message-State: AOAM531apHIuxxzXE2RJk/3/YDQKuX5YcOB8yt+gD6V/1Ge6izETMnn1
+	FVYTTMMQ8eHLtptcKPbSq127wkCMNbex6Ldsh+MW54yuO0bag02F0OBcuesrbUt/RK0LgsVkk7A
+	tcUwsJNTQERRZTw==
+X-Received: by 2002:a65:6b92:0:b0:39c:c97b:1b57 with SMTP id d18-20020a656b92000000b0039cc97b1b57mr3129948pgw.517.1649354052365;
+        Thu, 07 Apr 2022 10:54:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxY+f9QwoacEBY4kuGoqYuYwACBfLXX9MLBnkeSnGdArm5ggb+OlgU6GsrW0+ANYwvG2th5MA==
+X-Received: by 2002:a65:6b92:0:b0:39c:c97b:1b57 with SMTP id d18-20020a656b92000000b0039cc97b1b57mr3129928pgw.517.1649354051960;
+        Thu, 07 Apr 2022 10:54:11 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id d8-20020a056a00198800b004fab740dbe6sm23439873pfl.15.2022.04.07.10.54.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 10:54:11 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: pkshih@realtek.com,
+	kvalo@kernel.org,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] rtw89: ser: add a break statement
+Date: Thu,  7 Apr 2022 13:53:49 -0400
+Message-Id: <20220407175349.3053362-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20200817220212.338670-5-ndesaulniers@google.com> <164934565464.389.2546833245037255032.tip-bot2@tip-bot2>
-In-Reply-To: <164934565464.389.2546833245037255032.tip-bot2@tip-bot2>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 7 Apr 2022 10:01:32 -0700
-Message-ID: <CAKwvOdkQeSx3uy25KaTrX=ywc26wDEefXHbCB_ifGot+yXGvHQ@mail.gmail.com>
-Subject: Re: [tip: x86/build] x86/build: Don't build CONFIG_X86_32 as -ffreestanding
-To: linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>, 
-	Kees Cook <keescook@chromium.org>
-Cc: linux-tip-commits@vger.kernel.org, Arvind Sankar <nivedita@alum.mit.edu>, 
-	Fangrui Song <maskray@google.com>, x86@kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-On Thu, Apr 7, 2022 at 8:34 AM tip-bot2 for Nick Desaulniers
-<tip-bot2@linutronix.de> wrote:
->
-> The following commit has been merged into the x86/build branch of tip:
->
-> Commit-ID:     9b2687f29bc1a050ffd63b425129aa9db987e4f3
-> Gitweb:        https://git.kernel.org/tip/9b2687f29bc1a050ffd63b425129aa9db987e4f3
-> Author:        Nick Desaulniers <ndesaulniers@google.com>
-> AuthorDate:    Thu, 03 Feb 2022 12:40:25 -08:00
-> Committer:     Borislav Petkov <bp@suse.de>
-> CommitterDate: Thu, 07 Apr 2022 11:55:42 +02:00
->
-> x86/build: Don't build CONFIG_X86_32 as -ffreestanding
->
-> -ffreestanding typically inhibits "libcall optimizations" where calls to
-> certain library functions can be replaced by the compiler in certain
-> cases to calls to other library functions that may be more efficient.
-> This can be problematic for embedded targets that don't provide full
-> libc implementations.
->
-> -ffreestanding inhibits all such optimizations, which is the safe
-> choice, but generally we want the optimizations that are performed. The
-> Linux kernel does implement a fair amount of libc routines. Instead of
-> -ffreestanding (which makes more sense in smaller images like kexec's
-> purgatory image), prefer -fno-builtin-* flags to disable the compiler
-> from emitting calls to functions which may not be defined.
->
-> If you see a linkage failure due to a missing symbol that's typically
-> defined in a libc, and not explicitly called from the source code, then
-> the compiler may have done such a transform. You can either implement
-> such a function (i.e. in lib/string.c) or disable the transform outright
-> via -fno-builtin-* flag (where * is the name of the library routine,
-> i.e. -fno-builtin-bcmp).
->
-> i386_defconfig build+boot tested with GCC and Clang. Removes a pretty
-> old TODO from the code base.
->
-> [kees: These libcall optimizations are specifically needed to allow Clang
-> to correctly optimize the string functions under CONFIG_FORTIFY_SOURCE.]
+The clang build fails with
+ser.c:397:2: error: unannotated fall-through
+  between switch labels [-Werror,-Wimplicit-fallthrough]
+        default:
+        ^
+The case above the default does not have a break.
+So add one.
 
-Right, but...
-I think we found that doing so leads to a boot regression for i386
-when built w/ clang because:
-https://github.com/ClangBuiltLinux/linux/issues/1583
-https://github.com/llvm/llvm-project/issues/53645
-TL;DR
-In doing such libcall optimizations, LLVM drops the -mregparm=3
-calling convention...on the caller's side and not the callee's.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/realtek/rtw89/ser.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Boris, Can I send you a patch to replace this one (with a guard for
-clang) or a patch on top? i.e. what base would you prefer me to use.
-
-Using mainline:
-
-```
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 63d50f65b828..c94de779e334 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -100,8 +100,13 @@ ifeq ($(CONFIG_X86_32),y)
-         include $(srctree)/arch/x86/Makefile_32.cpu
-         KBUILD_CFLAGS += $(cflags-y)
-
--        # temporary until string.h is fixed
-+        # LLVM is dropping -mregparm=3 from callers when doing libcall
-+        # optimization.
-+        # https://github.com/ClangBuiltLinux/linux/issues/1583
-+        # https://github.com/llvm/llvm-project/issues/53645
-+        ifndef CONFIG_CC_IS_CLANG
-         KBUILD_CFLAGS += -ffreestanding
-+        endif
-
-        ifeq ($(CONFIG_STACKPROTECTOR),y)
-                ifeq ($(CONFIG_SMP),y)
-```
-
-but happy to rebase onto whichever and put a commit message on that.
-We'll bump up the priority on getting that fixed.
-
->
-> Fixes: 6edfba1b33c7 ("[PATCH] x86_64: Don't define string functions to builtin")
-> Suggested-by: Arvind Sankar <nivedita@alum.mit.edu>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Reviewed-by: Fangrui Song <maskray@google.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Link: https://lore.kernel.org/r/20200817220212.338670-5-ndesaulniers@google.com
-> Link: https://lore.kernel.org/r/20220203204025.1153397-1-keescook@chromium.org
-> ---
->  arch/x86/Makefile | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index 1abd7cc..670fe40 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -100,9 +100,6 @@ ifeq ($(CONFIG_X86_32),y)
->          include $(srctree)/arch/x86/Makefile_32.cpu
->          KBUILD_CFLAGS += $(cflags-y)
->
-> -        # temporary until string.h is fixed
-> -        KBUILD_CFLAGS += -ffreestanding
-> -
->         ifeq ($(CONFIG_STACKPROTECTOR),y)
->                 ifeq ($(CONFIG_SMP),y)
->                         KBUILD_CFLAGS += -mstack-protector-guard-reg=fs -mstack-protector-guard-symbol=__stack_chk_guard
-
-
-
+diff --git a/drivers/net/wireless/realtek/rtw89/ser.c b/drivers/net/wireless/realtek/rtw89/ser.c
+index 25d1df10f226..5aebd6839d29 100644
+--- a/drivers/net/wireless/realtek/rtw89/ser.c
++++ b/drivers/net/wireless/realtek/rtw89/ser.c
+@@ -394,6 +394,7 @@ static void ser_idle_st_hdl(struct rtw89_ser *ser, u8 evt)
+ 		break;
+ 	case SER_EV_STATE_OUT:
+ 		rtw89_hci_recovery_start(rtwdev);
++		break;
+ 	default:
+ 		break;
+ 	}
 -- 
-Thanks,
-~Nick Desaulniers
+2.27.0
+
