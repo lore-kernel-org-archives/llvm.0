@@ -1,58 +1,42 @@
-Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [131.159.0.202])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EAE2563
-	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 15:22:31 +0000 (UTC)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
-	by mailout2.rbg.tum.de (Postfix) with ESMTPS id 912AB4C0234;
-	Thu,  7 Apr 2022 17:12:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-	s=20220209; t=1649344344;
-	bh=Yda2j6lrq6q/8Qr9IDcdSxoBwSuVmTqIZ8v84YOihVo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=TJgGnxlrKn8w/dTVJabinCWu1YmEkCvUpZAU6BV90HfAEYs22cvbp1/htmgqBGhbL
-	 PkKQZpacG0Z9yoSTt5pz/mxO6ykFwvj0wZDIz2cWyhNACgdbpnKhicDJkzj63tAKy2
-	 3ZuX7wM8Azckyzg31tuX6amKQ8dRZCsa2RfCYWqs+Lintbih9xgxxyRkyXlR5ImnUv
-	 /XxlXZwh5HYdgVk6wOOBsUqSuGJM2ma97tQjavRixV4YTCNjKjD/nmj5zIkgKnfX6D
-	 YFa4bh/mNtvr+Zsf6+Wj4d/9fDhJFOJ4z3INYB64mQ/xQWOOMyCRcde9S4WEfJ67VE
-	 DgPfsPQLGvzVA==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-	id 8CEDA254; Thu,  7 Apr 2022 17:12:24 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 5FBA3252;
-	Thu,  7 Apr 2022 17:12:24 +0200 (CEST)
-Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 5BD1024E;
-	Thu,  7 Apr 2022 17:12:24 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-	id 3C8BB4A02E4; Thu,  7 Apr 2022 17:12:24 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-	by mail.in.tum.de (Postfix) with ESMTPSA id 847E94A0238;
-	Thu,  7 Apr 2022 17:12:20 +0200 (CEST)
-	(Extended-Queue-bit xtech_fn@fff.in.tum.de)
-Date: Thu, 7 Apr 2022 17:12:15 +0200
-From: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-To: Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Marco Elver <elver@google.com>,
-	Charalampos Mainas <charalampos.mainas@gmail.com>,
-	Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: Dangerous addr to ctrl dependency transformation in
- fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
-Message-ID: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724DD2563
+	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 15:26:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649345212; x=1680881212;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VbYykRIwappfpRNrt3o6O1ku6astoaWsyhEOz9gfjes=;
+  b=ZMImLbCXfuqw1gUVdyvpGUd62olJA3CQysRhN+hVhbwECb/bLFExpj/R
+   BKgD1VhnlKRcVqTLEadngpYXjLEdXLMf0ujUDyy4wm00EZVeu5s1FhjCT
+   dGuPtoyXjPS300axxfOC6nh6+PBoKwf1MpzdSdiyrVbXftvCBwCGAjIY5
+   Le7KWlw5smOAiyNMJYGxdpXn/bEj8j6KlO4ycvWWWPEVe74/KuZ+5oWKw
+   m/LEBBLtit0kr8/gCtB1MhiFeF2sTcAxLXrOG0sBsSOKuvOnfJ+OYp3GI
+   NnZmJgpB3l1vW649h6J0yjqdA6mkROXp2yWBB6SQ999i0UVZAsC5vqVKC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="241947383"
+X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
+   d="scan'208";a="241947383"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 08:26:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
+   d="scan'208";a="723007166"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 07 Apr 2022 08:26:49 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ncU25-0005X1-0t;
+	Thu, 07 Apr 2022 15:26:49 +0000
+Date: Thu, 7 Apr 2022 23:26:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Slaby <jslaby@suse.cz>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 45/50] drivers/tty/serial/men_z135_uart.c:296:40:
+ error: no member named 'xmit' in 'struct uart_state'
+Message-ID: <202204072341.za6cIui8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,147 +45,172 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi all,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   100a309b4d75252d31b3ae0e69d6469ac0e0f522
+commit: 977858b1b952395763e2a47a94e69dd0b2f22a42 [45/50] tty: serial, use kfifo
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220407/202204072341.za6cIui8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=977858b1b952395763e2a47a94e69dd0b2f22a42
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout 977858b1b952395763e2a47a94e69dd0b2f22a42
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/tty/serial/
 
-work on my dependency checker tool is progressing nicely, and it is
-flagging, what I believe is, a harmful addr to ctrl dependency
-transformation. For context, see [1] and [2]. I'm using the Clang
-compiler.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The dependency in question runs from line 618 into the for loop
-increment, i.e. the third expresion in the for loop condition, in line
-622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
+All errors (new ones prefixed by >>):
 
-I did my best to reverse-engineer some pseudocode from Clang's IR for
-showing what I think is going on.
+>> drivers/tty/serial/men_z135_uart.c:296:40: error: no member named 'xmit' in 'struct uart_state'
+           struct circ_buf *xmit = &port->state->xmit;
+                                    ~~~~~~~~~~~  ^
+>> drivers/tty/serial/men_z135_uart.c:306:6: error: implicit declaration of function 'uart_circ_empty' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (uart_circ_empty(xmit))
+               ^
+>> drivers/tty/serial/men_z135_uart.c:316:9: error: implicit declaration of function 'uart_circ_chars_pending' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           qlen = uart_circ_chars_pending(xmit);
+                  ^
+>> drivers/tty/serial/men_z135_uart.c:348:13: error: incomplete definition of type 'struct circ_buf'
+           head = xmit->head & (UART_XMIT_SIZE - 1);
+                  ~~~~^
+   drivers/tty/serial/men_z135_uart.c:296:9: note: forward declaration of 'struct circ_buf'
+           struct circ_buf *xmit = &port->state->xmit;
+                  ^
+   drivers/tty/serial/men_z135_uart.c:349:13: error: incomplete definition of type 'struct circ_buf'
+           tail = xmit->tail & (UART_XMIT_SIZE - 1);
+                  ~~~~^
+   drivers/tty/serial/men_z135_uart.c:296:9: note: forward declaration of 'struct circ_buf'
+           struct circ_buf *xmit = &port->state->xmit;
+                  ^
+   drivers/tty/serial/men_z135_uart.c:354:52: error: incomplete definition of type 'struct circ_buf'
+           memcpy_toio(port->membase + MEN_Z135_TX_RAM, &xmit->buf[xmit->tail], n);
+                                                         ~~~~^
+   drivers/tty/serial/men_z135_uart.c:296:9: note: forward declaration of 'struct circ_buf'
+           struct circ_buf *xmit = &port->state->xmit;
+                  ^
+   drivers/tty/serial/men_z135_uart.c:354:62: error: incomplete definition of type 'struct circ_buf'
+           memcpy_toio(port->membase + MEN_Z135_TX_RAM, &xmit->buf[xmit->tail], n);
+                                                                   ~~~~^
+   drivers/tty/serial/men_z135_uart.c:296:9: note: forward declaration of 'struct circ_buf'
+           struct circ_buf *xmit = &port->state->xmit;
+                  ^
+   drivers/tty/serial/men_z135_uart.c:355:6: error: incomplete definition of type 'struct circ_buf'
+           xmit->tail = (xmit->tail + n) & (UART_XMIT_SIZE - 1);
+           ~~~~^
+   drivers/tty/serial/men_z135_uart.c:296:9: note: forward declaration of 'struct circ_buf'
+           struct circ_buf *xmit = &port->state->xmit;
+                  ^
+   drivers/tty/serial/men_z135_uart.c:355:20: error: incomplete definition of type 'struct circ_buf'
+           xmit->tail = (xmit->tail + n) & (UART_XMIT_SIZE - 1);
+                         ~~~~^
+   drivers/tty/serial/men_z135_uart.c:296:9: note: forward declaration of 'struct circ_buf'
+           struct circ_buf *xmit = &port->state->xmit;
+                  ^
+   9 errors generated.
 
-Clang's unoptimised version:
 
-> restart:
-> 	if(place_holder != NULL)
-> 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
-> 	if(delegation != NULL)
-> 		if(delegation != place_holder_deleg)
-> 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
-> 
-> 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
-> 		/*
-> 		 * Can continue, "goto restart" or "goto break" (after loop). 
-> 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
-> 		 * "delegation" might be assigned either a value depending on 
-> 		 * "delegation" itself, i.e. it is part of the dependency chain, 
-> 		 * or NULL.
-> 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
-> 		 * points to.
-> 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
-> 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
-> 		 * and the for loop's increment is executed.
-> 		 */
-> 	}
+vim +296 drivers/tty/serial/men_z135_uart.c
 
-Clang's optimised version:
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  287  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  288  /**
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  289   * men_z135_handle_tx() - TX tasklet routine
+145f5646be67eb Jiri Slaby         2020-08-18  290   * @uart: Pointer to struct men_z135_port
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  291   *
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  292   */
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  293  static void men_z135_handle_tx(struct men_z135_port *uart)
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  294  {
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  295  	struct uart_port *port = &uart->port;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17 @296  	struct circ_buf *xmit = &port->state->xmit;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  297  	u32 txc;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  298  	u32 wptr;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  299  	int qlen;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  300  	int n;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  301  	int txfree;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  302  	int head;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  303  	int tail;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  304  	int s;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  305  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17 @306  	if (uart_circ_empty(xmit))
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  307  		goto out;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  308  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  309  	if (uart_tx_stopped(port))
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  310  		goto out;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  311  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  312  	if (port->x_char)
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  313  		goto out;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  314  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  315  	/* calculate bytes to copy */
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17 @316  	qlen = uart_circ_chars_pending(xmit);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  317  	if (qlen <= 0)
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  318  		goto out;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  319  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  320  	wptr = ioread32(port->membase + MEN_Z135_TX_CTRL);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  321  	txc = (wptr >> 16) & 0x3ff;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  322  	wptr &= 0x3ff;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  323  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  324  	if (txc > MEN_Z135_FIFO_WATERMARK)
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  325  		txc = MEN_Z135_FIFO_WATERMARK;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  326  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  327  	txfree = MEN_Z135_FIFO_WATERMARK - txc;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  328  	if (txfree <= 0) {
+01ba8d6af4b76a Johannes Thumshirn 2015-01-19  329  		dev_err(&uart->mdev->dev,
+01ba8d6af4b76a Johannes Thumshirn 2015-01-19  330  			"Not enough room in TX FIFO have %d, need %d\n",
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  331  			txfree, qlen);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  332  		goto irq_en;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  333  	}
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  334  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  335  	/* if we're not aligned, it's better to copy only 1 or 2 bytes and
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  336  	 * then the rest.
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  337  	 */
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  338  	if (align && qlen >= 3 && BYTES_TO_ALIGN(wptr))
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  339  		n = 4 - BYTES_TO_ALIGN(wptr);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  340  	else if (qlen > txfree)
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  341  		n = txfree;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  342  	else
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  343  		n = qlen;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  344  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  345  	if (n <= 0)
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  346  		goto irq_en;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  347  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17 @348  	head = xmit->head & (UART_XMIT_SIZE - 1);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  349  	tail = xmit->tail & (UART_XMIT_SIZE - 1);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  350  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  351  	s = ((head >= tail) ? head : UART_XMIT_SIZE) - tail;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  352  	n = min(n, s);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  353  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  354  	memcpy_toio(port->membase + MEN_Z135_TX_RAM, &xmit->buf[xmit->tail], n);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  355  	xmit->tail = (xmit->tail + n) & (UART_XMIT_SIZE - 1);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  356  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  357  	iowrite32(n & 0x3ff, port->membase + MEN_Z135_TX_CTRL);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  358  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  359  	port->icount.tx += n;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  360  
+a9977620a448f1 Johannes Thumshirn 2014-06-16  361  	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+a9977620a448f1 Johannes Thumshirn 2014-06-16  362  		uart_write_wakeup(port);
+a9977620a448f1 Johannes Thumshirn 2014-06-16  363  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  364  irq_en:
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  365  	if (!uart_circ_empty(xmit))
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  366  		men_z135_reg_set(uart, MEN_Z135_CONF_REG, MEN_Z135_IER_TXCIEN);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  367  	else
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  368  		men_z135_reg_clr(uart, MEN_Z135_CONF_REG, MEN_Z135_IER_TXCIEN);
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  369  
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  370  out:
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  371  	return;
+e264ebf4c81ac7 Johannes Thumshirn 2014-04-17  372  
 
-> restart:
-> 	if(place_holder == NULL) {
-> 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
-> 	} else {
-> 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
-> 		if(cmp != NULL) { /* Transformation to ctrl dep */
-> 			if(cmp == place_holder_deleg) {
-> 				delegation = place_holder_deleg;
-> 			} else {
-> 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
-> 			}
-> 		} else {
-> 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
-> 		}
-> 	}
-> 
-> 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
-> 		/*
-> 		 * At this point, "delegation" cannot depend on line 618 anymore
-> 		 * since the "rcu_dereference()" was only used for an assignment
-> 		 * to "cmp" and a subsequent comparison (ctrl dependency).
-> 		 * Therefore, the loop increment cannot depend on the
-> 		 * "rcu_dereference()" either. The dependency chain has been
-> 		 * broken.
-> 		 */
->         }
+:::::: The code at line 296 was first introduced by commit
+:::::: e264ebf4c81ac733642ed03ee3f0e26914ed3714 tty: serial: Add driver for MEN's 16z135 High Speed UART.
 
-The above is an abstraction of the following control flow path in
-"nfs_server_return_marked_delegations()":
+:::::: TO: Johannes Thumshirn <johannes.thumshirn@men.de>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-1. When "nfs_server_return_marked_delegations()" gets called, it has no
-choice but to skip the dependency beginning in line 620, since
-"place_holder" is NULL the first time round.
-
-2. Now take a path until "place_holder", the condition for the
-dependency beginning, becomes true and "!delegation || delegation !=
-place_holder_deleg", the condition for the assignment in line 620,
-becomes false. Then, enter the loop again and take a path to one of the
-"goto restart" statements without reassigning to "delegation".
-
-3. After going back to "restart", since the condition for line 618
-became true, "rcu_dereference()" into "delegation".
-
-4. Enter the for loop again, but avoid the "goto restart" statements in
-the first iteration and ensure that "&(delegation)->super_list !=
-&server->delegations", the loop condition, remains true and "delegation"
-isn't assigned NULL.
-
-5. When the for loop condition is reached for the second time, the loop
-increment is executed and there is an address dependency.
-
-Now, why would the compiler decide to assign "place_holder_deleg" to
-"delegation" instead of what "rcu_dereference()" returned? Here's my
-attempt at explaining.
-
-In the pseudo code above, i.e. in the optimised IR, the assignment of
-"place_holder_deleg" is guarded by two conditions. It is executed iff
-"place_holder" isn't NULL and the "rcu_dereference()" didn't return
-NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
-NULL" holds at line 617, then "delegation == rcu_dereference() ==
-place_holder_deleg" must hold at line 622. Otherwise, the optimisation
-would be wrong.
-
-Assume control flow has just reached the first if, i.e. line 617, in
-source code. Since "place_holder" isn't NULL, it will execute the first
-if's body and "rcu_dereference()" into "delegation" (618). Now it has
-reached the second if. Per our aussmption, "rcu_dereference()" returned
-something that wasn't NULL. Therefore, "!delegation", the first part of
-the second if condition's OR, will be false.
-
-However, if we want "rcu_dereference() == delegation" to hold after the
-two if's, we can't enter the second if anyway, as it will overwrite
-"delegation" with a value that might not be equal to what
-"rcu_dereference()" returned. So, we want the second part of the second
-if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
-as well.
-
-When is that the case? It is the case when "delegation ==
-place_holder_deleg" holds.
-
-So, if we want "delegation == rcu_dereference() == place_holder_deleg"
-to hold after the two if's, "place_holder != NULL && rcu_dereference()
-!= NULL" must hold before the two if's, which is what we wanted to show
-and what the compiler figured out too.
-
-TL;DR: it appears the compiler optimisation is plausible, yet it still
-breaks the address dependency.
-
-For those interested, I have made the unoptimised and optimised IR CFGs
-available. In the optimised one, the interesting part is the transition
-from "if.end" to "if.end13".
-
-Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
-
-Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
-
-What do you think?
-
-Many thanks,
-Paul
-
-[1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
-[2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
