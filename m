@@ -1,30 +1,28 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D672570
-	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 18:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D72B4C385A0;
-	Thu,  7 Apr 2022 18:01:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69002570
+	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 18:03:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33FABC385A4;
+	Thu,  7 Apr 2022 18:03:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1649354500;
-	bh=+RD7PW8EiSgoK7hk7pP1ZkBkMlJVqYjQb7/8uzaiGkI=;
+	s=k20201202; t=1649354585;
+	bh=+yMtJUm6feZXxZqTlDnWwouUGLx0qcjo0z4uDWA8UyY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f0vWDtvkhfMG14Ich+ZDQF2Vq/dAuwCEG8DnOjCWNORlmA/yWORy3+Dd0EypYeDIK
-	 3cAfvwWSUVtOrIZhXZje1gFhro63bVSV2hSXWIobEc+lXOGtbBHzA68xSYOZBB7smj
-	 5ZtG5IrR8RjJuupPT/vS1L2SQNcu1pDBOQ5KTeG1FXtIzvqyuD1gKMEUfeSZ2MGoNj
-	 vxveqTMEkq2fF5IActEasm1sF31cGeCh1eD0+Qoce1oy+2FYkVOxGWbNwxv7/zH8u5
-	 WTB55RJY1jotbCFwNeDsicMACrCkTswdbqVnLYEeUcvU+2fxleXm26s3WhAdKzIYH2
-	 5RuGIcdkNHzfA==
-Date: Thu, 7 Apr 2022 11:01:38 -0700
+	b=q3uWEl+mmqyGILtDhV3tico+Pa5LYwylnlSPAYjjJAdreKmdVbxliuwon2JYO8BLh
+	 3LV8FKBQnHUQ0pAnYKdidtAXqJJ1yYdukD7TlZ6JCVPmr/WB3Kknp20uT/8G0WK+yz
+	 c8k0C+QUkNDWlI3Xu73w3pqcHCBWf7+6r9ja78Us8RMxRB5IalL5wBsgR8v3vEi7tC
+	 J0eSZI1/92t09vdy6pFLh3KkLvLxjK0OtJTZ6nAdG27hcW0GBtiN6rKpxhlhmC+ZCO
+	 L3hi1jIB5eMUs9Pv0VAqbSIytp62TIOvpm+JHLjwkNtVvgnmmanlGDOz4m+g3AGt2S
+	 ZvXRL23/W0Big==
+Date: Thu, 7 Apr 2022 11:03:03 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Tom Rix <trix@redhat.com>
-Cc: pkshih@realtek.com, kvalo@kernel.org, davem@davemloft.net,
-	kuba@kernel.org, pabeni@redhat.com, ndesaulniers@google.com,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] rtw89: ser: add a break statement
-Message-ID: <Yk8nAnDcnPF5rC7N@dev-arch.thelio-3990X>
-References: <20220407175349.3053362-1-trix@redhat.com>
+Cc: ndesaulniers@google.com, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] MAINTAINERS: add self as clang reviewer
+Message-ID: <Yk8nV1kBngon+o6N@dev-arch.thelio-3990X>
+References: <20220407175715.3378998-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,49 +31,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220407175349.3053362-1-trix@redhat.com>
+In-Reply-To: <20220407175715.3378998-1-trix@redhat.com>
 
-On Thu, Apr 07, 2022 at 01:53:49PM -0400, Tom Rix wrote:
-> The clang build fails with
-> ser.c:397:2: error: unannotated fall-through
->   between switch labels [-Werror,-Wimplicit-fallthrough]
->         default:
->         ^
-> The case above the default does not have a break.
-> So add one.
+On Thu, Apr 07, 2022 at 01:57:15PM -0400, Tom Rix wrote:
+> I have been helping with build breaks and
+> other clang things and would like to help
+> with the reviews.
 > 
 > Signed-off-by: Tom Rix <trix@redhat.com>
 
-There is also https://lore.kernel.org/r/20220407132316.61132-2-pkshih@realtek.com/.
+Thanks a lot Tom!
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Acked-by: Nathan Chancellor <nathan@kernel.org>
 
-I have been using Documentation/process/deprecated.rst as justification
-for the extra break, warning aside, as all case statements must end in
-one of the following:
-
-break
-fallthrough
-continue
-goto
-return
+I think we might need to CC Andrew Morton for this, as we do not
+currently pick up patches ourselves.
 
 > ---
->  drivers/net/wireless/realtek/rtw89/ser.c | 1 +
+>  MAINTAINERS | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/net/wireless/realtek/rtw89/ser.c b/drivers/net/wireless/realtek/rtw89/ser.c
-> index 25d1df10f226..5aebd6839d29 100644
-> --- a/drivers/net/wireless/realtek/rtw89/ser.c
-> +++ b/drivers/net/wireless/realtek/rtw89/ser.c
-> @@ -394,6 +394,7 @@ static void ser_idle_st_hdl(struct rtw89_ser *ser, u8 evt)
->  		break;
->  	case SER_EV_STATE_OUT:
->  		rtw89_hci_recovery_start(rtwdev);
-> +		break;
->  	default:
->  		break;
->  	}
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9ebfc93d8f0d..8da670067a34 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4797,6 +4797,7 @@ F:	.clang-format
+>  CLANG/LLVM BUILD SUPPORT
+>  M:	Nathan Chancellor <nathan@kernel.org>
+>  M:	Nick Desaulniers <ndesaulniers@google.com>
+> +R:	Tom Rix <trix@redhat.com>
+>  L:	llvm@lists.linux.dev
+>  S:	Supported
+>  W:	https://clangbuiltlinux.github.io/
 > -- 
 > 2.27.0
+> 
 > 
