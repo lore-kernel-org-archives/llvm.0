@@ -1,45 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4AA920E9
-	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 05:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A06C20F5
+	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 07:02:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649309423; x=1680845423;
+  t=1649314956; x=1680850956;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TLY9VbrLN3iYNKEihGEU85+7l5qc8Uss+xhSOCkTAw4=;
-  b=QfrUw7GaMTxOZNj6vWkUndoM6buBFSPnuFtSYqr2A7M4BV8g+zKWsCnu
-   ydi1M0yUbUZ5aQT/IJrBnbX7HbpFlFFN7PJ9R6fkuYFze2/boMWHLlTyg
-   6734RNdFB3OSNVvqKKktZaVfCQ4TEN952ke8r5dLU/rHNqx2m+AQ2pyKY
-   MfXbCmXr0ZZ7xuCYq9MQWgjt4s/18In4rph8/0D54H+umBASVAnE67nJa
-   UAQ4V5myWf3i4phJxazQln1eV5aiIn/bccDFImAZajMGPWZaXTUXPd8j/
-   RkAtk7Lhw448vGbbhB/0a7nIHNiu+zD2bg3gP/tTR5htB5fcxy+WV+swJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="261225801"
+  bh=M+V40WE+kYDuiNwugfWzf0qQ86G/RlSPWEGv/TCbofk=;
+  b=caiqWu+4pDDSxf2mnKuekcoNoPC3neSYAMoqo+SDp+s4YBtQVwI7GgmQ
+   M9Ez3MGgkryeKouEih4K57ZpymyfbqjyZEjMFi2Mw2SLXaoD5uUAjl8/N
+   21ATBKHaZAM3AdSL0wtNzzR5mrDo/MPSj1uqdXOg0V67kzAA0/MAb8/Ri
+   I3EWM/BHgvhGQoDrdEMa+xMofaHj2PqsRebVWJMkRc8Bm42Ki04xjOPHN
+   V4B2p1OdtkIPT4y7JqbjZhaNnhcypbxFViAb6dg2rZ3891elGUpiQsyVa
+   Gd/rOXzSF7LF6rpXmFyU1v2RUv3fZW02fcpbAQI2nN32c9UHBNFzMO6Sy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241838962"
 X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="261225801"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 22:30:23 -0700
+   d="scan'208";a="241838962"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 00:02:34 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="524780904"
+   d="scan'208";a="549894270"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2022 22:30:21 -0700
+  by orsmga007.jf.intel.com with ESMTP; 07 Apr 2022 00:02:32 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ncKiq-00056Y-T2;
-	Thu, 07 Apr 2022 05:30:20 +0000
-Date: Thu, 7 Apr 2022 13:29:53 +0800
+	id 1ncMA3-0005AU-M1;
+	Thu, 07 Apr 2022 07:02:31 +0000
+Date: Thu, 7 Apr 2022 15:02:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zong-Zhe Yang <kevin_yang@realtek.com>
+To: Alexander Lobakin <alobakin@pm.me>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-	Ping-Ke Shih <pkshih@realtek.com>
-Subject: [ammarfaizi2-block:kvalo/ath/pending 9/45]
- drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated
- fall-through between switch labels
-Message-ID: <202204071343.R89skHKl-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>
+Subject: drivers/net/dsa/microchip/ksz9477_spi.c:86:34: warning: unused
+ variable 'ksz9477_dt_ids'
+Message-ID: <202204071418.9ByMEtlP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,70 +48,160 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
-head:   e1bd1e32fab0c91cf7a87e96fee9270e98e79351
-commit: 14f9f4790048f684c2b151c899895feae0b5731a [9/45] rtw89: ser: control hci interrupts on/off by state
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220407/202204071343.R89skHKl-lkp@intel.com/config)
+Hi Alexander,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
+commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
+date:   1 year, 1 month ago
+config: s390-randconfig-c005-20220407 (https://download.01.org/0day-ci/archive/20220407/202204071418.9ByMEtlP-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/14f9f4790048f684c2b151c899895feae0b5731a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
-        git checkout 14f9f4790048f684c2b151c899895feae0b5731a
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/realtek/rtw89/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/microchip/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   drivers/net/wireless/realtek/rtw89/ser.c:319:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   1 warning generated.
+   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/dsa/microchip/ksz9477_spi.c:86:34: warning: unused variable 'ksz9477_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id ksz9477_dt_ids[] = {
+                                    ^
+   21 warnings generated.
 
 
-vim +319 drivers/net/wireless/realtek/rtw89/ser.c
+vim +/ksz9477_dt_ids +86 drivers/net/dsa/microchip/ksz9477_spi.c
 
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  301  
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  302  /* state handler */
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  303  static void ser_idle_st_hdl(struct rtw89_ser *ser, u8 evt)
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  304  {
-14f9f4790048f6 Zong-Zhe Yang 2022-03-14  305  	struct rtw89_dev *rtwdev = container_of(ser, struct rtw89_dev, ser);
-14f9f4790048f6 Zong-Zhe Yang 2022-03-14  306  
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  307  	switch (evt) {
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  308  	case SER_EV_STATE_IN:
-14f9f4790048f6 Zong-Zhe Yang 2022-03-14  309  		rtw89_hci_recovery_complete(rtwdev);
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  310  		break;
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  311  	case SER_EV_L1_RESET:
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  312  		ser_state_goto(ser, SER_RESET_TRX_ST);
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  313  		break;
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  314  	case SER_EV_L2_RESET:
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  315  		ser_state_goto(ser, SER_L2_RESET_ST);
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  316  		break;
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  317  	case SER_EV_STATE_OUT:
-14f9f4790048f6 Zong-Zhe Yang 2022-03-14  318  		rtw89_hci_recovery_start(rtwdev);
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11 @319  	default:
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  320  		break;
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  321  	}
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  322  }
-e3ec7017f6a20d Ping-Ke Shih  2021-10-11  323  
+c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20  85  
+c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20 @86  static const struct of_device_id ksz9477_dt_ids[] = {
+b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  87  	{ .compatible = "microchip,ksz9477" },
+45316818371d1f drivers/net/dsa/microchip/ksz_spi.c     Lad, Prabhakar     2018-08-15  88  	{ .compatible = "microchip,ksz9897" },
+8c29bebb1f8a68 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2019-02-28  89  	{ .compatible = "microchip,ksz9893" },
+8c29bebb1f8a68 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2019-02-28  90  	{ .compatible = "microchip,ksz9563" },
+d9033ae95cf445 drivers/net/dsa/microchip/ksz9477_spi.c Razvan Stefanescu  2019-08-30  91  	{ .compatible = "microchip,ksz8563" },
+9b2d9f05cddfee drivers/net/dsa/microchip/ksz9477_spi.c George McCollister 2019-09-10  92  	{ .compatible = "microchip,ksz9567" },
+b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  93  	{},
+b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  94  };
+c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20  95  MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
+b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  96  
 
-:::::: The code at line 319 was first introduced by commit
-:::::: e3ec7017f6a20d12ddd9fe23d345ebb7b8c104dd rtw89: add Realtek 802.11ax driver
+:::::: The code at line 86 was first introduced by commit
+:::::: c2e866911e2540677c31ee009d8f75cdb4c023aa net: dsa: microchip: break KSZ9477 DSA driver into two files
 
-:::::: TO: Ping-Ke Shih <pkshih@realtek.com>
-:::::: CC: Kalle Valo <kvalo@codeaurora.org>
+:::::: TO: Tristram Ha <Tristram.Ha@microchip.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
 0-DAY CI Kernel Test Service
