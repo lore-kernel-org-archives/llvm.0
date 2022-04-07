@@ -1,208 +1,102 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A06C20F5
-	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 07:02:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649314956; x=1680850956;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=M+V40WE+kYDuiNwugfWzf0qQ86G/RlSPWEGv/TCbofk=;
-  b=caiqWu+4pDDSxf2mnKuekcoNoPC3neSYAMoqo+SDp+s4YBtQVwI7GgmQ
-   M9Ez3MGgkryeKouEih4K57ZpymyfbqjyZEjMFi2Mw2SLXaoD5uUAjl8/N
-   21ATBKHaZAM3AdSL0wtNzzR5mrDo/MPSj1uqdXOg0V67kzAA0/MAb8/Ri
-   I3EWM/BHgvhGQoDrdEMa+xMofaHj2PqsRebVWJMkRc8Bm42Ki04xjOPHN
-   V4B2p1OdtkIPT4y7JqbjZhaNnhcypbxFViAb6dg2rZ3891elGUpiQsyVa
-   Gd/rOXzSF7LF6rpXmFyU1v2RUv3fZW02fcpbAQI2nN32c9UHBNFzMO6Sy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241838962"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="241838962"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 00:02:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="549894270"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 07 Apr 2022 00:02:32 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ncMA3-0005AU-M1;
-	Thu, 07 Apr 2022 07:02:31 +0000
-Date: Thu, 7 Apr 2022 15:02:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Lobakin <alobakin@pm.me>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>
-Subject: drivers/net/dsa/microchip/ksz9477_spi.c:86:34: warning: unused
- variable 'ksz9477_dt_ids'
-Message-ID: <202204071418.9ByMEtlP-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678F120F5
+	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 07:18:48 +0000 (UTC)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so5441240fac.11
+        for <llvm@lists.linux.dev>; Thu, 07 Apr 2022 00:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kJgVxXTSGUL5Ml3w5PiaRd14nMB9CIKCrHN3GWr0TqM=;
+        b=oQ1HJeQCQC5n4qCBU2DXCCVkwUX12Rt3xib0qn1D9v+Vr4OJP2gxh2o4gm5R/pGj9f
+         YNvt9HlCxHLgYJLh/EHM6+KGaIBk6MSYamfbSBtIHhzh2goqMEiWIOyyw4DfkwJce0Hf
+         vHhrQk1/hob+b4mYT2BFF+mA5rlDRFuTgF7hB1R7osvQcJpe73AVVzQcFY775BWaLB5Q
+         nknirBp+4Wbc4rtxd9qahyM0e16+x4spXyVW7tKFpn99qWo3K+PS2yb9Y6f0VSnwZW6X
+         hcjv3snZVrQHECdvtqQNfSq1ePlGzIh+xixdGXmaMB4KDihEZhy4A7qyH7i9TOlPMRE/
+         kFzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kJgVxXTSGUL5Ml3w5PiaRd14nMB9CIKCrHN3GWr0TqM=;
+        b=g1wpGFOPjmcaMbCZNNka3+ijX58FygtSE1ESy1GKx1/4jEdX3r84VG+hDj8RQRW+ep
+         QEmaYNYT7IEJ7tD9zqde8OZEIL+pVlNlQNU6cbOfNmhAusO9HUkq2pQHMXoPYLLG3+Mz
+         BBhd1E2r87FkdUM7GS/TJzmVE7PnK5/eIo9R3HDa2A42+tYwTpXhsBl81GQqaqRvzJzr
+         bgRRteFJ05Jq6HDIjkZynFb4feyuu4I3anhqa/W/1ZHXkhCxThkFK6KQI1getAdIJpKW
+         R/749CkNR9fHDPTg0w1I3vXb/sQRCLGTNfETYBF7Lh2W6ZoCNgS4MIQnZeE3WqIpDPEs
+         8+Uw==
+X-Gm-Message-State: AOAM5320XSHIow1vAMAFJ6X8Ct/uHlgeIkRDxv9w4xisai9eYLWYmGAD
+	lekuDS9SIdZUOEJQQ5XusKkt/BaXPzJ1BYACCcX9Vg==
+X-Google-Smtp-Source: ABdhPJwE5SJa9B0V0BpKDtoeMPTYGxl+ueDIC4EtAGMY2EXeynZBq31t3MsHu4SvzUk6ntBQp+9uCDgpxvmtJSdAuE8=
+X-Received: by 2002:a05:6870:d254:b0:db:12b5:da3 with SMTP id
+ h20-20020a056870d25400b000db12b50da3mr5773981oac.211.1649315927305; Thu, 07
+ Apr 2022 00:18:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <000000000000008dae05dbfebd85@google.com> <7108f263-5cda-d91d-792b-d3f18b63c6d7@redhat.com>
+ <CAKwvOd=-4S1nV=qa3CGNPTAMOv9fGYZsh8hQPXDH1MpowYDX=w@mail.gmail.com>
+In-Reply-To: <CAKwvOd=-4S1nV=qa3CGNPTAMOv9fGYZsh8hQPXDH1MpowYDX=w@mail.gmail.com>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Thu, 7 Apr 2022 09:18:36 +0200
+Message-ID: <CACT4Y+ZB4oBVks7hF5shnW8FDH2c6O6UWoLVtyZ1ccp8AJhmcw@mail.gmail.com>
+Subject: Re: [syzbot] upstream build error (17)
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Alexander Potapenko <glider@google.com>, 
+	Marco Elver <elver@google.com>, 
+	syzbot <syzbot+6b36bab98e240873fd5a@syzkaller.appspotmail.com>, bp@alien8.de, 
+	dave.hansen@linux.intel.com, hpa@zytor.com, jmattson@google.com, 
+	joro@8bytes.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, mingo@redhat.com, seanjc@google.com, 
+	syzkaller-bugs@googlegroups.com, tglx@linutronix.de, vkuznets@redhat.com, 
+	wanpengli@tencent.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Alexander,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
-commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
-date:   1 year, 1 month ago
-config: s390-randconfig-c005-20220407 (https://download.01.org/0day-ci/archive/20220407/202204071418.9ByMEtlP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/microchip/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz9477_spi.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/dsa/microchip/ksz9477_spi.c:86:34: warning: unused variable 'ksz9477_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id ksz9477_dt_ids[] = {
-                                    ^
-   21 warnings generated.
+On Wed, 6 Apr 2022 at 20:26, Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Wed, Apr 6, 2022 at 10:33 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> >
+> > On 4/6/22 18:20, syzbot wrote:
+> > > Hello,
+> > >
+> > > syzbot found the following issue on:
+> > >
+> > > HEAD commit:    3e732ebf7316 Merge tag 'for_linus' of git://git.kernel.org..
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10ca0687700000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=eba855fbe3373b4f
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=6b36bab98e240873fd5a
+> > > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+6b36bab98e240873fd5a@syzkaller.appspotmail.com
+> > >
+> > > arch/x86/kvm/emulate.c:3332:5: error: stack frame size (2552) exceeds limit (2048) in function 'emulator_task_switch' [-Werror,-Wframe-larger-than]
+> > > drivers/block/loop.c:1524:12: error: stack frame size (2648) exceeds limit (2048) in function 'lo_ioctl' [-Werror,-Wframe-larger-than]
+> >
+> > I spot-checked these two and the stack frame is just 144 and 320 bytes
+> > respectively on a normal compile.  This is probably just the effect of
+> > some of the sanitizer options.
+>
+> Yep.
+> $ wget -q https://syzkaller.appspot.com/x/.config\?x\=eba855fbe3373b4f
+> -O - | grep CONFIG_KASAN=y
+> CONFIG_KASAN=y
+> https://github.com/ClangBuiltLinux/linux/issues/39 (our oldest still-open issue)
 
 
-vim +/ksz9477_dt_ids +86 drivers/net/dsa/microchip/ksz9477_spi.c
+The issue is due to:
 
-c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20  85  
-c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20 @86  static const struct of_device_id ksz9477_dt_ids[] = {
-b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  87  	{ .compatible = "microchip,ksz9477" },
-45316818371d1f drivers/net/dsa/microchip/ksz_spi.c     Lad, Prabhakar     2018-08-15  88  	{ .compatible = "microchip,ksz9897" },
-8c29bebb1f8a68 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2019-02-28  89  	{ .compatible = "microchip,ksz9893" },
-8c29bebb1f8a68 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2019-02-28  90  	{ .compatible = "microchip,ksz9563" },
-d9033ae95cf445 drivers/net/dsa/microchip/ksz9477_spi.c Razvan Stefanescu  2019-08-30  91  	{ .compatible = "microchip,ksz8563" },
-9b2d9f05cddfee drivers/net/dsa/microchip/ksz9477_spi.c George McCollister 2019-09-10  92  	{ .compatible = "microchip,ksz9567" },
-b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  93  	{},
-b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  94  };
-c2e866911e2540 drivers/net/dsa/microchip/ksz9477_spi.c Tristram Ha        2018-11-20  95  MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
-b987e98e50ab90 drivers/net/dsa/microchip/ksz_spi.c     Woojung Huh        2017-05-31  96  
+commit b9080ba4a6ec56447f263082825a4fddb873316b
+Date:   Wed Mar 23 12:21:10 2022 +0100
+    x86/defconfig: Enable WERROR
 
-:::::: The code at line 86 was first introduced by commit
-:::::: c2e866911e2540677c31ee009d8f75cdb4c023aa net: dsa: microchip: break KSZ9477 DSA driver into two files
+Marco has disabled it in syzbot configs:
+https://github.com/google/syzkaller/commit/53c67432e69b0df4ff64448b944cbffaecec20f4
 
-:::::: TO: Tristram Ha <Tristram.Ha@microchip.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+#syz invalid
