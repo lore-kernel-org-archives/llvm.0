@@ -1,87 +1,108 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1EA29A1
-	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 22:28:12 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 79D7E1F85A;
-	Thu,  7 Apr 2022 22:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1649370490; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=km6cLSvcevUTiMWx8bdylNikiJbG874gtpsaUOE+xKo=;
-	b=OQWeXtJtyDQCM4yM/PXITvLUzVSGb3pkrlHNB7HCBW1IUCYBcvcgcX5fZpLQofJ5y0xxHI
-	NaWZVbCb5mbYR7lf2jTuaG4s9JXMKiYF5sRqO58NQE0PR7LT1I+QoXt7+VnzXOb+AbnmKY
-	uGVfwrxZ9+t2AZVCltsN8hDV5SQ/QbI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1649370490;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=km6cLSvcevUTiMWx8bdylNikiJbG874gtpsaUOE+xKo=;
-	b=QQ6ett+ZaKNSXw0mJnvlcfSPwRwWTQ7wqjNHS0CVcGJFtvV14risk0tkEMmqt6iJlcfFA4
-	oyFNRD5vx//WELDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B52913A66;
-	Thu,  7 Apr 2022 22:28:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id pC4sGnplT2IGAwAAMHmgww
-	(envelope-from <bp@suse.de>); Thu, 07 Apr 2022 22:28:10 +0000
-Date: Fri, 8 Apr 2022 00:28:09 +0200
-From: Borislav Petkov <bp@suse.de>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-	linux-tip-commits@vger.kernel.org,
-	Arvind Sankar <nivedita@alum.mit.edu>,
-	Fangrui Song <maskray@google.com>, x86@kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [tip: x86/build] x86/build: Don't build CONFIG_X86_32 as
- -ffreestanding
-Message-ID: <Yk9leWxNnnuJWKcI@zn.tnic>
-References: <20200817220212.338670-5-ndesaulniers@google.com>
- <164934565464.389.2546833245037255032.tip-bot2@tip-bot2>
- <CAKwvOdkQeSx3uy25KaTrX=ywc26wDEefXHbCB_ifGot+yXGvHQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D7633EB
+	for <llvm@lists.linux.dev>; Thu,  7 Apr 2022 23:40:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649374826; x=1680910826;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0VtU0UneVuCkQyvNiHQoIuOKZgrxrtzsJsTWmdxkcV4=;
+  b=I9yyFGO1fKDhjyLy2QhSn2DEQ16Q7QhTDMQOqp0ANagazblMBA+S/b5v
+   s/pkT1lldN2sG/a3v44HTgwRXfu1B/0IF0nyjKrGUFndxgWGfv0Ek/pAr
+   gxnhbt4uX7mfmas65POt8C3D2a3B1QKe/r52eBU6XDeAHrlb1URgEi1UW
+   bDDnWFnwGIr3/bG1RlhjuzjA56GmfnbNMOr+g9dt6ySAdoYe5AoY5/qKI
+   ENHONLH5lz1kg8KFQl/iQNcCTfq6673a+IlOdjrxCaYxmyGBNyVghAIN7
+   FikV1I6y0nbDrZ77DYZZ0G4EaPAXCF5g8MloIK77dQE3ahQKqVHnXqBep
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="242060497"
+X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
+   d="scan'208";a="242060497"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 16:40:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
+   d="scan'208";a="506344200"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 07 Apr 2022 16:40:14 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ncbjZ-0005rv-Ml;
+	Thu, 07 Apr 2022 23:40:13 +0000
+Date: Fri, 8 Apr 2022 07:39:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/fixes 2/5] include/linux/kallsyms.h:107:5: warning:
+ no previous prototype for function 'kallsyms_lookup_names'
+Message-ID: <202204080713.3jWhtN6s-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdkQeSx3uy25KaTrX=ywc26wDEefXHbCB_ifGot+yXGvHQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Apr 07, 2022 at 10:01:32AM -0700, Nick Desaulniers wrote:
-> Boris, Can I send you a patch to replace this one (with a guard for
-> clang) or a patch on top? i.e. what base would you prefer me to use.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/fixes
+head:   baa78873a24a7e0f21b0a01e82214ce9a096e147
+commit: 3f047c53b0e7e747b76f0b3d032e476efbe1222f [2/5] kallsyms: Add kallsyms_lookup_names function
+config: powerpc-mpc8313_rdb_defconfig (https://download.01.org/0day-ci/archive/20220408/202204080713.3jWhtN6s-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=3f047c53b0e7e747b76f0b3d032e476efbe1222f
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/fixes
+        git checkout 3f047c53b0e7e747b76f0b3d032e476efbe1222f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
-I don't mind much, whatever Kees wants. I can just as well drop this
-one completely and wait until you guys have fixed clang... or do the
-gcc-only thing... your call.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Using mainline:
+All warnings (new ones prefixed by >>):
 
-The branch to use is in the tip tree and there x86/build - it is in the
-subject of the tip-bot2 message:
+   In file included from arch/powerpc/kernel/asm-offsets.c:36:
+   In file included from arch/powerpc/include/asm/dbell.h:17:
+   In file included from arch/powerpc/include/asm/kvm_ppc.h:19:
+   In file included from include/linux/kvm_host.h:32:
+   In file included from include/linux/ftrace.h:12:
+>> include/linux/kallsyms.h:107:5: warning: no previous prototype for function 'kallsyms_lookup_names' [-Wmissing-prototypes]
+   int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
+       ^
+   include/linux/kallsyms.h:107:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
+   ^
+   static 
+   1 warning generated.
+   /usr/bin/ld: unrecognised emulation mode: elf32ppclinux
+   Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
+   clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:65: arch/powerpc/kernel/vdso/vdso32.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:423: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-[tip: x86/build] ...
 
-Thx.
+vim +/kallsyms_lookup_names +107 include/linux/kallsyms.h
+
+   106	
+ > 107	int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
+   108	{
+   109		return -ERANGE;
+   110	}
+   111	
 
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+0-DAY CI Kernel Test Service
+https://01.org/lkp
