@@ -1,30 +1,30 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3828363C
-	for <llvm@lists.linux.dev>; Fri,  8 Apr 2022 20:32:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5690B63C
+	for <llvm@lists.linux.dev>; Fri,  8 Apr 2022 20:48:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=F/vMULxwPA3PweIjUbWnlp7vWLOZb8eeWiid2cEkC1k=; b=n11aCZbtUGp7/Bm8HOKJrNWqjs
-	7HEJamwcKvRmKUHgVkDE7V/jCc4UruPMQFILZtdaJVevLhXAjGiyguzzzJj2udu13Su5Hc4wPS0Ld
-	qjm5UMobIaT0uMHGBLLEUyQj8rRZpNll+kWxIPAcz60NO7wALUv1G2Ighe9ALXzDdn5dLwtNrg4AR
-	bLvUKQ5Gu4LTVthCSP4teTXZZIb5p1VPie5v1GMjPly4EDFPzVW6TrTIfS/mvxgaZ89etzyEJiSzN
-	t3y/KpyH8tWAMCo8soRGwSh7cGnRRnTEEfysQdcgjtS57wVjsUgawP4OoI92d/8R1Kx/TojkBnVUS
-	SkUcZekQ==;
+	bh=jSNlhgteFciJhaFanIIz/zy2rD53IRDwcvBetwHtIQM=; b=mrD47God47Rhpq962QoM1VVzjc
+	KK1mF/026DuTnYfWGFDoh8xKdgVe+vat38s8Er328ZS/B05WjMfK2e92WBGLhb18E4XTOsJFBMrUI
+	UXBo2/PkRE5hYxAIAt/ItIzbc4tdO/SxYZr9h2RE5soayULihO0SX45nD5fDpMSDOH0z0HIar86MP
+	QGAgCGSvWKHsG4U6srhbhIrgFndKJ6u6aGaubWc5qcBEX8k9owEXsFhNHTOwoUPjynY5oOTRVuLtu
+	T+i+6/2Bvvv0BoHez5tjKBebyWJ0sf9HQcs8jELGAugpOIAzTpgqLMyVAwchJcXXyQwJjtq+63uan
+	4gYttRPg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1ncvHS-00A8fd-G5; Fri, 08 Apr 2022 20:32:30 +0000
+	id 1ncvWY-00A98f-1r; Fri, 08 Apr 2022 20:48:06 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4915F300130;
-	Fri,  8 Apr 2022 22:32:28 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8E8FC3000E6;
+	Fri,  8 Apr 2022 22:48:05 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 2374832233310; Fri,  8 Apr 2022 22:32:28 +0200 (CEST)
-Date: Fri, 8 Apr 2022 22:32:28 +0200
+	id 6D07432233317; Fri,  8 Apr 2022 22:48:05 +0200 (CEST)
+Date: Fri, 8 Apr 2022 22:48:05 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: Nick Desaulniers <ndesaulniers@google.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>,
@@ -37,11 +37,12 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	linux-toolchains@vger.kernel.org,
 	clang-built-linux <llvm@lists.linux.dev>
 Subject: Re: [PATCH] kbuild: Remove CONFIG_DEBUG_SECTION_MISMATCH
-Message-ID: <YlCb3L7ByWwszbaA@hirez.programming.kicks-ass.net>
+Message-ID: <YlCfhUkOXTvqCfjT@hirez.programming.kicks-ass.net>
 References: <7fad83ecde03540e65677959034315f8fbb3755e.1649434832.git.jpoimboe@redhat.com>
  <CAK7LNARvFcQgEB1b0L6giwx0vD7wU9L-OZ5jvm1c5+StLjeOYQ@mail.gmail.com>
  <YlCJm8iQBPSOWIT5@hirez.programming.kicks-ass.net>
  <CAKwvOd=2xeZOg+0HosLPgCegKZxe7F-Cprw0MjOiWf2q=AbNDQ@mail.gmail.com>
+ <YlCb3L7ByWwszbaA@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,74 +51,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOd=2xeZOg+0HosLPgCegKZxe7F-Cprw0MjOiWf2q=AbNDQ@mail.gmail.com>
+In-Reply-To: <YlCb3L7ByWwszbaA@hirez.programming.kicks-ass.net>
 
-On Fri, Apr 08, 2022 at 01:08:47PM -0700, Nick Desaulniers wrote:
-> Lore thread start for newly cc'ed ML readers:
-> https://lore.kernel.org/lkml/7fad83ecde03540e65677959034315f8fbb3755e.1649434832.git.jpoimboe@redhat.com/
-> 
-> On Fri, Apr 8, 2022 at 12:14 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Sat, Apr 09, 2022 at 03:29:21AM +0900, Masahiro Yamada wrote:
-> > > Is [2] caused by dead code that was not optimized out
-> > > due to the unusual inlining decisions by the compiler ?
-> >
-> > The complaint is due to SMAP validation; objtool will scream if there's
-> > a CALL in between STAC/CLAC. The thinking is that since they open a
-> > security window, we want tight code between them. We also very much
-> > don't want tracing and other funnies to happen there. As such, any CALL
-> > is dis-allowed.
-> 
-> Just indirect calls, which might be manipulated, or static calls, too?
+On Fri, Apr 08, 2022 at 10:32:28PM +0200, Peter Zijlstra wrote:
 
-Any CALL instruction is a no-no. Only 'simple' code is allowed between
-STAC and CLAC.
+> > > This weird option is having us upgrade quite a few 'inline' to
+> > > '__always_inline'.
+> > 
+> > As is, the assumption that __init functions only call other __init
+> > functions or __always_inline is a brittle house of cards that leads to
+> > a "what color is your function" [0] scenario, and leads to code that
+> > happens to not emit warnings for compiler X (or compiler X version Y).
+> > There's also curious exceptions in modpost that look like memory leaks
+> > to me.
 
-> > This weird option is having us upgrade quite a few 'inline' to
-> > '__always_inline'.
-> 
-> As is, the assumption that __init functions only call other __init
-> functions or __always_inline is a brittle house of cards that leads to
-> a "what color is your function" [0] scenario, and leads to code that
-> happens to not emit warnings for compiler X (or compiler X version Y).
-> There's also curious exceptions in modpost that look like memory leaks
-> to me.
-> 
-> We already have such toolchain portability issues for different
-> toolchains and different configs; warnings from section mismatches,
-> and objtool STAC/CLAC checks.  I feel that Josh's patch would sweep
-> more of those under the rug, so I'm not in favor of it, but could be
-> convinced otherwise.
-> 
-> TBH, I kind of think that we could use a C extension to permit
-> __attribute__((always_inline)) to additionally be a statement
-> attribute, rather than just a function attribute because of cases like
-> this; we need the flexibility to make one call site __always_inline
-> without necessarily forcing ALL callsites to be __always_inline'd.
-> 
-> void y (void);
-> void x (void) { __attribute__((always_inline)) y(); };
-> 
-> (This is already expressable in LLVM IR; not (yet) in C. I'm not sure
-> yet _why_ this was added to LLVM; whether a different language front
-> end can express this, if C can and I'm mistaken, or whether it's only
-> used for optimizations).
-> 
-> I think that would give developers maximal flexibility to defer as
-> much to the compiler's inlining decisions when they don't care, and
-> express precisely what they need when they do [care].
-> 
-> [0] https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/
+So I don't see __always_inline that way (also I'm in the 'inline' should
+be '__always_inline' camp).
 
-So in the case of that latest __always_inline patch, there was only a
-single caller. New syntax would buy us absolutely nothing there.
+To me inline is more like: 'instantiate that pattern *here*'. It's like
+CPP macros, only less horrible. You get the code generated according to
+the local rules (instrumentation yes/no, section, and whatever other
+function attributes we have that affect code-gen).
 
-If we're talking extentions, I'd much rather have function spaces. That
-is, being able to tag functions *AND* function pointers with an address
-space qualifier.
+So with inline we can get the same pattern instantiated a number of
+different times, leading to different actual code, without having to
+type the whole thing multiple times (which would be terrible for
+maintenance) etc..
 
-I want to be able to create a function pointer that can only be assigned
-functions from the noinstr space for example. Ideally calling such a
-functino pointer would only be possible from within that space.
-
-Anyway, let me go read that blog you linked.
+Combine __always_inline with constant propagation of inline function
+'pointers' and you get do beautiful things ;-) /me runs
