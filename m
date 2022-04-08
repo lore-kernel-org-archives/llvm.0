@@ -1,44 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98343362
-	for <llvm@lists.linux.dev>; Fri,  8 Apr 2022 07:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20CFB39C
+	for <llvm@lists.linux.dev>; Fri,  8 Apr 2022 08:00:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649403582; x=1680939582;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3zrp1LCinPGbxnXslarJ2cePZid18+wENiG18pbmG/4=;
-  b=DdmoQoENAMgbYlf83YlYQHeGiX34oUAiQOykDZs3SYD2Xl/+z0SdlGZH
-   9P5W9LeyzRsth9+Ub2wB1lo8Fm5PDIX/zeVyrsGnuvPr9O4QG55fmLONk
-   0Fp28EsNu0MR+wLAWbWlWR9e7DoJ4ypYp8+PBydcrodgnFQxjK2mQ4pXO
-   dV+fDC5lRvCGS246BX4QuXIpDVBLUPSJTZU4xqBHZO8glHUKsz0xeAVMT
-   JWivNfztC8Qo9qjmXXFKz43qDOBx1wW8UCHsp0HNvxpLCSmAGsXigrbWP
-   UFdutxnAB7gPTrtkS1RKi5emBJFo0B5Sdls5Jl8FzdNcXyl9Tx17ekGzm
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="286525173"
+  t=1649404811; x=1680940811;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RxVpt7VtidCAz2GgUbQBZKdYhvv68PbSH1gaQ+Hyerk=;
+  b=URgL0O3YrfN8cMmgLrwdtCBkXOal2dx+pMUQbPQhjFce1+si1qQX1B4H
+   67xDZm5x5rBQieicUTXiWQTADAchFUaUdvv27eglYacEZSgVVUl4TAIuF
+   J/3NDlIu72HnjqWHer0owifKy5Usy/5Bb09wPFAbWaySBVfhFSOnoQD0M
+   Td+YwKyFS3DGPZyVCfXtS5m9YkfAwr7H+pVbfM0/WXpFkQa0KneI07qIQ
+   OH5CG04TMBKm00CUZFzsr5iCVu6ysVcNgbNtQYIc8YJ3bp33YZoWXi2E/
+   nNWdHIpuEZbE8jE8+pauh7aRb+1b1sCehVBiwOwjHu3P+YFpEh0uKN+ar
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261532911"
 X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="286525173"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 00:39:30 -0700
+   d="scan'208";a="261532911"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 01:00:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="794490563"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Apr 2022 00:39:28 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+   d="scan'208";a="571403596"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 08 Apr 2022 01:00:08 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ncjDM-0006Az-0o;
-	Fri, 08 Apr 2022 07:39:28 +0000
-Date: Fri, 8 Apr 2022 15:38:53 +0800
+	id 1ncjXL-00001q-Cm;
+	Fri, 08 Apr 2022 08:00:07 +0000
+Date: Fri, 8 Apr 2022 15:59:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: zhanglianjie <zhanglianjie@uniontech.com>
+To: Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [mcgrof:sysctl-testing 12/18] mm/page-writeback.c:93:28: warning:
- unused variable 'dirty_bytes_min'
-Message-ID: <202204081510.D41wQr6m-lkp@intel.com>
+	martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
+	bvanassche@acm.org, hch@lst.de
+Subject: Re: [PATCH 1/6] scsi_cmnd: reinstate support for cmd_len > 32
+Message-ID: <202204081548.EhdacQg9-lkp@intel.com>
+References: <20220408035651.6472-2-dgilbert@interlog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,43 +47,147 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220408035651.6472-2-dgilbert@interlog.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-testing
-head:   7cde53da38a3ea00d75ef6a6ab06fa85b80bcf87
-commit: 87125d15aa3c4046e902758a39062f213b3664ad [12/18] mm: move page-writeback sysctls to their own file
-config: s390-randconfig-r034-20220406 (https://download.01.org/0day-ci/archive/20220408/202204081510.D41wQr6m-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
+Hi Douglas,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on mkp-scsi/for-next v5.18-rc1 next-20220407]
+[cannot apply to hch-configfs/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Gilbert/scsi-fix-scsi_cmd-cmd_len/20220408-121036
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+config: hexagon-randconfig-r041-20220408 (https://download.01.org/0day-ci/archive/20220408/202204081548.EhdacQg9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=87125d15aa3c4046e902758a39062f213b3664ad
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof sysctl-testing
-        git checkout 87125d15aa3c4046e902758a39062f213b3664ad
+        # https://github.com/intel-lab-lkp/linux/commit/efdf7335424993375502b298131c1d106fc5e6d4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Douglas-Gilbert/scsi-fix-scsi_cmd-cmd_len/20220408-121036
+        git checkout efdf7335424993375502b298131c1d106fc5e6d4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> mm/page-writeback.c:93:28: warning: unused variable 'dirty_bytes_min' [-Wunused-const-variable]
-   static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
-                              ^
-   1 warning generated.
+>> drivers/scsi/scsi_ioctl.c:444:28: warning: result of comparison of constant 260 with expression of type 'unsigned char' is always false [-Wtautological-constant-out-of-range-compare]
+           if (unlikely(hdr->cmd_len > SCSI_MAX_RUN_TIME_CDB_LEN)) {
+                        ~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:48:41: note: expanded from macro 'unlikely'
+   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+                                             ^
+   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
+                           ______r = __builtin_expect(!!(x), expect);      \
+                                                         ^
+>> drivers/scsi/scsi_ioctl.c:444:28: warning: result of comparison of constant 260 with expression of type 'unsigned char' is always false [-Wtautological-constant-out-of-range-compare]
+           if (unlikely(hdr->cmd_len > SCSI_MAX_RUN_TIME_CDB_LEN)) {
+                        ~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:48:68: note: expanded from macro 'unlikely'
+   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+                                                                        ^
+   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
+                                                expect, is_constant);      \
+                                                        ^~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/dirty_bytes_min +93 mm/page-writeback.c
+vim +444 drivers/scsi/scsi_ioctl.c
 
-    91	
-    92	/* this is needed for the proc_doulongvec_minmax of vm_dirty_bytes */
-  > 93	static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
-    94	
+   407	
+   408	static int sg_io(struct scsi_device *sdev, struct sg_io_hdr *hdr, fmode_t mode)
+   409	{
+   410		unsigned long start_time;
+   411		ssize_t ret = 0;
+   412		int writing = 0;
+   413		int at_head = 0;
+   414		struct request *rq;
+   415		struct scsi_cmnd *scmd;
+   416		struct bio *bio;
+   417	
+   418		if (hdr->interface_id != 'S')
+   419			return -EINVAL;
+   420	
+   421		if (hdr->dxfer_len > (queue_max_hw_sectors(sdev->request_queue) << 9))
+   422			return -EIO;
+   423	
+   424		if (hdr->dxfer_len)
+   425			switch (hdr->dxfer_direction) {
+   426			default:
+   427				return -EINVAL;
+   428			case SG_DXFER_TO_DEV:
+   429				writing = 1;
+   430				break;
+   431			case SG_DXFER_TO_FROM_DEV:
+   432			case SG_DXFER_FROM_DEV:
+   433				break;
+   434			}
+   435		if (hdr->flags & SG_FLAG_Q_AT_HEAD)
+   436			at_head = 1;
+   437	
+   438		rq = scsi_alloc_request(sdev->request_queue, writing ?
+   439				     REQ_OP_DRV_OUT : REQ_OP_DRV_IN, 0);
+   440		if (IS_ERR(rq))
+   441			return PTR_ERR(rq);
+   442		scmd = blk_mq_rq_to_pdu(rq);
+   443	
+ > 444		if (unlikely(hdr->cmd_len > SCSI_MAX_RUN_TIME_CDB_LEN)) {
+   445			ret = -EINVAL;
+   446			goto out_put_request;
+   447		}
+   448	
+   449		ret = scsi_fill_sghdr_rq(sdev, rq, hdr, mode);
+   450		if (ret < 0)
+   451			goto out_put_request;
+   452	
+   453		ret = 0;
+   454		if (hdr->iovec_count) {
+   455			struct iov_iter i;
+   456			struct iovec *iov = NULL;
+   457	
+   458			ret = import_iovec(rq_data_dir(rq), hdr->dxferp,
+   459					   hdr->iovec_count, 0, &iov, &i);
+   460			if (ret < 0)
+   461				goto out_put_request;
+   462	
+   463			/* SG_IO howto says that the shorter of the two wins */
+   464			iov_iter_truncate(&i, hdr->dxfer_len);
+   465	
+   466			ret = blk_rq_map_user_iov(rq->q, rq, NULL, &i, GFP_KERNEL);
+   467			kfree(iov);
+   468		} else if (hdr->dxfer_len)
+   469			ret = blk_rq_map_user(rq->q, rq, NULL, hdr->dxferp,
+   470					      hdr->dxfer_len, GFP_KERNEL);
+   471	
+   472		if (ret)
+   473			goto out_put_request;
+   474	
+   475		bio = rq->bio;
+   476		scmd->allowed = 0;
+   477	
+   478		start_time = jiffies;
+   479	
+   480		blk_execute_rq(rq, at_head);
+   481	
+   482		hdr->duration = jiffies_to_msecs(jiffies - start_time);
+   483	
+   484		ret = scsi_complete_sghdr_rq(rq, hdr, bio);
+   485	
+   486	out_put_request:
+   487		scsi_free_cmnd(scmd);
+   488		return ret;
+   489	}
+   490	
 
 -- 
 0-DAY CI Kernel Test Service
