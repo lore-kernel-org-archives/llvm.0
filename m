@@ -1,77 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56933366
-	for <llvm@lists.linux.dev>; Fri,  8 Apr 2022 05:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B753C385A1;
-	Fri,  8 Apr 2022 05:25:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1649395553;
-	bh=QeG7e3it6xxlS97YcIp53LJohPxHBHQayoT1m2dcYRs=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=uy1+Efjrm8Psbhx5lRdKfFCeV5bDzw4z8FUthEHDYEPTP1vA6AcCzoEB3IZgheWBJ
-	 fS/TUaZ1Af/ru/ySHzYP5ECpM58OSUfBUDNvhCL8A/6CNuRfJbiwb/Fv+VJkPiD5ij
-	 gItwanegZG9lorKJzLvZpE4U+t1bxf4OpfcM+g3kZcxqGCNHQnXnPMGd/NES2rlKx+
-	 j2BnAGyq/yRGLRvv2v3Ze5aRYn+J6DhrHYANCg4z/DdS4V3a616p/G9QUWbXNcQkMU
-	 VgNRSpoGyuB5tPm6YzHUZyLSj8XO0/5tLJ61d48VFBsuGvphrHXSiI7SGUTu8wQs/F
-	 ZHu0na+eYUn1g==
-From: Kalle Valo <kvalo@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Zong-Zhe Yang <kevin_yang@realtek.com>,  llvm@lists.linux.dev,  kbuild-all@lists.01.org,  GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,  linux-kernel@vger.kernel.org,  Ping-Ke Shih <pkshih@realtek.com>, linux-wireless@vger.kernel.org
-Subject: Re: [ammarfaizi2-block:kvalo/ath/pending 9/45] drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated fall-through between switch labels
-References: <202204071343.R89skHKl-lkp@intel.com>
-Date: Fri, 08 Apr 2022 08:25:48 +0300
-In-Reply-To: <202204071343.R89skHKl-lkp@intel.com> (kernel test robot's
-	message of "Thu, 7 Apr 2022 13:29:53 +0800")
-Message-ID: <87k0c0p2n7.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98343362
+	for <llvm@lists.linux.dev>; Fri,  8 Apr 2022 07:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649403582; x=1680939582;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3zrp1LCinPGbxnXslarJ2cePZid18+wENiG18pbmG/4=;
+  b=DdmoQoENAMgbYlf83YlYQHeGiX34oUAiQOykDZs3SYD2Xl/+z0SdlGZH
+   9P5W9LeyzRsth9+Ub2wB1lo8Fm5PDIX/zeVyrsGnuvPr9O4QG55fmLONk
+   0Fp28EsNu0MR+wLAWbWlWR9e7DoJ4ypYp8+PBydcrodgnFQxjK2mQ4pXO
+   dV+fDC5lRvCGS246BX4QuXIpDVBLUPSJTZU4xqBHZO8glHUKsz0xeAVMT
+   JWivNfztC8Qo9qjmXXFKz43qDOBx1wW8UCHsp0HNvxpLCSmAGsXigrbWP
+   UFdutxnAB7gPTrtkS1RKi5emBJFo0B5Sdls5Jl8FzdNcXyl9Tx17ekGzm
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="286525173"
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="286525173"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 00:39:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="794490563"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Apr 2022 00:39:28 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ncjDM-0006Az-0o;
+	Fri, 08 Apr 2022 07:39:28 +0000
+Date: Fri, 8 Apr 2022 15:38:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: zhanglianjie <zhanglianjie@uniontech.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [mcgrof:sysctl-testing 12/18] mm/page-writeback.c:93:28: warning:
+ unused variable 'dirty_bytes_min'
+Message-ID: <202204081510.D41wQr6m-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-kernel test robot <lkp@intel.com> writes:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-testing
+head:   7cde53da38a3ea00d75ef6a6ab06fa85b80bcf87
+commit: 87125d15aa3c4046e902758a39062f213b3664ad [12/18] mm: move page-writeback sysctls to their own file
+config: s390-randconfig-r034-20220406 (https://download.01.org/0day-ci/archive/20220408/202204081510.D41wQr6m-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=87125d15aa3c4046e902758a39062f213b3664ad
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof sysctl-testing
+        git checkout 87125d15aa3c4046e902758a39062f213b3664ad
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-> tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
-> head:   e1bd1e32fab0c91cf7a87e96fee9270e98e79351
-> commit: 14f9f4790048f684c2b151c899895feae0b5731a [9/45] rtw89: ser: control hci interrupts on/off by state
-> config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220407/202204071343.R89skHKl-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://github.com/ammarfaizi2/linux-block/commit/14f9f4790048f684c2b151c899895feae0b5731a
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
->         git checkout 14f9f4790048f684c2b151c899895feae0b5731a
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/realtek/rtw89/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
->            default:
->            ^
->    drivers/net/wireless/realtek/rtw89/ser.c:319:2: note: insert 'break;' to avoid fall-through
->            default:
->            ^
->            break; 
->    1 warning generated.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This should fix the warning:
+All warnings (new ones prefixed by >>):
 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220408001353.17188-2-pkshih@realtek.com/
+>> mm/page-writeback.c:93:28: warning: unused variable 'dirty_bytes_min' [-Wunused-const-variable]
+   static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
+                              ^
+   1 warning generated.
+
+
+vim +/dirty_bytes_min +93 mm/page-writeback.c
+
+    91	
+    92	/* this is needed for the proc_doulongvec_minmax of vm_dirty_bytes */
+  > 93	static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
+    94	
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+0-DAY CI Kernel Test Service
+https://01.org/lkp
