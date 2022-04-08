@@ -1,55 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3939763E
-	for <llvm@lists.linux.dev>; Fri,  8 Apr 2022 12:57:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A832363E
+	for <llvm@lists.linux.dev>; Fri,  8 Apr 2022 13:39:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649422650; x=1680958650;
+  t=1649425168; x=1680961168;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MVI4Vgkqb6DiTIPHj0xrlh5P96lXeUBmGyU+faGhIzo=;
-  b=hGG8+EW6YgTZga4EDQvPemcqYD1ZQCXGeMh55d8mWAszkT/1uefdyd2P
-   tiTTxIKFX+mrCZWv9kNsXJHLoWFdFT4hhDXmA2M6JjSYHcUS9GhPXkeTP
-   OgyquX40qsOCGkqnbz+4gXxcx5FfUxXRoAcFncQPuPHoExcHYKAJQ9Nur
-   kz+rAkcoA1AdE/llBA2ge8KF65+/eMOTuBh6qVRtp6MJkqJVMBBQ0KJFB
-   Og7DBiT+EwJupZeC/vl5ABm1P9fEQmGhoe+xViylB+D2AYpUXw3+Sj+D2
-   j3GvZ2udwB2Hep/v0CwMmEM9NNmkIVMGXRqmiGO+8J/PvfhmFYgHJqzm9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261761716"
+  bh=aVWJ9fXEzuztrv1mLqunrlyCPorl2wNv6i+Y14FIbIo=;
+  b=H2cV3fCKDGL8QwpG07kDJbRYG1+JnekJHyIxb7why4tVzJ0EWdHEBaur
+   By/YD5NaOsSSGE2ikGv0RHrfJSO79j5KcA6fu1WWFotSwuxvuAjz5UJS2
+   Wq/G/woJlPp+Qf2nX0P6A3O1aVtCjdEk3/1R/Y0EvvLVbnpI10x+kxqch
+   Pk3MrAAzi4luHGUmxru5AdtbAzJn6CSW0U6pLbEjIlseK/XTQNOqOe0TI
+   T64cWxNApGVfnI/8T2BIeCw2qg1usqqvZj14xkVPChgPeWbDRAYFjg19R
+   Vn2rRtj1/gxGNNhVM3oYt0otUIDFxb8UD4A5s/9H/gDndeDQYHhDN+XC5
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261284544"
 X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="261761716"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:57:29 -0700
+   d="scan'208";a="261284544"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:39:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="621623882"
+   d="scan'208";a="609757343"
 Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Apr 2022 05:57:25 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 08 Apr 2022 06:39:26 -0700
 Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ncoB2-0000Gv-E8;
-	Fri, 08 Apr 2022 12:57:24 +0000
-Date: Fri, 8 Apr 2022 20:56:50 +0800
+	id 1ncopi-0000JS-0C;
+	Fri, 08 Apr 2022 13:39:26 +0000
+Date: Fri, 8 Apr 2022 21:38:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: popcornmix <popcornmix@gmail.com>
+To: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Kari Suvanto <karis79@gmail.com>,
-	Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-	Phil Elwell <phil@raspberrypi.org>,
-	Malik Olivier Boussejra <malik@boussejra.com>,
-	Paul Zimmerman <paulz@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	Nathan Chancellor <natechancellor@gmail.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.org>,
-	Michael Zoran <mzoran@crowfest.net>,
-	Marek =?iso-8859-1?Q?Beh=FAn?= <marek.behun@nic.cz>,
-	Jonathan Bell <jonathan@raspberrypi.org>,
-	Hui Wang <hui.wang@canonical.com>,
-	Zixuan Wang <wangzixuan@sjtu.edu.cn>
-Subject: [l1k:smsc95xx_5.17 56/887] arch/arm/include/asm/irqflags.h:182:3:
- error: invalid operand for instruction
-Message-ID: <202204082019.m8kwLvwM-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>
+Subject: [l1k:smsc95xx_5.17 423/887]
+ drivers/regulator/rpi-panel-attiny-regulator.c:357:12: error: no member
+ named 'of_node' in 'struct gpio_chip'; did you mean 'fwnode'?
+Message-ID: <202204082122.onPg5boL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,379 +50,141 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://github.com/l1k/linux smsc95xx_5.17
 head:   05d68ced287b30f62f18f95b5476135ef669804a
-commit: a8197852bb8f1f6804cff9442d426888e97aaed3 [56/887] Add dwc_otg driver
-config: arm-randconfig-r013-20220408 (https://download.01.org/0day-ci/archive/20220408/202204082019.m8kwLvwM-lkp@intel.com/config)
+commit: ac3d51b0c8cae7b7dacbf817eb7e6b96c1a1ccf2 [423/887] regulator: rpi-panel: Add GPIO control for panel and touch resets
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220408/202204082122.onPg5boL-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/l1k/linux/commit/a8197852bb8f1f6804cff9442d426888e97aaed3
+        # https://github.com/l1k/linux/commit/ac3d51b0c8cae7b7dacbf817eb7e6b96c1a1ccf2
         git remote add l1k https://github.com/l1k/linux
         git fetch --no-tags l1k smsc95xx_5.17
-        git checkout a8197852bb8f1f6804cff9442d426888e97aaed3
+        git checkout ac3d51b0c8cae7b7dacbf817eb7e6b96c1a1ccf2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/regulator/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/usb/core/hub.c:13:
-   In file included from include/linux/kernel.h:22:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
+>> drivers/regulator/rpi-panel-attiny-regulator.c:357:12: error: no member named 'of_node' in 'struct gpio_chip'; did you mean 'fwnode'?
+           state->gc.of_node = i2c->dev.of_node;
+                     ^~~~~~~
+                     fwnode
+   include/linux/gpio/driver.h:381:24: note: 'fwnode' declared here
+           struct fwnode_handle    *fwnode;
+                                    ^
    1 error generated.
---
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r1    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r1    @ local_irq_restore
-                      ^
->> <inline asm>:1:13: error: invalid operand for instruction
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r1    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r1    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r1    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   In file included from drivers/usb/core/hcd.c:13:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:6:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:5:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:33:
-   In file included from arch/arm/include/asm/bitops.h:28:
-   In file included from include/linux/irqflags.h:16:
->> arch/arm/include/asm/irqflags.h:182:3: error: invalid operand for instruction
-                   "    msr    cpsr_c, %0    @ local_irq_restore"
-                   ^
-   <inline asm>:1:13: note: instantiated into assembly here
-               msr    cpsr_c, r0    @ local_irq_restore
-                      ^
-   18 errors generated.
-..
 
 
-vim +182 arch/arm/include/asm/irqflags.h
+vim +357 drivers/regulator/rpi-panel-attiny-regulator.c
 
-   164	
-   165	/*
-   166	 * restore saved IRQ state
-   167	 */
-   168	#define arch_local_irq_restore arch_local_irq_restore
-   169	static inline void arch_local_irq_restore(unsigned long flags)
-   170	{
-   171		unsigned long temp = 0;
-   172		flags &= ~(1 << 6);
-   173		asm volatile (
-   174			" mrs %0, cpsr"
-   175			: "=r" (temp)
-   176			:
-   177			: "memory", "cc");
-   178			/* Preserve FIQ bit */
-   179			temp &= (1 << 6);
-   180			flags = flags | temp;
-   181		asm volatile (
- > 182			"    msr    cpsr_c, %0    @ local_irq_restore"
-   183			:
-   184			: "r" (flags)
-   185			: "memory", "cc");
-   186	}
-   187	
+   275	
+   276	/*
+   277	 * I2C driver interface functions
+   278	 */
+   279	static int attiny_i2c_probe(struct i2c_client *i2c,
+   280			const struct i2c_device_id *id)
+   281	{
+   282		struct backlight_properties props = { };
+   283		struct regulator_config config = { };
+   284		struct backlight_device *bl;
+   285		struct regulator_dev *rdev;
+   286		struct attiny_lcd *state;
+   287		struct regmap *regmap;
+   288		unsigned int data;
+   289		int ret;
+   290	
+   291		state = devm_kzalloc(&i2c->dev, sizeof(*state), GFP_KERNEL);
+   292		if (!state)
+   293			return -ENOMEM;
+   294	
+   295		mutex_init(&state->lock);
+   296		i2c_set_clientdata(i2c, state);
+   297	
+   298		regmap = devm_regmap_init_i2c(i2c, &attiny_regmap_config);
+   299		if (IS_ERR(regmap)) {
+   300			ret = PTR_ERR(regmap);
+   301			dev_err(&i2c->dev, "Failed to allocate register map: %d\n",
+   302				ret);
+   303			goto error;
+   304		}
+   305	
+   306		ret = regmap_read(regmap, REG_ID, &data);
+   307		if (ret < 0) {
+   308			dev_err(&i2c->dev, "Failed to read REG_ID reg: %d\n", ret);
+   309			goto error;
+   310		}
+   311	
+   312		switch (data) {
+   313		case 0xde: /* ver 1 */
+   314		case 0xc3: /* ver 2 */
+   315			break;
+   316		default:
+   317			dev_err(&i2c->dev, "Unknown Atmel firmware revision: 0x%02x\n", data);
+   318			ret = -ENODEV;
+   319			goto error;
+   320		}
+   321	
+   322		regmap_write(regmap, REG_POWERON, 0);
+   323		msleep(30);
+   324		regmap_write(regmap, REG_PWM, 0);
+   325	
+   326		config.dev = &i2c->dev;
+   327		config.regmap = regmap;
+   328		config.of_node = i2c->dev.of_node;
+   329		config.init_data = &attiny_regulator_default;
+   330		config.driver_data = state;
+   331	
+   332		rdev = devm_regulator_register(&i2c->dev, &attiny_regulator, &config);
+   333		if (IS_ERR(rdev)) {
+   334			dev_err(&i2c->dev, "Failed to register ATTINY regulator\n");
+   335			ret = PTR_ERR(rdev);
+   336			goto error;
+   337		}
+   338	
+   339		props.type = BACKLIGHT_RAW;
+   340		props.max_brightness = 0xff;
+   341	
+   342		state->regmap = regmap;
+   343	
+   344		bl = devm_backlight_device_register(&i2c->dev, dev_name(&i2c->dev),
+   345						    &i2c->dev, state, &attiny_bl,
+   346						    &props);
+   347		if (IS_ERR(bl)) {
+   348			ret = PTR_ERR(bl);
+   349			goto error;
+   350		}
+   351	
+   352		bl->props.brightness = 0xff;
+   353	
+   354		state->gc.parent = &i2c->dev;
+   355		state->gc.label = i2c->name;
+   356		state->gc.owner = THIS_MODULE;
+ > 357		state->gc.of_node = i2c->dev.of_node;
+   358		state->gc.base = -1;
+   359		state->gc.ngpio = NUM_GPIO;
+   360	
+   361		state->gc.set = attiny_gpio_set;
+   362		state->gc.get_direction = attiny_gpio_get_direction;
+   363		state->gc.can_sleep = true;
+   364	
+   365		ret = devm_gpiochip_add_data(&i2c->dev, &state->gc, state);
+   366		if (ret) {
+   367			dev_err(&i2c->dev, "Failed to create gpiochip: %d\n", ret);
+   368			goto error;
+   369		}
+   370	
+   371		return 0;
+   372	
+   373	error:
+   374		mutex_destroy(&state->lock);
+   375	
+   376		return ret;
+   377	}
+   378	
 
 -- 
 0-DAY CI Kernel Test Service
