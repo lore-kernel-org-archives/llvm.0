@@ -1,43 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2A57FA
-	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 10:28:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B29B621
+	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 10:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649500084; x=1681036084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/SSRyijzpi5DD5S80z3wq/RG0mk2POU8NyKf2x5wmtE=;
-  b=OhrZ9Ggu4H0OrsJFP0w84kx2wVMXjVuKPsbo6dyeUU0Moww7KQHAeGjZ
-   HxAULZfMuVTU4/wlcA/d+yIIoAd021xZj7I55ctq2NU8Ybg/+SYXDyPo/
-   bJn0J+7sojx8SNWPqzak4TJ827usoyIR0N0UHQFcmVldRAkE01SOzvF4U
-   JTct4VUhd44hVstArQPa7XLVy9OPp0cy9ZCZHv2sdUt0vuzK7lXrY2Cf0
-   GM8SzyFiGmfCk6QtsCInDP1d0A7b95R21dMadt1zk1g+QcLpxN7AsyOy0
-   FSVZRNZEhHiiIUVaAOQ+UPfgjXQInPS9DqVeXKKjsYBK4QoI5u3GIeATB
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="286785452"
+  t=1649501345; x=1681037345;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mXXqI0/eD/EIm3cw9F50pAEZ+FovEcTtMur0L3bc2AE=;
+  b=b8bj0ImwobyPcvcRrFGGY/ZkqTkQleITkes8YyCn8xUqFP7hQn5tq9Ie
+   xHXDY3kaXxlPbjQ++uXNbKdRwHfyfLrz1uB7i0pxc4HPjhvSBEf+Nj2cz
+   Eg6MHiUOsmwJYznxRrKS5oH6XdCucfwrEVKZkzk8nmyoQEUJFjPvtMPcV
+   HDH39T/LidLJ+fMVLUhfkpq76LdEdLMc8kx2UwkDd/1WGYgpewH67ut4p
+   mVjtUwbjAa8j/iga0vyfihswezeZ6NTzi3zLatUr7SqyFNnrUb6N+O/at
+   6oy6INGSQXZLP3hVwAkmj3NZH9pg/sCQefGX0tj7MwJ5A84pjxXQRrGDp
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="259385565"
 X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="286785452"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 03:28:03 -0700
+   d="scan'208";a="259385565"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 03:49:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="558174286"
+   d="scan'208";a="698601815"
 Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Apr 2022 03:28:02 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2022 03:49:03 -0700
 Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nd8K2-00015h-1y;
-	Sat, 09 Apr 2022 10:28:02 +0000
-Date: Sat, 9 Apr 2022 18:27:33 +0800
+	id 1nd8eM-00016T-DB;
+	Sat, 09 Apr 2022 10:49:02 +0000
+Date: Sat, 9 Apr 2022 18:48:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Douglas Anderson <dianders@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 2/6] drm/bridge: parade-ps8640: Break probe in two to
- handle DP AUX better
-Message-ID: <202204091858.CJxHfQWu-lkp@intel.com>
-References: <20220408193536.RFC.2.Ia6324ebc848cd40b4dbd3ad3289a7ffb5c197779@changeid>
+To: popcornmix <popcornmix@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Phil Elwell <phil@raspberrypi.org>,
+	Christian Lamparter <chunkeey@gmail.com>,
+	Christopher Blake <chrisrblake93@gmail.com>
+Subject: [l1k:smsc95xx_5.17 74/888] arch/arm/lib/uaccess_with_memcpy.c:137:1:
+ warning: no previous prototype for function '__copy_to_user_memcpy'
+Message-ID: <202204091831.fSZgY5jM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,44 +47,161 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220408193536.RFC.2.Ia6324ebc848cd40b4dbd3ad3289a7ffb5c197779@changeid>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Douglas,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on drm-tip/drm-tip]
-[also build test ERROR on next-20220408]
-[cannot apply to drm/drm-next drm-intel/for-linux-next v5.18-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/drm-dp-Improvements-for-DP-AUX-channel/20220409-103757
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220409/202204091858.CJxHfQWu-lkp@intel.com/config)
+tree:   https://github.com/l1k/linux smsc95xx_5.17
+head:   240f56c27361c195cd502d95aba51c6b8e5b808c
+commit: 375b90433562ce3545ccda0376716268ff974114 [74/888] Improve __copy_to_user and __copy_from_user performance
+config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20220409/202204091831.fSZgY5jM-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 893e1c18b98d8bbc7b8d7d22cc2c348f65c72ad9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/014e12b5d0aea273512d56e196c11f40ee229b3f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Douglas-Anderson/drm-dp-Improvements-for-DP-AUX-channel/20220409-103757
-        git checkout 014e12b5d0aea273512d56e196c11f40ee229b3f
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/l1k/linux/commit/375b90433562ce3545ccda0376716268ff974114
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k smsc95xx_5.17
+        git checkout 375b90433562ce3545ccda0376716268ff974114
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> ERROR: modpost: "devm_dp_aux_register_ep_client" [drivers/gpu/drm/bridge/parade-ps8640.ko] undefined!
-ERROR: modpost: "auxiliary_driver_unregister" [drivers/gpu/drm/dp/drm_dp_aux_bus.ko] undefined!
-ERROR: modpost: "__auxiliary_driver_register" [drivers/gpu/drm/dp/drm_dp_aux_bus.ko] undefined!
-ERROR: modpost: "__auxiliary_device_add" [drivers/gpu/drm/dp/drm_dp_aux_bus.ko] undefined!
-ERROR: modpost: "auxiliary_device_init" [drivers/gpu/drm/dp/drm_dp_aux_bus.ko] undefined!
+>> arch/arm/lib/uaccess_with_memcpy.c:137:1: warning: no previous prototype for function '__copy_to_user_memcpy' [-Wmissing-prototypes]
+   __copy_to_user_memcpy(void __user *to, const void *from, unsigned long n)
+   ^
+   arch/arm/lib/uaccess_with_memcpy.c:136:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long noinline
+   ^
+   static 
+>> arch/arm/lib/uaccess_with_memcpy.c:190:1: warning: no previous prototype for function '__copy_from_user_memcpy' [-Wmissing-prototypes]
+   __copy_from_user_memcpy(void *to, const void __user *from, unsigned long n)
+   ^
+   arch/arm/lib/uaccess_with_memcpy.c:189:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long noinline
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/__copy_to_user_memcpy +137 arch/arm/lib/uaccess_with_memcpy.c
+
+375b90433562ce popcornmix        2016-11-28  135  
+375b90433562ce popcornmix        2016-11-28  136  unsigned long noinline
+cb9dc92c0a1b76 Nicolas Pitre     2009-05-21 @137  __copy_to_user_memcpy(void __user *to, const void *from, unsigned long n)
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  138  {
+c014953d84ec21 Russell King      2015-12-05  139  	unsigned long ua_flags;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  140  	int atomic;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  141  
+db68ce10c4f0a2 Al Viro           2017-03-20  142  	if (uaccess_kernel()) {
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  143  		memcpy((void *)to, from, n);
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  144  		return 0;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  145  	}
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  146  
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  147  	/* the mmap semaphore is taken only if not in an atomic context */
+0f64b247e63ac8 Nicolas Pitre     2015-08-12  148  	atomic = faulthandler_disabled();
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  149  
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  150  	if (!atomic)
+d8ed45c5dcd455 Michel Lespinasse 2020-06-08  151  		mmap_read_lock(current->mm);
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  152  	while (n) {
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  153  		pte_t *pte;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  154  		spinlock_t *ptl;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  155  		int tocopy;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  156  
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  157  		while (!pin_page_for_write(to, &pte, &ptl)) {
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  158  			if (!atomic)
+d8ed45c5dcd455 Michel Lespinasse 2020-06-08  159  				mmap_read_unlock(current->mm);
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  160  			if (__put_user(0, (char __user *)to))
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  161  				goto out;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  162  			if (!atomic)
+d8ed45c5dcd455 Michel Lespinasse 2020-06-08  163  				mmap_read_lock(current->mm);
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  164  		}
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  165  
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  166  		tocopy = (~(unsigned long)to & ~PAGE_MASK) + 1;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  167  		if (tocopy > n)
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  168  			tocopy = n;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  169  
+c014953d84ec21 Russell King      2015-12-05  170  		ua_flags = uaccess_save_and_enable();
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  171  		memcpy((void *)to, from, tocopy);
+c014953d84ec21 Russell King      2015-12-05  172  		uaccess_restore(ua_flags);
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  173  		to += tocopy;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  174  		from += tocopy;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  175  		n -= tocopy;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  176  
+a3a9ea656d1925 Steven Capper     2013-10-14  177  		if (pte)
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  178  			pte_unmap_unlock(pte, ptl);
+a3a9ea656d1925 Steven Capper     2013-10-14  179  		else
+a3a9ea656d1925 Steven Capper     2013-10-14  180  			spin_unlock(ptl);
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  181  	}
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  182  	if (!atomic)
+d8ed45c5dcd455 Michel Lespinasse 2020-06-08  183  		mmap_read_unlock(current->mm);
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  184  
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  185  out:
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  186  	return n;
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  187  }
+39ec58f3fea47c Lennert Buytenhek 2009-03-09  188  
+375b90433562ce popcornmix        2016-11-28  189  unsigned long noinline
+375b90433562ce popcornmix        2016-11-28 @190  __copy_from_user_memcpy(void *to, const void __user *from, unsigned long n)
+375b90433562ce popcornmix        2016-11-28  191  {
+375b90433562ce popcornmix        2016-11-28  192  	unsigned long ua_flags;
+375b90433562ce popcornmix        2016-11-28  193  	int atomic;
+375b90433562ce popcornmix        2016-11-28  194  
+375b90433562ce popcornmix        2016-11-28  195  	if (unlikely(uaccess_kernel())) {
+375b90433562ce popcornmix        2016-11-28  196  		memcpy(to, (const void *)from, n);
+375b90433562ce popcornmix        2016-11-28  197  		return 0;
+375b90433562ce popcornmix        2016-11-28  198  	}
+375b90433562ce popcornmix        2016-11-28  199  
+375b90433562ce popcornmix        2016-11-28  200  	/* the mmap semaphore is taken only if not in an atomic context */
+375b90433562ce popcornmix        2016-11-28  201  	atomic = in_atomic();
+375b90433562ce popcornmix        2016-11-28  202  
+375b90433562ce popcornmix        2016-11-28  203  	if (!atomic)
+375b90433562ce popcornmix        2016-11-28  204  		mmap_read_lock(current->mm);
+375b90433562ce popcornmix        2016-11-28  205  	while (n) {
+375b90433562ce popcornmix        2016-11-28  206  		pte_t *pte;
+375b90433562ce popcornmix        2016-11-28  207  		spinlock_t *ptl;
+375b90433562ce popcornmix        2016-11-28  208  		int tocopy;
+375b90433562ce popcornmix        2016-11-28  209  
+375b90433562ce popcornmix        2016-11-28  210  		while (!pin_page_for_read(from, &pte, &ptl)) {
+375b90433562ce popcornmix        2016-11-28  211  			char temp;
+375b90433562ce popcornmix        2016-11-28  212  			if (!atomic)
+375b90433562ce popcornmix        2016-11-28  213  				mmap_read_unlock(current->mm);
+375b90433562ce popcornmix        2016-11-28  214  			if (__get_user(temp, (char __user *)from))
+375b90433562ce popcornmix        2016-11-28  215  				goto out;
+375b90433562ce popcornmix        2016-11-28  216  			if (!atomic)
+375b90433562ce popcornmix        2016-11-28  217  				mmap_read_lock(current->mm);
+375b90433562ce popcornmix        2016-11-28  218  		}
+375b90433562ce popcornmix        2016-11-28  219  
+375b90433562ce popcornmix        2016-11-28  220  		tocopy = (~(unsigned long)from & ~PAGE_MASK) + 1;
+375b90433562ce popcornmix        2016-11-28  221  		if (tocopy > n)
+375b90433562ce popcornmix        2016-11-28  222  			tocopy = n;
+375b90433562ce popcornmix        2016-11-28  223  
+375b90433562ce popcornmix        2016-11-28  224  		ua_flags = uaccess_save_and_enable();
+375b90433562ce popcornmix        2016-11-28  225  		memcpy(to, (const void *)from, tocopy);
+375b90433562ce popcornmix        2016-11-28  226  		uaccess_restore(ua_flags);
+375b90433562ce popcornmix        2016-11-28  227  		to += tocopy;
+375b90433562ce popcornmix        2016-11-28  228  		from += tocopy;
+375b90433562ce popcornmix        2016-11-28  229  		n -= tocopy;
+375b90433562ce popcornmix        2016-11-28  230  
+375b90433562ce popcornmix        2016-11-28  231  		pte_unmap_unlock(pte, ptl);
+375b90433562ce popcornmix        2016-11-28  232  	}
+375b90433562ce popcornmix        2016-11-28  233  	if (!atomic)
+375b90433562ce popcornmix        2016-11-28  234  		mmap_read_unlock(current->mm);
+375b90433562ce popcornmix        2016-11-28  235  
+375b90433562ce popcornmix        2016-11-28  236  out:
+375b90433562ce popcornmix        2016-11-28  237  	return n;
+375b90433562ce popcornmix        2016-11-28  238  }
+375b90433562ce popcornmix        2016-11-28  239  
+
+:::::: The code at line 137 was first introduced by commit
+:::::: cb9dc92c0a1b76165c8c334402e27191084b2047 [ARM] lower overhead with alternative copy_to_user for small copies
+
+:::::: TO: Nicolas Pitre <nico@cam.org>
+:::::: CC: Nicolas Pitre <nico@cam.org>
 
 -- 
 0-DAY CI Kernel Test Service
