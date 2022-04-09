@@ -1,52 +1,58 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10E97FA
-	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 10:20:27 +0000 (UTC)
-Received: by mail-lj1-f181.google.com with SMTP id b43so14307093ljr.10
-        for <llvm@lists.linux.dev>; Sat, 09 Apr 2022 03:20:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10737FA
+	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 10:20:40 +0000 (UTC)
+Received: by mail-lj1-f179.google.com with SMTP id a30so14275291ljq.13
+        for <llvm@lists.linux.dev>; Sat, 09 Apr 2022 03:20:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=n4Zl1IUxP7WaOSfw1jsy76q0LhMby1ouy62pDNc0Q4s=;
-        b=NZfatcEit4I13GXA6crtJcqIr4+6S29r33mb2AKAvMrGcFGrKfAU6TKdufyWL1/cXW
-         elC6jxN1EyMUCAofIOZa89HoflwTu69a4c0Tuf9IfYO1OWbjiSn+06Zvn87Cy/rVRGIa
-         5eK5cF2VlZN2KX9R+ImdpNsOWTsvrqiYD0Yf90QZkVcx+5LLXh+alU4PAGRsc2wadPlb
-         1GnHYpzZ+DKQAhIca/zkS6i5E+f/RM4Quw6s2JI8hnNdypgwVsCd8WNsLKzjyVMc0cEJ
-         849a7Gp/pzOS2v+pnMBESbSNq0g6BVMDFtfhz7nV+SR0rHn+P4E9o4Ea77Q73nb/mQn6
-         HzwQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5QftsX1dgd5OMiDjNSHKc4sKfhDSWXlBSyJWmhsDORE=;
+        b=lIcaIvVgQWhf4bm21WVG4xpWBPraOWyb1f6F59KYYAkMggzis7CkSLVbW6960O74u/
+         el2jRgkdd2sXdTu7zCFrzGxuBYpP+pZ04sjx3fM5FvQHaXGdkKa8TSoJ/06Exx7rw43j
+         bjAiH1puHxtVOPfC2t4JJo+1x8RS/QYeC9ZSxseviBh1fBzDdm2bg6wqAJ7RVxvFi5a4
+         xsSHw8HDPTgNA3x8N+NzfCFOkgoJkByY/dzalIvn2bEvBX6iHWb7f9tAZm1yerigeM4x
+         b6N3Ylh+F+y4pZuePJaBdZ/mad+RgxS2mwY7urf0ELWob8NzCy+2yhpoz6JXKw6vxfDR
+         XZWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=n4Zl1IUxP7WaOSfw1jsy76q0LhMby1ouy62pDNc0Q4s=;
-        b=ADWY6ol9oPfIKpaEAPpwyJeCFeeIGk8Vp05rK3sAb5txrFKirLoM59ecE/JhbJ68x4
-         jh2x2JzsGSoH5F36uoBcEC+eK5mBxcftdnhRprl/WkgMRalFCAFicwg6hJwkERA9Q4LW
-         qtA+g+rX2tAjfBCun1woXAVtsRandyBvPkMhEYATjFp9Z8RlRDnwkqUhev7unQKyhLrh
-         a1OZyvYx5kw1me8nDu+eYf6ZKl2WXLe2TFNUIBBqlmV2Q1Tvq7r8RBa6Rz+L5/TlMFsY
-         hK++GnkxoQMjT9JNykZJK5feGAbjxKcJb92YSEUwbXy/tNo4Q60n6JtccGz1Xdk/EsuX
-         Hsrg==
-X-Gm-Message-State: AOAM531sFVyNa55DvykqTwBukRxh+Hua09cu/C+mkhyf53C0t05ofNUG
-	nAairl1tzr1lUje2aNgMkuo=
-X-Google-Smtp-Source: ABdhPJznNYKp3fWw3ZrGe44GgmwcvXordVC1DLcpKpi67HvhXE6u5Cd+zk1zr/AfsLGcf3jM3L2e/w==
-X-Received: by 2002:a2e:a596:0:b0:249:7ecf:606c with SMTP id m22-20020a2ea596000000b002497ecf606cmr14480320ljp.114.1649499625292;
-        Sat, 09 Apr 2022 03:20:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5QftsX1dgd5OMiDjNSHKc4sKfhDSWXlBSyJWmhsDORE=;
+        b=NmYWH+1e4qFdVRcBFgHCgSiEcsi2s9F5tCPTAH/CeUshWLAemaoy1FiW6uN0wm6RFW
+         hy4kX5l2ZCOrqpNKPlzPkrHOlNl0m5v7dXVFI1csG8284cBvyYqzLwP9WkThqEr6Gc8x
+         6Tc8VKOKhCV+xosnBlQviLGNtvdzszvb57XxfPMo/kSRKRhcHiXENdJkWD+oDyCBjzql
+         PvCtF6mf5jYwE1minSkJfaFRAQHV/cqhzGY+j4m5ydVR3TpATTdTRGT98vp2HX6X/8nb
+         DL9+cL8bHAGETKyxvMQZ0kFAuzTD3POBNiy4sFeUsbQQ+5TA1P14GTLKS3t0lgaCPW+z
+         3Evg==
+X-Gm-Message-State: AOAM530MR4hEe9ZHsTbraOCHOdHoc+PEPrEvhOTCV/50wvtNl9MVmbtc
+	Z/nMplnvVXJ7A+c7z8x+M3w=
+X-Google-Smtp-Source: ABdhPJwdqdeQNfPRzFlZMVy9U++8XAvooRz27TV4IDt40ZVMkyp9aNtRrPu1iD9L5v9gpgq2Z4XXOg==
+X-Received: by 2002:a2e:700c:0:b0:24b:56ab:1ab8 with SMTP id l12-20020a2e700c000000b0024b56ab1ab8mr2089677ljc.357.1649499638896;
+        Sat, 09 Apr 2022 03:20:38 -0700 (PDT)
 Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
-        by smtp.gmail.com with ESMTPSA id h8-20020ac24da8000000b0046b8a03301bsm363680lfe.137.2022.04.09.03.20.23
+        by smtp.gmail.com with ESMTPSA id h8-20020ac24da8000000b0046b8a03301bsm363680lfe.137.2022.04.09.03.20.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 03:20:24 -0700 (PDT)
+        Sat, 09 Apr 2022 03:20:38 -0700 (PDT)
 From: Michal Orzel <michalorzel.eng@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>,
+To: Jens Axboe <axboe@kernel.dk>,
+	"Richard Russon (FlatCap)" <ldm@flatcap.org>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>
 Cc: Michal Orzel <michalorzel.eng@gmail.com>,
+	linux-block@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
+	linux-ntfs-dev@lists.sourceforge.net,
 	llvm@lists.linux.dev
-Subject: [PATCH] ipc/sem: Remove redundant assignments
-Date: Sat,  9 Apr 2022 12:19:31 +0200
-Message-Id: <20220409101933.207157-1-michalorzel.eng@gmail.com>
+Subject: [PATCH] block: Remove redundant assignments
+Date: Sat,  9 Apr 2022 12:19:32 +0200
+Message-Id: <20220409101933.207157-2-michalorzel.eng@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220409101933.207157-1-michalorzel.eng@gmail.com>
+References: <20220409101933.207157-1-michalorzel.eng@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,29 +68,132 @@ Reported by clang-tidy [deadcode.DeadStores]
 
 Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
 ---
- ipc/sem.c | 2 --
- 1 file changed, 2 deletions(-)
+ block/badblocks.c        |  2 --
+ block/blk-map.c          |  5 ++---
+ block/partitions/acorn.c |  4 ++--
+ block/partitions/atari.c |  1 -
+ block/partitions/ldm.c   | 15 +++------------
+ 5 files changed, 7 insertions(+), 20 deletions(-)
 
-diff --git a/ipc/sem.c b/ipc/sem.c
-index 0dbdb98fdf2d..38ef91a63edd 100644
---- a/ipc/sem.c
-+++ b/ipc/sem.c
-@@ -766,7 +766,6 @@ static int perform_atomic_semop(struct sem_array *sma, struct sem_queue *q)
- 	for (sop = sops; sop < sops + nsops; sop++) {
- 		curr = &sma->sems[sop->sem_num];
- 		sem_op = sop->sem_op;
--		result = curr->semval;
+diff --git a/block/badblocks.c b/block/badblocks.c
+index d39056630d9c..3afb550c0f7b 100644
+--- a/block/badblocks.c
++++ b/block/badblocks.c
+@@ -65,7 +65,6 @@ int badblocks_check(struct badblocks *bb, sector_t s, int sectors,
+ 		s >>= bb->shift;
+ 		target += (1<<bb->shift) - 1;
+ 		target >>= bb->shift;
+-		sectors = target - s;
+ 	}
+ 	/* 'target' is now the first block after the bad range */
  
- 		if (sop->sem_flg & SEM_UNDO) {
- 			int undo = un->semadj[sop->sem_num] - sem_op;
-@@ -1430,7 +1429,6 @@ static int semctl_main(struct ipc_namespace *ns, int semid, int semnum,
- 	if (err)
- 		goto out_rcu_wakeup;
+@@ -345,7 +344,6 @@ int badblocks_clear(struct badblocks *bb, sector_t s, int sectors)
+ 		s += (1<<bb->shift) - 1;
+ 		s >>= bb->shift;
+ 		target >>= bb->shift;
+-		sectors = target - s;
+ 	}
  
--	err = -EACCES;
- 	switch (cmd) {
- 	case GETALL:
- 	{
+ 	write_seqlock_irq(&bb->lock);
+diff --git a/block/blk-map.c b/block/blk-map.c
+index c7f71d83eff1..fa72e63e18c2 100644
+--- a/block/blk-map.c
++++ b/block/blk-map.c
+@@ -260,10 +260,9 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+ 
+ 		npages = DIV_ROUND_UP(offs + bytes, PAGE_SIZE);
+ 
+-		if (unlikely(offs & queue_dma_alignment(rq->q))) {
+-			ret = -EINVAL;
++		if (unlikely(offs & queue_dma_alignment(rq->q)))
+ 			j = 0;
+-		} else {
++		else {
+ 			for (j = 0; j < npages; j++) {
+ 				struct page *page = pages[j];
+ 				unsigned int n = PAGE_SIZE - offs;
+diff --git a/block/partitions/acorn.c b/block/partitions/acorn.c
+index 2c381c694c57..d2fc122d7426 100644
+--- a/block/partitions/acorn.c
++++ b/block/partitions/acorn.c
+@@ -282,13 +282,13 @@ int adfspart_check_ADFS(struct parsed_partitions *state)
+ #ifdef CONFIG_ACORN_PARTITION_RISCIX
+ 		case PARTITION_RISCIX_SCSI:
+ 		case PARTITION_RISCIX_MFM:
+-			slot = riscix_partition(state, start_sect, slot,
++			riscix_partition(state, start_sect, slot,
+ 						nr_sects);
+ 			break;
+ #endif
+ 
+ 		case PARTITION_LINUX:
+-			slot = linux_partition(state, start_sect, slot,
++			linux_partition(state, start_sect, slot,
+ 					       nr_sects);
+ 			break;
+ 		}
+diff --git a/block/partitions/atari.c b/block/partitions/atari.c
+index da5994175416..9655c728262a 100644
+--- a/block/partitions/atari.c
++++ b/block/partitions/atari.c
+@@ -140,7 +140,6 @@ int atari_partition(struct parsed_partitions *state)
+ 				/* accept only GEM,BGM,RAW,LNX,SWP partitions */
+ 				if (!((pi->flg & 1) && OK_id(pi->id)))
+ 					continue;
+-				part_fmt = 2;
+ 				put_partition (state, slot,
+ 						be32_to_cpu(pi->st),
+ 						be32_to_cpu(pi->siz));
+diff --git a/block/partitions/ldm.c b/block/partitions/ldm.c
+index 27f6c7d9c776..38e58960ae03 100644
+--- a/block/partitions/ldm.c
++++ b/block/partitions/ldm.c
+@@ -736,7 +736,6 @@ static bool ldm_parse_cmp3 (const u8 *buffer, int buflen, struct vblk *vb)
+ 		len = r_cols;
+ 	} else {
+ 		r_stripe = 0;
+-		r_cols   = 0;
+ 		len = r_parent;
+ 	}
+ 	if (len < 0)
+@@ -783,11 +782,8 @@ static int ldm_parse_dgr3 (const u8 *buffer, int buflen, struct vblk *vb)
+ 		r_id1 = ldm_relative (buffer, buflen, 0x24, r_diskid);
+ 		r_id2 = ldm_relative (buffer, buflen, 0x24, r_id1);
+ 		len = r_id2;
+-	} else {
+-		r_id1 = 0;
+-		r_id2 = 0;
++	} else
+ 		len = r_diskid;
+-	}
+ 	if (len < 0)
+ 		return false;
+ 
+@@ -826,11 +822,8 @@ static bool ldm_parse_dgr4 (const u8 *buffer, int buflen, struct vblk *vb)
+ 		r_id1 = ldm_relative (buffer, buflen, 0x44, r_name);
+ 		r_id2 = ldm_relative (buffer, buflen, 0x44, r_id1);
+ 		len = r_id2;
+-	} else {
+-		r_id1 = 0;
+-		r_id2 = 0;
++	} else
+ 		len = r_name;
+-	}
+ 	if (len < 0)
+ 		return false;
+ 
+@@ -963,10 +956,8 @@ static bool ldm_parse_prt3(const u8 *buffer, int buflen, struct vblk *vb)
+ 			return false;
+ 		}
+ 		len = r_index;
+-	} else {
+-		r_index = 0;
++	} else
+ 		len = r_diskid;
+-	}
+ 	if (len < 0) {
+ 		ldm_error("len %d < 0", len);
+ 		return false;
 -- 
 2.25.1
 
