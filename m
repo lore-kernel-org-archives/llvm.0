@@ -1,48 +1,43 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5690B63C
-	for <llvm@lists.linux.dev>; Fri,  8 Apr 2022 20:48:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=jSNlhgteFciJhaFanIIz/zy2rD53IRDwcvBetwHtIQM=; b=mrD47God47Rhpq962QoM1VVzjc
-	KK1mF/026DuTnYfWGFDoh8xKdgVe+vat38s8Er328ZS/B05WjMfK2e92WBGLhb18E4XTOsJFBMrUI
-	UXBo2/PkRE5hYxAIAt/ItIzbc4tdO/SxYZr9h2RE5soayULihO0SX45nD5fDpMSDOH0z0HIar86MP
-	QGAgCGSvWKHsG4U6srhbhIrgFndKJ6u6aGaubWc5qcBEX8k9owEXsFhNHTOwoUPjynY5oOTRVuLtu
-	T+i+6/2Bvvv0BoHez5tjKBebyWJ0sf9HQcs8jELGAugpOIAzTpgqLMyVAwchJcXXyQwJjtq+63uan
-	4gYttRPg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1ncvWY-00A98f-1r; Fri, 08 Apr 2022 20:48:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8E8FC3000E6;
-	Fri,  8 Apr 2022 22:48:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 6D07432233317; Fri,  8 Apr 2022 22:48:05 +0200 (CEST)
-Date: Fri, 8 Apr 2022 22:48:05 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-	Sam Ravnborg <sam@ravnborg.org>, X86 ML <x86@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Changbin Du <changbin.du@gmail.com>,
-	linux-toolchains@vger.kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: [PATCH] kbuild: Remove CONFIG_DEBUG_SECTION_MISMATCH
-Message-ID: <YlCfhUkOXTvqCfjT@hirez.programming.kicks-ass.net>
-References: <7fad83ecde03540e65677959034315f8fbb3755e.1649434832.git.jpoimboe@redhat.com>
- <CAK7LNARvFcQgEB1b0L6giwx0vD7wU9L-OZ5jvm1c5+StLjeOYQ@mail.gmail.com>
- <YlCJm8iQBPSOWIT5@hirez.programming.kicks-ass.net>
- <CAKwvOd=2xeZOg+0HosLPgCegKZxe7F-Cprw0MjOiWf2q=AbNDQ@mail.gmail.com>
- <YlCb3L7ByWwszbaA@hirez.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C949D622
+	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 00:55:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649465753; x=1681001753;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=V5cfWvp3WA7HQ89Pce+jIBMuCn8QW+MBcoax8kox/KE=;
+  b=HmwdBxQ7/0HJDKF44dW1Df/LHs7HD9jmAJuuNLvh95uccwk9xCWkP+Xd
+   WEWmtzMJ7pkYNYz0Mvdm2idKMliPCGANFW3dsqhShforH5g/xgWDi+nKk
+   M4kTszIxqXEGiDvgoeb6vMbv75X0YTul3ZXed0efItZcVhWvutb1F5rm+
+   MJOC1D1H9Lj0XasV/gO5t4BAjQJO3FgdjtfI2mhvsNGJ0n1m0dcggtz69
+   INdbBJZNeq7N1FO8X9OB2nmQ2TVESQ806R0Hz89OhslQyaEdQO4x9cfe8
+   tBM60lpTVrTrYyAF3u//iGgNk0NA9+RMuLoNrBvy6CUKfokZGYai0wrY2
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="241672299"
+X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
+   d="scan'208";a="241672299"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 17:55:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
+   d="scan'208";a="643132543"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Apr 2022 17:55:51 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nczOJ-0000ky-0L;
+	Sat, 09 Apr 2022 00:55:51 +0000
+Date: Sat, 9 Apr 2022 08:55:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Zoran <mzoran@crowfest.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>
+Subject: [l1k:smsc95xx_5.17 83/887] drivers/irqchip/irq-bcm2836.c:92:6:
+ warning: no previous prototype for function
+ 'bcm2836_arm_irqchip_spin_gpu_irq'
+Message-ID: <202204090803.BYLpU9Vt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,32 +46,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlCb3L7ByWwszbaA@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Apr 08, 2022 at 10:32:28PM +0200, Peter Zijlstra wrote:
+tree:   https://github.com/l1k/linux smsc95xx_5.17
+head:   05d68ced287b30f62f18f95b5476135ef669804a
+commit: d9c90edc942c69dc18b6818f69ba36024d1446fa [83/887] ARM64: Round-Robin dispatch IRQs between CPUs.
+config: arm64-randconfig-r006-20220408 (https://download.01.org/0day-ci/archive/20220409/202204090803.BYLpU9Vt-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/l1k/linux/commit/d9c90edc942c69dc18b6818f69ba36024d1446fa
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k smsc95xx_5.17
+        git checkout d9c90edc942c69dc18b6818f69ba36024d1446fa
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/irqchip/
 
-> > > This weird option is having us upgrade quite a few 'inline' to
-> > > '__always_inline'.
-> > 
-> > As is, the assumption that __init functions only call other __init
-> > functions or __always_inline is a brittle house of cards that leads to
-> > a "what color is your function" [0] scenario, and leads to code that
-> > happens to not emit warnings for compiler X (or compiler X version Y).
-> > There's also curious exceptions in modpost that look like memory leaks
-> > to me.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So I don't see __always_inline that way (also I'm in the 'inline' should
-be '__always_inline' camp).
+All warnings (new ones prefixed by >>):
 
-To me inline is more like: 'instantiate that pattern *here*'. It's like
-CPP macros, only less horrible. You get the code generated according to
-the local rules (instrumentation yes/no, section, and whatever other
-function attributes we have that affect code-gen).
+>> drivers/irqchip/irq-bcm2836.c:92:6: warning: no previous prototype for function 'bcm2836_arm_irqchip_spin_gpu_irq' [-Wmissing-prototypes]
+   void bcm2836_arm_irqchip_spin_gpu_irq(void)
+        ^
+   drivers/irqchip/irq-bcm2836.c:92:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bcm2836_arm_irqchip_spin_gpu_irq(void)
+   ^
+   static 
+   1 warning generated.
 
-So with inline we can get the same pattern instantiated a number of
-different times, leading to different actual code, without having to
-type the whole thing multiple times (which would be terrible for
-maintenance) etc..
 
-Combine __always_inline with constant propagation of inline function
-'pointers' and you get do beautiful things ;-) /me runs
+vim +/bcm2836_arm_irqchip_spin_gpu_irq +92 drivers/irqchip/irq-bcm2836.c
+
+    91	
+  > 92	void bcm2836_arm_irqchip_spin_gpu_irq(void)
+    93	{
+    94		u32 i;
+    95		void __iomem *gpurouting = (intc.base + LOCAL_GPU_ROUTING);
+    96		u32 routing_val = readl(gpurouting);
+    97	
+    98		for (i = 1; i <= 3; i++) {
+    99			u32 new_routing_val = (routing_val + i) & 3;
+   100	
+   101			if (cpu_active(new_routing_val)) {
+   102				writel(new_routing_val, gpurouting);
+   103				return;
+   104			}
+   105		}
+   106	}
+   107	EXPORT_SYMBOL(bcm2836_arm_irqchip_spin_gpu_irq);
+   108	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
