@@ -1,208 +1,184 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50084.outbound.protection.outlook.com [40.107.5.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B29B621
-	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 10:49:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649501345; x=1681037345;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mXXqI0/eD/EIm3cw9F50pAEZ+FovEcTtMur0L3bc2AE=;
-  b=b8bj0ImwobyPcvcRrFGGY/ZkqTkQleITkes8YyCn8xUqFP7hQn5tq9Ie
-   xHXDY3kaXxlPbjQ++uXNbKdRwHfyfLrz1uB7i0pxc4HPjhvSBEf+Nj2cz
-   Eg6MHiUOsmwJYznxRrKS5oH6XdCucfwrEVKZkzk8nmyoQEUJFjPvtMPcV
-   HDH39T/LidLJ+fMVLUhfkpq76LdEdLMc8kx2UwkDd/1WGYgpewH67ut4p
-   mVjtUwbjAa8j/iga0vyfihswezeZ6NTzi3zLatUr7SqyFNnrUb6N+O/at
-   6oy6INGSQXZLP3hVwAkmj3NZH9pg/sCQefGX0tj7MwJ5A84pjxXQRrGDp
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="259385565"
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="259385565"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 03:49:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="698601815"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2022 03:49:03 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nd8eM-00016T-DB;
-	Sat, 09 Apr 2022 10:49:02 +0000
-Date: Sat, 9 Apr 2022 18:48:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: popcornmix <popcornmix@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Phil Elwell <phil@raspberrypi.org>,
-	Christian Lamparter <chunkeey@gmail.com>,
-	Christopher Blake <chrisrblake93@gmail.com>
-Subject: [l1k:smsc95xx_5.17 74/888] arch/arm/lib/uaccess_with_memcpy.c:137:1:
- warning: no previous prototype for function '__copy_to_user_memcpy'
-Message-ID: <202204091831.fSZgY5jM-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85696809
+	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 11:04:48 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bTQEMYhsh7ks6kbTUQfjR2EVSFhGwDmZMqmGaHaxdl7MkjSTT0siqUpbFEnwtR87GYMPEyS5GH1+nW9x/zHozNW6VhxtsRPNH8BsKialf4EjvpNGdkvFraE7YKo2aXbOcSEbe9z7I9OazwGrWS2wGitI7u5R6P6H6zzTWXi7qLGeWGQHJ15g6pg5HQtc3MiHkv6H2IGsD6s13SoQMyn/tx186IU0VDKiNr5dn0VRFwAl3YpZHtBTH53r6YoMtq5B3qpgCTmgoGhrz+hG1vYyk/ybllqCsD7R5u7xt8QKZ1jP5+fcZFNPpyACQCQz8Zy34HKk8Qpgo+D9CYqjZCagog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iUaLA0XQcCEu/0ycvrypc9IuGZsWgWdQy1np3iO8WB4=;
+ b=dL71XgP76j/mXSsLr/jk4YIVH62iFM7I5v37iXiOuT8lLaYdgMu+A6/5cSlKxN8vPG1wfaTPvlbgRf/1eFIsCqTIZaQid/anzcq5FBX4Fk7YARiLvpFAqMCgqs8TvGml14k5Xs8gGVPFkYdlv4VVQqyCe7HnQL/vh15aBOkGr9dynegCSagO3nr1n07DVTZAiPR4okPTzAPKMF1RsfXFWOBxXMxKUT09JCAJa7UvPfC2ikQlxIOen0HTZrVAJaXBguSruXPR7qpxTcvO96mXAVjsZSxO9DoKpFDhL4AYpbnupW/r7mv6cgsHZ5WxQ1ckW8j7zZt+YAm3cQylue9VCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iUaLA0XQcCEu/0ycvrypc9IuGZsWgWdQy1np3iO8WB4=;
+ b=IbwBsrdcM0olgbFiEo1AR37rCHOHmA+MkJ9I0VcjjXNogeIOybtXn4OqHI4TUlD9kzsxcSHQrtwYJSFmYVLBfyY0A6qnH1S4BHhdMxv85/8E+8/Qxy1AcCoV92vf7DMhhbhs9+GhWt+1xHo9OAicXxZe5YJMIhgrxKx0BgHXd9k=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AM7PR04MB7160.eurprd04.prod.outlook.com (2603:10a6:20b:119::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.27; Sat, 9 Apr
+ 2022 11:04:45 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::8ed:49e7:d2e7:c55e]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::8ed:49e7:d2e7:c55e%3]) with mapi id 15.20.5123.031; Sat, 9 Apr 2022
+ 11:04:45 +0000
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: kernel test robot <lkp@intel.com>
+CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+	Jakub Kicinski <kuba@kernel.org>, Florian Fainelli <f.fainelli@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>, Vivien Didelot <vivien.didelot@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>, "UNGLinuxDriver@microchip.com"
+	<UNGLinuxDriver@microchip.com>, Paolo Abeni <pabeni@redhat.com>, Roopa Prabhu
+	<roopa@nvidia.com>, Nikolay Aleksandrov <razor@blackwall.org>, Jiri Pirko
+	<jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, Tobias Waldekranz
+	<tobias@waldekranz.com>, Mattias Forsblad <mattias.forsblad@gmail.com>
+Subject: Re: [PATCH net-next 6/6] net: bridge: avoid uselessly making
+ offloaded ports promiscuous
+Thread-Topic: [PATCH net-next 6/6] net: bridge: avoid uselessly making
+ offloaded ports promiscuous
+Thread-Index: AQHYS4PvZMgIStRZRk2NwcP1mpJ7TaznXvCAgAANRAA=
+Date: Sat, 9 Apr 2022 11:04:45 +0000
+Message-ID: <20220409110444.5uf62kg5xjuvwysk@skbuf>
+References: <20220408200337.718067-7-vladimir.oltean@nxp.com>
+ <202204091856.0PBgeBSa-lkp@intel.com>
+In-Reply-To: <202204091856.0PBgeBSa-lkp@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dea278b3-b8e2-45c0-76d8-08da1a18c175
+x-ms-traffictypediagnostic: AM7PR04MB7160:EE_
+x-microsoft-antispam-prvs:
+ <AM7PR04MB7160E6E2C1A527648C957D00E0E89@AM7PR04MB7160.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ Hpxto1NeTS5th+GrNbOnbOyewTqJIjNOZPfdOZVkmXt/vmER7yb+INaHv0qJ6HwHD5q8kepBehIAnhf4pz+gxFr8vgeUT1vK3DIoGkdXDQXgSvIGdmL1Q9SnyQwalM+0PbO5qqHvjt3ZeArn6V/KhjuI1E19ZE2Mzllkh7JJdRn2Xj3K/Fdl2j1XPHC47O7rU8Vem1wBJnNE+ExwQV4ZwYhEXHMhZeZliY/mdU093OhaYnqkuoKoPLFO/R5IZrPnJn677Xx5K6X4us9SyuW4IeXuXmaE9SQ7rGTWdDpSTqAs137XJkdAVkCO5M+KzS7H62tPoTIe+SwGTHXOxssnrabw79oi0eeQf3gByh5yi/KjZkdHJXjcoMZds1eGUqMk4dIpy0/X4nfizbqNUcobiNGlNPVM20TDHEVLbP6Wi+ndhP0mVRqkCRSMGDGT3X5q9rx/A8UE8/aVf6f0001IvQ7t0mL3fy3N6EN4CvJEze7JrrOhUaABDc3lPQK5wa94qbhrTQsRuoO/uhIv0fh44jCabFVqpmewpTLZ0gASSSdrSgJeRAUBAzc63fd1QHnix7VjY/PnaiAYTk3b1JsOdPj910/p1WQIkxbvI2AG8is1JAzBq7p+325tbT7O6cc7R+cDBIWSZoXQdwK01nB8kU5lEQe7qiMmgZQcXKqfFIY9QzUBgkhGs7Aj/pfwMreB9DOi/ZuItqcnzEsI6P2MvA==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(44832011)(64756008)(2906002)(7416002)(76116006)(5660300002)(8676002)(4326008)(86362001)(66946007)(66556008)(66446008)(6486002)(66476007)(38070700005)(508600001)(83380400001)(6506007)(9686003)(6512007)(1076003)(186003)(122000001)(26005)(38100700002)(33716001)(54906003)(6916009)(316002)(71200400001)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?uO2FHsOQPzz0ay9YY2m8c8Tf2MtbJbG7K+b7495w5UBmFCmxQjQtF55fDRIp?=
+ =?us-ascii?Q?o7i6MnZALjWfEC0iPlSeSlwkZcqIbGCv89nVG5BEPN+qbsFHq7isldLBgvgR?=
+ =?us-ascii?Q?ozoaO7WR6mh9LCKdn7Gso7GJwq9evf92/XYtZmJxwENbDu9ap7qnGK55aXSl?=
+ =?us-ascii?Q?VhiI3Jj6f7a5XHnt9JRUNDiUULjcHGdmZRMkuHSIyB3bA+oAvZbnS4CYknqo?=
+ =?us-ascii?Q?XXcUnF8Ewe7lABYTKG1irzvyItEQWesXwyk7G7kXspOe/ak+18kbEUAHFygl?=
+ =?us-ascii?Q?q4b4rrrBfJtf6WdKAxtcONZM8SDunzqo5wgnN4BbsnYMcLWp+k1hfK4We8xp?=
+ =?us-ascii?Q?tboHmX4xlEzp9NXG2EVQ9dGvdmj5xIq1MQk3n0gHmwpjIJKFcI/a6XHpiQCs?=
+ =?us-ascii?Q?tyYJn5B560qnb1nE2xwKag4ERc6H9F7RSLAetJSVWLTh/Prc19XjzeszavJx?=
+ =?us-ascii?Q?xFTtgb4S6oQNw9+NOI+prsg74JJHrSxjf3gia2RKTeW+zu7qjBDlqWp/qMwc?=
+ =?us-ascii?Q?Qajum8CmZGrrluCya+4CdYkexE+K2JTbaMNyq7uFxBv5VQMgmeU8vQDJPMgb?=
+ =?us-ascii?Q?VWxRGPcxj3oapgh3rAveZgjsLUlUNXyAPwEeGiUrHmfWvmaAgXmXiUs6gh2f?=
+ =?us-ascii?Q?Ww++L0opAJlV3H7izuiHGdHaBpc4746ssCs9R9PbY5rCWGpANjrJRLW2ZK/h?=
+ =?us-ascii?Q?VYhZTBRtVUchhbRny0jS1Jx9Ri+OIPdcceiixUK2dYE2hvKjqvtD6sgOkdhM?=
+ =?us-ascii?Q?e3iJSV9KJsoau1GSRUbSQBxJTsKHHcCDL2EKOTVLD8ugEn8+L4iTQ6KSFT3o?=
+ =?us-ascii?Q?981/UEfvXNCmaTuIsLQTH8hpddrkAis0hpXvlf5fpwnUFUoczCQWZpoNAIE3?=
+ =?us-ascii?Q?B2XGHTMuU1oWFkRnKm/R1O3dOXkEFoS7HnblGpzywxeuioeOH4Hcza3Pivbj?=
+ =?us-ascii?Q?wJ3QGDe2gGnHymQTexVMVc2KrxKOsBCF69UNhfKbnoc+C5cYRvsr8P+0FDMe?=
+ =?us-ascii?Q?F412fBlka/WbgALEMDwizonL6Aoxu1Zeaj5ZTLG8yGPGuAUTJNkjQim5tQ/V?=
+ =?us-ascii?Q?HNsJDU0zSLStHaKGdhAQun7P+gOhfliBdCnU9O06ERdB0BYNeI0CsTLFa44u?=
+ =?us-ascii?Q?MyMbG7Cuo/ezDCAM3t8q036EvNYI9ukgJFNsgH+XaNn+UUFJz8qY35cvFI3h?=
+ =?us-ascii?Q?lmIy8al80AeZKAgu8+za0qH6Pfs7mmn7y70eJOfz6O2KvXJ5EvcD3ifZS7ew?=
+ =?us-ascii?Q?JWb3eS237ezDeF3gwN87KEwcwYpXf70Og+l2h074Mbg+KyKZeqhBs76U6wMq?=
+ =?us-ascii?Q?3RNVg3RYaSbbtc3+b0YknDvQUzny6xL4i357XTF+wih+wFTWt4fwDvrfKxnV?=
+ =?us-ascii?Q?OEcz2uQRzsYVx5UwfL1LAiHxTM8ZCJpv/LgJuvPe8m0QH/eJkilSzQE+pVCO?=
+ =?us-ascii?Q?FPzOpDgzjkoC3/JndmgfF2dtRJCaJyMV4qtcQ4g2rmH+b34twiy1N13bvGiA?=
+ =?us-ascii?Q?I9zbCjfI2ezwEahrDBFihbg7FAViU0Hzvvtj9yFUBaOyK2yXLFT9WNtT7bD5?=
+ =?us-ascii?Q?wCx54B0+2LAbHHQ3VT0SxuzFbbkmqR+K3PdUQ1xi30hbwafoWhfGKhVoxBnZ?=
+ =?us-ascii?Q?Q3eXmMzJe3mEVOs+xsWfuH1T3R85+mkTwXnD5NJrrri0l95mB4GQatanzCBO?=
+ =?us-ascii?Q?84PYK5aQT8G0/0pwxNIuUOJK5MjXefJTskuznHtySwAcQ1Ie9z24WwsDWNSd?=
+ =?us-ascii?Q?5/t0K7je3rsR0wF26loZIfhVNugVVS4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <8F6E2AC479288946991E3B419EFC0410@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dea278b3-b8e2-45c0-76d8-08da1a18c175
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2022 11:04:45.2959
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FPW979wdEtV/+emd3B4yc90GLkftDSOUVZs1CKomBj6W0AJLib2xwtjb7bgsBDC9umS+NaX4AJRbOZRD5ugZzA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7160
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   240f56c27361c195cd502d95aba51c6b8e5b808c
-commit: 375b90433562ce3545ccda0376716268ff974114 [74/888] Improve __copy_to_user and __copy_from_user performance
-config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20220409/202204091831.fSZgY5jM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 893e1c18b98d8bbc7b8d7d22cc2c348f65c72ad9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/l1k/linux/commit/375b90433562ce3545ccda0376716268ff974114
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout 375b90433562ce3545ccda0376716268ff974114
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Sat, Apr 09, 2022 at 06:17:15PM +0800, kernel test robot wrote:
+> >> net/bridge/br_if.c:145:10: error: no member named 'offload_count' in '=
+struct net_bridge_port'
+>                    if (p->offload_count) {
+>                        ~  ^
+>    130	/* When a port is added or removed or when certain port flags
+>    131	 * change, this function is called to automatically manage
+>    132	 * promiscuity setting of all the bridge ports.  We are always cal=
+led
+>    133	 * under RTNL so can skip using rcu primitives.
+>    134	 */
+>    135	void br_manage_promisc(struct net_bridge *br)
+>    136	{
+>    137		struct net_bridge_port *p;
+>    138=09
+>    139		list_for_each_entry(p, &br->port_list, list) {
+>    140			/* Offloaded ports have a separate address database for
+>    141			 * forwarding, which is managed through switchdev and not
+>    142			 * through dev_uc_add(), so the promiscuous concept makes no
+>    143			 * sense for them. Avoid updating promiscuity in that case.
+>    144			 */
+>  > 145			if (p->offload_count) {
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Good point. Please imagine there's a static inline nbp_get_offload_count()
+that returns 0 when CONFIG_NET_SWITCHDEV=3Dn. I'll address this for v2.
 
-All warnings (new ones prefixed by >>):
-
->> arch/arm/lib/uaccess_with_memcpy.c:137:1: warning: no previous prototype for function '__copy_to_user_memcpy' [-Wmissing-prototypes]
-   __copy_to_user_memcpy(void __user *to, const void *from, unsigned long n)
-   ^
-   arch/arm/lib/uaccess_with_memcpy.c:136:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long noinline
-   ^
-   static 
->> arch/arm/lib/uaccess_with_memcpy.c:190:1: warning: no previous prototype for function '__copy_from_user_memcpy' [-Wmissing-prototypes]
-   __copy_from_user_memcpy(void *to, const void __user *from, unsigned long n)
-   ^
-   arch/arm/lib/uaccess_with_memcpy.c:189:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long noinline
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/__copy_to_user_memcpy +137 arch/arm/lib/uaccess_with_memcpy.c
-
-375b90433562ce popcornmix        2016-11-28  135  
-375b90433562ce popcornmix        2016-11-28  136  unsigned long noinline
-cb9dc92c0a1b76 Nicolas Pitre     2009-05-21 @137  __copy_to_user_memcpy(void __user *to, const void *from, unsigned long n)
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  138  {
-c014953d84ec21 Russell King      2015-12-05  139  	unsigned long ua_flags;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  140  	int atomic;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  141  
-db68ce10c4f0a2 Al Viro           2017-03-20  142  	if (uaccess_kernel()) {
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  143  		memcpy((void *)to, from, n);
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  144  		return 0;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  145  	}
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  146  
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  147  	/* the mmap semaphore is taken only if not in an atomic context */
-0f64b247e63ac8 Nicolas Pitre     2015-08-12  148  	atomic = faulthandler_disabled();
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  149  
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  150  	if (!atomic)
-d8ed45c5dcd455 Michel Lespinasse 2020-06-08  151  		mmap_read_lock(current->mm);
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  152  	while (n) {
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  153  		pte_t *pte;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  154  		spinlock_t *ptl;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  155  		int tocopy;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  156  
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  157  		while (!pin_page_for_write(to, &pte, &ptl)) {
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  158  			if (!atomic)
-d8ed45c5dcd455 Michel Lespinasse 2020-06-08  159  				mmap_read_unlock(current->mm);
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  160  			if (__put_user(0, (char __user *)to))
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  161  				goto out;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  162  			if (!atomic)
-d8ed45c5dcd455 Michel Lespinasse 2020-06-08  163  				mmap_read_lock(current->mm);
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  164  		}
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  165  
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  166  		tocopy = (~(unsigned long)to & ~PAGE_MASK) + 1;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  167  		if (tocopy > n)
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  168  			tocopy = n;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  169  
-c014953d84ec21 Russell King      2015-12-05  170  		ua_flags = uaccess_save_and_enable();
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  171  		memcpy((void *)to, from, tocopy);
-c014953d84ec21 Russell King      2015-12-05  172  		uaccess_restore(ua_flags);
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  173  		to += tocopy;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  174  		from += tocopy;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  175  		n -= tocopy;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  176  
-a3a9ea656d1925 Steven Capper     2013-10-14  177  		if (pte)
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  178  			pte_unmap_unlock(pte, ptl);
-a3a9ea656d1925 Steven Capper     2013-10-14  179  		else
-a3a9ea656d1925 Steven Capper     2013-10-14  180  			spin_unlock(ptl);
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  181  	}
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  182  	if (!atomic)
-d8ed45c5dcd455 Michel Lespinasse 2020-06-08  183  		mmap_read_unlock(current->mm);
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  184  
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  185  out:
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  186  	return n;
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  187  }
-39ec58f3fea47c Lennert Buytenhek 2009-03-09  188  
-375b90433562ce popcornmix        2016-11-28  189  unsigned long noinline
-375b90433562ce popcornmix        2016-11-28 @190  __copy_from_user_memcpy(void *to, const void __user *from, unsigned long n)
-375b90433562ce popcornmix        2016-11-28  191  {
-375b90433562ce popcornmix        2016-11-28  192  	unsigned long ua_flags;
-375b90433562ce popcornmix        2016-11-28  193  	int atomic;
-375b90433562ce popcornmix        2016-11-28  194  
-375b90433562ce popcornmix        2016-11-28  195  	if (unlikely(uaccess_kernel())) {
-375b90433562ce popcornmix        2016-11-28  196  		memcpy(to, (const void *)from, n);
-375b90433562ce popcornmix        2016-11-28  197  		return 0;
-375b90433562ce popcornmix        2016-11-28  198  	}
-375b90433562ce popcornmix        2016-11-28  199  
-375b90433562ce popcornmix        2016-11-28  200  	/* the mmap semaphore is taken only if not in an atomic context */
-375b90433562ce popcornmix        2016-11-28  201  	atomic = in_atomic();
-375b90433562ce popcornmix        2016-11-28  202  
-375b90433562ce popcornmix        2016-11-28  203  	if (!atomic)
-375b90433562ce popcornmix        2016-11-28  204  		mmap_read_lock(current->mm);
-375b90433562ce popcornmix        2016-11-28  205  	while (n) {
-375b90433562ce popcornmix        2016-11-28  206  		pte_t *pte;
-375b90433562ce popcornmix        2016-11-28  207  		spinlock_t *ptl;
-375b90433562ce popcornmix        2016-11-28  208  		int tocopy;
-375b90433562ce popcornmix        2016-11-28  209  
-375b90433562ce popcornmix        2016-11-28  210  		while (!pin_page_for_read(from, &pte, &ptl)) {
-375b90433562ce popcornmix        2016-11-28  211  			char temp;
-375b90433562ce popcornmix        2016-11-28  212  			if (!atomic)
-375b90433562ce popcornmix        2016-11-28  213  				mmap_read_unlock(current->mm);
-375b90433562ce popcornmix        2016-11-28  214  			if (__get_user(temp, (char __user *)from))
-375b90433562ce popcornmix        2016-11-28  215  				goto out;
-375b90433562ce popcornmix        2016-11-28  216  			if (!atomic)
-375b90433562ce popcornmix        2016-11-28  217  				mmap_read_lock(current->mm);
-375b90433562ce popcornmix        2016-11-28  218  		}
-375b90433562ce popcornmix        2016-11-28  219  
-375b90433562ce popcornmix        2016-11-28  220  		tocopy = (~(unsigned long)from & ~PAGE_MASK) + 1;
-375b90433562ce popcornmix        2016-11-28  221  		if (tocopy > n)
-375b90433562ce popcornmix        2016-11-28  222  			tocopy = n;
-375b90433562ce popcornmix        2016-11-28  223  
-375b90433562ce popcornmix        2016-11-28  224  		ua_flags = uaccess_save_and_enable();
-375b90433562ce popcornmix        2016-11-28  225  		memcpy(to, (const void *)from, tocopy);
-375b90433562ce popcornmix        2016-11-28  226  		uaccess_restore(ua_flags);
-375b90433562ce popcornmix        2016-11-28  227  		to += tocopy;
-375b90433562ce popcornmix        2016-11-28  228  		from += tocopy;
-375b90433562ce popcornmix        2016-11-28  229  		n -= tocopy;
-375b90433562ce popcornmix        2016-11-28  230  
-375b90433562ce popcornmix        2016-11-28  231  		pte_unmap_unlock(pte, ptl);
-375b90433562ce popcornmix        2016-11-28  232  	}
-375b90433562ce popcornmix        2016-11-28  233  	if (!atomic)
-375b90433562ce popcornmix        2016-11-28  234  		mmap_read_unlock(current->mm);
-375b90433562ce popcornmix        2016-11-28  235  
-375b90433562ce popcornmix        2016-11-28  236  out:
-375b90433562ce popcornmix        2016-11-28  237  	return n;
-375b90433562ce popcornmix        2016-11-28  238  }
-375b90433562ce popcornmix        2016-11-28  239  
-
-:::::: The code at line 137 was first introduced by commit
-:::::: cb9dc92c0a1b76165c8c334402e27191084b2047 [ARM] lower overhead with alternative copy_to_user for small copies
-
-:::::: TO: Nicolas Pitre <nico@cam.org>
-:::::: CC: Nicolas Pitre <nico@cam.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>    146				br_port_clear_promisc(p);
+>    147				continue;
+>    148			}
+>    149=09
+>    150			/* If bridge is promiscuous, unconditionally place all ports
+>    151			 * in promiscuous mode too. This allows the bridge device to
+>    152			 * locally receive all unknown traffic.
+>    153			 */
+>    154			if (br->dev->flags & IFF_PROMISC) {
+>    155				br_port_set_promisc(p);
+>    156				continue;
+>    157			}
+>    158=09
+>    159			/* If vlan filtering is disabled, place all ports in
+>    160			 * promiscuous mode.
+>    161			 */
+>    162			if (!br_vlan_enabled(br->dev)) {
+>    163				br_port_set_promisc(p);
+>    164				continue;
+>    165			}
+>    166=09
+>    167			/* If the number of auto-ports is <=3D 1, then all other ports
+>    168			 * will have their output configuration statically specified
+>    169			 * through fdbs. Since ingress on the auto-port becomes
+>    170			 * forwarding/egress to other ports and egress configuration is
+>    171			 * statically known, we can say that ingress configuration of
+>    172			 * the auto-port is also statically known.
+>    173			 * This lets us disable promiscuous mode and write this config
+>    174			 * to hw.
+>    175			 */
+>    176			if (br->auto_cnt =3D=3D 0 ||
+>    177			    (br->auto_cnt =3D=3D 1 && br_auto_port(p)))
+>    178				br_port_clear_promisc(p);
+>    179			else
+>    180				br_port_set_promisc(p);
+>    181		}
+>    182	}
+>    183	=
