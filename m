@@ -1,199 +1,90 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10737FA
-	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 10:20:40 +0000 (UTC)
-Received: by mail-lj1-f179.google.com with SMTP id a30so14275291ljq.13
-        for <llvm@lists.linux.dev>; Sat, 09 Apr 2022 03:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5QftsX1dgd5OMiDjNSHKc4sKfhDSWXlBSyJWmhsDORE=;
-        b=lIcaIvVgQWhf4bm21WVG4xpWBPraOWyb1f6F59KYYAkMggzis7CkSLVbW6960O74u/
-         el2jRgkdd2sXdTu7zCFrzGxuBYpP+pZ04sjx3fM5FvQHaXGdkKa8TSoJ/06Exx7rw43j
-         bjAiH1puHxtVOPfC2t4JJo+1x8RS/QYeC9ZSxseviBh1fBzDdm2bg6wqAJ7RVxvFi5a4
-         xsSHw8HDPTgNA3x8N+NzfCFOkgoJkByY/dzalIvn2bEvBX6iHWb7f9tAZm1yerigeM4x
-         b6N3Ylh+F+y4pZuePJaBdZ/mad+RgxS2mwY7urf0ELWob8NzCy+2yhpoz6JXKw6vxfDR
-         XZWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5QftsX1dgd5OMiDjNSHKc4sKfhDSWXlBSyJWmhsDORE=;
-        b=NmYWH+1e4qFdVRcBFgHCgSiEcsi2s9F5tCPTAH/CeUshWLAemaoy1FiW6uN0wm6RFW
-         hy4kX5l2ZCOrqpNKPlzPkrHOlNl0m5v7dXVFI1csG8284cBvyYqzLwP9WkThqEr6Gc8x
-         6Tc8VKOKhCV+xosnBlQviLGNtvdzszvb57XxfPMo/kSRKRhcHiXENdJkWD+oDyCBjzql
-         PvCtF6mf5jYwE1minSkJfaFRAQHV/cqhzGY+j4m5ydVR3TpATTdTRGT98vp2HX6X/8nb
-         DL9+cL8bHAGETKyxvMQZ0kFAuzTD3POBNiy4sFeUsbQQ+5TA1P14GTLKS3t0lgaCPW+z
-         3Evg==
-X-Gm-Message-State: AOAM530MR4hEe9ZHsTbraOCHOdHoc+PEPrEvhOTCV/50wvtNl9MVmbtc
-	Z/nMplnvVXJ7A+c7z8x+M3w=
-X-Google-Smtp-Source: ABdhPJwdqdeQNfPRzFlZMVy9U++8XAvooRz27TV4IDt40ZVMkyp9aNtRrPu1iD9L5v9gpgq2Z4XXOg==
-X-Received: by 2002:a2e:700c:0:b0:24b:56ab:1ab8 with SMTP id l12-20020a2e700c000000b0024b56ab1ab8mr2089677ljc.357.1649499638896;
-        Sat, 09 Apr 2022 03:20:38 -0700 (PDT)
-Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
-        by smtp.gmail.com with ESMTPSA id h8-20020ac24da8000000b0046b8a03301bsm363680lfe.137.2022.04.09.03.20.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 03:20:38 -0700 (PDT)
-From: Michal Orzel <michalorzel.eng@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	"Richard Russon (FlatCap)" <ldm@flatcap.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>
-Cc: Michal Orzel <michalorzel.eng@gmail.com>,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-ntfs-dev@lists.sourceforge.net,
-	llvm@lists.linux.dev
-Subject: [PATCH] block: Remove redundant assignments
-Date: Sat,  9 Apr 2022 12:19:32 +0200
-Message-Id: <20220409101933.207157-2-michalorzel.eng@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220409101933.207157-1-michalorzel.eng@gmail.com>
-References: <20220409101933.207157-1-michalorzel.eng@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2A57FA
+	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 10:28:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649500084; x=1681036084;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/SSRyijzpi5DD5S80z3wq/RG0mk2POU8NyKf2x5wmtE=;
+  b=OhrZ9Ggu4H0OrsJFP0w84kx2wVMXjVuKPsbo6dyeUU0Moww7KQHAeGjZ
+   HxAULZfMuVTU4/wlcA/d+yIIoAd021xZj7I55ctq2NU8Ybg/+SYXDyPo/
+   bJn0J+7sojx8SNWPqzak4TJ827usoyIR0N0UHQFcmVldRAkE01SOzvF4U
+   JTct4VUhd44hVstArQPa7XLVy9OPp0cy9ZCZHv2sdUt0vuzK7lXrY2Cf0
+   GM8SzyFiGmfCk6QtsCInDP1d0A7b95R21dMadt1zk1g+QcLpxN7AsyOy0
+   FSVZRNZEhHiiIUVaAOQ+UPfgjXQInPS9DqVeXKKjsYBK4QoI5u3GIeATB
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="286785452"
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="286785452"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 03:28:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="558174286"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Apr 2022 03:28:02 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nd8K2-00015h-1y;
+	Sat, 09 Apr 2022 10:28:02 +0000
+Date: Sat, 9 Apr 2022 18:27:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Douglas Anderson <dianders@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 2/6] drm/bridge: parade-ps8640: Break probe in two to
+ handle DP AUX better
+Message-ID: <202204091858.CJxHfQWu-lkp@intel.com>
+References: <20220408193536.RFC.2.Ia6324ebc848cd40b4dbd3ad3289a7ffb5c197779@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408193536.RFC.2.Ia6324ebc848cd40b4dbd3ad3289a7ffb5c197779@changeid>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Get rid of redundant assignments which end up in values not being
-read either because they are overwritten or the function ends.
+Hi Douglas,
 
-Reported by clang-tidy [deadcode.DeadStores]
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on drm-tip/drm-tip]
+[also build test ERROR on next-20220408]
+[cannot apply to drm/drm-next drm-intel/for-linux-next v5.18-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
----
- block/badblocks.c        |  2 --
- block/blk-map.c          |  5 ++---
- block/partitions/acorn.c |  4 ++--
- block/partitions/atari.c |  1 -
- block/partitions/ldm.c   | 15 +++------------
- 5 files changed, 7 insertions(+), 20 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/drm-dp-Improvements-for-DP-AUX-channel/20220409-103757
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220409/202204091858.CJxHfQWu-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 893e1c18b98d8bbc7b8d7d22cc2c348f65c72ad9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/014e12b5d0aea273512d56e196c11f40ee229b3f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Douglas-Anderson/drm-dp-Improvements-for-DP-AUX-channel/20220409-103757
+        git checkout 014e12b5d0aea273512d56e196c11f40ee229b3f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-diff --git a/block/badblocks.c b/block/badblocks.c
-index d39056630d9c..3afb550c0f7b 100644
---- a/block/badblocks.c
-+++ b/block/badblocks.c
-@@ -65,7 +65,6 @@ int badblocks_check(struct badblocks *bb, sector_t s, int sectors,
- 		s >>= bb->shift;
- 		target += (1<<bb->shift) - 1;
- 		target >>= bb->shift;
--		sectors = target - s;
- 	}
- 	/* 'target' is now the first block after the bad range */
- 
-@@ -345,7 +344,6 @@ int badblocks_clear(struct badblocks *bb, sector_t s, int sectors)
- 		s += (1<<bb->shift) - 1;
- 		s >>= bb->shift;
- 		target >>= bb->shift;
--		sectors = target - s;
- 	}
- 
- 	write_seqlock_irq(&bb->lock);
-diff --git a/block/blk-map.c b/block/blk-map.c
-index c7f71d83eff1..fa72e63e18c2 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -260,10 +260,9 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 
- 		npages = DIV_ROUND_UP(offs + bytes, PAGE_SIZE);
- 
--		if (unlikely(offs & queue_dma_alignment(rq->q))) {
--			ret = -EINVAL;
-+		if (unlikely(offs & queue_dma_alignment(rq->q)))
- 			j = 0;
--		} else {
-+		else {
- 			for (j = 0; j < npages; j++) {
- 				struct page *page = pages[j];
- 				unsigned int n = PAGE_SIZE - offs;
-diff --git a/block/partitions/acorn.c b/block/partitions/acorn.c
-index 2c381c694c57..d2fc122d7426 100644
---- a/block/partitions/acorn.c
-+++ b/block/partitions/acorn.c
-@@ -282,13 +282,13 @@ int adfspart_check_ADFS(struct parsed_partitions *state)
- #ifdef CONFIG_ACORN_PARTITION_RISCIX
- 		case PARTITION_RISCIX_SCSI:
- 		case PARTITION_RISCIX_MFM:
--			slot = riscix_partition(state, start_sect, slot,
-+			riscix_partition(state, start_sect, slot,
- 						nr_sects);
- 			break;
- #endif
- 
- 		case PARTITION_LINUX:
--			slot = linux_partition(state, start_sect, slot,
-+			linux_partition(state, start_sect, slot,
- 					       nr_sects);
- 			break;
- 		}
-diff --git a/block/partitions/atari.c b/block/partitions/atari.c
-index da5994175416..9655c728262a 100644
---- a/block/partitions/atari.c
-+++ b/block/partitions/atari.c
-@@ -140,7 +140,6 @@ int atari_partition(struct parsed_partitions *state)
- 				/* accept only GEM,BGM,RAW,LNX,SWP partitions */
- 				if (!((pi->flg & 1) && OK_id(pi->id)))
- 					continue;
--				part_fmt = 2;
- 				put_partition (state, slot,
- 						be32_to_cpu(pi->st),
- 						be32_to_cpu(pi->siz));
-diff --git a/block/partitions/ldm.c b/block/partitions/ldm.c
-index 27f6c7d9c776..38e58960ae03 100644
---- a/block/partitions/ldm.c
-+++ b/block/partitions/ldm.c
-@@ -736,7 +736,6 @@ static bool ldm_parse_cmp3 (const u8 *buffer, int buflen, struct vblk *vb)
- 		len = r_cols;
- 	} else {
- 		r_stripe = 0;
--		r_cols   = 0;
- 		len = r_parent;
- 	}
- 	if (len < 0)
-@@ -783,11 +782,8 @@ static int ldm_parse_dgr3 (const u8 *buffer, int buflen, struct vblk *vb)
- 		r_id1 = ldm_relative (buffer, buflen, 0x24, r_diskid);
- 		r_id2 = ldm_relative (buffer, buflen, 0x24, r_id1);
- 		len = r_id2;
--	} else {
--		r_id1 = 0;
--		r_id2 = 0;
-+	} else
- 		len = r_diskid;
--	}
- 	if (len < 0)
- 		return false;
- 
-@@ -826,11 +822,8 @@ static bool ldm_parse_dgr4 (const u8 *buffer, int buflen, struct vblk *vb)
- 		r_id1 = ldm_relative (buffer, buflen, 0x44, r_name);
- 		r_id2 = ldm_relative (buffer, buflen, 0x44, r_id1);
- 		len = r_id2;
--	} else {
--		r_id1 = 0;
--		r_id2 = 0;
-+	} else
- 		len = r_name;
--	}
- 	if (len < 0)
- 		return false;
- 
-@@ -963,10 +956,8 @@ static bool ldm_parse_prt3(const u8 *buffer, int buflen, struct vblk *vb)
- 			return false;
- 		}
- 		len = r_index;
--	} else {
--		r_index = 0;
-+	} else
- 		len = r_diskid;
--	}
- 	if (len < 0) {
- 		ldm_error("len %d < 0", len);
- 		return false;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "devm_dp_aux_register_ep_client" [drivers/gpu/drm/bridge/parade-ps8640.ko] undefined!
+ERROR: modpost: "auxiliary_driver_unregister" [drivers/gpu/drm/dp/drm_dp_aux_bus.ko] undefined!
+ERROR: modpost: "__auxiliary_driver_register" [drivers/gpu/drm/dp/drm_dp_aux_bus.ko] undefined!
+ERROR: modpost: "__auxiliary_device_add" [drivers/gpu/drm/dp/drm_dp_aux_bus.ko] undefined!
+ERROR: modpost: "auxiliary_device_init" [drivers/gpu/drm/dp/drm_dp_aux_bus.ko] undefined!
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
