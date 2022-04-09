@@ -1,154 +1,90 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87CC7FA
-	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 10:18:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649499486; x=1681035486;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C6U1V87siRPRZCH9qENMTaYVfRsbKyhnbJtISrGKcOk=;
-  b=cVp1JNTOZq4I+EGFu2mYqTI37YKQ4ti0WgLxuCXO0NVYwdnaLe+VTTvr
-   n08pE3iu8XG9Png4IJf8V5Km1YRUhhzhgYnKoxYUzV1HDePnjhd0EsJhh
-   hr7qBMYazRlaKrBuCNzS5F5qHC77koaZtoPyUdyZIEBp35H/h5ZFv9TdB
-   ScgqKOu8Y6w4Y5VXTvd8VAGaNc+b3KDJzH14wGnWsROkrlMKJ7FTsSQH8
-   /Yxz0/JupjjGVsiuUktP+gi3cuASYq0FvUKyKz8UWowTWTRzIYIdFf5Ar
-   /vnN03HkrnAojZs6b2XixIrdn1tDJqvPqnAMmEAZe80cmMUG7kkUM2jow
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="242380375"
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="242380375"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 03:18:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="558172370"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Apr 2022 03:18:02 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nd8AL-00015F-PL;
-	Sat, 09 Apr 2022 10:18:01 +0000
-Date: Sat, 9 Apr 2022 18:17:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Vivien Didelot <vivien.didelot@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>, UNGLinuxDriver@microchip.com,
-	Paolo Abeni <pabeni@redhat.com>, Roopa Prabhu <roopa@nvidia.com>,
-	Nikolay Aleksandrov <nikolay@nvidia.com>,
-	Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
-	Tobias Waldekranz <tobias@waldekranz.com>,
-	Mattias Forsblad <mattias.forsblad@gmail.com>
-Subject: Re: [PATCH net-next 6/6] net: bridge: avoid uselessly making
- offloaded ports promiscuous
-Message-ID: <202204091856.0PBgeBSa-lkp@intel.com>
-References: <20220408200337.718067-7-vladimir.oltean@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10E97FA
+	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 10:20:27 +0000 (UTC)
+Received: by mail-lj1-f181.google.com with SMTP id b43so14307093ljr.10
+        for <llvm@lists.linux.dev>; Sat, 09 Apr 2022 03:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n4Zl1IUxP7WaOSfw1jsy76q0LhMby1ouy62pDNc0Q4s=;
+        b=NZfatcEit4I13GXA6crtJcqIr4+6S29r33mb2AKAvMrGcFGrKfAU6TKdufyWL1/cXW
+         elC6jxN1EyMUCAofIOZa89HoflwTu69a4c0Tuf9IfYO1OWbjiSn+06Zvn87Cy/rVRGIa
+         5eK5cF2VlZN2KX9R+ImdpNsOWTsvrqiYD0Yf90QZkVcx+5LLXh+alU4PAGRsc2wadPlb
+         1GnHYpzZ+DKQAhIca/zkS6i5E+f/RM4Quw6s2JI8hnNdypgwVsCd8WNsLKzjyVMc0cEJ
+         849a7Gp/pzOS2v+pnMBESbSNq0g6BVMDFtfhz7nV+SR0rHn+P4E9o4Ea77Q73nb/mQn6
+         HzwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n4Zl1IUxP7WaOSfw1jsy76q0LhMby1ouy62pDNc0Q4s=;
+        b=ADWY6ol9oPfIKpaEAPpwyJeCFeeIGk8Vp05rK3sAb5txrFKirLoM59ecE/JhbJ68x4
+         jh2x2JzsGSoH5F36uoBcEC+eK5mBxcftdnhRprl/WkgMRalFCAFicwg6hJwkERA9Q4LW
+         qtA+g+rX2tAjfBCun1woXAVtsRandyBvPkMhEYATjFp9Z8RlRDnwkqUhev7unQKyhLrh
+         a1OZyvYx5kw1me8nDu+eYf6ZKl2WXLe2TFNUIBBqlmV2Q1Tvq7r8RBa6Rz+L5/TlMFsY
+         hK++GnkxoQMjT9JNykZJK5feGAbjxKcJb92YSEUwbXy/tNo4Q60n6JtccGz1Xdk/EsuX
+         Hsrg==
+X-Gm-Message-State: AOAM531sFVyNa55DvykqTwBukRxh+Hua09cu/C+mkhyf53C0t05ofNUG
+	nAairl1tzr1lUje2aNgMkuo=
+X-Google-Smtp-Source: ABdhPJznNYKp3fWw3ZrGe44GgmwcvXordVC1DLcpKpi67HvhXE6u5Cd+zk1zr/AfsLGcf3jM3L2e/w==
+X-Received: by 2002:a2e:a596:0:b0:249:7ecf:606c with SMTP id m22-20020a2ea596000000b002497ecf606cmr14480320ljp.114.1649499625292;
+        Sat, 09 Apr 2022 03:20:25 -0700 (PDT)
+Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
+        by smtp.gmail.com with ESMTPSA id h8-20020ac24da8000000b0046b8a03301bsm363680lfe.137.2022.04.09.03.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Apr 2022 03:20:24 -0700 (PDT)
+From: Michal Orzel <michalorzel.eng@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: Michal Orzel <michalorzel.eng@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] ipc/sem: Remove redundant assignments
+Date: Sat,  9 Apr 2022 12:19:31 +0200
+Message-Id: <20220409101933.207157-1-michalorzel.eng@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408200337.718067-7-vladimir.oltean@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Vladimir,
+Get rid of redundant assignments which end up in values not being
+read either because they are overwritten or the function ends.
 
-I love your patch! Yet something to improve:
+Reported by clang-tidy [deadcode.DeadStores]
 
-[auto build test ERROR on net-next/master]
+Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
+---
+ ipc/sem.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Oltean/Disable-host-flooding-for-DSA-ports-under-a-bridge/20220409-041556
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git e8bd70250a821edb541c3abe1eacdad9f8dc7adf
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220409/202204091856.0PBgeBSa-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 893e1c18b98d8bbc7b8d7d22cc2c348f65c72ad9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2b24e24c704fa129c753dbc8fb764c95f4a3562c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vladimir-Oltean/Disable-host-flooding-for-DSA-ports-under-a-bridge/20220409-041556
-        git checkout 2b24e24c704fa129c753dbc8fb764c95f4a3562c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/bridge/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/bridge/br_if.c:145:10: error: no member named 'offload_count' in 'struct net_bridge_port'
-                   if (p->offload_count) {
-                       ~  ^
-   1 error generated.
-
-
-vim +145 net/bridge/br_if.c
-
-   129	
-   130	/* When a port is added or removed or when certain port flags
-   131	 * change, this function is called to automatically manage
-   132	 * promiscuity setting of all the bridge ports.  We are always called
-   133	 * under RTNL so can skip using rcu primitives.
-   134	 */
-   135	void br_manage_promisc(struct net_bridge *br)
-   136	{
-   137		struct net_bridge_port *p;
-   138	
-   139		list_for_each_entry(p, &br->port_list, list) {
-   140			/* Offloaded ports have a separate address database for
-   141			 * forwarding, which is managed through switchdev and not
-   142			 * through dev_uc_add(), so the promiscuous concept makes no
-   143			 * sense for them. Avoid updating promiscuity in that case.
-   144			 */
- > 145			if (p->offload_count) {
-   146				br_port_clear_promisc(p);
-   147				continue;
-   148			}
-   149	
-   150			/* If bridge is promiscuous, unconditionally place all ports
-   151			 * in promiscuous mode too. This allows the bridge device to
-   152			 * locally receive all unknown traffic.
-   153			 */
-   154			if (br->dev->flags & IFF_PROMISC) {
-   155				br_port_set_promisc(p);
-   156				continue;
-   157			}
-   158	
-   159			/* If vlan filtering is disabled, place all ports in
-   160			 * promiscuous mode.
-   161			 */
-   162			if (!br_vlan_enabled(br->dev)) {
-   163				br_port_set_promisc(p);
-   164				continue;
-   165			}
-   166	
-   167			/* If the number of auto-ports is <= 1, then all other ports
-   168			 * will have their output configuration statically specified
-   169			 * through fdbs. Since ingress on the auto-port becomes
-   170			 * forwarding/egress to other ports and egress configuration is
-   171			 * statically known, we can say that ingress configuration of
-   172			 * the auto-port is also statically known.
-   173			 * This lets us disable promiscuous mode and write this config
-   174			 * to hw.
-   175			 */
-   176			if (br->auto_cnt == 0 ||
-   177			    (br->auto_cnt == 1 && br_auto_port(p)))
-   178				br_port_clear_promisc(p);
-   179			else
-   180				br_port_set_promisc(p);
-   181		}
-   182	}
-   183	
-
+diff --git a/ipc/sem.c b/ipc/sem.c
+index 0dbdb98fdf2d..38ef91a63edd 100644
+--- a/ipc/sem.c
++++ b/ipc/sem.c
+@@ -766,7 +766,6 @@ static int perform_atomic_semop(struct sem_array *sma, struct sem_queue *q)
+ 	for (sop = sops; sop < sops + nsops; sop++) {
+ 		curr = &sma->sems[sop->sem_num];
+ 		sem_op = sop->sem_op;
+-		result = curr->semval;
+ 
+ 		if (sop->sem_flg & SEM_UNDO) {
+ 			int undo = un->semadj[sop->sem_num] - sem_op;
+@@ -1430,7 +1429,6 @@ static int semctl_main(struct ipc_namespace *ns, int semid, int semnum,
+ 	if (err)
+ 		goto out_rcu_wakeup;
+ 
+-	err = -EACCES;
+ 	switch (cmd) {
+ 	case GETALL:
+ 	{
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
