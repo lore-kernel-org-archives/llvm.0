@@ -1,47 +1,53 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6AB7E3
-	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 06:24:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87CC7FA
+	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 10:18:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649485441; x=1681021441;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=o0Kidqq7ChtJB5LjNY72wCdecLyykNyGhxKhNN3+MPk=;
-  b=ZCoaUFUf4YDaMANGsvZfixiZfdAxAAq3x3fyLuvDSVg2XQzMyElD0r0w
-   1XCj4xOAi2qOClp2kW1wOzla2br3TNTe7M40vQZ7bkkWIPPiuyaSp0Kqm
-   bLL3o4ZwalB1mVhuuDIG/VFiQs6GsWqSoWPoK1Po2TcbLsZSXzUHlseI7
-   M4dXUshKjOeBcZFl/ONSvmPiW/MsnNhYYTUhLO1I8tM+Et1YLNMIfUpFM
-   sgJIoPMrq4g0YrsANQYZD7sNF+ak5n3ySyc3fex7fbeg3HI/0zUBGtUAm
-   dmrWrTgRv1VHH1SXMhDOSxZgNrbfTlGT6/o2bmY2tfoLon2o3eCIiweZs
+  t=1649499486; x=1681035486;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C6U1V87siRPRZCH9qENMTaYVfRsbKyhnbJtISrGKcOk=;
+  b=cVp1JNTOZq4I+EGFu2mYqTI37YKQ4ti0WgLxuCXO0NVYwdnaLe+VTTvr
+   n08pE3iu8XG9Png4IJf8V5Km1YRUhhzhgYnKoxYUzV1HDePnjhd0EsJhh
+   hr7qBMYazRlaKrBuCNzS5F5qHC77koaZtoPyUdyZIEBp35H/h5ZFv9TdB
+   ScgqKOu8Y6w4Y5VXTvd8VAGaNc+b3KDJzH14wGnWsROkrlMKJ7FTsSQH8
+   /Yxz0/JupjjGVsiuUktP+gi3cuASYq0FvUKyKz8UWowTWTRzIYIdFf5Ar
+   /vnN03HkrnAojZs6b2XixIrdn1tDJqvPqnAMmEAZe80cmMUG7kkUM2jow
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="261945969"
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="242380375"
 X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="261945969"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 23:24:00 -0700
+   d="scan'208";a="242380375"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 03:18:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="643246205"
+   d="scan'208";a="558172370"
 Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Apr 2022 23:23:58 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 09 Apr 2022 03:18:02 -0700
 Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nd4Vp-0000xd-TJ;
-	Sat, 09 Apr 2022 06:23:57 +0000
-Date: Sat, 9 Apr 2022 14:23:37 +0800
+	id 1nd8AL-00015F-PL;
+	Sat, 09 Apr 2022 10:18:01 +0000
+Date: Sat, 9 Apr 2022 18:17:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dan Williams <dan.j.williams@intel.com>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Ben Widawsky <ben.widawsky@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: [cxl:for-5.19/cxl-device-lock 2/12] include/linux/device.h:849:3:
- error: use of undeclared identifier 'DRV_NAME'
-Message-ID: <202204091427.VqNnQI8Y-lkp@intel.com>
+	Jakub Kicinski <kuba@kernel.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Vivien Didelot <vivien.didelot@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>, UNGLinuxDriver@microchip.com,
+	Paolo Abeni <pabeni@redhat.com>, Roopa Prabhu <roopa@nvidia.com>,
+	Nikolay Aleksandrov <nikolay@nvidia.com>,
+	Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
+	Tobias Waldekranz <tobias@waldekranz.com>,
+	Mattias Forsblad <mattias.forsblad@gmail.com>
+Subject: Re: [PATCH net-next 6/6] net: bridge: avoid uselessly making
+ offloaded ports promiscuous
+Message-ID: <202204091856.0PBgeBSa-lkp@intel.com>
+References: <20220408200337.718067-7-vladimir.oltean@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,172 +56,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220408200337.718067-7-vladimir.oltean@nxp.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git for-5.19/cxl-device-lock
-head:   fd011b3bf6035eb145160f266fe0250e1e42b86e
-commit: 69d523de7046a14555e4f4986c4682e8c1635740 [2/12] device-core: Add dev->lock_class to enable device_lock() lockdep validation
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220409/202204091427.VqNnQI8Y-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
+Hi Vladimir,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Oltean/Disable-host-flooding-for-DSA-ports-under-a-bridge/20220409-041556
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git e8bd70250a821edb541c3abe1eacdad9f8dc7adf
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220409/202204091856.0PBgeBSa-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 893e1c18b98d8bbc7b8d7d22cc2c348f65c72ad9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=69d523de7046a14555e4f4986c4682e8c1635740
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl for-5.19/cxl-device-lock
-        git checkout 69d523de7046a14555e4f4986c4682e8c1635740
+        # https://github.com/intel-lab-lkp/linux/commit/2b24e24c704fa129c753dbc8fb764c95f4a3562c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vladimir-Oltean/Disable-host-flooding-for-DSA-ports-under-a-bridge/20220409-041556
+        git checkout 2b24e24c704fa129c753dbc8fb764c95f4a3562c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/bridge/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:37:
->> include/linux/device.h:849:3: error: use of undeclared identifier 'DRV_NAME'
-                   dev_warn(dev,
-                   ^
-   include/linux/dev_printk.h:146:54: note: expanded from macro 'dev_warn'
-           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                               ^
-   drivers/xen/xen-pciback/conf_space.c:13:22: note: expanded from macro 'dev_fmt'
-   #define dev_fmt(fmt) DRV_NAME ": " fmt
-                        ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
+>> net/bridge/br_if.c:145:10: error: no member named 'offload_count' in 'struct net_bridge_port'
+                   if (p->offload_count) {
+                       ~  ^
+   1 error generated.
 
 
-vim +/DRV_NAME +849 include/linux/device.h
+vim +145 net/bridge/br_if.c
 
-   826	
-   827	/*
-   828	 * Note: this routine expects that the state of @dev->mutex is stable
-   829	 * from entry to exit. There is no support for changing lockdep
-   830	 * validation classes, only enabling and disabling validation.
-   831	 */
-   832	static inline void device_set_lock_class(struct device *dev, int lock_class)
-   833	{
-   834		/*
-   835		 * Allow for setting or clearing the lock class while the
-   836		 * device_lock() is held, in which case the paired nested lock
-   837		 * might need to be acquired or released now to accommodate the
-   838		 * next device_unlock().
-   839		 */
-   840		if (dev->lock_class < 0 && lock_class >= 0) {
-   841			/* Enabling lockdep validation... */
-   842			if (mutex_is_locked(&dev->mutex))
-   843				mutex_lock_nested(&dev->lockdep_mutex, lock_class);
-   844		} else if (dev->lock_class >= 0 && lock_class < 0) {
-   845			/* Disabling lockdep validation... */
-   846			if (mutex_is_locked(&dev->mutex))
-   847				mutex_unlock(&dev->lockdep_mutex);
-   848		} else {
- > 849			dev_warn(dev,
-   850				 "%s: failed to change lock_class from: %d to %d\n",
-   851				 __func__, dev->lock_class, lock_class);
-   852			return;
-   853		}
-   854		dev->lock_class = lock_class;
-   855	}
-   856	#else /* !CONFIG_PROVE_LOCKING */
-   857	static inline void device_lockdep_init(struct device *dev)
-   858	{
-   859		lockdep_set_novalidate_class(&dev->mutex);
-   860	}
-   861	
+   129	
+   130	/* When a port is added or removed or when certain port flags
+   131	 * change, this function is called to automatically manage
+   132	 * promiscuity setting of all the bridge ports.  We are always called
+   133	 * under RTNL so can skip using rcu primitives.
+   134	 */
+   135	void br_manage_promisc(struct net_bridge *br)
+   136	{
+   137		struct net_bridge_port *p;
+   138	
+   139		list_for_each_entry(p, &br->port_list, list) {
+   140			/* Offloaded ports have a separate address database for
+   141			 * forwarding, which is managed through switchdev and not
+   142			 * through dev_uc_add(), so the promiscuous concept makes no
+   143			 * sense for them. Avoid updating promiscuity in that case.
+   144			 */
+ > 145			if (p->offload_count) {
+   146				br_port_clear_promisc(p);
+   147				continue;
+   148			}
+   149	
+   150			/* If bridge is promiscuous, unconditionally place all ports
+   151			 * in promiscuous mode too. This allows the bridge device to
+   152			 * locally receive all unknown traffic.
+   153			 */
+   154			if (br->dev->flags & IFF_PROMISC) {
+   155				br_port_set_promisc(p);
+   156				continue;
+   157			}
+   158	
+   159			/* If vlan filtering is disabled, place all ports in
+   160			 * promiscuous mode.
+   161			 */
+   162			if (!br_vlan_enabled(br->dev)) {
+   163				br_port_set_promisc(p);
+   164				continue;
+   165			}
+   166	
+   167			/* If the number of auto-ports is <= 1, then all other ports
+   168			 * will have their output configuration statically specified
+   169			 * through fdbs. Since ingress on the auto-port becomes
+   170			 * forwarding/egress to other ports and egress configuration is
+   171			 * statically known, we can say that ingress configuration of
+   172			 * the auto-port is also statically known.
+   173			 * This lets us disable promiscuous mode and write this config
+   174			 * to hw.
+   175			 */
+   176			if (br->auto_cnt == 0 ||
+   177			    (br->auto_cnt == 1 && br_auto_port(p)))
+   178				br_port_clear_promisc(p);
+   179			else
+   180				br_port_set_promisc(p);
+   181		}
+   182	}
+   183	
 
 -- 
 0-DAY CI Kernel Test Service
