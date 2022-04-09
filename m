@@ -1,44 +1,50 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C4D622
-	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 01:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADB7621
+	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 02:38:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649469475; x=1681005475;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WbxxERTt3tjk5D9kdcgRolm9kB5K0owt6IPbE9QXvV4=;
-  b=lr5BXoPLFhqZxf1JD/J3HEJZEACmOQvbBhw+5UIy7VGn5Gr/MVgL2+Cf
-   TuOogs2gouRoeWjPxLtTICwvbLHc3jKd8k60nPcHe1VPjizazk3Uae9yP
-   Ux3Y/yBlwITz7XwfF1ymtwqUT13S82vxh3U44EjwdKSPrFTOQEWevSKo8
-   1QfqMo47C2mHB/BnfiMw63FC+psvuUTpdnqoKB4a72UOCkEbX+XCsAA2x
-   i+qvdA2yspmO2tRmmvAZkJnCe2Cf6we8ndOWGOkrJe0a+XVij4Ur5nWrn
-   8kOEyJmkNWlAJSXZUG7sURsQnqJEo2uOhVeZqZzyf2+KDK2a23k9J3YBJ
+  t=1649471937; x=1681007937;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7aR8m2ikj3v7u6h4AcK9g+khiMuvadGO9El6+uN/BJ0=;
+  b=UVen5aLxZ8V7Mv7lTqciCOnYYPjh0Zl8flCadik1Syqij44G335pvQC8
+   8ehlSl2mGXChT5eQbjvo59TGDFiRTIwH+SG/97oAN50Osbi48KrN4+KKY
+   ABEdurrbNVzhsrEn4bRsr+IqUM5Ad57Icvu0DTdEsTEqg6FwWJV66kK5+
+   Z/UzEkck/EodUMRJmodjZDcX1cyVSEVPBFCXNEmstkIrJ4rxdozKxKtTK
+   c2nLJ70tNPsVM5+1HCY08qsWJ/9kvzqINnzKgzNLY4djrVE3azClCThId
+   vAoVuEpOhoGJvxLKCVYkndrL2CVPe/a3onVDNNcEDqGDfAO3XHMNJzz6l
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="260587227"
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="286744820"
 X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
-   d="scan'208";a="260587227"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 18:57:54 -0700
+   d="scan'208";a="286744820"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 19:38:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
-   d="scan'208";a="621898234"
+   d="scan'208";a="610021726"
 Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Apr 2022 18:57:53 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 08 Apr 2022 19:38:54 -0700
 Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nd0MK-0000nS-ES;
-	Sat, 09 Apr 2022 01:57:52 +0000
-Date: Sat, 9 Apr 2022 09:57:30 +0800
+	id 1nd101-0000ou-DP;
+	Sat, 09 Apr 2022 02:38:53 +0000
+Date: Sat, 9 Apr 2022 10:38:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rob Herring <robh@kernel.org>, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:crng/random/jd/not-zero-entropy 7/11]
- arch/arm/include/asm/timex.h:19:22: error: implicit declaration of function
- 'read_current_timer' is invalid in C99
-Message-ID: <202204090940.51vg3sZ7-lkp@intel.com>
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Frank Rowand <frowand.list@gmail.com>, Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH v6 4/5] device property: Constify fwnode_handle_get()
+Message-ID: <202204091049.rHkbqiFm-lkp@intel.com>
+References: <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,158 +53,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/not-zero-entropy
-head:   ac7d8411f0216fe77e48592ed0ff2ccbd599d0de
-commit: 5cde0b2eaaf94891163f14984697361fe51849e6 [7/11] arm: use sched_clock() for random_get_entropy() instead of zero
-config: arm-randconfig-c002-20220408 (https://download.01.org/0day-ci/archive/20220409/202204090940.51vg3sZ7-lkp@intel.com/config)
+Hi Andy,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on rafael-pm/linux-next robh/for-next linus/master v5.18-rc1 next-20220408]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/device-property-Allow-error-pointer-to-be-passed-to-fwnode-APIs/20220409-025056
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 3123109284176b1532874591f7c81f3837bbdc17
+config: hexagon-randconfig-r041-20220408 (https://download.01.org/0day-ci/archive/20220409/202204091049.rHkbqiFm-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/5cde0b2eaaf94891163f14984697361fe51849e6
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block crng/random/jd/not-zero-entropy
-        git checkout 5cde0b2eaaf94891163f14984697361fe51849e6
+        # https://github.com/intel-lab-lkp/linux/commit/477683439b5ee0954b08970d8c356b4cdaca8bc0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/device-property-Allow-error-pointer-to-be-passed-to-fwnode-APIs/20220409-025056
+        git checkout 477683439b5ee0954b08970d8c356b4cdaca8bc0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/base/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/arm/kernel/asm-offsets.c:11:
-   In file included from include/linux/sched.h:15:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:7:
-   In file included from include/linux/rhashtable-types.h:15:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:66:
->> arch/arm/include/asm/timex.h:19:22: error: implicit declaration of function 'read_current_timer' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           unsigned long ret = get_cycles();
-                               ^
-   arch/arm/include/asm/timex.h:15:37: note: expanded from macro 'get_cycles'
-   #define get_cycles()    ({ cycles_t c; read_current_timer(&c) ? 0 : c; })
-                                          ^
-   In file included from arch/arm/kernel/asm-offsets.c:11:
-   In file included from include/linux/sched.h:15:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:7:
-   In file included from include/linux/rhashtable-types.h:15:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   include/linux/timex.h:53:2: error: unterminated conditional directive
-   #ifndef _LINUX_TIMEX_H
-    ^
-   In file included from arch/arm/kernel/asm-offsets.c:11:
-   In file included from include/linux/sched.h:15:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:7:
-   In file included from include/linux/rhashtable-types.h:15:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:25:
-   In file included from include/linux/jiffies.h:11:
-   include/linux/timex.h:53:2: error: unterminated conditional directive
-   #ifndef _LINUX_TIMEX_H
-    ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
+>> drivers/base/property.c:782:10: error: returning 'const struct fwnode_handle *' from a function with result type 'struct fwnode_handle *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                   return fwnode;
+                          ^~~~~~
+   1 error generated.
 
 
-vim +/read_current_timer +19 arch/arm/include/asm/timex.h
+vim +782 drivers/base/property.c
 
-    16	
-    17	static inline unsigned long random_get_entropy(void)
-    18	{
-  > 19		unsigned long ret = get_cycles();
-    20		if (ret)
-    21			return ret;
-    22		return sched_clock();
-    23	}
-    24	#define random_get_entropy random_get_entropy
-    25	
+613e97218ccbd7 Adam Thomson    2016-06-21  772  
+e7887c284969a2 Sakari Ailus    2017-03-28  773  /**
+e7887c284969a2 Sakari Ailus    2017-03-28  774   * fwnode_handle_get - Obtain a reference to a device node
+e7887c284969a2 Sakari Ailus    2017-03-28  775   * @fwnode: Pointer to the device node to obtain the reference to.
+cf89a31ca55272 Sakari Ailus    2017-09-19  776   *
+cf89a31ca55272 Sakari Ailus    2017-09-19  777   * Returns the fwnode handle.
+e7887c284969a2 Sakari Ailus    2017-03-28  778   */
+477683439b5ee0 Andy Shevchenko 2022-04-08  779  struct fwnode_handle *fwnode_handle_get(const struct fwnode_handle *fwnode)
+e7887c284969a2 Sakari Ailus    2017-03-28  780  {
+cf89a31ca55272 Sakari Ailus    2017-09-19  781  	if (!fwnode_has_op(fwnode, get))
+cf89a31ca55272 Sakari Ailus    2017-09-19 @782  		return fwnode;
+cf89a31ca55272 Sakari Ailus    2017-09-19  783  
+cf89a31ca55272 Sakari Ailus    2017-09-19  784  	return fwnode_call_ptr_op(fwnode, get);
+e7887c284969a2 Sakari Ailus    2017-03-28  785  }
+e7887c284969a2 Sakari Ailus    2017-03-28  786  EXPORT_SYMBOL_GPL(fwnode_handle_get);
+e7887c284969a2 Sakari Ailus    2017-03-28  787  
 
 -- 
 0-DAY CI Kernel Test Service
