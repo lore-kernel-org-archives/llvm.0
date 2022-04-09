@@ -1,42 +1,45 @@
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7105621
-	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 04:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464C47E7
+	for <llvm@lists.linux.dev>; Sat,  9 Apr 2022 04:52:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649476858; x=1681012858;
+  t=1649479931; x=1681015931;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=f0STnqFn6gc7mAgH7r5NxAlmkxuVedk3L3mvJYOIuno=;
-  b=DGWlX+yGtn2t/GtTwz+ABXW22AXK2TaHib4cLFPPCdOMTXJXmIs2DX7n
-   yPZhjI+JnIVRKUuld3UmiQy4RN3XSGmo0kIxvHsXUUpd+Wc75ADg2Emtl
-   Z+O2vHNdDKFIM/pEeiJEW1cbBYw46SIXYVi7WgZ/WU85dZCoJRCiLhv/f
-   RqTLLMDo+Z9szC+p3PGpIQu5BORCw2i/qoCRTG/ddF87W0HBDyzAxGTk2
-   SDBSyNUWnOVgGEQmjOrR1C3Jwj7o4Xs9QRIUjBY3Cilu7dhaZgN2Li/Qd
-   KZ4mVhuflvkOyOfaHq5llnYc/+saoO+QYkAZ34nw/+O7FD0zif0JUMn7m
+  bh=m99myn4BC7BodDsZQ+mdhI1ipOS8W0CNzPn/MvEXBi8=;
+  b=ApkO3wAAxJ4oXpWpBqswTfU0frGx3ZdwrxcSS2qKtoid3S8LlxW7Zbx9
+   ruh810RJRLSXhEDDkn+Gz2Jlo7sK3wMzAZFc1tA0jcGrXgFLAUpt72s87
+   mCMpjijOno8O03dPmYv0BooaGFtoaMCjtrVKjqtc7lD/s62DDN4o9/jIH
+   u4MW5KCqXVMcrHGeLXNpC3ffOsUVUI915INRySBi04+Y1gMDaaGw9Av2q
+   DVSpGrusKU1460syQNKxQMI8IIjMoljk/1en10eCdyn8PDZSwv1lFBOlc
+   d98YWsQYhw/6uy/HWmJtj0WGLaDQQg/AtaIzE0mzfYvaYhTZ17Iv5jsVg
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="348191416"
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="348195472"
 X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="348191416"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 21:00:56 -0700
+   d="scan'208";a="348195472"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 21:51:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="653565533"
+   d="scan'208";a="558083757"
 Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Apr 2022 21:00:55 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 08 Apr 2022 21:51:56 -0700
 Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nd2HO-0000rE-MH;
-	Sat, 09 Apr 2022 04:00:54 +0000
-Date: Sat, 9 Apr 2022 12:00:21 +0800
+	id 1nd34l-0000sV-ES;
+	Sat, 09 Apr 2022 04:51:55 +0000
+Date: Sat, 9 Apr 2022 12:51:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Phil Elwell <phil@raspberrypi.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>
-Subject: [l1k:smsc95xx_5.17 95/887] drivers/irqchip/irq-bcm2835.c:204:15:
- warning: variable 'last_irq' set but not used
-Message-ID: <202204091144.FB1a2hA7-lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
+	Robert Hu <robert.hu@intel.com>,
+	Farrah Chen <farrah.chen@intel.com>,
+	Danmei Wei <danmei.wei@intel.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Subject: [kvm:queue 19/54] arch/x86/kvm/mmu/paging_tmpl.h:532:8: error: use
+ of undeclared identifier 'EPT_VIOLATION_RWX_SHIFT'
+Message-ID: <202204091254.FzYg6D71-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,121 +50,286 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   05d68ced287b30f62f18f95b5476135ef669804a
-commit: d721ee482d0edde5df2ddd15556b1e2754bdc5c0 [95/887] irqchip: irq-bcm2835: Calc. FIQ_START at boot-time
-config: arm64-randconfig-r006-20220408 (https://download.01.org/0day-ci/archive/20220409/202204091144.FB1a2hA7-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+head:   59d9e75d641565603e7c293f4cec182d86db8586
+commit: 68ca1f59584e5793a3949d8806f683f9245d33f9 [19/54] KVM: x86/mmu: Derive EPT violation RWX bits from EPTE RWX bits
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220409/202204091254.FzYg6D71-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/l1k/linux/commit/d721ee482d0edde5df2ddd15556b1e2754bdc5c0
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout d721ee482d0edde5df2ddd15556b1e2754bdc5c0
+        # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=68ca1f59584e5793a3949d8806f683f9245d33f9
+        git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
+        git fetch --no-tags kvm queue
+        git checkout 68ca1f59584e5793a3949d8806f683f9245d33f9
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/irqchip/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/irqchip/irq-bcm2835.c:204:15: warning: variable 'last_irq' set but not used [-Wunused-but-set-variable]
-           int irq = 0, last_irq, b, i;
-                        ^
-   1 warning generated.
+   In file included from arch/x86/kvm/mmu/mmu.c:4259:
+>> arch/x86/kvm/mmu/paging_tmpl.h:532:8: error: use of undeclared identifier 'EPT_VIOLATION_RWX_SHIFT'
+                                                    EPT_VIOLATION_RWX_SHIFT;
+                                                    ^
+   1 error generated.
+--
+>> arch/x86/kvm/vmx/vmx.c:5408:38: error: use of undeclared identifier 'EPT_VIOLATION_RWX_SHIFT'
+           error_code |= (exit_qualification & EPT_VIOLATION_RWX_MASK)
+                                               ^
+   arch/x86/include/asm/vmx.h:551:54: note: expanded from macro 'EPT_VIOLATION_RWX_MASK'
+   #define EPT_VIOLATION_RWX_MASK          (VMX_EPT_RWX_MASK << EPT_VIOLATION_RWX_SHIFT)
+                                                                ^
+   1 error generated.
 
 
-vim +/last_irq +204 drivers/irqchip/irq-bcm2835.c
+vim +/EPT_VIOLATION_RWX_SHIFT +532 arch/x86/kvm/mmu/paging_tmpl.h
 
-   198	
-   199	static int __init armctrl_of_init(struct device_node *node,
-   200					  struct device_node *parent,
-   201					  bool is_2836)
-   202	{
-   203		void __iomem *base;
- > 204		int irq = 0, last_irq, b, i;
-   205		u32 reg;
-   206	
-   207		base = of_iomap(node, 0);
-   208		if (!base)
-   209			panic("%pOF: unable to map IC registers\n", node);
-   210	
-   211		intc.base = base;
-   212		intc.domain = irq_domain_add_linear(node, NUMBER_IRQS * 2,
-   213						    &armctrl_ops, NULL);
-   214		if (!intc.domain)
-   215			panic("%pOF: unable to create IRQ domain\n", node);
-   216	
-   217		for (b = 0; b < NR_BANKS; b++) {
-   218			intc.pending[b] = base + reg_pending[b];
-   219			intc.enable[b] = base + reg_enable[b];
-   220			intc.disable[b] = base + reg_disable[b];
-   221	
-   222			for (i = 0; i < bank_irqs[b]; i++) {
-   223				irq = irq_create_mapping(intc.domain, MAKE_HWIRQ(b, i));
-   224				BUG_ON(irq <= 0);
-   225				irq_set_chip_and_handler(irq, &armctrl_chip,
-   226					handle_level_irq);
-   227				irq_set_probe(irq);
-   228			}
-   229	
-   230			reg = readl_relaxed(intc.enable[b]);
-   231			if (reg) {
-   232				writel_relaxed(reg, intc.disable[b]);
-   233				pr_err(FW_BUG "Bootloader left irq enabled: "
-   234				       "bank %d irq %*pbl\n", b, IRQS_PER_BANK, &reg);
-   235			}
-   236		}
-   237	
-   238		reg = readl_relaxed(base + REG_FIQ_CONTROL);
-   239		if (reg & FIQ_CONTROL_ENABLE) {
-   240			writel_relaxed(0, base + REG_FIQ_CONTROL);
-   241			pr_err(FW_BUG "Bootloader left fiq enabled\n");
-   242		}
-   243	
-   244		last_irq = irq;
-   245	
-   246		if (is_2836) {
-   247			int parent_irq = irq_of_parse_and_map(node, 0);
-   248	
-   249			if (!parent_irq) {
-   250				panic("%pOF: unable to get parent interrupt.\n",
-   251				      node);
-   252			}
-   253			irq_set_chained_handler(parent_irq, bcm2836_chained_handle_irq);
-   254		} else {
-   255			set_handle_irq(bcm2835_handle_irq);
-   256		}
-   257	
-   258		if (is_2836) {
-   259			extern void __iomem * __attribute__((weak)) arm_local_intc;
-   260			intc.local_base = arm_local_intc;
-   261			if (!intc.local_base)
-   262				pr_err("Failed to get local intc base. FIQ is disabled for cpus > 1\n");
-   263		}
-   264	
-   265		/* Make a duplicate irq range which is used to enable FIQ */
-   266		for (b = 0; b < NR_BANKS; b++) {
-   267			for (i = 0; i < bank_irqs[b]; i++) {
-   268				irq = irq_create_mapping(intc.domain,
-   269						MAKE_HWIRQ(b, i) + NUMBER_IRQS);
-   270				BUG_ON(irq <= 0);
-   271				irq_set_chip(irq, &armctrl_chip);
-   272				irq_set_probe(irq);
-   273			}
-   274		}
-   275	#ifndef CONFIG_ARM64
-   276		init_FIQ(irq - last_irq);
-   277	#endif
-   278	
-   279		return 0;
-   280	}
-   281	
+   301	
+   302	static inline bool FNAME(is_last_gpte)(struct kvm_mmu *mmu,
+   303					       unsigned int level, unsigned int gpte)
+   304	{
+   305		/*
+   306		 * For EPT and PAE paging (both variants), bit 7 is either reserved at
+   307		 * all level or indicates a huge page (ignoring CR3/EPTP).  In either
+   308		 * case, bit 7 being set terminates the walk.
+   309		 */
+   310	#if PTTYPE == 32
+   311		/*
+   312		 * 32-bit paging requires special handling because bit 7 is ignored if
+   313		 * CR4.PSE=0, not reserved.  Clear bit 7 in the gpte if the level is
+   314		 * greater than the last level for which bit 7 is the PAGE_SIZE bit.
+   315		 *
+   316		 * The RHS has bit 7 set iff level < (2 + PSE).  If it is clear, bit 7
+   317		 * is not reserved and does not indicate a large page at this level,
+   318		 * so clear PT_PAGE_SIZE_MASK in gpte if that is the case.
+   319		 */
+   320		gpte &= level - (PT32_ROOT_LEVEL + mmu->mmu_role.ext.cr4_pse);
+   321	#endif
+   322		/*
+   323		 * PG_LEVEL_4K always terminates.  The RHS has bit 7 set
+   324		 * iff level <= PG_LEVEL_4K, which for our purpose means
+   325		 * level == PG_LEVEL_4K; set PT_PAGE_SIZE_MASK in gpte then.
+   326		 */
+   327		gpte |= level - PG_LEVEL_4K - 1;
+   328	
+   329		return gpte & PT_PAGE_SIZE_MASK;
+   330	}
+   331	/*
+   332	 * Fetch a guest pte for a guest virtual address, or for an L2's GPA.
+   333	 */
+   334	static int FNAME(walk_addr_generic)(struct guest_walker *walker,
+   335					    struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+   336					    gpa_t addr, u64 access)
+   337	{
+   338		int ret;
+   339		pt_element_t pte;
+   340		pt_element_t __user *ptep_user;
+   341		gfn_t table_gfn;
+   342		u64 pt_access, pte_access;
+   343		unsigned index, accessed_dirty, pte_pkey;
+   344		u64 nested_access;
+   345		gpa_t pte_gpa;
+   346		bool have_ad;
+   347		int offset;
+   348		u64 walk_nx_mask = 0;
+   349		const int write_fault = access & PFERR_WRITE_MASK;
+   350		const int user_fault  = access & PFERR_USER_MASK;
+   351		const int fetch_fault = access & PFERR_FETCH_MASK;
+   352		u16 errcode = 0;
+   353		gpa_t real_gpa;
+   354		gfn_t gfn;
+   355	
+   356		trace_kvm_mmu_pagetable_walk(addr, access);
+   357	retry_walk:
+   358		walker->level = mmu->root_level;
+   359		pte           = mmu->get_guest_pgd(vcpu);
+   360		have_ad       = PT_HAVE_ACCESSED_DIRTY(mmu);
+   361	
+   362	#if PTTYPE == 64
+   363		walk_nx_mask = 1ULL << PT64_NX_SHIFT;
+   364		if (walker->level == PT32E_ROOT_LEVEL) {
+   365			pte = mmu->get_pdptr(vcpu, (addr >> 30) & 3);
+   366			trace_kvm_mmu_paging_element(pte, walker->level);
+   367			if (!FNAME(is_present_gpte)(pte))
+   368				goto error;
+   369			--walker->level;
+   370		}
+   371	#endif
+   372		walker->max_level = walker->level;
+   373		ASSERT(!(is_long_mode(vcpu) && !is_pae(vcpu)));
+   374	
+   375		/*
+   376		 * FIXME: on Intel processors, loads of the PDPTE registers for PAE paging
+   377		 * by the MOV to CR instruction are treated as reads and do not cause the
+   378		 * processor to set the dirty flag in any EPT paging-structure entry.
+   379		 */
+   380		nested_access = (have_ad ? PFERR_WRITE_MASK : 0) | PFERR_USER_MASK;
+   381	
+   382		pte_access = ~0;
+   383		++walker->level;
+   384	
+   385		do {
+   386			unsigned long host_addr;
+   387	
+   388			pt_access = pte_access;
+   389			--walker->level;
+   390	
+   391			index = PT_INDEX(addr, walker->level);
+   392			table_gfn = gpte_to_gfn(pte);
+   393			offset    = index * sizeof(pt_element_t);
+   394			pte_gpa   = gfn_to_gpa(table_gfn) + offset;
+   395	
+   396			BUG_ON(walker->level < 1);
+   397			walker->table_gfn[walker->level - 1] = table_gfn;
+   398			walker->pte_gpa[walker->level - 1] = pte_gpa;
+   399	
+   400			real_gpa = kvm_translate_gpa(vcpu, mmu, gfn_to_gpa(table_gfn),
+   401						     nested_access, &walker->fault);
+   402	
+   403			/*
+   404			 * FIXME: This can happen if emulation (for of an INS/OUTS
+   405			 * instruction) triggers a nested page fault.  The exit
+   406			 * qualification / exit info field will incorrectly have
+   407			 * "guest page access" as the nested page fault's cause,
+   408			 * instead of "guest page structure access".  To fix this,
+   409			 * the x86_exception struct should be augmented with enough
+   410			 * information to fix the exit_qualification or exit_info_1
+   411			 * fields.
+   412			 */
+   413			if (unlikely(real_gpa == UNMAPPED_GVA))
+   414				return 0;
+   415	
+   416			host_addr = kvm_vcpu_gfn_to_hva_prot(vcpu, gpa_to_gfn(real_gpa),
+   417						    &walker->pte_writable[walker->level - 1]);
+   418			if (unlikely(kvm_is_error_hva(host_addr)))
+   419				goto error;
+   420	
+   421			ptep_user = (pt_element_t __user *)((void *)host_addr + offset);
+   422			if (unlikely(__get_user(pte, ptep_user)))
+   423				goto error;
+   424			walker->ptep_user[walker->level - 1] = ptep_user;
+   425	
+   426			trace_kvm_mmu_paging_element(pte, walker->level);
+   427	
+   428			/*
+   429			 * Inverting the NX it lets us AND it like other
+   430			 * permission bits.
+   431			 */
+   432			pte_access = pt_access & (pte ^ walk_nx_mask);
+   433	
+   434			if (unlikely(!FNAME(is_present_gpte)(pte)))
+   435				goto error;
+   436	
+   437			if (unlikely(FNAME(is_rsvd_bits_set)(mmu, pte, walker->level))) {
+   438				errcode = PFERR_RSVD_MASK | PFERR_PRESENT_MASK;
+   439				goto error;
+   440			}
+   441	
+   442			walker->ptes[walker->level - 1] = pte;
+   443	
+   444			/* Convert to ACC_*_MASK flags for struct guest_walker.  */
+   445			walker->pt_access[walker->level - 1] = FNAME(gpte_access)(pt_access ^ walk_nx_mask);
+   446		} while (!FNAME(is_last_gpte)(mmu, walker->level, pte));
+   447	
+   448		pte_pkey = FNAME(gpte_pkeys)(vcpu, pte);
+   449		accessed_dirty = have_ad ? pte_access & PT_GUEST_ACCESSED_MASK : 0;
+   450	
+   451		/* Convert to ACC_*_MASK flags for struct guest_walker.  */
+   452		walker->pte_access = FNAME(gpte_access)(pte_access ^ walk_nx_mask);
+   453		errcode = permission_fault(vcpu, mmu, walker->pte_access, pte_pkey, access);
+   454		if (unlikely(errcode))
+   455			goto error;
+   456	
+   457		gfn = gpte_to_gfn_lvl(pte, walker->level);
+   458		gfn += (addr & PT_LVL_OFFSET_MASK(walker->level)) >> PAGE_SHIFT;
+   459	
+   460		if (PTTYPE == 32 && walker->level > PG_LEVEL_4K && is_cpuid_PSE36())
+   461			gfn += pse36_gfn_delta(pte);
+   462	
+   463		real_gpa = kvm_translate_gpa(vcpu, mmu, gfn_to_gpa(gfn), access, &walker->fault);
+   464		if (real_gpa == UNMAPPED_GVA)
+   465			return 0;
+   466	
+   467		walker->gfn = real_gpa >> PAGE_SHIFT;
+   468	
+   469		if (!write_fault)
+   470			FNAME(protect_clean_gpte)(mmu, &walker->pte_access, pte);
+   471		else
+   472			/*
+   473			 * On a write fault, fold the dirty bit into accessed_dirty.
+   474			 * For modes without A/D bits support accessed_dirty will be
+   475			 * always clear.
+   476			 */
+   477			accessed_dirty &= pte >>
+   478				(PT_GUEST_DIRTY_SHIFT - PT_GUEST_ACCESSED_SHIFT);
+   479	
+   480		if (unlikely(!accessed_dirty)) {
+   481			ret = FNAME(update_accessed_dirty_bits)(vcpu, mmu, walker,
+   482								addr, write_fault);
+   483			if (unlikely(ret < 0))
+   484				goto error;
+   485			else if (ret)
+   486				goto retry_walk;
+   487		}
+   488	
+   489		pgprintk("%s: pte %llx pte_access %x pt_access %x\n",
+   490			 __func__, (u64)pte, walker->pte_access,
+   491			 walker->pt_access[walker->level - 1]);
+   492		return 1;
+   493	
+   494	error:
+   495		errcode |= write_fault | user_fault;
+   496		if (fetch_fault && (is_efer_nx(mmu) || is_cr4_smep(mmu)))
+   497			errcode |= PFERR_FETCH_MASK;
+   498	
+   499		walker->fault.vector = PF_VECTOR;
+   500		walker->fault.error_code_valid = true;
+   501		walker->fault.error_code = errcode;
+   502	
+   503	#if PTTYPE == PTTYPE_EPT
+   504		/*
+   505		 * Use PFERR_RSVD_MASK in error_code to to tell if EPT
+   506		 * misconfiguration requires to be injected. The detection is
+   507		 * done by is_rsvd_bits_set() above.
+   508		 *
+   509		 * We set up the value of exit_qualification to inject:
+   510		 * [2:0] - Derive from the access bits. The exit_qualification might be
+   511		 *         out of date if it is serving an EPT misconfiguration.
+   512		 * [5:3] - Calculated by the page walk of the guest EPT page tables
+   513		 * [7:8] - Derived from [7:8] of real exit_qualification
+   514		 *
+   515		 * The other bits are set to 0.
+   516		 */
+   517		if (!(errcode & PFERR_RSVD_MASK)) {
+   518			vcpu->arch.exit_qualification &= (EPT_VIOLATION_GVA_IS_VALID |
+   519							  EPT_VIOLATION_GVA_TRANSLATED);
+   520			if (write_fault)
+   521				vcpu->arch.exit_qualification |= EPT_VIOLATION_ACC_WRITE;
+   522			if (user_fault)
+   523				vcpu->arch.exit_qualification |= EPT_VIOLATION_ACC_READ;
+   524			if (fetch_fault)
+   525				vcpu->arch.exit_qualification |= EPT_VIOLATION_ACC_INSTR;
+   526	
+   527			/*
+   528			 * Note, pte_access holds the raw RWX bits from the EPTE, not
+   529			 * ACC_*_MASK flags!
+   530			 */
+   531			vcpu->arch.exit_qualification |= (pte_access & VMX_EPT_RWX_MASK) <<
+ > 532							 EPT_VIOLATION_RWX_SHIFT;
+   533		}
+   534	#endif
+   535		walker->fault.address = addr;
+   536		walker->fault.nested_page_fault = mmu != vcpu->arch.walk_mmu;
+   537		walker->fault.async_page_fault = false;
+   538	
+   539		trace_kvm_mmu_walker_error(walker->fault.error_code);
+   540		return 0;
+   541	}
+   542	
 
 -- 
 0-DAY CI Kernel Test Service
