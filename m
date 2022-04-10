@@ -1,44 +1,46 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992391389
-	for <llvm@lists.linux.dev>; Sun, 10 Apr 2022 18:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B721389;
+	Sun, 10 Apr 2022 19:49:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649617157; x=1681153157;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T71qbFdqFG92pViJvacOnrBv3zga4Sk9oewjiHUKL4I=;
-  b=DKZEkVW/pwxmz9G/ozT3oYIBA+RiZ2vMDJRInjPckh7YtKGWrU91B+iV
-   oU8MYKm0uUDEfIkq13WeFExO7/3DiS5B6UTZvILr8xPlSYx3/zf7AmxND
-   gk3OYPKEzpR5dQ/sOEDzuBlV1/DbPgRzijEf83Y1E7alWDxG8ahS37GyC
-   BxKwmPfqtqph9hn86B1ohDDIwJE3BlwT/Fdc4eFIkJHWVH1RrQO286XUh
-   j+cFh525xbetkxHL7/HFyw1mPmVGoV5pg6hVGtg+1usQIB8VGN4sC8EKR
-   VJQK2sbgIvNvH/pqll3Ftask9KaLbI8c5JN38JPqjjngfh5FWt5aaIh0G
+  t=1649620159; x=1681156159;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qfXauU8CU0Y9jHH69CgjUZV8bb7CeoNIsANq+mf0+I8=;
+  b=G+8rqoRR8Wu4GOjTDZ4cnmPkUIy3uzZsYTpytkJHfu69w+XHQMHF9+FP
+   42riMHYJ8+Hz5Jd05A88fWErDIsg1z8pvJ56G0dz++dCrGH/TwVtqIFW2
+   EQdwWyyem5DgKy7K30w7LTxf8Zl0TjKA73dEeoG29s3d1o54qi4oaJktp
+   v9hzKA0gZQmGizik+I7NIaUWzLAQDM1HTlacvWXqtdKMr45enR+eJnKoz
+   fZwslfKCHzn+S4cYhkgYOm5YToAlBxRNjDjjD2LpbAOBj6gNbJy3SH3s6
+   iI7ZOOO8oJvxFscL/LxAZ1Q1cwrqIW/pKQ/LdRrVS46VddI4YYZjy4dmU
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="286994985"
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="262173581"
 X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="286994985"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 11:59:17 -0700
+   d="scan'208";a="262173581"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 12:49:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="571803601"
+   d="scan'208";a="699108337"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 10 Apr 2022 11:59:14 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 10 Apr 2022 12:49:15 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ndcmH-00012h-VJ;
-	Sun, 10 Apr 2022 18:59:13 +0000
-Date: Mon, 11 Apr 2022 02:58:14 +0800
+	id 1nddYg-00013z-JJ;
+	Sun, 10 Apr 2022 19:49:14 +0000
+Date: Mon, 11 Apr 2022 03:48:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Brent Lu <brent.lu@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: sound/soc/intel/boards/sof_ssp_amp.c:97:6: warning: variable 'i' set
- but not used
-Message-ID: <202204110240.lp5uPnQY-lkp@intel.com>
+To: Shiyang Ruan <ruansy.fnst@fujitsu.com>, linux-kernel@vger.kernel.org,
+	linux-xfs@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, djwong@kernel.org,
+	dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
+	jane.chu@oracle.com, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v12 2/7] mm: factor helpers for memory_failure_dev_pagemap
+Message-ID: <202204110348.fupyvJK7-lkp@intel.com>
+References: <20220410160904.3758789-3-ruansy.fnst@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,87 +49,110 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220410160904.3758789-3-ruansy.fnst@fujitsu.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4ea3c6425269d33da53c79d539ce9554117cf4d4
-commit: 2fe14ff61bd6d4fabe313435dd378b5a38eb6102 ASoC: Intel: sof_ssp_amp: rename driver and support cs35l41 amplifier
-date:   6 weeks ago
-config: x86_64-randconfig-a002-20220411 (https://download.01.org/0day-ci/archive/20220411/202204110240.lp5uPnQY-lkp@intel.com/config)
+Hi Shiyang,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on hnaz-mm/master]
+[also build test WARNING on next-20220408]
+[cannot apply to xfs-linux/for-next linus/master linux/master v5.18-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220411-001048
+base:   https://github.com/hnaz/linux-mm master
+config: arm64-randconfig-r021-20220410 (https://download.01.org/0day-ci/archive/20220411/202204110348.fupyvJK7-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 256c6b0ba14e8a7ab6373b61b7193ea8c0a3651c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2fe14ff61bd6d4fabe313435dd378b5a38eb6102
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2fe14ff61bd6d4fabe313435dd378b5a38eb6102
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/9ab00d3f6d4d9d3d2e4446480567af17c8726bd2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220411-001048
+        git checkout 9ab00d3f6d4d9d3d2e4446480567af17c8726bd2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/intel/boards/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> sound/soc/intel/boards/sof_ssp_amp.c:97:6: warning: variable 'i' set but not used [-Wunused-but-set-variable]
-           int i = 0;
+>> mm/memory-failure.c:1533:6: warning: variable 'rc' set but not used [-Wunused-but-set-variable]
+           int rc = 0;
                ^
    1 warning generated.
 
 
-vim +/i +97 sound/soc/intel/boards/sof_ssp_amp.c
+vim +/rc +1533 mm/memory-failure.c
 
-    89	
-    90	static int sof_card_late_probe(struct snd_soc_card *card)
-    91	{
-    92		struct sof_card_private *ctx = snd_soc_card_get_drvdata(card);
-    93		struct snd_soc_component *component = NULL;
-    94		char jack_name[NAME_SIZE];
-    95		struct sof_hdmi_pcm *pcm;
-    96		int err;
-  > 97		int i = 0;
-    98	
-    99		if (!(sof_ssp_amp_quirk & SOF_HDMI_PLAYBACK_PRESENT))
-   100			return 0;
-   101	
-   102		/* HDMI is not supported by SOF on Baytrail/CherryTrail */
-   103		if (!ctx->idisp_codec)
-   104			return 0;
-   105	
-   106		if (list_empty(&ctx->hdmi_pcm_list))
-   107			return -EINVAL;
-   108	
-   109		if (ctx->common_hdmi_codec_drv) {
-   110			pcm = list_first_entry(&ctx->hdmi_pcm_list, struct sof_hdmi_pcm,
-   111					       head);
-   112			component = pcm->codec_dai->component;
-   113			return hda_dsp_hdmi_build_controls(card, component);
-   114		}
-   115	
-   116		list_for_each_entry(pcm, &ctx->hdmi_pcm_list, head) {
-   117			component = pcm->codec_dai->component;
-   118			snprintf(jack_name, sizeof(jack_name),
-   119				 "HDMI/DP, pcm=%d Jack", pcm->device);
-   120			err = snd_soc_card_jack_new(card, jack_name,
-   121						    SND_JACK_AVOUT, &pcm->sof_hdmi,
-   122						    NULL, 0);
-   123	
-   124			if (err)
-   125				return err;
-   126	
-   127			err = hdac_hdmi_jack_init(pcm->codec_dai, pcm->device,
-   128						  &pcm->sof_hdmi);
-   129			if (err < 0)
-   130				return err;
-   131	
-   132			i++;
-   133		}
-   134	
-   135		return hdac_hdmi_jack_port_init(component, &card->dapm);
-   136	}
-   137	
+  1526	
+  1527	static int mf_generic_kill_procs(unsigned long long pfn, int flags,
+  1528			struct dev_pagemap *pgmap)
+  1529	{
+  1530		struct page *page = pfn_to_page(pfn);
+  1531		LIST_HEAD(to_kill);
+  1532		dax_entry_t cookie;
+> 1533		int rc = 0;
+  1534	
+  1535		/*
+  1536		 * Pages instantiated by device-dax (not filesystem-dax)
+  1537		 * may be compound pages.
+  1538		 */
+  1539		page = compound_head(page);
+  1540	
+  1541		/*
+  1542		 * Prevent the inode from being freed while we are interrogating
+  1543		 * the address_space, typically this would be handled by
+  1544		 * lock_page(), but dax pages do not use the page lock. This
+  1545		 * also prevents changes to the mapping of this pfn until
+  1546		 * poison signaling is complete.
+  1547		 */
+  1548		cookie = dax_lock_page(page);
+  1549		if (!cookie)
+  1550			return -EBUSY;
+  1551	
+  1552		if (hwpoison_filter(page)) {
+  1553			rc = -EOPNOTSUPP;
+  1554			goto unlock;
+  1555		}
+  1556	
+  1557		if (pgmap->type == MEMORY_DEVICE_PRIVATE) {
+  1558			/*
+  1559			 * TODO: Handle HMM pages which may need coordination
+  1560			 * with device-side memory.
+  1561			 */
+  1562			return -EBUSY;
+  1563		}
+  1564	
+  1565		/*
+  1566		 * Use this flag as an indication that the dax page has been
+  1567		 * remapped UC to prevent speculative consumption of poison.
+  1568		 */
+  1569		SetPageHWPoison(page);
+  1570	
+  1571		/*
+  1572		 * Unlike System-RAM there is no possibility to swap in a
+  1573		 * different physical page at a given virtual address, so all
+  1574		 * userspace consumption of ZONE_DEVICE memory necessitates
+  1575		 * SIGBUS (i.e. MF_MUST_KILL)
+  1576		 */
+  1577		flags |= MF_ACTION_REQUIRED | MF_MUST_KILL;
+  1578		collect_procs(page, &to_kill, true);
+  1579	
+  1580		unmap_and_kill(&to_kill, pfn, page->mapping, page->index, flags);
+  1581	unlock:
+  1582		dax_unlock_page(page, cookie);
+  1583		return 0;
+  1584	}
+  1585	
 
 -- 
 0-DAY CI Kernel Test Service
