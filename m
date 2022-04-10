@@ -1,42 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DAA1843
-	for <llvm@lists.linux.dev>; Sun, 10 Apr 2022 22:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C0A1843
+	for <llvm@lists.linux.dev>; Sun, 10 Apr 2022 23:14:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649631214; x=1681167214;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=O8t8NBm5g/PCdD4t0srsqk2jc0slf8BtZeXNBlw4OZk=;
-  b=ZIownpa/qbBoFAVCVLbLr36X5vxQkQ+tt3XCWD+lilfHe09zV+zOUsiF
-   MNTh7xhBpLA7/KRptDHrbgM1pQ0tVCVolmxYqQfH5P/xZMHhT/8dxSliX
-   JIblYm8YgselKgZpDRPQoriDTcnh+QZhVOcK/dZ5DcUdAbaRsBsyFhcp+
-   H4KFCQfhXsk4iLAxiKTkb4sE1BcR9V8JSWJc0gtKlk4SAzpeeSN0zjIFT
-   cGaBYZ0s+5kn03bgOBT3B9U8BDJuNxM056llBxKwRQdcRBhd/NThZAiXr
-   8r6nS/c2ss+XRdqG4pDhU6JxGDMZNW05W2tgX1yDlgViFT2uUqjXw3JPM
+  t=1649632481; x=1681168481;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=psxz37D1DPooiSbTmqf6pZhcelOEdA1uQoa8dl19olo=;
+  b=AmcCRpIUuHbuDk2cgPy9Huskq6fG1aqZCtG9Y7kGwBWsqQ5wkORzTHom
+   A8wXTfHmq17Q1eUfETs1ISAKrcEFJ4XHcH3ddYWVHH+wRo9XcYaADQU2y
+   4SyXYIQvZrW9Sm6JQfqbU1SnogBtN27RS8kP20s7M6NDRfp9ZP0/UKlux
+   5S9Ku6qn2hW3QuX/aUgyt8irF+CW3Tz7BlH3dBqQrhEm/YEiRFydqY2GD
+   kT7xq1vrzeiWWhs142YDmbgud4+oI3HRAiFYyOvjerp5gne4d7bPQDBk9
+   ZJ+gQuRuCWt/1nhcWYK8zo45Bg7XAPA3NQx9d7388C71X3Th34WvbiKuE
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="262181356"
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="348436964"
 X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="262181356"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 15:53:34 -0700
+   d="scan'208";a="348436964"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 16:14:41 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="506881066"
+   d="scan'208";a="659820396"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 10 Apr 2022 15:53:33 -0700
+  by orsmga004.jf.intel.com with ESMTP; 10 Apr 2022 16:14:39 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ndgR2-0001AI-Kh;
-	Sun, 10 Apr 2022 22:53:32 +0000
-Date: Mon, 11 Apr 2022 06:53:14 +0800
+	id 1ndglS-0001B1-EJ;
+	Sun, 10 Apr 2022 23:14:38 +0000
+Date: Mon, 11 Apr 2022 07:13:40 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [ogabbay:habanalabs-next 23/28] ld.lld: error:
- arch/riscv/built-in.a(kernel/process.o):(function __show_regs: .text+0x38):
- relocation R_RISCV_HI20 out of range: 534715 is not in [-524288, 524287];
- references .L.str
-Message-ID: <202204110619.rY81PMIm-lkp@intel.com>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, netdev@vger.kernel.org,
+	kuba@kernel.org, davem@davemloft.net
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [PATCH net-next v2] net: remove noblock parameter from recvmsg()
+ entities
+Message-ID: <202204110751.725yvW2W-lkp@intel.com>
+References: <20220410200635.174327-1-socketcan@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,39 +48,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220410200635.174327-1-socketcan@hartkopp.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Dafna Hirschfeld <dhirschfeld@habana.ai>
-CC: Oded Gabbay <ogabbay@kernel.org>
+Hi Oliver,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
-head:   7346c0c6a3e0127c1d50473df90d201aeaaaa0bc
-commit: 85dffad021521ff2851a7800ff3f66c40309870a [23/28] habanalabs: unify code for memory access from debugfs
-config: riscv-buildonly-randconfig-r004-20220410 (https://download.01.org/0day-ci/archive/20220411/202204110619.rY81PMIm-lkp@intel.com/config)
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Hartkopp/net-remove-noblock-parameter-from-recvmsg-entities/20220411-040924
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 516a2f1f6f3ce1a87931579cc21de6e7e33440bd
+config: x86_64-randconfig-a004-20220411 (https://download.01.org/0day-ci/archive/20220411/202204110751.725yvW2W-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 256c6b0ba14e8a7ab6373b61b7193ea8c0a3651c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=85dffad021521ff2851a7800ff3f66c40309870a
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay habanalabs-next
-        git checkout 85dffad021521ff2851a7800ff3f66c40309870a
+        # https://github.com/intel-lab-lkp/linux/commit/8c4751aaa17d68be940bdaf4bb1402d1a34a60e7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Oliver-Hartkopp/net-remove-noblock-parameter-from-recvmsg-entities/20220411-040924
+        git checkout 8c4751aaa17d68be940bdaf4bb1402d1a34a60e7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/dccp/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: arch/riscv/built-in.a(kernel/process.o):(function __show_regs: .text+0x38): relocation R_RISCV_HI20 out of range: 534715 is not in [-524288, 524287]; references .L.str
-   >>> referenced by process.c
-   >>> defined in arch/riscv/built-in.a(kernel/process.o)
+>> net/dccp/ipv4.c:959:14: error: incompatible function pointer types initializing 'int (*)(struct sock *, struct msghdr *, size_t, int, int *)' (aka 'int (*)(struct sock *, struct msghdr *, unsigned long, int, int *)') with an expression of type 'int (struct sock *, struct msghdr *, size_t, int, int, int *)' (aka 'int (struct sock *, struct msghdr *, unsigned long, int, int, int *)') [-Werror,-Wincompatible-function-pointer-types]
+           .recvmsg                = dccp_recvmsg,
+                                     ^~~~~~~~~~~~
+   1 error generated.
+--
+>> net/dccp/ipv6.c:1044:16: error: incompatible function pointer types initializing 'int (*)(struct sock *, struct msghdr *, size_t, int, int *)' (aka 'int (*)(struct sock *, struct msghdr *, unsigned long, int, int *)') with an expression of type 'int (struct sock *, struct msghdr *, size_t, int, int, int *)' (aka 'int (struct sock *, struct msghdr *, unsigned long, int, int, int *)') [-Werror,-Wincompatible-function-pointer-types]
+           .recvmsg           = dccp_recvmsg,
+                                ^~~~~~~~~~~~
+   1 error generated.
+
+
+vim +959 net/dccp/ipv4.c
+
+6d6ee43e0b8b8d Arnaldo Carvalho de Melo 2005-12-13  947  
+5e0817f84c3328 Adrian Bunk              2006-03-20  948  static struct proto dccp_v4_prot = {
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  949  	.name			= "DCCP",
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  950  	.owner			= THIS_MODULE,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  951  	.close			= dccp_close,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  952  	.connect		= dccp_v4_connect,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  953  	.disconnect		= dccp_disconnect,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  954  	.ioctl			= dccp_ioctl,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  955  	.init			= dccp_v4_init_sock,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  956  	.setsockopt		= dccp_setsockopt,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  957  	.getsockopt		= dccp_getsockopt,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  958  	.sendmsg		= dccp_sendmsg,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09 @959  	.recvmsg		= dccp_recvmsg,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  960  	.backlog_rcv		= dccp_v4_do_rcv,
+ab1e0a13d70299 Arnaldo Carvalho de Melo 2008-02-03  961  	.hash			= inet_hash,
+ab1e0a13d70299 Arnaldo Carvalho de Melo 2008-02-03  962  	.unhash			= inet_unhash,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  963  	.accept			= inet_csk_accept,
+ab1e0a13d70299 Arnaldo Carvalho de Melo 2008-02-03  964  	.get_port		= inet_csk_get_port,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  965  	.shutdown		= dccp_shutdown,
+3e0fadc51f2fde Arnaldo Carvalho de Melo 2006-03-20  966  	.destroy		= dccp_destroy_sock,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  967  	.orphan_count		= &dccp_orphan_count,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  968  	.max_header		= MAX_DCCP_HEADER,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  969  	.obj_size		= sizeof(struct dccp_sock),
+5f0d5a3ae7cff0 Paul E. McKenney         2017-01-18  970  	.slab_flags		= SLAB_TYPESAFE_BY_RCU,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  971  	.rsk_prot		= &dccp_request_sock_ops,
+6d6ee43e0b8b8d Arnaldo Carvalho de Melo 2005-12-13  972  	.twsk_prot		= &dccp_timewait_sock_ops,
+39d8cda76cfb11 Pavel Emelyanov          2008-03-22  973  	.h.hashinfo		= &dccp_hashinfo,
+7c657876b63cb1 Arnaldo Carvalho de Melo 2005-08-09  974  };
+6d6ee43e0b8b8d Arnaldo Carvalho de Melo 2005-12-13  975  
 
 -- 
 0-DAY CI Kernel Test Service
