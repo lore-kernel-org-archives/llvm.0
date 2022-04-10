@@ -1,43 +1,67 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD81137A
-	for <llvm@lists.linux.dev>; Sun, 10 Apr 2022 16:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A43F137A
+	for <llvm@lists.linux.dev>; Sun, 10 Apr 2022 17:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649609773; x=1681145773;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5hgYay+A3u84P1Im7ew9yeUAIZ8FUtOEV39jCStQWtQ=;
-  b=JYYysPjddL974XGI3nPIkYlNDKoig3+AOrX6wVfnmMJE2Mo93DQbYavs
-   6w/DHhVFrHcbMDbaLT0ZPQZbhRoFv/JZAuYolDmBPYD2SCjqPVWL/d4nB
-   xYmm0ZBMWWWi0f/YYz/Zl2SbizRXGO/aUeY6CmwyH61zyJDhZ/rXJZWEN
-   KYngxQluET1Ojw+844gJ6ihhy2jP2vljrzgyx6kFD1XdGkwNrM68RJIhQ
-   m3sr7bddlTaNy2nqL2VUiNMtuBy5qf9HpdC24aVAeb34lfp2QfRVs9Wyu
-   xgCQsbWx8pkVmQWy0h4rug/nKbXKwveb7g9WBrQD65WDbMnXNKSyDPEcX
+  t=1649612900; x=1681148900;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YQpWhr3iY9RYZ/QQ7KsrLWIRBpUuvi7f5jvFQqObdc8=;
+  b=VFL5mHU7vkEV68P+iSIVXQbSg9w5kxS0utJzgdSwYimpyBzOlN5RY6Vg
+   62as8A1I1McF/gGEmqnNiZSubB2wVGyogn9YL8FtDvikexHNJQ+1he6K6
+   GSF/bZA3rY4jrKGSoNte/5qkIhHPQtwOhrkUltKWrJaaZaHnIqlJNFjYh
+   waGxh5vrLO2xpntZngmnVzD9omCxKUHa94qzoCqyRmTGtNf0ZNGVveGTO
+   eVOQDcjIypXHh6bgxcSdFVTWCp5ODv2OPXGYpN6OrkXqqyP9OBcHdTOit
+   dnkv40f/BJXjRpxS4tfaenT+z2y2Ktc7aIyjBJKsdWxhuTJDsUBPHSvau
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="324895862"
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="261424160"
 X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="324895862"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 09:56:13 -0700
+   d="scan'208";a="261424160"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 10:48:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="723662459"
+   d="scan'208";a="589506145"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 10 Apr 2022 09:56:11 -0700
+  by orsmga001.jf.intel.com with ESMTP; 10 Apr 2022 10:48:13 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ndarD-0000xr-5D;
-	Sun, 10 Apr 2022 16:56:11 +0000
-Date: Mon, 11 Apr 2022 00:55:48 +0800
+	id 1ndbfY-0000zz-Co;
+	Sun, 10 Apr 2022 17:48:12 +0000
+Date: Mon, 11 Apr 2022 01:47:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, zx2c4@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [crng-random:jd/not-zero-entropy-ktime 10/13]
- include/linux/timekeeping.h:121:9: error: implicit declaration of function
- 'timespec64_to_ktime' is invalid in C99
-Message-ID: <202204110039.k9CNcBlM-lkp@intel.com>
+To: Zach O'Keefe <zokeefe@google.com>,
+	Alex Shi <alex.shi@linux.alibaba.com>,
+	David Hildenbrand <david@redhat.com>,
+	David Rientjes <rientjes@google.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	SeongJae Park <sj@kernel.org>, Song Liu <songliubraving@fb.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Yang Shi <shy828301@gmail.com>,
+	Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Andrea Arcangeli <aarcange@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Chris Kennelly <ckennelly@google.com>,
+	Chris Zankel <chris@zankel.net>, Helge Deller <deller@gmx.de>,
+	Hugh Dickins <hughd@google.com>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Miaohe Lin <linmiaohe@huawei.com>, Minchan Kim <minchan@kernel.org>,
+	Patrick Xia <patrickx@google.com>
+Subject: Re: [PATCH 03/12] mm/khugepaged: make hugepage allocation
+ context-specific
+Message-ID: <202204110122.yKx76cVq-lkp@intel.com>
+References: <20220410135445.3897054-4-zokeefe@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,205 +70,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220410135445.3897054-4-zokeefe@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git jd/not-zero-entropy-ktime
-head:   340a25fe529e8fc1df1a82b42f021a9d0fa4fb51
-commit: 7376542333df813e81252121f5ebd8e91c0fb3b6 [10/13] x86: use ktime_read_raw_clock() for random_get_entropy() instead of zero
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220411/202204110039.k9CNcBlM-lkp@intel.com/config)
+Hi Zach,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on hnaz-mm/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zach-O-Keefe/mm-userspace-hugepage-collapse/20220410-215722
+base:   https://github.com/hnaz/linux-mm master
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220411/202204110122.yKx76cVq-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 256c6b0ba14e8a7ab6373b61b7193ea8c0a3651c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=7376542333df813e81252121f5ebd8e91c0fb3b6
-        git remote add crng-random git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
-        git fetch --no-tags crng-random jd/not-zero-entropy-ktime
-        git checkout 7376542333df813e81252121f5ebd8e91c0fb3b6
+        # https://github.com/intel-lab-lkp/linux/commit/93731be575c612b28ee4c7711ebab9e81960f213
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zach-O-Keefe/mm-userspace-hugepage-collapse/20220410-215722
+        git checkout 93731be575c612b28ee4c7711ebab9e81960f213
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   include/linux/timekeeping.h:98:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_coarse_boottime(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:21:
-   In file included from include/linux/mm_types.h:15:
-   In file included from include/linux/uprobes.h:49:
-   In file included from arch/x86/include/asm/uprobes.h:13:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/x86/include/asm/timex.h:6:
-   In file included from arch/x86/include/asm/tsc.h:8:
-   include/linux/timekeeping.h:106:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_clocktai(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:21:
-   In file included from include/linux/mm_types.h:15:
-   In file included from include/linux/uprobes.h:49:
-   In file included from arch/x86/include/asm/uprobes.h:13:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/x86/include/asm/timex.h:6:
-   In file included from arch/x86/include/asm/tsc.h:8:
-   include/linux/timekeeping.h:111:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_coarse_clocktai(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:21:
-   In file included from include/linux/mm_types.h:15:
-   In file included from include/linux/uprobes.h:49:
-   In file included from arch/x86/include/asm/uprobes.h:13:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/x86/include/asm/timex.h:6:
-   In file included from arch/x86/include/asm/tsc.h:8:
-   include/linux/timekeeping.h:116:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_coarse(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:21:
-   In file included from include/linux/mm_types.h:15:
-   In file included from include/linux/uprobes.h:49:
-   In file included from arch/x86/include/asm/uprobes.h:13:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/x86/include/asm/timex.h:6:
-   In file included from arch/x86/include/asm/tsc.h:8:
->> include/linux/timekeeping.h:121:9: error: implicit declaration of function 'timespec64_to_ktime' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return timespec64_to_ktime(ts);
-                  ^
-   include/linux/timekeeping.h:121:9: note: did you mean 'timespec64_to_ns'?
-   include/linux/time64.h:127:19: note: 'timespec64_to_ns' declared here
-   static inline s64 timespec64_to_ns(const struct timespec64 *ts)
-                     ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:21:
-   In file included from include/linux/mm_types.h:15:
-   In file included from include/linux/uprobes.h:49:
-   In file included from arch/x86/include/asm/uprobes.h:13:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/x86/include/asm/timex.h:6:
-   In file included from arch/x86/include/asm/tsc.h:8:
->> include/linux/timekeeping.h:126:9: error: implicit declaration of function 'ktime_to_ns' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return ktime_to_ns(ktime_get_coarse());
-                  ^
-   include/linux/timekeeping.h:131:9: error: implicit declaration of function 'ktime_to_ns' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return ktime_to_ns(ktime_get_coarse_real());
-                  ^
-   include/linux/timekeeping.h:136:9: error: implicit declaration of function 'ktime_to_ns' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return ktime_to_ns(ktime_get_coarse_boottime());
-                  ^
-   include/linux/timekeeping.h:141:9: error: implicit declaration of function 'ktime_to_ns' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return ktime_to_ns(ktime_get_coarse_clocktai());
-                  ^
-   include/linux/timekeeping.h:147:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_mono_to_real(ktime_t mono)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-   make[2]: *** [scripts/Makefile.build:120: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+   mm/khugepaged.c:1006:8: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           pmd_t pmde;
+                 ^
+>> mm/khugepaged.c:2339:18: error: incompatible function pointer types initializing 'struct page *(*)(struct collapse_control *, gfp_t, int)' (aka 'struct page *(*)(struct collapse_control *, unsigned int, int)') with an expression of type 'struct page *(*)(struct collapse_control *, gfp_t)' (aka 'struct page *(*)(struct collapse_control *, unsigned int)') [-Werror,-Wincompatible-function-pointer-types]
+                   .alloc_hpage = &khugepaged_alloc_page,
+                                  ^~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +/timespec64_to_ktime +121 include/linux/timekeeping.h
+vim +2339 mm/khugepaged.c
 
-b9ff604cff1135 Arnd Bergmann      2018-04-27  115  
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  116  static inline ktime_t ktime_get_coarse(void)
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  117  {
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  118  	struct timespec64 ts;
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  119  
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  120  	ktime_get_coarse_ts64(&ts);
-4c54294d01e605 Jason A. Donenfeld 2019-06-21 @121  	return timespec64_to_ktime(ts);
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  122  }
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  123  
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  124  static inline u64 ktime_get_coarse_ns(void)
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  125  {
-4c54294d01e605 Jason A. Donenfeld 2019-06-21 @126  	return ktime_to_ns(ktime_get_coarse());
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  127  }
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  128  
-
-:::::: The code at line 121 was first introduced by commit
-:::::: 4c54294d01e605a9f992361b924c5d8b12822a6d timekeeping: Add missing _ns functions for coarse accessors
-
-:::::: TO: Jason A. Donenfeld <Jason@zx2c4.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+  2333	
+  2334	static int khugepaged(void *none)
+  2335	{
+  2336		struct mm_slot *mm_slot;
+  2337		struct collapse_control cc = {
+  2338			.last_target_node = NUMA_NO_NODE,
+> 2339			.alloc_hpage = &khugepaged_alloc_page,
+  2340		};
+  2341	
+  2342		set_freezable();
+  2343		set_user_nice(current, MAX_NICE);
+  2344	
+  2345		while (!kthread_should_stop()) {
+  2346			khugepaged_do_scan(&cc);
+  2347			khugepaged_wait_work();
+  2348		}
+  2349	
+  2350		spin_lock(&khugepaged_mm_lock);
+  2351		mm_slot = khugepaged_scan.mm_slot;
+  2352		khugepaged_scan.mm_slot = NULL;
+  2353		if (mm_slot)
+  2354			collect_mm_slot(mm_slot);
+  2355		spin_unlock(&khugepaged_mm_lock);
+  2356		return 0;
+  2357	}
+  2358	
 
 -- 
 0-DAY CI Kernel Test Service
