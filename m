@@ -1,40 +1,50 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0A710ED
-	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 06:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F8910EC;
+	Mon, 11 Apr 2022 08:21:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649657940; x=1681193940;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=cFPuLPgbq+t3FTRYzKSbVn88aQSrsEaR0tkVP3l5xLM=;
-  b=NxgFfGOLlBGNMyIbgeQm3JROxEIy/q1JXmzeQIdoSOIblzZXoYbnSRgq
-   6shkH7zMO7C0969Slw6EuyAWKELzpcVwlWgNoQ14HNlTwTdgmo0uLHUIT
-   Kx48rHuxDdrTPzfi3KDWxlhZp09w8P5LrCAL+YUYUnKRovjXlh2chsIwv
-   8zhWr644alLSQ9PLYsmpBqyhP8ljkGKWcWu+2Tt/rr+Y5JqZg/M5GJ5l2
-   uqqatbTJkBDAPVQ0qwMoJeFMxl5TcNgmMqmXXlWjwcoggxZG7yFAyXY6x
-   /bPfAgQ9bsH6azYbPFjmn4C7Hbep3AxzNFRQc8zMG53m5sfnlDAF/OqiB
+  t=1649665317; x=1681201317;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=scsOcqJzNI6mZ2YEH5vHXnC/k0h5kNwTVDSSNWSTjAA=;
+  b=ll/JbAKfULVpsfSXyYAdw+csSpJhOdNX/aNcrMMNB8hfTDbk5kgD04z1
+   qTAC7+2G+miThrHPEp9vPCCxiql1bq/v5Ydsc5qBUfc+I+/16m1p1DIxt
+   ahGsbLlmKOxMeNPyc3g3ntbvhr0lOQK32lbHipJzMhlvFHJ7K93Tlp7lo
+   ewwNewfJmRZ6pzUwBz++eZ+gik6XSMXFn9OEkC0V35cHB1KJD0fnPS39m
+   5/ZSE0pJy3MC2fAKcZEOewoA3hSDT41VeC8eDnRqha6BJLIxzc70f1hZa
+   jdgkyBsOl2wrv/RUle8g7O/qggJ94zYqRss9kjv6Nf04JfqBndYe56dCS
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="324955610"
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="287071915"
 X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="324955610"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 23:19:00 -0700
+   d="scan'208";a="287071915"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 01:21:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="723840938"
+   d="scan'208";a="622754005"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 10 Apr 2022 23:18:58 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 11 Apr 2022 01:21:53 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ndnO6-0001bD-9q;
-	Mon, 11 Apr 2022 06:18:58 +0000
-Date: Mon, 11 Apr 2022 14:18:27 +0800
+	id 1ndpJ3-0001gN-6G;
+	Mon, 11 Apr 2022 08:21:53 +0000
+Date: Mon, 11 Apr 2022 16:20:58 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: fixup_bad_iret()+0x22: call to
- __this_cpu_preempt_check() leaves .noinstr.text section
-Message-ID: <202204111445.ejND1bA0-lkp@intel.com>
+To: Samuel Holland <samuel@sholland.org>, Vinod Koul <vkoul@kernel.org>,
+	dmaengine@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 2/4] dmaengine: sun6i: Do not use virt_to_phys
+Message-ID: <202204111641.yuvoMU5q-lkp@intel.com>
+References: <20220411044633.39014-3-samuel@sholland.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,60 +53,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220411044633.39014-3-samuel@sholland.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Peter Zijlstra <peterz@infradead.org>
+Hi Samuel,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
-commit: db2b0c5d7b6f19b3c2cab08c531b65342eb5252b objtool: Support pv_opsindirect calls for noinstr
-date:   7 months ago
-config: x86_64-randconfig-r005-20220411 (https://download.01.org/0day-ci/archive/20220411/202204111445.ejND1bA0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 256c6b0ba14e8a7ab6373b61b7193ea8c0a3651c)
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on vkoul-dmaengine/next]
+[also build test WARNING on sunxi/sunxi/for-next v5.18-rc2 next-20220411]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/dmaengine-sun6i-Allwinner-D1-support/20220411-124826
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+config: hexagon-randconfig-r041-20220410 (https://download.01.org/0day-ci/archive/20220411/202204111641.yuvoMU5q-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=db2b0c5d7b6f19b3c2cab08c531b65342eb5252b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout db2b0c5d7b6f19b3c2cab08c531b65342eb5252b
+        # https://github.com/intel-lab-lkp/linux/commit/280420721fd264a03a3d3f9fbe2b4e6bfddd0f79
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Samuel-Holland/dmaengine-sun6i-Allwinner-D1-support/20220411-124826
+        git checkout 280420721fd264a03a3d3f9fbe2b4e6bfddd0f79
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/dma/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: do_syscall_64()+0x1a: call to static_key_count() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: fixup_bad_iret()+0x22: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_task_stack()+0x13: call to task_stack_page() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: in_entry_stack()+0x9: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: exc_nmi()+0x8: call to sev_es_nmi_complete() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: default_do_nmi()+0x10: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_setup()+0x1d: call to memset() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: mce_rdmsrl()+0x3: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: mce_wrmsrl()+0x3: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check()+0x48: call to mce_gather_info() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: mce_check_crashing_cpu()+0x0: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: kvm_read_and_reset_apf_flags()+0x1: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_page_fault()+0x76: call to __kasan_check_read() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: lockdep_hardirqs_on()+0xb0: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: lockdep_hardirqs_off()+0xad: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: rcu_user_enter()+0x1f: call to rcu_irq_work_resched() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter()+0x0: call to rcu_dynticks_task_trace_enter() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_task_enter()+0x0: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_nmi_enter()+0x53: call to __kasan_check_read() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit()+0xe: call to rcu_dynticks_task_trace_exit() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: irqentry_nmi_enter()+0x64: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: irqentry_nmi_exit()+0x3a: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: __context_tracking_enter()+0x27: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: context_tracking_recursion_enter()+0x1: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: __context_tracking_exit()+0xc: call to __this_cpu_preempt_check() leaves .noinstr.text section
+>> drivers/dma/sun6i-dma.c:253:15: warning: format specifies type 'unsigned long' but the argument has type 'int' [-Wformat]
+                   pchan->idx, pchan->base - sdev->base,
+                               ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +253 drivers/dma/sun6i-dma.c
+
+   240	
+   241	static inline void sun6i_dma_dump_chan_regs(struct sun6i_dma_dev *sdev,
+   242						    struct sun6i_pchan *pchan)
+   243	{
+   244		dev_dbg(sdev->slave.dev, "Chan %d reg: 0x%lx\n"
+   245			"\t___en(%04x): \t0x%08x\n"
+   246			"\tpause(%04x): \t0x%08x\n"
+   247			"\tstart(%04x): \t0x%08x\n"
+   248			"\t__cfg(%04x): \t0x%08x\n"
+   249			"\t__src(%04x): \t0x%08x\n"
+   250			"\t__dst(%04x): \t0x%08x\n"
+   251			"\tcount(%04x): \t0x%08x\n"
+   252			"\t_para(%04x): \t0x%08x\n\n",
+ > 253			pchan->idx, pchan->base - sdev->base,
+   254			DMA_CHAN_ENABLE,
+   255			readl(pchan->base + DMA_CHAN_ENABLE),
+   256			DMA_CHAN_PAUSE,
+   257			readl(pchan->base + DMA_CHAN_PAUSE),
+   258			DMA_CHAN_LLI_ADDR,
+   259			readl(pchan->base + DMA_CHAN_LLI_ADDR),
+   260			DMA_CHAN_CUR_CFG,
+   261			readl(pchan->base + DMA_CHAN_CUR_CFG),
+   262			DMA_CHAN_CUR_SRC,
+   263			readl(pchan->base + DMA_CHAN_CUR_SRC),
+   264			DMA_CHAN_CUR_DST,
+   265			readl(pchan->base + DMA_CHAN_CUR_DST),
+   266			DMA_CHAN_CUR_CNT,
+   267			readl(pchan->base + DMA_CHAN_CUR_CNT),
+   268			DMA_CHAN_CUR_PARA,
+   269			readl(pchan->base + DMA_CHAN_CUR_PARA));
+   270	}
+   271	
 
 -- 
 0-DAY CI Kernel Test Service
