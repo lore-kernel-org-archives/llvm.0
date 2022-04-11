@@ -1,199 +1,49 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 876E11849
-	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 13:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649685290; x=1681221290;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=PAI8D1RVwPWVexSY/tdFEHEQ1kXMR7+TbquMisb3kw0=;
-  b=F57zTD/vyMkESp4aEFml3+pzQlgQgHuRMun5+5iWBiHiAkpWQ6s0BGbm
-   EjHPt+Z79O/cD1j8jScgVByuccz4a8njelg9d6sI6y0ZA8E/N/h95LYDW
-   L6GuXng5dbljWeoabkMIzbUBNBGqI7Da7xKIvEM25up7VWHOIEC6BBNlh
-   920gIAd3XPKk3IJxzFNrgr3DDFmYv8I/GDgtn5Zh1Sd+Kh3rEqoYvyszi
-   IB1m3Rj31OiUwo8ugmMX3rpdwA6U3etzl4R3OsvWHV3dBycOGP7GCOiEz
-   i79Zut8ft0n7XWjbyX5W7+TOjEh8DjYNQzmV8AEy4CNPxK0Zt7fNfHnUh
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="348558533"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="348558533"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:54:49 -0700
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="572171502"
-Received: from lwit-desk1.ger.corp.intel.com (HELO localhost) ([10.249.143.43])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:54:47 -0700
-From: Jani Nikula <jani.nikula@intel.com>
-To: kernel test robot <lkp@intel.com>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- intel-gfx@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [CI v2 12/12] drm/edid: add EDID block count and
- size helpers
-In-Reply-To: <202204112019.U9iIZWqP-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <44265d5a3f64e9d7ad9984fee766f68d0b8bd473.1649670305.git.jani.nikula@intel.com>
- <202204112019.U9iIZWqP-lkp@intel.com>
-Date: Mon, 11 Apr 2022 16:54:45 +0300
-Message-ID: <878rsbiv2y.fsf@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677CC7B
+	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 15:07:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=kaOYbB7BPRuQaA6MSo+ry7RpxuhRfvVv8fz/JnNUxz8=; b=fjLiTm+vkn8ToPkhqxJ9r/2JHE
+	6PU6Us8m6sMsugih5LHYR/OmBND3Ay1ajeJE260aTCfKQvwHxemQNuMnvqQxCkCWKArY4fn5FA2hR
+	yWtB7EpN10msubpx9aFTZByz6VTehNutR3ZeLzOMHvsSgZVAC/qmbgYR3wNq6pwFS3TMTzSCbyQZL
+	AS98yxFPTUj6ehFKyE6VXPo2J1KacTIokYLZ/kTpsG3pD9SSU5MSHao55JfuLhiotMh6s52wcvFhC
+	oTisq+Mly46j02oPIv01FBg+El5Nee+170jKpTzvIO0huA/7xzC/jKNZMvjMFzGJVQ7f67NdnpV4S
+	qjqfMrFQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1ndvdR-009UOP-4a; Mon, 11 Apr 2022 15:07:21 +0000
+Date: Mon, 11 Apr 2022 08:07:21 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Tom Rix <trix@redhat.com>
+Cc: tim@cyberelk.net, axboe@kernel.dk, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, nathan@kernel.org,
+	ndesaulniers@google.com, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] security: do not leak information in ioctl
+Message-ID: <YlREKRb/xgAFsi97@infradead.org>
+References: <20220409145137.67592-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409145137.67592-1-trix@redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Mon, 11 Apr 2022, kernel test robot <lkp@intel.com> wrote:
-> Hi Jani,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on drm-tip/drm-tip]
-> [also build test WARNING on next-20220411]
-> [cannot apply to drm/drm-next drm-intel/for-linux-next v5.18-rc2]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-edid-low-level-EDID-block-read-refactoring-etc/20220411-175027
-> base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-> config: i386-randconfig-a001-20220411 (https://download.01.org/0day-ci/archive/20220411/202204112019.U9iIZWqP-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/ba74d3cc8cc1b6ba4c34a039e797994ddbc77567
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jani-Nikula/drm-edid-low-level-EDID-block-read-refactoring-etc/20220411-175027
->         git checkout ba74d3cc8cc1b6ba4c34a039e797994ddbc77567
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/gpu/drm/drm_edid.c:2170:6: warning: logical not is only applied to the left hand side of this comparison [-Wlogical-not-parentheses]
->            if (!edid_extension_block_count(edid) == 0)
->                ^                                 ~~
->    drivers/gpu/drm/drm_edid.c:2170:6: note: add parentheses after the '!' to evaluate the comparison first
->            if (!edid_extension_block_count(edid) == 0)
->                ^
->                 (                                    )
->    drivers/gpu/drm/drm_edid.c:2170:6: note: add parentheses around left hand side expression to silence this warning
->            if (!edid_extension_block_count(edid) == 0)
->                ^
->                (                                )
->    1 warning generated.
+Wrong subject prefix, and this really should be split into one patch for
+pcd and one for sr.
 
-Whoops, thanks for the report!
+The sr prt looks sensible to me.  But for pcd why can't you just
+initialize buffer using
 
-BR,
-Jani.
+	char buffer[32] = { };
 
->
->
-> vim +2170 drivers/gpu/drm/drm_edid.c
->
->   2112	
->   2113	/**
->   2114	 * drm_do_get_edid - get EDID data using a custom EDID block read function
->   2115	 * @connector: connector we're probing
->   2116	 * @get_edid_block: EDID block read function
->   2117	 * @data: private data passed to the block read function
->   2118	 *
->   2119	 * When the I2C adapter connected to the DDC bus is hidden behind a device that
->   2120	 * exposes a different interface to read EDID blocks this function can be used
->   2121	 * to get EDID data using a custom block read function.
->   2122	 *
->   2123	 * As in the general case the DDC bus is accessible by the kernel at the I2C
->   2124	 * level, drivers must make all reasonable efforts to expose it as an I2C
->   2125	 * adapter and use drm_get_edid() instead of abusing this function.
->   2126	 *
->   2127	 * The EDID may be overridden using debugfs override_edid or firmware EDID
->   2128	 * (drm_load_edid_firmware() and drm.edid_firmware parameter), in this priority
->   2129	 * order. Having either of them bypasses actual EDID reads.
->   2130	 *
->   2131	 * Return: Pointer to valid EDID or NULL if we couldn't find any.
->   2132	 */
->   2133	struct edid *drm_do_get_edid(struct drm_connector *connector,
->   2134				     read_block_fn read_block,
->   2135				     void *context)
->   2136	{
->   2137		enum edid_block_status status;
->   2138		int i, invalid_blocks = 0;
->   2139		struct edid *edid, *new;
->   2140	
->   2141		edid = drm_get_override_edid(connector);
->   2142		if (edid)
->   2143			goto ok;
->   2144	
->   2145		edid = kmalloc(EDID_LENGTH, GFP_KERNEL);
->   2146		if (!edid)
->   2147			return NULL;
->   2148	
->   2149		status = edid_block_read(edid, 0, read_block, context);
->   2150	
->   2151		edid_block_status_print(status, edid, 0);
->   2152	
->   2153		if (status == EDID_BLOCK_READ_FAIL)
->   2154			goto fail;
->   2155	
->   2156		/* FIXME: Clarify what a corrupt EDID actually means. */
->   2157		if (status == EDID_BLOCK_OK || status == EDID_BLOCK_VERSION)
->   2158			connector->edid_corrupt = false;
->   2159		else
->   2160			connector->edid_corrupt = true;
->   2161	
->   2162		if (!edid_block_status_valid(status, edid_block_tag(edid))) {
->   2163			if (status == EDID_BLOCK_ZERO)
->   2164				connector->null_edid_counter++;
->   2165	
->   2166			connector_bad_edid(connector, edid, 1);
->   2167			goto fail;
->   2168		}
->   2169	
->> 2170		if (!edid_extension_block_count(edid) == 0)
->   2171			goto ok;
->   2172	
->   2173		new = krealloc(edid, edid_size(edid), GFP_KERNEL);
->   2174		if (!new)
->   2175			goto fail;
->   2176		edid = new;
->   2177	
->   2178		for (i = 1; i < edid_block_count(edid); i++) {
->   2179			void *block = (void *)edid_block_data(edid, i);
->   2180	
->   2181			status = edid_block_read(block, i, read_block, context);
->   2182	
->   2183			edid_block_status_print(status, block, i);
->   2184	
->   2185			if (!edid_block_status_valid(status, edid_block_tag(block))) {
->   2186				if (status == EDID_BLOCK_READ_FAIL)
->   2187					goto fail;
->   2188				invalid_blocks++;
->   2189			}
->   2190		}
->   2191	
->   2192		if (invalid_blocks) {
->   2193			connector_bad_edid(connector, edid, edid_block_count(edid));
->   2194	
->   2195			edid = edid_filter_invalid_blocks(edid, invalid_blocks);
->   2196		}
->   2197	
->   2198	ok:
->   2199		return edid;
->   2200	
->   2201	fail:
->   2202		kfree(edid);
->   2203		return NULL;
->   2204	}
->   2205	EXPORT_SYMBOL_GPL(drm_do_get_edid);
->   2206	
+and be done with it?
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
