@@ -1,30 +1,30 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B89F10EA
-	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 02:21:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31AF10EA
+	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 02:27:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1649643686;
+	s=mimecast20190719; t=1649644072;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=CJz7oEnNbLlhP+QINeo/I8p1re/s5SohOKxtLKr4+9w=;
-	b=AOeoJV8NP5/LQE+ErUpyAfHGsOyUxQB7IEZ8rhynCywi8xfA7HIKOov2cA94bJm9EjszHt
-	zpZNgOEoZ/rks5tN5alhnd3Ts8PdVevBiv6z54ghJrNqPCvCSrwbnZdFTaxB/LxXBMje4V
-	Ly0XLBvt4OTfwFOVgEFNyyE9pQpVmgI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=uH24s2rL9XYd0VVX6iEdJsnRX32Vai5aqnrVJogfHP8=;
+	b=DC9MjYPvpqBx0EfOtdtedsLlLaOm8OMh5e5f+9YcxI4MQNlzQJJ6JMtL0gpnFT6uvrLNQe
+	i8MKl0pV80RpjTdYFAZmTxSjU703UdYmWK9Ze8Ts67s64EBkUIxQpG8SJow97/gQMxEVhE
+	m3ys64SlyoGfO9iNwTZ10dh+I68Li9Q=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-459-LJRSV3mtN3WVcqQZ5ggcQw-1; Sun, 10 Apr 2022 22:21:25 -0400
-X-MC-Unique: LJRSV3mtN3WVcqQZ5ggcQw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+ us-mta-557-z2iDOHg4NDWGi69YjusAlg-1; Sun, 10 Apr 2022 22:27:51 -0400
+X-MC-Unique: z2iDOHg4NDWGi69YjusAlg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F10E8833960
-	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 02:21:24 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2700729DD995
+	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 02:27:51 +0000 (UTC)
 Received: from [172.64.5.57] (unknown [10.30.32.252])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A84D4C202C8;
-	Mon, 11 Apr 2022 02:21:24 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DE10D417E48;
+	Mon, 11 Apr 2022 02:27:50 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,21 +34,22 @@ MIME-Version: 1.0
 From: CKI Project <cki-project@redhat.com>
 To: skt-results-master@redhat.com, llvm@lists.linux.dev
 Subject: =?utf-8?q?=F0=9F=92=A5?= PANICKED: Test report for kernel 5.18.0-rc1
- (mainline.kernel.org-clang, 8b57b304)
-Date: Mon, 11 Apr 2022 02:21:24 -0000
+ (mainline.kernel.org-clang, 4ea3c642)
+Date: Mon, 11 Apr 2022 02:27:50 -0000
 CC: Memory Management <mm-qe@redhat.com>, Li Wang <liwang@redhat.com>,
  Jan Stancek <jstancek@redhat.com>, Zorro Lang <zlang@redhat.com>,
  Guangwu Zhang <guazhang@redhat.com>, Changhui Zhong <czhong@redhat.com>,
- Yi Zhang <yizhan@redhat.com>, Filip Suba <fsuba@redhat.com>,
- Fendy Tjahjadi <ftjahjad@redhat.com>, Xiaowu Wu <xiawu@redhat.com>,
- Baoquan He <bhe@redhat.com>
-Message-ID: <cki.T24NNI9C01H3A5FS6TPQ@redhat.com>
-X-Gitlab-Pipeline-ID: 513395741
+ Yi Zhang <yizhan@redhat.com>, Xiaowu Wu <xiawu@redhat.com>,
+ Baoquan He <bhe@redhat.com>, Jiri Dluhos <jdluhos@redhat.com>,
+ Filip Suba <fsuba@redhat.com>, Jeff Bastian <jbastian@redhat.com>,
+ Jianlin Shi <jishi@redhat.com>, Bruno Goncalves <bgoncalv@redhat.com>
+Message-ID: <cki.FIQ24D1MO45LSX01RPK7@redhat.com>
+X-Gitlab-Pipeline-ID: 513361544
 X-Gitlab-Url: https://gitlab.com
 X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
- =?utf-8?q?nes/cki-trusted-contributors/pipelines/513395741?=
-X-DataWarehouse-Checkout-IID: 38541
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+ =?utf-8?q?nes/cki-trusted-contributors/pipelines/513361544?=
+X-DataWarehouse-Checkout-IID: 38537
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
 Authentication-Results: relay.mimecast.com;
 	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
 X-Mimecast-Spam-Score: 0
@@ -59,7 +60,7 @@ Content-Transfer-Encoding: quoted-printable
 
 
 Check out this report and any autotriaged failures in our web dashboard:
-    https://datawarehouse.cki-project.org/kcidb/checkouts/38541
+    https://datawarehouse.cki-project.org/kcidb/checkouts/38537
 
 Hello,
 
@@ -67,8 +68,8 @@ We ran automated tests on a recent commit from this kernel tree:
 
        Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
 s/linux.git
-            Commit: 8b57b3046107 - Merge tag 'tty-5.18-rc2' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/gregkh/tty
+            Commit: 4ea3c6425269 - Merge tag 'powerpc-5.18-2' of git://git.=
+kernel.org/pub/scm/linux/kernel/git/powerpc/linux
 
 The results of these automated tests are provided below.
 
@@ -83,7 +84,7 @@ All kernel binaries, config files, and logs are available for download here=
 :
 
   https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
-fix=3Ddatawarehouse-public/2022/04/10/513395741
+fix=3Ddatawarehouse-public/2022/04/10/513361544
 
 One or more kernel tests failed:
 
@@ -94,14 +95,27 @@ One or more kernel tests failed:
      =E2=9D=8C Storage blktests - blk
 
     aarch64:
-     =E2=9D=8C lvm thinp sanity
      =E2=9D=8C LTP - syscalls
+     =E2=9D=8C POSIX pjd-fstest suites
+     =E2=9D=8C storage: dm/common
+     =E2=9D=8C kdump - kexec_boot
      =E2=9D=8C kdump - sysrq-c
+     =E2=9D=8C lvm thinp sanity
+     =F0=9F=92=A5 stress: stress-ng - os
 
     x86_64 (debug):
-     =E2=9D=8C lvm thinp sanity
      =E2=9D=8C LTP - syscalls
      =F0=9F=92=A5 LTP - fs
+     =E2=9D=8C lvm thinp sanity
+
+    x86_64:
+     =F0=9F=92=A5 Storage blktests - srp
+     =E2=9D=8C LTP - syscalls
+     =E2=9D=8C POSIX pjd-fstest suites
+     =E2=9D=8C storage: dm/common
+     =E2=9D=8C kdump - kexec_boot
+     =E2=9D=8C kdump - sysrq-c
+     =F0=9F=92=A5 Reboot test
 
 We hope that these logs can help you find the problem quickly. For the full
 detail on our testing procedures, please scroll to the bottom of this messa=
@@ -162,12 +176,94 @@ We booted each kernel and ran the following tests:
 
   aarch64:
     Host 1:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
 
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
+    Host 2:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 ACPI enabled test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 LTP: openposix test suite
+       =E2=9C=85 CIFS Connectathon
+       =E2=9D=8C POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking MACsec: sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking sctp-auth: sockopts test
+       =E2=9C=85 Networking: igmp conformance test
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking ipsec: basic netns - transport
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Networking vnic: ipvlan/basic
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9C=85 ALSA PCM loopback test
+       =E2=9C=85 ALSA Control (mixer) Userspace Element test
+       =E2=9D=8C storage: dm/common
+       =E2=9C=85 lvm snapper test
+       =E2=9C=85 storage: SCSI VPD
+       =E2=9C=85 trace: ftrace/tracer
+       =E2=9D=8C kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9C=85 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
+       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 Networking tunnel: permtest
+       =F0=9F=9A=A7 =E2=9C=85 Networking VRF: sanity
+       =F0=9F=9A=A7 =E2=9C=85 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9C=85 Usex - version 1.9-29
+       =F0=9F=9A=A7 =E2=9D=8C Storage: block zstd compression test
+       =F0=9F=9A=A7 =E2=9C=85 Storage: block zstd smoke test
+       =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
 
+    Host 3:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9D=8C kdump - sysrq-c
+
+    Host 4:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 Networking bridge: sanity - mlx5
+       =E2=9C=85 Ethernet drivers sanity - mlx5
+
+    Host 5:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =E2=9C=85 Boot test
        =E2=9C=85 Reboot test
@@ -187,123 +283,19 @@ We booted each kernel and ran the following tests:
        =E2=9C=85 stress: stress-ng - cpu-cache
        =E2=9C=85 stress: stress-ng - memory
        =F0=9F=9A=A7 =E2=9C=85 Podman system test - as root
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as user
+       =F0=9F=9A=A7 =E2=9C=85 Podman system test - as user
        =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
        =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9C=85 Storage block - storage fio numa
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =E2=9C=85 Networking bridge: sanity - mlx5
-       =E2=9C=85 Ethernet drivers sanity - mlx5
-
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
-
-    Host 5:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =E2=9C=85 ACPI table test
-       =E2=9C=85 ACPI enabled test
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9D=8C LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking MACsec: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformance test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
-t
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking vnic: ipvlan/basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
-est
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd compres=
-sion test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd smoke t=
-est
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec-file-load
+       =F0=9F=9A=A7 =E2=9D=8C Storage block - storage fio numa
+       =F0=9F=9A=A7 =E2=9C=85 lvm thinp stqe test
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =F0=9F=92=A5 stress: stress-ng - os
 
     Host 6:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =E2=9C=85 Boot test
        =E2=9C=85 Reboot test
-       =E2=9D=8C kdump - sysrq-c
+       =F0=9F=9A=A7 =E2=9D=8C Storage blktests - srp
 
   ppc64le:
     Host 1:
@@ -316,37 +308,10 @@ est
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
-
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
 
-    Host 4:
+    Host 2:
 
        =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
  (marked
@@ -412,19 +377,34 @@ est
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
 
-    Host 5:
+    Host 3:
 
        =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
  (marked
        with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
        This is not the fault of the kernel that was tested.
 
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
 
-    Host 6:
+    Host 5:
 
        =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
  (marked
@@ -438,6 +418,18 @@ est
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
 test - upstream
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+
+    Host 6:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
 
   s390x:
     Host 1:
@@ -502,7 +494,8 @@ test - upstream
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =E2=9C=85 Boot test
        =E2=9C=85 Reboot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+       =E2=9C=85 kdump - sysrq-c
+       =E2=9C=85 kdump - file-load
 
     Host 3:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
@@ -526,41 +519,10 @@ test - upstream
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =E2=9C=85 Boot test
        =E2=9C=85 Reboot test
-       =E2=9C=85 kdump - sysrq-c
-       =E2=9C=85 kdump - file-load
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
 
   x86_64 (debug):
     Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =E2=9C=85 CPU: Die Test
-       =E2=9C=85 xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =E2=9C=85 xfstests - nfsv4.2
-       =E2=9C=85 xfstests - cifsv3.11
-       =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9D=8C lvm thinp sanity
-       =E2=9C=85 storage: software RAID testing
-       =E2=9C=85 Storage: swraid mdadm raid_module test
-       =E2=9C=85 stress: stress-ng - interrupt
-       =E2=9C=85 stress: stress-ng - cpu
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
-       =F0=9F=9A=A7 =E2=9C=85 lvm thinp stqe test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
-       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
-       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
-
-    Host 2:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =E2=9C=85 Boot test
        =E2=9C=85 Reboot test
@@ -622,19 +584,6 @@ est_progs
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
 
-  x86_64:
-    Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
-
     Host 2:
 
        =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
@@ -645,110 +594,35 @@ est_progs
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =E2=9C=85 Boot test
        =E2=9C=85 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+       =E2=9C=85 CPU: Die Test
+       =E2=9C=85 xfstests - ext4
+       =E2=9C=85 xfstests - xfs
+       =E2=9C=85 xfstests - nfsv4.2
+       =E2=9C=85 xfstests - cifsv3.11
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9D=8C lvm thinp sanity
+       =E2=9C=85 storage: software RAID testing
+       =E2=9C=85 Storage: swraid mdadm raid_module test
+       =E2=9C=85 stress: stress-ng - interrupt
+       =E2=9C=85 stress: stress-ng - cpu
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9C=85 CPU: Idle Test
+       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9C=85 lvm thinp stqe test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
 
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
-p
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
+  x86_64:
+    Host 1:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =E2=9C=85 Boot test
        =E2=9C=85 Reboot test
-       =E2=9C=85 ACPI table test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking MACsec: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformance test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
-t
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking vnic: ipvlan/basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
-est
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - net
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - forwa=
-rding
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - tc
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf_t=
-est_progs
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd compres=
-sion test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd smoke t=
-est
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec-file-load
+       =F0=9F=9A=A7 =F0=9F=92=A5 Storage blktests - srp
 
-    Host 5:
+    Host 2:
 
        =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
  (marked
@@ -791,18 +665,125 @@ test - upstream
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
 
+    Host 3:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 LTP: openposix test suite
+       =E2=9C=85 CIFS Connectathon
+       =E2=9D=8C POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking MACsec: sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking sctp-auth: sockopts test
+       =E2=9C=85 Networking: igmp conformance test
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking ipsec: basic netns - transport
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Networking vnic: ipvlan/basic
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: sanity smoke test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9C=85 ALSA PCM loopback test
+       =E2=9C=85 ALSA Control (mixer) Userspace Element test
+       =E2=9D=8C storage: dm/common
+       =E2=9C=85 lvm snapper test
+       =E2=9C=85 storage: SCSI VPD
+       =E2=9C=85 trace: ftrace/tracer
+       =E2=9D=8C kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9D=8C xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9C=85 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
+       =F0=9F=9A=A7 =E2=9D=8C Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9D=8C Networking tunnel: permtest
+       =F0=9F=9A=A7 =E2=9C=85 Networking VRF: sanity
+       =F0=9F=9A=A7 =E2=9C=85 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9C=85 Usex - version 1.9-29
+       =F0=9F=9A=A7 =E2=9D=8C Storage: block zstd compression test
+       =F0=9F=9A=A7 =E2=9C=85 Storage: block zstd smoke test
+       =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
+
+    Host 4:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+
+    Host 5:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9D=8C kdump - sysrq-c
+       =E2=9C=85 kdump - file-load
+
     Host 6:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
-p
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =E2=9C=85 Boot test
+       =F0=9F=92=A5 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Die Test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - nfsv4.2
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - cifsv3.11
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Idle Test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - storage fio=
+ numa
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
 
   Test sources: https://gitlab.com/cki-project/kernel-tests
     =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
