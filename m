@@ -1,31 +1,25 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677CC7B
-	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 15:07:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=kaOYbB7BPRuQaA6MSo+ry7RpxuhRfvVv8fz/JnNUxz8=; b=fjLiTm+vkn8ToPkhqxJ9r/2JHE
-	6PU6Us8m6sMsugih5LHYR/OmBND3Ay1ajeJE260aTCfKQvwHxemQNuMnvqQxCkCWKArY4fn5FA2hR
-	yWtB7EpN10msubpx9aFTZByz6VTehNutR3ZeLzOMHvsSgZVAC/qmbgYR3wNq6pwFS3TMTzSCbyQZL
-	AS98yxFPTUj6ehFKyE6VXPo2J1KacTIokYLZ/kTpsG3pD9SSU5MSHao55JfuLhiotMh6s52wcvFhC
-	oTisq+Mly46j02oPIv01FBg+El5Nee+170jKpTzvIO0huA/7xzC/jKNZMvjMFzGJVQ7f67NdnpV4S
-	qjqfMrFQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1ndvdR-009UOP-4a; Mon, 11 Apr 2022 15:07:21 +0000
-Date: Mon, 11 Apr 2022 08:07:21 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Tom Rix <trix@redhat.com>
-Cc: tim@cyberelk.net, axboe@kernel.dk, jejb@linux.ibm.com,
-	martin.petersen@oracle.com, nathan@kernel.org,
-	ndesaulniers@google.com, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] security: do not leak information in ioctl
-Message-ID: <YlREKRb/xgAFsi97@infradead.org>
-References: <20220409145137.67592-1-trix@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBC77B
+	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 15:19:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73396C385A4;
+	Mon, 11 Apr 2022 15:19:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1649690385;
+	bh=hi9eum3OD1hBLstUFbV7sMEQ92y+ycNsvwEEwzUsSdE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=l2BMESHQZoA0ERaHImdN72fU9rJPvWh1VRmM8PGLMYfv8p6hBuGQZCubUHTbQc6bI
+	 FvIR66c97dkwQ+CbEZd1s5i3L4rlXYsX5n6kdtcdo/C2SQsDzCh6qni/fe8ru5ba4Y
+	 7rJ+wpYRUGwe0hklkPC3E//B10MAMyNAghzN3a50=
+Date: Mon, 11 Apr 2022 17:19:43 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: Backport of 4013e26670c5 and 60210a3d86dc for 4.9 to 5.10
+Message-ID: <YlRHDw1uW4vR9s8y@kroah.com>
+References: <Ykytcg+xI/MRSLue@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,16 +28,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220409145137.67592-1-trix@redhat.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <Ykytcg+xI/MRSLue@dev-arch.thelio-3990X>
 
-Wrong subject prefix, and this really should be split into one patch for
-pcd and one for sr.
+On Tue, Apr 05, 2022 at 01:58:26PM -0700, Nathan Chancellor wrote:
+> Hi Greg and Sasha,
+> 
+> Please find attached backports for commits 4013e26670c5 ("arm64: module:
+> remove (NOLOAD) from linker script") and 60210a3d86dc ("riscv module:
+> remove (NOLOAD)") to 4.9 through 5.10, where applicable. They resolve a
+> spew of warnings when linking modules with ld.lld. 4013e26670c5 is
+> currently queued from 5.15 to 5.17 and 60210a3d86dc is queued for 5.10
+> through 5.17, as that is where they applied cleanly.
 
-The sr prt looks sensible to me.  But for pcd why can't you just
-initialize buffer using
+If only everyone sent in patches in this style, it would make our lives
+so much easier!
 
-	char buffer[32] = { };
+thanks for these, all now queued up.
 
-and be done with it?
-
+greg k-h
