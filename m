@@ -1,46 +1,42 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56AF51FA6
-	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 21:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1261FA6
+	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 22:17:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649713558; x=1681249558;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jH/xwVkzJjWE9BpFJGOWfNIJMfg8Pt1j2t/mFRNvmWQ=;
-  b=KftRdnT9Tx6si+IbA5i9fX9HMF5ErnEvw/b4ANgaqYhjr2suigUhQW5x
-   dtABov9Dz1e3SgAieZ96OWyk/779+cGvDR6YJcC2ZezEgj+TpISx+U/3R
-   DKd1cpZVYKoV3fQtswe2/yUBYSylCahOm8vR2S8XL7SR1QTZ24Z15XwLu
-   tRQTByojWYwMRvedGDETW4yXFdbXoW5JSY2bGO6YAi3T5L6UMXSLj/wGB
-   sjzvcj4XTXXi19GFPmWN267Gs7pFueDcdr+Kr8vQjfPlYZ4x9h3RaEdEC
-   sVD7bT7hn/pn3VhjFsa2aKhzuWmqcorS4sbS04FdDsTaFiL9t2x8Xq+Hh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322666697"
+  t=1649715430; x=1681251430;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tEnAdWnojPkI4ODgnB1z2ZIPdW40Eu66/5Uh+i72ekE=;
+  b=PKAKvNZmor7JSYOSnQ/ihr2vRaWAtm59qR6yqY/mEE3SAPfqLMlDv9y9
+   p9dO8dWHU+5vRPAmDeR8wN9k+Pe6Wch3gkl9pbt5mxsZnBl2c9sc3N7hz
+   WV8qY26woJFBg0Ltzd3lfnBwPnLQm1MgYRVINglgDIj1bFNFN02gk8RKR
+   qw3Fg3/8DHeH3Liw2dpjIO7R5AzxgUnLMhObKs4GJcJdK4Noqasy8inKN
+   QVQ+bzfKHtTNJc8S93zhYPptZTZMPNE8Jcz+9ItPgv6hfHYhXGQtSPiQL
+   3lBb7jbYQrNu6xknmvdezMe7UQTyT5eaeaAUGZ4dewgmvFGWUnhmwsie6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261073894"
 X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="322666697"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 14:45:57 -0700
+   d="scan'208";a="261073894"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 15:17:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="699552975"
+   d="scan'208";a="525748608"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Apr 2022 14:45:55 -0700
+  by orsmga002.jf.intel.com with ESMTP; 11 Apr 2022 15:16:59 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ne1r9-0002EP-8o;
-	Mon, 11 Apr 2022 21:45:55 +0000
-Date: Tue, 12 Apr 2022 05:45:41 +0800
+	id 1ne2LC-0002Fl-E5;
+	Mon, 11 Apr 2022 22:16:58 +0000
+Date: Tue, 12 Apr 2022 06:16:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Claudiu Beznea <claudiu.beznea@microchip.com>,
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	linux@armlinux.org.uk
+To: Jiri Slaby <jslaby@suse.cz>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH 4/4] ARM: at91: pm: use kernel documentation style
-Message-ID: <202204120552.PLev1dS4-lkp@intel.com>
-References: <20220411112057.35369-5-claudiu.beznea@microchip.com>
+	linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 48/48] drivers/tty/serial/samsung_tty.c:911:6:
+ warning: variable 'count' is uninitialized when used here
+Message-ID: <202204120654.zM4PenFU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,60 +45,143 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411112057.35369-5-claudiu.beznea@microchip.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Claudiu,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on soc/for-next]
-[also build test WARNING on v5.18-rc2 next-20220411]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Claudiu-Beznea/ARM-at91-pm-add-quirks-for-ethernet/20220411-191956
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-config: arm-sama7_defconfig (https://download.01.org/0day-ci/archive/20220412/202204120552.PLev1dS4-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   c196e3b15cddb539135de6a3c6bcf32b89213b4c
+commit: c196e3b15cddb539135de6a3c6bcf32b89213b4c [48/48] tty: serial, use kfifo
+config: arm64-randconfig-r002-20220411 (https://download.01.org/0day-ci/archive/20220412/202204120654.zM4PenFU-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/0d5dd0bc2c021263d5e0c3b27fb073830ef4aa54
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Claudiu-Beznea/ARM-at91-pm-add-quirks-for-ethernet/20220411-191956
-        git checkout 0d5dd0bc2c021263d5e0c3b27fb073830ef4aa54
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=c196e3b15cddb539135de6a3c6bcf32b89213b4c
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout c196e3b15cddb539135de6a3c6bcf32b89213b4c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/tty/serial/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm/mach-at91/pm.c:62: warning: expecting prototype for struct at91_pm_sfrbu_offsets. Prototype was for struct at91_pm_sfrbu_regs instead
+>> drivers/tty/serial/samsung_tty.c:911:6: warning: variable 'count' is uninitialized when used here [-Wuninitialized]
+           if (count > port->fifosize) {
+               ^~~~~
+   drivers/tty/serial/samsung_tty.c:877:11: note: initialize the variable 'count' to silence this warning
+           int count, dma_count = 0;
+                    ^
+                     = 0
+   1 warning generated.
+--
+>> drivers/tty/serial/atmel_serial.c:927:34: warning: variable 'part2_len' set but not used [-Wunused-but-set-variable]
+           unsigned int tx_len, part1_len, part2_len, sg_len;
+                                           ^
+>> drivers/tty/serial/atmel_serial.c:927:23: warning: variable 'part1_len' set but not used [-Wunused-but-set-variable]
+           unsigned int tx_len, part1_len, part2_len, sg_len;
+                                ^
+>> drivers/tty/serial/atmel_serial.c:985:13: warning: variable 'sg_len' is uninitialized when used here [-Wuninitialized]
+                                                  sg_len,
+                                                  ^~~~~~
+   drivers/tty/serial/atmel_serial.c:927:51: note: initialize the variable 'sg_len' to silence this warning
+           unsigned int tx_len, part1_len, part2_len, sg_len;
+                                                            ^
+                                                             = 0
+   3 warnings generated.
+--
+>> drivers/tty/serial/serial-tegra.c:584:25: warning: variable 'count' is uninitialized when used here [-Wuninitialized]
+           if (tup->use_tx_pio || count < TEGRA_UART_MIN_DMA)
+                                  ^~~~~
+   drivers/tty/serial/serial-tegra.c:571:21: note: initialize the variable 'count' to silence this warning
+           unsigned long count;
+                              ^
+                               = 0
+>> drivers/tty/serial/serial-tegra.c:586:26: warning: variable 'tail' is uninitialized when used here [-Wuninitialized]
+           else if (BYTES_TO_ALIGN(tail) > 0)
+                                   ^~~~
+   drivers/tty/serial/serial-tegra.c:39:46: note: expanded from macro 'BYTES_TO_ALIGN'
+   #define BYTES_TO_ALIGN(x)                       ((unsigned long)(x) & 0x3)
+                                                                    ^
+   drivers/tty/serial/serial-tegra.c:570:20: note: initialize the variable 'tail' to silence this warning
+           unsigned long tail;
+                             ^
+                              = 0
+>> drivers/tty/serial/serial-tegra.c:1188:26: warning: variable 'dma_buf' is uninitialized when used here [-Wuninitialized]
+                   tup->tx_dma_buf_virt = dma_buf;
+                                          ^~~~~~~
+   drivers/tty/serial/serial-tegra.c:1140:24: note: initialize the variable 'dma_buf' to silence this warning
+           unsigned char *dma_buf;
+                                 ^
+                                  = NULL
+>> drivers/tty/serial/serial-tegra.c:1189:26: warning: variable 'dma_phys' is uninitialized when used here [-Wuninitialized]
+                   tup->tx_dma_buf_phys = dma_phys;
+                                          ^~~~~~~~
+   drivers/tty/serial/serial-tegra.c:1141:21: note: initialize the variable 'dma_phys' to silence this warning
+           dma_addr_t dma_phys;
+                              ^
+                               = 0
+   4 warnings generated.
 
 
-vim +62 arch/arm/mach-at91/pm.c
+vim +/count +911 drivers/tty/serial/samsung_tty.c
 
-f19dd1df9e71da Claudiu Beznea 2021-04-15  50  
-0d5dd0bc2c0212 Claudiu Beznea 2022-04-11  51  /**
-0d5dd0bc2c0212 Claudiu Beznea 2022-04-11  52   * struct at91_pm_sfrbu_offsets - registers mapping for SFRBU
-ac809e7879b156 Claudiu Beznea 2021-08-30  53   * @pswbu: power switch BU control registers
-ac809e7879b156 Claudiu Beznea 2021-08-30  54   */
-ac809e7879b156 Claudiu Beznea 2021-08-30  55  struct at91_pm_sfrbu_regs {
-ac809e7879b156 Claudiu Beznea 2021-08-30  56  	struct {
-ac809e7879b156 Claudiu Beznea 2021-08-30  57  		u32 key;
-ac809e7879b156 Claudiu Beznea 2021-08-30  58  		u32 ctrl;
-ac809e7879b156 Claudiu Beznea 2021-08-30  59  		u32 state;
-ac809e7879b156 Claudiu Beznea 2021-08-30  60  		u32 softsw;
-ac809e7879b156 Claudiu Beznea 2021-08-30  61  	} pswbu;
-ac809e7879b156 Claudiu Beznea 2021-08-30 @62  };
-ac809e7879b156 Claudiu Beznea 2021-08-30  63  
+29bef79908459d drivers/tty/serial/samsung.c     Robert Baldyga  2014-12-10  892  
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  893  	if (port->x_char) {
+8fba6c0c4c4a52 drivers/tty/serial/samsung_tty.c Hyunki Koo      2020-05-06  894  		wr_reg(port, S3C2410_UTXH, port->x_char);
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  895  		port->icount.tx++;
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  896  		port->x_char = 0;
+ad5613b98a48e7 drivers/tty/serial/samsung_tty.c Hector Martin   2021-03-05  897  		return;
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  898  	}
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  899  
+25985edcedea63 drivers/tty/serial/samsung.c     Lucas De Marchi 2011-03-30  900  	/* if there isn't anything more to transmit, or the uart is now
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  901  	 * stopped, disable the uart and exit
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  902  	 */
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  903  
+c196e3b15cddb5 drivers/tty/serial/samsung_tty.c Jiri Slaby      2022-01-05  904  	if (kfifo_is_empty(&tport->xmit_fifo) || uart_tx_stopped(port)) {
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  905  		s3c24xx_serial_stop_tx(port);
+ad5613b98a48e7 drivers/tty/serial/samsung_tty.c Hector Martin   2021-03-05  906  		return;
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  907  	}
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  908  
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  909  	/* try and drain the buffer... */
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  910  
+736cd79f483fd7 drivers/tty/serial/samsung.c     Robert Baldyga  2015-07-31 @911  	if (count > port->fifosize) {
+29bef79908459d drivers/tty/serial/samsung.c     Robert Baldyga  2014-12-10  912  		count = port->fifosize;
+736cd79f483fd7 drivers/tty/serial/samsung.c     Robert Baldyga  2015-07-31  913  		dma_count = 0;
+736cd79f483fd7 drivers/tty/serial/samsung.c     Robert Baldyga  2015-07-31  914  	}
+736cd79f483fd7 drivers/tty/serial/samsung.c     Robert Baldyga  2015-07-31  915  
+c196e3b15cddb5 drivers/tty/serial/samsung_tty.c Jiri Slaby      2022-01-05  916  	while (!(rd_regl(port, S3C2410_UFSTAT) & ourport->info->tx_fifofull)) {
+c196e3b15cddb5 drivers/tty/serial/samsung_tty.c Jiri Slaby      2022-01-05  917  		unsigned char ch;
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  918  
+c196e3b15cddb5 drivers/tty/serial/samsung_tty.c Jiri Slaby      2022-01-05  919  		if (!kfifo_get(&tport->xmit_fifo, &ch))
+c196e3b15cddb5 drivers/tty/serial/samsung_tty.c Jiri Slaby      2022-01-05  920  			break;
+c196e3b15cddb5 drivers/tty/serial/samsung_tty.c Jiri Slaby      2022-01-05  921  		wr_reg(port, S3C2410_UTXH, ch);
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  922  		port->icount.tx++;
+736cd79f483fd7 drivers/tty/serial/samsung.c     Robert Baldyga  2015-07-31  923  		count--;
+736cd79f483fd7 drivers/tty/serial/samsung.c     Robert Baldyga  2015-07-31  924  	}
+736cd79f483fd7 drivers/tty/serial/samsung.c     Robert Baldyga  2015-07-31  925  
+736cd79f483fd7 drivers/tty/serial/samsung.c     Robert Baldyga  2015-07-31  926  	if (!count && dma_count) {
+736cd79f483fd7 drivers/tty/serial/samsung.c     Robert Baldyga  2015-07-31  927  		s3c24xx_serial_start_tx_dma(ourport, dma_count);
+ad5613b98a48e7 drivers/tty/serial/samsung_tty.c Hector Martin   2021-03-05  928  		return;
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  929  	}
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  930  
+c196e3b15cddb5 drivers/tty/serial/samsung_tty.c Jiri Slaby      2022-01-05  931  	if (kfifo_len(&tport->xmit_fifo) < WAKEUP_CHARS)
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  932  		uart_write_wakeup(port);
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  933  
+c196e3b15cddb5 drivers/tty/serial/samsung_tty.c Jiri Slaby      2022-01-05  934  	if (kfifo_is_empty(&tport->xmit_fifo))
+b497549a035c2a drivers/serial/samsung.c         Ben Dooks       2008-07-03  935  		s3c24xx_serial_stop_tx(port);
+ad5613b98a48e7 drivers/tty/serial/samsung_tty.c Hector Martin   2021-03-05  936  }
+ad5613b98a48e7 drivers/tty/serial/samsung_tty.c Hector Martin   2021-03-05  937  
+
+:::::: The code at line 911 was first introduced by commit
+:::::: 736cd79f483fd7a1e0b71e6eaddf01d8d87fbbbb serial: samsung: fix DMA for FIFO smaller than cache line size
+
+:::::: TO: Robert Baldyga <r.baldyga@samsung.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
