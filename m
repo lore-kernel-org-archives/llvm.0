@@ -1,42 +1,44 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1EA21865
-	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 18:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956121840
+	for <llvm@lists.linux.dev>; Mon, 11 Apr 2022 19:05:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649701484; x=1681237484;
+  t=1649703918; x=1681239918;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Wl6WY4/B8WKpXD5i/+CDbBlXLg7RHazGg+wlD/LEtXc=;
-  b=Il6GVptYfpUE9D39K0UJftTtriS7ldw/sNRAk0ZP5FXP3J1Ev/tYJv2g
-   fa5X/IiwR4FSjF8TMbbruS+Q301INUGQDstfSpyCXhD2AOJnEBkap0pEP
-   DGoRSdXRt3lxV0odWkAabT/+acpt00d/W0pLj/kJD52U8vGOIxYvCcgRQ
-   HQqpVb8KgLwZAlLG1bKsA1sR1bYp0eWejXLjXjKHcUEzIgSLrp5kLhpA+
-   Ea3W4csNWTL6CD9CXmIEGFsKt3wFnRezBlvMoHia6tBVXoj1QPmqabfnz
-   RFYIDI3LToLNzskkegGyUu/3Wus5Crs4Kw69CuVio7nhBOeHUQoNFhOES
+  bh=42RuRms9RenWEfGgBw6IyxZZldn8VXK+Tiajo3ELY64=;
+  b=jUnm6gaQn2hFz+ouAxVXqzM2MMwe13pO+a0DHZ+/Ip5IocX1xO0lvAYr
+   Xgii0RTl4ME0wiQSdIwqoslJVe2XTWK57R3d8yXLKjPY1+DkxV1vapEIG
+   eeXZ4QvcGOhK4vM7Oklaolm5sKyi+wc/9jhl7H97Vf5N4AyA7Z7DOsK1G
+   MkRlhOHB50lUCqV31U9+zTQiR79win4MkK1oee8F4uIEVkHshZJ2U/hFN
+   PpR7TIfSIgljEpCAinKoA9wEtgRjv3A8imoKO0nLN+NNDnAAakGUZRVNt
+   CJ6AKJvX8DNONO8qlPJXV5A9yv/OyUoH0KMN7TyXhFBOre0WKwOjAXsoU
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="249466407"
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261939393"
 X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="249466407"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 11:24:44 -0700
+   d="scan'208";a="261939393"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 12:05:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="660158663"
+   d="scan'208";a="644206206"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 11 Apr 2022 11:24:43 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 11 Apr 2022 12:05:16 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ndyiQ-00023m-JJ;
-	Mon, 11 Apr 2022 18:24:42 +0000
-Date: Tue, 12 Apr 2022 02:23:42 +0800
+	id 1ndzLf-00025g-Lw;
+	Mon, 11 Apr 2022 19:05:15 +0000
+Date: Tue, 12 Apr 2022 03:05:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 3/4] mptcp: never shrink offered window
-Message-ID: <202204120247.mC6ZORgL-lkp@intel.com>
-References: <ab1fd2897c57a50d7580950dbe6fb58006c04253.1649672265.git.pabeni@redhat.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH] media: video-mux: Use dev_err_probe()
+Message-ID: <202204120223.QxnsaBfK-lkp@intel.com>
+References: <20220411135314.1012346-1-p.zabel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,110 +47,129 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ab1fd2897c57a50d7580950dbe6fb58006c04253.1649672265.git.pabeni@redhat.com>
+In-Reply-To: <20220411135314.1012346-1-p.zabel@pengutronix.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Paolo,
+Hi Philipp,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on mptcp/export]
-[also build test ERROR on linus/master v5.18-rc2 next-20220411]
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on v5.18-rc2 next-20220411]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paolo-Abeni/mptcp-improve-mptcp-level-window-tracking/20220411-184144
-base:   https://github.com/multipath-tcp/mptcp_net-next.git export
-config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20220412/202204120247.mC6ZORgL-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Zabel/media-video-mux-Use-dev_err_probe/20220411-215408
+base:   git://linuxtv.org/media_tree.git master
+config: i386-randconfig-r004-20220411 (https://download.01.org/0day-ci/archive/20220412/202204120223.QxnsaBfK-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4cd25cbca4acc18a428817e9b1adc5ddd131422b
+        # https://github.com/intel-lab-lkp/linux/commit/475ef9688294985534faa74b409355acb00c6873
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paolo-Abeni/mptcp-improve-mptcp-level-window-tracking/20220411-184144
-        git checkout 4cd25cbca4acc18a428817e9b1adc5ddd131422b
+        git fetch --no-tags linux-review Philipp-Zabel/media-video-mux-Use-dev_err_probe/20220411-215408
+        git checkout 475ef9688294985534faa74b409355acb00c6873
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/mptcp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/media/platform/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   net/mptcp/options.c:554:21: warning: parameter 'remaining' set but not used [-Wunused-but-set-parameter]
-                                             unsigned int remaining,
-                                                          ^
->> net/mptcp/options.c:1248:14: error: implicit declaration of function 'arch_cmpxchg64' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           rcv_wnd = cmpxchg64(&msk->rcv_wnd_sent, rcv_wnd_old, rcv_wnd_new);
-                                     ^
-   include/linux/atomic/atomic-instrumented.h:1946:2: note: expanded from macro 'cmpxchg64'
-           arch_cmpxchg64(__ai_ptr, __VA_ARGS__); \
-           ^
-   1 warning and 1 error generated.
+>> drivers/media/platform/video-mux.c:444:29: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+                   return dev_err_probe(dev, ret, "Failed to get mux\n");
+                                             ^~~
+   drivers/media/platform/video-mux.c:413:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
 
-vim +/arch_cmpxchg64 +1248 net/mptcp/options.c
+vim +/ret +444 drivers/media/platform/video-mux.c
 
-  1226	
-  1227	static void mptcp_set_rwin(struct tcp_sock *tp, void *opt)
-  1228	{
-  1229		const struct sock *ssk = (const struct sock *)tp;
-  1230		struct mptcp_subflow_context *subflow;
-  1231		u64 ack_seq, rcv_wnd_old, rcv_wnd_new;
-  1232		struct mptcp_sock *msk;
-  1233		struct tcphdr *th;
-  1234		u32 new_win;
-  1235		u64 win;
-  1236	
-  1237		subflow = mptcp_subflow_ctx(ssk);
-  1238		msk = mptcp_sk(subflow->conn);
-  1239	
-  1240		ack_seq = READ_ONCE(msk->ack_seq);
-  1241		rcv_wnd_new = ack_seq + tp->rcv_wnd;
-  1242	
-  1243		rcv_wnd_old = READ_ONCE(msk->rcv_wnd_sent);
-  1244		if (after64(rcv_wnd_new, rcv_wnd_old)) {
-  1245			u64 rcv_wnd;
-  1246	
-  1247			for (;;) {
-> 1248				rcv_wnd = cmpxchg64(&msk->rcv_wnd_sent, rcv_wnd_old, rcv_wnd_new);
-  1249	
-  1250				if (rcv_wnd == rcv_wnd_old)
-  1251					break;
-  1252				if (before64(rcv_wnd_new, rcv_wnd))
-  1253					goto raise_win;
-  1254				rcv_wnd_old = rcv_wnd;
-  1255			};
-  1256			return;
-  1257		}
-  1258	
-  1259		if (rcv_wnd_new != rcv_wnd_old) {
-  1260	
-  1261	raise_win:
-  1262			th = opt - sizeof(struct tcphdr);
-  1263			win = rcv_wnd_old - ack_seq;
-  1264			tp->rcv_wnd = min_t(u64, win, U32_MAX);
-  1265			new_win = tp->rcv_wnd;
-  1266	
-  1267			/* Make sure we do not exceed the maximum possible
-  1268			 * scaled window.
-  1269			 */
-  1270			if (unlikely(th->syn))
-  1271				new_win = min(new_win, 65535U) << tp->rx_opt.rcv_wscale;
-  1272			if (!tp->rx_opt.rcv_wscale &&
-  1273			    sock_net(ssk)->ipv4.sysctl_tcp_workaround_signed_windows)
-  1274				new_win = min(new_win, MAX_TCP_WINDOW);
-  1275			else
-  1276				new_win = min(new_win, (65535U << tp->rx_opt.rcv_wscale));
-  1277	
-  1278			/* RFC1323 scaling applied */
-  1279			new_win >>= tp->rx_opt.rcv_wscale;
-  1280			th->window = htons(new_win);
-  1281		}
-  1282	}
-  1283	
+   404	
+   405	static int video_mux_probe(struct platform_device *pdev)
+   406	{
+   407		struct device_node *np = pdev->dev.of_node;
+   408		struct device *dev = &pdev->dev;
+   409		struct device_node *ep;
+   410		struct video_mux *vmux;
+   411		unsigned int num_pads = 0;
+   412		unsigned int i;
+   413		int ret;
+   414	
+   415		vmux = devm_kzalloc(dev, sizeof(*vmux), GFP_KERNEL);
+   416		if (!vmux)
+   417			return -ENOMEM;
+   418	
+   419		platform_set_drvdata(pdev, vmux);
+   420	
+   421		v4l2_subdev_init(&vmux->subdev, &video_mux_subdev_ops);
+   422		snprintf(vmux->subdev.name, sizeof(vmux->subdev.name), "%pOFn", np);
+   423		vmux->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+   424		vmux->subdev.dev = dev;
+   425	
+   426		/*
+   427		 * The largest numbered port is the output port. It determines
+   428		 * total number of pads.
+   429		 */
+   430		for_each_endpoint_of_node(np, ep) {
+   431			struct of_endpoint endpoint;
+   432	
+   433			of_graph_parse_endpoint(ep, &endpoint);
+   434			num_pads = max(num_pads, endpoint.port + 1);
+   435		}
+   436	
+   437		if (num_pads < 2) {
+   438			dev_err(dev, "Not enough ports %d\n", num_pads);
+   439			return -EINVAL;
+   440		}
+   441	
+   442		vmux->mux = devm_mux_control_get(dev, NULL);
+   443		if (IS_ERR(vmux->mux))
+ > 444			return dev_err_probe(dev, ret, "Failed to get mux\n");
+   445	
+   446		mutex_init(&vmux->lock);
+   447		vmux->active = -1;
+   448		vmux->pads = devm_kcalloc(dev, num_pads, sizeof(*vmux->pads),
+   449					  GFP_KERNEL);
+   450		if (!vmux->pads)
+   451			return -ENOMEM;
+   452	
+   453		vmux->format_mbus = devm_kcalloc(dev, num_pads,
+   454						 sizeof(*vmux->format_mbus),
+   455						 GFP_KERNEL);
+   456		if (!vmux->format_mbus)
+   457			return -ENOMEM;
+   458	
+   459		for (i = 0; i < num_pads; i++) {
+   460			vmux->pads[i].flags = (i < num_pads - 1) ? MEDIA_PAD_FL_SINK
+   461								 : MEDIA_PAD_FL_SOURCE;
+   462			vmux->format_mbus[i] = video_mux_format_mbus_default;
+   463		}
+   464	
+   465		vmux->subdev.entity.function = MEDIA_ENT_F_VID_MUX;
+   466		ret = media_entity_pads_init(&vmux->subdev.entity, num_pads,
+   467					     vmux->pads);
+   468		if (ret < 0)
+   469			return ret;
+   470	
+   471		vmux->subdev.entity.ops = &video_mux_ops;
+   472	
+   473		ret = video_mux_async_register(vmux, num_pads - 1);
+   474		if (ret) {
+   475			v4l2_async_nf_unregister(&vmux->notifier);
+   476			v4l2_async_nf_cleanup(&vmux->notifier);
+   477		}
+   478	
+   479		return ret;
+   480	}
+   481	
 
 -- 
 0-DAY CI Kernel Test Service
