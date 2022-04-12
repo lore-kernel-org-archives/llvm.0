@@ -1,51 +1,41 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE94F7B;
-	Tue, 12 Apr 2022 10:00:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC3B7B
+	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 10:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649757653; x=1681293653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7tP6Hmh57tdYk/XI1EXwttwZcLinGHP54ZjZICaf18M=;
-  b=fZPDUNDrSwU2Y/m29Wr290TDIphF7UtGWFrDBGTnr0Oj0aSREZqCZSFR
-   WwJeMXeE8gA+8/9ZvdScFmLonJt32VRuRS4KV9jlAu113s8Cje5el4U2t
-   8eE5iJD6IsPsJ7Klf4TPc1LK8+/CwrHXSuMb0EopkJ1qm/BujOBdnSVxn
-   lbpWVNNA3XQqeqUqxpUiCzol8aSV7f98ZQ1sXAWPXRkBvskD47UbeFFwI
-   Dw8hZo0q28OcOWtKby9gsxJTb+JGQvwzOgfKIEnCfxQcGSaKzletNztSc
-   GqPPrW+dhcrcnnU417quMFSsl/aS62Vy7WQe1VOFUMaOQWPuZ3SHZWHJ1
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="244218785"
+  t=1649758862; x=1681294862;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=w0qqzuPg6fre0pLykL1SiwIqyX/9przAgXnZ0xEkhnI=;
+  b=Wpv7SBhD+uHdqW7j3/iyVaWjScExXDHkmPgxu9EOdYyPrqLzTYa52xhB
+   dniWxck2ajj7fGJOtC7vHxTC1g/QRxVZtcnGOKyEjehoqf3SWOqFOaljE
+   6h9HTv1l2Jr4A7lvG5uHKFNzKpHY4CRo6ZVW/l7ycrZnUfOzHmNOVxRmh
+   hc1KaTNSDY754opklX7M6/CvQUvzhBxVmcIsx8jBo7kltDfdfpC8AuhWi
+   2hESQPs2OW3E1+Hsa776m2wrJigcWOF+CoxKnbQySDSD9djuLpKnYSgG/
+   kG/LTFvXO/wI0W5pDxupMwhvc8V0Oz7tn7W/WrFnpIZMGTFx5QZMiEMGG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261776746"
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="244218785"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:00:53 -0700
+   d="scan'208";a="261776746"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:21:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="525976363"
+   d="scan'208";a="559271710"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 12 Apr 2022 03:00:47 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 12 Apr 2022 03:21:00 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1neDKJ-0002jQ-1f;
-	Tue, 12 Apr 2022 10:00:47 +0000
-Date: Tue, 12 Apr 2022 18:00:05 +0800
+	id 1neDdr-0002kx-Lb;
+	Tue, 12 Apr 2022 10:20:59 +0000
+Date: Tue, 12 Apr 2022 18:20:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>
+To: Josh Poimboeuf <jpoimboe@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Samuel Holland <samuel@sholland.org>,
-	Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 04/10] drm/sun4i: Allow building the driver on RISC-V
-Message-ID: <202204121758.QeUxJKUh-lkp@intel.com>
-References: <20220411043423.37333-5-samuel@sholland.org>
+	linux-kernel@vger.kernel.org
+Subject: [jpoimboe:objtool-run 14/14] ld.lld: error: unknown argument '--link'
+Message-ID: <202204121858.7ox6amp1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,104 +44,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411043423.37333-5-samuel@sholland.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Samuel,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on sunxi/sunxi/for-next]
-[also build test ERROR on drm/drm-next linus/master v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/drm-sun4i-Allwinner-D1-Display-Engine-2-0-Support/20220411-123701
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi/for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220412/202204121758.QeUxJKUh-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-run
+head:   7f408460a07320dc0da22915e82ec3b444fef8c8
+commit: 7f408460a07320dc0da22915e82ec3b444fef8c8 [14/14] todo
+config: i386-randconfig-a003-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121858.7ox6amp1-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/829dac8ee2cbb6d1b7bda1c513cc2ad1939fca53
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Samuel-Holland/drm-sun4i-Allwinner-D1-Display-Engine-2-0-Support/20220411-123701
-        git checkout 829dac8ee2cbb6d1b7bda1c513cc2ad1939fca53
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=7f408460a07320dc0da22915e82ec3b444fef8c8
+        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
+        git fetch --no-tags jpoimboe objtool-run
+        git checkout 7f408460a07320dc0da22915e82ec3b444fef8c8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:59:3: error: implicit declaration of function 'readsb' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   readsb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
-                   ^
-   drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:59:3: note: did you mean 'readb'?
-   arch/hexagon/include/asm/io.h:83:18: note: 'readb' declared here
-   static inline u8 readb(const volatile void __iomem *addr)
-                    ^
->> drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:61:3: error: implicit declaration of function 'writesb' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   writesb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
-                   ^
-   drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:61:3: note: did you mean 'writeb'?
-   arch/hexagon/include/asm/io.h:122:20: note: 'writeb' declared here
-   static inline void writeb(u8 data, volatile void __iomem *addr)
-                      ^
-   2 errors generated.
-
-
-vim +/readsb +59 drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c
-
-f0a3dd33ba685b Jonathan Liu 2017-07-02  24  
-f0a3dd33ba685b Jonathan Liu 2017-07-02  25  static int fifo_transfer(struct sun4i_hdmi *hdmi, u8 *buf, int len, bool read)
-f0a3dd33ba685b Jonathan Liu 2017-07-02  26  {
-f0a3dd33ba685b Jonathan Liu 2017-07-02  27  	/*
-f0a3dd33ba685b Jonathan Liu 2017-07-02  28  	 * 1 byte takes 9 clock cycles (8 bits + 1 ACK) = 90 us for 100 kHz
-f0a3dd33ba685b Jonathan Liu 2017-07-02  29  	 * clock. As clock rate is fixed, just round it up to 100 us.
-f0a3dd33ba685b Jonathan Liu 2017-07-02  30  	 */
-f0a3dd33ba685b Jonathan Liu 2017-07-02  31  	const unsigned long byte_time_ns = 100;
-f0a3dd33ba685b Jonathan Liu 2017-07-02  32  	const u32 mask = SUN4I_HDMI_DDC_INT_STATUS_ERROR_MASK |
-f0a3dd33ba685b Jonathan Liu 2017-07-02  33  			 SUN4I_HDMI_DDC_INT_STATUS_FIFO_REQUEST |
-f0a3dd33ba685b Jonathan Liu 2017-07-02  34  			 SUN4I_HDMI_DDC_INT_STATUS_TRANSFER_COMPLETE;
-f0a3dd33ba685b Jonathan Liu 2017-07-02  35  	u32 reg;
-939d749ad6649c Chen-Yu Tsai 2017-10-10  36  	/*
-939d749ad6649c Chen-Yu Tsai 2017-10-10  37  	 * If threshold is inclusive, then the FIFO may only have
-939d749ad6649c Chen-Yu Tsai 2017-10-10  38  	 * RX_THRESHOLD number of bytes, instead of RX_THRESHOLD + 1.
-939d749ad6649c Chen-Yu Tsai 2017-10-10  39  	 */
-939d749ad6649c Chen-Yu Tsai 2017-10-10  40  	int read_len = RX_THRESHOLD +
-939d749ad6649c Chen-Yu Tsai 2017-10-10  41  		(hdmi->variant->ddc_fifo_thres_incl ? 0 : 1);
-f0a3dd33ba685b Jonathan Liu 2017-07-02  42  
-939d749ad6649c Chen-Yu Tsai 2017-10-10  43  	/*
-939d749ad6649c Chen-Yu Tsai 2017-10-10  44  	 * Limit transfer length by FIFO threshold or FIFO size.
-939d749ad6649c Chen-Yu Tsai 2017-10-10  45  	 * For TX the threshold is for an empty FIFO.
-939d749ad6649c Chen-Yu Tsai 2017-10-10  46  	 */
-939d749ad6649c Chen-Yu Tsai 2017-10-10  47  	len = min_t(int, len, read ? read_len : SUN4I_HDMI_DDC_FIFO_SIZE);
-f0a3dd33ba685b Jonathan Liu 2017-07-02  48  
-f0a3dd33ba685b Jonathan Liu 2017-07-02  49  	/* Wait until error, FIFO request bit set or transfer complete */
-939d749ad6649c Chen-Yu Tsai 2017-10-10  50  	if (regmap_field_read_poll_timeout(hdmi->field_ddc_int_status, reg,
-939d749ad6649c Chen-Yu Tsai 2017-10-10  51  					   reg & mask, len * byte_time_ns,
-939d749ad6649c Chen-Yu Tsai 2017-10-10  52  					   100000))
-f0a3dd33ba685b Jonathan Liu 2017-07-02  53  		return -ETIMEDOUT;
-f0a3dd33ba685b Jonathan Liu 2017-07-02  54  
-f0a3dd33ba685b Jonathan Liu 2017-07-02  55  	if (reg & SUN4I_HDMI_DDC_INT_STATUS_ERROR_MASK)
-f0a3dd33ba685b Jonathan Liu 2017-07-02  56  		return -EIO;
-f0a3dd33ba685b Jonathan Liu 2017-07-02  57  
-f0a3dd33ba685b Jonathan Liu 2017-07-02  58  	if (read)
-939d749ad6649c Chen-Yu Tsai 2017-10-10 @59  		readsb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
-f0a3dd33ba685b Jonathan Liu 2017-07-02  60  	else
-939d749ad6649c Chen-Yu Tsai 2017-10-10 @61  		writesb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
-f0a3dd33ba685b Jonathan Liu 2017-07-02  62  
-939d749ad6649c Chen-Yu Tsai 2017-10-10  63  	/* Clear FIFO request bit by forcing a write to that bit */
-939d749ad6649c Chen-Yu Tsai 2017-10-10  64  	regmap_field_force_write(hdmi->field_ddc_int_status,
-939d749ad6649c Chen-Yu Tsai 2017-10-10  65  				 SUN4I_HDMI_DDC_INT_STATUS_FIFO_REQUEST);
-f0a3dd33ba685b Jonathan Liu 2017-07-02  66  
-f0a3dd33ba685b Jonathan Liu 2017-07-02  67  	return len;
-f0a3dd33ba685b Jonathan Liu 2017-07-02  68  }
-f0a3dd33ba685b Jonathan Liu 2017-07-02  69  
+>> ld.lld: error: unknown argument '--link'
 
 -- 
 0-DAY CI Kernel Test Service
