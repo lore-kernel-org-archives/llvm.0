@@ -1,46 +1,45 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E5D7B
-	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 02:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFF77B
+	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 04:06:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649732073; x=1681268073;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZZ03kDMABJJZI0UrTuqW+R10I6D2dFdE0aD6w2mgkEE=;
-  b=PMctmlVmACmfBs7STF1Ly2d4507Ep1bJLa72/lQnLyuN2ab40oxMEavp
-   qFNgUyDJEC51Vm55krE8hseVxldlAByGMf8bR0CKG9JPwYRcJzn3T6YUA
-   IBe1hFGhVFMZhBZr8hHy2Pm4Txp2LtS8UJDhzr7kg2F2Xks1pMaA+Gfrn
-   J/69Zu/jvFK4vmEmtScJMYngpEXf5XXbRWOAUFPgIhcZlE95ke5g9Haof
-   eiHkj7X4Au5qDf2o2mpNOATjCmiKk5NObDfHZFSOWkG69cAie9qFD6Mdi
-   FjdHd6vxYqnba70yx7NMfg9DsoVxgDOyfQZLEPxfcH7CN9J7zDsAeINmm
+  t=1649736400; x=1681272400;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mf9C6qT7/NO4kJZZHLDFOhQc2xAA3V03tnKvzVhd48s=;
+  b=iTahV5uZm7DDy8XDrYlwR4aq2ZPm4UAY55irtou/cE3v8neasgG1vDQx
+   NipMuC5K94mfMtHpwpD85iPQnXD1VDrtCefNivacq0SoefoN2oTSbSx8p
+   XJU1p16a70384X84oS7QNKSPMjCyW0SKurecFih2KoFsZ5+npEQ4nozxZ
+   z0L25kw7WSHGpK1KWNzN/KWWsYqLyIF+siLJzd3iY4biIeZW3Eo8EiKzL
+   zMZdKKOhAyH6Yje1u8kl0kl+QA6ETSKA1K/fxQt3tyWG+j/Y4qEJL9YDu
+   dXdkauq/g0rElu7++6yjYlbi/pEElUOGhviEJTDniSZFsM8ej6oGqiQi2
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261702064"
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322716266"
 X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="261702064"
+   d="scan'208";a="322716266"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 19:54:33 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 21:06:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="507360781"
+   d="scan'208";a="507379666"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2022 19:54:31 -0700
+  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2022 21:06:37 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ne6fm-0002SA-F0;
-	Tue, 12 Apr 2022 02:54:30 +0000
-Date: Tue, 12 Apr 2022 10:53:44 +0800
+	id 1ne7nZ-0002VQ-4w;
+	Tue, 12 Apr 2022 04:06:37 +0000
+Date: Tue, 12 Apr 2022 12:06:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Linux ACPI <linux-acpi@vger.kernel.org>
+To: David Riley <davidriley@chromium.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Bob Moore <robert.moore@intel.com>
-Subject: Re: [PATCH 14/20] ACPICA: executer/exsystem: Inform users about ACPI
- spec violation
-Message-ID: <202204121052.HOrN6tpw-lkp@intel.com>
-References: <22622452.6Emhk5qWAg@kreacher>
+	linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
+	Zach Reizner <zachr@chromium.org>,
+	Gurchetan Singh <gurchetansingh@chromium.org>
+Subject: [jsarha:topic/cros-sof-v4.19 4273/6555]
+ drivers/gpu/drm/virtio/virtgpu_object.c:176:5: warning: no previous
+ prototype for function 'virtio_gpu_dma_buf_to_handle'
+Message-ID: <202204121116.G1ASG8mq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,100 +48,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <22622452.6Emhk5qWAg@kreacher>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi "Rafael,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master linux/master v5.18-rc2 next-20220411]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Rafael-J-Wysocki/ACPICA-ACPICA-20220331/20220412-030922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: i386-randconfig-a006-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121052.HOrN6tpw-lkp@intel.com/config)
+tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
+head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
+commit: cea7ac75b0485305ef7d58b47c67d4ab82e620a3 [4273/6555] CHROMIUM: drm/virtio: Add interfaces to share dma bufs via virtwl.
+config: x86_64-randconfig-a003-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121116.G1ASG8mq-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5cdc6166cc35043a80f5f328d6e6b58190c4e46c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rafael-J-Wysocki/ACPICA-ACPICA-20220331/20220412-030922
-        git checkout 5cdc6166cc35043a80f5f328d6e6b58190c4e46c
+        # https://github.com/jsarha/linux/commit/cea7ac75b0485305ef7d58b47c67d4ab82e620a3
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/cros-sof-v4.19
+        git checkout cea7ac75b0485305ef7d58b47c67d4ab82e620a3
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/virtio/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the linux-review/Rafael-J-Wysocki/ACPICA-ACPICA-20220331/20220412-030922 HEAD 32181ae3d3173aeee41f709612dfa4d52951b39d builds fine.
-      It only hurts bisectability.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>):
-
->> drivers/acpi/acpica/exsystem.c:140:7: error: use of undeclared identifier 'how_long_US'; did you mean 'how_long_us'?
-                   if (how_long_US > 100) {
-                       ^~~~~~~~~~~
-                       how_long_us
-   drivers/acpi/acpica/exsystem.c:123:41: note: 'how_long_us' declared here
-   acpi_status acpi_ex_system_do_stall(u32 how_long_us)
-                                           ^
-   1 error generated.
+>> drivers/gpu/drm/virtio/virtgpu_object.c:176:5: warning: no previous prototype for function 'virtio_gpu_dma_buf_to_handle' [-Wmissing-prototypes]
+   int virtio_gpu_dma_buf_to_handle(struct dma_buf *dma_buf, bool no_wait,
+       ^
+   drivers/gpu/drm/virtio/virtgpu_object.c:176:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int virtio_gpu_dma_buf_to_handle(struct dma_buf *dma_buf, bool no_wait,
+   ^
+   static 
+   1 warning generated.
 
 
-vim +140 drivers/acpi/acpica/exsystem.c
+vim +/virtio_gpu_dma_buf_to_handle +176 drivers/gpu/drm/virtio/virtgpu_object.c
 
-   105	
-   106	/*******************************************************************************
-   107	 *
-   108	 * FUNCTION:    acpi_ex_system_do_stall
-   109	 *
-   110	 * PARAMETERS:  how_long_us     - The amount of time to stall,
-   111	 *                                in microseconds
-   112	 *
-   113	 * RETURN:      Status
-   114	 *
-   115	 * DESCRIPTION: Suspend running thread for specified amount of time.
-   116	 *              Note: ACPI specification requires that Stall() does not
-   117	 *              relinquish the processor, and delays longer than 100 usec
-   118	 *              should use Sleep() instead. We allow stalls up to 255 usec
-   119	 *              for compatibility with other interpreters and existing BIOSs.
-   120	 *
-   121	 ******************************************************************************/
-   122	
-   123	acpi_status acpi_ex_system_do_stall(u32 how_long_us)
-   124	{
-   125		acpi_status status = AE_OK;
-   126	
-   127		ACPI_FUNCTION_ENTRY();
-   128	
-   129		if (how_long_us > 255) {
-   130			/*
-   131			 * Longer than 255 microseconds, this is an error
-   132			 *
-   133			 * (ACPI specifies 100 usec as max, but this gives some slack in
-   134			 * order to support existing BIOSs)
-   135			 */
-   136			ACPI_ERROR((AE_INFO,
-   137				    "Time parameter is too large (%u)", how_long_us));
-   138			status = AE_AML_OPERAND_VALUE;
-   139		} else {
- > 140			if (how_long_US > 100) {
-   141				ACPI_WARNING((AE_INFO,
-   142					      "Time parameter %u us > 100 us violating ACPI spec, please fix the firmware.",
-   143					      how_long_us));
-   144			}
-   145			acpi_os_stall(how_long_us);
-   146		}
-   147	
-   148		return (status);
-   149	}
-   150	
+   175	
+ > 176	int virtio_gpu_dma_buf_to_handle(struct dma_buf *dma_buf, bool no_wait,
 
 -- 
 0-DAY CI Kernel Test Service
