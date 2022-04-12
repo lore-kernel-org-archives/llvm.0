@@ -1,111 +1,73 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A75B1FD1
-	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 17:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649784419; x=1681320419;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MTrQUb89ytH2QRNrlqQ8N1/cVixUkR7ofVo0qRQ1nuA=;
-  b=RJ2wABLjnnJRLstHbSuoJaH12RYpsrkjoUL+RSRv03ntmwgpOkw4I/fS
-   FngkyECMVY5EFEw5bxEeV86/n4i38ZVfxEW0c2cDkfgZIzEkdE1Gs/ACF
-   mXbLhQOTIof7iaW0R9vzr2HgNqwnJBFwrOsGEuep4ywM9NypvNLP+XZWi
-   OTmfy6NT4n3fyRrOiIvtIrMmd+zxeRcGWrcgSLJ6iMU63KczXpvHwED2N
-   gls9rS1eBP9YZONO6F4veHuGqOatqcl+05YelissGENmfQGCgeN2mPgeA
-   FJt0xq5obfCHeu4ghlklZmwnUM6ZvBclkTdpuLNayEOu/nC7RxLIq47Gn
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="348886994"
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="348886994"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 10:26:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="611550097"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 10:26:21 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1neKGD-00031g-0G;
-	Tue, 12 Apr 2022 17:25:01 +0000
-Date: Wed, 13 Apr 2022 01:24:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Benson Leung <bleung@google.com>,
-	Prashant Malani <pmalani@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	"Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-	Guenter Roeck <linux@roeck-us.net>, Won Chung <wonchung@google.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: typec: USB Power Deliver helpers for ports
- and partners
-Message-ID: <202204130102.YjEnm3E0-lkp@intel.com>
-References: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1ACD1FD1
+	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 17:35:55 +0000 (UTC)
+Received: by mail-il1-f170.google.com with SMTP id b17so7025219ilq.5
+        for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 10:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KLVJDr6jcH/Hhpk5ljJEeWK/iV9uol+R9xxj2F+8Y4A=;
+        b=IiKMX57C5YzcokCDFZdUE8zJQg/C0NyIHC5HWRAvzjaLUUxIxy4ABzQaRjHbEWwACc
+         Kg8zVLikJEHR44DHdL7wUaGnMO+0NWiUcb/Gje/dAfucsma0qPwytTqgv8bPfQdwh1FO
+         yFDLs486T781Go/Wf08yHKK8UegRCQeaEfuxzC+BKzJ2wcsg+js8ADYm5aI4J4BehwmI
+         Dt0TRW0YPQWg2mgrAlfC13jb7/N75LrvuQCrqW4H0g3aBRUsx9Dl36bXb3REoCx2gpkz
+         ka20mF4NxvyVsT02NQ7wD2Y9O+DbrwrD8xQ1/G/2Fa66NMVlOQLkxmwcwrZwwVNwTjdh
+         CCTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KLVJDr6jcH/Hhpk5ljJEeWK/iV9uol+R9xxj2F+8Y4A=;
+        b=lrTWjZXnw/tisZMiL78BZU1n5SbZC/bg3HQuXTkK5SLf0JVb9jyGDbXIAixrscyyYN
+         fiqbBi6j1KLbTeRQuXPZujfjxO1DXw+f+or5qEFoJtzwM0OGeK5S6Q0Vq9yp0oeS40CQ
+         Xat+5oIBKSu0o01hXTD7NkQB7c+GuX1ESCwx45UdLjjp9A85IolNNoSMC9S3Lr+EAm9s
+         yB7yGQnEq31Axgn0GX+LPTL3D2oYmWpk6L1d+beS5ZZ/eySAj13ozfV0LVkhcCofYZ7b
+         aEfr1dVrvFgzHUQea9AJ0u+nGs0y8U6jFG1b8gU//8rK8Wy3FB97v3cy2FV0/FIEmJTi
+         fwrQ==
+X-Gm-Message-State: AOAM5332PHqwenWejbC0++UuP5JSV7AfLOXSfOhMCxQ+GPpPtE0ad6Hg
+	N3CVazh+LhX6y4O++Fzd/fcGFOMn1b5wOXQ4pVo=
+X-Google-Smtp-Source: ABdhPJwR8VvgmSj2khd/OCj8r9by523CzaGYCcVzGx7LxRVB5weURh6GvoH9k/ltUnrPmBQdrleFaQfXN7BhInaRYKA=
+X-Received: by 2002:a05:6e02:1a64:b0:2ca:c168:a190 with SMTP id
+ w4-20020a056e021a6400b002cac168a190mr3814301ilv.72.1649784954752; Tue, 12 Apr
+ 2022 10:35:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220412153906.428179-1-mic@digikod.net> <CANiq72=ogSxwz8iJLZaYD4nSkE71sBhT4dZyDv1HYyo5R43=pw@mail.gmail.com>
+ <acdf5af3-f256-8d53-ec44-fcef4022ec62@digikod.net>
+In-Reply-To: <acdf5af3-f256-8d53-ec44-fcef4022ec62@digikod.net>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 12 Apr 2022 19:35:43 +0200
+Message-ID: <CANiq72mpdYY6Un6UZ49r05AJir_F4xRur9Ecmjw8v8CCWhLJ2w@mail.gmail.com>
+Subject: Re: [PATCH v1] clang-format: Update and extend the for_each list with tools/
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <keescook@chromium.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, bpf <bpf@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Heikki,
+On Tue, Apr 12, 2022 at 7:05 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+>
+> I'm wondering about the ASSERT_* and EXPECT_* macros from
+> tools/testing/selftests/kselftest_harness.h
+> Do you think we should treat them as "for macros" as well? They can
+> either be used with or without a following code block.
 
-I love your patch! Perhaps something to improve:
+I would keep the style that we have in the kernel -- as far as I can
+see, that means without a space.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on chrome-platform/for-next v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Also, from a quick grep, it seems most callers do not use the optional
+handler, which also makes sense w.r.t. not using a space.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: i386-randconfig-a004-20220411 (https://download.01.org/0day-ci/archive/20220413/202204130102.YjEnm3E0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/98fece77872792e49f1005617761a533089f319d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-        git checkout 98fece77872792e49f1005617761a533089f319d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/typec/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/typec/class.c:30:27: warning: unused variable 'cap_name' [-Wunused-const-variable]
-   static const char * const cap_name[] = {
-                             ^
-   1 warning generated.
---
->> drivers/usb/typec/pd.c:669: warning: expecting prototype for pd_register(). Prototype was for pd_unregister() instead
->> drivers/usb/typec/pd.c:717: warning: expecting prototype for pd_link_device(). Prototype was for pd_unlink_device() instead
---
->> drivers/usb/typec/class.c:1222: warning: expecting prototype for typec_port_set_pd_capabilities(). Prototype was for typec_port_set_pd() instead
-
-
-vim +/cap_name +30 drivers/usb/typec/class.c
-
-    29	
-  > 30	static const char * const cap_name[] = {
-    31		[TYPEC_SINK]		= "sink-capabilities",
-    32		[TYPEC_SOURCE]		= "source-capabilities",
-    33	};
-    34	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Miguel
