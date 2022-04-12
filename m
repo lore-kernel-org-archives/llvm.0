@@ -1,51 +1,45 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA881876
-	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 08:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A697D7B
+	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 08:38:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649751472; x=1681287472;
+  t=1649752685; x=1681288685;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KttORuuzKa1gAej3+50sABpd4LK7JoBRCSwgJ4ZP7EM=;
-  b=HjlVp2RWsMt254dx8koUoBrWAP5uI1lQaNuqLAREcSiezIKIzUHVcLEN
-   cT3pLokgegHB7iHyv3ZLW0LOKBbviLKQr40emL4KxHHllKQ8a1O8tudtc
-   tsdElqF/53u6X/p/kx/A7l7oJC9oXon7nq+XuTzNjrH4pgwaepsQpFagV
-   kA3MfUNKISqN79qzv1qzkt7pPzQdbYH6lktZPg2m9Lt63Fy5ZUSQ4LjXK
-   mmZaU9tQ6SUG6jggEXrhKHDQEutwl+IbC5Qr9KpbrGN36WI+N6+1ln6j9
-   B5PE8OChfe71YdVkw/HLlRSerSDqpv1aYm2BToPr0t2cYsJwJE+qFZnrh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322759223"
+  bh=QLFnvFZjCBbBm1WrCuQHfneVU5wUafBRZqi1LfvDPoE=;
+  b=mOSYN6HK4TTZts/UuOsNetTBcqvyjMVC1a0D+ojBhnMOq+qp/DfZzFbe
+   SZZd0R1XMKE2AVTGwe71xb776qGNwb/JKHiu8u5R3Gg6NEINTVeNp2nzt
+   zog34OBxVUkcZ1DyXbXlT+mGV/V5CVcd/2YY8PDelPgu0Lw9Jo+AAHdnC
+   gUKeiMmpQlNva+a/hI3RvUr84VXxCQUiecuMIMWU5fzHkZPZJev6RAIvr
+   tQDWapMylYMEFsk7JrduTu7s4GKFMcV3PPEwWbI5pAJNftVT89bqqzKc5
+   Pto7hwxOyz42XkMACv/eRIM8pxvmoe+JdGVY2NhOP5OJoScakqnP3KW07
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="259913380"
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="322759223"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 01:17:51 -0700
+   d="scan'208";a="259913380"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 01:38:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="572653613"
+   d="scan'208";a="611341789"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 12 Apr 2022 01:17:48 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 01:38:03 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1neBid-0002f5-KO;
-	Tue, 12 Apr 2022 08:17:47 +0000
-Date: Tue, 12 Apr 2022 16:17:08 +0800
+	id 1neC2E-0002fc-Oa;
+	Tue, 12 Apr 2022 08:38:02 +0000
+Date: Tue, 12 Apr 2022 16:37:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Javier Martinez Canillas <javierm@redhat.com>,
-	linux-kernel@vger.kernel.org
+To: Patrick Wang <patrick.wang.shcn@gmail.com>, robh+dt@kernel.org,
+	frowand.list@gmail.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Chen-Yu Tsai <wens@kernel.org>,
-	Neil Armstrong <narmstrong@baylibre.com>,
-	David Airlie <airlied@linux.ie>, YueHaibing <yuehaibing@huawei.com>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	dri-devel@lists.freedesktop.org, Mark Brown <broonie@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Maxime Ripard <maxime@cerno.tech>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2 5/5] drm/solomon: Add SSD130x OLED displays SPI support
-Message-ID: <202204121654.38UTab7Q-lkp@intel.com>
-References: <20220411211243.11121-6-javierm@redhat.com>
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	patrick.wang.shcn@gmail.com
+Subject: Re: [PATCH] of: fdt: do not reserve memory below MIN_MEMBLOCK_ADDR
+Message-ID: <202204121637.4ZHpTqwT-lkp@intel.com>
+References: <20220412045228.35306-1-patrick.wang.shcn@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,67 +48,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411211243.11121-6-javierm@redhat.com>
+In-Reply-To: <20220412045228.35306-1-patrick.wang.shcn@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Javier,
+Hi Patrick,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on drm-tip/drm-tip]
-[also build test WARNING on next-20220412]
-[cannot apply to drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next tegra-drm/drm/tegra/for-next linus/master linux/master airlied/drm-next v5.18-rc2]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on v5.18-rc2 next-20220412]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Martinez-Canillas/drm-solomon-Add-SSD130x-OLED-displays-SPI-support/20220412-051518
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220412/202204121654.38UTab7Q-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Patrick-Wang/of-fdt-do-not-reserve-memory-below-MIN_MEMBLOCK_ADDR/20220412-125309
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm-buildonly-randconfig-r006-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121637.4ZHpTqwT-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/46bbef7fc1afeb9bc8241fe7636e77b5096e3d22
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/d362274832c02bb7812c13eff968322a76f10ed3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Javier-Martinez-Canillas/drm-solomon-Add-SSD130x-OLED-displays-SPI-support/20220412-051518
-        git checkout 46bbef7fc1afeb9bc8241fe7636e77b5096e3d22
+        git fetch --no-tags linux-review Patrick-Wang/of-fdt-do-not-reserve-memory-below-MIN_MEMBLOCK_ADDR/20220412-125309
+        git checkout d362274832c02bb7812c13eff968322a76f10ed3
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/solomon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/solomon/ssd130x-spi.c:161:35: warning: unused variable 'ssd130x_spi_table' [-Wunused-const-variable]
-   static const struct spi_device_id ssd130x_spi_table[] = {
-                                     ^
+>> drivers/of/fdt.c:494:4: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                           base, phys_offset);
+                           ^~~~
+   include/linux/printk.h:499:37: note: expanded from macro 'pr_warn'
+           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+                                      ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
    1 warning generated.
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
+   Depends on HAS_IOMEM && DRM && MMU
+   Selected by
+   - DRM_SSD130X && HAS_IOMEM && DRM
 
-vim +/ssd130x_spi_table +161 drivers/gpu/drm/solomon/ssd130x-spi.c
 
-   152	
-   153	/*
-   154	 * The SPI core always reports a MODALIAS uevent of the form "spi:<dev>", even
-   155	 * if the device was registered via OF. This means that the module will not be
-   156	 * auto loaded, unless it contains an alias that matches the MODALIAS reported.
-   157	 *
-   158	 * To workaround this issue, add a SPI device ID table. Even when this should
-   159	 * not be needed for this driver to match the registered SPI devices.
-   160	 */
- > 161	static const struct spi_device_id ssd130x_spi_table[] = {
-   162		{ "sh1106",  SH1106_ID },
-   163		{ "ssd1305", SSD1305_ID },
-   164		{ "ssd1306", SSD1306_ID },
-   165		{ "ssd1307", SSD1307_ID },
-   166		{ "ssd1309", SSD1309_ID },
-   167		{ /* sentinel */ }
-   168	};
-   169	MODULE_DEVICE_TABLE(spi, ssd130x_spi_table);
-   170	
+vim +494 drivers/of/fdt.c
+
+   486	
+   487	static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
+   488						phys_addr_t size, bool nomap)
+   489	{
+   490		const u64 phys_offset = MIN_MEMBLOCK_ADDR;
+   491	
+   492		if (base < phys_offset) {
+   493			pr_warn("Ignoring reserved memory range 0x%llx - 0x%llx\n",
+ > 494				base, phys_offset);
+   495			size = (phys_offset - base) < size ?
+   496				size - (phys_offset - base) : 0;
+   497			base = phys_offset;
+   498	
+   499			if (!size)
+   500				return -EFAULT;
+   501		}
+   502	
+   503		if (nomap) {
+   504			/*
+   505			 * If the memory is already reserved (by another region), we
+   506			 * should not allow it to be marked nomap, but don't worry
+   507			 * if the region isn't memory as it won't be mapped.
+   508			 */
+   509			if (memblock_overlaps_region(&memblock.memory, base, size) &&
+   510			    memblock_is_region_reserved(base, size))
+   511				return -EBUSY;
+   512	
+   513			return memblock_mark_nomap(base, size);
+   514		}
+   515		return memblock_reserve(base, size);
+   516	}
+   517	
 
 -- 
 0-DAY CI Kernel Test Service
