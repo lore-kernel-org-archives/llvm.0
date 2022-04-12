@@ -1,48 +1,47 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56C0468C
-	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 01:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E934692
+	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 02:03:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649725354; x=1681261354;
+  t=1649729035; x=1681265035;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/4o3oYMU5gSgB8qPiDc43LBv7jh3k9t17S7xbMxAzzM=;
-  b=Y8Sev/7kauPXEKNzD34vZVF8/1a9JaerQRAeLIHldRlfmB6gDLz/zpHu
-   D/P/7Mcy4QwQxpfJYnfe92d1HlOpIt5o/H0octQr7tCbFP+ko18gC7Prr
-   PrLUX3yxKW9FRak3MiLwPwnK6bW+FI5W7puuRSr4cFgkYBzgSBOH9ymQp
-   k4keDTaS1jaJoogpaHxrZb0CJ5pSSma3fKnFZE9KPKc/5jJBDSiP9h4J8
-   gCm7an3jRozNQdkkPux+4TLgzTHTg/wQrlWPM3tktX5RlGbdTrHwYI78E
-   Dyqkm8PPmQkEfdnK5QbMbPap4NzbeoKJmpotwL9a38Rt+mJiVA+tEeHLg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261688367"
+  bh=r4GRUR6zF+v37vBUgf/DDdpurM7HAtY37B8rErw3mbA=;
+  b=JEe38TGTC2X7hqpCztRf3L6Y+bRFMM4jyuOFdAHvlpCs1HbAHpHgxkHu
+   PruMz6yRsqL8YE1Q4DuhtMfm5dOr79i7v5NSqGHWxaHqMWefH6PKP+YHs
+   hdPXeZZJYfSKFqeisSzWpygvaS1Be2YYkwiG4guongAkYqdvxyKp2yFIq
+   Tudpz0Xcu6gOOfeg77U65KCWyBbkqXtsjW+FTf8UPx6Ns7eyLeDv0H91F
+   I8mQ2dHYRiVprLBuIHHlcA5yMHM4niHcJy0yiUe0QvqS4ySFK9/Uu9YJN
+   wc+3uFIdhtIOgRsFV58hgtySd25ceNvjfQk3hqJFdkHvoKF4OH5pub9OG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261103963"
 X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="261688367"
+   d="scan'208";a="261103963"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 18:02:34 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 19:03:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="854144452"
+   d="scan'208";a="854158711"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Apr 2022 18:02:30 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 11 Apr 2022 19:03:51 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ne4vN-0002OA-LO;
-	Tue, 12 Apr 2022 01:02:29 +0000
-Date: Tue, 12 Apr 2022 09:01:28 +0800
+	id 1ne5sk-0002QX-Cy;
+	Tue, 12 Apr 2022 02:03:50 +0000
+Date: Tue, 12 Apr 2022 10:03:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Priyanka Singh <priyanka.singh@nxp.com>, york.sun@nxp.com, bp@alien8.de,
-	mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-	rric@kernel.org
+To: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, paul@crapouillou.net,
+	robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+	mturquette@baylibre.com, sboyd@kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	priyanka.jain@nxp.com, jaiprakash.singh@nxp.com,
-	rajan.gupta@nxp.com, rajesh.bhagat@nxp.com,
-	Priyanka Singh <priyanka.singh@nxp.com>
-Subject: Re: [PATCH 1/1] drivers: edac: Fix bad bit shift operations
-Message-ID: <202204120845.og2FaL10-lkp@intel.com>
-References: <20220411105159.10746-1-priyanka.singh@nxp.com>
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000
+ SoCs
+Message-ID: <202204120958.uBiGandq-lkp@intel.com>
+References: <20220411154241.50834-3-aidanmacdonald.0x0@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,167 +50,191 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411105159.10746-1-priyanka.singh@nxp.com>
+In-Reply-To: <20220411154241.50834-3-aidanmacdonald.0x0@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Priyanka,
+Hi Aidan,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on ras/edac-for-next]
-[also build test WARNING on next-20220411]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on clk/clk-next linus/master linux/master v5.18-rc2 next-20220411]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Priyanka-Singh/drivers-edac-Fix-bad-bit-shift-operations/20220411-190157
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-config: arm64-buildonly-randconfig-r001-20220411 (https://download.01.org/0day-ci/archive/20220412/202204120845.og2FaL10-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Aidan-MacDonald/Fix-missing-TCU-clock-for-X1000-X1830-SoCs/20220411-234531
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: mips-randconfig-c004-20220411 (https://download.01.org/0day-ci/archive/20220412/202204120958.uBiGandq-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/c686e26cdea24d78450aaaff268558ea6842cd31
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/8c04eee82a9d67a768bb6c787d66724782fce89b
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Priyanka-Singh/drivers-edac-Fix-bad-bit-shift-operations/20220411-190157
-        git checkout c686e26cdea24d78450aaaff268558ea6842cd31
+        git fetch --no-tags linux-review Aidan-MacDonald/Fix-missing-TCU-clock-for-X1000-X1830-SoCs/20220411-234531
+        git checkout 8c04eee82a9d67a768bb6c787d66724782fce89b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/edac/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/clk/ingenic/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/edac/fsl_ddr_edac.c:353:14: warning: data argument not used by format string [-Wformat-extra-args]
-                                   cap_low, syndrome ^ (1 << bad_ecc_bit));
-                                   ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/edac/fsl_ddr_edac.h:20:55: note: expanded from macro 'fsl_mc_printk'
-           edac_mc_chipset_printk(mci, level, "FSL_DDR", fmt, ##arg)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-   drivers/edac/edac_mc.h:55:60: note: expanded from macro 'edac_mc_chipset_printk'
-           printk(level "EDAC " prefix " MC%d: " fmt, mci->mc_idx, ##arg)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^
-   1 warning generated.
+>> drivers/clk/ingenic/tcu.c:366:8: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                           if (tcu->soc_info->allow_missing_tcu_clk &&
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/ingenic/tcu.c:456:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/clk/ingenic/tcu.c:366:4: note: remove the 'if' if its condition is always true
+                           if (tcu->soc_info->allow_missing_tcu_clk &&
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/clk/ingenic/tcu.c:366:8: warning: variable 'ret' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+                           if (tcu->soc_info->allow_missing_tcu_clk &&
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/ingenic/tcu.c:456:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/clk/ingenic/tcu.c:366:8: note: remove the '&&' if its condition is always true
+                           if (tcu->soc_info->allow_missing_tcu_clk &&
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/ingenic/tcu.c:343:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   2 warnings generated.
 
 
-vim +353 drivers/edac/fsl_ddr_edac.c
+vim +366 drivers/clk/ingenic/tcu.c
 
-   276	
-   277	static void fsl_mc_check(struct mem_ctl_info *mci)
-   278	{
-   279		struct fsl_mc_pdata *pdata = mci->pvt_info;
-   280		struct csrow_info *csrow;
-   281		u32 bus_width;
-   282		u32 err_detect;
-   283		u32 syndrome;
-   284		u64 err_addr;
-   285		u32 pfn;
-   286		int row_index;
-   287		u32 cap_high;
-   288		u32 cap_low;
-   289		int bad_data_bit;
-   290		int bad_ecc_bit;
-   291	
-   292		err_detect = ddr_in32(pdata->mc_vbase + FSL_MC_ERR_DETECT);
-   293		if (!err_detect)
-   294			return;
-   295	
-   296		fsl_mc_printk(mci, KERN_ERR, "Err Detect Register: %#8.8x\n",
-   297			      err_detect);
-   298	
-   299		/* no more processing if not ECC bit errors */
-   300		if (!(err_detect & (DDR_EDE_SBE | DDR_EDE_MBE))) {
-   301			ddr_out32(pdata->mc_vbase + FSL_MC_ERR_DETECT, err_detect);
-   302			return;
-   303		}
-   304	
-   305		syndrome = ddr_in32(pdata->mc_vbase + FSL_MC_CAPTURE_ECC);
-   306	
-   307		/* Mask off appropriate bits of syndrome based on bus width */
-   308		bus_width = (ddr_in32(pdata->mc_vbase + FSL_MC_DDR_SDRAM_CFG) &
-   309			     DSC_DBW_MASK) ? 32 : 64;
-   310		if (bus_width == 64)
-   311			syndrome &= 0xff;
-   312		else
-   313			syndrome &= 0xffff;
-   314	
-   315		err_addr = make64(
-   316			ddr_in32(pdata->mc_vbase + FSL_MC_CAPTURE_EXT_ADDRESS),
-   317			ddr_in32(pdata->mc_vbase + FSL_MC_CAPTURE_ADDRESS));
-   318		pfn = err_addr >> PAGE_SHIFT;
-   319	
-   320		for (row_index = 0; row_index < mci->nr_csrows; row_index++) {
-   321			csrow = mci->csrows[row_index];
-   322			if ((pfn >= csrow->first_page) && (pfn <= csrow->last_page))
-   323				break;
-   324		}
-   325	
-   326		cap_high = ddr_in32(pdata->mc_vbase + FSL_MC_CAPTURE_DATA_HI);
-   327		cap_low = ddr_in32(pdata->mc_vbase + FSL_MC_CAPTURE_DATA_LO);
-   328	
-   329		/*
-   330		 * Analyze single-bit errors on 64-bit wide buses
-   331		 * TODO: Add support for 32-bit wide buses
-   332		 */
-   333		if ((err_detect & DDR_EDE_SBE) && (bus_width == 64)) {
-   334			sbe_ecc_decode(cap_high, cap_low, syndrome,
-   335					&bad_data_bit, &bad_ecc_bit);
    336	
-   337			if (bad_data_bit >= 0)
-   338				fsl_mc_printk(mci, KERN_ERR,
-   339					"Faulty Data bit: %d\n", bad_data_bit);
-   340			if (bad_ecc_bit >= 0)
-   341				fsl_mc_printk(mci, KERN_ERR,
-   342						"Faulty ECC bit: %d\n", bad_ecc_bit);
-   343			if ((bad_data_bit > 0 && bad_data_bit < 32) && bad_ecc_bit > 0) {
-   344				fsl_mc_printk(mci, KERN_ERR,
-   345					"Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
-   346					cap_high, cap_low ^ (1 << bad_data_bit),
-   347					syndrome ^ (1 << bad_ecc_bit));
-   348			}
-   349			if (bad_data_bit >= 32 && bad_ecc_bit > 0) {
-   350				fsl_mc_printk(mci, KERN_ERR,
-   351					"Expected Data / ECC:\t%#8.8x / %#2.2x\n",
-   352					cap_high ^ (1 << (bad_data_bit - 32)),
- > 353					cap_low, syndrome ^ (1 << bad_ecc_bit));
-   354			}
-   355		}
-   356	
-   357		fsl_mc_printk(mci, KERN_ERR,
-   358				"Captured Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
-   359				cap_high, cap_low, syndrome);
-   360		fsl_mc_printk(mci, KERN_ERR, "Err addr: %#8.8llx\n", err_addr);
-   361		fsl_mc_printk(mci, KERN_ERR, "PFN: %#8.8x\n", pfn);
-   362	
-   363		/* we are out of range */
-   364		if (row_index == mci->nr_csrows)
-   365			fsl_mc_printk(mci, KERN_ERR, "PFN out of range!\n");
-   366	
-   367		if (err_detect & DDR_EDE_SBE)
-   368			edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, 1,
-   369					     pfn, err_addr & ~PAGE_MASK, syndrome,
-   370					     row_index, 0, -1,
-   371					     mci->ctl_name, "");
-   372	
-   373		if (err_detect & DDR_EDE_MBE)
-   374			edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci, 1,
-   375					     pfn, err_addr & ~PAGE_MASK, syndrome,
-   376					     row_index, 0, -1,
-   377					     mci->ctl_name, "");
-   378	
-   379		ddr_out32(pdata->mc_vbase + FSL_MC_ERR_DETECT, err_detect);
-   380	}
-   381	
+   337	static int __init ingenic_tcu_probe(struct device_node *np)
+   338	{
+   339		const struct of_device_id *id = of_match_node(ingenic_tcu_of_match, np);
+   340		struct ingenic_tcu *tcu;
+   341		struct regmap *map;
+   342		unsigned int i;
+   343		int ret;
+   344	
+   345		map = device_node_to_regmap(np);
+   346		if (IS_ERR(map))
+   347			return PTR_ERR(map);
+   348	
+   349		tcu = kzalloc(sizeof(*tcu), GFP_KERNEL);
+   350		if (!tcu)
+   351			return -ENOMEM;
+   352	
+   353		tcu->map = map;
+   354		tcu->soc_info = id->data;
+   355	
+   356		if (tcu->soc_info->has_tcu_clk) {
+   357			tcu->clk = of_clk_get_by_name(np, "tcu");
+   358			if (IS_ERR(tcu->clk)) {
+   359				/*
+   360				 * Old device trees for some SoCs did not include the
+   361				 * TCU clock because this driver (incorrectly) didn't
+   362				 * use it. In this case we complain loudly and attempt
+   363				 * to continue without the clock, which might work if
+   364				 * booting with workarounds like "clk_ignore_unused".
+   365				 */
+ > 366				if (tcu->soc_info->allow_missing_tcu_clk &&
+   367				    PTR_ERR(tcu->clk) == -EINVAL) {
+   368					pr_warn("TCU clock missing from device tree, please update your device tree\n");
+   369					tcu->clk = NULL;
+   370				} else {
+   371					pr_crit("Cannot get TCU clock from device tree\n");
+   372					goto err_free_tcu;
+   373				}
+   374			} else {
+   375				ret = clk_prepare_enable(tcu->clk);
+   376				if (ret) {
+   377					pr_crit("Unable to enable TCU clock\n");
+   378					goto err_put_clk;
+   379				}
+   380			}
+   381		}
+   382	
+   383		tcu->clocks = kzalloc(struct_size(tcu->clocks, hws, TCU_CLK_COUNT),
+   384				      GFP_KERNEL);
+   385		if (!tcu->clocks) {
+   386			ret = -ENOMEM;
+   387			goto err_clk_disable;
+   388		}
+   389	
+   390		tcu->clocks->num = TCU_CLK_COUNT;
+   391	
+   392		for (i = 0; i < tcu->soc_info->num_channels; i++) {
+   393			ret = ingenic_tcu_register_clock(tcu, i, TCU_PARENT_EXT,
+   394							 &ingenic_tcu_clk_info[i],
+   395							 tcu->clocks);
+   396			if (ret) {
+   397				pr_crit("cannot register clock %d\n", i);
+   398				goto err_unregister_timer_clocks;
+   399			}
+   400		}
+   401	
+   402		/*
+   403		 * We set EXT as the default parent clock for all the TCU clocks
+   404		 * except for the watchdog one, where we set the RTC clock as the
+   405		 * parent. Since the EXT and PCLK are much faster than the RTC clock,
+   406		 * the watchdog would kick after a maximum time of 5s, and we might
+   407		 * want a slower kicking time.
+   408		 */
+   409		ret = ingenic_tcu_register_clock(tcu, TCU_CLK_WDT, TCU_PARENT_RTC,
+   410						 &ingenic_tcu_watchdog_clk_info,
+   411						 tcu->clocks);
+   412		if (ret) {
+   413			pr_crit("cannot register watchdog clock\n");
+   414			goto err_unregister_timer_clocks;
+   415		}
+   416	
+   417		if (tcu->soc_info->has_ost) {
+   418			ret = ingenic_tcu_register_clock(tcu, TCU_CLK_OST,
+   419							 TCU_PARENT_EXT,
+   420							 &ingenic_tcu_ost_clk_info,
+   421							 tcu->clocks);
+   422			if (ret) {
+   423				pr_crit("cannot register ost clock\n");
+   424				goto err_unregister_watchdog_clock;
+   425			}
+   426		}
+   427	
+   428		ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, tcu->clocks);
+   429		if (ret) {
+   430			pr_crit("cannot add OF clock provider\n");
+   431			goto err_unregister_ost_clock;
+   432		}
+   433	
+   434		ingenic_tcu = tcu;
+   435	
+   436		return 0;
+   437	
+   438	err_unregister_ost_clock:
+   439		if (tcu->soc_info->has_ost)
+   440			clk_hw_unregister(tcu->clocks->hws[i + 1]);
+   441	err_unregister_watchdog_clock:
+   442		clk_hw_unregister(tcu->clocks->hws[i]);
+   443	err_unregister_timer_clocks:
+   444		for (i = 0; i < tcu->clocks->num; i++)
+   445			if (tcu->clocks->hws[i])
+   446				clk_hw_unregister(tcu->clocks->hws[i]);
+   447		kfree(tcu->clocks);
+   448	err_clk_disable:
+   449		if (tcu->clk)
+   450			clk_disable_unprepare(tcu->clk);
+   451	err_put_clk:
+   452		if (tcu->clk)
+   453			clk_put(tcu->clk);
+   454	err_free_tcu:
+   455		kfree(tcu);
+   456		return ret;
+   457	}
+   458	
 
 -- 
 0-DAY CI Kernel Test Service
