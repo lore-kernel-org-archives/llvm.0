@@ -1,142 +1,334 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [131.159.0.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95C01FBA
-	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 12:47:41 +0000 (UTC)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2eafabbc80aso199249617b3.11
-        for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 05:47:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WkUiUdHoDpNAi0zdRE9ANpSiniGW0nNNuGE1NcaA95g=;
-        b=ESuPCnnnlr6VtriNj4BzBV2T/VocahYSousMEGs+iWGmh7eEybeygvPHyFomnNHhST
-         FaE+qPIql4kF7RDDZ/RP1ktjX5G0TlQj6ngxDUWwstqebpD4+bsg5vEWQilNOzu08wRd
-         mw9Drq35zRYbhSOTCeDy4UbjYAkccDh1fx+sql/SZGlHGT+1NYVwbfOX2kQgHGYOXzY8
-         WX6XuSzLMoHyIhZ+LN4vVMKceYpEBxUUlVCUtRpqnPheV49nesk4D0YrmbVNg1GPtE/W
-         TthfwcNq0aHgLvRV6Um/6tKQpolErIoUkU6L5itpwbzhH2RvcA9CC5p3gCl5skONQwQU
-         qZpw==
-X-Gm-Message-State: AOAM531xiHWnXMd9s42zd902yEWUaY8nZeJGz/iEyjdnLypiBfBfgmM4
-	SDgxO827tEaROfvx+rGzGCy04jzolrdfLOBuBoM=
-X-Google-Smtp-Source: ABdhPJzqMRaCdna/2UYv9JsfsWjK4Bxln8AmtcV2uN/a+VAXsHvJMw4uCW2Lg3nDHyZCTmndPY/RhPSzoDb3lcuzUQ4=
-X-Received: by 2002:a81:7c45:0:b0:2eb:4759:cc32 with SMTP id
- x66-20020a817c45000000b002eb4759cc32mr30158169ywc.515.1649767660662; Tue, 12
- Apr 2022 05:47:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1FD1FBA
+	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 12:48:26 +0000 (UTC)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+	by mailout2.rbg.tum.de (Postfix) with ESMTPS id 520B44C047C;
+	Tue, 12 Apr 2022 14:48:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+	s=20220209; t=1649767698;
+	bh=WVqpsKFERF6/eOkQXNZY4IJ8hqcJfaSUzzBXe4fgwjI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kBrx9WeyfmvMyOPhszxQMW5Vk3yV5X3GWH3Dl2wCUkqN0o1pJVwE2Zclkti2nql2G
+	 O6jWbEX+8IzmPgGEYykH9A5Nh6AvFzVNc8xp7pyOrKodWXnGF1a6PkSMnYzdiOdm7G
+	 s4WRDMLtd8RaLZ5/VD9ij/3TPbdszKcfNgVokP2xUb5yl6B2aoIHbKNEC+TJ0tAp5/
+	 R2Y0V2LUJz5BVTBDtfclAiRxK1q69L3O+Hr3kKr/uYT2C6vJPbcZj7DiOzbdJK9I6M
+	 oxLXUYu/IkTiqBbXakOXMZ1/Z9q6WW0jm5KKwwOI3KmlBY6bZKusHuxsNKdPLeGvG+
+	 EiI0wqhe7hJkA==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+	id 4E81D256; Tue, 12 Apr 2022 14:48:18 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 1E7EB254;
+	Tue, 12 Apr 2022 14:48:18 +0200 (CEST)
+Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
+	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 1A638252;
+	Tue, 12 Apr 2022 14:48:18 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+	id 163154A047D; Tue, 12 Apr 2022 14:48:18 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+	by mail.in.tum.de (Postfix) with ESMTPSA id 33CE54A0144;
+	Tue, 12 Apr 2022 14:48:17 +0200 (CEST)
+	(Extended-Queue-bit xtech_lz@fff.in.tum.de)
+Date: Tue, 12 Apr 2022 14:48:15 +0200
+From: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+	Charalampos Mainas <charalampos.mainas@gmail.com>,
+	Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: Re: Dangerous addr to ctrl dependency transformation in
+ fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+Message-ID: <YlV1D2RmZgx/PJn5@Pauls-MacBook-Pro.local>
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
+ <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <22622452.6Emhk5qWAg@kreacher> <202204121052.HOrN6tpw-lkp@intel.com>
-In-Reply-To: <202204121052.HOrN6tpw-lkp@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 12 Apr 2022 14:47:29 +0200
-Message-ID: <CAJZ5v0jMXBC63aPdt5FuMqC9sDN_avNbRaPyXjjyVkESMCxkXw@mail.gmail.com>
-Subject: Re: [PATCH 14/20] ACPICA: executer/exsystem: Inform users about ACPI
- spec violation
-To: kernel test robot <lkp@intel.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux ACPI <linux-acpi@vger.kernel.org>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, LKML <linux-kernel@vger.kernel.org>, 
-	Bob Moore <robert.moore@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
 
-On Tue, Apr 12, 2022 at 4:54 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi "Rafael,
->
-> Thank you for the patch! Yet something to improve:
+On Mon, Apr 11, 2022 at 11:21:41AM -0700, Paul E. McKenney wrote:
+> On Thu, Apr 07, 2022 at 05:12:15PM +0200, Paul Heidekrüger wrote:
+> > Hi all,
+> > 
+> > work on my dependency checker tool is progressing nicely, and it is
+> > flagging, what I believe is, a harmful addr to ctrl dependency
+> > transformation. For context, see [1] and [2]. I'm using the Clang
+> > compiler.
+> > 
+> > The dependency in question runs from line 618 into the for loop
+> > increment, i.e. the third expresion in the for loop condition, in line
+> > 622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
+> > 
+> > I did my best to reverse-engineer some pseudocode from Clang's IR for
+> > showing what I think is going on.
+> 
+> First, thank you very much for doing this work!
+> 
+> > Clang's unoptimised version:
+> > 
+> > > restart:
+> > > 	if(place_holder != NULL)
+> > > 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
+> > > 	if(delegation != NULL)
+> > > 		if(delegation != place_holder_deleg)
+> > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
+> > > 
+> > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
+> > > 		/*
+> > > 		 * Can continue, "goto restart" or "goto break" (after loop). 
+> > > 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
+> > > 		 * "delegation" might be assigned either a value depending on 
+> > > 		 * "delegation" itself, i.e. it is part of the dependency chain, 
+> > > 		 * or NULL.
+> > > 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
+> > > 		 * points to.
+> > > 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
+> > > 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
+> > > 		 * and the for loop's increment is executed.
+> > > 		 */
+> > > 	}
+> > 
+> > Clang's optimised version:
+> > 
+> > > restart:
+> > > 	if(place_holder == NULL) {
+> > > 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > > 	} else {
+> > > 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
+> > > 		if(cmp != NULL) { /* Transformation to ctrl dep */
+> > > 			if(cmp == place_holder_deleg) {
+> > > 				delegation = place_holder_deleg;
+> > > 			} else {
+> > > 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
+> > > 			}
+> > > 		} else {
+> > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > > 		}
+> > > 	}
+> > > 
+> > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
+> > > 		/*
+> > > 		 * At this point, "delegation" cannot depend on line 618 anymore
+> > > 		 * since the "rcu_dereference()" was only used for an assignment
+> > > 		 * to "cmp" and a subsequent comparison (ctrl dependency).
+> > > 		 * Therefore, the loop increment cannot depend on the
+> > > 		 * "rcu_dereference()" either. The dependency chain has been
+> > > 		 * broken.
+> > > 		 */
+> > >         }
+> > 
+> > The above is an abstraction of the following control flow path in
+> > "nfs_server_return_marked_delegations()":
+> > 
+> > 1. When "nfs_server_return_marked_delegations()" gets called, it has no
+> > choice but to skip the dependency beginning in line 620, since
+> > "place_holder" is NULL the first time round.
+> > 
+> > 2. Now take a path until "place_holder", the condition for the
+> > dependency beginning, becomes true and "!delegation || delegation !=
+> > place_holder_deleg", the condition for the assignment in line 620,
+> > becomes false. Then, enter the loop again and take a path to one of the
+> > "goto restart" statements without reassigning to "delegation".
+> > 
+> > 3. After going back to "restart", since the condition for line 618
+> > became true, "rcu_dereference()" into "delegation".
+> > 
+> > 4. Enter the for loop again, but avoid the "goto restart" statements in
+> > the first iteration and ensure that "&(delegation)->super_list !=
+> > &server->delegations", the loop condition, remains true and "delegation"
+> > isn't assigned NULL.
+> > 
+> > 5. When the for loop condition is reached for the second time, the loop
+> > increment is executed and there is an address dependency.
+> > 
+> > Now, why would the compiler decide to assign "place_holder_deleg" to
+> > "delegation" instead of what "rcu_dereference()" returned? Here's my
+> > attempt at explaining.
+> > 
+> > In the pseudo code above, i.e. in the optimised IR, the assignment of
+> > "place_holder_deleg" is guarded by two conditions. It is executed iff
+> > "place_holder" isn't NULL and the "rcu_dereference()" didn't return
+> > NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
+> > NULL" holds at line 617, then "delegation == rcu_dereference() ==
+> > place_holder_deleg" must hold at line 622. Otherwise, the optimisation
+> > would be wrong.
+> > 
+> > Assume control flow has just reached the first if, i.e. line 617, in
+> > source code. Since "place_holder" isn't NULL, it will execute the first
+> > if's body and "rcu_dereference()" into "delegation" (618). Now it has
+> > reached the second if. Per our aussmption, "rcu_dereference()" returned
+> > something that wasn't NULL. Therefore, "!delegation", the first part of
+> > the second if condition's OR, will be false.
+> > 
+> > However, if we want "rcu_dereference() == delegation" to hold after the
+> > two if's, we can't enter the second if anyway, as it will overwrite
+> > "delegation" with a value that might not be equal to what
+> > "rcu_dereference()" returned. So, we want the second part of the second
+> > if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
+> > as well.
+> > 
+> > When is that the case? It is the case when "delegation ==
+> > place_holder_deleg" holds.
+> > 
+> > So, if we want "delegation == rcu_dereference() == place_holder_deleg"
+> > to hold after the two if's, "place_holder != NULL && rcu_dereference()
+> > != NULL" must hold before the two if's, which is what we wanted to show
+> > and what the compiler figured out too.
+> > 
+> > TL;DR: it appears the compiler optimisation is plausible, yet it still
+> > breaks the address dependency.
+> > 
+> > For those interested, I have made the unoptimised and optimised IR CFGs
+> > available. In the optimised one, the interesting part is the transition
+> > from "if.end" to "if.end13".
+> > 
+> > Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
+> > 
+> > Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
+> > 
+> > What do you think?
+> > 
+> > Many thanks,
+> > Paul
+> > 
+> > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
+> 
+> If I understand this correctly (rather unlikely), this stems from
+> violating the following rule in Documentation/RCU/rcu_dereference.rst:
+> 
+> ------------------------------------------------------------------------
+> 
+> -	Be very careful about comparing pointers obtained from
+> 	rcu_dereference() against non-NULL values.  As Linus Torvalds
+> 	explained, if the two pointers are equal, the compiler could
+> 	substitute the pointer you are comparing against for the pointer
+> 	obtained from rcu_dereference().  For example::
+> 
+> 		p = rcu_dereference(gp);
+> 		if (p == &default_struct)
+> 			do_default(p->a);
+> 
+> 	Because the compiler now knows that the value of "p" is exactly
+> 	the address of the variable "default_struct", it is free to
+> 	transform this code into the following::
+> 
+> 		p = rcu_dereference(gp);
+> 		if (p == &default_struct)
+> 			do_default(default_struct.a);
+> 
+> 	On ARM and Power hardware, the load from "default_struct.a"
+> 	can now be speculated, such that it might happen before the
+> 	rcu_dereference().  This could result in bugs due to misordering.
+> 
+> 	However, comparisons are OK in the following cases:
+> 
+> 	-	The comparison was against the NULL pointer.  If the
+> 		compiler knows that the pointer is NULL, you had better
+> 		not be dereferencing it anyway.  If the comparison is
+> 		non-equal, the compiler is none the wiser.  Therefore,
+> 		it is safe to compare pointers from rcu_dereference()
+> 		against NULL pointers.
+> 
+> 	-	The pointer is never dereferenced after being compared.
+> 		Since there are no subsequent dereferences, the compiler
+> 		cannot use anything it learned from the comparison
+> 		to reorder the non-existent subsequent dereferences.
+> 		This sort of comparison occurs frequently when scanning
+> 		RCU-protected circular linked lists.
+> 
+> 		Note that if checks for being within an RCU read-side
+> 		critical section are not required and the pointer is never
+> 		dereferenced, rcu_access_pointer() should be used in place
+> 		of rcu_dereference().
+> 
+> 	-	The comparison is against a pointer that references memory
+> 		that was initialized "a long time ago."  The reason
+> 		this is safe is that even if misordering occurs, the
+> 		misordering will not affect the accesses that follow
+> 		the comparison.  So exactly how long ago is "a long
+> 		time ago"?  Here are some possibilities:
+> 
+> 		-	Compile time.
+> 
+> 		-	Boot time.
+> 
+> 		-	Module-init time for module code.
+> 
+> 		-	Prior to kthread creation for kthread code.
+> 
+> 		-	During some prior acquisition of the lock that
+> 			we now hold.
+> 
+> 		-	Before mod_timer() time for a timer handler.
+> 
+> 		There are many other possibilities involving the Linux
+> 		kernel's wide array of primitives that cause code to
+> 		be invoked at a later time.
+> 
+> 	-	The pointer being compared against also came from
+> 		rcu_dereference().  In this case, both pointers depend
+> 		on one rcu_dereference() or another, so you get proper
+> 		ordering either way.
+> 
+> 		That said, this situation can make certain RCU usage
+> 		bugs more likely to happen.  Which can be a good thing,
+> 		at least if they happen during testing.  An example
+> 		of such an RCU usage bug is shown in the section titled
+> 		"EXAMPLE OF AMPLIFIED RCU-USAGE BUG".
+> 
+> 	-	All of the accesses following the comparison are stores,
+> 		so that a control dependency preserves the needed ordering.
+> 		That said, it is easy to get control dependencies wrong.
+> 		Please see the "CONTROL DEPENDENCIES" section of
+> 		Documentation/memory-barriers.txt for more details.
+> 
+> 	-	The pointers are not equal *and* the compiler does
+> 		not have enough information to deduce the value of the
+> 		pointer.  Note that the volatile cast in rcu_dereference()
+> 		will normally prevent the compiler from knowing too much.
+> 
+> 		However, please note that if the compiler knows that the
+> 		pointer takes on only one of two values, a not-equal
+> 		comparison will provide exactly the information that the
+> 		compiler needs to deduce the value of the pointer.
+> 
+> ------------------------------------------------------------------------
+> 
+> But it would be good to support this use case, for example, by having
+> the compiler provide some way of marking the "delegation" variable as
+> carrying a full dependency.
+> 
+> Or did I miss a turn in here somewhere?
+> 
+> 							Thanx, Paul
 
-This is addressed by one of the subsequent patches in the series.
+Actually, I think you're spot on! The original source code has a,
+allbeit nested, comparison of "delegation" against a non-NULL value,
+which is exactly what the documentation discourages as it helps the
+compiler figure out the value of "delegation".
 
-> [auto build test ERROR on rafael-pm/linux-next]
-> [also build test ERROR on linus/master linux/master v5.18-rc2 next-20220411]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Rafael-J-Wysocki/ACPICA-ACPICA-20220331/20220412-030922
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-> config: i386-randconfig-a006-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121052.HOrN6tpw-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/5cdc6166cc35043a80f5f328d6e6b58190c4e46c
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Rafael-J-Wysocki/ACPICA-ACPICA-20220331/20220412-030922
->         git checkout 5cdc6166cc35043a80f5f328d6e6b58190c4e46c
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> Note: the linux-review/Rafael-J-Wysocki/ACPICA-ACPICA-20220331/20220412-030922 HEAD 32181ae3d3173aeee41f709612dfa4d52951b39d builds fine.
->       It only hurts bisectability.
->
-> All errors (new ones prefixed by >>):
->
-> >> drivers/acpi/acpica/exsystem.c:140:7: error: use of undeclared identifier 'how_long_US'; did you mean 'how_long_us'?
->                    if (how_long_US > 100) {
->                        ^~~~~~~~~~~
->                        how_long_us
->    drivers/acpi/acpica/exsystem.c:123:41: note: 'how_long_us' declared here
->    acpi_status acpi_ex_system_do_stall(u32 how_long_us)
->                                            ^
->    1 error generated.
->
->
-> vim +140 drivers/acpi/acpica/exsystem.c
->
->    105
->    106  /*******************************************************************************
->    107   *
->    108   * FUNCTION:    acpi_ex_system_do_stall
->    109   *
->    110   * PARAMETERS:  how_long_us     - The amount of time to stall,
->    111   *                                in microseconds
->    112   *
->    113   * RETURN:      Status
->    114   *
->    115   * DESCRIPTION: Suspend running thread for specified amount of time.
->    116   *              Note: ACPI specification requires that Stall() does not
->    117   *              relinquish the processor, and delays longer than 100 usec
->    118   *              should use Sleep() instead. We allow stalls up to 255 usec
->    119   *              for compatibility with other interpreters and existing BIOSs.
->    120   *
->    121   ******************************************************************************/
->    122
->    123  acpi_status acpi_ex_system_do_stall(u32 how_long_us)
->    124  {
->    125          acpi_status status = AE_OK;
->    126
->    127          ACPI_FUNCTION_ENTRY();
->    128
->    129          if (how_long_us > 255) {
->    130                  /*
->    131                   * Longer than 255 microseconds, this is an error
->    132                   *
->    133                   * (ACPI specifies 100 usec as max, but this gives some slack in
->    134                   * order to support existing BIOSs)
->    135                   */
->    136                  ACPI_ERROR((AE_INFO,
->    137                              "Time parameter is too large (%u)", how_long_us));
->    138                  status = AE_AML_OPERAND_VALUE;
->    139          } else {
->  > 140                  if (how_long_US > 100) {
->    141                          ACPI_WARNING((AE_INFO,
->    142                                        "Time parameter %u us > 100 us violating ACPI spec, please fix the firmware.",
->    143                                        how_long_us));
->    144                  }
->    145                  acpi_os_stall(how_long_us);
->    146          }
->    147
->    148          return (status);
->    149  }
->    150
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+I'll try to prepare a patch, using my dependency checker tool to verify
+that this was indeed the issue.
+
+Many thanks,
+Paul
