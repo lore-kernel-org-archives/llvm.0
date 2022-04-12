@@ -1,45 +1,45 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A697D7B
-	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 08:38:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFD87B
+	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 09:50:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649752685; x=1681288685;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QLFnvFZjCBbBm1WrCuQHfneVU5wUafBRZqi1LfvDPoE=;
-  b=mOSYN6HK4TTZts/UuOsNetTBcqvyjMVC1a0D+ojBhnMOq+qp/DfZzFbe
-   SZZd0R1XMKE2AVTGwe71xb776qGNwb/JKHiu8u5R3Gg6NEINTVeNp2nzt
-   zog34OBxVUkcZ1DyXbXlT+mGV/V5CVcd/2YY8PDelPgu0Lw9Jo+AAHdnC
-   gUKeiMmpQlNva+a/hI3RvUr84VXxCQUiecuMIMWU5fzHkZPZJev6RAIvr
-   tQDWapMylYMEFsk7JrduTu7s4GKFMcV3PPEwWbI5pAJNftVT89bqqzKc5
-   Pto7hwxOyz42XkMACv/eRIM8pxvmoe+JdGVY2NhOP5OJoScakqnP3KW07
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="259913380"
+  t=1649757041; x=1681293041;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+ly8MdmHPLc+5oJDQTx/Jq3Qcj4r+aduCH/cUSyk+Qk=;
+  b=bKGKV1w/6nK62K1I59CtdCaHs2NEOz2k1YTnkilk0HlXqbp5WTYyr6/Y
+   Vek+/AGtXXDAandxah7jgvGSnjl/r3hjA9L9Jnfo3Yro8sLaTIHlWaOtm
+   pSN1NRFxslBR0QHhcvV20aC5FkfOAglh1PqzUZ4GETNvXxnqpPQhmGaxm
+   +NjRFUKH/g1nB3Ms/lRXjdGJbJTzBnUOPfQ6NlJ4WVGQ4JSfy6Cw4ztTI
+   njSCA1LXLLjPHEJLVew7hi6JuFgYLA068M47tkxxlOMAsZzcnEKDLfPdK
+   2tBGYQF7VfJnqLBOJKBQj4IMp65G9wm9AkxXUR9p8SaFyG2F9YqhJyY/i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261182323"
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="259913380"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 01:38:05 -0700
+   d="scan'208";a="261182323"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 02:50:40 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="611341789"
+   d="scan'208";a="590263394"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 01:38:03 -0700
+  by orsmga001.jf.intel.com with ESMTP; 12 Apr 2022 02:50:38 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1neC2E-0002fc-Oa;
-	Tue, 12 Apr 2022 08:38:02 +0000
-Date: Tue, 12 Apr 2022 16:37:51 +0800
+	id 1neDAT-0002ia-SI;
+	Tue, 12 Apr 2022 09:50:37 +0000
+Date: Tue, 12 Apr 2022 17:49:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Patrick Wang <patrick.wang.shcn@gmail.com>, robh+dt@kernel.org,
-	frowand.list@gmail.com
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	patrick.wang.shcn@gmail.com
-Subject: Re: [PATCH] of: fdt: do not reserve memory below MIN_MEMBLOCK_ADDR
-Message-ID: <202204121637.4ZHpTqwT-lkp@intel.com>
-References: <20220412045228.35306-1-patrick.wang.shcn@gmail.com>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/not-zero-entropy 3/12]
+ kernel/time/timekeeping.c:2388: warning: expecting prototype for
+ random_read_entropy_fallback(). Prototype was for
+ random_get_entropy_fallback() instead
+Message-ID: <202204121736.FCps0gwC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,96 +48,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412045228.35306-1-patrick.wang.shcn@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Patrick,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Patrick-Wang/of-fdt-do-not-reserve-memory-below-MIN_MEMBLOCK_ADDR/20220412-125309
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm-buildonly-randconfig-r006-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121637.4ZHpTqwT-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/not-zero-entropy
+head:   4ee3bf173a552cd996e048d57f65bb5b471ab577
+commit: aeeed98e20910aeafd5db8c56b449810b60bad9f [3/12] timekeeping: add raw clock fallback for random_get_entropy()
+config: i386-randconfig-a003-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121736.FCps0gwC-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/d362274832c02bb7812c13eff968322a76f10ed3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Patrick-Wang/of-fdt-do-not-reserve-memory-below-MIN_MEMBLOCK_ADDR/20220412-125309
-        git checkout d362274832c02bb7812c13eff968322a76f10ed3
+        # https://github.com/ammarfaizi2/linux-block/commit/aeeed98e20910aeafd5db8c56b449810b60bad9f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/not-zero-entropy
+        git checkout aeeed98e20910aeafd5db8c56b449810b60bad9f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/time/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/of/fdt.c:494:4: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
-                           base, phys_offset);
-                           ^~~~
-   include/linux/printk.h:499:37: note: expanded from macro 'pr_warn'
-           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-                                      ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_SSD130X && HAS_IOMEM && DRM
+   kernel/time/timekeeping.c:1684: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * We have three kinds of time sources to use for sleep time
+   kernel/time/timekeeping.c:1705: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * 1) can be determined whether to use or not only when doing
+>> kernel/time/timekeeping.c:2388: warning: expecting prototype for random_read_entropy_fallback(). Prototype was for random_get_entropy_fallback() instead
+   kernel/time/timekeeping.c:2396: warning: Function parameter or member 'txc' not described in 'do_adjtimex'
+   kernel/time/timekeeping.c:2462: warning: Function parameter or member 'phase_ts' not described in 'hardpps'
+   kernel/time/timekeeping.c:2462: warning: Function parameter or member 'raw_ts' not described in 'hardpps'
 
 
-vim +494 drivers/of/fdt.c
+vim +2388 kernel/time/timekeeping.c
 
-   486	
-   487	static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
-   488						phys_addr_t size, bool nomap)
-   489	{
-   490		const u64 phys_offset = MIN_MEMBLOCK_ADDR;
-   491	
-   492		if (base < phys_offset) {
-   493			pr_warn("Ignoring reserved memory range 0x%llx - 0x%llx\n",
- > 494				base, phys_offset);
-   495			size = (phys_offset - base) < size ?
-   496				size - (phys_offset - base) : 0;
-   497			base = phys_offset;
-   498	
-   499			if (!size)
-   500				return -EFAULT;
-   501		}
-   502	
-   503		if (nomap) {
-   504			/*
-   505			 * If the memory is already reserved (by another region), we
-   506			 * should not allow it to be marked nomap, but don't worry
-   507			 * if the region isn't memory as it won't be mapped.
-   508			 */
-   509			if (memblock_overlaps_region(&memblock.memory, base, size) &&
-   510			    memblock_is_region_reserved(base, size))
-   511				return -EBUSY;
-   512	
-   513			return memblock_mark_nomap(base, size);
-   514		}
-   515		return memblock_reserve(base, size);
-   516	}
-   517	
+  2382	
+  2383	/**
+  2384	 * random_read_entropy_fallback - Returns the raw clock source value,
+  2385	 * used by random.c for platforms with no valid random_get_entropy().
+  2386	 */
+  2387	unsigned long random_get_entropy_fallback(void)
+> 2388	{
+  2389		return tk_clock_read(&tk_core.timekeeper.tkr_mono);
+  2390	}
+  2391	
 
 -- 
 0-DAY CI Kernel Test Service
