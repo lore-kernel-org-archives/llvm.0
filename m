@@ -1,74 +1,87 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4918C46A7
-	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 14:35:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649774121; x=1681310121;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HHsgRkFWikOLC0+eUkqw7b7yg2tukWfTOUQdrXgfpyE=;
-  b=J3GsG3/UyKPQig8P8/uJGo7gdCYA8jMzvgdQUlTFkkg3zjcMDyHP1SAL
-   Gg7s2V+S6Yt48tpKuSeIfY8fuvz2OvD9v1SfP8xFhJt+rwU/iA2q+G6C8
-   2Dwvjcy54ob1Vo/9VrNY4pYO3CmYvYGthad4oRSV7ShihtS9fV73lvHyJ
-   tJZNdkvYtiiqhPvrs0ZJgfuO6MqqbMaLrw7d9yAEM4vKpnVCouYmyO7So
-   GZzoKRoselNO/zBV017CLbwYyllwlr1mZjpkNP2XkMgzXAUHFMDumMBCA
-   ol104hKhHvEP0xf2Km7uDgDQ32kU7wQKWygOjfJW5r/CBuxKRVkS9/bSd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="322832802"
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="322832802"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 07:35:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="724471172"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 12 Apr 2022 07:35:11 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1neHbq-0002uS-Ko;
-	Tue, 12 Apr 2022 14:35:10 +0000
-Date: Tue, 12 Apr 2022 22:34:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jpoimboe:objtool-run 14/14] Error: unknown option `link'
-Message-ID: <202204122219.oMEWJFBW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913391FC6
+	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 15:19:30 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id x17so23679629lfa.10
+        for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 08:19:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PSN/G7KoRGQAWHR4F43xGgEd8OPfGRRXsI08IvJD1iw=;
+        b=i4SdmqPVAwCqWESWwmY6MXcUpY1VZFR2pdu7XSUg9+IOVt1o0bHs7m+/oz32NtwrhY
+         j2CHxlntzJri+QTf/5esfdtWT/Yjqdm4ODWzvSF7QMOhavynjxTqRzr21KJX4y0Peofe
+         MF7PxvB7w8bI1SiInG0DYbec8i/KE90EyWy7N4luk1pdmwYFwilKMQzVtHCyZXoMMQtc
+         YVStWP97a8WXTff+ptMrI6pMRKxCBYQ1N88CPkx7lfgFAk5/ZUyDq9GyxYBCjmGJRxwm
+         UIfihpHfVeOAILqaUlv5Sf8nnK+H6bwHondzj6rQjSIO0/rmF8PYofc9gwUsoAKnfGtt
+         J9Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PSN/G7KoRGQAWHR4F43xGgEd8OPfGRRXsI08IvJD1iw=;
+        b=d4Dns8g1pKtaxxKTo2ep687d0I9Rmu6im9VBTnHAb+2QKTavmLWq5ZiNsMFANlPysx
+         4tp4vCmKVCs0wICImRknSZ3+RHUt+8ZkodJBooKGI37AEAoy3I+gL/4uQ4RAL9q6huE5
+         78TlRd1JbuFFa9ac28yspt5BUZg4kZxXNOFOpYLLidNSUBSKHFLDMCL1K20yvtBUSMft
+         26FTEiDGCTi5SpJgCGCZIwL1+1H43adeGHW1CF2IaocmQQ/nPOEXVuOMsOYo7U03eEkk
+         HROB879B70Sd0VqEtGsyxtEfd53AXEFCuItAEOC+U7dvRU5wDn0/d0sa6fzFZSz/+6dD
+         nC2A==
+X-Gm-Message-State: AOAM53179J27fjsbCgrAYvLScHdfHBAGgS2BOfwHEDvx48IYxGDGxHNq
+	4MOsP0hrQg06nOypIxYsjyg=
+X-Google-Smtp-Source: ABdhPJxCm/oN52YYKUHdQ98NAwlPo+Q75+UZ/FEhNqLjr1fqzc6EKelA9yoG80pZqkUHXfy/qTduPQ==
+X-Received: by 2002:a05:6512:c01:b0:448:6aec:65c5 with SMTP id z1-20020a0565120c0100b004486aec65c5mr26121654lfu.193.1649776768427;
+        Tue, 12 Apr 2022 08:19:28 -0700 (PDT)
+Received: from [192.168.31.104] (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
+        by smtp.gmail.com with ESMTPSA id l13-20020a19494d000000b0046ba0e38750sm876671lfj.3.2022.04.12.08.19.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 08:19:27 -0700 (PDT)
+Message-ID: <7d6893a9-01d2-e1ab-06c2-745aa8bcd2b0@gmail.com>
+Date: Tue, 12 Apr 2022 17:19:25 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ipc/sem: Remove redundant assignments
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Andrew Morton <akpm@linux-foundation.org>
+References: <20220409101933.207157-1-michalorzel.eng@gmail.com>
+ <YlRNmXucZwNasoFq@thelio-3990X>
+From: Michal Orzel <michalorzel.eng@gmail.com>
+In-Reply-To: <YlRNmXucZwNasoFq@thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-run
-head:   7f408460a07320dc0da22915e82ec3b444fef8c8
-commit: 7f408460a07320dc0da22915e82ec3b444fef8c8 [14/14] todo
-config: x86_64-randconfig-a001-20220411 (https://download.01.org/0day-ci/archive/20220412/202204122219.oMEWJFBW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=7f408460a07320dc0da22915e82ec3b444fef8c8
-        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
-        git fetch --no-tags jpoimboe objtool-run
-        git checkout 7f408460a07320dc0da22915e82ec3b444fef8c8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi Nathan,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 11.04.2022 17:47, Nathan Chancellor wrote:
+> Hi Michal,
+> 
+> On Sat, Apr 09, 2022 at 12:19:31PM +0200, Michal Orzel wrote:
+>> Get rid of redundant assignments which end up in values not being
+>> read either because they are overwritten or the function ends.
+>>
+>> Reported by clang-tidy [deadcode.DeadStores]
+>>
+>> Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
+> 
+> Thank you for the patch! This should go through Andrew Morton, now CC'd.
+> 
+> For the future, having some history behind the origin of these warnings
+> would make review a little easier. I'll comment on each below.
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> 
+Thanks,
+I will keep that in mind when sending other patches fixing static analyzer findings.
 
-All errors (new ones prefixed by >>):
-
->> Error: unknown option `link'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Michal
