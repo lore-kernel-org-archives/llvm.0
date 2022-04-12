@@ -1,141 +1,115 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7916D1FA1
-	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 07:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D18A1FA1
+	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 07:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649748383; x=1681284383;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5OyqKZ2t12lVTvKw/fJWrzDUz4nPfGALPPcWHIJFgN8=;
-  b=O+Qvlm3KUxP6NVMuF9f3Uk8PHtLEqAfxKw7hl4eGYCN5b31hkBJvLS1M
-   aUVFvkSmYbolPm7NkycXFjPBRL3+yPHekPwZ7rEu8+lP3cjWpo7vaGX3m
-   Gixz6Yr6xG4ExcXlWfLWQ37eohuUu/fCETc/hZq1gZNLcd+owgIKhnO14
-   0VOmEQNTQuAQPWlj0dA2SKe3803QAl3yAgBnsZ+szM3l42GIk1cIrBcre
-   KdVEg7nt/MExsG3DxptHOB9k5174nlPqBG9fQsaetQk69QFeAZjMIQMqJ
-   Jni85dpNPkRsJW0SH29DcVw6BTOamZCtPUZrO9AsI9lbtIJKI1W4aXCPv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="249581554"
+  t=1649749049; x=1681285049;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0LJFvrdyN/JW03J9udGK9z8Z3EITY86/qGe+UYJwVjM=;
+  b=Leo8rNPKrmUEmyiVJgG/hzNCQ3akhmSMrDeQQKpX/TWJyNCNt08gxdDj
+   bOor1jQ0xsJ8hmcM2Hq4tJVQW8oNazhjxsQz+R2kDxlR7/dejVUw7wZwT
+   OxgK3QRVkSqgtSQpzcf/bt6J3KkMrtX0YNCn0970I1o1ezqfq8OFFkRYN
+   3LgjERudPKc+cgoI2S4qMdYR7ThxrLdmA66bshk0uBGupcW6KnqK5sly/
+   mdWBT3LpKF7Jkmgi68DgrVB4RJR7KqSEUroxSp32v5uJqd1XczOn3SWrd
+   Hov6/SQoROHkborNb1nMZlHYDCHlVACE6n944bu085tFnmCpryluWceSr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="287315895"
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="249581554"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 00:26:22 -0700
+   d="scan'208";a="287315895"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 00:37:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="644602157"
+   d="scan'208";a="525925955"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2022 00:26:17 -0700
+  by orsmga002.jf.intel.com with ESMTP; 12 Apr 2022 00:37:24 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1neAun-0002cr-5k;
-	Tue, 12 Apr 2022 07:26:17 +0000
-Date: Tue, 12 Apr 2022 15:25:46 +0800
+	id 1neB5X-0002dU-Ck;
+	Tue, 12 Apr 2022 07:37:23 +0000
+Date: Tue, 12 Apr 2022 15:36:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-	David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-	Gurchetan Singh <gurchetansingh@chromium.org>,
-	Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Gert Wollny <gert.wollny@collabora.com>,
-	Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Rob Herring <robh@kernel.org>, Steven Price <steven.price@arm.com>,
-	Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-	Rob Clark <robdclark@gmail.com>
+To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	virtualization@lists.linux-foundation.org,
-	Gustavo Padovan <gustavo.padovan@collabora.com>,
-	dri-devel@lists.freedesktop.org,
-	Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: Re: [PATCH v3 11/15] drm/shmem-helper: Add generic memory shrinker
-Message-ID: <202204121523.qVMxOvZg-lkp@intel.com>
-References: <20220411215937.281655-12-dmitry.osipenko@collabora.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:queue/5.17 638/1505]
+ drivers/net/dsa/realtek/realtek-smi-core.c:494:34: warning: unused variable
+ 'realtek_smi_of_match'
+Message-ID: <202204121538.1pGOoGfb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220411215937.281655-12-dmitry.osipenko@collabora.com>
+Content-Transfer-Encoding: 8bit
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Dmitry,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on next-20220411]
-[cannot apply to drm/drm-next v5.18-rc2 v5.18-rc1 v5.17 v5.18-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Osipenko/Add-generic-memory-shrinker-to-VirtIO-GPU-and-Panfrost-DRM-drivers/20220412-060325
-base:    d12d7e1cfe38e0c36d28c7a9fbbc436ad0d17c14
-config: i386-randconfig-a005-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121523.qVMxOvZg-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.17
+head:   22fa848c25c536c9ec7b151d56caa65b3e5b8b68
+commit: b0cbd13db467ef03b28297d3effb6b726c0dcba8 [638/1505] net: dsa: realtek-smi: move to subdirectory
+config: x86_64-randconfig-r033-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121538.1pGOoGfb-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/683ba8a9d72ba7770a61a9266a2b33949f3874f2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dmitry-Osipenko/Add-generic-memory-shrinker-to-VirtIO-GPU-and-Panfrost-DRM-drivers/20220412-060325
-        git checkout 683ba8a9d72ba7770a61a9266a2b33949f3874f2
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=b0cbd13db467ef03b28297d3effb6b726c0dcba8
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.17
+        git checkout b0cbd13db467ef03b28297d3effb6b726c0dcba8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/realtek/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/drm_gem_shmem_helper.c:289:11: warning: variable 'new_state' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           else if (shmem->madv < 0)
-                    ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/drm_gem_shmem_helper.c:292:46: note: uninitialized use occurs here
-           drm_gem_shmem_set_pages_state_locked(shmem, new_state);
-                                                       ^~~~~~~~~
-   drivers/gpu/drm/drm_gem_shmem_helper.c:289:7: note: remove the 'if' if its condition is always true
-           else if (shmem->madv < 0)
-                ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/drm_gem_shmem_helper.c:278:2: note: variable 'new_state' is declared here
-           enum drm_gem_shmem_pages_state new_state;
-           ^
+>> drivers/net/dsa/realtek/realtek-smi-core.c:494:34: warning: unused variable 'realtek_smi_of_match' [-Wunused-const-variable]
+   static const struct of_device_id realtek_smi_of_match[] = {
+                                    ^
    1 warning generated.
 
 
-vim +289 drivers/gpu/drm/drm_gem_shmem_helper.c
+vim +/realtek_smi_of_match +494 drivers/net/dsa/realtek/realtek-smi-core.c
 
-   273	
-   274	static void drm_gem_shmem_update_pages_state_locked(struct drm_gem_shmem_object *shmem)
-   275	{
-   276		struct drm_gem_object *obj = &shmem->base;
-   277		struct drm_gem_shmem_shrinker *gem_shrinker = obj->dev->shmem_shrinker;
-   278		enum drm_gem_shmem_pages_state new_state;
-   279	
-   280		if (!gem_shrinker || obj->import_attach)
-   281			return;
-   282	
-   283		mutex_lock(&gem_shrinker->lock);
-   284	
-   285		if (!shmem->madv)
-   286			new_state = DRM_GEM_SHMEM_PAGES_STATE_ACTIVE;
-   287		else if (shmem->madv > 0)
-   288			new_state = DRM_GEM_SHMEM_PAGES_STATE_PURGEABLE;
- > 289		else if (shmem->madv < 0)
-   290			new_state = DRM_GEM_SHMEM_PAGES_STATE_PURGED;
-   291	
-   292		drm_gem_shmem_set_pages_state_locked(shmem, new_state);
-   293	
-   294		mutex_unlock(&gem_shrinker->lock);
-   295	}
-   296	
+0650bf52b31ff3 drivers/net/dsa/realtek-smi-core.c Vladimir Oltean 2021-09-17  493  
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14 @494  static const struct of_device_id realtek_smi_of_match[] = {
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  495  	{
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  496  		.compatible = "realtek,rtl8366rb",
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  497  		.data = &rtl8366rb_variant,
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  498  	},
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  499  	{
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  500  		/* FIXME: add support for RTL8366S and more */
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  501  		.compatible = "realtek,rtl8366s",
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  502  		.data = NULL,
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  503  	},
+4af2950c50c863 drivers/net/dsa/realtek-smi-core.c Alvin Šipraga   2021-10-18  504  	{
+4af2950c50c863 drivers/net/dsa/realtek-smi-core.c Alvin Šipraga   2021-10-18  505  		.compatible = "realtek,rtl8365mb",
+4af2950c50c863 drivers/net/dsa/realtek-smi-core.c Alvin Šipraga   2021-10-18  506  		.data = &rtl8365mb_variant,
+4af2950c50c863 drivers/net/dsa/realtek-smi-core.c Alvin Šipraga   2021-10-18  507  	},
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  508  	{ /* sentinel */ },
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  509  };
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  510  MODULE_DEVICE_TABLE(of, realtek_smi_of_match);
+d8652956cf37c5 drivers/net/dsa/realtek-smi.c      Linus Walleij   2018-07-14  511  
+
+:::::: The code at line 494 was first introduced by commit
+:::::: d8652956cf37c5caa8c19e0b99ce5ca235c6d5de net: dsa: realtek-smi: Add Realtek SMI driver
+
+:::::: TO: Linus Walleij <linus.walleij@linaro.org>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
 0-DAY CI Kernel Test Service
