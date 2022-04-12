@@ -1,32 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C7443D82
-	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 21:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C00C385A5;
-	Tue, 12 Apr 2022 21:42:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1649799734;
-	bh=Qh6+GqKN5meXd+LrkS0vT//U/JIDvmn9UR+juFg+GOM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BNWc2i8NJ+1xk3Yc5bV/Y4/0DVgsiI/qFCzSa6+4eaO/L0OOYDqRIKL8eCEU7JK6N
-	 v8iObN66NfBfCTlbiBuRNpdNXoMXG6e5AztgPW2fI7e7Fx0r/ZsEoCyl7UWTXjp1p6
-	 /ZPQJffSRcbFZMpZBKDIQek+1HsyHqh5YlZL5wFfUDvWi1RObgDeq1q2rbazpvzgNS
-	 we9pmNCoho5u+Fh8ddWbULv6+PDMWIXFlaAMC0UGqCm5JjBFaOMjzvG5mOCwLJR/ts
-	 1rFZBGeePi9JcTqg/VIH4gbPoSWMsAHDOIbB0e8s9pORF3itl+TErmZaJCmVDjQVeW
-	 ertRqqXzWy5aA==
-Date: Tue, 12 Apr 2022 14:42:11 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Tom Rix <trix@redhat.com>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	ndesaulniers@google.com, sven@svenpeter.dev, alyssa@rosenzweig.io,
-	marcan@marcan.st, martink@posteo.de, saranya.gopal@intel.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] usb: typec: tipd: improve handling of failures in
- interrupt handlers
-Message-ID: <YlXyM7e+Bkqa3HCZ@dev-arch.thelio-3990X>
-References: <20220409130013.1474412-1-trix@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C1B3D82
+	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 21:46:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649799978; x=1681335978;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=pUxRBs0JutkHwxlvDkJEA9k4C0XtgjokANMoeyyHU1k=;
+  b=HCjusoyMjAqgF42NIhAfW8xh2KQa8qWoMvyRmPUZPsdzCoJu0gc0DWyR
+   HeyXZU376dMiK3DoCTFVBNJu8YekGL9tvQbZtjXXzon9sfVqZlur6vVF+
+   oeS5ggPWkT4jj5eZkRii+F+X2kqLgQeZmA/2rlEfVUYhXvuEF8BMKXe3Y
+   +JEaKT9i9zf4p/lzS6I/9pUJleUUp6Gw3LFaEAryYAYtYRgK0iuvHjvo/
+   dhp5WYbOvHJ+rFs96FdUzJzzv0vdllUlVvbQxGvTwztWISEtHXp/vRZIT
+   y4Qm4EDsjkfzvE70qXtc8BdWocARgVeZuXfTn6VjAFSVK6tm2OV8FG3e5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="243098277"
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="243098277"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 14:46:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="724640311"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 12 Apr 2022 14:46:16 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1neOL2-0003Bq-1W;
+	Tue, 12 Apr 2022 21:46:16 +0000
+Date: Wed, 13 Apr 2022 05:46:06 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-stable-rc:queue/5.10 2688/9999] ld.lld: error:
+ kernel/built-in.a(kallsyms.o):(function kallsyms_lookup: .text+0x6e4):
+ relocation R_RISCV_PCREL_HI20 out of range: 33553705 is not in [-524288,
+ 524287]; references kallsyms_names
+Message-ID: <202204130502.BLLV2Q8e-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,140 +45,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220409130013.1474412-1-trix@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Tom,
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Khem Raj <raj.khem@gmail.com>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Nathan Chancellor <nathan@kernel.org>
+CC: Palmer Dabbelt <palmerdabbelt@google.com>
+CC: Sasha Levin <sashal@kernel.org>
 
-Thanks for the patch!
+Hi Khem,
 
-On Sat, Apr 09, 2022 at 09:00:13AM -0400, Tom Rix wrote:
-> clang static analysis reports this representative issue
-> core.c:516:6: warning: Branch condition evaluates
->   to a garbage value
->   if (event)
->       ^~~~~
-> 
-> In cd321x_interrupt(), a successful call to
-> tps6598x_read64() is the only way event is set,
-> and if a failure happens the irq should not be
-> reported as handled.
-> 
-> Instead of initializing event, rework the
-> usage of ret by initializing it to IRQ_NONE
-> and then setting it when event is known to
-> be not zero.  This removes the if-statement
-> before the return.
-> 
-> tps6598x_interrupt() is similar.
-> 
-> Fixes: 0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
+FYI, the error/warning still remains.
 
-I am not sure this fixes tag is accurate. At that point in time,
-tps6598x_interrupt() did not have any use of event1 or event2 that was
-uninitialized.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+head:   b68f6a2cb08baf49e787c88f85391b58d6d2bc22
+commit: bb73f2f789695028a4cc8baf9d6a8df03fb5ae14 [2688/9999] riscv: Use -mno-relax when using lld linker
+config: riscv-randconfig-r042-20220412 (https://download.01.org/0day-ci/archive/20220413/202204130502.BLLV2Q8e-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=bb73f2f789695028a4cc8baf9d6a8df03fb5ae14
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.10
+        git checkout bb73f2f789695028a4cc8baf9d6a8df03fb5ae14
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-I think
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: c7260e29dd20 ("usb: typec: tipd: Add short-circuit for no irqs")
-Fixes: 45188f27b3d0 ("usb: typec: tipd: Add support for Apple CD321X")
+All errors (new ones prefixed by >>):
 
-is a more accurate set, as these changes made it possible for the event
-variables to be used uninitialized.
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_lookup: .text+0x6e4): relocation R_RISCV_PCREL_HI20 out of range: 33553705 is not in [-524288, 524287]; references kallsyms_names
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-
-I found one issue below. With that addressed, feel free to carry
-forward:
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  drivers/usb/typec/tipd/core.c | 24 +++++++++++-------------
->  1 file changed, 11 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 16b4560216ba..88a20cc15da4 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -478,12 +478,11 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  	struct tps6598x *tps = data;
->  	u64 event;
->  	u32 status;
-> -	int ret;
-> +	int ret = IRQ_NONE;
->  
->  	mutex_lock(&tps->lock);
->  
-> -	ret = tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event);
-> -	if (ret) {
-> +	if (tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event)) {
->  		dev_err(tps->dev, "%s: failed to read events\n", __func__);
->  		goto err_unlock;
->  	}
-> @@ -492,6 +491,8 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  	if (!event)
->  		goto err_unlock;
->  
-> +	ret = IRQ_HANDLED;
-> +
->  	if (!tps6598x_read_status(tps, &status))
->  		goto err_clear_ints;
->  
-> @@ -513,9 +514,7 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  err_unlock:
->  	mutex_unlock(&tps->lock);
->  
-> -	if (event)
-> -		return IRQ_HANDLED;
-> -	return IRQ_NONE;
-> +	return ret;
->  }
->  
->  static irqreturn_t tps6598x_interrupt(int irq, void *data)
-> @@ -524,13 +523,12 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
->  	u64 event1;
->  	u64 event2;
->  	u32 status;
-> -	int ret;
-> +	int ret = IRQ_NONE;
->  
->  	mutex_lock(&tps->lock);
->  
-> -	ret = tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event1);
-> -	ret |= tps6598x_read64(tps, TPS_REG_INT_EVENT2, &event2);
-> -	if (ret) {
-> +	if (tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event1) ||
-> +	    tps6598x_read64(tps, TPS_REG_INT_EVENT2, &event2)) {
-
-This change is incorrect. If the first tps6598x_read64() call succeeds,
-then the second tps6598x_read64() will not be called, which would leave
-event2 uninitialized. This should be a bitwise OR so that both calls to
-tps6598x_read64() occur.
-
->  		dev_err(tps->dev, "%s: failed to read events\n", __func__);
->  		goto err_unlock;
->  	}
-> @@ -539,6 +537,8 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
->  	if (!(event1 | event2))
->  		goto err_unlock;
->  
-> +	ret = IRQ_HANDLED;
-> +
->  	if (!tps6598x_read_status(tps, &status))
->  		goto err_clear_ints;
->  
-> @@ -561,9 +561,7 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
->  err_unlock:
->  	mutex_unlock(&tps->lock);
->  
-> -	if (event1 | event2)
-> -		return IRQ_HANDLED;
-> -	return IRQ_NONE;
-> +	return ret;
->  }
->  
->  static int tps6598x_check_mode(struct tps6598x *tps)
-> -- 
-> 2.27.0
-> 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
