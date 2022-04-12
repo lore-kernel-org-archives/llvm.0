@@ -1,45 +1,51 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFD87B
-	for <llvm@lists.linux.dev>; Tue, 12 Apr 2022 09:50:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE94F7B;
+	Tue, 12 Apr 2022 10:00:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649757041; x=1681293041;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+ly8MdmHPLc+5oJDQTx/Jq3Qcj4r+aduCH/cUSyk+Qk=;
-  b=bKGKV1w/6nK62K1I59CtdCaHs2NEOz2k1YTnkilk0HlXqbp5WTYyr6/Y
-   Vek+/AGtXXDAandxah7jgvGSnjl/r3hjA9L9Jnfo3Yro8sLaTIHlWaOtm
-   pSN1NRFxslBR0QHhcvV20aC5FkfOAglh1PqzUZ4GETNvXxnqpPQhmGaxm
-   +NjRFUKH/g1nB3Ms/lRXjdGJbJTzBnUOPfQ6NlJ4WVGQ4JSfy6Cw4ztTI
-   njSCA1LXLLjPHEJLVew7hi6JuFgYLA068M47tkxxlOMAsZzcnEKDLfPdK
-   2tBGYQF7VfJnqLBOJKBQj4IMp65G9wm9AkxXUR9p8SaFyG2F9YqhJyY/i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261182323"
+  t=1649757653; x=1681293653;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7tP6Hmh57tdYk/XI1EXwttwZcLinGHP54ZjZICaf18M=;
+  b=fZPDUNDrSwU2Y/m29Wr290TDIphF7UtGWFrDBGTnr0Oj0aSREZqCZSFR
+   WwJeMXeE8gA+8/9ZvdScFmLonJt32VRuRS4KV9jlAu113s8Cje5el4U2t
+   8eE5iJD6IsPsJ7Klf4TPc1LK8+/CwrHXSuMb0EopkJ1qm/BujOBdnSVxn
+   lbpWVNNA3XQqeqUqxpUiCzol8aSV7f98ZQ1sXAWPXRkBvskD47UbeFFwI
+   Dw8hZo0q28OcOWtKby9gsxJTb+JGQvwzOgfKIEnCfxQcGSaKzletNztSc
+   GqPPrW+dhcrcnnU417quMFSsl/aS62Vy7WQe1VOFUMaOQWPuZ3SHZWHJ1
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="244218785"
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="261182323"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 02:50:40 -0700
+   d="scan'208";a="244218785"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:00:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="590263394"
+   d="scan'208";a="525976363"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 12 Apr 2022 02:50:38 -0700
+  by orsmga002.jf.intel.com with ESMTP; 12 Apr 2022 03:00:47 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1neDAT-0002ia-SI;
-	Tue, 12 Apr 2022 09:50:37 +0000
-Date: Tue, 12 Apr 2022 17:49:40 +0800
+	id 1neDKJ-0002jQ-1f;
+	Tue, 12 Apr 2022 10:00:47 +0000
+Date: Tue, 12 Apr 2022 18:00:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+To: Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:crng/random/jd/not-zero-entropy 3/12]
- kernel/time/timekeeping.c:2388: warning: expecting prototype for
- random_read_entropy_fallback(). Prototype was for
- random_get_entropy_fallback() instead
-Message-ID: <202204121736.FCps0gwC-lkp@intel.com>
+	Samuel Holland <samuel@sholland.org>,
+	Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 04/10] drm/sun4i: Allow building the driver on RISC-V
+Message-ID: <202204121758.QeUxJKUh-lkp@intel.com>
+References: <20220411043423.37333-5-samuel@sholland.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,51 +54,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220411043423.37333-5-samuel@sholland.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/not-zero-entropy
-head:   4ee3bf173a552cd996e048d57f65bb5b471ab577
-commit: aeeed98e20910aeafd5db8c56b449810b60bad9f [3/12] timekeeping: add raw clock fallback for random_get_entropy()
-config: i386-randconfig-a003-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121736.FCps0gwC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+Hi Samuel,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on sunxi/sunxi/for-next]
+[also build test ERROR on drm/drm-next linus/master v5.18-rc2 next-20220412]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/drm-sun4i-Allwinner-D1-Display-Engine-2-0-Support/20220411-123701
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi/for-next
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220412/202204121758.QeUxJKUh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/aeeed98e20910aeafd5db8c56b449810b60bad9f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block crng/random/jd/not-zero-entropy
-        git checkout aeeed98e20910aeafd5db8c56b449810b60bad9f
+        # https://github.com/intel-lab-lkp/linux/commit/829dac8ee2cbb6d1b7bda1c513cc2ad1939fca53
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Samuel-Holland/drm-sun4i-Allwinner-D1-Display-Engine-2-0-Support/20220411-123701
+        git checkout 829dac8ee2cbb6d1b7bda1c513cc2ad1939fca53
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/time/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   kernel/time/timekeeping.c:1684: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * We have three kinds of time sources to use for sleep time
-   kernel/time/timekeeping.c:1705: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * 1) can be determined whether to use or not only when doing
->> kernel/time/timekeeping.c:2388: warning: expecting prototype for random_read_entropy_fallback(). Prototype was for random_get_entropy_fallback() instead
-   kernel/time/timekeeping.c:2396: warning: Function parameter or member 'txc' not described in 'do_adjtimex'
-   kernel/time/timekeeping.c:2462: warning: Function parameter or member 'phase_ts' not described in 'hardpps'
-   kernel/time/timekeeping.c:2462: warning: Function parameter or member 'raw_ts' not described in 'hardpps'
+>> drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:59:3: error: implicit declaration of function 'readsb' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   readsb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
+                   ^
+   drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:59:3: note: did you mean 'readb'?
+   arch/hexagon/include/asm/io.h:83:18: note: 'readb' declared here
+   static inline u8 readb(const volatile void __iomem *addr)
+                    ^
+>> drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:61:3: error: implicit declaration of function 'writesb' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   writesb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
+                   ^
+   drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:61:3: note: did you mean 'writeb'?
+   arch/hexagon/include/asm/io.h:122:20: note: 'writeb' declared here
+   static inline void writeb(u8 data, volatile void __iomem *addr)
+                      ^
+   2 errors generated.
 
 
-vim +2388 kernel/time/timekeeping.c
+vim +/readsb +59 drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c
 
-  2382	
-  2383	/**
-  2384	 * random_read_entropy_fallback - Returns the raw clock source value,
-  2385	 * used by random.c for platforms with no valid random_get_entropy().
-  2386	 */
-  2387	unsigned long random_get_entropy_fallback(void)
-> 2388	{
-  2389		return tk_clock_read(&tk_core.timekeeper.tkr_mono);
-  2390	}
-  2391	
+f0a3dd33ba685b Jonathan Liu 2017-07-02  24  
+f0a3dd33ba685b Jonathan Liu 2017-07-02  25  static int fifo_transfer(struct sun4i_hdmi *hdmi, u8 *buf, int len, bool read)
+f0a3dd33ba685b Jonathan Liu 2017-07-02  26  {
+f0a3dd33ba685b Jonathan Liu 2017-07-02  27  	/*
+f0a3dd33ba685b Jonathan Liu 2017-07-02  28  	 * 1 byte takes 9 clock cycles (8 bits + 1 ACK) = 90 us for 100 kHz
+f0a3dd33ba685b Jonathan Liu 2017-07-02  29  	 * clock. As clock rate is fixed, just round it up to 100 us.
+f0a3dd33ba685b Jonathan Liu 2017-07-02  30  	 */
+f0a3dd33ba685b Jonathan Liu 2017-07-02  31  	const unsigned long byte_time_ns = 100;
+f0a3dd33ba685b Jonathan Liu 2017-07-02  32  	const u32 mask = SUN4I_HDMI_DDC_INT_STATUS_ERROR_MASK |
+f0a3dd33ba685b Jonathan Liu 2017-07-02  33  			 SUN4I_HDMI_DDC_INT_STATUS_FIFO_REQUEST |
+f0a3dd33ba685b Jonathan Liu 2017-07-02  34  			 SUN4I_HDMI_DDC_INT_STATUS_TRANSFER_COMPLETE;
+f0a3dd33ba685b Jonathan Liu 2017-07-02  35  	u32 reg;
+939d749ad6649c Chen-Yu Tsai 2017-10-10  36  	/*
+939d749ad6649c Chen-Yu Tsai 2017-10-10  37  	 * If threshold is inclusive, then the FIFO may only have
+939d749ad6649c Chen-Yu Tsai 2017-10-10  38  	 * RX_THRESHOLD number of bytes, instead of RX_THRESHOLD + 1.
+939d749ad6649c Chen-Yu Tsai 2017-10-10  39  	 */
+939d749ad6649c Chen-Yu Tsai 2017-10-10  40  	int read_len = RX_THRESHOLD +
+939d749ad6649c Chen-Yu Tsai 2017-10-10  41  		(hdmi->variant->ddc_fifo_thres_incl ? 0 : 1);
+f0a3dd33ba685b Jonathan Liu 2017-07-02  42  
+939d749ad6649c Chen-Yu Tsai 2017-10-10  43  	/*
+939d749ad6649c Chen-Yu Tsai 2017-10-10  44  	 * Limit transfer length by FIFO threshold or FIFO size.
+939d749ad6649c Chen-Yu Tsai 2017-10-10  45  	 * For TX the threshold is for an empty FIFO.
+939d749ad6649c Chen-Yu Tsai 2017-10-10  46  	 */
+939d749ad6649c Chen-Yu Tsai 2017-10-10  47  	len = min_t(int, len, read ? read_len : SUN4I_HDMI_DDC_FIFO_SIZE);
+f0a3dd33ba685b Jonathan Liu 2017-07-02  48  
+f0a3dd33ba685b Jonathan Liu 2017-07-02  49  	/* Wait until error, FIFO request bit set or transfer complete */
+939d749ad6649c Chen-Yu Tsai 2017-10-10  50  	if (regmap_field_read_poll_timeout(hdmi->field_ddc_int_status, reg,
+939d749ad6649c Chen-Yu Tsai 2017-10-10  51  					   reg & mask, len * byte_time_ns,
+939d749ad6649c Chen-Yu Tsai 2017-10-10  52  					   100000))
+f0a3dd33ba685b Jonathan Liu 2017-07-02  53  		return -ETIMEDOUT;
+f0a3dd33ba685b Jonathan Liu 2017-07-02  54  
+f0a3dd33ba685b Jonathan Liu 2017-07-02  55  	if (reg & SUN4I_HDMI_DDC_INT_STATUS_ERROR_MASK)
+f0a3dd33ba685b Jonathan Liu 2017-07-02  56  		return -EIO;
+f0a3dd33ba685b Jonathan Liu 2017-07-02  57  
+f0a3dd33ba685b Jonathan Liu 2017-07-02  58  	if (read)
+939d749ad6649c Chen-Yu Tsai 2017-10-10 @59  		readsb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
+f0a3dd33ba685b Jonathan Liu 2017-07-02  60  	else
+939d749ad6649c Chen-Yu Tsai 2017-10-10 @61  		writesb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
+f0a3dd33ba685b Jonathan Liu 2017-07-02  62  
+939d749ad6649c Chen-Yu Tsai 2017-10-10  63  	/* Clear FIFO request bit by forcing a write to that bit */
+939d749ad6649c Chen-Yu Tsai 2017-10-10  64  	regmap_field_force_write(hdmi->field_ddc_int_status,
+939d749ad6649c Chen-Yu Tsai 2017-10-10  65  				 SUN4I_HDMI_DDC_INT_STATUS_FIFO_REQUEST);
+f0a3dd33ba685b Jonathan Liu 2017-07-02  66  
+f0a3dd33ba685b Jonathan Liu 2017-07-02  67  	return len;
+f0a3dd33ba685b Jonathan Liu 2017-07-02  68  }
+f0a3dd33ba685b Jonathan Liu 2017-07-02  69  
 
 -- 
 0-DAY CI Kernel Test Service
