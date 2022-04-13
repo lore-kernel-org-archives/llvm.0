@@ -1,176 +1,198 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA3723D6
-	for <llvm@lists.linux.dev>; Wed, 13 Apr 2022 07:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B36128E0
+	for <llvm@lists.linux.dev>; Wed, 13 Apr 2022 08:44:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649834831; x=1681370831;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9+856DcjO2YNbuW7rEr3u9PhAYPs1Ie75ilf0c59pmE=;
-  b=POQjT+t+Z3PeNFogwepYexD//ydowkSUWsca8zEWoruI18kqFtAiQWJ+
-   sD3M+AiOGZAa2ub8GMH9tfuiQHtRKzIMlz8M/mx7NHiBh/qXOLBNnNVZD
-   wjZB39zU57TRayaJkoOErV2+T7z1SHNxhUN+7nLiFyVhRXAFaXDZlRJVA
-   D8W16OxmxHYZ7g8b3Vfgk8QxLCuyTQaCOyuur/eU80OvcDvjXcJyUOCbR
-   tHgxcjIpVLwujXgV3+q8YSWEv21+tSOQz1xpuip+QS7fnR3lNBD6hQg/R
-   LpNDLL/WQbtCZ+V/bFV/eDyBB1zu5K9gG0jkesJGk/zaWSh7hqj+jh+bF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="260193678"
+  t=1649839442; x=1681375442;
+  h=message-id:date:subject:references:to:cc:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=MOhC2EROjl8CR1Hex+gbkLjRXMTWPc1bAZh57j/B1kg=;
+  b=XBQhx6WBbUrWRTuZdv3A+iK7EcihfDV9qdJszuk/M+TXLAzJ4NzFPSjn
+   OS7RDFIGEXdJ50EAmyea+2VyM8Gnnnam6JKE3Dm2vU2KHRArSTwJRw/c3
+   1STLBPIOYqF6RzKus5MJIFwcYGnIJ+ilj4uwxa8Nzl1CzZ7+RWkJdD3Vu
+   DJrZwxe509f+wVyrIVUFctxMief753UrsAI50Rt2QN347JywW1oaqzUtt
+   NoBFZ7ixIPuuDCrzrJwr2CBZGt2T5443VeIlMeI93y1QeI9XFjWFV/nRf
+   4/lg8lToXQlUumb/jXNPOVFQ8xwgNGqvGc6POM1wJGZWvPJ8iVCb3gnol
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="243194348"
 X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="260193678"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 00:27:10 -0700
+   d="scan'208";a="243194348"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 01:44:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="590656716"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 13 Apr 2022 00:27:08 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1neXPA-00006i-3N;
-	Wed, 13 Apr 2022 07:27:08 +0000
-Date: Wed, 13 Apr 2022 15:26:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 2/19]
- fs/netfs/objects.c:48:2: error: implicit declaration of function
- 'netfs_proc_add_writeback' is invalid in C99
-Message-ID: <202204131520.EiLQsAAH-lkp@intel.com>
+   d="scan'208";a="645084786"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Apr 2022 01:44:00 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 13 Apr 2022 01:44:00 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 13 Apr 2022 01:44:00 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 13 Apr 2022 01:43:59 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UwB7RUYOozYagDVRZxlu0276ycrA3BInJyyprNosci5aABhl/eRhBja9kFuWQJKXjzue2ZFbbWOb/bWF3kG0yqPWEhlurQKzEG7JtUGkTbY+yiQ3QepiEFTcl2ST4GKUEUBO8tsGph3gz76eZA4ZppfxDHiF/I1SzE8MnE0Nza3Ib+pXCWj9ODj5XXEwYQugwDqCHLfLhDOJwhPy5jaRE4WTOnn8EBLKWC8FWtrdVIhFfxcg9s3JCRyDM4dIVP3Pbjf5tMmZmAgzWoBVVw2HrILsTtVviKdNMFcwymhsR92U82zeNJozP0GyOR5UTtHsv1RRonvp3saI5JbG/GEOKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MRLK5LgeevbCa7rPe0SF9aAtZ1gI+GuRXiyfJWcdqOg=;
+ b=KeY08OFJLU16dLN6rTxkmhZkvrunxMRiRqy4UdIakHhDJMi0ndJM3fctfdXhH4EqRfyUW73CT0cwJI24QnAPNf55/Y5735lID77ojuGOYb2YWIISeNaznx1qGxOBtnfujtnwEc1n+aHEqB4iH81eZTisIteku8AcWGeAMw/7F7rzRP0ikj8u1PaDCNRgk/tvWG0scg63WhVB+WLzZv+manlVEUQ03P7L1P84ZcTbgL47sJKzuLtWXngLQ1dxlpidHDw/5qgOF9Lcq4h/Z7rfptVg2C4gYgDW9E/8h1i+UOOOvPZohm5mj67N60Z1uLK07YOkwSm0YOfRyGBzsyEvBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ0PR11MB5598.namprd11.prod.outlook.com (2603:10b6:a03:304::12)
+ by SN6PR11MB2653.namprd11.prod.outlook.com (2603:10b6:805:63::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
+ 2022 08:43:57 +0000
+Received: from SJ0PR11MB5598.namprd11.prod.outlook.com
+ ([fe80::90bc:9408:541e:5b94]) by SJ0PR11MB5598.namprd11.prod.outlook.com
+ ([fe80::90bc:9408:541e:5b94%7]) with mapi id 15.20.5164.018; Wed, 13 Apr 2022
+ 08:43:57 +0000
+Message-ID: <5f198292-247a-e3bd-f3b2-0052d318fc20@intel.com>
+Date: Wed, 13 Apr 2022 16:43:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.0
+Subject: [tip:perf/core 3/10] arch/x86/events/amd/core.c:722:3: warning: Value
+ stored to 'hwc' is never read [clang-analyzer-deadcode.DeadStores]
+References: <202204110431.SBvb4g5G-lkp@intel.com>
+Content-Language: en-US
+To: Stephane Eranian <eranian@google.com>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>, "Linux Kernel Mailing
+ List" <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>
+From: kernel test robot <yujie.liu@intel.com>
+In-Reply-To: <202204110431.SBvb4g5G-lkp@intel.com>
+X-Forwarded-Message-Id: <202204110431.SBvb4g5G-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HK2P15301CA0017.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:202:1::27) To SJ0PR11MB5598.namprd11.prod.outlook.com
+ (2603:10b6:a03:304::12)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 45b69582-5ffb-40d3-4424-08da1d29bf70
+X-MS-TrafficTypeDiagnostic: SN6PR11MB2653:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <SN6PR11MB2653C7E96F054E2C01AF8B5EFBEC9@SN6PR11MB2653.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vgO6H2NCZIurMpRQstade7Jdaj6uzlyIZ5mZn/KxRHndfJvd8x5z0SXvnnKqkolRR82qhlgAi+cMSXBis0v33CCT8Jvp54yMUym6vqrOY+hb2+1rRxTH7QNJRRY/sdDF81PeqKPy4eaM3gcFMh5TW6xhEkM5+QwVoHD+uCshPf8wmrfIGwwdJTqAlBNOZ/c5n7EMWkFZMHt6/EP5JniwEmL+jXYE4/3ghtPK3C6OUGL0dtheJ68YI7BUK6/fxreMxg4p3hVRZ6lDvnhpTNPSSCAJy25lm16jLUcig6vmB4aU0K4zJojBsktRQHlMHNj83ibo4/OgMk7hDBIumv5EqFKIL0BgFEbzaVhzaCcXT3z0sm1n6DhhQd/CttOIUFD1PORCHNEXNj9AqceDJZnJdNvKVH69iYXcaFN9W/m7zPGob1K2r11GCb3xoBwIpjBDCUvHNyHC4tB2np6BXoJhQ3qrxJSjjHzErWN4lYwMkynwdUGYCpDeO/RhRmm7CI6Lrou3BN8rlp557ZWoBrEoEzZNuDfxBRnyvO3eRgpr0pvRdl7aSPWyPTGG11+SfAzPPch8S3SX1JTzXRC6o0/NATYFS9XIEaVYl721ixeNhwcbg2cbORQgNrY7UZl0aVOkUASSwtPGDkzCY7EFBKj0USRKUx3o2q2omGhqLA7219BQdVoOgkBYt1ePgep/I0i19yymd3OMuh6y4C5otomz/doDvaRnneDwrrStZEyzireIpj1nfZZ/Q/Li8jfvd6ldSU8AWfz/IFlYwozFqGf7Z7E8kMwciit4B/pF8SYIiJa/3VQL+uKzlXvh6E+xtSOKNrEYJRyvwGMcqd+8d59QXucUgeT7urjbafygvOQWTyU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5598.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(8936002)(316002)(38100700002)(66946007)(66556008)(6916009)(82960400001)(31696002)(8676002)(4326008)(54906003)(5660300002)(6666004)(6512007)(86362001)(6506007)(966005)(26005)(2616005)(6486002)(508600001)(83380400001)(31686004)(2906002)(36756003)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VENVNEN2enZOdmJWQmEzS292eVgrL0YzekFLN1hCMldzVlBrdzhWL2dhZXFW?=
+ =?utf-8?B?STlFMlB2Wlg2Rm5KWkhWdTFIYjRWK3REaHp3OS9ubWR4QmhvV3NOM0I4Ukk2?=
+ =?utf-8?B?YzhiZnFmTndEYllkZXQ4bEozUWlHVlNnZHdOekdvRjZQWXJZYnFzV0RiTGFJ?=
+ =?utf-8?B?WE90TklzOUVyeTdudzdhZmhhYno3eG5DLzJmc1d0Vno0eEw0MEQ3T2hYZURz?=
+ =?utf-8?B?WVE2NXNtcG9aTHhoendaN1FOZTgxM1U1WTRoMjc2bFJwS3pYb0p6cXR6bFdM?=
+ =?utf-8?B?K1I5K3drV1hRcVdEMnA0SjFHNGhVZjVSbnlQWUtPQUUrSFoybWxhcWY4bXNO?=
+ =?utf-8?B?VklISkJSNWkzeEd3LzR4LzFjTEh3Y012eENpSUFRQzdjK3lENWc1MnFSNG9i?=
+ =?utf-8?B?di9lTmloNG9ub1V4MzZGTkh5akdRRlpRTjFJQm8rY1NWMGFiQzF3aXM4SUJt?=
+ =?utf-8?B?dzJjbHYxajdQU1BjRXorRzJ5N1JYZUdncEJveHNoSGJONjNTRGNLMVlGUWxo?=
+ =?utf-8?B?QUt5QU01MzJXTTVRaFpJQ3gwenZ4YnA0cUViT3ZmcUdVYTgzU3ltL3VpMnJD?=
+ =?utf-8?B?eDNBRndTVzlKa3N6QnBidWhqNEFYaUMzSERLZmRRNFZHeUJIS0sxSmtHMHUr?=
+ =?utf-8?B?UDVxa2Q3Ymp0bUVYZFJtU0g1UDhsdjVaMmdqMllFbnJlaS85NW9xR3hwb0dS?=
+ =?utf-8?B?Y3AxVWRzRTVWaENqaFE0am1yUFREY0FBanV0WlN3RVV5UFk4eGE4UkdiZGE0?=
+ =?utf-8?B?ay9pWkVDZjhJbUtrYlFURGpoQm8wZ3J3N205ZHdCZUQxYit5c0o3aEU5Rkto?=
+ =?utf-8?B?MEp2UmVsMzB4UkJzRGdwYmJmS3ZnTmFVQXRKbEpvRXUrZFFOcnZMeTZVa3hM?=
+ =?utf-8?B?bmxGM3hyejdDQWR0Qll3VFVXT0VHdkR2Z3I2VHVRMXlOTS8va05PbTBBMVZl?=
+ =?utf-8?B?SVJSYXM2UzgrZUhodWl2NGh6Z2RpYjNoOVorTGd0MlZ5eGNzSktwREJCdjNo?=
+ =?utf-8?B?NUFaZVQvRW95cENCdStIMDZEN3hxTyswQ3l6TFRUYlc4bUtMMitYeFl0aHZa?=
+ =?utf-8?B?Rlhqa0xycnQrcUlwN29DeVh1ekd4RlNPS3JDcUg2NjlmcC93RDIrMDV0S01R?=
+ =?utf-8?B?dUVxRDZScWNHVW5QS2R0eTRPOHlPVnphd2RJR2ppbm00ZTFoR1laUW9md1pj?=
+ =?utf-8?B?Tk5HbzFBUHV1SDF1ZWQ2Z0gzQXlKQXZIZEF6V2xQRmg2N2JEdnVFNmhkNU9s?=
+ =?utf-8?B?emYxdDlKenFsS05YM3ZzT0RTOXhtdzFhbGc5K0hlUDEvbjRjS3VENVgvQUdz?=
+ =?utf-8?B?NE9vSmRrTTltSFFROS9kN3pnMHhXV0s4azlZbXhsY3k3ZXEvR2dWMTdlSmhw?=
+ =?utf-8?B?cDJDeDVHSGVveG9xUUJJcG0yUWVpODJra1hnaTVQcVBkcmR6d0ZsbmFyWS9h?=
+ =?utf-8?B?TmYrUDNjbjdCdU9kNUg5SUlXZUg5TWF2SjlPUU1nL2lkcTZmbUo1eU5sR3ZC?=
+ =?utf-8?B?SDBCdFlvamdONmNmNlBaWlcrWldXeCs2RFBORHQ4enhLNHBTdEpJc1hxR0dP?=
+ =?utf-8?B?YWtGeUtEM2xDWUVMOFZZMWFCd2wweUovSHBpNVhyeUF0OXFKdllsam53RmYw?=
+ =?utf-8?B?aUJuNXloaWY0WFVUVnRGcnZxNlBRSXlFMUQ2aXgrSVFXSXFOcjZ2Q3lYTkk4?=
+ =?utf-8?B?K2hDU3VjMDYwN2Z3YUJCSzM3dGxvckQxWlVJZm9GUUlvSU9PMkxlQXlsSEVq?=
+ =?utf-8?B?QW5zM3NEazhCYUN4V1FDSVErOUEzOVRFV0Q4aC80aGtvOEVtSTk3Y1R0NEJa?=
+ =?utf-8?B?STZ4WGJrU2x1MWtGcDlRNWxHcDRjQkVWMEZlK1BoUW9tRnA1bmJueFcxdkxj?=
+ =?utf-8?B?ZXFvZXNmS3YrbFNHMDZML3dIWW5wUFZyRWVobFFHMk45c2RtVzhHSlhhS09K?=
+ =?utf-8?B?WFdSek1LUytRcllkQklmbytUbU9FTHVJZVBXM2o5akxzNEozNEZPUDBmdVVH?=
+ =?utf-8?B?MlU2RmZ1UFZhUi9BMFVwRkg0MVQxTTRPNUUzZG5ZV0loZ2JoVnNadEV3Y1Qw?=
+ =?utf-8?B?SEVCUUhCZHpTdXBWcnRRNUhoL21LNi9HS3A3akxTemxyV2VKUllFd01HZDBG?=
+ =?utf-8?B?VkpMY0RxSjBvWHNUVUNOaGFIempSNDhXK3gxTk5rMlFyL1IyS25ybG5jSFJw?=
+ =?utf-8?B?WERNVXpQUC9welhDN2FXekFySGhHdHhhV1lyWm84VzVTRDZWaWtKWjhOZlpY?=
+ =?utf-8?B?a2lNK1gvM2E5eEZyY0trR2VqTEt5dTlLRHdsaVdCVklWSWtWN1BQVEUrMmVB?=
+ =?utf-8?B?dGtaQk1FZExUMldORHlIQkpuemtub05oVnc2aC9VRmtZVk40bWhnZz09?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45b69582-5ffb-40d3-4424-08da1d29bf70
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5598.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 08:43:57.2922
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 02yMpmBOqCZNA2PTD/aOyrCUO0Qn40kbHlevAb2ylLeoHKH79wh+rZAdnPutU7BgGqHrkNmV3+g+VKZWlI1qbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2653
+X-OriginatorOrg: intel.com
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
-head:   581c77dd1ab4abe122b649ed7118b3581ff1a437
-commit: 20239f3d18983c183a267ab537919bc88990b832 [2/19] netfs: Add a procfile to list in-progress requests
-config: s390-buildonly-randconfig-r002-20220412 (https://download.01.org/0day-ci/archive/20220413/202204131520.EiLQsAAH-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
+head:   7bebfe9dd802b80abff5a43e00ab68d98893a22c
+commit: ada543459cab7f653dcacdaba4011a8bb19c627c [3/10] perf/x86/amd: Add AMD Fam19h Branch Sampling support
+config: x86_64-randconfig-c007 (https://download.01.org/0day-ci/archive/20220411/202204110431.SBvb4g5G-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/20239f3d18983c183a267ab537919bc88990b832
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
-        git checkout 20239f3d18983c183a267ab537919bc88990b832
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+         chmod +x ~/bin/make.cross
+         # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=ada543459cab7f653dcacdaba4011a8bb19c627c
+         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+         git fetch --no-tags tip perf/core
+         git checkout ada543459cab7f653dcacdaba4011a8bb19c627c
+         # save the config file to linux build tree
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64 clang-analyzer
 
 If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> fs/netfs/objects.c:48:2: error: implicit declaration of function 'netfs_proc_add_writeback' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           netfs_proc_add_writeback(rreq);
-           ^
-   fs/netfs/objects.c:48:2: note: did you mean 'netfs_proc_add_rreq'?
-   fs/netfs/internal.h:51:20: note: 'netfs_proc_add_rreq' declared here
-   static inline void netfs_proc_add_rreq(struct netfs_io_request *rreq) {}
-                      ^
->> fs/netfs/objects.c:80:2: error: implicit declaration of function 'netfs_proc_del_writeback' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           netfs_proc_del_writeback(rreq);
-           ^
-   fs/netfs/objects.c:80:2: note: did you mean 'netfs_proc_del_rreq'?
-   fs/netfs/internal.h:52:20: note: 'netfs_proc_del_rreq' declared here
-   static inline void netfs_proc_del_rreq(struct netfs_io_request *rreq) {}
-                      ^
-   2 errors generated.
+Reported-by: kernel test robot <yujie.liu@intel.com>
 
 
-vim +/netfs_proc_add_writeback +48 fs/netfs/objects.c
+clang-analyzer warnings: (new ones prefixed by >>)
 
-    10	
-    11	/*
-    12	 * Allocate an I/O request and initialise it.
-    13	 */
-    14	struct netfs_io_request *netfs_alloc_request(struct address_space *mapping,
-    15						     struct file *file,
-    16						     loff_t start, size_t len,
-    17						     enum netfs_io_origin origin)
-    18	{
-    19		static atomic_t debug_ids;
-    20		struct inode *inode = file ? file_inode(file) : mapping->host;
-    21		struct netfs_i_context *ctx = netfs_i_context(inode);
-    22		struct netfs_io_request *rreq;
-    23		int ret;
-    24	
-    25		rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
-    26		if (!rreq)
-    27			return ERR_PTR(-ENOMEM);
-    28	
-    29		rreq->start	= start;
-    30		rreq->len	= len;
-    31		rreq->origin	= origin;
-    32		rreq->netfs_ops	= ctx->ops;
-    33		rreq->mapping	= mapping;
-    34		rreq->inode	= inode;
-    35		rreq->i_size	= i_size_read(inode);
-    36		rreq->debug_id	= atomic_inc_return(&debug_ids);
-    37		INIT_LIST_HEAD(&rreq->subrequests);
-    38		refcount_set(&rreq->ref, 1);
-    39		__set_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
-    40		if (rreq->netfs_ops->init_request) {
-    41			ret = rreq->netfs_ops->init_request(rreq, file);
-    42			if (ret < 0) {
-    43				kfree(rreq);
-    44				return ERR_PTR(ret);
-    45			}
-    46		}
-    47	
-  > 48		netfs_proc_add_writeback(rreq);
-    49		netfs_stat(&netfs_n_rh_rreq);
-    50		return rreq;
-    51	}
-    52	
-    53	void netfs_get_request(struct netfs_io_request *rreq, enum netfs_rreq_ref_trace what)
-    54	{
-    55		int r;
-    56	
-    57		__refcount_inc(&rreq->ref, &r);
-    58		trace_netfs_rreq_ref(rreq->debug_id, r + 1, what);
-    59	}
-    60	
-    61	void netfs_clear_subrequests(struct netfs_io_request *rreq, bool was_async)
-    62	{
-    63		struct netfs_io_subrequest *subreq;
-    64	
-    65		while (!list_empty(&rreq->subrequests)) {
-    66			subreq = list_first_entry(&rreq->subrequests,
-    67						  struct netfs_io_subrequest, rreq_link);
-    68			list_del(&subreq->rreq_link);
-    69			netfs_put_subrequest(subreq, was_async,
-    70					     netfs_sreq_trace_put_clear);
-    71		}
-    72	}
-    73	
-    74	static void netfs_free_request(struct work_struct *work)
-    75	{
-    76		struct netfs_io_request *rreq =
-    77			container_of(work, struct netfs_io_request, work);
-    78	
-    79		trace_netfs_rreq(rreq, netfs_rreq_trace_free);
-  > 80		netfs_proc_del_writeback(rreq);
-    81		netfs_clear_subrequests(rreq, false);
-    82		if (rreq->netfs_ops->free_request)
-    83			rreq->netfs_ops->free_request(rreq);
-    84		if (rreq->cache_resources.ops)
-    85			rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
-    86		kfree_rcu(rreq, rcu);
-    87		netfs_stat_d(&netfs_n_rh_rreq);
-    88	}
-    89	
+ >> arch/x86/events/amd/core.c:722:3: warning: Value stored to 'hwc' is never read [clang-analyzer-deadcode.DeadStores]
+                    hwc = &cpuc->events[idx]->hw;
+                    ^     ~~~~~~~~~~~~~~~~~~~~~~
+
+vim +/hwc +722 arch/x86/events/amd/core.c
+
+ada543459cab7f Stephane Eranian 2022-03-22  712
+ada543459cab7f Stephane Eranian 2022-03-22  713  static void amd_pmu_enable_all(int added)
+ada543459cab7f Stephane Eranian 2022-03-22  714  {
+ada543459cab7f Stephane Eranian 2022-03-22  715  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ada543459cab7f Stephane Eranian 2022-03-22  716  	struct hw_perf_event *hwc;
+ada543459cab7f Stephane Eranian 2022-03-22  717  	int idx;
+ada543459cab7f Stephane Eranian 2022-03-22  718
+ada543459cab7f Stephane Eranian 2022-03-22  719  	amd_brs_enable_all();
+ada543459cab7f Stephane Eranian 2022-03-22  720
+ada543459cab7f Stephane Eranian 2022-03-22  721  	for (idx = 0; idx < x86_pmu.num_counters; idx++) {
+ada543459cab7f Stephane Eranian 2022-03-22 @722  		hwc = &cpuc->events[idx]->hw;
+ada543459cab7f Stephane Eranian 2022-03-22  723
+ada543459cab7f Stephane Eranian 2022-03-22  724  		/* only activate events which are marked as active */
+ada543459cab7f Stephane Eranian 2022-03-22  725  		if (!test_bit(idx, cpuc->active_mask))
+ada543459cab7f Stephane Eranian 2022-03-22  726  			continue;
+ada543459cab7f Stephane Eranian 2022-03-22  727
+ada543459cab7f Stephane Eranian 2022-03-22  728  		amd_pmu_enable_event(cpuc->events[idx]);
+ada543459cab7f Stephane Eranian 2022-03-22  729  	}
+ada543459cab7f Stephane Eranian 2022-03-22  730  }
+ada543459cab7f Stephane Eranian 2022-03-22  731
 
 -- 
 0-DAY CI Kernel Test Service
