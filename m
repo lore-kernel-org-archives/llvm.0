@@ -1,82 +1,96 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050CA291E
-	for <llvm@lists.linux.dev>; Wed, 13 Apr 2022 19:26:43 +0000 (UTC)
-Received: by mail-pl1-f179.google.com with SMTP id p10so2776213plf.9
-        for <llvm@lists.linux.dev>; Wed, 13 Apr 2022 12:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jf/ZCTZ5Gt2jVqN46dFAbZd9GqgtwDVJ36AS2dLx9QE=;
-        b=fDivrUePV7M5M2U9uoSiSeosNah6RKsS1lEZDEDtTtdJ5JoDGOjQVirldSum93E/03
-         aor33I8b33rmWXERSUDFzQDlz4xm+t3bXDzkQr1IoDv2fc9FJmmsJpZgtzm4kZkM5y8S
-         4AV0eKhTgzGC6KzpOIPEs5CzCZmL+rf86NQeg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jf/ZCTZ5Gt2jVqN46dFAbZd9GqgtwDVJ36AS2dLx9QE=;
-        b=PHwE/VHItuE5rn661zprxyOKBo24p+sou1xUq+z4kKntgtnACswn1yxVqA9j8VYDNr
-         PXLPWF+w7QZ/u3P77Ou2Qop66Tcy56wAooBCFRUYtl/blUhOUAf9PZ5XwIzniERho03z
-         YhrCAJE/UE4e1trVYsS6j1Tn2d/x/eJbV6OFxudpPXkbDKA7W6+O/9EWfPP+3FGq2TUq
-         jHUK+D2FlMUPjDW9KDO1M0BgWLXG8Ka7rrQFPQlcDzAXrJWWRy8U9IQhQoFtcnvzCRXp
-         HqRBlv0tddja9nRsZjkQY9AEA8Jm64la/NBnzhaDsHZF8NinLLsqjcJKHffdtI43QUZm
-         kqQA==
-X-Gm-Message-State: AOAM530C1880mIg0HEtTUw09xLqvqXZ8CdYsd9FzsVG6+6U4QSvvERxx
-	cjm6T72/bTDh+Fy0Ow5+97Vv3g==
-X-Google-Smtp-Source: ABdhPJwsDOGUzvY9tZ6EmHG6uOb71mNsqBiP8D5hYRNo/rNgxu/k9B4PViksdjKiE4djMDXlMlspSw==
-X-Received: by 2002:a17:902:d884:b0:153:ce8e:66fe with SMTP id b4-20020a170902d88400b00153ce8e66femr44113768plz.157.1649878003377;
-        Wed, 13 Apr 2022 12:26:43 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm45505437pfl.135.2022.04.13.12.26.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 12:26:42 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: samitolvanen@google.com
-Cc: Kees Cook <keescook@chromium.org>,
-	nathan@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	masahiroy@kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA7F23A6
+	for <llvm@lists.linux.dev>; Wed, 13 Apr 2022 22:54:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649890461; x=1681426461;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8V4OPc5qWzAYZSVwVpMIb8F9Q8695qCcFacUPCDjceI=;
+  b=KrLykR+1LuVjenmlMwmyyJNecorBc6cvhoHrIizglvmppIo0dF+emJeU
+   7bk4HT8b+RoL8d7L63OTuPctvlQh8mFMzXbuUxCDSsKSgHHZ3iF9jYoW5
+   3/pwIj360wEenNX8D0cCJ6JyRbt5UwOmkiPsZsdll4LgOaBMkMGfiBYvc
+   /Llkkfem3O1fTWFqO4ppNtZUylD4LhQhDIv7zvmTjYCXa9DC7+T5CXoLU
+   rYDS9+1zRFLaVsfm6US3g2rYrhque17ZBE98eSlhZtzb/h/R8W/hjwgJr
+   i5K2aO+0JenlPRXVGm6CBd+UBSbUEeowwpNlCSD3HZ3NccmLEy9DPwGHl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="261640978"
+X-IronPort-AV: E=Sophos;i="5.90,258,1643702400"; 
+   d="scan'208";a="261640978"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 15:54:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,258,1643702400"; 
+   d="scan'208";a="854968940"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Apr 2022 15:54:15 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nelsN-0000gs-2D;
+	Wed, 13 Apr 2022 22:54:15 +0000
+Date: Thu, 14 Apr 2022 06:54:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yan Zhu <zhuyan34@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	mark.rutland@arm.com,
-	ndesaulniers@google.com,
-	will@kernel.org,
-	catalin.marinas@arm.com
-Subject: Re: [PATCH v2] cfi: Use __builtin_function_start
-Date: Wed, 13 Apr 2022 12:26:33 -0700
-Message-Id: <164987798634.655998.2445977983913600905.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220405221618.633743-1-samitolvanen@google.com>
-References: <20220405221618.633743-1-samitolvanen@google.com>
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [ammarfaizi2-block:bpf/bpf-next/pr/bpf-sysctl 1/1]
+ kernel/bpf/syscall.c:4944:13: warning: no previous prototype for function
+ 'unpriv_ebpf_notify'
+Message-ID: <202204140608.VUvJxAlq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, 5 Apr 2022 15:16:18 -0700, Sami Tolvanen wrote:
-> Clang 14 added support for the __builtin_function_start function,
-> which allows us to implement the function_nocfi macro without
-> architecture-specific inline assembly and in a way that also works
-> with static initializers.
-> 
-> Change CONFIG_CFI_CLANG to depend on Clang >= 14, define
-> function_nocfi using __builtin_function_start, and remove the arm64
-> inline assembly implementation.
-> 
-> [...]
+tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf-next/pr/bpf-sysctl
+head:   2900005ea287b11dcc8c1b9fcf24893b7ff41d6d
+commit: 2900005ea287b11dcc8c1b9fcf24893b7ff41d6d [1/1] bpf: Move BPF sysctls from kernel/sysctl.c to BPF core
+config: arm64-buildonly-randconfig-r005-20220413 (https://download.01.org/0day-ci/archive/20220414/202204140608.VUvJxAlq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/2900005ea287b11dcc8c1b9fcf24893b7ff41d6d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block bpf/bpf-next/pr/bpf-sysctl
+        git checkout 2900005ea287b11dcc8c1b9fcf24893b7ff41d6d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/bpf/
 
-Applied to for-next/hardening, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[1/1] cfi: Use __builtin_function_start
-      https://git.kernel.org/kees/c/e6f3b3c9c109
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/syscall.c:4944:13: warning: no previous prototype for function 'unpriv_ebpf_notify' [-Wmissing-prototypes]
+   void __weak unpriv_ebpf_notify(int new_state)
+               ^
+   kernel/bpf/syscall.c:4944:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __weak unpriv_ebpf_notify(int new_state)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/unpriv_ebpf_notify +4944 kernel/bpf/syscall.c
+
+  4943	
+> 4944	void __weak unpriv_ebpf_notify(int new_state)
+  4945	{
+  4946	}
+  4947	
 
 -- 
-Kees Cook
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
