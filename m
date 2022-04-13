@@ -1,45 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E97123BD
-	for <llvm@lists.linux.dev>; Wed, 13 Apr 2022 02:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3E523BD
+	for <llvm@lists.linux.dev>; Wed, 13 Apr 2022 03:04:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649818411; x=1681354411;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hRIWfIYlFrX7ZKl3HBejDOvzl6OoZT8bn+gfQ7L9d5o=;
-  b=Qkfo8wSi4Xn9w/JPVe56YmU5uU6iEp7W/MQLWcE88HfXJtbkhrz7gXjY
-   jgOnUhYzkMA/fUEwzfBqPPa8sy8GxNIK832aeQ6FMXMWeQLkiMWyDekhu
-   UTrXEbH+Fxdi2lTfrnQMbtLzeow79pEZn07PyjvUs3mnz6XXfOjR4omHJ
-   EYRVSALSAgoBNjREoft3YRSPmkkI+LY0tdSs7u2oNAind65SHOxOJtCZj
-   hZrfpM72cU8qSxU/TW5mqwuBYKldKl37jCr8N1CjISC/i/UqQio3z1hnS
-   p7tnVF/V+XKDoaVO6W9ga9VXr4yyNE3q/wbD9uBQLPnxXJ+clWv0aMReS
+  t=1649819071; x=1681355071;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dK7udxG6bgxJt7xKd4ClWjZpEriOEAWgaIkIvydR0Sg=;
+  b=jkA38qdnXH/JQuFVMKYrQq1z+A7u6QxrrspETb36upskaxHr8JAFfKuA
+   UDolTk+0JR2OtAgtaqgs2MPLU/kKZBbUQsuZ8xAviMz+wAiH9SM+jqpI4
+   iUpyPRocvqRRpuEaujUXaWzBjZNVJ4/J4BMbOeMKrIHByrBI+huGnnFfw
+   VoP59fkOZlZj65gJ1iNJ1YJGVrCze39RJSNQHDj+x1QXwOH9CWC5vx//0
+   i5FL1KuTe67f6fkZLkCBZcUWccbNXaHgULGAGpeKMFeh15q58spkTze7f
+   RG9c3XM4gqGvXTxpQPxy1Qi7yT7pG7Dyb8znxh0PUrBgxtjlQ+HZdltA4
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="325463553"
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="261405502"
 X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
-   d="scan'208";a="325463553"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 19:53:30 -0700
+   d="scan'208";a="261405502"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 20:04:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
-   d="scan'208";a="611708753"
+   d="scan'208";a="700081100"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 19:53:28 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 12 Apr 2022 20:04:29 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1neT8K-0003Nk-67;
-	Wed, 13 Apr 2022 02:53:28 +0000
-Date: Wed, 13 Apr 2022 10:53:04 +0800
+	id 1neTIz-0003OI-6u;
+	Wed, 13 Apr 2022 03:04:29 +0000
+Date: Wed, 13 Apr 2022 11:03:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	LKML <linux-kernel@vger.kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Christoph Hellwig <hch@infradead.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [patch V4 1/2] smp: Rename flush_smp_call_function_from_idle()
-Message-ID: <202204131056.b582vtMv-lkp@intel.com>
-References: <20220412204353.655068649@linutronix.de>
+	linux-kernel@vger.kernel.org
+Subject: [mark:stacktrace/testing 1/1] ERROR: modpost:
+ "kallsyms_lookup_size_offset" [lib/test_stacktrace/test_stacktrace.ko]
+ undefined!
+Message-ID: <202204131029.GIdIxZ9E-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,30 +46,20 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412204353.655068649@linutronix.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Thomas,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on tip/sched/core]
-[also build test WARNING on hch-configfs/for-next linus/master linux/master v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Gleixner/smp-Make-softirq-handling-RT-friendly/20220413-045944
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 089c02ae2771a14af2928c59c56abfb9b885a8d7
-config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20220413/202204131056.b582vtMv-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git stacktrace/testing
+head:   a8e8825116626f8c3e8be3bb889b6442a7465cb8
+commit: a8e8825116626f8c3e8be3bb889b6442a7465cb8 [1/1] WIP: stacktrace tests
+config: hexagon-randconfig-r041-20220412 (https://download.01.org/0day-ci/archive/20220413/202204131029.GIdIxZ9E-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7c7c3b99f3599eb409f237b32f330fa06bffcd5d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Thomas-Gleixner/smp-Make-softirq-handling-RT-friendly/20220413-045944
-        git checkout 7c7c3b99f3599eb409f237b32f330fa06bffcd5d
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=a8e8825116626f8c3e8be3bb889b6442a7465cb8
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark stacktrace/testing
+        git checkout a8e8825116626f8c3e8be3bb889b6442a7465cb8
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
@@ -79,51 +67,18 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> kernel/smp.c:697:6: warning: no previous prototype for function 'flush_smp_call_function_queue' [-Wmissing-prototypes]
-   void flush_smp_call_function_queue(void)
-        ^
-   kernel/smp.c:697:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void flush_smp_call_function_queue(void)
+>> ERROR: modpost: "kallsyms_lookup_size_offset" [lib/test_stacktrace/test_stacktrace.ko] undefined!
+--
+>> lib/test_stacktrace/kunit.c:54:5: warning: no previous prototype for function 'st_find_func_idx' [-Wmissing-prototypes]
+   int st_find_func_idx(struct st_data *st, void *func, int start)
+       ^
+   lib/test_stacktrace/kunit.c:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int st_find_func_idx(struct st_data *st, void *func, int start)
    ^
    static 
    1 warning generated.
-
-
-vim +/flush_smp_call_function_queue +697 kernel/smp.c
-
-   683	
-   684	
-   685	/**
-   686	 * flush_smp_call_function_queue - Flush pending smp-call-function callbacks
-   687	 *				   from task context (idle, migration thread)
-   688	 *
-   689	 * When TIF_POLLING_NRFLAG is supported and a CPU is in idle and has it
-   690	 * set, then remote CPUs can avoid sending IPIs and wake the idle CPU by
-   691	 * setting TIF_NEED_RESCHED. The idle task on the woken up CPU has to
-   692	 * handle queued SMP function calls before scheduling.
-   693	 *
-   694	 * The migration thread has to ensure that an eventually pending wakeup has
-   695	 * been handled before it migrates a task.
-   696	 */
- > 697	void flush_smp_call_function_queue(void)
-   698	{
-   699		unsigned long flags;
-   700	
-   701		if (llist_empty(this_cpu_ptr(&call_single_queue)))
-   702			return;
-   703	
-   704		cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->idle, CFD_SEQ_NOCPU,
-   705			      smp_processor_id(), CFD_SEQ_IDLE);
-   706		local_irq_save(flags);
-   707		__flush_smp_call_function_queue(true);
-   708		if (local_softirq_pending())
-   709			do_softirq();
-   710	
-   711		local_irq_restore(flags);
-   712	}
-   713	
 
 -- 
 0-DAY CI Kernel Test Service
