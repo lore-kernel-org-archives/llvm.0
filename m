@@ -1,141 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375EC7B
-	for <llvm@lists.linux.dev>; Wed, 13 Apr 2022 18:16:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58370C385A3;
-	Wed, 13 Apr 2022 18:16:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1649873805;
-	bh=2PyU5+wH+1ioE4szb8MizzXuB+wDw+SvOadxmPcv3gw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=XCfqrjUnlFQ2/Z3Dw1r25L1UJS/3jKHbfIkuMvjc9WxH/ngfCXMYbuA/iO/ouh3U5
-	 T0+221xA/m/n8vXhJf2Lh61SA8h8xH+zK3PLMhlyEc75mE89ClhUfyWnVgB7DAlEgS
-	 EjuQVXJRyn6Qy37OTeW3T7cDyAaiZRumMrceQ65TqzmyXtcsZRsTxcEALQ32CSc/l0
-	 qX23IuS3yLMZvE3hqqxyTSWYDfjMFHRW5+espAK701WLu8BBnbqAEwETFVJge/uBWo
-	 DLZQiVQ/CJqrlTXoYgEvXGSaGe2HcSuwQYxVA6faSDWqO7ga2aAT8AfPqjxpdfO54P
-	 q2qFDZ7W9LTHw==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH] arm64: Improve HAVE_DYNAMIC_FTRACE_WITH_REGS selection for clang
-Date: Wed, 13 Apr 2022 11:14:21 -0700
-Message-Id: <20220413181420.3522187-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CFD291E
+	for <llvm@lists.linux.dev>; Wed, 13 Apr 2022 18:48:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649875713; x=1681411713;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vADpo0Y/n9wmDwVhgSNuPyebjkxQp2ZgIereRbZ+S2E=;
+  b=PySrNCr7vPEik0cK7+nwUHVa1enNNLjIiwiG8fDj2uFLQzGKFyJhTww+
+   KHyUOVWfwUYrSjkzT/qNYe1AxxApyY8N8zvZLkSxqBfLSpa6sF/RfonoG
+   LhDmbvahdQ5Q32HH1Eht6ZV7kgX1Df6zcY/OtyW/1Bv1B//HyaqnTOjaB
+   IaEw5bVJ2sNVcae2a5A+vV+XfH8Ihc19df358DviPSi1Lp7AVVeKrYEGE
+   d41bGUInJrpoMKgbpa5Ue6yunQP1jN2ERvfdbcEvDVKSEssdndN8eiRDi
+   nVWdGBdW9Vf3QyKIPK5bx1BQUZr5f6OUGUTwZRZ+voimX7CC0Yt9CeP7R
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="243334677"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="243334677"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:48:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="725016107"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 13 Apr 2022 11:48:31 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nei2Y-0000Wj-NH;
+	Wed, 13 Apr 2022 18:48:30 +0000
+Date: Thu, 14 Apr 2022 02:48:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Thompson <daniel.thompson@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [daniel-thompson:kdb/seq_file 1/5] include/linux/kdb.h:217:33:
+ warning: declaration of 'struct seq_operations' will not be visible outside
+ of this function
+Message-ID: <202204140223.LWUYoH9B-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Will and Anders reported that using just 'CC=clang' with CONFIG_FTRACE=y
-and CONFIG_STACK_TRACER=y would result in an error while linking:
+tree:   https://git.linaro.org/people/daniel.thompson/linux.git kdb/seq_file
+head:   b58798cd87e95bdb8832940ba312ce920de71613
+commit: e333b2ce40d76f3250a29a610671861f5ad0689c [1/5] kdb: Add framework to display sequence files
+config: arm64-buildonly-randconfig-r003-20220413 (https://download.01.org/0day-ci/archive/20220414/202204140223.LWUYoH9B-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        git remote add daniel-thompson https://git.linaro.org/people/daniel.thompson/linux.git
+        git fetch --no-tags daniel-thompson kdb/seq_file
+        git checkout e333b2ce40d76f3250a29a610671861f5ad0689c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/printk/
 
-  aarch64-linux-gnu-ld: .init.data has both ordered [`__patchable_function_entries' in init/main.o] and unordered [`.meminit.data' in mm/sparse.o] sections
-  aarch64-linux-gnu-ld: final link failed: bad value
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This error was exposed by commit f12b034afeb3 ("scripts/Makefile.clang:
-default to LLVM_IAS=1") in combination with binutils older than 2.36.
+All warnings (new ones prefixed by >>):
 
-When '-fpatchable-function-entry' was implemented in LLVM, two code
-paths were added for adding the section attributes, one for the
-integrated assembler and another for GNU as, due to binutils
-deficiencies at the time. If the integrated assembler was used,
-attributes that GNU ld < 2.36 could not handle were added, presumably
-with the assumption that use of the integrated assembler meant the whole
-LLVM stack was being used, namely ld.lld.
+   In file included from kernel/printk/printk_safe.c:7:
+>> include/linux/kdb.h:217:33: warning: declaration of 'struct seq_operations' will not be visible outside of this function [-Wvisibility]
+   kdb_print_seq_file(const struct seq_operations *ops) { return 0; }
+                                   ^
+   1 warning generated.
 
-Prior to the kernel change previously mentioned, that assumption was
-valid, as there were three commonly used combinations of tools for
-compiling, assembling, and linking respectively:
 
-$ make CC=clang (clang, GNU as, GNU ld)
-$ make LLVM=1 (clang, GNU as, ld.lld)
-$ make LLVM=1 LLVM_IAS=1 (clang, integrated assembler, ld.lld)
+vim +217 include/linux/kdb.h
 
-After the default switch of the integrated assembler, the second and
-third commands become equivalent and the first command means "clang,
-integrated assembler, and GNU ld", which was not a combination that was
-considered when the aforementioned LLVM change was implemented.
+   210	
+   211	/* Dynamic kdb shell command registration */
+   212	extern int kdb_register(kdbtab_t *cmd);
+   213	extern void kdb_unregister(kdbtab_t *cmd);
+   214	#else /* ! CONFIG_KGDB_KDB */
+   215	static inline __printf(1, 2) int kdb_printf(const char *fmt, ...) { return 0; }
+   216	static inline int
+ > 217	kdb_print_seq_file(const struct seq_operations *ops) { return 0; }
+   218	static inline void kdb_init(int level) {}
+   219	static inline int kdb_register(kdbtab_t *cmd) { return 0; }
+   220	static inline void kdb_unregister(kdbtab_t *cmd) {}
+   221	#endif	/* CONFIG_KGDB_KDB */
+   222	enum {
+   223		KDB_NOT_INITIALIZED,
+   224		KDB_INIT_EARLY,
+   225		KDB_INIT_FULL,
+   226	};
+   227	
 
-It is not possible to go back and fix LLVM, as this change was
-implemented in the 10.x series, which is no longer supported. To
-workaround this on the kernel side, split out the selection of
-HAVE_DYNAMIC_FTRACE_WITH_REGS to two separate configurations, one for
-GCC and one for clang.
-
-The GCC config inherits the '-fpatchable-function-entry' check. The
-Clang config does not it, as '-fpatchable-function-entry' is always
-available for LLVM 11.0.0 and newer, which is the supported range of
-versions for the kernel.
-
-The Clang config makes sure that the user is using GNU as or the
-integrated assembler with ld.lld or GNU ld 2.36 or newer, which will
-avoid the error above.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1507
-Link: https://github.com/ClangBuiltLinux/linux/issues/788
-Link: https://lore.kernel.org/YlCA5PoIjF6nhwYj@dev-arch.thelio-3990X/
-Link: https://sourceware.org/bugzilla/show_bug.cgi?id=26256
-Link: https://github.com/llvm/llvm-project/commit/7fa5290d5bd5632d7a36a4ea9f46e81e04fb819e
-Link: https://github.com/llvm/llvm-project/commit/853a2649160c1c80b9bbd38a20b53ca8fab704e8
-Reported-by: Anders Roxell <anders.roxell@linaro.org>
-Reported-by: Will Deacon <will@kernel.org>
-Tested-by: Will Deacon <will@kernel.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-If there is a better place to put these symbols, please let me know!
-
-No fixes tag, as commit f12b034afeb3 ("scripts/Makefile.clang: default
-to LLVM_IAS=1") made this easier to hit but this has always been a
-problem that could be hit ('make CC=clang LLVM_IAS=1').
-
- arch/arm64/Kconfig | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 57c4c995965f..1fd16faa7f31 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -175,8 +175,6 @@ config ARM64
- 	select HAVE_DEBUG_KMEMLEAK
- 	select HAVE_DMA_CONTIGUOUS
- 	select HAVE_DYNAMIC_FTRACE
--	select HAVE_DYNAMIC_FTRACE_WITH_REGS \
--		if $(cc-option,-fpatchable-function-entry=2)
- 	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY \
- 		if DYNAMIC_FTRACE_WITH_REGS
- 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
-@@ -228,6 +226,17 @@ config ARM64
- 	help
- 	  ARM 64-bit (AArch64) Linux support.
- 
-+config CLANG_SUPPORTS_DYNAMIC_FTRACE_WITH_REGS
-+	def_bool CC_IS_CLANG
-+	# https://github.com/ClangBuiltLinux/linux/issues/1507
-+	depends on AS_IS_GNU || (AS_IS_LLVM && (LD_IS_LLD || LD_VERSION >= 23600))
-+	select HAVE_DYNAMIC_FTRACE_WITH_REGS
-+
-+config GCC_SUPPORTS_DYNAMIC_FTRACE_WITH_REGS
-+	def_bool CC_IS_GCC
-+	depends on $(cc-option,-fpatchable-function-entry=2)
-+	select HAVE_DYNAMIC_FTRACE_WITH_REGS
-+
- config 64BIT
- 	def_bool y
- 
-
-base-commit: ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
 -- 
-2.35.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
