@@ -1,36 +1,36 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277163225
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 21:33:31 +0000 (UTC)
-Received: by mail-lj1-f172.google.com with SMTP id n17so2701925ljc.11
-        for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 14:33:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9869F3225
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 21:42:25 +0000 (UTC)
+Received: by mail-lf1-f53.google.com with SMTP id bi26so11322833lfb.2
+        for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 14:42:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=FiXeDUXp16zKJj+mcJh8ScMaBjpuOPaR9nYFXOkk6f8=;
-        b=FbaIuBg/7dhs/uWN5PQfxk10t/IWdc/zHPtC49e7dSuPrvc0fUWL/iVsIUWRAwVh7p
-         Xv1loUqW0tud004xqJbvaSyr5tibUNuE45FUmhSwvyABWxIb3Hw+eH/bz2jSKwYbkC3M
-         IdadwSERGLt53qj6Aq4GM7JZLwBHEXWJ6WEafIxuMc/CBSJTqWuGltW/s5A4ynrZb5Yi
-         fgFD8JJDXqa+hTH1FGN6dfGQ1isz5OOH8wscgj93dJm39BIEVVIt5C9Go/jD3yxC7gWu
-         1uudOcmrEw+5vjqSHjgAZse4VgnSUZ/utk5CqtpiKskw/b/AYHnDKaugJzpjHg5itkoK
-         rLiQ==
+        bh=tcBZgcin2Qyz/lpER3nOUcqk5oo+6NLHp21dTPe5XSI=;
+        b=qr0NB//CO+T6ov9HWJAjA7QrzZwDVcVTEJCMfcqFTiHPOyq/M9Yiq7SAXiZ7PyrfrI
+         iVIqF8xNnQm4BzAXLPX2wEZrAPGS/Yz12lackQllkmoX/eJ2pGARERTH9lc31ZAsk1be
+         SsSTw5+s70/B4BoSErVc2CeOVArFf0Js9vxOh3Cd/LKXWiPbdfN4CNTRGEtObJaKuoam
+         BFWuU2DzpbVcy5HnuauliH11YNi30vHfmu1uptVLWZ+I1KdDu6i4CPK6NDRUemnWx+Ac
+         0xMHrFqdsIyPo8W+31mrroZnED/c2Vm0LSYjKhQYw/9KBbRlJio1SZVunj0v98iF5Bpg
+         mvyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=FiXeDUXp16zKJj+mcJh8ScMaBjpuOPaR9nYFXOkk6f8=;
-        b=2Q5xZBNIjpR0qj/WR2xNvgGLP9NWptv7aWfK5U02CX4OH03sL3Oqv2LLfkH4uoGzN4
-         IC7NSRCPHz4MtUzcLXQWtDFAVJSxNw92n0e8ZjAXqoFOmwrwF/Hy0lLJlaWGynbDRudT
-         qtol2N19pD+vogNjBA646sJcJSGu82SIitE2dnWqEp/SGw7ugyV72H+MiLLTA0nAeprE
-         u+xl0j2sB4lZdLOxYh2+xHcqfb00S1pN81GBSePOnnq5/3lytq707ZLEIV4hf5l+XeOZ
-         gh2KIbUoghKbklKJJ4No2KHMsbICx5ysJa0V8EzoYc9reKXI7+bfMQp4SCEwzWlJYKfH
-         R5NQ==
-X-Gm-Message-State: AOAM533CHgZV4XNdKU4wh8N1WeAwNtyR0FngsS4OIfws9LqhhXwMs7It
-	xDGXAUYMvLNQexO5lkVULigj46/CBKlNbu6u/WQ5yTxWOTEYjw==
-X-Google-Smtp-Source: ABdhPJxiromgUQTsDqM/zPpDXJ3yXx2P5o8IzHVl6OnC92TnIGa2AEdEcKXbGcXC8ARiCXFBqr8m4Yu1Ofwy987EclU=
-X-Received: by 2002:a05:651c:2115:b0:24c:8e91:d14d with SMTP id
- a21-20020a05651c211500b0024c8e91d14dmr2778881ljq.165.1649972009113; Thu, 14
- Apr 2022 14:33:29 -0700 (PDT)
+        bh=tcBZgcin2Qyz/lpER3nOUcqk5oo+6NLHp21dTPe5XSI=;
+        b=vxHB1dsaeKdDGGXR6MvufefyTvmpNkJqaNPuuK+ONq/R5/RTM9/vockfJdSV9BYc04
+         SO6iREEIfhwl4ZUIzHxfQLnz4oG5Avm0fMX010AIKgq6wu7yW8XTt6MHlahh/F5Ch9iR
+         EPOBHyYyUX8ymj6rg+z8Tujld76ir/fMzRB57TXj6hc38X2dmfzGRiQ9Nt42KIDZ5qh3
+         qUV664XaGCl7Q9BqawIiY46ppuw2GWM+IIuwRQHI0NLxvdN99El+vkkoggrhyBvKA9Ql
+         0yrecUQUpf1jDGOfAAhsg5t/u2XDy04ygBa5/nwQWKigBu7iHtF8ZxGR1X4THwTVeeHG
+         0qWw==
+X-Gm-Message-State: AOAM531yeADsSTK9X9oQrNmofvxT5ok9tjR/+CxAXBd3O2HnVNP4HBVW
+	Ow4qvpknPQwAnrZypx38gxeZ9zhVcFRmjGmKaMXlirduBaOWCA==
+X-Google-Smtp-Source: ABdhPJyZTsFVcgmSTJ6yKli834hTErha0MggV+ytWjbk/HkHWABtMkkLdxNE86W8Tsx/mX0eglCRmLLZpuu294lTrdc=
+X-Received: by 2002:a19:505d:0:b0:46d:167e:b9df with SMTP id
+ z29-20020a19505d000000b0046d167eb9dfmr2612287lfj.184.1649972540744; Thu, 14
+ Apr 2022 14:42:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,22 +38,24 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 14 Apr 2022 14:33:17 -0700
-Message-ID: <CAKwvOdnb-MV+Fw2oeZ5qiGQH9FPOjgYTDtVrYc1=ynY7=NReDQ@mail.gmail.com>
-Subject: Kernel ABI Monitoring and toolchain support
-To: =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>, 
-	Giuliano Procida <gprocida@google.com>
-Cc: "Jose E. Marchesi" <jemarch@gnu.org>, clang-built-linux <llvm@lists.linux.dev>
+Date: Thu, 14 Apr 2022 14:42:09 -0700
+Message-ID: <CAKwvOdnb-DiAnq4bT7XiJpFtqyJYpWNw1shEp8gWYpVmUpRBaA@mail.gmail.com>
+Subject: Plumbers conf presentation on -fanalyze?
+To: dmalcolm@redhat.com
+Cc: "Jose E. Marchesi" <jemarch@gnu.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Matthias and Giuliano,
+Hi David,
 Jose and I are currently in the planning process to put together a
 Kernel+Toolchain microconference track at Linux Plumbers Conference
 this year (Sept 12-14) in Dublin, Ireland.
 
-Would you all be interested in a leading session on Kernel ABI
-Monitoring and perhaps what toolchain vendors can do to help, as part
-of our MC (which itself is currently still in planning phase).
+We had seen
+https://developers.redhat.com/articles/2022/04/12/state-static-analysis-gcc-12-compiler#scaling_up_the_analyzer
+particularly the section on The Linux kernel and were wondering if
+you'd be interested in presenting more information about -fanalyze to
+kernel and toolchain developers there?
 -- 
 Thanks,
 ~Nick Desaulniers
