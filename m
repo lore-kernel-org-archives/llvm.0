@@ -1,278 +1,166 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD90F28F5
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 14:01:15 +0000 (UTC)
-Received: from kwepemi100016.china.huawei.com (unknown [172.30.72.57])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KfLFW1Dt7zgYjT;
-	Thu, 14 Apr 2022 21:40:47 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi100016.china.huawei.com (7.221.188.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Apr 2022 21:42:37 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Apr 2022 21:42:36 +0800
-From: Yang Jihong <yangjihong1@huawei.com>
-To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-	<mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-	<jolsa@kernel.org>, <namhyung@kernel.org>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <kafai@fb.com>,
-	<songliubraving@fb.com>, <yhs@fb.com>, <john.fastabend@gmail.com>,
-	<kpsingh@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
-	<trix@redhat.com>, <ak@linux.intel.com>, <adrian.hunter@intel.com>,
-	<james.clark@arm.com>, <linux-perf-users@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <llvm@lists.linux.dev>
-CC: <yangjihong1@huawei.com>
-Subject: [PATCH] perf llvm: Fix compile bpf failed to cope with latest llvm
-Date: Thu, 14 Apr 2022 21:41:34 +0800
-Message-ID: <20220414134134.247912-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3494328F5
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 14:04:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649945096; x=1681481096;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jKQm+kUuUqino+2dW5Y03gm+/rXNyu9sTs6oih6VvXk=;
+  b=AuhByxzOerlhxUH6qGOktyjaumum9Lb9XvsJglDNQLvDrZVZbDQVFkNU
+   r/4n/wQRCZHHAocls2ahF1OeOadzRpY8wDr0SLVOfhhADTQsaSb6jMr0m
+   IJnrkQeDKyvU5irZ23WqJ/yE2U85Q2Ay+bvFU8O8z3owSj5cjXT5BnveN
+   mHB0IDLWNUU1QUG9sF+fOYBR/CYHC+RvuE41lJIKn0X1HJ7Mgatu+EWol
+   D7nr1BXl50CPGWemtpcANd35MhRK/RqfJ2DWo8ju9cNDOPngSziZ7ivGD
+   dZ6PrqEygeoju3tedXDLKmLGAR83Wk3w1a1T/Z5XSULAFuovnH3nWlQkU
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="287990987"
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="287990987"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 07:04:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="624106685"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Apr 2022 07:04:53 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nf05d-000110-BZ;
+	Thu, 14 Apr 2022 14:04:53 +0000
+Date: Thu, 14 Apr 2022 22:04:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	"Darrick J. Wong" <darrick.wong@oracle.com>,
+	linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:vectorized-scrub 38/396]
+ fs/xfs/scrub/agheader_repair.c:585:2: error: implicit declaration of
+ function 'xbitmap_walk'
+Message-ID: <202204142115.5hNAAWHG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Inline assembly used by asm/sysreg.h is incompatible with latest llvm,
-If bpf C program include "linux/ptrace.h" (which is common), compile will fail:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
+head:   bd756ef7af68274b79308166ee64949d288be861
+commit: d8273f3634d00732c204ba1c112bf1b9efcc6e4d [38/396] xfs: make AGFL repair function avoid crosslinked blocks
+config: hexagon-buildonly-randconfig-r002-20220413 (https://download.01.org/0day-ci/archive/20220414/202204142115.5hNAAWHG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=d8273f3634d00732c204ba1c112bf1b9efcc6e4d
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs vectorized-scrub
+        git checkout d8273f3634d00732c204ba1c112bf1b9efcc6e4d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
- # perf --debug verbose record -e bpf-output/no-inherit,name=evt/ \
-                              -e ./perf_bpf_test.c/map:channel.event=evt/ ls
- [SNIP]
- /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:20:7: error: invalid output constraint '=a' in asm
-                          : "="REG_OUT (res)
-                           ^
- /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:48:7: error: invalid output constraint '=a' in asm
-                          : "="REG_OUT (res)
-                           ^
- In file included from /root/projects/perf-bpf/perf_bpf_test.c:2:
- In file included from /lib/modules/5.17/build/./include/linux/ptrace.h:6:
- In file included from /lib/modules/5.17/build/./include/linux/sched.h:12:
- In file included from /lib/modules/5.17/build/./arch/x86/include/asm/current.h:6:
- In file included from /lib/modules/5.17/build/./arch/x86/include/asm/percpu.h:27:
- In file included from /lib/modules/5.17/build/./include/linux/kernel.h:25:
- In file included from /lib/modules/5.17/build/./include/linux/math.h:6:
- /lib/modules/5.17.0/build/./arch/x86/include/asm/div64.h:85:28: error: invalid output constraint '=a' in asm
-         asm ("mulq %2; divq %3" : "=a" (q)
- [SNIP]
- # cat /root/projects/perf-bpf/perf_bpf_test.c
- /************************ BEGIN **************************/
- #include <uapi/linux/bpf.h>
- #include <linux/ptrace.h>
- #include <linux/types.h>
- #define SEC(NAME) __attribute__((section(NAME), used))
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
- struct bpf_map_def {
-         unsigned int type;
-         unsigned int key_size;
-         unsigned int value_size;
-         unsigned int max_entries;
- };
+Note: the djwong-xfs/vectorized-scrub HEAD bd756ef7af68274b79308166ee64949d288be861 builds fine.
+      It only hurts bisectability.
 
- static int (*perf_event_output)(void *, struct bpf_map_def *, int, void *,
-     unsigned long) = (void *)BPF_FUNC_perf_event_output;
+All errors (new ones prefixed by >>):
 
- struct bpf_map_def SEC("maps") channel = {
-         .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
-         .key_size = sizeof(int),
-         .value_size = sizeof(__u32),
-         .max_entries = __NR_CPUS__,
- };
+>> fs/xfs/scrub/agheader_repair.c:585:2: error: implicit declaration of function 'xbitmap_walk' [-Werror,-Wimplicit-function-declaration]
+           xbitmap_walk(agfl_extents, xrep_agfl_check_extent, &ra);
+           ^
+   1 error generated.
 
- #define MIN_BYTES 1024
 
- SEC("func=vfs_read")
- int bpf_myprog(struct pt_regs *ctx)
- {
-         long bytes = ctx->dx;
-         if (bytes >= MIN_BYTES) {
-                 perf_event_output(ctx, &channel, BPF_F_CURRENT_CPU,
-                                   &bytes, sizeof(bytes));
-         }
+vim +/xbitmap_walk +585 fs/xfs/scrub/agheader_repair.c
 
-         return 0;
- }
+   525	
+   526	/*
+   527	 * Map out all the non-AGFL OWN_AG space in this AG so that we can deduce
+   528	 * which blocks belong to the AGFL.
+   529	 *
+   530	 * Compute the set of old AGFL blocks by subtracting from the list of OWN_AG
+   531	 * blocks the list of blocks owned by all other OWN_AG metadata (bnobt, cntbt,
+   532	 * rmapbt).  These are the old AGFL blocks, so return that list and the number
+   533	 * of blocks we're actually going to put back on the AGFL.
+   534	 */
+   535	STATIC int
+   536	xrep_agfl_collect_blocks(
+   537		struct xfs_scrub	*sc,
+   538		struct xfs_buf		*agf_bp,
+   539		struct xbitmap		*agfl_extents,
+   540		xfs_agblock_t		*flcount)
+   541	{
+   542		struct xrep_agfl	ra;
+   543		struct xfs_mount	*mp = sc->mp;
+   544		struct xfs_btree_cur	*cur;
+   545		int			error;
+   546	
+   547		ra.sc = sc;
+   548		ra.freesp = agfl_extents;
+   549		xbitmap_init(&ra.agmetablocks);
+   550		xbitmap_init(&ra.crossed);
+   551	
+   552		/* Find all space used by the free space btrees & rmapbt. */
+   553		cur = xfs_rmapbt_init_cursor(mp, sc->tp, agf_bp, sc->sa.pag);
+   554		error = xfs_rmap_query_all(cur, xrep_agfl_walk_rmap, &ra);
+   555		xfs_btree_del_cursor(cur, error);
+   556		if (error)
+   557			goto out_bmp;
+   558	
+   559		/* Find all blocks currently being used by the bnobt. */
+   560		cur = xfs_allocbt_init_cursor(mp, sc->tp, agf_bp,
+   561				sc->sa.pag, XFS_BTNUM_BNO);
+   562		error = xbitmap_set_btblocks(&ra.agmetablocks, cur);
+   563		xfs_btree_del_cursor(cur, error);
+   564		if (error)
+   565			goto out_bmp;
+   566	
+   567		/* Find all blocks currently being used by the cntbt. */
+   568		cur = xfs_allocbt_init_cursor(mp, sc->tp, agf_bp,
+   569				sc->sa.pag, XFS_BTNUM_CNT);
+   570		error = xbitmap_set_btblocks(&ra.agmetablocks, cur);
+   571		xfs_btree_del_cursor(cur, error);
+   572		if (error)
+   573			goto out_bmp;
+   574	
+   575		/*
+   576		 * Drop the freesp meta blocks that are in use by btrees.
+   577		 * The remaining blocks /should/ be AGFL blocks.
+   578		 */
+   579		error = xbitmap_disunion(agfl_extents, &ra.agmetablocks);
+   580		if (error)
+   581			goto out_bmp;
+   582	
+   583		/* Strike out the blocks that are cross-linked. */
+   584		ra.rmap_cur = xfs_rmapbt_init_cursor(mp, sc->tp, agf_bp, sc->sa.pag);
+ > 585		xbitmap_walk(agfl_extents, xrep_agfl_check_extent, &ra);
+   586		xfs_btree_del_cursor(ra.rmap_cur, 0);
+   587		error = xbitmap_disunion(agfl_extents, &ra.crossed);
+   588		if (error)
+   589			goto out_bmp;
+   590	
+   591		/*
+   592		 * Calculate the new AGFL size.  If we found more blocks than fit in
+   593		 * the AGFL we'll free them later.
+   594		 */
+   595		*flcount = min_t(uint64_t, xbitmap_hweight(agfl_extents),
+   596				 xfs_agfl_size(mp));
+   597	
+   598	out_bmp:
+   599		xbitmap_destroy(&ra.crossed);
+   600		xbitmap_destroy(&ra.agmetablocks);
+   601		return error;
+   602	}
+   603	
 
-char _license[] SEC("license") = "GPL";
-int _version SEC("version") = LINUX_VERSION_CODE;
-/************************* END ***************************/
-
-Compilation command is modified to be the same as that in samples/bpf/Makefile,
-use clang | opt | llvm-dis | llc chain of commands to solve the problem.
-see the comment in samples/bpf/Makefile.
-
-Modifications:
-1. Change "clang --target bpf" to chain of commands "clang | opt | llvm-dis | llc"
-2. Delete "CLANG_EMIT_LLVM" and "LLVM_OPTIONS_PIPE" macros from the compilation
-   command because the two macros are not defined and the content is empty.
-3. Add options llvm.llvm-opt-path, llvm.llvm-dis-path, and llvm.llc-path to
-   perf config for user-defined settings, which are similar to llvm.clang-path.
-4. Add "-Wno-address-of-packed-member" to resolve the compilation warning of
-   "/lib/modules/5.17/build/./arch/x86/include/asm/processor.h:552:17: \
-    warning: taking address of packed member 'sp0' of class or structure \
-    'x86_hw_tss' may result in an unaligned pointer value [-Waddress-of-packed-member]
-        this_cpu_write(cpu_tss_rw.x86_tss.sp0, sp0);
-                       ^~~~~~~~~~~~~~~~~~~~~~
-   /lib/modules/5.17/build/./include/linux/percpu-defs.h:508:68: note: \
-   expanded from macro 'this_cpu_write' \
-    #define this_cpu_write(pcp, val)        __pcpu_size_call(this_cpu_write_, pcp, val)",
-   which is similar to that of sample/bpf/Makefile.
-
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- tools/perf/Documentation/perf-config.txt | 16 ++++++++++-
- tools/perf/util/llvm-utils.c             | 35 ++++++++++++++++++------
- tools/perf/util/llvm-utils.h             |  4 +++
- 3 files changed, 45 insertions(+), 10 deletions(-)
-
-diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
-index 0420e71698ee..48f12bd6ca9a 100644
---- a/tools/perf/Documentation/perf-config.txt
-+++ b/tools/perf/Documentation/perf-config.txt
-@@ -655,6 +655,15 @@ llvm.*::
- 	llvm.clang-path::
- 		Path to clang. If omit, search it from $PATH.
- 
-+	llvm.llvm-opt-path::
-+		Path to llvm opt. If omit, search it from $PATH.
-+
-+	llvm.llvm-dis-path::
-+		Path to llvm-dis. If omit, search it from $PATH.
-+
-+	llvm.llc-path::
-+		Path to llc. If omit, search it from $PATH.
-+
- 	llvm.clang-bpf-cmd-template::
- 		Cmdline template. Below lines show its default value. Environment
- 		variable is used to pass options.
-@@ -662,8 +671,13 @@ llvm.*::
- 		"-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "	\
- 		"$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
- 		"-Wno-unused-value -Wno-pointer-sign "		\
-+		"-Wno-address-of-packed-member "                \
- 		"-working-directory $WORKING_DIR "		\
--		"-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
-+		"-c \"$CLANG_SOURCE\" "                               \
-+		"-O2 -emit-llvm -Xclang -disable-llvm-passes -o - | " \
-+		"$LLVM_OPT_EXEC -O2 -mtriple=bpf-pc-linux | "         \
-+		"$LLVM_DIS_EXEC | "                                   \
-+		"$LLC_EXEC -march=bpf -filetype=obj -o -"
- 
- 	llvm.clang-opt::
- 		Options passed to clang.
-diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-index 96c8ef60f4f8..c939681dfafb 100644
---- a/tools/perf/util/llvm-utils.c
-+++ b/tools/perf/util/llvm-utils.c
-@@ -24,11 +24,18 @@
- 		"-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "	\
- 		"$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
- 		"-Wno-unused-value -Wno-pointer-sign "		\
-+		"-Wno-address-of-packed-member "		\
- 		"-working-directory $WORKING_DIR "		\
--		"-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
-+		"-c \"$CLANG_SOURCE\" "				      \
-+		"-O2 -emit-llvm -Xclang -disable-llvm-passes -o - | " \
-+		"$LLVM_OPT_EXEC -O2 -mtriple=bpf-pc-linux | "	      \
-+		"$LLVM_DIS_EXEC | "				      \
-+		"$LLC_EXEC -march=bpf -filetype=obj -o -"
- 
- struct llvm_param llvm_param = {
- 	.clang_path = "clang",
-+	.llvm_opt_path = "opt",
-+	.llvm_dis_path = "llvm-dis",
- 	.llc_path = "llc",
- 	.clang_bpf_cmd_template = CLANG_BPF_CMD_DEFAULT_TEMPLATE,
- 	.clang_opt = NULL,
-@@ -48,6 +55,12 @@ int perf_llvm_config(const char *var, const char *value)
- 
- 	if (!strcmp(var, "clang-path"))
- 		llvm_param.clang_path = strdup(value);
-+	else if (!strcmp(var, "llvm-opt-path"))
-+		llvm_param.llvm_opt_path = strdup(value);
-+	else if (!strcmp(var, "llvm-dis-path"))
-+		llvm_param.llvm_dis_path = strdup(value);
-+	else if (!strcmp(var, "llc-path"))
-+		llvm_param.llc_path = strdup(value);
- 	else if (!strcmp(var, "clang-bpf-cmd-template"))
- 		llvm_param.clang_bpf_cmd_template = strdup(value);
- 	else if (!strcmp(var, "clang-opt"))
-@@ -456,6 +469,7 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
- 	char linux_version_code_str[64];
- 	const char *clang_opt = llvm_param.clang_opt;
- 	char clang_path[PATH_MAX], llc_path[PATH_MAX], abspath[PATH_MAX], nr_cpus_avail_str[64];
-+	char llvm_opt_path[PATH_MAX], llvm_dis_path[PATH_MAX];
- 	char serr[STRERR_BUFSIZE];
- 	char *kbuild_dir = NULL, *kbuild_include_opts = NULL,
- 	     *perf_bpf_include_opts = NULL;
-@@ -475,9 +489,10 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
- 	if (!template)
- 		template = CLANG_BPF_CMD_DEFAULT_TEMPLATE;
- 
--	err = search_program_and_warn(llvm_param.clang_path,
--			     "clang", clang_path);
--	if (err)
-+	if (search_program_and_warn(llvm_param.clang_path, "clang", clang_path) ||
-+	    search_program_and_warn(llvm_param.llvm_opt_path, "opt", llvm_opt_path) ||
-+	    search_program_and_warn(llvm_param.llvm_dis_path, "llvm-dis", llvm_dis_path) ||
-+	    search_program_and_warn(llvm_param.llc_path, "llc", llc_path))
- 		return -ENOENT;
- 
- 	/*
-@@ -495,21 +510,23 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
- 
- 	snprintf(linux_version_code_str, sizeof(linux_version_code_str),
- 		 "0x%x", kernel_version);
--	if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0)
-+	if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0) {
-+		err = -ENOMEM;
- 		goto errout;
-+	}
-+
- 	force_set_env("NR_CPUS", nr_cpus_avail_str);
- 	force_set_env("LINUX_VERSION_CODE", linux_version_code_str);
- 	force_set_env("CLANG_EXEC", clang_path);
-+	force_set_env("LLVM_OPT_EXEC", llvm_opt_path);
-+	force_set_env("LLVM_DIS_EXEC", llvm_dis_path);
-+	force_set_env("LLC_EXEC", llc_path);
- 	force_set_env("CLANG_OPTIONS", clang_opt);
- 	force_set_env("KERNEL_INC_OPTIONS", kbuild_include_opts);
- 	force_set_env("PERF_BPF_INC_OPTIONS", perf_bpf_include_opts);
- 	force_set_env("WORKING_DIR", kbuild_dir ? : ".");
- 
- 	if (opts) {
--		err = search_program_and_warn(llvm_param.llc_path, "llc", llc_path);
--		if (err)
--			goto errout;
--
- 		err = -ENOMEM;
- 		if (asprintf(&pipe_template, "%s -emit-llvm | %s -march=bpf %s -filetype=obj -o -",
- 			      template, llc_path, opts) < 0) {
-diff --git a/tools/perf/util/llvm-utils.h b/tools/perf/util/llvm-utils.h
-index 7878a0e3fa98..e276d10f85b4 100644
---- a/tools/perf/util/llvm-utils.h
-+++ b/tools/perf/util/llvm-utils.h
-@@ -11,6 +11,10 @@
- struct llvm_param {
- 	/* Path of clang executable */
- 	const char *clang_path;
-+	/* Path of llvm opt executable */
-+	const char *llvm_opt_path;
-+	/* Path of llvm-dis executable */
-+	const char *llvm_dis_path;
- 	/* Path of llc executable */
- 	const char *llc_path;
- 	/*
 -- 
-2.30.GIT
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
