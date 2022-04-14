@@ -1,247 +1,312 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969957A
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 15:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649950342; x=1681486342;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GWVpvaE0Wgi4ximav1D+j4xQUb5aXMCEWIKwKCiRekw=;
-  b=NN5lTotRp2E3kICcbgCn/ZT2/4mNousau/SHXN4rct5JJFopQ1LzmtO9
-   LTrNLvhw+fvaL0tnd+1AO+7QSNaKUbrFcNcNq/R77Vl6wcewBwMJOub3z
-   SbHubD0DW6cUIKgJ1epwymVG3nWmm3OZU66VS/OZDWJGV3YJpyYubVIlU
-   CFuginx557Hyedq09Jy0U2RLCkLRA1MV8bLSqZbyvN2oU7jvqUPgkRYPR
-   9cryaVjml1bQxmTncU7+5J1uBx2hedgou0l9xnV/0NjJeIPz0FZTOow5n
-   xTwy1ZOCR35YdHFQtrKDf4j+CDIvutb4zV5sdh6OjL5zFh+1lhiuUmdt3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="263133360"
-X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
-   d="scan'208";a="263133360"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 08:32:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
-   d="scan'208";a="552728132"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 14 Apr 2022 08:32:15 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nf1SA-00014v-Sw;
-	Thu, 14 Apr 2022 15:32:14 +0000
-Date: Thu, 14 Apr 2022 23:31:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: "jason-jh.lin" <jason-jh.lin@mediatek.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, fshao@chromium.org,
-	David Airlie <airlied@linux.ie>, singo.chang@mediatek.com,
-	dri-devel@lists.freedesktop.org,
-	Fabien Parent <fparent@baylibre.com>,
-	linux-stm32@st-md-mailman.stormreply.com, roy-cw.yeh@mediatek.com,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	Yongqiang Niu <yongqiang.niu@mediatek.com>,
-	Rex-BC Chen <rex-bc.chen@mediatek.com>, devicetree@vger.kernel.org,
-	nancy.lin@mediatek.com, linux-mediatek@lists.infradead.org,
-	hsinyi@chromium.org, linux-arm-kernel@lists.infradead.org,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>,
-	linux-kernel@vger.kernel.org, moudy.ho@mediatek.com,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Subject: Re: [PATCH v18 07/10] drm/mediatek: add mediatek-drm of vdosys0
- support for mt8195
-Message-ID: <202204142333.qXgcGMI1-lkp@intel.com>
-References: <20220412103114.19922-8-jason-jh.lin@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1025B7A
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 15:58:08 +0000 (UTC)
+Received: by mail-lf1-f49.google.com with SMTP id x17so9856770lfa.10
+        for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 08:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kUk5JygR0JjFN0Ag0erLGQrnwAWSH4YiuZY4dZAUjEA=;
+        b=RUbUHj5EPVqvPqq+TcTWjMmObEujlnlWApV821IL5t8M1uRkgwTulDUjjbOYSN4WPI
+         khljhSPQXRuJdDH4uiwC1DuxXhbbJ6pL9FW8RLdDZcFHCR5UpB5YLdtM26KPv1SW6pfP
+         ujTm+FG8ENp0TFeKo4LPSnBmEsPABXqMKaotUtnJ8o8Xy/K7NcTEqq2uPLqDqP4SVu4e
+         ST2uclRcXxmgNbxoBPrfZi4qnvI4WgKjrm4IW24N4YzZbyAx7JeNtu55MmD3LmDYpsBE
+         sYNCKTdE8F3O24nudhXaMfo7x7SBMqviG/NuUZBRQ8VUfGK72/yqPM1d6lvk5bJC+Qvg
+         wpfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kUk5JygR0JjFN0Ag0erLGQrnwAWSH4YiuZY4dZAUjEA=;
+        b=sFwQU1M5wfdnaR52BZqyYJzZ8fTR83h0iT+zDL11MxZvxoP3Stkf06s5lqP6uhmfhZ
+         ZicPHLiaVfB8G3XOiY76sH4d9lx5KKJrxSAISFs211DmVaIG1zg/55SQ+pE8uawIZCzz
+         RN+SpbsGxLI8fUZREFwHbfS1oAF6nCw0mhEPp+AMQPyszi+tqFvMpOdlnDI/ZozfiKlM
+         SE2kFAGGLWUV+8Hl8vllqeYal9YD55MYpF+RbMP9ARq0YBpOz+hV2VfZ9McX/fliKlv+
+         xhFt//iMECEb3podu3TNIogiTcXz0FGiUbeTgNpSQDay1Ec4pKCcqC+LH9q30R15+nQs
+         if5Q==
+X-Gm-Message-State: AOAM531jlI8Qs42zOazA+MoNUlytm9RxPuo2FTUkRLASOdeoBqVj+kXQ
+	otELtnQOhruBhZImFi8cqC2sO+4Em4bd4qSHc493Eg==
+X-Google-Smtp-Source: ABdhPJy2QACz18n8/ud36eXsqX63eh5pWrMDuc8LQppovQ/4vOzDL0k5gg3rF/y3T/W7c6TeiIEZadlBMiRVNIn9qxQ=
+X-Received: by 2002:ac2:4e66:0:b0:46b:c3d3:e203 with SMTP id
+ y6-20020ac24e66000000b0046bc3d3e203mr2421966lfs.380.1649951886772; Thu, 14
+ Apr 2022 08:58:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412103114.19922-8-jason-jh.lin@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220414134134.247912-1-yangjihong1@huawei.com>
+In-Reply-To: <20220414134134.247912-1-yangjihong1@huawei.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 14 Apr 2022 08:57:54 -0700
+Message-ID: <CAKwvOdmZCS784R5myuA=MgSnxQfS6sPUsBKbbax_QN1fSMNzbQ@mail.gmail.com>
+Subject: Re: [PATCH] perf llvm: Fix compile bpf failed to cope with latest llvm
+To: Yang Jihong <yangjihong1@huawei.com>
+Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org, 
+	namhyung@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	kafai@fb.com, songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, nathan@kernel.org, trix@redhat.com, ak@linux.intel.com, 
+	adrian.hunter@intel.com, james.clark@arm.com, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi "jason-jh.lin",
+On Thu, Apr 14, 2022 at 6:42 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+>
+> Inline assembly used by asm/sysreg.h is incompatible with latest llvm,
 
-Thank you for the patch! Perhaps something to improve:
+With "latest" llvm makes it sound like LLVM has regressed. Has it? Or
+have the headers changed in a way where now inline asm from a
+different target (x86) than what's being targeted (BPF)? Perhaps
+fixing that is simpler?
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on robh/for-next krzk/for-next linus/master v5.18-rc2 next-20220414]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Clang will validate inline asm before LLVM drops unreferenced static
+inline functions; this was a headache getting i386 building with
+clang, but not insurmountable.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/jason-jh-lin/Add-Mediatek-Soc-DRM-vdosys0-support-for-mt8195/20220412-183359
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: arm64-buildonly-randconfig-r001-20220413 (https://download.01.org/0day-ci/archive/20220414/202204142333.qXgcGMI1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/7c175317aa80bbc885609a730214448147a46b47
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review jason-jh-lin/Add-Mediatek-Soc-DRM-vdosys0-support-for-mt8195/20220412-183359
-        git checkout 7c175317aa80bbc885609a730214448147a46b47
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/mediatek/
+> If bpf C program include "linux/ptrace.h" (which is common), compile will fail:
+>
+>  # perf --debug verbose record -e bpf-output/no-inherit,name=evt/ \
+>                               -e ./perf_bpf_test.c/map:channel.event=evt/ ls
+>  [SNIP]
+>  /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:20:7: error: invalid output constraint '=a' in asm
+>                           : "="REG_OUT (res)
+>                            ^
+>  /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:48:7: error: invalid output constraint '=a' in asm
+>                           : "="REG_OUT (res)
+>                            ^
+>  In file included from /root/projects/perf-bpf/perf_bpf_test.c:2:
+>  In file included from /lib/modules/5.17/build/./include/linux/ptrace.h:6:
+>  In file included from /lib/modules/5.17/build/./include/linux/sched.h:12:
+>  In file included from /lib/modules/5.17/build/./arch/x86/include/asm/current.h:6:
+>  In file included from /lib/modules/5.17/build/./arch/x86/include/asm/percpu.h:27:
+>  In file included from /lib/modules/5.17/build/./include/linux/kernel.h:25:
+>  In file included from /lib/modules/5.17/build/./include/linux/math.h:6:
+>  /lib/modules/5.17.0/build/./arch/x86/include/asm/div64.h:85:28: error: invalid output constraint '=a' in asm
+>          asm ("mulq %2; divq %3" : "=a" (q)
+>  [SNIP]
+>  # cat /root/projects/perf-bpf/perf_bpf_test.c
+>  /************************ BEGIN **************************/
+>  #include <uapi/linux/bpf.h>
+>  #include <linux/ptrace.h>
+>  #include <linux/types.h>
+>  #define SEC(NAME) __attribute__((section(NAME), used))
+>
+>  struct bpf_map_def {
+>          unsigned int type;
+>          unsigned int key_size;
+>          unsigned int value_size;
+>          unsigned int max_entries;
+>  };
+>
+>  static int (*perf_event_output)(void *, struct bpf_map_def *, int, void *,
+>      unsigned long) = (void *)BPF_FUNC_perf_event_output;
+>
+>  struct bpf_map_def SEC("maps") channel = {
+>          .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
+>          .key_size = sizeof(int),
+>          .value_size = sizeof(__u32),
+>          .max_entries = __NR_CPUS__,
+>  };
+>
+>  #define MIN_BYTES 1024
+>
+>  SEC("func=vfs_read")
+>  int bpf_myprog(struct pt_regs *ctx)
+>  {
+>          long bytes = ctx->dx;
+>          if (bytes >= MIN_BYTES) {
+>                  perf_event_output(ctx, &channel, BPF_F_CURRENT_CPU,
+>                                    &bytes, sizeof(bytes));
+>          }
+>
+>          return 0;
+>  }
+>
+> char _license[] SEC("license") = "GPL";
+> int _version SEC("version") = LINUX_VERSION_CODE;
+> /************************* END ***************************/
+>
+> Compilation command is modified to be the same as that in samples/bpf/Makefile,
+> use clang | opt | llvm-dis | llc chain of commands to solve the problem.
+> see the comment in samples/bpf/Makefile.
+>
+> Modifications:
+> 1. Change "clang --target bpf" to chain of commands "clang | opt | llvm-dis | llc"
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This will drop the --target flag. That will mess up the default target
+triple, and can affect command line option feature detection.
 
-All warnings (new ones prefixed by >>):
+> 2. Delete "CLANG_EMIT_LLVM" and "LLVM_OPTIONS_PIPE" macros from the compilation
+>    command because the two macros are not defined and the content is empty.
+> 3. Add options llvm.llvm-opt-path, llvm.llvm-dis-path, and llvm.llc-path to
+>    perf config for user-defined settings, which are similar to llvm.clang-path.
+> 4. Add "-Wno-address-of-packed-member" to resolve the compilation warning of
+>    "/lib/modules/5.17/build/./arch/x86/include/asm/processor.h:552:17: \
+>     warning: taking address of packed member 'sp0' of class or structure \
+>     'x86_hw_tss' may result in an unaligned pointer value [-Waddress-of-packed-member]
+>         this_cpu_write(cpu_tss_rw.x86_tss.sp0, sp0);
+>                        ^~~~~~~~~~~~~~~~~~~~~~
+>    /lib/modules/5.17/build/./include/linux/percpu-defs.h:508:68: note: \
+>    expanded from macro 'this_cpu_write' \
+>     #define this_cpu_write(pcp, val)        __pcpu_size_call(this_cpu_write_, pcp, val)",
+>    which is similar to that of sample/bpf/Makefile.
+>
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> ---
+>  tools/perf/Documentation/perf-config.txt | 16 ++++++++++-
+>  tools/perf/util/llvm-utils.c             | 35 ++++++++++++++++++------
+>  tools/perf/util/llvm-utils.h             |  4 +++
+>  3 files changed, 45 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
+> index 0420e71698ee..48f12bd6ca9a 100644
+> --- a/tools/perf/Documentation/perf-config.txt
+> +++ b/tools/perf/Documentation/perf-config.txt
+> @@ -655,6 +655,15 @@ llvm.*::
+>         llvm.clang-path::
+>                 Path to clang. If omit, search it from $PATH.
+>
+> +       llvm.llvm-opt-path::
+> +               Path to llvm opt. If omit, search it from $PATH.
+> +
+> +       llvm.llvm-dis-path::
+> +               Path to llvm-dis. If omit, search it from $PATH.
+> +
+> +       llvm.llc-path::
+> +               Path to llc. If omit, search it from $PATH.
+> +
+>         llvm.clang-bpf-cmd-template::
+>                 Cmdline template. Below lines show its default value. Environment
+>                 variable is used to pass options.
+> @@ -662,8 +671,13 @@ llvm.*::
+>                 "-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "     \
+>                 "$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
+>                 "-Wno-unused-value -Wno-pointer-sign "          \
+> +               "-Wno-address-of-packed-member "                \
+>                 "-working-directory $WORKING_DIR "              \
+> -               "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
+> +               "-c \"$CLANG_SOURCE\" "                               \
+> +               "-O2 -emit-llvm -Xclang -disable-llvm-passes -o - | " \
+> +               "$LLVM_OPT_EXEC -O2 -mtriple=bpf-pc-linux | "         \
+> +               "$LLVM_DIS_EXEC | "                                   \
+> +               "$LLC_EXEC -march=bpf -filetype=obj -o -"
+>
+>         llvm.clang-opt::
+>                 Options passed to clang.
+> diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+> index 96c8ef60f4f8..c939681dfafb 100644
+> --- a/tools/perf/util/llvm-utils.c
+> +++ b/tools/perf/util/llvm-utils.c
+> @@ -24,11 +24,18 @@
+>                 "-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "     \
+>                 "$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
+>                 "-Wno-unused-value -Wno-pointer-sign "          \
+> +               "-Wno-address-of-packed-member "                \
+>                 "-working-directory $WORKING_DIR "              \
+> -               "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
+> +               "-c \"$CLANG_SOURCE\" "                               \
+> +               "-O2 -emit-llvm -Xclang -disable-llvm-passes -o - | " \
+> +               "$LLVM_OPT_EXEC -O2 -mtriple=bpf-pc-linux | "         \
+> +               "$LLVM_DIS_EXEC | "                                   \
+> +               "$LLC_EXEC -march=bpf -filetype=obj -o -"
+>
+>  struct llvm_param llvm_param = {
+>         .clang_path = "clang",
+> +       .llvm_opt_path = "opt",
+> +       .llvm_dis_path = "llvm-dis",
+>         .llc_path = "llc",
+>         .clang_bpf_cmd_template = CLANG_BPF_CMD_DEFAULT_TEMPLATE,
+>         .clang_opt = NULL,
+> @@ -48,6 +55,12 @@ int perf_llvm_config(const char *var, const char *value)
+>
+>         if (!strcmp(var, "clang-path"))
+>                 llvm_param.clang_path = strdup(value);
+> +       else if (!strcmp(var, "llvm-opt-path"))
+> +               llvm_param.llvm_opt_path = strdup(value);
+> +       else if (!strcmp(var, "llvm-dis-path"))
+> +               llvm_param.llvm_dis_path = strdup(value);
+> +       else if (!strcmp(var, "llc-path"))
+> +               llvm_param.llc_path = strdup(value);
+>         else if (!strcmp(var, "clang-bpf-cmd-template"))
+>                 llvm_param.clang_bpf_cmd_template = strdup(value);
+>         else if (!strcmp(var, "clang-opt"))
+> @@ -456,6 +469,7 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+>         char linux_version_code_str[64];
+>         const char *clang_opt = llvm_param.clang_opt;
+>         char clang_path[PATH_MAX], llc_path[PATH_MAX], abspath[PATH_MAX], nr_cpus_avail_str[64];
+> +       char llvm_opt_path[PATH_MAX], llvm_dis_path[PATH_MAX];
+>         char serr[STRERR_BUFSIZE];
+>         char *kbuild_dir = NULL, *kbuild_include_opts = NULL,
+>              *perf_bpf_include_opts = NULL;
+> @@ -475,9 +489,10 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+>         if (!template)
+>                 template = CLANG_BPF_CMD_DEFAULT_TEMPLATE;
+>
+> -       err = search_program_and_warn(llvm_param.clang_path,
+> -                            "clang", clang_path);
+> -       if (err)
+> +       if (search_program_and_warn(llvm_param.clang_path, "clang", clang_path) ||
+> +           search_program_and_warn(llvm_param.llvm_opt_path, "opt", llvm_opt_path) ||
+> +           search_program_and_warn(llvm_param.llvm_dis_path, "llvm-dis", llvm_dis_path) ||
+> +           search_program_and_warn(llvm_param.llc_path, "llc", llc_path))
+>                 return -ENOENT;
+>
+>         /*
+> @@ -495,21 +510,23 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+>
+>         snprintf(linux_version_code_str, sizeof(linux_version_code_str),
+>                  "0x%x", kernel_version);
+> -       if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0)
+> +       if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0) {
+> +               err = -ENOMEM;
+>                 goto errout;
+> +       }
+> +
+>         force_set_env("NR_CPUS", nr_cpus_avail_str);
+>         force_set_env("LINUX_VERSION_CODE", linux_version_code_str);
+>         force_set_env("CLANG_EXEC", clang_path);
+> +       force_set_env("LLVM_OPT_EXEC", llvm_opt_path);
+> +       force_set_env("LLVM_DIS_EXEC", llvm_dis_path);
+> +       force_set_env("LLC_EXEC", llc_path);
+>         force_set_env("CLANG_OPTIONS", clang_opt);
+>         force_set_env("KERNEL_INC_OPTIONS", kbuild_include_opts);
+>         force_set_env("PERF_BPF_INC_OPTIONS", perf_bpf_include_opts);
+>         force_set_env("WORKING_DIR", kbuild_dir ? : ".");
+>
+>         if (opts) {
+> -               err = search_program_and_warn(llvm_param.llc_path, "llc", llc_path);
+> -               if (err)
+> -                       goto errout;
+> -
+>                 err = -ENOMEM;
+>                 if (asprintf(&pipe_template, "%s -emit-llvm | %s -march=bpf %s -filetype=obj -o -",
+>                               template, llc_path, opts) < 0) {
+> diff --git a/tools/perf/util/llvm-utils.h b/tools/perf/util/llvm-utils.h
+> index 7878a0e3fa98..e276d10f85b4 100644
+> --- a/tools/perf/util/llvm-utils.h
+> +++ b/tools/perf/util/llvm-utils.h
+> @@ -11,6 +11,10 @@
+>  struct llvm_param {
+>         /* Path of clang executable */
+>         const char *clang_path;
+> +       /* Path of llvm opt executable */
+> +       const char *llvm_opt_path;
+> +       /* Path of llvm-dis executable */
+> +       const char *llvm_dis_path;
+>         /* Path of llc executable */
+>         const char *llc_path;
+>         /*
+> --
+> 2.30.GIT
+>
 
-   drivers/gpu/drm/mediatek/mtk_drm_drv.c:707:15: warning: cast to smaller integer type 'enum mtk_ddp_comp_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-                   comp_type = (enum mtk_ddp_comp_type)of_id->data;
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/mediatek/mtk_drm_drv.c:203:42: warning: unused variable 'mt2701_mmsys_match_data' [-Wunused-const-variable]
-   static const struct mtk_mmsys_match_data mt2701_mmsys_match_data = {
-                                            ^
->> drivers/gpu/drm/mediatek/mtk_drm_drv.c:218:42: warning: unused variable 'mt7623_mmsys_match_data' [-Wunused-const-variable]
-   static const struct mtk_mmsys_match_data mt7623_mmsys_match_data = {
-                                            ^
->> drivers/gpu/drm/mediatek/mtk_drm_drv.c:234:42: warning: unused variable 'mt2712_mmsys_match_data' [-Wunused-const-variable]
-   static const struct mtk_mmsys_match_data mt2712_mmsys_match_data = {
-                                            ^
->> drivers/gpu/drm/mediatek/mtk_drm_drv.c:246:42: warning: unused variable 'mt8167_mmsys_match_data' [-Wunused-const-variable]
-   static const struct mtk_mmsys_match_data mt8167_mmsys_match_data = {
-                                            ^
->> drivers/gpu/drm/mediatek/mtk_drm_drv.c:260:42: warning: unused variable 'mt8173_mmsys_match_data' [-Wunused-const-variable]
-   static const struct mtk_mmsys_match_data mt8173_mmsys_match_data = {
-                                            ^
->> drivers/gpu/drm/mediatek/mtk_drm_drv.c:274:42: warning: unused variable 'mt8183_mmsys_match_data' [-Wunused-const-variable]
-   static const struct mtk_mmsys_match_data mt8183_mmsys_match_data = {
-                                            ^
->> drivers/gpu/drm/mediatek/mtk_drm_drv.c:288:42: warning: unused variable 'mt8192_mmsys_match_data' [-Wunused-const-variable]
-   static const struct mtk_mmsys_match_data mt8192_mmsys_match_data = {
-                                            ^
->> drivers/gpu/drm/mediatek/mtk_drm_drv.c:305:42: warning: unused variable 'mt8195_mmsys_match_data' [-Wunused-const-variable]
-   static const struct mtk_mmsys_match_data mt8195_mmsys_match_data = {
-                                            ^
-   9 warnings generated.
-
-
-vim +/mt2701_mmsys_match_data +203 drivers/gpu/drm/mediatek/mtk_drm_drv.c
-
-   202	
- > 203	static const struct mtk_mmsys_match_data mt2701_mmsys_match_data = {
-   204		.num_drv_data = 1,
-   205		.drv_data = {
-   206			&mt2701_mmsys_driver_data,
-   207		},
-   208	};
-   209	
-   210	static const struct mtk_mmsys_driver_data mt7623_mmsys_driver_data = {
-   211		.main_path = mt7623_mtk_ddp_main,
-   212		.main_len = ARRAY_SIZE(mt7623_mtk_ddp_main),
-   213		.ext_path = mt7623_mtk_ddp_ext,
-   214		.ext_len = ARRAY_SIZE(mt7623_mtk_ddp_ext),
-   215		.shadow_register = true,
-   216	};
-   217	
- > 218	static const struct mtk_mmsys_match_data mt7623_mmsys_match_data = {
-   219		.num_drv_data = 1,
-   220		.drv_data = {
-   221			&mt7623_mmsys_driver_data,
-   222		},
-   223	};
-   224	
-   225	static const struct mtk_mmsys_driver_data mt2712_mmsys_driver_data = {
-   226		.main_path = mt2712_mtk_ddp_main,
-   227		.main_len = ARRAY_SIZE(mt2712_mtk_ddp_main),
-   228		.ext_path = mt2712_mtk_ddp_ext,
-   229		.ext_len = ARRAY_SIZE(mt2712_mtk_ddp_ext),
-   230		.third_path = mt2712_mtk_ddp_third,
-   231		.third_len = ARRAY_SIZE(mt2712_mtk_ddp_third),
-   232	};
-   233	
- > 234	static const struct mtk_mmsys_match_data mt2712_mmsys_match_data = {
-   235		.num_drv_data = 1,
-   236		.drv_data = {
-   237			&mt2712_mmsys_driver_data,
-   238		},
-   239	};
-   240	
-   241	static const struct mtk_mmsys_driver_data mt8167_mmsys_driver_data = {
-   242		.main_path = mt8167_mtk_ddp_main,
-   243		.main_len = ARRAY_SIZE(mt8167_mtk_ddp_main),
-   244	};
-   245	
- > 246	static const struct mtk_mmsys_match_data mt8167_mmsys_match_data = {
-   247		.num_drv_data = 1,
-   248		.drv_data = {
-   249			&mt8167_mmsys_driver_data,
-   250		},
-   251	};
-   252	
-   253	static const struct mtk_mmsys_driver_data mt8173_mmsys_driver_data = {
-   254		.main_path = mt8173_mtk_ddp_main,
-   255		.main_len = ARRAY_SIZE(mt8173_mtk_ddp_main),
-   256		.ext_path = mt8173_mtk_ddp_ext,
-   257		.ext_len = ARRAY_SIZE(mt8173_mtk_ddp_ext),
-   258	};
-   259	
- > 260	static const struct mtk_mmsys_match_data mt8173_mmsys_match_data = {
-   261		.num_drv_data = 1,
-   262		.drv_data = {
-   263			&mt8173_mmsys_driver_data,
-   264		},
-   265	};
-   266	
-   267	static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
-   268		.main_path = mt8183_mtk_ddp_main,
-   269		.main_len = ARRAY_SIZE(mt8183_mtk_ddp_main),
-   270		.ext_path = mt8183_mtk_ddp_ext,
-   271		.ext_len = ARRAY_SIZE(mt8183_mtk_ddp_ext),
-   272	};
-   273	
- > 274	static const struct mtk_mmsys_match_data mt8183_mmsys_match_data = {
-   275		.num_drv_data = 1,
-   276		.drv_data = {
-   277			&mt8183_mmsys_driver_data,
-   278		},
-   279	};
-   280	
-   281	static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
-   282		.main_path = mt8192_mtk_ddp_main,
-   283		.main_len = ARRAY_SIZE(mt8192_mtk_ddp_main),
-   284		.ext_path = mt8192_mtk_ddp_ext,
-   285		.ext_len = ARRAY_SIZE(mt8192_mtk_ddp_ext),
-   286	};
-   287	
- > 288	static const struct mtk_mmsys_match_data mt8192_mmsys_match_data = {
-   289		.num_drv_data = 1,
-   290		.drv_data = {
-   291			&mt8192_mmsys_driver_data,
-   292		},
-   293	};
-   294	
-   295	static const struct mtk_mmsys_driver_data mt8195_vdosys0_driver_data = {
-   296		.io_start = 0x1c01a000,
-   297		.main_path = mt8195_mtk_ddp_main,
-   298		.main_len = ARRAY_SIZE(mt8195_mtk_ddp_main),
-   299	};
-   300	
-   301	static const struct mtk_mmsys_driver_data mt8195_vdosys1_driver_data = {
-   302		.io_start = 0x1c100000,
-   303	};
-   304	
- > 305	static const struct mtk_mmsys_match_data mt8195_mmsys_match_data = {
-   306		.num_drv_data = 1,
-   307		.drv_data = {
-   308			&mt8195_vdosys0_driver_data,
-   309			&mt8195_vdosys1_driver_data,
-   310		},
-   311	};
-   312	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
