@@ -1,312 +1,96 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1025B7A
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 15:58:08 +0000 (UTC)
-Received: by mail-lf1-f49.google.com with SMTP id x17so9856770lfa.10
-        for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 08:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kUk5JygR0JjFN0Ag0erLGQrnwAWSH4YiuZY4dZAUjEA=;
-        b=RUbUHj5EPVqvPqq+TcTWjMmObEujlnlWApV821IL5t8M1uRkgwTulDUjjbOYSN4WPI
-         khljhSPQXRuJdDH4uiwC1DuxXhbbJ6pL9FW8RLdDZcFHCR5UpB5YLdtM26KPv1SW6pfP
-         ujTm+FG8ENp0TFeKo4LPSnBmEsPABXqMKaotUtnJ8o8Xy/K7NcTEqq2uPLqDqP4SVu4e
-         ST2uclRcXxmgNbxoBPrfZi4qnvI4WgKjrm4IW24N4YzZbyAx7JeNtu55MmD3LmDYpsBE
-         sYNCKTdE8F3O24nudhXaMfo7x7SBMqviG/NuUZBRQ8VUfGK72/yqPM1d6lvk5bJC+Qvg
-         wpfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kUk5JygR0JjFN0Ag0erLGQrnwAWSH4YiuZY4dZAUjEA=;
-        b=sFwQU1M5wfdnaR52BZqyYJzZ8fTR83h0iT+zDL11MxZvxoP3Stkf06s5lqP6uhmfhZ
-         ZicPHLiaVfB8G3XOiY76sH4d9lx5KKJrxSAISFs211DmVaIG1zg/55SQ+pE8uawIZCzz
-         RN+SpbsGxLI8fUZREFwHbfS1oAF6nCw0mhEPp+AMQPyszi+tqFvMpOdlnDI/ZozfiKlM
-         SE2kFAGGLWUV+8Hl8vllqeYal9YD55MYpF+RbMP9ARq0YBpOz+hV2VfZ9McX/fliKlv+
-         xhFt//iMECEb3podu3TNIogiTcXz0FGiUbeTgNpSQDay1Ec4pKCcqC+LH9q30R15+nQs
-         if5Q==
-X-Gm-Message-State: AOAM531jlI8Qs42zOazA+MoNUlytm9RxPuo2FTUkRLASOdeoBqVj+kXQ
-	otELtnQOhruBhZImFi8cqC2sO+4Em4bd4qSHc493Eg==
-X-Google-Smtp-Source: ABdhPJy2QACz18n8/ud36eXsqX63eh5pWrMDuc8LQppovQ/4vOzDL0k5gg3rF/y3T/W7c6TeiIEZadlBMiRVNIn9qxQ=
-X-Received: by 2002:ac2:4e66:0:b0:46b:c3d3:e203 with SMTP id
- y6-20020ac24e66000000b0046bc3d3e203mr2421966lfs.380.1649951886772; Thu, 14
- Apr 2022 08:58:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58322F3A
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 17:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649959095; x=1681495095;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=sc3/wuX2pbuHolCAQ4Lik7PAR0SwL4kq3OCN0Wj3FwI=;
+  b=eT7ouYB14fXFcvDG3ka3p5ziS8uPBJ/K0tHTb2uX6qDTlQ3VRTiiH9zn
+   PceKaX2k/BuGnHDymEZ/zHsbAXT0wihIvJ6IMLO1Mn7bcj11A2IB7oD0D
+   8GPpfLYzqYiwzSHVfwAz3gIjSLWW+/MBUNRyKKZUAjT5zlxFR4/iHtW58
+   06OG3KWgAfH+j+Rx6tePJ8Ai72lyVXPVv2AwwusubPhaCjTnnwyC1wmwy
+   KruHvC0+tKaOZU7BT6LbmPyob8UwsdOQtR9HQOwszA0YrQlT8xF+VdBIw
+   xnIb657RChU6zv+N577WZ7NH4xhjJ9fsGIv8CXKeSjJ4u5P1mTnZ9oWwp
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="323439926"
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="323439926"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 10:58:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="700765896"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Apr 2022 10:58:13 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nf3jR-0001CZ-Cu;
+	Thu, 14 Apr 2022 17:58:13 +0000
+Date: Fri, 15 Apr 2022 01:57:38 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: clang-15: error: unknown argument: '-mr10k-cache-barrier=store'
+Message-ID: <202204150132.v7e0Rjx4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220414134134.247912-1-yangjihong1@huawei.com>
-In-Reply-To: <20220414134134.247912-1-yangjihong1@huawei.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 14 Apr 2022 08:57:54 -0700
-Message-ID: <CAKwvOdmZCS784R5myuA=MgSnxQfS6sPUsBKbbax_QN1fSMNzbQ@mail.gmail.com>
-Subject: Re: [PATCH] perf llvm: Fix compile bpf failed to cope with latest llvm
-To: Yang Jihong <yangjihong1@huawei.com>
-Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
-	mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org, 
-	namhyung@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	kafai@fb.com, songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, nathan@kernel.org, trix@redhat.com, ak@linux.intel.com, 
-	adrian.hunter@intel.com, james.clark@arm.com, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Apr 14, 2022 at 6:42 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->
-> Inline assembly used by asm/sysreg.h is incompatible with latest llvm,
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Tiezhu Yang <yangtiezhu@loongson.cn>
+CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC: Nathan Chancellor <nathan@kernel.org>
+CC: Masahiro Yamada <masahiroy@kernel.org>
 
-With "latest" llvm makes it sound like LLVM has regressed. Has it? Or
-have the headers changed in a way where now inline asm from a
-different target (x86) than what's being targeted (BPF)? Perhaps
-fixing that is simpler?
+Hi Tiezhu,
 
-Clang will validate inline asm before LLVM drops unreferenced static
-inline functions; this was a headache getting i386 building with
-clang, but not insurmountable.
+FYI, the error/warning still remains.
 
-> If bpf C program include "linux/ptrace.h" (which is common), compile will fail:
->
->  # perf --debug verbose record -e bpf-output/no-inherit,name=evt/ \
->                               -e ./perf_bpf_test.c/map:channel.event=evt/ ls
->  [SNIP]
->  /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:20:7: error: invalid output constraint '=a' in asm
->                           : "="REG_OUT (res)
->                            ^
->  /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:48:7: error: invalid output constraint '=a' in asm
->                           : "="REG_OUT (res)
->                            ^
->  In file included from /root/projects/perf-bpf/perf_bpf_test.c:2:
->  In file included from /lib/modules/5.17/build/./include/linux/ptrace.h:6:
->  In file included from /lib/modules/5.17/build/./include/linux/sched.h:12:
->  In file included from /lib/modules/5.17/build/./arch/x86/include/asm/current.h:6:
->  In file included from /lib/modules/5.17/build/./arch/x86/include/asm/percpu.h:27:
->  In file included from /lib/modules/5.17/build/./include/linux/kernel.h:25:
->  In file included from /lib/modules/5.17/build/./include/linux/math.h:6:
->  /lib/modules/5.17.0/build/./arch/x86/include/asm/div64.h:85:28: error: invalid output constraint '=a' in asm
->          asm ("mulq %2; divq %3" : "=a" (q)
->  [SNIP]
->  # cat /root/projects/perf-bpf/perf_bpf_test.c
->  /************************ BEGIN **************************/
->  #include <uapi/linux/bpf.h>
->  #include <linux/ptrace.h>
->  #include <linux/types.h>
->  #define SEC(NAME) __attribute__((section(NAME), used))
->
->  struct bpf_map_def {
->          unsigned int type;
->          unsigned int key_size;
->          unsigned int value_size;
->          unsigned int max_entries;
->  };
->
->  static int (*perf_event_output)(void *, struct bpf_map_def *, int, void *,
->      unsigned long) = (void *)BPF_FUNC_perf_event_output;
->
->  struct bpf_map_def SEC("maps") channel = {
->          .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
->          .key_size = sizeof(int),
->          .value_size = sizeof(__u32),
->          .max_entries = __NR_CPUS__,
->  };
->
->  #define MIN_BYTES 1024
->
->  SEC("func=vfs_read")
->  int bpf_myprog(struct pt_regs *ctx)
->  {
->          long bytes = ctx->dx;
->          if (bytes >= MIN_BYTES) {
->                  perf_event_output(ctx, &channel, BPF_F_CURRENT_CPU,
->                                    &bytes, sizeof(bytes));
->          }
->
->          return 0;
->  }
->
-> char _license[] SEC("license") = "GPL";
-> int _version SEC("version") = LINUX_VERSION_CODE;
-> /************************* END ***************************/
->
-> Compilation command is modified to be the same as that in samples/bpf/Makefile,
-> use clang | opt | llvm-dis | llc chain of commands to solve the problem.
-> see the comment in samples/bpf/Makefile.
->
-> Modifications:
-> 1. Change "clang --target bpf" to chain of commands "clang | opt | llvm-dis | llc"
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a19944809fe9942e6a96292490717904d0690c21
+commit: 048cc2378c2494519d940597629465b3ea44a96f MIPS: SGI-IP22: Remove unnecessary check of GCC option
+date:   4 months ago
+config: mips-ip28_defconfig (https://download.01.org/0day-ci/archive/20220415/202204150132.v7e0Rjx4-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=048cc2378c2494519d940597629465b3ea44a96f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 048cc2378c2494519d940597629465b3ea44a96f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
 
-This will drop the --target flag. That will mess up the default target
-triple, and can affect command line option feature detection.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 2. Delete "CLANG_EMIT_LLVM" and "LLVM_OPTIONS_PIPE" macros from the compilation
->    command because the two macros are not defined and the content is empty.
-> 3. Add options llvm.llvm-opt-path, llvm.llvm-dis-path, and llvm.llc-path to
->    perf config for user-defined settings, which are similar to llvm.clang-path.
-> 4. Add "-Wno-address-of-packed-member" to resolve the compilation warning of
->    "/lib/modules/5.17/build/./arch/x86/include/asm/processor.h:552:17: \
->     warning: taking address of packed member 'sp0' of class or structure \
->     'x86_hw_tss' may result in an unaligned pointer value [-Waddress-of-packed-member]
->         this_cpu_write(cpu_tss_rw.x86_tss.sp0, sp0);
->                        ^~~~~~~~~~~~~~~~~~~~~~
->    /lib/modules/5.17/build/./include/linux/percpu-defs.h:508:68: note: \
->    expanded from macro 'this_cpu_write' \
->     #define this_cpu_write(pcp, val)        __pcpu_size_call(this_cpu_write_, pcp, val)",
->    which is similar to that of sample/bpf/Makefile.
->
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
->  tools/perf/Documentation/perf-config.txt | 16 ++++++++++-
->  tools/perf/util/llvm-utils.c             | 35 ++++++++++++++++++------
->  tools/perf/util/llvm-utils.h             |  4 +++
->  3 files changed, 45 insertions(+), 10 deletions(-)
->
-> diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
-> index 0420e71698ee..48f12bd6ca9a 100644
-> --- a/tools/perf/Documentation/perf-config.txt
-> +++ b/tools/perf/Documentation/perf-config.txt
-> @@ -655,6 +655,15 @@ llvm.*::
->         llvm.clang-path::
->                 Path to clang. If omit, search it from $PATH.
->
-> +       llvm.llvm-opt-path::
-> +               Path to llvm opt. If omit, search it from $PATH.
-> +
-> +       llvm.llvm-dis-path::
-> +               Path to llvm-dis. If omit, search it from $PATH.
-> +
-> +       llvm.llc-path::
-> +               Path to llc. If omit, search it from $PATH.
-> +
->         llvm.clang-bpf-cmd-template::
->                 Cmdline template. Below lines show its default value. Environment
->                 variable is used to pass options.
-> @@ -662,8 +671,13 @@ llvm.*::
->                 "-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "     \
->                 "$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
->                 "-Wno-unused-value -Wno-pointer-sign "          \
-> +               "-Wno-address-of-packed-member "                \
->                 "-working-directory $WORKING_DIR "              \
-> -               "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
-> +               "-c \"$CLANG_SOURCE\" "                               \
-> +               "-O2 -emit-llvm -Xclang -disable-llvm-passes -o - | " \
-> +               "$LLVM_OPT_EXEC -O2 -mtriple=bpf-pc-linux | "         \
-> +               "$LLVM_DIS_EXEC | "                                   \
-> +               "$LLC_EXEC -march=bpf -filetype=obj -o -"
->
->         llvm.clang-opt::
->                 Options passed to clang.
-> diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-> index 96c8ef60f4f8..c939681dfafb 100644
-> --- a/tools/perf/util/llvm-utils.c
-> +++ b/tools/perf/util/llvm-utils.c
-> @@ -24,11 +24,18 @@
->                 "-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "     \
->                 "$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
->                 "-Wno-unused-value -Wno-pointer-sign "          \
-> +               "-Wno-address-of-packed-member "                \
->                 "-working-directory $WORKING_DIR "              \
-> -               "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
-> +               "-c \"$CLANG_SOURCE\" "                               \
-> +               "-O2 -emit-llvm -Xclang -disable-llvm-passes -o - | " \
-> +               "$LLVM_OPT_EXEC -O2 -mtriple=bpf-pc-linux | "         \
-> +               "$LLVM_DIS_EXEC | "                                   \
-> +               "$LLC_EXEC -march=bpf -filetype=obj -o -"
->
->  struct llvm_param llvm_param = {
->         .clang_path = "clang",
-> +       .llvm_opt_path = "opt",
-> +       .llvm_dis_path = "llvm-dis",
->         .llc_path = "llc",
->         .clang_bpf_cmd_template = CLANG_BPF_CMD_DEFAULT_TEMPLATE,
->         .clang_opt = NULL,
-> @@ -48,6 +55,12 @@ int perf_llvm_config(const char *var, const char *value)
->
->         if (!strcmp(var, "clang-path"))
->                 llvm_param.clang_path = strdup(value);
-> +       else if (!strcmp(var, "llvm-opt-path"))
-> +               llvm_param.llvm_opt_path = strdup(value);
-> +       else if (!strcmp(var, "llvm-dis-path"))
-> +               llvm_param.llvm_dis_path = strdup(value);
-> +       else if (!strcmp(var, "llc-path"))
-> +               llvm_param.llc_path = strdup(value);
->         else if (!strcmp(var, "clang-bpf-cmd-template"))
->                 llvm_param.clang_bpf_cmd_template = strdup(value);
->         else if (!strcmp(var, "clang-opt"))
-> @@ -456,6 +469,7 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
->         char linux_version_code_str[64];
->         const char *clang_opt = llvm_param.clang_opt;
->         char clang_path[PATH_MAX], llc_path[PATH_MAX], abspath[PATH_MAX], nr_cpus_avail_str[64];
-> +       char llvm_opt_path[PATH_MAX], llvm_dis_path[PATH_MAX];
->         char serr[STRERR_BUFSIZE];
->         char *kbuild_dir = NULL, *kbuild_include_opts = NULL,
->              *perf_bpf_include_opts = NULL;
-> @@ -475,9 +489,10 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
->         if (!template)
->                 template = CLANG_BPF_CMD_DEFAULT_TEMPLATE;
->
-> -       err = search_program_and_warn(llvm_param.clang_path,
-> -                            "clang", clang_path);
-> -       if (err)
-> +       if (search_program_and_warn(llvm_param.clang_path, "clang", clang_path) ||
-> +           search_program_and_warn(llvm_param.llvm_opt_path, "opt", llvm_opt_path) ||
-> +           search_program_and_warn(llvm_param.llvm_dis_path, "llvm-dis", llvm_dis_path) ||
-> +           search_program_and_warn(llvm_param.llc_path, "llc", llc_path))
->                 return -ENOENT;
->
->         /*
-> @@ -495,21 +510,23 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
->
->         snprintf(linux_version_code_str, sizeof(linux_version_code_str),
->                  "0x%x", kernel_version);
-> -       if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0)
-> +       if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0) {
-> +               err = -ENOMEM;
->                 goto errout;
-> +       }
-> +
->         force_set_env("NR_CPUS", nr_cpus_avail_str);
->         force_set_env("LINUX_VERSION_CODE", linux_version_code_str);
->         force_set_env("CLANG_EXEC", clang_path);
-> +       force_set_env("LLVM_OPT_EXEC", llvm_opt_path);
-> +       force_set_env("LLVM_DIS_EXEC", llvm_dis_path);
-> +       force_set_env("LLC_EXEC", llc_path);
->         force_set_env("CLANG_OPTIONS", clang_opt);
->         force_set_env("KERNEL_INC_OPTIONS", kbuild_include_opts);
->         force_set_env("PERF_BPF_INC_OPTIONS", perf_bpf_include_opts);
->         force_set_env("WORKING_DIR", kbuild_dir ? : ".");
->
->         if (opts) {
-> -               err = search_program_and_warn(llvm_param.llc_path, "llc", llc_path);
-> -               if (err)
-> -                       goto errout;
-> -
->                 err = -ENOMEM;
->                 if (asprintf(&pipe_template, "%s -emit-llvm | %s -march=bpf %s -filetype=obj -o -",
->                               template, llc_path, opts) < 0) {
-> diff --git a/tools/perf/util/llvm-utils.h b/tools/perf/util/llvm-utils.h
-> index 7878a0e3fa98..e276d10f85b4 100644
-> --- a/tools/perf/util/llvm-utils.h
-> +++ b/tools/perf/util/llvm-utils.h
-> @@ -11,6 +11,10 @@
->  struct llvm_param {
->         /* Path of clang executable */
->         const char *clang_path;
-> +       /* Path of llvm opt executable */
-> +       const char *llvm_opt_path;
-> +       /* Path of llvm-dis executable */
-> +       const char *llvm_dis_path;
->         /* Path of llc executable */
->         const char *llc_path;
->         /*
-> --
-> 2.30.GIT
->
+All errors (new ones prefixed by >>):
 
+>> clang-15: error: unknown argument: '-mr10k-cache-barrier=store'
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+>> clang-15: error: unknown argument: '-mr10k-cache-barrier=store'
+   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+   make[2]: Target 'missing-syscalls' not remade because of errors.
+   make[1]: *** [arch/mips/Makefile:415: archprepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
