@@ -1,45 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F50B28F6
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 13:22:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FC728F5
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 13:34:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649942576; x=1681478576;
+  t=1649943245; x=1681479245;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q5s6Mi1KwZaanmP+MLd/OHLPbqoXDxfYP5xCn4DY2ZE=;
-  b=Pf0LKGuwpRjlhRJ846sMA+9DWrbyriiRsFglyh5MH/xV4VKLaJsL86rD
-   aa1NGSdcO+fuXRpu75ai1JrNtNpHUZi8EiMIMYwWtqRTQyX6sRsQ6oR5M
-   PR6nN7tLSC8es78O441cGmGSL9Hy5sFq8fiA8+L5as2FFf9Qu7FXO7bG6
-   Wpry+OGs4eY8BgHD5lPrlPnelJkmXlGeVdcjACRH1HCHAQGGPEsLRPoUg
-   x6HWBO1aBv04d4uR4knKNp9CxafOwvO9lviWxWRCr413H6ogXcQN+no+2
-   07rfEv04TSDsEfEsEvPDrb7eHuwBvgB9CMSdRwL2aHTbnyl8+71MFFINs
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="287982771"
+  bh=UNppWNaeAIa10Dki/dKqomPYngkMUhRRYFw1rQFeEto=;
+  b=MKcN6L23TZ6mswotDEagbiJBQfYc2utbLGv1nTT3KDM3YouY70w5vuxg
+   f8M+gOhwdfxC1FgEtLxx7NoZnaqQTFfl9ta2GmK4VxSb5B+iwE/FFl5Bv
+   EskT4S/XDfI63AlGhPFT0zXGmOubrw3E/ctBstiWg5VG5N3q+1/I0gYdm
+   YC/6BMYSDTfroKH4MLbFv0VT/ZMaqtuIZv6emOA6gqXlrYnvxyHAhoTQA
+   WD16GfoOloa9yOgEuvOsdbEyHu3OVOxjWFeHMzQhovujQA4XyMLmZ9bSj
+   yIYnRE7dfp/agVKT6b/MdiK3TPxUhMU8oMtVaN9ewtUSDAIdOjjCHyZl1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="260525468"
 X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="287982771"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 06:22:55 -0700
+   d="scan'208";a="260525468"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 06:34:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="612330530"
+   d="scan'208";a="508406979"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Apr 2022 06:22:54 -0700
+  by orsmga003.jf.intel.com with ESMTP; 14 Apr 2022 06:34:03 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nezQz-0000zI-Bk;
-	Thu, 14 Apr 2022 13:22:53 +0000
-Date: Thu, 14 Apr 2022 21:22:35 +0800
+	id 1nezbm-0000zx-Cz;
+	Thu, 14 Apr 2022 13:34:02 +0000
+Date: Thu, 14 Apr 2022 21:33:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>,
-	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15 132/1093]
- drivers/clk/clk-xlnx-clock-wizard.c:309:8: error: implicit declaration of
- function 'FIELD_PREP'
-Message-ID: <202204142127.ZUtBDF8x-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [axboe-block:sock-nolock.2 5/5] net/mptcp/subflow.c:1796:20: error:
+ too few arguments to function call, expected 2, have 1
+Message-ID: <202204142114.rOCzHB7d-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,136 +47,102 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Shubhrajyoti,
-
-FYI, the error/warning still remains.
-
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
-head:   b1635a7683e2274f21d795783e4c9db7e518267a
-commit: e7cc160039f02d71ef5a3b16038d325ad76ab59e [132/1093] clocking-wizard: Support higher frequency accuracy
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220414/202204142127.ZUtBDF8x-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git sock-nolock.2
+head:   95f2e3bd27b30244f79deacbc1aac49d294bd854
+commit: 95f2e3bd27b30244f79deacbc1aac49d294bd854 [5/5] net: allow sk_prot->release_cb() without sock lock held
+config: hexagon-randconfig-r041-20220414 (https://download.01.org/0day-ci/archive/20220414/202204142114.rOCzHB7d-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/e7cc160039f02d71ef5a3b16038d325ad76ab59e
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15
-        git checkout e7cc160039f02d71ef5a3b16038d325ad76ab59e
+        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=95f2e3bd27b30244f79deacbc1aac49d294bd854
+        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+        git fetch --no-tags axboe-block sock-nolock.2
+        git checkout 95f2e3bd27b30244f79deacbc1aac49d294bd854
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/clk/clk-xlnx-clock-wizard.c:309:8: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
-           reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
-                 ^
->> drivers/clk/clk-xlnx-clock-wizard.c:369:6: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
-           d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-               ^
+>> net/mptcp/subflow.c:1796:20: error: too few arguments to function call, expected 2, have 1
+           tcp_release_cb(ssk);
+           ~~~~~~~~~~~~~~    ^
+   include/net/tcp.h:337:6: note: 'tcp_release_cb' declared here
+   void tcp_release_cb(struct sock *sk, bool locked);
+        ^
+>> net/mptcp/subflow.c:1841:31: error: incompatible function pointer types assigning to 'void (*)(struct sock *, bool)' (aka 'void (*)(struct sock *, _Bool)') from 'void (struct sock *)' [-Werror,-Wincompatible-function-pointer-types]
+           tcp_prot_override.release_cb = tcp_release_cb_override;
+                                        ^ ~~~~~~~~~~~~~~~~~~~~~~~
    2 errors generated.
 
 
-vim +/FIELD_PREP +309 drivers/clk/clk-xlnx-clock-wizard.c
+vim +1796 net/mptcp/subflow.c
 
-   286	
-   287	static int clk_wzrd_dynamic_all_nolock(struct clk_hw *hw, unsigned long rate,
-   288					       unsigned long parent_rate)
-   289	{
-   290		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   291		u32 reg, pre;
-   292		u32 value;
-   293		int err;
-   294		u64 vco_freq, rate_div, f, clockout0_div;
-   295	
-   296		err = clk_wzrd_get_divisors(hw, rate, parent_rate);
-   297		if (err)
-   298			pr_err("failed to get divisors\n");
-   299	
-   300		vco_freq = DIV_ROUND_CLOSEST((parent_rate * divider->valuem), divider->valued);
-   301		rate_div = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
-   302	
-   303		clockout0_div = rate_div / WZRD_FRAC_POINTS;
-   304	
-   305		pre = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
-   306		f = (u32)(pre - (clockout0_div * WZRD_FRAC_POINTS));
-   307		f = f & WZRD_CLKOUT_FRAC_MASK;
-   308	
- > 309		reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
-   310		      FIELD_PREP(WZRD_CLKOUT0_FRAC_MASK, f);
-   311	
-   312		writel(reg, divider->base + WZRD_CLK_CFG_REG(2));
-   313		/* Set divisor and clear phase offset */
-   314		reg = FIELD_PREP(WZRD_CLKFBOUT_MULT_MASK, divider->valuem) |
-   315		      FIELD_PREP(WZRD_DIVCLK_DIVIDE_MASK, divider->valued);
-   316		writel(reg, divider->base + WZRD_CLK_CFG_REG(0));
-   317		writel(divider->valueo, divider->base + WZRD_CLK_CFG_REG(2));
-   318		writel(0, divider->base + WZRD_CLK_CFG_REG(3));
-   319		/* Check status register */
-   320		err = readl_poll_timeout(divider->base + WZRD_DR_STATUS_REG_OFFSET, value,
-   321					 value & WZRD_DR_LOCK_BIT_MASK,
-   322					 WZRD_USEC_POLL, WZRD_TIMEOUT_POLL);
-   323		if (err)
-   324			return -ETIMEDOUT;
-   325	
-   326		/* Initiate reconfiguration */
-   327		writel(WZRD_DR_BEGIN_DYNA_RECONF,
-   328		       divider->base + WZRD_DR_INIT_REG_OFFSET);
-   329	
-   330		/* Check status register */
-   331		err = readl_poll_timeout(divider->base + WZRD_DR_STATUS_REG_OFFSET, value,
-   332					 value & WZRD_DR_LOCK_BIT_MASK,
-   333					 WZRD_USEC_POLL, WZRD_TIMEOUT_POLL);
-   334		if (err)
-   335			return -ETIMEDOUT;
-   336	
-   337		return 0;
-   338	}
-   339	
-   340	static int clk_wzrd_dynamic_all(struct clk_hw *hw, unsigned long rate,
-   341					unsigned long parent_rate)
-   342	{
-   343		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   344		unsigned long flags = 0;
-   345		int ret;
-   346	
-   347		if (divider->lock)
-   348			spin_lock_irqsave(divider->lock, flags);
-   349		else
-   350			__acquire(divider->lock);
-   351	
-   352		ret = clk_wzrd_dynamic_all_nolock(hw, rate, parent_rate);
-   353	
-   354		if (divider->lock)
-   355			spin_unlock_irqrestore(divider->lock, flags);
-   356		else
-   357			__release(divider->lock);
-   358	
-   359		return ret;
-   360	}
-   361	
-   362	static unsigned long clk_wzrd_recalc_rate_all(struct clk_hw *hw,
-   363						      unsigned long parent_rate)
-   364	{
-   365		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   366		u32 m, d, o, div, reg, f;
-   367	
-   368		reg = readl(divider->base + WZRD_CLK_CFG_REG(0));
- > 369		d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-   370		m = FIELD_GET(WZRD_CLKFBOUT_MULT_MASK, reg);
-   371		reg = readl(divider->base + WZRD_CLK_CFG_REG(2));
-   372		o = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-   373		f = FIELD_GET(WZRD_CLKOUT0_FRAC_MASK, reg);
-   374	
-   375		div = DIV_ROUND_CLOSEST(d * (WZRD_FRAC_POINTS * o + f), WZRD_FRAC_POINTS);
-   376		return divider_recalc_rate(hw, parent_rate * m, div, divider->table,
-   377				divider->flags, divider->width);
-   378	}
-   379	
+cec37a6e41aae7 Peter Krystad    2020-01-21  1788  
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1789  static void tcp_release_cb_override(struct sock *ssk)
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1790  {
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1791  	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(ssk);
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1792  
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1793  	if (mptcp_subflow_has_delegated_action(subflow))
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1794  		mptcp_subflow_process_delegated(ssk);
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1795  
+b19bc2945b40b9 Paolo Abeni      2021-01-20 @1796  	tcp_release_cb(ssk);
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1797  }
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1798  
+2303f994b3e187 Peter Krystad    2020-01-21  1799  static struct tcp_ulp_ops subflow_ulp_ops __read_mostly = {
+2303f994b3e187 Peter Krystad    2020-01-21  1800  	.name		= "mptcp",
+2303f994b3e187 Peter Krystad    2020-01-21  1801  	.owner		= THIS_MODULE,
+2303f994b3e187 Peter Krystad    2020-01-21  1802  	.init		= subflow_ulp_init,
+2303f994b3e187 Peter Krystad    2020-01-21  1803  	.release	= subflow_ulp_release,
+cec37a6e41aae7 Peter Krystad    2020-01-21  1804  	.clone		= subflow_ulp_clone,
+2303f994b3e187 Peter Krystad    2020-01-21  1805  };
+2303f994b3e187 Peter Krystad    2020-01-21  1806  
+cec37a6e41aae7 Peter Krystad    2020-01-21  1807  static int subflow_ops_init(struct request_sock_ops *subflow_ops)
+cec37a6e41aae7 Peter Krystad    2020-01-21  1808  {
+cec37a6e41aae7 Peter Krystad    2020-01-21  1809  	subflow_ops->obj_size = sizeof(struct mptcp_subflow_request_sock);
+cec37a6e41aae7 Peter Krystad    2020-01-21  1810  	subflow_ops->slab_name = "request_sock_subflow";
+cec37a6e41aae7 Peter Krystad    2020-01-21  1811  
+cec37a6e41aae7 Peter Krystad    2020-01-21  1812  	subflow_ops->slab = kmem_cache_create(subflow_ops->slab_name,
+cec37a6e41aae7 Peter Krystad    2020-01-21  1813  					      subflow_ops->obj_size, 0,
+cec37a6e41aae7 Peter Krystad    2020-01-21  1814  					      SLAB_ACCOUNT |
+cec37a6e41aae7 Peter Krystad    2020-01-21  1815  					      SLAB_TYPESAFE_BY_RCU,
+cec37a6e41aae7 Peter Krystad    2020-01-21  1816  					      NULL);
+cec37a6e41aae7 Peter Krystad    2020-01-21  1817  	if (!subflow_ops->slab)
+cec37a6e41aae7 Peter Krystad    2020-01-21  1818  		return -ENOMEM;
+cec37a6e41aae7 Peter Krystad    2020-01-21  1819  
+79c0949e9a09f6 Peter Krystad    2020-01-21  1820  	subflow_ops->destructor = subflow_req_destructor;
+79c0949e9a09f6 Peter Krystad    2020-01-21  1821  
+cec37a6e41aae7 Peter Krystad    2020-01-21  1822  	return 0;
+cec37a6e41aae7 Peter Krystad    2020-01-21  1823  }
+cec37a6e41aae7 Peter Krystad    2020-01-21  1824  
+d39dceca388ad0 Paolo Abeni      2020-06-26  1825  void __init mptcp_subflow_init(void)
+2303f994b3e187 Peter Krystad    2020-01-21  1826  {
+08b8d080982fec Florian Westphal 2020-07-30  1827  	mptcp_subflow_request_sock_ops = tcp_request_sock_ops;
+08b8d080982fec Florian Westphal 2020-07-30  1828  	if (subflow_ops_init(&mptcp_subflow_request_sock_ops) != 0)
+cec37a6e41aae7 Peter Krystad    2020-01-21  1829  		panic("MPTCP: failed to init subflow request sock ops\n");
+cec37a6e41aae7 Peter Krystad    2020-01-21  1830  
+cec37a6e41aae7 Peter Krystad    2020-01-21  1831  	subflow_request_sock_ipv4_ops = tcp_request_sock_ipv4_ops;
+7ea851d19b2359 Florian Westphal 2020-11-30  1832  	subflow_request_sock_ipv4_ops.route_req = subflow_v4_route_req;
+cec37a6e41aae7 Peter Krystad    2020-01-21  1833  
+cec37a6e41aae7 Peter Krystad    2020-01-21  1834  	subflow_specific = ipv4_specific;
+cec37a6e41aae7 Peter Krystad    2020-01-21  1835  	subflow_specific.conn_request = subflow_v4_conn_request;
+cec37a6e41aae7 Peter Krystad    2020-01-21  1836  	subflow_specific.syn_recv_sock = subflow_syn_recv_sock;
+cec37a6e41aae7 Peter Krystad    2020-01-21  1837  	subflow_specific.sk_rx_dst_set = subflow_finish_connect;
+4cf86ae84c7183 Paolo Abeni      2022-03-07  1838  	subflow_specific.rebuild_header = subflow_rebuild_header;
+cec37a6e41aae7 Peter Krystad    2020-01-21  1839  
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1840  	tcp_prot_override = tcp_prot;
+b19bc2945b40b9 Paolo Abeni      2021-01-20 @1841  	tcp_prot_override.release_cb = tcp_release_cb_override;
+b19bc2945b40b9 Paolo Abeni      2021-01-20  1842  
+
+:::::: The code at line 1796 was first introduced by commit
+:::::: b19bc2945b40b9fd38e835700907ffe8534ef0de mptcp: implement delegated actions
+
+:::::: TO: Paolo Abeni <pabeni@redhat.com>
+:::::: CC: Jakub Kicinski <kuba@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
