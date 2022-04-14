@@ -1,80 +1,72 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17093234
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 22:51:04 +0000 (UTC)
-Received: by mail-pf1-f177.google.com with SMTP id u29so2377952pfg.7
-        for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 15:51:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NmbaSnv4y5xMGTlU8ENC8ho38hjGPo6HcBQqGFgE7fg=;
-        b=A6c41PYgjZELRGT1LHkHqYeqfZGz+IzMDcM/eK2CdoLx9x4Rk2I1cVR9UwITG++aDK
-         0ed+4YkHiOBhJrkJtq2iPZbxc/4bTZBg9moRAgShSetICYBI4TUIAIxInHnznwo9roCM
-         OCXyr2StDJzksDqqYYvaWQDgmdhuTluksYt5o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NmbaSnv4y5xMGTlU8ENC8ho38hjGPo6HcBQqGFgE7fg=;
-        b=MrSaqpzHQsznHsOPNlIfrwXl3uONUfiVUFJgiqwqY8zJ5gUqjjHrIzykramHBknndJ
-         lAmFG6lvIReJuHMCYhWe1CEjrjQsKYNSG8qKGAe0gGCRRmiMz8OB5CdZ3CY18+F051N8
-         kznk+Nqw1gI99gNVwKhxe0NGNQS9wS54LpROCXxZixoLd9k5+qpZ+Hmyh8fCOMaqApbW
-         Bi2uA8uzv0E/y0lBvL/Ui+l76cLddhZmddUc2RbJ2aySeRQE4EgPr0B8z75/te+c892j
-         H7wLWtxn4/dl4QPRbUPkKGdFH3bKE+c7e47Oz2twyHrUoF3EB+x9a8DAqpoJ8EUDpsHZ
-         DkYg==
-X-Gm-Message-State: AOAM531hOrn/YJKlXCZuYUL3ORQ0EiBEdURxv5VkL8U39I9LU3XRDLUK
-	pCIkq9exPlZmniWo+W7TVac0AQ==
-X-Google-Smtp-Source: ABdhPJw1WfdQgJMU5KTNCN8tOxbpMzFChkkNktUkUq6tl7GNiadTyrSzIM3Bwd/MZY5PXKg3iFO8ng==
-X-Received: by 2002:a63:f34d:0:b0:399:5abe:b2e1 with SMTP id t13-20020a63f34d000000b003995abeb2e1mr4112093pgj.451.1649976664252;
-        Thu, 14 Apr 2022 15:51:04 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id fv7-20020a17090b0e8700b001ce18c551dcsm2584285pjb.19.2022.04.14.15.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 15:51:03 -0700 (PDT)
-Date: Thu, 14 Apr 2022 15:51:02 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Qing Zhao <qing.zhao@oracle.com>, Bill Wendling <morbo@google.com>,
-	"Moreira, Joao" <joao.moreira@intel.com>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"Jose E. Marchesi" <jemarch@gnu.org>
-Subject: Re: toolchain mitigations plumbers session
-Message-ID: <202204141549.B1DE158@keescook>
-References: <CAKwvOdniB-+F37ygZhRytBGVFjwnukyOpmoiJTCeusMdb=6_=g@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBA53234
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 22:51:20 +0000 (UTC)
+Date: Thu, 14 Apr 2022 22:44:32 +0000
+Authentication-Results: mail-41103.protonmail.ch;
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="lE7nwooI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail2; t=1649976281;
+	bh=NbUyMRXU3YGyouZhFWR+9oe5iiAhaIN84BE7CsU16Zc=;
+	h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID;
+	b=lE7nwooIHB/4IgEfwRdkbBZ7P0LpWSGdD9zZmqLTeCGJCVWDYrAoZljZGQSPtWUV6
+	 rJCe1lEnjKjBgjsPGaNVXDv7io4kZN1nziWGF8tu+vJqa0Q2A5p6mX78pU1p85tLaP
+	 gRicHZEM87UVPIsTECwtmhRiEDRP/PrGHKd/RmoALy738gTUed7bIpeMH7W5DuDyEv
+	 RkEg0ckD6yNgDX7XsSrOdPmiKaX4CTS0cfWVCTWUuhCDP8aPojWmfXVMTqlPRaGTQc
+	 ZM9U7wl49sykLy3ZzCyhAfu4WwftGEFkth+U4v0m4F4egi9Y4donykcb+azNwS6GEr
+	 i86EhtsJVfp/g==
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+From: Alexander Lobakin <alobakin@pm.me>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Alexander Lobakin <alobakin@pm.me>, Dmitrii Dolgov <9erthalion6@gmail.com>, Quentin Monnet <quentin@isovalent.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Chenbo
+	Feng <fengc@google.com>, Willem de Bruijn <willemb@google.com>, Daniel Wagner <daniel.wagner@bmw-carit.de>, Thomas Graf <tgraf@suug.ch>, Ong Boon Leong <boon.leong.ong@intel.com>, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH bpf-next 00/11] bpf: random unpopular userspace fixes (32 bit et al.)
+Message-ID: <20220414223704.341028-1-alobakin@pm.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdniB-+F37ygZhRytBGVFjwnukyOpmoiJTCeusMdb=6_=g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 14, 2022 at 02:30:33PM -0700, Nick Desaulniers wrote:
-> Hi Qing, Kees, and Bill,
-> Jose and I are currently in the planning process to put together a
-> Kernel+Toolchain microconference track at Linux Plumbers Conference
-> this year (Sept 12-14) in Dublin, Ireland.
-> 
-> Would you all be interested in leading another session on
-> kernel+toolchain collaboration for mitigations?
+This mostly issues the cross build (1) errors for 32 bit (2)
+MIPS (3) with minimal configuration (4) on Musl (5). The majority
+of them aren't yesterday's, so it is a "who does need it outside
+of x86_64 or ARM64?" moment again.
+Trivial stuff in general, not counting the bpf_cookie build fix.
 
-Yes please! With work Qing and Bill (and Sami and Joao and others) have
-been doing lately, this session will have a lot of new stuff to talk
-about!
+Alexander Lobakin (11):
+  bpf, perf: fix bpftool compilation with !CONFIG_PERF_EVENTS
+  bpf: always emit struct bpf_perf_link BTF
+  tools, bpf: fix bpftool build with !CONFIG_BPF_EVENTS
+  samples: bpf: add 'asm/mach-generic' include path for every MIPS
+  samples: bpf: use host bpftool to generate vmlinux.h, not target
+  tools, bpf: fix fcntl.h include in bpftool
+  samples: bpf: fix uin64_t format literals
+  samples: bpf: fix shifting unsigned long by 32 positions
+  samples: bpf: fix include order for non-Glibc environments
+  samples: bpf: fix -Wsequence-point
+  samples: bpf: xdpsock: fix -Wmaybe-uninitialized
 
-> Do you plan to attend
-> plumbers this year which will be in person?
+ include/linux/perf_event.h              |  2 ++
+ kernel/bpf/syscall.c                    |  4 +++-
+ samples/bpf/Makefile                    |  7 ++++---
+ samples/bpf/cookie_uid_helper_example.c | 12 ++++++------
+ samples/bpf/lathist_kern.c              |  2 +-
+ samples/bpf/lwt_len_hist_kern.c         |  2 +-
+ samples/bpf/lwt_len_hist_user.c         |  4 ++--
+ samples/bpf/task_fd_query_user.c        |  2 +-
+ samples/bpf/test_lru_dist.c             |  3 ++-
+ samples/bpf/tracex2_kern.c              |  2 +-
+ samples/bpf/xdpsock_user.c              |  5 +++--
+ tools/bpf/bpftool/tracelog.c            |  2 +-
+ 12 files changed, 27 insertions(+), 20 deletions(-)
 
-Yes, my current intention is to attend plumbers in person this year.
-However, I reserve the right to shake the magic covid 8-ball again as
-we get closer to September. :)
+--
+2.35.2
 
--Kees
 
--- 
-Kees Cook
