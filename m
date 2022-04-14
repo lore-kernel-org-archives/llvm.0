@@ -1,81 +1,98 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 236783225
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 22:13:47 +0000 (UTC)
-Received: by mail-lj1-f176.google.com with SMTP id f5so155516ljp.8
-        for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 15:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IKci9zYLvStXfoOzJWr4xGXyeN+jUndpG64b6kauUp0=;
-        b=qvqe+62r+z/zDHE5VRRaio8IJPC7F3l7Dlayxdrb3SvRIoEubz6Cle36EQUX9fbPX0
-         +Uk2MTpyjYKEOQKsRoqkF0I6kAL3jfNo5MGfXeFMyJvuakCaiWPRq2AErFX811Fn+e9L
-         x4v0nZHKKgisniNqH6PqHnF7caSTYdUF1xCdBfEH2UnqgFvjFwkfX+Rx/kAflE8nyN+j
-         I7anxMwZ90CMLksmayukGJd25+eTmClHgkLjS4SdszIZPDaaAxGau1lUPcSDR5Vtdwo8
-         sm9hruLYGP5JN5K+iqtkIcpcLcxVnz4sjKQyofJgrfZ3oMVP0XjOKWtJ0p11BuhDQIoY
-         lwmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IKci9zYLvStXfoOzJWr4xGXyeN+jUndpG64b6kauUp0=;
-        b=tD0Dlcforjh/uh9DXwZIkS3iH61+aqcwbe8p3KJAGdplOwapkqweD8n1zxasSeDnDX
-         6J8kcOeSgCeKrRl+CsJ3Uy8B/Mw1Hv99MVYbb+wTyNM+eJjB4tn0+kzGAv5lNEfBR23T
-         HG9KdsrH60NT61WmHBIJmjTkbt0Ctu9OGUODaiCNAAKIGLbIsU5/n9L+OZx0LZpqopW0
-         PZqYB/n9o+oCEDSUS9pk6dLR3rQ1auJTm7JhNWK5fk5NgDwJ57XSWbR1u2lMACBCpwjZ
-         OPSHlvRXygv+wD27y7luzYU52DLBMC3pcEzoI9+XaT+IA3qd6vvo1lKnkWDwQ864jgtY
-         +Zyw==
-X-Gm-Message-State: AOAM530RDxRihW+0NqyMQFcUEmVek1HVeVYMfLMLXrYioYuBSFLKB7AA
-	nWEMtQFvn9HNHMcmmUEufrWJtWuiO/7FkC9rQQsRTg==
-X-Google-Smtp-Source: ABdhPJy0w0vwfGz3NPPcdJRgNSnmwG8BK0PTb3S8h9EVIY4Gx4Gpp0ntMuST8iHzvd1KZ/Qvu8mp2UL86xpd0IzsIuk=
-X-Received: by 2002:a2e:8650:0:b0:24b:5309:352f with SMTP id
- i16-20020a2e8650000000b0024b5309352fmr2697199ljj.472.1649974424908; Thu, 14
- Apr 2022 15:13:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7C615A5
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 22:45:19 +0000 (UTC)
+Date: Thu, 14 Apr 2022 22:45:03 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail2; t=1649976310;
+	bh=uv61apQIeQt8drF2A52PZrs8AoOA0Lvm41y6dOx4zW4=;
+	h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+	 References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID;
+	b=dWY+JprLs4JIrIWoJF/Ubs58DGuvqgzq0bbgkJbERbj+vlcFLFU4rLtZoy/LqcBem
+	 j5UIXLMFErTLjO5XpUmTD1bJor/Sv45lvgS54UbUxhe4TFAvY2KbYulb1Bc6QfZ7YY
+	 GEluu1k5+/WyknMrfSSIHY3WTmzhoGSpwCUZ/dwyv/lZGHRo3ell+m8rxkxWI34P0t
+	 zg2nC6c1GBM5nxedFuxOziSD0uwPAUxoWlzIYpkXqeG1VlJpQ+eowVW9yrtjgdiWVJ
+	 +zQtLu/qJJaA85eYPNHDmu6+wcUeI06oX1xMr9mrHwF3zuEkxafI4uQ2aEkxqHe7xu
+	 InZyBMxrBp/Gg==
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+From: Alexander Lobakin <alobakin@pm.me>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Alexander Lobakin <alobakin@pm.me>, Dmitrii Dolgov <9erthalion6@gmail.com>, Quentin Monnet <quentin@isovalent.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Chenbo
+	Feng <fengc@google.com>, Willem de Bruijn <willemb@google.com>, Daniel Wagner <daniel.wagner@bmw-carit.de>, Thomas Graf <tgraf@suug.ch>, Ong Boon Leong <boon.leong.ong@intel.com>, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH bpf-next 02/11] bpf: always emit struct bpf_perf_link BTF
+Message-ID: <20220414223704.341028-3-alobakin@pm.me>
+In-Reply-To: <20220414223704.341028-1-alobakin@pm.me>
+References: <20220414223704.341028-1-alobakin@pm.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdnb-DiAnq4bT7XiJpFtqyJYpWNw1shEp8gWYpVmUpRBaA@mail.gmail.com>
- <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
-In-Reply-To: <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 14 Apr 2022 15:13:32 -0700
-Message-ID: <CAKwvOdmXYa-A76CGitoAFNQz3rab37AJafQVN-=QSRVDA8y1fg@mail.gmail.com>
-Subject: Re: Plumbers conf presentation on -fanalyze?
-To: David Malcolm <dmalcolm@redhat.com>, 
-	James Bottomley <james.bottomley@hansenpartnership.com>, 
-	Steven Rostedt <rostedt@goodmis.org>
-Cc: "Jose E. Marchesi" <jemarch@gnu.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 14, 2022 at 3:08 PM David Malcolm <dmalcolm@redhat.com> wrote:
->
-> On Thu, 2022-04-14 at 14:42 -0700, Nick Desaulniers wrote:
-> > Hi David,
-> > Jose and I are currently in the planning process to put together a
-> > Kernel+Toolchain microconference track at Linux Plumbers Conference
-> > this year (Sept 12-14) in Dublin, Ireland.
-> >
-> > We had seen
-> > https://developers.redhat.com/articles/2022/04/12/state-static-analysis-gcc-12-compiler#scaling_up_the_analyzer
-> > particularly the section on The Linux kernel and were wondering if
-> > you'd be interested in presenting more information about -fanalyze to
-> > kernel and toolchain developers there?
->
-> Thanks!  I'm very much interested, but am not yet sure about travel
-> (both in terms of (a) budget and (b) possible new virus strains).  Is
-> this conference going to be purely in-person, or hybrid virtual/in-
-> person?
+When building bpftool with !CONFIG_PERF_EVENTS:
 
-I didn't see an answer to that question on
-https://lpc.events/event/16/page/185-faqs.
-cc' James + Stephen who might be able to answer that more precisely
-than I could.
--- 
-Thanks,
-~Nick Desaulniers
+skeleton/pid_iter.bpf.c:47:14: error: incomplete definition of type 'struct=
+ bpf_perf_link'
+        perf_link =3D container_of(link, struct bpf_perf_link, link);
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:74:22: note: e=
+xpanded from macro 'container_of'
+                ((type *)(__mptr - offsetof(type, member)));    \
+                                   ^~~~~~~~~~~~~~~~~~~~~~
+tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:68:60: note: e=
+xpanded from macro 'offsetof'
+ #define offsetof(TYPE, MEMBER)  ((unsigned long)&((TYPE *)0)->MEMBER)
+                                                  ~~~~~~~~~~~^
+skeleton/pid_iter.bpf.c:44:9: note: forward declaration of 'struct bpf_perf=
+_link'
+        struct bpf_perf_link *perf_link;
+               ^
+
+&bpf_perf_link is being defined and used only under the ifdef.
+Move it out of the block and explicitly emit a BTF to fix
+compilation.
+
+Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ kernel/bpf/syscall.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index e9621cfa09f2..34fdf27d14cf 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2952,12 +2952,12 @@ static const struct bpf_link_ops bpf_raw_tp_link_lo=
+ps =3D {
+ =09.fill_link_info =3D bpf_raw_tp_link_fill_link_info,
+ };
+
+-#ifdef CONFIG_PERF_EVENTS
+ struct bpf_perf_link {
+ =09struct bpf_link link;
+ =09struct file *perf_file;
+ };
+
++#ifdef CONFIG_PERF_EVENTS
+ static void bpf_perf_link_release(struct bpf_link *link)
+ {
+ =09struct bpf_perf_link *perf_link =3D container_of(link, struct bpf_perf_=
+link, link);
+@@ -4333,6 +4333,7 @@ static int link_create(union bpf_attr *attr, bpfptr_t=
+ uattr)
+ #endif
+ =09case BPF_PROG_TYPE_PERF_EVENT:
+ =09case BPF_PROG_TYPE_TRACEPOINT:
++=09=09BTF_TYPE_EMIT(struct bpf_perf_link);
+ =09=09ret =3D bpf_perf_link_attach(attr, prog);
+ =09=09break;
+ =09case BPF_PROG_TYPE_KPROBE:
+--
+2.35.2
+
+
