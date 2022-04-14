@@ -1,85 +1,80 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5E13234
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 22:47:33 +0000 (UTC)
-Date: Thu, 14 Apr 2022 22:47:20 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail2; t=1649976451;
-	bh=wBk9JjddsWdkPL3+TnZwqvhbFqPlgDryFkVFtACVs5s=;
-	h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-	 References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID;
-	b=nOwFrCMQqgdnT5ACg0miHsryQvMGaVe1VVs6T+wkBBVk40W6TE0Oxjlsqbiiqtd4i
-	 IL3o3iY4Fmhszf3elBnEFfupsT+BLDg2f0H4qXtRtsemsQkLk8jIQ9ZubVi6/8Mj0C
-	 WSO0kpOQNupTzmMubOERMBBZKtgMtH9nko71yWrOKqgqTgLI6YoUgUiUMxyn77ZNzn
-	 B4gmE8cw6m7FaO8iBFxmb5lmu/zAbxSCDY+JMXFJ2mue0BKKsVwYAGHThryC4JPvB7
-	 hqVfIWqC1Bv4OFOZY6FypF77uCtCS32X6gX/aV7jChafN1KUc8WV9PUzrVlWlFTDd0
-	 50OCb5uCi1WOQ==
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-From: Alexander Lobakin <alobakin@pm.me>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Alexander Lobakin <alobakin@pm.me>, Dmitrii Dolgov <9erthalion6@gmail.com>, Quentin Monnet <quentin@isovalent.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Chenbo
-	Feng <fengc@google.com>, Willem de Bruijn <willemb@google.com>, Daniel Wagner <daniel.wagner@bmw-carit.de>, Thomas Graf <tgraf@suug.ch>, Ong Boon Leong <boon.leong.ong@intel.com>, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH bpf-next 11/11] samples: bpf: xdpsock: fix -Wmaybe-uninitialized
-Message-ID: <20220414223704.341028-12-alobakin@pm.me>
-In-Reply-To: <20220414223704.341028-1-alobakin@pm.me>
-References: <20220414223704.341028-1-alobakin@pm.me>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17093234
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 22:51:04 +0000 (UTC)
+Received: by mail-pf1-f177.google.com with SMTP id u29so2377952pfg.7
+        for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 15:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NmbaSnv4y5xMGTlU8ENC8ho38hjGPo6HcBQqGFgE7fg=;
+        b=A6c41PYgjZELRGT1LHkHqYeqfZGz+IzMDcM/eK2CdoLx9x4Rk2I1cVR9UwITG++aDK
+         0ed+4YkHiOBhJrkJtq2iPZbxc/4bTZBg9moRAgShSetICYBI4TUIAIxInHnznwo9roCM
+         OCXyr2StDJzksDqqYYvaWQDgmdhuTluksYt5o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NmbaSnv4y5xMGTlU8ENC8ho38hjGPo6HcBQqGFgE7fg=;
+        b=MrSaqpzHQsznHsOPNlIfrwXl3uONUfiVUFJgiqwqY8zJ5gUqjjHrIzykramHBknndJ
+         lAmFG6lvIReJuHMCYhWe1CEjrjQsKYNSG8qKGAe0gGCRRmiMz8OB5CdZ3CY18+F051N8
+         kznk+Nqw1gI99gNVwKhxe0NGNQS9wS54LpROCXxZixoLd9k5+qpZ+Hmyh8fCOMaqApbW
+         Bi2uA8uzv0E/y0lBvL/Ui+l76cLddhZmddUc2RbJ2aySeRQE4EgPr0B8z75/te+c892j
+         H7wLWtxn4/dl4QPRbUPkKGdFH3bKE+c7e47Oz2twyHrUoF3EB+x9a8DAqpoJ8EUDpsHZ
+         DkYg==
+X-Gm-Message-State: AOAM531hOrn/YJKlXCZuYUL3ORQ0EiBEdURxv5VkL8U39I9LU3XRDLUK
+	pCIkq9exPlZmniWo+W7TVac0AQ==
+X-Google-Smtp-Source: ABdhPJw1WfdQgJMU5KTNCN8tOxbpMzFChkkNktUkUq6tl7GNiadTyrSzIM3Bwd/MZY5PXKg3iFO8ng==
+X-Received: by 2002:a63:f34d:0:b0:399:5abe:b2e1 with SMTP id t13-20020a63f34d000000b003995abeb2e1mr4112093pgj.451.1649976664252;
+        Thu, 14 Apr 2022 15:51:04 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id fv7-20020a17090b0e8700b001ce18c551dcsm2584285pjb.19.2022.04.14.15.51.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 15:51:03 -0700 (PDT)
+Date: Thu, 14 Apr 2022 15:51:02 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Qing Zhao <qing.zhao@oracle.com>, Bill Wendling <morbo@google.com>,
+	"Moreira, Joao" <joao.moreira@intel.com>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	LKML <linux-kernel@vger.kernel.org>,
+	"Jose E. Marchesi" <jemarch@gnu.org>
+Subject: Re: toolchain mitigations plumbers session
+Message-ID: <202204141549.B1DE158@keescook>
+References: <CAKwvOdniB-+F37ygZhRytBGVFjwnukyOpmoiJTCeusMdb=6_=g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdniB-+F37ygZhRytBGVFjwnukyOpmoiJTCeusMdb=6_=g@mail.gmail.com>
 
-Fix two sort-of-false-positives in the xdpsock userspace part:
+On Thu, Apr 14, 2022 at 02:30:33PM -0700, Nick Desaulniers wrote:
+> Hi Qing, Kees, and Bill,
+> Jose and I are currently in the planning process to put together a
+> Kernel+Toolchain microconference track at Linux Plumbers Conference
+> this year (Sept 12-14) in Dublin, Ireland.
+> 
+> Would you all be interested in leading another session on
+> kernel+toolchain collaboration for mitigations?
 
-samples/bpf/xdpsock_user.c: In function 'main':
-samples/bpf/xdpsock_user.c:1531:47: warning: 'tv_usec' may be used uninitia=
-lized in this function [-Wmaybe-uninitialized]
- 1531 |                         pktgen_hdr->tv_usec =3D htonl(tv_usec);
-      |                                               ^~~~~~~~~~~~~~
-samples/bpf/xdpsock_user.c:1500:26: note: 'tv_usec' was declared here
- 1500 |         u32 idx, tv_sec, tv_usec;
-      |                          ^~~~~~~
-samples/bpf/xdpsock_user.c:1530:46: warning: 'tv_sec' may be used uninitial=
-ized in this function [-Wmaybe-uninitialized]
- 1530 |                         pktgen_hdr->tv_sec =3D htonl(tv_sec);
-      |                                              ^~~~~~~~~~~~~
-samples/bpf/xdpsock_user.c:1500:18: note: 'tv_sec' was declared here
- 1500 |         u32 idx, tv_sec, tv_usec;
-      |                  ^~~~~~
+Yes please! With work Qing and Bill (and Sami and Joao and others) have
+been doing lately, this session will have a lot of new stuff to talk
+about!
 
-Both variables are always initialized when @opt_tstamp =3D=3D true and
-they're being used also only when @opt_tstamp =3D=3D true. However, that
-variable comes from the BSS and is being toggled from another
-function. They can't be executed simultaneously to actually trigger
-undefined behaviour, but purely technically it is a correct warning.
-Just initialize them with zeroes.
+> Do you plan to attend
+> plumbers this year which will be in person?
 
-Fixes: eb68db45b747 ("samples/bpf: xdpsock: Add timestamp for Tx-only opera=
-tion")
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
----
- samples/bpf/xdpsock_user.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, my current intention is to attend plumbers in person this year.
+However, I reserve the right to shake the magic covid 8-ball again as
+we get closer to September. :)
 
-diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index 399b999fcec2..1dc7ad5dbef4 100644
---- a/samples/bpf/xdpsock_user.c
-+++ b/samples/bpf/xdpsock_user.c
-@@ -1496,7 +1496,7 @@ static void rx_drop_all(void)
- static int tx_only(struct xsk_socket_info *xsk, u32 *frame_nb,
- =09=09   int batch_size, unsigned long tx_ns)
- {
--=09u32 idx, tv_sec, tv_usec;
-+=09u32 idx, tv_sec =3D 0, tv_usec =3D 0;
- =09unsigned int i;
+-Kees
 
- =09while (xsk_ring_prod__reserve(&xsk->tx, batch_size, &idx) <
---
-2.35.2
-
-
+-- 
+Kees Cook
