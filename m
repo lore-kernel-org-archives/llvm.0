@@ -1,36 +1,36 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633953225
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 21:30:47 +0000 (UTC)
-Received: by mail-lj1-f170.google.com with SMTP id h11so7623430ljb.2
-        for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 14:30:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277163225
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 21:33:31 +0000 (UTC)
+Received: by mail-lj1-f172.google.com with SMTP id n17so2701925ljc.11
+        for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 14:33:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=nj37mJGFxeaaCkwLeuwqWm1g7ahychPhmNkOI5dR3ds=;
-        b=SwzM+kDG244qvAlk81Kzb7jv3jo9bS70fWhEtYwXqtm+KXlXhViG7y3/nT1CB3u58z
-         J7kXl/3ZGOUj1EHYa2pH4oPGmBFoKhbQuY9dXdT/K1aLSG+uwo7KbSBbNLUHEFAFm1Xk
-         JXFfL/BFMbcxJW4CLX0rcWmruwDcONxWX8gpqtwbTnokGfkGnZXVcMH5sC+oGnN9x14g
-         Gb+XpWC6a+vv5tq/AR2RFonjnylMv97WlZZ/sHT8xirmgWZ7AP6yX+ii+eqBk25MrMv5
-         ZAAqTyRFv5arJlLD4AqBJNT48kUEj16407m5X/BfH+IB3phccmmLwYqukwMhrfAe/znY
-         WCUA==
+        bh=FiXeDUXp16zKJj+mcJh8ScMaBjpuOPaR9nYFXOkk6f8=;
+        b=FbaIuBg/7dhs/uWN5PQfxk10t/IWdc/zHPtC49e7dSuPrvc0fUWL/iVsIUWRAwVh7p
+         Xv1loUqW0tud004xqJbvaSyr5tibUNuE45FUmhSwvyABWxIb3Hw+eH/bz2jSKwYbkC3M
+         IdadwSERGLt53qj6Aq4GM7JZLwBHEXWJ6WEafIxuMc/CBSJTqWuGltW/s5A4ynrZb5Yi
+         fgFD8JJDXqa+hTH1FGN6dfGQ1isz5OOH8wscgj93dJm39BIEVVIt5C9Go/jD3yxC7gWu
+         1uudOcmrEw+5vjqSHjgAZse4VgnSUZ/utk5CqtpiKskw/b/AYHnDKaugJzpjHg5itkoK
+         rLiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=nj37mJGFxeaaCkwLeuwqWm1g7ahychPhmNkOI5dR3ds=;
-        b=jW6E6wiQvKEogualYdjm46aT6Xzc/S7ihJb+XSYzcl0F6ueWtNIhqlnnRQF/dhIn4r
-         HJVCS33KHJi91V9QGM2JxQ5GSTG2aEHsSDrCKmcA9CeDkvFfz47vSzTtRCCfEugsoi9a
-         xOz3Tzl47i9f9N42D5jWbEIIbIPywQePwp2vB2hAUUGgbWBWQtXcU8um/T8U3AHkt6u5
-         ckLH/jmfQcCaQT+A/DW2fR8Fuw4/csgGlr8kV+n/jfCgOngH4DebjDzmheAPp3m/WWTa
-         ryk+tc1p69ZwdrmFdX+SJeX0gd+P+vnvNJv3tnrzqyejGTqBAmWHfiyQgorRDZWuMFsB
-         3d7g==
-X-Gm-Message-State: AOAM532nL+oZiXCoxzERr7ZwJNnjqi5+bIrtWlZs13ejmFKqmzYGq3aL
-	atIApqxj5clqe0J1l2aVfGtK6nEpRNb07/tg5D/+f/GHHXnvyw==
-X-Google-Smtp-Source: ABdhPJxPS2QvyVN47bMyTQZoKgjfDFLroQlH4A7AyIN0YFxZMQTVLkXYHXNZv6tDsX2UV90960wH9W3lFhk2hVuHbQ8=
-X-Received: by 2002:a05:651c:555:b0:24b:15b7:74ad with SMTP id
- q21-20020a05651c055500b0024b15b774admr2684739ljp.239.1649971845219; Thu, 14
- Apr 2022 14:30:45 -0700 (PDT)
+        bh=FiXeDUXp16zKJj+mcJh8ScMaBjpuOPaR9nYFXOkk6f8=;
+        b=2Q5xZBNIjpR0qj/WR2xNvgGLP9NWptv7aWfK5U02CX4OH03sL3Oqv2LLfkH4uoGzN4
+         IC7NSRCPHz4MtUzcLXQWtDFAVJSxNw92n0e8ZjAXqoFOmwrwF/Hy0lLJlaWGynbDRudT
+         qtol2N19pD+vogNjBA646sJcJSGu82SIitE2dnWqEp/SGw7ugyV72H+MiLLTA0nAeprE
+         u+xl0j2sB4lZdLOxYh2+xHcqfb00S1pN81GBSePOnnq5/3lytq707ZLEIV4hf5l+XeOZ
+         gh2KIbUoghKbklKJJ4No2KHMsbICx5ysJa0V8EzoYc9reKXI7+bfMQp4SCEwzWlJYKfH
+         R5NQ==
+X-Gm-Message-State: AOAM533CHgZV4XNdKU4wh8N1WeAwNtyR0FngsS4OIfws9LqhhXwMs7It
+	xDGXAUYMvLNQexO5lkVULigj46/CBKlNbu6u/WQ5yTxWOTEYjw==
+X-Google-Smtp-Source: ABdhPJxiromgUQTsDqM/zPpDXJ3yXx2P5o8IzHVl6OnC92TnIGa2AEdEcKXbGcXC8ARiCXFBqr8m4Yu1Ofwy987EclU=
+X-Received: by 2002:a05:651c:2115:b0:24c:8e91:d14d with SMTP id
+ a21-20020a05651c211500b0024c8e91d14dmr2778881ljq.165.1649972009113; Thu, 14
+ Apr 2022 14:33:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,23 +38,22 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 14 Apr 2022 14:30:33 -0700
-Message-ID: <CAKwvOdniB-+F37ygZhRytBGVFjwnukyOpmoiJTCeusMdb=6_=g@mail.gmail.com>
-Subject: toolchain mitigations plumbers session
-To: Qing Zhao <qing.zhao@oracle.com>, Kees Cook <keescook@chromium.org>, 
-	Bill Wendling <morbo@google.com>
-Cc: "Moreira, Joao" <joao.moreira@intel.com>, clang-built-linux <llvm@lists.linux.dev>, 
-	LKML <linux-kernel@vger.kernel.org>, "Jose E. Marchesi" <jemarch@gnu.org>
+Date: Thu, 14 Apr 2022 14:33:17 -0700
+Message-ID: <CAKwvOdnb-MV+Fw2oeZ5qiGQH9FPOjgYTDtVrYc1=ynY7=NReDQ@mail.gmail.com>
+Subject: Kernel ABI Monitoring and toolchain support
+To: =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>, 
+	Giuliano Procida <gprocida@google.com>
+Cc: "Jose E. Marchesi" <jemarch@gnu.org>, clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Qing, Kees, and Bill,
+Hi Matthias and Giuliano,
 Jose and I are currently in the planning process to put together a
 Kernel+Toolchain microconference track at Linux Plumbers Conference
 this year (Sept 12-14) in Dublin, Ireland.
 
-Would you all be interested in leading another session on
-kernel+toolchain collaboration for mitigations? Do you plan to attend
-plumbers this year which will be in person?
+Would you all be interested in a leading session on Kernel ABI
+Monitoring and perhaps what toolchain vendors can do to help, as part
+of our MC (which itself is currently still in planning phase).
 -- 
 Thanks,
 ~Nick Desaulniers
