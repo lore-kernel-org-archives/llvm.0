@@ -1,1021 +1,350 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [131.159.0.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC8215A6
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 06:18:34 +0000 (UTC)
-Received: by mail-pg1-f180.google.com with SMTP id r66so3943453pgr.3
-        for <llvm@lists.linux.dev>; Wed, 13 Apr 2022 23:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=AJc3yJ0OYO3lLoes1FNCl2Mh4My0V88ZLQJymEz6wvk=;
-        b=lWTlOgncUHdik+M8Tv6nZ2KZ5IQbaz8EjG3EOJTYOBzhEP4WeQIvxj+L8qog2BuyxW
-         lvcVoSq9/7HfBXKzYaSA4OVgGpCS2oEBHLLHYMU7NNyLPlWq8Vh6ZIui0MBrcaLouwnQ
-         4mkOE3YxXnNk8AZ5W6DBOZGRZ6lssV9vlHkRXIYFiyaWV3fnfS9xihiZHvJfdMZL0f0O
-         iK+h3u+Hk8Sw+idn/Sm3/nIimF9hdt4MvLTsxoNT9pzdFgXsQrQxMrinvCeu+fniCXlf
-         KEoRu5p3EcQOH0CdE5ZPz31PX8pt408Bz3GzeIJd3/hcI4L/j1e7dU2EWx5hJccZ6PyZ
-         q8sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=AJc3yJ0OYO3lLoes1FNCl2Mh4My0V88ZLQJymEz6wvk=;
-        b=uEyfCpR/1Nddtb07z5VZf9IXclmF0VkbH1tg4vV0AeSn76rMCBK2vI6XXMgCeNh9wu
-         yqOVB+7urFgCVCcPJF3A2mRQvQYvLjXvh+Q+k04qcIluH9BDMMAd0JiOcqmjHQPVW8IT
-         e/uGA/nSbZuqCkysodV4N4GqznSkEj6Xec/M9Ye3AeawDhJakQWCX0v3f+B3KSxoe9RL
-         62lEIGcB3rsX68RkJi8nCZeA2vLGZVF6juAYW6ky08m+Cr4x6GC86rKqwJVY5Y7Df+33
-         xNvV7WucPNTW8no+MCz/poi+HquUrv1Sx3AdN7U9aC1J6KVE1wjJB0zYfo5VoDGD+qLj
-         xl1w==
-X-Gm-Message-State: AOAM531HJUfoyxUCfuCb+jQ2aukYur7wMIwIC8vjbOVzsVrTo44V4UWn
-	iFtiEfypU+ZIkOg1/60YAYuMPfi0NHaBFPgz
-X-Google-Smtp-Source: ABdhPJzstEzL5i0ZTxLx8cOyospj9F4ADF4JuKzlYcFvCBaQElLZIPQoaT0c1ZpMWdrLcxswQSeiNg==
-X-Received: by 2002:a65:64c6:0:b0:39c:cb67:626b with SMTP id t6-20020a6564c6000000b0039ccb67626bmr1085362pgv.548.1649917113043;
-        Wed, 13 Apr 2022 23:18:33 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l15-20020a62be0f000000b005059cc9cc34sm955828pff.92.2022.04.13.23.18.32
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 23:18:32 -0700 (PDT)
-Message-ID: <6257bcb8.1c69fb81.dfcc2.338f@mx.google.com>
-Date: Wed, 13 Apr 2022 23:18:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570347B
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 09:04:58 +0000 (UTC)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
+	by mailout2.rbg.tum.de (Postfix) with ESMTPS id 152F84C0486;
+	Thu, 14 Apr 2022 11:04:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+	s=20220209; t=1649927091;
+	bh=N3KRViML6P0KL6WjkU6CKmFdRzGnL98KUT7E8Vw+9Go=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cKxGUrORXSYc75KD+lXTTo24ai6Z/9rNjXkNAG0+w6fWCm9hzjWAx7ce08Yrx5PZt
+	 nIi3ZVHEPoL08IbD5TSk5jggmwc9x+7RKl7v7jOuw6uMgQrFAXqm4vauOT7Z4ciqoj
+	 UaIRUDewEbgP0Mw3LXWxao2lkQIuJ6sNcYXaOo4j0BB6lsRB8/SWpX5h+aqDNZP5zT
+	 6rjH6/Kk4InvldLFp+mdIWCMpCsKz3H3GeZ79wND2K/w8aLTutRD2a6LmDQ0Yyt94k
+	 3Pf2A8UkI0Y6NpEL0ieARr/gCPIjKpHoSIYa9YDb8Uz8TR3vaYlomQtOG6N/Es0POg
+	 Poh/p2fYCxrDw==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+	id 10D8B6D7; Thu, 14 Apr 2022 11:04:51 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id D607355F;
+	Thu, 14 Apr 2022 11:04:50 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id D1A4324E;
+	Thu, 14 Apr 2022 11:04:50 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+	id CE2544A047E; Thu, 14 Apr 2022 11:04:50 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+	by mail.in.tum.de (Postfix) with ESMTPSA id B8F9E4A027B;
+	Thu, 14 Apr 2022 11:04:49 +0200 (CEST)
+	(Extended-Queue-bit xtech_vf@fff.in.tum.de)
+Date: Thu, 14 Apr 2022 11:04:42 +0200
+From: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+	Charalampos Mainas <charalampos.mainas@gmail.com>,
+	Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: Re: Dangerous addr to ctrl dependency transformation in
+ fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+Message-ID: <Ylfjqk0a6rAiIIB8@Pauls-MacBook-Pro.local>
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
+ <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
+ <YlV1D2RmZgx/PJn5@Pauls-MacBook-Pro.local>
+ <20220412152649.GF4285@paulmck-ThinkPad-P17-Gen-1>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20220414
-X-Kernelci-Report-Type: build
-Subject: next/master build: 154 builds: 1 failed, 153 passed, 4 errors,
- 37 warnings (next-20220414)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master build: 154 builds: 1 failed, 153 passed, 4 errors, 37 warnings =
-(next-20220414)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220414/
-
-Tree: next
-Branch: master
-Git Describe: next-20220414
-Git Commit: 40354149f4d738dc3492d9998e45b3f02950369a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
-
-Build Failure Detected:
-
-arm:
-    rpc_defconfig: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-    aspeed_g5_defconfig (clang-14): 10 warnings
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
-warnings
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
-): 6 warnings
-    multi_v7_defconfig (clang-14): 10 warnings
-    rpc_defconfig (gcc-10): 2 errors
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-    32r2el_defconfig+debug (gcc-10): 1 warning
-    loongson2k_defconfig (gcc-10): 1 error
-    loongson3_defconfig (gcc-10): 1 error
-    rb532_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-    x86_64_defconfig+debug (gcc-10): 2 warnings
-
-Errors summary:
-
-    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-
-Warnings summary:
-
-    22   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-    10   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x59: call to=
- do_strnlen_user() with UACCESS enabled
-    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
-6: call to do_strncpy_from_user() with UACCESS enabled
-    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
-s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
--overflow=3D]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, =
-0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
-rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
- section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
-bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
-flow=3D]
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x86: ca=
-ll to do_strncpy_from_user() with UACCESS enabled
-    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x59: call to do_s=
-trnlen_user() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----
-For more info write to <info@kernelci.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220412152649.GF4285@paulmck-ThinkPad-P17-Gen-1>
+
+On Tue, Apr 12, 2022 at 08:26:49AM -0700, Paul E. McKenney wrote:
+> On Tue, Apr 12, 2022 at 02:48:15PM +0200, Paul Heidekrüger wrote:
+> > On Mon, Apr 11, 2022 at 11:21:41AM -0700, Paul E. McKenney wrote:
+> > > On Thu, Apr 07, 2022 at 05:12:15PM +0200, Paul Heidekrüger wrote:
+> > > > Hi all,
+> > > > 
+> > > > work on my dependency checker tool is progressing nicely, and it is
+> > > > flagging, what I believe is, a harmful addr to ctrl dependency
+> > > > transformation. For context, see [1] and [2]. I'm using the Clang
+> > > > compiler.
+> > > > 
+> > > > The dependency in question runs from line 618 into the for loop
+> > > > increment, i.e. the third expresion in the for loop condition, in line
+> > > > 622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
+> > > > 
+> > > > I did my best to reverse-engineer some pseudocode from Clang's IR for
+> > > > showing what I think is going on.
+> > > 
+> > > First, thank you very much for doing this work!
+> > > 
+> > > > Clang's unoptimised version:
+> > > > 
+> > > > > restart:
+> > > > > 	if(place_holder != NULL)
+> > > > > 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
+> > > > > 	if(delegation != NULL)
+> > > > > 		if(delegation != place_holder_deleg)
+> > > > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
+> > > > > 
+> > > > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
+> > > > > 		/*
+> > > > > 		 * Can continue, "goto restart" or "goto break" (after loop). 
+> > > > > 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
+> > > > > 		 * "delegation" might be assigned either a value depending on 
+> > > > > 		 * "delegation" itself, i.e. it is part of the dependency chain, 
+> > > > > 		 * or NULL.
+> > > > > 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
+> > > > > 		 * points to.
+> > > > > 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
+> > > > > 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
+> > > > > 		 * and the for loop's increment is executed.
+> > > > > 		 */
+> > > > > 	}
+> > > > 
+> > > > Clang's optimised version:
+> > > > 
+> > > > > restart:
+> > > > > 	if(place_holder == NULL) {
+> > > > > 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > > > > 	} else {
+> > > > > 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
+> > > > > 		if(cmp != NULL) { /* Transformation to ctrl dep */
+> > > > > 			if(cmp == place_holder_deleg) {
+> > > > > 				delegation = place_holder_deleg;
+> > > > > 			} else {
+> > > > > 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
+> > > > > 			}
+> > > > > 		} else {
+> > > > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > > > > 		}
+> > > > > 	}
+> > > > > 
+> > > > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
+> > > > > 		/*
+> > > > > 		 * At this point, "delegation" cannot depend on line 618 anymore
+> > > > > 		 * since the "rcu_dereference()" was only used for an assignment
+> > > > > 		 * to "cmp" and a subsequent comparison (ctrl dependency).
+> > > > > 		 * Therefore, the loop increment cannot depend on the
+> > > > > 		 * "rcu_dereference()" either. The dependency chain has been
+> > > > > 		 * broken.
+> > > > > 		 */
+> > > > >         }
+> > > > 
+> > > > The above is an abstraction of the following control flow path in
+> > > > "nfs_server_return_marked_delegations()":
+> > > > 
+> > > > 1. When "nfs_server_return_marked_delegations()" gets called, it has no
+> > > > choice but to skip the dependency beginning in line 620, since
+> > > > "place_holder" is NULL the first time round.
+> > > > 
+> > > > 2. Now take a path until "place_holder", the condition for the
+> > > > dependency beginning, becomes true and "!delegation || delegation !=
+> > > > place_holder_deleg", the condition for the assignment in line 620,
+> > > > becomes false. Then, enter the loop again and take a path to one of the
+> > > > "goto restart" statements without reassigning to "delegation".
+> > > > 
+> > > > 3. After going back to "restart", since the condition for line 618
+> > > > became true, "rcu_dereference()" into "delegation".
+> > > > 
+> > > > 4. Enter the for loop again, but avoid the "goto restart" statements in
+> > > > the first iteration and ensure that "&(delegation)->super_list !=
+> > > > &server->delegations", the loop condition, remains true and "delegation"
+> > > > isn't assigned NULL.
+> > > > 
+> > > > 5. When the for loop condition is reached for the second time, the loop
+> > > > increment is executed and there is an address dependency.
+> > > > 
+> > > > Now, why would the compiler decide to assign "place_holder_deleg" to
+> > > > "delegation" instead of what "rcu_dereference()" returned? Here's my
+> > > > attempt at explaining.
+> > > > 
+> > > > In the pseudo code above, i.e. in the optimised IR, the assignment of
+> > > > "place_holder_deleg" is guarded by two conditions. It is executed iff
+> > > > "place_holder" isn't NULL and the "rcu_dereference()" didn't return
+> > > > NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
+> > > > NULL" holds at line 617, then "delegation == rcu_dereference() ==
+> > > > place_holder_deleg" must hold at line 622. Otherwise, the optimisation
+> > > > would be wrong.
+> > > > 
+> > > > Assume control flow has just reached the first if, i.e. line 617, in
+> > > > source code. Since "place_holder" isn't NULL, it will execute the first
+> > > > if's body and "rcu_dereference()" into "delegation" (618). Now it has
+> > > > reached the second if. Per our aussmption, "rcu_dereference()" returned
+> > > > something that wasn't NULL. Therefore, "!delegation", the first part of
+> > > > the second if condition's OR, will be false.
+> > > > 
+> > > > However, if we want "rcu_dereference() == delegation" to hold after the
+> > > > two if's, we can't enter the second if anyway, as it will overwrite
+> > > > "delegation" with a value that might not be equal to what
+> > > > "rcu_dereference()" returned. So, we want the second part of the second
+> > > > if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
+> > > > as well.
+> > > > 
+> > > > When is that the case? It is the case when "delegation ==
+> > > > place_holder_deleg" holds.
+> > > > 
+> > > > So, if we want "delegation == rcu_dereference() == place_holder_deleg"
+> > > > to hold after the two if's, "place_holder != NULL && rcu_dereference()
+> > > > != NULL" must hold before the two if's, which is what we wanted to show
+> > > > and what the compiler figured out too.
+> > > > 
+> > > > TL;DR: it appears the compiler optimisation is plausible, yet it still
+> > > > breaks the address dependency.
+> > > > 
+> > > > For those interested, I have made the unoptimised and optimised IR CFGs
+> > > > available. In the optimised one, the interesting part is the transition
+> > > > from "if.end" to "if.end13".
+> > > > 
+> > > > Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
+> > > > 
+> > > > Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
+> > > > 
+> > > > What do you think?
+> > > > 
+> > > > Many thanks,
+> > > > Paul
+> > > > 
+> > > > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> > > > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
+> > > 
+> > > If I understand this correctly (rather unlikely), this stems from
+> > > violating the following rule in Documentation/RCU/rcu_dereference.rst:
+> > > 
+> > > ------------------------------------------------------------------------
+> > > 
+> > > -	Be very careful about comparing pointers obtained from
+> > > 	rcu_dereference() against non-NULL values.  As Linus Torvalds
+> > > 	explained, if the two pointers are equal, the compiler could
+> > > 	substitute the pointer you are comparing against for the pointer
+> > > 	obtained from rcu_dereference().  For example::
+> > > 
+> > > 		p = rcu_dereference(gp);
+> > > 		if (p == &default_struct)
+> > > 			do_default(p->a);
+> > > 
+> > > 	Because the compiler now knows that the value of "p" is exactly
+> > > 	the address of the variable "default_struct", it is free to
+> > > 	transform this code into the following::
+> > > 
+> > > 		p = rcu_dereference(gp);
+> > > 		if (p == &default_struct)
+> > > 			do_default(default_struct.a);
+> > > 
+> > > 	On ARM and Power hardware, the load from "default_struct.a"
+> > > 	can now be speculated, such that it might happen before the
+> > > 	rcu_dereference().  This could result in bugs due to misordering.
+> > > 
+> > > 	However, comparisons are OK in the following cases:
+> > > 
+> > > 	-	The comparison was against the NULL pointer.  If the
+> > > 		compiler knows that the pointer is NULL, you had better
+> > > 		not be dereferencing it anyway.  If the comparison is
+> > > 		non-equal, the compiler is none the wiser.  Therefore,
+> > > 		it is safe to compare pointers from rcu_dereference()
+> > > 		against NULL pointers.
+> > > 
+> > > 	-	The pointer is never dereferenced after being compared.
+> > > 		Since there are no subsequent dereferences, the compiler
+> > > 		cannot use anything it learned from the comparison
+> > > 		to reorder the non-existent subsequent dereferences.
+> > > 		This sort of comparison occurs frequently when scanning
+> > > 		RCU-protected circular linked lists.
+> > > 
+> > > 		Note that if checks for being within an RCU read-side
+> > > 		critical section are not required and the pointer is never
+> > > 		dereferenced, rcu_access_pointer() should be used in place
+> > > 		of rcu_dereference().
+> > > 
+> > > 	-	The comparison is against a pointer that references memory
+> > > 		that was initialized "a long time ago."  The reason
+> > > 		this is safe is that even if misordering occurs, the
+> > > 		misordering will not affect the accesses that follow
+> > > 		the comparison.  So exactly how long ago is "a long
+> > > 		time ago"?  Here are some possibilities:
+> > > 
+> > > 		-	Compile time.
+> > > 
+> > > 		-	Boot time.
+> > > 
+> > > 		-	Module-init time for module code.
+> > > 
+> > > 		-	Prior to kthread creation for kthread code.
+> > > 
+> > > 		-	During some prior acquisition of the lock that
+> > > 			we now hold.
+> > > 
+> > > 		-	Before mod_timer() time for a timer handler.
+> > > 
+> > > 		There are many other possibilities involving the Linux
+> > > 		kernel's wide array of primitives that cause code to
+> > > 		be invoked at a later time.
+> > > 
+> > > 	-	The pointer being compared against also came from
+> > > 		rcu_dereference().  In this case, both pointers depend
+> > > 		on one rcu_dereference() or another, so you get proper
+> > > 		ordering either way.
+> > > 
+> > > 		That said, this situation can make certain RCU usage
+> > > 		bugs more likely to happen.  Which can be a good thing,
+> > > 		at least if they happen during testing.  An example
+> > > 		of such an RCU usage bug is shown in the section titled
+> > > 		"EXAMPLE OF AMPLIFIED RCU-USAGE BUG".
+> > > 
+> > > 	-	All of the accesses following the comparison are stores,
+> > > 		so that a control dependency preserves the needed ordering.
+> > > 		That said, it is easy to get control dependencies wrong.
+> > > 		Please see the "CONTROL DEPENDENCIES" section of
+> > > 		Documentation/memory-barriers.txt for more details.
+> > > 
+> > > 	-	The pointers are not equal *and* the compiler does
+> > > 		not have enough information to deduce the value of the
+> > > 		pointer.  Note that the volatile cast in rcu_dereference()
+> > > 		will normally prevent the compiler from knowing too much.
+> > > 
+> > > 		However, please note that if the compiler knows that the
+> > > 		pointer takes on only one of two values, a not-equal
+> > > 		comparison will provide exactly the information that the
+> > > 		compiler needs to deduce the value of the pointer.
+> > > 
+> > > ------------------------------------------------------------------------
+> > > 
+> > > But it would be good to support this use case, for example, by having
+> > > the compiler provide some way of marking the "delegation" variable as
+> > > carrying a full dependency.
+> > > 
+> > > Or did I miss a turn in here somewhere?
+> > > 
+> > > 							Thanx, Paul
+> > 
+> > Actually, I think you're spot on! The original source code has a,
+> > allbeit nested, comparison of "delegation" against a non-NULL value,
+> > which is exactly what the documentation discourages as it helps the
+> > compiler figure out the value of "delegation".
+> 
+> Sometimes I get lucky.  ;-)
+> 
+> > I'll try to prepare a patch, using my dependency checker tool to verify
+> > that this was indeed the issue.
+> 
+> This would be a kernel patch to avoid the comparison?  Or a patch to
+> the compiler to tell it that the "delegation" variable carries a full
+> dependency?  Either would be useful, just curious.
+
+Ah, sorry, ambiguous. I was referring to a kernel patch which avoids the
+comparions. But we, i.e. everyone involved with the dependency checker
+tool, are also aware of the value of a dependency-preserving compiler
+and have had some discussions around the topic. Not making any promises
+in that regard though :-)
+
+Many thanks,
+Paul
